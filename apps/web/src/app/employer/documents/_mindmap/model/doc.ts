@@ -468,6 +468,21 @@ export function topicParent(page: DiagramPage, id: string, index?: GraphIndex): 
 }
 
 /**
+ * A central topic with branches: a topic nothing sits above, holding others.
+ * Deleting one "and keeping its children" has nowhere to put them — they would
+ * each become a centre of their own, splitting one map into several.
+ */
+export function isCentreWithBranches(page: DiagramPage, id: string, index?: GraphIndex): boolean {
+    const idx = index ?? graphIndex(page);
+    const nd = nodeById(page, id);
+    if (!nd || !isTopicShape(nd.shape) || topicParent(page, id, idx) !== null) return false;
+    return (idx.out.get(id) ?? []).some(child => {
+        const c = nodeById(page, child);
+        return c !== undefined && isTopicShape(c.shape);
+    });
+}
+
+/**
  * `ids` plus everything downstream that would be left with no parent if they
  * went: what deleting a topic "with its subtree" removes. A node that also
  * hangs off something outside — a topic another branch points at with a

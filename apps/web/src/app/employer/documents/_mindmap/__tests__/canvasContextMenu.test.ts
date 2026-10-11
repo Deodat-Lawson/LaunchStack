@@ -77,6 +77,9 @@ describe("canvas context menu", () => {
         for (const promoted of ["add-child", "colour", "collapse", "duplicate", "delete"]) {
             expect(more).not.toContain(promoted);
         }
+        // "Delete and reconnect" would split the map into one centre per
+        // branch, so the centre does not offer it anywhere.
+        expect([...ids(menu), ...more]).not.toContain("delete-reconnect");
     });
 
     test("a branch topic offers a sibling, and every hint names the key that does it", () => {

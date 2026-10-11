@@ -1,4 +1,10 @@
-import { addChildTopic, applySwatch, insertShape } from "../model/commands";
+import {
+    addChildTopic,
+    applySwatch,
+    insertShape,
+    outdentTopic,
+    toggleCollapse,
+} from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
 import { contrastRatio, swatchFor, THEME_BY_ID } from "../model/palette";
 import { EditorStore } from "../model/store";
@@ -131,6 +137,21 @@ describe("the colour dots", () => {
         expect(p.edges.find(e => e.to.nodeId === branch)!.style.stroke).toBe(orange);
     });
 
+    it("on the centre recolour the centre alone, not every branch", () => {
+        // Its subtree is the whole map; one hue over everything would erase
+        // what colour means (QA, 2026-10-11).
+        const store = blankStore("dark");
+        const root = startMap(store);
+        const a = addChildTopic(store, root)!;
+        const b = addChildTopic(store, root)!;
+        store.setEditing(null);
+        const before = [a, b].map(id => nodeById(page(store), id)!.style.stroke);
+        store.selectNodes([root]);
+        applySwatch(store, "orange");
+        expect(nodeById(page(store), root)!.style.fill).toBe(swatchFor("orange", "dark").stroke);
+        expect([a, b].map(id => nodeById(page(store), id)!.style.stroke)).toEqual(before);
+    });
+
     it("keep the centre solid and its label readable", () => {
         const store = blankStore();
         const root = startMap(store);
@@ -139,6 +160,31 @@ describe("the colour dots", () => {
         const nd = nodeById(page(store), root)!;
         expect(nd.style.fill).toBe(swatchFor("amber", "light").stroke);
         expect(contrastRatio(nd.textStyle.color, nd.style.fill)).toBeGreaterThanOrEqual(4.5);
+    });
+});
+
+describe("moving and folding", () => {
+    it("gives an outdented detail a main branch's type, not just its colour", () => {
+        const store = blankStore();
+        const root = startMap(store);
+        const branch = addChildTopic(store, root)!;
+        const detail = addChildTopic(store, branch)!;
+        store.setEditing(null);
+        expect(nodeById(page(store), detail)!.textStyle).toMatchObject({ size: 13.5, bold: false });
+        outdentTopic(store, detail);
+        expect(nodeById(page(store), detail)!.textStyle).toMatchObject({ size: 15, bold: true });
+    });
+
+    it("opens a folded branch before adding a child to it", () => {
+        const store = blankStore();
+        const root = startMap(store);
+        const branch = addChildTopic(store, root)!;
+        addChildTopic(store, branch);
+        store.setEditing(null);
+        toggleCollapse(store, branch);
+        expect(nodeById(page(store), branch)!.collapsed).toBe(true);
+        addChildTopic(store, branch);
+        expect(nodeById(page(store), branch)!.collapsed).toBe(false);
     });
 });
 

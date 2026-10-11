@@ -10,6 +10,7 @@ import type {
 
 import {
     activePage,
+    isTopicShape,
     mapEdges,
     mapNodes,
     nodeById,
@@ -1424,8 +1425,4 @@ function spawnFromPortClick(store: EditorStore, g: Gesture): DiagramNode | null 
     if (isMind) restyleMovedTopics(store, [spawned.id]);
     store.selectNodes([spawned.id]);
     return spawned;
-}
-
-function isTopicShape(shape: ShapeId): boolean {
-    return shape.startsWith("mind-");
 }

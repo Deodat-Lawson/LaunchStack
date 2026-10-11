@@ -24,7 +24,14 @@ import {
     toggleLock,
     ungroupSelection,
 } from "../model/commands";
-import { activePage, graphIndex, isTopicShape, nodeById, topicParent } from "../model/doc";
+import {
+    activePage,
+    graphIndex,
+    isCentreWithBranches,
+    isTopicShape,
+    nodeById,
+    topicParent,
+} from "../model/doc";
 import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
 import type { EditorState, EditorStore } from "../model/store";
@@ -254,15 +261,21 @@ function buildEverything(
                     shortcut: "⌘/",
                     onSelect: () => toggleCollapse(store, singleNode.id),
                 },
-                {
-                    type: "item",
-                    id: "delete-reconnect",
-                    label: "Delete and reconnect",
-                    icon: "move",
-                    // ⌥⌫ is the topic binding; other shapes have no key for it.
-                    shortcut: singleTopic ? "⌥⌫" : undefined,
-                    onSelect: () => deleteNodeReconnecting(store, singleNode.id),
-                }
+                // Not on the centre: its branches have nowhere to go, and
+                // keeping them would split the map (see `removeReconnecting`).
+                ...(isCentreWithBranches(page, singleNode.id)
+                    ? []
+                    : [
+                          {
+                              type: "item" as const,
+                              id: "delete-reconnect",
+                              label: "Delete and reconnect",
+                              icon: "move" as const,
+                              // ⌥⌫ is the topic binding; other shapes have no key for it.
+                              shortcut: singleTopic ? "⌥⌫" : undefined,
+                              onSelect: () => deleteNodeReconnecting(store, singleNode.id),
+                          },
+                      ])
             );
             // A topic's plain Delete already takes its branch.
             if (!singleTopic) {

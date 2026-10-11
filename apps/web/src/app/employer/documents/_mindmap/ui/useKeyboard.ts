@@ -391,11 +391,20 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                 return;
             }
 
-            // Typing on a selected shape replaces its label (XMind). Not
-            // default-prevented: the field mounts and takes focus before the
-            // browser delivers the character, and the seed covers the case
-            // where it never does — see TextEditorOverlay. Space stays pan.
-            if (only && key !== " " && isPrintable(e) && canEditText(only)) {
+            // Typing on a selected topic replaces its label (XMind). Topics
+            // only: on a canvas of boxes the letters are tools (R, then click,
+            // places a rectangle), and renaming the selected box to "r"
+            // instead broke that habit. Not default-prevented: the field
+            // mounts and takes focus before the browser delivers the
+            // character, and the seed covers the case where it never does —
+            // see TextEditorOverlay. Space stays pan.
+            if (
+                only &&
+                key !== " " &&
+                isPrintable(e) &&
+                isTopicShape(only.shape) &&
+                canEditText(only)
+            ) {
                 store.setEditing({ kind: "node", id: only.id, seed: key });
                 return;
             }

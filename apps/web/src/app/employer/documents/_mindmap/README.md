@@ -115,25 +115,29 @@ and the reorder only ever moves an edge earlier so that stays true.
 shortcuts dialog. With a topic selected the keys are an outliner's, after
 XMind, MindNode and MindMeister:
 
-| Key              | While typing a label             | With a topic selected                                 |
-| ---------------- | -------------------------------- | ----------------------------------------------------- |
-| Enter            | Finish the label — only that     | Add a sibling right after it (a child, on the centre) |
-| ⇧Enter           | New line                         | Add a sibling right before it                         |
-| ⌥Enter           | New line                         | —                                                     |
-| Tab / ⇧Tab       | Finish, then add child / outdent | Add child / outdent                                   |
-| Esc              | Finish the label                 | Clear the selection                                   |
-| Arrows           | —                                | Go to the nearest visible topic that way (⌥ nudges)   |
-| ⌘↑ / ⌘↓          | —                                | Move among its siblings                               |
-| ⌘/               | —                                | Collapse / expand                                     |
-| Delete / ⌥Delete | —                                | Delete with its branch / keep its children            |
-| Any character    | —                                | Start typing; the character replaces the label        |
+| Key              | While typing a label             | With a topic selected                                          |
+| ---------------- | -------------------------------- | -------------------------------------------------------------- |
+| Enter            | Finish the label — only that     | Add a sibling right after it (a child, on the centre)          |
+| ⇧Enter           | New line                         | Add a sibling right before it                                  |
+| ⌥Enter           | New line                         | —                                                              |
+| Tab / ⇧Tab       | Finish, then add child / outdent | Add child / outdent                                            |
+| Esc              | Finish the label                 | Clear the selection                                            |
+| Arrows           | —                                | Go to the nearest visible topic that way (⌥ nudges)            |
+| ⌘↑ / ⌘↓          | —                                | Move among its siblings                                        |
+| ⌘/               | —                                | Collapse / expand                                              |
+| Delete / ⌥Delete | —                                | Delete with its branch / keep its children (not on the centre) |
+| Any character    | —                                | Start typing; the character replaces the label                 |
 
 Enter finishing and nothing else is the point of the table: one Enter used to
 commit _and_ create, which put boxes on the canvas nobody asked for. Now the
 label field swallows its Enter — propagation stopped, and default-prevented,
 which the window handler also checks — the topic stays selected, and the
-second Enter is the window's. Other shapes keep a canvas's keys: Enter and typing open their text,
-arrows nudge, Delete removes only the selection.
+second Enter is the window's. Other shapes keep a canvas's keys: Enter opens
+their text, letters stay tools (R then a click places a rectangle — typing over
+a selected box would rename it "r"), arrows nudge, Delete removes only the
+selection. ⌥Delete on a centre that holds branches does nothing: its children
+have no parent to be handed to, and keeping them would split one map into one
+centre per branch.
 
 Type-to-edit does not prevent the keystroke. The field mounts and focuses
 during the keydown and the browser delivers the character into it; the
@@ -247,14 +251,16 @@ is the centre.
 `cycle`, so the anchor cannot be mistaken for a branch. (Before, a topic added
 under a violet root came out violet.)
 
-**Neighbouring branches are far apart.** Cycles alternate warm and cool, and a
-test holds every adjacent pair, and every pair among the first four (all
-of them are on screen in a typical map), at ≥ 0.1 OKLab ΔE — several just-noticeable
-differences, in lightness as well as hue — which is what keeps branches apart
-for readers with a colour-vision deficiency. Ocean was recast (blue centre;
-cyan, indigo, green branches) because its old teal and cyan failed this, and
-Sunset traded amber and magenta — too close to orange and to pink once four
-branches are on screen — for violet and a teal.
+**Neighbouring branches are far apart.** Cycles alternate warm and cool. Every
+coloured theme has at least four hues — a typical map shows four branches at
+once — and a test holds every pair among the first four, and every adjacent
+pair, at ≥ 0.1 OKLab ΔE: several just-noticeable differences, in lightness as
+well as hue, which is what keeps branches apart for readers with a
+colour-vision deficiency. Monochrome is the exception by design (one grey;
+weight alone carries depth). Ocean was recast (blue centre; cyan, orange,
+indigo, green branches) because its old teal and cyan failed this; Sunset
+traded amber and magenta — too close to orange and to pink — for violet and a
+teal; Forest gained a blue so a fourth branch no longer repeats the first.
 
 **Light and dark are one identity under two lightings** (as before): each light
 theme has a dark counterpart with the same root and cycle, read through the
@@ -264,9 +270,9 @@ dark swatch table, and new documents are seeded in the creator's app theme.
 | ---------------------- | ------------------ | ----------------------------------------------------------- |
 | Launchstack / Midnight | violet (the brand) | blue, amber, teal, pink, green, orange                      |
 | Monochrome / Carbon    | graphite           | slate — hierarchy by weight alone, for print and formal use |
-| Ocean / Abyss          | blue               | cyan, indigo, green                                         |
+| Ocean / Abyss          | blue               | cyan, orange, indigo, green                                 |
 | Sunset / Ember         | red                | orange, pink, violet, teal                                  |
-| Forest / Pine          | green              | teal, amber, lime                                           |
+| Forest / Pine          | green              | teal, amber, blue, lime                                     |
 
 Measured (WCAG contrast; minima over each theme's branch hues):
 
@@ -274,14 +280,14 @@ Measured (WCAG contrast; minima over each theme's branch hues):
 | ----------- | ------------ | --------------- | ------------ | ----------------------- | ------------ |
 | Launchstack | 5.5          | 5.5             | 8.1          | 3.5                     | 16.9         |
 | Monochrome  | 7.3          | 7.5             | 13.4         | 3.7                     | 17.3         |
-| Ocean       | 4.6          | 4.5             | 8.6          | 3.5                     | 14.9         |
+| Ocean       | 4.6          | 4.5             | 8.5          | 3.5                     | 14.9         |
 | Sunset      | 5.3          | 5.3             | 8.5          | 3.5                     | 14.4         |
 | Forest      | 5.0          | 5.0             | 8.1          | 3.4                     | 14.9         |
 | Midnight    | 6.4          | 6.8             | 9.9          | 6.9                     | 16.0         |
 | Carbon      | 6.5          | 7.1             | 11.1         | 5.2                     | 16.5         |
 | Abyss       | 7.1          | 7.5             | 10.0         | 6.6                     | 15.5         |
 | Ember       | 5.5          | 5.9             | 9.9          | 6.8                     | 15.5         |
-| Pine        | 7.7          | 8.2             | 9.9          | 8.4                     | 15.7         |
+| Pine        | 7.7          | 8.2             | 9.9          | 7.6                     | 15.7         |
 
 **Every path paints through the same function.** A topic's look depends on
 the theme _and_ its place in the tree, which no factory can know, so Tab,

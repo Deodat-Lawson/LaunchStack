@@ -352,6 +352,17 @@ describe("Delete", () => {
         expect(children(store, "R")).toEqual(["A1", "B", "C"]);
     });
 
+    it("leaves the centre standing on ⌥ — its branches have nowhere to go", () => {
+        // Lifting the centre's children would make each branch a centre of
+        // its own: one map split into three (QA, 2026-10-11).
+        const { store } = mount(smallMap());
+        act(() => store.selectNodes(["R"]));
+        press("Backspace", { altKey: true });
+        expect(count(store)).toBe(5);
+        expect(graphRoots(page(store)).map(n => n.id)).toEqual(["R"]);
+        expect(store.selectedNodeIds()).toEqual(["R"]);
+    });
+
     it("removes only the selected box from a flowchart", () => {
         const box = (id: string, x: number) => ({
             ...createNode({ shape: "rectangle", x, y: 0 }),
@@ -399,12 +410,25 @@ describe("typing on a selection", () => {
         expect(count(store)).toBe(5);
     });
 
-    it("works on any shape that holds text", () => {
+    it("is a topic's alone: on a box or a sticky a letter is still a tool", () => {
+        // R then a click is how a flowchart grows; renaming the selected box
+        // to "r" instead broke that (QA, 2026-10-11). Enter opens their text.
         const sticky = { ...createNode({ shape: "sticky", x: 0, y: 400, text: "old" }), id: "s" };
-        const { store } = mount(smallMap([sticky]));
-        act(() => store.selectNodes(["s"]));
+        const box = { ...createNode({ shape: "rectangle", x: 0, y: 600, text: "Box A" }), id: "b" };
+        const { store } = mount(smallMap([sticky, box]));
+        act(() => store.selectNodes(["b"]));
+        press("r");
+        expect(store.getState().editing).toBeNull();
+        expect(store.getState().pendingShape).toBe("rectangle");
+        expect(textOf(store, "b")).toBe("Box A");
+
+        act(() => {
+            store.setTool("select");
+            store.selectNodes(["s"]);
+        });
         press("Q", { shiftKey: true });
-        expect(field().value).toBe("Q");
+        expect(store.getState().editing).toBeNull();
+        expect(textOf(store, "s")).toBe("old");
     });
 
     it("leaves tool letters alone when no single text shape is selected", () => {

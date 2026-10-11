@@ -77,7 +77,7 @@ export function EmptyCanvasHint({
                 Type your idea
             </button>
 
-            <p className="text-ink-2 flex items-center gap-3 text-[12.5px]">
+            <p className="text-ink-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[12.5px]">
                 <span>
                     <Key>Enter</Key> finish / next
                 </span>

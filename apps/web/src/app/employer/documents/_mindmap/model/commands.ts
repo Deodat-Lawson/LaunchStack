@@ -25,6 +25,7 @@ import {
     graphDescendants,
     graphIndex,
     insertEdgesBeside,
+    isCentreWithBranches,
     isTopicShape,
     mapEdges,
     mapNodes,
@@ -196,6 +197,10 @@ function removeReconnecting(
     nodeId: string
 ): { page: DiagramPage; moved: string[] } {
     const idx = graphIndex(page);
+    // The centre's branches have no parent to be handed to; keeping them
+    // would split the map into one centre per branch. Leave it standing —
+    // plain Delete is how a whole map goes.
+    if (isCentreWithBranches(page, nodeId, idx)) return { page, moved: [] };
     const parent = (idx.in.get(nodeId) ?? [])[0];
     const removed = new Set(withDescendants(page, [nodeId]));
     const children = (idx.out.get(nodeId) ?? []).filter(id => !removed.has(id));
@@ -245,11 +250,15 @@ export function deleteTopicsOrSelection(
     opts: { keepChildren?: boolean } = {}
 ): void {
     const page = activePage(store.getState().doc);
-    const ids = selectedTopicIds(store);
-    if (!ids) {
+    const all = selectedTopicIds(store);
+    if (!all) {
         deleteSelection(store);
         return;
     }
+    // ⌥⌫ skips a centre that holds branches (see `removeReconnecting`); with
+    // nothing else selected it does nothing, and the selection stays put.
+    const ids = opts.keepChildren ? all.filter(id => !isCentreWithBranches(page, id)) : all;
+    if (ids.length === 0) return;
 
     const doomed = opts.keepChildren ? new Set(ids) : branchOf(page, ids);
     let next = topicParent(page, ids[0]!);
@@ -1106,7 +1115,15 @@ export function addChildTopic(
             page2 =>
                 paintTopics(
                     insertEdgesBeside(
-                        addNodes(page2, [child]),
+                        // A child added under a folded branch would be born
+                        // hidden, with its label field floating over nothing:
+                        // open the branch first.
+                        addNodes(
+                            parent.collapsed
+                                ? mapNodes(page2, [parentId], nd => ({ ...nd, collapsed: false }))
+                                : page2,
+                            [child]
+                        ),
                         [edge],
                         anchor?.id,
                         place.after ? "after" : "before"

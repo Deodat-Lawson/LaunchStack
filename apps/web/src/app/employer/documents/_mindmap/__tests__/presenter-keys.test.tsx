@@ -4,6 +4,7 @@ import React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
+import { createEdge, createNode, createPage } from "../model/factory";
 import { buildTemplate } from "../model/templates";
 import { MindmapEditor } from "../ui/MindmapEditor";
 
@@ -65,4 +66,36 @@ it("steps through the branches with the arrow keys, forward and back", () => {
     expect(screen.getByText("Branch 2 of 4")).toBeInTheDocument();
     press("ArrowLeft");
     expect(screen.getByText("Branch 1 of 4")).toBeInTheDocument();
+});
+
+it("starts the next page at its own overview when → runs past the last branch", () => {
+    const base = buildTemplate("mindmap", "Deck");
+    const root = createNode({ shape: "mind-root", x: 0, y: 0, text: "Second page" });
+    const a = createNode({ shape: "mind-branch", x: 300, y: 0, text: "A" });
+    const b = createNode({ shape: "mind-branch", x: 300, y: 120, text: "B" });
+    const link = (to: string) =>
+        createEdge({ from: { nodeId: root.id, port: "auto" }, to: { nodeId: to, port: "auto" } });
+    const second = {
+        ...createPage("Page 2"),
+        nodes: [root, a, b],
+        edges: [link(a.id), link(b.id)],
+    };
+    render(
+        <MindmapEditor
+            mindmapId={1}
+            initialDoc={{ ...base, pages: [...base.pages, second] }}
+            initialTitle="Deck"
+            initialRevision={1}
+            folder="Unfiled"
+            publishedDocumentId={null}
+            author="Ada Lovelace"
+            initialChrome="focus"
+        />
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Present/ }));
+    // Overview → four branches → the whole map, then one more turns the page.
+    for (let i = 0; i < 6; i++) press("ArrowRight");
+    expect(screen.getByText("Overview")).toBeInTheDocument();
+    press("ArrowRight");
+    expect(screen.getByText("Branch 1 of 2")).toBeInTheDocument();
 });

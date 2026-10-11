@@ -17,15 +17,16 @@ import { activePage, nodeById } from "../model/doc";
 import { nodesBounds, worldToScreen } from "../model/geometry";
 import { SWATCH_BY_ID, swatchFor } from "../model/palette";
 
+import type { EditorState } from "../model/store";
+import type { DiagramNode } from "../model/types";
+import { useEditor, useStore } from "./EditorContext";
+
 /**
  * The eight hues on the floating toolbar: one neutral and seven that are far
  * apart round the wheel, so each dot is a different answer. (The first eight
  * of the full table were two greys and four blues.)
  */
 const PICKER = ["slate", "violet", "blue", "teal", "green", "amber", "orange", "pink"] as const;
-import type { EditorState } from "../model/store";
-import type { DiagramNode } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
 
 /**
  * The toolbar that sits on the selection.

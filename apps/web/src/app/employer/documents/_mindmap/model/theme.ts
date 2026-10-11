@@ -257,7 +257,8 @@ function withDescendants(page: DiagramPage, ids: readonly string[]): Set<string>
 export function paintTopics(
     page: DiagramPage,
     ids: readonly string[],
-    paletteId: string | null | undefined
+    paletteId: string | null | undefined,
+    opts: { retype?: boolean } = {}
 ): DiagramPage {
     const theme = themeFor(paletteId, undefined);
     const painting = withDescendants(page, ids);
@@ -275,7 +276,16 @@ export function paintTopics(
         const place = places.get(id);
         const hue = hueFor(next, theme, id, place);
         const paint = topicPaint(theme, nd.shape, place?.depth ?? 0, hue);
-        const painted = paintTopicNode(nd, theme, place, hue);
+        const coloured = paintTopicNode(nd, theme, place, hue);
+        // A topic that moved level takes that level's type as well: an
+        // outdented detail is a main branch now, so it gets 15px bold too.
+        const painted =
+            opts.retype && nd.shape !== "mind-leaf"
+                ? {
+                      ...coloured,
+                      textStyle: { ...coloured.textStyle, ...topicType(place?.depth ?? 0) },
+                  }
+                : coloured;
         next = {
             ...next,
             nodes: next.nodes.map(n => (n.id === id ? painted : n)),
@@ -303,7 +313,16 @@ export function recolourTopics(
 ): DiagramPage {
     const theme = themeFor(paletteId, undefined);
     const places = topicPlaces(page);
-    const painting = withDescendants(page, ids);
+    // A centre is recoloured alone. Its "subtree" is the whole map, and
+    // pouring one hue over every branch would erase what colour means here.
+    const centres = ids.filter(id => places.get(id)?.depth === 0);
+    const painting = new Set([
+        ...centres,
+        ...withDescendants(
+            page,
+            ids.filter(id => !centres.includes(id))
+        ),
+    ]);
     const nodes = page.nodes.map(nd => {
         if (!painting.has(nd.id)) return nd;
         if (nd.shape === "mind-root") {

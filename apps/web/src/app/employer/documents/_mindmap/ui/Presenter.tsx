@@ -45,11 +45,17 @@ export function Presenter({
     }, [doc]);
 
     // 0 = overview with everything folded; 1..n = branch n revealed;
-    // n + 1 = the whole map, unfolded.
-    const [step, setStep] = useState(0);
+    // n + 1 = the whole map, unfolded. Kept per page: stepping past the last
+    // branch turns to the next page (the editor's page stepper), and that
+    // page starts at its own overview rather than at "Branch 5 of 1".
+    const pageId = doc.activePageId;
+    const [position, setPosition] = useState({ pageId, step: 0 });
+    const step = position.pageId === pageId ? position.step : 0;
+    const setStep = useCallback((next: number) => setPosition({ pageId, step: next }), [pageId]);
 
-    // Fold on mount, unfold on unmount. Idempotent rather than guarded by a
-    // ref: React runs mount → cleanup → mount in development.
+    // Fold on mount and on every page turn, unfold on unmount. Idempotent
+    // rather than guarded by a ref: React runs mount → cleanup → mount in
+    // development.
     useEffect(() => {
         if (branches.length === 0) return;
         store.setFolded(branches);
@@ -57,9 +63,9 @@ export function Presenter({
         return () => {
             store.setFolded([]);
         };
-        // The branch list is fixed for the length of a presentation.
+        // The branch list is fixed for the length of a page's presentation.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [branches.length]);
+    }, [pageId, branches.length]);
 
     const go = useCallback(
         (next: number) => {
@@ -81,7 +87,7 @@ export function Presenter({
             store.setFolded(branches.slice(target));
             focusNode(store, branches[target - 1]!, canvasSize);
         },
-        [branches, canvasSize, store]
+        [branches, canvasSize, store, setStep]
     );
 
     useEffect(() => {

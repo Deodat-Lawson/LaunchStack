@@ -309,10 +309,20 @@ describe("branch hues", () => {
         }
     });
 
-    it("keep the first four branches — a typical map — mutually distinct", () => {
+    it("give a typical four-branch map four different hues, in every coloured theme", () => {
         // Neighbours in the cycle are not the only pairs on screen: a map with
-        // four branches shows all four at once, so all of them must differ.
+        // four branches shows all four at once, so a coloured theme needs four
+        // hues and every pair of them must differ. Monochrome is the one
+        // theme that is grey by design (a single hue; weight carries depth).
         for (const theme of THEMES) {
+            if (theme.cycle.length === 1) {
+                expect(["mono", "carbon"]).toContain(theme.id);
+                continue;
+            }
+            expect({ id: theme.id, hues: theme.cycle.length >= 4 }).toEqual({
+                id: theme.id,
+                hues: true,
+            });
             const first = theme.cycle.slice(0, 4).map(h => swatchFor(h, theme.mode).stroke);
             for (let i = 0; i < first.length; i++) {
                 for (let j = i + 1; j < first.length; j++) {

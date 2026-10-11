@@ -7,9 +7,10 @@ import {
 } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
 import { contrastRatio, swatchFor, THEME_BY_ID } from "../model/palette";
+import { createNodeAt } from "../model/factory";
 import { EditorStore } from "../model/store";
 import { buildTemplate } from "../model/templates";
-import { restyleMovedTopics } from "../model/topicStyle";
+import { paintNewTopics, restyleMovedTopics } from "../model/topicStyle";
 
 /**
  * Colour by branch, at the level of the commands people actually use.
@@ -74,6 +75,23 @@ describe("Tab under the centre", () => {
         const theme = THEME_BY_ID.default!;
         expect(strokes).not.toContain(swatchFor(theme.root, "light").stroke);
         expect(strokes[0]).toBe(swatchFor(theme.cycle[0]!, "light").stroke);
+    });
+
+    it("hands out branch hues in the theme's own order, not the factory's placeholder", () => {
+        // Forest's hues include the default theme's blue, which every new
+        // topic is born wearing; kept, it put blue first (QA, round 2).
+        const base = buildTemplate("blank", "Map");
+        const store = new EditorStore({
+            ...base,
+            settings: { ...base.settings, paletteId: "forest" },
+        });
+        const root = startMap(store);
+        const strokes = [1, 2, 3, 4].map(() => {
+            const id = addChildTopic(store, root)!;
+            store.setEditing(null);
+            return nodeById(page(store), id)!.style.stroke;
+        });
+        expect(strokes).toEqual(THEME_BY_ID.forest!.cycle.map(h => swatchFor(h, "light").stroke));
     });
 
     it("hands a subtopic its branch's hue and colours the line into it to match", () => {
@@ -185,6 +203,16 @@ describe("moving and folding", () => {
         expect(nodeById(page(store), branch)!.collapsed).toBe(true);
         addChildTopic(store, branch);
         expect(nodeById(page(store), branch)!.collapsed).toBe(false);
+    });
+});
+
+describe("paintNewTopics", () => {
+    it("leaves a topic floating free at the size it was made with, not the centre's", () => {
+        const store = blankStore();
+        const node = createNodeAt("mind-branch", { x: 400, y: 400 }, { mode: "light" });
+        store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), { label: "Add topic" });
+        paintNewTopics(store, [node.id]);
+        expect(nodeById(page(store), node.id)!.textStyle).toMatchObject({ size: 14, bold: false });
     });
 });
 

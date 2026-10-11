@@ -189,10 +189,11 @@ function hueFor(
     page: DiagramPage,
     theme: DocTheme,
     id: string,
-    place: TopicPlace | undefined
+    place: TopicPlace | undefined,
+    fresh: boolean
 ): string {
     if (place?.branchId == null) return branchHueAt(theme, 0);
-    if (place.depth === 1) return mainBranchHue(page, theme, id);
+    if (place.depth === 1) return mainBranchHue(page, theme, id, fresh);
     const stroke = nodeById(page, place.branchId)?.style.stroke;
     return (stroke ? swatchIdOf(stroke) : null) ?? branchHueAt(theme, place.branchIndex);
 }
@@ -203,7 +204,12 @@ function hueFor(
  * a branch never repeats a neighbour's colour while there are hues left. Once
  * the cycle is used up, it falls back to its position.
  */
-function mainBranchHue(page: DiagramPage, theme: DocTheme, branchId: string): string {
+function mainBranchHue(
+    page: DiagramPage,
+    theme: DocTheme,
+    branchId: string,
+    fresh: boolean
+): string {
     const idx = graphIndex(page);
     const parent = (idx.in.get(branchId) ?? []).find(p => isTopic(nodeById(page, p)));
     const siblings = parent ? (idx.out.get(parent) ?? []) : [];
@@ -214,7 +220,10 @@ function mainBranchHue(page: DiagramPage, theme: DocTheme, branchId: string): st
             .filter((hue): hue is string => hue !== null)
     );
     const own = swatchIdOf(nodeById(page, branchId)?.style.stroke ?? "");
-    if (own && theme.cycle.includes(own) && !used.has(own)) return own;
+    // A topic made a moment ago wears the factory's placeholder hue, not a
+    // choice — keeping it would start a Forest map on blue. Only a topic that
+    // already belonged somewhere keeps what it wore.
+    if (!fresh && own && theme.cycle.includes(own) && !used.has(own)) return own;
     const free = theme.cycle.find(hue => !used.has(hue));
     if (free) return free;
     return branchHueAt(theme, Math.max(siblings.indexOf(branchId), 0));
@@ -258,7 +267,7 @@ export function paintTopics(
     page: DiagramPage,
     ids: readonly string[],
     paletteId: string | null | undefined,
-    opts: { retype?: boolean } = {}
+    opts: { retype?: boolean; fresh?: boolean } = {}
 ): DiagramPage {
     const theme = themeFor(paletteId, undefined);
     const painting = withDescendants(page, ids);
@@ -274,13 +283,17 @@ export function paintTopics(
         const nd = nodeById(next, id);
         if (!nd) continue;
         const place = places.get(id);
-        const hue = hueFor(next, theme, id, place);
+        const hue = hueFor(next, theme, id, place, opts.fresh === true);
         const paint = topicPaint(theme, nd.shape, place?.depth ?? 0, hue);
         const coloured = paintTopicNode(nd, theme, place, hue);
         // A topic that moved level takes that level's type as well: an
         // outdented detail is a main branch now, so it gets 15px bold too.
+        // Only a topic with a place in a tree, or a centre: one floating free
+        // (double-clicked onto the canvas) keeps the size it was made with
+        // rather than the centre's, which depth 0 would otherwise give it.
+        const placed = nd.shape === "mind-root" || (place?.depth ?? 0) >= 1;
         const painted =
-            opts.retype && nd.shape !== "mind-leaf"
+            opts.retype && placed && nd.shape !== "mind-leaf"
                 ? {
                       ...coloured,
                       textStyle: { ...coloured.textStyle, ...topicType(place?.depth ?? 0) },

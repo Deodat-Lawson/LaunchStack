@@ -110,7 +110,7 @@ export function docMode(store: EditorStore): ThemeMode {
 function addPainted(page: DiagramPage, nodes: DiagramNode[], paletteId: string): DiagramPage {
     const next = addNodes(page, nodes);
     const topics = nodes.filter(nd => nd.shape.startsWith("mind-")).map(nd => nd.id);
-    return topics.length ? paintTopics(next, topics, paletteId) : next;
+    return topics.length ? paintTopics(next, topics, paletteId, { fresh: true }) : next;
 }
 
 export function insertShape(
@@ -1129,7 +1129,8 @@ export function addChildTopic(
                         place.after ? "after" : "before"
                     ),
                     [child.id],
-                    paletteId
+                    paletteId,
+                    { fresh: true }
                 ),
             { label: "Add topic" }
         );

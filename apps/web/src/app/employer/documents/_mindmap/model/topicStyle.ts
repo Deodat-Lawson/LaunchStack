@@ -17,3 +17,17 @@ export function restyleMovedTopics(store: EditorStore, ids: string[]): void {
         transient: true,
     });
 }
+
+/**
+ * Paint topics that were just made by a gesture — dragged out of a port,
+ * double-clicked onto the canvas, dropped from the palette. As
+ * `restyleMovedTopics`, except a new main branch takes the theme's next unused
+ * hue instead of keeping the placeholder colour the factory gave it.
+ */
+export function paintNewTopics(store: EditorStore, ids: string[]): void {
+    if (ids.length === 0) return;
+    const paletteId = store.getState().doc.settings.paletteId;
+    store.updatePage(page => paintTopics(page, ids, paletteId, { retype: true, fresh: true }), {
+        transient: true,
+    });
+}

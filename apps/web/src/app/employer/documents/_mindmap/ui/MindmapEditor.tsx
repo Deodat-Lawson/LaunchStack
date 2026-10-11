@@ -38,7 +38,7 @@ import { isImageFile } from "../lib/images";
 import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
-import { restyleMovedTopics } from "../model/topicStyle";
+import { paintNewTopics } from "../model/topicStyle";
 import type { Point, ShapeId } from "../model/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
@@ -389,7 +389,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
                 });
-                if (shape.startsWith("mind-")) restyleMovedTopics(store, [node.id]);
+                if (shape.startsWith("mind-")) paintNewTopics(store, [node.id]);
                 store.selectNodes([node.id]);
                 // Same as placing one with the shape tool: land in the label,
                 // so a dropped box asks to be named rather than sitting blank.

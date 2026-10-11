@@ -1,6 +1,6 @@
 /** Comments on LinkedIn posts (socialActions/comments): reading them and replying. */
 import { decodeId, encodeUrn, linkedInContext, linkedInRequest, mapLimit, readJson } from "./http";
-import type { LinkedInClientOptions, LinkedInComment } from "./types";
+import { LinkedInApiError, type LinkedInClientOptions, type LinkedInComment } from "./types";
 import { nonBlank } from "../text";
 
 interface CommentElement {
@@ -56,6 +56,34 @@ function hasReplies(el: CommentElement): boolean {
 }
 
 /**
+ * Who wrote each comment: LinkedIn returns only the actor's URN unless the
+ * request asks it to decorate the actor (`actor~`), which the Comments API
+ * documents for current versions. Decoration is being retired version by
+ * version, so a request LinkedIn rejects for its projection (400) is made
+ * again without one — names then fall back to the host.
+ */
+const ACTOR_PROJECTION =
+    "(elements*(*,actor~(localizedFirstName,localizedLastName,localizedName,vanityName)))";
+
+async function readCommentElements(
+    ctx: ReturnType<typeof linkedInContext>,
+    targetUrn: string,
+    count: number,
+    what: string
+): Promise<CommentElement[]> {
+    const base = `/rest/socialActions/${encodeUrn(targetUrn)}/comments?count=${count}`;
+    let res: Response;
+    try {
+        res = await linkedInRequest(ctx, { path: `${base}&projection=${ACTOR_PROJECTION}`, what });
+    } catch (error) {
+        if (!(error instanceof LinkedInApiError) || error.status !== 400) throw error;
+        res = await linkedInRequest(ctx, { path: base, what });
+    }
+    const data = await readJson<{ elements?: CommentElement[] }>(res);
+    return data?.elements ?? [];
+}
+
+/**
  * Comments on a post, newest first. LinkedIn lists first-level comments on
  * the post; when a comment reports replies of its own (`commentsSummary`),
  * those are read too (`includeReplies`, default on), each tolerated if it
@@ -68,12 +96,12 @@ export async function listLinkedInComments(
     const ctx = linkedInContext(opts);
     const count = opts.count ?? DEFAULT_COUNT;
 
-    const res = await linkedInRequest(ctx, {
-        path: `/rest/socialActions/${encodeUrn(opts.postUrn)}/comments?count=${count}`,
-        what: "read the post's comments",
-    });
-    const data = await readJson<{ elements?: CommentElement[] }>(res);
-    const elements = data?.elements ?? [];
+    const elements = await readCommentElements(
+        ctx,
+        opts.postUrn,
+        count,
+        "read the post's comments"
+    );
 
     const comments: LinkedInComment[] = [];
     const threads: LinkedInComment[] = [];
@@ -86,12 +114,13 @@ export async function listLinkedInComments(
 
     const replies = await mapLimit(threads, 4, async parent => {
         try {
-            const r = await linkedInRequest(ctx, {
-                path: `/rest/socialActions/${encodeUrn(parent.urn)}/comments?count=${count}`,
-                what: "read replies to a comment",
-            });
-            const nested = await readJson<{ elements?: CommentElement[] }>(r);
-            return (nested?.elements ?? [])
+            const nested = await readCommentElements(
+                ctx,
+                parent.urn,
+                count,
+                "read replies to a comment"
+            );
+            return nested
                 .map(el =>
                     toComment(el, { objectUrn: parent.objectUrn, parentCommentUrn: parent.urn })
                 )

@@ -10,7 +10,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, desc, eq, gte, inArray, isNotNull } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
 
 import {
     brandPosts,
@@ -103,7 +103,7 @@ async function saveMetrics(
     return updated;
 }
 
-/** Insert comments not seen before; a comment already stored keeps its done state. */
+/** Store comments; returns how many were new. A comment already stored keeps its done state. */
 async function saveComments(
     channel: BrandChannelRow,
     post: BrandPostRow,
@@ -132,9 +132,18 @@ async function saveComments(
                 handledAt: seed.authorExternalId === channel.externalId ? seed.commentedAt : null,
             }))
         )
-        .onConflictDoNothing({ target: [brandComments.channelId, brandComments.externalId] })
-        .returning({ id: brandComments.id });
-    return rows.length;
+        // Seen before: keep its done state, but take the network's latest
+        // wording and the author's name if it has one now.
+        .onConflictDoUpdate({
+            target: [brandComments.channelId, brandComments.externalId],
+            set: {
+                body: sql`excluded.body`,
+                authorName: sql`coalesce(excluded.author_name, ${brandComments.authorName})`,
+                authorHandle: sql`coalesce(excluded.author_handle, ${brandComments.authorHandle})`,
+            },
+        })
+        .returning({ id: brandComments.id, inserted: sql<boolean>`(xmax = 0)` });
+    return rows.filter(r => r.inserted).length;
 }
 
 async function syncLinkedInPage(

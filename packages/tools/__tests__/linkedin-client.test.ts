@@ -788,7 +788,7 @@ describe("comments", () => {
         });
 
         expect(calls[0]!.url).toBe(
-            `${BASE}/rest/socialActions/urn%3Ali%3Ashare%3A6305471423242596352/comments?count=20`
+            `${BASE}/rest/socialActions/urn%3Ali%3Ashare%3A6305471423242596352/comments?count=20&projection=(elements*(*,actor~(localizedFirstName,localizedLastName,localizedName,vanityName)))`
         );
         expect(comments.map(c => c.id)).toEqual(["333", "222", "111"]);
         expect(comments[0]).toMatchObject({
@@ -810,6 +810,54 @@ describe("comments", () => {
             actorName: "Ann Lee",
             createdAt: new Date(1_700_000_000_000),
         });
+    });
+
+    it("asks again without the actor projection when LinkedIn rejects it", async () => {
+        const { fetch, calls } = router([
+            [
+                "projection=",
+                () =>
+                    json(
+                        { status: 400, message: "Projection is not supported for this version" },
+                        400
+                    ),
+            ],
+            [
+                "/comments?count=50",
+                () =>
+                    json({
+                        elements: [
+                            {
+                                commentUrn: C1,
+                                id: "111",
+                                actor: "urn:li:person:a",
+                                message: { text: "Hi" },
+                                created: { time: 1_700_000_000_000 },
+                            },
+                        ],
+                    }),
+            ],
+        ]);
+        const comments = await listLinkedInComments({
+            accessToken: "t",
+            apiBaseUrl: BASE,
+            fetch,
+            postUrn: POST,
+        });
+        expect(calls).toHaveLength(2);
+        expect(calls[1]!.url).not.toContain("projection=");
+        expect(comments).toHaveLength(1);
+        expect(comments[0]!.actorName).toBeNull();
+    });
+
+    it("does not retry a refused token without the projection", async () => {
+        const { fetch, calls } = router([
+            ["/comments", () => json({ status: 401, code: "REVOKED_ACCESS_TOKEN" }, 401)],
+        ]);
+        await expect(
+            listLinkedInComments({ accessToken: "t", apiBaseUrl: BASE, fetch, postUrn: POST })
+        ).rejects.toMatchObject({ authFailed: true });
+        expect(calls).toHaveLength(1);
     });
 
     it("replies on the parent comment's thread, with object = the post", async () => {

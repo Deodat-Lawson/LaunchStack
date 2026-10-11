@@ -64,6 +64,14 @@
             "types": "./src/social-publish/index.ts",
             "default": "./src/social-publish/index.ts"
         },
+        "./social-publish/linkedin": {
+            "types": "./src/social-publish/linkedin/index.ts",
+            "default": "./src/social-publish/linkedin/index.ts"
+        },
+        "./social-publish/bluesky": {
+            "types": "./src/social-publish/bluesky/index.ts",
+            "default": "./src/social-publish/bluesky/index.ts"
+        },
         "./stage-runner": {
             "types": "./src/stage-runner/index.ts",
             "default": "./src/stage-runner/index.ts"
@@ -173,6 +181,14 @@
             "./social-publish": {
                 "types": "./dist/social-publish/index.d.ts",
                 "default": "./dist/social-publish/index.js"
+            },
+            "./social-publish/linkedin": {
+                "types": "./dist/social-publish/linkedin/index.d.ts",
+                "default": "./dist/social-publish/linkedin/index.js"
+            },
+            "./social-publish/bluesky": {
+                "types": "./dist/social-publish/bluesky/index.d.ts",
+                "default": "./dist/social-publish/bluesky/index.js"
             },
             "./stage-runner": {
                 "types": "./dist/stage-runner/index.d.ts",

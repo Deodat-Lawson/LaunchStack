@@ -81,6 +81,9 @@ describe("AskPanel reading a shared chat", () => {
         expect(screen.getByTestId("hidden-citations")).toHaveTextContent(
             "2 sources you can’t open are hidden."
         );
+        // Their questions are under their name, not "You".
+        expect(screen.getByText("Ada Lovelace")).toBeInTheDocument();
+        expect(screen.queryByText("You")).not.toBeInTheDocument();
     });
 
     it("replaces the composer with a quiet bar that continues it as your own", async () => {

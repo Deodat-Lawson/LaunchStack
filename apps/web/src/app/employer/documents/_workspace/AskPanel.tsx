@@ -263,6 +263,8 @@ interface MessageProps {
     active?: boolean;
     /** Someone else's chat: no verbs that write into a composer that isn't there. */
     readOnly?: boolean;
+    /** Who asked the questions, when it isn't you (a chat shared with you). */
+    asker?: { name: string; email?: string; avatarUrl?: string | null };
 }
 
 /**
@@ -406,6 +408,7 @@ const Message = React.memo(function Message({
     isPlan,
     active,
     readOnly = false,
+    asker,
 }: MessageProps) {
     const isUser = msg.role === "user";
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -582,21 +585,32 @@ const Message = React.memo(function Message({
                         marginBottom: 8,
                     }}
                 >
-                    <div
-                        style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: "50%",
-                            background: "var(--ink)",
-                            color: "var(--panel)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <IconUser size={12} />
-                    </div>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>You</span>
+                    {asker ? (
+                        // Someone else's chat: their question, under their name.
+                        <ProfileAvatar
+                            name={asker.name}
+                            email={asker.email}
+                            src={asker.avatarUrl}
+                            className="size-[22px]"
+                            fallbackClassName="text-[9px]"
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: 22,
+                                height: 22,
+                                borderRadius: "50%",
+                                background: "var(--ink)",
+                                color: "var(--panel)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <IconUser size={12} />
+                        </div>
+                    )}
+                    <span className="text-[13px] font-semibold">{asker?.name ?? "You"}</span>
                     {msg.intent && (
                         <span className="border-line bg-panel text-ink-3 rounded border px-1.5 py-0.5 text-[10px] font-normal">
                             {msg.intent === "interrupt" ? "Immediate follow-up" : "Queued"}
@@ -1307,6 +1321,19 @@ export function AskPanel({
             setSeed({ ...composerSeed, draftKey: suppliedDraftKey });
     }, [composerSeed, suppliedDraftKey]);
     /** Reading someone else's chat: there is no composer here to put text into. */
+    const ownerId = readOnly?.ownerAuthUserId ?? null;
+    const ownerLook = usePeople(ownerId ? [ownerId] : [])[ownerId ?? ""];
+    const asker = useMemo(
+        () =>
+            ownerId
+                ? {
+                      name: ownerLook?.displayName ?? "Teammate",
+                      email: ownerLook?.email,
+                      avatarUrl: ownerLook?.avatarUrl ?? null,
+                  }
+                : undefined,
+        [ownerId, ownerLook]
+    );
     const readOnlyRef = useRef(Boolean(readOnly));
     readOnlyRef.current = Boolean(readOnly);
     const noComposer = useCallback(() => {
@@ -1706,6 +1733,7 @@ export function AskPanel({
                                         active={isSending}
                                         agents={agents}
                                         readOnly={Boolean(readOnly)}
+                                        asker={asker}
                                     />
                                 );
                             })}
@@ -1755,7 +1783,7 @@ export function AskPanel({
                             <button
                                 type="button"
                                 key={msg.id ?? i}
-                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? "You" : "Assistant"} — ${msg.text.slice(0, 80)}`}
+                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? (asker?.name ?? "You") : "Assistant"} — ${msg.text.slice(0, 80)}`}
                                 aria-current={i === currentIndex ? "true" : undefined}
                                 title={msg.text.slice(0, 160)}
                                 className="my-1 h-2 min-w-2 rounded-full focus-visible:outline"

@@ -812,7 +812,9 @@ export function WorkspaceShell() {
         async (id: string) => {
             try {
                 const fork = await sessionApi.forkSession(id);
-                void refreshHistory();
+                // The header's title comes from History: load the copy into it
+                // first, so the new chat never opens as "New chat".
+                await refreshHistory();
                 resumeSession(fork.id);
                 toast.success("Continued in a new chat", {
                     description: "This copy is yours and private. The original is unchanged.",

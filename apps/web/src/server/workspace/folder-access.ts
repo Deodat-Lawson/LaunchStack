@@ -21,7 +21,9 @@ import { createFolder } from "~/server/folders";
 
 import {
     canManageFolderPath,
+    countAudience,
     folderAccess,
+    loadFolderLineage,
     folderOwner,
     inheritedAudience,
     workspaceName,
@@ -125,15 +127,12 @@ async function buildView(ctx: WorkspaceContext, folder: FolderRef): Promise<Fold
         folderAccess(ctx, folder.name),
     ]);
     const names = await principalNames(ctx.companyId, grants);
-    // An inheriting folder is seen by whoever sees the folder it inherits from.
-    let audienceCount = members.filter(m => canSeeFolder(m, restricted, grants)).length;
-    if (!restricted && inheritsFrom.restricted && inheritsFrom.path) {
-        const governing = await findFolderByPath(ctx.companyId, inheritsFrom.path);
-        if (governing) {
-            const governingGrants = await folderGrantRows(governing.id);
-            audienceCount = members.filter(m => canSeeFolder(m, true, governingGrants)).length;
-        }
-    }
+    // By the read rules themselves: an inheriting folder is seen by whoever
+    // sees the folder it inherits from, plus anyone added to it directly.
+    const audienceCount = countAudience(
+        members,
+        await loadFolderLineage(ctx.companyId, folder.name)
+    );
     return {
         folder,
         visibility: restricted ? "restricted" : "workspace",

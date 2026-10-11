@@ -340,6 +340,59 @@ describeDb("resolveDocumentScope (integration)", () => {
         expect(rows).toEqual([]);
     });
 
+    it("opens a folder or file to someone added to it, though it only inherits a restriction they're not on", async () => {
+        const { folderGrants, documentGrants } = await import("~/server/db/schema");
+        // Reports only inherits Finance's restriction; the member is added to it.
+        const [reports] = await test.db
+            .insert(category)
+            .values({ name: "Finance/Reports", companyId: ids.companyId })
+            .returning();
+        await test.db.insert(folderGrants).values({
+            companyId: ids.companyId,
+            categoryId: BigInt(reports!.id),
+            principalType: "user",
+            principalId: ids.member.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+        // The Ledger has no restriction of its own; the viewer is added to it.
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docFinance),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Budget", "Handbook"]);
+        expect(await visibleTitles(ids.viewer, "viewer")).toEqual([
+            "Board deck",
+            "Handbook",
+            "Ledger",
+        ]);
+        // Nobody else gains anything from either.
+        expect(await visibleTitles(ids.groupMember, "member")).toEqual([
+            "Budget",
+            "Handbook",
+            "Ledger",
+        ]);
+
+        await test.db.delete(folderGrants).where(eq(folderGrants.categoryId, BigInt(reports!.id)));
+        await test.db.delete(category).where(eq(category.id, reports!.id));
+        await test.db
+            .delete(documentGrants)
+            .where(eq(documentGrants.principalId, ids.viewer.toString()));
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docBoardDeck),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+    });
+
     it("collapses to everything once the workspace has nothing restricted", async () => {
         const { folderSettings, documentSettings } = await import("~/server/db/schema");
         await test.db.delete(folderSettings).where(eq(folderSettings.companyId, ids.companyId));

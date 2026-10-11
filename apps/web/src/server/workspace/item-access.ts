@@ -15,8 +15,9 @@
  *   `folders.manage` → manage); grants anywhere in the lineage can only raise
  *   it.
  * - A restricted document is governed by its own grants alone. An
- *   unrestricted document follows its folder, and a grant on the document can
- *   raise the level the folder gives (never make it visible on its own).
+ *   unrestricted document follows its folder; a grant on the document raises
+ *   the level the folder gives, and opens it to someone the folder keeps out
+ *   (a reach-in, as `resolveDocumentScope` applies it).
  * - Nobody reads past a restriction by role: there is no admin bypass.
  * - Guests see only what reaches them through a grant on a restricted item.
  */
@@ -223,7 +224,14 @@ export function documentAccessFrom(
             principalCount: countPrincipals(doc.grants),
         };
     }
-    if (!folder.visible) return { ...folder, ownAudience: false };
+    // A person added to a file inside a folder they can't open still opens
+    // that file ("Same as Q4 planning", plus Ada) — the reach-in exception
+    // `resolveDocumentScope` applies too.
+    if (!folder.visible) {
+        return granted
+            ? { ...folder, visible: true, level: granted, ownAudience: false }
+            : { ...folder, ownAudience: false };
+    }
     return { ...folder, level: maxLevel(folder.level, granted), ownAudience: false };
 }
 
@@ -444,7 +452,7 @@ export async function folderOwner(categoryId: number): Promise<OwnerView | null>
         )
         .orderBy(asc(folderGrants.createdAt))
         .limit(1);
-    return row ?? null;
+    return row ? { authUserId: row.authUserId, name: row.name } : null;
 }
 
 /** Who added a document: the uploader of its first version. */
@@ -456,7 +464,7 @@ export async function documentOwner(documentId: number): Promise<OwnerView | nul
         .where(eq(documentVersions.documentId, BigInt(documentId)))
         .orderBy(asc(documentVersions.versionNumber))
         .limit(1);
-    return row ?? null;
+    return row ? { authUserId: row.authUserId, name: row.name } : null;
 }
 
 export async function workspaceName(companyId: bigint): Promise<string> {
@@ -466,4 +474,42 @@ export async function workspaceName(companyId: bigint): Promise<string> {
         .where(eq(company.id, Number(companyId)))
         .limit(1);
     return row?.name ?? "the workspace";
+}
+
+// ---------------------------------------------------------------------------
+// Audience
+// ---------------------------------------------------------------------------
+
+/** One active member, as `activeMemberPrincipals` lists them. */
+export interface AudienceMember {
+    /** `users.id` as a string. */
+    readonly userId: string;
+    readonly role: string;
+    readonly groupIds: ReadonlySet<string>;
+    readonly permissions: ReadonlySet<Permission>;
+}
+
+/**
+ * How many of `members` can open the folder at the top of `lineage` (deepest
+ * first) — or, with `doc`, that document in it — by exactly the rules reads
+ * use. The Share dialog's "(4 people)".
+ */
+export function countAudience(
+    members: readonly AudienceMember[],
+    lineage: readonly FolderFact[],
+    doc?: { restricted: boolean; grants: readonly GrantFact[] }
+): number {
+    let n = 0;
+    for (const m of members) {
+        const subject: AccessSubject = {
+            userPk: m.userId,
+            role: m.role,
+            groupIds: m.groupIds,
+            permissions: m.permissions,
+        };
+        const folder = folderAccessFrom(lineage, subject);
+        const access = doc ? documentAccessFrom(doc, folder, subject) : folder;
+        if (access.visible) n++;
+    }
+    return n;
 }

@@ -6,7 +6,7 @@
 
 import { and, eq } from "drizzle-orm";
 
-import { category, document } from "@launchstack/store/schema";
+import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { documentGrants, documentSettings } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
@@ -18,6 +18,8 @@ import { forbidden, notFound } from "./errors";
 import { notifyShared } from "./notifications";
 import {
     canManageDocument as canManageDocumentAccess,
+    countAudience,
+    loadFolderLineage,
     documentOwner,
     inheritedAudience,
     workspaceName,
@@ -25,12 +27,9 @@ import {
     type OwnerView,
 } from "./item-access";
 import { isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
-import { folderGrantRows, folderRestricted } from "./folder-access";
 import {
     activeMemberPrincipals,
     callerGroupIds,
-    canSeeFolder,
-    canSeeRestrictedDocument,
     diffGrants,
     hasManageGrant,
     principalNames,
@@ -39,7 +38,6 @@ import {
     type GrantInput,
     type GrantRow,
     type GrantView,
-    type MemberPrincipal,
 } from "./grants";
 
 export interface DocumentAccessView {
@@ -100,25 +98,6 @@ async function documentGrantRows(documentId: number): Promise<GrantRow[]> {
     return rows.map(r => ({ ...r, id: Number(r.id) }));
 }
 
-/** An unrestricted document is seen by whoever sees its folder. */
-async function folderAudience(
-    companyId: bigint,
-    categoryName: string,
-    members: readonly MemberPrincipal[]
-): Promise<number> {
-    const [folder] = await db
-        .select({ id: category.id })
-        .from(category)
-        .where(and(eq(category.companyId, companyId), eq(category.name, categoryName)))
-        .limit(1);
-    if (!folder) return members.filter(m => canSeeFolder(m, false, [])).length;
-    const [restricted, grants] = await Promise.all([
-        folderRestricted(Number(folder.id)),
-        folderGrantRows(Number(folder.id)),
-    ]);
-    return members.filter(m => canSeeFolder(m, restricted, grants)).length;
-}
-
 /** Manage level on the document (its own grants, or its folder's when it has none of its own). */
 async function canManageDocument(ctx: WorkspaceContext, doc: DocumentRef): Promise<boolean> {
     return canManageDocumentAccess(ctx, doc);
@@ -133,9 +112,11 @@ async function buildView(ctx: WorkspaceContext, doc: DocumentRef): Promise<Docum
     const names = await principalNames(ctx.companyId, grants);
     const loose = isUnfiledFolder(doc.category);
     const [audienceCount, inherited, owner, wsName, canManage] = await Promise.all([
-        restricted
-            ? Promise.resolve(members.filter(m => canSeeRestrictedDocument(m, grants)).length)
-            : folderAudience(ctx.companyId, doc.category, members),
+        // By the read rules themselves: the folder's whole lineage, the
+        // document's own restriction, and anyone added to the document.
+        loadFolderLineage(ctx.companyId, doc.category).then(lineage =>
+            countAudience(members, lineage, { restricted, grants })
+        ),
         inheritedAudience(ctx.companyId, loose ? null : normalizeFolderPath(doc.category)),
         documentOwner(doc.id),
         workspaceName(ctx.companyId),

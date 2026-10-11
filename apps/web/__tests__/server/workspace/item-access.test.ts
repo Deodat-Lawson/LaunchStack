@@ -8,6 +8,7 @@ import { builtinRolePermissions, type Permission } from "~/lib/authz/permissions
 import {
     audienceOf,
     canDeleteAtLevel,
+    countAudience,
     documentAccessFrom,
     folderAccessFrom,
     type AccessSubject,
@@ -172,17 +173,22 @@ describe("documentAccessFrom", () => {
         ).toBe("edit");
     });
 
-    it("never makes a document visible through a grant when its folder is closed", () => {
+    it("opens a file to someone added to it, even inside a folder that keeps them out", () => {
         const closed = folderAccessFrom(
             lineage({ path: "Board", restricted: true, grants: [user("7")] }),
             subject("member", "8")
         );
+        // "Same as Board", plus Ben: Ben opens this one file, at the level given.
         expect(
             documentAccessFrom(
-                { restricted: false, grants: [user("8")] },
+                { restricted: false, grants: [user("8", "view")] },
                 closed,
                 subject("member", "8")
-            ).visible
+            )
+        ).toMatchObject({ visible: true, level: "view" });
+        expect(
+            documentAccessFrom({ restricted: false, grants: [] }, closed, subject("member", "8"))
+                .visible
         ).toBe(false);
     });
 });
@@ -212,5 +218,32 @@ describe("canDeleteAtLevel", () => {
         expect(canDeleteAtLevel("edit", admin)).toBe(true);
         expect(canDeleteAtLevel("view", admin)).toBe(false);
         expect(canDeleteAtLevel(null, admin)).toBe(false);
+    });
+});
+
+describe("countAudience", () => {
+    const member = (userId: string, role = "member", groups: string[] = []) => ({
+        userId,
+        role,
+        groupIds: new Set(groups),
+        permissions: builtinRolePermissions(role) ?? new Set<Permission>(),
+    });
+    const team = [member("7"), member("8"), member("9", "admin"), member("10", "guest")];
+
+    it("counts an inheriting subfolder by its parent's list, plus anyone added to it", () => {
+        const child = lineage(
+            { path: "Q4/Pricing", grants: [user("8", "view")] },
+            { path: "Q4", restricted: true, grants: [user("7")] }
+        );
+        // Ada (7) through the parent, Ben (8) added here; not the admin, not the guest.
+        expect(countAudience(team, child)).toBe(2);
+    });
+
+    it("counts a file inside a private folder as private, not workspace-wide", () => {
+        const inside = lineage(
+            { path: "Q4/Pricing" },
+            { path: "Q4", restricted: true, grants: [user("7")] }
+        );
+        expect(countAudience(team, inside, { restricted: false, grants: [] })).toBe(1);
     });
 });

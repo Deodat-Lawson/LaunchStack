@@ -71,7 +71,13 @@ export interface ShareState {
     grants: ShareGrant[];
     canManage: boolean;
     /** What "open" means here. */
-    open: { kind: "workspace" | "inherit"; label: string; hint: string };
+    open: {
+        kind: "workspace" | "inherit";
+        label: string;
+        hint: string;
+        /** For "inherit": the folder it follows, to say "whoever can open it, plus …". */
+        from?: string;
+    };
     /** Levels a grant may take; chats are view-only. */
     levels: readonly GrantLevel[];
     owner: OwnerRef | null;
@@ -111,6 +117,7 @@ function openFor(
             kind: "inherit",
             label: `Same as ${name}`,
             hint: `Whoever can open ${name} can open this.`,
+            from: name,
         };
     }
     return {
@@ -211,17 +218,9 @@ export function shareSummary(input: {
     audienceCount: number | null;
     dirty: boolean;
 }): string {
-    if (input.general === "open") {
-        if (input.audienceCount !== null && !input.dirty) {
-            const n = input.audienceCount;
-            return `${input.open.hint} (${n} ${n === 1 ? "person" : "people"})`;
-        }
-        return input.open.hint;
-    }
     const isSelf = (g: ShareGrant) =>
         g.principalType === "user" && Boolean(g.authUserId) && g.authUserId === input.selfAuthId;
     const others = input.grants.filter(g => !isSelf(g));
-    if (others.length === 0) return "Only you can open it.";
     const people = others.filter(g => g.principalType === "user").length;
     const groups = others.filter(g => g.principalType === "group").length;
     const roles = others.filter(g => g.principalType === "role").length;
@@ -229,6 +228,19 @@ export function shareSummary(input: {
     if (people > 0) parts.push(`${people} ${people === 1 ? "person" : "people"}`);
     if (groups > 0) parts.push(`${groups} ${groups === 1 ? "group" : "groups"}`);
     if (roles > 0) parts.push(`${roles} ${roles === 1 ? "role" : "roles"}`);
+    const counted =
+        input.audienceCount !== null && !input.dirty
+            ? ` (${input.audienceCount} ${input.audienceCount === 1 ? "person" : "people"})`
+            : "";
+
+    if (input.general === "open") {
+        // Inheriting, people added here open it too — on top of the folder's audience.
+        if (input.open.kind === "inherit" && input.open.from && parts.length > 0) {
+            return `Whoever can open ${input.open.from}, plus ${parts.join(", ")}, can open this.${counted}`;
+        }
+        return `${input.open.hint}${counted}`;
+    }
+    if (others.length === 0) return "Only you can open it.";
     const listed = input.grants.some(isSelf);
     return `${listed ? "You and " : ""}${parts.join(", ")} can open it.`;
 }

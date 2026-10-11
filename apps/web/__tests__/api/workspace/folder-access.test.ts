@@ -190,10 +190,10 @@ describe("GET /api/workspace/folders/[categoryId]/access", () => {
     it("counts the real audience of a restricted folder", async () => {
         gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "owner", userPk: 7n })));
         fakeDb.onSelect(category, [FINANCE]);
-        fakeDb.onSelect(folderSettings, [{ visibility: "restricted" }]);
+        fakeDb.onSelect(folderSettings, [{ categoryId: 3n, visibility: "restricted" }]);
         fakeDb.onSelect(folderGrants, [
-            { id: 1, principalType: "user", principalId: "7", level: "manage" },
-            { id: 2, principalType: "user", principalId: "8", level: "view" },
+            { id: 1, categoryId: 3n, principalType: "user", principalId: "7", level: "manage" },
+            { id: 2, categoryId: 3n, principalType: "user", principalId: "8", level: "view" },
         ]);
         fakeDb.onSelect(userCompanyMemberships, [
             { userId: 7n, role: "owner", status: "active" },

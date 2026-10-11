@@ -76,12 +76,25 @@ recipients of a shared chat keep reading it.
 | `edit`   | Can edit   | also add files, rename, move, replace, delete |
 | `manage` | Can manage | also change who has access                    |
 
-`canEditDocument` enforces this for rename, move, delete and new versions,
-on top of the role permission. A grant on the document wins over the folder.
-Moving needs edit on the source and edit on the destination folder. Deleting a
-folder copies each governing restriction onto the documents it re-homes, so
-deleting a restricted folder never publishes its contents. Deleting a custom
-role removes its grants.
+`canEditDocument` enforces this for rename, move and new versions, on top of
+the role permission. A grant on the document wins over the folder. Moving
+needs edit on the source and edit on the destination folder.
+
+Deleting a file needs manage on it (whoever added it), or edit plus
+`documents.delete`. A Member can throw away their own upload, not a
+teammate's.
+
+Deleting a folder copies each governing restriction onto the documents it
+re-homes, so deleting a restricted folder never publishes its contents.
+Deleting a custom role removes its grants.
+
+**Adding someone to something that inherits** — a subfolder or file showing
+"Same as Q4 planning" — opens it to them on top of the folder's audience, as in
+Drive and Notion. `resolveDocumentScope` turns such reach-in grants into the
+same carve-outs a granted restricted subfolder uses (`allowedCategories`,
+`allowedDocumentIds`), and only when the item would otherwise be closed to
+them, so the scope grows with what was shared into closed places rather than
+with everything someone uploaded.
 
 ### 4. Chats: private by default, shared as read-only, continued as a fork
 

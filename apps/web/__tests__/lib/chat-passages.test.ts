@@ -1,5 +1,6 @@
 import {
     addPassage,
+    capPassageText,
     cleanSelectionText,
     isChatPassage,
     makePassage,
@@ -41,10 +42,36 @@ describe("cleanSelectionText", () => {
         );
     });
 
-    it("caps the passage length", () => {
+    it("leaves capping to capPassageText", () => {
         expect(cleanSelectionText("x".repeat(MAX_PASSAGE_CHARS + 50))).toHaveLength(
-            MAX_PASSAGE_CHARS
+            MAX_PASSAGE_CHARS + 50
         );
+    });
+});
+
+describe("capPassageText", () => {
+    it("cuts a long passage at a word boundary and marks the cut", () => {
+        const long = "word ".repeat(1_000).trim();
+        const { text, truncated } = capPassageText(long);
+        expect(truncated).toBe(true);
+        expect(text.length).toBeLessThanOrEqual(MAX_PASSAGE_CHARS);
+        expect(text.endsWith("word…")).toBe(true);
+    });
+
+    it("cuts an unbroken run at the cap", () => {
+        const { text } = capPassageText("x".repeat(MAX_PASSAGE_CHARS + 50));
+        expect(text).toHaveLength(MAX_PASSAGE_CHARS);
+        expect(text.endsWith("…")).toBe(true);
+    });
+
+    it("leaves a passage within the cap alone", () => {
+        expect(capPassageText("short")).toEqual({ text: "short", truncated: false });
+    });
+
+    it("is applied by makePassage", () => {
+        const passage = makePassage({ sourceId: "d7", title: "T", text: "word ".repeat(1_000) });
+        expect(passage?.text.length).toBeLessThanOrEqual(MAX_PASSAGE_CHARS);
+        expect(passage?.text.endsWith("…")).toBe(true);
     });
 });
 

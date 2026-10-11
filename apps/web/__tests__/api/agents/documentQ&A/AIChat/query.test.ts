@@ -1459,7 +1459,7 @@ describe("selected passages", () => {
             `User's question: "How does this compare with the FY25 forecast?"`
         );
         expect(prompt).toContain(
-            `Selected passage 1 — "Owned Report", page 2:\n"""\n${PASSAGE}\n"""\nSurrounding text (page 2):\n${ANCHOR}`
+            `Selected passage 1 — "Owned Report", page 2:\n"""\n${PASSAGE}\n"""\nSurrounding text:\n${ANCHOR}`
         );
         expect(prompt.indexOf("Selected passage 1")).toBeLessThan(
             prompt.indexOf("Relevant document content")
@@ -1537,7 +1537,7 @@ describe("selected passages", () => {
         expect(documentEnsembleSearch).not.toHaveBeenCalled();
         const prompt = userPrompt();
         expect(prompt).toContain(`Selected passage 1 — "Owned Report", page 2:`);
-        expect(prompt).toContain(`Surrounding text (page 2):\n${ANCHOR}`);
+        expect(prompt).toContain(`Surrounding text:\n${ANCHOR}`);
         const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
         expect(messages[0]!.content).toContain("The user did select passage(s)");
     });

@@ -62,11 +62,37 @@ describe("retrievalQueryFor", () => {
         expect(query).toContain("Retrieval-augmented generation grounds each answer");
     });
 
-    it("drops legacy quoted context entirely behind a substantive question", () => {
-        const legacy = `> some quoted chat answer\n\n[Source message](#chat-message-abc123)\n\nHow does the pricing model affect gross margin next year?`;
+    it("drops a legacy Ask AI quote behind a substantive question", () => {
+        const legacy = `> some quoted passage\n\n[Quoted context](#launchstack-quoted-context)\n\nHow does the pricing model affect gross margin next year?`;
         expect(retrievalQueryFor(legacy, [])).toBe(
             "How does the pricing model affect gross margin next year?"
         );
+    });
+
+    it("leaves a Quote in reply message exactly as it was searched before", () => {
+        const reply = `> The authors propose propositions as retrieval units.\n\n[Source message](#chat-message-abc123)\n\nCan you find more evidence for this claim in the document?`;
+        expect(retrievalQueryFor(reply, [])).toBe(reply);
+    });
+
+    it("keeps a typed blockquote that is not followed by the marker", () => {
+        const mixed = `> my own quote\n\nthoughts?\n\n> pasted passage\n\n[Quoted context](#launchstack-quoted-context)\n\nwhy?`;
+        const query = retrievalQueryFor(mixed, []);
+        expect(query).toContain("> my own quote");
+        expect(query).toContain("pasted passage");
+        expect(query).not.toContain("> pasted passage");
+        expect(query).not.toContain("launchstack-quoted-context");
+    });
+
+    it("parses a maximum-size message of quote lines in linear time", () => {
+        const hostile = `${">\n".repeat(60_000)}[Quoted context](#launchstack-quoted-context)`;
+        const started = performance.now();
+        retrievalQueryFor(hostile, []);
+        retrievalQueryFor(">\n".repeat(60_000), []);
+        retrievalQueryFor(
+            `${">\n".repeat(60_000)}x [Quoted context](#launchstack-quoted-context)`,
+            []
+        );
+        expect(performance.now() - started).toBeLessThan(500);
     });
 
     it("prefers structured passages over a legacy quote", () => {
@@ -220,7 +246,22 @@ describe("passagePromptSection", () => {
         expect(section).toContain(
             `Selected passage 1 — "Annual Report", page 4:\n"""\n${PASSAGE}\n"""`
         );
-        expect(section).toContain(`Surrounding text (page 4):\n${anchor.content}`);
+        expect(section).toContain(`Surrounding text:\n${anchor.content}`);
+    });
+
+    it("never labels the surrounding text with an index page that contradicts the viewer", () => {
+        const stampedPageOne = { ...anchor, page: 1 };
+        const withPage = passagePromptSection(
+            [{ documentId: 7, title: "Annual Report", page: 2, text: PASSAGE }],
+            [[stampedPageOne]]
+        );
+        expect(withPage).toContain('"Annual Report", page 2:');
+        expect(withPage).not.toContain("page 1");
+        const withoutPage = passagePromptSection(
+            [{ documentId: 7, title: "Annual Report", text: PASSAGE }],
+            [[anchor]]
+        );
+        expect(withoutPage).toContain(`Surrounding text (page 4):\n${anchor.content}`);
     });
 
     it("omits the page when unknown and the surrounding text when not found", () => {
@@ -248,7 +289,7 @@ describe("passagePromptSection", () => {
         const after = "omega ".repeat(1_000);
         const long = { ...anchor, content: `${before}${PASSAGE} ${after}` };
         const section = passagePromptSection([{ title: "T", page: 4, text: PASSAGE }], [[long]]);
-        const surrounding = section.split("Surrounding text (page 4):\n")[1]!;
+        const surrounding = section.split("Surrounding text:\n")[1]!;
         expect(surrounding.length).toBeLessThanOrEqual(3_002);
         expect(surrounding).toContain(PASSAGE);
         expect(surrounding.startsWith("…")).toBe(true);

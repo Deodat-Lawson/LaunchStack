@@ -55,6 +55,7 @@ import {
 import {
     downloadTextFile,
     parseQuotedMessage,
+    passagesMarkdown,
     quoteBlock,
     transcriptFilename,
     transcriptMarkdown,
@@ -278,18 +279,31 @@ interface MessageProps {
  * are, and `pre-wrap` keeps the line breaks in either.
  */
 function QuestionProse({ text }: { text: string }) {
-    const parts = text.split(/(\[Source message\]\(#chat-message-[\w-]+\))/g);
+    const parts = text.split(
+        /(\[Source message\]\(#chat-message-[\w-]+\)|\[(?:Source|Conversation|Folder): [^\]\n]{1,300}\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\))/g
+    );
     return (
         <>
             {parts.map((part, i) => {
                 const source = /^\[Source message\]\((#chat-message-[\w-]+)\)$/.exec(part);
-                return source ? (
-                    <a key={i} href={source[1]} className="text-[var(--accent)] underline">
-                        Source message
-                    </a>
-                ) : (
-                    <React.Fragment key={i}>{part}</React.Fragment>
+                if (source)
+                    return (
+                        <a key={i} href={source[1]} className="text-[var(--accent)] underline">
+                            Source message
+                        </a>
+                    );
+                // The rich editor writes its context chips into the message
+                // as machine links; they read as the name they stand for.
+                const context = /^\[(?:Source|Conversation|Folder): ([^\]]+)\]\(#launchstack-/.exec(
+                    part
                 );
+                if (context)
+                    return (
+                        <span key={i} className="text-brand font-medium">
+                            {context[1]}
+                        </span>
+                    );
+                return <React.Fragment key={i}>{part}</React.Fragment>;
             })}
         </>
     );
@@ -451,7 +465,7 @@ const Message = React.memo(function Message({
                 title="Copy message"
                 aria-label="Copy message"
                 className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
-                onClick={() => void copyWithToast(msg.text)}
+                onClick={() => void copyWithToast(`${passagesMarkdown(msg)}${msg.text}`)}
             >
                 <Copy size={14} />
             </button>
@@ -545,7 +559,9 @@ const Message = React.memo(function Message({
                       buildQuestionMenuItems(msg, {
                           onCopy: text => void copyWithToast(text),
                           onQuote,
-                          onEdit,
+                          // Same path as the toolbar's edit, which brings the
+                          // turn's passages back with its text.
+                          onEdit: text => (onEditMessage ? onEditMessage(index) : onEdit(text)),
                       }),
               }
             : {
@@ -1304,8 +1320,11 @@ export function AskPanel({
     const quoteThread = useRef(thread);
     quoteThread.current = thread;
     const quote = useCallback((text: string) => {
+        // A user turn is quoted as typed, an answer as plain text. Matching
+        // both keeps the reply's link on "Source message": the "Quoted
+        // context" marker is Ask AI's, and the server reads it as a passage.
         const index = quoteThread.current.findIndex(
-            message => plainTextOfAnswer(message.text) === text
+            message => message.text === text || plainTextOfAnswer(message.text) === text
         );
         const anchor =
             index >= 0

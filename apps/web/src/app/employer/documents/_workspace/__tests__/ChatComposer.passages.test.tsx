@@ -137,11 +137,39 @@ describe("passages in the composer", () => {
         expect(screen.getByTestId("passage-card")).toBeInTheDocument();
     });
 
+    it("does not offer a jump for a passage taken from the chat itself", () => {
+        mount({
+            draftKey: "passage-chat",
+            onOpenPassage: jest.fn(),
+            seed: {
+                nonce: 9,
+                text: "",
+                mode: "append",
+                passages: [{ sourceId: "chat", title: "This conversation", text: "an answer" }],
+            },
+        });
+        expect(screen.queryByRole("button", { name: "This conversation" })).not.toBeInTheDocument();
+        expect(screen.getByText("This conversation")).toBeInTheDocument();
+    });
+
     it("opens the passage in its document from the card title", async () => {
         const user = userEvent.setup();
         const onOpenPassage = jest.fn();
         mount({
             draftKey: "passage-open",
+            sources: [
+                {
+                    id: "d7",
+                    documentId: 7,
+                    title: "Dense X Retrieval.pdf",
+                    type: "doc",
+                    size: "",
+                    added: "",
+                    folder: "Papers",
+                    tags: [],
+                    domain: "Technical",
+                },
+            ],
             onOpenPassage,
             seed: { nonce: 8, text: "", mode: "append", passages: [PASSAGE] },
         });

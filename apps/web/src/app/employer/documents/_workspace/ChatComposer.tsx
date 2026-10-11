@@ -293,10 +293,10 @@ export function Composer({
     const overLimit = text.length > COMPOSER_MAX_CHARACTERS;
     const hasContent = Boolean(
         text.trim() ||
-        passages.length ||
-        attachments.length ||
-        uploads.length ||
-        missingFiles.length
+            passages.length ||
+            attachments.length ||
+            uploads.length ||
+            missingFiles.length
     );
     const canSend =
         hasContent &&
@@ -923,10 +923,10 @@ export function Composer({
                     isComposerDraft(stored) &&
                     Boolean(
                         stored.text.trim().length > 0 ||
-                        stored.attachments.length > 0 ||
-                        (stored.pendingFiles?.length ?? 0) > 0 ||
-                        (stored.threadRefs?.length ?? 0) > 0 ||
-                        (stored.passages?.length ?? 0) > 0
+                            stored.attachments.length > 0 ||
+                            (stored.pendingFiles?.length ?? 0) > 0 ||
+                            (stored.threadRefs?.length ?? 0) > 0 ||
+                            (stored.passages?.length ?? 0) > 0
                     );
                 if (hasNewerDraft) {
                     const saved = readComposerStorage<unknown>(
@@ -1627,7 +1627,12 @@ export function Composer({
                         <PassageCard
                             key={`${passage.sourceId}:${passage.page ?? ""}:${passage.text.slice(0, 48)}`}
                             passage={passage}
-                            onOpen={onOpenPassage ? () => onOpenPassage(passage) : undefined}
+                            onOpen={
+                                onOpenPassage &&
+                                sources.some(source => source.id === passage.sourceId)
+                                    ? () => onOpenPassage(passage)
+                                    : undefined
+                            }
                             onRemove={() =>
                                 setPassages(previous =>
                                     previous.filter(item => !samePassage(item, passage))

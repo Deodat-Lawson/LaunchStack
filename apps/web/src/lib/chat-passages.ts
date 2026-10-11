@@ -57,8 +57,19 @@ export function cleanSelectionText(text: string): string {
                 .trim()
         )
         .filter(Boolean)
-        .join("\n\n")
-        .slice(0, MAX_PASSAGE_CHARS);
+        .join("\n\n");
+}
+
+/**
+ * Keep a passage within the cap, cut at a word boundary and marked with an
+ * ellipsis, so a long selection never ends mid-word without a sign of it.
+ */
+export function capPassageText(text: string): { text: string; truncated: boolean } {
+    if (text.length <= MAX_PASSAGE_CHARS) return { text, truncated: false };
+    const room = text.slice(0, MAX_PASSAGE_CHARS - 1);
+    const space = room.search(/\s\S*$/);
+    const cut = space > MAX_PASSAGE_CHARS * 0.8 ? room.slice(0, space) : room;
+    return { text: `${cut.trimEnd()}…`, truncated: true };
 }
 
 /** Build a passage from a selection; null when nothing usable was selected. */
@@ -69,7 +80,7 @@ export function makePassage(input: {
     page?: number;
     text: string;
 }): ChatPassage | null {
-    const text = cleanSelectionText(input.text);
+    const text = capPassageText(cleanSelectionText(input.text)).text;
     if (!text) return null;
     return {
         sourceId: input.sourceId,

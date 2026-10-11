@@ -36,6 +36,12 @@ describe("tidySessionTitle", () => {
         ).toBe("sentence. We discover that the retrieval unit choice signifi…");
     });
 
+    it("tidies an old right-click title with the quote after a colon", () => {
+        expect(
+            tidySessionTitle("Explain this passage from “Report.pdf”: > Revenue rose > in Q3…")
+        ).toBe("Explain this passage from “Report.pdf”: Revenue rose in Q3…");
+    });
+
     it("leaves an ordinary title alone, chevrons included", () => {
         expect(tidySessionTitle("Is revenue > cost?")).toBe("Is revenue > cost?");
     });
@@ -84,6 +90,14 @@ describe("deriveSessionTitle", () => {
                 { text: "ignored when the question says enough" },
             ])
         ).toBe("What is the novel retrieval unit they propose?");
+    });
+
+    it("names rich-editor context chips by their names, not their links", () => {
+        expect(
+            deriveSessionTitle(
+                "[Source: 2312.06648v3.pdf](#launchstack-source-d17) How large are the recall gains?"
+            )
+        ).toBe("2312.06648v3.pdf How large are the recall gains?");
     });
 
     it("falls back to the quoted words when nothing else was sent", () => {

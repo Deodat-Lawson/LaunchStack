@@ -66,13 +66,13 @@ const STOPWORDS = new Set(
     ).split(" ")
 );
 
-const LEGACY_MARKER = String.raw`\[(?:Source message|Quoted context)\]\(#(?:chat-message-[^)\s]+|launchstack-quoted-context)\)`;
-/** A run of `>` lines followed by the machine marker older clients appended. */
-const LEGACY_QUOTE = new RegExp(
-    String.raw`(?:^|\n)((?:[ \t]*>[^\n]*(?:\n|$))+)\s*${LEGACY_MARKER}`,
-    "g"
-);
-const STRAY_MARKER = new RegExp(LEGACY_MARKER, "g");
+/**
+ * The machine link Ask AI appended after a pasted passage before passages
+ * travelled beside the question. Only this marker identifies Ask AI context:
+ * "Quote in reply" writes `[Source message](#chat-message-…)`, and its quote
+ * is part of what the person is asking about, so it is left alone.
+ */
+const QUOTED_CONTEXT_MARKER = "[Quoted context](#launchstack-quoted-context)";
 
 const NOT_ALPHANUMERIC = /[^\p{L}\p{N}]+/gu;
 const ALPHANUMERIC = /[\p{L}\p{N}]/u;
@@ -101,24 +101,59 @@ export type AnchorRowLoader = (query: {
 /**
  * Split an older client's message into what was typed and what was quoted.
  *
- * Older clients pasted the passage into the question as a blockquote followed
- * by `[Quoted context](#launchstack-quoted-context)` (or a `[Source message]`
- * link). Only a blockquote carrying that marker is machine context; a
- * blockquote the person typed stays part of the question.
+ * Older clients pasted the Ask AI passage into the question as a blockquote
+ * followed by `[Quoted context](#launchstack-quoted-context)`. Only a
+ * blockquote carrying that marker is machine context; any other blockquote —
+ * one the person typed, or a "Quote in reply" — stays part of the question,
+ * and a message without the marker comes back unchanged.
+ *
+ * One pass over the lines, never a backtracking pattern over the whole
+ * message: the question is caller input of up to 120,000 characters, and a
+ * regex over runs of `>` lines took seconds of CPU on a crafted message.
  */
 export function splitLegacyQuote(question: string): { question: string; quoted: string[] } {
+    if (!question.includes(QUOTED_CONTEXT_MARKER)) return { question, quoted: [] };
     const quoted: string[] = [];
-    const typed = question
-        .replace(LEGACY_QUOTE, (_match, block: string) => {
+    const kept: string[] = [];
+    let block: string[] = [];
+    let blanks: string[] = [];
+    const release = () => {
+        kept.push(...block, ...blanks);
+        block = [];
+        blanks = [];
+    };
+    for (const line of question.split("\n")) {
+        const trimmed = line.trimStart();
+        if (trimmed.startsWith(">")) {
+            if (blanks.length > 0) release();
+            block.push(line);
+        } else if (block.length > 0 && trimmed === "") {
+            blanks.push(line);
+        } else if (block.length > 0 && trimmed.startsWith(QUOTED_CONTEXT_MARKER)) {
             const text = block
-                .split("\n")
-                .map(line => line.replace(/^[ \t]*>[ \t]?/, ""))
+                .map(quoteLine =>
+                    quoteLine
+                        .trimStart()
+                        .slice(1)
+                        .replace(/^[ \t]/, "")
+                )
                 .join("\n")
                 .trim();
             if (text) quoted.push(text);
-            return "\n";
-        })
-        .replace(STRAY_MARKER, "")
+            block = [];
+            blanks = [];
+            const rest = trimmed.slice(QUOTED_CONTEXT_MARKER.length);
+            kept.push(rest.trim() ? rest : "");
+        } else {
+            release();
+            kept.push(line);
+        }
+    }
+    release();
+    const typed = kept
+        .join("\n")
+        .split(QUOTED_CONTEXT_MARKER)
+        .join("")
         .replace(/\n{3,}/g, "\n\n")
         .trim();
     return { question: typed, quoted };
@@ -434,7 +469,10 @@ export function passagePromptSection(
         const found = anchors[index] ?? [];
         if (found.length > 0) {
             const budget = Math.floor(SURROUNDING_CHARS / found.length);
-            const pages = pagesLabel(found);
+            // The viewer's page is the one the reader saw. The index's page
+            // can disagree (some extractors stamp page 1 on every chunk), so
+            // it only labels the surrounding text when the viewer had none.
+            const pages = passage.page ? "" : pagesLabel(found);
             lines.push(`Surrounding text${pages ? ` (${pages})` : ""}:`);
             lines.push(
                 found

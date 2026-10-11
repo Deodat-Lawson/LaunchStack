@@ -143,6 +143,11 @@ export function deriveSessionTitle(
     const unquoted = withoutQuotedContext(firstMessage);
     const flat = (unquoted.trim() ? unquoted : firstMessage.replace(/^[ \t]*>[ \t]?/gm, ""))
         .replace(QUOTE_MARKER, "")
+        // Rich-editor context chips arrive as machine links; keep their names.
+        .replace(
+            /\[(?:Source|Conversation|Folder): ([^\]\n]{1,300})\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\)/g,
+            "$1"
+        )
         .replace(/\s+/g, " ")
         .trim();
     if (flat.length === 0) return "New chat";
@@ -161,7 +166,9 @@ export function deriveSessionTitle(
  * It reads as the quoted words, without the markers; renaming replaces it.
  */
 export function tidySessionTitle(title: string): string {
-    if (!/^\s*>/.test(title)) return title;
+    // "> quote…" (Ask AI) or "Explain this passage from “x”: > quote…" (the
+    // old right-click actions); a chevron mid-question is left alone.
+    if (!/^\s*>|:\s+>\s/.test(title)) return title;
     return (
         title
             .replace(/(^|\s)>(?=\s|$)/g, "$1")

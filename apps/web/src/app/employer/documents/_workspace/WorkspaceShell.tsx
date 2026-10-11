@@ -3,7 +3,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { makePassage, type ChatPassage } from "~/lib/chat-passages";
+import {
+    capPassageText,
+    cleanSelectionText,
+    makePassage,
+    MAX_PASSAGE_CHARS,
+    type ChatPassage,
+} from "~/lib/chat-passages";
 import { PanelLeftOpen } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { firstFilled } from "~/lib/profile/resolve";
@@ -2263,7 +2269,7 @@ export function WorkspaceShell() {
                             editingQueued={Boolean(editingQueued)}
                             queuedEditUnavailable={Boolean(
                                 editingQueued &&
-                                !chatRuntime.queue.items.some(item => item.id === editingQueued)
+                                    !chatRuntime.queue.items.some(item => item.id === editingQueued)
                             )}
                             onCancelQueueEdit={() => setEditingQueued(null)}
                             onQueueSendOldest={() => {
@@ -2730,18 +2736,27 @@ type SelectionHome =
     | { kind: "document"; source: WorkspaceSource; addNote?: (text: string) => void }
     | { kind: "chat" };
 
-/** Where a text selection lives — the open document, or the chat — read off the target chain. */
+/** A selection in a source as a passage to ask about. */
 function passageFromSource(
     source: WorkspaceSource,
     selection: PassageSelection
 ): ChatPassage | null {
-    return makePassage({
+    return notedPassage({
         sourceId: source.id,
         documentId: source.documentId,
         title: source.title,
         page: selection.page,
         text: selection.text,
     });
+}
+
+/** `makePassage`, saying so when a long selection had to be cut. */
+function notedPassage(input: Parameters<typeof makePassage>[0]): ChatPassage | null {
+    if (capPassageText(cleanSelectionText(input.text)).truncated)
+        toast.info(
+            `Long selection: the first ${MAX_PASSAGE_CHARS.toLocaleString()} characters were kept.`
+        );
+    return makePassage(input);
 }
 
 /**
@@ -2765,9 +2780,10 @@ function passageFromSelection(
             text: selection.text,
             page: pageOfSelection(selection),
         });
-    return makePassage({ sourceId: "chat", title: "This conversation", text: selection.text });
+    return notedPassage({ sourceId: "chat", title: "This conversation", text: selection.text });
 }
 
+/** Where a text selection lives — the open document, or the chat — read off the target chain. */
 function selectionHome(ctx: MenuOpenContext): SelectionHome | null {
     for (const target of ctx.chain) {
         if (target.kind === "document") {

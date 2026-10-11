@@ -606,8 +606,12 @@ export function useChatRuntime(input: {
             const context = get();
             try {
                 await serial(context, async () => {
+                    const opening = messages.find(message => message.role === "user");
                     const created = await sessions.createSession({
                         messages: messages.slice(0, MAX_SESSION_APPEND).map(storedMessage),
+                        ...(opening?.send?.passages?.length
+                            ? { title: deriveSessionTitle(opening.text, opening.send.passages) }
+                            : {}),
                         contextSourceIds: [
                             ...new Set(messages.flatMap(message => message.refs ?? [])),
                         ],

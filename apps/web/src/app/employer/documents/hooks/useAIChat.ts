@@ -28,7 +28,11 @@ export interface AIChatRequest {
     enableWebSearch?: boolean;
     conversationHistory?: string;
     aiPersona?:
-        "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning";
+        | "general"
+        | "learning-coach"
+        | "financial-expert"
+        | "legal-expert"
+        | "math-reasoning";
     /** Auto enables reasoning only when the selected model and agent allow it. */
     thinkingMode?: boolean | "auto";
     modelRoute?: "default" | "fast" | "reasoning" | "vision";

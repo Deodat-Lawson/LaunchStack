@@ -103,6 +103,17 @@ describe("a question asked about a passage", () => {
         } satisfies ThreadReference);
     });
 
+    it("reads a rich-editor source link in a question as the source's name", () => {
+        renderPanel([
+            {
+                role: "user",
+                text: "[Source: Dense X Retrieval.pdf](#launchstack-source-d7) How large are the recall gains?",
+            },
+        ]);
+        expect(document.body.textContent).not.toContain("#launchstack-source-d7");
+        expect(screen.getByText("Dense X Retrieval.pdf")).toBeInTheDocument();
+    });
+
     it("renders an old pasted-quote turn without its machine link", () => {
         renderPanel([
             {

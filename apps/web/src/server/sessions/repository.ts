@@ -48,7 +48,6 @@ export interface SessionSummary {
     id: string;
     title: string;
     messageCount: number;
-    pinned: boolean;
     contextSourceIds: string[];
     /** The agent the chat is held with; null = the default assistant. */
     agentKey: string | null;
@@ -77,7 +76,6 @@ function toSummary(row: WorkspaceSessionRow): SessionSummary {
         id: row.id,
         title: row.title,
         messageCount: row.messageCount,
-        pinned: row.pinned,
         contextSourceIds: row.contextSourceIds ?? [],
         agentKey: row.agentKey ?? null,
         lastMessageAt: iso(row.lastMessageAt),
@@ -123,7 +121,9 @@ export async function listSessions(
         .select()
         .from(workspaceSessions)
         .where(ownedBy(owner))
-        .orderBy(desc(workspaceSessions.pinned), desc(workspaceSessions.lastMessageAt))
+        // Pins are per person now (`workspace_session_user_state`); the old
+        // column is kept by the migration but never read.
+        .orderBy(desc(workspaceSessions.lastMessageAt))
         .limit(limit);
     return rows.map(toSummary);
 }
@@ -207,12 +207,19 @@ export async function getSession(
         .select()
         .from(workspaceSessions)
         .where(and(ownedBy(owner), eq(workspaceSessions.id, sessionId)));
-    if (!row) return null;
+    return row ? sessionDetail(row) : null;
+}
 
+/**
+ * The transcript behind a row the caller already resolved — through
+ * `ownedBy` above, or through `resolveSessionAccess` for a reader. Never call
+ * it with a row looked up by id alone.
+ */
+export async function sessionDetail(row: WorkspaceSessionRow): Promise<SessionDetail> {
     const messages = await db
         .select()
         .from(workspaceSessionMessages)
-        .where(eq(workspaceSessionMessages.sessionId, sessionId))
+        .where(eq(workspaceSessionMessages.sessionId, row.id))
         .orderBy(asc(workspaceSessionMessages.seq));
 
     return {
@@ -290,11 +297,10 @@ export async function appendMessages(
 export async function updateSession(
     owner: SessionOwner,
     sessionId: string,
-    patch: { title?: string; pinned?: boolean; agentKey?: string | null }
+    patch: { title?: string; agentKey?: string | null }
 ): Promise<SessionSummary | null> {
     const values: Record<string, unknown> = { updatedAt: new Date() };
     if (patch.title !== undefined) values.title = patch.title.trim().slice(0, 300);
-    if (patch.pinned !== undefined) values.pinned = patch.pinned;
     if (patch.agentKey !== undefined) values.agentKey = patch.agentKey;
 
     const [row] = await db

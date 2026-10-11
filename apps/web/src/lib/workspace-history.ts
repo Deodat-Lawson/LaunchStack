@@ -55,6 +55,22 @@ export interface HistoryEntry {
     href?: string;
     /** Chat only: how many turns are stored, shown as a count on the row. */
     messageCount?: number;
+    /*
+     * Chat only, and per person (ADR-014 §5) — the reader's own organisation,
+     * never the owner's.
+     */
+    /** Pinned to the top of this person's list. */
+    pinned?: boolean;
+    /** Manual order among pinned chats, ascending. Null when not pinned. */
+    pinRank?: number | null;
+    /** Hidden from the list; shown in the Archived view. */
+    archived?: boolean;
+    /** Own chat that someone else can read. */
+    shared?: boolean;
+    /** Someone else's chat shared with me: the owner's auth subject id. */
+    sharedBy?: string;
+    /** Shared with me, with turns I haven't opened since they landed. */
+    unread?: boolean;
 }
 
 export interface HistoryKindMeta {

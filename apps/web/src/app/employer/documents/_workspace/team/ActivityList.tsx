@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { usePeople } from "~/lib/profile/use-people";
+import { cn } from "~/lib/utils";
 
 import { errorMessage } from "../settings/people/api";
 import { teamApi, type ActivityRow } from "./api";
@@ -163,29 +164,30 @@ function ActivityItem({
           ? () => onOpenGroup(groupId)
           : null;
 
-    return (
-        <li className="flex items-start gap-2.5 px-3.5 py-1.5" data-testid="team-activity-row">
+    // The whole row is the control when there is something to open: a button
+    // inside the sentence renders as an inline-block and breaks a long name
+    // onto its own centred lines in a narrow rail.
+    const content = (
+        <>
             <ProfileAvatar
                 name={actorName}
                 src={actorAvatar}
                 className="mt-px size-6"
                 fallbackClassName="text-[9px]"
             />
-            <p className="text-ink-2 m-0 min-w-0 flex-1 break-words text-[12.5px] leading-snug">
+            <span className="text-ink-2 min-w-0 flex-1 break-words text-[12.5px] leading-snug">
                 <span className="text-ink font-medium">{actorName}</span> {before}{" "}
-                {onClick ? (
-                    <button
-                        type="button"
-                        onClick={onClick}
-                        className="text-ink hover:text-brand-ink focus-visible:ring-brand/50 decoration-line rounded-sm font-medium underline underline-offset-2 outline-none hover:decoration-current focus-visible:ring-2"
-                    >
-                        {target}
-                    </button>
-                ) : (
-                    <span className="text-ink font-medium">{target}</span>
-                )}
+                <span
+                    className={cn(
+                        "text-ink font-medium",
+                        onClick &&
+                            "decoration-line group-hover/act:text-brand-ink underline underline-offset-2 group-hover/act:decoration-current"
+                    )}
+                >
+                    {target}
+                </span>
                 {after}
-            </p>
+            </span>
             <time
                 dateTime={row.at}
                 title={new Date(row.at).toLocaleString()}
@@ -193,6 +195,22 @@ function ActivityItem({
             >
                 {shortAgo(row.at)}
             </time>
+        </>
+    );
+
+    return (
+        <li data-testid="team-activity-row">
+            {onClick ? (
+                <button
+                    type="button"
+                    onClick={onClick}
+                    className="group/act hover:bg-panel-2 focus-visible:bg-panel-2 flex w-full items-start gap-2.5 px-3.5 py-1.5 text-left outline-none"
+                >
+                    {content}
+                </button>
+            ) : (
+                <div className="flex items-start gap-2.5 px-3.5 py-1.5">{content}</div>
+            )}
         </li>
     );
 }

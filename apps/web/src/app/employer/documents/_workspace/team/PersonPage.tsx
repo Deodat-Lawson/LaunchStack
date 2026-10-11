@@ -20,11 +20,6 @@ import { SharePicker } from "./SharePicker";
 import type { TeamTarget } from "./types";
 import { BackButton, EmptyLine, ErrorLine, ItemIcon, LoadingRows, SectionHeading } from "./ui";
 
-/** "Ada Lovelace" → "Ada", for headings that would otherwise wrap in a narrow rail. */
-function firstName(name: string): string {
-    return /^\S+/.exec(name.trim())?.[0] ?? name;
-}
-
 export function PersonPage({
     member,
     onBack,
@@ -38,7 +33,8 @@ export function PersonPage({
     onShare?: (target: TeamTarget & { name: string }) => void;
     onOpenGroup: (groupId: number) => void;
 }) {
-    const short = firstName(member.displayName);
+    // Their name as this workspace shows it; headings truncate in a narrow rail.
+    const name = member.displayName;
     const [shared, setShared] = useState<{
         sharedWithMe: SharedItem[];
         iShared: SharedItem[];
@@ -123,26 +119,26 @@ export function PersonPage({
                 <>
                     {onShare && (
                         <div className="px-3.5 pt-3">
-                            <SharePicker personName={short} onShare={onShare} />
+                            <SharePicker personName={name} onShare={onShare} />
                         </div>
                     )}
 
-                    <SectionHeading>Shared with you by {short}</SectionHeading>
+                    <SectionHeading>Shared with you by {name}</SectionHeading>
                     {error ? (
                         <ErrorLine message={error} onRetry={() => void load()} />
                     ) : shared === null ? (
                         <LoadingRows rows={2} />
                     ) : shared.sharedWithMe.length === 0 ? (
-                        <EmptyLine>Nothing {short} has shared reaches you yet.</EmptyLine>
+                        <EmptyLine>Nothing {name} has shared reaches you yet.</EmptyLine>
                     ) : (
                         <SharedList items={shared.sharedWithMe} onOpenTarget={onOpenTarget} />
                     )}
 
-                    <SectionHeading>You shared with {short}</SectionHeading>
+                    <SectionHeading>You shared with {name}</SectionHeading>
                     {error ? null : shared === null ? (
                         <LoadingRows rows={2} />
                     ) : shared.iShared.length === 0 ? (
-                        <EmptyLine>You haven&apos;t shared anything with {short} yet.</EmptyLine>
+                        <EmptyLine>You haven&apos;t shared anything with {name} yet.</EmptyLine>
                     ) : (
                         <SharedList items={shared.iShared} onOpenTarget={onOpenTarget} />
                     )}
@@ -156,7 +152,7 @@ export function PersonPage({
                 emptyText={
                     member.isSelf
                         ? "Nothing yet. What you add, share and move shows up here."
-                        : `Nothing from ${short} that you can see yet.`
+                        : `Nothing from ${name} that you can see yet.`
                 }
                 onOpenTarget={onOpenTarget}
                 onOpenGroup={onOpenGroup}

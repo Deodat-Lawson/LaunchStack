@@ -246,12 +246,12 @@ describe("TeamPanel", () => {
 
         const page = await screen.findByTestId("team-person");
         expect(within(page).getByTestId("team-back")).toHaveTextContent("Team");
-        expect(page).toHaveTextContent("Shared with you by Ben");
-        expect(page).toHaveTextContent("You shared with Ben");
+        expect(page).toHaveTextContent("Shared with you by Ben Ng");
+        expect(page).toHaveTextContent("You shared with Ben Ng");
         const shared = await within(page).findByTestId("team-shared-list");
         expect(shared).toHaveTextContent("Finance / Board");
         expect(shared).toHaveTextContent("Can edit · via Sales");
-        expect(page).toHaveTextContent("You haven't shared anything with Ben yet.");
+        expect(page).toHaveTextContent("You haven't shared anything with Ben Ng yet.");
         await waitFor(() =>
             expect(calledWith("/api/workspace/activity")).toContain(
                 "/api/workspace/activity?limit=10&actor=user-ben"
@@ -290,9 +290,11 @@ describe("TeamPanel", () => {
             expect(feed).toHaveTextContent("Ben Ng shared Finance with Sales team")
         );
         expect(feed).toHaveTextContent("Ben Ng deleted Old.pdf");
-        expect(within(feed).queryByRole("button", { name: "Old.pdf" })).not.toBeInTheDocument();
+        expect(within(feed).queryByRole("button", { name: /Old\.pdf/ })).not.toBeInTheDocument();
 
-        fireEvent.click(within(feed).getByRole("button", { name: "Finance" }));
+        fireEvent.click(
+            within(feed).getByRole("button", { name: /shared Finance with Sales team/ })
+        );
         expect(props.onOpenTarget).toHaveBeenCalledWith({ type: "folder", path: "Finance" });
     });
 });

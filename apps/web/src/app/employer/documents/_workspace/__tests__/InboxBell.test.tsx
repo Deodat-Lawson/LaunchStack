@@ -227,4 +227,23 @@ describe("InboxBell", () => {
         });
         expect(inboxCalls()).toBe(3);
     });
+
+    it("still shows the count for a page opened in a background tab", async () => {
+        Object.defineProperty(document, "visibilityState", {
+            configurable: true,
+            get: () => "hidden",
+        });
+        jest.useFakeTimers();
+        render(<InboxBell onOpenTarget={jest.fn()} />);
+        await act(async () => {
+            await Promise.resolve();
+        });
+        expect(inboxCalls()).toBe(1);
+
+        await act(async () => {
+            jest.advanceTimersByTime(INBOX_POLL_MS * 2);
+            await Promise.resolve();
+        });
+        expect(inboxCalls()).toBe(1);
+    });
 });

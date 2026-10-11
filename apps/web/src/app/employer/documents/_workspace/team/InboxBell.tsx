@@ -5,9 +5,10 @@
  * popover listing what was shared with you — "Ada shared “Q3 plan” with you".
  * Opening an entry marks it read and opens the thing.
  *
- * It asks the server once a minute and whenever the window regains focus,
- * never while the tab is hidden: a background tab polling all day is cost
- * nobody sees, and focus is exactly when the count matters.
+ * It asks the server when it mounts, then once a minute and whenever the
+ * window regains focus — but the minute poll skips while the tab is hidden: a
+ * background tab polling all day is cost nobody sees, and focus is exactly
+ * when the count matters.
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -58,7 +59,10 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
     }, []);
 
     useEffect(() => {
-        if (!isHidden()) void refresh();
+        // Always once on mount: a page opened in a background tab (or a
+        // webview that reports itself hidden) still needs its count. Only the
+        // repeat waits for the tab to be visible.
+        void refresh();
         const timer = window.setInterval(() => {
             if (!isHidden()) void refresh();
         }, INBOX_POLL_MS);

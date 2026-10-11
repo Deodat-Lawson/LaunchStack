@@ -75,9 +75,10 @@ test.describe("the demo path", () => {
             timeout: 90_000,
         });
 
-        // 1–3: the rail's caret → New mindmap → a template.
-        await m.click(page.getByLabel("More ways to add"));
-        await m.click(page.getByRole("menuitem", { name: "New mindmap" }));
+        // 1–3: the rail's Add knowledge → Mindmap → a template. (The rail's
+        // split "+" with its "More ways to add" caret is gone from main.)
+        await m.click(page.getByRole("button", { name: /^Add knowledge/ }));
+        await m.click(page.getByRole("button", { name: "Mindmap", exact: true }));
         await m.click(page.getByRole("button", { name: /^Mindmap Central idea/ }));
 
         await page.waitForURL(/\/employer\/documents\?.*source=m\d+.*edit=1/);

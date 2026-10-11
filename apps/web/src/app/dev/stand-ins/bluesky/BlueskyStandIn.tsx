@@ -135,7 +135,7 @@ export function BlueskyStandIn({
 
                     <Card className="gap-2 p-5">
                         <h2 className="text-ink-2 text-sm font-semibold">Point the app here</h2>
-                        <pre className="bg-panel-2 border-line text-ink-2 overflow-x-auto rounded-md border p-3 font-mono text-[11px] leading-relaxed">
+                        <pre className="bg-panel-2 border-line text-ink-2 whitespace-pre-wrap break-all rounded-md border p-3 font-mono text-[11px] leading-relaxed">
                             {`BLUESKY_SERVICE_URL=${origin}${base}\nBLUESKY_APPVIEW_URL=${origin}${base}`}
                         </pre>
                         <p className="text-ink-3 text-xs">

@@ -182,7 +182,7 @@ export function LinkedInStandIn({
 
                     <Card className="gap-2 p-5">
                         <h2 className="text-ink-2 text-sm font-semibold">Point the app here</h2>
-                        <pre className="bg-panel-2 border-line text-ink-2 overflow-x-auto rounded-md border p-3 font-mono text-[11px] leading-relaxed">
+                        <pre className="bg-panel-2 border-line text-ink-2 whitespace-pre-wrap break-all rounded-md border p-3 font-mono text-[11px] leading-relaxed">
                             {`LINKEDIN_OAUTH_BASE_URL=${origin}${base}/oauth/v2\nLINKEDIN_API_BASE_URL=${origin}${base}`}
                         </pre>
                         <p className="text-ink-3 text-xs">

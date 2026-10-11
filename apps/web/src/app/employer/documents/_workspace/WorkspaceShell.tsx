@@ -2172,6 +2172,12 @@ export function WorkspaceShell() {
                     <SheetContent
                         side="left"
                         className="w-auto max-w-[85vw] gap-0 p-0 sm:max-w-[85vw] [&>button:last-child]:hidden"
+                        // A row's menu is portaled outside the drawer; pressing
+                        // in it is not "outside" — the drawer stays open and
+                        // the menu item runs.
+                        onInteractOutside={e => {
+                            if (isInsideActionMenu(e.target)) e.preventDefault();
+                        }}
                     >
                         <SheetTitle className="sr-only">Sources</SheetTitle>
                         <SourceRail
@@ -2804,6 +2810,14 @@ export function WorkspaceShell() {
                 selfAuthId={userId ?? null}
             />
         </div>
+    );
+}
+
+/** True for anything inside an open context menu or its backdrop (both portaled to <body>). */
+function isInsideActionMenu(target: EventTarget | null): boolean {
+    return (
+        target instanceof Element &&
+        Boolean(target.closest('[data-testid="context-menu-backdrop"], [role="menu"]'))
     );
 }
 

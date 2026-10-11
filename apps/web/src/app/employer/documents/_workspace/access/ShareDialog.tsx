@@ -517,6 +517,9 @@ export function ShareDialog({
                                             />
                                             <span className="text-ink min-w-0 flex-1 truncate text-[13px]">
                                                 {ownerName}
+                                                {saved?.owner?.authUserId === selfAuthId && (
+                                                    <span className="text-ink-3"> (you)</span>
+                                                )}
                                             </span>
                                             <span className="text-ink-3 text-[12px]">Owner</span>
                                         </li>

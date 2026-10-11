@@ -92,6 +92,7 @@ export const redditAdapter: PublishAdapter = {
                     success: false,
                     platform: "reddit",
                     error: `Reddit submit failed: ${submitRes.status}`,
+                    retryable: submitRes.status === 429 || submitRes.status >= 500 || undefined,
                 };
             }
 

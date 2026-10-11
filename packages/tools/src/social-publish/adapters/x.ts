@@ -27,6 +27,7 @@ export const xAdapter: PublishAdapter = {
                     success: false,
                     platform: "x",
                     error: `Twitter API ${response.status}: ${errText}`,
+                    retryable: response.status === 429 || response.status >= 500 || undefined,
                 };
             }
 

@@ -5,6 +5,8 @@
  * clear per-platform error instead of a boot failure.
  */
 
+import { nonBlank } from "./text";
+
 export function getTwitterBearerToken(): string | undefined {
     return process.env.TWITTER_BEARER_TOKEN;
 }
@@ -38,7 +40,7 @@ export function getLinkedInAccessToken(): string | undefined {
  * rotated within that window as new versions ship; override via env.
  */
 export function getLinkedInApiVersion(): string {
-    return process.env.LINKEDIN_API_VERSION?.trim() || "202609";
+    return nonBlank(process.env.LINKEDIN_API_VERSION) ?? "202609";
 }
 
 /**
@@ -60,5 +62,5 @@ export function getBlueskyAppViewUrl(): string {
 }
 
 function withoutTrailingSlash(value: string | undefined, fallback: string): string {
-    return (value?.trim() || fallback).replace(/\/+$/, "");
+    return (nonBlank(value) ?? fallback).replace(/\/+$/, "");
 }

@@ -1,4 +1,5 @@
 /** LinkedIn Pages: which ones the member runs, their follower totals, and their posts' numbers. */
+import { nonBlank } from "../text";
 import {
     encodeUrn,
     linkedInContext,
@@ -102,8 +103,8 @@ async function describeOrganization(
     return {
         id,
         urn,
-        name: record?.localizedName?.trim() || `LinkedIn Page ${id}`,
-        vanityName: record?.vanityName?.trim() || null,
+        name: nonBlank(record?.localizedName) ?? `LinkedIn Page ${id}`,
+        vanityName: nonBlank(record?.vanityName) ?? null,
         logoUrl: logoUrn ? await resolveImageUrl(ctx, logoUrn) : null,
         role,
     };
@@ -123,7 +124,7 @@ async function resolveImageUrl(ctx: LinkedInContext, urn: string): Promise<strin
             what: "read the Page logo",
         });
         const image = await readJson<{ downloadUrl?: string }>(res);
-        return image?.downloadUrl?.trim() || null;
+        return nonBlank(image?.downloadUrl) ?? null;
     } catch {
         return null;
     }

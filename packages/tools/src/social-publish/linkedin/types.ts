@@ -20,7 +20,7 @@ export class LinkedInApiError extends Error {
         readonly authFailed: boolean,
         /** 429, 5xx or a network failure. */
         readonly retryable: boolean,
-        readonly body: string = ""
+        readonly body = ""
     ) {
         super(message);
         this.name = "LinkedInApiError";

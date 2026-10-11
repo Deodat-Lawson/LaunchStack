@@ -4,6 +4,7 @@
  * LinkedInApiError (reconnect vs retry vs give up).
  */
 import { getLinkedInApiBaseUrl, getLinkedInApiVersion } from "../config";
+import { nonBlank } from "../text";
 import { LinkedInApiError, type FetchLike, type LinkedInClientOptions } from "./types";
 
 export interface LinkedInContext {
@@ -16,8 +17,8 @@ export interface LinkedInContext {
 export function linkedInContext(opts: LinkedInClientOptions): LinkedInContext {
     return {
         token: opts.accessToken,
-        base: (opts.apiBaseUrl?.trim() || getLinkedInApiBaseUrl()).replace(/\/+$/, ""),
-        version: opts.version?.trim() || getLinkedInApiVersion(),
+        base: (nonBlank(opts.apiBaseUrl) ?? getLinkedInApiBaseUrl()).replace(/\/+$/, ""),
+        version: nonBlank(opts.version) ?? getLinkedInApiVersion(),
         // Resolved per call so a test (or the host) can swap the global fetch.
         fetch: opts.fetch ?? ((input, init) => fetch(input, init)),
     };

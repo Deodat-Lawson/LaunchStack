@@ -1,6 +1,7 @@
 /** Comments on LinkedIn posts (socialActions/comments): reading them and replying. */
 import { decodeId, encodeUrn, linkedInContext, linkedInRequest, mapLimit, readJson } from "./http";
 import type { LinkedInClientOptions, LinkedInComment } from "./types";
+import { nonBlank } from "../text";
 
 interface CommentElement {
     commentUrn?: string;
@@ -32,11 +33,10 @@ function toComment(
     const id = el.id ?? /,([^,()]+)\)$/.exec(urn)?.[1] ?? urn;
     const decorated = el["actor~"];
     const actorName =
-        decorated?.localizedName?.trim() ||
-        [decorated?.localizedFirstName, decorated?.localizedLastName]
-            .filter(Boolean)
-            .join(" ")
-            .trim() ||
+        nonBlank(decorated?.localizedName) ??
+        nonBlank(
+            [decorated?.localizedFirstName, decorated?.localizedLastName].filter(Boolean).join(" ")
+        ) ??
         null;
     return {
         urn,
@@ -122,7 +122,7 @@ export async function createLinkedInComment(
     }
 ): Promise<LinkedInComment> {
     const ctx = linkedInContext(opts);
-    const parent = opts.parentCommentUrn?.trim() || null;
+    const parent = nonBlank(opts.parentCommentUrn) ?? null;
     const target = parent ?? opts.postUrn;
 
     const res = await linkedInRequest(ctx, {

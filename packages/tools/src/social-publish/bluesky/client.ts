@@ -1,4 +1,5 @@
 /** Bluesky calls: sign-in check, profiles, posting with images, counts and replies. */
+import { nonBlank } from "../text";
 import type { PublishMedia } from "../types";
 import {
     blueskyContext,
@@ -40,8 +41,8 @@ function toProfile(view: ProfileView | null, fallback: { did: string; handle: st
     const profile: BlueskyProfile = {
         did: view?.did ?? fallback.did,
         handle: view?.handle ?? fallback.handle,
-        displayName: view?.displayName?.trim() || null,
-        avatarUrl: view?.avatar?.trim() || null,
+        displayName: nonBlank(view?.displayName) ?? null,
+        avatarUrl: nonBlank(view?.avatar) ?? null,
         followers: typeof view?.followersCount === "number" ? view.followersCount : null,
     };
     return profile;
@@ -343,7 +344,7 @@ export async function listBlueskyReplies(
                 root: reply?.root ?? rootRef,
                 authorDid: post.author.did,
                 authorHandle: post.author.handle ?? post.author.did,
-                authorName: post.author.displayName?.trim() || null,
+                authorName: nonBlank(post.author.displayName) ?? null,
                 text: post.record?.text ?? "",
                 createdAt: new Date(post.record?.createdAt ?? post.indexedAt ?? 0),
             });

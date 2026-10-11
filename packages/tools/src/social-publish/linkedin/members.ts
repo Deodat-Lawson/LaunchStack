@@ -1,3 +1,4 @@
+import { nonBlank } from "../text";
 import { linkedInContext, linkedInRequest, readJson } from "./http";
 import { LinkedInApiError, type LinkedInClientOptions, type LinkedInMember } from "./types";
 
@@ -43,15 +44,15 @@ export async function getLinkedInMember(opts: LinkedInClientOptions): Promise<Li
         const info = await readJson<UserInfo>(res);
         if (info?.sub) {
             const name =
-                info.name?.trim() ||
-                [info.given_name, info.family_name].filter(Boolean).join(" ").trim() ||
+                nonBlank(info.name) ??
+                nonBlank([info.given_name, info.family_name].filter(Boolean).join(" ")) ??
                 null;
             return {
                 id: info.sub,
                 urn: `urn:li:person:${info.sub}`,
                 name,
-                email: info.email?.trim() || null,
-                pictureUrl: info.picture?.trim() || null,
+                email: nonBlank(info.email) ?? null,
+                pictureUrl: nonBlank(info.picture) ?? null,
             };
         }
     } catch (err) {

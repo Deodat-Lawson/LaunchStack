@@ -22,7 +22,7 @@ export class BlueskyApiError extends Error {
         readonly status: number,
         readonly authFailed: boolean,
         readonly retryable: boolean,
-        readonly body: string = ""
+        readonly body = ""
     ) {
         super(message);
         this.name = "BlueskyApiError";

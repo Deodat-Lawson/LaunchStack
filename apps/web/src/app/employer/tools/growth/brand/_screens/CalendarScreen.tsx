@@ -16,7 +16,13 @@ import { useGrowthPaths } from "../../_lib/paths";
 import { useResource } from "~/lib/tools/useResource";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
-import { MediaMark, PostActions, PostMetricsInline, PostStatus } from "../_components/PostRow";
+import {
+    MediaMark,
+    PostActions,
+    PostMetricsInline,
+    PostStatus,
+    PostsReadOnly,
+} from "../_components/PostRow";
 import {
     addDays,
     dayNumber,
@@ -137,125 +143,135 @@ export function CalendarScreen() {
     };
 
     return (
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-5">
-            <PageHeader
-                size="md"
-                title="Calendar"
-                sub={
-                    res.data
-                        ? `${plural(scheduled, "post")} scheduled and ${published} out this week${due.length ? ` · ${plural(due.length, "post")} overdue` : ""}`
-                        : undefined
-                }
-                actions={
-                    <>
-                        {due.length > 0 && (
-                            <Button size="sm" variant="outline" onClick={() => void publishDue()}>
-                                Publish overdue now
+        <PostsReadOnly.Provider value={res.data?.canPublish === false}>
+            <div className="mx-auto flex max-w-[1200px] flex-col gap-5">
+                <PageHeader
+                    size="md"
+                    title="Calendar"
+                    sub={
+                        res.data
+                            ? `${plural(scheduled, "post")} scheduled and ${published} out this week${due.length ? ` · ${plural(due.length, "post")} overdue` : ""}`
+                            : undefined
+                    }
+                    actions={
+                        <>
+                            {due.length > 0 && (
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => void publishDue()}
+                                >
+                                    Publish overdue now
+                                </Button>
+                            )}
+                            <Button asChild size="sm">
+                                <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
                             </Button>
-                        )}
-                        <Button asChild size="sm">
-                            <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
-                        </Button>
-                    </>
-                }
-            />
+                        </>
+                    }
+                />
 
-            <div className="flex items-center gap-2">
-                <Button
-                    size="sm"
-                    variant="outline"
-                    className="size-8 p-0"
-                    aria-label="Previous week"
-                    onClick={() => setWeekStart(w => addDays(w, -7))}
-                >
-                    <ChevronLeft className="size-4" />
-                </Button>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    className="size-8 p-0"
-                    aria-label="Next week"
-                    onClick={() => setWeekStart(w => addDays(w, 7))}
-                >
-                    <ChevronRight className="size-4" />
-                </Button>
-                {!thisWeek && (
+                <div className="flex items-center gap-2">
                     <Button
                         size="sm"
-                        variant="ghost"
-                        onClick={() => setWeekStart(startOfWeek(new Date()))}
+                        variant="outline"
+                        className="size-8 p-0"
+                        aria-label="Previous week"
+                        onClick={() => setWeekStart(w => addDays(w, -7))}
                     >
-                        This week
+                        <ChevronLeft className="size-4" />
                     </Button>
-                )}
-                <span className="text-ink text-[13px] font-medium">{monthYear(weekStart)}</span>
-                <span className="text-ink-3 text-[13px]">
-                    week of {dayNumber(weekStart)}–{dayNumber(addDays(weekStart, 6))}
-                </span>
-            </div>
-
-            {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
-            {res.loading ? (
-                <SkeletonRows rows={3} height={90} />
-            ) : (
-                <div className="border-line bg-panel @max-md:grid-cols-1 grid grid-cols-7 overflow-hidden rounded-lg border">
-                    {days.map((day, i) => {
-                        const isToday = sameDay(day, today);
-                        const dayPosts = posts
-                            .filter(p => sameDay(postMoment(p), day))
-                            .sort((a, b) => postMoment(a).getTime() - postMoment(b).getTime());
-                        return (
-                            <section
-                                key={day.toISOString()}
-                                className={cn(
-                                    "border-line-2 flex min-h-[132px] flex-col gap-1.5 p-2",
-                                    i > 0 && "@max-md:border-l-0 @max-md:border-t border-l",
-                                    isToday && "bg-surface-2/60"
-                                )}
-                                aria-label={day.toDateString()}
-                            >
-                                <header className="flex items-baseline justify-between px-0.5">
-                                    <span
-                                        className={cn(
-                                            "text-[12px]",
-                                            isToday ? "text-brand-ink font-semibold" : "text-ink-3"
-                                        )}
-                                    >
-                                        {weekday(day)}
-                                    </span>
-                                    <span
-                                        className={cn(
-                                            "font-mono text-[12px] tabular-nums",
-                                            isToday ? "text-brand-ink font-semibold" : "text-ink-3"
-                                        )}
-                                    >
-                                        {dayNumber(day)}
-                                    </span>
-                                </header>
-                                {dayPosts.map(post => (
-                                    <DayPost
-                                        key={post.id}
-                                        post={post}
-                                        onChange={() => void res.reload()}
-                                    />
-                                ))}
-                            </section>
-                        );
-                    })}
-                </div>
-            )}
-            {!res.loading && posts.length === 0 && (
-                <p className="text-ink-3 text-[13px]">
-                    Nothing on this week.{" "}
-                    <ToolLink
-                        href={paths.brand("/compose")}
-                        className="text-brand-ink hover:underline"
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        className="size-8 p-0"
+                        aria-label="Next week"
+                        onClick={() => setWeekStart(w => addDays(w, 7))}
                     >
-                        Compose a post
-                    </ToolLink>{" "}
-                    or generate a campaign and schedule its drafts.
-                </p>
-            )}
-        </div>
+                        <ChevronRight className="size-4" />
+                    </Button>
+                    {!thisWeek && (
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setWeekStart(startOfWeek(new Date()))}
+                        >
+                            This week
+                        </Button>
+                    )}
+                    <span className="text-ink text-[13px] font-medium">{monthYear(weekStart)}</span>
+                    <span className="text-ink-3 text-[13px]">
+                        week of {dayNumber(weekStart)}–{dayNumber(addDays(weekStart, 6))}
+                    </span>
+                </div>
+
+                {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
+                {res.loading ? (
+                    <SkeletonRows rows={3} height={90} />
+                ) : (
+                    <div className="border-line bg-panel @max-md:grid-cols-1 grid grid-cols-7 overflow-hidden rounded-lg border">
+                        {days.map((day, i) => {
+                            const isToday = sameDay(day, today);
+                            const dayPosts = posts
+                                .filter(p => sameDay(postMoment(p), day))
+                                .sort((a, b) => postMoment(a).getTime() - postMoment(b).getTime());
+                            return (
+                                <section
+                                    key={day.toISOString()}
+                                    className={cn(
+                                        "border-line-2 flex min-h-[132px] flex-col gap-1.5 p-2",
+                                        i > 0 && "@max-md:border-l-0 @max-md:border-t border-l",
+                                        isToday && "bg-surface-2/60"
+                                    )}
+                                    aria-label={day.toDateString()}
+                                >
+                                    <header className="flex items-baseline justify-between px-0.5">
+                                        <span
+                                            className={cn(
+                                                "text-[12px]",
+                                                isToday
+                                                    ? "text-brand-ink font-semibold"
+                                                    : "text-ink-3"
+                                            )}
+                                        >
+                                            {weekday(day)}
+                                        </span>
+                                        <span
+                                            className={cn(
+                                                "font-mono text-[12px] tabular-nums",
+                                                isToday
+                                                    ? "text-brand-ink font-semibold"
+                                                    : "text-ink-3"
+                                            )}
+                                        >
+                                            {dayNumber(day)}
+                                        </span>
+                                    </header>
+                                    {dayPosts.map(post => (
+                                        <DayPost
+                                            key={post.id}
+                                            post={post}
+                                            onChange={() => void res.reload()}
+                                        />
+                                    ))}
+                                </section>
+                            );
+                        })}
+                    </div>
+                )}
+                {!res.loading && posts.length === 0 && (
+                    <p className="text-ink-3 text-[13px]">
+                        Nothing on this week.{" "}
+                        <ToolLink
+                            href={paths.brand("/compose")}
+                            className="text-brand-ink hover:underline"
+                        >
+                            Compose a post
+                        </ToolLink>{" "}
+                        or generate a campaign and schedule its drafts.
+                    </p>
+                )}
+            </div>
+        </PostsReadOnly.Provider>
     );
 }

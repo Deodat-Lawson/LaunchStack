@@ -328,6 +328,13 @@ interface Store {
     startedAt: number;
 }
 
+const PLATFORM_LABEL: Record<BrandPlatform, string> = {
+    linkedin: "LinkedIn",
+    x: "X",
+    bluesky: "Bluesky",
+    reddit: "Reddit",
+};
+
 function snapshot(channel: BrandChannel): BrandPost["channel"] {
     return {
         id: channel.id,
@@ -356,7 +363,16 @@ function seedPosts(now: number, channels: BrandChannel[], nosync: boolean): Bran
             id,
             platform,
             channelId: channel ? channel.id : null,
-            channel: channel ? snapshot(channel) : null,
+            // Like the server: a post with no channel of its own went out on
+            // the deployment's account, which is named as a channel too.
+            channel: channel
+                ? snapshot(channel)
+                : {
+                      id: `deployment:${platform}`,
+                      name: `${PLATFORM_LABEL[platform]} (deployment account)`,
+                      kind: "deployment",
+                      avatarUrl: null,
+                  },
             body,
             title: null,
             status,
@@ -1296,7 +1312,11 @@ export async function simulateBrand(
             .filter(p => moment(p) >= fromMs && moment(p) < toMs)
             .filter(p => !status || p.status === status)
             .sort((a, b) => moment(a) - moment(b));
-        return json({ posts: list, now: new Date(now).toISOString() });
+        return json({
+            posts: list,
+            now: new Date(now).toISOString(),
+            canPublish: store.options.canPublish,
+        });
     }
 
     if (!id && method === "POST") return createPosts(readBody(init), now);

@@ -184,18 +184,33 @@ const KIND_PREFERENCE = ["organization", "account", "person", "deployment"] as c
 /**
  * Where a post for a network goes when the caller names no channel (the
  * campaign generator's Publish button): the workspace's own enabled, healthy
- * channel — a Page before a person — and the deployment's account only when
- * the workspace has none on that network. Null when nothing can post there.
+ * channel — a Page before a person, and of several Pages the one with the
+ * most followers (the company's main Page, as a rule), then by name — and
+ * the deployment's account only when the workspace has none on that
+ * network. The caller tells the member which one it used. Null when
+ * nothing can post there.
  */
+export function pickDefaultChannel(
+    channels: readonly BrandChannelView[],
+    platform: MarketingPlatform
+): BrandChannelView | null {
+    const usable = channels.filter(
+        c => c.platform === platform && c.enabled && c.status === "active" && c.capabilities.publish
+    );
+    usable.sort(
+        (a, b) =>
+            KIND_PREFERENCE.indexOf(a.kind) - KIND_PREFERENCE.indexOf(b.kind) ||
+            (b.followers ?? -1) - (a.followers ?? -1) ||
+            a.name.localeCompare(b.name)
+    );
+    return usable[0] ?? null;
+}
+
 export async function defaultChannelFor(
     companyId: bigint,
     platform: MarketingPlatform
 ): Promise<BrandChannelView | null> {
-    const usable = (await listBrandChannels(companyId)).filter(
-        c => c.platform === platform && c.enabled && c.status === "active" && c.capabilities.publish
-    );
-    usable.sort((a, b) => KIND_PREFERENCE.indexOf(a.kind) - KIND_PREFERENCE.indexOf(b.kind));
-    return usable[0] ?? null;
+    return pickDefaultChannel(await listBrandChannels(companyId), platform);
 }
 
 export async function listBrandAccounts(

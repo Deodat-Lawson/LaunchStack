@@ -308,8 +308,11 @@ export const brandApi = {
         return call<{ media: BrandMedia }>("/api/brand/media", { method: "POST", body: form });
     },
 
+    /** `canPublish`: whether this member may act on the posts (social.publish). */
     posts: (params: { from?: string; to?: string; status?: string } = {}) =>
-        call<{ posts: BrandPost[]; now: string }>(`/api/brand/posts${q(params)}`),
+        call<{ posts: BrandPost[]; now: string; canPublish: boolean }>(
+            `/api/brand/posts${q(params)}`
+        ),
     compose: (input: ComposeInput) =>
         call<{ posts: BrandPost[] }>("/api/brand/posts", {
             method: "POST",

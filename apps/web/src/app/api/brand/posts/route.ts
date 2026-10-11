@@ -99,6 +99,7 @@ export async function GET(request: NextRequest) {
         return json({
             posts: await toPostViews(auth.ctx.companyId, records),
             now: now.toISOString(),
+            canPublish: auth.ctx.canPublish,
         });
     } catch (err) {
         return handleBrandError("GET posts", err);

@@ -1937,6 +1937,9 @@ export function MarketingPipelineWorkspace({
                                                                         p =>
                                                                             p.id === result.platform
                                                                     )?.label ?? "the platform"}
+                                                                    {publishResult.channel
+                                                                        ? ` as ${publishResult.channel}`
+                                                                        : ""}
                                                                     .
                                                                 </span>
                                                                 {publishResult.postUrl && (

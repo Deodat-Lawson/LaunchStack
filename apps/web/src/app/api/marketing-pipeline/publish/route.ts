@@ -38,8 +38,13 @@ export async function POST(request: Request) {
         const { platform, message, title } = validation.data;
         const channel = await defaultChannelFor(ctx.data.companyId, platform);
         if (!channel) {
+            // LinkedIn and Bluesky are connected per workspace; X and Reddit
+            // only through the operator's deployment-wide keys.
+            const perWorkspace = platform === "linkedin" || platform === "bluesky";
             return fail(
-                `Nothing can post to ${NETWORK_LABELS[platform]} yet. Connect it under Growth › Brand › Accounts.`,
+                perWorkspace
+                    ? `Nothing can post to ${NETWORK_LABELS[platform]} yet. Connect it under Growth › Brand › Accounts.`
+                    : `${NETWORK_LABELS[platform]} is set up by the operator for the whole deployment, and this deployment has no ${NETWORK_LABELS[platform]} key yet.`,
                 400,
                 { platform }
             );

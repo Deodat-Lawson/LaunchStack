@@ -1,7 +1,7 @@
 "use client";
 
 import { ExternalLink, Eye, ImageIcon, MessageSquare, ThumbsUp } from "lucide-react";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -107,6 +107,13 @@ export function MediaMark({ count, className }: { count: number; className?: str
  * move it, cancel or delete it, open it where it went. Actions are gated the
  * way the API gates them, so a disabled control is never a surprise.
  */
+/**
+ * Whether the member looking may only read: a Viewer or Guest sees the
+ * calendar and a post's details but no control that would speak as the
+ * company. The screens set it from the posts response's `canPublish`.
+ */
+export const PostsReadOnly = createContext(false);
+
 export function PostActions({
     post,
     onChange,
@@ -121,9 +128,11 @@ export function PostActions({
     const [when, setWhen] = useState(() =>
         toLocalInput(post.scheduledAt ? new Date(post.scheduledAt) : postMoment(post))
     );
-    const editable = post.status !== "published" && post.status !== "publishing";
+    const readOnly = useContext(PostsReadOnly);
+    const editable = !readOnly && post.status !== "published" && post.status !== "publishing";
     const publishable =
-        post.status === "draft" || post.status === "scheduled" || post.status === "failed";
+        !readOnly &&
+        (post.status === "draft" || post.status === "scheduled" || post.status === "failed");
     const run = async (work: () => Promise<unknown>, done: string) => {
         setBusy(true);
         try {
@@ -227,7 +236,7 @@ export function PostActions({
                             Publish now
                         </Button>
                     )}
-                    {post.status === "scheduled" && (
+                    {post.status === "scheduled" && !readOnly && (
                         <Button
                             size="sm"
                             variant="outline"

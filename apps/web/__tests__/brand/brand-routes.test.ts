@@ -510,6 +510,18 @@ describe("the campaign generator's Publish goes through the workspace's own chan
         );
     });
 
+    it("for X and Reddit, says the operator sets them up (they are not connectable here)", async () => {
+        as("member");
+        mockDefaultChannelFor.mockResolvedValue(null);
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "reddit", message: "Hi" })
+        );
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toMatchObject({
+            message: expect.stringContaining("set up by the operator"),
+        });
+    });
+
     it("says what to connect when nothing can post to the network", async () => {
         as("member");
         mockDefaultChannelFor.mockResolvedValue(null);

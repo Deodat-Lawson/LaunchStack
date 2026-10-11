@@ -360,19 +360,9 @@ const GATES: readonly Gate[] = [
         deniedRole: "member",
         call: () => uploadBootstrap(),
     },
-    // documents.delete
-    {
-        route: "DELETE /api/deleteDocument",
-        permission: "documents.delete",
-        deniedRole: "member",
-        call: () => deleteDocument(json("/api/deleteDocument", "DELETE", { docId: "1" })),
-    },
-    {
-        route: "DELETE /api/documents/batchDelete",
-        permission: "documents.delete",
-        deniedRole: "member",
-        call: () => batchDelete(json("/api/documents/batchDelete", "DELETE", { docIds: [1] })),
-    },
+    // documents.delete — deleting a file itself is gated by level, not role
+    // (ADR-014: whoever manages a file may delete it); see
+    // __tests__/api/documents/document-levels.route.test.ts.
     {
         route: "DELETE /api/documents/[id]/versions/[versionId]",
         permission: "documents.delete",

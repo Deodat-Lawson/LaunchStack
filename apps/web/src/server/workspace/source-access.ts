@@ -30,6 +30,7 @@ import { folderAncestors, normalizeFolderPath } from "~/lib/folders/path";
 import {
     documentAccessFrom,
     folderAccessFrom,
+    canDeleteAtLevel,
     levelAtLeast,
     type AccessSubject,
     type AudienceKind,
@@ -284,7 +285,10 @@ export async function loadDocumentOwners(companyId: bigint): Promise<Map<number,
 export type DocumentAccessView = Pick<
     AccessView,
     "audience" | "ownAudience" | "principalCount" | "canEdit" | "canManage"
->;
+> & {
+    /** May delete it: manages it, or can edit it and holds `documents.delete`. */
+    canDelete: boolean;
+};
 
 /** What the documents list adds to each row it already returns. */
 export interface DescribedDocuments {
@@ -308,7 +312,14 @@ export async function describeDocumentAccess(
     const access = new Map<number, DocumentAccessView>();
     for (const [id, item] of classifyDocuments(docs, documentFacts, folderFacts, subject)) {
         const { audience, ownAudience, principalCount, canEdit, canManage } = accessViewOf(item);
-        access.set(id, { audience, ownAudience, principalCount, canEdit, canManage });
+        access.set(id, {
+            audience,
+            ownAudience,
+            principalCount,
+            canEdit,
+            canManage,
+            canDelete: canDeleteAtLevel(item.level, subject.permissions),
+        });
     }
     return { access, addedBy };
 }

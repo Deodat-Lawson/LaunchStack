@@ -23,7 +23,7 @@ import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
-import { canChangeSource } from "./sourceContextMenu";
+import { canChangeSource, canDeleteSource, DELETE_RESERVED_REASON } from "./sourceContextMenu";
 import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
@@ -264,6 +264,7 @@ export function DocumentViewer({
         : typeof source.documentId === "number" && source.documentId > 0;
     // ADR-014: a file shared with you to view opens, but does not rename or delete.
     const editable = canChangeSource(source);
+    const deletable = canDeleteSource(source);
     // "Added by Ada · 2h ago", under the title — the name as they appear in
     // this workspace now. A map's published copy was made by whoever
     // published it, not whoever drew it, so maps say nothing here.
@@ -878,8 +879,12 @@ export function DocumentViewer({
             onSelect: deleteDocument,
             iconOnly: true,
             tone: "danger",
-            disabled: !editable,
-            hint: editable ? undefined : "You can view this file but not change it.",
+            disabled: !deletable,
+            hint: !editable
+                ? "You can view this file but not change it."
+                : deletable
+                  ? undefined
+                  : DELETE_RESERVED_REASON,
             testId: "viewer-delete",
         },
     ];

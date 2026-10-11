@@ -9,9 +9,9 @@ import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { DOCUMENT_DELETE_DENIED, DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
-import { documentAccess, levelAtLeast } from "~/server/workspace/item-access";
+import { canDeleteAtLevel, documentAccess, levelAtLeast } from "~/server/workspace/item-access";
 
 export async function DELETE(request: Request) {
     try {
@@ -20,7 +20,7 @@ export async function DELETE(request: Request) {
             return validation.response;
         }
 
-        const ctx = await requireWorkspacePermission("documents.delete");
+        const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
 
         const { docId } = validation.data;
@@ -52,12 +52,17 @@ export async function DELETE(request: Request) {
             );
         }
 
-        // Deleting is editing (ADR-014): a view grant opens a file, it does
-        // not let you throw it away.
+        // ADR-014: whoever manages a file may delete it (a Member, their own
+        // private upload); anyone else needs edit plus `documents.delete`.
         const access = await documentAccess(ctx.data, { id: documentId, category: doc.category });
-        if (!levelAtLeast(access.level, "edit")) {
+        if (!canDeleteAtLevel(access.level, ctx.data.permissions)) {
             return NextResponse.json(
-                { success: false, error: DOCUMENT_EDIT_DENIED },
+                {
+                    success: false,
+                    error: levelAtLeast(access.level, "edit")
+                        ? DOCUMENT_DELETE_DENIED
+                        : DOCUMENT_EDIT_DENIED,
+                },
                 { status: 403 }
             );
         }

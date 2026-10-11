@@ -7,6 +7,7 @@
 import { builtinRolePermissions, type Permission } from "~/lib/authz/permissions";
 import {
     audienceOf,
+    canDeleteAtLevel,
     documentAccessFrom,
     folderAccessFrom,
     type AccessSubject,
@@ -199,5 +200,17 @@ describe("audienceOf", () => {
                 me
             )
         ).toBe("shared");
+    });
+});
+
+describe("canDeleteAtLevel", () => {
+    it("lets whoever manages a file delete it, and an editor only with documents.delete", () => {
+        const member = builtinRolePermissions("member") ?? new Set<Permission>();
+        const admin = builtinRolePermissions("admin") ?? new Set<Permission>();
+        expect(canDeleteAtLevel("manage", member)).toBe(true);
+        expect(canDeleteAtLevel("edit", member)).toBe(false);
+        expect(canDeleteAtLevel("edit", admin)).toBe(true);
+        expect(canDeleteAtLevel("view", admin)).toBe(false);
+        expect(canDeleteAtLevel(null, admin)).toBe(false);
     });
 });

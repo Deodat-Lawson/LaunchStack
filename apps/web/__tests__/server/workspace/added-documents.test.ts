@@ -5,7 +5,11 @@
  * again, or announce it twice.
  */
 
+import { document } from "@launchstack/store/schema";
+import { documentGrants, documentSettings } from "~/server/db/schema";
 import { recordUpload } from "~/server/workspace/added-documents";
+
+import { fakeDb } from "../../helpers/fake-db";
 import { recordActivity } from "~/server/workspace/activity";
 import { applyDocumentCreationDefaults } from "~/server/workspace/ownership";
 
@@ -15,7 +19,10 @@ jest.mock("~/server/workspace/activity", () => ({ recordActivity: jest.fn() }));
 
 const ADA = { companyId: BigInt(5), userPk: BigInt(7), authUserId: "ada" };
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+    jest.clearAllMocks();
+    fakeDb.reset();
+});
 
 describe("recordUpload", () => {
     it("gives every new row its defaults and announces the one the person added", async () => {
@@ -48,6 +55,9 @@ describe("recordUpload", () => {
     });
 
     it("does nothing for a retry that converged on rows an earlier call made", async () => {
+        // The earlier call finished: the file already has its owner's grant.
+        fakeDb.onSelect(document, [{ createdAt: new Date() }]);
+        fakeDb.onSelect(documentGrants, [{ id: 1 }]);
         await recordUpload(ADA, {
             document: { id: 20, title: "Plan.pdf", category: "Sales" },
             createdDocuments: [],
@@ -55,5 +65,33 @@ describe("recordUpload", () => {
 
         expect(applyDocumentCreationDefaults).not.toHaveBeenCalled();
         expect(recordActivity).not.toHaveBeenCalled();
+    });
+
+    it("finishes the defaults when the earlier attempt died before they landed", async () => {
+        fakeDb.onSelect(document, [{ createdAt: new Date() }]);
+        fakeDb.onSelect(documentGrants, []);
+        fakeDb.onSelect(documentSettings, []);
+
+        await recordUpload(ADA, {
+            document: { id: 20, title: "Plan.pdf", category: "" },
+            createdDocuments: [],
+        });
+
+        expect(applyDocumentCreationDefaults).toHaveBeenCalledWith(expect.anything(), ADA, [
+            { id: 20, category: "" },
+        ]);
+    });
+
+    it("never makes an old, pre-ADR-014 file private on a converged retry", async () => {
+        fakeDb.onSelect(document, [{ createdAt: new Date(Date.now() - 86_400_000) }]);
+        fakeDb.onSelect(documentGrants, []);
+        fakeDb.onSelect(documentSettings, []);
+
+        await recordUpload(ADA, {
+            document: { id: 20, title: "Plan.pdf", category: "" },
+            createdDocuments: [],
+        });
+
+        expect(applyDocumentCreationDefaults).not.toHaveBeenCalled();
     });
 });

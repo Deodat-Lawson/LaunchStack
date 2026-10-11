@@ -231,6 +231,20 @@ export function levelAtLeast(level: GrantLevel | null, required: GrantLevel): bo
     return level !== null && grantLevelRank(level) >= grantLevelRank(required);
 }
 
+/**
+ * May someone at `level` delete a document? Whoever manages it — the person
+ * who added it, or anyone they made a manager — always may; anyone else needs
+ * edit access and the `documents.delete` permission. A Member can throw away
+ * their own private file, not a teammate's.
+ */
+export function canDeleteAtLevel(
+    level: GrantLevel | null,
+    permissions: ReadonlySet<Permission>
+): boolean {
+    if (levelAtLeast(level, "manage")) return true;
+    return levelAtLeast(level, "edit") && permissions.has("documents.delete");
+}
+
 // ---------------------------------------------------------------------------
 // Loaders
 // ---------------------------------------------------------------------------

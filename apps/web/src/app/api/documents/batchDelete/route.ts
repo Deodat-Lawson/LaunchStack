@@ -26,12 +26,12 @@ import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { DOCUMENT_DELETE_DENIED } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
 import {
     accessSubject,
     documentAccess,
-    levelAtLeast,
+    canDeleteAtLevel,
     type ItemAccess,
 } from "~/server/workspace/item-access";
 
@@ -48,7 +48,7 @@ export async function DELETE(request: Request) {
             const validation = await validateRequestBody(request, BatchDeleteSchema);
             if (!validation.success) return validation.response;
 
-            const ctx = await requireWorkspacePermission("documents.delete");
+            const ctx = await requireWorkspacePermission("documents.read");
             if (!ctx.success) return ctx.response;
 
             const { docIds } = validation.data;
@@ -85,9 +85,9 @@ export async function DELETE(request: Request) {
                     { id: Number(row.id), category: row.category },
                     subject
                 );
-                if (!levelAtLeast(item.level, "edit")) {
+                if (!canDeleteAtLevel(item.level, ctx.data.permissions)) {
                     return NextResponse.json(
-                        { success: false, error: DOCUMENT_EDIT_DENIED },
+                        { success: false, error: DOCUMENT_DELETE_DENIED },
                         { status: 403 }
                     );
                 }

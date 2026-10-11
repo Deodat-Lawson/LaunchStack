@@ -127,6 +127,8 @@ export interface ItemAccessView {
     canEdit: boolean;
     /** May change who has access; for a folder also rename, move or delete it. */
     canManage: boolean;
+    /** Files only: may delete it (manages it, or can edit it and holds `documents.delete`). */
+    canDelete?: boolean;
     /** Folders only: the restricted folder that governs it, or null. */
     governingPath?: string | null;
 }

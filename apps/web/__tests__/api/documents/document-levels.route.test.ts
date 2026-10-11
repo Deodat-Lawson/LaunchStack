@@ -52,10 +52,13 @@ jest.mock("~/server/company-profile/service", () => ({ reassembleAfterDelete: je
 jest.mock("~/server/services/folder-access", () => ({
     FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
     DOCUMENT_EDIT_DENIED: "You can view this file but not change it.",
+    DOCUMENT_DELETE_DENIED:
+        "Only the person who added this file, or someone who manages it, can delete it.",
     canEditFolder: jest.fn(),
 }));
 jest.mock("~/server/workspace/item-access", () => ({
     accessSubject: jest.fn().mockResolvedValue({ userPk: "7" }),
+    canDeleteAtLevel: jest.requireActual("~/server/workspace/item-access").canDeleteAtLevel,
     canEditDocument: jest.fn(),
     documentAccess: jest.fn(),
     levelAtLeast: (level: string | null, required: string) => {
@@ -265,6 +268,31 @@ describe("DELETE /api/deleteDocument", () => {
             expect.anything(),
             expect.objectContaining({ detail: { wasWorkspace: false } })
         );
+    });
+});
+
+describe("DELETE /api/deleteDocument — who may throw a file away", () => {
+    it("lets a Member delete a file they manage (their own upload) without documents.delete", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: member });
+        jest.mocked(documentAccess).mockResolvedValue(access("manage", "private"));
+
+        const response = await deleteDocument(del("/api/deleteDocument", { docId: "12" }));
+
+        expect(response.status).toBe(200);
+        expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12);
+    });
+
+    it("refuses a Member who can edit a teammate's file but does not manage it", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: member });
+        jest.mocked(documentAccess).mockResolvedValue(access("edit", "workspace"));
+
+        const response = await deleteDocument(del("/api/deleteDocument", { docId: "12" }));
+
+        expect(response.status).toBe(403);
+        await expect(response.json()).resolves.toMatchObject({
+            error: "Only the person who added this file, or someone who manages it, can delete it.",
+        });
+        expect(deleteDocumentCore).not.toHaveBeenCalled();
     });
 });
 

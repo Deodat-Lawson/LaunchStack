@@ -47,6 +47,15 @@ export function canChangeSource(source: WorkspaceSource): boolean {
     return source.access?.canEdit !== false;
 }
 
+/** Why a file the caller can edit still can't be deleted by them. */
+export const DELETE_RESERVED_REASON =
+    "Only the person who added this file, or someone who manages it, can delete it.";
+
+/** May the caller delete it? Unknown reads as yes; the server decides. */
+export function canDeleteSource(source: WorkspaceSource): boolean {
+    return canChangeSource(source) && source.access?.canDelete !== false;
+}
+
 export function isPersistedSource(source: WorkspaceSource): boolean {
     // A mindmap is persisted by its own row, published or not; everything
     // else is persisted by a document row.
@@ -217,8 +226,9 @@ export function buildSourceMenuItems(
             label: "Delete…",
             icon: "delete",
             danger: true,
-            disabled: changeBlocked,
-            disabledReason: changeReason,
+            disabled: changeBlocked || !canDeleteSource(source),
+            disabledReason:
+                changeReason ?? (canDeleteSource(source) ? undefined : DELETE_RESERVED_REASON),
             onSelect: () => handlers.onDelete?.(source),
         });
     }
@@ -513,8 +523,14 @@ export function buildSelectionMenuItems(
             label: `Delete ${persisted.length === count ? count : `${persisted.length} of ${count}`} ${noun}…`,
             icon: "delete",
             danger: true,
-            disabled: persisted.length === 0,
-            disabledReason: persisted.length === 0 ? pendingReason : undefined,
+            // The server refuses a batch with one file the caller may not delete.
+            disabled: persisted.length === 0 || !persisted.every(canDeleteSource),
+            disabledReason:
+                persisted.length === 0
+                    ? pendingReason
+                    : persisted.every(canDeleteSource)
+                      ? undefined
+                      : DELETE_RESERVED_REASON,
             onSelect: () => handlers.onDelete?.(persisted),
         });
     }

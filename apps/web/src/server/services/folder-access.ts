@@ -31,6 +31,10 @@ export const FOLDER_EDIT_DENIED = "You do not have edit access to this folder.";
  */
 export const DOCUMENT_EDIT_DENIED = "You can view this file but not change it.";
 
+/** The 403 body when someone can edit a file but neither manages it nor holds `documents.delete`. */
+export const DOCUMENT_DELETE_DENIED =
+    "Only the person who added this file, or someone who manages it, can delete it.";
+
 /** May `ctx` add documents to the folder named `categoryName`? */
 export async function canEditFolder(ctx: FolderActor, categoryName: string): Promise<boolean> {
     return canEditFolderPath(ctx, categoryName);

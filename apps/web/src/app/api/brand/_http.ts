@@ -4,10 +4,12 @@
  * BrandConnectError, BrandMediaError, BrandCommentError) pass through the
  * shared route handler as expected outcomes.
  *
- * Who may do what: any member composes, schedules, publishes and answers
- * comments; connecting, disconnecting and switching channels speaks for the
- * company on a network, so it takes `connectors.manage`, like every other
- * workspace connection.
+ * Who may do what: anyone in the workspace reads the calendar, numbers and
+ * comments. Composing, scheduling, publishing, replying and syncing speak
+ * as the company, so they take `social.publish` (Members and up; never a
+ * Viewer or Guest). Connecting, disconnecting and switching channels decide
+ * *which* accounts speak for it, so they take `connectors.manage`, like
+ * every other workspace connection.
  */
 import { type NextResponse } from "next/server";
 
@@ -21,6 +23,7 @@ export interface BrandCtx {
     userId: string;
     userPk: bigint;
     canManage: boolean;
+    canPublish: boolean;
 }
 
 export async function brandContext(): Promise<
@@ -35,6 +38,7 @@ export async function brandContext(): Promise<
             userId: result.data.authUserId,
             userPk: result.data.userPk,
             canManage: result.data.can("connectors.manage"),
+            canPublish: result.data.can("social.publish"),
         },
     };
 }
@@ -49,6 +53,23 @@ export async function brandManageContext(): Promise<
         return {
             ok: false,
             response: error("Only workspace admins can change connected accounts.", 403, {
+                code: "forbidden",
+            }),
+        };
+    }
+    return auth;
+}
+
+/** The context, or a 403 when the member may not speak as the workspace's accounts. */
+export async function brandPublishContext(): Promise<
+    { ok: true; ctx: BrandCtx } | { ok: false; response: NextResponse }
+> {
+    const auth = await brandContext();
+    if (!auth.ok) return auth;
+    if (!auth.ctx.canPublish) {
+        return {
+            ok: false,
+            response: error("Your role can read Brand but not post or reply as the company.", 403, {
                 code: "forbidden",
             }),
         };

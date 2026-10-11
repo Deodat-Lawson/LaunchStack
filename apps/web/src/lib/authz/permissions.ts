@@ -26,6 +26,7 @@ export const PERMISSIONS = [
     "analytics.view",
     "audit.view",
     "campaigns.send",
+    "social.publish",
     "billing.manage",
     "workspace.transfer",
 ] as const;
@@ -49,6 +50,8 @@ export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "analytics.view": "The statistics dashboard and per-document stats",
     "audit.view": "Read the audit log",
     "campaigns.send": "Approve and send email campaigns",
+    "social.publish":
+        "Publish, schedule and reply as the workspace's connected social accounts (LinkedIn Pages, Bluesky)",
     "billing.manage": "Credits, plan, and keys that cost money",
     "workspace.transfer": "Transfer ownership or delete the workspace",
 };
@@ -77,7 +80,7 @@ export const ROLE_LABELS: Record<BuiltinRole, string> = {
 export const ROLE_DESCRIPTIONS: Record<BuiltinRole, string> = {
     owner: "Everything, including billing and ownership.",
     admin: "Runs the workspace: people, folders, settings, connectors.",
-    member: "Works on documents: upload, edit, search, ask.",
+    member: "Works on documents (upload, edit, search, ask) and posts as the social accounts.",
     viewer: "Reads and searches, never changes.",
     guest: "Sees only the folders they have been added to.",
 };
@@ -91,6 +94,9 @@ const MEMBER_PERMISSIONS: ReadonlySet<Permission> = new Set<Permission>([
     "documents.upload",
     "documents.edit",
     "members.view",
+    // Speaking as the company on social networks: anyone who works here,
+    // never someone who only reads (no approval step, by decision).
+    "social.publish",
 ]);
 const VIEWER_PERMISSIONS: ReadonlySet<Permission> = new Set<Permission>([
     "documents.read",

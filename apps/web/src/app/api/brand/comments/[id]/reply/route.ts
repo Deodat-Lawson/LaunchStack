@@ -4,12 +4,12 @@ import { z } from "zod";
 
 import { replyToComment } from "~/server/brand/comments";
 
-import { brandContext, error, handleBrandError, json, readBody } from "../../../_http";
+import { brandPublishContext, error, handleBrandError, json, readBody } from "../../../_http";
 
 const ReplySchema = z.object({ text: z.string().min(1).max(5000) });
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;

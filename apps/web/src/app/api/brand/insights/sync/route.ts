@@ -5,12 +5,12 @@
 import { syncBrandWorkspace } from "~/server/brand/sync";
 import { listChannelRows } from "~/server/brand/channels";
 
-import { brandContext, handleBrandError, json } from "../../_http";
+import { brandPublishContext, handleBrandError, json } from "../../_http";
 
 const MIN_INTERVAL_MS = 60_000;
 
 export async function POST() {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const rows = await listChannelRows(auth.ctx.companyId);

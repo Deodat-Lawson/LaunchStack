@@ -31,14 +31,13 @@ import { requireConnectorAdmin } from "~/server/services/connectors/workspace-gu
 
 export const runtime = "nodejs";
 
-/** What Brand › Accounts says when a LinkedIn sign-in comes back without channels to post to. */
-const LINKEDIN_RETURN_PROBLEMS: Record<string, string> = {
-    denied: "The LinkedIn sign-in was cancelled, so nothing was connected.",
-    error: "LinkedIn did not complete the sign-in. Try again; if it keeps failing, check the app's redirect URL and LINKEDIN_OAUTH_SCOPES against its Auth tab.",
-    partial: "LinkedIn is connected, but its Pages could not be read. Use Refresh Pages below.",
-    "no-channels":
-        "LinkedIn is connected, but the sign-in gave no permission to post. Check LINKEDIN_OAUTH_SCOPES against the app's Auth tab.",
-};
+/** LinkedIn returns that Brand › Accounts explains (its CONNECT_PROBLEMS owns the words). */
+const LINKEDIN_RETURN_PROBLEMS: ReadonlySet<string> = new Set([
+    "denied",
+    "error",
+    "partial",
+    "no-channels",
+]);
 
 function backToDocuments(
     request: Request,
@@ -48,11 +47,11 @@ function backToDocuments(
     const url = new URL("/employer/documents", new URL(request.url).origin);
     if (provider === "linkedin") {
         url.searchParams.set("feature", "growth");
-        const problem = LINKEDIN_RETURN_PROBLEMS[result];
+        // A code, never text: a crafted link cannot put words in the app's mouth.
         url.searchParams.set(
             "at",
-            problem
-                ? `/brand/accounts?${new URLSearchParams({ error: problem })}`
+            LINKEDIN_RETURN_PROBLEMS.has(result)
+                ? `/brand/accounts?${new URLSearchParams({ connect: result })}`
                 : "/brand/accounts"
         );
     }

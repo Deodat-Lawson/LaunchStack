@@ -63,6 +63,25 @@ export function mediaProblem(mimeType: string, size: number): string | null {
     return null;
 }
 
+/** Bluesky refuses an image blob over this many bytes. */
+export const BLUESKY_MAX_IMAGE_BYTES = 1_000_000;
+
+/**
+ * Why a network would refuse these images, checked when the post is saved
+ * rather than at its scheduled time: LinkedIn takes no WebP, Bluesky no
+ * image over about 1 MB. Null when the network takes them (or ignores media).
+ */
+export function networkMediaProblem(
+    platform: string,
+    media: ReadonlyArray<Pick<BrandMediaRow, "mimeType" | "size">>
+): string | null {
+    if (platform === "linkedin" && media.some(m => m.mimeType === "image/webp"))
+        return "LinkedIn does not take WebP images. Use JPEG, PNG or GIF.";
+    if (platform === "bluesky" && media.some(m => m.size > BLUESKY_MAX_IMAGE_BYTES))
+        return "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.";
+    return null;
+}
+
 export async function saveBrandMedia(args: {
     companyId: bigint;
     userId: string;

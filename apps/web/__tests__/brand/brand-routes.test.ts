@@ -22,10 +22,13 @@ jest.mock("~/lib/require-workspace-context", () =>
 
 const mockListBrandAccounts = jest.fn();
 const mockListBrandChannels = jest.fn();
+const mockDefaultChannelFor = jest.fn();
 jest.mock("~/server/brand/accounts", () => ({
     BRAND_CONNECTION_PROVIDERS: ["linkedin", "bluesky"],
+    NETWORK_LABELS: { linkedin: "LinkedIn", x: "X", bluesky: "Bluesky", reddit: "Reddit" },
     listBrandAccounts: (...a: unknown[]) => mockListBrandAccounts(...a),
     listBrandChannels: (...a: unknown[]) => mockListBrandChannels(...a),
+    defaultChannelFor: (...a: unknown[]) => mockDefaultChannelFor(...a),
 }));
 
 const mockSetChannelEnabled = jest.fn();
@@ -57,6 +60,9 @@ jest.mock("~/server/services/connectors/config", () => ({
 }));
 
 const mockCreateBrandPosts = jest.fn();
+const mockPublishBrandPost = jest.fn();
+/** Anything that speaks as the company; a refused role must never reach it. */
+const mockSpeaks = jest.fn();
 jest.mock("@launchstack/pipelines/marketing/posts", () => {
     const { z } = jest.requireActual<typeof Zod>("zod");
     return {
@@ -72,15 +78,36 @@ jest.mock("@launchstack/pipelines/marketing/posts", () => {
         createBrandPosts: (...a: unknown[]) => mockCreateBrandPosts(...a),
         hasDueBrandPosts: jest.fn().mockResolvedValue(false),
         listBrandPosts: jest.fn().mockResolvedValue([]),
-        publishBrandPost: jest.fn(),
-        publishDueBrandPosts: jest.fn(),
+        publishBrandPost: (...a: unknown[]) => mockPublishBrandPost(...a),
+        publishDueBrandPosts: (...a: unknown[]) => mockSpeaks("publishDue", ...a),
+        updateBrandPost: (...a: unknown[]) => mockSpeaks("update", ...a),
+        deleteBrandPost: (...a: unknown[]) => mockSpeaks("delete", ...a),
     };
 });
 
 const mockGetBrandMediaRows = jest.fn();
+const mockNetworkMediaProblem = jest.fn();
 jest.mock("~/server/brand/media", () => ({
     getBrandMediaRows: (...a: unknown[]) => mockGetBrandMediaRows(...a),
+    networkMediaProblem: (...a: unknown[]) => mockNetworkMediaProblem(...a),
+    saveBrandMedia: (...a: unknown[]) => mockSpeaks("media", ...a),
+    toMediaView: (row: unknown) => row,
 }));
+jest.mock("~/server/brand/comments", () => ({
+    replyToComment: (...a: unknown[]) => mockSpeaks("reply", ...a),
+    setCommentHandled: (...a: unknown[]) => mockSpeaks("handled", ...a),
+}));
+jest.mock("~/server/brand/sync", () => ({
+    syncBrandWorkspace: (...a: unknown[]) => mockSpeaks("sync", ...a),
+}));
+const mockMarkContentPublished = jest.fn().mockResolvedValue(undefined);
+jest.mock("@launchstack/pipelines/marketing", () => {
+    const { z } = jest.requireActual<typeof Zod>("zod");
+    return {
+        MarketingPlatformEnum: z.enum(["x", "linkedin", "bluesky", "reddit"]),
+        markContentPublished: (...a: unknown[]) => mockMarkContentPublished(...a),
+    };
+});
 jest.mock("~/server/brand/post-views", () => ({
     toPostViews: (_companyId: bigint, posts: unknown[]) => Promise.resolve(posts),
 }));
@@ -94,6 +121,14 @@ import { POST as connectBluesky } from "~/app/api/brand/connections/bluesky/rout
 import { DELETE as disconnect } from "~/app/api/brand/connections/[id]/route";
 import { POST as refreshConnection } from "~/app/api/brand/connections/[id]/refresh/route";
 import { POST as compose } from "~/app/api/brand/posts/route";
+import { DELETE as deletePost, PATCH as patchPost } from "~/app/api/brand/posts/[id]/route";
+import { POST as publishPost } from "~/app/api/brand/posts/[id]/publish/route";
+import { POST as publishDue } from "~/app/api/brand/posts/publish-due/route";
+import { PATCH as markComment } from "~/app/api/brand/comments/[id]/route";
+import { POST as replyComment } from "~/app/api/brand/comments/[id]/reply/route";
+import { POST as uploadMedia } from "~/app/api/brand/media/route";
+import { POST as syncNow } from "~/app/api/brand/insights/sync/route";
+import { POST as campaignPublish } from "~/app/api/marketing-pipeline/publish/route";
 
 function req(path: string, method: string, body?: unknown) {
     return new Request(`https://app.test${path}`, {
@@ -104,7 +139,7 @@ function req(path: string, method: string, body?: unknown) {
 }
 const params = <T extends Record<string, string>>(value: T) => ({ params: Promise.resolve(value) });
 
-function as(role: "owner" | "admin" | "member") {
+function as(role: "owner" | "admin" | "member" | "viewer" | "guest") {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: makeWorkspaceContext({ role, companyId: BigInt(5) }),
@@ -128,7 +163,8 @@ beforeEach(() => {
     mockCreateBrandPosts.mockImplementation((args: { targets: unknown[] }) =>
         Promise.resolve(args.targets.map((t, i) => ({ id: `p${i}`, ...(t as object) })))
     );
-    mockGetBrandMediaRows.mockResolvedValue([{ id: "m1" }]);
+    mockGetBrandMediaRows.mockResolvedValue([{ id: "m1", mimeType: "image/png", size: 1000 }]);
+    mockNetworkMediaProblem.mockReturnValue(null);
 });
 
 describe("account management needs connectors.manage", () => {
@@ -243,7 +279,7 @@ describe("account management needs connectors.manage", () => {
 });
 
 describe("GET accounts", () => {
-    it("tells a member they cannot manage", async () => {
+    it("tells a member they cannot manage, and a viewer that they cannot post", async () => {
         as("member");
         mockListBrandAccounts.mockResolvedValue({
             networks: [],
@@ -253,7 +289,10 @@ describe("GET accounts", () => {
         });
         const response = await getAccounts();
         expect(response.status).toBe(200);
-        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false);
+        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false, true);
+        as("viewer");
+        await getAccounts();
+        expect(mockListBrandAccounts).toHaveBeenLastCalledWith(BigInt(5), false, false);
     });
 });
 
@@ -319,6 +358,163 @@ describe("compose onto channels", () => {
                 body: "Hi",
                 media: [{ id: "theirs" }],
             })
+        );
+        expect(response.status).toBe(400);
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+});
+
+describe("speaking as the company needs social.publish (Viewers and Guests read only)", () => {
+    const form = () => {
+        const body = new FormData();
+        body.set("file", new File([new Uint8Array([1])], "a.png", { type: "image/png" }));
+        return new Request("https://app.test/api/brand/media", {
+            method: "POST",
+            body,
+        }) as unknown as Parameters<typeof uploadMedia>[0];
+    };
+    const writes: Array<[string, () => Promise<Response>]> = [
+        [
+            "POST posts (compose)",
+            () =>
+                compose(
+                    req("/api/brand/posts", "POST", {
+                        channels: ["ch-page"],
+                        body: "Hi",
+                        publishNow: true,
+                    })
+                ),
+        ],
+        [
+            "PATCH posts/[id]",
+            () =>
+                patchPost(req("/api/brand/posts/p1", "PATCH", { body: "x" }), params({ id: "p1" })),
+        ],
+        [
+            "DELETE posts/[id]",
+            () => deletePost(req("/api/brand/posts/p1", "DELETE"), params({ id: "p1" })),
+        ],
+        [
+            "POST posts/[id]/publish",
+            () => publishPost(req("/api/brand/posts/p1/publish", "POST"), params({ id: "p1" })),
+        ],
+        ["POST posts/publish-due", () => publishDue()],
+        [
+            "POST comments/[id]/reply",
+            () =>
+                replyComment(
+                    req("/api/brand/comments/c1/reply", "POST", { text: "Thanks" }),
+                    params({ id: "c1" })
+                ),
+        ],
+        [
+            "PATCH comments/[id]",
+            () =>
+                markComment(
+                    req("/api/brand/comments/c1", "PATCH", { handled: true }),
+                    params({ id: "c1" })
+                ),
+        ],
+        ["POST media", () => uploadMedia(form())],
+        ["POST insights/sync", () => syncNow()],
+        [
+            "POST marketing-pipeline/publish (campaign)",
+            () =>
+                campaignPublish(
+                    req("/api/marketing-pipeline/publish", "POST", {
+                        platform: "linkedin",
+                        message: "Hi",
+                    })
+                ),
+        ],
+    ];
+
+    it.each(["viewer", "guest"] as const)(
+        "a %s is refused everywhere, before anything speaks",
+        async role => {
+            as(role);
+            for (const [name, call] of writes) {
+                const response = await call();
+                expect([name, response.status]).toEqual([name, 403]);
+            }
+            expect(mockSpeaks).not.toHaveBeenCalled();
+            expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+            expect(mockPublishBrandPost).not.toHaveBeenCalled();
+        }
+    );
+
+    it("a member may reply and mark done", async () => {
+        as("member");
+        mockSpeaks.mockResolvedValue({ id: "c2" });
+        expect(
+            (await replyComment(req("/x", "POST", { text: "Thanks" }), params({ id: "c1" }))).status
+        ).toBe(201);
+        expect(
+            (await markComment(req("/x", "PATCH", { handled: true }), params({ id: "c1" }))).status
+        ).toBe(200);
+    });
+});
+
+describe("compose rules on the server", () => {
+    it("needs channels; the old per-network form (deployment keys) is gone", async () => {
+        as("member");
+        const response = await compose(
+            req("/api/brand/posts", "POST", { platforms: ["linkedin"], body: "Hi" })
+        );
+        expect(response.status).toBe(400);
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+
+    it("refuses images a chosen network would refuse at publish time", async () => {
+        as("member");
+        mockNetworkMediaProblem.mockImplementation((platform: string) =>
+            platform === "linkedin"
+                ? "LinkedIn does not take WebP images. Use JPEG, PNG or GIF."
+                : null
+        );
+        const response = await compose(
+            req("/api/brand/posts", "POST", {
+                channels: ["ch-page"],
+                body: "Hi",
+                media: [{ id: "m1" }],
+            })
+        );
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toMatchObject({
+            error: expect.stringContaining("WebP"),
+        });
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+});
+
+describe("the campaign generator's Publish goes through the workspace's own channel", () => {
+    it("posts on the workspace's Page, recorded on the calendar", async () => {
+        as("member");
+        mockDefaultChannelFor.mockResolvedValue(PAGE);
+        mockPublishBrandPost.mockResolvedValue({
+            status: "published",
+            postId: "urn:li:share:1",
+            postUrl: "https://li/1",
+            error: null,
+        });
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "linkedin", message: "Hi" })
+        );
+        expect(response.status).toBe(200);
+        expect(mockDefaultChannelFor).toHaveBeenCalledWith(BigInt(5), "linkedin");
+        expect(mockCreateBrandPosts).toHaveBeenCalledWith(
+            expect.objectContaining({
+                targets: [{ platform: "linkedin", channelId: "ch-page" }],
+                source: { kind: "campaign" },
+            })
+        );
+    });
+
+    it("says what to connect when nothing can post to the network", async () => {
+        as("member");
+        mockDefaultChannelFor.mockResolvedValue(null);
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "x", message: "Hi" })
         );
         expect(response.status).toBe(400);
         expect(mockCreateBrandPosts).not.toHaveBeenCalled();

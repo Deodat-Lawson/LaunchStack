@@ -86,6 +86,8 @@ export interface BrandAccounts {
     channels: BrandChannel[];
     /** The member may connect, disconnect and switch channels (connectors.manage). */
     canManage: boolean;
+    /** The member may compose, publish, reply and sync (social.publish); Viewers and Guests may not. */
+    canPublish: boolean;
 }
 
 export type BrandPostStatus =

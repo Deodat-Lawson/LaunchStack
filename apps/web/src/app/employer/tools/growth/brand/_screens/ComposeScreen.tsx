@@ -301,14 +301,17 @@ export function ComposeScreen() {
     const uploading = attachments.some(a => a.status === "uploading");
     const failedUpload = attachments.some(a => a.status === "error");
     const over = chosen.filter(c => overLimit(c, body));
-    const mediaErrors = chosen.filter(
-        c =>
-            channelMediaNote(
-                c,
-                attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
-            )?.tone === "error"
-    );
+    const mediaErrors = chosen.flatMap(c => {
+        const note = channelMediaNote(
+            c,
+            attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
+        );
+        return note?.tone === "error" ? [{ channel: c, text: note.text }] : [];
+    });
+    // Viewers and Guests read Brand; posting speaks as the company.
+    const canPublish = accounts.data?.canPublish ?? true;
     const canSave =
+        canPublish &&
         length > 0 &&
         chosen.length > 0 &&
         over.length === 0 &&
@@ -317,16 +320,17 @@ export function ComposeScreen() {
         !failedUpload &&
         !submitting;
     const canSend = canSave && (when !== "later" || Boolean(at));
-    const blocked =
-        over.length > 0
-            ? `Too long for ${over.map(c => c.name).join(", ")}`
-            : mediaErrors.length > 0
-              ? `${mediaErrors.map(c => c.name).join(", ")} cannot take a WebP image`
-              : uploading
-                ? "Waiting for images to finish uploading"
-                : failedUpload
-                  ? "An image did not upload; retry or remove it"
-                  : null;
+    const blocked = !canPublish
+        ? "Your role can read Brand but not post as the company. Ask an admin for Member access."
+        : over.length > 0
+          ? `Too long for ${over.map(c => c.name).join(", ")}`
+          : mediaErrors.length > 0
+            ? mediaErrors[0]!.text
+            : uploading
+              ? "Waiting for images to finish uploading"
+              : failedUpload
+                ? "An image did not upload; retry or remove it"
+                : null;
 
     const whenLabel =
         when === "now"
@@ -567,7 +571,7 @@ export function ComposeScreen() {
                                             <X className="size-3.5" aria-hidden />
                                         </Button>
                                     </div>
-                                    <Input
+                                    <Textarea
                                         value={a.alt}
                                         onChange={e =>
                                             setAttachments(list =>
@@ -581,7 +585,10 @@ export function ComposeScreen() {
                                         placeholder="Describe it"
                                         aria-label={`Alt text for ${a.file.name}`}
                                         maxLength={1000}
-                                        className="h-7 text-[12px]"
+                                        rows={2}
+                                        // Two lines that wrap: alt text is a sentence, and 132px shows
+                                        // only a few words of one line.
+                                        className="min-h-0 resize-none px-2 py-1 text-[12px] leading-snug"
                                     />
                                     <span className="text-ink-3 truncate text-[11px]">
                                         {fileSize(a.file.size)} ·{" "}

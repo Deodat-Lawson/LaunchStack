@@ -498,6 +498,20 @@ function ConnectRow({ network, children }: { network: BrandNetwork; children: Re
  * each lasts; then how to connect more. Members read all of it; admins
  * change it.
  */
+/** What a LinkedIn sign-in that came back without channels to post to means. */
+const CONNECT_PROBLEMS = new Map<string, string>([
+    ["denied", "The LinkedIn sign-in was cancelled, so nothing was connected."],
+    [
+        "error",
+        "LinkedIn did not complete the sign-in. Try again; if it keeps failing, check the app's redirect URL and LINKEDIN_OAUTH_SCOPES against its Auth tab.",
+    ],
+    ["partial", "LinkedIn is connected, but its Pages could not be read. Use Refresh Pages below."],
+    [
+        "no-channels",
+        "LinkedIn is connected, but the sign-in gave no permission to post. Check LINKEDIN_OAUTH_SCOPES against the app's Auth tab.",
+    ],
+]);
+
 export function AccountsScreen() {
     const params = useToolSearchParams();
     const res = useResource("brand:accounts", () => brandApi.accounts());
@@ -505,9 +519,10 @@ export function AccountsScreen() {
     const [pendingDisconnect, setPendingDisconnect] = useState<BrandConnection | null>(null);
     const [blueskyHandle, setBlueskyHandle] = useState("");
     const blueskyRef = useRef<HTMLInputElement>(null);
-    // A LinkedIn sign-in that came back without channels says why here; the
-    // workspace's own toast covers the clean "connected" return.
-    const returnError = params.get("error");
+    // A LinkedIn sign-in that came back without channels says why here (the
+    // callback sends a code; the words are ours). The workspace's own toast
+    // covers the clean "connected" return.
+    const returnError = CONNECT_PROBLEMS.get(params.get("connect") ?? "") ?? null;
 
     const setAccounts = (update: (current: BrandAccounts) => BrandAccounts) => res.mutate(update);
 

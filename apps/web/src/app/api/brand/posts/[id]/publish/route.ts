@@ -6,10 +6,10 @@ import { publishBrandPost } from "@launchstack/pipelines/marketing/posts";
 import { toPostViews } from "~/server/brand/post-views";
 import { publishForWorkspace } from "~/server/brand/publish";
 
-import { brandContext, handleBrandError, json } from "../../../_http";
+import { brandPublishContext, handleBrandError, json } from "../../../_http";
 
 export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;

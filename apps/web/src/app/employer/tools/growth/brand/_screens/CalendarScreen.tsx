@@ -76,7 +76,7 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
                         quiet ? "text-ink-3" : "text-ink-2"
                     )}
                 >
-                    {post.channel?.name ?? NETWORK_LABEL[post.platform]}
+                    {post.channel?.name ?? `${NETWORK_LABEL[post.platform]} · disconnected`}
                 </span>
                 <span
                     className={cn(

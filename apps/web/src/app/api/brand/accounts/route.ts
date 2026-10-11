@@ -7,7 +7,9 @@ export async function GET() {
     const auth = await brandContext();
     if (!auth.ok) return auth.response;
     try {
-        return json(await listBrandAccounts(auth.ctx.companyId, auth.ctx.canManage));
+        return json(
+            await listBrandAccounts(auth.ctx.companyId, auth.ctx.canManage, auth.ctx.canPublish)
+        );
     } catch (err) {
         return handleBrandError("GET accounts", err);
     }

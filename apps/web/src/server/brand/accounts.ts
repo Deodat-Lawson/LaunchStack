@@ -62,6 +62,7 @@ export interface BrandAccountsView {
     connections: BrandConnectionView[];
     channels: BrandChannelView[];
     canManage: boolean;
+    canPublish: boolean;
 }
 
 /** The order networks are listed in: the ones a workspace connects itself first. */
@@ -178,9 +179,29 @@ export async function listBrandChannels(
     return [...own, ...deploymentChannels(ownPlatforms, platformLimit)];
 }
 
+const KIND_PREFERENCE = ["organization", "account", "person", "deployment"] as const;
+
+/**
+ * Where a post for a network goes when the caller names no channel (the
+ * campaign generator's Publish button): the workspace's own enabled, healthy
+ * channel — a Page before a person — and the deployment's account only when
+ * the workspace has none on that network. Null when nothing can post there.
+ */
+export async function defaultChannelFor(
+    companyId: bigint,
+    platform: MarketingPlatform
+): Promise<BrandChannelView | null> {
+    const usable = (await listBrandChannels(companyId)).filter(
+        c => c.platform === platform && c.enabled && c.status === "active" && c.capabilities.publish
+    );
+    usable.sort((a, b) => KIND_PREFERENCE.indexOf(a.kind) - KIND_PREFERENCE.indexOf(b.kind));
+    return usable[0] ?? null;
+}
+
 export async function listBrandAccounts(
     companyId: bigint,
-    canManage: boolean
+    canManage: boolean,
+    canPublish = true
 ): Promise<BrandAccountsView> {
     const connections = await listBrandConnections(companyId);
     const grantors = connections
@@ -210,6 +231,7 @@ export async function listBrandAccounts(
         })),
         channels: await listBrandChannels(companyId, connections),
         canManage,
+        canPublish,
     };
 }
 

@@ -1,5 +1,7 @@
 // GET  /api/brand/posts?from=&to=&status= — the calendar's rows
 // POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow? }
+//   (a deployment account is a channel too: `deployment:<network>`, offered
+//   only while the workspace has no account of its own on that network)
 //
 // A dev environment has no worker to run the scheduler, so after answering a
 // list request that shows something due, the web process runs the same
@@ -10,7 +12,6 @@ import { z } from "zod";
 
 import {
     BRAND_POST_STATUSES,
-    MarketingPlatformEnum,
     createBrandPosts,
     hasDueBrandPosts,
     listBrandPosts,
@@ -20,42 +21,43 @@ import {
 } from "@launchstack/pipelines/marketing/posts";
 
 import { listBrandChannels } from "~/server/brand/accounts";
-import { getBrandMediaRows } from "~/server/brand/media";
+import { getBrandMediaRows, networkMediaProblem } from "~/server/brand/media";
 import { toPostViews } from "~/server/brand/post-views";
 import { publishForWorkspace } from "~/server/brand/publish";
 
-import { brandContext, error, handleBrandError, json, readBody } from "../_http";
+import {
+    brandContext,
+    brandPublishContext,
+    error,
+    handleBrandError,
+    json,
+    readBody,
+} from "../_http";
 
 const DAY = 86_400_000;
 
-const CreateSchema = z
-    .object({
-        channels: z.array(z.string().min(1).max(80)).max(20).optional(),
-        /** Legacy: one copy per network on the deployment's account (campaign publish). */
-        platforms: z.array(MarketingPlatformEnum).max(4).optional(),
-        body: z.string().min(1).max(40_000),
-        title: z.string().max(300).optional().nullable(),
-        media: z
-            .array(
-                z.object({
-                    id: z.string().min(1).max(64),
-                    alt: z.string().max(1000).nullable().optional(),
-                })
-            )
-            .max(4)
-            .optional(),
-        scheduledAt: z.string().datetime({ offset: true }).optional().nullable(),
-        publishNow: z.boolean().optional(),
-        source: z
-            .object({
-                kind: z.enum(["compose", "campaign"]),
-                historyId: z.number().int().optional(),
+const CreateSchema = z.object({
+    channels: z.array(z.string().min(1).max(80)).min(1).max(20),
+    body: z.string().min(1).max(40_000),
+    title: z.string().max(300).optional().nullable(),
+    media: z
+        .array(
+            z.object({
+                id: z.string().min(1).max(64),
+                alt: z.string().max(1000).nullable().optional(),
             })
-            .optional(),
-    })
-    .refine(v => (v.channels?.length ?? 0) + (v.platforms?.length ?? 0) > 0, {
-        message: "Pick at least one channel",
-    });
+        )
+        .max(4)
+        .optional(),
+    scheduledAt: z.string().datetime({ offset: true }).optional().nullable(),
+    publishNow: z.boolean().optional(),
+    source: z
+        .object({
+            kind: z.enum(["compose", "campaign"]),
+            historyId: z.number().int().optional(),
+        })
+        .optional(),
+});
 
 function parseDate(value: string | null): Date | undefined {
     if (!value) return undefined;
@@ -104,7 +106,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const parsed = CreateSchema.safeParse(await readBody(request));
@@ -116,7 +118,7 @@ export async function POST(request: NextRequest) {
 
         // Every channel must be this workspace's, switched on, and able to post.
         const targets: BrandPostTarget[] = [];
-        if (input.channels?.length) {
+        {
             const available = new Map(
                 (await listBrandChannels(auth.ctx.companyId)).map(c => [c.id, c])
             );
@@ -147,13 +149,16 @@ export async function POST(request: NextRequest) {
             );
             if (found.length !== new Set(media.map(m => m.id)).size)
                 return error("One of the images is missing. Add it again.", 400);
+            for (const platform of new Set(targets.map(t => t.platform))) {
+                const problem = networkMediaProblem(platform, found);
+                if (problem) return error(problem, 400);
+            }
         }
 
         const created = await createBrandPosts({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
             targets,
-            platforms: input.platforms,
             body: input.body,
             title: input.title ?? null,
             media: media.map(m => ({ id: m.id, alt: m.alt?.trim() ? m.alt.trim() : null })),

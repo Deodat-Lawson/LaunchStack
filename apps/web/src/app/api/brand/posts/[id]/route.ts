@@ -7,7 +7,7 @@ import { deleteBrandPost, updateBrandPost } from "@launchstack/pipelines/marketi
 
 import { toPostViews } from "~/server/brand/post-views";
 
-import { brandContext, error, handleBrandError, json, readBody } from "../../_http";
+import { brandPublishContext, error, handleBrandError, json, readBody } from "../../_http";
 
 const PatchSchema = z.object({
     body: z.string().min(1).max(40_000).optional(),
@@ -17,7 +17,7 @@ const PatchSchema = z.object({
 });
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
@@ -45,7 +45,7 @@ export async function DELETE(
     _request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;

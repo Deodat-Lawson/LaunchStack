@@ -36,7 +36,7 @@ stubApi();
 const LINKEDIN_START = LINKEDIN_CONNECT_HREF.split("?")[0]!;
 
 /** Harness switches read from the address bar; they are not part of the tab's location. */
-const HARNESS_PARAMS = ["reset", "member", "reconnect", "empty", "nosync"] as const;
+const HARNESS_PARAMS = ["reset", "member", "viewer", "reconnect", "empty", "nosync"] as const;
 
 /**
  * `/dev/growth/prospects/companies?view=new` opens the tool at
@@ -58,7 +58,8 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
         const params = new URLSearchParams(window.location.search);
         if (params.get("reset") === "1") resetSimulator();
         configureBrandSim({
-            canManage: params.get("member") !== "1",
+            canManage: params.get("member") !== "1" && params.get("viewer") !== "1",
+            canPublish: params.get("viewer") !== "1",
             reconnect: params.get("reconnect") === "1",
             empty: params.get("empty") === "1",
             nosync: params.get("nosync") === "1",
@@ -100,7 +101,8 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
                 Preview harness — no login, in-memory data. Find companies runs a simulated
                 20-second run; Brand posts publish in memory and Connect LinkedIn signs in as Dana
                 Okafor. Add <span className="font-mono">?reset=1</span> to start over,{" "}
-                <span className="font-mono">?member=1</span> to read as a non-admin.
+                <span className="font-mono">?member=1</span> to read as a non-admin,{" "}
+                <span className="font-mono">?viewer=1</span> as a Viewer who cannot post.
             </div>
             {/* The tab's box: the tool fills it and scrolls inside it, as it
                 does in the workspace. */}

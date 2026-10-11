@@ -45,6 +45,7 @@ function CommentRow({
     onCancelReply,
     onSendReply,
     onHandled,
+    readOnly,
 }: {
     comment: BrandComment;
     channel: BrandChannel | undefined;
@@ -57,6 +58,8 @@ function CommentRow({
     onCancelReply: () => void;
     onSendReply: () => void;
     onHandled: (handled: boolean) => void;
+    /** Viewers and Guests read the inbox; answering speaks as the company. */
+    readOnly: boolean;
 }) {
     const blocker = replyBlocker(channel);
     const done = comment.handledAt !== null;
@@ -106,7 +109,7 @@ function CommentRow({
                 >
                     {comment.text}
                 </p>
-                {!comment.isOwn && !pending && (
+                {!comment.isOwn && !pending && !readOnly && (
                     <div className="-ml-2 mt-1 flex flex-wrap items-center gap-1">
                         <Button
                             size="sm"
@@ -318,6 +321,7 @@ export function EngagementScreen() {
             }}
             onSendReply={() => void sendReply(comment)}
             onHandled={handled => void setHandled(comment, handled)}
+            readOnly={accounts.data?.canPublish === false}
         />
     );
 
@@ -338,7 +342,13 @@ export function EngagementScreen() {
                         </>
                     ) : undefined
                 }
-                actions={<SyncButton onClick={() => void sync.run()} busy={sync.busy} />}
+                actions={
+                    <SyncButton
+                        onClick={() => void sync.run()}
+                        busy={sync.busy}
+                        disabled={accounts.data?.canPublish === false}
+                    />
+                }
             />
             <SyncProblems errors={sync.errors} failure={sync.failure} />
 
@@ -403,7 +413,13 @@ export function EngagementScreen() {
                     <EmptyState
                         title="No comments yet"
                         body="Comments on posts published from here show up after a sync."
-                        action={<SyncButton onClick={() => void sync.run()} busy={sync.busy} />}
+                        action={
+                            <SyncButton
+                                onClick={() => void sync.run()}
+                                busy={sync.busy}
+                                disabled={accounts.data?.canPublish === false}
+                            />
+                        }
                     />
                 )
             ) : (

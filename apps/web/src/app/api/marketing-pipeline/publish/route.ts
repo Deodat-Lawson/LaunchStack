@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
-import { markContentPublished, publishContent } from "@launchstack/pipelines/marketing";
-import { recordPublishedBrandPost } from "@launchstack/pipelines/marketing/posts";
+import { markContentPublished } from "@launchstack/pipelines/marketing";
+import { createBrandPosts, publishBrandPost } from "@launchstack/pipelines/marketing/posts";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
+import { defaultChannelFor, NETWORK_LABELS } from "~/server/brand/accounts";
+import { publishForWorkspace } from "~/server/brand/publish";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -14,10 +16,19 @@ const PublishSchema = z.object({
     title: z.string().max(300).optional(),
 });
 
+/**
+ * The campaign generator's Publish button. It goes through Brand like
+ * everything else that speaks as the company: the workspace's own account
+ * for the network (a Page first), the deployment's only when the workspace
+ * has none, the same permission, and a row on the Brand calendar.
+ */
 export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        if (!ctx.data.can("social.publish")) {
+            return fail("Your role can read Brand but not post as the company.", 403);
+        }
 
         const validation = PublishSchema.safeParse(await readJson(request));
         if (!validation.success) {
@@ -25,41 +36,46 @@ export async function POST(request: Request) {
         }
 
         const { platform, message, title } = validation.data;
-        const result = await publishContent(platform, message, title);
+        const channel = await defaultChannelFor(ctx.data.companyId, platform);
+        if (!channel) {
+            return fail(
+                `Nothing can post to ${NETWORK_LABELS[platform]} yet. Connect it under Growth › Brand › Accounts.`,
+                400,
+                { platform }
+            );
+        }
+        const [created] = await createBrandPosts({
+            companyId: ctx.data.companyId,
+            userId: ctx.data.authUserId,
+            targets: [{ platform, channelId: channel.id }],
+            body: message,
+            title: title ?? null,
+            source: { kind: "campaign" },
+        });
+        const post = await publishBrandPost(created!.id, ctx.data.companyId, {
+            publish: publishForWorkspace,
+        });
 
-        if (!result.success) {
-            return fail(result.error ?? "Publish failed", 502, { platform });
+        if (post.status !== "published") {
+            return fail(post.error ?? "Publish failed", 502, { platform });
         }
 
-        // Record the publish against the matching history row and on the Brand
-        // calendar (fire-and-forget: a failed write-back must not fail a post
-        // that already went out).
+        // Record the publish against the matching history row (fire-and-forget:
+        // a failed write-back must not fail a post that already went out).
         const companyId = Number(ctx.data.companyId);
         if (!Number.isNaN(companyId)) {
             void markContentPublished({
                 companyId,
                 platform,
                 message,
-                postId: result.postId,
-                postUrl: result.postUrl,
+                postId: post.postId ?? undefined,
+                postUrl: post.postUrl ?? undefined,
             }).catch(err =>
                 console.warn("[marketing-pipeline/publish] history write-back failed:", err)
             );
         }
-        void recordPublishedBrandPost({
-            companyId: ctx.data.companyId,
-            userId: ctx.data.authUserId,
-            platform,
-            body: message,
-            title: title ?? null,
-            postId: result.postId ?? null,
-            postUrl: result.postUrl ?? null,
-            source: { kind: "campaign" },
-        }).catch(err =>
-            console.warn("[marketing-pipeline/publish] calendar write-back failed:", err)
-        );
 
-        return ok({ platform, postUrl: result.postUrl });
+        return ok({ platform, postUrl: post.postUrl, channel: channel.name });
     } catch (error) {
         return handleRouteError("marketing-pipeline/publish", error);
     }

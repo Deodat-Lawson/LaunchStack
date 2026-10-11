@@ -347,10 +347,8 @@ export async function syncBrandWorkspace(
     return summary;
 }
 
-/** Every workspace with an active channel that reads back; the worker's cron. */
-export async function syncAllBrandWorkspaces(
-    now = new Date()
-): Promise<{ workspaces: number; errors: number }> {
+/** Workspaces with an active channel that reads back (the cron's fan-out list). */
+export async function listBrandSyncWorkspaces(): Promise<bigint[]> {
     const rows = await db
         .selectDistinct({ companyId: brandChannels.companyId })
         .from(brandChannels)
@@ -360,10 +358,5 @@ export async function syncAllBrandWorkspaces(
                 inArray(brandChannels.platform, ["linkedin", "bluesky"])
             )
         );
-    let errors = 0;
-    for (const row of rows) {
-        const summary = await syncBrandWorkspace(row.companyId, now);
-        errors += summary.errors.length;
-    }
-    return { workspaces: rows.length, errors };
+    return rows.map(r => r.companyId);
 }

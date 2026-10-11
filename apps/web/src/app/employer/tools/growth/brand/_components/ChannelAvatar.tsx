@@ -66,13 +66,15 @@ export function ChannelLabel({
     className?: string;
 }) {
     if (!channel) {
-        // A post from before channels existed went out on the deployment account.
+        // The server names the deployment account (and posts from before
+        // channels) as a channel of kind "deployment"; no channel at all means
+        // the one this post was on has since been disconnected.
         return (
             <span className={cn("inline-flex min-w-0 items-center gap-2", className)}>
-                <NetworkMark platform={platform} size={size} muted={muted} />
-                <span className="text-ink truncate text-[13px]">{NETWORK_LABEL[platform]}</span>
+                <NetworkMark platform={platform} size={size} muted />
+                <span className="text-ink-3 truncate text-[13px]">{NETWORK_LABEL[platform]}</span>
                 {showKind && (
-                    <span className="text-ink-3 shrink-0 text-xs">Deployment account</span>
+                    <span className="text-ink-3 shrink-0 text-xs">Disconnected channel</span>
                 )}
             </span>
         );

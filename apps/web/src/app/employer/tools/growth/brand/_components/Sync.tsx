@@ -45,13 +45,22 @@ export function SyncButton({
     onClick,
     busy,
     variant = "default",
+    disabled = false,
 }: {
     onClick: () => void;
     busy: boolean;
     variant?: "default" | "outline";
+    /** The member's role cannot ask the networks (Viewer, Guest). */
+    disabled?: boolean;
 }) {
     return (
-        <Button size="sm" variant={variant} onClick={onClick} disabled={busy}>
+        <Button
+            size="sm"
+            variant={variant}
+            onClick={onClick}
+            disabled={busy || disabled}
+            title={disabled ? "Your role can read Brand but not sync it" : undefined}
+        >
             <RefreshCw
                 className={cn("size-3.5", busy && "animate-spin motion-reduce:animate-none")}
                 aria-hidden

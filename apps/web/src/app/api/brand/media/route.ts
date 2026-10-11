@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server";
 
 import { saveBrandMedia, toMediaView } from "~/server/brand/media";
 
-import { brandContext, error, handleBrandError, json } from "../_http";
+import { brandPublishContext, error, handleBrandError, json } from "../_http";
 
 export async function POST(request: NextRequest) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         let form: FormData;

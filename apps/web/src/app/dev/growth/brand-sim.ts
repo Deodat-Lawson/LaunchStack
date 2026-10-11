@@ -34,6 +34,7 @@ const DAY = 24 * HOUR;
 
 export interface BrandSimOptions {
     canManage: boolean;
+    canPublish: boolean;
     reconnect: boolean;
     empty: boolean;
     nosync: boolean;
@@ -41,6 +42,7 @@ export interface BrandSimOptions {
 
 const DEFAULT_OPTIONS: BrandSimOptions = {
     canManage: true,
+    canPublish: true,
     reconnect: false,
     empty: false,
     nosync: false,
@@ -154,9 +156,8 @@ function networks(): BrandNetwork[] {
             available: false,
             pages: false,
             setup: [
-                "Open an X developer account on the pay-per-use plan",
-                "Create an app with read and write permission and generate its user tokens",
-                "Set TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN and TWITTER_ACCESS_SECRET, then restart",
+                "An X developer account on pay-per-use",
+                "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
             ],
             note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. No free tier for new developers.",
             limit: 280,
@@ -178,8 +179,8 @@ function networks(): BrandNetwork[] {
             available: false,
             pages: false,
             setup: [
-                "Create a script app at reddit.com/prefs/apps",
-                "Set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD and REDDIT_USER_AGENT",
+                "A Reddit script app (client id and secret)",
+                "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
             ],
             note: "Free at this volume. Posts go to the account's own profile; each subreddit has its own rules.",
             limit: 40000,
@@ -1101,6 +1102,7 @@ function accounts(): BrandAccounts {
         connections: store.connections,
         channels: store.channels,
         canManage: store.options.canManage,
+        canPublish: store.options.canPublish,
     };
 }
 
@@ -1119,6 +1121,13 @@ export async function simulateBrand(
     const [head, id, action] = parts;
 
     if (head === "accounts" && method === "GET") return json(accounts());
+
+    // A Viewer reads everything and changes nothing that speaks as the company.
+    const speaks =
+        method !== "GET" &&
+        (head === "posts" || head === "media" || head === "comments" || head === "insights");
+    if (speaks && !store.options.canPublish)
+        return err(403, "Your role can read Brand but not post or reply as the company.");
 
     if (head === "channels" && id && method === "PATCH") {
         const no = forbidden();

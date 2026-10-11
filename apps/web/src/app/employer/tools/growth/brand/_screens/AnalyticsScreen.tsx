@@ -202,7 +202,11 @@ export function AnalyticsScreen() {
                                 </ToggleGroupItem>
                             ))}
                         </ToggleGroup>
-                        <SyncButton onClick={() => void sync.run()} busy={sync.busy} />
+                        <SyncButton
+                            onClick={() => void sync.run()}
+                            busy={sync.busy}
+                            disabled={accounts.data?.canPublish === false}
+                        />
                     </>
                 }
             />
@@ -223,7 +227,13 @@ export function AnalyticsScreen() {
                 <EmptyState
                     title="Numbers have not been read yet"
                     body="A sync reads impressions, reactions, comments and followers from each channel's network."
-                    action={<SyncButton onClick={() => void sync.run()} busy={sync.busy} />}
+                    action={
+                        <SyncButton
+                            onClick={() => void sync.run()}
+                            busy={sync.busy}
+                            disabled={accounts.data?.canPublish === false}
+                        />
+                    }
                 />
             ) : (
                 <>

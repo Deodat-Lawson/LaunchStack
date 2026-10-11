@@ -227,6 +227,7 @@ export function InviteLinkCard({
                 {state !== "live" && (
                     <Badge variant="warn">{state === "expired" ? "Expired" : "Used up"}</Badge>
                 )}
+                {state === "live" && link.legacy && <Badge variant="warn">Old short link</Badge>}
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -258,6 +259,13 @@ export function InviteLinkCard({
                 )}
                 {state === "live" && limited && (
                     <span className="text-ink-3"> {joinLinkTerms(link)}.</span>
+                )}
+                {link.legacy && (
+                    <span className="text-warn">
+                        {" "}
+                        This is an old short link that could be guessed, so it always waits for
+                        approval. Reset it to get a secure link that can let people straight in.
+                    </span>
                 )}
             </p>
 
@@ -294,7 +302,8 @@ export function InviteLinkCard({
                     <Switch
                         id="invite-link-approval"
                         checked={requiresApproval}
-                        disabled={busy}
+                        // A short code can't be trusted to admit anyone unseen.
+                        disabled={busy || link.legacy}
                         onCheckedChange={next => void update(link, { requiresApproval: next })}
                     />
                     <Label htmlFor="invite-link-approval" className="text-ink-2 text-[13px]">

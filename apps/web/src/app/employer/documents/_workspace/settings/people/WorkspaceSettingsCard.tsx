@@ -20,7 +20,7 @@ export function WorkspaceSettingsCard() {
                     Workspace settings
                 </h2>
                 <p className="text-ink-3 m-0 mt-1 text-[13px] leading-normal">
-                    How long the audit log is kept.
+                    Policy that applies to everyone in this workspace.
                 </p>
             </div>
             <SettingRow settingKey="workspace.auditRetentionDays" />

@@ -74,23 +74,29 @@ export function rememberJoinIntent(kind: JoinSourceKind, key: string, now = Date
 }
 
 /**
- * True, once, when this tab started signing in from the join page for this
- * exact link within the last half hour. Reading it consumes it, so a reload
- * or a later visit never joins on its own.
+ * True when this tab started signing in from the join page for this exact
+ * link within the last half hour. Reading does not consume it: the join page
+ * clears it once the server has answered the join, so a request cut off by a
+ * navigation is simply retried by the page that loads next. A stale intent is
+ * dropped here; one for another link is left for that link.
  */
-export function takeJoinIntent(kind: JoinSourceKind, key: string, now = Date.now()): boolean {
+export function hasJoinIntent(kind: JoinSourceKind, key: string, now = Date.now()): boolean {
     const stored = read(INTENT_KEY);
     if (!stored || typeof stored !== "object") return false;
     const intent = stored as Partial<StoredIntent>;
-    const matches =
+    if (
+        typeof intent.at !== "number" ||
+        now - intent.at < 0 ||
+        now - intent.at > JOIN_INTENT_TTL_MS
+    ) {
+        remove(INTENT_KEY);
+        return false;
+    }
+    return (
         intent.kind === kind &&
         typeof intent.key === "string" &&
-        intent.key.toLowerCase() === key.toLowerCase() &&
-        typeof intent.at === "number" &&
-        now - intent.at >= 0 &&
-        now - intent.at <= JOIN_INTENT_TTL_MS;
-    remove(INTENT_KEY);
-    return matches;
+        intent.key.toLowerCase() === key.toLowerCase()
+    );
 }
 
 export function clearJoinIntent(): void {

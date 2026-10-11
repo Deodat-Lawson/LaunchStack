@@ -1,9 +1,9 @@
 /**
  * Settings that live in legacy columns.
  *
- * The join policy, the audit retention window and the upload storage
- * preference predate the settings table and have readers of their own
- * (`join-links.ts`, the upload bootstrap). Moving the bytes would mean
+ * The audit retention window and the upload storage preference predate the
+ * settings table and have readers of their own (the workspace settings API
+ * in `server/workspace/settings.ts`, the upload bootstrap). Moving the bytes would mean
  * touching every reader for no gain, so the registry indexes them and these
  * bindings read and write the column. The panel, the API and the audit log
  * cannot tell the difference — which is the point.

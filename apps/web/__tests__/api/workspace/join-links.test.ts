@@ -28,10 +28,14 @@ import { gateFor, jsonRequest, params } from "./_setup";
 const gate = requireWorkspacePermission as jest.Mock;
 const session = getServerSession as jest.Mock;
 
+/** An issued code: 32 hex characters. Legacy 8-character codes get their own tests. */
+const CODE = "AB12CD34EF56AB12CD34EF56AB12CD34";
+const LEGACY = "ABCD1234";
+
 function linkRow(overrides: Partial<Record<string, unknown>> = {}) {
     return {
         id: 3,
-        code: "ABCD1234",
+        code: CODE,
         companyId: 5n,
         role: "member",
         isActive: true,
@@ -59,7 +63,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "abcd1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE.toLowerCase() })
         );
 
         expect(res.status).toBe(200);
@@ -83,7 +87,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "abcd1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE.toLowerCase() })
         );
 
         expect(res.status).toBe(200);
@@ -131,7 +135,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onReturning(inviteCodes, []);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "ABCD1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
         );
 
         expect(res.status).toBe(410);
@@ -145,7 +149,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "ABCD1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
         );
 
         expect(res.status).toBe(200);
@@ -162,7 +166,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onSelect(userCompanyMemberships, []);
         fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
 
-        await ACCEPT(jsonRequest("/api/workspace/join-links/accept", "POST", { code: "ABCD1234" }));
+        await ACCEPT(jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE }));
 
         expect(fakeDb.insertedInto(userCompanyMemberships)[0]).toMatchObject({ role: "admin" });
     });
@@ -171,7 +175,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onSelect(inviteCodes, [linkRow({ maxUses: 2, useCount: 2 })]);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "ABCD1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
         );
 
         expect(res.status).toBe(410);
@@ -184,7 +188,7 @@ describe("POST /api/workspace/join-links/accept", () => {
         fakeDb.onSelect(userCompanyMemberships, [{ status: "pending" }]);
 
         const res = await ACCEPT(
-            jsonRequest("/api/workspace/join-links/accept", "POST", { code: "ABCD1234" })
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
         );
 
         expect(res.status).toBe(200);
@@ -225,12 +229,12 @@ describe("POST /api/workspace/join-links", () => {
             link: { code: string; role: string; roleName: string; url: string; maxUses: number };
         };
         expect(link).toMatchObject({
-            code: "ABCD1234",
+            code: CODE,
             role: "viewer",
             roleName: "Viewer",
             maxUses: 10,
         });
-        expect(link.url).toBe("http://localhost/join/abcd1234");
+        expect(link.url).toBe(`http://localhost/join/${CODE.toLowerCase()}`);
         expect(fakeDb.insertedInto(workspaceAuditEvents)).toEqual([
             expect.objectContaining({
                 action: "join_link.created",
@@ -289,7 +293,7 @@ describe("GET /api/workspace/join-links/preview", () => {
         await expect(unknown.json()).resolves.toEqual({ valid: false, reason: "unknown" });
 
         const inactive = await PREVIEW(
-            new Request("http://localhost/api/workspace/join-links/preview?code=ABCD1234")
+            new Request(`http://localhost/api/workspace/join-links/preview?code=${CODE}`)
         );
         await expect(inactive.json()).resolves.toEqual({ valid: false, reason: "inactive" });
     });
@@ -299,7 +303,9 @@ describe("GET /api/workspace/join-links/preview", () => {
         fakeDb.onSelect(users, [lookRow({ name: "Ada Admin" })]);
 
         const res = await PREVIEW(
-            new Request("http://localhost/api/workspace/join-links/preview?code=abcd1234")
+            new Request(
+                `http://localhost/api/workspace/join-links/preview?code=${CODE.toLowerCase()}`
+            )
         );
 
         await expect(res.json()).resolves.toEqual({
@@ -317,7 +323,9 @@ describe("GET /api/workspace/join-links/preview", () => {
         fakeDb.onSelect(users, [lookRow({ name: "" })]);
 
         const res = await PREVIEW(
-            new Request("http://localhost/api/workspace/join-links/preview?code=abcd1234")
+            new Request(
+                `http://localhost/api/workspace/join-links/preview?code=${CODE.toLowerCase()}`
+            )
         );
 
         const body = (await res.json()) as { invitedBy: string | null };
@@ -367,7 +375,7 @@ describe("PATCH /api/workspace/join-links/[id]", () => {
         const { link } = (await res.json()) as { link: { requiresApproval: boolean; url: string } };
         expect(link).toMatchObject({
             requiresApproval: true,
-            url: "http://localhost/join/abcd1234",
+            url: `http://localhost/join/${CODE.toLowerCase()}`,
         });
         expect(fakeDb.updatesOf(inviteCodes)).toEqual([{ requiresApproval: true }]);
         expect(fakeDb.insertedInto(workspaceAuditEvents)).toEqual([
@@ -477,5 +485,79 @@ describe("POST /api/workspace/join-links/[id]/reset", () => {
 
         expect(res.status).toBe(409);
         expect(fakeDb.inserts).toHaveLength(0);
+    });
+});
+
+describe("legacy 8-character links", () => {
+    it("never admit anyone straight in, whatever the stored flag says", async () => {
+        fakeDb.onSelect(inviteCodes, [linkRow({ code: LEGACY, requiresApproval: false })]);
+        fakeDb.onSelect(users, []);
+        fakeDb.onSelect(userCompanyMemberships, []);
+        fakeDb.onReturning(inviteCodes, [{ id: 3 }]);
+
+        const res = await ACCEPT(
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: LEGACY.toLowerCase() })
+        );
+
+        await expect(res.json()).resolves.toMatchObject({ status: "pending" });
+        expect(fakeDb.insertedInto(userCompanyMemberships)[0]).toMatchObject({ status: "pending" });
+    });
+
+    it("can't be switched to admit people straight in", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ code: LEGACY, requiresApproval: true })]);
+
+        const res = await PATCH(
+            jsonRequest("/api/workspace/join-links/3", "PATCH", { requiresApproval: false }),
+            params({ id: "3" })
+        );
+
+        expect(res.status).toBe(409);
+        await expect(res.json()).resolves.toMatchObject({
+            error: expect.stringContaining("Reset it to get a new link"),
+        });
+        expect(fakeDb.updates).toHaveLength(0);
+    });
+
+    it("are shown as legacy and needing approval, and previewed that way", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ code: LEGACY, requiresApproval: false })]);
+
+        const res = await PATCH(
+            jsonRequest("/api/workspace/join-links/3", "PATCH", { role: "member" }),
+            params({ id: "3" })
+        );
+        const { link } = (await res.json()) as {
+            link: { legacy: boolean; requiresApproval: boolean };
+        };
+        expect(link).toMatchObject({ legacy: true, requiresApproval: true });
+
+        fakeDb.reset();
+        fakeDb.onSelect(inviteCodes, [
+            linkRow({ code: LEGACY, requiresApproval: false, workspaceName: "Acme" }),
+        ]);
+        const preview = await PREVIEW(
+            new Request(`http://localhost/api/workspace/join-links/preview?code=${LEGACY}`)
+        );
+        await expect(preview.json()).resolves.toMatchObject({
+            valid: true,
+            requiresApproval: true,
+        });
+    });
+
+    it("reset into a long code that keeps the terms", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ code: LEGACY, requiresApproval: true })]);
+        fakeDb.onReturning(inviteCodes, [linkRow({ id: 4, requiresApproval: true })]);
+
+        const res = await RESET(
+            jsonRequest("/api/workspace/join-links/3/reset", "POST", {}),
+            params({ id: "3" })
+        );
+
+        expect(res.status).toBe(201);
+        expect(fakeDb.insertedInto(inviteCodes)[0]?.code).toMatch(/^[0-9A-F]{32}$/);
+        const { link } = (await res.json()) as { link: { legacy: boolean } };
+        expect(link.legacy).toBe(false);
     });
 });

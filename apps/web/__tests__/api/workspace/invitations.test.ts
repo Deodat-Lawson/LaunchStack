@@ -7,13 +7,14 @@ jest.mock("~/lib/require-workspace-context", () => ({
 jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("~/server/auth/email", () => ({
     sendAuthEmail: jest.fn().mockResolvedValue({ delivered: false }),
+    authEmailDelivers: () => false,
 }));
 
 import { company } from "@launchstack/store/schema";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { POST as ACCEPT } from "~/app/api/workspace/invitations/accept/route";
 import { GET as PREVIEW } from "~/app/api/workspace/invitations/preview/route";
-import { POST } from "~/app/api/workspace/invitations/route";
+import { GET as LIST, POST } from "~/app/api/workspace/invitations/route";
 import { getServerSession } from "~/server/auth";
 import { sendAuthEmail } from "~/server/auth/email";
 import {
@@ -56,6 +57,17 @@ function invitationRow(overrides: Partial<Record<string, unknown>> = {}) {
 beforeEach(() => {
     fakeDb.reset();
     jest.clearAllMocks();
+});
+
+describe("GET /api/workspace/invitations", () => {
+    it("says whether invitations are emailed, so the UI doesn't promise to send", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(workspaceInvitations, []);
+
+        const res = await LIST();
+
+        await expect(res.json()).resolves.toEqual({ invitations: [], emailDelivery: false });
+    });
 });
 
 describe("POST /api/workspace/invitations", () => {

@@ -30,7 +30,10 @@ export interface JoinLinkView {
     role: string;
     roleName: string;
     isActive: boolean;
+    /** Always true for a legacy short code, whatever the stored flag says. */
     requiresApproval: boolean;
+    /** An 8-character code from before links could admit straight in. */
+    legacy: boolean;
     createdAt: string;
     expiresAt: string | null;
     maxUses: number | null;
@@ -95,6 +98,23 @@ export function newJoinCode(): string {
     return randomBytes(16).toString("hex").toUpperCase();
 }
 
+/**
+ * The 8-character codes issued before this release: 32 bits, few enough to
+ * guess, so such a link never admits anyone straight in — whoever uses it
+ * waits for approval. Resetting it issues a long code that can.
+ */
+export function isLegacyJoinCode(code: string): boolean {
+    return normalizeJoinCode(code).length < 32;
+}
+
+/** Whether people who use this link wait on the pending list. */
+function needsApproval(row: { code: string; requiresApproval: boolean }): boolean {
+    return row.requiresApproval || isLegacyJoinCode(row.code);
+}
+
+export const LEGACY_LINK_MESSAGE =
+    "This is an old short link that could be guessed, so it can't let people straight in. Reset it to get a new link that can.";
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function joinLinkProblem(
@@ -129,7 +149,8 @@ async function toViews(
             role,
             roleName: displayRoleName(role, names),
             isActive: row.isActive,
-            requiresApproval: row.requiresApproval,
+            requiresApproval: needsApproval(row),
+            legacy: isLegacyJoinCode(row.code),
             createdAt: row.createdAt.toISOString(),
             expiresAt: row.expiresAt ? row.expiresAt.toISOString() : null,
             maxUses: row.maxUses ?? null,
@@ -264,6 +285,9 @@ export async function updateJoinLink(
 
     const set: Partial<{ role: string; requiresApproval: boolean }> = {};
     if (role && role.slug !== normalizeRoleSlug(row.role)) set.role = role.slug;
+    if (patch.requiresApproval === false && isLegacyJoinCode(row.code)) {
+        throw conflict(LEGACY_LINK_MESSAGE);
+    }
     if (patch.requiresApproval !== undefined && patch.requiresApproval !== row.requiresApproval) {
         set.requiresApproval = patch.requiresApproval;
     }
@@ -388,7 +412,7 @@ export async function previewJoinLink(code: string): Promise<JoinLinkPreview> {
         workspaceName: row.workspaceName,
         role,
         roleName: roleLabel(role, resolved.name),
-        requiresApproval: row.requiresApproval,
+        requiresApproval: needsApproval({ code, requiresApproval: row.requiresApproval }),
         // The page is public: a name, never the email the look falls back to.
         invitedBy: inviter && inviter.displayName !== inviter.email ? inviter.displayName : null,
     };
@@ -429,7 +453,7 @@ export async function acceptJoinLink(
 
         // Someone already waiting for approval who is handed a straight-in
         // link is let in by it — that link is the admin's approval.
-        const activatesPending = membership?.status === "pending" && !row.requiresApproval;
+        const activatesPending = membership?.status === "pending" && !needsApproval(row);
         if (membership && !activatesPending) {
             if (membership.status === "suspended") {
                 throw conflict("Your membership in this workspace is suspended.");
@@ -459,7 +483,7 @@ export async function acceptJoinLink(
             .returning({ id: inviteCodes.id });
         if (claimed.length === 0) throw gone(PROBLEM_MESSAGES.exhausted);
 
-        const status = row.requiresApproval ? "pending" : "active";
+        const status = needsApproval(row) ? "pending" : "active";
         if (activatesPending) {
             await tx
                 .update(userCompanyMemberships)

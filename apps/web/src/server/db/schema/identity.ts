@@ -104,7 +104,8 @@ export const inviteCodes = pgTable(
         /**
          * Whether people who use the link wait on the pending list. The link
          * itself is the admin's approval otherwise. Replaced the workspace-wide
-         * `workspace_settings.join_policy`, which the migration folded in here.
+         * `workspace_settings.join_policy`. A legacy 8-character code always
+         * needs approval, whatever this says (`isLegacyJoinCode`).
          */
         requiresApproval: boolean("requires_approval").default(false).notNull(),
     },

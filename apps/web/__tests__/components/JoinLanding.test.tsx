@@ -21,12 +21,13 @@ import "@testing-library/jest-dom";
 
 const mockAuth = { isLoaded: true, isSignedIn: false, signOut: jest.fn() };
 const mockUser: { user: { email: string; name: string } | null } = { user: null };
+const mockSignInEmail = jest.fn();
 jest.mock("~/lib/auth-client", () => ({
     useAuth: () => mockAuth,
     useUser: () => mockUser,
     authClient: {
         getLastUsedLoginMethod: () => null,
-        signIn: { email: jest.fn(), social: jest.fn() },
+        signIn: { email: (...args: unknown[]) => mockSignInEmail(...args), social: jest.fn() },
         signUp: { email: jest.fn() },
     },
 }));
@@ -39,7 +40,7 @@ jest.mock("~/lib/join-handoff", () => ({
 }));
 
 import { JoinLanding } from "~/app/_components/join/JoinLanding";
-import { rememberJoinIntent, takeJoinWelcome } from "~/lib/join-handoff";
+import { hasJoinIntent, rememberJoinIntent, takeJoinWelcome } from "~/lib/join-handoff";
 
 let calls: { url: string; method: string; body: unknown }[] = [];
 let routes: Record<string, { status: number; body: unknown }> = {};
@@ -52,9 +53,19 @@ function respond(status: number, body: unknown) {
     } as Response);
 }
 
+// The sign-in form's checkbox measures itself; jsdom has no ResizeObserver.
+beforeAll(() => {
+    globalThis.ResizeObserver ??= class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    } as unknown as typeof ResizeObserver;
+});
+
 beforeEach(() => {
     calls = [];
     mockAssign.mockReset();
+    mockSignInEmail.mockReset();
     window.sessionStorage.clear();
     mockAuth.isLoaded = true;
     mockAuth.isSignedIn = false;
@@ -153,6 +164,49 @@ describe("JoinLanding", () => {
         expect(accepts()).toHaveLength(1);
     });
 
+    it("leaves the joining to the page that loads after an email sign-in", async () => {
+        // Sign-in success reloads the page; the session can land here first.
+        mockSignInEmail.mockResolvedValue({ error: null });
+        jest.spyOn(console, "error").mockImplementation(() => {}); // jsdom: "navigation not implemented"
+        const user = userEvent.setup();
+        const view = render(<JoinLanding source={link} socialProviders={[]} />);
+
+        await user.click(await screen.findByRole("tab", { name: "I have an account" }));
+        await user.type(screen.getByLabelText("Email", { exact: true }), "newt@example.com");
+        await user.type(screen.getByLabelText("Password", { exact: true }), "correct horse");
+        await user.click(screen.getByRole("button", { name: /^Sign in$/ }));
+        await waitFor(() => expect(mockSignInEmail).toHaveBeenCalled());
+
+        signedIn();
+        view.rerender(<JoinLanding source={link} socialProviders={[]} />);
+        await new Promise(r => setTimeout(r, 50));
+        expect(accepts()).toHaveLength(0);
+        expect(hasJoinIntent("link", "abcd1234")).toBe(true);
+
+        // The reloaded page joins.
+        view.unmount();
+        render(<JoinLanding source={link} socialProviders={[]} />);
+        await waitFor(() => expect(mockAssign).toHaveBeenCalledWith("/employer/documents"));
+        expect(accepts()).toHaveLength(1);
+        expect(hasJoinIntent("link", "abcd1234")).toBe(false);
+    });
+
+    it("keeps the intent when the join never got an answer, so the next load retries", async () => {
+        rememberJoinIntent("link", "abcd1234");
+        signedIn();
+        const realFetch = global.fetch;
+        global.fetch = jest.fn((url: string, init?: { method?: string; body?: string }) =>
+            url.endsWith("/accept")
+                ? Promise.reject(new TypeError("Failed to fetch"))
+                : realFetch(url, init as RequestInit)
+        ) as unknown as typeof fetch;
+
+        render(<JoinLanding source={link} socialProviders={[]} />);
+
+        expect(await screen.findByText(/couldn't reach the server/)).toBeInTheDocument();
+        expect(hasJoinIntent("link", "abcd1234")).toBe(true);
+    });
+
     it("ignores a join intent left for a different link", async () => {
         rememberJoinIntent("link", "ffff0000");
         signedIn();
@@ -214,19 +268,26 @@ describe("JoinLanding", () => {
         expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
     });
 
-    it("shows the server's reason when a link dies between preview and join", async () => {
+    it("explains a link that died between loading and joining in the page's own words", async () => {
         routes["/api/workspace/join-links/accept"] = {
             status: 410,
-            body: { error: "This join link has reached its use limit." },
+            body: { error: "This join link was revoked." },
         };
         signedIn();
         const user = userEvent.setup();
 
         render(<JoinLanding source={link} socialProviders={[]} />);
-        await user.click(await screen.findByRole("button", { name: "Join Acme" }));
+        const join = await screen.findByRole("button", { name: "Join Acme" });
+        routes["/api/workspace/join-links/preview"] = {
+            status: 200,
+            body: { valid: false, reason: "inactive" },
+        };
+        await user.click(join);
 
         expect(
-            await screen.findByText("This join link has reached its use limit.")
+            await screen.findByText(
+                "This invite link was turned off. Ask whoever sent it for a new one."
+            )
         ).toBeInTheDocument();
         expect(mockAssign).not.toHaveBeenCalled();
     });

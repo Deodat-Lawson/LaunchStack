@@ -69,6 +69,7 @@ function joinLink(over: Partial<JoinLink> = {}): JoinLink {
         roleName: "Member",
         isActive: true,
         requiresApproval: false,
+        legacy: false,
         createdAt: "2026-10-10T12:00:00Z",
         expiresAt: null,
         maxUses: null,
@@ -247,16 +248,36 @@ describe("InvitationsTab", () => {
         expect(screen.getByText(capped.url)).toBeInTheDocument();
     });
 
+    it("explains an old short link and won't let it admit people straight in", async () => {
+        api.joinLinks.list.mockResolvedValue({
+            links: [
+                joinLink({
+                    code: "08ecb0a1",
+                    url: "https://app.example.com/join/08ecb0a1",
+                    requiresApproval: true,
+                    legacy: true,
+                }),
+            ],
+        });
+        await renderTab();
+
+        expect(screen.getByText("Old short link")).toBeInTheDocument();
+        expect(screen.getByText(/old short link that could be guessed/)).toBeInTheDocument();
+        expect(screen.getByRole("switch", { name: "Require admin approval" })).toBeDisabled();
+    });
+
     it("says nothing was sent when the server can't email, and gives the link", async () => {
         const acceptUrl = "https://app.example.com/invite/tok_123";
         api.invitations.create.mockResolvedValue({ invitation, acceptUrl, emailSent: false });
         await renderTab();
 
+        // No provider: the form doesn't promise to send anything.
+        expect(screen.queryByRole("button", { name: "Send invitation" })).not.toBeInTheDocument();
         fireEvent.change(screen.getByLabelText("Email"), {
             target: { value: "ada@example.com" },
         });
         await act(async () => {
-            fireEvent.click(screen.getByRole("button", { name: "Send invitation" }));
+            fireEvent.click(screen.getByRole("button", { name: "Create invitation link" }));
         });
 
         expect(
@@ -271,6 +292,7 @@ describe("InvitationsTab", () => {
     it("says the invitation was emailed when it was", async () => {
         const acceptUrl = "https://app.example.com/invite/tok_456";
         api.invitations.create.mockResolvedValue({ invitation, acceptUrl, emailSent: true });
+        api.invitations.list.mockResolvedValue({ invitations: [], emailDelivery: true });
         await renderTab();
 
         fireEvent.change(screen.getByLabelText("Email"), {

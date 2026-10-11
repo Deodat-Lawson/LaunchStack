@@ -124,6 +124,8 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    // Until a provider is wired, "invite by email" only makes a link to copy.
+    const [emailDelivery, setEmailDelivery] = useState(false);
 
     const load = useCallback(async () => {
         setError(null);
@@ -135,6 +137,7 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
                 peopleApi.groups.list().catch(() => ({ groups: [] as Group[] })),
             ]);
             setInvitations(inv.invitations);
+            setEmailDelivery(inv.emailDelivery === true);
             setLinks(jl.links);
             if (rl) setRoles(rl.roles);
             setGroups(gr.groups);
@@ -224,6 +227,7 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
             <InviteForm
                 roles={assignable}
                 groups={groups}
+                emailDelivery={emailDelivery}
                 onCreated={invitation => {
                     setInvitations(prev => [
                         invitation,
@@ -236,7 +240,11 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
                 {loading ? (
                     <LoadingNote label="Loading invitations…" />
                 ) : (
-                    <InvitationList invitations={invitations} onChanged={() => void load()} />
+                    <InvitationList
+                        invitations={invitations}
+                        emailDelivery={emailDelivery}
+                        onChanged={() => void load()}
+                    />
                 )}
             </Panel>
 
@@ -258,10 +266,12 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
 function InviteForm({
     roles,
     groups,
+    emailDelivery,
     onCreated,
 }: {
     roles: RoleOption[];
     groups: Group[];
+    emailDelivery: boolean;
     onCreated: (invitation: Invitation) => void;
 }) {
     const [email, setEmail] = useState("");
@@ -396,7 +406,13 @@ function InviteForm({
 
                 <div>
                     <Button type="submit" disabled={busy || !email.trim()}>
-                        {busy ? "Sending…" : "Send invitation"}
+                        {emailDelivery
+                            ? busy
+                                ? "Sending…"
+                                : "Send invitation"
+                            : busy
+                              ? "Creating…"
+                              : "Create invitation link"}
                     </Button>
                 </div>
             </form>
@@ -479,9 +495,11 @@ function SentNotice({
 
 function InvitationList({
     invitations,
+    emailDelivery,
     onChanged,
 }: {
     invitations: Invitation[];
+    emailDelivery: boolean;
     onChanged: () => void;
 }) {
     const [busyId, setBusyId] = useState<number | null>(null);
@@ -598,7 +616,13 @@ function InvitationList({
                                                         disabled={busy}
                                                         onClick={() => void resend(inv)}
                                                     >
-                                                        {busy ? "Resending…" : "Resend"}
+                                                        {emailDelivery
+                                                            ? busy
+                                                                ? "Resending…"
+                                                                : "Resend"
+                                                            : busy
+                                                              ? "Making a new link…"
+                                                              : "New link"}
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -898,6 +922,11 @@ function MoreLinks({
                                                 </span>
                                                 {link.requiresApproval && (
                                                     <Badge variant="warn">Needs approval</Badge>
+                                                )}
+                                                {link.legacy && (
+                                                    <Badge variant="secondary">
+                                                        Old short link
+                                                    </Badge>
                                                 )}
                                                 {state !== "live" && (
                                                     <Badge variant="secondary">

@@ -23,9 +23,9 @@ import { useAuth, useUser } from "~/lib/auth-client";
 import {
     clearJoinIntent,
     enterWorkspace,
+    hasJoinIntent,
     leaveJoinWelcome,
     rememberJoinIntent,
-    takeJoinIntent,
 } from "~/lib/join-handoff";
 import { resetMyProfile } from "~/lib/profile/use-my-profile";
 import { cn } from "~/lib/utils";
@@ -187,6 +187,11 @@ export function JoinLanding({
     const [join, setJoin] = useState<JoinState>({ phase: "idle" });
     const [tab, setTab] = useState<"signup" | "signin">("signup");
     const intentChecked = useRef(false);
+    // Email sign-in reloads the page once it succeeds (CredentialsForm). The
+    // session can arrive here a moment before that navigation, and a join
+    // started now would be cut off with the outgoing page — so this page
+    // leaves the joining to the one that loads next.
+    const reloadPending = useRef(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -222,17 +227,23 @@ export function JoinLanding({
                               body: JSON.stringify({ token: source.token }),
                           });
 
+                // The server has answered: whatever it said, the intent is spent.
+                clearJoinIntent();
                 if (res.status === 403 && details.email) {
                     setJoin({ phase: "mismatch", invitedEmail: details.email });
                     return;
                 }
                 if (res.status === 404 || res.status === 410) {
+                    const fallback = await readError(
+                        res,
+                        source.kind === "link" ? LINK_PROBLEMS.unknown! : INVITE_GONE
+                    );
+                    // It died after the page loaded; ask again so the reason
+                    // reads the same as it would have on arrival.
+                    const now = await loadDetails(source).catch(() => null);
                     setJoin({
                         phase: "dead",
-                        message: await readError(
-                            res,
-                            source.kind === "link" ? LINK_PROBLEMS.unknown! : INVITE_GONE
-                        ),
+                        message: now?.phase === "dead" ? now.message : fallback,
                     });
                     return;
                 }
@@ -272,6 +283,8 @@ export function JoinLanding({
                 resetMyProfile();
                 enterWorkspace(result.redirectTo ?? "/employer/documents");
             } catch {
+                // No answer — possibly cut off by a navigation. The intent stays,
+                // so the next load of this page tries again.
                 setJoin({ phase: "error", message: NETWORK_MESSAGE });
             }
         },
@@ -281,15 +294,22 @@ export function JoinLanding({
     // Back from signing in or up on this page: join without another click.
     useEffect(() => {
         if (load.phase !== "ready" || !isLoaded || intentChecked.current) return;
-        if (!isSignedIn) return;
+        if (!isSignedIn || reloadPending.current) return;
         intentChecked.current = true;
-        if (takeJoinIntent(source.kind, key)) void accept(load.details);
+        if (hasJoinIntent(source.kind, key)) void accept(load.details);
     }, [load, isLoaded, isSignedIn, source.kind, key, accept]);
 
+    /** Sign-up and social sign-in: this page (or the one OAuth returns to) joins. */
     const remember = useCallback(() => {
         rememberJoinIntent(source.kind, key);
-        // A fresh sign-in on this page should be honoured once it lands.
+        reloadPending.current = false;
         intentChecked.current = false;
+    }, [source.kind, key]);
+
+    /** Email sign-in: the reload that follows success does the joining. */
+    const rememberForReload = useCallback(() => {
+        rememberJoinIntent(source.kind, key);
+        reloadPending.current = true;
     }, [source.kind, key]);
 
     const useDifferentAccount = () => {
@@ -353,6 +373,7 @@ export function JoinLanding({
                             signedInEmail={user?.email ?? null}
                             socialProviders={socialProviders}
                             onAuthStart={remember}
+                            onSignInStart={rememberForReload}
                             onJoin={() => void accept(load.details)}
                             onUseDifferentAccount={useDifferentAccount}
                         />
@@ -375,6 +396,7 @@ function Ready({
     signedInEmail,
     socialProviders,
     onAuthStart,
+    onSignInStart,
     onJoin,
     onUseDifferentAccount,
 }: {
@@ -389,6 +411,7 @@ function Ready({
     signedInEmail: string | null;
     socialProviders: SocialProvider[];
     onAuthStart: () => void;
+    onSignInStart: () => void;
     onJoin: () => void;
     onUseDifferentAccount: () => void;
 }) {
@@ -469,7 +492,7 @@ function Ready({
                             newUserRedirectTo={here}
                             socialProviders={socialProviders}
                             defaultEmail={details.email ?? ""}
-                            onAuthStart={onAuthStart}
+                            onAuthStart={onSignInStart}
                         />
                     </TabsContent>
                 </Tabs>

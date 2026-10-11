@@ -77,6 +77,8 @@ export interface JoinLink {
     isActive: boolean;
     /** People who use it wait on the pending list instead of joining at once. */
     requiresApproval: boolean;
+    /** An old 8-character code: guessable, so it always needs approval. Reset to replace it. */
+    legacy: boolean;
     createdAt: string;
     expiresAt: string | null;
     maxUses: number | null;
@@ -255,7 +257,10 @@ export const peopleApi = {
             }),
     },
     invitations: {
-        list: () => request<{ invitations: Invitation[] }>("/api/workspace/invitations"),
+        list: () =>
+            request<{ invitations: Invitation[]; emailDelivery?: boolean }>(
+                "/api/workspace/invitations"
+            ),
         create: (body: { email: string; role: string; groupIds?: number[] }) =>
             request<InvitationSent>("/api/workspace/invitations", {
                 method: "POST",

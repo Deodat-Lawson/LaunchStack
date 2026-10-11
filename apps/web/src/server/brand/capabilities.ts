@@ -38,10 +38,11 @@ export function linkedInGrantFeatures(scopes: string | readonly string[]): Linke
 }
 
 /**
- * A channel's capabilities. A LinkedIn Page's analytics also need the
- * member to be the Page's ADMINISTRATOR — a content admin may post but
- * LinkedIn will not show them the numbers. Member post analytics need
- * `r_member_postAnalytics`, which Brand does not read yet.
+ * A channel's capabilities. A LinkedIn Page's analytics and comments also
+ * need the member to be the Page's ADMINISTRATOR — a content admin may
+ * post but LinkedIn will not show them the numbers or the comment feed.
+ * Member post analytics need `r_member_postAnalytics`, which Brand does not
+ * read yet.
  */
 export function channelCapabilities(
     platform: string,
@@ -57,11 +58,14 @@ export function channelCapabilities(
     }
     const features = linkedInGrantFeatures(scopes);
     if (kind === "organization") {
+        // LinkedIn shows a Page's numbers and comment feed to its
+        // ADMINISTRATORs only; a content admin may still post.
+        const admin = role === "ADMINISTRATOR";
         return {
             publish: features.pagePosting,
             images: features.pagePosting,
-            analytics: features.pageAnalytics && role === "ADMINISTRATOR",
-            comments: features.pageComments,
+            analytics: features.pageAnalytics && admin,
+            comments: features.pageComments && admin,
         };
     }
     return {

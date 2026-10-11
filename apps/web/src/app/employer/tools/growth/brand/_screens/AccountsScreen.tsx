@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, ExternalLink } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { useToolSearchParams } from "~/components/tool-app/nav";
@@ -505,12 +505,9 @@ export function AccountsScreen() {
     const [pendingDisconnect, setPendingDisconnect] = useState<BrandConnection | null>(null);
     const [blueskyHandle, setBlueskyHandle] = useState("");
     const blueskyRef = useRef<HTMLInputElement>(null);
+    // A LinkedIn sign-in that came back without channels says why here; the
+    // workspace's own toast covers the clean "connected" return.
     const returnError = params.get("error");
-    const returned = params.get("connected");
-
-    useEffect(() => {
-        if (returned === "linkedin") toast.success("LinkedIn connected");
-    }, [returned]);
 
     const setAccounts = (update: (current: BrandAccounts) => BrandAccounts) => res.mutate(update);
 
@@ -605,9 +602,7 @@ export function AccountsScreen() {
                 }
             />
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
-            {returnError && (
-                <InlineError message={`The connection did not go through: ${returnError}`} />
-            )}
+            {returnError && <InlineError message={returnError} />}
 
             {res.loading ? (
                 <SkeletonRows rows={4} height={64} />

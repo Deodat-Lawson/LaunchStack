@@ -43,7 +43,7 @@ describe("linkedInGrantFeatures", () => {
 });
 
 describe("channelCapabilities", () => {
-    it("a Page's numbers need the ADMINISTRATOR role as well as the scope", () => {
+    it("a Page's numbers and comments need the ADMINISTRATOR role as well as the scope", () => {
         expect(channelCapabilities("linkedin", "organization", COMMUNITY, "ADMINISTRATOR")).toEqual(
             {
                 publish: true,
@@ -54,8 +54,7 @@ describe("channelCapabilities", () => {
         );
         expect(
             channelCapabilities("linkedin", "organization", COMMUNITY, "CONTENT_ADMINISTRATOR")
-                .analytics
-        ).toBe(false);
+        ).toEqual({ publish: true, images: true, analytics: false, comments: false });
     });
 
     it("a member profile publishes with images but reads nothing back yet", () => {

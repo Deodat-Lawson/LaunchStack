@@ -97,7 +97,8 @@ export interface AddSourceModalProps {
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
     /** Optional: persist a new folder name the user typed in the picker. */
-    onCreateFolder?: (name: string) => void;
+    /** Create a folder; may resolve to the path it really got ("Name (2)"). */
+    onCreateFolder?: (name: string) => void | Promise<string | null | void>;
     /**
      * Tab to open on. Set when the caller already knows what the user picked —
      * the Knowledge pane's connector strip opens straight onto Slack or Drive
@@ -550,7 +551,7 @@ interface FolderPickerProps {
     value: string;
     onChange: (next: string) => void;
     folders: string[];
-    onCreate?: (name: string) => void;
+    onCreate?: (name: string) => void | Promise<string | null | void>;
 }
 
 function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps) {
@@ -666,8 +667,14 @@ function FolderPicker({ value, onChange, folders, onCreate }: FolderPickerProps)
                         {canCreate && (
                             <button
                                 onClick={() => {
-                                    onCreate?.(candidate);
+                                    const made = onCreate?.(candidate);
                                     onChange(candidate);
+                                    // A taken name comes back as "Name (2)": save there.
+                                    if (made instanceof Promise) {
+                                        void made.then(actual => {
+                                            if (actual && actual !== candidate) onChange(actual);
+                                        });
+                                    }
                                     setOpen(false);
                                     setQ("");
                                 }}

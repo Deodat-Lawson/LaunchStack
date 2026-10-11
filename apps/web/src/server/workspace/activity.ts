@@ -13,6 +13,7 @@ import { workspaceActivity, type WorkspaceActivityRow } from "~/server/db/schema
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { folderLeafName, isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
 import { listFolders } from "~/server/folders";
 import { readableSessionIds } from "~/server/sessions/access";
 
@@ -114,11 +115,14 @@ export async function filterVisibleActivity(
                 .map(r => Number(r.targetId))
         ),
     ];
-    // Rows written before folder ids were recorded carry only a path.
+    // Paths are checked against today's tree: rows written before folder ids
+    // were recorded carry only a path, and any row may name a folder that has
+    // since become private, been renamed or been deleted.
     const needsPaths = rows.some(
         r =>
-            (r.targetType === "folder" && !(r.targetId && /^\d+$/.test(r.targetId))) ||
-            (r.targetType === "document" && typeof r.detail?.from === "string")
+            r.targetPath !== null ||
+            typeof r.detail?.from === "string" ||
+            typeof r.detail?.to === "string"
     );
 
     const [visibleDocs, existingDocs, readableChats, folderRows, folderPaths] = await Promise.all([
@@ -153,7 +157,10 @@ export async function filterVisibleActivity(
     const exists = new Set(existingDocs.map(d => Number(d.id)));
     const folderNow = new Map(folderRows.map(f => [Number(f.id), f.name]));
     /** A path the reader can see today: it still exists, and their scope allows it. */
-    const seesPath = (path: string) => folderPaths.has(path) && scopeAllowsCategory(scope, path);
+    const seesPath = (raw: string) => {
+        const path = normalizeFolderPath(raw);
+        return isUnfiledFolder(path) || (folderPaths.has(path) && scopeAllowsCategory(scope, path));
+    };
     const mine = (row: ActivityEntry) => row.actorUserId === ctx.authUserId;
 
     const kept = rows.filter(row => {
@@ -185,16 +192,38 @@ export async function filterVisibleActivity(
         }
     });
 
-    // A file the reader can open may have come from a folder they can't: keep
-    // its old path out of what they read.
+    // What a reader is told about where things are: only folders they can see
+    // today, or that everyone could see when it happened. A folder row names
+    // the folder as it is now; a private folder something moved out of, or a
+    // name a folder had while it was private, is left out.
     return kept.map(row => {
-        if (row.targetType !== "document" || mine(row) || typeof row.detail?.from !== "string") {
-            return row;
+        if (mine(row) || row.verb === "deleted") return row;
+        const current =
+            row.targetType === "folder" && row.targetId && /^\d+$/.test(row.targetId)
+                ? folderNow.get(Number(row.targetId))
+                : undefined;
+        let { targetPath, targetLabel } = row;
+        if (current !== undefined) {
+            targetPath = current;
+            targetLabel = folderLeafName(current);
+        } else if (targetPath !== null && !seesPath(targetPath)) {
+            targetPath = null;
         }
-        if (seesPath(row.detail.from)) return row;
-        const detail = { ...row.detail };
-        delete detail.from;
-        return { ...row, detail };
+        let detail = row.detail;
+        if (detail && (row.targetType === "folder" || row.verb === "moved")) {
+            for (const key of ["from", "to", "name"] as const) {
+                const value = detail[key];
+                if (typeof value !== "string" || seesPath(value)) continue;
+                if (key === "from" && detail.fromWorkspace === true) continue;
+                detail = { ...detail };
+                delete detail[key];
+            }
+        }
+        return targetPath === row.targetPath &&
+            targetLabel === row.targetLabel &&
+            detail === row.detail
+            ? row
+            : { ...row, targetPath, targetLabel, detail };
     });
 }
 

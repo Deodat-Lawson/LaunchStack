@@ -114,6 +114,28 @@ describe("who will see it (ADR-014)", () => {
     });
 });
 
+describe("creating a folder from the picker", () => {
+    it("files into the folder that was really made when the name was taken", async () => {
+        const user = userEvent.setup();
+        // A folder the person can't see already holds "Board"; the server made "Board (2)".
+        const onCreateFolder = jest.fn(() => Promise.resolve("Board (2)"));
+        mount({ defaultCategory: "Strategy", initialTab: "paste", onCreateFolder });
+        await settleStatus();
+
+        await user.click(screen.getByRole("button", { name: "Strategy" }));
+        await user.type(screen.getByPlaceholderText("Find or create folder…"), "Board");
+        await user.click(screen.getByRole("button", { name: 'Create folder "Board"' }));
+
+        expect(onCreateFolder).toHaveBeenCalledWith("Board");
+        await waitFor(() =>
+            expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+                "Visible to everyone who can open Board (2)."
+            )
+        );
+        expect(screen.getByRole("button", { name: "Board (2)" })).toBeInTheDocument();
+    });
+});
+
 describe("the Create group", () => {
     it("is listed first, before Upload and Connect", () => {
         expect(ADD_TABS[0]?.group).toBe("Create");

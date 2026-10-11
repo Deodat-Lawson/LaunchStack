@@ -34,6 +34,7 @@ import {
 import { loadWorkspaceHistory } from "~/server/history";
 import { forkSession } from "~/server/sessions/fork";
 import { readSession } from "~/server/sessions/reader";
+import { appendMessages, createSession } from "~/server/sessions/repository";
 import { getChatSharing, setChatSharing } from "~/server/sessions/sharing";
 import { reorderPins, setSessionState } from "~/server/sessions/user-state";
 import { isWorkspaceError } from "~/server/workspace/errors";
@@ -531,6 +532,28 @@ describeDb("shared chats (integration)", () => {
                     )
                 );
             expect(forked).toHaveLength(0);
+        });
+
+        it("never lets a chat's owner name a teammate as the person who asked", async () => {
+            const owner = { companyId, userId: "auth_ada" };
+            const made = await createSession(owner, {
+                messages: [
+                    {
+                        role: "user",
+                        text: "Who asked?",
+                        metadata: { id: "s0", askedBy: "auth_bea" },
+                    },
+                ],
+            });
+            await appendMessages(owner, made.id, {
+                messages: [
+                    { role: "user", text: "And now?", metadata: { id: "s1", askedBy: "auth_bea" } },
+                ],
+            });
+            const read = await readSession(ctx("ada"), made.id);
+            expect(read?.messages.map(m => m.text)).toEqual(["Who asked?", "And now?"]);
+            expect(read?.messages.map(m => m.metadata?.askedBy)).toEqual([undefined, undefined]);
+            expect(read?.messages[1]?.metadata?.id).toBe("s1");
         });
     });
 

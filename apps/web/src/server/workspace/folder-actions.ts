@@ -141,6 +141,9 @@ export async function renameFolderAs(
             "You do not have edit access to the folder you are moving it into."
         );
     }
+    // Whether teammates may read the old name afterwards: only if everyone
+    // could see the folder under it.
+    const fromWorkspace = (await folderAccess(ctx, from)).audience === "workspace";
     const owner = ownerOf(ctx);
     let access: "kept_audience" | "inherits_folder" | "unchanged" = "unchanged";
     let renamed: RenameFolderResult;
@@ -169,7 +172,7 @@ export async function renameFolderAs(
         targetId: await folderIdOf(db, ctx.companyId, renamed.to),
         targetLabel: folderLeafName(renamed.to),
         targetPath: renamed.to,
-        detail: { from: renamed.from, to: renamed.to, access },
+        detail: { from: renamed.from, to: renamed.to, access, fromWorkspace },
     });
     await recordAuditEvent(db, {
         companyId: ctx.companyId,

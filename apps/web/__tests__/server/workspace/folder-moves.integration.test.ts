@@ -178,6 +178,45 @@ describeDb("folder moves, deletes and creates (integration)", () => {
         expect(await titlesFor("cy")).toContain("Launch draft");
     });
 
+    it("lets you file your own private top-level folder into a team folder, as a file would", async () => {
+        const { createFolderAs, renameFolderAs } = await import(
+            "~/server/workspace/folder-actions"
+        );
+        const ada = await ctxFor("ada");
+        await createFolderAs(ada, "Pitch");
+        await addDoc("Pitch deck", "Pitch");
+        expect(await titlesFor("cy")).not.toContain("Pitch deck");
+
+        const moved = await renameFolderAs(ada, "Pitch", "Team/Pitch");
+
+        expect(moved.access).toBe("inherits_folder");
+        expect(await titlesFor("cy")).toContain("Pitch deck");
+    });
+
+    it("keeps a folder private to you when you only rename it, or share it first", async () => {
+        const { createFolderAs, renameFolderAs } = await import(
+            "~/server/workspace/folder-actions"
+        );
+        const ada = await ctxFor("ada");
+        await createFolderAs(ada, "Team/Mine");
+        await setAudience("Team/Mine", true, [{ who: "ada", level: "manage" }]);
+        await addDoc("Mine note", "Team/Mine");
+        expect((await renameFolderAs(ada, "Team/Mine", "Team/Mine still")).access).toBe(
+            "unchanged"
+        );
+        expect(await titlesFor("cy")).not.toContain("Mine note");
+
+        await createFolderAs(ada, "Duo");
+        await setAudience("Duo", true, [
+            { who: "ada", level: "manage" },
+            { who: "ben", level: "view" },
+        ]);
+        await addDoc("Duo note", "Duo");
+        expect((await renameFolderAs(ada, "Duo", "Team/Duo")).access).toBe("unchanged");
+        expect(await titlesFor("cy")).not.toContain("Duo note");
+        expect(await titlesFor("ben")).toContain("Duo note");
+    });
+
     it("keeps a file's audience when someone moves it out of a private folder", async () => {
         const { applyDocumentMoveDefaults } = await import("~/server/workspace/ownership");
         // Board is Ada (manage) + Ben (edit); Team is workspace-wide.
@@ -255,5 +294,72 @@ describeDb("folder moves, deletes and creates (integration)", () => {
         }
         const adaFeed = JSON.stringify((await listActivity(ada)).entries);
         expect(adaFeed).toContain("Reorg");
+    });
+
+    it("never names a private folder something left, or a name a folder had while private", async () => {
+        const { createFolderAs, renameFolderAs } = await import(
+            "~/server/workspace/folder-actions"
+        );
+        const { listActivity, recordActivity } = await import("~/server/workspace/activity");
+        const { documentGrants } = await import("~/server/db/schema");
+        const ada = await ctxFor("ada");
+        await createFolderAs(ada, "Vault");
+        // A subfolder made in private, then filed into Team where Cy sees it.
+        await createFolderAs(ada, "Vault/Roadmap");
+        await renameFolderAs(ada, "Vault/Roadmap", "Team/Roadmap");
+        // A file Ada filed from Vault into Team.
+        const pitch = await addDoc("Vault pitch", "Team");
+        await recordActivity(test.db, {
+            companyId,
+            actorUserId: "auth_ada",
+            verb: "moved",
+            targetType: "document",
+            targetId: pitch,
+            targetLabel: "Vault pitch",
+            targetPath: "Team",
+            detail: { from: "Vault", to: "Team", access: "inherits_folder" },
+        });
+        // A file still in Vault that Ada shared with Cy alone.
+        const memo = await addDoc("Vault memo", "Vault");
+        await test.db.insert(documentGrants).values({
+            companyId,
+            documentId: BigInt(memo),
+            principalType: "user",
+            principalId: pk.cy!.toString(),
+            level: "view",
+            grantedBy: "auth_ada",
+        });
+        await recordActivity(test.db, {
+            companyId,
+            actorUserId: "auth_ada",
+            verb: "added",
+            targetType: "document",
+            targetId: memo,
+            targetLabel: "Vault memo",
+            targetPath: "Vault",
+        });
+        // A team folder renamed in the open: its old name was never private.
+        await createFolderAs(ada, "Team/Q3");
+        await renameFolderAs(ada, "Team/Q3", "Team/Q3 final");
+
+        const entries = (await listActivity(await ctxFor("cy"))).entries;
+        const cyFeed = JSON.stringify(entries);
+        expect(cyFeed).toContain("Vault pitch");
+        expect(cyFeed).toContain("Vault memo");
+        expect(cyFeed.replace(/Vault (pitch|memo)/g, "")).not.toContain("Vault");
+
+        const roadmap = entries.filter(
+            e => e.targetType === "folder" && e.targetLabel === "Roadmap"
+        );
+        expect(roadmap.map(e => e.verb).sort()).toEqual(["created_folder", "moved"]);
+        expect(roadmap.every(e => e.targetPath === "Team/Roadmap")).toBe(true);
+        const memoRow = entries.find(e => e.targetLabel === "Vault memo");
+        expect(memoRow?.targetPath).toBeNull();
+        const q3 = entries.find(e => e.verb === "renamed" && e.targetPath === "Team/Q3 final");
+        expect(q3?.detail?.from).toBe("Team/Q3");
+
+        // Ada, who did all of it, still sees her own history as it happened.
+        const adaFeed = JSON.stringify((await listActivity(ada)).entries);
+        expect(adaFeed).toContain('"from":"Vault"');
     });
 });

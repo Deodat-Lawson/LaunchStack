@@ -321,7 +321,8 @@ function mergeGrants(grants: readonly GrantFact[]): GrantFact[] {
  * that audience with it as its own — unless that audience was only the person
  * moving it and it is being filed into another folder, in which case it joins
  * the destination's audience (Drive's rule: you filed your own thing there).
- * A folder moved to the top level always stays restricted.
+ * The same goes for a folder whose own audience is only its mover. A folder
+ * moved to the top level always stays restricted.
  */
 export async function carryFolderRestrictionOnMove(
     executor: Executor,
@@ -331,11 +332,27 @@ export async function carryFolderRestrictionOnMove(
 ): Promise<"kept_audience" | "inherits_folder" | "unchanged"> {
     const from = normalizeFolderPath(rawFrom);
     const to = normalizeFolderPath(rawTo);
+    const toTopLevel = folderParentPath(to) === null;
+    const me = owner.userPk.toString();
+
+    // A folder private to its mover alone, filed into another folder, joins
+    // that folder's audience — as a file does (Drive's rule). A rename in
+    // place is not a filing and changes nothing.
+    const [self] = await loadFolderLineage(owner.companyId, from, executor);
+    if (self?.restricted && self.categoryId !== null) {
+        const filed = !toTopLevel && folderParentPath(to) !== folderParentPath(from);
+        if (filed && onlyPrincipalIs(self.grants, me)) {
+            await executor
+                .delete(folderSettings)
+                .where(eq(folderSettings.categoryId, BigInt(self.categoryId)));
+            return "inherits_folder";
+        }
+        return "unchanged";
+    }
+
     const left = await restrictionLeftBehind(owner.companyId, from, to, false, executor);
     if (!left) return "unchanged";
-    const toTopLevel = folderParentPath(to) === null;
-    if (!toTopLevel && onlyPrincipalIs(left.grants, owner.userPk.toString()))
-        return "inherits_folder";
+    if (!toTopLevel && onlyPrincipalIs(left.grants, me)) return "inherits_folder";
 
     // The folder may exist only through its documents; give it a row to hang
     // the restriction on. Its id survives the rename that follows.

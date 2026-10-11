@@ -99,6 +99,18 @@ function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
     };
 }
 
+/**
+ * What a client may store about a turn. `askedBy` names who asked a question
+ * and only the server's fork sets it (ADR-014); taken from a client it would
+ * let a chat's owner put words in a teammate's mouth for everyone reading it.
+ */
+function clientMetadata(metadata: ChatTurnMetadata | undefined): ChatTurnMetadata | null {
+    if (!metadata) return null;
+    const rest = { ...metadata };
+    delete rest.askedBy;
+    return rest;
+}
+
 /** Trim to the storage cap. Truncating beats refusing to save the turn at all. */
 function clampText(text: string): string {
     return text.length > MAX_SESSION_MESSAGE_CHARS
@@ -180,7 +192,7 @@ export async function createSession(
                     model: message.model ?? null,
                     tokens: message.tokens ?? null,
                     agentKey: message.agentKey ?? null,
-                    metadata: message.metadata ?? null,
+                    metadata: clientMetadata(message.metadata),
                 }))
             );
         }
@@ -273,7 +285,7 @@ export async function appendMessages(
                 model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
-                metadata: message.metadata ?? null,
+                metadata: clientMetadata(message.metadata),
             }))
         );
 

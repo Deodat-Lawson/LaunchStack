@@ -26,6 +26,7 @@ import { LANDING_URL } from "~/config/landing";
 import {
     UNFILED_FOLDER,
     folderLeafName,
+    folderParentPath,
     isFolderDescendant,
     isFolderOrDescendant,
     joinFolderPath,
@@ -1386,9 +1387,17 @@ export function WorkspaceShell() {
         [folders]
     );
 
-    /** One call for every folder mutation; resolves to an error message or null. */
+    /**
+     * One call for every folder mutation; resolves to an error message or null.
+     * `onData` sees the response body on success (a create's real path, a
+     * move's effect on who can see it).
+     */
     const folderRequest = useCallback(
-        async (method: "POST" | "PATCH" | "DELETE", body: Record<string, string>) => {
+        async (
+            method: "POST" | "PATCH" | "DELETE",
+            body: Record<string, string>,
+            onData?: (data: Record<string, unknown>) => void
+        ) => {
             try {
                 const res = await fetch("/api/folders", {
                     method,
@@ -1398,10 +1407,12 @@ export function WorkspaceShell() {
                 const json = (await res.json().catch(() => ({}))) as {
                     success?: boolean;
                     message?: string;
+                    data?: Record<string, unknown>;
                 };
                 if (!res.ok || !json.success) {
                     return json.message ?? `Request failed (${res.status})`;
                 }
+                onData?.(json.data ?? {});
                 await refresh();
                 return null;
             } catch (err) {
@@ -1411,14 +1422,53 @@ export function WorkspaceShell() {
         [refresh]
     );
 
-    const handleCreateFolder = useCallback(
-        (path: string) => folderRequest("POST", { path }),
+    /**
+     * Create a folder and resolve to the path it really got: a name already
+     * held by a folder you can't see comes back as "Name (2)" (ADR-014), and
+     * the person is told why.
+     */
+    const createFolderAt = useCallback(
+        async (path: string): Promise<{ failure: string | null; path: string }> => {
+            let actual = path;
+            const failure = await folderRequest("POST", { path }, data => {
+                if (typeof data.renamedTo === "string" && data.renamedTo) {
+                    actual = data.renamedTo;
+                    toast.info(`Created “${folderLeafName(actual)}”`, {
+                        description: `This workspace already has a folder called “${folderLeafName(path)}”.`,
+                    });
+                }
+            });
+            return { failure, path: actual };
+        },
         [folderRequest]
+    );
+
+    const handleCreateFolder = useCallback(
+        async (path: string) => (await createFolderAt(path)).failure,
+        [createFolderAt]
     );
 
     const handleRenameFolder = useCallback(
         async (path: string, newPath: string) => {
-            const failure = await folderRequest("PATCH", { path, newPath });
+            let access: unknown = null;
+            const failure = await folderRequest("PATCH", { path, newPath }, data => {
+                access = data.access;
+            });
+            // A move that changed (or deliberately kept) who can see it says so.
+            if (!failure && folderParentPath(path) !== folderParentPath(newPath)) {
+                const leaf = folderLeafName(newPath);
+                const where = folderParentPath(newPath);
+                const description =
+                    access === "kept_audience" || access === "inherits_folder"
+                        ? moveOutcomeMessage(access, where ? folderLeafName(where) : leaf)
+                        : null;
+                toast.success(
+                    where ? `Moved to ${folderLeafName(where)}` : `Moved ${leaf} to the top level`,
+                    {
+                        description: description ?? undefined,
+                    }
+                );
+            }
             if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
                 setActiveFolder(replaceFolderPrefix(activeFolder, path, newPath));
             }
@@ -2695,10 +2745,11 @@ export function WorkspaceShell() {
                 folders={uploadFolderPaths}
                 onCreateFolder={
                     canAddFolders
-                        ? path => {
-                              void handleCreateFolder(path).then(failure => {
-                                  if (failure) toast.error(failure);
-                              });
+                        ? async path => {
+                              const made = await createFolderAt(path);
+                              if (made.failure) toast.error(made.failure);
+                              // The picker selects the folder that was really made.
+                              return made.failure ? null : made.path;
                           }
                         : undefined
                 }

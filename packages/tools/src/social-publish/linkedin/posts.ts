@@ -112,12 +112,17 @@ export async function createLinkedInPost(
     if (images.length === 1) body.content = { media: images[0] };
     else if (images.length > 1) body.content = { multiImage: { images } };
 
-    const res = await linkedInRequest(ctx, {
-        method: "POST",
-        path: "/rest/posts",
-        json: body,
-        what: "publish the post",
-    });
+    let res: Response;
+    try {
+        res = await linkedInRequest(ctx, {
+            method: "POST",
+            path: "/rest/posts",
+            json: body,
+            what: "publish the post",
+        });
+    } catch (error) {
+        throw unconfirmedCreate(error);
+    }
     const header = decodeId(res.headers.get("x-restli-id"));
     const postUrn = header ?? decodeId((await readJson<{ id?: string }>(res))?.id ?? null);
     if (!postUrn) {
@@ -130,6 +135,25 @@ export async function createLinkedInPost(
         );
     }
     return { postUrn, postUrl: linkedInPostUrl(postUrn) };
+}
+
+/**
+ * The create call failed in a way that does not say whether the post exists:
+ * a 5xx, or the connection dropped after the request went out. LinkedIn
+ * takes no idempotency key, so trying again could publish it twice. Only a
+ * rate limit (429) is a clean refusal worth retrying; anything else ambiguous
+ * becomes a plain failure that asks a person to look first.
+ */
+export function unconfirmedCreate(error: unknown): unknown {
+    if (!(error instanceof LinkedInApiError) || !error.retryable || error.status === 429)
+        return error;
+    return new LinkedInApiError(
+        `LinkedIn did not confirm the post, so it may have gone out. Check the Page before publishing again. (${error.message})`,
+        error.status,
+        false,
+        false,
+        error.body
+    );
 }
 
 /** Delete a post. Already gone (404) counts as done. */

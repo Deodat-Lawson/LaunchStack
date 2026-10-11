@@ -274,6 +274,57 @@ describe("createLinkedInPost", () => {
     });
 });
 
+describe("createLinkedInPost never retries a create that may have happened", () => {
+    const opts = (fetch: ReturnType<typeof router>["fetch"]) => ({
+        accessToken: "tok",
+        apiBaseUrl: BASE,
+        fetch,
+        authorUrn: PAGE,
+        text: "Hello",
+    });
+
+    it("a 504 on the create call fails without retry and asks to check the Page", async () => {
+        const { fetch } = router([
+            ["/rest/posts", () => json({ message: "Gateway Timeout" }, 504)],
+        ]);
+        await expect(createLinkedInPost(opts(fetch))).rejects.toMatchObject({
+            retryable: false,
+            authFailed: false,
+            message: expect.stringContaining("Check the Page before publishing again"),
+        });
+    });
+
+    it("a connection dropped after the request went out fails without retry", async () => {
+        const { fetch } = router([
+            [
+                "/rest/posts",
+                () => {
+                    throw new TypeError("socket hang up");
+                },
+            ],
+        ]);
+        await expect(createLinkedInPost(opts(fetch))).rejects.toMatchObject({ retryable: false });
+    });
+
+    it("a 429 on the create call is a clean refusal and stays retryable", async () => {
+        const { fetch } = router([["/rest/posts", () => json({ message: "Throttled" }, 429)]]);
+        await expect(createLinkedInPost(opts(fetch))).rejects.toMatchObject({ retryable: true });
+    });
+
+    it("an outage while uploading the image, before the post exists, stays retryable", async () => {
+        const { fetch, calls } = router([
+            ["action=initializeUpload", () => json({ message: "unavailable" }, 503)],
+        ]);
+        await expect(
+            createLinkedInPost({
+                ...opts(fetch),
+                media: [{ data: new Uint8Array([1]), mimeType: "image/png" }],
+            })
+        ).rejects.toMatchObject({ retryable: true });
+        expect(calls.some(c => c.url.endsWith("/rest/posts"))).toBe(false);
+    });
+});
+
 describe("LinkedIn error classification", () => {
     const post = (fetch: ReturnType<typeof router>["fetch"]) =>
         createLinkedInPost({
@@ -340,7 +391,7 @@ describe("LinkedIn error classification", () => {
         expect(err.message).toContain("partnerApiPostsExternal.CREATE");
     });
 
-    it("429, 5xx and network failures are retryable", async () => {
+    it("429, 5xx and network failures are retryable (reads; a create only on 429)", async () => {
         const limited = router([
             ["/rest/posts", () => json({ message: "Too many requests" }, 429)],
         ]);
@@ -350,18 +401,25 @@ describe("LinkedIn error classification", () => {
             retryable: true,
         });
 
-        const down = router([["/rest/posts", () => new Response("bad gateway", { status: 502 })]]);
-        await expect(post(down.fetch)).rejects.toMatchObject({ status: 502, retryable: true });
+        const read = (fetch: ReturnType<typeof router>["fetch"]) =>
+            listLinkedInComments({
+                accessToken: "t",
+                apiBaseUrl: BASE,
+                fetch,
+                postUrn: "urn:li:share:1",
+            });
+        const down = router([["/comments", () => new Response("bad gateway", { status: 502 })]]);
+        await expect(read(down.fetch)).rejects.toMatchObject({ status: 502, retryable: true });
 
         const offline = router([
             [
-                "/rest/posts",
+                "/comments",
                 () => {
                     throw new TypeError("fetch failed");
                 },
             ],
         ]);
-        await expect(post(offline.fetch)).rejects.toMatchObject({ status: 0, retryable: true });
+        await expect(read(offline.fetch)).rejects.toMatchObject({ status: 0, retryable: true });
     });
 });
 

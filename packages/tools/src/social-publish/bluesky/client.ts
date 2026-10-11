@@ -225,14 +225,30 @@ export async function createBlueskyPost(
             };
         }
 
-        const res = await xrpc(ctx, {
-            base: ctx.service,
-            nsid: "com.atproto.repo.createRecord",
-            method: "POST",
-            json: { repo: session.did, collection: "app.bsky.feed.post", record },
-            accessJwt: session.accessJwt,
-            what: "publish the post",
-        });
+        let res: Response;
+        try {
+            res = await xrpc(ctx, {
+                base: ctx.service,
+                nsid: "com.atproto.repo.createRecord",
+                method: "POST",
+                json: { repo: session.did, collection: "app.bsky.feed.post", record },
+                accessJwt: session.accessJwt,
+                what: "publish the post",
+            });
+        } catch (error) {
+            // A 5xx or a dropped connection after the request went out may
+            // still have created the record; only a 429 is a clean refusal.
+            if (error instanceof BlueskyApiError && error.retryable && error.status !== 429) {
+                throw new BlueskyApiError(
+                    `Bluesky did not confirm the post, so it may have gone out. Check the account before publishing again. (${error.message})`,
+                    error.status,
+                    false,
+                    false,
+                    error.body
+                );
+            }
+            throw error;
+        }
         const created = await readJson<{ uri?: string; cid?: string }>(res);
         if (!created?.uri) {
             // The record may exist; retrying could post twice.

@@ -427,6 +427,29 @@ describe("createBlueskyPost", () => {
     });
 });
 
+describe("createBlueskyPost never retries a create that may have happened", () => {
+    it("a 502 on createRecord fails without retry and asks to check the account", async () => {
+        const { fetch } = router([
+            ["createSession", session()],
+            ["com.atproto.repo.createRecord", () => json({ error: "UpstreamFailure" }, 502)],
+        ]);
+        await expect(createBlueskyPost(CREDS, { text: "Hello" }, { fetch })).rejects.toMatchObject({
+            retryable: false,
+            message: expect.stringContaining("Check the account before publishing again"),
+        });
+    });
+
+    it("a 429 on createRecord stays retryable", async () => {
+        const { fetch } = router([
+            ["createSession", session()],
+            ["com.atproto.repo.createRecord", () => json({ error: "RateLimitExceeded" }, 429)],
+        ]);
+        await expect(createBlueskyPost(CREDS, { text: "Hello" }, { fetch })).rejects.toMatchObject({
+            retryable: true,
+        });
+    });
+});
+
 describe("getBlueskyPostStats", () => {
     it("asks the AppView for up to 25 posts per call and maps the counts", async () => {
         const uris = Array.from(

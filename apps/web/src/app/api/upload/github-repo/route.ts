@@ -22,6 +22,7 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { recordUpload } from "~/server/workspace/added-documents";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
@@ -118,6 +119,7 @@ export async function POST(request: Request) {
                 mimeType: "application/zip",
                 originalFilename: filename,
             });
+            await recordUpload(ctx.data, uploadResult);
 
             console.log(
                 `[GitHubRepoUpload] Pipeline triggered: jobId=${uploadResult.jobId}, ` +

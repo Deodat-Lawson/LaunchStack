@@ -21,6 +21,20 @@ import { getOcrConfig } from "@launchstack/conversion/ocr/config";
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
 
+function uploadedDocumentOf(lifecycle: CreatedDocumentLifecycle): UploadedDocument {
+    return {
+        id: lifecycle.document.id,
+        title: lifecycle.document.title,
+        url: lifecycle.document.url,
+        category: lifecycle.document.category,
+    };
+}
+
+/** The rows these lifecycles inserted — a retry that converged on an earlier row is not new. */
+function createdDocumentsOf(...lifecycles: CreatedDocumentLifecycle[]): UploadedDocument[] {
+    return lifecycles.filter(l => l.created).map(uploadedDocumentOf);
+}
+
 function toDocumentUploadResult(
     lifecycle: CreatedDocumentLifecycle,
     storageType: StorageType,
@@ -30,12 +44,8 @@ function toDocumentUploadResult(
         jobId: lifecycle.jobId ?? "",
         eventIds: lifecycle.eventIds,
         storageType,
-        document: {
-            id: lifecycle.document.id,
-            title: lifecycle.document.title,
-            url: lifecycle.document.url,
-            category: lifecycle.document.category,
-        },
+        document: uploadedDocumentOf(lifecycle),
+        createdDocuments: createdDocumentsOf(lifecycle),
         resolvedDocumentUrl,
     };
 }
@@ -69,16 +79,25 @@ export interface DocumentUploadParams {
     ocrMetadata?: Record<string, unknown>;
 }
 
+export interface UploadedDocument {
+    id: number;
+    title: string;
+    url: string;
+    category: string;
+}
+
 export interface DocumentUploadResult {
     jobId: string;
     eventIds: string[];
     storageType: StorageType;
-    document: {
-        id: number;
-        title: string;
-        url: string;
-        category: string;
-    };
+    document: UploadedDocument;
+    /**
+     * Every document row this call inserted — empty when a retried creation
+     * key converged on rows an earlier call made. An audio upload inserts two
+     * (the recording and its transcript). Routes acting for a person give
+     * these their ADR-014 defaults (`~/server/workspace/added-documents`).
+     */
+    createdDocuments: UploadedDocument[];
     resolvedDocumentUrl: string;
 }
 
@@ -238,6 +257,7 @@ export async function processDocumentUpload({
                 ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),
                 jobId: transcriptLifecycle.jobId ?? "",
                 eventIds: transcriptLifecycle.eventIds,
+                createdDocuments: createdDocumentsOf(audioLifecycle, transcriptLifecycle),
             };
         } catch (error) {
             console.error(

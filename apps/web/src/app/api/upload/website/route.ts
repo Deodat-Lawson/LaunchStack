@@ -23,6 +23,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { recordUpload } from "~/server/workspace/added-documents";
 
 const WebsiteUploadSchema = z.object({
     url: z.string().url("A valid URL is required"),
@@ -249,6 +250,7 @@ export async function POST(request: Request) {
                 originalFilename: filename,
                 isWebsite: true,
             });
+            await recordUpload(ctx.data, uploadResult);
 
             console.log(
                 `[WebsiteUpload] Pipeline triggered: jobId=${uploadResult.jobId}, docId=${uploadResult.document.id}`

@@ -82,16 +82,16 @@ beforeEach(() => {
             },
         },
     };
-    global.fetch = jest.fn((input: RequestInfo | URL, init?: RequestInit) => {
-        const url = String(input);
+    // The page always calls fetch with a string URL and a JSON string body.
+    global.fetch = jest.fn((url: string, init?: { method?: string; body?: string }) => {
         calls.push({
             url,
             method: init?.method ?? "GET",
-            body: init?.body ? (JSON.parse(String(init.body)) as unknown) : undefined,
+            body: init?.body ? (JSON.parse(init.body) as unknown) : undefined,
         });
         const route = routes[url.split("?")[0]!];
         return route ? respond(route.status, route.body) : respond(404, {});
-    }) as typeof fetch;
+    }) as unknown as typeof fetch;
 });
 
 const link = { kind: "link" as const, code: "abcd1234" };

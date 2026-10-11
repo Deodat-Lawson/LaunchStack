@@ -275,13 +275,13 @@ export function PostRow({ post, onChange }: { post: BrandPost; onChange: () => v
         <PostActions post={post} onChange={onChange}>
             <button
                 type="button"
-                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[72px_22px_minmax(0,1fr)_auto] grid w-full grid-cols-[132px_minmax(0,170px)_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
+                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[72px_22px_minmax(0,1fr)_auto] grid w-full grid-cols-[164px_minmax(0,170px)_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
             >
                 <span className="text-ink-2 text-[13px] tabular-nums">
                     <span className="@max-md:hidden">{dayAndMonth(at)} · </span>
                     {timeOfDay(at)}
                 </span>
-                <span className="@max-md:hidden min-w-0">
+                <span className="@max-md:hidden flex min-w-0 items-center">
                     <ChannelLabel
                         channel={post.channel}
                         platform={post.platform}

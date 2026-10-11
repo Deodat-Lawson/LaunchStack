@@ -578,9 +578,12 @@ export function AccountsScreen() {
     const linkedin = networks.find(n => n.platform === "linkedin");
     const hasLinkedIn = connections.some(c => c.platform === "linkedin");
     const hasBluesky = connections.some(c => c.platform === "bluesky");
-    // One primary action: connecting LinkedIn while there is none, else Bluesky.
-    const linkedInPrimary = Boolean(linkedin?.available && !hasLinkedIn && canManage);
-    const blueskyPrimary = !linkedInPrimary && !hasBluesky;
+    // One primary action. With nothing connected the empty state carries it;
+    // otherwise it is connecting LinkedIn while there is none, else Bluesky.
+    const empty = channels.length === 0;
+    const linkedInAvailable = Boolean(linkedin?.available && canManage);
+    const linkedInPrimary = linkedInAvailable && !hasLinkedIn && !empty;
+    const blueskyPrimary = !linkedInPrimary && !hasBluesky && !(empty && linkedInAvailable);
 
     const pendingChannels = pendingDisconnect
         ? channels.filter(c => c.connectionId === pendingDisconnect.id)
@@ -625,7 +628,11 @@ export function AccountsScreen() {
                                             <a href={LINKEDIN_CONNECT_HREF}>Connect LinkedIn</a>
                                         </Button>
                                     ) : (
-                                        <Button size="sm" onClick={() => focusBluesky()}>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => focusBluesky()}
+                                        >
                                             Connect Bluesky
                                         </Button>
                                     )

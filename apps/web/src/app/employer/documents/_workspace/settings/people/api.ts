@@ -84,6 +84,10 @@ export interface Group {
     description: string | null;
     memberCount: number;
     members: { id: number; name: string; email: string }[];
+    /** Auth subject id of whoever created it; they manage it (ADR-014). */
+    createdBy?: string;
+    /** May the viewer rename, delete, or change who is in it. */
+    canManage?: boolean;
 }
 
 export interface Role {
@@ -205,7 +209,8 @@ export function errorMessage(err: unknown, fallback = "Something went wrong."): 
     return fallback;
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+/** One call to a `/api/workspace/*` route: JSON in, JSON out, `ApiError` on failure. */
+export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     const headers: Record<string, string> = { ...(init.headers as Record<string, string>) };
     if (init.body !== undefined && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";

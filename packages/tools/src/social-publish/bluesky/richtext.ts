@@ -53,7 +53,7 @@ export function detectFacets(text: string): Facet[] {
             const before = uri;
             uri = uri.replace(TRAILING_PUNCTUATION, "");
             // A closing bracket belongs to the sentence unless the URL opened one.
-            if (uri.endsWith(")") && !uri.includes("(")) uri = uri.slice(0, -1);
+            if (uri.endsWith(")") && count(uri, ")") > count(uri, "(")) uri = uri.slice(0, -1);
             if (uri === before) break;
         }
         if (!/^https?:\/\/[^/?#\s]+\.[^/?#\s]+/i.test(uri)) continue;
@@ -74,6 +74,10 @@ export function detectFacets(text: string): Facet[] {
     }
 
     return facets.sort((a, b) => a.index.byteStart - b.index.byteStart);
+}
+
+function count(text: string, ch: string): number {
+    return text.split(ch).length - 1;
 }
 
 function overlaps(

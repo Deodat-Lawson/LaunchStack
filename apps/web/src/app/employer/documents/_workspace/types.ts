@@ -233,6 +233,8 @@ export interface EphemeralAttachment {
 
 export interface ThreadMessage {
     forkedFromSessionId?: string;
+    /** Someone else's question, carried over by "Continue in a new chat" (auth subject id). */
+    askedBy?: string;
     intent?: "queued" | "interrupt";
     id?: string;
     createdAt?: string;

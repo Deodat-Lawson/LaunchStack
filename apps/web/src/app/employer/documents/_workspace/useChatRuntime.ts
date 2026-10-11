@@ -76,6 +76,7 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
         agentKey: message.agent?.key ?? null,
         metadata: {
             forkedFromSessionId: message.forkedFromSessionId,
+            askedBy: message.askedBy,
             intent: message.intent,
             id: message.id,
             status: message.status === "streaming" ? undefined : message.status,

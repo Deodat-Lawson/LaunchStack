@@ -7,12 +7,13 @@
 
 import { and, desc, eq, inArray, lt } from "drizzle-orm";
 
-import { document } from "@launchstack/store/schema";
+import { category, document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { workspaceActivity, type WorkspaceActivityRow } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { listFolders } from "~/server/folders";
 import { readableSessionIds } from "~/server/sessions/access";
 
 import type { Executor } from "./db-types";
@@ -106,8 +107,21 @@ export async function filterVisibleActivity(
         ),
     ];
     const chatIds = rows.filter(r => r.targetType === "chat" && r.targetId).map(r => r.targetId!);
+    const folderIds = [
+        ...new Set(
+            rows
+                .filter(r => r.targetType === "folder" && r.targetId && /^\d+$/.test(r.targetId))
+                .map(r => Number(r.targetId))
+        ),
+    ];
+    // Rows written before folder ids were recorded carry only a path.
+    const needsPaths = rows.some(
+        r =>
+            (r.targetType === "folder" && !(r.targetId && /^\d+$/.test(r.targetId))) ||
+            (r.targetType === "document" && typeof r.detail?.from === "string")
+    );
 
-    const [visibleDocs, existingDocs, readableChats] = await Promise.all([
+    const [visibleDocs, existingDocs, readableChats, folderRows, folderPaths] = await Promise.all([
         docIds.length === 0
             ? Promise.resolve([])
             : db
@@ -123,24 +137,45 @@ export async function filterVisibleActivity(
                   .from(document)
                   .where(and(eq(document.companyId, ctx.companyId), inArray(document.id, docIds))),
         readableSessionIds(ctx, chatIds),
+        folderIds.length === 0
+            ? Promise.resolve([])
+            : db
+                  .select({ id: category.id, name: category.name })
+                  .from(category)
+                  .where(
+                      and(eq(category.companyId, ctx.companyId), inArray(category.id, folderIds))
+                  ),
+        needsPaths
+            ? listFolders(ctx.companyId).then(list => new Set(list.map(f => f.path)))
+            : Promise.resolve(new Set<string>()),
     ]);
     const visible = new Set(visibleDocs.map(d => Number(d.id)));
     const exists = new Set(existingDocs.map(d => Number(d.id)));
+    const folderNow = new Map(folderRows.map(f => [Number(f.id), f.name]));
+    /** A path the reader can see today: it still exists, and their scope allows it. */
+    const seesPath = (path: string) => folderPaths.has(path) && scopeAllowsCategory(scope, path);
+    const mine = (row: ActivityEntry) => row.actorUserId === ctx.authUserId;
 
-    return rows.filter(row => {
+    const kept = rows.filter(row => {
         switch (row.targetType) {
             case "document": {
                 const id = Number(row.targetId);
                 if (exists.has(id)) return visible.has(id);
-                return row.actorUserId === ctx.authUserId || row.detail?.wasWorkspace === true;
+                return mine(row) || row.detail?.wasWorkspace === true;
             }
-            case "folder":
-                // A deleted folder has no access rows left to check: teammates
-                // see it only if it was workspace-wide when it went.
-                if (row.verb === "deleted") {
-                    return row.actorUserId === ctx.authUserId || row.detail?.wasWorkspace === true;
+            case "folder": {
+                // Gone: teammates see it only if it was workspace-wide when it went.
+                if (row.verb === "deleted") return mine(row) || row.detail?.wasWorkspace === true;
+                // By id: the folder as it is now, under whatever name it has now.
+                if (row.targetId && /^\d+$/.test(row.targetId)) {
+                    const now = folderNow.get(Number(row.targetId));
+                    return now !== undefined ? scopeAllowsCategory(scope, now) : mine(row);
                 }
-                return row.targetPath ? scopeAllowsCategory(scope, row.targetPath) : false;
+                // An older row with only a path: only while that path still
+                // exists and is visible — a renamed or deleted private folder's
+                // old path must not read as "unrestricted".
+                return mine(row) || (row.targetPath !== null && seesPath(row.targetPath));
+            }
             case "chat":
                 return row.targetId ? readableChats.has(row.targetId) : false;
             case "group":
@@ -148,6 +183,18 @@ export async function filterVisibleActivity(
             default:
                 return false;
         }
+    });
+
+    // A file the reader can open may have come from a folder they can't: keep
+    // its old path out of what they read.
+    return kept.map(row => {
+        if (row.targetType !== "document" || mine(row) || typeof row.detail?.from !== "string") {
+            return row;
+        }
+        if (seesPath(row.detail.from)) return row;
+        const detail = { ...row.detail };
+        delete detail.from;
+        return { ...row, detail };
     });
 }
 

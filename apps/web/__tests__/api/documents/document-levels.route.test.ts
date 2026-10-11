@@ -200,7 +200,7 @@ describe("PATCH /api/documents/[id] — rename and move", () => {
         expect(applyDocumentMoveDefaults).toHaveBeenCalledWith(
             expect.anything(),
             { companyId: BigInt(5), userPk: BigInt(7), authUserId: "ada" },
-            { id: 12, toCategory: "Marketing" }
+            { id: 12, fromCategory: "Sales", toCategory: "Marketing" }
         );
         expect(body.move).toEqual({ from: "Sales", to: "Marketing", access: "inherits_folder" });
         expect(recordActivity).toHaveBeenCalledWith(

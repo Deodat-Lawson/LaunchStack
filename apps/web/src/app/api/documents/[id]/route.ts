@@ -137,6 +137,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
                 if (moving) {
                     moveAccess = await applyDocumentMoveDefaults(tx, owner, {
                         id: parsed.documentId,
+                        fromCategory: fromFolder,
                         toCategory: toFolder,
                     });
                     await recordActivity(tx, {

@@ -150,11 +150,13 @@ export function filterMessagesForReader(
             }
         }
         const send = message.metadata?.send;
-        if (send?.refs) {
-            next.metadata = {
-                ...message.metadata,
-                send: { ...send, refs: send.refs.filter(ref => visible.has(ref)) },
-            };
+        if (send) {
+            // `threadRefs` are the owner's other chats: ids a reader has no
+            // business holding, whatever they point at.
+            const readerSend = { ...send };
+            delete readerSend.threadRefs;
+            if (send.refs) readerSend.refs = send.refs.filter(ref => visible.has(ref));
+            next.metadata = { ...message.metadata, send: readerSend };
         }
         return next;
     });

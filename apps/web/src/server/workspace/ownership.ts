@@ -18,7 +18,7 @@
  * the default and the change in one transaction.
  */
 
-import { and, eq, inArray, like, or } from "drizzle-orm";
+import { and, eq, inArray, like, notInArray, or } from "drizzle-orm";
 
 import { category, document } from "@launchstack/store/schema";
 import {
@@ -29,16 +29,17 @@ import {
     userCompanyMemberships,
     workspaceSessionGrants,
 } from "~/server/db/schema";
-import { grantLevelAtLeast, isGrantLevel } from "~/lib/authz/permissions";
+import { grantLevelAtLeast, grantLevelRank, isGrantLevel } from "~/lib/authz/permissions";
 import {
     FOLDER_SEPARATOR,
     folderParentPath,
+    isFolderOrDescendant,
     isUnfiledFolder,
     normalizeFolderPath,
 } from "~/lib/folders/path";
 
 import type { Executor } from "./db-types";
-import { loadDocumentFacts, loadFolderLineage } from "./item-access";
+import { loadDocumentFacts, loadFolderLineage, type GrantFact } from "./item-access";
 
 /** The person a default is applied for. */
 export interface OwnerRef {
@@ -181,6 +182,7 @@ export async function applyDocumentCreationDefaults(
     owner: OwnerRef,
     docs: readonly { id: number | bigint; category: string | null }[]
 ): Promise<void> {
+    const newDocIds = docs.map(d => Number(d.id));
     for (const doc of docs) {
         const id = BigInt(doc.id);
         await grantDocumentManage(executor, owner, id);
@@ -194,7 +196,66 @@ export async function applyDocumentCreationDefaults(
                     updatedBy: owner.authUserId,
                 })
                 .onConflictDoNothing();
+        } else {
+            await claimNewFolderPath(executor, owner, normalizeFolderPath(doc.category), newDocIds);
         }
+    }
+}
+
+/**
+ * A file added to a folder path that did not exist until now (only the API
+ * can do that; the UI creates the folder first) brings that folder into
+ * being: it gets the same defaults as one created by hand — rows for the path
+ * and its ancestors, a manage grant for its creator, and a private top level —
+ * instead of quietly appearing to the whole workspace.
+ */
+async function claimNewFolderPath(
+    executor: Executor,
+    owner: OwnerRef,
+    path: string,
+    justAddedDocIds: readonly number[]
+): Promise<void> {
+    const segments = path.split(FOLDER_SEPARATOR);
+    const top = segments[0]!;
+    const known = await folderIdsByPath(executor, owner.companyId, [top]);
+    if (known.has(top)) return;
+    const [other] = await executor
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, owner.companyId),
+                or(eq(document.category, top), like(document.category, descendantPattern(top))),
+                notInArray(document.id, [...justAddedDocIds])
+            )
+        )
+        .limit(1);
+    if (other) return; // An older implied folder: it keeps the audience it had.
+
+    const lineage = segments.map((_, i) => segments.slice(0, i + 1).join(FOLDER_SEPARATOR));
+    const present = await folderIdsByPath(executor, owner.companyId, lineage);
+    const missing = lineage.filter(p => !present.has(p));
+    if (missing.length > 0) {
+        await executor
+            .insert(category)
+            .values(missing.map(name => ({ name, companyId: owner.companyId })));
+    }
+    const ids = await folderIdsByPath(executor, owner.companyId, lineage);
+    for (const p of lineage) {
+        const id = ids.get(p);
+        if (id !== undefined) await grantFolderManage(executor, owner, id);
+    }
+    const topId = ids.get(top);
+    if (topId !== undefined) {
+        await executor
+            .insert(folderSettings)
+            .values({
+                categoryId: topId,
+                companyId: owner.companyId,
+                visibility: "restricted",
+                updatedBy: owner.authUserId,
+            })
+            .onConflictDoNothing();
     }
 }
 
@@ -212,19 +273,125 @@ function onlyPrincipalIs(
 }
 
 /**
- * What a document's own audience becomes when it changes folder. Call after
- * the category is updated, in the same transaction. Returns what happened so
- * the caller can tell the person ("now visible to everyone in Sales").
+ * The restriction an item at `fromPath` inherits from a restricted folder
+ * that `toPath` is not under — what a move would silently drop. Null when
+ * nothing restricts it, or when the destination is still inside the folder
+ * that does. `includeSelf` is false for a folder (its own restriction moves
+ * with its row) and true for a document (its folder is part of what it leaves).
+ */
+export async function restrictionLeftBehind(
+    companyId: bigint,
+    fromPath: string,
+    toPath: string,
+    includeSelf: boolean,
+    executor?: Executor
+): Promise<{ governingPath: string; grants: GrantFact[] } | null> {
+    const lineage = await loadFolderLineage(companyId, fromPath, executor);
+    const index = lineage.findIndex(f => f.restricted);
+    if (index === -1) return null;
+    if (!includeSelf && index === 0) return null;
+    const governing = lineage[index]!;
+    if (isFolderOrDescendant(normalizeFolderPath(toPath), governing.path)) return null;
+    return {
+        governingPath: governing.path,
+        grants: lineage.slice(0, index + 1).flatMap(f => f.grants),
+    };
+}
+
+/** One grant per principal, at the highest level any of them gives. */
+function mergeGrants(grants: readonly GrantFact[]): GrantFact[] {
+    const best = new Map<string, GrantFact>();
+    for (const g of grants) {
+        if (!isGrantLevel(g.level)) continue;
+        const key = `${g.principalType}:${g.principalId}`;
+        const current = best.get(key);
+        if (
+            !current ||
+            (isGrantLevel(current.level) && grantLevelRank(g.level) > grantLevelRank(current.level))
+        ) {
+            best.set(key, g);
+        }
+    }
+    return [...best.values()];
+}
+
+/**
+ * A move never widens who can see something by accident (ADR-014). When a
+ * folder leaves the restricted folder it inherited its audience from, it takes
+ * that audience with it as its own — unless that audience was only the person
+ * moving it and it is being filed into another folder, in which case it joins
+ * the destination's audience (Drive's rule: you filed your own thing there).
+ * A folder moved to the top level always stays restricted.
+ */
+export async function carryFolderRestrictionOnMove(
+    executor: Executor,
+    owner: OwnerRef,
+    rawFrom: string,
+    rawTo: string
+): Promise<"kept_audience" | "inherits_folder" | "unchanged"> {
+    const from = normalizeFolderPath(rawFrom);
+    const to = normalizeFolderPath(rawTo);
+    const left = await restrictionLeftBehind(owner.companyId, from, to, false, executor);
+    if (!left) return "unchanged";
+    const toTopLevel = folderParentPath(to) === null;
+    if (!toTopLevel && onlyPrincipalIs(left.grants, owner.userPk.toString()))
+        return "inherits_folder";
+
+    // The folder may exist only through its documents; give it a row to hang
+    // the restriction on. Its id survives the rename that follows.
+    let id = (await folderIdsByPath(executor, owner.companyId, [from])).get(from);
+    if (id === undefined) {
+        await executor.insert(category).values({ name: from, companyId: owner.companyId });
+        id = (await folderIdsByPath(executor, owner.companyId, [from])).get(from);
+    }
+    if (id === undefined) return "unchanged";
+    await executor
+        .insert(folderSettings)
+        .values({
+            categoryId: id,
+            companyId: owner.companyId,
+            visibility: "restricted",
+            updatedBy: owner.authUserId,
+        })
+        .onConflictDoNothing();
+    for (const grant of mergeGrants(left.grants)) {
+        await executor
+            .insert(folderGrants)
+            .values({
+                companyId: owner.companyId,
+                categoryId: id,
+                principalType: grant.principalType,
+                principalId: grant.principalId,
+                level: grant.level,
+                grantedBy: grant.grantedBy ?? owner.authUserId,
+            })
+            .onConflictDoNothing();
+    }
+    return "kept_audience";
+}
+
+/**
+ * What a document's own audience becomes when it changes folder (ADR-014).
+ * Call after the category is updated, in the same transaction. Returns what
+ * happened so the caller can tell the person.
+ *
+ * - Its own audience, if only its mover, joins the destination folder's
+ *   audience; any other own audience stays.
+ * - An audience it inherited from a restricted folder it is leaving goes with
+ *   it — unless that audience was only the mover and it is filed into a
+ *   folder, where it joins that folder's audience.
+ * - Sent to Unfiled with nothing restricting it, it becomes private to the mover.
  */
 export async function applyDocumentMoveDefaults(
     executor: Executor,
     owner: OwnerRef,
-    doc: { id: number | bigint; toCategory: string }
-): Promise<"inherits_folder" | "made_private" | "unchanged"> {
+    doc: { id: number | bigint; fromCategory: string; toCategory: string }
+): Promise<"inherits_folder" | "made_private" | "kept_audience" | "unchanged"> {
     const id = BigInt(doc.id);
-    const facts = await loadDocumentFacts(Number(id));
-    if (isUnfiledFolder(doc.toCategory)) {
-        if (facts.restricted) return "unchanged";
+    const me = owner.userPk.toString();
+    const toUnfiled = isUnfiledFolder(doc.toCategory);
+    const facts = await loadDocumentFacts(Number(id), executor);
+    const makePrivate = async () => {
         await grantDocumentManage(executor, owner, id);
         await executor
             .insert(documentSettings)
@@ -235,11 +402,59 @@ export async function applyDocumentMoveDefaults(
                 updatedBy: owner.authUserId,
             })
             .onConflictDoNothing();
-        return "made_private";
+    };
+
+    if (facts.restricted) {
+        if (!toUnfiled && onlyPrincipalIs(facts.grants, me)) {
+            await executor.delete(documentSettings).where(eq(documentSettings.documentId, id));
+            return "inherits_folder";
+        }
+        return "unchanged";
     }
-    if (facts.restricted && onlyPrincipalIs(facts.grants, owner.userPk.toString())) {
-        await executor.delete(documentSettings).where(eq(documentSettings.documentId, id));
-        return "inherits_folder";
+
+    const left = await restrictionLeftBehind(
+        owner.companyId,
+        doc.fromCategory,
+        doc.toCategory,
+        true,
+        executor
+    );
+    if (left) {
+        if (onlyPrincipalIs(left.grants, me)) {
+            if (toUnfiled) {
+                await makePrivate();
+                return "made_private";
+            }
+            return "inherits_folder";
+        }
+        await executor
+            .insert(documentSettings)
+            .values({
+                documentId: id,
+                companyId: owner.companyId,
+                restricted: true,
+                updatedBy: owner.authUserId,
+            })
+            .onConflictDoNothing();
+        for (const grant of mergeGrants(left.grants)) {
+            await executor
+                .insert(documentGrants)
+                .values({
+                    companyId: owner.companyId,
+                    documentId: id,
+                    principalType: grant.principalType,
+                    principalId: grant.principalId,
+                    level: grant.level,
+                    grantedBy: grant.grantedBy ?? owner.authUserId,
+                })
+                .onConflictDoNothing();
+        }
+        return "kept_audience";
+    }
+
+    if (toUnfiled) {
+        await makePrivate();
+        return "made_private";
     }
     return "unchanged";
 }
@@ -294,7 +509,7 @@ export async function carryRestrictionsBeforeFolderDelete(
         const folderPath = normalizeFolderPath(doc.category);
         let lineage = lineageCache.get(folderPath);
         if (!lineage) {
-            lineage = await loadFolderLineage(owner.companyId, folderPath);
+            lineage = await loadFolderLineage(owner.companyId, folderPath, executor);
             lineageCache.set(folderPath, lineage);
         }
         const governing = lineage.find(f => f.restricted);

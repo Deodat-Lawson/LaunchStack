@@ -20,7 +20,9 @@ jest.mock("~/lib/require-workspace-context", () =>
 );
 
 jest.mock("~/server/folders", () => ({
+    FolderError: jest.requireActual("~/server/folders").FolderError,
     listVisibleFolders: jest.fn(),
+    listFolders: jest.fn().mockResolvedValue([]),
     createFolder: jest.fn(),
     renameFolder: jest.fn(),
     deleteFolder: jest.fn(),
@@ -37,6 +39,7 @@ jest.mock("~/server/workspace/item-access", () => ({
 }));
 jest.mock("~/server/workspace/ownership", () => ({
     applyFolderCreationDefaults: jest.fn().mockResolvedValue(undefined),
+    carryFolderRestrictionOnMove: jest.fn().mockResolvedValue("unchanged"),
     carryRestrictionsBeforeFolderDelete: jest.fn().mockResolvedValue(0),
 }));
 jest.mock("~/server/workspace/activity", () => ({
@@ -47,7 +50,10 @@ jest.mock("~/server/workspace/activity", () => ({
 jest.mock("~/lib/authz/audit", () => ({
     recordAuditEvent: jest.fn().mockResolvedValue(undefined),
 }));
-jest.mock("~/server/db", () => ({ db: {} }));
+// folder-actions looks a created folder's id up for the feed; no row here.
+jest.mock("~/server/db", () => ({
+    db: { select: () => ({ from: () => ({ where: () => ({ limit: async () => [] }) }) }) },
+}));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<NextResponse>) =>

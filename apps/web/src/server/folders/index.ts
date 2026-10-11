@@ -260,7 +260,13 @@ export interface RenameFolderResult {
 export async function renameFolder(
     companyId: bigint,
     rawFrom: string,
-    rawTo: string
+    rawTo: string,
+    /**
+     * Runs first in the same transaction, with the normalized paths — ADR-014
+     * uses it so a folder leaving the restricted folder it inherited from takes
+     * that audience with it instead of becoming visible to everyone.
+     */
+    beforeMove?: (tx: Tx, from: string, to: string) => Promise<void>
 ): Promise<RenameFolderResult> {
     const from = normalizeFolderPath(rawFrom);
     const to = normalizeFolderPath(rawTo);
@@ -289,6 +295,7 @@ export async function renameFolder(
     }
 
     return db.transaction(async tx => {
+        if (beforeMove) await beforeMove(tx, from, to);
         const parent = folderParentPath(to);
         if (parent) await ensureFolderRows(tx, companyId, parent);
 

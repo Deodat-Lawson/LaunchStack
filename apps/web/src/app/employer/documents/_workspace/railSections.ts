@@ -165,7 +165,7 @@ export function showsAudienceGlyph(
 
 /** What a move did to a file's audience, in words for a toast; null when nothing changed. */
 export function moveOutcomeMessage(
-    outcome: "inherits_folder" | "made_private" | "unchanged" | null | undefined,
+    outcome: "inherits_folder" | "made_private" | "kept_audience" | "unchanged" | null | undefined,
     folderLeaf: string
 ): string | null {
     switch (outcome) {
@@ -173,6 +173,8 @@ export function moveOutcomeMessage(
             return `Now visible to everyone who can open ${folderLeaf}`;
         case "made_private":
             return "Now private to you";
+        case "kept_audience":
+            return "Still visible only to the people who could see it before";
         default:
             return null;
     }

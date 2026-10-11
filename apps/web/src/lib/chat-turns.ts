@@ -30,6 +30,11 @@ export interface ChatSendResult {
 
 export interface ChatTurnMetadata {
     forkedFromSessionId?: string;
+    /**
+     * A question someone else asked, carried into your copy when you continued
+     * their chat (auth subject id) — so it reads as theirs, not "You".
+     */
+    askedBy?: string;
     intent?: "queued" | "interrupt";
     id?: string;
     status?: "complete" | "stopped" | "error";

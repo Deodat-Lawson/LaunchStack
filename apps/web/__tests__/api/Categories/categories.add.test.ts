@@ -1,13 +1,17 @@
+/**
+ * The legacy folder create runs through ADR-014's folder rules
+ * (`createFolderAs`): Members may create folders (they start private), a
+ * Viewer may not.
+ */
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
 import { POST } from "~/app/api/Categories/AddCategories/route";
-import { validateRequestBody } from "~/lib/validation";
-import { recordAuditEvent } from "~/lib/authz/audit";
+import { FolderError } from "~/server/folders";
+import { createFolderAs } from "~/server/workspace/folder-actions";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
-
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<
@@ -16,35 +20,18 @@ jest.mock("~/lib/require-workspace-context", () =>
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
 
-jest.mock("~/lib/validation", () => ({
-    validateRequestBody: jest.fn(),
-}));
-
-jest.mock("~/lib/authz/audit", () => ({
-    recordAuditEvent: jest.fn().mockResolvedValue(undefined),
-}));
-
-const mockInsert = jest.fn();
-const mockTx = { insert: (...args: unknown[]) => mockInsert(...args) };
+jest.mock("~/server/workspace/folder-actions", () => ({ createFolderAs: jest.fn() }));
 
 jest.mock("~/server/db/index", () => ({
     db: {
-        transaction: (fn: (tx: unknown) => Promise<unknown>) => fn(mockTx),
+        select: () => ({ from: () => ({ where: () => ({ limit: async () => [{ id: 41 }] }) }) }),
     },
 }));
 
-function mockCtx(role: string, companyId = BigInt(1)) {
+function mockCtx(role: string) {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: makeWorkspaceContext({ role, companyId, authUserId: "user-123" }),
-    });
-}
-
-function mockInsertReturning(rows: { id: number }[]) {
-    mockInsert.mockReturnValue({
-        values: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue(rows),
-        }),
+        data: makeWorkspaceContext({ role, companyId: BigInt(1), authUserId: "user-123" }),
     });
 }
 
@@ -56,93 +43,58 @@ function request(body: unknown) {
     });
 }
 
+beforeEach(() => jest.clearAllMocks());
+
 describe("POST /api/Categories/AddCategories", () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it("allows an owner to create a category and records the audit event", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { CategoryName: "Test Category" },
-        });
-        mockCtx("owner");
-        mockInsertReturning([{ id: 1 }]);
-
-        const response = await POST(request({ CategoryName: "Test Category" }));
-        const json = await response.json();
-
-        expect(response.status).toBe(200);
-        expect(json.success).toBe(true);
-        expect(json.name).toBe("Test Category");
-        expect(recordAuditEvent).toHaveBeenCalledWith(
-            mockTx,
-            expect.objectContaining({
-                companyId: BigInt(1),
-                actorUserId: "user-123",
-                action: "folder.created",
-                targetType: "folder",
-                targetId: 1,
-                detail: { name: "Test Category" },
-            })
-        );
-    });
-
-    it("allows an admin to create a category", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { CategoryName: "Admin Category" },
-        });
-        mockCtx("admin");
-        mockInsertReturning([{ id: 2 }]);
-
-        const response = await POST(request({ CategoryName: "Admin Category" }));
-
-        expect(response.status).toBe(200);
-    });
-
-    it("returns 403 for a member (no folders.manage)", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { CategoryName: "Test Category" },
-        });
+    it("lets a member create a folder, with ADR-014's defaults", async () => {
         mockCtx("member");
+        jest.mocked(createFolderAs).mockResolvedValue({
+            path: "Plans",
+            created: ["Plans"],
+            renamedTo: null,
+        });
 
-        const response = await POST(request({ CategoryName: "Test Category" }));
-        const json = await response.json();
+        const res = await POST(request({ CategoryName: "Plans" }));
 
-        expect(response.status).toBe(403);
-        expect(json.permission).toBe("folders.manage");
-        expect(mockInsert).not.toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        expect(createFolderAs).toHaveBeenCalledWith(expect.anything(), "Plans");
+        await expect(res.json()).resolves.toEqual({ success: true, id: { id: 41 }, name: "Plans" });
     });
 
-    it("returns 401 when workspace context fails", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: true,
-            data: { CategoryName: "Test Category" },
-        });
-        mockRequireWorkspaceContext.mockResolvedValue({
-            success: false,
-            response: new Response(JSON.stringify({ error: "Unauthorized" }), {
-                status: 401,
-            }),
+    it("reports the name actually used when the asked one was taken", async () => {
+        mockCtx("member");
+        jest.mocked(createFolderAs).mockResolvedValue({
+            path: "Notes (2)",
+            created: ["Notes (2)"],
+            renamedTo: "Notes (2)",
         });
 
-        const response = await POST(request({ CategoryName: "Test Category" }));
+        const res = await POST(request({ CategoryName: "Notes" }));
 
-        expect(response.status).toBe(401);
+        await expect(res.json()).resolves.toMatchObject({ name: "Notes (2)" });
     });
 
-    it("returns validation error when CategoryName is invalid", async () => {
-        (validateRequestBody as jest.Mock).mockResolvedValue({
-            success: false,
-            response: new Response(JSON.stringify({ error: "Category name is required" }), {
-                status: 400,
-            }),
-        });
+    it("passes a refusal through with its status", async () => {
+        mockCtx("member");
+        jest.mocked(createFolderAs).mockRejectedValue(
+            new FolderError("forbidden", 403, "You do not have edit access to that folder.")
+        );
 
-        const response = await POST(request({ CategoryName: "" }));
+        const res = await POST(request({ CategoryName: "Board/Sub" }));
 
-        expect(response.status).toBe(400);
+        expect(res.status).toBe(403);
+    });
+
+    it("refuses a viewer outright", async () => {
+        mockCtx("viewer");
+        const res = await POST(request({ CategoryName: "Plans" }));
+        expect(res.status).toBe(403);
+        expect(createFolderAs).not.toHaveBeenCalled();
+    });
+
+    it("rejects an empty name", async () => {
+        mockCtx("member");
+        const res = await POST(request({ CategoryName: "" }));
+        expect(res.status).toBe(400);
     });
 });

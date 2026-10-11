@@ -273,23 +273,25 @@ interface Gate {
 
 const GATES: readonly Gate[] = [
     // folders.manage
+    // Folder writes take documents.upload since ADR-014 (Members make their
+    // own folders); per-folder rights are checked in folder-actions.
     {
         route: "POST /api/Categories/AddCategories",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () =>
             addCategory(json("/api/Categories/AddCategories", "POST", { CategoryName: "X" })),
     },
     {
         route: "DELETE /api/Categories/DeleteCategories",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () => deleteCategory(json("/api/Categories/DeleteCategories", "DELETE", { id: 1 })),
     },
     {
         route: "PATCH /api/Categories/[id]",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () =>
             renameCategory(json("/api/Categories/1", "PATCH", { name: "Y" }), params({ id: "1" })),
     },

@@ -86,6 +86,32 @@ describe("filterMessagesForReader", () => {
         expect(messages[0]!.hiddenCitations).toBeUndefined();
     });
 
+    it("never hands a reader the owner's other chats (threadRefs)", () => {
+        const { messages } = filterMessagesForReader(
+            [
+                message({
+                    role: "user",
+                    text: "Like we said in the other chat",
+                    metadata: {
+                        send: {
+                            text: "Like we said",
+                            refs: [],
+                            attachments: [],
+                            webSearch: false,
+                            thinking: false,
+                            agentKey: null,
+                            threadRefs: ["owner-private-chat"],
+                        },
+                    },
+                }),
+            ],
+            visible
+        );
+
+        expect(messages[0]!.metadata?.send?.threadRefs).toBeUndefined();
+        expect(JSON.stringify(messages)).not.toContain("owner-private-chat");
+    });
+
     it("collects every source id a transcript mentions", () => {
         const ids = sourceIdsIn(
             [

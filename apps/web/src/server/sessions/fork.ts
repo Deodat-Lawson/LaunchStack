@@ -69,23 +69,33 @@ export async function forkSession(
             forkedFromSessionId: source.id,
         });
 
-        const rows = transcript.messages.map((message, index) => ({
-            sessionId: id,
-            seq: index,
-            role: message.role,
-            text: message.text,
-            refs: message.refs ?? null,
-            citations: message.citations ?? null,
-            attachments: message.attachments ?? null,
-            model: message.model ?? null,
-            tokens: message.tokens ?? null,
-            agentKey: message.agentKey ?? null,
-            metadata:
-                index === 0
-                    ? { ...(message.metadata ?? {}), forkedFromSessionId: source.id }
-                    : (message.metadata ?? null),
-            createdAt: new Date(message.createdAt),
-        }));
+        const rows = transcript.messages.map((message, index) => {
+            // A question someone else asked stays theirs in your copy.
+            const askedBy =
+                message.role === "user"
+                    ? (message.metadata?.askedBy ?? source.userId)
+                    : message.metadata?.askedBy;
+            const metadata = {
+                ...(message.metadata ?? {}),
+                ...(index === 0 ? { forkedFromSessionId: source.id } : {}),
+            };
+            if (askedBy && askedBy !== ctx.authUserId) metadata.askedBy = askedBy;
+            else delete metadata.askedBy;
+            return {
+                sessionId: id,
+                seq: index,
+                role: message.role,
+                text: message.text,
+                refs: message.refs ?? null,
+                citations: message.citations ?? null,
+                attachments: message.attachments ?? null,
+                model: message.model ?? null,
+                tokens: message.tokens ?? null,
+                agentKey: message.agentKey ?? null,
+                metadata: Object.keys(metadata).length > 0 ? metadata : null,
+                createdAt: new Date(message.createdAt),
+            };
+        });
         for (let offset = 0; offset < rows.length; offset += INSERT_CHUNK) {
             await tx
                 .insert(workspaceSessionMessages)

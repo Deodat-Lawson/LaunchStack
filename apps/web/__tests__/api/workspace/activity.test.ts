@@ -128,9 +128,16 @@ describe("GET /api/workspace/activity", () => {
                 targetPath: null,
             }),
         ]);
-        // listActivity: visible documents, then documents that still exist;
-        // then the feed's own existence check.
-        fakeDb.onSelect(document, [{ id: 42 }], [{ id: 42 }], [{ id: 42 }]);
+        // listActivity: the folder tree (rows with only a path are checked
+        // against it; it starts first), visible documents, documents that
+        // still exist; then the feed's own existence check.
+        fakeDb.onSelect(
+            document,
+            [{ path: "Finance/Q3", count: 1 }],
+            [{ id: 42 }],
+            [{ id: 42 }],
+            [{ id: 42 }]
+        );
         fakeDb.onSelect(category, [{ name: "Finance/Q3" }]);
         fakeDb.onSelect(workspaceGroups, [{ id: 9 }]);
         readable.mockImplementation(async () => new Set(["s1"]));
@@ -142,7 +149,8 @@ describe("GET /api/workspace/activity", () => {
             [6, true],
             [5, false], // deleted
             [4, true],
-            [3, false], // the folder is not there any more
+            // Row 3 is gone: someone else's path-only row for a folder that no
+            // longer exists might name a private folder (QA, ADR-014).
             [2, true],
             [1, true],
         ]);

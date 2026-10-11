@@ -1334,6 +1334,25 @@ export function AskPanel({
                 : undefined,
         [ownerId, ownerLook]
     );
+    // In a chat you continued from someone else's, their questions keep
+    // their name ("Continue in a new chat" stamps `askedBy`).
+    const carriedAskerIds = useMemo(
+        () => [...new Set(thread.map(m => m.askedBy).filter((id): id is string => Boolean(id)))],
+        [thread]
+    );
+    const carriedLooks = usePeople(carriedAskerIds);
+    const askerFor = useCallback(
+        (m: ThreadMessage) => {
+            if (!m.askedBy) return asker;
+            const look = carriedLooks[m.askedBy];
+            return {
+                name: look?.displayName ?? "Teammate",
+                email: look?.email,
+                avatarUrl: look?.avatarUrl ?? null,
+            };
+        },
+        [asker, carriedLooks]
+    );
     const readOnlyRef = useRef(Boolean(readOnly));
     readOnlyRef.current = Boolean(readOnly);
     const noComposer = useCallback(() => {
@@ -1733,7 +1752,7 @@ export function AskPanel({
                                         active={isSending}
                                         agents={agents}
                                         readOnly={Boolean(readOnly)}
-                                        asker={asker}
+                                        asker={askerFor(m)}
                                     />
                                 );
                             })}
@@ -1783,7 +1802,7 @@ export function AskPanel({
                             <button
                                 type="button"
                                 key={msg.id ?? i}
-                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? (asker?.name ?? "You") : "Assistant"} — ${msg.text.slice(0, 80)}`}
+                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? (askerFor(msg)?.name ?? "You") : "Assistant"} — ${msg.text.slice(0, 80)}`}
                                 aria-current={i === currentIndex ? "true" : undefined}
                                 title={msg.text.slice(0, 160)}
                                 className="my-1 h-2 min-w-2 rounded-full focus-visible:outline"

@@ -43,6 +43,8 @@ import {
 } from "~/lib/authz/permissions";
 import { folderAncestors, normalizeFolderPath } from "~/lib/folders/path";
 
+import type { Executor } from "./db-types";
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -279,10 +281,15 @@ export async function accessSubject(actor: AccessActor): Promise<AccessSubject> 
 }
 
 /** Facts for a folder and every ancestor, deepest first. Two indexed reads. */
-export async function loadFolderLineage(companyId: bigint, rawPath: string): Promise<FolderFact[]> {
+export async function loadFolderLineage(
+    companyId: bigint,
+    rawPath: string,
+    /** Read through this transaction when called inside one. */
+    executor: Executor = db
+): Promise<FolderFact[]> {
     const path = normalizeFolderPath(rawPath);
     const paths = [path, ...folderAncestors(path).reverse()];
-    const rows = await db
+    const rows = await executor
         .select({ id: category.id, name: category.name })
         .from(category)
         .where(and(eq(category.companyId, companyId), inArray(category.name, paths)));
@@ -297,7 +304,7 @@ export async function loadFolderLineage(companyId: bigint, rawPath: string): Pro
         ids.length === 0
             ? [[], []]
             : await Promise.all([
-                  db
+                  executor
                       .select({ categoryId: folderSettings.categoryId })
                       .from(folderSettings)
                       .where(
@@ -306,7 +313,7 @@ export async function loadFolderLineage(companyId: bigint, rawPath: string): Pro
                               eq(folderSettings.visibility, "restricted")
                           )
                       ),
-                  db
+                  executor
                       .select({
                           categoryId: folderGrants.categoryId,
                           principalType: folderGrants.principalType,
@@ -331,16 +338,18 @@ export async function loadFolderLineage(companyId: bigint, rawPath: string): Pro
 }
 
 export async function loadDocumentFacts(
-    documentId: number
+    documentId: number,
+    /** Read through this transaction when called inside one. */
+    executor: Executor = db
 ): Promise<{ restricted: boolean; grants: GrantFact[] }> {
     const key = BigInt(documentId);
     const [settings, grants] = await Promise.all([
-        db
+        executor
             .select({ restricted: documentSettings.restricted })
             .from(documentSettings)
             .where(eq(documentSettings.documentId, key))
             .limit(1),
-        db
+        executor
             .select({
                 principalType: documentGrants.principalType,
                 principalId: documentGrants.principalId,

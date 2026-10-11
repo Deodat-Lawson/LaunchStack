@@ -487,6 +487,9 @@ describeDb("shared chats (integration)", () => {
                 "Five million.",
             ]);
             expect(copied?.messages[0]?.metadata?.forkedFromSessionId).toBe(chat);
+            // Ada's question stays Ada's in Bea's copy; the answer has no asker.
+            expect(copied?.messages[0]?.metadata?.askedBy).toBe("auth_ada");
+            expect(copied?.messages[1]?.metadata?.askedBy).toBeUndefined();
             expect(copied?.messages[1]?.citations).toEqual([
                 { sourceId: dPublic, snippet: "handbook says five" },
                 { sourceId: mOpen, snippet: "open map" },

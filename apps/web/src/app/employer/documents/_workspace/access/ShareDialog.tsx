@@ -430,7 +430,7 @@ export function ShareDialog({
                 if (!next && !saving) onClose();
             }}
         >
-            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+            <DialogContent className="max-h-[90vh] grid-cols-[minmax(0,1fr)] overflow-y-auto sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="truncate pr-6">
                         Share “{target?.name ?? ""}”
@@ -576,12 +576,17 @@ export function ShareDialog({
                                                 )}
                                             </span>
                                             {g.principalType !== "user" && (
-                                                <Badge variant="secondary">
+                                                // The icon already says group or role; on a phone the
+                                                // name needs the room more than the label does.
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="max-sm:hidden"
+                                                >
                                                     {TYPE_LABEL[g.principalType]}
                                                 </Badge>
                                             )}
                                             {isOwner && g.level === "manage" ? (
-                                                <span className="text-ink-3 w-[118px] text-right text-[12px]">
+                                                <span className="text-ink-3 w-[104px] shrink-0 text-right text-[12px] sm:w-[118px]">
                                                     Owner
                                                 </span>
                                             ) : (
@@ -597,7 +602,7 @@ export function ShareDialog({
                                                 >
                                                     <SelectTrigger
                                                         size="sm"
-                                                        className="w-[118px]"
+                                                        className="w-[104px] shrink-0 sm:w-[118px]"
                                                         aria-label={`Access level for ${name}`}
                                                     >
                                                         <SelectValue />

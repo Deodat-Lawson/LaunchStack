@@ -62,6 +62,11 @@ CREATE INDEX "workspace_notifications_recipient_created_idx" ON "pdr_ai_v2_works
 CREATE UNIQUE INDEX "workspace_session_grants_session_principal_uq" ON "pdr_ai_v2_workspace_session_grants" USING btree ("session_id","principal_type","principal_id");--> statement-breakpoint
 CREATE INDEX "workspace_session_grants_company_principal_idx" ON "pdr_ai_v2_workspace_session_grants" USING btree ("company_id","principal_type","principal_id");--> statement-breakpoint
 CREATE INDEX "workspace_session_user_state_company_user_idx" ON "pdr_ai_v2_workspace_session_user_state" USING btree ("company_id","user_id");--> statement-breakpoint
+-- launchstack:allow-dml — these statements must ship atomically with the code
+-- that removes the admin read bypass (ADR-014): as a separate backfill, every
+-- Owner and Admin would lose sight of every restricted folder between deploy
+-- and the backfill run. They are idempotent and no-ops on a clean database.
+--
 -- ADR-014 data: Owners and Admins no longer read past restrictions. Everything
 -- restricted before this change keeps its admin audience through an explicit
 -- manage grant to the owner and admin roles and to every custom role holding

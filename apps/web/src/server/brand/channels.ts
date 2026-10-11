@@ -410,6 +410,13 @@ export async function setChannelEnabled(
     return row ?? null;
 }
 
+/** What every channel of a refused sign-in says, whichever channel hit it first. */
+export function refusedSignInReason(platform: string): string {
+    const label =
+        platform === "linkedin" ? "LinkedIn" : platform === "bluesky" ? "Bluesky" : platform;
+    return `${label} no longer accepts this sign-in. Reconnect it under Accounts.`;
+}
+
 /** The network refused a connection's credential: every channel it brings needs a reconnect. */
 export async function markConnectionReconnect(connectionId: number, reason: string): Promise<void> {
     await db

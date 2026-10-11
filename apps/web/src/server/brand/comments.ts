@@ -19,6 +19,7 @@ import {
     ChannelUnavailableError,
     getChannelRow,
     markConnectionReconnect,
+    refusedSignInReason,
     resolveChannelTarget,
 } from "./channels";
 import { linkedInApiOptions } from "./linkedin-options";
@@ -231,14 +232,9 @@ export async function replyToComment(args: {
             "authFailed" in error &&
             error.authFailed === true;
         if (authFailed) {
-            await markConnectionReconnect(
-                channel.connectionId,
-                `The network refused the sign-in for ${channel.name}. Reconnect it under Accounts.`
-            );
-            throw new BrandCommentError(
-                `The network refused the sign-in for ${channel.name}. Reconnect it under Accounts.`,
-                409
-            );
+            const reason = refusedSignInReason(channel.platform);
+            await markConnectionReconnect(channel.connectionId, reason);
+            throw new BrandCommentError(reason, 409);
         }
         throw new BrandCommentError(
             `The reply did not go through: ${error instanceof Error ? error.message : String(error)}`,

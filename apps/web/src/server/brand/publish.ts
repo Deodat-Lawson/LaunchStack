@@ -14,6 +14,7 @@ import {
     getChannelRow,
     markConnectionReconnect,
     parseDeploymentChannelId,
+    refusedSignInReason,
     resolveChannelTarget,
 } from "./channels";
 import { BrandMediaError, loadPublishMedia } from "./media";
@@ -72,7 +73,7 @@ export const publishForWorkspace: PublishFn = async post => {
         media,
     });
     if (!result.success && result.authFailed) {
-        const reason = `${channel.platform === "linkedin" ? "LinkedIn" : "Bluesky"} refused the sign-in for ${channel.name}. Reconnect it under Accounts.`;
+        const reason = refusedSignInReason(channel.platform);
         await markConnectionReconnect(channel.connectionId, reason);
         return { ...result, error: `${reason} (${result.error ?? "authorization failed"})` };
     }

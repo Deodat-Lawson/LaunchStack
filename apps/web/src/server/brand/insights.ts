@@ -64,8 +64,11 @@ export async function getBrandInsights(
 
     const channels = await listBrandChannels(companyId);
     const byId = new Map<string, InsightsChannelView>();
+    // A row per channel that reports numbers. Posts on the others (a Page the
+    // member only content-admins, a profile, the deployment's account) still
+    // count in totals.posts and list with metrics null, never as zeros.
     for (const c of channels) {
-        if (!c.capabilities.analytics && c.kind !== "deployment") continue;
+        if (!c.capabilities.analytics) continue;
         byId.set(c.id, {
             channelId: c.id,
             platform: c.platform,
@@ -87,33 +90,17 @@ export async function getBrandInsights(
     let engagementCount = 0;
     for (const post of posts) {
         totals.posts += 1;
-        const key = post.channel?.id ?? `deployment:${post.platform}`;
-        let row = byId.get(key);
-        if (!row) {
-            row = {
-                channelId: key,
-                platform: post.platform,
-                kind: post.channel?.kind ?? "deployment",
-                name: post.channel?.name ?? "Disconnected channel",
-                avatarUrl: post.channel?.avatarUrl ?? null,
-                followers: null,
-                posts: 0,
-                impressions: 0,
-                reactions: 0,
-                comments: 0,
-                shares: 0,
-                clicks: 0,
-            };
-            byId.set(key, row);
-        }
-        row.posts += 1;
+        const row = post.channel ? byId.get(post.channel.id) : undefined;
+        if (row) row.posts += 1;
         const m = post.metrics;
         if (!m) continue;
-        row.impressions += m.impressions ?? 0;
-        row.reactions += m.reactions;
-        row.comments += m.comments;
-        row.shares += m.shares;
-        row.clicks += m.clicks ?? 0;
+        if (row) {
+            row.impressions += m.impressions ?? 0;
+            row.reactions += m.reactions;
+            row.comments += m.comments;
+            row.shares += m.shares;
+            row.clicks += m.clicks ?? 0;
+        }
         totals.impressions += m.impressions ?? 0;
         totals.reactions += m.reactions;
         totals.comments += m.comments;
@@ -134,9 +121,7 @@ export async function getBrandInsights(
             ...totals,
             engagement: engagementCount > 0 ? engagementSum / engagementCount : null,
         },
-        channels: [...byId.values()].filter(
-            c => c.posts > 0 || c.followers !== null || c.kind !== "deployment"
-        ),
+        channels: [...byId.values()],
         posts,
         syncedAt: synced.length > 0 ? new Date(Math.max(...synced)) : null,
     };

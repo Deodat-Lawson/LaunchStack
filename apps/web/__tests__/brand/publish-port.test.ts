@@ -26,6 +26,8 @@ jest.mock("~/server/brand/channels", () => {
         getChannelRow: (...a: unknown[]) => mockGetChannelRow(...a),
         resolveChannelTarget: (...a: unknown[]) => mockResolveChannelTarget(...a),
         markConnectionReconnect: (...a: unknown[]) => mockMarkConnectionReconnect(...a),
+        refusedSignInReason: () =>
+            "LinkedIn no longer accepts this sign-in. Reconnect it under Accounts.",
         parseDeploymentChannelId: (id: string) =>
             id.startsWith("deployment:") ? id.slice("deployment:".length) : null,
     };
@@ -125,7 +127,8 @@ it("a refused credential marks the connection's channels reconnect and does not 
         9,
         expect.stringContaining("Reconnect")
     );
-    expect(result.error).toContain("LaunchStack");
+    expect(result.error).toContain("no longer accepts this sign-in");
+    expect(result.error).toContain("REVOKED_ACCESS_TOKEN");
 });
 
 it("an expired sign-in fails before calling the network", async () => {

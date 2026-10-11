@@ -18,6 +18,7 @@ import {
     type BrandPostRow,
 } from "@launchstack/pipelines/schema";
 import {
+    BlueskyApiError,
     getBlueskyPostStats,
     getBlueskyProfile,
     listBlueskyReplies,
@@ -37,6 +38,7 @@ import {
     ChannelUnavailableError,
     listChannelRows,
     markConnectionReconnect,
+    refusedSignInReason,
     resolveChannelTarget,
 } from "./channels";
 import { linkedInApiOptions } from "./linkedin-options";
@@ -313,10 +315,13 @@ async function syncChannel(
             .where(eq(brandChannels.id, channel.id));
         return { ...out, error: null };
     } catch (error) {
-        if (error instanceof LinkedInApiError && error.authFailed) {
+        const authFailed =
+            (error instanceof LinkedInApiError || error instanceof BlueskyApiError) &&
+            error.authFailed;
+        if (authFailed) {
             await markConnectionReconnect(
                 channel.connectionId,
-                `LinkedIn refused the sign-in for ${channel.name}. Reconnect it under Accounts.`
+                refusedSignInReason(channel.platform)
             );
         }
         const message =

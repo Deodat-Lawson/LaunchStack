@@ -258,7 +258,7 @@ interface MessageProps {
     /** Puts a quote of this text in the composer. */
     onQuote: (text: string) => void;
     /** Puts this text in the composer to change and resend. */
-    onEdit: (text: string) => void;
+    onEdit: (text: string, passages?: ChatPassage[]) => void;
     onCite?: (text: string) => void;
     onEditMessage?: (index: number) => void;
     onRetryMessage?: (index: number) => void;
@@ -280,7 +280,7 @@ interface MessageProps {
  */
 function QuestionProse({ text }: { text: string }) {
     const parts = text.split(
-        /(\[Source message\]\(#chat-message-[\w-]+\)|\[(?:Source|Conversation|Folder): [^\]\n]{1,300}\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\))/g
+        /(\[Source message\]\(#chat-message-[\w-]+\)|\[(?:Source|Conversation|Folder): (?:\\.|[^\]\\\n]){1,300}\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\))/g
     );
     return (
         <>
@@ -294,13 +294,14 @@ function QuestionProse({ text }: { text: string }) {
                     );
                 // The rich editor writes its context chips into the message
                 // as machine links; they read as the name they stand for.
-                const context = /^\[(?:Source|Conversation|Folder): ([^\]]+)\]\(#launchstack-/.exec(
-                    part
-                );
+                const context =
+                    /^\[(?:Source|Conversation|Folder): ((?:\\.|[^\]\\\n]){1,300})\]\(#launchstack-/.exec(
+                        part
+                    );
                 if (context)
                     return (
                         <span key={i} className="text-brand font-medium">
-                            {context[1]}
+                            {(context[1] ?? "").replace(/\\(.)/g, "$1")}
                         </span>
                     );
                 return <React.Fragment key={i}>{part}</React.Fragment>;
@@ -559,9 +560,9 @@ const Message = React.memo(function Message({
                       buildQuestionMenuItems(msg, {
                           onCopy: text => void copyWithToast(text),
                           onQuote,
-                          // Same path as the toolbar's edit, which brings the
-                          // turn's passages back with its text.
-                          onEdit: text => (onEditMessage ? onEditMessage(index) : onEdit(text)),
+                          // Refills the composer and changes nothing in the
+                          // chat; the passages come back with the text.
+                          onEdit: text => onEdit(text, passages),
                       }),
               }
             : {
@@ -1338,8 +1339,14 @@ export function AskPanel({
         });
     }, []);
     const edit = useCallback(
-        (text: string) =>
-            setSeed({ text, mode: "replace", nonce: Date.now(), draftKey: seedScope.current }),
+        (text: string, passages?: ChatPassage[]) =>
+            setSeed({
+                text,
+                mode: "replace",
+                nonce: Date.now(),
+                draftKey: seedScope.current,
+                ...(passages?.length ? { passages } : {}),
+            }),
         []
     );
 

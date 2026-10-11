@@ -145,8 +145,8 @@ export function deriveSessionTitle(
         .replace(QUOTE_MARKER, "")
         // Rich-editor context chips arrive as machine links; keep their names.
         .replace(
-            /\[(?:Source|Conversation|Folder): ([^\]\n]{1,300})\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\)/g,
-            "$1"
+            /\[(?:Source|Conversation|Folder): ((?:\\.|[^\]\\\n]){1,300})\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\)/g,
+            (_link, name: string) => name.replace(/\\(.)/g, "$1")
         )
         .replace(/\s+/g, " ")
         .trim();

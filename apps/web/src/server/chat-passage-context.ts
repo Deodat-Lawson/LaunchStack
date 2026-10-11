@@ -117,8 +117,11 @@ export function splitLegacyQuote(question: string): { question: string; quoted: 
     const kept: string[] = [];
     let block: string[] = [];
     let blanks: string[] = [];
+    // Line by line, not spread: a message can hold ~120,000 lines, and
+    // spreading that many arguments overflows the call stack.
     const release = () => {
-        kept.push(...block, ...blanks);
+        for (const line of block) kept.push(line);
+        for (const line of blanks) kept.push(line);
         block = [];
         blanks = [];
     };

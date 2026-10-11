@@ -98,6 +98,9 @@ describe("deriveSessionTitle", () => {
                 "[Source: 2312.06648v3.pdf](#launchstack-source-d17) How large are the recall gains?"
             )
         ).toBe("2312.06648v3.pdf How large are the recall gains?");
+        expect(
+            deriveSessionTitle("[Source: Q3 \\[draft\\].pdf](#launchstack-source-d9) Totals?")
+        ).toBe("Q3 [draft].pdf Totals?");
     });
 
     it("falls back to the quoted words when nothing else was sent", () => {

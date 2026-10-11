@@ -114,6 +114,17 @@ describe("a question asked about a passage", () => {
         expect(screen.getByText("Dense X Retrieval.pdf")).toBeInTheDocument();
     });
 
+    it("reads a source name with escaped brackets as the name", () => {
+        renderPanel([
+            {
+                role: "user",
+                text: "[Source: Q3 \\[draft\\].pdf](#launchstack-source-d9) Totals?",
+            },
+        ]);
+        expect(document.body.textContent).not.toContain("#launchstack-source-d9");
+        expect(screen.getByText("Q3 [draft].pdf")).toBeInTheDocument();
+    });
+
     it("renders an old pasted-quote turn without its machine link", () => {
         renderPanel([
             {

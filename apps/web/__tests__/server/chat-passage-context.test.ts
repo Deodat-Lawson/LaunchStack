@@ -83,6 +83,11 @@ describe("retrievalQueryFor", () => {
         expect(query).not.toContain("launchstack-quoted-context");
     });
 
+    it("survives a marker, one quote line and a hundred thousand blank lines", () => {
+        const hostile = `[Quoted context](#launchstack-quoted-context)\n>\n${"\n".repeat(110_000)}why?`;
+        expect(() => retrievalQueryFor(hostile, [])).not.toThrow();
+    });
+
     it("parses a maximum-size message of quote lines in linear time", () => {
         const hostile = `${">\n".repeat(60_000)}[Quoted context](#launchstack-quoted-context)`;
         const started = performance.now();

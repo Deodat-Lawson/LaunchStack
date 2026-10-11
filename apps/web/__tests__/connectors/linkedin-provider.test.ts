@@ -39,7 +39,10 @@ function recordingFetch(status: number, body: unknown): { fetch: FetchLike; call
     return {
         calls,
         fetch: async (url, init) => {
-            calls.push({ url, body: new URLSearchParams(String(init?.body ?? "")) });
+            calls.push({
+                url,
+                body: new URLSearchParams(typeof init?.body === "string" ? init.body : ""),
+            });
             return new Response(JSON.stringify(body), {
                 status,
                 headers: { "Content-Type": "application/json" },

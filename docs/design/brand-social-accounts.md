@@ -31,9 +31,13 @@ sync (worker cron, every 6 h; "Sync now") ──▶ numbers, followers, comments
             Analytics                           Engagement ──reply──▶ /rest/socialActions
 ```
 
-- **Who may do what.** Connecting, disconnecting and switching channels speak
-  for the company on a network, so they need `connectors.manage` (owners and
-  admins). Any member composes, schedules, publishes and replies.
+- **Who may do what.** Anyone in the workspace reads the calendar, numbers
+  and comments. Composing, scheduling, publishing, replying and Sync now
+  speak as the company, so they need `social.publish` (Members and up; never
+  a Viewer or Guest). Connecting, disconnecting and switching channels
+  decide which accounts speak for it, so they need `connectors.manage`
+  (owners and admins). The campaign generator's Publish button goes through
+  the same channels and permission.
 - **Scopes decide features.** LinkedIn grants scopes per developer app, so
   Brand never assumes a product: posting as a Page needs
   `w_organization_social`, listing Pages needs `rw_organization_admin` or
@@ -43,8 +47,11 @@ sync (worker cron, every 6 h; "Sync now") ──▶ numbers, followers, comments
   `apps/web/src/server/brand/capabilities.ts`.
 - **A refused credential never retries.** A 401 from the network marks every
   channel of that connection "Reconnect" and fails the post with the reason.
-  Rate limits and outages put the post back on the calendar 2, 8 and 32
-  minutes later before failing it.
+  Rate limits and outages before the post is created (image upload, token
+  refresh, a 429) put it back on the calendar 2, 8 and 32 minutes later
+  before failing it. A 5xx or dropped connection on the create call itself
+  never retries: neither network takes an idempotency key, so the post may
+  exist, and the failure says to check the Page first.
 - **Read-back budget.** A Community Management app on LinkedIn's development
   tier gets 500 calls a day. One Page costs about 2 + (posts in the last 30
   days, up to 20) calls per sync, so the six-hourly cron plus a few "Sync now"

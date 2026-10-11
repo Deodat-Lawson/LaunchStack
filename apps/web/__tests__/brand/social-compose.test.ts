@@ -107,6 +107,16 @@ describe("channelMediaNote", () => {
     it("a text-only channel never complains about WebP", () => {
         expect(channelMediaNote(textOnly, [webp])?.tone).toBe("note");
     });
+
+    it("blocks an image Bluesky would refuse for size, before it fails at publish time", () => {
+        const big = { mimeType: "image/jpeg", size: 2_400_000 };
+        expect(channelMediaNote(bluesky, [png, big])).toEqual({
+            tone: "error",
+            text: "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.",
+        });
+        expect(channelMediaNote(linkedin, [big])).toBeNull();
+        expect(channelMediaNote(bluesky, [{ mimeType: "image/png", size: 900_000 }])).toBeNull();
+    });
 });
 
 describe("limits", () => {

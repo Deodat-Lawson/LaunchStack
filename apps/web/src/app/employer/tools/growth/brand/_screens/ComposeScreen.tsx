@@ -149,7 +149,7 @@ function ChannelPreview({
     const over = overLimit(channel, body);
     const note = channelMediaNote(
         channel,
-        attachments.map(a => ({ mimeType: a.file.type }))
+        attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
     );
     const fold = channel.platform === "linkedin" && !over && !expanded ? previewText(text) : null;
     const images = channel.capabilities.images
@@ -305,7 +305,7 @@ export function ComposeScreen() {
         c =>
             channelMediaNote(
                 c,
-                attachments.map(a => ({ mimeType: a.file.type }))
+                attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
             )?.tone === "error"
     );
     const canSave =

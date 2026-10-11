@@ -57,14 +57,18 @@ export function fileSize(bytes: number): string {
     return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+/** Bluesky refuses an image blob over this many bytes. */
+export const BLUESKY_MAX_IMAGE_BYTES = 1_000_000;
+
 /**
  * What a channel will do with the attached images. A channel without image
- * support posts the text only (a note); LinkedIn refuses WebP (an error,
- * which blocks sending).
+ * support posts the text only (a note); LinkedIn refuses WebP and Bluesky
+ * refuses images over about 1 MB (errors, which block sending — better here
+ * than as a failed post at its scheduled time).
  */
 export function channelMediaNote(
     channel: Pick<BrandChannel, "name" | "platform" | "capabilities">,
-    media: ReadonlyArray<{ mimeType: string }>
+    media: ReadonlyArray<{ mimeType: string; size?: number }>
 ): { tone: "note" | "error"; text: string } | null {
     if (media.length === 0) return null;
     if (!channel.capabilities.images)
@@ -73,6 +77,11 @@ export function channelMediaNote(
         return {
             tone: "error",
             text: "LinkedIn does not take WebP images. Use JPEG, PNG or GIF.",
+        };
+    if (channel.platform === "bluesky" && media.some(m => (m.size ?? 0) > BLUESKY_MAX_IMAGE_BYTES))
+        return {
+            tone: "error",
+            text: "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.",
         };
     return null;
 }

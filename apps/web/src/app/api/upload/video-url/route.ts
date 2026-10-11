@@ -7,6 +7,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { processVideoUrlUpload } from "~/server/services/document-upload";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { recordUpload } from "~/server/workspace/added-documents";
 import { assertPublicHttpUrl, UrlGuardError } from "~/server/security/url-guard";
 
 const VideoUrlSchema = z.object({
@@ -55,6 +56,7 @@ export async function POST(request: Request) {
                 title,
                 preferredProvider,
             });
+            await recordUpload(ctx.data, result);
 
             return NextResponse.json(
                 {

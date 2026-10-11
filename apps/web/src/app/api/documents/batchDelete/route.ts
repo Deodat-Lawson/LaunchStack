@@ -6,9 +6,10 @@
  *
  * Deletes N documents and all their related data in a single transaction.
  * Atomic across the entire batch — if any doc fails to delete, nothing is
- * removed. Enforces the same `documents.delete` permission and read scope as
- * the single-doc delete, and rejects the request if any docId isn't a
- * document the caller can see in their workspace.
+ * removed. Enforces the same `documents.delete` permission, read scope and
+ * per-file edit level (ADR-014) as the single-doc delete, and rejects the
+ * request if any docId isn't a document the caller can see, or can see but
+ * not change.
  */
 
 import { NextResponse } from "next/server";
@@ -25,6 +26,14 @@ import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { recordActivity } from "~/server/workspace/activity";
+import {
+    accessSubject,
+    documentAccess,
+    levelAtLeast,
+    type ItemAccess,
+} from "~/server/workspace/item-access";
 
 const BatchDeleteSchema = z.object({
     docIds: z
@@ -66,6 +75,25 @@ export async function DELETE(request: Request) {
                 );
             }
 
+            // Every one must be a file the caller may change; one view-only
+            // file refuses the batch rather than deleting the rest.
+            const subject = await accessSubject(ctx.data);
+            const access = new Map<number, ItemAccess>();
+            for (const row of rows) {
+                const item = await documentAccess(
+                    ctx.data,
+                    { id: Number(row.id), category: row.category },
+                    subject
+                );
+                if (!levelAtLeast(item.level, "edit")) {
+                    return NextResponse.json(
+                        { success: false, error: DOCUMENT_EDIT_DENIED },
+                        { status: 403 }
+                    );
+                }
+                access.set(Number(row.id), item);
+            }
+
             await db.transaction(async tx => {
                 for (const row of rows) {
                     await deleteDocumentCore(tx, Number(row.id));
@@ -76,6 +104,18 @@ export async function DELETE(request: Request) {
                         targetType: "document",
                         targetId: row.id,
                         detail: { title: row.title, category: row.category },
+                    });
+                    await recordActivity(tx, {
+                        companyId: ctx.data.companyId,
+                        actorUserId: ctx.data.authUserId,
+                        verb: "deleted",
+                        targetType: "document",
+                        targetId: row.id,
+                        targetLabel: row.title,
+                        targetPath: row.category,
+                        detail: {
+                            wasWorkspace: access.get(Number(row.id))?.audience === "workspace",
+                        },
                     });
                 }
             });

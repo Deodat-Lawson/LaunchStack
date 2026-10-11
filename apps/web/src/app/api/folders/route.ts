@@ -2,8 +2,10 @@
  * /api/folders — the workspace's folder tree.
  *
  * GET    any member with `documents.read`: every folder path the caller may
- *        see, with its direct source count, whether it is persisted, and
- *        whether it (or an ancestor) is restricted.
+ *        see, with its direct source count, whether it is persisted, whether
+ *        it (or an ancestor) is restricted, and the caller's `access` — its
+ *        audience (workspace / shared / private), whether it inherits it,
+ *        and whether they may edit or manage it.
  * POST   { path }            create a folder (and any missing ancestors).
  * PATCH  { path, newPath }   rename or move a folder and everything in it.
  * DELETE { path }            remove a folder and its subfolders; sources move up.
@@ -33,6 +35,7 @@ import { createFolder, deleteFolder, listVisibleFolders, renameFolder } from "~/
 import { folderLeafName, folderParentPath, normalizeFolderPath } from "~/lib/folders/path";
 import { recordActivity } from "~/server/workspace/activity";
 import {
+    accessSubject,
     canEditFolderPath,
     canManageFolderPath,
     folderAccess,
@@ -61,8 +64,13 @@ export async function GET(request: Request) {
         try {
             const ctx = await requireWorkspacePermission("documents.read");
             if (!ctx.success) return ctx.response;
-            const scope = await ctx.data.documentScope();
-            return ok({ folders: await listVisibleFolders(ctx.data.companyId, scope) });
+            const [scope, subject] = await Promise.all([
+                ctx.data.documentScope(),
+                accessSubject(ctx.data),
+            ]);
+            return ok({
+                folders: await listVisibleFolders(ctx.data.companyId, scope, subject),
+            });
         } catch (error) {
             return handleRouteError("folders.list", error);
         }

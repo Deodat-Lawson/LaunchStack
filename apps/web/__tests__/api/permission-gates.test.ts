@@ -225,6 +225,8 @@ import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
 import { POST as uploadGithubRepo } from "~/app/api/upload/github-repo/route";
 import { POST as commitBatch } from "~/app/api/upload/batches/[batchId]/commit/route";
+import { POST as publishMindmap } from "~/app/api/mindmaps/[id]/publish/route";
+import { POST as publishExplanation } from "~/app/api/repo-explainer/publish/route";
 import { DELETE as disconnectGoogle } from "~/app/api/connectors/google/route";
 import { GET as startGoogleOAuth } from "~/app/api/connectors/google/oauth/start/route";
 import { GET as googleOAuthCallback } from "~/app/api/connectors/google/oauth/callback/route";
@@ -415,6 +417,20 @@ const GATES: readonly Gate[] = [
             uploadDocument(
                 json("/api/uploadDocument", "POST", { documentUrl: "u", documentName: "n" })
             ),
+    },
+    // Publishing a map or an explanation adds a file to the library (ADR-014).
+    {
+        route: "POST /api/mindmaps/[id]/publish",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            publishMindmap(json("/api/mindmaps/1/publish", "POST", {}), params({ id: "1" })),
+    },
+    {
+        route: "POST /api/repo-explainer/publish",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => publishExplanation(json("/api/repo-explainer/publish", "POST", { jobId: "j" })),
     },
     {
         route: "POST /api/upload/website",

@@ -9,7 +9,12 @@ import {
 } from "~/app/employer/documents/_workspace/FolderDialog";
 import { RenameSourceDialog } from "~/app/employer/documents/_workspace/RenameSourceDialog";
 import { SourceRail } from "~/app/employer/documents/_workspace/SourceRail";
-import type { WorkspaceFolder, WorkspaceSource } from "~/app/employer/documents/_workspace/types";
+import type {
+    ItemAccessView,
+    SourceAudience,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "~/app/employer/documents/_workspace/types";
 import type { HistoryEntry } from "~/lib/workspace-history";
 import {
     UNFILED_FOLDER,
@@ -22,7 +27,28 @@ import {
     replaceFolderPrefix,
 } from "~/lib/folders/path";
 
-function src(id: string, title: string, folder: string, added: string): WorkspaceSource {
+/** ADR-014 access as the server reports it, from the viewer's (Ada's) point of view. */
+function access(audience: SourceAudience, extra: Partial<ItemAccessView> = {}): ItemAccessView {
+    return {
+        audience,
+        ownAudience: audience !== "workspace",
+        principalCount: audience === "private" ? 1 : audience === "shared" ? 3 : 0,
+        canEdit: true,
+        canManage: true,
+        ...extra,
+    };
+}
+
+const ADA = { authUserId: "ada", name: "Ada Lovelace" };
+const BOB = { authUserId: "bob", name: "Bob Ito" };
+
+function src(
+    id: string,
+    title: string,
+    folder: string,
+    added: string,
+    extra: Partial<WorkspaceSource> = {}
+): WorkspaceSource {
     return {
         id,
         documentId: Number(id.slice(1)),
@@ -33,24 +59,78 @@ function src(id: string, title: string, folder: string, added: string): Workspac
         folder,
         tags: [],
         domain: "General",
+        ...extra,
     };
 }
 
+const inherits = (audience: SourceAudience, extra: Partial<ItemAccessView> = {}) =>
+    access(audience, { ownAudience: false, ...extra });
+
 const FIXTURE_SOURCES: WorkspaceSource[] = [
-    src("d1", "Globex MSA 2026.pdf", "Contracts/2026", "2h ago"),
-    src("d2", "Initech SOW.docx", "Contracts/2026", "yesterday"),
-    src("d3", "NDA template.docx", "Contracts", "last week"),
-    src("d4", "PickBot v3 field spec.docx", "Engineering/Specs", "3 days ago"),
-    src("d5", "Employee handbook.pdf", "HR", "2 weeks ago"),
+    src("d1", "Globex MSA 2026.pdf", "Contracts/2026", "2h ago", {
+        access: inherits("workspace"),
+        addedBy: BOB,
+    }),
+    src("d2", "Initech SOW.docx", "Contracts/2026", "yesterday", {
+        access: inherits("workspace"),
+        addedBy: ADA,
+    }),
+    src("d3", "NDA template.docx", "Contracts", "last week", {
+        // Shared with fewer people than its folder: a badge, not a new section.
+        access: access("shared", { principalCount: 2 }),
+        addedBy: ADA,
+    }),
+    src("d4", "PickBot v3 field spec.docx", "Engineering/Specs", "3 days ago", {
+        access: inherits("workspace"),
+        addedBy: BOB,
+    }),
+    src("d5", "Board pack Q3.pdf", "Board", "2 weeks ago", {
+        access: inherits("shared", { canEdit: false, canManage: false }),
+        addedBy: BOB,
+    }),
+    src("d6", "Fundraise model.xlsx", "Fundraise", "4 days ago", {
+        access: inherits("private"),
+        addedBy: ADA,
+    }),
     src(
-        "d6",
+        "d7",
         "Claude Code (global) — projects/-Users-aurea-Pensieve-new-frontend/memory/reference_design_bundles.md",
         "Unfiled",
-        "just now"
+        "just now",
+        { access: access("private"), addedBy: ADA }
     ),
+    src("d8", "Pricing ideas.md", "Unfiled", "1h ago", {
+        access: access("shared", { principalCount: 2 }),
+        addedBy: ADA,
+    }),
+    src("d9", "Company one-pager.pdf", "Unfiled", "last month", {
+        // From before private-by-default: everyone's, under Workspace › Unfiled.
+        access: access("workspace"),
+        addedBy: BOB,
+    }),
 ];
 
-const FIXTURE_FOLDER_PATHS = ["Contracts/Archive", "Engineering/Specs", "HR"];
+const FIXTURE_FOLDER_PATHS = [
+    "Contracts/Archive",
+    "Engineering/Specs",
+    "HR",
+    "Board",
+    "Fundraise",
+    "Fundraise/Drafts",
+    "Contracts/Partner terms",
+];
+
+/** Each folder's access for Ada; anything not listed is workspace-wide and hers to edit. */
+const FIXTURE_FOLDER_ACCESS: Record<string, ItemAccessView> = {
+    Contracts: access("workspace", { canManage: false }),
+    "Contracts/2026": inherits("workspace", { canManage: false }),
+    "Contracts/Archive": inherits("workspace", { canManage: false }),
+    // A subfolder only Ada sees, inside a workspace-wide folder: a badge.
+    "Contracts/Partner terms": access("private"),
+    Board: access("shared", { canEdit: false, canManage: false }),
+    Fundraise: access("private"),
+    "Fundraise/Drafts": inherits("private"),
+};
 
 /** Minutes ago, as the feed's ISO timestamp. */
 function ago(minutes: number): string {
@@ -149,6 +229,7 @@ export function SourceRailPreview() {
                 id: `f-${name}`,
                 name,
                 color: "oklch(0.6 0.17 285)",
+                access: FIXTURE_FOLDER_ACCESS[name] ?? access("workspace"),
             })),
         [folderPaths, sources]
     );
@@ -223,9 +304,25 @@ export function SourceRailPreview() {
                 }}
                 onDeleteFolder={folder => setDeleteFolderPath(folder.name)}
                 onMoveToFolder={(id, name) => {
+                    // The server's Drive rule, roughly: filed, it takes the
+                    // folder's audience; loose, it is yours alone.
                     setSources(prev =>
                         prev.map(source =>
-                            source.id === id ? { ...source, folder: name } : source
+                            source.id === id
+                                ? {
+                                      ...source,
+                                      folder: name,
+                                      access:
+                                          name === UNFILED_FOLDER
+                                              ? access("private")
+                                              : inherits(
+                                                    (
+                                                        FIXTURE_FOLDER_ACCESS[name] ??
+                                                        access("workspace")
+                                                    ).audience
+                                                ),
+                                  }
+                                : source
                         )
                     );
                     setOpened(`move:${id}→${name}`);
@@ -236,6 +333,10 @@ export function SourceRailPreview() {
                 setActiveFolder={setActiveFolder}
                 activeTag={activeTag}
                 setActiveTag={setActiveTag}
+                workspaceName="Acme"
+                selfAuthId="ada"
+                onShareFolder={folder => setOpened(`share-folder:${folder.name}`)}
+                onRestrictAccess={source => setOpened(`share:${source.title}`)}
                 history={{
                     entries,
                     loading: false,

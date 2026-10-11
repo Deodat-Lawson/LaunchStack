@@ -10,6 +10,8 @@ import { isS3Storage } from "~/lib/storage";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { mediaMimeFromName } from "~/lib/media-document";
+import { accessSubject } from "~/server/workspace/item-access";
+import { describeDocumentAccess } from "~/server/workspace/source-access";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -122,6 +124,15 @@ export async function POST(_request: Request) {
             mimeByFileId = Object.fromEntries(rows.map(r => [r.id, r.mimeType]));
         }
 
+        // Who else can see each one, what the caller may do with it, and who
+        // added it — for the rail's Workspace / Shared / Private sections
+        // (ADR-014). Read once for the whole list.
+        const described = await describeDocumentAccess(
+            companyId,
+            await accessSubject(ctx.data),
+            docs.map(doc => ({ id: Number(doc.id), category: doc.category }))
+        );
+
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
         const serializedDocs = docs.map(doc => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
@@ -146,6 +157,8 @@ export async function POST(_request: Request) {
                 currentVersionId:
                     doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
                 restricted: doc.restricted === true,
+                access: described.access.get(Number(doc.id)) ?? null,
+                addedBy: described.addedBy.get(Number(doc.id)) ?? null,
                 ...(mimeType && { mimeType }),
             };
         });

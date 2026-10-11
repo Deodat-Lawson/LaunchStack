@@ -25,6 +25,12 @@ export type FolderActor = Pick<WorkspaceContext, "companyId" | "userPk" | "role"
 /** The 403 body every upload path returns when a restricted folder refuses. */
 export const FOLDER_EDIT_DENIED = "You do not have edit access to this folder.";
 
+/**
+ * The 403 body for renaming, moving, replacing or deleting a file the caller
+ * can open but holds no edit level on (ADR-014's `canEditDocument`).
+ */
+export const DOCUMENT_EDIT_DENIED = "You can view this file but not change it.";
+
 /** May `ctx` add documents to the folder named `categoryName`? */
 export async function canEditFolder(ctx: FolderActor, categoryName: string): Promise<boolean> {
     return canEditFolderPath(ctx, categoryName);

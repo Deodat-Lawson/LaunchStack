@@ -6,12 +6,14 @@ import {
     displayFolderPath,
     folderDepth,
     folderLeafName,
+    isUnfiledFolder,
     normalizeFolderPath,
     validateFolderPath,
 } from "~/lib/folders/path";
 import { useRouter } from "next/navigation";
 import {
     Lock,
+    Users,
     Zap as IconBolt,
     Check as IconCheck,
     ChevronDown as IconChevronDown,
@@ -90,7 +92,7 @@ export interface AddSourceModalProps {
     defaultCategory: string;
     /** Existing folder names for the Save-to picker. */
     folders: string[];
-    /** Folders whose audience is limited to people with access — the picker says so. */
+    /** Folders whose audience is limited to people with access — the note under the picker says so. */
     restrictedFolders?: string[];
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
@@ -503,56 +505,35 @@ export function AddSourceModal({
                             Imported sessions go to the &ldquo;Agent Sessions&rdquo; folder.
                         </p>
                     ) : (
-                        <div
-                            style={{
-                                marginTop: 14,
-                                paddingTop: 14,
-                                borderTop: "1px solid var(--line)",
-                                display: "flex",
-                                gap: 10,
-                                alignItems: "center",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <div
-                                className="mono"
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.08em",
-                                    color: "var(--ink-3)",
-                                    textTransform: "uppercase",
-                                }}
-                            >
-                                Save to
+                        <div className="border-line mt-3.5 flex flex-col gap-1.5 border-t pt-3.5">
+                            <div className="flex flex-wrap items-center gap-2.5">
+                                <div className="mono text-ink-3 text-[10px] font-semibold uppercase tracking-[0.08em]">
+                                    Save to
+                                </div>
+                                <FolderPicker
+                                    value={folder}
+                                    onChange={setFolder}
+                                    folders={folders}
+                                    onCreate={onCreateFolder}
+                                />
                             </div>
-                            <FolderPicker
-                                value={folder}
-                                onChange={setFolder}
-                                folders={folders}
-                                onCreate={onCreateFolder}
-                            />
-                            <span
+                            {/* Who will see it (ADR-014): a loose file is yours
+                                alone until you share it; a filed one takes
+                                its folder's audience. */}
+                            <p
                                 role="note"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 5,
-                                    fontSize: 11.5,
-                                    color: restrictedFolders.includes(folder)
-                                        ? "var(--ink-2)"
-                                        : "var(--ink-3)",
-                                }}
+                                data-testid="add-source-audience"
+                                className="text-ink-3 flex items-center gap-1.5 text-[11.5px]"
                             >
-                                {restrictedFolders.includes(folder) ? (
-                                    <>
-                                        <Lock size={11} />
-                                        Restricted folder — visible only to people with access
-                                    </>
+                                {isUnfiledFolder(folder) || restrictedFolders.includes(folder) ? (
+                                    <Lock className="size-3 shrink-0" aria-hidden />
                                 ) : (
-                                    "Visible to everyone in the workspace"
+                                    <Users className="size-3 shrink-0" aria-hidden />
                                 )}
-                            </span>
+                                {isUnfiledFolder(folder)
+                                    ? "Only you will see it until you share it."
+                                    : `Visible to everyone who can open ${folderLeafName(folder)}.`}
+                            </p>
                         </div>
                     )}
                 </div>

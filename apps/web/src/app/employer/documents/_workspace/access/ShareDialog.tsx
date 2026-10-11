@@ -13,7 +13,7 @@
  * branches on endpoints; chats only offer "Can view".
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Building2, CornerDownRight, Lock, ShieldCheck, Users, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -276,6 +276,8 @@ export function ShareDialog({
     const [error, setError] = useState<string | null>(null);
     const [groupDraft, setGroupDraft] = useState<string | null>(null);
     const [creatingGroup, setCreatingGroup] = useState(false);
+    /** Where focus goes when the inline group form closes — not the dialog itself. */
+    const saveRef = useRef<HTMLButtonElement>(null);
 
     const use = useMemo(
         () => adapter ?? (target ? ADAPTERS[target.kind] : null),
@@ -373,6 +375,7 @@ export function ShareDialog({
                 },
             ]);
             setGroupDraft(null);
+            requestAnimationFrame(() => saveRef.current?.focus());
             toast.success(
                 memberIds.length > 0
                     ? `Created “${group.name}” with ${memberIds.length} ${memberIds.length === 1 ? "person" : "people"}`
@@ -705,6 +708,7 @@ export function ShareDialog({
                         </Button>
                         {canManage && (
                             <Button
+                                ref={saveRef}
                                 onClick={() => void save()}
                                 disabled={!dirty || saving || loading}
                             >

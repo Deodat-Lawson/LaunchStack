@@ -71,6 +71,10 @@ export function PrincipalPicker({
     const pick = (principal: PickedPrincipal) => {
         onPick(principal);
         setQuery("");
+        // Close the list so the row just added is what you see next — left
+        // open, it covers the list and shifts whatever sits below it.
+        setFocused(false);
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     };
 
     const groups: { label: string; Icon: typeof User; items: PickedPrincipal[] }[] = results

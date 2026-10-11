@@ -28,6 +28,7 @@ import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/pr
 import {
     docMode,
     pauseAutoArrangeAfterManualMove,
+    revealNode,
     setActivePage,
     setAutoLayout,
     viewportCentre,
@@ -192,6 +193,25 @@ export function MindmapEditor(props: MindmapEditorProps) {
     // in — and a template framed against that half-width stage is what opened
     // at 5%.
     const frame = useAutoFit(store, stageSize);
+
+    // Whatever opens a label — Tab, Enter, a port drag, typing on a selection —
+    // the field has to be on screen to type into. Auto-arrange can put a new
+    // topic past the stage's edge (a third branch lands on the far side of the
+    // centre), and typing into a box you cannot see is the "nothing shows up"
+    // experience all over again. Pans the least distance, and only when needed.
+    const stageSizeRef = useRef(stageSize);
+    stageSizeRef.current = stageSize;
+    useEffect(() => {
+        let shown: string | null = null;
+        return store.subscribe(() => {
+            const editing = store.getState().editing;
+            const id = editing?.kind === "node" ? editing.id : null;
+            if (id === shown) return;
+            shown = id;
+            // After the emit that announced it, not inside it.
+            if (id) queueMicrotask(() => revealNode(store, id, stageSizeRef.current));
+        });
+    }, [store]);
 
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);

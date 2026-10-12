@@ -59,21 +59,28 @@ storage migration is part of this flow.
 
 ## 2. Where the code lives
 
+Paths below use the current package owners for this historical flow. The
+`process-document` function is retired; the current outbox runner lives in
+`apps/worker/src/main.ts`.
+
 ```
 HTTP/intake Adapters  apps/web  …/api/uploadDocument, website, github-repo,
                        …/services/document-upload.ts
        ↓
 Document Creation Module
                        apps/web/src/server/services/document-creation.ts
+                       lifecycle: packages/orchestration/src/source-lifecycle/
        ↓ (commit, then dispatch)
-Job Dispatcher Interface packages/core  …/jobs/types.ts
-                       dispatch seam: …/ocr/trigger.ts
+Job Dispatcher Interface packages/runtime/src/job-dispatcher-port/types.ts
+                       dispatch seam: packages/conversion/src/ocr-processing/trigger.ts
        ↓
-process-document       apps/web  …/inngest/functions/processDocument.ts
+process-document       retired; current runner: apps/worker/src/main.ts
        ↓
-runDocIngestionTool    packages/features  …/doc-ingestion/index.ts   ← stages A–G
+runDocIngestionTool    packages/indexing/src/doc-ingestion/index.ts   ← stages A–G
        ↓
-OCR / embed / graph    packages/core  …/ocr/processor.ts, …/graph/, …/ingestion/
+OCR / embed / graph    packages/conversion/src/ocr-processing/processor.ts,
+                       packages/llm/src/embeddings/,
+                       packages/indexing/src/knowledge-graph/
 ```
 
 The runner is an Adapter behind the Job Dispatcher Interface; the lifecycle
@@ -111,7 +118,7 @@ flowchart TD
 
 ### Stages (A → G)
 
-Orchestrator: [`runDocIngestionTool`](../../packages/features/src/doc-ingestion/index.ts).
+Orchestrator: [`runDocIngestionTool`](../../packages/indexing/src/doc-ingestion/index.ts).
 Each `runStep` becomes an Inngest `step.run` (memoized on retry).
 
 | Step                  | What                                                       | Writes                                                                                  |
@@ -137,7 +144,7 @@ operations but are not current retrieval results.
 `step-ab-ingest` step. There is no separate “F2” — entities and relationships are extracted
 together.
 
-**Branches** ([`processDocument.ts`](../../apps/web/src/server/inngest/functions/processDocument.ts)):
+**Branches** (historical; current owner: [`DocIngestionPipeline`](../../packages/indexing/src/pipeline-port.ts)):
 
 - **ZIP** — extract entries (cap 500, 10 MB/file), store child and summary bytes through the
   Storage Adapter, and call the Document Creation Module for each child/summary with stable
@@ -159,8 +166,8 @@ together.
 | **Neo4j**          | Mirror only — `:Entity`, `:Section`, `:MENTIONED_IN`, dynamic rel types. Full text stays in Postgres.                                                                                                                                                                                                                               |
 | **Object storage** | Raw bytes through the existing Storage Adapter. No outbox or AWS migration is implied.                                                                                                                                                                                                                                              |
 
-Schema sources: [`packages/core/src/db/schema/`](../../packages/core/src/db/schema/),
-[`neo4j-sync.ts`](../../packages/core/src/graph/neo4j-sync.ts).
+Schema sources: [`packages/store/src/db/schema/`](../../packages/store/src/db/schema/),
+[`neo4j-sync.ts`](../../packages/indexing/src/knowledge-graph/neo4j-sync.ts).
 
 Postgres `kg_*` is the graph source of truth; Neo4j is the mirror.
 
@@ -220,9 +227,12 @@ enrichment.
 | **Fail-hard** | OCR, embedding, DB storage     | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
 | **Fail-soft** | VLM enrichment, Step F, Step G | Doc still marked `completed`                                                                                      |
 
-**“Sidecar” naming trap:** `SIDECAR_URL` points at an **external** ML worker (`/embed`,
-`/extract-entities`, `/rerank`). This repo’s [`sidecar/`](../../sidecar/app/main.py) is a
-separate DOCX/Whisper service — it does **not** implement those endpoints.
+**“Sidecar” naming trap:** the historical `SIDECAR_URL` setting referred to an
+**external** ML worker (`/embed`, `/extract-entities`, `/rerank`). The former
+DOCX/Whisper service now has separate owners:
+[`services/adeu-ai-docs-editing`](../../services/adeu-ai-docs-editing/app/main.py)
+and [`services/transcription`](../../services/transcription/app/main.py).
+Neither implements those inference endpoints.
 
 **Idempotency:** `creationKey` makes Document Creation Module retries converge on
 the same document/version rows and linked stable job ID. Archive children and

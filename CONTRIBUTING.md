@@ -11,25 +11,37 @@ Thanks for your interest in contributing! This document covers how to set up a d
 ## Repo layout
 
 ```
-packages/protocol    cross-language contracts (zod + generated JSON Schema) — published
-packages/evidence    pure company-state logic (anchors, supersession, freshness) — published
-packages/application use cases + ports (outbox tick, citations) — published
-packages/adapters    Postgres/storage/provider implementations + engine schema — published
-packages/core        @launchstack/core — compatibility facade over the above — published
-packages/features    vertical features on top of the engine (private, not published)
-apps/web             Next.js app: UI, auth, command acceptance, synchronous reads
-apps/worker          the durable workflow coordinator (outbox consumer + Inngest host)
-services/            Compute services (document-converter, transcription, adeu-ai-docs-editing)
+packages/runtime                     host ports, actor context, errors, singleton slots — publishable
+packages/evidence                    pure company-state logic (anchors, supersession, freshness) — publishable
+packages/store                       Postgres client, engine schema, credentials, credits — publishable
+packages/llm                         model calls, structured output, guardrails, embeddings — publishable
+packages/orchestration               outbox, worker tick, source lifecycle, stage ports — publishable
+packages/conversion                  document conversion, OCR, transcription, archives — publishable
+packages/indexing                    chunking, embeddings, entity extraction, graph sync — publishable
+packages/retrieval                   hybrid retrieval, reranking, citations — publishable
+packages/tools                       shared capabilities composed by verticals — publishable
+packages/engine                      @launchstack/engine — createEngine() aggregate — publishable
+packages/editing                     tracked-changes Word editing contract and client — publishable
+packages/collab                      channels, multi-agent meetings, signed HTTP protocol — publishable
+packages/document-conversion-engine  Gotenberg PDF-rendering client — publishable
+packages/google-drive                Google Drive v3 and OAuth client — publishable
+packages/schema-generator            generated JSON Schema from wire contracts — publishable
+packages/design-tokens               shared CSS design tokens (private, not published)
+pipelines/                           @launchstack/pipelines — 13 vertical compositions — publishable
+apps/web                             Next.js app: UI, auth, command acceptance, synchronous reads
+apps/worker                          the durable workflow coordinator (outbox consumer + Inngest host)
+apps/landing                         public marketing site (no engine)
+services/                            Compute services (document-converter, transcription, adeu-ai-docs-editing)
 ```
 
 The **layer boundaries are enforced by ESLint** (see [`eslint.config.js`](eslint.config.js))
-with the strict direction `protocol ← evidence ← application ← adapters ← core ← apps`:
+with per-package import allowlists and the one-way boundary `packages/* ← pipelines ← apps`:
 
-- `protocol`/`evidence` import nothing but zod (and protocol, respectively); no Node built-ins, no env.
-- `application` may not touch databases or frameworks; `adapters` may not import features/web/Next/React or auth modules.
-- None of the engine packages may read `process.env` — configuration flows through `CoreConfig`/ports.
-- `@launchstack/core` must stay re-exports only (`node scripts/ci/check-core-facade.mjs`).
-- `@launchstack/features` must not import from the host app (`~/*`) or pull in Next/React or auth modules. Features can read `process.env`.
+- `runtime`/`evidence` have no dependencies; they must not import frameworks or read `process.env`.
+- `store` may import `runtime`; `llm` and `orchestration` may import `runtime`/`store`. `conversion`, `indexing`, and `retrieval` have their own dependency allowlists. Bricks must not import `@launchstack/pipelines`.
+- Configuration is injected into the engine through `CoreConfig`/ports and `configure*` hooks. ESLint bans `process.env` in `runtime`, `evidence`, `store`, `llm`, `orchestration`, `conversion`, `indexing`, `retrieval`, `engine`, `collab`, `document-conversion-engine`, and `google-drive`. Transcription clients in `conversion` are exempt; `editing`, `tools`, `schema-generator`, and `pipelines` are outside this ban.
+- `@launchstack/engine` assembles the bricks with `createEngine()`. The release workflow checks built publishable exports with `scripts/ci/check-package-exports.mjs`.
+- `@launchstack/pipelines` must not import from the host app (`~/*`) or pull in Next/React or Clerk. Pipelines can read `process.env`.
 - Violations fail lint (blocking in CI — ADR-006).
 
 ## Local dev
@@ -46,9 +58,9 @@ with the strict direction `protocol ← evidence ← application ← adapters �
 git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
-cp .env.example .env                  # fill in DATABASE_URL + BETTER_AUTH_SECRET + OPENAI keys
+cp .env.example .env                  # fill in DATABASE_URL, BETTER_AUTH_SECRET, a chat key and an embeddings key (see README "Run it locally")
 pnpm --filter @launchstack/web db:migrate      # apply BOTH migration sets (engine, then product)
-pnpm --filter @launchstack/core db:seed        # optional sample data
+DEV_SEED_PASSWORD=<8+ chars> pnpm --filter @launchstack/web db:seed   # optional: one workspace + four role accounts
 pnpm --filter @launchstack/web dev             # Next.js app on :3000 (plain `next dev` — no background work)
 pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — required for ingestion
 ```
@@ -74,26 +86,26 @@ Once the stack is up: app at `localhost:3000`, worker health at `localhost:8020/
 ## Changing the database
 
 There are **two migration sets** against one database. Which one you touch
-depends on whether the table is part of the published engine.
+depends on whether the table belongs to the reusable engine or the product.
 
 | Set | Schema | Migrations | Owns |
 | --- | --- | --- | --- |
-| **engine** | `packages/adapters/src/db/schema/` (re-exported by `@launchstack/core/db/schema`) | `packages/core/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph — the 26 tables `@launchstack/core` publishes |
-| **product** | `apps/web/src/server/db/schema/` and `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals — 39 tables |
+| **engine** | `packages/store/src/db/schema.ts` (exported by `@launchstack/store/schema`) | `packages/store/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph, outbox |
+| **product** | `apps/web/src/server/db/schema/*.ts`, `pipelines/src/*/schema.ts`, and `pipelines/src/*/cache-schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals |
 
 The dependency is **one-way**: product tables may reference engine tables, never
-the reverse. That is what lets someone embed `@launchstack/core` and apply
-`packages/core/drizzle` alone to get a working database. ESLint blocks core from
-importing `~/*` or `@launchstack/features` (which a foreign key would need), and
-`scripts/ci/check-schema-boundary.mjs` re-checks it against the generated SQL.
+the reverse. That is what lets someone embed `@launchstack/engine` and apply
+`packages/store/drizzle` alone to get a working engine database. ESLint blocks
+`@launchstack/store` from importing `~/*` or `@launchstack/pipelines`, and
+`scripts/ci/check-schema-boundary.mjs` re-checks the boundary against generated SQL.
 
-Feature-vertical tables live in `packages/features` rather than `apps/web`
+Feature-vertical tables live in `pipelines/` rather than `apps/web`
 because a package cannot import from an app — but they are on the product side
 of the boundary and ship in the product migration set.
 
 ```bash
 # engine change
-pnpm --filter @launchstack/core db:generate --name=add_document_language
+pnpm --filter @launchstack/store db:generate --name=add_document_language
 
 # product change
 pnpm --filter @launchstack/web db:generate --name=add_meeting_transcripts
@@ -104,12 +116,14 @@ pnpm --filter @launchstack/web db:generate --name=add_meeting_transcripts
 pnpm --filter @launchstack/web db:migrate
 
 # engine only — what an embedding consumer runs
-pnpm --filter @launchstack/core db:migrate
+pnpm --filter @launchstack/store db:migrate
 
 # useful
-pnpm --filter @launchstack/web db:verify     # anything pending? (deploy preflight)
-pnpm --filter @launchstack/core db:check     # journal/snapshot integrity
-node packages/core/scripts/migrate.mjs --set=product --dry-run
+pnpm --filter @launchstack/store db:migrate --check                  # engine pending? (deploy preflight)
+pnpm --filter @launchstack/store db:migrate --set=product --check    # product pending? (deploy preflight)
+pnpm --filter @launchstack/store db:check                           # engine journal/snapshot integrity
+pnpm --filter @launchstack/store db:check --set=product              # product journal/snapshot integrity
+pnpm --filter @launchstack/store db:migrate --set=product --dry-run
 ```
 
 **Rules**
@@ -135,15 +149,20 @@ node packages/core/scripts/migrate.mjs --set=product --dry-run
 
 Two PRs that each add a migration will both append an entry. **Never hand-merge
 it** — a textual merge produces duplicate `idx` values and silently breaks the
-ordering. `.gitattributes` marks these files unmergeable so you get a conflict
-instead. To resolve:
+ordering. Resolve by regenerating the artifacts for the affected migration set:
 
 ```bash
 git rebase origin/main
-# delete YOUR .sql and its meta/*_snapshot.json, take main's _journal.json
-git checkout --theirs packages/core/drizzle/meta/_journal.json
-pnpm --filter @launchstack/core db:generate --name=<your-change>
-pnpm --filter @launchstack/core db:check
+# delete YOUR .sql and its meta/*_snapshot.json, then take main's _journal.json
+# engine set
+git checkout origin/main -- packages/store/drizzle/meta/_journal.json
+pnpm --filter @launchstack/store db:generate --name=<your-change>
+pnpm --filter @launchstack/store db:check
+
+# product set (use this block instead for a product migration)
+git checkout origin/main -- apps/web/drizzle/meta/_journal.json
+pnpm --filter @launchstack/web db:generate --name=<your-change>
+pnpm --filter @launchstack/store db:check --set=product
 ```
 
 Regenerating is always cheaper and always correct.
@@ -186,11 +205,11 @@ pnpm check         # eslint + pnpm -r typecheck
 pnpm --filter @launchstack/web test          # Jest (apps/web)
 ```
 
-All three must pass in CI. Boundary rules (no `process.env` in core, no `~/*` in features) are checked by ESLint — don't try to work around them with `/* eslint-disable */`; talk to us if the rule seems wrong.
+All three must pass in CI. Boundary rules (injected engine configuration with the exemptions above, no `~/*` in pipelines) are checked by ESLint — don't try to work around them with `/* eslint-disable */`; talk to us if the rule seems wrong.
 
 ## Changesets (for releases)
 
-We publish `@launchstack/core` to npm using [Changesets](https://github.com/changesets/changesets). **If your PR changes anything under `packages/core/`**, you must add a changeset:
+We use [Changesets](https://github.com/changesets/changesets) to release the publishable packages under `packages/*` (all except private `packages/design-tokens/`) and `pipelines/` (`@launchstack/pipelines`) to npm. These packages are not yet published. **If your PR changes any of these publishable packages**, you must add a changeset:
 
 ```bash
 pnpm changeset
@@ -198,9 +217,9 @@ pnpm changeset
 
 Follow the prompt — pick `patch` / `minor` / `major` and write a short user-facing summary of what changed. The tool writes a Markdown file under `.changeset/` that you commit with your PR.
 
-On merge to `main`, the Changesets bot opens (or updates) a "Version Packages" PR. Merging that PR publishes the new version to npm.
+On merge to `main`, the Changesets release workflow opens (or updates) a "Version Packages" PR. Merging that PR publishes the new package versions to npm.
 
-Changes to `packages/features/` and `apps/web/` **do not** need a changeset — they're private.
+Changes to `packages/design-tokens/` and `apps/*` **do not** need a changeset — they're private.
 
 ## Pull request checklist
 
@@ -209,7 +228,7 @@ Before requesting review:
 - [ ] Commits are focused and have meaningful messages
 - [ ] `pnpm check` passes
 - [ ] `pnpm --filter @launchstack/web test` passes
-- [ ] Changeset added if `packages/core/` changed
+- [ ] Changeset added if a publishable package under `packages/*` or `pipelines/` changed
 - [ ] New env vars documented in [`.env.example`](.env.example) and [`apps/web/src/env.ts`](apps/web/src/env.ts)
 - [ ] If the change touches UI, you've exercised the flow in a browser (not just a successful build)
 - [ ] PR description explains **why**, not just **what**

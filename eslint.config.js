@@ -57,7 +57,8 @@ const chatClientImportBans = [
         name: "@langchain/openai",
         importNames: ["ChatOpenAI"],
         message:
-            "Resolve a route with @launchstack/core/llm instead. " +
+            "Resolve a route with `resolveChatModel` from " +
+            "`@launchstack/llm/chat-model-factory` instead. " +
             "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
             "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
     },

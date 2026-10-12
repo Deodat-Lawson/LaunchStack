@@ -16,8 +16,8 @@
  * different contract; declare that model explicitly instead.
  *
  * Contributing: add an entry with a first-party source URL, set `verifiedOn`
- * to the date you checked it, and cover it in
- * `packages/core/src/llm/__tests__` or the app-level preset test.
+ * to the date you checked it, and cover it in the app-level preset test
+ * (`apps/web/__tests__/lib/llm/chat-config.test.ts`).
  */
 
 import type { ChatModelBehavior } from "./types";
@@ -292,6 +292,40 @@ const PRESETS: readonly ChatModelPreset[] = [
             image: { mimeTypes: OPENAI_IMAGE_MIME_TYPES },
             reasoning: OPENAI_REASONING_EFFORT,
             nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+            parameters: {
+                temperature: "unsupported",
+                systemMessages: "supported",
+                streaming: "supported",
+                maxOutputTokens: "supported",
+                maxOutputTokensField: "max_completion_tokens",
+            },
+        },
+    },
+    {
+        name: "openai/gpt-6-luna",
+        source: "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        verifiedOn: "2026-10-12",
+        notes:
+            "Verified over Azure OpenAI's v1 chat-completions endpoint. Rejects " +
+            "`temperature` (only the default is accepted) and `max_tokens`. Azure " +
+            "rejects the `minimal` and `max` efforts the OpenAI docs list. Function " +
+            "tools work only at effort `none` over chat completions, so tool-calling " +
+            "is not declared; json-schema returned valid output at every effort.",
+        behavior: {
+            input: ["text", "image"],
+            image: { mimeTypes: OPENAI_IMAGE_MIME_TYPES },
+            reasoning: {
+                mode: "effort",
+                levels: {
+                    none: { reasoning_effort: "none" },
+                    low: { reasoning_effort: "low" },
+                    medium: { reasoning_effort: "medium" },
+                    high: { reasoning_effort: "high" },
+                    xhigh: { reasoning_effort: "xhigh" },
+                },
+                default: "medium",
+            },
+            nativeStructuredOutput: ["json-object", "json-schema"],
             parameters: {
                 temperature: "unsupported",
                 systemMessages: "supported",

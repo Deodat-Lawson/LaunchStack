@@ -159,6 +159,11 @@ Optional: run the compute services separately and point
 
 ## Environment Variables Summary
 
+Developer machines should follow the grouped catalog in
+[Developer onboarding](./developer-onboarding.md#environment-variables)
+(required to boot, chat, embeddings, Compose-local defaults, external
+accounts). The table below is the deployment short list.
+
 Chat reaches one endpoint implementing the OpenAI chat-completions protocol.
 Model ids, per-model behavior, and route assignments live in
 `apps/web/config/chat-models.yaml` — not in environment variables. See
@@ -170,7 +175,7 @@ modes, and migration from the pre-PR variables.
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
-| `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
+| `CHAT_BASE_URL` | Defaults to Gemini | The OpenAI-compatible chat endpoint every route talks to. Unset, chat uses Gemini and `GOOGLE_AI_API_KEY` |
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
 | `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
 | `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
@@ -181,12 +186,6 @@ modes, and migration from the pre-PR variables.
 | `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
 | `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
 | `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
-
-The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
-`OCR_WORKER_URL`) are being phased out per
-[ADR-004](./architecture/ADR-004-compute-service-consolidation.md); while the
-migration completes, set both the new and the legacy name if a service isn't
-being picked up.
 | `EXA_API_KEY` | Optional | Exa (trend search); required for `exa` / `fallback` / `parallel` when using Exa |
 | `SERPER_API_KEY` | Optional | Serper Google News (trend search); required for `serper` / `fallback` / `parallel` when using Serper |
 | `SEARCH_PROVIDER` | Optional | `exa` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
@@ -198,6 +197,11 @@ being picked up.
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
 | `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
 | `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
+
+The legacy variables (`SIDECAR_URL`, `OCR_ROUTER_URL`, `OCR_WORKER_URL`) are
+being phased out per
+[ADR-004](./architecture/ADR-004-compute-service-consolidation.md). Prefer
+`TRANSCRIPTION_SERVICE_URL`, `ADEU_SERVICE_URL`, and `DOCUMENT_CONVERTER_URL`.
 
 ## Post-deployment Checklist
 

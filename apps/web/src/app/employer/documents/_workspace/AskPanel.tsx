@@ -1088,7 +1088,14 @@ function EmptyState({
     onAsk,
     onOpenProfile,
 }: EmptyStateProps) {
-    const sourceCount = sources.length;
+    let sourceCount = 0;
+    let processingCount = 0;
+    let failedCount = 0;
+    for (const source of sources) {
+        if (source.indexStatus === "ready") sourceCount++;
+        else if (source.indexStatus === "processing") processingCount++;
+        else if (source.indexStatus === "failed") failedCount++;
+    }
     return (
         <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
             <div className="mb-10 text-center">
@@ -1096,7 +1103,10 @@ function EmptyState({
                     What do you want to <em className="text-brand">ask</em> yourself?
                 </div>
                 <div className="text-ink-3 text-sm">
-                    {sourceCount} source{sourceCount !== 1 ? "s" : ""} indexed · ready to query
+                    {sourceCount} source{sourceCount !== 1 ? "s" : ""} indexed
+                    {processingCount > 0 && ` · ${processingCount} processing`}
+                    {failedCount > 0 && ` · ${failedCount} failed`}
+                    {processingCount === 0 && failedCount === 0 && " · ready to query"}
                 </div>
             </div>
             <AskStarters

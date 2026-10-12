@@ -25,6 +25,12 @@ export interface EmbeddingConfig {
     concurrency?: number;
 }
 
+/** Missing embedding credentials or endpoint cannot be fixed by retrying. */
+export class EmbeddingConfigurationError extends Error {
+    override readonly name = "EmbeddingConfigurationError";
+    readonly retryable = false;
+}
+
 /**
  * Library defaults. The caller is expected to pass apiKey and baseUrl (and
  * optionally override model / dimensions) on every call; the default apiKey
@@ -92,12 +98,12 @@ export async function generateEmbeddings(
     const startTime = Date.now();
 
     if (!merged.apiKey) {
-        throw new Error("API key not configured for embeddings");
+        throw new EmbeddingConfigurationError("API key not configured for embeddings");
     }
 
     const { baseUrl } = merged;
     if (!baseUrl) {
-        throw new Error(
+        throw new EmbeddingConfigurationError(
             "Embeddings base URL not configured. Set EMBEDDING_API_BASE_URL (with " +
                 "EMBEDDING_API_KEY) or AI_BASE_URL, or pass EmbeddingConfig.baseUrl. " +
                 "Embeddings deliberately have no default endpoint, unlike chat and " +

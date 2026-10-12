@@ -101,7 +101,7 @@ for (const [name, schema] of Object.entries(CONTRACTS)) {
 if (checkMode) {
     if (drifted.length > 0) {
         console.error(
-            `JSON Schemas are stale (run \`pnpm --filter @launchstack/protocol schemas:generate\`):\n` +
+            `JSON Schemas are stale (run \`pnpm --filter @launchstack/schema-generator schemas:generate\`):\n` +
                 drifted.map(f => `  - ${f}`).join("\n")
         );
         process.exit(1);

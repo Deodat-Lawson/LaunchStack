@@ -89,6 +89,9 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
  */
 export type SourceCitability = "citable" | "stale" | "none";
 
+/** Indexing state from the document row, including a mindmap's published copy. */
+export type SourceIndexStatus = "ready" | "processing" | "failed";
+
 export type DocDomain =
     | "Contract"
     | "Financial"
@@ -134,6 +137,10 @@ export interface WorkspaceSource {
     thumbnailUrl?: string;
     /** Defaults to `citable` when absent — uploads become citable as they index. */
     citability?: SourceCitability;
+    /** Unset for local sources and mindmaps without a published document. */
+    indexStatus?: SourceIndexStatus;
+    /** The processing failure reported by the worker, for the status tooltip. */
+    errorMessage?: string;
     title: string;
     type: SourceTypeId;
     size: string;

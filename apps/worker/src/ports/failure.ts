@@ -1,16 +1,16 @@
 /**
- * Failure visibility (ADR-003): when a pipeline event dies after max
- * attempts, mark the underlying OCR job failed AND stamp the document's
- * failure metadata so the product UI shows the terminal state instead of
- * an eternal "processing". Parity with the retired Inngest
- * `handleProcessDocumentFailure`, which wrote both records.
+ * Failure visibility (ADR-003): when a pipeline event goes dead, mark the
+ * underlying OCR job failed AND stamp the document and version's failure
+ * metadata so the product UI shows the terminal state instead of an eternal
+ * "processing". Mirrors the completion writes to both source records.
+ * Both metadata writes are best-effort: neither blocks the other on failure.
  */
 import { and, eq, inArray } from "drizzle-orm";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
 import { getDb } from "@launchstack/store/client";
-import { document, ocrJobs } from "@launchstack/store/schema";
+import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
 
 const JOB_BEARING_EVENTS = new Set([
     "source.version.created",
@@ -29,7 +29,7 @@ export function createDeadEventHandler(logger: LoggerPort) {
         };
         if (!payload.ocrJobId) return;
 
-        const errorMessage = `pipeline dead after max attempts: ${error}`.slice(0, 2000);
+        const errorMessage = `pipeline event dead: ${error}`.slice(0, 2000);
         const db = getDb();
         await db
             .update(ocrJobs)
@@ -51,16 +51,17 @@ export function createDeadEventHandler(logger: LoggerPort) {
         // failure for a superseded version never marks the live one failed —
         // same guard the retired Inngest failure handler used.
         if (payload.sourceId !== undefined && payload.sourceVersionId !== undefined) {
+            const ocrMetadata = {
+                error: "processing_failed",
+                errorMessage,
+                failedAt: new Date().toISOString(),
+            };
             try {
                 await db
                     .update(document)
                     .set({
                         ocrProcessed: false,
-                        ocrMetadata: {
-                            error: "processing_failed",
-                            errorMessage,
-                            failedAt: new Date().toISOString(),
-                        },
+                        ocrMetadata,
                     })
                     .where(
                         and(
@@ -78,6 +79,36 @@ export function createDeadEventHandler(logger: LoggerPort) {
                     "could not stamp document failure metadata"
                 );
             }
+
+            try {
+                // Mirror the same current-version guard onto the version row.
+                await db
+                    .update(documentVersions)
+                    .set({ ocrProcessed: false, ocrMetadata })
+                    .where(
+                        and(
+                            eq(documentVersions.id, payload.sourceVersionId),
+                            eq(documentVersions.documentId, BigInt(payload.sourceId)),
+                            inArray(
+                                documentVersions.id,
+                                db
+                                    .select({ id: document.currentVersionId })
+                                    .from(document)
+                                    .where(eq(document.id, payload.sourceId))
+                            )
+                        )
+                    );
+            } catch (dbError) {
+                logger.error(
+                    {
+                        traceId: event.traceId,
+                        sourceId: payload.sourceId,
+                        sourceVersionId: payload.sourceVersionId,
+                        error: String(dbError),
+                    },
+                    "could not stamp version failure metadata"
+                );
+            }
         }
 
         logger.error(
@@ -87,7 +118,7 @@ export function createDeadEventHandler(logger: LoggerPort) {
                 sourceId: payload.sourceId,
                 eventType: event.eventType,
             },
-            "marked OCR job failed after pipeline exhausted retries"
+            "marked OCR job failed after pipeline event went dead"
         );
     };
 }

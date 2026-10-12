@@ -13,11 +13,11 @@ import React, {
     useState,
 } from "react";
 import {
+    CircleAlert,
     Folder,
     FolderOpen,
     Lock,
     Plus,
-    Check as IconCheck,
     ChevronLeft as IconChevronLeft,
     ChevronRight as IconChevronRight,
     Ellipsis as IconMore,
@@ -39,6 +39,8 @@ import {
     type FolderTreeNode,
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Checkbox as UiCheckbox } from "~/components/ui/checkbox";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { SOURCE_DRAG_MIME } from "./dragData";
@@ -120,46 +122,22 @@ interface CheckboxProps {
     state: CheckState;
     onClick?: (e: MouseEvent) => void;
     title?: string;
+    disabled?: boolean;
 }
 
-function Checkbox({ state, onClick, title }: CheckboxProps) {
+function Checkbox({ state, onClick, title, disabled }: CheckboxProps) {
     return (
-        <button
+        <UiCheckbox
+            checked={state === "some" ? "indeterminate" : state === "all"}
+            disabled={disabled}
             onClick={e => {
                 e.stopPropagation();
                 onClick?.(e);
             }}
             title={title}
-            style={{
-                width: 15,
-                height: 15,
-                borderRadius: 3,
-                border: `1.5px solid ${state !== "none" ? "var(--accent)" : "var(--ink-4)"}`,
-                background:
-                    state === "all"
-                        ? "var(--accent)"
-                        : state === "some"
-                          ? "var(--accent-soft)"
-                          : "var(--panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                transition: "all 100ms",
-                cursor: "pointer",
-            }}
-            onMouseEnter={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--accent)";
-            }}
-            onMouseLeave={e => {
-                if (state === "none") e.currentTarget.style.borderColor = "var(--ink-4)";
-            }}
-        >
-            {state === "all" && <IconCheck size={10} style={{ color: "white" }} />}
-            {state === "some" && (
-                <div style={{ width: 7, height: 1.5, background: "var(--accent)" }} />
-            )}
-        </button>
+            aria-label={title}
+            className="border-ink-4 enabled:hover:border-brand data-[state=indeterminate]:border-brand data-[state=indeterminate]:bg-brand-soft data-[state=indeterminate]:text-brand size-[15px] rounded-[3px] border-[1.5px] shadow-none enabled:cursor-pointer [&_svg]:size-2.5"
+        />
     );
 }
 
@@ -203,6 +181,8 @@ function SourceRow({
     const visibleTags = tags.slice(0, 2);
     const extra = tags.length - visibleTags.length;
     const showActions = hover || menuFocus;
+    const failed = source.indexStatus === "failed";
+    const processing = source.indexStatus === "processing" || source.syncing === true;
 
     return (
         <div
@@ -225,9 +205,16 @@ function SourceRow({
             }}
         >
             <Checkbox
-                state={selected ? "all" : "none"}
+                state={!failed && selected ? "all" : "none"}
+                disabled={failed}
                 onClick={() => toggleSelected(source.id)}
-                title={selected ? "Remove from context" : "Add to context"}
+                title={
+                    failed
+                        ? "Unavailable as context: indexing failed"
+                        : selected
+                          ? "Remove from context"
+                          : "Add to context"
+                }
             />
             <div
                 onClick={event => {
@@ -265,30 +252,33 @@ function SourceRow({
                         {source.title}
                     </div>
                     {(visibleTags.length > 0 ||
-                        (source.syncing ?? false) ||
+                        processing ||
+                        failed ||
                         (source.gaps?.length ?? 0) > 0) && (
-                        <div
-                            style={{
-                                fontSize: 11,
-                                color: "var(--ink-3)",
-                                marginTop: 1,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 4,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                            }}
-                        >
-                            {source.syncing && (
+                        <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">
+                            {failed ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span
+                                            tabIndex={0}
+                                            className="text-danger inline-flex items-center gap-1"
+                                        >
+                                            <CircleAlert className="size-2.5" aria-hidden />
+                                            failed
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="max-w-xs">
+                                        {source.errorMessage ?? "This source could not be indexed."}
+                                    </TooltipContent>
+                                </Tooltip>
+                            ) : processing ? (
                                 <span
-                                    style={{
-                                        color: "var(--accent)",
-                                        animation: "lsw-shimmer 1.6s ease-in-out infinite",
-                                    }}
+                                    className="text-brand"
+                                    style={{ animation: "lsw-shimmer 1.6s ease-in-out infinite" }}
                                 >
                                     syncing…
                                 </span>
-                            )}
+                            ) : null}
                             {visibleTags.map((t, i) => (
                                 <Fragment key={t}>
                                     {i > 0 && <span style={{ opacity: 0.4 }}>·</span>}
@@ -301,15 +291,7 @@ function SourceRow({
                             {(source.gaps?.length ?? 0) > 0 && (
                                 <span
                                     title={source.gaps?.join(" · ")}
-                                    style={{
-                                        marginLeft: "auto",
-                                        color: "oklch(0.55 0.16 45)",
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 2,
-                                        fontSize: 10,
-                                        fontWeight: 600,
-                                    }}
+                                    className="text-warn ml-auto inline-flex items-center gap-0.5 text-[10px] font-semibold"
                                 >
                                     <IconShield size={9} />
                                     {source.gaps?.length}
@@ -369,9 +351,13 @@ function SourceRow({
 
 type SourceNode = FolderTreeNode<WorkspaceSource>;
 
-/** Every source id in a folder and the folders beneath it. */
-function collectItemIds(node: SourceNode): string[] {
-    return [...node.items.map(item => item.id), ...node.children.flatMap(collectItemIds)];
+/** Every source id in a subtree; context selection excludes failed documents. */
+function collectItemIds(node: SourceNode, excludeFailed = false, ids: string[] = []): string[] {
+    for (const item of node.items) {
+        if (!excludeFailed || item.indexStatus !== "failed") ids.push(item.id);
+    }
+    for (const child of node.children) collectItemIds(child, excludeFailed, ids);
+    return ids;
 }
 
 interface FolderHeaderProps {
@@ -413,12 +399,12 @@ function FolderHeader({
             ? { kind: "folder", id: node.path, label: menuLabel, data: node, items: menuItems }
             : null
     );
-    const itemIds = collectItemIds(node);
-    const selCount = itemIds.filter(id => selected.includes(id)).length;
+    const selectableIds = collectItemIds(node, true);
+    const selCount = selectableIds.filter(id => selected.includes(id)).length;
     const state: CheckState =
         selCount === 0
             ? "none"
-            : selCount === itemIds.length && itemIds.length > 0
+            : selCount === selectableIds.length && selectableIds.length > 0
               ? "all"
               : "some";
     const FolderIcon = collapsed ? Folder : FolderOpen;
@@ -455,7 +441,8 @@ function FolderHeader({
         >
             <Checkbox
                 state={state}
-                onClick={() => onSelectAll(itemIds, state !== "all")}
+                disabled={selectableIds.length === 0}
+                onClick={() => onSelectAll(selectableIds, state !== "all")}
                 title={state === "all" ? "Deselect folder" : "Select all in folder"}
             />
             <div
@@ -809,6 +796,17 @@ export function SourceRail({
     // A rail without history props can never sit on a tab that isn't there.
     const activeTab: RailTab = history ? tab : "sources";
 
+    // A source may have been pinned while processing, before indexing failed.
+    useEffect(() => {
+        const failedIds = new Set<string>();
+        for (const source of sources) {
+            if (source.indexStatus === "failed") failedIds.add(source.id);
+        }
+        if (selected.some(id => failedIds.has(id))) {
+            setSelected(prev => prev.filter(id => !failedIds.has(id)));
+        }
+    }, [sources, selected, setSelected]);
+
     const folderFor = useCallback(
         (path: string): WorkspaceFolder =>
             folders.find(f => f.name === path) ?? {
@@ -841,11 +839,16 @@ export function SourceRail({
             return buildSourceMenuItems(source, folders, selected, {
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
-                onToggleContext: s => {
-                    setSelected(prev =>
-                        prev.includes(s.id) ? prev.filter(id => id !== s.id) : [...prev, s.id]
-                    );
-                },
+                onToggleContext:
+                    source.indexStatus === "failed" && !selected.includes(source.id)
+                        ? undefined
+                        : s => {
+                              setSelected(prev =>
+                                  prev.includes(s.id)
+                                      ? prev.filter(id => id !== s.id)
+                                      : [...prev, s.id]
+                              );
+                          },
                 onOpenInNewTab: s => {
                     if (s.documentId) {
                         window.open(
@@ -900,7 +903,7 @@ export function SourceRail({
     const folderMenuItems = useCallback(
         (node: SourceNode): ActionMenuItem[] => {
             const path = node.path;
-            const itemIds = collectItemIds(node);
+            const itemIds = collectItemIds(node, true);
             const isUnfiled = path === UNFILED_FOLDER;
             const selCount = itemIds.filter(id => selected.includes(id)).length;
             const selectState: "none" | "some" | "all" =
@@ -1067,6 +1070,7 @@ export function SourceRail({
     );
 
     const toggle = (id: string) => {
+        if (sources.some(source => source.id === id && source.indexStatus === "failed")) return;
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
     };
 

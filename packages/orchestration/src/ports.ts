@@ -58,8 +58,14 @@ export interface OutboxStorePort {
      * consumed attempt so a crash-poison event cannot loop forever: a row
      * whose incremented count reaches `maxAttempts` goes `dead` instead.
      * Returns the number of rows reclaimed (including newly dead ones).
+     * Calls the optional onDead hook once per newly dead, valid event; hook
+     * errors are logged, never thrown.
      */
-    reclaimStale(claimedBefore: Date, maxAttempts: number): Promise<number>;
+    reclaimStale(
+        claimedBefore: Date,
+        maxAttempts: number,
+        onDead?: (claimed: ClaimedEvent, error: string) => Promise<void>
+    ): Promise<number>;
     /** Failure visibility: dead-row count for health/metrics surfaces. */
     countDead(): Promise<number>;
 }

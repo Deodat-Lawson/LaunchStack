@@ -1,11 +1,13 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { ContextMenuProvider } from "~/components/context-menu";
 
 import { AskPanel } from "../AskPanel";
+import { SourceRail } from "../SourceRail";
 import { resetAskStartersMemo } from "../useAskStarters";
 import type { ComposerSend, WorkspaceSource } from "../types";
 import type { AskStartersPayload } from "~/lib/ask-starters/contract";
@@ -16,6 +18,13 @@ import type { AskStartersPayload } from "~/lib/ask-starters/contract";
  * click through the same path as a typed message, and (c) pin the document a
  * starter is about so the answer and any follow-up are scoped to it.
  */
+
+// Radix's tooltip measures itself; jsdom has no ResizeObserver.
+global.ResizeObserver ??= class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+} as unknown as typeof ResizeObserver;
 
 jest.mock("next-themes", () => ({
     useTheme: () => ({ resolvedTheme: "light", setTheme: jest.fn() }),
@@ -43,6 +52,7 @@ const SOURCES: WorkspaceSource[] = [
         folder: "Contracts",
         tags: [],
         domain: "Contract",
+        indexStatus: "ready",
     },
     {
         id: "d9",
@@ -54,6 +64,7 @@ const SOURCES: WorkspaceSource[] = [
         folder: "HR",
         tags: [],
         domain: "HR",
+        indexStatus: "ready",
     },
 ];
 
@@ -114,6 +125,7 @@ beforeEach(() => {
 });
 
 function renderPanel(overrides: {
+    sources?: WorkspaceSource[];
     sendMessage?: (send: ComposerSend) => void;
     setSelected?: jest.Mock;
     selected?: string[];
@@ -126,7 +138,7 @@ function renderPanel(overrides: {
         const [selected, setSelected] = React.useState(overrides.selected ?? []);
         return (
             <AskPanel
-                sources={SOURCES}
+                sources={overrides.sources ?? SOURCES}
                 selected={overrides.stateful ? selected : (overrides.selected ?? [])}
                 setSelected={
                     overrides.stateful ? setSelected : (overrides.setSelected ?? jest.fn())
@@ -153,10 +165,64 @@ describe("AskPanel starter questions", () => {
         for (const starter of PAYLOAD.starters) {
             expect(screen.getByText(starter.question)).toBeInTheDocument();
         }
+        expect(screen.getByText("2 sources indexed · ready to query")).toBeInTheDocument();
         expect(
             screen.getByText("Suggested from the Acme Robotics profile and 2 sources")
         ).toBeInTheDocument();
         expect(fetchMock).toHaveBeenCalledWith("/api/ask/starters", expect.anything());
+    });
+
+    it("does not count or allow a failed source as indexed context", async () => {
+        const user = userEvent.setup();
+        const setSelected = jest.fn();
+        const errorMessage = "Embedding provider is not configured.";
+        const sources: WorkspaceSource[] = [
+            SOURCES[0]!,
+            { ...SOURCES[1]!, folder: "Contracts", indexStatus: "failed", errorMessage },
+            {
+                ...SOURCES[1]!,
+                id: "d11",
+                documentId: 11,
+                title: "Still processing.pdf",
+                folder: "Contracts",
+                indexStatus: "processing",
+            },
+        ];
+        renderPanel({ sources });
+        render(
+            <ContextMenuProvider>
+                <SourceRail
+                    sources={sources}
+                    folders={[]}
+                    selected={[]}
+                    setSelected={setSelected}
+                    onOpenAdd={jest.fn()}
+                    activeFolder={null}
+                    setActiveFolder={jest.fn()}
+                    activeTag={null}
+                    setActiveTag={jest.fn()}
+                />
+            </ContextMenuProvider>
+        );
+
+        expect(screen.getByText("1 source indexed · 1 processing · 1 failed")).toBeInTheDocument();
+        const failedRow = within(screen.getByTestId("source-row-d9"));
+        const failedCheckbox = failedRow.getByRole("checkbox");
+        expect(failedCheckbox).toBeDisabled();
+        await user.click(failedCheckbox);
+        expect(setSelected).not.toHaveBeenCalled();
+        expect(
+            within(screen.getByTestId("source-row-d11")).getByText("syncing…")
+        ).toBeInTheDocument();
+        const failedStatus = failedRow.getByText("failed");
+        act(() => failedStatus.focus());
+        expect(await screen.findByRole("tooltip")).toHaveTextContent(errorMessage);
+        expect(failedStatus).toHaveAccessibleDescription(errorMessage);
+        act(() => failedStatus.blur());
+
+        await user.click(within(screen.getByTestId("folder-row-Contracts")).getByRole("checkbox"));
+        const update = setSelected.mock.calls[0]![0] as (previous: string[]) => string[];
+        expect(update([])).toEqual(["d7", "d11"]);
     });
 
     it("sends a pinned starter over its document and pins it for follow-ups", async () => {

@@ -3,7 +3,7 @@
  * itself and hand it to the pure generator as one `WorkspaceBrief`.
  *
  * Four cheap reads, run together: the company row, the extracted profile,
- * the document inventory (counts per folder plus the newest titles), and the
+ * indexed document inventory (counts per folder plus the newest titles), and the
  * active connector list. No retrieval — starters are about what the workspace
  * *has*, not about any one passage, and a RAG pass per page load would be the
  * most expensive thing on the screen.
@@ -11,7 +11,7 @@
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
-import { count, desc, eq, max } from "drizzle-orm";
+import { and, count, desc, eq, max } from "drizzle-orm";
 import { formatMetadataContext } from "@launchstack/tools/company-context";
 import { company, document } from "@launchstack/store/schema";
 
@@ -29,6 +29,10 @@ export async function buildWorkspaceBrief(
     scope: DocumentScope = SCOPE_EVERYTHING
 ): Promise<WorkspaceBrief> {
     const now = new Date();
+    const processedDocumentsWhere = and(
+        scopedDocumentWhere(companyId, scope),
+        eq(document.ocrProcessed, true)
+    );
 
     const [companyRows, metadataRows, folderRows, recentRows, totalRows, connections] =
         await Promise.all([
@@ -53,7 +57,7 @@ export async function buildWorkspaceBrief(
             db
                 .select({ name: document.category, count: count() })
                 .from(document)
-                .where(scopedDocumentWhere(companyId, scope))
+                .where(processedDocumentsWhere)
                 .groupBy(document.category),
             db
                 .select({
@@ -63,13 +67,13 @@ export async function buildWorkspaceBrief(
                     createdAt: document.createdAt,
                 })
                 .from(document)
-                .where(scopedDocumentWhere(companyId, scope))
+                .where(processedDocumentsWhere)
                 .orderBy(desc(document.createdAt), desc(document.id))
                 .limit(RECENT_DOCUMENT_LIMIT),
             db
                 .select({ total: count(), maxId: max(document.id) })
                 .from(document)
-                .where(scopedDocumentWhere(companyId, scope)),
+                .where(processedDocumentsWhere),
             listConnectionsForCompany(companyId),
         ]);
 

@@ -14,7 +14,13 @@ import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
 import { transcriptMarkerOf } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
-import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import type {
+    SourceCitability,
+    SourceIndexStatus,
+    SourceTypeId,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -71,6 +77,11 @@ function humanDate(raw: unknown): string {
     return d.toLocaleDateString();
 }
 
+function documentIndexStatus(doc: DocumentType): SourceIndexStatus {
+    if (doc.ocrProcessed === true) return "ready";
+    return doc.ocrMetadata?.error === "processing_failed" ? "failed" : "processing";
+}
+
 function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSource {
     return {
         id: `d${doc.id}`,
@@ -83,6 +94,8 @@ function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSourc
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        indexStatus: documentIndexStatus(doc),
+        errorMessage: doc.ocrMetadata?.errorMessage,
     };
 }
 
@@ -103,7 +116,7 @@ export function mindmapCitability(
  * there is one, so the retrieval layer's citations — which name document ids —
  * resolve to the map rather than to a Markdown copy of it.
  */
-export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+export function mapMindmap(map: MindmapSummary, publishedDocument?: DocumentType): WorkspaceSource {
     const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
     return {
         id: `m${map.id}`,
@@ -120,6 +133,8 @@ export function mapMindmap(map: MindmapSummary): WorkspaceSource {
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
+        indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
+        errorMessage: publishedDocument?.ocrMetadata?.errorMessage,
     };
 }
 
@@ -214,13 +229,22 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         // A published map's Markdown copy is the map, not a second source: it
         // is hidden here and reached through the map's `documentId`.
         const claimed = new Set<number>();
+        const documentsById = new Map<number, DocumentType>();
+        for (const doc of documents) documentsById.set(doc.id, doc);
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
         return [
             ...optimistic,
             ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
-            ...mindmaps.map(mapMindmap),
+            ...mindmaps.map(map =>
+                mapMindmap(
+                    map,
+                    map.publishedDocumentId === null
+                        ? undefined
+                        : documentsById.get(map.publishedDocumentId)
+                )
+            ),
         ];
     }, [documents, mindmaps, optimistic]);
 

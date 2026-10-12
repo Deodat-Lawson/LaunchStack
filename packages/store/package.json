@@ -107,7 +107,7 @@
         "test": "vitest run",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "node ./scripts/migrate.mjs",
-        "db:verify": "node ./scripts/migrate.mjs --verify",
+        "db:verify": "node ./scripts/migrate.mjs --check",
         "db:check": "node ./scripts/check-journal.mjs"
     },
     "dependencies": {

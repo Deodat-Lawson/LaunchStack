@@ -24,19 +24,20 @@ Before the first pass:
 2. **Database**
 
    ```bash
-   pnpm --filter @launchstack/core db:migrate   # apply schema
-   pnpm --filter @launchstack/core db:seed      # optional sample data
+   pnpm --filter @launchstack/web db:migrate   # apply both migration sets
+   DEV_SEED_PASSWORD=<8+ chars> pnpm --filter @launchstack/web db:seed   # optional: one workspace + four role accounts
    ```
 
-3. **Enable Inngest** (required for background document processing)
-   - Set `INNGEST_EVENT_KEY=placeholder` in `.env`.
-   - In a **separate terminal**, run the Inngest dev server:
+3. **Run the worker** (required for document processing)
+   - In a **separate terminal**, run the worker. It consumes the ingestion outbox; without it,
+     uploads stay queued. Ingestion does not need Inngest.
 
    ```bash
-   pnpm --filter @launchstack/web inngest:dev
+   pnpm --filter @launchstack/worker dev
    ```
 
-   Dashboard: **http://localhost:8288**. Keep this running while testing.
+   Optional: `pnpm --filter @launchstack/web inngest:dev` (dashboard **http://localhost:8288**) for the
+   Inngest-hosted background verticals (trend search, prospector, …).
 
 4. **Run dev server**
 

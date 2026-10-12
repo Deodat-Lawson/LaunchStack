@@ -169,10 +169,10 @@ modes, and migration from the pre-PR variables.
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Behind a proxy | Public origin, e.g. `https://app.example.com` |
+| `BETTER_AUTH_URL` | Yes | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin" |
 | `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
-| `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
+| `CHAT_MODELS_CONFIG` | Optional | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI |
 | `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
 | `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
 | `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |

@@ -264,16 +264,19 @@ routes:
         }
     });
 
-    it("ships every route on a preset that is not deprecated", () => {
-        const config = createChatModelsConfig({
-            yaml: readFileSync(join(process.cwd(), "config/chat-models.yaml"), "utf8"),
-            endpoint,
-        });
-        for (const model of config.models.values()) {
-            expect(model.preset).toBeDefined();
-            expect(getChatModelPreset(model.preset!)!.deprecated).toBeUndefined();
+    it.each(["config/chat-models.yaml", "config/chat-models.azure.yaml"])(
+        "ships every route in %s on a preset that is not deprecated",
+        file => {
+            const config = createChatModelsConfig({
+                yaml: readFileSync(join(process.cwd(), file), "utf8"),
+                endpoint,
+            });
+            for (const model of config.models.values()) {
+                expect(model.preset).toBeDefined();
+                expect(getChatModelPreset(model.preset!)!.deprecated).toBeUndefined();
+            }
         }
-    });
+    );
 
     it("reports an unknown preset with the available names", () => {
         expect(() =>

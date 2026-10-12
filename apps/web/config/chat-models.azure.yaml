@@ -1,0 +1,51 @@
+# Chat model configuration for Azure OpenAI. Select it with
+#   CHAT_MODELS_CONFIG="config/chat-models.azure.yaml"
+# and point CHAT_BASE_URL at the resource's v1 endpoint
+# (https://<resource>.openai.azure.com/openai/v1).
+#
+# `id` is the Azure *deployment* name, not the model name. These ids assume a
+# deployment named `gpt-6-luna`; rename them if yours differs.
+#
+# Every route runs on GPT-6 Luna (preset verified against Azure in
+# packages/llm/src/presets.ts). The tiers differ by reasoning effort, as in
+# chat-models.yaml.
+version: 1
+
+models:
+    # Vision route inherits this model, so it must declare image input.
+    primary:
+        id: gpt-6-luna
+        preset: openai/gpt-6-luna
+
+    # The cheap tier: same model, no thinking unless a caller asks for it.
+    fast:
+        id: gpt-6-luna
+        preset: openai/gpt-6-luna
+        behavior:
+            reasoning:
+                mode: effort
+                levels:
+                    none: { reasoning_effort: "none" }
+                    low: { reasoning_effort: "low" }
+                default: "none"
+
+    # The reasoning route: same model, thinking hard by default. `none` is
+    # absent on purpose — a caller routed here asked for reasoning.
+    deep:
+        id: gpt-6-luna
+        preset: openai/gpt-6-luna
+        behavior:
+            reasoning:
+                mode: effort
+                levels:
+                    low: { reasoning_effort: "low" }
+                    medium: { reasoning_effort: "medium" }
+                    high: { reasoning_effort: "high" }
+                    xhigh: { reasoning_effort: "xhigh" }
+                default: "high"
+
+routes:
+    default: primary
+    fast: fast
+    reasoning: deep
+    vision: primary

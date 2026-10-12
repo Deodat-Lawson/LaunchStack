@@ -69,9 +69,7 @@ describe("Single-endpoint chat runtime configuration", () => {
         const content = fs.readFileSync(composePath, "utf-8");
         const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(content);
 
-        expect(appService![1]).toContain(
-            "./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro"
-        );
+        expect(appService![1]).toContain("./apps/web/config:/app/apps/web/config:ro");
     });
 
     /**

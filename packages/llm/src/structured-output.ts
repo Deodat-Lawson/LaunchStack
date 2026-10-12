@@ -213,6 +213,8 @@ function strictObjectSchema(node: JsonSchema7Type | undefined): JsonSchema7Type 
  * Preprocessing each optional property lets Zod choose union branches itself,
  * without guessing a branch or running refinements/transforms twice. Required
  * nullable fields, and optional fields that already accept null, keep null.
+ * Traverse every container the converter descends into, including catchalls;
+ * Map, Set and Promise still require their original non-JSON input types.
  * Copies preserve the original checks, defaults, effects and unknown-key policy.
  * Explicit class generics keep child-schema accessors typed after narrowing.
  */
@@ -223,15 +225,20 @@ function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
         if (cached) return cached;
         let result: z.ZodTypeAny = node;
         if (node instanceof z.ZodObject) {
+            const object = node as z.ZodObject<z.ZodRawShape, z.UnknownKeysParam, z.ZodTypeAny>;
             const shape: z.ZodRawShape = {};
-            for (const [key, property] of Object.entries(node.shape as z.ZodRawShape)) {
+            for (const [key, property] of Object.entries(object.shape)) {
                 const child = visit(property);
                 shape[key] =
                     property.isOptional() && !property.isNullable()
                         ? z.preprocess(value => (value === null ? undefined : value), child)
                         : child;
             }
-            result = node.extend(shape);
+            result = new z.ZodObject({
+                ...object._def,
+                shape: () => shape,
+                catchall: visit(object._def.catchall),
+            });
         } else if (node instanceof z.ZodArray) {
             const array = node as z.ZodArray<z.ZodTypeAny, z.ArrayCardinality>;
             result = new z.ZodArray({ ...array._def, type: visit(array.element) });
@@ -244,6 +251,41 @@ function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
                     z.ZodTypeAny,
                     ...z.ZodTypeAny[],
                 ],
+            });
+        } else if (node instanceof z.ZodDiscriminatedUnion) {
+            const union = node as z.ZodDiscriminatedUnion<
+                string,
+                z.ZodDiscriminatedUnionOption<string>[]
+            >;
+            // Rebuild the discriminator lookup as well as the option schemas.
+            result = z.discriminatedUnion(
+                union.discriminator,
+                union.options.map(visit) as [
+                    z.ZodDiscriminatedUnionOption<string>,
+                    ...z.ZodDiscriminatedUnionOption<string>[],
+                ],
+                union._def
+            );
+        } else if (node instanceof z.ZodIntersection) {
+            const intersection = node as z.ZodIntersection<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodIntersection({
+                ...intersection._def,
+                left: visit(intersection._def.left),
+                right: visit(intersection._def.right),
+            });
+        } else if (node instanceof z.ZodTuple) {
+            const tuple = node as z.ZodTuple<z.ZodTupleItems | [], z.ZodTypeAny | null>;
+            result = new z.ZodTuple({
+                ...tuple._def,
+                items: tuple.items.map(visit) as z.ZodTupleItems | [],
+                rest: tuple._def.rest ? visit(tuple._def.rest) : null,
+            });
+        } else if (node instanceof z.ZodPipeline) {
+            const pipeline = node as z.ZodPipeline<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodPipeline({
+                ...pipeline._def,
+                in: visit(pipeline._def.in),
+                out: visit(pipeline._def.out),
             });
         } else if (node instanceof z.ZodEffects) {
             const effects = node as z.ZodEffects<z.ZodTypeAny>;
@@ -260,12 +302,37 @@ function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
                 ...defaultSchema._def,
                 innerType: visit(defaultSchema.removeDefault()),
             });
+        } else if (node instanceof z.ZodCatch) {
+            const catchSchema = node as z.ZodCatch<z.ZodTypeAny>;
+            result = new z.ZodCatch({
+                ...catchSchema._def,
+                innerType: visit(catchSchema.removeCatch()),
+            });
+        } else if (node instanceof z.ZodBranded) {
+            const branded = node as z.ZodBranded<z.ZodTypeAny, string | number | symbol>;
+            result = new z.ZodBranded({ ...branded._def, type: visit(branded.unwrap()) });
+        } else if (node instanceof z.ZodReadonly) {
+            const readonly = node as z.ZodReadonly<z.ZodTypeAny>;
+            result = new z.ZodReadonly({ ...readonly._def, innerType: visit(readonly.unwrap()) });
+        } else if (node instanceof z.ZodPromise) {
+            const promise = node as z.ZodPromise<z.ZodTypeAny>;
+            result = new z.ZodPromise({ ...promise._def, type: visit(promise.unwrap()) });
         } else if (node instanceof z.ZodLazy) {
             const lazy = node as z.ZodLazy<z.ZodTypeAny>;
             result = new z.ZodLazy({ ...lazy._def, getter: () => visit(lazy.schema) });
         } else if (node instanceof z.ZodRecord) {
             const record = node as z.ZodRecord<z.KeySchema, z.ZodTypeAny>;
             result = new z.ZodRecord({ ...record._def, valueType: visit(record.valueSchema) });
+        } else if (node instanceof z.ZodMap) {
+            const map = node as z.ZodMap<z.ZodTypeAny, z.ZodTypeAny>;
+            result = new z.ZodMap({
+                ...map._def,
+                keyType: visit(map.keySchema),
+                valueType: visit(map.valueSchema),
+            });
+        } else if (node instanceof z.ZodSet) {
+            const set = node as z.ZodSet<z.ZodTypeAny>;
+            result = new z.ZodSet({ ...set._def, valueType: visit(set._def.valueType) });
         }
         seen.set(node, result);
         return result;

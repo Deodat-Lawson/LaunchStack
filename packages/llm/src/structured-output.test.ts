@@ -10,16 +10,23 @@ function fakeResolved(
     parsed: unknown,
     options: { nativeError?: Error; nativeErrors?: Error[]; text?: string } = {}
 ) {
-    const seen: { schema?: unknown; schemas: unknown[]; method?: string; plainCalls: number } = {
+    const seen: {
+        schema?: unknown;
+        schemas: unknown[];
+        method?: string;
+        strict?: boolean;
+        plainCalls: number;
+    } = {
         schemas: [],
         plainCalls: 0,
     };
     const queued = [...(options.nativeErrors ?? [])];
     const chat = {
-        withStructuredOutput(schema: unknown, config: { method?: string }) {
+        withStructuredOutput(schema: unknown, config: { method?: string; strict?: boolean }) {
             seen.schema = schema;
             seen.schemas.push(schema);
             seen.method = config.method;
+            seen.strict = config.strict;
             return {
                 invoke: async () => {
                     const next = queued.shift();
@@ -52,17 +59,36 @@ const schema = z.object({
 });
 
 describe("invokeStructuredWithUsage in json-schema mode", () => {
-    it("sends a plain JSON Schema, so optional fields are not refused before the request", async () => {
-        // OpenAI's strict Zod helper threw "uses .optional() without .nullable()"
-        // for this schema, failing Vantage's weekly review and the prospector.
-        const { resolved, seen } = fakeResolved({ title: "t", priorities: [{ item: "a" }] });
+    it("requests strict JSON Schema and decodes optional nulls before Zod validation", async () => {
+        // A plain schema bypasses OpenAI's strict Zod helper; the endpoint still
+        // requires optional properties, using null to represent a missing value.
+        const { resolved, seen } = fakeResolved({
+            title: "t",
+            priorities: [{ item: "a", rationale: null }],
+        });
 
         const { result } = await invokeStructuredWithUsage(resolved, schema, [], { name: "plan" });
 
         expect(seen.method).toBe("jsonSchema");
-        expect(seen.schema).toMatchObject({ type: "object", required: ["title", "priorities"] });
+        expect(seen.strict).toBe(true);
+        expect(seen.schema).toMatchObject({
+            type: "object",
+            required: ["title", "priorities"],
+            additionalProperties: false,
+            properties: {
+                priorities: {
+                    items: {
+                        required: ["item", "rationale"],
+                        additionalProperties: false,
+                        properties: {
+                            rationale: { anyOf: [{ type: "string" }, { type: "null" }] },
+                        },
+                    },
+                },
+            },
+        });
         expect(JSON.stringify(seen.schema)).not.toContain("$ref");
-        expect(result).toEqual({ title: "t", priorities: [{ item: "a" }] });
+        expect(result).toEqual({ title: "t", priorities: [{ item: "a", rationale: undefined }] });
     });
 
     it("sends literals as single-value enums, which Gemini enforces and `const` it does not", async () => {

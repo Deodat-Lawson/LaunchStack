@@ -11,9 +11,10 @@
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
-import { and, count, desc, eq, max } from "drizzle-orm";
+import { MEDIA_MIME_BY_EXTENSION } from "~/lib/media-document";
+import { and, count, desc, eq, isNull, max, not, or, sql } from "drizzle-orm";
 import { formatMetadataContext } from "@launchstack/tools/company-context";
-import { company, document } from "@launchstack/store/schema";
+import { company, document, documentVersions } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
@@ -23,15 +24,36 @@ import { relativeAge, type BriefDocument, type BriefFolder, type WorkspaceBrief 
 /** Newest titles the model may reference (and pin) — enough variety, small prompt. */
 const RECENT_DOCUMENT_LIMIT = 16;
 const FOLDER_LIMIT = 8;
+const MEDIA_FILE_PATTERN = `\\.(${Object.keys(MEDIA_MIME_BY_EXTENSION).join("|")})([?#].*)?$`;
 
 export async function buildWorkspaceBrief(
     companyId: bigint,
     scope: DocumentScope = SCOPE_EVERYTHING
 ): Promise<WorkspaceBrief> {
     const now = new Date();
+    // A recording is stored for playback; only its separate text transcript is
+    // indexed/cited. The creation key identifies current uploads even when the
+    // filename/MIME was omitted. Non-OCR media rows retain that rule for legacy uploads.
+    const originalMediaWhere = or(
+        sql`coalesce(${document.creationKey} like '%:audio-source', false)`,
+        and(
+            eq(document.ocrEnabled, false),
+            sql`coalesce(${document.ocrMetadata}->>'source', '') not in ('transcription', 'sidecar-ytdlp')`,
+            sql`${document.title} not ilike '%(transcription)%'`,
+            or(
+                sql`btrim(coalesce(${document.mimeType}, '')) ~* '^(audio|video)/'`,
+                sql`${document.title} ~* ${MEDIA_FILE_PATTERN}`,
+                sql`${document.url} ~* ${MEDIA_FILE_PATTERN}`
+            )
+        )
+    );
     const processedDocumentsWhere = and(
         scopedDocumentWhere(companyId, scope),
-        eq(document.ocrProcessed, true)
+        or(
+            and(isNull(document.currentVersionId), eq(document.ocrProcessed, true)),
+            eq(documentVersions.ocrProcessed, true)
+        ),
+        not(originalMediaWhere!)
     );
 
     const [companyRows, metadataRows, folderRows, recentRows, totalRows, connections] =
@@ -57,6 +79,13 @@ export async function buildWorkspaceBrief(
             db
                 .select({ name: document.category, count: count() })
                 .from(document)
+                .leftJoin(
+                    documentVersions,
+                    and(
+                        eq(documentVersions.id, document.currentVersionId),
+                        eq(documentVersions.documentId, document.id)
+                    )
+                )
                 .where(processedDocumentsWhere)
                 .groupBy(document.category),
             db
@@ -67,12 +96,26 @@ export async function buildWorkspaceBrief(
                     createdAt: document.createdAt,
                 })
                 .from(document)
+                .leftJoin(
+                    documentVersions,
+                    and(
+                        eq(documentVersions.id, document.currentVersionId),
+                        eq(documentVersions.documentId, document.id)
+                    )
+                )
                 .where(processedDocumentsWhere)
                 .orderBy(desc(document.createdAt), desc(document.id))
                 .limit(RECENT_DOCUMENT_LIMIT),
             db
                 .select({ total: count(), maxId: max(document.id) })
                 .from(document)
+                .leftJoin(
+                    documentVersions,
+                    and(
+                        eq(documentVersions.id, document.currentVersionId),
+                        eq(documentVersions.documentId, document.id)
+                    )
+                )
                 .where(processedDocumentsWhere),
             listConnectionsForCompany(companyId),
         ]);

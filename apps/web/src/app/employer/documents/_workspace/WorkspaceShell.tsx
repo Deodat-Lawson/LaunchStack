@@ -1883,7 +1883,14 @@ export function WorkspaceShell() {
             // same window; while it is focused, its map wins. The column
             // verbs are the exception: they move between columns and close
             // this one, so the editor must not be able to trap someone in it.
-            if (editingRef.current && !command.id.startsWith("pane.")) return;
+            // "Focused" is the editor's own test (`isActive` in
+            // MindmapEditor): with the focus in the tab strip it lets go of
+            // every key, so they are the workspace's again. Closing a tab
+            // leaves the focus on the tab that took its place, and when that
+            // was the editor's, ⌘K went to neither palette.
+            const editorHasKeys =
+                editingRef.current && !document.activeElement?.closest("[data-studio-tab-strip]");
+            if (editorHasKeys && !command.id.startsWith("pane.")) return;
             e.preventDefault();
             switch (command.id) {
                 case "palette.toggle":

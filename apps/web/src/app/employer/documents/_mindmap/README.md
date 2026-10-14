@@ -15,19 +15,31 @@ Documents workspace beside every upload, found by the same three search boxes
 (the rail, Knowledge, ⌘K — node labels included), filed in the same folders,
 and opened, renamed, moved and deleted through the same controls.
 
-| Surface | Where                                           | What it is                                                                                        |
-| ------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Preview | `/employer/documents?source=m<id>`              | The workspace viewer showing the live canvas read-only (`ui/MindmapPreview`), with **Edit**       |
-| Editor  | `/employer/documents?source=m<id>&edit=1`       | `MindmapEditor` mounted in the workspace's main area; the rail stays. Back returns to the preview |
-| Create  | Documents → **Add a source → Create → Mindmap** | Picks a template, creates the row, opens the editor in place                                      |
-| Create  | Documents → Studio → **Mindmap**                | Opens that same tab                                                                               |
+Everything a map opens is a tab of the workspace's centre, like any other
+source or Studio app.
 
-Both params persist in the URL and transitions push history, so the browser's
-back button walks editor → preview → library. `/employer/mindmap/[id]` survives
-only as a redirect for links shared before the move. The glue on the workspace
-side is `_workspace/useWorkspaceData` (lists maps as `WorkspaceSource`s of type
-`mindmap`), `_workspace/sourceApi` (the one place that picks an API by id
-prefix) and `_workspace/MindmapEditorHost`.
+| Surface | Where                                                  | What it is                                                                                                  |
+| ------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Preview | A tab named after the map                              | The workspace viewer showing the live canvas read-only (`ui/MindmapPreview`), with **Edit**                 |
+| Editor  | The **Mindmap** tab, `?source=m<id>&edit=1` while open | `MindmapEditor` in the workspace's centre; the rail stays. One map at a time; never restored on reload      |
+| Create  | Sidebar → **Add knowledge → Mindmap**                  | Picks a template, creates the row, opens the editor in place                                                |
+| Create  | Studio → **Mindmap**                                   | Opens the Mindmap tab on its "New mindmap" page                                                             |
+| Link    | `/employer/documents?source=m<id>`                     | A way in, not an address: opens the preview tab and drops the param. `&present=1` opens it in the presenter |
+
+How you leave the editor decides what stays open. Its **Back** button saves,
+lets go of the map and brings the preview tab forward. The browser's back
+button also brings the preview forward but keeps the editor open in its tab
+behind, undo history and all, so a stray swipe costs nothing; closing the
+preview then shows the editor again, and closing the Mindmap tab lets go.
+With the Mindmap tab in front, ⌘K is the editor's palette, except while the
+focus is in the tab strip (where closing or picking a tab leaves it): the strip
+is the workspace's, so there ⌘K opens "Jump to anything".
+
+`/employer/mindmap/[id]` survives only as a redirect for links shared before
+the move. The glue on the workspace side is `_workspace/useWorkspaceData`
+(lists maps as `WorkspaceSource`s of type `mindmap`), `_workspace/sourceApi`
+(the one place that picks an API by id prefix) and
+`_workspace/MindmapEditorHost`.
 
 ## Layout
 

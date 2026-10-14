@@ -3,10 +3,11 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
 
 /**
- * A mindmap is a source: create → edit → back → preview → library, all inside
- * the Documents workspace, with the browser's own back button walking the
- * same path. Each test gets a fresh account and workspace so nothing depends
- * on the database's prior state and nothing leaks between runs.
+ * A mindmap is a source, and everything it opens is a tab of the Documents
+ * workspace: its editor is the Mindmap tab, its preview a tab named after it.
+ * Create → edit → back → close → find → reopen, with the browser's own back
+ * button in the mix. Each test gets a fresh account and workspace so nothing
+ * depends on the database's prior state and nothing leaks between runs.
  */
 
 /**
@@ -52,7 +53,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await signUpWithWorkspace(page);
     });
 
-    test("create → edit in place → back → preview tab → library, with a working back button", async ({
+    test("create → edit in place → back to its tab → close → palette → rail → reload → deep link", async ({
         page,
     }) => {
         await page.goto("/employer/documents");
@@ -68,55 +69,88 @@ test.describe("mindmaps live in the Documents workspace", () => {
         await expect(page.getByText("Diagram it, then cite it")).toBeVisible();
         await page.getByText("Blank canvas").click();
 
-        // The editor opened in place: the URL names the map and the edit mode,
-        // and the editor's own chrome is on screen beside the rail.
+        // The editor opens in place, as the Mindmap tab: the URL names the map
+        // and the edit mode, and the rail stays beside it.
         await page.waitForURL(/\/employer\/documents\?.*source=m\d+.*edit=1/);
         const sourceId = sourceIdFromUrl(page.url());
+        const editorTab = page.getByRole("tab", { name: "Mindmap", exact: true });
+        await expect(editorTab).toHaveAttribute("data-state", "active");
         await expect(page.getByLabel("Mindmap title")).toBeVisible();
         await expect(page.getByPlaceholder("Filter sources")).toBeVisible();
 
-        // Name it from the editor, then leave.
+        // Name it from the editor, then leave by its Back button.
         const title = `Launch plan ${sourceId}`;
+        const mapTab = page.getByRole("tab", { name: title, exact: true });
+        const row = page.getByTestId(`source-row-${sourceId}`);
         await page.getByLabel("Mindmap title").fill(title);
         await page.getByLabel("Mindmap title").press("Enter");
         await page.getByRole("button", { name: "Back", exact: true }).click();
 
-        // Back lands on the map's preview, in a tab of its own, and the URL
-        // lets go of the editor — not a gallery.
-        await page.waitForURL(url => new URL(url).searchParams.get("edit") === null);
+        // Back saves first, then shows the map's preview in a tab of its own,
+        // and the URL lets go of the map. The tab and the rail already carry
+        // the new name — the template's first save still running is no
+        // excuse to show the old one.
+        await page.waitForURL(url => {
+            const params = new URL(url).searchParams;
+            return params.get("source") === null && params.get("edit") === null;
+        });
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
+        await expect(mapTab).toHaveAttribute("data-state", "active");
+        await expect(row).toContainText(title);
         await expect(page.getByTestId("viewer-edit-mindmap")).toBeVisible();
         await expect(page.getByRole("button", { name: "Make citable" })).toBeVisible();
 
-        // Edit goes back in; the browser's back button comes out again.
+        // Edit goes back into the Mindmap tab. The browser's back button comes
+        // out to the preview but keeps the editor open in its tab behind: a
+        // stray back swipe must not throw the undo history away.
         await page.getByTestId("viewer-edit-mindmap").click();
         await page.waitForURL(/edit=1/);
-        await expect(page.getByLabel("Mindmap title")).toBeVisible();
+        await expect(editorTab).toHaveAttribute("data-state", "active");
+        await expect(page.getByLabel("Mindmap title")).toHaveValue(title);
         await page.goBack();
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
+        await expect(mapTab).toHaveAttribute("data-state", "active");
+        await expect(editorTab).toBeVisible();
 
-        // Close the preview from its tab: the library, with the map in the
-        // rail under its new name.
+        // Close the preview from its tab: the editor's tab, next in line,
+        // comes forward with the map still open.
         await page.getByTitle(`Close ${title}`).click();
         await expect(page.getByTestId("mindmap-preview")).toHaveCount(0);
-        const row = page.getByTestId(`source-row-${sourceId}`);
-        await expect(row).toBeVisible();
+        await expect(editorTab).toHaveAttribute("data-state", "active");
+        await expect(page.getByLabel("Mindmap title")).toHaveValue(title);
+
+        // The focus followed the close onto the editor's tab, and the strip is
+        // the workspace's: ⌘K there is the workspace palette, not the
+        // editor's, and it finds the map like any other source.
+        await page.keyboard.press("ControlOrMeta+k");
+        const jump = page.getByPlaceholder(/^Jump to anything/);
+        await jump.fill(title);
+        // The palette's results sit in the same panel as its input.
+        const palette = jump.locator("xpath=ancestor::div[2]");
+        await expect(palette.getByText(title, { exact: true })).toBeVisible();
+        await page.keyboard.press("Escape");
+        await expect(jump).toHaveCount(0);
+
+        // Close the editor's tab too: it lets go of the map, nothing of it is
+        // left open, and the rail still lists it under its new name.
+        await page.getByTitle("Close Mindmap").click();
+        await expect(editorTab).toHaveCount(0);
+        await expect(page.getByLabel("Mindmap title")).toHaveCount(0);
+        await expect(page.getByTestId("mindmap-preview")).toHaveCount(0);
         await expect(row).toContainText(title);
 
-        // ⌘K finds it like any other source.
-        await page.keyboard.press("ControlOrMeta+k");
-        await page.getByPlaceholder(/^Jump to anything/).fill(title);
-        await expect(page.getByText(title).first()).toBeVisible();
-        await page.keyboard.press("Escape");
-
         // The rail reopens it as a tab, which survives a reload; a deep link
-        // opens the same tab.
+        // opens the same tab and drops the param.
         await row.getByTitle("Open").click();
+        await expect(mapTab).toHaveAttribute("data-state", "active");
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
         await page.reload();
+        await expect(mapTab).toHaveAttribute("data-state", "active", { timeout: 60_000 });
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
         await page.getByTitle(`Close ${title}`).click();
+        await expect(mapTab).toHaveCount(0);
         await page.goto(`/employer/documents?source=${sourceId}`);
+        await expect(mapTab).toHaveAttribute("data-state", "active");
         await expect(page.getByTestId("mindmap-preview")).toBeVisible();
         await page.waitForURL(url => new URL(url).searchParams.get("source") === null);
     });

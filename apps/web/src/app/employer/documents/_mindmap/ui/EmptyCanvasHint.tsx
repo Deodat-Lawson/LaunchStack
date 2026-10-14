@@ -3,10 +3,14 @@
 import React from "react";
 import { ClipboardPaste } from "lucide-react";
 
+import { cn } from "~/lib/utils";
+
 import { insertShape, styleTextSelection } from "../model/commands";
 import { activePage } from "../model/doc";
 import { screenToWorld } from "../model/geometry";
+import { isDarkSurface } from "../model/palette";
 import type { EditorState } from "../model/store";
+import styles from "./Canvas.module.css";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
@@ -16,6 +20,13 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  * the three keys that grow it, so the first question — "where do I type?" —
  * is answered on the canvas instead of in a side panel. Focus depth only, and
  * only while the page has no shapes; the first node removes it.
+ *
+ * It is HTML laid over the board rather than part of the <svg>, so it opts
+ * into the paper's colours itself (`.paper` + `data-paper`, as the canvas
+ * does). Painted in the app's theme instead, a dark-mode viewer got pale
+ * violet on a cream board and a light-mode viewer dark violet on a black one.
+ * Only `brand` (the paper's `--accent`) and the ink/line/panel names are
+ * rebound — `brand-ink` and `brand-soft` are not, so they are not used here.
  */
 
 /** The shape a mindmap's centre is drawn with. */
@@ -39,7 +50,8 @@ export function EmptyCanvasHint({
     const viewport = useEditor(selectViewport);
 
     if (depth !== "focus" || presenting) return null;
-    if (activePage(doc).nodes.length > 0) return null;
+    const page = activePage(doc);
+    if (page.nodes.length > 0) return null;
 
     const start = () => {
         const at = screenToWorld(viewport, { x: canvasSize.w / 2, y: canvasSize.h / 2 });
@@ -51,19 +63,23 @@ export function EmptyCanvasHint({
     return (
         <div
             data-export="omit"
-            className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-5"
+            data-paper={isDarkSurface(page.background.color) ? "dark" : "light"}
+            className={cn(
+                styles.paper,
+                "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-5"
+            )}
         >
             <button
                 type="button"
                 onClick={start}
-                className="border-brand/40 text-brand-ink hover:border-brand hover:bg-brand-soft pointer-events-auto rounded-xl border-2 border-dashed px-8 py-4 text-lg font-semibold transition-colors"
+                className="border-brand/50 text-brand hover:border-brand hover:bg-brand/10 pointer-events-auto rounded-xl border-2 border-dashed px-8 py-4 text-lg font-semibold transition-colors"
             >
                 Type your idea
             </button>
 
-            <p className="text-ink-3 flex items-center gap-3 text-[12.5px]">
+            <p className="text-ink-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[12.5px]">
                 <span>
-                    <Key>Enter</Key> sibling
+                    <Key>Enter</Key> finish / next
                 </span>
                 <span className="text-line">·</span>
                 <span>
@@ -78,7 +94,7 @@ export function EmptyCanvasHint({
             <button
                 type="button"
                 onClick={onPasteOutline}
-                className="text-ink-2 hover:text-brand-ink pointer-events-auto flex items-center gap-1.5 text-[12.5px] underline-offset-4 hover:underline"
+                className="text-ink-2 hover:text-brand pointer-events-auto flex items-center gap-1.5 text-[12.5px] underline-offset-4 hover:underline"
             >
                 <ClipboardPaste className="size-3.5" />
                 Paste an outline instead

@@ -63,7 +63,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
         });
 
         // Add a source → Create → Mindmap → a template.
-        await page.getByTitle("Add knowledge  ⌘U").click();
+        await page.getByRole("button", { name: /^Add knowledge/ }).click();
         await page.getByRole("button", { name: "Mindmap", exact: true }).click();
         await expect(page.getByText("Diagram it, then cite it")).toBeVisible();
         await page.getByText("Blank canvas").click();
@@ -105,7 +105,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
 
         // ⌘K finds it like any other source.
         await page.keyboard.press("ControlOrMeta+k");
-        await page.getByPlaceholder("Jump to anything — sources, features, actions…").fill(title);
+        await page.getByPlaceholder(/^Jump to anything/).fill(title);
         await expect(page.getByText(title).first()).toBeVisible();
         await page.keyboard.press("Escape");
 
@@ -123,7 +123,7 @@ test.describe("mindmaps live in the Documents workspace", () => {
 
     test("the old editor address redirects into the workspace", async ({ page }) => {
         await page.goto("/employer/documents");
-        await page.getByTitle("Add knowledge  ⌘U").click();
+        await page.getByRole("button", { name: /^Add knowledge/ }).click();
         await page.getByRole("button", { name: "Mindmap", exact: true }).click();
         await page.getByText("Blank canvas").click();
         await page.waitForURL(/source=m\d+/);

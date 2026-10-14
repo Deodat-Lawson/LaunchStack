@@ -28,6 +28,7 @@ import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/pr
 import {
     docMode,
     pauseAutoArrangeAfterManualMove,
+    revealNode,
     setActivePage,
     setAutoLayout,
     viewportCentre,
@@ -37,6 +38,7 @@ import { isImageFile } from "../lib/images";
 import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
+import { paintNewTopics } from "../model/topicStyle";
 import type { Point, ShapeId } from "../model/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
@@ -192,6 +194,25 @@ export function MindmapEditor(props: MindmapEditorProps) {
     // at 5%.
     const frame = useAutoFit(store, stageSize);
 
+    // Whatever opens a label — Tab, Enter, a port drag, typing on a selection —
+    // the field has to be on screen to type into. Auto-arrange can put a new
+    // topic past the stage's edge (a third branch lands on the far side of the
+    // centre), and typing into a box you cannot see is the "nothing shows up"
+    // experience all over again. Pans the least distance, and only when needed.
+    const stageSizeRef = useRef(stageSize);
+    stageSizeRef.current = stageSize;
+    useEffect(() => {
+        let shown: string | null = null;
+        return store.subscribe(() => {
+            const editing = store.getState().editing;
+            const id = editing?.kind === "node" ? editing.id : null;
+            if (id === shown) return;
+            shown = id;
+            // After the emit that announced it, not inside it.
+            if (id) queueMicrotask(() => revealNode(store, id, stageSizeRef.current));
+        });
+    }, [store]);
+
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);
     useEffect(() => {
@@ -235,10 +256,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const doc = store.getState().doc;
             const index = doc.pages.findIndex(p => p.id === doc.activePageId);
             const next = doc.pages[index + delta];
-            if (!next) return;
+            if (!next) return false;
             setActivePage(store, next.id);
             // The new page has its own content; frame it before it is shown.
             requestAnimationFrame(() => frame(stageSize));
+            return true;
         },
         [stageSize, frame, store]
     );
@@ -247,12 +269,12 @@ export function MindmapEditor(props: MindmapEditorProps) {
         if (!presenting) return;
         const onKey = (e: KeyboardEvent) => {
             if (!isActive() || e.defaultPrevented) return;
+            // Claim the key only when a page actually turned; on a one-page
+            // map there is nothing to turn, and the key is the Presenter's.
             if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
-                e.preventDefault();
-                stepPage(1);
+                if (stepPage(1)) e.preventDefault();
             } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
-                e.preventDefault();
-                stepPage(-1);
+                if (stepPage(-1)) e.preventDefault();
             }
         };
         window.addEventListener("keydown", onKey);
@@ -367,6 +389,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
                 });
+                if (shape.startsWith("mind-")) paintNewTopics(store, [node.id]);
                 store.selectNodes([node.id]);
                 // Same as placing one with the shape tool: land in the label,
                 // so a dropped box asks to be named rather than sitting blank.

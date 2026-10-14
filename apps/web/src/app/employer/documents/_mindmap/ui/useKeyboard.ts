@@ -8,24 +8,30 @@ import {
     alignSelection,
     copySelection,
     cutSelection,
-    deleteSelection,
+    deleteTopicsOrSelection,
     duplicateSelection,
     fitToScreen,
     groupSelection,
     moveSelection,
+    moveTopicAmongSiblings,
+    outdentTopic,
     reorder,
     selectAll,
+    selectTopicInDirection,
     styleTextSelection,
     tidyUp,
+    toggleCollapseSelection,
     toggleLock,
     ungroupSelection,
     setZoom,
     zoomByStep,
     zoomToSelection,
 } from "../model/commands";
-import { activePage, nodeById } from "../model/doc";
+import { activePage, isTopicShape, nodeById, type NavDirection } from "../model/doc";
+import { shapeHoldsText } from "../model/shapes";
 import type { EditorStore } from "../model/store";
-import type { ShapeId, ToolId } from "../model/types";
+import type { DiagramNode, ShapeId, ToolId } from "../model/types";
+import { focusEditorField } from "./EditorContext";
 
 /**
  * The keyboard map.
@@ -36,6 +42,14 @@ import type { ShapeId, ToolId } from "../model/types";
  *
  * Keystrokes are ignored while focus is inside a field: the canvas must never
  * steal ⌘A from the title input or Delete from a comment box.
+ *
+ * With a topic selected the keys are an outliner's, the way XMind, MindNode
+ * and MindMeister have them: Enter adds the next sibling (the Enter that
+ * finished typing was the label field's, and stopped there), Tab a child,
+ * ⇧Tab outdents, the arrows walk to the nearest topic that way, ⌘↑/↓ reorder,
+ * ⌘/ folds, Delete takes the branch, and typing replaces the label. Other
+ * shapes keep a canvas's keys — Enter edits, arrows nudge, Delete removes
+ * only what is selected.
  */
 
 export interface KeyboardActions {
@@ -69,11 +83,28 @@ const TOOL_KEYS: Record<string, { tool: ToolId; shape?: ShapeId }> = {
     s: { tool: "shape", shape: "rounded-rectangle" },
 };
 
+const ARROWS: Record<string, NavDirection> = {
+    ArrowLeft: "left",
+    ArrowRight: "right",
+    ArrowUp: "up",
+    ArrowDown: "down",
+};
+
 function isTypingTarget(target: EventTarget | null): boolean {
     const el = target as HTMLElement | null;
     if (!el) return false;
     if (el.isContentEditable) return true;
     return /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+}
+
+/** A key that types a character: one code point, no ⌘/Ctrl/⌥ held. */
+function isPrintable(e: KeyboardEvent): boolean {
+    return Array.from(e.key).length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey;
+}
+
+/** Whether Enter or a typed key may open this shape's label. */
+function canEditText(nd: DiagramNode): boolean {
+    return !nd.locked && nd.shape !== "group" && shapeHoldsText(nd.shape);
 }
 
 export function useKeyboard(store: EditorStore, actions: KeyboardActions): void {
@@ -85,12 +116,32 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
             if (!ref.current.isActive() || e.defaultPrevented) return;
             if (isTypingTarget(e.target)) return;
             const state = store.getState();
-            if (state.editing) return;
+            if (state.editing) {
+                // A label is open but focus is not in it — the field never
+                // got it, or something took it. Rather than let keystrokes
+                // vanish: a character moves focus into the field during its
+                // own keydown, so the browser types it there; Enter and
+                // Escape finish the label, as they would from inside it.
+                if (isPrintable(e)) {
+                    focusEditorField(store);
+                } else if (e.key === "Enter" || e.key === "Escape") {
+                    e.preventDefault();
+                    store.setEditing(null);
+                }
+                return;
+            }
 
             const mod = e.metaKey || e.ctrlKey;
             const shift = e.shiftKey;
             const key = e.key;
             const lower = key.length === 1 ? key.toLowerCase() : key;
+            const page = activePage(state.doc);
+            /** The node selected, when it is the only thing selected. */
+            const only =
+                state.selection.length === 1 && state.selection[0]!.kind === "node"
+                    ? nodeById(page, state.selection[0]!.id)
+                    : undefined;
+            const topic = only && isTopicShape(only.shape) ? only : undefined;
 
             // -- always available ------------------------------------------
             if (key === "Escape") {
@@ -105,10 +156,11 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
             }
 
             if (state.presenting) {
-                // Presentation mode only listens for movement and exit.
-                if (key === "ArrowRight" || key === "ArrowDown" || key === " ") {
-                    e.preventDefault();
-                }
+                // Presentation mode only listens for movement and exit — and
+                // movement belongs to the Presenter and the page stepper, which
+                // claim a key (preventDefault) only when they actually move.
+                // Claiming it here, unconditionally, is what left → dead in
+                // Present: both of them skip a key that is already claimed.
                 return;
             }
 
@@ -184,9 +236,17 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                         e.preventDefault();
                         ref.current.onExport();
                         return;
-                    case "enter":
+                    // `lower` only folds single characters, so this is the
+                    // key's own name, not "enter" — which never matched.
+                    case "Enter":
                         e.preventDefault();
                         ref.current.onEditSelection();
+                        return;
+                    // ⌘/ folds, as in XMind (Whimsical has Ctrl+/). Bare /
+                    // stays Find.
+                    case "/":
+                        e.preventDefault();
+                        toggleCollapseSelection(store);
                         return;
                     case "]":
                         e.preventDefault();
@@ -235,18 +295,30 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                     alignSelection(store, axis);
                     return;
                 }
+                // ⌘↑ / ⌘↓: move a topic among its siblings.
+                if (key === "ArrowUp" || key === "ArrowDown") {
+                    e.preventDefault();
+                    if (topic) moveTopicAmongSiblings(store, topic.id, key === "ArrowUp" ? -1 : 1);
+                    return;
+                }
                 return;
             }
 
             // -- plain keys -------------------------------------------------
             if (key === "Delete" || key === "Backspace") {
                 e.preventDefault();
-                deleteSelection(store);
+                deleteTopicsOrSelection(store, { keepChildren: e.altKey });
                 return;
             }
 
-            if (key.startsWith("Arrow")) {
+            const arrow = ARROWS[key];
+            if (arrow) {
                 e.preventDefault();
+                // A topic's arrows walk the map; ⌥ makes them nudge it instead.
+                if (topic && !e.altKey) {
+                    selectTopicInDirection(store, topic.id, arrow, ref.current.getViewportSize());
+                    return;
+                }
                 const step = shift ? state.doc.settings.gridSize * 5 : state.doc.settings.gridSize;
                 const delta =
                     key === "ArrowLeft"
@@ -264,16 +336,26 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
 
             if (key === "Tab") {
                 e.preventDefault();
+                if (shift) {
+                    if (topic) outdentTopic(store, topic.id);
+                    return;
+                }
                 if (firstNode) addChildTopic(store, firstNode.id);
                 return;
             }
 
             if (key === "Enter") {
                 e.preventDefault();
-                if (!firstNode) return;
-                const page = activePage(state.doc);
-                if (!nodeById(page, firstNode.id)) return;
-                addSiblingTopic(store, firstNode.id);
+                const nd = firstNode ? nodeById(page, firstNode.id) : undefined;
+                if (nd && isTopicShape(nd.shape)) {
+                    // The label was finished by the Enter before this one;
+                    // this one is "next". On the centre that is a child.
+                    addSiblingTopic(store, nd.id, shift ? "before" : "after");
+                } else if (nd ? canEditText(nd) : !firstNode && state.selection.length > 0) {
+                    // Any other shape, or a connector: Enter opens its text,
+                    // the FigJam and Lucid convention. Nothing is created.
+                    ref.current.onEditSelection();
+                }
                 return;
             }
 
@@ -306,6 +388,24 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
             if (lower === "-" || lower === "_") {
                 e.preventDefault();
                 zoomByStep(store, -1, ref.current.getViewportSize());
+                return;
+            }
+
+            // Typing on a selected topic replaces its label (XMind). Topics
+            // only: on a canvas of boxes the letters are tools (R, then click,
+            // places a rectangle), and renaming the selected box to "r"
+            // instead broke that habit. Not default-prevented: the field
+            // mounts and takes focus before the browser delivers the
+            // character, and the seed covers the case where it never does —
+            // see TextEditorOverlay. Space stays pan.
+            if (
+                only &&
+                key !== " " &&
+                isPrintable(e) &&
+                isTopicShape(only.shape) &&
+                canEditText(only)
+            ) {
+                store.setEditing({ kind: "node", id: only.id, seed: key });
                 return;
             }
 
@@ -359,12 +459,27 @@ export const SHORTCUTS: readonly ShortcutGroup[] = [
         ],
     },
     {
+        title: "Topics",
+        rows: [
+            { keys: "Enter", label: "Finish typing · again for the next topic" },
+            { keys: "⇧Enter", label: "New topic before this one" },
+            { keys: "Tab", label: "Add child topic" },
+            { keys: "⇧Tab", label: "Outdent topic" },
+            { keys: "Arrows", label: "Go to the nearest topic that way" },
+            { keys: "⌘↑ / ⌘↓", label: "Move topic up / down" },
+            { keys: "⌘/", label: "Collapse / expand branch" },
+            { keys: "Delete", label: "Delete topic and its branch" },
+            { keys: "⌥Delete", label: "Delete topic, keep its children" },
+        ],
+    },
+    {
         title: "Editing",
         rows: [
             { keys: "Double-click", label: "Edit text · new topic on empty canvas" },
-            { keys: "Tab", label: "Add child topic" },
-            { keys: "Enter", label: "Add sibling topic" },
-            { keys: "F2 / ⌘Enter", label: "Rename selection" },
+            { keys: "Type", label: "Replace the selected shape's text" },
+            { keys: "Enter / F2 / ⌘Enter", label: "Edit the selected shape's text" },
+            { keys: "⇧Enter / ⌥Enter", label: "New line while typing" },
+            { keys: "Esc", label: "Finish typing" },
             { keys: "⌘C / ⌘X / ⌘V", label: "Copy / cut / paste" },
             { keys: "⌘D", label: "Duplicate" },
             { keys: "Delete", label: "Delete selection" },
@@ -380,7 +495,8 @@ export const SHORTCUTS: readonly ShortcutGroup[] = [
             { keys: "⇧⌘] / ⇧⌘[", label: "Bring to front / send to back" },
             { keys: "⌘L", label: "Lock / unlock" },
             { keys: "⇧⌘L", label: "Tidy up (auto-layout)" },
-            { keys: "Arrows", label: "Nudge · Shift for a larger step" },
+            { keys: "Arrows", label: "Nudge · ⇧ for a larger step" },
+            { keys: "⌥ + arrow", label: "Nudge a topic" },
             { keys: "⇧⌘ + arrow", label: "Align selection" },
         ],
     },

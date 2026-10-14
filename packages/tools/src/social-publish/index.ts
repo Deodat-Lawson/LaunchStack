@@ -24,7 +24,15 @@ import { redditAdapter } from "./adapters/reddit";
 import { xAdapter } from "./adapters/x";
 import type { PublishAdapter, PublishRequest, PublishResult } from "./types";
 
-export type { PublishAdapter, PublishRequest, PublishResult } from "./types";
+export type {
+    BlueskyTarget,
+    LinkedInTarget,
+    PublishAdapter,
+    PublishMedia,
+    PublishRequest,
+    PublishResult,
+    PublishTarget,
+} from "./types";
 export { resetBlueskySession } from "./adapters/bluesky";
 export { resetRedditToken } from "./adapters/reddit";
 

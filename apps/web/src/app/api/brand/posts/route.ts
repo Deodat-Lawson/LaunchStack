@@ -1,5 +1,7 @@
 // GET  /api/brand/posts?from=&to=&status= — the calendar's rows
-// POST /api/brand/posts — compose: { platforms, body, title?, scheduledAt?, publishNow? }
+// POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow? }
+//   (a deployment account is a channel too: `deployment:<network>`, offered
+//   only while the workspace has no account of its own on that network)
 //
 // A dev environment has no worker to run the scheduler, so after answering a
 // list request that shows something due, the web process runs the same
@@ -10,26 +12,50 @@ import { z } from "zod";
 
 import {
     BRAND_POST_STATUSES,
-    MarketingPlatformEnum,
     createBrandPosts,
     hasDueBrandPosts,
     listBrandPosts,
     publishBrandPost,
     publishDueBrandPosts,
+    type BrandPostTarget,
 } from "@launchstack/pipelines/marketing/posts";
 
-import { brandContext, error, handleBrandError, json, readBody } from "../_http";
+import { listBrandChannels } from "~/server/brand/accounts";
+import { getBrandMediaRows, networkMediaProblem } from "~/server/brand/media";
+import { toPostViews } from "~/server/brand/post-views";
+import { publishForWorkspace } from "~/server/brand/publish";
+
+import {
+    brandContext,
+    brandPublishContext,
+    error,
+    handleBrandError,
+    json,
+    readBody,
+} from "../_http";
 
 const DAY = 86_400_000;
 
 const CreateSchema = z.object({
-    platforms: z.array(MarketingPlatformEnum).min(1).max(4),
+    channels: z.array(z.string().min(1).max(80)).min(1).max(20),
     body: z.string().min(1).max(40_000),
     title: z.string().max(300).optional().nullable(),
+    media: z
+        .array(
+            z.object({
+                id: z.string().min(1).max(64),
+                alt: z.string().max(1000).nullable().optional(),
+            })
+        )
+        .max(4)
+        .optional(),
     scheduledAt: z.string().datetime({ offset: true }).optional().nullable(),
     publishNow: z.boolean().optional(),
     source: z
-        .object({ kind: z.enum(["compose", "campaign"]), historyId: z.number().int().optional() })
+        .object({
+            kind: z.enum(["compose", "campaign"]),
+            historyId: z.number().int().optional(),
+        })
         .optional(),
 });
 
@@ -55,25 +81,33 @@ export async function GET(request: NextRequest) {
                       (BRAND_POST_STATUSES as readonly string[]).includes(s)
                   )
             : undefined;
-        const posts = await listBrandPosts({ companyId: auth.ctx.companyId, from, to, statuses });
+        const records = await listBrandPosts({ companyId: auth.ctx.companyId, from, to, statuses });
         if (await hasDueBrandPosts(auth.ctx.companyId, now)) {
             const companyId = auth.ctx.companyId;
             after(async () => {
                 try {
-                    await publishDueBrandPosts({ companyId, now: new Date() });
+                    await publishDueBrandPosts({
+                        companyId,
+                        now: new Date(),
+                        publish: publishForWorkspace,
+                    });
                 } catch (dueError) {
                     console.error("[brand] due-check failed:", dueError);
                 }
             });
         }
-        return json({ posts, now: now.toISOString() });
+        return json({
+            posts: await toPostViews(auth.ctx.companyId, records),
+            now: now.toISOString(),
+            canPublish: auth.ctx.canPublish,
+        });
     } catch (err) {
         return handleBrandError("GET posts", err);
     }
 }
 
 export async function POST(request: NextRequest) {
-    const auth = await brandContext();
+    const auth = await brandPublishContext();
     if (!auth.ok) return auth.response;
     try {
         const parsed = CreateSchema.safeParse(await readBody(request));
@@ -82,19 +116,66 @@ export async function POST(request: NextRequest) {
         const scheduledAt = input.publishNow ? null : parseDate(input.scheduledAt ?? null);
         if (!input.publishNow && input.scheduledAt && !scheduledAt)
             return error("That schedule time is not a date", 400);
+
+        // Every channel must be this workspace's, switched on, and able to post.
+        const targets: BrandPostTarget[] = [];
+        {
+            const available = new Map(
+                (await listBrandChannels(auth.ctx.companyId)).map(c => [c.id, c])
+            );
+            for (const id of new Set(input.channels)) {
+                const channel = available.get(id);
+                if (!channel) return error("One of those channels is not connected any more.", 400);
+                if (!channel.enabled)
+                    return error(`${channel.name} is switched off under Accounts.`, 400);
+                if (channel.status !== "active")
+                    return error(
+                        channel.statusReason ?? `${channel.name} needs to be reconnected.`,
+                        409
+                    );
+                if (!channel.capabilities.publish)
+                    return error(
+                        `This deployment's LinkedIn app cannot post as ${channel.name}.`,
+                        400
+                    );
+                targets.push({ platform: channel.platform, channelId: channel.id });
+            }
+        }
+
+        const media = input.media ?? [];
+        if (media.length > 0) {
+            const found = await getBrandMediaRows(
+                auth.ctx.companyId,
+                media.map(m => m.id)
+            );
+            if (found.length !== new Set(media.map(m => m.id)).size)
+                return error("One of the images is missing. Add it again.", 400);
+            for (const platform of new Set(targets.map(t => t.platform))) {
+                const problem = networkMediaProblem(platform, found);
+                if (problem) return error(problem, 400);
+            }
+        }
+
         const created = await createBrandPosts({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
-            platforms: input.platforms,
+            targets,
             body: input.body,
             title: input.title ?? null,
+            media: media.map(m => ({ id: m.id, alt: m.alt?.trim() ? m.alt.trim() : null })),
             scheduledAt: scheduledAt ?? null,
             source: input.source ?? { kind: "compose" },
         });
-        if (!input.publishNow) return json({ posts: created }, 201);
+        if (!input.publishNow)
+            return json({ posts: await toPostViews(auth.ctx.companyId, created) }, 201);
         const posts = [];
-        for (const post of created) posts.push(await publishBrandPost(post.id, auth.ctx.companyId));
-        return json({ posts }, 201);
+        for (const post of created)
+            posts.push(
+                await publishBrandPost(post.id, auth.ctx.companyId, {
+                    publish: publishForWorkspace,
+                })
+            );
+        return json({ posts: await toPostViews(auth.ctx.companyId, posts) }, 201);
     } catch (err) {
         return handleBrandError("POST posts", err);
     }

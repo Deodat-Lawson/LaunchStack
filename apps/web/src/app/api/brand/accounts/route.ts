@@ -1,4 +1,4 @@
-// GET /api/brand/accounts — which networks this deployment can publish to
+// GET /api/brand/accounts — networks, the workspace's sign-ins and its channels
 import { listBrandAccounts } from "~/server/brand/accounts";
 
 import { brandContext, handleBrandError, json } from "../_http";
@@ -7,7 +7,9 @@ export async function GET() {
     const auth = await brandContext();
     if (!auth.ok) return auth.response;
     try {
-        return json({ accounts: listBrandAccounts() });
+        return json(
+            await listBrandAccounts(auth.ctx.companyId, auth.ctx.canManage, auth.ctx.canPublish)
+        );
     } catch (err) {
         return handleBrandError("GET accounts", err);
     }

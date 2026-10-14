@@ -33,10 +33,14 @@ const ENV_PAIRS: Record<ConnectorProvider, string> = {
     slack: "SLACK_CLIENT_ID and SLACK_CLIENT_SECRET",
     github: "GITHUB_OAUTH_CLIENT_ID and GITHUB_OAUTH_CLIENT_SECRET",
     gmail: "GMAIL_CONNECTOR_ENABLED=true plus GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET",
+    linkedin: "LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET",
+    // Bluesky needs no app pair, only somewhere safe to keep the app password.
+    bluesky: "",
 };
 
 export function notConfiguredResponse(provider: ConnectorProvider): NextResponse {
+    const pair = ENV_PAIRS[provider];
     return createForbiddenError(
-        `The ${provider} connector is not configured. Set ${ENV_PAIRS[provider]} and EMBEDDING_SECRETS_KEY on the server.`
+        `The ${provider} connector is not configured. Set ${pair ? `${pair} and ` : ""}EMBEDDING_SECRETS_KEY on the server.`
     );
 }

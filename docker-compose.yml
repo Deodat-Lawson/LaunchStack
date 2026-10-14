@@ -167,6 +167,20 @@ x-shared-env: &shared-env
   SLACK_CLIENT_ID: ${SLACK_CLIENT_ID:-}
   SLACK_CLIENT_SECRET: ${SLACK_CLIENT_SECRET:-}
   SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
+  # Growth › Brand social accounts. LinkedIn: the app pair and the exact
+  # scopes its Auth tab lists. The deployment-wide keys below are the
+  # fallback for networks a workspace has not connected itself.
+  LINKEDIN_CLIENT_ID: ${LINKEDIN_CLIENT_ID:-}
+  LINKEDIN_CLIENT_SECRET: ${LINKEDIN_CLIENT_SECRET:-}
+  LINKEDIN_OAUTH_SCOPES: ${LINKEDIN_OAUTH_SCOPES:-}
+  LINKEDIN_API_VERSION: ${LINKEDIN_API_VERSION:-}
+  LINKEDIN_ACCESS_TOKEN: ${LINKEDIN_ACCESS_TOKEN:-}
+  TWITTER_BEARER_TOKEN: ${TWITTER_BEARER_TOKEN:-}
+  BLUESKY_HANDLE: ${BLUESKY_HANDLE:-}
+  BLUESKY_APP_PASSWORD: ${BLUESKY_APP_PASSWORD:-}
+  REDDIT_CLIENT_ID: ${REDDIT_CLIENT_ID:-}
+  REDDIT_CLIENT_SECRET: ${REDDIT_CLIENT_SECRET:-}
+  REDDIT_USER_AGENT: ${REDDIT_USER_AGENT:-}
   # Public origin of the app; the converter and the OAuth redirect derive from it.
   APP_PUBLIC_URL: ${APP_PUBLIC_URL:-}
   # Campaign email: HMAC key for unsubscribe links, and the send switch

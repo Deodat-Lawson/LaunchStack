@@ -8,6 +8,7 @@ import { company } from "@launchstack/store/schema";
 import { configureDatabase } from "@launchstack/store/client";
 import {
     BrandPostError,
+    MAX_PUBLISH_ATTEMPTS,
     createBrandPosts,
     deleteBrandPost,
     hasDueBrandPosts,
@@ -175,5 +176,89 @@ describeDb("brand posts persistence", () => {
             scheduledAt: new Date(Date.now() + 7_200_000),
         });
         expect(rearmed.status).toBe("scheduled");
+    });
+
+    it("keeps one row per channel with its images, and hands the post to the host's publisher", async () => {
+        const posts = await createBrandPosts({
+            companyId: companyA,
+            userId: "u1",
+            targets: [
+                { platform: "linkedin", channelId: "page-1" },
+                { platform: "linkedin", channelId: "member-1" },
+                { platform: "linkedin", channelId: "page-1" },
+            ],
+            body: "Two channels, one image.",
+            media: [{ id: "img-1", alt: "The roaster" }],
+        });
+        expect(posts.map(p => p.channelId).sort()).toEqual(["member-1", "page-1"]);
+        expect(posts[0]!.media).toEqual([{ id: "img-1", alt: "The roaster" }]);
+        expect(posts[0]!.attempts).toBe(0);
+
+        const seen: string[] = [];
+        const published = await publishBrandPost(posts[0]!.id, companyA, {
+            publish: async post => {
+                seen.push(`${post.channelId}:${post.media.map(m => m.id).join(",")}`);
+                return ok("linkedin");
+            },
+        });
+        expect(seen).toEqual([`${posts[0]!.channelId}:img-1`]);
+        expect(published.status).toBe("published");
+        expect(published.attempts).toBe(1);
+    });
+
+    it("puts a rate-limited post back on the calendar with backoff, then fails it", async () => {
+        const now = new Date();
+        const [post] = await createBrandPosts({
+            companyId: companyA,
+            userId: "u1",
+            targets: [{ platform: "linkedin", channelId: "page-1" }],
+            body: "LinkedIn is busy.",
+            scheduledAt: new Date(now.getTime() + 60_000),
+        });
+        const limited = async (): Promise<PublishResult> => ({
+            success: false,
+            platform: "linkedin",
+            error: "429 Too Many Requests",
+            retryable: true,
+        });
+        let current = await publishBrandPost(post!.id, companyA, { publish: limited, now });
+        expect(current.status).toBe("scheduled");
+        expect(current.attempts).toBe(1);
+        expect(current.scheduledAt!.getTime() - now.getTime()).toBe(2 * 60_000);
+        expect(current.error).toContain("429 Too Many Requests");
+
+        for (let attempt = 2; attempt < MAX_PUBLISH_ATTEMPTS; attempt += 1) {
+            current = await publishBrandPost(post!.id, companyA, { publish: limited, now });
+            expect(current.status).toBe("scheduled");
+        }
+        current = await publishBrandPost(post!.id, companyA, { publish: limited, now });
+        expect(current.status).toBe("failed");
+        expect(current.attempts).toBe(MAX_PUBLISH_ATTEMPTS);
+        expect(current.error).toBe("429 Too Many Requests");
+
+        // Re-arming starts the count over.
+        const rearmed = await updateBrandPost(post!.id, companyA, {
+            scheduledAt: new Date(Date.now() + 3_600_000),
+        });
+        expect(rearmed.attempts).toBe(0);
+    });
+
+    it("a refused credential fails at once instead of retrying", async () => {
+        const [post] = await createBrandPosts({
+            companyId: companyA,
+            userId: "u1",
+            targets: [{ platform: "linkedin", channelId: "page-1" }],
+            body: "Token was revoked.",
+        });
+        const failed = await publishBrandPost(post!.id, companyA, {
+            publish: async () => ({
+                success: false,
+                platform: "linkedin",
+                error: "Reconnect LinkedIn",
+                authFailed: true,
+            }),
+        });
+        expect(failed.status).toBe("failed");
+        expect(failed.attempts).toBe(1);
     });
 });

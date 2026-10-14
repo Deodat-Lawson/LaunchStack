@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Accelerators — Browser extension</title>
+        <link rel="stylesheet" href="wireframe.css" />
+        <style>
+            .browser-window {
+                width: 1404px;
+                height: 864px;
+                margin: 18px;
+                border: 1px solid var(--line-2);
+                border-radius: 12px;
+                overflow: hidden;
+                background: var(--surface);
+            }
+            .browser-tabs {
+                height: 36px;
+                background: var(--sunk);
+                display: flex;
+                align-items: end;
+                gap: 8px;
+                padding: 0 14px;
+                color: var(--ink-3);
+            }
+            .browser-tab {
+                width: 268px;
+                padding: 8px 12px;
+                background: var(--surface);
+                border-radius: 8px 8px 0 0;
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: var(--ink-2);
+            }
+            .browser-address {
+                height: 44px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 0 16px;
+                border-bottom: 1px solid var(--line);
+            }
+            .address {
+                flex: 1;
+                border-radius: 20px;
+                background: var(--surface-2);
+                padding: 7px 14px;
+                color: var(--ink-2);
+                font-size: 12px;
+            }
+            .extension-icon {
+                width: 22px;
+                height: 22px;
+                border-radius: 6px;
+                background: var(--brand-soft);
+                border: 1px solid var(--brand);
+            }
+            .browser-content {
+                height: 782px;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 380px;
+            }
+            .portal {
+                padding: 24px;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                background: var(--surface);
+            }
+            .portal-header {
+                margin-bottom: 14px;
+            }
+            .portal-header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+            .portal-header p {
+                margin: 6px 0 0;
+                color: var(--ink-3);
+                font-size: 12px;
+            }
+            .portal-form {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px 18px;
+            }
+            .portal-field {
+                min-width: 0;
+            }
+            .portal-field.wide {
+                grid-column: 1 / -1;
+            }
+            .portal-label {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                margin-bottom: 5px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            .portal-label .chip {
+                padding: 1px 6px;
+                font-size: 10px;
+            }
+            .portal .input {
+                width: 100%;
+                font: inherit;
+                color: var(--ink);
+            }
+            .portal .filled {
+                background: var(--success-soft);
+                border-color: var(--success);
+            }
+            .portal .manual {
+                background: var(--warn-soft);
+                border-color: var(--warn);
+            }
+            .portal .textarea {
+                padding: 8px 10px;
+                font-size: 12px;
+                line-height: 1.45;
+            }
+            .portal .long-answer {
+                min-height: 70px;
+            }
+            .portal .short-answer {
+                min-height: 76px;
+            }
+            .field-help {
+                margin-top: 4px;
+                color: var(--ink-3);
+                font-size: 11px;
+            }
+            .select-mock {
+                display: flex;
+                justify-content: space-between;
+                color: var(--ink-3);
+            }
+            .file-mock {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+            .portal-review {
+                margin-top: 12px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .portal-actions {
+                margin-top: 12px;
+            }
+            .btn {
+                font-family: inherit;
+                cursor: default;
+            }
+            .portal-notes {
+                display: flex;
+                gap: 12px;
+                margin-top: auto;
+                padding-top: 16px;
+                align-items: start;
+            }
+            .portal-notes .note {
+                position: static;
+                flex: 1;
+                max-width: none;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+            .portal-notes .mono {
+                font-size: 10.5px;
+                overflow-wrap: anywhere;
+            }
+            .extension-panel {
+                border-left: 1px solid var(--line-2);
+                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                min-height: 0;
+                background: var(--surface-2);
+            }
+            .extension-brand {
+                font-size: 15px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .extension-brand i {
+                display: inline-block;
+                width: 22px;
+                height: 22px;
+                background: var(--brand);
+                border-radius: 6px;
+            }
+            .extension-brand .close {
+                margin-left: auto;
+                font-weight: 400;
+                color: var(--ink-3);
+            }
+            .workspace-select {
+                background: var(--surface);
+                color: var(--ink);
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+            .connection {
+                font-size: 11.5px;
+                color: var(--success);
+            }
+            .match-card {
+                padding: 12px;
+            }
+            .match-card h3 {
+                font-size: 14px;
+            }
+            .match-card p {
+                margin: 5px 0 0;
+                font-size: 11px;
+                color: var(--ink-3);
+            }
+            .panel-actions {
+                display: grid;
+                gap: 8px;
+            }
+            .panel-actions .btn {
+                justify-content: center;
+                font-size: 12px;
+            }
+            .result-summary {
+                display: flex;
+                gap: 6px;
+                flex-wrap: nowrap;
+            }
+            .result-summary .chip {
+                font-size: 11px;
+            }
+            .results-header {
+                font-size: 11px;
+                color: var(--ink-3);
+            }
+            .field-results {
+                flex: 1;
+                min-height: 0;
+            }
+            .result-row {
+                padding: 7px 0;
+                border-top: 1px solid var(--line);
+            }
+            .result-row .row {
+                gap: 8px;
+                font-size: 12px;
+            }
+            .result-row .chip {
+                font-size: 10px;
+                padding: 1px 6px;
+            }
+            .result-detail {
+                margin-top: 3px;
+                color: var(--ink-3);
+                font-size: 11px;
+            }
+            .extension-footer {
+                padding-top: 10px;
+                border-top: 1px solid var(--line);
+                font-size: 12px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="browser-window">
+            <div class="browser-tabs">
+                <div class="browser-tab">
+                    <span>Accelerator application — Spring 2027</span><span>×</span>
+                </div>
+                <span>+</span>
+            </div>
+            <div class="browser-address">
+                <span class="muted">‹ &nbsp; › &nbsp; ↻</span>
+                <div class="address">apply.example-accelerator.com/spring-2027</div>
+                <span class="extension-icon" aria-label="LaunchStack extension"></span>
+                <span class="muted">⋯</span>
+            </div>
+            <div class="browser-content">
+                <main class="portal">
+                    <div class="portal-header">
+                        <div class="row between">
+                            <h1>Y Combinator · Spring 2027 application</h1>
+                            <span class="chip">Portal mock · illustrative</span>
+                        </div>
+                        <p>
+                            Northwind Cold Chain · 8 of 18 portal fields shown · review every filled
+                            value before submitting
+                        </p>
+                    </div>
+                    <div class="portal-form" aria-label="Illustrative accelerator portal form">
+                        <div class="portal-field">
+                            <label class="portal-label" for="company-name"
+                                ><span>Company name *</span
+                                ><span class="chip ok">filled</span></label
+                            >
+                            <input
+                                class="input filled"
+                                id="company-name"
+                                value="Northwind Cold Chain"
+                                readonly
+                            />
+                        </div>
+                        <div class="portal-field">
+                            <label class="portal-label" for="company-url"
+                                ><span>Company URL *</span
+                                ><span class="chip ok">filled</span></label
+                            >
+                            <input
+                                class="input filled"
+                                id="company-url"
+                                value="https://northwindcoldchain.example"
+                                readonly
+                            />
+                        </div>
+                        <div class="portal-field">
+                            <label class="portal-label" for="founded-date"
+                                ><span>Founded date *</span
+                                ><span class="chip warn">needs you</span></label
+                            >
+                            <input
+                                class="input manual"
+                                id="founded-date"
+                                placeholder="Confirm the exact date · YYYY-MM-DD"
+                                readonly
+                            />
+                            <div class="field-help">
+                                Profile has 2014; full date has not been confirmed.
+                            </div>
+                        </div>
+                        <div class="portal-field">
+                            <div class="portal-label" id="founder-count-label">
+                                <span>Number of founders *</span
+                                ><span class="chip warn">needs you</span>
+                            </div>
+                            <div
+                                class="input manual select-mock"
+                                role="combobox"
+                                aria-expanded="false"
+                                aria-labelledby="founder-count-label"
+                            >
+                                <span>Select founder count</span><span>▾</span>
+                            </div>
+                            <div class="field-help">Custom select · choose “2” manually.</div>
+                        </div>
+                        <div class="portal-field wide">
+                            <div class="portal-label">
+                                <span>What are you building? *</span
+                                ><span class="chip ok">filled</span>
+                            </div>
+                            <div class="textarea filled long-answer">
+                                Northwind Cold Chain builds temperature-monitoring hardware and
+                                reporting software for chilled and frozen food logistics. Our NW-40
+                                probe logs temperatures across transport and storage. Northwind
+                                Records turns these readings into clear exception reports for
+                                quality managers assembling audit evidence. We supply monitoring
+                                records; customers remain responsible for their own HACCP plans and
+                                for sensor placement.
+                            </div>
+                            <div class="field-help">412 / 500 characters · approved Oct 30</div>
+                        </div>
+                        <div class="portal-field">
+                            <div class="portal-label">
+                                <span>What progress have you made? *</span
+                                ><span class="chip ok">filled</span>
+                            </div>
+                            <div class="textarea filled short-answer">
+                                In September, recurring revenue reached $52,000. Eighteen operators
+                                used Northwind Records to monitor 120,000 shipments that month.
+                                These figures are from our latest Vantage observations.
+                            </div>
+                            <div class="field-help">187 / 1,000 characters</div>
+                        </div>
+                        <div class="portal-field">
+                            <div class="portal-label">
+                                <span>Why this program?</span
+                                ><span class="chip bad">not approved</span>
+                            </div>
+                            <div class="textarea short-answer muted">
+                                Not filled. This answer is outside the approved packet.
+                            </div>
+                            <div class="field-help">Return to LaunchStack for founder review.</div>
+                        </div>
+                        <div class="portal-field wide">
+                            <div class="portal-label">
+                                <span>Upload 1-minute founder video *</span
+                                ><span class="chip warn">needs you</span>
+                            </div>
+                            <div class="input manual file-mock">
+                                <button class="btn sm" type="button">Choose file</button
+                                ><span>No file selected · video is not drafted</span>
+                            </div>
+                            <div class="field-help">
+                                File inputs are never populated by the extension.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card sunk portal-review">
+                        14 approved fields filled across the full form. Three fields still need you;
+                        one answer is not approved.
+                    </div>
+                    <div class="actions portal-actions">
+                        <button class="btn" type="button">Save draft</button
+                        ><button class="btn primary" type="button">Review application</button>
+                    </div>
+                    <div class="portal-notes">
+                        <div class="note">
+                            Capture posts labels/maxlength/required/options to
+                            <span class="mono">/api/extension/forms</span>. The portal URL is
+                            illustrative.
+                        </div>
+                        <div class="note">
+                            Only approved answers are fetched from
+                            <span class="mono">/api/extension/applications/[id]/answers</span>.
+                            Unapproved text stays in LaunchStack.
+                        </div>
+                        <div class="note">
+                            Counts, metrics, exact dates and approval state are illustrative
+                            [INFERENCE]. Selects and uploads may require manual work.
+                        </div>
+                    </div>
+                </main>
+                <aside class="extension-panel" aria-label="LaunchStack extension side panel">
+                    <div class="extension-brand">
+                        <i></i><span>LaunchStack</span><span class="close">×</span>
+                    </div>
+                    <div class="input workspace-select row between">
+                        <span>Workspace · Northwind Cold Chain</span><span>▾</span>
+                    </div>
+                    <div class="connection">Connected · token expires in 52 min</div>
+                    <section class="card match-card">
+                        <h3>Y Combinator — Spring 2027</h3>
+                        <div class="row between">
+                            <span class="small ink2">approved Oct 30</span
+                            ><span class="chip ok">Matched</span>
+                        </div>
+                        <p>Northwind Cold Chain · application 01 · matched portal URL</p>
+                    </section>
+                    <div class="panel-actions">
+                        <button class="btn" type="button">Capture form</button>
+                        <button class="btn primary" type="button">Fill approved answers</button>
+                    </div>
+                    <div class="result-summary" aria-label="Fill results">
+                        <span class="chip ok">Filled 14</span
+                        ><span class="chip warn">Needs you 3</span
+                        ><span class="chip bad">Not approved 1</span>
+                    </div>
+                    <div class="results-header">FIELD RESULTS · 8 of 18 shown</div>
+                    <div class="field-results">
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Company name</span><span class="chip ok">Filled</span>
+                            </div>
+                            <div class="result-detail">Approved profile value</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Company URL</span><span class="chip ok">Filled</span>
+                            </div>
+                            <div class="result-detail">Approved profile value</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Founded date</span><span class="chip warn">Needs you</span>
+                            </div>
+                            <div class="result-detail">
+                                Full date is unconfirmed; no value fetched
+                            </div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Number of founders</span
+                                ><span class="chip warn">Needs you</span>
+                            </div>
+                            <div class="result-detail">Unsupported custom select</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>What are you building?</span
+                                ><span class="chip ok">Filled</span>
+                            </div>
+                            <div class="result-detail">412 / 500 characters</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>What progress have you made?</span
+                                ><span class="chip ok">Filled</span>
+                            </div>
+                            <div class="result-detail">187 / 1,000 characters</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Why this program?</span
+                                ><span class="chip bad">Not approved</span>
+                            </div>
+                            <div class="result-detail">
+                                No answer fetched; request founder approval
+                            </div>
+                        </div>
+                        <div class="result-row">
+                            <div class="row between">
+                                <span>Founder video</span><span class="chip warn">Needs you</span>
+                            </div>
+                            <div class="result-detail">Upload manually in the portal</div>
+                        </div>
+                    </div>
+                    <footer class="extension-footer">LaunchStack never presses submit.</footer>
+                </aside>
+            </div>
+        </div>
+    </body>
+</html>

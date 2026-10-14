@@ -1,0 +1,463 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span class="on">Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .answers-head {
+                            margin-bottom: 16px;
+                        }
+                        .answers-head p {
+                            font-size: 12px;
+                        }
+                        .company-label {
+                            text-align: right;
+                            padding-top: 3px;
+                        }
+                        .company-label .small {
+                            margin-top: 5px;
+                        }
+                        .families {
+                            margin-bottom: 14px;
+                            gap: 6px;
+                        }
+                        .families .chip {
+                            padding: 5px 10px;
+                            font-size: 11px;
+                        }
+                        .answers-grid {
+                            display: grid;
+                            grid-template-columns: minmax(0, 1fr) 330px;
+                            gap: 14px;
+                            height: 592px;
+                        }
+                        .library-panel {
+                            padding: 0;
+                            min-width: 0;
+                        }
+                        .library-heading {
+                            padding: 12px 14px;
+                            border-bottom: 1px solid var(--line);
+                        }
+                        .library-heading h3 {
+                            margin: 0;
+                        }
+                        .library-heading .small {
+                            font-size: 11px;
+                        }
+                        .library-table {
+                            table-layout: fixed;
+                        }
+                        .library-table th {
+                            padding: 8px 7px;
+                            font-size: 10px;
+                            line-height: 1.3;
+                        }
+                        .library-table td {
+                            padding: 9px 7px;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                        .library-table tbody tr {
+                            height: 64px;
+                        }
+                        .library-table tr.selected {
+                            background: var(--brand-soft);
+                        }
+                        .library-table .family-name {
+                            font-size: 10px;
+                        }
+                        .library-table .mono {
+                            font-size: 11px;
+                        }
+                        .library-table .date {
+                            font-size: 10.5px;
+                            color: var(--ink-3);
+                            margin-top: 3px;
+                        }
+                        .library-table .chip {
+                            font-size: 10px;
+                            padding: 1px 6px;
+                        }
+                        .library-table .btn {
+                            font-size: 10.5px;
+                            padding: 3px 6px;
+                            margin-top: 5px;
+                        }
+                        .library-footer {
+                            padding: 10px 14px;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                        .answer-preview {
+                            min-width: 0;
+                            padding: 14px;
+                        }
+                        .answer-preview h3 {
+                            margin: 0;
+                        }
+                        .answer-preview > .small {
+                            margin-top: 7px;
+                            line-height: 1.4;
+                        }
+                        .stale-banner {
+                            margin-top: 12px;
+                            padding: 9px 10px;
+                            background: var(--warn-soft);
+                            border-color: var(--warn-soft);
+                            font-size: 11px;
+                            line-height: 1.4;
+                        }
+                        .stale-banner p {
+                            margin: 4px 0 0;
+                            color: var(--ink-2);
+                        }
+                        .variant-heading {
+                            margin-top: 14px;
+                            font-size: 11px;
+                            color: var(--ink-3);
+                        }
+                        .variant-tabs {
+                            display: flex;
+                            gap: 5px;
+                            margin-top: 7px;
+                        }
+                        .variant-tabs .btn {
+                            padding: 5px 8px;
+                            font-size: 11px;
+                        }
+                        .variant-tabs .active {
+                            color: var(--brand-ink);
+                            border-color: var(--brand);
+                            background: var(--brand-soft);
+                        }
+                        .variant-text {
+                            margin-top: 10px;
+                            font-size: 12px;
+                            line-height: 1.5;
+                        }
+                        .variant-text p {
+                            margin: 0;
+                        }
+                        .variant-count {
+                            margin-top: 6px;
+                            font-size: 10.5px;
+                        }
+                        .used-by {
+                            border-top: 1px solid var(--line);
+                            margin-top: 4px;
+                            padding-top: 10px;
+                            font-size: 11px;
+                            line-height: 1.45;
+                        }
+                        .used-by strong {
+                            display: block;
+                            margin-bottom: 4px;
+                        }
+                        .preview-actions {
+                            margin-top: 12px;
+                        }
+                        .answers-notes {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr;
+                            gap: 12px;
+                            margin-top: 14px;
+                        }
+                        .answers-notes .note {
+                            position: static;
+                            max-width: none;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="ph answers-head">
+                        <div>
+                            <h1>Answers</h1>
+                            <p>
+                                Approved answers by question family — reused across programs and by
+                                the rest of LaunchStack
+                            </p>
+                        </div>
+                        <div class="company-label">
+                            <strong>Northwind Cold Chain</strong>
+                            <div class="small muted">12 approved answers · 9 families</div>
+                        </div>
+                    </div>
+                    <div class="row between families">
+                        <div class="row" style="gap: 6px" aria-label="Question family filters">
+                            <span class="chip brand">All families</span>
+                            <span class="chip">one_liner</span>
+                            <span class="chip">what_building</span>
+                            <span class="chip">problem</span>
+                            <span class="chip">traction</span>
+                            <span class="chip">revenue</span>
+                            <span class="chip">team</span>
+                            <span class="chip">More families</span>
+                        </div>
+                        <span class="small muted">Approved only</span>
+                    </div>
+                    <div class="answers-grid">
+                        <section class="card library-panel">
+                            <div class="row between library-heading">
+                                <h3>Canonical answers</h3>
+                                <span class="small muted">Latest approval per family</span>
+                            </div>
+                            <table class="t library-table">
+                                <colgroup>
+                                    <col style="width: 14%" />
+                                    <col style="width: 27%" />
+                                    <col style="width: 7%" />
+                                    <col style="width: 10%" />
+                                    <col style="width: 15%" />
+                                    <col style="width: 7%" />
+                                    <col style="width: 20%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Family</th>
+                                        <th>Canonical answer excerpt</th>
+                                        <th>Length<br />(chars)</th>
+                                        <th>As of</th>
+                                        <th>Approved<br />by / when</th>
+                                        <th>Used in</th>
+                                        <th>Freshness</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="mono family-name">one_liner</span></td>
+                                        <td>
+                                            Temperature monitoring for food logistics, from sensor
+                                            to shipment record.
+                                        </td>
+                                        <td class="mono">83</td>
+                                        <td>Sep 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 2, 2026</div>
+                                        </td>
+                                        <td>6 apps</td>
+                                        <td><span class="chip ok">fresh</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="mono family-name">what_building</span></td>
+                                        <td>
+                                            NW-40 sensors and Northwind Records show temperature
+                                            excursions in transit…
+                                        </td>
+                                        <td class="mono">516</td>
+                                        <td>Sep 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 2, 2026</div>
+                                        </td>
+                                        <td>5 apps</td>
+                                        <td><span class="chip ok">fresh</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="mono family-name">problem</span></td>
+                                        <td>
+                                            Operators discover temperature damage after delivery,
+                                            when intervention is too late…
+                                        </td>
+                                        <td class="mono">487</td>
+                                        <td>Sep 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 2, 2026</div>
+                                        </td>
+                                        <td>4 apps</td>
+                                        <td><span class="chip ok">fresh</span></td>
+                                    </tr>
+                                    <tr class="selected">
+                                        <td><strong class="mono family-name">traction</strong></td>
+                                        <td>
+                                            18 active operators; July MRR $38k; 120,000 shipments
+                                            monitored a month…
+                                        </td>
+                                        <td class="mono">742</td>
+                                        <td>Jul 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 2, 2026</div>
+                                        </td>
+                                        <td>4 apps</td>
+                                        <td>
+                                            <span class="chip warn">stale</span><br /><button
+                                                class="btn sm"
+                                                type="button"
+                                            >
+                                                Refresh draft
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="mono family-name">revenue</span></td>
+                                        <td>
+                                            September MRR is $52k. We charge a subscription by
+                                            active depot and sensor count…
+                                        </td>
+                                        <td class="mono">312</td>
+                                        <td>Sep 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 8, 2026</div>
+                                        </td>
+                                        <td>3 apps</td>
+                                        <td><span class="chip ok">fresh</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="mono family-name">team</span></td>
+                                        <td>
+                                            The founders combine cold-chain operations experience
+                                            with embedded systems…
+                                        </td>
+                                        <td class="mono">675</td>
+                                        <td>Oct 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 8, 2026</div>
+                                        </td>
+                                        <td>3 apps</td>
+                                        <td><span class="chip ok">confirmed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="mono family-name">why_now</span></td>
+                                        <td>
+                                            Customers need shipment-level temperature records that
+                                            their operations teams can act on…
+                                        </td>
+                                        <td class="mono">420</td>
+                                        <td>Sep 2026</td>
+                                        <td>
+                                            Maya Chen
+                                            <div class="date">Oct 2, 2026</div>
+                                        </td>
+                                        <td>2 apps</td>
+                                        <td><span class="chip warn">aging</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="library-footer muted">
+                                7 of 12 answers shown · Approved packet copies are citable in
+                                Sources → Applications.<br />[INFERENCE] Illustrative answer text,
+                                approvals and metrics.
+                            </div>
+                        </section>
+                        <aside class="card answer-preview">
+                            <div class="row between">
+                                <h3>Traction</h3>
+                                <span class="chip brand">traction</span>
+                            </div>
+                            <div class="small ink2">
+                                Techstars 2026 · approved by Maya Chen<br />Oct 2, 2026 · source
+                                snapshot Jul 2026
+                            </div>
+                            <div class="card stale-banner">
+                                <strong>Stale · newer metric available</strong>
+                                <p>
+                                    July MRR $38k → September MRR $52k.<br />Approved text is
+                                    unchanged.
+                                </p>
+                            </div>
+                            <div class="variant-heading">Variants by length</div>
+                            <div class="variant-tabs" aria-label="Answer length variants">
+                                <button class="btn sm" type="button">100 chars</button>
+                                <button class="btn sm active" type="button">500 chars</button>
+                                <button class="btn sm" type="button">1,000 chars</button>
+                            </div>
+                            <div class="textarea variant-text">
+                                <p>
+                                    Northwind Cold Chain has 18 active food-logistics operators in
+                                    the UK, Ireland and the Netherlands. Customers monitor 120,000
+                                    shipments per month with NW-40 sensors and Northwind Records.
+                                    <span class="hl-warn">July MRR was $38k</span
+                                    ><sup class="c">E2</sup>, up from $24k in April. We focus on
+                                    expanding within current operators rather than entering a new
+                                    segment.
+                                </p>
+                            </div>
+                            <div class="row between variant-count">
+                                <span class="muted">500-character variant</span
+                                ><span class="chip ok">approved</span>
+                            </div>
+                            <div class="used-by">
+                                <strong>Used by: Investors intro drafts, Growth compose</strong
+                                ><span class="muted"
+                                    >4 accelerator applications · freshness and citations travel
+                                    with the answer.</span
+                                >
+                            </div>
+                            <div class="row between preview-actions">
+                                <button class="btn sm" type="button">Refresh draft</button
+                                ><button class="btn sm ghost" type="button">Ask in chat</button>
+                            </div>
+                        </aside>
+                    </div>
+                    <div class="answers-notes">
+                        <div class="note">
+                            The latest approved answer in each family is the company's canonical
+                            narrative, not a program-specific prompt match.
+                        </div>
+                        <div class="note">
+                            Refresh creates an unapproved draft. It never silently rewrites a
+                            founder-approved answer or an existing packet.
+                        </div>
+                        <div class="note">
+                            Investors, Growth, outreach and chat reuse the same approved library
+                            with its evidence and freshness state.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,390 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span class="on">Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .ph {
+                            margin-bottom: 14px;
+                        }
+                        .stats {
+                            grid-template-columns: 1fr 1fr 1.65fr 1fr;
+                            gap: 12px;
+                            margin-bottom: 14px;
+                        }
+                        .stat {
+                            height: 94px;
+                            padding: 12px 14px;
+                        }
+                        .stat strong {
+                            display: block;
+                            font-size: 26px;
+                            line-height: 1.2;
+                            margin: 3px 0;
+                        }
+                        .stat .next {
+                            font-size: 17px;
+                        }
+                        .overview-grid {
+                            display: grid;
+                            grid-template-columns: minmax(0, 2.05fr) minmax(0, 1fr);
+                            gap: 14px;
+                        }
+                        .overview-grid > .stack {
+                            gap: 14px;
+                        }
+                        .section-head {
+                            margin-bottom: 3px;
+                        }
+                        .section-head h3 {
+                            margin: 0;
+                        }
+                        .deadline {
+                            padding: 10px 0;
+                            border-bottom: 1px solid var(--line);
+                        }
+                        .deadline:last-child {
+                            padding-bottom: 0;
+                            border-bottom: 0;
+                        }
+                        .deadline .source {
+                            margin-top: 5px;
+                            font-size: 11.5px;
+                            line-height: 1.35;
+                        }
+                        .applications {
+                            padding: 12px;
+                        }
+                        .applications table.t th {
+                            padding: 7px 6px;
+                            font-size: 10.5px;
+                        }
+                        .applications table.t td {
+                            padding: 10px 6px;
+                            font-size: 12px;
+                        }
+                        .applications table.t tr:last-child td {
+                            border-bottom: 0;
+                        }
+                        .readiness {
+                            width: 88px;
+                        }
+                        .readiness .meter {
+                            margin-top: 5px;
+                        }
+                        .task {
+                            padding: 10px 0;
+                            border-bottom: 1px solid var(--line);
+                            line-height: 1.4;
+                        }
+                        .task:last-child {
+                            padding-bottom: 0;
+                            border-bottom: 0;
+                        }
+                        .task .small {
+                            margin-top: 4px;
+                        }
+                        .suite p {
+                            margin: 8px 0 0;
+                            line-height: 1.45;
+                        }
+                        .annotation-strip {
+                            position: relative;
+                            height: 54px;
+                            margin-top: 14px;
+                        }
+                        .annotation-strip .note {
+                            top: 0;
+                            width: 220px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="ph">
+                        <div>
+                            <h1>Accelerators</h1>
+                            <p>
+                                Northwind Cold Chain · Program sourcing and founder-approved
+                                applications.
+                            </p>
+                        </div>
+                        <div class="actions">
+                            <span class="btn">View programs</span
+                            ><span class="btn primary">Open applications</span>
+                        </div>
+                    </div>
+                    <div class="stats grid">
+                        <div class="card stat">
+                            <h4>Saved programs</h4>
+                            <strong>4</strong
+                            ><span class="small muted">From 6 visible matches</span>
+                        </div>
+                        <div class="card stat">
+                            <h4>Open applications</h4>
+                            <strong>3</strong><span class="small muted">1 ready for Fill mode</span>
+                        </div>
+                        <div class="card stat">
+                            <h4>Next deadline</h4>
+                            <strong class="next">YC Spring 2027 · 9 days</strong
+                            ><span class="small ink2"
+                                >Nov 10, 8:00 PM PT · 4:00 AM GMT next day</span
+                            >
+                        </div>
+                        <div class="card stat">
+                            <h4>Answers approved</h4>
+                            <strong>14<span class="muted">/22</span></strong
+                            ><span class="small muted">In your answer library</span>
+                        </div>
+                    </div>
+                    <div class="overview-grid">
+                        <div class="stack">
+                            <section class="card">
+                                <div class="row between section-head">
+                                    <h3>Upcoming deadlines</h3>
+                                    <span class="small muted">Your time zone: Europe/London</span>
+                                </div>
+                                <div class="deadline">
+                                    <div class="row between">
+                                        <strong
+                                            >Y Combinator
+                                            <span class="small ink2">· Spring 2027</span></strong
+                                        ><span class="small">Nov 11, 4:00 AM GMT</span>
+                                    </div>
+                                    <div class="source ink2">
+                                        Confirmed 4 days ago · Source snippet: “Applications close
+                                        November 10 at 8pm PT.”
+                                        <span class="muted">[INFERENCE]</span>
+                                    </div>
+                                </div>
+                                <div class="deadline">
+                                    <div class="row between">
+                                        <strong
+                                            >Techstars
+                                            <span class="small ink2"
+                                                >· Boston Spring 2027</span
+                                            ></strong
+                                        ><span class="small">Nov 13, 4:59 AM GMT</span>
+                                    </div>
+                                    <div class="source ink2">
+                                        Confirmed 6 days ago · Source snippet: “Apply by November
+                                        12, 11:59pm ET.” <span class="muted">[INFERENCE]</span>
+                                    </div>
+                                </div>
+                                <div class="deadline">
+                                    <div class="row between">
+                                        <strong
+                                            >a16z speedrun
+                                            <span class="small ink2">· SR005</span></strong
+                                        ><span class="small">Nov 15, 7:59 AM GMT</span>
+                                    </div>
+                                    <div class="source ink2">
+                                        Confirmed 2 days ago · Source snippet: “Deadline: November
+                                        14, 11:59pm PT.” <span class="muted">[INFERENCE]</span>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="card applications">
+                                <div class="row between section-head">
+                                    <h3>Applications</h3>
+                                    <span class="small muted">By next deadline · View all →</span>
+                                </div>
+                                <table class="t">
+                                    <thead>
+                                        <tr>
+                                            <th>Program / batch</th>
+                                            <th>Status</th>
+                                            <th>Readiness</th>
+                                            <th>Approval</th>
+                                            <th>Next action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Y Combinator</strong><br /><span
+                                                    class="small muted"
+                                                    >Spring 2027</span
+                                                >
+                                            </td>
+                                            <td><span class="chip info">In progress</span></td>
+                                            <td>
+                                                <div class="readiness">
+                                                    14 / 22 fields
+                                                    <div class="meter">
+                                                        <b style="width: 64%"></b>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="chip warn">Waiting for you</span></td>
+                                            <td><span class="btn sm">Review packet</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Techstars</strong><br /><span
+                                                    class="small muted"
+                                                    >Boston Spring 2027</span
+                                                >
+                                            </td>
+                                            <td><span class="chip warn">Needs facts</span></td>
+                                            <td>
+                                                <div class="readiness">
+                                                    7 / 16 fields
+                                                    <div class="meter warn">
+                                                        <b style="width: 44%"></b>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="chip">Not requested</span></td>
+                                            <td><span class="btn sm">Confirm limits</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>a16z speedrun</strong><br /><span
+                                                    class="small muted"
+                                                    >SR005</span
+                                                >
+                                            </td>
+                                            <td><span class="chip ok">Ready to fill</span></td>
+                                            <td>
+                                                <div class="readiness">
+                                                    12 / 12 fields
+                                                    <div class="meter ok">
+                                                        <b style="width: 100%"></b>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="chip ok">Approved</span></td>
+                                            <td>
+                                                <span class="btn sm primary">Open Fill mode</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                        <div class="stack">
+                            <section class="card">
+                                <div class="row between section-head">
+                                    <h3>To do</h3>
+                                    <span class="chip warn">4 items</span>
+                                </div>
+                                <div class="task">
+                                    <strong>Confirm Techstars character limits</strong>
+                                    <div class="small ink2">
+                                        Approximate form. Check the portal or capture with the
+                                        extension.
+                                    </div>
+                                    <div class="small muted">Open form preview →</div>
+                                </div>
+                                <div class="task">
+                                    <strong>2 stale metrics need confirmation</strong>
+                                    <div class="small ink2">
+                                        MRR: last observed 74 days ago.<br />Active pilots: last
+                                        observed 61 days ago.
+                                    </div>
+                                    <div class="small muted">Open Facts &amp; metrics →</div>
+                                </div>
+                                <div class="task">
+                                    <strong>Approval waiting for you</strong>
+                                    <div class="small ink2">
+                                        YC Spring 2027 · 8 answers in a frozen review packet.
+                                    </div>
+                                    <div class="small muted">Review approval →</div>
+                                </div>
+                                <div class="task">
+                                    <strong>3 programs closing in 14 days</strong>
+                                    <div class="small ink2">
+                                        YC, Techstars and a16z speedrun. Deadlines use each portal's
+                                        time zone.
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="card sunk suite">
+                                <h3>Also in LaunchStack</h3>
+                                <p class="small ink2">
+                                    These deadlines also appear in <strong>Vantage</strong>.
+                                </p>
+                                <p class="small ink2">
+                                    Approved answers are reused by
+                                    <strong>Investors intro drafts</strong> and
+                                    <strong>Growth</strong>. Drafts are not reusable as approved
+                                    answers.
+                                </p>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="annotation-strip">
+                        <div class="note" style="left: 0">
+                            A deadline retains its source time zone and quote. Failed refreshes keep
+                            the last confirmed value visible.
+                        </div>
+                        <div class="note" style="left: 244px">
+                            Readiness is not approval. Only a founder-approved, unchanged answer
+                            packet unlocks Fill mode.
+                        </div>
+                        <div
+                            class="small muted"
+                            style="
+                                position: absolute;
+                                right: 0;
+                                top: 7px;
+                                width: 320px;
+                                line-height: 1.45;
+                            "
+                        >
+                            Preview as of Nov 1, 2026.<br />[INFERENCE] Illustrative dates, source
+                            snippets, scores and application data. Not live program advice.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

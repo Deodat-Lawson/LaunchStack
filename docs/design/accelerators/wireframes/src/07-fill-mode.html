@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Accelerators — Fill mode</title>
+        <link rel="stylesheet" href="wireframe.css" />
+        <style>
+            .fill-body .ph {
+                margin-bottom: 10px;
+            }
+            .fill-body .ph h1 {
+                font-size: 24px;
+            }
+            .fill-body .actions {
+                align-items: center;
+            }
+            .fill-body .btn {
+                font-family: inherit;
+                cursor: default;
+            }
+            .instruction {
+                padding: 8px 12px;
+                margin-bottom: 10px;
+            }
+            .instruction .chip {
+                flex: none;
+            }
+            .field-list {
+                padding: 0;
+                overflow: hidden;
+            }
+            .field-head,
+            .fill-field {
+                display: grid;
+                grid-template-columns: 24px 222px minmax(0, 1fr) 142px;
+                gap: 12px;
+                padding: 5px 14px;
+            }
+            .field-head {
+                background: var(--surface-2);
+                font-size: 11px;
+                color: var(--ink-3);
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+            }
+            .fill-field {
+                border-top: 1px solid var(--line);
+                align-items: start;
+            }
+            .field-number {
+                padding-top: 2px;
+                color: var(--ink-3);
+                font-size: 11px;
+            }
+            .field-label {
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 1.35;
+            }
+            .field-meta {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                margin-top: 3px;
+                font-size: 11px;
+                color: var(--ink-3);
+            }
+            .field-meta .chip {
+                font-size: 10px;
+                padding: 1px 6px;
+            }
+            .answer {
+                margin: 0;
+                font-size: 12px;
+                line-height: 1.45;
+                overflow-wrap: anywhere;
+            }
+            .copy-control {
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+                gap: 3px;
+            }
+            .copy-control .small {
+                font-size: 11px;
+            }
+            .copy-control .btn {
+                min-width: 74px;
+                justify-content: center;
+            }
+            .copy-control .copied {
+                background: var(--success-soft);
+                border-color: var(--success);
+                color: var(--success);
+            }
+            .unapproved {
+                background: var(--warn-soft);
+            }
+            .copy-warning {
+                display: block;
+                margin-top: 3px;
+                font-size: 10px;
+                line-height: 1.25;
+                color: var(--warn);
+            }
+            .fact-value {
+                font-weight: 500;
+            }
+            .fact-origin {
+                display: block;
+                color: var(--ink-3);
+                font-size: 11px;
+                margin-top: 3px;
+            }
+            .manual-field {
+                background: var(--surface-2);
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            .manual-field .answer {
+                color: var(--ink-2);
+            }
+            .annotation-strip {
+                display: flex;
+                gap: 12px;
+                margin-top: 12px;
+                align-items: start;
+            }
+            .annotation-strip .note {
+                position: static;
+                flex: 1;
+                max-width: none;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span class="on">Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body fill-body">
+                    <div class="ph">
+                        <div>
+                            <h1>Fill mode · <em>Y Combinator Spring 2027</em></h1>
+                            <p>
+                                Northwind Cold Chain · approved Oct 30 · portal order · 9 of 18
+                                fields shown
+                            </p>
+                        </div>
+                        <div class="actions">
+                            <span class="chip ok">Copied 12 / 18</span>
+                            <button class="btn" type="button">Open portal ↗</button>
+                        </div>
+                    </div>
+                    <div class="card sunk instruction row between">
+                        <span
+                            >Copy each answer into the matching portal field, complete uploads
+                            yourself, then review and submit in the portal.</span
+                        >
+                        <span class="chip brand">Copy-based · P2–P3</span>
+                    </div>
+                    <section
+                        class="card field-list"
+                        aria-label="Application fields in portal order"
+                    >
+                        <div class="field-head">
+                            <span>#</span><span>Portal field · type · limit</span
+                            ><span>Answer to copy</span><span>Count / action</span>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">01</span>
+                            <div>
+                                <div class="field-label">One-sentence company description</div>
+                                <div class="field-meta">
+                                    <span class="chip">short text</span><span>100 characters</span>
+                                </div>
+                            </div>
+                            <p class="answer">
+                                Temperature monitoring and audit records for food logistics.
+                            </p>
+                            <div class="copy-control">
+                                <span class="small muted">60 / 100</span
+                                ><button class="btn sm copied" type="button">Copied</button>
+                            </div>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">02</span>
+                            <div>
+                                <div class="field-label">What are you building?</div>
+                                <div class="field-meta">
+                                    <span class="chip">long text</span><span>500 characters</span>
+                                </div>
+                            </div>
+                            <p class="answer">
+                                Northwind Cold Chain builds temperature-monitoring hardware and
+                                reporting software for chilled and frozen food logistics. Our NW-40
+                                probe logs temperatures across transport and storage. Northwind
+                                Records turns these readings into clear exception reports for
+                                quality managers assembling audit evidence. We supply monitoring
+                                records; customers remain responsible for their own HACCP plans and
+                                for sensor placement.
+                            </p>
+                            <div class="copy-control">
+                                <span class="small muted">412 / 500</span
+                                ><button class="btn sm copied" type="button">Copied</button>
+                            </div>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">03</span>
+                            <div>
+                                <div class="field-label">What progress have you made?</div>
+                                <div class="field-meta">
+                                    <span class="chip">long text</span><span>1,000 characters</span>
+                                </div>
+                            </div>
+                            <p class="answer">
+                                In September, recurring revenue reached $52,000. Eighteen operators
+                                used Northwind Records to monitor 120,000 shipments that month.
+                                These figures are from our latest Vantage observations.
+                            </p>
+                            <div class="copy-control">
+                                <span class="small muted">187 / 1,000</span
+                                ><button class="btn sm" type="button">Copy</button>
+                            </div>
+                        </div>
+                        <div class="fill-field unapproved">
+                            <span class="field-number">04</span>
+                            <div>
+                                <div class="field-label">Why this program?</div>
+                                <div class="field-meta">
+                                    <span class="chip">long text</span><span>500 characters</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="answer">
+                                    We want founder support to test a focused expansion into
+                                    European food logistics and refine how quality teams buy
+                                    monitoring software.
+                                </p>
+                                <span class="copy-warning"
+                                    >Not approved — copy anyway (logged)</span
+                                >
+                            </div>
+                            <div class="copy-control">
+                                <span class="small muted">134 / 500</span
+                                ><button class="btn sm" type="button">Copy anyway</button>
+                            </div>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">05</span>
+                            <div>
+                                <div class="field-label">Company URL</div>
+                                <div class="field-meta">
+                                    <span class="chip">URL</span><span>No stated limit</span>
+                                </div>
+                            </div>
+                            <div class="answer fact-value">
+                                https://northwindcoldchain.example<span class="fact-origin"
+                                    >Profile fact · confirmed Oct 30</span
+                                >
+                            </div>
+                            <div class="copy-control">
+                                <button class="btn sm copied" type="button">Copied</button>
+                            </div>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">06</span>
+                            <div>
+                                <div class="field-label">Founded date</div>
+                                <div class="field-meta">
+                                    <span class="chip">date</span><span>YYYY-MM-DD</span>
+                                </div>
+                            </div>
+                            <div class="answer fact-value">
+                                2014-05-12<span class="fact-origin"
+                                    >Profile fact · exact date unconfirmed</span
+                                >
+                            </div>
+                            <div class="copy-control">
+                                <button class="btn sm" type="button">Copy</button>
+                            </div>
+                        </div>
+                        <div class="fill-field">
+                            <span class="field-number">07</span>
+                            <div>
+                                <div class="field-label">Number of founders</div>
+                                <div class="field-meta">
+                                    <span class="chip">select</span><span>1 · 2 · 3 · 4+</span>
+                                </div>
+                            </div>
+                            <div class="answer fact-value">
+                                2<span class="fact-origin"
+                                    >Profile fact · choose “2” in portal</span
+                                >
+                            </div>
+                            <div class="copy-control">
+                                <button class="btn sm copied" type="button">Copied</button>
+                            </div>
+                        </div>
+                        <div class="fill-field manual-field">
+                            <span class="field-number">08</span>
+                            <div>
+                                <div class="field-label">Founder video</div>
+                                <div class="field-meta">
+                                    <span class="chip">video</span><span>1 minute</span>
+                                </div>
+                            </div>
+                            <p class="answer">Upload 1-minute founder video — not drafted</p>
+                            <div class="copy-control"><span class="chip warn">Needs you</span></div>
+                        </div>
+                        <div class="fill-field manual-field">
+                            <span class="field-number">09</span>
+                            <div>
+                                <div class="field-label">Product demo attachment</div>
+                                <div class="field-meta">
+                                    <span class="chip">file</span><span>PDF · up to 10 MB</span>
+                                </div>
+                            </div>
+                            <p class="answer">Attach product overview PDF — not drafted</p>
+                            <div class="copy-control"><span class="chip warn">Needs you</span></div>
+                        </div>
+                    </section>
+                    <div class="annotation-strip">
+                        <div class="note">
+                            P4 extension fills these automatically. Files, videos and unsupported
+                            controls still need the founder.
+                        </div>
+                        <div class="note">
+                            Unapproved copy is logged with the draft hash. Copying does not approve
+                            an answer or submit the application.
+                        </div>
+                        <div class="note">
+                            Dates, founders, metrics, portal fields and approval states are
+                            illustrative [INFERENCE]. No citations are copied.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

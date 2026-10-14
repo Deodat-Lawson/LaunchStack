@@ -2,6 +2,10 @@
 
 _2026-09-30. Status: shipped as its own app under Tools; runs inline by default._
 
+> **2026-10-13:** grant work in this tool is frozen. The accelerator successor —
+> a separate Accelerators tool tab on this same backend — is designed in
+> [`accelerators/technical-design.md`](./accelerators/technical-design.md).
+
 ## Why
 
 A small organisation has no grants department: one person finds the calls,

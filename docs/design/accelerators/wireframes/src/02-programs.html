@@ -1,0 +1,361 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span class="on">Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .ph {
+                            margin-bottom: 12px;
+                        }
+                        .disabled {
+                            opacity: 0.48;
+                        }
+                        .refresh-banner {
+                            padding: 8px 12px;
+                            margin-bottom: 10px;
+                        }
+                        .filters {
+                            gap: 8px;
+                            margin-bottom: 12px;
+                        }
+                        .filters .input {
+                            padding: 6px 10px;
+                            color: var(--ink-2);
+                        }
+                        .filters label {
+                            margin-left: auto;
+                            gap: 6px;
+                            white-space: nowrap;
+                        }
+                        .programs-grid {
+                            gap: 14px;
+                        }
+                        .program {
+                            height: 204px;
+                            padding: 12px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+                        }
+                        .program h3 {
+                            margin: 0;
+                            font-size: 15px;
+                            line-height: 18px;
+                        }
+                        .program p {
+                            margin: 0;
+                            font-size: 12px;
+                            line-height: 15px;
+                        }
+                        .program .row {
+                            gap: 5px;
+                        }
+                        .fitbar {
+                            display: grid;
+                            grid-template-columns: 22px 1fr 52px;
+                            gap: 8px;
+                            align-items: center;
+                            font-size: 12px;
+                            line-height: 15px;
+                        }
+                        .fitbar strong {
+                            text-align: right;
+                        }
+                        .eligibility {
+                            flex-wrap: nowrap;
+                        }
+                        .eligibility .chip {
+                            padding: 2px 6px;
+                            font-size: 10.5px;
+                        }
+                        .program .footer {
+                            margin-top: auto;
+                        }
+                        .program .footer .small {
+                            font-size: 11px;
+                        }
+                        .program .actions {
+                            gap: 4px;
+                        }
+                        .catalogue-footer {
+                            margin-top: 9px;
+                            line-height: 16px;
+                        }
+                        .annotation-strip {
+                            position: relative;
+                            height: 54px;
+                            margin-top: 12px;
+                        }
+                        .annotation-strip .note {
+                            top: 0;
+                            width: 220px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="ph">
+                        <div>
+                            <h1>Programs</h1>
+                            <p>
+                                Matches for Northwind Cold Chain · Ranked by fit, with eligibility
+                                checked separately.
+                            </p>
+                        </div>
+                        <div class="actions">
+                            <span class="btn disabled" aria-disabled="true"
+                                >Find more programs · v1.1</span
+                            ><span class="btn primary">Rerun matching</span>
+                        </div>
+                    </div>
+                    <div class="card sunk refresh-banner row between">
+                        <span class="small"
+                            >Catalogue refreshed Mon 06:00 UTC ·
+                            <strong>2 programs could not be checked</strong></span
+                        ><span class="small ink2">View failures →</span>
+                    </div>
+                    <div class="row filters">
+                        <span class="input small">Stage: Early / seed ▾</span>
+                        <span class="input small">Format: Any ▾</span>
+                        <span class="input small">Location: Any ▾</span>
+                        <span class="input small">Deadline: Next 90 days ▾</span>
+                        <label class="row small ink2"
+                            ><input type="checkbox" /> Show ineligible</label
+                        >
+                    </div>
+                    <div class="g3 programs-grid grid">
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>Y Combinator</h3>
+                                <span class="chip brand">Saved</span>
+                            </div>
+                            <p>$500k · 7% + uncapped MFN SAFE</p>
+                            <p class="muted">In person · San Francisco · Spring 2027</p>
+                            <p><strong>Next deadline: Nov 10, 8:00 PM PT</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 88%"></b></div>
+                                <strong>88 / 100</strong>
+                            </div>
+                            <p class="ink2">B2B technology with a clear logistics problem.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: sector</span
+                                ><span class="chip warn">Soft miss: age</span
+                                ><span class="chip">Unknown: entity</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Last confirmed 4 days ago</span>
+                                <div class="actions">
+                                    <span class="btn sm">Saved</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>Techstars</h3>
+                                <span class="chip brand">Saved</span>
+                            </div>
+                            <p>$220k · equity + uncapped SAFE</p>
+                            <p class="muted">In person · Boston · Spring 2027</p>
+                            <p><strong>Next deadline: Nov 12, 11:59 PM ET</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 84%"></b></div>
+                                <strong>84 / 100</strong>
+                            </div>
+                            <p class="ink2">Mentor network fits enterprise food logistics.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: stage</span
+                                ><span class="chip warn">Soft miss: move</span
+                                ><span class="chip">Unknown: entity</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Last confirmed 6 days ago</span>
+                                <div class="actions">
+                                    <span class="btn sm">Saved</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>a16z speedrun</h3>
+                                <span class="chip brand">Saved</span>
+                            </div>
+                            <p>Up to $1m · investment terms vary</p>
+                            <p class="muted">In person · San Francisco · SR005</p>
+                            <p><strong>Next deadline: Nov 14, 11:59 PM PT</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 72%"></b></div>
+                                <strong>72 / 100</strong>
+                            </div>
+                            <p class="ink2">Sensor software fits; AI focus needs evidence.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: tech</span
+                                ><span class="chip warn">Soft miss: AI</span
+                                ><span class="chip">Unknown: move</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Last confirmed 2 days ago</span>
+                                <div class="actions">
+                                    <span class="btn sm">Saved</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>Antler</h3>
+                                <span class="chip warn">Check failed</span>
+                            </div>
+                            <p>Local investment terms · confirm offer</p>
+                            <p class="muted">In person · London · UK residency</p>
+                            <p><strong>Next deadline: Nov 30, 11:59 PM GMT</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 68%"></b></div>
+                                <strong>68 / 100</strong>
+                            </div>
+                            <p class="ink2">UK access fits; company may be too mature.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: location</span
+                                ><span class="chip warn">Soft miss: age</span
+                                ><span class="chip">Unknown: team</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Last confirmed 21 days ago</span>
+                                <div class="actions">
+                                    <span class="btn sm">Save</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>Entrepreneur First</h3>
+                                <span class="chip">Not saved</span>
+                            </div>
+                            <p>Up to $250k · local investment terms</p>
+                            <p class="muted">In person · London · Spring 2027</p>
+                            <p><strong>Next deadline: Dec 1, 11:59 PM GMT</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 61%"></b></div>
+                                <strong>61 / 100</strong>
+                            </div>
+                            <p class="ink2">Technical founders fit; existing team is a concern.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: location</span
+                                ><span class="chip warn">Soft miss: team</span
+                                ><span class="chip">Unknown: time</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Last confirmed 5 days ago</span>
+                                <div class="actions">
+                                    <span class="btn sm">Save</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card program">
+                            <div class="row between">
+                                <h3>500 Global</h3>
+                                <span class="chip brand">Saved</span>
+                            </div>
+                            <p>$150k · 6% equity · fee may apply</p>
+                            <p class="muted">Hybrid · San Francisco · Flagship 2027</p>
+                            <p><strong>Next deadline: Dec 15, 11:59 PM PT</strong></p>
+                            <div class="fitbar">
+                                <span>Fit</span>
+                                <div class="meter"><b style="width: 76%"></b></div>
+                                <strong>76 / 100</strong>
+                            </div>
+                            <p class="ink2">Global B2B growth network fits the next round.</p>
+                            <div class="row eligibility">
+                                <span class="chip ok">Pass: sector</span
+                                ><span class="chip warn">Soft miss: fee</span
+                                ><span class="chip">Unknown: terms</span>
+                            </div>
+                            <div class="row between footer">
+                                <span class="small muted">Confirmed 18d ago · check failed</span>
+                                <div class="actions">
+                                    <span class="btn sm">Saved</span
+                                    ><span class="btn sm ghost">Dismiss</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="row between catalogue-footer">
+                        <strong class="small ink2">3 hidden: hard eligibility fail</strong
+                        ><span class="small muted"
+                            >[INFERENCE] Illustrative catalogue values, terms, rules and fit ·
+                            Preview Nov 1, 2026</span
+                        >
+                    </div>
+                    <div class="annotation-strip">
+                        <div class="note" style="left: 0">
+                            Hard fails are hidden by default. Soft misses and unknown facts stay
+                            visible and never become silent passes.
+                        </div>
+                        <div class="note" style="left: 244px">
+                            Rerun matching changes fit, not your Save or Dismiss choices. Weekly
+                            refresh updates the shared catalogue.
+                        </div>
+                        <div class="note" style="left: 488px">
+                            A failed check keeps the last confirmed deadline. Open program detail to
+                            inspect the quote or refresh now.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

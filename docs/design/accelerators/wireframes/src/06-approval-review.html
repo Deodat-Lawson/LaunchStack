@@ -1,0 +1,444 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span>Answers</span>
+                        <span class="on">Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .approval-head {
+                            margin-bottom: 14px;
+                        }
+                        .approval-head h1 {
+                            font-size: 24px;
+                        }
+                        .approval-head p {
+                            font-size: 12px;
+                        }
+                        .reviewer {
+                            text-align: right;
+                            padding-top: 2px;
+                        }
+                        .reviewer .small {
+                            margin: 5px 0;
+                        }
+                        .reviewer .chip {
+                            font-size: 10.5px;
+                        }
+                        .frozen-banner {
+                            padding: 10px 12px;
+                            margin-bottom: 12px;
+                            background: var(--brand-soft);
+                            border-color: var(--brand-soft);
+                        }
+                        .frozen-banner strong {
+                            font-size: 12px;
+                            color: var(--brand-ink);
+                        }
+                        .approval-summary {
+                            padding: 12px 14px;
+                            margin-bottom: 12px;
+                        }
+                        .summary-grid {
+                            display: grid;
+                            grid-template-columns: repeat(5, 1fr);
+                            gap: 18px;
+                        }
+                        .summary-value {
+                            font-size: 23px;
+                            font-weight: 700;
+                            line-height: 1;
+                        }
+                        .summary-value.good {
+                            color: var(--success);
+                        }
+                        .summary-value.warning {
+                            color: var(--warn);
+                        }
+                        .summary-label {
+                            margin-top: 5px;
+                            font-size: 11px;
+                            color: var(--ink-3);
+                        }
+                        .summary-override {
+                            border-top: 1px solid var(--line);
+                            margin-top: 10px;
+                            padding-top: 9px;
+                            font-size: 11.5px;
+                        }
+                        .summary-override .chip {
+                            font-size: 10.5px;
+                        }
+                        .review-label {
+                            margin-bottom: 8px;
+                            font-size: 11.5px;
+                        }
+                        .review-grid {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            grid-template-rows: 234px 144px;
+                            gap: 12px;
+                        }
+                        .field-review {
+                            padding: 12px;
+                            min-width: 0;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .field-review h3 {
+                            margin: 0;
+                            font-size: 13px;
+                        }
+                        .field-review .chip {
+                            font-size: 10.5px;
+                            padding: 1px 7px;
+                        }
+                        .review-field-meta {
+                            margin-top: 5px;
+                            color: var(--ink-3);
+                            font-size: 10.5px;
+                        }
+                        .review-answer {
+                            margin: 8px 0 0;
+                            font-size: 11.5px;
+                            line-height: 1.4;
+                        }
+                        .verdicts {
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            margin-top: 8px;
+                            font-size: 10.5px;
+                        }
+                        .pinned-evidence {
+                            margin-top: 10px;
+                            font-size: 10.5px;
+                            color: var(--ink-3);
+                        }
+                        .field-review .quote {
+                            margin-top: 6px;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                        .field-decisions {
+                            margin-top: auto;
+                            padding-top: 8px;
+                            display: flex;
+                            gap: 7px;
+                        }
+                        .field-decisions .btn {
+                            font-size: 11px;
+                            padding: 4px 8px;
+                        }
+                        .comment-label {
+                            margin-top: 8px;
+                            font-size: 10.5px;
+                            color: var(--ink-2);
+                        }
+                        .review-comment {
+                            margin-top: 4px;
+                            padding: 6px 8px;
+                            font-size: 10.5px;
+                            line-height: 1.4;
+                        }
+                        .compact-review .review-answer {
+                            margin-top: 6px;
+                        }
+                        .compact-bottom {
+                            margin-top: auto;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            gap: 8px;
+                        }
+                        .compact-bottom .verdicts {
+                            margin-top: 0;
+                            gap: 4px;
+                        }
+                        .compact-bottom .field-decisions {
+                            margin-top: 0;
+                            padding-top: 0;
+                            gap: 5px;
+                        }
+                        .compact-bottom .btn {
+                            padding: 4px 7px;
+                            font-size: 10.5px;
+                        }
+                        .approval-footer {
+                            margin-top: 12px;
+                            padding-top: 12px;
+                            border-top: 1px solid var(--line);
+                        }
+                        .approval-footer .small {
+                            font-size: 11px;
+                            line-height: 1.4;
+                        }
+                        .approval-footer .btn {
+                            font-size: 12px;
+                        }
+                        .approval-notes {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr;
+                            gap: 12px;
+                            margin-top: 12px;
+                        }
+                        .approval-notes .note {
+                            position: static;
+                            max-width: none;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="ph approval-head">
+                        <div>
+                            <h1>Approval request · Y Combinator Spring 2027</h1>
+                            <p>
+                                Requested by Priya (writer) 2 h ago · packet
+                                <span class="mono">3f9c…a1</span>
+                            </p>
+                        </div>
+                        <div class="reviewer">
+                            <strong>Northwind Cold Chain</strong>
+                            <div class="small muted">Maya Chen · founder view</div>
+                            <span class="chip brand">proposals.approve</span>
+                        </div>
+                    </div>
+                    <div class="card row between frozen-banner">
+                        <strong>Frozen at request time. Any edit supersedes this request.</strong
+                        ><span class="chip brand">Pending approval · read-only packet</span>
+                    </div>
+                    <section class="card approval-summary">
+                        <div class="summary-grid">
+                            <div>
+                                <div class="summary-value">18</div>
+                                <div class="summary-label">Fields</div>
+                            </div>
+                            <div>
+                                <div class="summary-value good">41</div>
+                                <div class="summary-label">Verified claims</div>
+                            </div>
+                            <div>
+                                <div class="summary-value warning">2</div>
+                                <div class="summary-label">Flagged · non-blocking</div>
+                            </div>
+                            <div>
+                                <div class="summary-value warning">3</div>
+                                <div class="summary-label">Unconfirmed facts</div>
+                            </div>
+                            <div>
+                                <div class="summary-value">1</div>
+                                <div class="summary-label">Blocker overridden</div>
+                            </div>
+                        </div>
+                        <div class="row summary-override">
+                            <span class="chip warn">1 blocker overridden</span
+                            ><span
+                                >Approximate form limits · Reason:
+                                <strong>limits checked in portal</strong></span
+                            ><span class="muted">Recorded by Priya</span>
+                        </div>
+                    </section>
+                    <div class="row between review-label">
+                        <strong>Review fields</strong
+                        ><span class="muted"
+                            >4 of 18 shown · evidence versions pinned to packet</span
+                        >
+                    </div>
+                    <div class="review-grid">
+                        <section class="card field-review">
+                            <div class="row between">
+                                <h3>04 · What are you building?</h3>
+                                <span class="chip brand">what_building</span>
+                            </div>
+                            <div class="review-field-meta">
+                                long_text · 516 / 1,000 chars · portal limit confirmed
+                            </div>
+                            <p class="review-answer">
+                                We build NW-40 temperature sensors and Northwind Records for
+                                food-logistics operators. Teams see temperature excursions while
+                                shipments are in transit and retain a record for their own operating
+                                procedures.<sup class="c">E1 E3</sup>
+                            </p>
+                            <div class="verdicts">
+                                <span class="chip ok">9 verified claims</span
+                                ><span class="chip">0 flagged</span><span class="muted">Ready</span>
+                            </div>
+                            <div class="pinned-evidence">
+                                E1 · Pitch deck v7 · Sep 28 &nbsp; E3 · profile v12 · Oct 7
+                            </div>
+                            <div class="quote">
+                                “NW-40 sensors send temperature readings to Northwind Records.”
+                            </div>
+                            <div class="field-decisions">
+                                <button class="btn sm" type="button">Approve</button
+                                ><button class="btn sm" type="button">Request changes</button>
+                            </div>
+                        </section>
+                        <section class="card field-review">
+                            <div class="row between">
+                                <h3>05 · Describe your traction</h3>
+                                <span class="chip brand">traction</span>
+                            </div>
+                            <div class="review-field-meta">
+                                long_text · 718 / 1,000 chars · E2 updated to Sep observation
+                            </div>
+                            <p class="review-answer">
+                                September MRR is <span class="hl-ok">$52k</span
+                                ><sup class="c">E2</sup>. We monitor 120,000 shipments per month for
+                                18 active operators in the UK, Ireland and the Netherlands.<sup
+                                    class="c"
+                                    >E1 E3</sup
+                                >
+                                <span class="hl-warn"
+                                    >Most paid pilots convert within eight weeks.</span
+                                >
+                            </p>
+                            <div class="verdicts">
+                                <span class="chip ok">8 verified claims</span
+                                ><span class="chip warn">1 flagged · cohort missing</span>
+                            </div>
+                            <label class="comment-label" for="traction-comment"
+                                >Comment to writer</label
+                            >
+                            <textarea
+                                class="textarea review-comment"
+                                id="traction-comment"
+                                rows="1"
+                            >
+Replace “most” with the measured pilot conversion rate and cite the cohort.</textarea
+                            >
+                            <div class="field-decisions">
+                                <button class="btn sm" type="button">Approve</button
+                                ><button class="btn sm" type="button">Request changes</button>
+                            </div>
+                        </section>
+                        <section class="card field-review compact-review">
+                            <div class="row between">
+                                <h3>08 · Founder backgrounds</h3>
+                                <span class="chip brand">team</span>
+                            </div>
+                            <div class="review-field-meta">
+                                long_text · 675 / 1,000 chars · 2 unconfirmed profile facts
+                            </div>
+                            <p class="review-answer">
+                                Maya leads operations; the engineering co-founder leads sensor
+                                firmware and Northwind Records.
+                                <span class="hl-warn">Both founders work full time.</span
+                                ><sup class="c">E3</sup>
+                            </p>
+                            <div class="compact-bottom">
+                                <div class="verdicts">
+                                    <span class="chip ok">6 verified</span
+                                    ><span class="chip warn">1 flagged</span>
+                                </div>
+                                <div class="field-decisions">
+                                    <button class="btn sm" type="button">Approve</button
+                                    ><button class="btn sm" type="button">Request changes</button>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card field-review compact-review">
+                            <div class="row between">
+                                <h3>14 · Funding raised</h3>
+                                <span class="chip brand">funding_raised</span>
+                            </div>
+                            <div class="review-field-meta">
+                                long_text · 296 / 500 chars · 1 unconfirmed profile fact
+                            </div>
+                            <p class="review-answer">
+                                The company has been funded through customer revenue and founder
+                                capital.
+                                <span class="hl-warn"
+                                    >We have not raised institutional funding.</span
+                                ><sup class="c">E3</sup>
+                            </p>
+                            <div class="compact-bottom">
+                                <div class="verdicts">
+                                    <span class="chip ok">2 verified</span
+                                    ><span class="chip warn">1 unconfirmed</span>
+                                </div>
+                                <div class="field-decisions">
+                                    <button class="btn sm" type="button">Approve</button
+                                    ><button class="btn sm" type="button">Request changes</button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <footer class="row between approval-footer">
+                        <div class="small ink2">
+                            Approval accepts the remaining non-blocking flags and unconfirmed
+                            facts.<br /><span class="muted"
+                                >[INFERENCE] Illustrative review data · approving does not submit to
+                                YC.</span
+                            >
+                        </div>
+                        <div class="actions">
+                            <button class="btn" type="button">Request changes</button
+                            ><button class="btn primary" type="button">Approve all</button>
+                        </div>
+                    </footer>
+                    <div class="approval-notes">
+                        <div class="note">
+                            Only holders of <span class="mono">proposals.approve</span> see the
+                            buttons. Custom roles can grant this permission.
+                        </div>
+                        <div class="note">
+                            The packet freezes answer text, verification, evidence versions, field
+                            limits and the override reason at request time.
+                        </div>
+                        <div class="note">
+                            Approval is bound to this packet hash. Later edits supersede the request
+                            and require fresh approval before filling.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

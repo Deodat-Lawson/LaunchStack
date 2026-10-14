@@ -1,0 +1,424 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span class="on">Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .breadcrumb {
+                            margin-bottom: 8px;
+                            line-height: 15px;
+                        }
+                        .ph {
+                            margin-bottom: 14px;
+                        }
+                        .detail-grid {
+                            display: grid;
+                            grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+                            gap: 14px;
+                        }
+                        .detail-grid > .stack {
+                            gap: 12px;
+                        }
+                        .detail-grid .card {
+                            padding: 12px;
+                        }
+                        .detail-grid .card h3 {
+                            margin-bottom: 8px;
+                        }
+                        .detail-grid .t th {
+                            padding: 6px;
+                            font-size: 10px;
+                            letter-spacing: 0.02em;
+                        }
+                        .detail-grid .t td {
+                            padding: 8px 6px;
+                            font-size: 11.5px;
+                            line-height: 1.3;
+                        }
+                        .detail-grid .t tr:last-child td {
+                            border-bottom: 0;
+                        }
+                        .detail-grid .t .chip {
+                            padding: 2px 6px;
+                            font-size: 10px;
+                        }
+                        .terms .quote {
+                            margin: 9px 0;
+                            font-size: 12px;
+                            line-height: 1.45;
+                        }
+                        .terms .source {
+                            font-size: 11.5px;
+                            line-height: 1.4;
+                        }
+                        .detail-grid a {
+                            color: var(--brand-ink);
+                            text-decoration: underline;
+                            text-underline-offset: 2px;
+                        }
+                        .fit-score {
+                            font-size: 28px;
+                            font-weight: 700;
+                            line-height: 1;
+                        }
+                        .fit .meter {
+                            margin: 10px 0;
+                        }
+                        .fit p {
+                            margin: 7px 0 0;
+                            font-size: 12px;
+                            line-height: 1.4;
+                        }
+                        .preview-warning {
+                            padding: 8px 9px !important;
+                            margin-bottom: 7px;
+                            font-size: 11.5px;
+                            line-height: 1.35;
+                        }
+                        .form-preview .t {
+                            table-layout: fixed;
+                        }
+                        .form-preview .t td {
+                            padding: 7px 4px;
+                        }
+                        .form-preview .t th {
+                            padding: 6px 4px;
+                        }
+                        .form-preview .t .chip {
+                            font-size: 9.5px;
+                            padding: 2px 5px;
+                        }
+                        .form-preview .limit-note {
+                            margin-top: 6px;
+                            font-size: 11px;
+                        }
+                        .annotation-strip {
+                            position: relative;
+                            height: 54px;
+                            margin-top: 12px;
+                        }
+                        .annotation-strip .note {
+                            top: 0;
+                            width: 220px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="breadcrumb small muted">
+                        Programs › <strong class="ink2">Y Combinator</strong>
+                    </div>
+                    <div class="ph">
+                        <div>
+                            <h1>Y Combinator</h1>
+                            <p>Northwind Cold Chain · In person, San Francisco · Spring 2027</p>
+                        </div>
+                        <div class="actions">
+                            <a class="btn" href="https://www.ycombinator.com/">Website ↗</a
+                            ><span class="btn">Refresh now</span
+                            ><span class="btn primary">Start application</span>
+                        </div>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="stack">
+                            <section class="card terms">
+                                <div class="row between">
+                                    <h3>Terms</h3>
+                                    <span class="chip info">Source quote</span>
+                                </div>
+                                <div class="small">
+                                    <strong>$500,000 total</strong> · $125k for 7% + $375k uncapped
+                                    MFN SAFE
+                                </div>
+                                <div class="quote">
+                                    “We invest $500,000, and our investment gives YC 7% of your
+                                    company plus an incremental equity amount that will be fixed
+                                    when you raise money from other investors.”
+                                </div>
+                                <div class="source muted">
+                                    Captured Oct 13, 2026 ·
+                                    <a href="https://www.ycombinator.com/deal"
+                                        >ycombinator.com/deal ↗</a
+                                    >
+                                    · Verbatim source wording
+                                </div>
+                            </section>
+                            <section class="card">
+                                <div class="row between">
+                                    <h3>Batches</h3>
+                                    <span class="small muted">Last confirmed 4 days ago</span>
+                                </div>
+                                <table class="t">
+                                    <thead>
+                                        <tr>
+                                            <th>Label</th>
+                                            <th>Opens</th>
+                                            <th>Deadline + TZ</th>
+                                            <th>Decision by</th>
+                                            <th>Confidence</th>
+                                            <th>Source</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Spring 2027</strong></td>
+                                            <td>Sep 14<br />2026</td>
+                                            <td>Nov 10, 2026<br /><strong>8:00 PM PT</strong></td>
+                                            <td>Dec 11<br />2026</td>
+                                            <td><span class="chip info">Extracted</span></td>
+                                            <td>
+                                                <a href="https://www.ycombinator.com/apply"
+                                                    >Apply ↗</a
+                                                >
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Summer 2027</strong></td>
+                                            <td>Dec 1<br />2026</td>
+                                            <td>Feb 10, 2027<br /><strong>8:00 PM PT</strong></td>
+                                            <td>Mar 12<br />2027</td>
+                                            <td><span class="chip">Seed</span></td>
+                                            <td>
+                                                <a href="https://www.ycombinator.com/apply"
+                                                    >Apply ↗</a
+                                                >
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="small muted">
+                                    [INFERENCE] Illustrative batch dates, not the live application
+                                    schedule.
+                                </div>
+                            </section>
+                            <section class="card">
+                                <div class="row between">
+                                    <h3>Eligibility verdicts</h3>
+                                    <span class="small muted"
+                                        >[INFERENCE] Illustrative rules and verdicts</span
+                                    >
+                                </div>
+                                <table class="t">
+                                    <thead>
+                                        <tr>
+                                            <th>Rule</th>
+                                            <th>Severity</th>
+                                            <th>Verdict</th>
+                                            <th>Cited company fact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Technology startup</td>
+                                            <td><span class="chip">Hard</span></td>
+                                            <td><span class="chip ok">Pass</span></td>
+                                            <td>
+                                                Temperature monitoring for food logistics — company
+                                                profile
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Supported parent jurisdiction</td>
+                                            <td><span class="chip">Hard</span></td>
+                                            <td><span class="chip">Unknown</span></td>
+                                            <td>Unknown — no incorporation fact</td>
+                                        </tr>
+                                        <tr>
+                                            <td>San Francisco attendance</td>
+                                            <td><span class="chip">Soft</span></td>
+                                            <td><span class="chip">Unknown</span></td>
+                                            <td>
+                                                Leeds, UK — company profile; relocation not
+                                                confirmed
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Early-stage profile</td>
+                                            <td><span class="chip">Soft</span></td>
+                                            <td><span class="chip warn">Soft miss</span></td>
+                                            <td>Founded 2014 — company profile</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                        <div class="stack">
+                            <section class="card fit">
+                                <div class="row between">
+                                    <h3>Fit for Northwind Cold Chain</h3>
+                                    <span class="chip brand">[INFERENCE]</span>
+                                </div>
+                                <div class="row between">
+                                    <span class="fit-score"
+                                        >88 <span class="small muted">/ 100</span></span
+                                    ><span class="small muted">Rerun after confirming facts</span>
+                                </div>
+                                <div class="meter"><b style="width: 88%"></b></div>
+                                <p>
+                                    <strong>Why:</strong> B2B technology; a specific cold-chain
+                                    problem; an international customer base to build on.
+                                </p>
+                                <p class="ink2">
+                                    <strong>Concerns:</strong> Company maturity, relocation and
+                                    parent jurisdiction need founder confirmation.
+                                </p>
+                            </section>
+                            <section class="card form-preview">
+                                <div class="row between">
+                                    <h3>Form preview</h3>
+                                    <span class="chip warn">Seed template</span>
+                                </div>
+                                <div class="card sunk preview-warning">
+                                    Approximate template — confirm limits in the portal or capture
+                                    with the extension.
+                                </div>
+                                <table class="t">
+                                    <colgroup>
+                                        <col style="width: 34%" />
+                                        <col style="width: 22%" />
+                                        <col style="width: 13%" />
+                                        <col style="width: 31%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Label</th>
+                                            <th>Type</th>
+                                            <th>Chars</th>
+                                            <th>Family</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Company name</td>
+                                            <td><span class="chip">short_text</span></td>
+                                            <td>80*</td>
+                                            <td><span class="chip brand">other</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>What are you building?</td>
+                                            <td><span class="chip">long_text</span></td>
+                                            <td>500*</td>
+                                            <td><span class="chip brand">what_building</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>What problem?</td>
+                                            <td><span class="chip">long_text</span></td>
+                                            <td>1,000*</td>
+                                            <td><span class="chip brand">problem</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Who uses it?</td>
+                                            <td><span class="chip">long_text</span></td>
+                                            <td>500*</td>
+                                            <td><span class="chip brand">customer</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Monthly revenue</td>
+                                            <td><span class="chip">number</span></td>
+                                            <td>—</td>
+                                            <td><span class="chip brand">revenue</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Company website</td>
+                                            <td><span class="chip">url</span></td>
+                                            <td>—</td>
+                                            <td><span class="chip brand">other</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Funding raised</td>
+                                            <td><span class="chip">number</span></td>
+                                            <td>—</td>
+                                            <td><span class="chip brand">funding_raised</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Founder video</td>
+                                            <td><span class="chip">video</span></td>
+                                            <td>—</td>
+                                            <td><span class="chip brand">team</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="limit-note muted">
+                                    * Unconfirmed template limit · Values count UTF-16 code units.
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="annotation-strip">
+                        <div class="note" style="left: 0">
+                            Terms preserve the exact source quote and capture date. Refresh can
+                            change terms without changing saved programs.
+                        </div>
+                        <div class="note" style="left: 244px">
+                            Seed and extracted are provenance labels, not guarantees. Unknown facts
+                            are not eligibility failures.
+                        </div>
+                        <div class="note" style="left: 488px">
+                            Start application creates typed fields from this batch. Unconfirmed
+                            limits must be resolved before approved Fill mode.
+                        </div>
+                        <div
+                            class="small muted"
+                            style="
+                                position: absolute;
+                                right: 0;
+                                top: 7px;
+                                width: 290px;
+                                line-height: 1.45;
+                            "
+                        >
+                            Preview as of Nov 1, 2026.<br />No portal submission occurs in
+                            LaunchStack.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

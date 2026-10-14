@@ -1,0 +1,590 @@
+<!doctype html>
+<!--
+  Reference shell for every Accelerators wireframe. Copy this file, keep the
+  rail / tabstrip / toolbar markup, change only the `.on` screen tab and the
+  contents of <main class="body">. Rendered at 1440×900.
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Accelerators — shell</title>
+        <link rel="stylesheet" href="wireframe.css" />
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span class="on">Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span>Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body">
+                    <style>
+                        .editor-head {
+                            margin-bottom: 14px;
+                        }
+                        .editor-head h1 {
+                            font-size: 24px;
+                        }
+                        .editor-meta {
+                            margin-top: 8px;
+                            gap: 10px;
+                            font-size: 12px;
+                        }
+                        .readiness {
+                            width: 110px;
+                        }
+                        .readiness .meter {
+                            margin-top: 4px;
+                        }
+                        .editor-actions {
+                            text-align: right;
+                        }
+                        .editor-actions .actions {
+                            justify-content: flex-end;
+                        }
+                        .editor-actions .btn {
+                            font-size: 12px;
+                            padding: 7px 10px;
+                        }
+                        .disabled {
+                            opacity: 0.45;
+                            cursor: not-allowed;
+                        }
+                        .disabled-reason {
+                            margin-top: 6px;
+                            font-size: 11.5px;
+                            color: var(--danger);
+                        }
+                        .editor-grid {
+                            display: grid;
+                            grid-template-columns: 218px minmax(0, 1fr) 292px;
+                            gap: 12px;
+                            height: 628px;
+                        }
+                        .editor-grid > .card {
+                            min-width: 0;
+                        }
+                        .field-panel,
+                        .evidence-panel {
+                            padding: 12px;
+                        }
+                        .field-list {
+                            margin-top: 12px;
+                        }
+                        .field-item {
+                            height: 50px;
+                            padding: 7px 8px;
+                            border-bottom: 1px solid var(--line);
+                        }
+                        .field-item.selected {
+                            background: var(--brand-soft);
+                            border-radius: 7px;
+                            border-bottom-color: transparent;
+                        }
+                        .field-name {
+                            display: flex;
+                            gap: 6px;
+                            font-size: 12px;
+                            line-height: 14px;
+                        }
+                        .field-name .muted {
+                            width: 14px;
+                            flex: none;
+                        }
+                        .field-state {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-top: 5px;
+                        }
+                        .field-state .chip {
+                            padding: 1px 6px;
+                            font-size: 10.5px;
+                        }
+                        .field-state .mono {
+                            font-size: 10.5px;
+                            color: var(--ink-3);
+                        }
+                        .field-footer {
+                            border-top: 1px solid var(--line);
+                            padding-top: 12px;
+                            margin-top: 10px;
+                            font-size: 11px;
+                            line-height: 1.4;
+                        }
+                        .draft-panel {
+                            padding: 14px;
+                        }
+                        .draft-title h3 {
+                            margin: 0;
+                        }
+                        .field-type {
+                            margin-top: 6px;
+                            font-size: 11.5px;
+                        }
+                        .reuse {
+                            margin-top: 10px;
+                            font-size: 11px;
+                        }
+                        .limit {
+                            margin: 10px 0 8px;
+                            font-size: 12px;
+                        }
+                        .limit .meter {
+                            width: 140px;
+                        }
+                        .answer-text {
+                            padding: 10px 12px;
+                            font-size: 12px;
+                            line-height: 1.45;
+                        }
+                        .answer-text p {
+                            margin: 0 0 6px;
+                        }
+                        .answer-text p:last-child {
+                            margin-bottom: 0;
+                        }
+                        .presets {
+                            display: flex;
+                            gap: 5px;
+                            margin-top: 10px;
+                        }
+                        .presets .btn {
+                            font-size: 11px;
+                            padding: 4px 8px;
+                        }
+                        .draft-controls {
+                            margin-top: 10px;
+                        }
+                        .claims {
+                            border-top: 1px solid var(--line);
+                            margin-top: 12px;
+                            padding-top: 10px;
+                        }
+                        .claims h3 {
+                            margin-bottom: 7px;
+                        }
+                        .claim {
+                            padding: 7px 0;
+                            border-bottom: 1px solid var(--line);
+                            font-size: 11.5px;
+                            line-height: 1.35;
+                        }
+                        .claim:last-child {
+                            border-bottom: 0;
+                            padding-bottom: 0;
+                        }
+                        .claim .chip {
+                            font-size: 10.5px;
+                            padding: 1px 6px;
+                        }
+                        .claim p {
+                            margin: 4px 0 0;
+                            color: var(--ink-2);
+                        }
+                        .evidence-panel > .small {
+                            margin-bottom: 10px;
+                        }
+                        .evidence-card {
+                            padding: 9px 10px;
+                            margin-bottom: 8px;
+                        }
+                        .evidence-title {
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            font-size: 12px;
+                        }
+                        .evidence-title .mono {
+                            font-size: 11px;
+                            color: var(--brand-ink);
+                        }
+                        .evidence-meta {
+                            margin-top: 6px;
+                            display: flex;
+                            justify-content: space-between;
+                            gap: 4px;
+                        }
+                        .evidence-meta .chip {
+                            font-size: 10px;
+                            padding: 1px 6px;
+                        }
+                        .source-date {
+                            font-size: 10.5px;
+                            margin: 5px 0;
+                            color: var(--ink-3);
+                        }
+                        .evidence-card .quote {
+                            font-size: 11px;
+                            line-height: 1.35;
+                            padding: 4px 7px;
+                        }
+                        .latest {
+                            margin-top: 6px;
+                            gap: 6px;
+                        }
+                        .latest .btn {
+                            font-size: 10.5px;
+                            padding: 3px 6px;
+                        }
+                        .latest .small {
+                            font-size: 10.5px;
+                        }
+                        .editor-notes {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr 1fr;
+                            gap: 12px;
+                            margin-top: 14px;
+                        }
+                        .editor-notes .note {
+                            position: static;
+                            max-width: none;
+                            font-size: 11px;
+                            line-height: 1.35;
+                        }
+                    </style>
+                    <div class="ph editor-head">
+                        <div>
+                            <h1>Y Combinator — Spring 2027</h1>
+                            <div class="row editor-meta">
+                                <span class="ink2">Northwind Cold Chain</span>
+                                <span class="chip warn">Draft · 3 claims flagged</span>
+                                <div class="readiness">
+                                    <div class="row between">
+                                        <span class="muted">Readiness</span><strong>68%</strong>
+                                    </div>
+                                    <div class="meter"><b style="width: 68%"></b></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="editor-actions">
+                            <div class="actions">
+                                <button class="btn" type="button">Verify</button>
+                                <button class="btn" type="button">Fill mode</button>
+                                <button
+                                    class="btn primary disabled"
+                                    type="button"
+                                    disabled
+                                    aria-describedby="approval-blocker"
+                                >
+                                    Request founder approval
+                                </button>
+                            </div>
+                            <div class="disabled-reason" id="approval-blocker">
+                                3 claims flagged
+                            </div>
+                        </div>
+                    </div>
+                    <div class="editor-grid">
+                        <section class="card field-panel">
+                            <h3>Application fields</h3>
+                            <div class="small muted">Portal order · 10 of 18 shown</div>
+                            <div class="field-list">
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">01</span><span>Company name</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip ok">approved</span
+                                        ><span class="mono">20 / 100</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">02</span><span>Website</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip info">ready</span
+                                        ><span class="mono">31 / 200</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">03</span
+                                        ><span>One-line description</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip ok">approved</span
+                                        ><span class="mono">83 / 150</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">04</span
+                                        ><span>What are you building?</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip">drafted</span
+                                        ><span class="mono">516 / 1,000</span>
+                                    </div>
+                                </div>
+                                <div class="field-item selected">
+                                    <div class="field-name">
+                                        <span class="muted">05</span
+                                        ><strong>Describe your traction</strong>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip warn">drafted</span
+                                        ><span class="mono">742 / 1,000</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">06</span
+                                        ><span>Who are your customers?</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip info">ready</span
+                                        ><span class="mono">391 / 1,000</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">07</span><span>Business model</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip">drafted</span
+                                        ><span class="mono">312 / 500</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">08</span
+                                        ><span>Founder backgrounds</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip ok">approved</span
+                                        ><span class="mono">675 / 1,000</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">09</span><span>Equity split</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip info">ready</span
+                                        ><span class="mono">86 / 500</span>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <div class="field-name">
+                                        <span class="muted">10</span><span>Why YC?</span>
+                                    </div>
+                                    <div class="field-state">
+                                        <span class="chip">empty</span
+                                        ><span class="mono">0 / 1,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-footer muted">
+                                Form captured Oct 9 · 18 fields<br />Limits confirmed in portal
+                            </div>
+                        </section>
+                        <section class="card draft-panel">
+                            <div class="row between draft-title">
+                                <h3>Describe your traction</h3>
+                                <span class="chip brand">traction</span>
+                            </div>
+                            <div class="field-type muted">
+                                <span class="mono">long_text</span> · Limit 1,000 chars · confirmed
+                            </div>
+                            <div class="chip ok reuse">
+                                Reused from Techstars 2026 answer · approved Oct 2
+                            </div>
+                            <div class="row between limit">
+                                <strong>742 / 1,000</strong>
+                                <div class="meter"><b style="width: 74.2%"></b></div>
+                            </div>
+                            <div class="textarea answer-text">
+                                <p>
+                                    Northwind Cold Chain monitors temperature-sensitive food
+                                    shipments. We sell to logistics operators who need to catch
+                                    excursions before a delivery is rejected.
+                                </p>
+                                <p>
+                                    We have
+                                    <span class="hl-ok"
+                                        >18 active operators in the UK, Ireland and the
+                                        Netherlands</span
+                                    ><sup class="c">E1 E3</sup>. Revenue is
+                                    <span class="hl-warn">$38k MRR</span><sup class="c">E2</sup>, up
+                                    from $24k in April. Teams monitor
+                                    <span class="hl-ok">120,000 shipments a month</span
+                                    ><sup class="c">E1</sup>; they use our alerts to intervene while
+                                    a vehicle is still on the road. Paid pilots usually convert
+                                    within eight weeks.
+                                </p>
+                                <p>
+                                    Our first customers have expanded from one depot to multiple
+                                    sites. We are
+                                    <span class="hl-bad"
+                                        >the only platform combining sensor data and route
+                                        events</span
+                                    ><sup class="c">E4</sup> in one operational view. We are adding
+                                    integrations requested by current operators before entering
+                                    pharmaceutical logistics.
+                                </p>
+                            </div>
+                            <div class="presets" aria-label="Rewrite presets">
+                                <button class="btn sm" type="button">Tighten</button>
+                                <button class="btn sm" type="button">More specific</button>
+                                <button class="btn sm" type="button">Plainer</button>
+                                <button class="btn sm" type="button">Stronger</button>
+                                <button class="btn sm" type="button">Your words</button>
+                            </div>
+                            <div class="row between draft-controls">
+                                <button class="btn sm primary" type="button">Mark ready</button
+                                ><button class="btn sm ghost" type="button">Ask in chat</button>
+                            </div>
+                            <div class="claims">
+                                <div class="row between">
+                                    <h3>Claim check</h3>
+                                    <span class="small muted">2 of 3 flags in this field</span>
+                                </div>
+                                <div class="claim">
+                                    <div class="row">
+                                        <span class="chip ok">verified</span
+                                        ><strong>18 active operators · confirmed regions</strong>
+                                    </div>
+                                    <p>
+                                        September operator roster and confirmed sales regions agree
+                                        · E1, E3.
+                                    </p>
+                                </div>
+                                <div class="claim">
+                                    <div class="row">
+                                        <span class="chip warn">stale</span
+                                        ><strong>$38k MRR</strong>
+                                    </div>
+                                    <p>
+                                        MRR $38k cites a July observation; Sep observation is $52k —
+                                        stale.
+                                    </p>
+                                </div>
+                                <div class="claim">
+                                    <div class="row">
+                                        <span class="chip bad">unsupported</span
+                                        ><strong>Only platform</strong>
+                                    </div>
+                                    <p>
+                                        E4 describes the workflow; it does not establish
+                                        exclusivity.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                        <aside class="card evidence-panel">
+                            <h3>Evidence for this answer</h3>
+                            <div class="small muted">Pinned sources · versions preserved</div>
+                            <div class="card evidence-card">
+                                <div class="evidence-title">
+                                    <span class="mono">E1</span><strong>Pitch deck v7.pdf</strong>
+                                </div>
+                                <div class="evidence-meta">
+                                    <span class="chip">document</span
+                                    ><span class="chip ok">fresh</span>
+                                </div>
+                                <div class="source-date">Version 7 · Sep 28, 2026 · slide 6</div>
+                                <div class="quote">
+                                    “18 active operators. 120,000 shipments monitored per month.”
+                                </div>
+                            </div>
+                            <div class="card evidence-card">
+                                <div class="evidence-title">
+                                    <span class="mono">E2</span><strong>MRR observation</strong>
+                                </div>
+                                <div class="evidence-meta">
+                                    <span class="chip">metric</span
+                                    ><span class="chip warn">stale</span>
+                                </div>
+                                <div class="source-date">Vantage · period Jul 2026</div>
+                                <div class="quote">“Monthly recurring revenue: $38,000.”</div>
+                                <div class="row latest">
+                                    <button class="btn sm" type="button">Use latest</button
+                                    ><span class="small ink2">Sep 2026 · $52k</span>
+                                </div>
+                            </div>
+                            <div class="card evidence-card">
+                                <div class="evidence-title">
+                                    <span class="mono">E3</span><strong>Customer footprint</strong>
+                                </div>
+                                <div class="evidence-meta">
+                                    <span class="chip">profile fact</span
+                                    ><span class="chip ok">confirmed</span>
+                                </div>
+                                <div class="source-date">Profile v12 · confirmed Oct 7, 2026</div>
+                                <div class="quote">
+                                    “Food logistics operators. Sales in the UK, Ireland and the
+                                    Netherlands only.”
+                                </div>
+                            </div>
+                            <div class="card evidence-card">
+                                <div class="evidence-title">
+                                    <span class="mono">E4</span><strong>Customer interviews</strong>
+                                </div>
+                                <div class="evidence-meta">
+                                    <span class="chip">document</span
+                                    ><span class="chip ok">fresh</span>
+                                </div>
+                                <div class="source-date">
+                                    Version 3 · Sep 18, 2026 · interview 4
+                                </div>
+                                <div class="quote">
+                                    “We need sensor alerts and route events in the same workflow.”
+                                </div>
+                            </div>
+                            <div class="small muted">[INFERENCE] Illustrative company data.</div>
+                        </aside>
+                    </div>
+                    <div class="editor-notes">
+                        <div class="note">
+                            Portal order is preserved. Confirmed character limits count UTF-16 code
+                            units, including spaces.
+                        </div>
+                        <div class="note">
+                            Reuse is free. Editing an approved answer returns it to draft and
+                            invalidates its approval.
+                        </div>
+                        <div class="note">
+                            Verify checks claims. Approval is blocked until blockers are resolved or
+                            explicitly overridden with a reason.
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

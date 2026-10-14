@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Accelerators — Facts &amp; metrics</title>
+        <link rel="stylesheet" href="wireframe.css" />
+        <style>
+            .facts-body .ph {
+                margin-bottom: 14px;
+            }
+            .facts-body .actions {
+                align-items: center;
+            }
+            .facts-body .btn {
+                font-family: inherit;
+                cursor: default;
+            }
+            .freshness-banner {
+                margin-bottom: 14px;
+                padding: 9px 12px;
+                background: var(--warn-soft);
+                border-color: var(--warn);
+                color: var(--warn);
+            }
+            .data-grid {
+                display: grid;
+                grid-template-columns: 600px minmax(0, 1fr);
+                gap: 14px;
+                align-items: start;
+            }
+            .data-card {
+                padding: 12px;
+                min-width: 0;
+            }
+            .card-heading {
+                margin-bottom: 10px;
+            }
+            .card-heading h3 {
+                margin: 0;
+            }
+            .card-heading p {
+                margin: 4px 0 0;
+                color: var(--ink-3);
+                font-size: 11px;
+            }
+            .data-card table.t {
+                table-layout: fixed;
+                font-size: 11.5px;
+            }
+            .data-card table.t th {
+                padding: 7px 5px;
+                font-size: 10px;
+                line-height: 1.25;
+                letter-spacing: 0.02em;
+            }
+            .data-card table.t td {
+                padding: 7px 5px;
+                line-height: 1.3;
+                vertical-align: middle;
+                overflow-wrap: anywhere;
+            }
+            .data-card table.t tr:last-child td {
+                border-bottom: none;
+            }
+            .data-card .btn.sm {
+                padding: 4px 7px;
+                font-size: 11px;
+            }
+            .data-card .chip {
+                padding: 2px 6px;
+                font-size: 10px;
+            }
+            .source-link {
+                color: var(--brand-ink);
+            }
+            .company-url {
+                white-space: nowrap;
+            }
+            .fact-status {
+                white-space: nowrap;
+                font-size: 11px;
+            }
+            .confirmed {
+                color: var(--success);
+            }
+            .unconfirmed {
+                color: var(--warn);
+            }
+            .metric-value {
+                font-weight: 600;
+            }
+            .metric-footer {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid var(--line);
+            }
+            .metric-footer .mono {
+                font-size: 10.5px;
+            }
+            .metric-footer p {
+                margin: 5px 0 0;
+                font-size: 11px;
+                color: var(--ink-3);
+                line-height: 1.35;
+            }
+            .missing-card {
+                margin-top: 14px;
+                padding: 12px;
+            }
+            .missing-card h3 {
+                margin: 0;
+            }
+            .missing-card .grid {
+                margin-top: 10px;
+                gap: 16px;
+            }
+            .missing-fact h4 {
+                margin: 0;
+                text-transform: none;
+                letter-spacing: 0;
+                font-size: 12px;
+                color: var(--ink);
+            }
+            .missing-fact p {
+                margin: 4px 0 6px;
+                color: var(--ink-3);
+                font-size: 11px;
+                line-height: 1.35;
+                min-height: 30px;
+            }
+            .missing-fact .actions {
+                gap: 6px;
+            }
+            .missing-fact .btn.sm {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            .annotation-strip {
+                display: flex;
+                gap: 12px;
+                margin-top: 12px;
+                align-items: start;
+            }
+            .annotation-strip .note {
+                position: static;
+                flex: 1;
+                max-width: none;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ws">
+            <aside class="rail">
+                <div class="logo"><i></i>LaunchStack</div>
+                <div class="jump">Jump to anything ⌘K</div>
+                <div class="add">+ Add knowledge</div>
+                <div class="seg"><span class="on">Sources</span><span>History</span></div>
+                <div class="tree">
+                    <div>▾ Company</div>
+                    <div class="dim">Pitch deck v7.pdf</div>
+                    <div class="dim">Metrics — Sep 2026.xlsx</div>
+                    <div class="dim">Customer interviews</div>
+                    <div>▸ Product</div>
+                    <div>▸ Fundraising</div>
+                    <div>▸ Applications</div>
+                </div>
+            </aside>
+            <section class="pane">
+                <div class="tabstrip">
+                    <span>Chat</span><span>Vantage</span><span class="on">Accelerators</span
+                    ><span>Growth</span>
+                </div>
+                <div class="toolbar">
+                    <span class="nav">‹ ›</span>
+                    <span class="mark"><i></i>Accelerators</span>
+                    <div class="tabs">
+                        <span class="grp">Find</span>
+                        <span>Overview</span>
+                        <span>Programs</span>
+                        <span class="sep"></span>
+                        <span class="grp">Apply</span>
+                        <span>Applications</span>
+                        <span>Answers</span>
+                        <span>Approvals</span>
+                        <span class="sep"></span>
+                        <span class="grp">Company</span>
+                        <span class="on">Facts &amp; metrics</span>
+                    </div>
+                    <span class="more">⋯</span>
+                </div>
+                <main class="body facts-body">
+                    <div class="ph">
+                        <div>
+                            <h1>Facts &amp; <em>metrics</em></h1>
+                            <p>What answers draw from. Confirm facts; keep metrics fresh.</p>
+                        </div>
+                        <div class="actions">
+                            <span class="chip brand">Northwind Cold Chain</span
+                            ><button class="btn" type="button">Open Vantage ↗</button>
+                        </div>
+                    </div>
+                    <div class="card freshness-banner row between">
+                        <span
+                            >Freshness policy: aging after 30 days, stale after 90 [proposed]</span
+                        >
+                        <span class="small">Preview as of Nov 1, 2026</span>
+                    </div>
+                    <div class="data-grid">
+                        <section class="card data-card" aria-label="Company facts">
+                            <div class="card-heading">
+                                <div class="row between">
+                                    <h3>Company facts</h3>
+                                    <span class="chip warn">1 unconfirmed</span>
+                                </div>
+                                <p>
+                                    Company profile and source-backed claims. Confirm the fact, not
+                                    the whole application.
+                                </p>
+                            </div>
+                            <table class="t">
+                                <colgroup>
+                                    <col style="width: 15%" />
+                                    <col style="width: 27%" />
+                                    <col style="width: 12%" />
+                                    <col style="width: 10%" />
+                                    <col style="width: 21%" />
+                                    <col style="width: 15%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Fact</th>
+                                        <th>Value</th>
+                                        <th>Source</th>
+                                        <th>As of</th>
+                                        <th>Confirmed by</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Company name</td>
+                                        <td>Northwind Cold Chain</td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 30</td>
+                                        <td class="confirmed">Founder</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company URL</td>
+                                        <td>
+                                            <span class="company-url"
+                                                >northwindcoldchain.example</span
+                                            >
+                                        </td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 30</td>
+                                        <td class="confirmed">Founder</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Founded date</td>
+                                        <td>12 May 2014</td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 30</td>
+                                        <td><span class="chip warn">Unconfirmed</span></td>
+                                        <td>
+                                            <button class="btn sm primary" type="button">
+                                                Confirm
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Headquarters</td>
+                                        <td>Leeds, United Kingdom</td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 30</td>
+                                        <td class="confirmed">Founder</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Founders</td>
+                                        <td>2</td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 30</td>
+                                        <td class="confirmed">Founder</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Products</td>
+                                        <td>NW-40 + Northwind Records</td>
+                                        <td><span class="source-link">Profile</span></td>
+                                        <td>Oct 26</td>
+                                        <td class="confirmed">Ingrid Halvorsen</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Certifications</td>
+                                        <td>ISO 9001:2015<br />ISO/IEC 27001:2022</td>
+                                        <td><span class="source-link">Claims doc</span></td>
+                                        <td>Oct 26</td>
+                                        <td class="confirmed">Ingrid Halvorsen</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Reporting boundary</td>
+                                        <td>Customer owns and validates their HACCP plan</td>
+                                        <td><span class="source-link">Claims doc</span></td>
+                                        <td>Oct 26</td>
+                                        <td class="confirmed">Ingrid Halvorsen</td>
+                                        <td><span class="muted fact-status">Confirmed ✓</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        <section class="card data-card" aria-label="Metrics from Vantage">
+                            <div class="card-heading">
+                                <div class="row between">
+                                    <h3>Metrics from Vantage</h3>
+                                    <span class="chip bad">1 stale</span>
+                                </div>
+                                <p>
+                                    Observation dates set freshness. A newer import does not refresh
+                                    an old period.
+                                </p>
+                            </div>
+                            <table class="t">
+                                <colgroup>
+                                    <col style="width: 20%" />
+                                    <col style="width: 15%" />
+                                    <col style="width: 14%" />
+                                    <col style="width: 14%" />
+                                    <col style="width: 19%" />
+                                    <col style="width: 18%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Latest value</th>
+                                        <th>Period</th>
+                                        <th>Source</th>
+                                        <th>Freshness</th>
+                                        <th>Used in</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>MRR</td>
+                                        <td class="metric-value">$52,000</td>
+                                        <td>Sep 2026</td>
+                                        <td><span class="source-link">Billing</span></td>
+                                        <td><span class="chip warn">Aging · 32 d</span></td>
+                                        <td>4 answers</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Active operators</td>
+                                        <td class="metric-value">18</td>
+                                        <td>Oct 26</td>
+                                        <td><span class="source-link">Company metrics</span></td>
+                                        <td><span class="chip ok">Fresh · 6 d</span></td>
+                                        <td>3 answers</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipments / month</td>
+                                        <td class="metric-value">120,000</td>
+                                        <td>Sep 2026</td>
+                                        <td><span class="source-link">Telemetry</span></td>
+                                        <td><span class="chip warn">Aging · 32 d</span></td>
+                                        <td>2 answers</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Monitored sites</td>
+                                        <td class="metric-value">34</td>
+                                        <td>Oct 26</td>
+                                        <td><span class="source-link">Telemetry</span></td>
+                                        <td><span class="chip ok">Fresh · 6 d</span></td>
+                                        <td>2 answers</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MRR growth</td>
+                                        <td class="metric-value">36.8%</td>
+                                        <td>Jul–Sep</td>
+                                        <td><span class="source-link">Billing</span></td>
+                                        <td><span class="chip warn">Aging · 32 d</span></td>
+                                        <td>1 answer</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MRR (prior period)</td>
+                                        <td class="metric-value">$38,000</td>
+                                        <td>Jul 2026</td>
+                                        <td><span class="source-link">Billing</span></td>
+                                        <td><span class="chip bad">Stale · 93 d</span></td>
+                                        <td>1 answer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="metric-footer">
+                                <div class="row between">
+                                    <span class="small"
+                                        >Read from
+                                        <span class="mono">vantageApi.metrics()</span></span
+                                    ><button class="btn sm" type="button">
+                                        Update in Vantage ↗
+                                    </button>
+                                </div>
+                                <p>
+                                    Stale observations remain visible with their period. Verify
+                                    affected answers before requesting approval.
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+                    <section
+                        class="card missing-card"
+                        aria-label="Missing facts found while drafting"
+                    >
+                        <div class="row between">
+                            <h3>Missing facts</h3>
+                            <span class="small muted"
+                                >Gaps found while drafting · Y Combinator Spring 2027</span
+                            >
+                        </div>
+                        <div class="g3 grid">
+                            <div class="missing-fact">
+                                <h4>Churn rate</h4>
+                                <p>
+                                    No confirmed subscription churn observation for the last
+                                    completed month.
+                                </p>
+                                <div class="actions">
+                                    <button class="btn sm" type="button">Add in Vantage</button
+                                    ><button class="btn sm ghost" type="button">Ask in chat</button>
+                                </div>
+                            </div>
+                            <div class="missing-fact">
+                                <h4>CAC payback</h4>
+                                <p>
+                                    Acquisition cost and gross-profit observations are missing for
+                                    the same period.
+                                </p>
+                                <div class="actions">
+                                    <button class="btn sm" type="button">Add in Vantage</button
+                                    ><button class="btn sm ghost" type="button">Ask in chat</button>
+                                </div>
+                            </div>
+                            <div class="missing-fact">
+                                <h4>Number of paying customers</h4>
+                                <p>
+                                    Confirm billing customers. Active operators are not a confirmed
+                                    paying-customer count.
+                                </p>
+                                <div class="actions">
+                                    <button class="btn sm" type="button">Add in Vantage</button
+                                    ><button class="btn sm ghost" type="button">Ask in chat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="annotation-strip">
+                        <div class="note">
+                            Confirm records the actor and source. Confirmed facts still require
+                            founder approval when used in an answer.
+                        </div>
+                        <div class="note">
+                            Freshness policy is [PROPOSED]. Drafting gaps link to Vantage or chat
+                            instead of inventing missing values.
+                        </div>
+                        <div class="note">
+                            Founded year, location, products and claim boundaries use the fixture.
+                            Dates, founders, metrics and confirmations are illustrative [INFERENCE].
+                        </div>
+                    </div>
+                </main>
+            </section>
+        </div>
+    </body>
+</html>

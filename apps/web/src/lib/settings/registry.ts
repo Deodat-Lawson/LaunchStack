@@ -164,34 +164,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
     // Workspace
     // ------------------------------------------------------------------
     {
-        key: "workspace.joinPolicy",
-        section: "people",
-        label: "When someone uses a join link",
-        description: "Whether they wait for approval or join with the link's role immediately.",
-        aliases: ["join policy", "approval", "join links", "invite", "open workspace"],
-        scopes: ["workspace"],
-        permission: "settings.manage",
-        schema: z.enum(["approval", "open"]),
-        default: "approval",
-        control: {
-            kind: "radio",
-            options: [
-                {
-                    value: "approval",
-                    label: "Approval required",
-                    description: "They wait on the pending list until an admin approves them.",
-                },
-                {
-                    value: "open",
-                    label: "Anyone with a link joins immediately",
-                    description:
-                        "They get the link's role the moment they use it. Revoke links you no longer trust.",
-                },
-            ],
-        },
-        bound: true,
-    },
-    {
         key: "workspace.auditRetentionDays",
         section: "people",
         label: "Keep audit events for",

@@ -24,19 +24,20 @@ Before the first pass:
 2. **Database**
 
    ```bash
-   pnpm --filter @launchstack/core db:migrate   # apply schema
-   pnpm --filter @launchstack/core db:seed      # optional sample data
+   pnpm --filter @launchstack/web db:migrate   # apply both migration sets
+   DEV_SEED_PASSWORD=<8+ chars> pnpm --filter @launchstack/web db:seed   # optional: one workspace + four role accounts
    ```
 
-3. **Enable Inngest** (required for background document processing)
-   - Set `INNGEST_EVENT_KEY=placeholder` in `.env`.
-   - In a **separate terminal**, run the Inngest dev server:
+3. **Run the worker** (required for document processing)
+   - In a **separate terminal**, run the worker. It consumes the ingestion outbox; without it,
+     uploads stay queued. Ingestion does not need Inngest.
 
    ```bash
-   pnpm --filter @launchstack/web inngest:dev
+   pnpm --filter @launchstack/worker dev
    ```
 
-   Dashboard: **http://localhost:8288**. Keep this running while testing.
+   Optional: `pnpm --filter @launchstack/web inngest:dev` (dashboard **http://localhost:8288**) for the
+   Inngest-hosted background verticals (trend search, prospector, …).
 
 4. **Run dev server**
 
@@ -48,8 +49,8 @@ Before the first pass:
 
 5. **Test accounts**
    - Have at least one **Owner** account (the first signup on a fresh instance).
-   - Optionally have one **pending** member (joined through a join link under the default
-     "approval required" policy) and one **Member** for the folder-access checks.
+   - Optionally have one **pending** member (joined through a join link with "Require admin
+     approval" switched on) and one **Member** for the folder-access checks.
 
 Complete sections 1–5 (and 6 if desired), then proceed to Run 2.
 
@@ -97,13 +98,13 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 
 ### 2.1 Sign up and join
 
-| #     | Check                  | Steps                                                                                                                                                                                                              | Expected                                                                                                                                                                                        |
-| ----- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2.1.1 | New workspace          | Go to `/signup`, create an account, choose "Create a workspace", submit.                                                                                                                                           | Company created; the account is its **Owner**, active immediately; redirected to `/employer/documents`.                                                                                         |
-| 2.1.2 | Join link              | As an Owner, Settings → People and access → Join links → create one (role Member). Open its URL in a fresh browser and sign up.                                                                                    | Membership created with status **pending** (default policy); redirected to `/employer/pending-approval`. With join policy "open", status is active and the person lands in the workspace.       |
-| 2.1.3 | Email invitation       | Settings → People and access → Invitations → invite an address as Viewer. Copy the accept link (also in the server log on a self-hosted instance). Open it signed out, then sign in / sign up with **that** email. | `/invite/<token>` shows the workspace and role; accepting creates an **active** Viewer membership and lands in the workspace. Accepting with a different email is refused with a clear message. |
-| 2.1.4 | Second workspace       | Accept an invitation while signed in with an account that already belongs to another workspace.                                                                                                                    | A second membership is created; `/workspaces` lists both.                                                                                                                                       |
-| 2.1.5 | Expired / revoked link | Revoke a join link or invitation, then open it.                                                                                                                                                                    | The preview says it is no longer valid; nothing is created.                                                                                                                                     |
+| #     | Check                  | Steps                                                                                                                                                                                                              | Expected                                                                                                                                                                                              |
+| ----- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2.1.1 | New workspace          | Go to `/signup`, create an account, choose "Create a workspace", submit.                                                                                                                                           | Company created; the account is its **Owner**, active immediately; redirected to `/employer/documents`.                                                                                               |
+| 2.1.2 | Join link              | As an Owner, Settings → People and access → Invitations → **Create invite link**. Open the `/join/…` URL in a fresh browser and create an account on that page.                                                    | No other screen: the person lands in the workspace as an **active** Member with a one-time welcome. With "Require admin approval" on, the page says "Request sent" and the membership is **pending**. |
+| 2.1.3 | Email invitation       | Settings → People and access → Invitations → invite an address as Viewer. Copy the accept link (also in the server log on a self-hosted instance). Open it signed out, then sign in / sign up with **that** email. | `/invite/<token>` shows the workspace and role; accepting creates an **active** Viewer membership and lands in the workspace. Accepting with a different email is refused with a clear message.       |
+| 2.1.4 | Second workspace       | Accept an invitation while signed in with an account that already belongs to another workspace.                                                                                                                    | A second membership is created; `/workspaces` lists both.                                                                                                                                             |
+| 2.1.5 | Expired / revoked link | Revoke a join link or invitation, then open it.                                                                                                                                                                    | The preview says it is no longer valid; nothing is created.                                                                                                                                           |
 
 ### 2.2 Sign in & redirects
 

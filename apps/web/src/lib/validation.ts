@@ -2,11 +2,11 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
+import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
 import {
     FOLDER_VISIBILITIES,
     GRANT_LEVELS,
-    JOIN_POLICIES,
     PERMISSIONS,
     PRINCIPAL_TYPES,
 } from "~/lib/authz/permissions";
@@ -101,6 +101,14 @@ const AttachmentPayloadSchema = z.object({
     kind: z.enum(["image", "text"]),
 });
 
+/** A selected passage as the chat endpoint receives it (`ChatPassagePayload`). */
+const ChatPassagePayloadSchema = z.object({
+    documentId: z.number().int().positive().optional(),
+    title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+    page: z.number().int().positive().optional(),
+    text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+});
+
 export const QuestionSchema = z
     .object({
         documentId: z.number().int().positive().optional(),
@@ -136,6 +144,12 @@ export const QuestionSchema = z
         // enforced separately by the route.
         attachments: z.array(AttachmentPayloadSchema).max(100).optional(),
         /**
+         * Passages the reader selected in a document and is asking about.
+         * They travel beside the question (which holds only what was typed);
+         * the route authorizes each `documentId` against the caller's scope.
+         */
+        passages: z.array(ChatPassagePayloadSchema).max(MAX_PASSAGES).optional(),
+        /**
          * Handle of the workspace agent answering this turn. Its standing
          * instructions, style, route and tool policy shape the answer; the
          * route resolves it against the caller's roster.
@@ -169,6 +183,7 @@ export const QuestionSchema = z
             embeddingIndexKey: data.embeddingIndexKey,
             thinkingMode: data.thinkingMode ?? false,
             attachments: data.attachments,
+            passages: data.passages,
             agentKey: data.agentKey ?? null,
         };
     });
@@ -354,7 +369,7 @@ export const EmployerCompanySignupSchema = z.object({
 export const JoinWithInviteSchema = z.object({
     name: z.string().trim().min(1, "Name is required").max(256),
     email: z.string().trim().toLowerCase().email("Valid email is required"),
-    inviteCode: z.string().trim().min(1, "Invite code is required").max(12),
+    inviteCode: z.string().trim().min(1, "Invite code is required").max(64),
 });
 
 // ============================================================================
@@ -400,10 +415,20 @@ export const CreateJoinLinkSchema = z.object({
     role: RoleSlugSchema,
     expiresInDays: z.number().int().min(1).max(365).nullable().optional(),
     maxUses: z.number().int().min(1).max(10_000).nullable().optional(),
+    requiresApproval: z.boolean().optional(),
 });
 
+export const UpdateJoinLinkSchema = z
+    .object({
+        role: RoleSlugSchema.optional(),
+        requiresApproval: z.boolean().optional(),
+    })
+    .refine(v => v.role !== undefined || v.requiresApproval !== undefined, {
+        message: "Nothing to change",
+    });
+
 export const AcceptJoinLinkSchema = z.object({
-    code: z.string().trim().min(1, "Join code is required").max(12),
+    code: z.string().trim().min(1, "Join code is required").max(64),
     name: z.string().trim().min(1).max(256).optional(),
     email: EmailSchema.optional(),
 });
@@ -467,10 +492,9 @@ export const DocumentAccessSchema = z.object({
 
 export const WorkspaceSettingsPatchSchema = z
     .object({
-        joinPolicy: z.enum(JOIN_POLICIES).optional(),
         auditRetentionDays: z.number().int().min(1).max(3650).nullable().optional(),
     })
-    .refine(v => v.joinPolicy !== undefined || v.auditRetentionDays !== undefined, {
+    .refine(v => v.auditRetentionDays !== undefined, {
         message: "Nothing to change",
     });
 
@@ -891,6 +915,19 @@ export const ChatSendPayloadSchema = z.object({
         .max(4)
         .optional(),
     threadRefs: z.array(z.string().min(1).max(64)).max(20).optional(),
+    /** Selected passages (`ChatPassage`), so a saved or queued turn keeps them. */
+    passages: z
+        .array(
+            z.object({
+                sourceId: z.string().min(1).max(64),
+                documentId: z.number().int().positive().optional(),
+                title: z.string().min(1).max(MAX_PASSAGE_TITLE_CHARS),
+                page: z.number().int().positive().optional(),
+                text: z.string().min(1).max(MAX_PASSAGE_CHARS),
+            })
+        )
+        .max(MAX_PASSAGES)
+        .optional(),
 });
 
 export const ChatQueueSchema = z

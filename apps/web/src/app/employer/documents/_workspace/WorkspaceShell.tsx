@@ -3,6 +3,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import {
+    capPassageText,
+    cleanSelectionText,
+    makePassage,
+    MAX_PASSAGE_CHARS,
+    type ChatPassage,
+} from "~/lib/chat-passages";
 import { PanelLeftOpen } from "lucide-react";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { firstFilled } from "~/lib/profile/resolve";
@@ -55,7 +62,7 @@ import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, type ComposerSeed } from "./AskPanel";
 import type { DocumentTargetData } from "./documentContextMenu";
-import { citationWithSource, contextQuoteBlock, transcriptMarkdown } from "./transcript";
+import { citationWithSource, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -89,6 +96,7 @@ import { SOURCE_META, demotedFeatureHref, resolveStudioFeature, settingsSectionO
 import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
+    PassageSelection,
     CitationHighlight,
     ComposerSend,
     ThreadMessage,
@@ -970,9 +978,15 @@ export function WorkspaceShell() {
     );
 
     const seedComposer = useCallback(
-        (text: string, mode: "append" | "replace") => {
+        (text: string, mode: "append" | "replace", passages?: ChatPassage[]) => {
             setActiveFeatureId("chat");
-            setComposerSeed({ text, mode, nonce: Date.now(), draftKey: composerDraftKey });
+            setComposerSeed({
+                text,
+                mode,
+                nonce: Date.now(),
+                draftKey: composerDraftKey,
+                ...(passages?.length ? { passages } : {}),
+            });
         },
         [setActiveFeatureId, composerDraftKey]
     );
@@ -1225,32 +1239,36 @@ export function WorkspaceShell() {
 
     /**
      * "Ask AI" on a passage: the document stays beside the chat, and the
-     * passage lands in the composer as a quote for the question to be
-     * written under — not sent, since the question is the reader's to ask.
+     * passage lands in the composer as a card above the question — not sent,
+     * since the question is the reader's to ask. The passage travels beside
+     * the question (with its page), never pasted into it.
      */
     const askAboutPassage = useCallback(
-        (source: WorkspaceSource, quote: string) => {
+        (source: WorkspaceSource, selection: PassageSelection) => {
+            const passage = passageFromSource(source, selection);
+            if (!passage) return;
             handleAskAbout(source);
-            seedComposer(contextQuoteBlock(quote), "append");
+            seedComposer("", "append", [passage]);
         },
         [handleAskAbout, seedComposer]
     );
 
     /** Send a question about a selected passage, scoped to the document it came from. */
     const askAboutSelection = useCallback(
-        (prefix: string, target: ContextTarget, ctx: MenuOpenContext) => {
+        (question: string, target: ContextTarget, ctx: MenuOpenContext) => {
             const home = selectionHome(ctx);
-            const quote = (target.data as TextSelectionInfo).text;
+            const passage = passageFromSelection(target.data as TextSelectionInfo, home);
+            if (!passage) return;
             if (home?.kind === "document") handleAskAbout(home.source);
             setActiveFeatureId("chat");
-            const from = home?.kind === "document" ? ` from “${home.source.title}”` : "";
             void sendMessage({
-                text: `${prefix}${from}:\n\n${contextQuoteBlock(quote).trimEnd()}`,
+                text: question,
                 refs: home?.kind === "document" ? [home.source.id] : selected,
                 attachments: [],
                 webSearch: true,
                 thinking: true,
                 agentKey: composerAgentKey,
+                passages: [passage],
             });
         },
         [handleAskAbout, sendMessage, selected, composerAgentKey, setActiveFeatureId]
@@ -1977,9 +1995,16 @@ export function WorkspaceShell() {
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
             run: (target, ctx) => {
                 const home = selectionHome(ctx);
-                const quote = (target.data as TextSelectionInfo).text;
-                if (home?.kind === "document") askAboutPassage(home.source, quote);
-                else seedComposer(contextQuoteBlock(quote), "append");
+                const selection = target.data as TextSelectionInfo;
+                if (home?.kind === "document")
+                    askAboutPassage(home.source, {
+                        text: selection.text,
+                        page: pageOfSelection(selection),
+                    });
+                else {
+                    const passage = passageFromSelection(selection, home);
+                    if (passage) seedComposer("", "append", [passage]);
+                }
             },
         },
         {
@@ -1989,7 +2014,7 @@ export function WorkspaceShell() {
             order: 1,
             appliesTo: (target, ctx) =>
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
-            run: (target, ctx) => askAboutSelection("Explain this passage", target, ctx),
+            run: (target, ctx) => askAboutSelection("Explain this passage.", target, ctx),
         },
         {
             id: "selection.summarise",
@@ -1998,7 +2023,7 @@ export function WorkspaceShell() {
             order: 2,
             appliesTo: (target, ctx) =>
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
-            run: (target, ctx) => askAboutSelection("Summarise this passage", target, ctx),
+            run: (target, ctx) => askAboutSelection("Summarise this passage.", target, ctx),
         },
         {
             id: "selection.copy-cited",
@@ -2646,7 +2671,8 @@ export function WorkspaceShell() {
                                     // so pin only — a preview beside it would
                                     // show the same map twice.
                                     pinSource(editedMindmap);
-                                    seedComposer(contextQuoteBlock(text), "append");
+                                    const passage = passageFromSource(editedMindmap, { text });
+                                    if (passage) seedComposer("", "append", [passage]);
                                 }}
                             />
                         </div>
@@ -2911,7 +2937,7 @@ function EmbeddedSourcePane({
     onDelete: (source: WorkspaceSource) => void;
     onRestrictAccess: (source: WorkspaceSource) => void;
     onAskAbout: (source: WorkspaceSource) => void;
-    onAskAboutPassage: (source: WorkspaceSource, quote: string) => void;
+    onAskAboutPassage: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged: () => void;
     onEdit: (source: WorkspaceSource) => void;
     onPublished: () => void;
@@ -3005,6 +3031,53 @@ function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; b
 type SelectionHome =
     | { kind: "document"; source: WorkspaceSource; addNote?: (text: string) => void }
     | { kind: "chat" };
+
+/** A selection in a source as a passage to ask about. */
+function passageFromSource(
+    source: WorkspaceSource,
+    selection: PassageSelection
+): ChatPassage | null {
+    return notedPassage({
+        sourceId: source.id,
+        documentId: source.documentId,
+        title: source.title,
+        page: selection.page,
+        text: selection.text,
+    });
+}
+
+/** `makePassage`, saying so when a long selection had to be cut. */
+function notedPassage(input: Parameters<typeof makePassage>[0]): ChatPassage | null {
+    if (capPassageText(cleanSelectionText(input.text)).truncated)
+        toast.info(
+            `Long selection: the first ${MAX_PASSAGE_CHARS.toLocaleString()} characters were kept.`
+        );
+    return makePassage(input);
+}
+
+/**
+ * The page a right-click selection sits on, read off the PDF page element
+ * around it (react-pdf stamps `data-page-number` on each page).
+ */
+function pageOfSelection(selection: TextSelectionInfo): number | undefined {
+    const page = Number(
+        selection.container?.closest("[data-page-number]")?.getAttribute("data-page-number")
+    );
+    return Number.isInteger(page) && page > 0 ? page : undefined;
+}
+
+/** A right-click selection as a passage: from its document, or from this chat. */
+function passageFromSelection(
+    selection: TextSelectionInfo,
+    home: SelectionHome | null
+): ChatPassage | null {
+    if (home?.kind === "document")
+        return passageFromSource(home.source, {
+            text: selection.text,
+            page: pageOfSelection(selection),
+        });
+    return notedPassage({ sourceId: "chat", title: "This conversation", text: selection.text });
+}
 
 /** Where a text selection lives — the open document, or the chat — read off the target chain. */
 function selectionHome(ctx: MenuOpenContext): SelectionHome | null {

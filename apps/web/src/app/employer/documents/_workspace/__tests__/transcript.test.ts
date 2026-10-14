@@ -1,6 +1,7 @@
 import {
     citationWithSource,
     parseQuotedMessage,
+    passagesMarkdown,
     plainTextOfAnswer,
     transcriptFilename,
     transcriptMarkdown,
@@ -104,5 +105,43 @@ describe("parseQuotedMessage", () => {
 
     it("ignores an empty blockquote", () => {
         expect(parseQuotedMessage(">\n>").quote).toBeNull();
+    });
+});
+
+describe("passages in copies and exports", () => {
+    const asked: ThreadMessage = {
+        role: "user",
+        text: "What is the cap?",
+        refs: ["d1"],
+        send: {
+            text: "What is the cap?",
+            refs: ["d1"],
+            attachments: [],
+            webSearch: true,
+            thinking: true,
+            agentKey: null,
+            passages: [
+                {
+                    sourceId: "d1",
+                    documentId: 1,
+                    title: "Vendor MSA",
+                    page: 3,
+                    text: "Liability is capped at twelve months of fees.",
+                },
+            ],
+        },
+    };
+
+    it("puts a turn's passages above its question, attributed", () => {
+        expect(passagesMarkdown(asked)).toBe(
+            "> Liability is capped at twelve months of fees.\n\n— Vendor MSA · p. 3\n\n"
+        );
+        expect(passagesMarkdown({ role: "assistant", send: asked.send })).toBe("");
+    });
+
+    it("keeps the passage in an exported transcript", () => {
+        expect(transcriptMarkdown([asked], [source])).toContain(
+            "## You\n\n> Liability is capped at twelve months of fees.\n\n— Vendor MSA · p. 3\n\nWhat is the cap?"
+        );
     });
 });

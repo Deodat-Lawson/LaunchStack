@@ -1,5 +1,5 @@
 import type { ActionMenuItem } from "~/components/ui/action-menu";
-import { citationOfReference, plainTextOfAnswer } from "./transcript";
+import { citationOfReference, passagesMarkdown, plainTextOfAnswer } from "./transcript";
 import type { EphemeralAttachment, ThreadMessage, ThreadReference, WorkspaceSource } from "./types";
 
 /**
@@ -68,7 +68,7 @@ export function buildQuestionMenuItems(
             id: "copy",
             label: "Copy",
             icon: "copy",
-            onSelect: () => handlers.onCopy(msg.text),
+            onSelect: () => handlers.onCopy(`${passagesMarkdown(msg)}${msg.text}`),
         },
         {
             type: "item",

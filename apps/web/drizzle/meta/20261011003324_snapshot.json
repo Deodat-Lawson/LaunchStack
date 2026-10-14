@@ -1,5 +1,5 @@
 {
-  "id": "e36219bd-2acc-4831-b134-edbb28bbd2e4",
+  "id": "e09cb524-49f3-42e1-b0c4-b226461e7d8a",
   "prevId": "ffc1b501-7eb5-4aa5-a66d-50bd88afcce4",
   "version": "7",
   "dialect": "postgresql",
@@ -469,137 +469,6 @@
         "pdr_ai_v2_folder_settings_company_id_pdr_ai_v2_company_id_fk": {
           "name": "pdr_ai_v2_folder_settings_company_id_pdr_ai_v2_company_id_fk",
           "tableFrom": "pdr_ai_v2_folder_settings",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_workspace_activity": {
-      "name": "pdr_ai_v2_workspace_activity",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigserial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "actor_user_id": {
-          "name": "actor_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "verb": {
-          "name": "verb",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_type": {
-          "name": "target_type",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_id": {
-          "name": "target_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "target_label": {
-          "name": "target_label",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_path": {
-          "name": "target_path",
-          "type": "varchar(1024)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "detail": {
-          "name": "detail",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "workspace_activity_company_created_idx": {
-          "name": "workspace_activity_company_created_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "workspace_activity_company_actor_idx": {
-          "name": "workspace_activity_company_actor_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "actor_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_workspace_activity_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_workspace_activity_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_activity",
           "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
             "company_id"
@@ -1087,128 +956,6 @@
         "pdr_ai_v2_workspace_invitations_company_id_pdr_ai_v2_company_id_fk": {
           "name": "pdr_ai_v2_workspace_invitations_company_id_pdr_ai_v2_company_id_fk",
           "tableFrom": "pdr_ai_v2_workspace_invitations",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_workspace_notifications": {
-      "name": "pdr_ai_v2_workspace_notifications",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigserial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "recipient_user_id": {
-          "name": "recipient_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "actor_user_id": {
-          "name": "actor_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "kind": {
-          "name": "kind",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_type": {
-          "name": "target_type",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_id": {
-          "name": "target_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "target_label": {
-          "name": "target_label",
-          "type": "varchar(300)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "detail": {
-          "name": "detail",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "read_at": {
-          "name": "read_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "workspace_notifications_recipient_created_idx": {
-          "name": "workspace_notifications_recipient_created_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "recipient_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_workspace_notifications_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_workspace_notifications_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_notifications",
           "tableTo": "pdr_ai_v2_company",
           "columnsFrom": [
             "company_id"
@@ -6135,7 +5882,7 @@
         },
         "code": {
           "name": "code",
-          "type": "varchar(12)",
+          "type": "varchar(64)",
           "primaryKey": false,
           "notNull": true
         },
@@ -6189,6 +5936,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
+        },
+        "requires_approval": {
+          "name": "requires_approval",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {
@@ -7249,151 +7003,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_workspace_session_grants": {
-      "name": "pdr_ai_v2_workspace_session_grants",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigserial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "session_id": {
-          "name": "session_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "principal_type": {
-          "name": "principal_type",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "principal_id": {
-          "name": "principal_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "level": {
-          "name": "level",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'view'"
-        },
-        "granted_by": {
-          "name": "granted_by",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "workspace_session_grants_session_principal_uq": {
-          "name": "workspace_session_grants_session_principal_uq",
-          "columns": [
-            {
-              "expression": "session_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "principal_type",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "principal_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "workspace_session_grants_company_principal_idx": {
-          "name": "workspace_session_grants_company_principal_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "principal_type",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "principal_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_workspace_session_grants_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_workspace_session_grants_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_session_grants",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_workspace_session_grants_session_id_pdr_ai_v2_workspace_sessions_id_fk": {
-          "name": "pdr_ai_v2_workspace_session_grants_session_id_pdr_ai_v2_workspace_sessions_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_session_grants",
-          "tableTo": "pdr_ai_v2_workspace_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.pdr_ai_v2_workspace_session_messages": {
       "name": "pdr_ai_v2_workspace_session_messages",
       "schema": "",
@@ -7522,125 +7131,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_workspace_session_user_state": {
-      "name": "pdr_ai_v2_workspace_session_user_state",
-      "schema": "",
-      "columns": {
-        "session_id": {
-          "name": "session_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pinned_at": {
-          "name": "pinned_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "pin_rank": {
-          "name": "pin_rank",
-          "type": "double precision",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "archived_at": {
-          "name": "archived_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_seen_at": {
-          "name": "last_seen_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "workspace_session_user_state_company_user_idx": {
-          "name": "workspace_session_user_state_company_user_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_workspace_session_user_state_session_id_pdr_ai_v2_workspace_sessions_id_fk": {
-          "name": "pdr_ai_v2_workspace_session_user_state_session_id_pdr_ai_v2_workspace_sessions_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_session_user_state",
-          "tableTo": "pdr_ai_v2_workspace_sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_workspace_session_user_state_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_workspace_session_user_state_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_session_user_state",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "pdr_ai_v2_workspace_session_user_state_session_id_user_id_pk": {
-          "name": "pdr_ai_v2_workspace_session_user_state_session_id_user_id_pk",
-          "columns": [
-            "session_id",
-            "user_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.pdr_ai_v2_workspace_sessions": {
       "name": "pdr_ai_v2_workspace_sessions",
       "schema": "",
@@ -7736,18 +7226,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
-        },
-        "shared_at": {
-          "name": "shared_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "forked_from_session_id": {
-          "name": "forked_from_session_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {

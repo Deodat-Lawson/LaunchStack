@@ -96,8 +96,14 @@ of a 32-byte token, and a seven-day expiry; the email goes through
 `sendAuthEmail` and the UI always shows the same link. Accepting requires a
 session whose email matches and creates an `active` membership in one
 transaction with its audit row. `invite_codes` gain `expires_at`, `max_uses`,
-`use_count`; a link never mints an owner; where a link arrival lands is
-`workspace_settings.join_policy` (`approval` by default).
+`use_count`; a link never mints an owner. Whether a link arrival lands
+`active` or `pending` is the link's own `requires_approval` (default false:
+the link is the admin's approval). The workspace-wide
+`workspace_settings.join_policy` that used to decide this is retired and no
+longer read. New codes are 32 hex characters (128 bits); a legacy
+8-character code always lands `pending`, and resetting it issues a long one.
+Links point at `/join/<code>`, a public page that signs people up or in and
+joins them; old `/signup?code=` links redirect there.
 
 ### 3.3 Folders, visibility, grants
 

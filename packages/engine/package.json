@@ -1,7 +1,7 @@
 {
     "name": "@launchstack/engine",
     "version": "0.1.0",
-    "description": "The one-install aggregate: createEngine() assembles the LaunchStack feature packages (store, llm, conversion, indexing, search, orchestration) behind a single CoreConfig, and re-exports their surfaces for consumers who want one dependency instead of eight.",
+    "description": "The one-install aggregate: createEngine() assembles the LaunchStack feature packages (store, llm, conversion, indexing, retrieval, orchestration) behind a single CoreConfig, and re-exports their surfaces for consumers who want one dependency instead of eight.",
     "license": "Apache-2.0",
     "type": "module",
     "sideEffects": false,

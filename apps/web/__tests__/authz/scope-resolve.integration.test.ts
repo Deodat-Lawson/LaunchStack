@@ -251,7 +251,7 @@ describeDb("resolveDocumentScope (integration)", () => {
         // The migration's data statements give owners and admins back what was
         // restricted before ADR-014, through explicit role grants.
         const migration = readFileSync(
-            join(__dirname, "../../drizzle/20261010233832_private_by_default_sharing.sql"),
+            join(__dirname, "../../drizzle/20261014005705_private_by_default_sharing.sql"),
             "utf8"
         );
         const carryOver = migration

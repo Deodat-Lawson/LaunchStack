@@ -194,8 +194,15 @@
     {
       "idx": 27,
       "version": "7",
-      "when": 1791675512132,
-      "tag": "20261010233832_private_by_default_sharing",
+      "when": 1791678804697,
+      "tag": "20261011003324_per_link_join_approval",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1791939425407,
+      "tag": "20261014005705_private_by_default_sharing",
       "breakpoints": true
     }
   ]

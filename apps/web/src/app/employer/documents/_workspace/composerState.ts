@@ -1,3 +1,4 @@
+import { isChatPassage, type ChatPassage } from "~/lib/chat-passages";
 import type { ComposerSend, EphemeralAttachment } from "./types";
 import type { JSONContent } from "@tiptap/react";
 
@@ -68,6 +69,8 @@ export interface ComposerDraft {
     modelRoute?: ComposerSend["modelRoute"];
     modelRoutes?: ComposerSend["modelRoutes"];
     threadRefs?: string[];
+    /** Selected passages waiting to be asked about. */
+    passages?: ChatPassage[];
     reasoningEffort?: string;
     chatMode?: ComposerSend["chatMode"];
     webSearch: boolean;
@@ -240,6 +243,8 @@ export function isComposerDraft(value: unknown): value is ComposerDraft {
         (draft.threadRefs === undefined ||
             (Array.isArray(draft.threadRefs) &&
                 draft.threadRefs.every(id => typeof id === "string"))) &&
+        (draft.passages === undefined ||
+            (Array.isArray(draft.passages) && draft.passages.every(isChatPassage))) &&
         (draft.pendingFiles === undefined ||
             (Array.isArray(draft.pendingFiles) &&
                 draft.pendingFiles.every(name => typeof name === "string")))

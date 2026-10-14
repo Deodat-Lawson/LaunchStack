@@ -213,7 +213,8 @@ async function main(): Promise<void> {
         void outbox
             .reclaimStale(
                 new Date(Date.now() - workerEnv.OUTBOX_STALE_CLAIM_MS),
-                DEFAULT_RETRY_POLICY.maxAttempts
+                DEFAULT_RETRY_POLICY.maxAttempts,
+                onDead
             )
             .catch(error => logger.error({ error: String(error) }, "stale-claim reclaim failed"));
     }, workerEnv.OUTBOX_RECLAIM_INTERVAL_MS);

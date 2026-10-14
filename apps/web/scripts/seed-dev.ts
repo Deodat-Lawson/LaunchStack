@@ -209,7 +209,7 @@ async function main() {
     await ensureTokenAccount(companyId);
 
     console.log(
-        `\nDone. Sign in at /sign-in with any address above and the value of ` +
+        `\nDone. Sign in at /signin with any address above and the value of ` +
             `DEV_SEED_PASSWORD.\nRe-running this script is safe.`
     );
 }

@@ -18,7 +18,7 @@ two steps: first layered engine packages with an enforced dependency
 direction, a dedicated worker over a transactional outbox, and single-owner
 compute services; then ADR-008 reorganized the packages **by feature** —
 each package owns its tools, its wire contracts, and its clients — and the
-kind-based packages (protocol/application/adapters/core) were deleted
+kind-based engine packages were deleted
 outright, since nothing was ever published under the old names.
 
 ## Layout
@@ -28,23 +28,23 @@ outright, since nothing was ever published under the old names.
 | `apps/web`                            | Next.js 15             | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint.                                                                                                                                                                       |
 | `apps/landing`                        | Next.js 15             | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment.                                                     |
 | `apps/worker`                         | Node (tsx)             | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
-| `packages/runtime`                    | TS library (published) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing.                                                                                                                                                  |
-| `packages/evidence`                   | TS library (published) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies.                                                                                                                                          |
-| `packages/store`                      | TS library (published) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history).                                                                             |
-| `packages/llm`                        | TS library (published) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport.                                                                                                                  |
-| `packages/orchestration`              | TS library (published) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports.                                                                                                                        |
-| `packages/conversion`                 | TS library (published) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router.                                                                                         |
-| `packages/indexing`                   | TS library (published) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer).                                                                                                                                                                              |
-| `packages/retrieval`                 | TS library (published) | Question → cited answer (renamed from `search`): every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`.                                   |
-| `packages/editing`                    | TS library (published) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client.                                                                                                                                                                                                                         |
-| `packages/document-conversion-engine` | TS library (published) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env.                                                                                                                                   |
-| `packages/google-drive`               | TS library (published) | Thin typed client for the Google Drive v3 REST API and Google OAuth 2.0 token endpoints — the wire layer for Drive-linked documents. Framework-free; credentials injected, never read from the environment.                                                                                            |
-| `packages/collab`                     | TS library (published) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only.                                                                                                                                                                                                             |
-| `packages/engine`                     | TS library (published) | The one-install aggregate: `createEngine(CoreConfig)` plus re-exports of every feature surface.                                                                                                                                                                                                        |
-| `packages/schema-generator`           | TS library (published) | Walks the feature wire contracts and emits the one `schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                                                    |
-| `packages/tools`                      | TS library             | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
-| `packages/design-tokens`              | CSS (published)        | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
-| `pipelines/`                          | TS library (published) | **The compositions tier** — the verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer, repo-workspace, distribution, proposals, vantage) + the product schema they own. May import any brick; no brick may import it (lint-enforced).                      |
+| `packages/runtime`                    | TS library (publishable) | The bottom of the graph: clock/logger ports, actor context, error taxonomy, storage/job slots, the singleton slot, the wire version. Imports nothing.                                                                                                                                                  |
+| `packages/evidence`                   | TS library (publishable) | Pure company-state logic as tool-directories: citation-anchors, fact-assertions/-conflicts/-ledger, version-diff/-freshness/-supersession. Zero dependencies.                                                                                                                                          |
+| `packages/store`                      | TS library (publishable) | Shared persistence: Drizzle client + engine schema (25 tables), sealed credentials, signed file-access tokens, credit metering, backfills. Owns the engine migration ledger (`packages/store/drizzle`, immutable history).                                                                             |
+| `packages/llm`                        | TS library (publishable) | Everything that calls a model: structured output, message normalization, usage accounting, guardrails, NER, embeddings, and the vendor wiring behind one OpenAI-compatible transport.                                                                                                                  |
+| `packages/orchestration`              | TS library (publishable) | Durable work (ADR-003): the pipeline-events contract, the SKIP LOCKED outbox store, the worker tick with bounded retries, transactional source acceptance, and the stage ports.                                                                                                                        |
+| `packages/conversion`                 | TS library (publishable) | Any source → EvidenceDocument: per-type document converters with their wire + client, audio- and video-transcription in their own folders, OCR primitives, chunking, archive expansion, the extraction router.                                                                                         |
+| `packages/indexing`                   | TS library (publishable) | EvidenceDocument → searchable: the two-stage doc-ingestion pipeline, entity extraction, Neo4j graph sync (optional peer).                                                                                                                                                                              |
+| `packages/retrieval`                 | TS library (publishable) | Question → cited answer: every retrieval algorithm as a documented folder under `src/algorithms/` (bm25, vector, fusion, ensemble, rlm, graph, reranking) behind the replaceable RagPort, plus the retrieval-facing tools under `src/tools/`.                                   |
+| `packages/editing`                    | TS library (publishable) | Tracked-changes Word editing (ADR-007): the adeu wire contract + typed client.                                                                                                                                                                                                                         |
+| `packages/document-conversion-engine` | TS library (publishable) | PDF rendering (ADR-009): the typed client for the Gotenberg service — Office → PDF via LibreOffice, HTML/Markdown → PDF via Chromium. Imports nothing, reads no env.                                                                                                                                   |
+| `packages/google-drive`               | TS library (publishable) | Thin typed client for the Google Drive v3 REST API and Google OAuth 2.0 token endpoints — the wire layer for Drive-linked documents. Framework-free; credentials injected, never read from the environment.                                                                                            |
+| `packages/collab`                     | TS library (publishable) | Agent meetings in Slack-shaped channels, signed HTTP agent transport. Node built-ins only.                                                                                                                                                                                                             |
+| `packages/engine`                     | TS library (publishable) | The one-install aggregate: `createEngine(CoreConfig)` plus selected conversion, indexing, and orchestration re-exports.                                                                                                                                                                               |
+| `packages/schema-generator`           | TS library (publishable) | Walks the feature wire contracts and emits the `packages/schema-generator/schemas/v1/` bundle the Python contract tests validate against.                                                                                                                                                             |
+| `packages/tools`                      | TS library (publishable) | Shared, contract-typed capabilities the verticals compose (company-context, grounded-retrieval, brand-voice, persona, web-research, social-publish, platform-profiles, content-scoring, claim-evidence, stage-runner). Tools may import bricks up to `retrieval`, never a vertical.                       |
+| `packages/design-tokens`              | CSS (private)            | The design contract: primitives feeding semantic tokens, one file, no build step.                                                                                                                                                                                                                      |
+| `pipelines/`                          | TS library (publishable) | **The compositions tier** — the verticals (marketing, email, founder-weekly-review, legal-templates, company-metadata, client-prospector, trend-search, connectors, repo-explainer, repo-workspace, distribution, proposals, vantage) + the product schema they own. May import any brick; bricks must not import compositions.                                        |
 | `services/document-converter`         | Node/Express           | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004).                                                                                                                                       |
 | `services/transcription`              | Python/FastAPI         | Whisper + yt-dlp → timestamped transcripts.                                                                                                                                                                                                                                                            |
 | `services/adeu-ai-docs-editing`       | Python/FastAPI         | The authoritative Word-editing service (ADR-007): tracked changes, review-item enumeration, review actions, CriticMarkup preview, diffing. Backs the in-app Word editor.                                                                                                                               |
@@ -70,22 +70,24 @@ engine                     ← createEngine() aggregate
 pipelines/  apps/          ← compositions and products (never imported by bricks)
 ```
 
-ESLint blocks every illegal edge with composed per-package blocks in
-`eslint.config.js`, plus a **flat ban on the deleted legacy names**
-(`@launchstack/{core,protocol,application,adapters,features}`) — the ban
-that replaced the facade ratchet. `check-schema-boundary.mjs` keeps engine
-SQL free of product references. Engine packages must not read
-`process.env` (two documented exceptions: the transcription and adeu
-clients, inherited from the old features tier) — configuration flows
-through `CoreConfig` from the composition roots
+ESLint enforces per-package import boundaries in `eslint.config.js`,
+including a **flat ban on deleted package names**.
+`scripts/ci/check-schema-boundary.mjs` keeps engine SQL free of product
+references. Most engine-package source scopes prohibit `process.env`.
+Explicit exemptions cover `packages/conversion/src/transcription-service.ts`,
+`packages/conversion/src/audio-transcription/providers/`, and all of
+`packages/editing`. The no-env rule is also absent from the `packages/tools`
+and `packages/schema-generator` scopes. Otherwise, configuration flows through
+`CoreConfig` and `configure*` hooks from the composition roots
 (`apps/web/src/server/engine.ts`, reused by the worker).
 
 `packages/tools` (`@launchstack/tools`) holds shared, contract-typed
-capabilities the feature verticals compose — a tool is _imported_, a service is
-_deployed_. Capabilities move down into tools; pipelines stay up in features
-(tools cannot import `@launchstack/features`, lint-enforced), and `process.env`
-is allowed only in a tool's `config.ts`. See `packages/tools/README.md` for the
-catalog.
+capabilities the verticals compose — a tool is _imported_, a service is
+_deployed_. Capabilities move down into tools; compositions stay up in
+`pipelines/` (tools cannot import `@launchstack/pipelines`, lint-enforced).
+ESLint allows `process.env` throughout tools; provider configuration belongs
+in each tool's `config.ts` by convention. See `packages/tools/README.md` for
+the catalog.
 
 ## The one ingestion path (ADR-003)
 
@@ -182,13 +184,16 @@ link it cannot honour.
 
 ## Two migration sets, one database
 
-Unchanged from before (see `CONTRIBUTING.md`): engine set in
-`packages/core/drizzle` (ledger `_launchstack_migrations`; schema source now
-`packages/adapters/src/db/schema/`), product set in `apps/web/drizzle`
-(ledger `_launchstack_web_migrations`). Forward-only, checksummed, applied
-by `packages/store/scripts/migrate.mjs` everywhere. `drizzle-kit push` stays
-banned on deploy surfaces. The one engine table the refactor added:
-`pdr_ai_v2_event_outbox`.
+The engine set lives in `packages/store/drizzle` (ledger
+`_launchstack_migrations`; schema source `packages/store/src/db/schema.ts`).
+The product set lives in `apps/web/drizzle` (ledger
+`_launchstack_web_migrations`); its schema sources are
+`apps/web/src/server/db/schema/`, `pipelines/src/*/schema.ts`, and
+`pipelines/src/*/cache-schema.ts`. Both sets are forward-only, checksummed,
+and applied by `packages/store/scripts/migrate.mjs`.
+`pnpm --filter @launchstack/web db:migrate` applies engine then product
+(see `CONTRIBUTING.md`). `drizzle-kit push` remains banned on deploy
+surfaces. The engine set owns `pdr_ai_v2_event_outbox`.
 
 ## Deploy targets
 
@@ -196,7 +201,7 @@ banned on deploy surfaces. The one engine table the refactor added:
 | -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | GHCR images    | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.**                                                                                     |
 | `apps/landing` | —                                               | The public marketing site has no deploy pipeline in this repo.                                                                                                                                                                       |
-| npm packages   | every `packages/*` + `pipelines/`               | One Changesets flow (`release.yml`); `check-package-exports.mjs` proves every published subpath loadable under plain Node ESM (127 exports).                                                                                         |
+| npm packages   | publishable `packages/*` + `pipelines/`          | One Changesets flow (`.github/workflows/release.yml`); `scripts/ci/check-package-exports.mjs` checks configured publishable subpaths under plain Node ESM. The private design-tokens package is excluded.                                                                                         |
 | Local          | `docker-compose.yml` via `Makefile`             | `make up` starts the required stack: db, migrate, seaweedfs, transcription, adeu-docs-editing, document-converter, gotenberg, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 
 ## Verification (all blocking — ADR-006)

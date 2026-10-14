@@ -56,6 +56,13 @@ import { validateQAResponse } from "~/lib/agents/supervisor";
 import { isAgentStyle, mentionedAgentKeys, type AgentStyleId } from "~/lib/agents/definition";
 import { readSettingValue } from "~/server/settings/store";
 import {
+    locatePassageContext,
+    passagePromptSection,
+    retrievalQueryFor,
+    withoutAnchoredChunks,
+    type PassageAnchor,
+} from "~/server/chat-passage-context";
+import {
     ChatAgentError,
     agentResponseInfo,
     agentSystemPromptBlock,
@@ -499,6 +506,7 @@ export async function POST(request: Request) {
                 embeddingIndexKey,
                 thinkingMode: requestedThinking,
                 attachments: requestedAttachments,
+                passages: requestedPassages,
                 agentKey: requestedAgentKey,
                 modelRoute: requestedModelRoute,
                 reasoningEffort,
@@ -510,6 +518,11 @@ export async function POST(request: Request) {
             const numericCompanyId = Number(userCompanyId);
             const scope = await ctx.data.documentScope();
             observeScopeSize(scope);
+            // The passages the reader selected travel beside the question,
+            // which holds only what they typed. Retrieval searches on the
+            // question; a bare "explain this" searches on the passage too.
+            const passages = requestedPassages ?? [];
+            const retrievalQuery = retrievalQueryFor(question, passages);
             const automaticThinking = requestedThinking === "auto";
             const wantsThinking =
                 automaticThinking ||
@@ -729,6 +742,50 @@ export async function POST(request: Request) {
                 };
             }
 
+            // A passage names the document it came from, and its surrounding
+            // text is read from that document's index — so every passage
+            // document passes the same scope check as a searched document,
+            // and one the caller cannot read is missing (404), whatever the
+            // search scope. Passage text itself is the caller's own input.
+            const passageDocumentIds = Array.from(
+                new Set(passages.flatMap(passage => passage.documentId ?? []))
+            ).filter(id => id !== authorizedDocument?.id);
+            if (passageDocumentIds.length > 0) {
+                const readable = await db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(
+                        and(
+                            inArray(document.id, passageDocumentIds),
+                            scopedDocumentWhere(userCompanyId, scope)
+                        )
+                    );
+                const readableIds = new Set(readable.map(row => row.id));
+                if (passageDocumentIds.some(id => !readableIds.has(id))) {
+                    recordResult("error");
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: "The document a selected passage came from was not found.",
+                        },
+                        { status: 404 }
+                    );
+                }
+            }
+            const passageAnchors: PassageAnchor[][] = [];
+            for (const passage of passages) {
+                passageAnchors.push(
+                    await locatePassageContext(passage, { companyId: userCompanyId })
+                );
+            }
+            if (passages.length > 0) {
+                console.info("[AIChat] passages", {
+                    count: passages.length,
+                    anchored: passageAnchors.filter(found => found.length > 0).length,
+                    retrievalQuery: retrievalQuery.slice(0, 160),
+                });
+            }
+
             let documents: SearchResult[] = [];
             retrievalMethod = "none";
             if (searchScope !== "none") {
@@ -831,7 +888,7 @@ export async function POST(request: Request) {
                         };
 
                         documents = await multiDocEnsembleSearch(
-                            question,
+                            retrievalQuery,
                             multiDocOptions,
                             embeddings
                         );
@@ -844,7 +901,7 @@ export async function POST(request: Request) {
                         };
 
                         documents = await documentEnsembleSearch(
-                            question,
+                            retrievalQuery,
                             documentOptions,
                             embeddings
                         );
@@ -870,7 +927,8 @@ export async function POST(request: Request) {
                             retrievalMethod = "ann_hybrid";
 
                             try {
-                                const questionEmbedding = await embeddings.embedQuery(question);
+                                const questionEmbedding =
+                                    await embeddings.embedQuery(retrievalQuery);
                                 const annResults = await qaAnnOptimizer.searchSimilarChunks(
                                     questionEmbedding,
                                     [documentId],
@@ -909,7 +967,7 @@ export async function POST(request: Request) {
                                 resolvedEmbeddingIndex,
                                 3
                             );
-                            const vectorDocs = await retriever.getRelevantDocuments(question);
+                            const vectorDocs = await retriever.getRelevantDocuments(retrievalQuery);
                             documents = vectorDocs.map(doc => ({
                                 retrievalMethod: "vector_fallback",
                                 source:
@@ -952,7 +1010,8 @@ export async function POST(request: Request) {
                     searchScope: searchScope ?? "document",
                 });
 
-                if (documents.length === 0) {
+                // A selected passage is content enough to answer about.
+                if (documents.length === 0 && passages.length === 0) {
                     recordResult("empty");
                     return NextResponse.json({
                         success: false,
@@ -962,8 +1021,18 @@ export async function POST(request: Request) {
             }
             throwIfChatAborted(request.signal);
 
+            // The passage section shows each passage's own chunk; a retrieved
+            // copy of it is dropped here and the section shows it whole.
+            const { remaining: promptDocuments, covered: anchorsRetrieved } = withoutAnchoredChunks(
+                documents,
+                passageAnchors.flat()
+            );
+            const passageSection = passagePromptSection(passages, passageAnchors, {
+                whole: anchorsRetrieved,
+            });
+
             // Build comprehensive context from retrieved documents
-            const combinedContent = documents
+            const combinedContent = promptDocuments
                 .map((doc, idx) => {
                     const page = doc.metadata?.page ?? "Unknown";
                     const source = doc.metadata?.source ?? retrievalMethod;
@@ -989,11 +1058,11 @@ export async function POST(request: Request) {
                 .join("\n\n");
 
             console.log(
-                `✅ [AIChat] Built context with pages: ${documents.map(doc => doc.metadata?.page).join(", ")}`
+                `✅ [AIChat] Built context with pages: ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
             );
 
             // Build references for document highlights and page navigation
-            const references = buildReferences(question, documents, 5);
+            const references = buildReferences(retrievalQuery, documents, 5);
 
             // Perform comprehensive web search if enabled
             const documentContext =
@@ -1003,7 +1072,7 @@ export async function POST(request: Request) {
 
             const enableWebSearchFlag = Boolean(enableWebSearch ?? false);
             const webSearch = await performWebSearch(
-                question,
+                retrievalQuery,
                 documentContext,
                 enableWebSearchFlag,
                 5
@@ -1037,6 +1106,10 @@ export async function POST(request: Request) {
             if (searchScope === "none") {
                 systemPrompt +=
                     "\n\nThis turn has no indexed document sources. Answer general questions using your knowledge and the user attachments when present. Do not invent document citations or claim access to workspace sources.";
+                if (passages.length > 0) {
+                    systemPrompt +=
+                        " The user did select passage(s) from their documents: those passages, and any surrounding text shown with them, are in the message and may be quoted.";
+                }
             }
             if (chatMode === "plan") {
                 systemPrompt +=
@@ -1049,7 +1122,12 @@ export async function POST(request: Request) {
                 webSearch.reasoning
             );
 
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${attachmentTextBlock}${webSearchInstruction}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
+            const passageBlock = passageSection ? `${passageSection}\n\n` : "";
+            const documentContent =
+                passageSection && !combinedContent
+                    ? "(nothing beyond the selected passage)"
+                    : combinedContent;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${webSearch.content}${attachmentTextBlock}${webSearchInstruction}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1188,7 +1266,12 @@ export async function POST(request: Request) {
                     }).catch(err => console.warn("[AIChat] Token debit failed:", err));
                 }
 
-                const sourceTexts = documents.map(d => d.pageContent);
+                // The passages and their surrounding text are sources too.
+                const sourceTexts = [
+                    ...documents.map(d => d.pageContent),
+                    ...passages.map(passage => passage.text),
+                    ...passageAnchors.flat().map(anchor => anchor.content),
+                ];
                 const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);
                 if (supervision.adjustedOutput) {
                     summarizedAnswer = supervision.adjustedOutput;

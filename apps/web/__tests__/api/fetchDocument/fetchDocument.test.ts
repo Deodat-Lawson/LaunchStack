@@ -9,6 +9,7 @@ import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-wo
 import type { SQL } from "drizzle-orm";
 
 import type { DocumentScope } from "~/lib/authz/scope-types";
+import type { WorkspaceSource } from "~/app/employer/documents/_workspace/types";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
@@ -62,7 +63,9 @@ jest.mock("~/server/workspace/source-access", () => ({
 }));
 
 import { POST } from "~/app/api/fetchDocument/route";
+import { mapDocument } from "~/app/employer/documents/_workspace/useWorkspaceData";
 import { db } from "~/server/db";
+import { documentVersions } from "@launchstack/store/schema";
 
 const SCOPE_MARKER = { marker: "scoped-where" } as unknown as SQL;
 
@@ -100,10 +103,9 @@ function docRow(id: number, overrides: Record<string, unknown> = {}) {
 /** Captures the predicate the route hands to `.where()` and resolves `rows`. */
 function mockDocumentQuery(rows: Record<string, unknown>[]) {
     const where = jest.fn().mockResolvedValue(rows);
+    const query = { leftJoin: jest.fn().mockReturnThis(), where };
     (db.select as jest.Mock).mockReturnValue({
-        from: jest.fn().mockReturnValue({
-            leftJoin: jest.fn().mockReturnValue({ where }),
-        }),
+        from: jest.fn().mockReturnValue(query),
     });
     return where;
 }
@@ -160,6 +162,153 @@ describe("POST /api/fetchDocument", () => {
         expect(json[0].id).toBe(1);
         expect(json[0].companyId).toBe(1);
         expect(json[0].restricted).toBe(false);
+    });
+
+    it.each([
+        {
+            previousState: "indexed",
+            ocrProcessed: true,
+            ocrMetadata: null,
+        },
+        {
+            previousState: "failed",
+            ocrProcessed: false,
+            ocrMetadata: {
+                error: "processing_failed",
+                errorMessage: "The previous version failed",
+            },
+        },
+    ])(
+        "keeps a queued current version processing when the previous version $previousState",
+        async ({ ocrProcessed, ocrMetadata }) => {
+            mockAuthenticated();
+            mockDocumentQuery([
+                docRow(1, {
+                    ocrProcessed,
+                    ocrMetadata,
+                    currentVersionId: BigInt(22),
+                    currentVersionOcrProcessed: false,
+                    currentVersionOcrMetadata: null,
+                }),
+            ]);
+
+            const response = await POST(
+                new Request("http://localhost/api/fetchDocument", { method: "POST" })
+            );
+            const [doc] = await response.json();
+
+            expect(response.status).toBe(200);
+            expect(db.select).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    currentVersionOcrProcessed: documentVersions.ocrProcessed,
+                    currentVersionOcrMetadata: documentVersions.ocrMetadata,
+                })
+            );
+            expect(doc).toMatchObject({
+                ocrProcessed,
+                ocrMetadata,
+                currentVersionId: 22,
+                currentVersionOcrProcessed: false,
+                currentVersionOcrMetadata: null,
+            });
+            expect(mapDocument(doc)).toMatchObject({ indexStatus: "processing" });
+            expect(mapDocument(doc).errorMessage).toBeUndefined();
+        }
+    );
+
+    it("does not call an unindexed recording ready, but uses version readiness for its transcript", async () => {
+        mockAuthenticated();
+        mockDocumentQuery([
+            docRow(1, {
+                title: "Standup.mp3",
+                mimeType: "audio/mpeg",
+                creationKey: "upload:standup:audio-source",
+                ocrProcessed: true,
+                currentVersionId: BigInt(22),
+                currentVersionOcrProcessed: true,
+                currentVersionOcrMetadata: null,
+            }),
+            docRow(2, {
+                title: "Standup.mp3 (Transcription)",
+                mimeType: "text/plain",
+                ocrMetadata: { source: "transcription", audioDocumentId: 1 },
+                currentVersionId: BigInt(23),
+                currentVersionOcrProcessed: false,
+                currentVersionOcrMetadata: { source: "transcription", audioDocumentId: 1 },
+            }),
+            docRow(3, {
+                title: "Legacy standup.mp3",
+                mimeType: "audio/mpeg",
+                ocrEnabled: false,
+                ocrProcessed: true,
+            }),
+        ]);
+
+        const response = await POST(
+            new Request("http://localhost/api/fetchDocument", { method: "POST" })
+        );
+        const [recording, transcript, legacyRecording] = await response.json();
+
+        expect(response.status).toBe(200);
+        expect(mapDocument(recording).indexStatus).toBeUndefined();
+        expect(mapDocument(recording).citability).toBe("none");
+        expect(mapDocument(legacyRecording).indexStatus).toBeUndefined();
+        expect(mapDocument(legacyRecording).citability).toBe("none");
+        expect(mapDocument(transcript).indexStatus).toBe("processing");
+        expect(mapDocument({ ...transcript, currentVersionOcrProcessed: true }).indexStatus).toBe(
+            "ready"
+        );
+    });
+
+    it("uses current-version failures and falls back only for documents without a version", async () => {
+        mockAuthenticated();
+        mockDocumentQuery([
+            docRow(1, {
+                ocrProcessed: true,
+                currentVersionId: BigInt(22),
+                currentVersionOcrProcessed: false,
+                currentVersionOcrMetadata: {
+                    error: "processing_failed",
+                    errorMessage: "The current version failed",
+                },
+            }),
+            docRow(2, {
+                ocrProcessed: false,
+                ocrMetadata: { error: "processing_failed", errorMessage: "An old failure" },
+                currentVersionId: BigInt(23),
+                currentVersionOcrProcessed: true,
+                currentVersionOcrMetadata: null,
+            }),
+            docRow(3, {
+                ocrProcessed: false,
+                ocrMetadata: { error: "processing_failed", errorMessage: "Legacy failure" },
+            }),
+            docRow(4, {
+                ocrProcessed: true,
+                currentVersionId: BigInt(24),
+                currentVersionOcrProcessed: null,
+                currentVersionOcrMetadata: null,
+            }),
+            docRow(5, { ocrProcessed: true }),
+        ]);
+
+        const response = await POST(
+            new Request("http://localhost/api/fetchDocument", { method: "POST" })
+        );
+        const docs = await response.json();
+        const sources: WorkspaceSource[] = docs.map(mapDocument);
+
+        expect(response.status).toBe(200);
+        expect(sources.map(source => source.indexStatus)).toEqual([
+            "failed",
+            "ready",
+            "failed",
+            "processing",
+            "ready",
+        ]);
+        expect(sources[0]?.errorMessage).toBe("The current version failed");
+        expect(sources[1]?.errorMessage).toBeUndefined();
+        expect(sources[2]?.errorMessage).toBe("Legacy failure");
     });
 
     it("reads through the caller's scope predicate, not a bare company filter", async () => {

@@ -96,6 +96,60 @@ a relationship, not ownership: removing one box in a flowchart must not remove
 the boxes downstream. "Delete and reconnect" and "Delete whole branch" are
 separate commands on the context menu.
 
+Topics are the one exception, because in an outline the edges _are_ ownership:
+when the selection is nothing but topics, Delete takes each with its branch
+(`branchOf` — everything that would be left without a parent, so a topic
+another branch merely cross-links to survives) and ⌥Delete lifts the children
+up a level instead (`deleteTopicsOrSelection`). Any selection with a
+non-topic in it falls back to the plain delete above.
+
+Child order is edge order: the layouts read a node's children off
+`page.edges`, so inserting, outdenting and reordering topics are edits to
+where an edge sits in that list (`insertEdgesBeside`), not to coordinates. A
+topic's parent is its first incoming edge from another topic (`topicParent`),
+and the reorder only ever moves an edge earlier so that stays true.
+
+## Keyboard
+
+`ui/useKeyboard.ts` is the whole map, and its `SHORTCUTS` table is the
+shortcuts dialog. With a topic selected the keys are an outliner's, after
+XMind, MindNode and MindMeister:
+
+| Key              | While typing a label             | With a topic selected                                          |
+| ---------------- | -------------------------------- | -------------------------------------------------------------- |
+| Enter            | Finish the label — only that     | Add a sibling right after it (a child, on the centre)          |
+| ⇧Enter           | New line                         | Add a sibling right before it                                  |
+| ⌥Enter           | New line                         | —                                                              |
+| Tab / ⇧Tab       | Finish, then add child / outdent | Add child / outdent                                            |
+| Esc              | Finish the label                 | Clear the selection                                            |
+| Arrows           | —                                | Go to the nearest visible topic that way (⌥ nudges)            |
+| ⌘↑ / ⌘↓          | —                                | Move among its siblings                                        |
+| ⌘/               | —                                | Collapse / expand                                              |
+| Delete / ⌥Delete | —                                | Delete with its branch / keep its children (not on the centre) |
+| Any character    | —                                | Start typing; the character replaces the label                 |
+
+Enter finishing and nothing else is the point of the table: one Enter used to
+commit _and_ create, which put boxes on the canvas nobody asked for. Now the
+label field swallows its Enter — propagation stopped, and default-prevented,
+which the window handler also checks — the topic stays selected, and the
+second Enter is the window's. Other shapes keep a canvas's keys: Enter opens
+their text, letters stay tools (R then a click places a rectangle — typing over
+a selected box would rename it "r"), arrows nudge, Delete removes only the
+selection. ⌥Delete on a centre that holds branches does nothing: its children
+have no parent to be handed to, and keeping them would split one map into one
+centre per branch.
+
+Type-to-edit does not prevent the keystroke. The field mounts and focuses
+during the keydown and the browser delivers the character into it; the
+character is also written in as a selected `seed`, so a delivery replaces it
+rather than doubling it, and a missing one (jsdom) still leaves it there. If
+focus ever slips out of an open field, the next character pulls it back in
+(`focusEditorField`) and Enter or Esc still finish the label.
+
+Every structural edit — add, outdent, reorder, delete — runs its auto-arrange
+pass inside `store.group`, so one ⌘Z takes back the edit and the layout
+together.
+
 ## Colours are data, not tokens
 
 Shape fills and strokes are literal OKLCH values stored in the document, not
@@ -147,16 +201,101 @@ dark-on-black.
 ### Contrast is a tested property, not a matter of taste
 
 `__tests__/theme.test.ts` asserts it over the whole palette rather than
-spot-checking: every swatch's ink clears 4.5:1 on its own fill, every theme's
-cycled stroke clears 3:1 on its own paper, and every label in a repainted
-document is readable in all ten themes. Two colours were moved to satisfy it
-(green's and amber's light strokes), and `readableInkOn()` picks a root topic's
+spot-checking: every swatch's ink clears 4.5:1 on its own fill, every topic
+label at every depth clears 4.5:1 on whatever is behind it — the central
+topic included, whose 18px bold label is just under WCAG's large-text line
+(18.66px bold) and so gets no 3:1 allowance — every outline and connector
+clears 3:1 on the paper (WCAG 1.4.11), and every label in a repainted document
+is readable in all ten themes. Two colours were moved to satisfy it (green's
+and amber's light strokes), and `readableInkOn()` picks the central topic's
 label colour by measurement instead of by mode — near-white loses on a bright
 violet root and wins on a mid violet one, and no fixed choice gets both.
 
 The same contract governs the app's own ink ladder in `tokens.css`: `--ink-3`
 is the smallest tier used for prose and must clear 4.5:1 on every surface in
 its block; `--ink-4` is de-emphasised UI and must clear 3:1.
+
+### Why the default themes look the way they do
+
+Every choice below is a convention with a reason, not a taste call, and the
+reason is what to argue with if one should change.
+
+**Colour means "belongs together", so it is assigned by branch.** Each main
+branch takes one hue from the theme's `cycle`, and every topic under it — and
+every connector into one — wears that hue. This is the mind-map convention
+(XMind's "Colored Branch", MindNode's themes taking branch colours from the
+first level, Miro filling nodes "with the same color as the branch", Buzan's
+"a colour per branch") and it rests on Gestalt similarity: a reader sees a
+limb as one thing before reading a word of it. Colouring by _depth_ instead,
+as this editor did until October 2026, made every main branch the same blue
+and every detail the same teal — the colour carried no information the layout
+did not already show.
+
+**Depth is shown by weight, so it reads without colour** (WCAG 1.4.1, and
+XMind's "colour intensity … from Center Topic to Main Topic, gradually
+decreasing"). `topicPaint` in `model/theme.ts` is the whole ladder:
+
+| Depth                  | Surface                        | Outline            | Label                                 | Line in         |
+| ---------------------- | ------------------------------ | ------------------ | ------------------------------------- | --------------- |
+| Central topic          | solid, in the theme's root hue | none               | measured (`readableInkOn`), 18px bold | —               |
+| Main branch            | tint of the branch hue         | 2px, branch hue    | branch ink, 15px bold                 | 3px, branch hue |
+| Subtopic               | the paper itself               | 1.5px, branch hue  | theme ink, 13.5px                     | 2px             |
+| Leaf (underline shape) | none                           | rule in branch hue | theme ink                             | 1.5px           |
+
+Connectors thin from the centre outward, Buzan's "thicker… becoming thinner as
+they radiate out". Details sit on the paper with neutral ink so they recede:
+the strongest coloured mark is the main branch, and the strongest mark of all
+is the centre.
+
+**The centre's hue is reserved.** A theme's `root` never appears in its
+`cycle`, so the anchor cannot be mistaken for a branch. (Before, a topic added
+under a violet root came out violet.)
+
+**Neighbouring branches are far apart.** Cycles alternate warm and cool. Every
+coloured theme has at least four hues — a typical map shows four branches at
+once — and a test holds every pair among the first four, and every adjacent
+pair, at ≥ 0.1 OKLab ΔE: several just-noticeable differences, in lightness as
+well as hue, which is what keeps branches apart for readers with a
+colour-vision deficiency. Monochrome is the exception by design (one grey;
+weight alone carries depth). Ocean was recast (blue centre; cyan, orange,
+indigo, green branches) because its old teal and cyan failed this; Sunset
+traded amber and magenta — too close to orange and to pink — for violet and a
+teal; Forest gained a blue so a fourth branch no longer repeats the first.
+
+**Light and dark are one identity under two lightings** (as before): each light
+theme has a dark counterpart with the same root and cycle, read through the
+dark swatch table, and new documents are seeded in the creator's app theme.
+
+| Theme                  | Centre             | Branch hues                                                 |
+| ---------------------- | ------------------ | ----------------------------------------------------------- |
+| Launchstack / Midnight | violet (the brand) | blue, amber, teal, pink, green, orange                      |
+| Monochrome / Carbon    | graphite           | slate — hierarchy by weight alone, for print and formal use |
+| Ocean / Abyss          | blue               | cyan, orange, indigo, green                                 |
+| Sunset / Ember         | red                | orange, pink, violet, teal                                  |
+| Forest / Pine          | green              | teal, amber, blue, lime                                     |
+
+Measured (WCAG contrast; minima over each theme's branch hues):
+
+| Theme       | Centre label | Centre vs paper | Branch label | Outline / line vs paper | Detail label |
+| ----------- | ------------ | --------------- | ------------ | ----------------------- | ------------ |
+| Launchstack | 5.5          | 5.5             | 8.1          | 3.5                     | 16.9         |
+| Monochrome  | 7.3          | 7.5             | 13.4         | 3.7                     | 17.3         |
+| Ocean       | 4.6          | 4.5             | 8.5          | 3.5                     | 14.9         |
+| Sunset      | 5.3          | 5.3             | 8.5          | 3.5                     | 14.4         |
+| Forest      | 5.0          | 5.0             | 8.1          | 3.4                     | 14.9         |
+| Midnight    | 6.4          | 6.8             | 9.9          | 6.9                     | 16.0         |
+| Carbon      | 6.5          | 7.1             | 11.1         | 5.2                     | 16.5         |
+| Abyss       | 7.1          | 7.5             | 10.0         | 6.6                     | 15.5         |
+| Ember       | 5.5          | 5.9             | 9.9          | 6.8                     | 15.5         |
+| Pine        | 7.7          | 8.2             | 9.9          | 7.6                     | 15.7         |
+
+**Every path paints through the same function.** A topic's look depends on
+the theme _and_ its place in the tree, which no factory can know, so Tab,
+Enter, the Topic tool, a port drag, a palette drop, an outline import and the
+Theme picker all end in `paintTopics` / `applyThemeToPage`. Adding to a map
+follows the branch as it is (recolour a branch red and its new details are
+red); switching theme replaces every colour by branch position. The colour
+dots recolour a whole branch, in the tone for the board's lighting.
 
 ## Saving
 

@@ -3,7 +3,7 @@
 Covers recipients, company-data → template field mapping, deterministic validation,
 the UI, and docs. Builds against the frozen contract (schema / types / interfaces)
 in `lead.md`. **Status: implemented — see [README.md](./README.md) for the runbook,
-the Phase 0 contract gaps, and known limitations.** Feature dir: `packages/features/src/email-pipeline/`.
+the Phase 0 contract gaps, and known limitations.** Feature dir: `pipelines/src/email/`.
 
 ## Phase 0 — Contract review
 
@@ -14,7 +14,7 @@ the Phase 0 contract gaps, and known limitations.** Feature dir: `packages/featu
 ## Phase 1 — Recipient ingestion
 
 - [x] Turn recipient sources into a normalized `Recipient[]`:
-  - **client-prospector** results ([`packages/features/src/client-prospector`](../client-prospector)) — prospects to reach out to about the owner's company.
+  - **client-prospector** results ([`pipelines/src/client-prospector`](../client-prospector/)) — prospects to reach out to about the owner's company.
   - a **manual list / CSV / pasted addresses**.
 - [x] Normalize each to `{ email, name, company, contextNotes }`; attach per-recipient context used for personalization.
 - **DoD:** a prospector run or a pasted list produces a validated `Recipient[]`.

@@ -4,12 +4,15 @@ Shared, contract-typed capabilities that the feature verticals compose. A
 **tool** is something you _import_ — it runs in the caller's process and shares
 its types, config, and auth context. Deployed compute with its own API lives in
 `services/`; product verticals that orchestrate tools into user-facing flows
-live in `packages/features`.
+live in `pipelines/`.
 
-Layering (lint-enforced): `core ← tools ← features ← apps`. Tools may import
-`@launchstack/core`, never a feature vertical — capabilities move **down** into
-this package, pipelines stay **up** in features. `process.env` is permitted
-only in a tool's `config.ts` module.
+Layering: `retrieval ← tools ← pipelines ← apps`. Tools may import the
+`runtime`, `evidence`, `store`, `llm`, `retrieval`, and `conversion` bricks;
+imports of `@launchstack/pipelines` are banned (lint-enforced). Capabilities
+move **down** into this package; compositions stay **up** in `pipelines/`.
+ESLint permits `process.env` throughout this package, not only in
+`config.ts`; keep provider environment reads in each tool's `config.ts`
+module by convention.
 
 Every tool is one subpath export with zod-typed inputs/outputs. The shared
 contract types (`ToolRunContext`, `ToolResult`, `ToolError`) live in

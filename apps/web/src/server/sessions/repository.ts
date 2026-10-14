@@ -14,6 +14,7 @@ import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
 import {
     deriveSessionTitle,
+    tidySessionTitle,
     MAX_SESSION_APPEND,
     MAX_SESSION_MESSAGE_CHARS,
 } from "~/lib/workspace-history";
@@ -75,7 +76,7 @@ function iso(value: Date | string): string {
 function toSummary(row: WorkspaceSessionRow): SessionSummary {
     return {
         id: row.id,
-        title: row.title,
+        title: tidySessionTitle(row.title),
         messageCount: row.messageCount,
         contextSourceIds: row.contextSourceIds ?? [],
         agentKey: row.agentKey ?? null,

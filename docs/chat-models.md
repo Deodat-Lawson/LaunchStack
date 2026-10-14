@@ -25,13 +25,23 @@ shape needs a transport, which is
 | `apps/web/config/chat-models.yaml` | Model ids, behavior, route assignments | Non-secret; belongs in review and version control |
 
 Point `CHAT_MODELS_CONFIG` at another path to use a different file. Relative
-paths resolve from the working directory.
+paths resolve from `apps/web` (the app's working directory; the worker
+re-roots them there too). The repo ships two files:
+
+| File | Endpoint |
+| --- | --- |
+| `config/chat-models.yaml` | Gemini (the default) |
+| `config/chat-models.azure.yaml` | Azure OpenAI, every route on GPT-6 Luna |
 
 ```bash
 CHAT_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
 CHAT_API_KEY="AIza..."
-# CHAT_MODELS_CONFIG="config/chat-models.production.yaml"
+# CHAT_MODELS_CONFIG="config/chat-models.azure.yaml"
 ```
+
+Docker Compose mounts `apps/web/config/` read-only into both the app and the
+worker, so any file there can be selected — or edited — without a rebuild.
+Under Compose, `CHAT_MODELS_CONFIG` must be relative to `apps/web`.
 
 Both are optional. With neither set, chat falls back to the same Gemini
 endpoint and authenticates with `GOOGLE_AI_API_KEY`. That fallback is the one
@@ -107,7 +117,7 @@ routes:
   default: primary
 ```
 
-Presets live in `packages/core/src/llm/presets.ts`. Each records the
+Presets live in `packages/llm/src/presets.ts`. Each records the
 first-party source it was read from and the date it was last checked, so a
 stale claim is visible rather than quietly authoritative. Preset behavior
 describes the model **over the plain OpenAI-compatible protocol**; a gateway
@@ -310,6 +320,23 @@ it — that is exactly what the declaration is for. Start conservative
 (`nativeStructuredOutput: []` always works via the fallback) and enable
 capabilities as you confirm them.
 
+### Azure OpenAI
+
+Azure's v1 surface speaks the plain protocol. The one difference: the request
+`model` field is read as the **deployment name**, so `id` must name your
+deployment, not the model.
+
+```bash
+CHAT_BASE_URL="https://<resource>.openai.azure.com/openai/v1"
+CHAT_API_KEY="<azure key>"
+CHAT_MODELS_CONFIG="config/chat-models.azure.yaml"
+```
+
+The shipped `config/chat-models.azure.yaml` runs every route on a deployment
+named `gpt-6-luna` with the `openai/gpt-6-luna` preset, tiered by reasoning
+effort like the Gemini file. Embeddings are configured separately — see
+`EMBEDDING_API_*` in `.env.example`.
+
 ### Keyless local endpoint
 
 ```bash
@@ -387,7 +414,7 @@ a 400 during the compatibility window.
 
 ## Contributing a preset
 
-1. Add an entry to `packages/core/src/llm/presets.ts` with a **first-party**
+1. Add an entry to `packages/llm/src/presets.ts` with a **first-party**
    source URL and today's date in `verifiedOn`.
 2. Describe behavior over the plain OpenAI-compatible protocol. If a claim
    only holds through one gateway, say so in `notes`.

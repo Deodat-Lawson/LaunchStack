@@ -1,12 +1,10 @@
 "use client";
 
 /**
- * Join policy and audit retention — two registry rows in the People section.
- *
- * They used to be a form of their own with a second Save button and a second
- * fetch. Now they are rows like any other workspace setting: same store,
- * same audit row, same read-only treatment for people without
- * `settings.manage`, and findable from the palette by name.
+ * Audit retention — a registry row in the People section, with the same
+ * store, audit row and read-only treatment as any other workspace setting.
+ * (Whether join links need approval used to sit here too; it is set on each
+ * link now, in Invitations.)
  */
 
 import React from "react";
@@ -22,10 +20,9 @@ export function WorkspaceSettingsCard() {
                     Workspace settings
                 </h2>
                 <p className="text-ink-3 m-0 mt-1 text-[13px] leading-normal">
-                    How people get in, and how long the audit log is kept.
+                    Policy that applies to everyone in this workspace.
                 </p>
             </div>
-            <SettingRow settingKey="workspace.joinPolicy" />
             <SettingRow settingKey="workspace.auditRetentionDays" />
         </Panel>
     );

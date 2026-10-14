@@ -38,7 +38,11 @@ export const workspaceSettings = pgTable("workspace_settings", {
     companyId: bigint("company_id", { mode: "bigint" })
         .primaryKey()
         .references(() => company.id, { onDelete: "cascade" }),
-    /** `approval` (join links land pending) | `open` (join links land active). */
+    /**
+     * Deprecated and unread: whether join links needed approval is now per
+     * link (`invite_codes.requires_approval`). Kept so the column can be
+     * dropped in a later release, not in the one that moved it.
+     */
     joinPolicy: varchar("join_policy", { length: 16 }).default("approval").notNull(),
     /** Null means keep audit events forever. */
     auditRetentionDays: integer("audit_retention_days"),

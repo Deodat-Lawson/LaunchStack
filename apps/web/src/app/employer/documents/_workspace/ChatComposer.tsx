@@ -32,6 +32,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
+import {
+    addPassage,
+    DEFAULT_PASSAGE_QUESTION,
+    isChatPassage,
+    samePassage,
+    type ChatPassage,
+} from "~/lib/chat-passages";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import {
     mentionQueryAt,
@@ -47,6 +54,7 @@ import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
 import { buildComposerMenuItems } from "./chatContextMenu";
 import { ChatAttachmentChip } from "./ChatAttachmentChip";
+import { PassageCard } from "./PassageCard";
 import { safeChatUri } from "./ChatMarkdown";
 import type { ComposerSend, EphemeralAttachment, WorkspaceSource } from "./types";
 import {
@@ -113,6 +121,8 @@ export interface ComposerProps {
     folderContextOptions?: { id: string; name: string }[];
     onOpenThreadContext?: (id: string) => void;
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** Shows a passage waiting in the composer where it lives in its document. */
+    onOpenPassage?: (passage: ChatPassage) => void;
     seed?: ComposerSeed | null;
     agents: ChatAgentOption[];
     agentKey: string | null;
@@ -165,6 +175,7 @@ export function Composer({
     folderContextOptions = [],
     onOpenThreadContext,
     onOpenSource,
+    onOpenPassage,
     seed,
     agents,
     agentKey,
@@ -190,6 +201,7 @@ export function Composer({
     const [modelRoute, setModelRoute] = useState<ChatRouteName>("default");
     const [modelRoutes, setModelRoutes] = useState<ChatRouteName[]>([]);
     const [threadRefs, setThreadRefs] = useState<string[]>([]);
+    const [passages, setPassages] = useState<ChatPassage[]>([]);
     const [inspectedThread, setInspectedThread] = useState<string | null>(null);
     const [reasoningEffort, setReasoningEffort] = useState<string | undefined>();
     const [chatMode, setChatMode] = useState<"default" | "plan">("default");
@@ -280,7 +292,11 @@ export function Composer({
     );
     const overLimit = text.length > COMPOSER_MAX_CHARACTERS;
     const hasContent = Boolean(
-        text.trim() || attachments.length || uploads.length || missingFiles.length
+        text.trim() ||
+            passages.length ||
+            attachments.length ||
+            uploads.length ||
+            missingFiles.length
     );
     const canSend =
         hasContent &&
@@ -297,6 +313,7 @@ export function Composer({
         modelRoute,
         modelRoutes,
         threadRefs,
+        passages,
         reasoningEffort,
         chatMode,
         webSearch,
@@ -507,6 +524,7 @@ export function Composer({
             setModelRoute(ROUTES.includes(draft.modelRoute!) ? draft.modelRoute! : "default");
             setModelRoutes((draft.modelRoutes ?? []).filter(route => ROUTES.includes(route)));
             setThreadRefs((draft.threadRefs ?? []).filter(id => typeof id === "string"));
+            setPassages((draft.passages ?? []).filter(isChatPassage));
             setMissingFiles(draft.pendingFiles ?? []);
             setReasoningEffort(draft.reasoningEffort);
             setChatMode(draft.chatMode === "plan" ? "plan" : "default");
@@ -548,6 +566,7 @@ export function Composer({
             setModelRoute("default");
             setModelRoutes([]);
             setThreadRefs([]);
+            setPassages([]);
             setMissingFiles([]);
             setReasoningEffort(undefined);
             setChatMode("default");
@@ -597,6 +616,7 @@ export function Composer({
             modelRoute,
             modelRoutes,
             threadRefs,
+            passages,
             reasoningEffort,
             chatMode,
             webSearch,
@@ -619,6 +639,7 @@ export function Composer({
         modelRoute,
         modelRoutes,
         threadRefs,
+        passages,
         reasoningEffort,
         chatMode,
         webSearch,
@@ -698,6 +719,7 @@ export function Composer({
                 modelRoute,
                 modelRoutes,
                 threadRefs,
+                passages,
                 reasoningEffort,
                 chatMode,
                 webSearch,
@@ -743,12 +765,18 @@ export function Composer({
         if (seed.nonce === appliedSeedNonce.current || seed.nonce === seen) return;
         appliedSeedNonce.current = seed.nonce;
         writeComposerStorage(scopedKey ? `${scopedKey}:last-seed` : undefined, seed.nonce);
-        setRichContent(null);
-        setText(previous =>
-            seed.mode === "replace" || !previous.trim()
-                ? seed.text
-                : `${previous.replace(/\s+$/, "")}\n\n${seed.text}`
-        );
+        // A seed that only brings passages leaves what was typed alone.
+        if (seed.text || seed.mode === "replace") {
+            setRichContent(null);
+            setText(previous =>
+                seed.mode === "replace" || !previous.trim()
+                    ? seed.text
+                    : `${previous.replace(/\s+$/, "")}\n\n${seed.text}`
+            );
+        }
+        if (seed.mode === "replace") setPassages(seed.passages ?? []);
+        else if (seed.passages?.length)
+            setPassages(previous => seed.passages!.reduce(addPassage, previous));
         if (seed.attachments) {
             verifiedUploads.current.clear();
             updateAttachments(seed.attachments);
@@ -846,12 +874,16 @@ export function Composer({
         const snapshot = latestDraft.current!;
         const originKey = scopedKey;
         const payload: ComposerSend = {
-            text: text.trim().length ? text.trim() : "Please review the attached files.",
+            text: text.trim().length
+                ? text.trim()
+                : passages.length
+                  ? DEFAULT_PASSAGE_QUESTION
+                  : "Please review the attached files.",
             recallText:
                 richContent && serializeRichDocument && validateRichDocument?.(richContent)
                     ? serializeRichDocument(composerDocumentWithoutContext(richContent))
                     : text,
-            origin: text.trim() ? "user" : "attachment",
+            origin: text.trim() || passages.length ? "user" : "attachment",
             refs: selected,
             attachments,
             webSearch,
@@ -860,6 +892,7 @@ export function Composer({
             modelRoute: effectiveRoute,
             ...(modelRoutes.length >= 2 ? { modelRoutes } : {}),
             ...(threadRefs.length ? { threadRefs } : {}),
+            ...(passages.length ? { passages } : {}),
             ...(reasoningEffort && effortOptions.includes(reasoningEffort)
                 ? { reasoningEffort }
                 : {}),
@@ -892,7 +925,8 @@ export function Composer({
                         stored.text.trim().length > 0 ||
                             stored.attachments.length > 0 ||
                             (stored.pendingFiles?.length ?? 0) > 0 ||
-                            (stored.threadRefs?.length ?? 0) > 0
+                            (stored.threadRefs?.length ?? 0) > 0 ||
+                            (stored.passages?.length ?? 0) > 0
                     );
                 if (hasNewerDraft) {
                     const saved = readComposerStorage<unknown>(
@@ -938,6 +972,7 @@ export function Composer({
                 !current?.text.trim() &&
                 !current?.attachments.length &&
                 !current?.threadRefs?.length &&
+                !current?.passages?.length &&
                 !current?.pendingFiles?.length
             ) {
                 applyDraft(failedDraft);
@@ -986,6 +1021,7 @@ export function Composer({
         setRichContent(null);
         richChipIds.current = [];
         setThreadRefs([]);
+        setPassages([]);
         updateAttachments([]);
         setMention(null);
         setSlash(null);
@@ -1263,7 +1299,8 @@ export function Composer({
             (suspended.text.trim() ||
                 suspended.attachments.length ||
                 suspended.pendingFiles?.length ||
-                suspended.threadRefs?.length)
+                suspended.threadRefs?.length ||
+                suspended.passages?.length)
         ) {
             saveStashes([
                 { ...suspended, id: crypto.randomUUID(), savedAt: Date.now() },
@@ -1295,6 +1332,7 @@ export function Composer({
                     modelRoute,
                     modelRoutes,
                     threadRefs,
+                    passages,
                     reasoningEffort,
                     chatMode,
                     richContent,
@@ -1308,6 +1346,7 @@ export function Composer({
             setRecallIndex(null);
             setRichContent(null);
             setThreadRefs([]);
+            setPassages([]);
             richChipIds.current = [];
             toast.success("Prompt saved. Press ⌘/Ctrl+S in an empty composer to restore it.");
         } else if (stashes.length === 1) restoreStash(stashes[0]!);
@@ -1501,6 +1540,7 @@ export function Composer({
                         setRichContent(null);
                         richChipIds.current = [];
                         setThreadRefs([]);
+                        setPassages([]);
                         setAttachError(null);
                         setRecallIndex(null);
                     },
@@ -1572,6 +1612,33 @@ export function Composer({
                                 <X className="size-3" />
                             </Button>
                         </span>
+                    ))}
+                </div>
+            )}
+            {passages.length > 0 && (
+                <div
+                    role="group"
+                    aria-label={
+                        passages.length === 1 ? "Passage to ask about" : "Passages to ask about"
+                    }
+                    className="mb-2.5 flex max-h-[min(16rem,30vh)] flex-col gap-1.5 overflow-y-auto"
+                >
+                    {passages.map(passage => (
+                        <PassageCard
+                            key={`${passage.sourceId}:${passage.page ?? ""}:${passage.text.slice(0, 48)}`}
+                            passage={passage}
+                            onOpen={
+                                onOpenPassage &&
+                                sources.some(source => source.id === passage.sourceId)
+                                    ? () => onOpenPassage(passage)
+                                    : undefined
+                            }
+                            onRemove={() =>
+                                setPassages(previous =>
+                                    previous.filter(item => !samePassage(item, passage))
+                                )
+                            }
+                        />
                     ))}
                 </div>
             )}
@@ -1835,7 +1902,11 @@ export function Composer({
                         value={text}
                         content={richContent}
                         contexts={richContexts}
-                        placeholder="Write a message…"
+                        placeholder={
+                            passages.length > 0
+                                ? `Ask about ${passages.length === 1 ? "this passage" : "these passages"}…`
+                                : "Write a message…"
+                        }
                         onChange={(value, content, contexts) => {
                             const removedSources = richChipIds.current
                                 .filter(
@@ -1960,9 +2031,13 @@ export function Composer({
                     placeholder={
                         agent
                             ? `Ask ${agent.displayName}, your ${agent.role.toLowerCase()}… or @mention another agent`
-                            : selSources.length > 0
-                              ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
-                              : "Ask anything…"
+                            : passages.length > 0
+                              ? passages.length === 1
+                                  ? "Ask about this passage… or send to have it explained"
+                                  : "Ask about these passages… or send to have them explained"
+                              : selSources.length > 0
+                                ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
+                                : "Ask anything…"
                     }
                     onChange={event => {
                         setText(event.target.value);

@@ -1,6 +1,7 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
+import type { ChatPassage } from "~/lib/chat-passages";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -88,6 +89,9 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
  */
 export type SourceCitability = "citable" | "stale" | "none";
 
+/** Indexing state from the document row, including a mindmap's published copy. */
+export type SourceIndexStatus = "ready" | "processing" | "failed";
+
 export type DocDomain =
     | "Contract"
     | "Financial"
@@ -163,6 +167,10 @@ export interface WorkspaceSource {
     thumbnailUrl?: string;
     /** Defaults to `citable` when absent — uploads become citable as they index. */
     citability?: SourceCitability;
+    /** Unset for local sources and mindmaps without a published document. */
+    indexStatus?: SourceIndexStatus;
+    /** The processing failure reported by the worker, for the status tooltip. */
+    errorMessage?: string;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -292,6 +300,15 @@ export interface ComposerSend {
     followUp?: "queue" | "interrupt";
     modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
     threadRefs?: string[];
+    /** Passages selected in a document and asked about; never pasted into `text`. */
+    passages?: ChatPassage[];
+}
+
+/** What a document viewer hands over when the reader asks about a selection. */
+export interface PassageSelection {
+    text: string;
+    /** 1-based page, when the viewer knows it (PDFs do). */
+    page?: number;
 }
 
 export interface QueuedChatMessage {

@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
-import { document, fileUploads } from "@launchstack/store/schema";
+import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { documentSettings } from "~/server/db/schema";
-import { eq, getTableColumns, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -100,9 +100,23 @@ export async function POST(_request: Request) {
         // join says which of the visible documents are individually restricted
         // (the caller sees those only because a grant reaches them).
         const docs = await db
-            .select({ ...getTableColumns(document), restricted: documentSettings.restricted })
+            .select({
+                ...getTableColumns(document),
+                restricted: documentSettings.restricted,
+                currentVersionOcrProcessed: documentVersions.ocrProcessed,
+                currentVersionOcrMetadata: documentVersions.ocrMetadata,
+            })
             .from(document)
             .leftJoin(documentSettings, eq(documentSettings.documentId, document.id))
+            // Document-level OCR fields can still describe an older version.
+            // Keep them for existing consumers; readiness follows only the pointer.
+            .leftJoin(
+                documentVersions,
+                and(
+                    eq(documentVersions.id, document.currentVersionId),
+                    eq(documentVersions.documentId, document.id)
+                )
+            )
             .where(scopedDocumentWhere(companyId, await ctx.data.documentScope()));
 
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}

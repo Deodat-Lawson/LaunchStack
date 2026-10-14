@@ -241,6 +241,7 @@ export function WorkspaceShell() {
         workspaceName,
         can,
         permissionsLoaded,
+        permissionsError,
         refresh,
         // The URL names a source; until the list has loaded, an id that is not
         // in it yet is "not loaded", not "gone".
@@ -1597,8 +1598,10 @@ export function WorkspaceShell() {
             if (!can(feature.requires)) {
                 // Once they have, an app that explains its gate says why
                 // nothing opened — a Guest following a Team link lands on
-                // the chat otherwise, with no word. One toast per app.
-                if (permissionsLoaded && feature.deniedNote) {
+                // the chat otherwise, with no word. One toast per app. Not
+                // when the answer failed: an owner would be told the app
+                // isn't part of their role.
+                if (permissionsLoaded && !permissionsError && feature.deniedNote) {
                     toast.info(`${feature.label} isn't part of your role`, {
                         id: `denied:${feature.id}`,
                         description: feature.deniedNote,
@@ -1609,7 +1612,7 @@ export function WorkspaceShell() {
             setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
         },
-        [can, permissionsLoaded, router, setActiveFeatureId, requestToolLocation]
+        [can, permissionsLoaded, permissionsError, router, setActiveFeatureId, requestToolLocation]
     );
     expandFeatureRef.current = expandFeature;
 

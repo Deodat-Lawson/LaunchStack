@@ -79,7 +79,7 @@ export function PeopleView({
             />
 
             {shown.length === 0 ? (
-                <EmptyLine>
+                <EmptyLine flush>
                     {needle ? `Nobody matches “${query.trim()}”.` : "Nobody else is here yet."}
                 </EmptyLine>
             ) : (

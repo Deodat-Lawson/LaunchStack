@@ -103,8 +103,24 @@ export function SectionHeading({
     );
 }
 
-export function EmptyLine({ children }: { children: React.ReactNode }) {
-    return <p className="text-ink-3 m-0 px-3.5 py-2 text-[12.5px] leading-relaxed">{children}</p>;
+/** One sentence where a list would be. `flush` drops the side padding for a full-width screen, so it lines up with the heading. */
+export function EmptyLine({
+    children,
+    flush = false,
+}: {
+    children: React.ReactNode;
+    flush?: boolean;
+}) {
+    return (
+        <p
+            className={cn(
+                "text-ink-3 m-0 py-2 text-[12.5px] leading-relaxed",
+                flush ? "px-0 text-[13px]" : "px-3.5"
+            )}
+        >
+            {children}
+        </p>
+    );
 }
 
 export function ErrorLine({ message, onRetry }: { message: string; onRetry?: () => void }) {

@@ -148,7 +148,7 @@ export function GroupPage({
             </header>
 
             {group.members.length === 0 ? (
-                <EmptyLine>
+                <EmptyLine flush>
                     {canManage
                         ? "Nobody is in this group yet. Add people, then share with the group in one step."
                         : "Nobody is in this group yet."}

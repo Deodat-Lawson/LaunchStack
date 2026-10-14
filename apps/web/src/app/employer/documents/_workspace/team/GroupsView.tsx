@@ -80,11 +80,11 @@ export function GroupsView({
             />
 
             {groups.length === 0 ? (
-                <EmptyLine>
+                <EmptyLine flush>
                     No groups yet. A group lets you share with several people in one step.
                 </EmptyLine>
             ) : shown.length === 0 ? (
-                <EmptyLine>No group matches “{query.trim()}”.</EmptyLine>
+                <EmptyLine flush>No group matches “{query.trim()}”.</EmptyLine>
             ) : (
                 <ul
                     className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 p-0"

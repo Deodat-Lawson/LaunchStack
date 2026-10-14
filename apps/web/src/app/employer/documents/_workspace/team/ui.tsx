@@ -123,9 +123,18 @@ export function EmptyLine({
     );
 }
 
-export function ErrorLine({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export function ErrorLine({
+    message,
+    onRetry,
+    flush = false,
+}: {
+    message: string;
+    onRetry?: () => void;
+    /** No side padding, for a full-width screen. */
+    flush?: boolean;
+}) {
     return (
-        <div className="flex items-center gap-2 px-3.5 py-2" role="alert">
+        <div className={cn("flex items-center gap-2 py-2", flush ? "px-0" : "px-3.5")} role="alert">
             <span className="text-danger min-w-0 flex-1 text-[12.5px]">{message}</span>
             {onRetry && (
                 <Button
@@ -141,9 +150,13 @@ export function ErrorLine({ message, onRetry }: { message: string; onRetry?: () 
     );
 }
 
-export function LoadingRows({ rows = 4 }: { rows?: number }) {
+export function LoadingRows({ rows = 4, flush = false }: { rows?: number; flush?: boolean }) {
     return (
-        <div className="flex flex-col gap-1 px-3.5 py-2" aria-busy="true" aria-label="Loading">
+        <div
+            className={cn("flex flex-col gap-1 py-2", flush ? "px-0" : "px-3.5")}
+            aria-busy="true"
+            aria-label="Loading"
+        >
             {Array.from({ length: rows }, (_, i) => (
                 <div key={i} className="flex h-10 items-center gap-2.5">
                     <Skeleton className="size-7 shrink-0 rounded-full" />

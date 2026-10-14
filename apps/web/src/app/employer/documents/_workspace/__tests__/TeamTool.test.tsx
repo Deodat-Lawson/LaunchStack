@@ -379,4 +379,45 @@ describe("TeamTool", () => {
         expect(screen.getByTestId("team-activity-person")).toHaveTextContent("Ben Ng");
         expect(screen.getByTestId("team-activity-kind")).toHaveTextContent("Sharing");
     });
+
+    it("waits for the member list before reading ?person=, so it never shows everyone's rows first", async () => {
+        let release: () => void = () => undefined;
+        const membersReady = new Promise<void>(resolve => {
+            release = resolve;
+        });
+        const base = fetchMock.getMockImplementation()!;
+        fetchMock.mockImplementation((input: RequestInfo | URL) =>
+            urlOf(input) === "/api/workspace/members"
+                ? membersReady.then(() => base(input))
+                : base(input)
+        );
+
+        setup("/activity?person=8&kind=shared");
+        await screen.findByTestId("team-activity-person");
+        expect(calledWith("/api/workspace/activity")).toEqual([]);
+
+        release();
+        await waitFor(() =>
+            expect(calledWith("/api/workspace/activity")).toEqual([
+                "/api/workspace/activity?limit=40&actor=user-ben&kind=shared",
+            ])
+        );
+    });
+
+    it("says what went wrong when the team can't load, and retries", async () => {
+        const base = fetchMock.getMockImplementation()!;
+        let fail = true;
+        fetchMock.mockImplementation((input: RequestInfo | URL) =>
+            urlOf(input) === "/api/workspace/members" && fail
+                ? json({ error: "The team is unavailable" }, 500)
+                : base(input)
+        );
+        setup();
+
+        const alert = await screen.findByRole("alert");
+        expect(alert).toHaveTextContent("The team is unavailable");
+        fail = false;
+        fireEvent.click(within(alert).getByRole("button", { name: "Retry" }));
+        expect(await screen.findByTestId("team-people")).toBeInTheDocument();
+    });
 });

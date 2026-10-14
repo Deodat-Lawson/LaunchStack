@@ -11,7 +11,13 @@ import { usableAsPrimary } from "~/lib/agents/definition";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
 import { usePermissions } from "~/lib/use-permissions";
-import { DEMOTED_FEATURES, SOURCE_META, resolveStudioFeature, type WorkspaceSource } from "./types";
+import {
+    DEMOTED_FEATURES,
+    SOURCE_META,
+    resolveStudioFeature,
+    settingsSectionOf,
+    type WorkspaceSource,
+} from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
     HISTORY_KIND_META,
@@ -159,8 +165,16 @@ export function CommandPalette({
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked.
-            .filter(f => can(resolveStudioFeature(f.id)?.requires))
+            // would do nothing when picked. A Settings section ("People and
+            // access") opens the Settings app, so it carries Settings' gate.
+            .filter(f => {
+                const opens =
+                    resolveStudioFeature(f.id) ??
+                    (settingsSectionOf(f.href) !== undefined
+                        ? resolveStudioFeature("settings")
+                        : undefined);
+                return can(opens?.requires);
+            })
             .forEach(f =>
                 base.push({
                     kind: "feature",

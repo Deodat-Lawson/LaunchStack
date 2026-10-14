@@ -532,6 +532,13 @@ export interface StudioFeature {
      * gated tile never flashes for someone who may not open it.
      */
     requires?: Permission;
+    /**
+     * What to tell someone who follows a link to this app (a teammate's
+     * link, a shortcut) without its permission. The app does not open for
+     * them; this sentence says why instead of leaving them where they were.
+     * Unset, nothing is said.
+     */
+    deniedNote?: string;
 }
 
 export interface StudioGroup {
@@ -579,6 +586,8 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "People and what you share with each, groups to share with in one step, and who added, shared or moved what",
                 href: "/employer/documents?feature=team",
                 requires: "members.view",
+                deniedNote:
+                    "Your role sees only what is shared with you, so there is no team list. New shares arrive in the bell at the top of the sidebar.",
             },
         ],
     },

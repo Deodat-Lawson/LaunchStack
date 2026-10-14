@@ -1,10 +1,10 @@
 /** @jest-environment jsdom */
 
 /**
- * ⌘K offers only apps the person may open. A row for a gated app — Team, for
+ * ⌘K offers only what the person may open. A row for a gated app — Team, for
  * a Guest who can't see the member list — would do nothing when picked, so it
- * isn't offered; the Settings section row ("People and access") is a link, not
- * an app, and stays.
+ * isn't offered. A Settings section row ("People and access") opens the
+ * Settings app, so it is offered only to those who may open Settings.
  */
 
 import React from "react";
@@ -57,10 +57,22 @@ describe("CommandPalette permissions", () => {
         expect(onPickFeature).toHaveBeenCalledWith("team");
     });
 
-    it("doesn't offer Team to a Guest, but keeps the Settings link", () => {
+    it("doesn't offer Team to a Guest", () => {
         mockPerms = new Set<Permission>(["documents.read"]);
-        search("people");
+        search("team");
         expect(screen.queryByText("Team")).not.toBeInTheDocument();
-        expect(screen.getByText("People and access")).toBeInTheDocument();
+    });
+
+    it("offers People and access only to those who may open Settings", () => {
+        mockPerms = new Set<Permission>(["documents.read", "members.view"]);
+        search("people and access");
+        expect(screen.queryByText("People and access")).not.toBeInTheDocument();
+    });
+
+    it("offers People and access to an admin, and picks it by id", () => {
+        mockPerms = new Set<Permission>(["members.view", "settings.manage"]);
+        const onPickFeature = search("people and access");
+        fireEvent.click(screen.getByText("People and access"));
+        expect(onPickFeature).toHaveBeenCalledWith("people-access");
     });
 });

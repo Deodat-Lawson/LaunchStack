@@ -133,7 +133,7 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
 
     let body: React.ReactNode;
     if (!loaded) {
-        body = <LoadingRows />;
+        body = <ScreenLoading />;
     } else if (!allowed) {
         body = (
             <EmptyState
@@ -146,6 +146,7 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
         body = (
             <ActivityScreen
                 members={directory.members}
+                membersLoading={directory.loading}
                 onOpenTarget={onOpenTarget}
                 onOpenGroup={openGroup}
             />
@@ -153,9 +154,17 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
     } else if (screen.kind === "not-found") {
         body = <ToolNotFound home={TEAM_HOME} homeLabel="People" />;
     } else if (directory.loading) {
-        body = <LoadingRows />;
+        body = <ScreenLoading />;
     } else if (directory.error) {
-        body = <ErrorLine message={directory.error} onRetry={() => void directory.reload()} />;
+        body = (
+            <div className="mx-auto max-w-[1100px]">
+                <ErrorLine
+                    flush
+                    message={directory.error}
+                    onRetry={() => void directory.reload()}
+                />
+            </div>
+        );
     } else if (screen.kind === "people") {
         body = (
             <PeopleView
@@ -247,6 +256,15 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
     );
 }
 
+/** Loading rows at the screen's width, lined up with where its heading will be. */
+function ScreenLoading() {
+    return (
+        <div className="mx-auto max-w-[1100px]">
+            <LoadingRows flush />
+        </div>
+    );
+}
+
 const EVERYONE = "everyone";
 const ALL_KINDS = "all";
 
@@ -257,10 +275,13 @@ const ALL_KINDS = "all";
  */
 function ActivityScreen({
     members,
+    membersLoading,
     onOpenTarget,
     onOpenGroup,
 }: {
     members: Member[];
+    /** The member list is on its way: a `?person=` can't be read yet. */
+    membersLoading: boolean;
     onOpenTarget: (target: TeamTarget) => void;
     onOpenGroup: (groupId: number) => void;
 }) {
@@ -349,21 +370,27 @@ function ActivityScreen({
                 }
             />
             <section className="border-line bg-panel min-w-0 rounded-lg border pb-2">
-                <ActivityList
-                    key={`${person?.authUserId ?? EVERYONE}:${kind ?? ALL_KINDS}`}
-                    actor={person?.authUserId}
-                    kind={kind}
-                    query={query}
-                    groupByDay
-                    pageSize={40}
-                    emptyText={
-                        filtered
-                            ? "Nothing matches these filters yet."
-                            : "Nothing yet. Adding, sharing and moving files shows up here."
-                    }
-                    onOpenTarget={onOpenTarget}
-                    onOpenGroup={onOpenGroup}
-                />
+                {/* A link naming a person waits for the member list, so it
+                    never shows everyone's rows first and then theirs. */}
+                {personParam && membersLoading ? (
+                    <LoadingRows rows={5} />
+                ) : (
+                    <ActivityList
+                        key={`${person?.authUserId ?? EVERYONE}:${kind ?? ALL_KINDS}`}
+                        actor={person?.authUserId}
+                        kind={kind}
+                        query={query}
+                        groupByDay
+                        pageSize={40}
+                        emptyText={
+                            filtered
+                                ? "Nothing matches these filters yet."
+                                : "Nothing yet. Adding, sharing and moving files shows up here."
+                        }
+                        onOpenTarget={onOpenTarget}
+                        onOpenGroup={onOpenGroup}
+                    />
+                )}
             </section>
         </div>
     );

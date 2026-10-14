@@ -1594,11 +1594,22 @@ export function WorkspaceShell() {
                 return;
             }
             // Fails closed: `can` answers false until permissions load.
-            if (!can(feature.requires)) return;
+            if (!can(feature.requires)) {
+                // Once they have, an app that explains its gate says why
+                // nothing opened — a Guest following a Team link lands on
+                // the chat otherwise, with no word. One toast per app.
+                if (permissionsLoaded && feature.deniedNote) {
+                    toast.info(`${feature.label} isn't part of your role`, {
+                        id: `denied:${feature.id}`,
+                        description: feature.deniedNote,
+                    });
+                }
+                return;
+            }
             setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
         },
-        [can, router, setActiveFeatureId, requestToolLocation]
+        [can, permissionsLoaded, router, setActiveFeatureId, requestToolLocation]
     );
     expandFeatureRef.current = expandFeature;
 

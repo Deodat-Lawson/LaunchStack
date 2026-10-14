@@ -1,12 +1,21 @@
 /** @jest-environment jsdom */
 
 import React, { useState } from "react";
+import type * as ReactModule from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import type { HistoryEntry } from "~/lib/workspace-history";
 
 import { ContextMenuProvider } from "~/components/context-menu";
+
+// The bell polls its own route; here it only needs to be there.
+jest.mock("../team/InboxBell", () => ({
+    InboxBell: () => {
+        const { createElement } = jest.requireActual<typeof ReactModule>("react");
+        return createElement("button", { type: "button", "aria-label": "Inbox" });
+    },
+}));
 import { SourceRail, type SourceRailProps } from "../SourceRail";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
 

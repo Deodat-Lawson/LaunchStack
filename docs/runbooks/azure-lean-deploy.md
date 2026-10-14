@@ -150,7 +150,7 @@ three):
 | Variable | Notes |
 |---|---|
 | `BETTER_AUTH_SECRET` | **Required — the app will not boot without it.** Signs session cookies and verification tokens: `openssl rand -base64 32`. Rotating it invalidates every live session. |
-| `BETTER_AUTH_URL` | The public origin (`https://$DOMAIN`). Optional in dev; set it behind a proxy so callback URLs and trusted origins resolve to the outside hostname. |
+| `BETTER_AUTH_URL` | The public origin (`https://$DOMAIN`). Required: browser sign-up is refused with "Invalid origin" without it, and callback URLs and trusted origins resolve from it. |
 | `GOTENBERG_SERVICE_PASSWORD` | Basic-auth password for the PDF-rendering service (ADR-009). Fails closed like the other services — override the local default. |
 | `CHAT_BASE_URL` (+ `CHAT_API_KEY`) | One OpenAI-compatible endpoint. Model IDs live in `apps/web/config/chat-models.yaml`, not env vars. |
 | `OPENAI_API_KEY` | Backs embeddings and other non-chat capabilities. Never used for chat. |

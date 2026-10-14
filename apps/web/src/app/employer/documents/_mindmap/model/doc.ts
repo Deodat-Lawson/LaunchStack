@@ -12,7 +12,7 @@
  * history stack can hold plain references.
  */
 
-import { nodeBounds, unionRects } from "./geometry";
+import { nodeBounds, rectCenter, unionRects } from "./geometry";
 import type {
     DiagramEdge,
     DiagramNode,
@@ -339,6 +339,26 @@ export function addEdges(page: DiagramPage, edges: readonly DiagramEdge[]): Diag
 }
 
 /**
+ * Add edges beside an existing one instead of at the end. Edge order is child
+ * order — the layouts read a node's children off `page.edges` — so this is
+ * how a topic lands between two siblings rather than after the last. Without
+ * an anchor (or with one that is gone) it appends, like `addEdges`.
+ */
+export function insertEdgesBeside(
+    page: DiagramPage,
+    edges: readonly DiagramEdge[],
+    anchorId: string | undefined,
+    side: "before" | "after"
+): DiagramPage {
+    if (edges.length === 0) return page;
+    const at = anchorId ? page.edges.findIndex(e => e.id === anchorId) : -1;
+    if (at < 0) return addEdges(page, edges);
+    const next = [...page.edges];
+    next.splice(side === "after" ? at + 1 : at, 0, ...edges);
+    return { ...page, edges: next };
+}
+
+/**
  * Delete nodes, their descendants, and any edge that touched them. Edges are
  * removed rather than orphaned: a connector to nothing is never what the user
  * meant by "delete this box".
@@ -427,6 +447,95 @@ export function docText(doc: MindmapDoc): string {
 }
 
 const MIND_SHAPES: ReadonlySet<string> = new Set(["mind-root", "mind-branch", "mind-leaf"]);
+
+/** A mindmap topic, as opposed to a sticky, a caption or a flowchart box. */
+export function isTopicShape(shape: string): boolean {
+    return MIND_SHAPES.has(shape);
+}
+
+/**
+ * A topic's parent in the outline: the first topic with an edge into it.
+ * Connectors from anything else — a sticky pinned to the centre — are
+ * annotations, not structure, so they never make a topic someone's child.
+ */
+export function topicParent(page: DiagramPage, id: string, index?: GraphIndex): string | null {
+    const idx = index ?? graphIndex(page);
+    for (const from of idx.in.get(id) ?? []) {
+        const nd = nodeById(page, from);
+        if (nd && isTopicShape(nd.shape)) return from;
+    }
+    return null;
+}
+
+/**
+ * A central topic with branches: a topic nothing sits above, holding others.
+ * Deleting one "and keeping its children" has nowhere to put them — they would
+ * each become a centre of their own, splitting one map into several.
+ */
+export function isCentreWithBranches(page: DiagramPage, id: string, index?: GraphIndex): boolean {
+    const idx = index ?? graphIndex(page);
+    const nd = nodeById(page, id);
+    if (!nd || !isTopicShape(nd.shape) || topicParent(page, id, idx) !== null) return false;
+    return (idx.out.get(id) ?? []).some(child => {
+        const c = nodeById(page, child);
+        return c !== undefined && isTopicShape(c.shape);
+    });
+}
+
+/**
+ * `ids` plus everything downstream that would be left with no parent if they
+ * went: what deleting a topic "with its subtree" removes. A node that also
+ * hangs off something outside — a topic another branch points at with a
+ * cross-link — keeps its other parent and stays.
+ */
+export function branchOf(page: DiagramPage, ids: readonly string[]): Set<string> {
+    const idx = graphIndex(page);
+    const doomed = new Set(ids);
+    const queue = [...ids];
+    while (queue.length) {
+        const cur = queue.shift()!;
+        for (const child of idx.out.get(cur) ?? []) {
+            if (doomed.has(child)) continue;
+            if ((idx.in.get(child) ?? []).every(from => doomed.has(from))) {
+                doomed.add(child);
+                queue.push(child);
+            }
+        }
+    }
+    return doomed;
+}
+
+export type NavDirection = "left" | "right" | "up" | "down";
+
+/**
+ * The topic an arrow key moves to from `fromId`: the nearest topic, not
+ * hidden by a collapsed branch, whose centre lies in the 90° cone facing
+ * `dir`. Distance along the axis plus twice the sideways offset, so a topic
+ * straight ahead beats a nearer one off to the side.
+ */
+export function topicInDirection(
+    page: DiagramPage,
+    fromId: string,
+    dir: NavDirection,
+    hidden: ReadonlySet<string> = NO_FOLDS
+): string | null {
+    const from = nodeById(page, fromId);
+    if (!from) return null;
+    const origin = rectCenter(nodeBounds(from));
+    const horizontal = dir === "left" || dir === "right";
+    const sign = dir === "right" || dir === "down" ? 1 : -1;
+    let best: { id: string; score: number } | null = null;
+    for (const nd of page.nodes) {
+        if (nd.id === fromId || nd.hidden || hidden.has(nd.id) || !isTopicShape(nd.shape)) continue;
+        const c = rectCenter(nodeBounds(nd));
+        const along = sign * (horizontal ? c.x - origin.x : c.y - origin.y);
+        const across = Math.abs(horizontal ? c.y - origin.y : c.x - origin.x);
+        if (along <= 0 || across > along) continue;
+        const score = along + 2 * across;
+        if (!best || score < best.score) best = { id: nd.id, score };
+    }
+    return best?.id ?? null;
+}
 
 /**
  * A page drawn with mindmap topics and nothing that is not one. Auto-arrange

@@ -9,6 +9,10 @@
  * to the right dashboard by DB role, exactly as it always has. Sign-up stays
  * on /signup: the session hook updates and the page flips to its
  * pick-a-path registration step.
+ *
+ * The join pages (`/join/<code>`, `/invite/<token>`) embed both forms and
+ * point every success path — email or social, new account or existing — back
+ * at themselves, so the person joins without detouring through /signup.
  */
 import React, { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
@@ -97,6 +101,80 @@ function ErrorText({ id, children }: { id?: string; children: React.ReactNode })
     );
 }
 
+/** Where better-auth sends the window after a social sign-in, by outcome. */
+interface SocialTargets {
+    callbackURL: string;
+    newUserCallbackURL: string;
+    errorCallbackURL: string;
+}
+
+function startSocialSignIn(provider: SocialProvider, targets: SocialTargets) {
+    return attempt(hooks => authClient.signIn.social({ provider, ...targets }, hooks));
+}
+
+function socialFailureMessage(provider: SocialProvider, failure: AuthFailure): React.ReactNode {
+    return failure.status === 0
+        ? NETWORK_ERROR
+        : failure.status === 429
+          ? rateLimitMessage(failure.retryAfter)
+          : `Couldn't start ${SOCIAL[provider].label} sign-in. Try again in a moment.`;
+}
+
+function SocialButtons({
+    providers,
+    pending,
+    disabled,
+    lastMethod,
+    onStart,
+    divider = "or use email",
+}: {
+    providers: SocialProvider[];
+    pending: string | null;
+    disabled: boolean;
+    lastMethod: string | null;
+    onStart: (provider: SocialProvider) => void;
+    divider?: string;
+}) {
+    return (
+        <>
+            <div className="flex flex-col gap-2">
+                {providers.map(provider => {
+                    const { label, Icon } = SOCIAL[provider];
+                    return (
+                        <Button
+                            key={provider}
+                            type="button"
+                            variant="outline"
+                            className="relative h-10 w-full"
+                            disabled={disabled}
+                            aria-busy={pending === provider}
+                            onClick={() => onStart(provider)}
+                        >
+                            {pending === provider ? (
+                                <Loader2 className="animate-spin" aria-hidden />
+                            ) : (
+                                <Icon size={16} />
+                            )}
+                            Continue with {label}
+                            {lastMethod === provider && (
+                                <LastUsedBadge className="absolute -top-2 right-3" />
+                            )}
+                        </Button>
+                    );
+                })}
+            </div>
+            <div className="text-ink-4 flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.12em]">
+                <Separator className="flex-1" />
+                <span className="flex items-center gap-2">
+                    {divider}
+                    {lastMethod === "email" && <LastUsedBadge />}
+                </span>
+                <Separator className="flex-1" />
+            </div>
+        </>
+    );
+}
+
 function LastUsedBadge({ className }: { className?: string }) {
     return (
         <Badge
@@ -140,13 +218,25 @@ export function SignInForm({
     socialProviders = [],
     /** `forgot` opens straight on the reset-link form (from an expired reset link). */
     initialView = "signin",
+    /** Prefills the email field (an invitation knows who it was sent to). */
+    defaultEmail = "",
+    /**
+     * Where a first-time social sign-in lands. Defaults to /signup, which
+     * registers them; a join page passes itself, since joining registers too.
+     */
+    newUserRedirectTo,
+    /** Runs as a sign-in starts, before any navigation (the join intent). */
+    onAuthStart,
 }: {
     redirectTo?: string;
     socialProviders?: SocialProvider[];
     initialView?: "signin" | "forgot";
+    defaultEmail?: string;
+    newUserRedirectTo?: string;
+    onAuthStart?: () => void;
 } = {}) {
     const [view, setView] = useState<View>(initialView);
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(defaultEmail);
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(true);
     const [error, setError] = useState<FormError | null>(null);
@@ -211,6 +301,7 @@ export function SignInForm({
         e.preventDefault();
         setError(null);
         setPending("email");
+        onAuthStart?.();
         const failure = await attempt(hooks =>
             authClient.signIn.email({ email: email.trim(), password, rememberMe }, hooks)
         );
@@ -246,32 +337,18 @@ export function SignInForm({
     const startSocial = async (provider: SocialProvider) => {
         setError(null);
         setPending(provider);
+        onAuthStart?.();
         const next = redirectTo === "/" ? null : redirectTo;
-        const failure = await attempt(hooks =>
-            authClient.signIn.social(
-                {
-                    provider,
-                    callbackURL: redirectTo,
-                    // A first-time social sign-in has an account but no
-                    // workspace yet; registration lives on /signup.
-                    newUserCallbackURL: withNext("/signup", next),
-                    errorCallbackURL: withNext(`/signin?provider=${provider}`, next),
-                },
-                hooks
-            )
-        );
+        const failure = await startSocialSignIn(provider, {
+            callbackURL: redirectTo,
+            // A first-time social sign-in has an account but no workspace
+            // yet; registration lives on /signup unless the caller joins.
+            newUserCallbackURL: newUserRedirectTo ?? withNext("/signup", next),
+            errorCallbackURL: withNext(`/signin?provider=${provider}`, next),
+        });
         // On success better-auth sends the window to the provider; leave
         // the button spinning until it goes.
-        if (failure) {
-            fail(
-                failure,
-                failure.status === 0
-                    ? NETWORK_ERROR
-                    : failure.status === 429
-                      ? rateLimitMessage(failure.retryAfter)
-                      : `Couldn't start ${SOCIAL[provider].label} sign-in. Try again in a moment.`
-            );
-        }
+        if (failure) fail(failure, socialFailureMessage(provider, failure));
     };
 
     if (view === "sent") {
@@ -336,42 +413,13 @@ export function SignInForm({
     return (
         <div className="flex flex-col gap-4">
             {!forgot && socialProviders.length > 0 && (
-                <>
-                    <div className="flex flex-col gap-2">
-                        {socialProviders.map(provider => {
-                            const { label, Icon } = SOCIAL[provider];
-                            return (
-                                <Button
-                                    key={provider}
-                                    type="button"
-                                    variant="outline"
-                                    className="relative h-10 w-full"
-                                    disabled={busy || lockedFor > 0}
-                                    aria-busy={pending === provider}
-                                    onClick={() => void startSocial(provider)}
-                                >
-                                    {pending === provider ? (
-                                        <Loader2 className="animate-spin" aria-hidden />
-                                    ) : (
-                                        <Icon size={16} />
-                                    )}
-                                    Continue with {label}
-                                    {lastMethod === provider && (
-                                        <LastUsedBadge className="absolute -top-2 right-3" />
-                                    )}
-                                </Button>
-                            );
-                        })}
-                    </div>
-                    <div className="text-ink-4 flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.12em]">
-                        <Separator className="flex-1" />
-                        <span className="flex items-center gap-2">
-                            or use email
-                            {lastMethod === "email" && <LastUsedBadge />}
-                        </span>
-                        <Separator className="flex-1" />
-                    </div>
-                </>
+                <SocialButtons
+                    providers={socialProviders}
+                    pending={pending}
+                    disabled={busy || lockedFor > 0}
+                    lastMethod={lastMethod}
+                    onStart={provider => void startSocial(provider)}
+                />
             )}
 
             <form
@@ -494,18 +542,58 @@ export function SignInForm({
     );
 }
 
-export function SignUpForm({ signInHref = "/signin" }: { signInHref?: string } = {}) {
+export function SignUpForm({
+    signInHref = "/signin",
+    defaultEmail = "",
+    lockEmail = false,
+    onAuthStart,
+    onSignInInstead,
+    socialProviders = [],
+    socialRedirectTo = "/signup",
+}: {
+    signInHref?: string;
+    /** Prefills the email field. */
+    defaultEmail?: string;
+    /** An invitation only works for its own address, so don't let it drift. */
+    lockEmail?: boolean;
+    /** Runs as sign-up starts, before any navigation (the join intent). */
+    onAuthStart?: () => void;
+    /** Switches the host to its sign-in form instead of linking to /signin. */
+    onSignInInstead?: () => void;
+    /** Offered above the form; a social sign-in creates the account too. */
+    socialProviders?: SocialProvider[];
+    /** Where a social sign-up lands, new account or not. */
+    socialRedirectTo?: string;
+} = {}) {
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(defaultEmail);
     const [password, setPassword] = useState("");
     const [error, setError] = useState<React.ReactNode>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [socialPending, setSocialPending] = useState<SocialProvider | null>(null);
     const passwordHintId = useId();
+    const emailHintId = useId();
+
+    const startSocial = async (provider: SocialProvider) => {
+        setError(null);
+        setSocialPending(provider);
+        onAuthStart?.();
+        const failure = await startSocialSignIn(provider, {
+            callbackURL: socialRedirectTo,
+            newUserCallbackURL: socialRedirectTo,
+            errorCallbackURL: withNext(`/signin?provider=${provider}`, socialRedirectTo),
+        });
+        if (failure) {
+            setError(socialFailureMessage(provider, failure));
+            setSocialPending(null);
+        }
+    };
 
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setIsSubmitting(true);
+        onAuthStart?.();
         const failure = await attempt(hooks =>
             authClient.signUp.email({ name: name.trim(), email: email.trim(), password }, hooks)
         );
@@ -514,9 +602,20 @@ export function SignUpForm({ signInHref = "/signin" }: { signInHref?: string } =
                 failure.status === 422 ? (
                     <>
                         An account with this email already exists.{" "}
-                        <Link href={signInHref} className="text-brand font-semibold">
-                            Sign in instead →
-                        </Link>
+                        {onSignInInstead ? (
+                            <Button
+                                type="button"
+                                variant="link"
+                                className="text-brand h-auto p-0 text-[12.5px] font-semibold"
+                                onClick={onSignInInstead}
+                            >
+                                Sign in instead →
+                            </Button>
+                        ) : (
+                            <Link href={signInHref} className="text-brand font-semibold">
+                                Sign in instead →
+                            </Link>
+                        )}
                     </>
                 ) : failure.status === 0 ? (
                     NETWORK_ERROR
@@ -534,8 +633,9 @@ export function SignUpForm({ signInHref = "/signin" }: { signInHref?: string } =
     };
 
     const longEnough = password.length >= 8;
+    const busy = isSubmitting || socialPending !== null;
 
-    return (
+    const form = (
         <form
             method="post"
             onSubmit={e => void submit(e)}
@@ -561,10 +661,18 @@ export function SignUpForm({ signInHref = "/signin" }: { signInHref?: string } =
                     {...EMAIL_FIELD}
                     autoComplete="email"
                     required
+                    readOnly={lockEmail}
+                    aria-describedby={lockEmail ? emailHintId : undefined}
+                    className={cn(lockEmail && "bg-panel-2 text-ink-2")}
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="you@example.com"
                 />
+                {lockEmail && (
+                    <p id={emailHintId} className="text-ink-3 m-0 text-[11.5px]">
+                        The invitation is for this address.
+                    </p>
+                )}
             </div>
             <div className="flex flex-col gap-1.5">
                 <Label htmlFor="signup-password">Password</Label>
@@ -590,9 +698,23 @@ export function SignUpForm({ signInHref = "/signin" }: { signInHref?: string } =
                 </p>
             </div>
             {error && <ErrorText>{error}</ErrorText>}
-            <SubmitButton pending={isSubmitting}>
+            <SubmitButton pending={isSubmitting} disabled={busy}>
                 {isSubmitting ? "Creating account…" : "Create account"}
             </SubmitButton>
         </form>
+    );
+
+    if (socialProviders.length === 0) return form;
+    return (
+        <div className="flex flex-col gap-4">
+            <SocialButtons
+                providers={socialProviders}
+                pending={socialPending}
+                disabled={busy}
+                lastMethod={null}
+                onStart={provider => void startSocial(provider)}
+            />
+            {form}
+        </div>
     );
 }

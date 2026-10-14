@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
 import {
@@ -12,9 +12,20 @@ import {
 import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
-import { transcriptMarkerOf } from "~/lib/media-document";
+import {
+    hasTranscriptTitle,
+    mediaKindOfMime,
+    mediaKindOfName,
+    transcriptMarkerOf,
+} from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
-import type { SourceCitability, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import type {
+    SourceCitability,
+    SourceIndexStatus,
+    SourceTypeId,
+    WorkspaceFolder,
+    WorkspaceSource,
+} from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
 const FOLDER_PALETTE = [
@@ -71,18 +82,65 @@ function humanDate(raw: unknown): string {
     return d.toLocaleDateString();
 }
 
-function mapDocument(doc: DocumentType & { createdAt?: string }): WorkspaceSource {
+/** Additional fields returned by /api/fetchDocument without changing document previews. */
+type IndexedDocument = DocumentType & {
+    createdAt?: string;
+    creationKey?: string | null;
+    ocrEnabled?: boolean | null;
+    currentVersionId?: number | null;
+    currentVersionOcrProcessed?: boolean | null;
+    currentVersionOcrMetadata?: DocumentType["ocrMetadata"];
+};
+
+function documentOcrState(doc: IndexedDocument) {
+    // Only unversioned legacy rows use document-level processing state. A
+    // missing/queued current version must not inherit an older success or failure.
+    return doc.currentVersionId == null
+        ? { processed: doc.ocrProcessed, metadata: doc.ocrMetadata }
+        : {
+              processed: doc.currentVersionOcrProcessed,
+              metadata: doc.currentVersionOcrMetadata,
+          };
+}
+
+function documentIndexStatus(doc: IndexedDocument): SourceIndexStatus {
+    const { processed, metadata } = documentOcrState(doc);
+    if (processed === true) return "ready";
+    return metadata?.error === "processing_failed" ? "failed" : "processing";
+}
+
+function documentIndexError(doc: IndexedDocument): string | undefined {
+    return documentIndexStatus(doc) === "failed"
+        ? documentOcrState(doc).metadata?.errorMessage
+        : undefined;
+}
+
+export function mapDocument(doc: IndexedDocument): WorkspaceSource {
+    const type = mapDocType(doc);
+    // The recording is stored for playback, never embedded. Its separate
+    // transcript is the searchable source, with its own current-version status.
+    const mediaOriginal =
+        doc.creationKey?.endsWith(":audio-source") === true ||
+        (doc.ocrEnabled === false &&
+            (mediaKindOfMime(doc.mimeType) ??
+                mediaKindOfName(doc.title) ??
+                mediaKindOfName(doc.url)) !== null &&
+            !transcriptMarkerOf(doc.ocrMetadata) &&
+            !hasTranscriptTitle(doc.title));
     return {
         id: `d${doc.id}`,
         documentId: doc.id,
         title: doc.title,
-        type: mapDocType(doc),
+        type,
         size: doc.aiSummary ? "" : "",
         added: humanDate(doc.createdAt) || "",
         folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        citability: mediaOriginal ? "none" : undefined,
+        indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
+        errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
     };
 }
 
@@ -103,7 +161,10 @@ export function mindmapCitability(
  * there is one, so the retrieval layer's citations — which name document ids —
  * resolve to the map rather than to a Markdown copy of it.
  */
-export function mapMindmap(map: MindmapSummary): WorkspaceSource {
+export function mapMindmap(
+    map: MindmapSummary,
+    publishedDocument?: IndexedDocument
+): WorkspaceSource {
     const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
     return {
         id: `m${map.id}`,
@@ -120,6 +181,8 @@ export function mapMindmap(map: MindmapSummary): WorkspaceSource {
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
+        indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
+        errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
     };
 }
 
@@ -152,6 +215,9 @@ interface FolderRow {
     categoryId?: number | null;
 }
 
+// Match the Drive/Gmail sync cadence while source ingestion is still running.
+const SOURCE_POLL_INTERVAL_MS = 3000;
+
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
@@ -159,11 +225,12 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const refreshInFlight = useRef<Promise<void> | null>(null);
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
     const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
 
-    const refresh = useCallback(async () => {
+    const fetchSources = useCallback(async () => {
         if (!userId) return;
         setError(null);
         try {
@@ -205,6 +272,19 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         }
     }, [userId]);
 
+    // Queue explicit refreshes rather than losing a post-upload refresh to an
+    // earlier poll. Poll ticks skip the entire queue while a request is pending.
+    const refresh = useCallback(async () => {
+        const pending = refreshInFlight.current;
+        const request = pending ? pending.then(fetchSources) : fetchSources();
+        refreshInFlight.current = request;
+        try {
+            await request;
+        } finally {
+            if (refreshInFlight.current === request) refreshInFlight.current = null;
+        }
+    }, [fetchSources]);
+
     useEffect(() => {
         if (!userId) return;
         void refresh();
@@ -214,15 +294,51 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         // A published map's Markdown copy is the map, not a second source: it
         // is hidden here and reached through the map's `documentId`.
         const claimed = new Set<number>();
+        const documentsById = new Map<number, DocumentType>();
+        for (const doc of documents) documentsById.set(doc.id, doc);
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
         return [
             ...optimistic,
             ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
-            ...mindmaps.map(mapMindmap),
+            ...mindmaps.map(map =>
+                mapMindmap(
+                    map,
+                    map.publishedDocumentId === null
+                        ? undefined
+                        : documentsById.get(map.publishedDocumentId)
+                )
+            ),
         ];
     }, [documents, mindmaps, optimistic]);
+
+    const hasProcessingSources = sources.some(source => source.indexStatus === "processing");
+
+    useEffect(() => {
+        if (!userId || !hasProcessingSources) return;
+        let timer: number | undefined;
+
+        const stopPolling = () => {
+            window.clearInterval(timer);
+            timer = undefined;
+        };
+        const updatePolling = () => {
+            stopPolling();
+            if (document.visibilityState !== "visible") return;
+            timer = window.setInterval(() => {
+                if (document.visibilityState !== "visible" || refreshInFlight.current) return;
+                void refresh();
+            }, SOURCE_POLL_INTERVAL_MS);
+        };
+
+        updatePolling();
+        document.addEventListener("visibilitychange", updatePolling);
+        return () => {
+            stopPolling();
+            document.removeEventListener("visibilitychange", updatePolling);
+        };
+    }, [userId, hasProcessingSources, refresh]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         // Every folder a source sits in, every folder that exists while empty,

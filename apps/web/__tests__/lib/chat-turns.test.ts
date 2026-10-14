@@ -11,6 +11,30 @@ test("ordinary conversation includes both roles, omits failed answers, and carri
         )
     ).toBe("Imported history\n\nUser: Paris\n\nAssistant: France");
 });
+test("a user turn asked about selected passages carries them into later turns' history", () => {
+    expect(
+        conversationContext([
+            {
+                role: "user",
+                text: "What do they propose?",
+                send: {
+                    passages: [
+                        {
+                            sourceId: "d7",
+                            documentId: 7,
+                            title: "Dense X Retrieval.pdf",
+                            page: 1,
+                            text: "we introduce a novel retrieval unit, proposition",
+                        },
+                    ],
+                },
+            },
+            { role: "assistant", text: "Propositions." },
+        ])
+    ).toBe(
+        'User: [Selected passage from "Dense X Retrieval.pdf · p. 1"]\n"we introduce a novel retrieval unit, proposition"\n\nWhat do they propose?\n\nAssistant: Propositions.'
+    );
+});
 test("history budget keeps recent context and empty conversations have no fabricated history", () => {
     expect(
         conversationContext(

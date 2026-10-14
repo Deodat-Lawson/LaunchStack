@@ -217,13 +217,6 @@ export function isPrincipalType(value: unknown): value is PrincipalType {
     return typeof value === "string" && (PRINCIPAL_TYPES as readonly string[]).includes(value);
 }
 
-export const JOIN_POLICIES = ["approval", "open"] as const;
-export type JoinPolicy = (typeof JOIN_POLICIES)[number];
-
-export function isJoinPolicy(value: unknown): value is JoinPolicy {
-    return typeof value === "string" && (JOIN_POLICIES as readonly string[]).includes(value);
-}
-
 export const FOLDER_VISIBILITIES = ["workspace", "restricted"] as const;
 export type FolderVisibility = (typeof FOLDER_VISIBILITIES)[number];
 

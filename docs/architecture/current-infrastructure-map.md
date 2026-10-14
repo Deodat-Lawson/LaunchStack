@@ -1,20 +1,17 @@
 # Current Infrastructure Code Map
 
-**Status:** Historical inventory (superseded in part — see note below)  
-**Snapshot:** `3dcb60e` (`codex/infrastructure-code-map`)  
-**Reviewed:** 2026-07-24
+**Status:** Current repository inventory  
+**Snapshot:** Working tree (feature-based package layout)  
+**Reviewed:** 2026-10-12
 
-> **⚠️ Snapshot note.** This map predates ADR-003 and ADR-004. Since it was
-> written: the transactional outbox (`pdr_ai_v2_event_outbox`) and
-> `apps/worker` now exist
-> ([ADR-003](./ADR-003-transactional-outbox-and-worker.md)); `sidecar/`,
-> `services/ocr-router`, and `services/ocr-worker` were consolidated into
-> `services/transcription`, `services/adeu-ai-docs-editing`, and
-> `services/document-converter`
-> ([ADR-004](./ADR-004-compute-service-consolidation.md)); and the sidecar
-> `/embed`//`/rerank`//`/extract-entities` contracts described below were
-> confirmed to have **never been implemented** and were removed. Treat the
-> rest of this document as the historical baseline those ADRs changed.
+> **Layout note.** This map follows the feature reorganization (ADR-008,
+> recorded in the [feature-reorganization changeset](../../.changeset/feature-reorganization.md)),
+> the transactional outbox and dedicated worker
+> ([ADR-003](./ADR-003-transactional-outbox-and-worker.md)), and the compute
+> service consolidation
+> ([ADR-004](./ADR-004-compute-service-consolidation.md)). The ADRs record
+> earlier decisions; the package and service paths below describe the current
+> tree.
 
 This document maps what is in the repository today. It distinguishes observed
 runtime wiring from the intended architecture described elsewhere in the repo.
@@ -22,112 +19,147 @@ It is not a proposal to move code.
 
 ## Executive summary
 
-Launchstack is in the middle of a monorepo migration:
+Launchstack is a feature-organized monorepo:
 
-- The pnpm workspace contains one deployable application, `apps/web`, and two
-  TypeScript packages, `packages/core` and `packages/features`.
-- Four additional deployable runtimes live outside that workspace:
-  `services/ocr-router`, `services/ocr-worker`, `sidecar`, and `api/adeu`.
-- Docker Compose adds PostgreSQL/pgvector, SeaweedFS, Inngest, and optionally
-  Docling.
-- The intended dependency direction is sound—web → features → core—but the
-  migration is incomplete. Compatibility shims, direct environment reads, and
-  duplicated or stale service contracts still cross those boundaries.
-- Most product and infrastructure complexity is concentrated in `apps/web`:
-  roughly 106,000 TypeScript/TSX lines, 25 pages, 119 API route handlers, and
-  nine Inngest functions at this snapshot.
+- The pnpm workspace contains three applications (`apps/web`, `apps/worker`,
+  and `apps/landing`), reusable bricks in `packages/`, and one compositions
+  package in `pipelines/`.
+- Three repository-owned compute runtimes live outside that workspace:
+  `services/document-converter`, `services/transcription`, and
+  `services/adeu-ai-docs-editing`.
+- Docker Compose adds PostgreSQL/pgvector, SeaweedFS, Gotenberg, Inngest, and
+  optionally Docling.
+- Applications compose bricks directly or through `@launchstack/pipelines`.
+  Pipelines may import bricks; bricks must never import pipelines.
+  `@launchstack/engine` assembles the engine subsystems with `createEngine`.
+- `apps/web` owns the UI, auth, command acceptance, synchronous reads, and
+  infrastructure configuration. `apps/worker` consumes the transactional
+  outbox and hosts the Inngest functions; `apps/landing` is the public site.
 
-The repository is therefore best understood as a modular monolith with
-auxiliary workers, not as a set of independent application workspaces.
+The product is therefore best understood as a modular monolith supported by
+a durable worker and compute services, with a separate public-site application.
 
 ## Repository map
 
 ```text
 .
 ├── apps/
-│   └── web/                    Next.js host, UI, API/BFF, jobs, adapters
-├── packages/
-│   ├── core/                   Publishable framework-agnostic engine
-│   └── features/               Internal vertical/business capabilities
+│   ├── web/                    Next.js host, UI, API/BFF, composition root
+│   ├── worker/                 Outbox consumer and Inngest serve endpoint
+│   └── landing/                Public marketing site
+├── packages/                   Reusable bricks
+│   ├── runtime/                Host ports, actor context, errors, injected slots
+│   ├── evidence/               Pure company-state and citation logic
+│   ├── store/                  PostgreSQL/Drizzle, credentials, engine migrations
+│   ├── llm/                    Model calls, behavior, embeddings, guardrails
+│   ├── orchestration/          Source lifecycle, outbox, worker tick
+│   ├── conversion/             EvidenceDocument conversion, OCR, transcription
+│   ├── indexing/               Chunking, embedding, entity extraction, graph sync
+│   ├── retrieval/              Hybrid retrieval, reranking, citations
+│   ├── tools/                  Shared capabilities composed by verticals
+│   ├── engine/                 createEngine aggregate
+│   ├── editing/                Adeu tracked-changes client and wire contracts
+│   ├── collab/                 Channels, meetings, signed HTTP protocol
+│   ├── document-conversion-engine/ Gotenberg PDF client
+│   ├── google-drive/           Drive and OAuth client
+│   ├── schema-generator/       Versioned JSON Schema from feature contracts
+│   └── design-tokens/          Private CSS design tokens
+├── pipelines/                  @launchstack/pipelines; 13 vertical compositions
 ├── services/
-│   ├── ocr-router/             Node/Express OCR classification and PDF rendering
-│   └── ocr-worker/             Python/FastAPI proxy to Docling
-├── sidecar/                    Python/FastAPI Adeu + Whisper runtime
-├── api/
-│   └── adeu/                   Standalone Python/Vercel Adeu handler
-├── docker/                     Database and SeaweedFS initialization/config
+│   ├── document-converter/     Node/Express routing, rendering, Docling parsing
+│   ├── transcription/          Python/FastAPI Whisper and yt-dlp
+│   └── adeu-ai-docs-editing/    Python/FastAPI DOCX editing
+├── docker/                     Database, SeaweedFS, and reverse-proxy config
 ├── docker-compose*.yml         Local/self-hosted topology
-├── Dockerfile*                 Web build, migration, and runtime images
-├── .github/workflows/          TypeScript CI, web image publish, core release
+├── scripts/                    CI policy, development, and operations tools
+├── .github/workflows/          Workspace CI, app/worker images, package releases
 └── docs/                       Product, deployment, and operations documentation
 ```
 
-Only `apps/*` and `packages/*` are selected by `pnpm-workspace.yaml`.
-`services/ocr-router` has its own `package.json` and npm install; the Python
-services have independent requirements files.
+`pnpm-workspace.yaml` selects `apps/*`, `packages/*`, and `pipelines`.
+`services/document-converter` has its own `package.json` and locked npm
+install; the Python services have independent requirements files.
 
 ## Deployable applications and services
 
 | Path                  | Runtime               | Responsibility                                                                                            | Main entry point                                       | Current deployment path                                                  |
 | --------------------- | --------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `apps/web`            | Next.js 15 / Node 20  | Browser UI, first-party auth (better-auth), 119 HTTP API handlers, engine composition, storage adapters, nine background jobs | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | Vercel or root `Dockerfile`                                              |
-| `services/ocr-router` | Express / Node 20     | OCR provider routing and PDF page rendering                                                               | `src/server.ts` on `:8002`                             | Its Dockerfile; Compose default stack                                    |
-| `services/ocr-worker` | FastAPI / Python 3.12 | Thin `/parse/docling` and `/parse/marker` façade                                                          | `app/main.py` on `:8001`                               | Its Dockerfile; Compose `ocr` profile                                    |
-| `sidecar`             | FastAPI / Python 3.12 | DOCX redlining through Adeu and local audio/video transcription through Whisper                           | `app/main.py` on `:8000`                               | Its Dockerfile; Compose default stack                                    |
-| `api/adeu`            | Python handler        | Second Adeu/redlining implementation designed for a serverless request shape                              | `index.py`                                             | Intended for Vercel, but not wired by the current `apps/web/vercel.json` |
+| `apps/web`            | Next.js 15 / Node 20  | Browser UI, first-party auth (better-auth), API/BFF, command acceptance, synchronous reads, engine composition | `src/app`, `src/middleware.ts`, `src/server/engine.ts` | `apps/web/Dockerfile`; GHCR image and Compose                            |
+| `apps/worker`         | Node 20 / TypeScript | Durable outbox execution and Inngest functions                                                             | `src/main.ts`, `src/inngest.ts`                         | `apps/worker/Dockerfile`; GHCR image and Compose                         |
+| `apps/landing`        | Next.js 15 / Node 20 | Public landing, pricing, contact, and deployment pages; no engine or database                              | `src/app`                                             | `apps/landing/Dockerfile`; production Compose overlay                    |
+| `services/document-converter` | Express / Node 20 | Provider routing, vision classification, PDF page rendering, and Docling-backed parsing                | `src/server.ts` on `:8002`                             | Its Dockerfile; Compose default stack                                   |
+| `services/transcription` | FastAPI / Python 3.12 | Audio/video transcription through Whisper and yt-dlp                                                  | `app/main.py` on `:8000`                               | Its Dockerfile; default Compose, opt-in in the production overlay        |
+| `services/adeu-ai-docs-editing` | FastAPI / Python 3.12 | Authoritative tracked-changes Word editing and review workflow                                     | `app/main.py` on `:8000` (`:8003` on host)               | Its Dockerfile; Compose default stack                                   |
 
 ### Runtime endpoints
 
 | Runtime                 | Implemented endpoints                                                                                                                                      |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| OCR router              | `GET /health`, `POST /route`, `POST /render-pages`                                                                                                         |
-| OCR worker              | `GET /health`, `POST /parse/docling`, `POST /parse/marker`                                                                                                 |
-| Sidecar                 | `GET /health`, `POST /transcribe`, `POST /download-and-transcribe`, Adeu routes `/read`, `/process-batch`, `/accept-all`, `/apply-edits-markdown`, `/diff` |
-| Adeu serverless handler | Adeu operations multiplexed by the request path                                                                                                            |
+| Document converter      | `GET /health`, `GET /readyz`, `POST /route`, `POST /render-pages`, `POST /convert`                                                                          |
+| Transcription           | `GET /health`, `POST /transcribe`, `POST /download-and-transcribe`                                                                                        |
+| Adeu docs editing       | `GET /health`; `POST /adeu/read`, `/adeu/review-items`, `/adeu/process-batch`, `/adeu/accept-all`, `/adeu/reject-all`, `/adeu/apply-edits-markdown`, `/adeu/diff` |
+| Worker                  | `GET /healthz`, `GET /readyz`, Inngest serve endpoint `/api/inngest`                                                                                        |
 
-There is an important contract mismatch: TypeScript callers also expect the
-sidecar to provide `/embed`, `/rerank`, and `/extract-entities`, but those
-routes are not registered by `sidecar/app/main.py`.
+These compute services do not host embeddings, reranking, or NER. Those
+capabilities resolve independently through `@launchstack/llm`; Gotenberg is
+the separate, off-the-shelf PDF-rendering service.
 
 ## Package boundaries
 
-### `@launchstack/core`
+### `@launchstack/engine`
 
-`packages/core` owns the intended portable engine:
+`packages/engine` is the aggregate, not a re-export-only facade.
+`createEngine(CoreConfig)` assembles the engine subsystems; reusable engine
+work is distributed across feature bricks:
 
-- PostgreSQL/Drizzle client and 55 table declarations
-- storage, job dispatch, credits, and RAG port interfaces
-- ingestion adapters and OCR processing
-- embeddings and provider resolution
-- graph/Neo4j integration
-- guardrails and LLM abstractions
+- `@launchstack/runtime` — host ports, actor context, errors, and injected slots
+- `@launchstack/evidence` — pure company-state logic and stable citation anchors
+- `@launchstack/store` — PostgreSQL/Drizzle, credentials, credits, and engine migrations
+- `@launchstack/llm` — chat routes, model behavior, structured output, embeddings, and guardrails
+- `@launchstack/orchestration` — transactional source acceptance, outbox storage, and worker tick
+- `@launchstack/conversion` — source conversion, OCR, transcription, and archive expansion
+- `@launchstack/indexing` — chunking, embedding, entity extraction, and graph integration
+- `@launchstack/retrieval` — scoped hybrid retrieval, reranking, and citations
 
-`apps/web/src/server/engine.ts` constructs the engine and supplies concrete
-ports for storage, Inngest jobs, credits, and RAG.
+Shared capabilities live in `@launchstack/tools`. Other bricks provide
+tracked-changes editing (`@launchstack/editing`), channels and meetings
+(`@launchstack/collab`), PDF rendering (`@launchstack/document-conversion-engine`),
+Drive/OAuth (`@launchstack/google-drive`), generated wire schemas
+(`@launchstack/schema-generator`), and private CSS tokens
+(`@launchstack/design-tokens`).
 
-The portability boundary is not complete. The package documentation and ESLint
-rules say core reads no environment variables, but ten core source files still
-contain `process.env` fallbacks. The engine also configures several module-level
-slots after construction. Those are migration mechanisms, not the final
-dependency model.
+`apps/web/src/server/engine.ts` builds configuration, registers provider and
+feature slots, and calls `createEngine`. It supplies storage, credits, and
+RAG ports, but no job-dispatch port: ingestion runs through the transactional
+outbox. The worker boots this same composition root.
 
-### `@launchstack/features`
+The engine spine receives injected configuration. ESLint prohibits environment
+reads there except for designated transcription clients; editing and shared
+tools retain environment access. Module-level slots remain part of the
+configuration and HMR lifecycle, not a second composition tier.
 
-`packages/features` contains internal vertical capabilities:
+### `@launchstack/pipelines`
 
-- Adeu client
+`pipelines/` is one package containing 13 vertical compositions:
+
 - client prospector
-- company metadata extraction
-- document ingestion orchestration
+- company metadata
+- connectors
+- distribution
+- email
+- founder weekly review
 - legal templates
-- marketing pipeline
+- marketing
+- proposals
 - repository explainer
+- repository workspace
 - trend search
-- voice/transcription
+- Vantage
 
-`connectors`, `mcp`, `rules-extraction`, and `workflow-generation` are currently
-roadmap scaffolds. Features may read environment variables, but they may not
-import Next.js, React, auth modules, or `apps/web`.
+Pipelines may import bricks and read environment variables, but they may not
+import Next.js, Clerk, React, or `apps/web` through `~/*`. Bricks must not
+import `@launchstack/pipelines`; these tier and framework restrictions live in
+`eslint.config.js`.
 
 ### `apps/web`
 
@@ -137,31 +169,32 @@ Its internal layers are:
 | Area                                    | Responsibility                                                              |
 | --------------------------------------- | --------------------------------------------------------------------------- |
 | `src/app`                               | UI pages, layouts, and HTTP route handlers                                  |
-| `src/server/engine.ts`                  | Core configuration and singleton lifecycle                                  |
-| `src/server/{storage,jobs,credits,rag}` | Host implementations of core ports                                          |
-| `src/server/inngest`                    | Background-function registry and implementations                            |
+| `src/server/engine.ts`                  | Engine configuration and singleton lifecycle                                |
+| `src/server/storage`, `src/server/credits`, `src/server/rag` | Host implementations of injected engine ports                   |
+| `src/server/inngest`                    | Event producers and function implementations registered by the worker        |
 | `src/server/services`                   | Application services for documents/uploads                                  |
 | `src/server/notes`                      | Notes and wiki-link domain logic                                            |
 | `src/lib`                               | Shared browser/server utilities plus transitional legacy implementations    |
 | `src/middleware.ts`                     | Session authentication, role routing, workspace routing, and direct DB lookup |
 
-The compatibility layer remains material: 113 web source files still import
-the legacy `~/server/db` façade, while 154 import `@launchstack/core` directly.
+Hosts import feature bricks and pipeline subpaths directly. The worker
+reuses the web composition root, but owns durable execution; the web app
+accepts commands and performs synchronous reads.
 
 ## Product surface inside `apps/web`
 
-The 25 pages group into these user-facing applications:
+The product routes group into these user-facing applications:
 
 | Route family                               | Product surface                                                                                       |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `/`, `/pricing`, `/contact`, `/deployment` | Public marketing and deployment guidance                                                              |
+| `apps/landing`: `/`, `/pricing`, `/contact`, `/deployment` | Public marketing and deployment guidance; the web app's `/` is an auth/workspace redirect |
 | `/signin`, `/signup`, `/workspaces`        | Identity, registration, and workspace selection                                                       |
 | `/employer/*`                              | The workspace: documents, settings (incl. People and access), statistics, upload, and tools — one app for every role |
 | `/employee/*`                              | Redirects to the `/employer` twin (the separate employee area was removed, ADR-010)                    |
 | `/employer/tools/marketing-pipeline`       | Marketing workflow UI                                                                                 |
 | `/employer/tools/repo-explainer`           | Repository analysis UI                                                                                |
 
-The 119 route handlers group into:
+The HTTP route handlers group into:
 
 - identity, users, companies, memberships (role + status), invitations, join links, groups, custom roles, folder/document grants, the audit log, and workspaces
 - document upload, storage, versions, notes, graph entities, and retrieval
@@ -169,7 +202,7 @@ The 119 route handlers group into:
 - legal document generation and Adeu edits
 - OCR configuration, execution, and benchmarking
 - company metadata, client prospector, trend search, marketing, and repo explainer
-- credits, metrics, health, and Inngest control endpoints
+- credits, metrics, health, and background-job event acceptance
 - voice transcription and speech synthesis
 
 This is a broad BFF/API surface inside one deployable application. Route URLs
@@ -181,66 +214,100 @@ do not need to change in order to reorganize the implementation behind them.
 flowchart LR
   Browser["Browser / API client"] --> Web["apps/web<br/>Next.js host"]
 
-  Web --> Features["@launchstack/features"]
-  Features --> Core["@launchstack/core"]
-  Web --> Core
+  Web --> Pipelines["pipelines/<br/>@launchstack/pipelines"]
+  Worker["apps/worker<br/>outbox + Inngest host"] --> Pipelines
+  Pipelines --> Tools["@launchstack/tools"]
+  Pipelines --> Engine["@launchstack/engine<br/>createEngine(CoreConfig)"]
+  Web --> Engine
+  Worker -->|same getEngine composition root| Engine
+
+  Engine --> Runtime["@launchstack/runtime<br/>injected host ports"]
+  Engine --> Store["@launchstack/store"]
+  Engine --> Llm["@launchstack/llm"]
+  Engine --> Orchestration["@launchstack/orchestration"]
+  Engine --> Conversion["@launchstack/conversion"]
+  Engine --> Indexing["@launchstack/indexing"]
+  Engine --> Retrieval["@launchstack/retrieval"]
+  Tools --> Retrieval
+  Retrieval --> Evidence["@launchstack/evidence"]
 
   Web --> Pg["PostgreSQL + pgvector"]
-  Core --> Pg
-  Web --> Storage["Vercel Blob or S3-compatible storage"]
+  Store --> Pg
+  Web -->|accept source + outbox event| Orchestration
+  Worker -->|claim + advance outbox| Orchestration
+  Orchestration --> Store
+  Web --> Storage["Vercel Blob / S3-compatible / database storage"]
+  Runtime -->|injected storage port| Storage
   Seaweed["SeaweedFS<br/>(local S3)"] -. local .-> Storage
 
   Web -->|emit events| Inngest["Inngest dev/cloud"]
-  Inngest -->|/api/inngest| Web
+  Inngest -->|/api/inngest| Worker
 
-  Core -->|route / render| OcrRouter["OCR router :8002"]
-  Core -->|parse| OcrWorker["OCR worker :8001"]
-  OcrWorker --> Docling["Docling serve :5001"]
-  Core --> CloudOcr["Azure / Datalab / Landing.AI"]
+  Conversion -->|route / render / convert| Converter["services/document-converter<br/>:8002"]
+  Converter -->|parse| Docling["Docling serve :5001<br/>(ocr profile)"]
+  Conversion --> CloudOcr["Azure / Datalab / Landing.AI"]
+  Conversion -->|local transcription provider| Transcription["services/transcription<br/>:8000"]
+  Pipelines --> Editing["@launchstack/editing"]
+  Editing --> Adeu["services/adeu-ai-docs-editing<br/>:8003 host"]
+  Web --> Pdf["@launchstack/document-conversion-engine"]
+  Pdf --> Gotenberg["Gotenberg<br/>:8004 host"]
 
-  Web -->|Adeu + transcription| Sidecar["Sidecar :8000"]
-  Features --> Sidecar
-  Expected["Expected ML contract:<br/>embed / rerank / extract-entities"] -. missing routes .-> Sidecar
-
-  Web -. optional .-> Neo4j["Neo4j"]
-  Web --> ChatResolver["Chat route resolver<br/>default / fast / reasoning / vision"]
-  ChatResolver --> ChatConfig["chat-models.yaml<br/>model ids + declared behavior"]
-  ChatResolver --> Ai["One OpenAI-compatible endpoint (CHAT_BASE_URL)"]
-  Web --> SupportingAi["Independent embeddings / OCR / reranking / transcription / TTS"]
-
-  AdeuFn["api/adeu serverless handler"] -. deployment wiring unresolved .-> Web
+  Indexing -. optional .-> Neo4j["Neo4j"]
+  Llm --> ChatResolver["Chat route resolver<br/>default / fast / reasoning / vision"]
+  ChatResolver -->|selected by CHAT_MODELS_CONFIG| ChatConfig["apps/web/config/<br/>chat-models.yaml / chat-models.azure.yaml<br/>mounted read-only into app + worker"]
+  ChatResolver --> Ai["One OpenAI-compatible endpoint<br/>CHAT_BASE_URL + CHAT_API_KEY"]
+  Llm --> SupportingAi["Independent embeddings / reranking / NER / transcription"]
 ```
 
 ## Background jobs
 
-`apps/web/src/app/api/inngest/route.ts` registers nine functions:
+`apps/worker/src/inngest.ts` registers the non-ingestion functions. Their
+implementations remain in `apps/web/src/server/inngest/functions`:
 
 | Function ID                  | Event                                  |
 | ---------------------------- | -------------------------------------- |
-| `process-document`           | `document/process.requested`           |
 | `trend-search-job`           | `trend-search/run.requested`           |
 | `client-prospector-job`      | `client-prospector/run.requested`      |
-| `extract-company-metadata`   | `company-metadata/extract.requested`   |
 | `predictive-analysis-job`    | `predictive-analysis/run.requested`    |
 | `reindex-company-embeddings` | `company/reindex-embeddings.requested` |
 | `modify-document`            | `document/modify.requested`            |
 | `crawl-website`              | `website/crawl.requested`              |
-| `rehydrate-note-anchors`     | `notes-anchors/rehydrate.requested`    |
+| `google-drive-sync-reconciler` | Cron: `*/15 * * * *`                  |
+| `founder-weekly-review-dispatcher` | `founder-weekly-review/dispatch.requested` |
+| `founder-weekly-review-dispatch-reconciler` | Cron: `*/5 * * * *`        |
+| `founder-weekly-review-generation` | `founder-weekly-review/generation.requested` |
+| `repo-workspace-sync`        | `repo-workspace/sync.requested`        |
+| `repo-workspace-poll-reconciler` | Cron: `*/30 * * * *`                |
+| `repo-explainer-job`         | `repo-explainer/job.requested`         |
+| `google-drive-sync`          | `google-drive/sync.requested`          |
+| `google-drive-sync-cron`     | Cron: `*/15 * * * *`                   |
+| `gmail-sync`                | `gmail/sync.requested`                |
+| `gmail-sync-cron`           | Cron: `7,22,37,52 * * * *`             |
+| `distribution-run`          | `distribution/run.requested`          |
+| `brand-publish-due`          | Cron: `* * * * *`                      |
+| `proposals-run`             | `proposals/run.requested`             |
 
-In development, `pnpm --filter @launchstack/web dev` starts Next.js and an Inngest dev process.
-In Docker, a separate Inngest container calls the same API route. In production,
-Inngest Cloud is expected to call the Vercel deployment.
+Document extraction/indexing, company-state projection, note re-anchoring,
+and note embedding use the PostgreSQL outbox instead of Inngest.
+
+In development, start the web and worker separately with their `dev`
+scripts; `pnpm --filter @launchstack/web inngest:dev` targets the worker's
+`http://localhost:8020/api/inngest`. Docker's Inngest dev container calls
+that same worker endpoint. The production overlay disables the dev server;
+Inngest Cloud can reach the worker through the reverse proxy.
 
 ## Data and tenancy
 
-- Drizzle table declarations live under `packages/core/src/db/schema`.
-- Two migration sets against one database: the engine set
-  (`packages/core/drizzle`, 25 published tables) and the product set
-  (`apps/web/drizzle`, 36 tables owned by the app and the feature verticals).
+- Engine Drizzle declarations live in `packages/store/src/db/schema.ts` and
+  `packages/store/src/db/schema`; product declarations live in
+  `apps/web/src/server/db/schema` and the pipeline verticals.
+- Two migration sets share one database: the engine set
+  (`packages/store/drizzle`) and the product set (`apps/web/drizzle`).
   Product tables reference engine tables; never the reverse, so
-  `@launchstack/core` can be applied standalone by an embedding consumer.
-- The runner and journal check live in `packages/core/scripts` and take
-  `--set=engine|product`.
+  `@launchstack/store` can be applied standalone by an embedding consumer.
+- The runner and journal check live in `packages/store/scripts` and take
+  `--set=engine|product`. `pnpm --filter @launchstack/web db:migrate`
+  applies the engine set first, then the product set.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.
@@ -253,8 +320,17 @@ Inngest Cloud is expected to call the Vercel deployment.
   entities, mentions, and relationships.
 - Chat reaches one OpenAI-compatible endpoint (`CHAT_BASE_URL`) that may serve
   many models. Operators assign models to the `default`, `fast`, `reasoning`,
-  and `vision` routes in `apps/web/config/chat-models.yaml`; application
-  features name a route, never a model id or an endpoint.
+  and `vision` routes in `apps/web/config/chat-models.yaml` or
+  `apps/web/config/chat-models.azure.yaml`, selected by `CHAT_MODELS_CONFIG`;
+  application features name a route, never a model id or an endpoint.
+  Both files map `default` and `vision` to `primary`, `fast` to `fast`, and
+  `reasoning` to `deep`. The default file uses `google/gemini-3.8-flash`;
+  the Azure file uses a `gpt-6-luna` deployment id with the
+  `openai/gpt-6-luna` preset. Model tiers differ by declared reasoning effort.
+  `docker-compose.yml` mounts the whole `apps/web/config/` directory
+  read-only into both app and worker. Compose accepts a config path relative
+  to `apps/web`, and re-roots it for the worker; edit the file and restart
+  both processes to apply a change, without rebuilding images.
 - Model behavior — image input, reasoning mode, native structured output,
   accepted request parameters — is declared per model, never inferred from the
   model id. Specialized routes fail closed rather than substituting a model.
@@ -268,53 +344,52 @@ Inngest Cloud is expected to call the Vercel deployment.
 
 | Mode                 | Components                                                                        | Notes                                                                                                      |
 | -------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Local pnpm           | Next.js + Inngest dev; externally supplied PostgreSQL and optional services       | Fastest web development loop                                                                               |
-| Docker default       | PostgreSQL, migration target, SeaweedFS, sidecar, OCR router, web, Inngest        | The sidecar and OCR router are hard startup dependencies even though documentation calls sidecars optional |
-| Docker `ocr` profile | Default stack + OCR worker + Docling serve                                        | Adds the heavier self-hosted Office/OCR path                                                               |
-| Vercel               | Next.js functions + managed PostgreSQL/storage + Inngest Cloud; sidecars external | Project Root Directory is `apps/web`, where the authoritative `vercel.json` lives                           |
-| Core package release | `@launchstack/core` built and published to npm                                    | Handled by Changesets on `main`                                                                            |
+| Local pnpm           | Separate web, worker, and Inngest dev processes; externally supplied PostgreSQL and optional services | Web `dev` starts only Next.js; worker `dev` supplies durable execution |
+| Docker default       | PostgreSQL, migrations, SeaweedFS, transcription, Adeu editing, document converter, Gotenberg, worker, app, Inngest | Compute dependencies order startup; they do not gate the app's health |
+| Docker `ocr` profile | Default stack + Docling serve                                                     | Enables Docling-backed PDF/Office parsing; text-file ingestion works without it |
+| Docker production    | App/worker GHCR images, database/storage, compute services, landing site, Caddy    | `docker-compose.prod.yml`; local Whisper and Inngest dev are opt-in |
+| Package release      | Publishable bricks and `@launchstack/pipelines` built for Changesets publication  | `release.yml` validates exports and the engine tarball; design tokens and apps are private |
 
-Every environment — local dev, CI, the Docker `migrate` target and the Vercel
-production build — applies schema with the same forward migration command
-(`db:migrate`). `drizzle-kit push` is banned on all deploy paths and enforced by
-`scripts/ci/check-no-push.mjs`. Data backfills are separate, resumable, and never
-run on container boot.
+Local setup, CI, and the Docker `migrate` target use the same forward
+migration runner, applying engine SQL before product SQL. The web
+`db:migrate` script applies both sets. `drizzle-kit push` is banned on
+deploy paths and enforced by `scripts/ci/check-no-push.mjs`. Data backfills
+are separate, resumable, and never run on container boot.
 
 ## CI/CD coverage
 
 | Workflow      | Covered                                                                                       | Not covered                                              |
 | ------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `CI.yml`      | Workspace install, DB schema push, root lint/typecheck, web Jest tests, web build, core build | OCR router build/tests and all Python services           |
-| `docker.yml`  | Root web Dockerfile build and GHCR publish                                                    | Sidecar, OCR router, OCR worker, and Compose integration |
-| `release.yml` | Core package build, pack validation, Changesets publication                                   | Features package and application/service releases        |
+| `CI.yml`      | Forward migrations, workspace lint/typecheck, wire-schema checks, package/web tests, service tests, Compose ingestion smoke, migration gates, web/landing/package builds | Live provider behavior and production configuration |
+| `docker.yml`  | Web migration/runner and worker image builds; GHCR publication; prebuilt web runner smoke on PRs | Compute-service and landing image publication; full Compose integration lives in CI |
+| `release.yml` | Publishable bricks and pipelines build, Node ESM export checks, engine tarball validation, Changesets publication | Private apps, design tokens, and compute-service releases |
 
-Next.js itself has `ignoreBuildErrors` and `ignoreDuringBuilds` enabled, so
-deploy correctness depends on the separate CI workflow being required.
+Next.js builds fail on TypeScript errors. Its per-build lint pass is
+disabled; the separate workspace lint step in CI is the authority.
 
 ## Current sources of confusion and risk
 
 | Finding                                              | Why it matters                                                                                                               |
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Workspace boundary is incomplete                     | Deployable services do not participate in the same install, typecheck, test, or release graph                                |
-| Core still has environment fallbacks                 | The published package's documented portability contract is not yet true for every path                                       |
-| Web contains legacy and new implementations          | Callers can choose multiple DB, RAG, LLM, OCR, and job access paths                                                          |
-| Sidecar implementation and callers disagree          | Configuring sidecar reranking, embeddings, or NER can call endpoints that do not exist                                       |
-| Two Adeu runtimes exist                              | Ownership, behavior parity, authentication, and deployment target are unclear                                                |
-| Existing Vercel dashboard settings are external state | Repository config and docs require root `apps/web`; older projects must be checked for a retained `./` root                 |
-| ~~Database schema ownership is split~~ *(resolved)*   | Core owns schema **and** migrations; every environment applies them with the same `db:migrate`                               |
-| “Optional” services are mandatory in default Compose | Local startup cost and failure modes are larger than the documentation implies                                               |
-| Floating container/dependency versions               | `latest` images and broadly ranged Python packages reduce reproducibility                                                    |
-| API surface is concentrated in one directory         | 119 handlers make ownership, authorization consistency, and testing harder to see                                            |
-| Documentation reflects multiple eras                 | `docs/Architechture`, old `src/*` paths, and incorrect `services/sidecar` references obscure the actual code                 |
+| Services are outside the workspace                   | Recursive pnpm checks exclude them; CI must keep explicit Node/Python service jobs in sync                                  |
+| Configuration slots are process-local               | App and worker must boot through the same configuration authority before touching providers, storage, or the database        |
+| Worker reuses the web composition root               | Durable execution remains coupled to web modules and their transitive environment requirements                               |
+| Chat YAML is cached at startup                       | Mounting live files avoids image rebuilds, but both app and worker need a restart to adopt the same route/model changes        |
+| Chat and non-chat provider configuration is separate  | Embeddings, reranking, NER, OCR, and transcription need their own endpoint/credential configuration, not the chat credential    |
+| Migration ownership spans two ledgers                | Product SQL must follow engine SQL even though both sets use the same PostgreSQL database                                     |
+| Docling parsing is opt-in                            | The converter returns a typed unavailable error without its parse engine; text-file ingestion still works                    |
+| Floating container versions                          | SeaweedFS and Inngest use `latest` images in the default Compose stack, reducing reproducibility                              |
+| API surface is concentrated in the web app            | A broad BFF still requires consistent ownership, authorization, and permission-scoped retrieval                               |
+| Historical records describe earlier layouts          | Read accepted ADRs as decision history; current package boundaries are the feature bricks and pipeline tier                   |
 
 ## What is intentionally not inferred
 
 This inventory does not decide:
 
-- whether the serverless or container Adeu implementation is used in production
-- whether missing sidecar ML endpoints were removed intentionally
-- whether Vercel currently uses repo root or `apps/web` as its configured root
+- which container tags, provider endpoints, and credentials production uses
+- whether production enables local Whisper, Docling, or background Inngest verticals
 - whether every route consistently enforces company/workspace scoping
+- whether every optional integration is configured in a running deployment
 
 Those require production configuration or an explicit product/operations
-decision. The cleanup ADR treats them as early verification tasks.
+decision; the repository topology alone does not establish them.

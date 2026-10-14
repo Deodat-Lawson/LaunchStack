@@ -23,7 +23,11 @@ export async function POST(request: Request) {
             name: body.data.name,
         });
         const response = NextResponse.json(result);
-        setActiveWorkspaceCookie(response, BigInt(result.companyId));
+        // Only a workspace they can use. Pointing the cookie at one they're
+        // still waiting on would strand them on a page that can't load.
+        if (result.status === "active") {
+            setActiveWorkspaceCookie(response, BigInt(result.companyId));
+        }
         return response;
     } catch (error) {
         return workspaceErrorResponse(error, "[signup/join POST]");

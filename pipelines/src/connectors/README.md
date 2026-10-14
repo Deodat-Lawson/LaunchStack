@@ -1,4 +1,4 @@
-# @launchstack/features/connectors
+# @launchstack/pipelines/connectors
 
 Data connectors that register external bodies of knowledge as ingestion
 sources.
@@ -27,7 +27,7 @@ What it picks up:
 walk — so the `.jsonl` transcripts sitting beside it stay out of reach.
 
 ```ts
-import { syncAgentKnowledge } from "@launchstack/features/connectors/agent-knowledge";
+import { syncAgentKnowledge } from "@launchstack/pipelines/connectors/agent-knowledge";
 
 const report = await syncAgentKnowledge({
   projects: [{ dir: "/srv/checkouts/launchstack" }],

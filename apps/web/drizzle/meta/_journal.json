@@ -194,8 +194,15 @@
     {
       "idx": 27,
       "version": "7",
-      "when": 1791679391687,
-      "tag": "20261011004311_brand_channels",
+      "when": 1791678804697,
+      "tag": "20261011003324_per_link_join_approval",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1791939405575,
+      "tag": "20261014005645_brand_channels",
       "breakpoints": true
     }
   ]

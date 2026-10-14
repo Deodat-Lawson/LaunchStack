@@ -7,12 +7,7 @@
  * sentence, which is what the UI shows.
  */
 
-import type {
-    GrantLevel,
-    JoinPolicy,
-    MembershipStatus,
-    PrincipalType,
-} from "~/lib/authz/permissions";
+import type { GrantLevel, MembershipStatus, PrincipalType } from "~/lib/authz/permissions";
 
 export interface Member {
     id: number;
@@ -62,6 +57,16 @@ export interface InvitationPreview {
     email: string;
     expiresAt: string;
     status: InvitationStatus;
+    /** Who sent it, as they appear in that workspace; null if unknown. */
+    invitedBy: string | null;
+}
+
+/** What creating or resending an invitation answers. */
+export interface InvitationSent {
+    invitation: Invitation;
+    acceptUrl: string;
+    /** False when no email provider is configured: the link must be sent by hand. */
+    emailSent: boolean;
 }
 
 export interface JoinLink {
@@ -70,6 +75,10 @@ export interface JoinLink {
     role: string;
     roleName: string;
     isActive: boolean;
+    /** People who use it wait on the pending list instead of joining at once. */
+    requiresApproval: boolean;
+    /** An old 8-character code: guessable, so it always needs approval. Reset to replace it. */
+    legacy: boolean;
     createdAt: string;
     expiresAt: string | null;
     maxUses: number | null;
@@ -124,7 +133,6 @@ export interface AuditQuery {
 }
 
 export interface WorkspaceSettings {
-    joinPolicy: JoinPolicy;
     auditRetentionDays: number | null;
 }
 
@@ -249,17 +257,20 @@ export const peopleApi = {
             }),
     },
     invitations: {
-        list: () => request<{ invitations: Invitation[] }>("/api/workspace/invitations"),
+        list: () =>
+            request<{ invitations: Invitation[]; emailDelivery?: boolean }>(
+                "/api/workspace/invitations"
+            ),
         create: (body: { email: string; role: string; groupIds?: number[] }) =>
-            request<{ invitation: Invitation; acceptUrl: string }>("/api/workspace/invitations", {
+            request<InvitationSent>("/api/workspace/invitations", {
                 method: "POST",
                 body: json(body),
             }),
         resend: (id: number) =>
-            request<{ invitation: Invitation; acceptUrl: string }>(
-                `/api/workspace/invitations/${id}/resend`,
-                { method: "POST", body: "{}" }
-            ),
+            request<InvitationSent>(`/api/workspace/invitations/${id}/resend`, {
+                method: "POST",
+                body: "{}",
+            }),
         revoke: (id: number) =>
             request<{ success: boolean }>(`/api/workspace/invitations/${id}`, {
                 method: "DELETE",
@@ -276,10 +287,25 @@ export const peopleApi = {
     },
     joinLinks: {
         list: () => request<{ links: JoinLink[] }>("/api/workspace/join-links"),
-        create: (body: { role: string; expiresInDays?: number | null; maxUses?: number | null }) =>
+        create: (body: {
+            role: string;
+            expiresInDays?: number | null;
+            maxUses?: number | null;
+            requiresApproval?: boolean;
+        }) =>
             request<{ link: JoinLink }>("/api/workspace/join-links", {
                 method: "POST",
                 body: json(body),
+            }),
+        update: (id: number, body: { role?: string; requiresApproval?: boolean }) =>
+            request<{ link: JoinLink }>(`/api/workspace/join-links/${id}`, {
+                method: "PATCH",
+                body: json(body),
+            }),
+        reset: (id: number) =>
+            request<{ link: JoinLink }>(`/api/workspace/join-links/${id}/reset`, {
+                method: "POST",
+                body: "{}",
             }),
         revoke: (id: number) =>
             request<{ success: boolean }>(`/api/workspace/join-links/${id}`, {

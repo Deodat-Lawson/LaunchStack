@@ -188,6 +188,19 @@ export default async function middleware(req: NextRequest) {
             return;
         }
 
+        // Join links used to be `/signup?code=…`; links already shared still
+        // say that. The join page is where a code is handled now, for anyone,
+        // signed in or not — it keeps the code across sign-in and sign-up,
+        // which the old route lost the moment someone clicked "Sign in".
+        if (pathname === "/signup") {
+            const code = req.nextUrl.searchParams.get("code")?.trim();
+            if (code) {
+                return NextResponse.redirect(
+                    new URL(`/join/${encodeURIComponent(code.toLowerCase())}`, req.url)
+                );
+            }
+        }
+
         // Anonymous visitor at the root. This origin is the product — the
         // public site lives in apps/landing — so the front door is sign-in.
         //
@@ -211,8 +224,6 @@ export default async function middleware(req: NextRequest) {
 
         // Route authenticated users based on their DB role + status
         if (userId && (isAuthRedirectRoute(req) || isProtectedRoute(req))) {
-            const hasCodeParam = pathname === "/signup" && req.nextUrl.searchParams.has("code");
-
             try {
                 const cachedUser = getCachedMiddlewareUser(userId);
                 let existingUser = cachedUser;
@@ -261,9 +272,6 @@ export default async function middleware(req: NextRequest) {
                     if (pathname !== "/signup") {
                         return NextResponse.redirect(new URL("/signup?from=signin", req.url));
                     }
-                } else if (hasCodeParam) {
-                    // Let the signup page handle the "already registered" error
-                    return;
                 } else if (existingUser.activeCount === 0) {
                     // No workspace this person may act in. Awaiting approval
                     // somewhere → the pending page; otherwise the workspace

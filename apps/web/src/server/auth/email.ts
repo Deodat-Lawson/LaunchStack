@@ -15,6 +15,25 @@ type AuthEmail = {
     text: string;
 };
 
-export async function sendAuthEmail(email: AuthEmail): Promise<void> {
+/**
+ * Whether the message actually left the machine. Callers that show a link
+ * (invitations) use it to tell the person to send that link themselves
+ * instead of implying an email is on its way.
+ */
+export interface AuthEmailResult {
+    delivered: boolean;
+}
+
+/**
+ * Whether `sendAuthEmail` can actually deliver — false while only the console
+ * adapter is wired. Screens that would say "Send" or "Resend" ask this first.
+ * Keep it in step with the adapter below.
+ */
+export function authEmailDelivers(): boolean {
+    return false;
+}
+
+export async function sendAuthEmail(email: AuthEmail): Promise<AuthEmailResult> {
     console.info(`[auth-email] (console adapter) → ${email.to}: ${email.subject}\n${email.text}`);
+    return { delivered: false };
 }

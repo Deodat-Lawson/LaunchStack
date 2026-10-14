@@ -25,6 +25,35 @@ const requiredString = () => z.preprocess(normalize, z.string().min(1, "Value is
 
 const optionalString = () => z.preprocess(normalize, z.string().min(1).optional());
 
+/** The literal `.env.example` once shipped; it is public, so it never signs anything. */
+const AUTH_SECRET_PLACEHOLDER = "BETTER_AUTH_SECRET";
+const AUTH_SECRET_MIN_LENGTH = 32;
+const AUTH_SECRET_HINT = "Generate one with: openssl rand -base64 32";
+
+/**
+ * BETTER_AUTH_SECRET signs session cookies and reset tokens. better-auth only
+ * warns on a short or low-entropy secret, so refuse at boot instead: a copied
+ * placeholder would sign every session with a value from the public repo.
+ */
+export const betterAuthSecretSchema = z.preprocess(
+    normalize,
+    z
+        .string({ required_error: `BETTER_AUTH_SECRET is required. ${AUTH_SECRET_HINT}` })
+        .superRefine((value, ctx) => {
+            if (value === AUTH_SECRET_PLACEHOLDER) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: `BETTER_AUTH_SECRET is still the .env.example placeholder. ${AUTH_SECRET_HINT}`,
+                });
+            } else if (value.length < AUTH_SECRET_MIN_LENGTH) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: `BETTER_AUTH_SECRET must be at least ${AUTH_SECRET_MIN_LENGTH} characters. ${AUTH_SECRET_HINT}`,
+                });
+            }
+        })
+);
+
 const serverSchema = z.object({
     // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
     DATABASE_URL: requiredString(),
@@ -61,14 +90,13 @@ const serverSchema = z.object({
     HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
     HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
     HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
-    // Signs session cookies and verification tokens. Generate with:
-    //   openssl rand -base64 32
+    // Signs session cookies and verification tokens (see betterAuthSecretSchema).
     // Rotating it invalidates every live session (users just sign in again).
-    BETTER_AUTH_SECRET: requiredString(),
-    // Public origin of the app (e.g. https://app.example.com). Optional in
-    // dev — better-auth infers http://localhost from the request — but set it
-    // in any deployment behind a proxy so callback URLs and trusted origins
-    // resolve to the outside hostname.
+    BETTER_AUTH_SECRET: betterAuthSecretSchema,
+    // Public origin of the app (e.g. https://app.example.com). Browser sign-up
+    // is refused with "Invalid origin" without it, locally too
+    // (http://localhost:3000); behind a proxy it is the outside hostname, so
+    // callback URLs and trusted origins resolve there.
     BETTER_AUTH_URL: optionalString(),
     // Optional social sign-in. Auth works credentials-only without these;
     // a provider appears on the sign-in page only when both halves are set.

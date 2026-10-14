@@ -1,3 +1,4 @@
+import { isChatPassage, passageLabel } from "~/lib/chat-passages";
 import type { ThreadMessage, ThreadReference, WorkspaceSource } from "./types";
 
 /**
@@ -38,7 +39,7 @@ export function transcriptMarkdown(thread: ThreadMessage[], sources: WorkspaceSo
         if (msg.role === "user") {
             const refs = (msg.refs ?? []).map(titleOf);
             const scope = refs.length ? `\n\n_Asked over: ${refs.join(", ")}_` : "";
-            return `## You\n\n${msg.text}${scope}`;
+            return `## You\n\n${passagesMarkdown(msg)}${msg.text}${scope}`;
         }
         const cites = (msg.citations ?? [])
             .map(c => {
@@ -59,9 +60,16 @@ export function quoteBlock(text: string): string {
     return `${lines.map(line => `> ${line}`).join("\n")}\n\n`;
 }
 
-/** Mark inserted source context so recall can distinguish it from typed Markdown. */
-export function contextQuoteBlock(text: string): string {
-    return `${quoteBlock(text)}[Quoted context](#launchstack-quoted-context)\n\n`;
+/**
+ * The passages a user turn asked about, as attributed Markdown quotes to put
+ * above its text — so a copied or exported question keeps what "this" was.
+ */
+export function passagesMarkdown(msg: Pick<ThreadMessage, "role" | "send">): string {
+    if (msg.role !== "user") return "";
+    return (msg.send?.passages ?? [])
+        .filter(isChatPassage)
+        .map(passage => `${quoteBlock(passage.text)}— ${passageLabel(passage)}\n\n`)
+        .join("");
 }
 
 /** A filename-safe stem for a downloaded transcript. */

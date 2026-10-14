@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -195,6 +195,69 @@ describe("editor shell", () => {
         mountEditor();
         await user.click(screen.getByLabelText("Add page"));
         expect(screen.getByText("Page 2")).toBeInTheDocument();
+    });
+});
+
+describe("keyboard, with every window listener mounted", () => {
+    /** jsdom's PointerEvent is incomplete; build the fields the canvas reads. */
+    const pointer = (type: string, init: PointerEventInit = {}) =>
+        new MouseEvent(type, {
+            bubbles: true,
+            cancelable: true,
+            clientX: 10,
+            clientY: 10,
+            ...init,
+        });
+
+    it("Enter finishes a label, and only the next Enter adds a topic", () => {
+        const doc = buildTemplate("mindmap", "Product plan");
+        const branch = doc.pages[0]!.nodes.find(n => n.text === "Second branch")!;
+        const view = render(
+            <MindmapEditor
+                mindmapId={1}
+                initialDoc={doc}
+                initialTitle="Product plan"
+                initialRevision={1}
+                folder="Unfiled"
+                publishedDocumentId={null}
+                author="Ada Lovelace"
+                initialChrome="focus"
+            />
+        );
+        const topics = () =>
+            new Set(
+                Array.from(view.container.querySelectorAll("[data-node-id]")).map(el =>
+                    el.getAttribute("data-node-id")
+                )
+            ).size;
+        const field = () => view.container.querySelector("textarea[data-mindmap-editor]");
+
+        // Select the branch: press on the shape itself (jsdom does no hit
+        // testing), release on the canvas.
+        const svg = view.container.querySelector("svg")!;
+        act(() => {
+            view.container
+                .querySelector(`[data-node-id="${branch.id}"]`)!
+                .dispatchEvent(pointer("pointerdown", { button: 0, buttons: 1 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", { buttons: 0 }));
+        });
+        const before = topics();
+
+        fireEvent.keyDown(document.body, { key: "Enter" });
+        expect(topics()).toBe(before + 1);
+        expect(document.activeElement).toBe(field());
+
+        fireEvent.change(field()!, { target: { value: "Budget" } });
+        fireEvent.keyDown(field()!, { key: "Enter" });
+        expect(topics()).toBe(before + 1);
+        expect(field()).toBeNull();
+        expect(screen.getAllByText("Budget").length).toBeGreaterThan(0);
+
+        fireEvent.keyDown(document.body, { key: "Enter" });
+        expect(topics()).toBe(before + 2);
+        expect(document.activeElement).toBe(field());
     });
 });
 

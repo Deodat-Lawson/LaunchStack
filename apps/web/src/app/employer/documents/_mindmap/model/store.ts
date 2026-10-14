@@ -65,6 +65,11 @@ export interface TextEditTarget {
     id: string;
     /** Label index for `edge-label`. */
     index?: number;
+    /**
+     * Text the field opens with instead of the node's label. Set when typing
+     * on a selected shape starts the edit: the keystroke replaces the label.
+     */
+    seed?: string;
 }
 
 /**
@@ -158,6 +163,8 @@ export class EditorStore {
     private batchDepth = 0;
     /** A notification was suppressed by a batch and still owes a delivery. */
     private batchPending = false;
+    /** The undo entry `group()` is accumulating; commits inside it push none. */
+    private groupBase: HistoryEntry | null = null;
 
     constructor(doc: MindmapDoc) {
         this.state = {
@@ -221,6 +228,41 @@ export class EditorStore {
                 this.emitNow();
             }
         }
+    }
+
+    /**
+     * Run `fn` as one undo entry, however many commits it makes.
+     *
+     * A structural edit on an auto-arranged map is two writes — the edit, then
+     * the layout pass it triggers — and one ⌘Z should take back both. Nested
+     * groups fold into the outermost; notifications are batched as in `batch`.
+     */
+    group(label: string, fn: () => void): void {
+        if (this.groupBase) {
+            fn();
+            return;
+        }
+        const base: HistoryEntry = {
+            doc: this.state.doc,
+            selection: this.state.selection,
+            label,
+            at: Date.now(),
+        };
+        this.batch(() => {
+            this.groupBase = base;
+            try {
+                fn();
+            } finally {
+                this.groupBase = null;
+                if (this.state.doc !== base.doc) {
+                    this.undoStack.push(base);
+                    if (this.undoStack.length > HISTORY_LIMIT) this.undoStack.shift();
+                    this.redoStack = [];
+                    this.refreshHistoryFlags();
+                    this.emit();
+                }
+            }
+        });
     }
 
     /** Number of live subscribers. Exposed for the performance tests. */
@@ -322,6 +364,11 @@ export class EditorStore {
     // -- history ------------------------------------------------------------
 
     private pushHistory(options: CommitOptions): void {
+        if (this.groupBase) {
+            // The group pushes one entry for all of it when it closes.
+            this.redoStack = [];
+            return;
+        }
         const now = Date.now();
         const top = this.undoStack[this.undoStack.length - 1];
         if (

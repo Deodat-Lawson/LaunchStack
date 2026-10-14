@@ -96,6 +96,59 @@ function mount(props: Partial<React.ComponentProps<typeof AddSourceModal>> = {})
     );
 }
 
+describe("who will see it (ADR-014)", () => {
+    it("says a loose file stays yours until you share it", async () => {
+        mount({ defaultCategory: "Unfiled", initialTab: "paste" });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Only you will see it until you share it."
+        );
+        await settleStatus();
+    });
+
+    it("says a file saved in a folder only you can open stays yours", async () => {
+        mount({
+            defaultCategory: "Strategy",
+            initialTab: "paste",
+            restrictedFolders: ["Strategy"],
+            privateFolders: ["Strategy"],
+        });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Only you will see it until you share it."
+        );
+        await settleStatus();
+    });
+
+    it("says a filed one goes to whoever can open the folder", async () => {
+        mount({ defaultCategory: "Strategy", initialTab: "paste" });
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Visible to everyone who can open Strategy."
+        );
+        await settleStatus();
+    });
+});
+
+describe("creating a folder from the picker", () => {
+    it("files into the folder that was really made when the name was taken", async () => {
+        const user = userEvent.setup();
+        // A folder the person can't see already holds "Board"; the server made "Board (2)".
+        const onCreateFolder = jest.fn(() => Promise.resolve("Board (2)"));
+        mount({ defaultCategory: "Strategy", initialTab: "paste", onCreateFolder });
+        await settleStatus();
+
+        await user.click(screen.getByRole("button", { name: "Strategy" }));
+        await user.type(screen.getByPlaceholderText("Find or create folder…"), "Board");
+        await user.click(screen.getByRole("button", { name: 'Create folder "Board"' }));
+
+        expect(onCreateFolder).toHaveBeenCalledWith("Board");
+        await waitFor(() =>
+            expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+                "Visible to everyone who can open Board (2)."
+            )
+        );
+        expect(screen.getByRole("button", { name: "Board (2)" })).toBeInTheDocument();
+    });
+});
+
 describe("the Create group", () => {
     it("is listed first, before Upload and Connect", () => {
         expect(ADD_TABS[0]?.group).toBe("Create");

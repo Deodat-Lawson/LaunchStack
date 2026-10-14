@@ -166,6 +166,51 @@ describe("transcript metadata for the media viewer", () => {
         );
     });
 
+    it("reports both rows of a media upload as new, and neither on a converged retry", async () => {
+        const upload = () =>
+            processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "standup.mp4",
+                rawDocumentUrl: "https://blob.test/standup.mp4",
+                requestUrl: "https://app.test/upload",
+                category: "Media",
+                mimeType: "video/mp4",
+                originalFilename: "standup.mp4",
+            });
+        mockTranscribeAudioFromUrl.mockResolvedValue({
+            text: "Hello.",
+            language: "en",
+            confidence: 0.9,
+            segments: SEGMENTS,
+        });
+        mockUploadFile.mockResolvedValue({ url: "/api/files/5" });
+
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce({
+                ...lifecycle(12, "standup.mp4", "/api/files/4"),
+                created: true,
+            })
+            .mockResolvedValueOnce({
+                ...lifecycle(13, "standup.mp4 (Transcription)", "/api/files/5"),
+                created: true,
+            });
+        const first = await upload();
+        expect(first.document.id).toBe(12);
+        expect(first.createdDocuments.map(d => d.id)).toEqual([12, 13]);
+
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce({
+                ...lifecycle(12, "standup.mp4", "/api/files/4"),
+                created: false,
+            })
+            .mockResolvedValueOnce({
+                ...lifecycle(13, "standup.mp4 (Transcription)", "/api/files/5"),
+                created: false,
+            });
+        const retry = await upload();
+        expect(retry.createdDocuments).toEqual([]);
+    });
+
     it("keeps a URL import's timestamps beside the page it came from", async () => {
         mockIsVideoUrl.mockReturnValue(true);
         mockTranscribeVideoFromUrl.mockResolvedValue({

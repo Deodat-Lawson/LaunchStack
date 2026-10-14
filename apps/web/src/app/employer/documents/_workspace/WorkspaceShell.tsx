@@ -33,6 +33,7 @@ import { LANDING_URL } from "~/config/landing";
 import {
     UNFILED_FOLDER,
     folderLeafName,
+    folderParentPath,
     isFolderDescendant,
     isFolderOrDescendant,
     joinFolderPath,
@@ -53,7 +54,9 @@ import { deriveRecallPrompt } from "~/lib/chat-turns";
 import { useChatRuntime } from "./useChatRuntime";
 import { backupChatEdit, removeChatEditBackup } from "./chatEditBackup";
 import { ChatQueue } from "./ChatQueue";
-import { AccessDialog, type AccessTarget } from "./access/AccessDialog";
+import { ShareDialog, type ShareTarget } from "./access/ShareDialog";
+import { moveOutcomeMessage } from "./railSections";
+import type { TeamTarget } from "./team/types";
 import { useAgents } from "./collab/useMeetings";
 import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
@@ -73,6 +76,7 @@ import { PaneLauncher } from "./PaneLauncher";
 import { useLayoutPersistence } from "./useLayoutPersistence";
 import * as sessionApi from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
+import { useSharedChatLive } from "./useSharedChatLive";
 import { StudioDrawer } from "./StudioDrawer";
 import { AccountMenu } from "./AccountMenu";
 import { CollapsedRail } from "./CollapsedRail";
@@ -234,6 +238,7 @@ export function WorkspaceShell() {
         sources,
         folders,
         companyId,
+        workspaceName,
         can,
         permissionsLoaded,
         refresh,
@@ -341,7 +346,8 @@ export function WorkspaceShell() {
     const [deleteBusy, setDeleteBusy] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
     /** The folder or document whose access dialog is open. */
-    const [accessTarget, setAccessTarget] = useState<AccessTarget | null>(null);
+    /** What the Share dialog is open for — a folder, a file, or a chat (ADR-014). */
+    const [accessTarget, setAccessTarget] = useState<ShareTarget | null>(null);
     const [studioOpen, setStudioOpen] = useState(false);
     /**
      * Which apps are open, in which pane, and which one each pane shows — and
@@ -646,7 +652,29 @@ export function WorkspaceShell() {
         refresh: refreshHistory,
         renameEntry: renameHistoryEntry,
         removeEntry: removeHistoryEntry,
+        markSeen: markHistorySeen,
     } = history;
+    /**
+     * How I reach each chat I've opened (ADR-014): my own, or someone else's
+     * shared with me to read. Learned from the read; a chat this tab created
+     * is mine and never appears here.
+     */
+    const [chatAccess, setChatAccess] = useState<
+        Record<string, sessionApi.SessionAccess & { hiddenCitations: number }>
+    >({});
+    const chatAccessRef = useRef(chatAccess);
+    chatAccessRef.current = chatAccess;
+    const historyEntriesRef = useRef(history.entries);
+    historyEntriesRef.current = history.entries;
+    /** Someone else's chat — read live, never written to from here. */
+    const isSharedWithMe = useCallback(
+        (id: string) =>
+            chatAccessRef.current[id]?.level === "view" ||
+            historyEntriesRef.current.some(
+                entry => entry.kind === "chat" && entry.refId === id && Boolean(entry.sharedBy)
+            ),
+        []
+    );
 
     useEffect(() => {
         sessionIdRef.current = sessionParam;
@@ -695,19 +723,29 @@ export function WorkspaceShell() {
         setComposerSeed(null);
         setEditingQueued(null);
         hydratedSession.current = sessionParam;
-        if (openChat(sessionParam)) return;
+        // Someone else's chat is read live (ADR-014): always fetch it, never
+        // reopen what this tab cached.
+        if (!isSharedWithMe(sessionParam) && openChat(sessionParam)) return;
         let cancelled = false;
         void (async () => {
             try {
                 const stored = await sessionApi.fetchSession(sessionParam);
                 if (cancelled) return;
                 if (!stored) {
-                    // Deleted here or in another tab. Drop the param rather
-                    // than sitting on a link to nothing.
+                    // Deleted here or in another tab, or no longer shared.
+                    // Drop the param rather than sitting on a link to nothing.
                     hydratedSession.current = null;
                     setSessionParam(null);
                     toast.error("That chat is no longer available");
                     return;
+                }
+                const access = stored.access;
+                if (access) {
+                    setChatAccess(prev => ({
+                        ...prev,
+                        [sessionParam]: { ...access, hiddenCitations: stored.hiddenCitations ?? 0 },
+                    }));
+                    if (access.level === "view") markHistorySeen(sessionParam);
                 }
                 openChat(sessionParam, stored);
                 setContinuation(stored.continuation ?? null);
@@ -721,7 +759,14 @@ export function WorkspaceShell() {
         return () => {
             cancelled = true;
         };
-    }, [sessionParam, setSessionParam, setActiveFeatureId, openChat]);
+    }, [
+        sessionParam,
+        setSessionParam,
+        setActiveFeatureId,
+        openChat,
+        isSharedWithMe,
+        markHistorySeen,
+    ]);
 
     const startNewChat = useCallback(() => {
         setComposerSeed(null);
@@ -768,6 +813,65 @@ export function WorkspaceShell() {
         },
         [removeHistoryEntry, refreshHistory, startNewChat]
     );
+
+    /**
+     * "Continue in a new chat" (ADR-014): the server copies a chat I can read
+     * into a private one of mine — citations already filtered to what I can
+     * open — and the composer moves to it.
+     */
+    const continueInNewChat = useCallback(
+        async (id: string) => {
+            try {
+                const fork = await sessionApi.forkSession(id);
+                // The header's title comes from History: load the copy into it
+                // first, so the new chat never opens as "New chat".
+                await refreshHistory();
+                resumeSession(fork.id);
+                toast.success("Continued in a new chat", {
+                    description: "This copy is yours and private. The original is unchanged.",
+                });
+            } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Couldn't continue that chat");
+            }
+        },
+        [refreshHistory, resumeSession]
+    );
+
+    /** The open chat is someone else's: whose, so the panel can say so; undefined when it's mine. */
+    const openChatAccess = sessionParam ? chatAccess[sessionParam] : undefined;
+    const openChatSharer =
+        openChatAccess?.level === "view"
+            ? openChatAccess.ownerAuthUserId
+            : sessionParam
+              ? history.entries.find(entry => entry.kind === "chat" && entry.refId === sessionParam)
+                    ?.sharedBy
+              : undefined;
+    const readOnlyChatRef = useRef(false);
+    readOnlyChatRef.current = Boolean(openChatSharer);
+
+    useSharedChatLive({
+        sessionId: openChatSharer ? sessionParam : null,
+        shownCount: () => thread.length,
+        onFresh: (id, stored) => {
+            if (sessionIdRef.current !== id) return;
+            setChatAccess(prev =>
+                stored.access
+                    ? {
+                          ...prev,
+                          [id]: { ...stored.access, hiddenCitations: stored.hiddenCitations ?? 0 },
+                      }
+                    : prev
+            );
+            openChat(id, stored);
+            markHistorySeen(id);
+        },
+        onGone: id => {
+            if (sessionIdRef.current !== id) return;
+            toast.info("That chat is no longer shared with you");
+            startNewChat();
+            void refreshHistory();
+        },
+    });
 
     /**
      * Delete a pipeline run — a partner discovery, a trend search, a repo
@@ -1207,10 +1311,17 @@ export function WorkspaceShell() {
             if (!src) return;
             if ((src.folder ?? "Unfiled") === folderName) return;
             try {
-                await sourceApi.moveSource(src, folderName);
+                const moved = await sourceApi.moveSource(src, folderName);
                 await refresh();
+                // Say what the move did to who can see it (ADR-014: a file
+                // private to you takes the folder's audience; Unfiled makes
+                // it yours alone).
+                const leaf = folderLeafName(folderName);
+                toast.success(`Moved to ${leaf}`, {
+                    description: moveOutcomeMessage(moved.access, leaf) ?? undefined,
+                });
             } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to move source");
+                toast.error(err instanceof Error ? err.message : "Couldn't move that");
             }
         },
         [sources, refresh]
@@ -1232,14 +1343,79 @@ export function WorkspaceShell() {
         setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
     }, []);
 
-    // Folder structure needs `folders.manage`, like every other write to the
-    // library. Members see the tree; owners and admins shape it.
-    const canManageFolders = can("folders.manage");
-    const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
+    /**
+     * Open what a notification or an activity row points at. A file that was
+     * just shared is not in the loaded list yet, so the list is refetched once
+     * before giving up on it.
+     */
+    const openTeamTarget = useCallback(
+        async (target: TeamTarget) => {
+            setRailDrawerOpen(false);
+            if (target.type === "chat") {
+                resumeSession(target.id);
+                return;
+            }
+            if (target.type === "folder") {
+                setActiveFolder(target.path);
+                return;
+            }
+            const known = sources.find(s => s.documentId === target.id);
+            if (known) {
+                handleOpenSource(known);
+                return;
+            }
+            // Just shared with me: not in the loaded list yet. The tab opens by
+            // id and fills in once the refetch lands.
+            await refresh();
+            openSourceTab(`d${target.id}`);
+        },
+        [sources, refresh, handleOpenSource, openSourceTab, resumeSession]
+    );
 
-    /** One call for every folder mutation; resolves to an error message or null. */
+    const shareTeamTarget = useCallback((target: TeamTarget & { name: string }) => {
+        if (target.type === "chat")
+            setAccessTarget({ kind: "chat", id: target.id, name: target.name });
+        else if (target.type === "folder")
+            setAccessTarget({
+                kind: "folder",
+                path: target.path,
+                name: displayFolderPath(target.path),
+            });
+        else setAccessTarget({ kind: "document", id: target.id, name: target.name });
+    }, []);
+
+    const teamRail = useMemo(
+        () => ({
+            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            onShare: shareTeamTarget,
+        }),
+        [openTeamTarget, shareTeamTarget]
+    );
+
+    // ADR-014: anyone who can add sources can make a folder (a new top-level
+    // one is private to them). Renaming, moving or deleting one is per folder
+    // — its `access.canManage` — and filing a file needs edit on the file and
+    // on the folder; the rail checks both per row.
+    const canAddFolders = can("documents.upload");
+    const canFileSources = can("documents.edit");
+    const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
+    /** Where an upload may land: folders the caller can add to (and Unfiled). */
+    const uploadFolderPaths = useMemo(
+        () => folders.filter(f => f.access?.canEdit !== false).map(f => f.name),
+        [folders]
+    );
+
+    /**
+     * One call for every folder mutation; resolves to an error message or null.
+     * `onData` sees the response body on success (a create's real path, a
+     * move's effect on who can see it).
+     */
     const folderRequest = useCallback(
-        async (method: "POST" | "PATCH" | "DELETE", body: Record<string, string>) => {
+        async (
+            method: "POST" | "PATCH" | "DELETE",
+            body: Record<string, string>,
+            onData?: (data: Record<string, unknown>) => void
+        ) => {
             try {
                 const res = await fetch("/api/folders", {
                     method,
@@ -1249,10 +1425,12 @@ export function WorkspaceShell() {
                 const json = (await res.json().catch(() => ({}))) as {
                     success?: boolean;
                     message?: string;
+                    data?: Record<string, unknown>;
                 };
                 if (!res.ok || !json.success) {
                     return json.message ?? `Request failed (${res.status})`;
                 }
+                onData?.(json.data ?? {});
                 await refresh();
                 return null;
             } catch (err) {
@@ -1262,14 +1440,53 @@ export function WorkspaceShell() {
         [refresh]
     );
 
-    const handleCreateFolder = useCallback(
-        (path: string) => folderRequest("POST", { path }),
+    /**
+     * Create a folder and resolve to the path it really got: a name already
+     * held by a folder you can't see comes back as "Name (2)" (ADR-014), and
+     * the person is told why.
+     */
+    const createFolderAt = useCallback(
+        async (path: string): Promise<{ failure: string | null; path: string }> => {
+            let actual = path;
+            const failure = await folderRequest("POST", { path }, data => {
+                if (typeof data.renamedTo === "string" && data.renamedTo) {
+                    actual = data.renamedTo;
+                    toast.info(`Created “${folderLeafName(actual)}”`, {
+                        description: `This workspace already has a folder called “${folderLeafName(path)}”.`,
+                    });
+                }
+            });
+            return { failure, path: actual };
+        },
         [folderRequest]
+    );
+
+    const handleCreateFolder = useCallback(
+        async (path: string) => (await createFolderAt(path)).failure,
+        [createFolderAt]
     );
 
     const handleRenameFolder = useCallback(
         async (path: string, newPath: string) => {
-            const failure = await folderRequest("PATCH", { path, newPath });
+            let access: unknown = null;
+            const failure = await folderRequest("PATCH", { path, newPath }, data => {
+                access = data.access;
+            });
+            // A move that changed (or deliberately kept) who can see it says so.
+            if (!failure && folderParentPath(path) !== folderParentPath(newPath)) {
+                const leaf = folderLeafName(newPath);
+                const where = folderParentPath(newPath);
+                const description =
+                    access === "kept_audience" || access === "inherits_folder"
+                        ? moveOutcomeMessage(access, where ? folderLeafName(where) : leaf)
+                        : null;
+                toast.success(
+                    where ? `Moved to ${folderLeafName(where)}` : `Moved ${leaf} to the top level`,
+                    {
+                        description: description ?? undefined,
+                    }
+                );
+            }
             if (!failure && activeFolder && isFolderOrDescendant(activeFolder, path)) {
                 setActiveFolder(replaceFolderPrefix(activeFolder, path, newPath));
             }
@@ -1731,7 +1948,8 @@ export function WorkspaceShell() {
             label: "Ask again",
             icon: "retry",
             order: 10,
-            appliesTo: target => target.kind === "chat-message",
+            // Someone else's chat is read-only here; it is continued as a fork.
+            appliesTo: target => target.kind === "chat-message" && !readOnlyChatRef.current,
             disabled: () => (isSending ? "Wait for the current answer." : false),
             run: target => void askAgain((target.data as { index: number }).index),
         },
@@ -1741,7 +1959,8 @@ export function WorkspaceShell() {
             icon: "branch",
             order: 11,
             appliesTo: target =>
-                target.kind === "chat-message" || target.kind === "chat-user-message",
+                (target.kind === "chat-message" || target.kind === "chat-user-message") &&
+                !readOnlyChatRef.current,
             run: target => branchFrom((target.data as { index: number }).index),
         },
         {
@@ -1895,7 +2114,14 @@ export function WorkspaceShell() {
             // same window; while it is focused, its map wins. The column
             // verbs are the exception: they move between columns and close
             // this one, so the editor must not be able to trap someone in it.
-            if (editingRef.current && !command.id.startsWith("pane.")) return;
+            // "Focused" is the editor's own test (`isActive` in
+            // MindmapEditor): with the focus in the tab strip it lets go of
+            // every key, so they are the workspace's again. Closing a tab
+            // leaves the focus on the tab that took its place, and when that
+            // was the editor's, ⌘K went to neither palette.
+            const editorHasKeys =
+                editingRef.current && !document.activeElement?.closest("[data-studio-tab-strip]");
+            if (editorHasKeys && !command.id.startsWith("pane.")) return;
             e.preventDefault();
             switch (command.id) {
                 case "palette.toggle":
@@ -1947,6 +2173,54 @@ export function WorkspaceShell() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
+    /** The History tab's props — one object for the docked rail and the drawer. */
+    const historyRail = useMemo(
+        () => ({
+            entries: history.entries,
+            loading: history.loading,
+            error: history.error,
+            degraded: history.degraded,
+            activeSessionId: sessionParam,
+            onNewChat: startNewChat,
+            onResumeSession: resumeSession,
+            onOpenRun: (entry: HistoryEntry) => {
+                if (entry.href) navigateStudio(entry.href);
+            },
+            onRenameSession: handleRenameSession,
+            onDeleteSession: handleDeleteSession,
+            onDeleteRun: handleDeleteRun,
+            onRefresh: () => void refreshHistory(),
+            onSetPinned: history.setPinned,
+            onSetArchived: history.setArchived,
+            onReorderPins: history.reorderPins,
+            onShareSession: (entry: HistoryEntry) =>
+                setAccessTarget({ kind: "chat", id: entry.refId, name: entry.title }),
+            onContinueSession: (entry: HistoryEntry) => void continueInNewChat(entry.refId),
+            archived: history.archived,
+            onArchivedOpenChange: history.setArchivedOpen,
+        }),
+        [
+            history.entries,
+            history.loading,
+            history.error,
+            history.degraded,
+            history.setPinned,
+            history.setArchived,
+            history.reorderPins,
+            history.archived,
+            history.setArchivedOpen,
+            sessionParam,
+            startNewChat,
+            resumeSession,
+            navigateStudio,
+            handleRenameSession,
+            handleDeleteSession,
+            handleDeleteRun,
+            refreshHistory,
+            continueInNewChat,
+        ]
+    );
+
     if (!isLoaded) return <LoadingPage label="Opening your workspace…" />;
     if (!isSignedIn) return <LoadingPage label="Opening your workspace…" />;
 
@@ -1992,6 +2266,12 @@ export function WorkspaceShell() {
                     <SheetContent
                         side="left"
                         className="w-auto max-w-[85vw] gap-0 p-0 sm:max-w-[85vw] [&>button:last-child]:hidden"
+                        // A row's menu is portaled outside the drawer; pressing
+                        // in it is not "outside" — the drawer stays open and
+                        // the menu item runs.
+                        onInteractOutside={e => {
+                            if (isInsideActionMenu(e.target)) e.preventDefault();
+                        }}
                     >
                         <SheetTitle className="sr-only">Sources</SheetTitle>
                         <SourceRail
@@ -2014,7 +2294,7 @@ export function WorkspaceShell() {
                                 openSourceBeside(source);
                             }}
                             onNewFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? parentPath =>
                                           setFolderDialog({
                                               mode: "create",
@@ -2023,18 +2303,18 @@ export function WorkspaceShell() {
                                     : undefined
                             }
                             onRenameFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? folder =>
                                           setFolderDialog({ mode: "rename", path: folder.name })
                                     : undefined
                             }
                             onMoveFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? (path, target) => void handleMoveFolder(path, target)
                                     : undefined
                             }
                             onDeleteFolder={
-                                canManageFolders
+                                canAddFolders
                                     ? folder => setDeleteFolderPath(folder.name)
                                     : undefined
                             }
@@ -2048,7 +2328,7 @@ export function WorkspaceShell() {
                                 openAdd();
                             }}
                             onMoveToFolder={
-                                canManageFolders
+                                canFileSources
                                     ? (id, name) => void handleMoveToFolder(id, name)
                                     : undefined
                             }
@@ -2059,22 +2339,11 @@ export function WorkspaceShell() {
                             onClose={() =>
                                 compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                             }
-                            history={{
-                                entries: history.entries,
-                                loading: history.loading,
-                                error: history.error,
-                                degraded: history.degraded,
-                                activeSessionId: sessionParam,
-                                onNewChat: startNewChat,
-                                onResumeSession: resumeSession,
-                                onOpenRun: entry => {
-                                    if (entry.href) navigateStudio(entry.href);
-                                },
-                                onRenameSession: handleRenameSession,
-                                onDeleteSession: handleDeleteSession,
-                                onDeleteRun: handleDeleteRun,
-                                onRefresh: () => void refreshHistory(),
-                            }}
+                            team={teamRail}
+                            workspaceName={workspaceName}
+                            selfAuthId={userId ?? null}
+                            history={historyRail}
+                            loading={sourcesLoading}
                         />
                     </SheetContent>
                 </Sheet>
@@ -2101,7 +2370,7 @@ export function WorkspaceShell() {
                             openSourceBeside(source);
                         }}
                         onNewFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? parentPath =>
                                       setFolderDialog({
                                           mode: "create",
@@ -2110,19 +2379,17 @@ export function WorkspaceShell() {
                                 : undefined
                         }
                         onRenameFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? folder => setFolderDialog({ mode: "rename", path: folder.name })
                                 : undefined
                         }
                         onMoveFolder={
-                            canManageFolders
+                            canAddFolders
                                 ? (path, target) => void handleMoveFolder(path, target)
                                 : undefined
                         }
                         onDeleteFolder={
-                            canManageFolders
-                                ? folder => setDeleteFolderPath(folder.name)
-                                : undefined
+                            canAddFolders ? folder => setDeleteFolderPath(folder.name) : undefined
                         }
                         onShareFolder={openFolderAccess}
                         onRestrictAccess={openDocumentAccess}
@@ -2134,7 +2401,7 @@ export function WorkspaceShell() {
                             openAdd();
                         }}
                         onMoveToFolder={
-                            canManageFolders
+                            canFileSources
                                 ? (id, name) => void handleMoveToFolder(id, name)
                                 : undefined
                         }
@@ -2145,22 +2412,11 @@ export function WorkspaceShell() {
                         onClose={() =>
                             compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                         }
-                        history={{
-                            entries: history.entries,
-                            loading: history.loading,
-                            error: history.error,
-                            degraded: history.degraded,
-                            activeSessionId: sessionParam,
-                            onNewChat: startNewChat,
-                            onResumeSession: resumeSession,
-                            onOpenRun: entry => {
-                                if (entry.href) navigateStudio(entry.href);
-                            },
-                            onRenameSession: handleRenameSession,
-                            onDeleteSession: handleDeleteSession,
-                            onDeleteRun: handleDeleteRun,
-                            onRefresh: () => void refreshHistory(),
-                        }}
+                        team={teamRail}
+                        workspaceName={workspaceName}
+                        selfAuthId={userId ?? null}
+                        history={historyRail}
+                        loading={sourcesLoading}
                     />
                     <RailResizeHandle
                         width={railWidth.width}
@@ -2311,14 +2567,40 @@ export function WorkspaceShell() {
                                     onSendNow={id => void chatRuntime.sendNow(id)}
                                 />
                             }
-                            onRetryMessage={index => void askAgain(index)}
-                            onEditMessage={index => void editFromHere(index)}
+                            onRetryMessage={
+                                openChatSharer ? undefined : index => void askAgain(index)
+                            }
+                            onEditMessage={
+                                openChatSharer ? undefined : index => void editFromHere(index)
+                            }
                             onOpenParentChat={
                                 thread[0]?.forkedFromSessionId
                                     ? () => resumeSession(thread[0]!.forkedFromSessionId!)
                                     : undefined
                             }
-                            onForkMessage={branchFrom}
+                            onForkMessage={openChatSharer ? undefined : branchFrom}
+                            readOnly={
+                                openChatSharer && sessionParam
+                                    ? {
+                                          ownerAuthUserId: openChatSharer,
+                                          hiddenCitations: openChatAccess?.hiddenCitations ?? 0,
+                                          onContinue: () => continueInNewChat(sessionParam),
+                                      }
+                                    : undefined
+                            }
+                            onShare={
+                                sessionParam && !openChatSharer
+                                    ? () =>
+                                          setAccessTarget({
+                                              kind: "chat",
+                                              id: sessionParam,
+                                              name:
+                                                  history.entries.find(
+                                                      entry => entry.refId === sessionParam
+                                                  )?.title ?? "This chat",
+                                          })
+                                    : undefined
+                            }
                             onSaveMessage={index => {
                                 const message = thread[index];
                                 if (message) void saveAnswerAsNote(message.text);
@@ -2337,11 +2619,12 @@ export function WorkspaceShell() {
                                 });
                             }}
                             title={
-                                history.entries.find(entry => entry.refId === sessionParam)
-                                    ?.title ?? "New chat"
+                                [...history.entries, ...history.archived.entries].find(
+                                    entry => entry.refId === sessionParam
+                                )?.title ?? "New chat"
                             }
                             onRename={
-                                sessionParam
+                                sessionParam && !openChatSharer
                                     ? title => handleRenameSession(sessionParam, title)
                                     : undefined
                             }
@@ -2499,18 +2782,26 @@ export function WorkspaceShell() {
                     setAddFolder(null);
                 }}
                 userId={userId ?? null}
-                defaultCategory={addFolder ?? activeFolder ?? UNFILED_FOLDER}
-                folders={folderPaths}
+                defaultCategory={
+                    [addFolder, activeFolder].find(
+                        (path): path is string => !!path && uploadFolderPaths.includes(path)
+                    ) ?? UNFILED_FOLDER
+                }
+                folders={uploadFolderPaths}
                 onCreateFolder={
-                    canManageFolders
-                        ? path => {
-                              void handleCreateFolder(path).then(failure => {
-                                  if (failure) toast.error(failure);
-                              });
+                    canAddFolders
+                        ? async path => {
+                              const made = await createFolderAt(path);
+                              if (made.failure) toast.error(made.failure);
+                              // The picker selects the folder that was really made.
+                              return made.failure ? null : made.path;
                           }
                         : undefined
                 }
                 restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
+                privateFolders={folders
+                    .filter(f => f.access?.audience === "private")
+                    .map(f => f.name)}
                 onUploaded={() => {
                     void refresh();
                 }}
@@ -2608,12 +2899,24 @@ export function WorkspaceShell() {
                 }}
             />
 
-            <AccessDialog
+            <ShareDialog
                 target={accessTarget}
                 onClose={() => setAccessTarget(null)}
-                onSaved={() => void refresh()}
+                onSaved={() => {
+                    void refresh();
+                    void refreshHistory();
+                }}
+                selfAuthId={userId ?? null}
             />
         </div>
+    );
+}
+
+/** True for anything inside an open context menu or its backdrop (both portaled to <body>). */
+function isInsideActionMenu(target: EventTarget | null): boolean {
+    return (
+        target instanceof Element &&
+        Boolean(target.closest('[data-testid="context-menu-backdrop"], [role="menu"]'))
     );
 }
 

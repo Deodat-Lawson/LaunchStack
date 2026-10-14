@@ -60,7 +60,19 @@ export async function renameSource(source: WorkspaceSource, title: string): Prom
     throw new Error("This source is still being added");
 }
 
-export async function moveSource(source: WorkspaceSource, folder: string): Promise<void> {
+/** What a move did to a file's own audience (ADR-014's Drive rule), when the server says. */
+export type MoveAccessOutcome = "inherits_folder" | "made_private" | "unchanged";
+
+export interface MoveOutcome {
+    /**
+     * `inherits_folder` — now visible to whoever can open the new folder;
+     * `made_private` — filed loose, so only you; `unchanged` — it keeps its
+     * own audience. Absent for mindmaps, whose route does not report it.
+     */
+    access?: MoveAccessOutcome;
+}
+
+export async function moveSource(source: WorkspaceSource, folder: string): Promise<MoveOutcome> {
     const kind = sourceKind(source);
     if (kind === "mindmap") {
         const res = await fetch(`/api/mindmaps/${source.mindmapId}`, {
@@ -69,7 +81,7 @@ export async function moveSource(source: WorkspaceSource, folder: string): Promi
             body: JSON.stringify({ folder }),
         });
         if (!res.ok) throw await readError(res, "Failed to move mindmap");
-        return;
+        return {};
     }
     if (kind === "document") {
         const res = await fetch(`/api/documents/${source.documentId}`, {
@@ -78,7 +90,10 @@ export async function moveSource(source: WorkspaceSource, folder: string): Promi
             body: JSON.stringify({ category: folder }),
         });
         if (!res.ok) throw await readError(res, "Failed to move document");
-        return;
+        const body = (await res.json().catch(() => ({}))) as {
+            move?: { access?: MoveAccessOutcome };
+        };
+        return { access: body.move?.access };
     }
     throw new Error("This source is still being added");
 }

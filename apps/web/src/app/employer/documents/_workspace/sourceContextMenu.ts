@@ -32,9 +32,28 @@ export interface SourceMenuHandlers {
     onShowInKnowledge?: (source: WorkspaceSource) => void;
     /** Pick the source up, to drop it on a folder with "Paste". */
     onCut?: (source: WorkspaceSource) => void;
-    /** Opens the access dialog: who, beyond the folder's audience, may see this document. */
+    /** "Share…" — opens the Share dialog: who can open this file, and at what level. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDelete?: (source: WorkspaceSource) => void;
+}
+
+/** Why a change is refused for a file the caller can open but not edit (ADR-014). */
+export const VIEW_ONLY_REASON = "You can view this file but not change it.";
+/** Why a folder is not offered as a destination. */
+export const FOLDER_LOCKED_REASON = "You can't add files to this folder.";
+
+/** May the caller rename, move or delete it? Unknown (no access reported) reads as yes; the server decides. */
+export function canChangeSource(source: WorkspaceSource): boolean {
+    return source.access?.canEdit !== false;
+}
+
+/** Why a file the caller can edit still can't be deleted by them. */
+export const DELETE_RESERVED_REASON =
+    "Only the person who added this file, or someone who manages it, can delete it.";
+
+/** May the caller delete it? Unknown reads as yes; the server decides. */
+export function canDeleteSource(source: WorkspaceSource): boolean {
+    return canChangeSource(source) && source.access?.canDelete !== false;
 }
 
 export function isPersistedSource(source: WorkspaceSource): boolean {
@@ -54,6 +73,10 @@ export function buildSourceMenuItems(
 ): SourceContextMenuItem[] {
     const persisted = isPersistedSource(source);
     const indexingReason = "This source is still being indexed.";
+    const editable = canChangeSource(source);
+    /** Rename, move, cut and delete: the file must exist and the caller must be able to edit it. */
+    const changeBlocked = !persisted || !editable;
+    const changeReason = !persisted ? indexingReason : !editable ? VIEW_ONLY_REASON : undefined;
     const inContext = selected.includes(source.id);
     const currentFolder = source.folder?.trim() || "Unfiled";
     const items: SourceContextMenuItem[] = [{ type: "label", id: "title", label: source.title }];
@@ -120,28 +143,31 @@ export function buildSourceMenuItems(
             id: "rename",
             label: "Rename…",
             icon: "rename",
-            disabled: !persisted,
-            disabledReason: persisted ? undefined : indexingReason,
+            disabled: changeBlocked,
+            disabledReason: changeReason,
             onSelect: () => handlers.onRename?.(source),
         });
     }
 
     if (handlers.onMoveToFolder) {
         const folderNames = uniqueFolderNames(folders, currentFolder);
+        const locked = lockedFolders(folders);
         items.push({
             type: "submenu",
             id: "move",
             label: "Move to folder",
             icon: "folder",
-            disabled: !persisted,
-            disabledReason: persisted ? undefined : indexingReason,
+            disabled: changeBlocked,
+            disabledReason: changeReason,
             items: folderNames.map(name => ({
                 type: "item" as const,
                 id: `move-${name}`,
                 label: displayFolderPath(name),
                 icon: name === currentFolder ? "check" : undefined,
                 checked: name === currentFolder,
-                disabled: name === currentFolder,
+                disabled: name === currentFolder || locked.has(name),
+                disabledReason:
+                    name !== currentFolder && locked.has(name) ? FOLDER_LOCKED_REASON : undefined,
                 onSelect: () => handlers.onMoveToFolder?.(source.id, name),
             })),
         });
@@ -154,8 +180,8 @@ export function buildSourceMenuItems(
             label: "Cut",
             icon: "cut",
             shortcut: "⌘X",
-            disabled: !persisted,
-            disabledReason: persisted ? undefined : indexingReason,
+            disabled: changeBlocked,
+            disabledReason: changeReason,
             onSelect: () => handlers.onCut?.(source),
         });
     }
@@ -184,8 +210,8 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "access",
-            label: source.restricted ? "Change access…" : "Restrict access…",
-            icon: "lock",
+            label: "Share…",
+            icon: "share",
             disabled: !persisted,
             disabledReason: persisted ? undefined : indexingReason,
             onSelect: () => handlers.onRestrictAccess?.(source),
@@ -200,8 +226,9 @@ export function buildSourceMenuItems(
             label: "Delete…",
             icon: "delete",
             danger: true,
-            disabled: !persisted,
-            disabledReason: persisted ? undefined : indexingReason,
+            disabled: changeBlocked || !canDeleteSource(source),
+            disabledReason:
+                changeReason ?? (canDeleteSource(source) ? undefined : DELETE_RESERVED_REASON),
             onSelect: () => handlers.onDelete?.(source),
         });
     }
@@ -223,7 +250,7 @@ export interface FolderMenuHandlers {
     /** Whether every folder in the subtree is folded already. */
     allCollapsed?: boolean;
     onRename?: () => void;
-    /** Opens the folder access dialog: everyone in the workspace, or only people added. */
+    /** "Share…" — the Share dialog: who can open this folder and everything in it. */
     onShare?: () => void;
     /** Move the folder under `targetParent`; null means the top level. */
     onMove?: (targetParent: string | null) => void;
@@ -338,7 +365,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "share-folder",
-            label: "Share folder…",
+            label: "Share…",
             icon: "share",
             onSelect: () => handlers.onShare?.(),
         });
@@ -429,12 +456,18 @@ export function buildSelectionMenuItems(
 ): SourceContextMenuItem[] {
     const count = sources.length;
     const noun = count === 1 ? "source" : "sources";
-    const persisted = sources.filter(isPersistedSource);
+    // What the verbs below act on: rows that exist and that the caller may change.
+    const persisted = sources.filter(s => isPersistedSource(s) && canChangeSource(s));
     const pending = count - persisted.length;
+    const viewOnly = sources.filter(s => isPersistedSource(s) && !canChangeSource(s)).length;
     const pendingReason =
-        pending === count
-            ? "These sources are still being indexed."
-            : `${pending} of these ${pending === 1 ? "is" : "are"} still being indexed and will be skipped.`;
+        viewOnly > 0
+            ? pending === count
+                ? "You can view these but not change them."
+                : `You can view ${viewOnly} of these but not change ${viewOnly === 1 ? "it" : "them"}; ${viewOnly === 1 ? "it" : "they"} will be skipped.`
+            : pending === count
+              ? "These sources are still being indexed."
+              : `${pending} of these ${pending === 1 ? "is" : "are"} still being indexed and will be skipped.`;
     const folderOf = (source: WorkspaceSource) => source.folder?.trim() || "Unfiled";
     const sharedFolder = sources.every(s => folderOf(s) === folderOf(sources[0]!))
         ? folderOf(sources[0]!)
@@ -456,6 +489,7 @@ export function buildSelectionMenuItems(
 
     if (handlers.onMoveToFolder) {
         const folderNames = uniqueFolderNames(folders, sharedFolder ?? "Unfiled");
+        const locked = lockedFolders(folders);
         items.push({
             type: "submenu",
             id: "move",
@@ -469,7 +503,9 @@ export function buildSelectionMenuItems(
                 label: displayFolderPath(name),
                 icon: name === sharedFolder ? "check" : undefined,
                 checked: name === sharedFolder,
-                disabled: name === sharedFolder,
+                disabled: name === sharedFolder || locked.has(name),
+                disabledReason:
+                    name !== sharedFolder && locked.has(name) ? FOLDER_LOCKED_REASON : undefined,
                 onSelect: () =>
                     handlers.onMoveToFolder?.(
                         persisted.map(s => s.id),
@@ -487,13 +523,24 @@ export function buildSelectionMenuItems(
             label: `Delete ${persisted.length === count ? count : `${persisted.length} of ${count}`} ${noun}…`,
             icon: "delete",
             danger: true,
-            disabled: persisted.length === 0,
-            disabledReason: persisted.length === 0 ? pendingReason : undefined,
+            // The server refuses a batch with one file the caller may not delete.
+            disabled: persisted.length === 0 || !persisted.every(canDeleteSource),
+            disabledReason:
+                persisted.length === 0
+                    ? pendingReason
+                    : persisted.every(canDeleteSource)
+                      ? undefined
+                      : DELETE_RESERVED_REASON,
             onSelect: () => handlers.onDelete?.(persisted),
         });
     }
 
     return items;
+}
+
+/** Folders the caller may not add files to — a move into one would be refused. */
+function lockedFolders(folders: WorkspaceFolder[]): Set<string> {
+    return new Set(folders.filter(f => f.access?.canEdit === false).map(f => f.name.trim()));
 }
 
 function uniqueFolderNames(folders: WorkspaceFolder[], currentFolder: string): string[] {

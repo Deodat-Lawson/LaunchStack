@@ -251,11 +251,24 @@ describe("HistoryRail", () => {
         expect(screen.queryByTestId("history-rename-input")).not.toBeInTheDocument();
     });
 
-    it("deletes a chat by session id", () => {
+    it("deletes a chat by session id, but only after asking (ADR-014)", async () => {
         const props = setup();
         fireEvent.click(screen.getByLabelText("Actions for Indemnity cap"));
-        fireEvent.click(screen.getByText("Delete chat"));
+        fireEvent.click(screen.getByText("Delete chat…"));
+
+        expect(await screen.findByText("Delete this chat?")).toBeInTheDocument();
+        expect(props.onDeleteSession).not.toHaveBeenCalled();
+
+        fireEvent.click(screen.getByTestId("confirm-accept"));
         expect(props.onDeleteSession).toHaveBeenCalledWith("s1");
+    });
+
+    it("keeps a chat when the delete is cancelled", async () => {
+        const props = setup();
+        fireEvent.click(screen.getByLabelText("Actions for Indemnity cap"));
+        fireEvent.click(screen.getByText("Delete chat…"));
+        fireEvent.click(await screen.findByTestId("confirm-cancel"));
+        expect(props.onDeleteSession).not.toHaveBeenCalled();
     });
 
     it("starts a new chat from the list header", () => {

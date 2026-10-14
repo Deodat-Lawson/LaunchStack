@@ -32,6 +32,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { canEditDocument } from "~/server/workspace/item-access";
 
 export async function DELETE(
     request: Request,
@@ -67,6 +69,11 @@ export async function DELETE(
 
             if (!doc) {
                 return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            }
+
+            // Throwing a version away is changing the file (ADR-014).
+            if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
+                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
             }
 
             // Must belong to this document — prevents cross-document row deletion.

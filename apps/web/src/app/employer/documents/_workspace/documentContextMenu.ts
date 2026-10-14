@@ -18,6 +18,11 @@ export interface DocumentMenuState {
     /** A mindmap that is not yet citable cannot be asked about. */
     askable: boolean;
     persisted: boolean;
+    /**
+     * The caller may rename or delete it (ADR-014 edit). False for a file
+     * shared with them to view; absent means the server did not say.
+     */
+    editable?: boolean;
     /** The original file's URL, when it is loaded. */
     originalUrl: string | null;
 }
@@ -40,6 +45,13 @@ export function buildDocumentMenuItems(
     handlers: DocumentMenuHandlers
 ): ActionMenuItem[] {
     const indexingReason = "This source is still being indexed.";
+    const viewOnly = state.editable === false;
+    /** Rename and delete: the row must exist and be one the caller may change. */
+    const changeReason = !state.persisted
+        ? indexingReason
+        : viewOnly
+          ? "You can view this file but not change it."
+          : undefined;
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: source.title }];
     items.push({
         type: "item",
@@ -57,8 +69,8 @@ export function buildDocumentMenuItems(
         id: "rename",
         label: "Rename…",
         icon: "rename",
-        disabled: !state.persisted,
-        disabledReason: state.persisted ? undefined : indexingReason,
+        disabled: changeReason !== undefined,
+        disabledReason: changeReason,
         onSelect: handlers.onRename,
     });
     if (handlers.onOpenInNewTab && !state.isMindmap) {
@@ -115,8 +127,8 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "access",
-            label: source.restricted ? "Change access…" : "Restrict access…",
-            icon: "lock",
+            label: "Share…",
+            icon: "share",
             disabled: !state.persisted,
             disabledReason: state.persisted ? undefined : indexingReason,
             onSelect: () => handlers.onRestrictAccess?.(),
@@ -129,8 +141,8 @@ export function buildDocumentMenuItems(
         label: state.isMindmap ? "Move to trash…" : "Delete…",
         icon: "delete",
         danger: true,
-        disabled: !state.persisted,
-        disabledReason: state.persisted ? undefined : indexingReason,
+        disabled: changeReason !== undefined,
+        disabledReason: changeReason,
         onSelect: handlers.onDelete,
     });
     return items;

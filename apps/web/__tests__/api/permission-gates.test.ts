@@ -214,8 +214,6 @@ import { PATCH as patchProfileFact } from "~/app/api/company/profile/facts/route
 import { PATCH as patchProfileSource } from "~/app/api/company/profile/sources/[documentId]/route";
 import { POST as repoExplainer } from "~/app/api/repo-explainer/route";
 import { GET as uploadBootstrap } from "~/app/api/employer/upload/bootstrap/route";
-import { DELETE as deleteDocument } from "~/app/api/deleteDocument/route";
-import { DELETE as batchDelete } from "~/app/api/documents/batchDelete/route";
 import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[versionId]/route";
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
@@ -225,6 +223,8 @@ import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
 import { POST as uploadGithubRepo } from "~/app/api/upload/github-repo/route";
 import { POST as commitBatch } from "~/app/api/upload/batches/[batchId]/commit/route";
+import { POST as publishMindmap } from "~/app/api/mindmaps/[id]/publish/route";
+import { POST as publishExplanation } from "~/app/api/repo-explainer/publish/route";
 import { DELETE as disconnectGoogle } from "~/app/api/connectors/google/route";
 import { GET as startGoogleOAuth } from "~/app/api/connectors/google/oauth/start/route";
 import { GET as googleOAuthCallback } from "~/app/api/connectors/google/oauth/callback/route";
@@ -273,23 +273,25 @@ interface Gate {
 
 const GATES: readonly Gate[] = [
     // folders.manage
+    // Folder writes take documents.upload since ADR-014 (Members make their
+    // own folders); per-folder rights are checked in folder-actions.
     {
         route: "POST /api/Categories/AddCategories",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () =>
             addCategory(json("/api/Categories/AddCategories", "POST", { CategoryName: "X" })),
     },
     {
         route: "DELETE /api/Categories/DeleteCategories",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () => deleteCategory(json("/api/Categories/DeleteCategories", "DELETE", { id: 1 })),
     },
     {
         route: "PATCH /api/Categories/[id]",
-        permission: "folders.manage",
-        deniedRole: "member",
+        permission: "documents.upload",
+        deniedRole: "viewer",
         call: () =>
             renameCategory(json("/api/Categories/1", "PATCH", { name: "Y" }), params({ id: "1" })),
     },
@@ -358,19 +360,9 @@ const GATES: readonly Gate[] = [
         deniedRole: "member",
         call: () => uploadBootstrap(),
     },
-    // documents.delete
-    {
-        route: "DELETE /api/deleteDocument",
-        permission: "documents.delete",
-        deniedRole: "member",
-        call: () => deleteDocument(json("/api/deleteDocument", "DELETE", { docId: "1" })),
-    },
-    {
-        route: "DELETE /api/documents/batchDelete",
-        permission: "documents.delete",
-        deniedRole: "member",
-        call: () => batchDelete(json("/api/documents/batchDelete", "DELETE", { docIds: [1] })),
-    },
+    // documents.delete — deleting a file itself is gated by level, not role
+    // (ADR-014: whoever manages a file may delete it); see
+    // __tests__/api/documents/document-levels.route.test.ts.
     {
         route: "DELETE /api/documents/[id]/versions/[versionId]",
         permission: "documents.delete",
@@ -415,6 +407,20 @@ const GATES: readonly Gate[] = [
             uploadDocument(
                 json("/api/uploadDocument", "POST", { documentUrl: "u", documentName: "n" })
             ),
+    },
+    // Publishing a map or an explanation adds a file to the library (ADR-014).
+    {
+        route: "POST /api/mindmaps/[id]/publish",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            publishMindmap(json("/api/mindmaps/1/publish", "POST", {}), params({ id: "1" })),
+    },
+    {
+        route: "POST /api/repo-explainer/publish",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () => publishExplanation(json("/api/repo-explainer/publish", "POST", { jobId: "j" })),
     },
     {
         route: "POST /api/upload/website",

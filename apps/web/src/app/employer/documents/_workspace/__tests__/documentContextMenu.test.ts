@@ -51,7 +51,31 @@ describe("document menu builders", () => {
             danger: true,
             label: "Delete…",
         });
-        expect(items.find(i => i.id === "access")).toMatchObject({ label: "Restrict access…" });
+        expect(items.find(i => i.id === "access")).toMatchObject({
+            label: "Share…",
+            icon: "share",
+        });
+    });
+
+    it("refuses rename and delete on a file shared with the caller to view", () => {
+        const items = buildDocumentMenuItems(
+            doc,
+            {
+                isMindmap: false,
+                askable: true,
+                persisted: true,
+                editable: false,
+                originalUrl: "https://x/y.pdf",
+            },
+            handlers()
+        );
+        for (const id of ["rename", "delete"]) {
+            expect(items.find(i => i.id === id)).toMatchObject({
+                disabled: true,
+                disabledReason: "You can view this file but not change it.",
+            });
+        }
+        expect(items.find(i => i.id === "access")).toMatchObject({ disabled: false });
     });
 
     it("holds back what an indexing source cannot do yet, and what a mindmap has no file for", () => {

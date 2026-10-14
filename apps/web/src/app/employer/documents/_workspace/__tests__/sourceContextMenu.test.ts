@@ -209,7 +209,7 @@ describe("buildBlankRailMenuItems", () => {
 });
 
 describe("access items", () => {
-    it("offers Restrict access only when a handler is wired, after copy and before delete", () => {
+    it("offers Share… only when a handler is wired, after copy and before delete", () => {
         const onRestrictAccess = jest.fn();
         const file = source();
         const items = buildSourceMenuItems(file, folders, [], {
@@ -226,18 +226,18 @@ describe("access items", () => {
             "delete",
         ]);
         const access = items.find(item => item.id === "access");
-        expect(access?.type === "item" && access.label).toBe("Restrict access…");
-        expect(access?.type === "item" && access.icon).toBe("lock");
+        expect(access?.type === "item" && access.label).toBe("Share…");
+        expect(access?.type === "item" && access.icon).toBe("share");
         if (access?.type === "item") access.onSelect();
         expect(onRestrictAccess).toHaveBeenCalledWith(file);
     });
 
-    it("reads Change access once the document is already restricted", () => {
+    it("reads Share… whoever can see it already — one verb for files and folders", () => {
         const items = buildSourceMenuItems(source({ restricted: true }), folders, [], {
             onRestrictAccess: jest.fn(),
         });
         const access = items.find(item => item.id === "access");
-        expect(access?.type === "item" && access.label).toBe("Change access…");
+        expect(access?.type === "item" && access.label).toBe("Share…");
     });
 
     it("waits for indexing before offering access changes", () => {
@@ -248,7 +248,7 @@ describe("access items", () => {
         expect(access?.type === "item" && access.disabled).toBe(true);
     });
 
-    it("offers Share folder… on a folder when a handler is wired", () => {
+    it("offers Share… on a folder when a handler is wired", () => {
         const onShare = jest.fn();
         const items = buildFolderMenuItems("Contracts", {
             onRename: jest.fn(),
@@ -263,8 +263,84 @@ describe("access items", () => {
             "select-folder",
         ]);
         const share = items.find(item => item.id === "share-folder");
+        expect(share?.type === "item" && share.label).toBe("Share…");
         if (share?.type === "item") share.onSelect();
         expect(onShare).toHaveBeenCalled();
+    });
+});
+
+describe("view-only files (ADR-014)", () => {
+    const viewOnly = (overrides: Partial<WorkspaceSource> = {}) =>
+        source({
+            access: {
+                audience: "shared",
+                ownAudience: true,
+                principalCount: 2,
+                canEdit: false,
+                canManage: false,
+            },
+            ...overrides,
+        });
+
+    it("keeps rename, move, cut and delete visible but refused, and says why", () => {
+        const items = buildSourceMenuItems(viewOnly(), folders, [], {
+            onRename: jest.fn(),
+            onMoveToFolder: jest.fn(),
+            onCut: jest.fn(),
+            onDelete: jest.fn(),
+            onRestrictAccess: jest.fn(),
+        });
+        for (const id of ["rename", "move", "cut", "delete"]) {
+            expect(items.find(item => item.id === id)).toMatchObject({
+                disabled: true,
+                disabledReason: "You can view this file but not change it.",
+            });
+        }
+        // Seeing who has access is still open to a viewer.
+        expect(items.find(item => item.id === "access")).toMatchObject({ disabled: false });
+    });
+
+    it("refuses a destination folder the caller cannot add to", () => {
+        const withLocked: WorkspaceFolder[] = [
+            ...folders,
+            {
+                id: "f-Board",
+                name: "Board",
+                color: "z",
+                access: {
+                    audience: "shared",
+                    ownAudience: true,
+                    principalCount: 3,
+                    canEdit: false,
+                    canManage: false,
+                },
+            },
+        ];
+        const items = buildSourceMenuItems(source(), withLocked, [], {
+            onMoveToFolder: jest.fn(),
+        });
+        const move = items.find(item => item.id === "move");
+        const board =
+            move?.type === "submenu" ? move.items.find(item => item.id === "move-Board") : null;
+        expect(board).toMatchObject({
+            disabled: true,
+            disabledReason: "You can't add files to this folder.",
+        });
+        const contracts =
+            move?.type === "submenu" ? move.items.find(item => item.id === "move-Contracts") : null;
+        expect(contracts).toMatchObject({ disabled: false });
+    });
+
+    it("acts on a selection's editable files only, and says how many it skips", () => {
+        const items = buildSelectionMenuItems(
+            [source(), viewOnly({ id: "d2", documentId: 2 })],
+            folders,
+            { onDelete: jest.fn(), onMoveToFolder: jest.fn() }
+        );
+        expect(items.find(item => item.id === "delete")).toMatchObject({
+            label: "Delete 1 of 2 sources…",
+            disabled: false,
+        });
     });
 });
 

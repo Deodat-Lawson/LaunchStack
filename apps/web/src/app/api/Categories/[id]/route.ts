@@ -3,10 +3,11 @@ import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { category, document } from "@launchstack/store/schema";
+import { category } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { recordAuditEvent } from "~/lib/authz/audit";
+import { FolderError } from "~/server/folders";
+import { renameFolderAs } from "~/server/workspace/folder-actions";
 
 const PatchCategorySchema = z.object({
     name: z
@@ -33,7 +34,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         const parsed = parseId(rawId);
         if (!parsed.ok) return parsed.response;
 
-        const ctx = await requireWorkspacePermission("folders.manage");
+        const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, PatchCategorySchema);
@@ -42,47 +43,28 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         }
         const { name } = validation.data;
 
-        // Verify the category belongs to the caller's company before letting them
-        // rename it.
         const [existing] = await db
-            .select()
+            .select({ name: category.name })
             .from(category)
             .where(and(eq(category.id, parsed.id), eq(category.companyId, ctx.data.companyId)));
-
         if (!existing) {
             return NextResponse.json({ error: "Category not found" }, { status: 404 });
         }
-
         if (existing.name === name) {
             return NextResponse.json({ success: true, id: parsed.id, name }, { status: 200 });
         }
 
-        // Rename + cascade the new name onto any documents that referenced the old
-        // name via the `category` text column. Kept in a transaction so the two
-        // writes can't drift, and the audit row lands with them.
-        await db.transaction(async tx => {
-            await tx.update(category).set({ name }).where(eq(category.id, parsed.id));
-            await tx
-                .update(document)
-                .set({ category: name })
-                .where(
-                    and(
-                        eq(document.companyId, ctx.data.companyId),
-                        eq(document.category, existing.name)
-                    )
-                );
-            await recordAuditEvent(tx, {
-                companyId: ctx.data.companyId,
-                actorUserId: ctx.data.authUserId,
-                action: "folder.renamed",
-                targetType: "folder",
-                targetId: parsed.id,
-                detail: { from: existing.name, to: name },
-            });
-        });
-
+        // The same rename as `PATCH /api/folders`: visible, managed by the
+        // caller, its subtree follows, and a move never publishes (ADR-014).
+        await renameFolderAs(ctx.data, existing.name, name);
         return NextResponse.json({ success: true, id: parsed.id, name }, { status: 200 });
     } catch (error) {
+        if (error instanceof FolderError) {
+            return NextResponse.json(
+                { error: error.status === 404 ? "Category not found" : error.message },
+                { status: error.status }
+            );
+        }
         console.error("[Categories PATCH] failed:", error);
         return NextResponse.json({ error: "Failed to rename category" }, { status: 500 });
     }

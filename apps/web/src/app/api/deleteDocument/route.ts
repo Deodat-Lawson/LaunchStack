@@ -9,6 +9,9 @@ import { deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { DOCUMENT_DELETE_DENIED, DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { recordActivity } from "~/server/workspace/activity";
+import { canDeleteAtLevel, documentAccess, levelAtLeast } from "~/server/workspace/item-access";
 
 export async function DELETE(request: Request) {
     try {
@@ -17,7 +20,7 @@ export async function DELETE(request: Request) {
             return validation.response;
         }
 
-        const ctx = await requireWorkspacePermission("documents.delete");
+        const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
 
         const { docId } = validation.data;
@@ -49,6 +52,21 @@ export async function DELETE(request: Request) {
             );
         }
 
+        // ADR-014: whoever manages a file may delete it (a Member, their own
+        // private upload); anyone else needs edit plus `documents.delete`.
+        const access = await documentAccess(ctx.data, { id: documentId, category: doc.category });
+        if (!canDeleteAtLevel(access.level, ctx.data.permissions)) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: levelAtLeast(access.level, "edit")
+                        ? DOCUMENT_DELETE_DENIED
+                        : DOCUMENT_EDIT_DENIED,
+                },
+                { status: 403 }
+            );
+        }
+
         await db.transaction(async tx => {
             await deleteDocumentCore(tx, documentId);
             await recordAuditEvent(tx, {
@@ -58,6 +76,18 @@ export async function DELETE(request: Request) {
                 targetType: "document",
                 targetId: documentId,
                 detail: { title: doc.title, category: doc.category },
+            });
+            // Teammates read "Ada deleted Q3.pdf" only if they could all see
+            // it; a private file's name never reaches the feed.
+            await recordActivity(tx, {
+                companyId: ctx.data.companyId,
+                actorUserId: ctx.data.authUserId,
+                verb: "deleted",
+                targetType: "document",
+                targetId: documentId,
+                targetLabel: doc.title,
+                targetPath: doc.category,
+                detail: { wasWorkspace: access.audience === "workspace" },
             });
         });
         // The company profile drops what the deleted documents said.

@@ -1,25 +1,35 @@
 /**
  * Who can see one document — the exception mechanism. An unrestricted
  * document follows its folder; a restricted one is visible only to the
- * principals in `document_grants` (and to `folders.manage` holders).
+ * principals in `document_grants`. No role reads past a restriction (ADR-014).
  */
 
 import { and, eq } from "drizzle-orm";
 
-import { category, document } from "@launchstack/store/schema";
+import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { documentGrants, documentSettings } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 
+import { recordActivity } from "./activity";
 import { forbidden, notFound } from "./errors";
-import { folderGrantRows, folderRestricted } from "./folder-access";
+import { notifyShared } from "./notifications";
+import {
+    canManageDocument as canManageDocumentAccess,
+    countAudience,
+    loadFolderLineage,
+    documentOwner,
+    inheritedAudience,
+    workspaceName,
+    type InheritedAudience,
+    type OwnerView,
+} from "./item-access";
+import { isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
 import {
     activeMemberPrincipals,
     callerGroupIds,
-    canSeeFolder,
-    canSeeRestrictedDocument,
     diffGrants,
     hasManageGrant,
     principalNames,
@@ -28,7 +38,6 @@ import {
     type GrantInput,
     type GrantRow,
     type GrantView,
-    type MemberPrincipal,
 } from "./grants";
 
 export interface DocumentAccessView {
@@ -37,6 +46,10 @@ export interface DocumentAccessView {
     grants: GrantView[];
     audienceCount: number;
     canManage: boolean;
+    /** What "not restricted" means: its folder's audience (or the workspace's, when loose). */
+    inheritsFrom: InheritedAudience & { folder: string | null };
+    owner: OwnerView | null;
+    workspaceName: string;
 }
 
 interface DocumentRef {
@@ -85,56 +98,39 @@ async function documentGrantRows(documentId: number): Promise<GrantRow[]> {
     return rows.map(r => ({ ...r, id: Number(r.id) }));
 }
 
-/** An unrestricted document is seen by whoever sees its folder. */
-async function folderAudience(
-    companyId: bigint,
-    categoryName: string,
-    members: readonly MemberPrincipal[]
-): Promise<number> {
-    const [folder] = await db
-        .select({ id: category.id })
-        .from(category)
-        .where(and(eq(category.companyId, companyId), eq(category.name, categoryName)))
-        .limit(1);
-    if (!folder) return members.filter(m => canSeeFolder(m, false, [])).length;
-    const [restricted, grants] = await Promise.all([
-        folderRestricted(Number(folder.id)),
-        folderGrantRows(Number(folder.id)),
-    ]);
-    return members.filter(m => canSeeFolder(m, restricted, grants)).length;
+/** Manage level on the document (its own grants, or its folder's when it has none of its own). */
+async function canManageDocument(ctx: WorkspaceContext, doc: DocumentRef): Promise<boolean> {
+    return canManageDocumentAccess(ctx, doc);
 }
 
-function canManageDocument(
-    ctx: WorkspaceContext,
-    groupIds: ReadonlySet<string>,
-    restricted: boolean,
-    grants: readonly GrantRow[]
-): boolean {
-    if (ctx.can("folders.manage")) return true;
-    if (!ctx.can("documents.edit")) return false;
-    return restricted ? hasManageGrant(ctx, groupIds, grants) : true;
-}
-
-async function buildView(
-    ctx: WorkspaceContext,
-    doc: DocumentRef,
-    groupIds: ReadonlySet<string>
-): Promise<DocumentAccessView> {
+async function buildView(ctx: WorkspaceContext, doc: DocumentRef): Promise<DocumentAccessView> {
     const [restricted, grants, members] = await Promise.all([
         documentRestricted(doc.id),
         documentGrantRows(doc.id),
         activeMemberPrincipals(ctx.companyId),
     ]);
     const names = await principalNames(ctx.companyId, grants);
-    const audienceCount = restricted
-        ? members.filter(m => canSeeRestrictedDocument(m, grants)).length
-        : await folderAudience(ctx.companyId, doc.category, members);
+    const loose = isUnfiledFolder(doc.category);
+    const [audienceCount, inherited, owner, wsName, canManage] = await Promise.all([
+        // By the read rules themselves: the folder's whole lineage, the
+        // document's own restriction, and anyone added to the document.
+        loadFolderLineage(ctx.companyId, doc.category).then(lineage =>
+            countAudience(members, lineage, { restricted, grants })
+        ),
+        inheritedAudience(ctx.companyId, loose ? null : normalizeFolderPath(doc.category)),
+        documentOwner(doc.id),
+        workspaceName(ctx.companyId),
+        canManageDocument(ctx, doc),
+    ]);
     return {
         document: doc,
         restricted,
         grants: toGrantViews(grants, names),
         audienceCount,
-        canManage: canManageDocument(ctx, groupIds, restricted, grants),
+        canManage,
+        inheritsFrom: { ...inherited, folder: loose ? null : normalizeFolderPath(doc.category) },
+        owner,
+        workspaceName: wsName,
     };
 }
 
@@ -143,8 +139,7 @@ export async function getDocumentAccess(
     documentId: number
 ): Promise<DocumentAccessView> {
     const doc = await loadVisibleDocument(ctx, documentId);
-    const groupIds = await callerGroupIds(ctx.userPk);
-    return buildView(ctx, doc, groupIds);
+    return buildView(ctx, doc);
 }
 
 // ---------------------------------------------------------------------------
@@ -163,14 +158,14 @@ export async function setDocumentAccess(
         documentRestricted(doc.id),
     ]);
 
-    if (!canManageDocument(ctx, groupIds, currentlyRestricted, existing)) {
+    if (!(await canManageDocument(ctx, doc))) {
         throw forbidden("You cannot change who can see this document.");
     }
 
     const desired = await validatePrincipals(ctx.companyId, input.grants);
-    // Restricting a document you do not manage as a folder manager would hide
-    // it from you too; keep a manage-level grant that reaches you.
-    if (!ctx.can("folders.manage") && input.restricted && !hasManageGrant(ctx, groupIds, desired)) {
+    // Restricting a document hides it from everyone not granted, the person
+    // doing it included; keep a manage-level grant that reaches you.
+    if (input.restricted && !hasManageGrant(ctx, groupIds, desired)) {
         throw forbidden("Keep a manage-level grant for yourself, or you will lose access.");
     }
 
@@ -222,6 +217,15 @@ export async function setDocumentAccess(
                 level: grant.level,
                 grantedBy: ctx.authUserId,
             });
+            await notifyShared(tx, {
+                companyId: ctx.companyId,
+                actorUserId: ctx.authUserId,
+                targetType: "document",
+                targetId: doc.id,
+                targetLabel: doc.title,
+                level: grant.level,
+                principals: [grant],
+            });
             await recordAuditEvent(tx, {
                 companyId: ctx.companyId,
                 actorUserId: ctx.authUserId,
@@ -269,7 +273,28 @@ export async function setDocumentAccess(
                 },
             });
         }
+
+        // The team feed: one line per save, naming what changed.
+        const opened = input.restricted !== currentlyRestricted && !input.restricted;
+        const closed = input.restricted !== currentlyRestricted && input.restricted;
+        if (opened || diff.added.length > 0 || closed || diff.removed.length > 0) {
+            await recordActivity(tx, {
+                companyId: ctx.companyId,
+                actorUserId: ctx.authUserId,
+                verb: opened || diff.added.length > 0 ? "shared" : "unshared",
+                targetType: "document",
+                targetId: doc.id,
+                targetLabel: doc.title,
+                targetPath: doc.category,
+                detail: {
+                    everyone: opened,
+                    restricted: closed,
+                    added: diff.added.map(principalNameOf),
+                    removed: diff.removed.map(principalNameOf),
+                },
+            });
+        }
     });
 
-    return buildView(ctx, doc, groupIds);
+    return buildView(ctx, doc);
 }

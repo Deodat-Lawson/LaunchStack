@@ -47,8 +47,7 @@ import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { InboxBell } from "./team/InboxBell";
-import { TeamPanel } from "./team/TeamPanel";
-import type { TeamRailProps, TeamTarget } from "./team/types";
+import type { InboxRailProps, TeamTarget } from "./team/types";
 import { SOURCE_DRAG_MIME } from "./dragData";
 import {
     buildBlankRailMenuItems,
@@ -640,10 +639,19 @@ export interface SourceRailProps {
      */
     history?: Omit<HistoryRailProps, "query">;
     /**
-     * The team layer (ADR-014): the Team tab and the inbox bell. Shown only
-     * alongside History, in the full workspace.
+     * The shared-with-you inbox bell (ADR-014), in the full workspace. The
+     * rest of the team layer — people, groups, activity — is the Team tab,
+     * not the sidebar: the sidebar makes, files and shares sources.
      */
-    team?: Omit<TeamRailProps, "query">;
+    inbox?: InboxRailProps;
+    /**
+     * Show the Sources or History half — something opened from elsewhere (the
+     * Team tab) lives there. Answered once: the rail calls `onRevealed` with
+     * the nonce and the shell drops the request, so a rail that mounts again
+     * later starts on the tab the member left it on.
+     */
+    revealTab?: { tab: "sources" | "history"; nonce: number } | null;
+    onRevealed?: (nonce: number) => void;
     /** "Everyone at <name>" on a workspace-wide row's glyph. */
     workspaceName?: string | null;
     /** The signed-in person's auth id: their own files read "Added by you". */
@@ -655,8 +663,11 @@ export interface SourceRailProps {
     loading?: boolean;
 }
 
-/** Which part of the rail is showing. Persisted, so a habit survives a reload. */
-type RailTab = "sources" | "history" | "team";
+/**
+ * Which part of the rail is showing. Persisted, so a habit survives a reload.
+ * A saved "team" — the tab the team layer once had here — reads as Sources.
+ */
+type RailTab = "sources" | "history";
 
 const RAIL_TAB_KEY = "workspace.railTab.v1";
 
@@ -925,7 +936,9 @@ export function SourceRail({
     width = 280,
     shortcuts,
     history,
-    team,
+    inbox,
+    revealTab,
+    onRevealed,
     workspaceName,
     selfAuthId,
     loading = false,
@@ -942,7 +955,7 @@ export function SourceRail({
     useEffect(() => {
         try {
             const saved = localStorage.getItem(RAIL_TAB_KEY);
-            if (saved === "history" || saved === "team") setTab(saved);
+            if (saved === "history") setTab(saved);
         } catch {
             // Private mode / corrupt storage — Sources is the safe default.
         }
@@ -958,22 +971,29 @@ export function SourceRail({
         }
     }, [tab]);
 
-    /** Opening something from the inbox or the Team tab shows where it lives. */
-    const teamOpen = useCallback(
+    // Declared after the restore above, so a request made while the rail was
+    // hidden (it mounts fresh) wins over the saved tab.
+    useEffect(() => {
+        if (!revealTab) return;
+        setTab(revealTab.tab);
+        onRevealed?.(revealTab.nonce);
+    }, [revealTab, onRevealed]);
+
+    /** Opening something from the inbox shows where it lives. */
+    const inboxOpen = useCallback(
         (target: TeamTarget) => {
             if (target.type === "chat") {
                 if (history) setTab("history");
             } else {
                 setTab("sources");
             }
-            team?.onOpenTarget(target);
+            inbox?.onOpenTarget(target);
         },
-        [team, history]
+        [inbox, history]
     );
 
     // A rail without history props can never sit on a tab that isn't there.
-    const activeTab: RailTab =
-        tab === "team" ? (team ? "team" : "sources") : history ? tab : "sources";
+    const activeTab: RailTab = history ? tab : "sources";
 
     // A source may have been pinned while processing, before indexing failed.
     useEffect(() => {
@@ -1411,7 +1431,7 @@ export function SourceRail({
                         {logoLabel}
                     </span>
                 </LandingLogoLink>
-                {team && <InboxBell onOpenTarget={teamOpen} />}
+                {inbox && <InboxBell onOpenTarget={inboxOpen} />}
                 {onClose && (
                     <button
                         onClick={onClose}
@@ -1484,7 +1504,6 @@ export function SourceRail({
                         [
                             { id: "sources", label: "Sources" },
                             { id: "history", label: "History" },
-                            ...(team ? [{ id: "team", label: "Team" } as const] : []),
                         ] as const
                     ).map(item => {
                         const selected = activeTab === item.id;
@@ -1542,13 +1561,7 @@ export function SourceRail({
                         // as context, move them, reopen a chat. ⌘K is the search
                         // that jumps; calling this one search too made it read
                         // as a smaller copy of that.
-                        placeholder={
-                            activeTab === "history"
-                                ? "Filter history"
-                                : activeTab === "team"
-                                  ? "Filter people"
-                                  : "Filter sources"
-                        }
+                        placeholder={activeTab === "history" ? "Filter history" : "Filter sources"}
                         style={{
                             flex: 1,
                             background: "transparent",
@@ -1601,9 +1614,7 @@ export function SourceRail({
                 </div>
             )}
 
-            {activeTab === "team" && team ? (
-                <TeamPanel {...team} onOpenTarget={teamOpen} query={search} />
-            ) : activeTab === "history" && history ? (
+            {activeTab === "history" && history ? (
                 <HistoryRail {...history} query={search} />
             ) : (
                 <div

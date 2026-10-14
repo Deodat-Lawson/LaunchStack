@@ -1384,12 +1384,45 @@ export function WorkspaceShell() {
         else setAccessTarget({ kind: "document", id: target.id, name: target.name });
     }, []);
 
-    const teamRail = useMemo(
+    /** The sidebar's inbox bell; the rail itself shows where the item lives. */
+    const inboxRail = useMemo(
+        () => ({ onOpenTarget: (target: TeamTarget) => void openTeamTarget(target) }),
+        [openTeamTarget]
+    );
+
+    /**
+     * A request for the sidebar to show its Sources or History half, answered
+     * once (`onRevealed`). The Team tab is not in the sidebar, so opening
+     * something from it asks the sidebar to show where that thing lives.
+     */
+    const [railReveal, setRailReveal] = useState<{
+        tab: "sources" | "history";
+        nonce: number;
+    } | null>(null);
+    const consumeRailReveal = useCallback(
+        (nonce: number) => setRailReveal(current => (current?.nonce === nonce ? null : current)),
+        []
+    );
+
+    const teamTab = useMemo(
         () => ({
-            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            onOpenTarget: (target: TeamTarget) => {
+                void openTeamTarget(target);
+                setRailReveal({
+                    tab: target.type === "chat" ? "history" : "sources",
+                    nonce: Date.now(),
+                });
+                // A folder opens as the sidebar's scope; nothing shows if the
+                // sidebar is put away, so bring it out. (A file or a chat
+                // opens in a tab and needs no sidebar.)
+                if (target.type === "folder") {
+                    if (compactViewport) setRailDrawerOpen(true);
+                    else setRailHidden(false);
+                }
+            },
             onShare: shareTeamTarget,
         }),
-        [openTeamTarget, shareTeamTarget]
+        [openTeamTarget, shareTeamTarget, compactViewport]
     );
 
     // ADR-014: anyone who can add sources can make a folder (a new top-level
@@ -2339,7 +2372,9 @@ export function WorkspaceShell() {
                             onClose={() =>
                                 compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                             }
-                            team={teamRail}
+                            inbox={inboxRail}
+                            revealTab={railReveal}
+                            onRevealed={consumeRailReveal}
                             workspaceName={workspaceName}
                             selfAuthId={userId ?? null}
                             history={historyRail}
@@ -2412,7 +2447,9 @@ export function WorkspaceShell() {
                         onClose={() =>
                             compactViewport ? setRailDrawerOpen(false) : setRailHidden(true)
                         }
-                        team={teamRail}
+                        inbox={inboxRail}
+                        revealTab={railReveal}
+                        onRevealed={consumeRailReveal}
                         workspaceName={workspaceName}
                         selfAuthId={userId ?? null}
                         history={historyRail}
@@ -2738,6 +2775,7 @@ export function WorkspaceShell() {
                                     newMeetingRequest,
                                     openAgentRequest,
                                 },
+                                team: teamTab,
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {

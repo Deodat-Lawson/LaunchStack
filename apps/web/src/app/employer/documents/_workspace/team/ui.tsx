@@ -1,16 +1,18 @@
 "use client";
 
 /**
- * The few pieces every Team view draws: the named back button, a section
- * heading, a one-sentence empty state, loading rows, an avatar stack, and the
- * icon for a folder, file or chat.
+ * The few pieces every Team screen draws: the named back button, a filter
+ * box, a bordered panel with its heading, a section heading, a one-sentence
+ * empty state, loading rows, an avatar stack, and the icon for a folder, file
+ * or chat.
  */
 
 import React from "react";
-import { ChevronLeft, FileText, Folder, MessageSquare, Users } from "lucide-react";
+import { ChevronLeft, FileText, Folder, MessageSquare, Search, Users } from "lucide-react";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
@@ -29,6 +31,58 @@ export function BackButton({ label, onClick }: { label: string; onClick: () => v
             <ChevronLeft className="size-3.5" />
             {label}
         </Button>
+    );
+}
+
+/** A screen's filter box: narrows the list below it, never searches the workspace. */
+export function FilterInput({
+    value,
+    onChange,
+    placeholder,
+    className,
+}: {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder: string;
+    className?: string;
+}) {
+    return (
+        <div className={cn("@max-md:w-full relative w-56", className)}>
+            <Search className="text-ink-4 pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
+            <Input
+                value={value}
+                onChange={e => onChange(e.target.value)}
+                placeholder={placeholder}
+                aria-label={placeholder}
+                className="h-8 pl-8 text-[13px]"
+                data-testid="team-filter"
+            />
+        </div>
+    );
+}
+
+/** A bordered block of a screen with its heading — "Shared with you by Ada", "Activity". */
+export function Panel({
+    title,
+    action,
+    children,
+    className,
+    testId,
+}: {
+    title: React.ReactNode;
+    action?: React.ReactNode;
+    children: React.ReactNode;
+    className?: string;
+    testId?: string;
+}) {
+    return (
+        <section
+            className={cn("border-line bg-panel min-w-0 rounded-lg border pb-2", className)}
+            data-testid={testId}
+        >
+            <SectionHeading action={action}>{title}</SectionHeading>
+            {children}
+        </section>
     );
 }
 

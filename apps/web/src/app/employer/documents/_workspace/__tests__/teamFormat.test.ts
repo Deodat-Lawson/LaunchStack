@@ -2,6 +2,8 @@ import {
     activitySentence,
     activityTarget,
     badgeCount,
+    dayKey,
+    dayLabel,
     inboxSentence,
     inboxTarget,
     joinNames,
@@ -40,6 +42,27 @@ describe("shortAgo", () => {
 
     it("falls back to a date after a week", () => {
         expect(shortAgo("2026-09-01T12:00:00Z", now)).toMatch(/Sep|9/);
+    });
+});
+
+describe("dayLabel", () => {
+    // Local noon, so the calendar day doesn't move with the test machine's zone.
+    const now = new Date(2026, 9, 13, 12, 0).getTime();
+    const at = (y: number, m: number, d: number, h = 9) => new Date(y, m, d, h).toISOString();
+
+    it("names the last two days, then the weekday and date", () => {
+        expect(dayLabel(at(2026, 9, 13), now)).toBe("Today");
+        expect(dayLabel(at(2026, 9, 12, 23), now)).toBe("Yesterday");
+        const older = dayLabel(at(2026, 9, 6), now);
+        expect(older).toMatch(/Oct|10/);
+        expect(older).not.toMatch(/2026/);
+        expect(dayLabel(at(2025, 11, 30), now)).toMatch(/2025/);
+    });
+
+    it("keys rows by local calendar day", () => {
+        expect(dayKey(at(2026, 9, 13, 0))).toBe(dayKey(at(2026, 9, 13, 23)));
+        expect(dayKey(at(2026, 9, 13))).not.toBe(dayKey(at(2026, 9, 12)));
+        expect(dayKey("nonsense")).toBe("");
     });
 });
 

@@ -2,16 +2,27 @@
  * /api/folders — the workspace's folder tree.
  *
  * GET    any member with `documents.read`: every folder path the caller may
- *        see, with its direct source count, whether it is persisted, and
- *        whether it (or an ancestor) is restricted.
+ *        see, with its direct source count, whether it is persisted, whether
+ *        it (or an ancestor) is restricted, and the caller's `access` — its
+ *        audience (workspace / shared / private), whether it inherits it,
+ *        and whether they may edit or manage it.
  * POST   { path }            create a folder (and any missing ancestors).
  * PATCH  { path, newPath }   rename or move a folder and everything in it.
  * DELETE { path }            remove a folder and its subfolders; sources move up.
  *
- * Mutations need `folders.manage`, like every other write to the library's
- * structure, and each one lands in the audit log. Folders are paths (`~/lib/folders/path`), so a body carries the
- * full path rather than an id — a folder that exists only through the
- * documents inside it has no row to point at.
+ * Who may change the tree (ADR-014):
+ * - create: anyone who can add sources (`documents.upload`). A new top-level
+ *   folder is private to its creator; a subfolder needs edit access to its
+ *   parent and inherits it. The creator always gets manage on what they made.
+ * - rename / move / delete: manage access to the folder (a grant, or
+ *   `folders.manage` while nothing above restricts it); a move also needs
+ *   edit access to the new parent.
+ * The rules live in `~/server/workspace/folder-actions`, shared with the
+ * legacy `/api/Categories` routes. Each lands in the audit log and the team
+ * activity feed. Folders are
+ * paths (`~/lib/folders/path`), so a body carries the full path rather than an
+ * id — a folder that exists only through the documents inside it has no row
+ * to point at.
  */
 
 import { z } from "zod";
@@ -19,10 +30,10 @@ import { z } from "zod";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { recordAuditEvent } from "~/lib/authz/audit";
-import { db } from "~/server/db";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
-import { createFolder, deleteFolder, listVisibleFolders, renameFolder } from "~/server/folders";
+import { listVisibleFolders } from "~/server/folders";
+import { createFolderAs, deleteFolderAs, renameFolderAs } from "~/server/workspace/folder-actions";
+import { accessSubject } from "~/server/workspace/item-access";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -43,8 +54,13 @@ export async function GET(request: Request) {
         try {
             const ctx = await requireWorkspacePermission("documents.read");
             if (!ctx.success) return ctx.response;
-            const scope = await ctx.data.documentScope();
-            return ok({ folders: await listVisibleFolders(ctx.data.companyId, scope) });
+            const [scope, subject] = await Promise.all([
+                ctx.data.documentScope(),
+                accessSubject(ctx.data),
+            ]);
+            return ok({
+                folders: await listVisibleFolders(ctx.data.companyId, scope, subject),
+            });
         } catch (error) {
             return handleRouteError("folders.list", error);
         }
@@ -54,22 +70,13 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         try {
-            const ctx = await requireWorkspacePermission("folders.manage");
+            const ctx = await requireWorkspacePermission("documents.upload");
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, PathBody);
             if (!body) return fail("A folder path is required.", 400);
 
-            const created = await createFolder(ctx.data.companyId, body.path);
-            await recordAuditEvent(db, {
-                companyId: ctx.data.companyId,
-                actorUserId: ctx.data.authUserId,
-                action: "folder.created",
-                targetType: "folder",
-                targetId: body.path,
-                detail: { name: body.path },
-            });
-            return ok(created, 201);
+            return ok(await createFolderAs(ctx.data, body.path), 201);
         } catch (error) {
             return handleRouteError("folders.create", error);
         }
@@ -79,22 +86,13 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         try {
-            const ctx = await requireWorkspacePermission("folders.manage");
+            const ctx = await requireWorkspacePermission("documents.upload");
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, RenameBody);
             if (!body) return fail("Both the current and the new folder path are required.", 400);
 
-            const renamed = await renameFolder(ctx.data.companyId, body.path, body.newPath);
-            await recordAuditEvent(db, {
-                companyId: ctx.data.companyId,
-                actorUserId: ctx.data.authUserId,
-                action: "folder.renamed",
-                targetType: "folder",
-                targetId: body.newPath,
-                detail: { from: body.path, name: body.newPath },
-            });
-            return ok(renamed);
+            return ok(await renameFolderAs(ctx.data, body.path, body.newPath));
         } catch (error) {
             return handleRouteError("folders.rename", error);
         }
@@ -104,22 +102,13 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         try {
-            const ctx = await requireWorkspacePermission("folders.manage");
+            const ctx = await requireWorkspacePermission("documents.upload");
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, PathBody);
             if (!body) return fail("A folder path is required.", 400);
 
-            const deleted = await deleteFolder(ctx.data.companyId, body.path);
-            await recordAuditEvent(db, {
-                companyId: ctx.data.companyId,
-                actorUserId: ctx.data.authUserId,
-                action: "folder.deleted",
-                targetType: "folder",
-                targetId: body.path,
-                detail: { name: body.path },
-            });
-            return ok(deleted);
+            return ok(await deleteFolderAs(ctx.data, body.path));
         } catch (error) {
             return handleRouteError("folders.delete", error);
         }

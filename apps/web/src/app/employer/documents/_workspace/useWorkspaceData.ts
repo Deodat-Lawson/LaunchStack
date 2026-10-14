@@ -20,6 +20,8 @@ import {
 } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
 import type {
+    ItemAccessView,
+    SourceAddedBy,
     SourceCitability,
     SourceIndexStatus,
     SourceTypeId,
@@ -92,6 +94,12 @@ type IndexedDocument = DocumentType & {
     currentVersionOcrMetadata?: DocumentType["ocrMetadata"];
 };
 
+/** A row of the documents list: the document, plus what ADR-014 says about it for the caller. */
+type DocumentRow = IndexedDocument & {
+    access?: ItemAccessView | null;
+    addedBy?: SourceAddedBy | null;
+};
+
 function documentOcrState(doc: IndexedDocument) {
     // Only unversioned legacy rows use document-level processing state. A
     // missing/queued current version must not inherit an older success or failure.
@@ -115,7 +123,7 @@ function documentIndexError(doc: IndexedDocument): string | undefined {
         : undefined;
 }
 
-export function mapDocument(doc: IndexedDocument): WorkspaceSource {
+export function mapDocument(doc: DocumentRow): WorkspaceSource {
     const type = mapDocType(doc);
     // The recording is stored for playback, never embedded. Its separate
     // transcript is the searchable source, with its own current-version status.
@@ -138,6 +146,8 @@ export function mapDocument(doc: IndexedDocument): WorkspaceSource {
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        access: doc.access ?? undefined,
+        addedBy: doc.addedBy ?? null,
         citability: mediaOriginal ? "none" : undefined,
         indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
         errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
@@ -163,7 +173,11 @@ export function mindmapCitability(
  */
 export function mapMindmap(
     map: MindmapSummary,
-    publishedDocument?: IndexedDocument
+    /**
+     * The published copy, when the caller can see it: the map is shared as
+     * that file is, and is searchable once that file is indexed.
+     */
+    publishedDocument?: DocumentRow
 ): WorkspaceSource {
     const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
     return {
@@ -181,6 +195,8 @@ export function mapMindmap(
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
+        access: publishedDocument?.access ?? undefined,
+        addedBy: publishedDocument?.addedBy ?? null,
         indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
         errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
     };
@@ -192,6 +208,8 @@ export interface UseWorkspaceDataResult {
     loading: boolean;
     error: string | null;
     companyId: number | null;
+    /** The active workspace's name — "Everyone at <name>". */
+    workspaceName: string | null;
     /**
      * What the signed-in person may do here. `can` answers false until the
      * permissions have loaded, so anything gated on it fails closed.
@@ -213,13 +231,15 @@ interface FolderRow {
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while the folder is only implied. */
     categoryId?: number | null;
+    /** The caller's access (ADR-014); absent from servers that predate it. */
+    access?: ItemAccessView;
 }
 
 // Match the Drive/Gmail sync cadence while source ingestion is still running.
 const SOURCE_POLL_INTERVAL_MS = 3000;
 
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
-    const [documents, setDocuments] = useState<(DocumentType & { createdAt?: string })[]>([]);
+    const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
@@ -228,7 +248,13 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const refreshInFlight = useRef<Promise<void> | null>(null);
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
-    const { companyId, permissions, can, loaded: permissionsLoaded } = usePermissions();
+    const {
+        companyId,
+        workspaceName,
+        permissions,
+        can,
+        loaded: permissionsLoaded,
+    } = usePermissions();
 
     const fetchSources = useCallback(async () => {
         if (!userId) return;
@@ -246,7 +272,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 fetch("/api/mindmaps?scope=active").catch(() => null),
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
-            const docs = (await docsRes.json()) as (DocumentType & { createdAt?: string })[];
+            const docs = (await docsRes.json()) as DocumentRow[];
             setDocuments(docs);
 
             // Folders that exist while empty only come from here; the rest are
@@ -294,7 +320,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         // A published map's Markdown copy is the map, not a second source: it
         // is hidden here and reached through the map's `documentId`.
         const claimed = new Set<number>();
-        const documentsById = new Map<number, DocumentType>();
+        const documentsById = new Map<number, DocumentRow>();
         for (const doc of documents) documentsById.set(doc.id, doc);
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
@@ -356,6 +382,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 color: folderColor(folderLeafName(path)),
                 restricted: row?.restricted === true,
                 categoryId: row?.categoryId ?? null,
+                access: row?.access,
             };
         });
     }, [sources, folderRows]);
@@ -370,6 +397,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         loading,
         error,
         companyId,
+        workspaceName,
         permissions,
         can,
         permissionsLoaded,

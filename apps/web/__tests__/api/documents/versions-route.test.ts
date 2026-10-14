@@ -11,7 +11,7 @@ import {
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
 
-import { canEditFolder } from "~/server/services/folder-access";
+import { canEditDocument } from "~/server/workspace/item-access";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
@@ -26,8 +26,13 @@ jest.mock("~/lib/require-workspace-context", () =>
 );
 
 jest.mock("~/server/services/folder-access", () => ({
-    FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",
-    canEditFolder: jest.fn().mockResolvedValue(true),
+    DOCUMENT_EDIT_DENIED: "You can view this file but not change it.",
+}));
+
+// ADR-014's level rules are pure and tested in item-access.test; here only
+// the route's use of the answer is.
+jest.mock("~/server/workspace/item-access", () => ({
+    canEditDocument: jest.fn().mockResolvedValue(true),
 }));
 
 // The scope predicate is exercised by its own tests; here it only has to be
@@ -223,13 +228,19 @@ describe("POST /api/documents/[id]/versions", () => {
         expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
     });
 
-    it("refuses a new version into a restricted folder without an edit grant", async () => {
-        (canEditFolder as jest.Mock).mockResolvedValueOnce(false);
+    it("refuses a new version from someone who can view the file but not edit it", async () => {
+        (canEditDocument as jest.Mock).mockResolvedValueOnce(false);
 
         const response = await POST(request(), routeContext());
 
         expect(response.status).toBe(403);
-        expect(canEditFolder).toHaveBeenCalledWith(workspaceContext, "contracts");
+        await expect(response.json()).resolves.toEqual({
+            error: "You can view this file but not change it.",
+        });
+        expect(canEditDocument).toHaveBeenCalledWith(workspaceContext, {
+            id: 55,
+            category: "contracts",
+        });
         expect(createDocumentVersionLifecycle).not.toHaveBeenCalled();
     });
 

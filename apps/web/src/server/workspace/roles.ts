@@ -31,6 +31,7 @@ import { resolveRole, type ResolvedRole } from "~/lib/authz/resolve";
 import { slugifyName } from "~/lib/workspace-slug";
 
 import { badRequest, conflict, forbidden, notFound } from "./errors";
+import { deleteRoleGrants } from "./ownership";
 
 export interface RoleView {
     id: number | null;
@@ -417,6 +418,8 @@ export async function deleteRole(
             }
         }
         await tx.delete(workspaceRoles).where(eq(workspaceRoles.id, id));
+        // Grants naming the role go with it, so re-creating the slug grants nothing.
+        await deleteRoleGrants(tx, ctx.companyId, row.slug);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,

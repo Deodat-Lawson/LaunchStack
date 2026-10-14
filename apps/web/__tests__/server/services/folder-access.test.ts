@@ -1,7 +1,7 @@
 /**
  * `canEditFolder` is the write-side twin of the read scope: who may put a
- * document into a folder. The cheap answers come first (a manager, an open
- * folder), then the grant walk — user, role, then the caller's groups.
+ * document into a folder. Its rules live in `~/server/workspace/item-access`
+ * (tested there); here it only has to ask them.
  */
 
 import { canEditFolder, ensureCategoryRow } from "~/server/services/folder-access";
@@ -36,9 +36,10 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-import { db } from "~/server/db";
-
-const selectMock = db.select as jest.Mock;
+const mockCanEditFolderPath = jest.fn();
+jest.mock("~/server/workspace/item-access", () => ({
+    canEditFolderPath: (...args: unknown[]) => mockCanEditFolderPath(...args),
+}));
 
 function member(overrides: Parameters<typeof makeWorkspaceContext>[0] = {}) {
     return makeWorkspaceContext({
@@ -55,73 +56,14 @@ beforeEach(() => {
 });
 
 describe("canEditFolder", () => {
-    it("says yes to a folders.manage holder without reading anything", async () => {
-        await expect(canEditFolder(makeWorkspaceContext({ role: "admin" }), "Board")).resolves.toBe(
-            true
-        );
-        expect(selectMock).not.toHaveBeenCalled();
-    });
+    it("asks the ADR-014 rules for edit level on the folder", async () => {
+        const ctx = member();
+        mockCanEditFolderPath.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
 
-    it("says yes to an open folder after one read", async () => {
-        mockResults.push([]);
-
-        await expect(canEditFolder(member(), "General")).resolves.toBe(true);
-        expect(selectMock).toHaveBeenCalledTimes(1);
-    });
-
-    it("says no to a restricted folder with no grants", async () => {
-        mockResults.push([{ categoryId: BigInt(3) }], []);
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(false);
-    });
-
-    it("ignores view-level grants", async () => {
-        mockResults.push(
-            [{ categoryId: BigInt(3) }],
-            [{ principalType: "user", principalId: "7", level: "view" }]
-        );
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(false);
-    });
-
-    it("honours an edit grant to the user", async () => {
-        mockResults.push(
-            [{ categoryId: BigInt(3) }],
-            [{ principalType: "user", principalId: "7", level: "edit" }]
-        );
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(true);
-        expect(selectMock).toHaveBeenCalledTimes(2);
-    });
-
-    it("honours a manage grant to the caller's role, legacy slug included", async () => {
-        mockResults.push(
-            [{ categoryId: BigInt(3) }],
-            [{ principalType: "role", principalId: "editor", level: "manage" }]
-        );
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(true);
-    });
-
-    it("walks the caller's groups only when a group grant exists", async () => {
-        mockResults.push(
-            [{ categoryId: BigInt(3) }],
-            [{ principalType: "group", principalId: "11", level: "edit" }],
-            [{ groupId: BigInt(11) }]
-        );
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(true);
-        expect(selectMock).toHaveBeenCalledTimes(3);
-    });
-
-    it("says no when the group grant is for a group the caller is not in", async () => {
-        mockResults.push(
-            [{ categoryId: BigInt(3) }],
-            [{ principalType: "group", principalId: "11", level: "edit" }],
-            [{ groupId: BigInt(12) }]
-        );
-
-        await expect(canEditFolder(member(), "Board")).resolves.toBe(false);
+        await expect(canEditFolder(ctx, "General")).resolves.toBe(true);
+        await expect(canEditFolder(ctx, "Board")).resolves.toBe(false);
+        expect(mockCanEditFolderPath).toHaveBeenNthCalledWith(1, ctx, "General");
+        expect(mockCanEditFolderPath).toHaveBeenNthCalledWith(2, ctx, "Board");
     });
 });
 

@@ -62,6 +62,13 @@ jest.mock("~/server/services/document-upload", () => ({
     processDocumentUpload: jest.fn(),
 }));
 
+// ADR-014 defaults for what the upload inserted; their rules are tested with
+// `ownership`, so here only the hand-off is.
+const mockRecordUpload = jest.fn().mockResolvedValue(undefined);
+jest.mock("~/server/workspace/added-documents", () => ({
+    recordUpload: (...args: unknown[]) => mockRecordUpload(...args),
+}));
+
 type UploadResult = DocumentUploadResult;
 
 const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
@@ -112,6 +119,14 @@ function mockUploadResult(overrides: Partial<UploadResult> = {}): UploadResult {
             title: "Example Document",
             category: "contracts",
         },
+        createdDocuments: [
+            {
+                id: 42,
+                url: "https://example.com/doc.pdf",
+                title: "Example Document",
+                category: "contracts",
+            },
+        ],
         resolvedDocumentUrl: "https://example.com/doc.pdf",
         ...overrides,
     };
@@ -146,6 +161,19 @@ describe("POST /api/uploadDocument", () => {
             sourceUrl: "https://claude.ai/share/abc",
         });
         expect(call.documentName).toBe("Revenue dashboard");
+    });
+
+    it("hands what it added to the ADR-014 defaults, as the uploader", async () => {
+        const ctx = mockAuthenticatedContext({ role: "member" });
+        const body = { documentName: "Plan", documentUrl: "/api/files/3" };
+        mockValidRequest(body);
+        const result = mockUploadResult();
+        processDocumentUploadMock.mockResolvedValue(result);
+
+        const response = await POST(requestFor(body));
+
+        expect(response.status).toBe(202);
+        expect(mockRecordUpload).toHaveBeenCalledWith(ctx, result);
     });
 
     it("leaves an ordinary upload unmarked", async () => {

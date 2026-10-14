@@ -5,6 +5,10 @@
  * stopped answer afterward, so the transcript tracks durable turns. A failed answer is stored too: "I couldn't reach the model" is part
  * of that conversation's history, and hiding it would make the reopened thread
  * a different thread.
+ *
+ * Owner only. Someone a chat is shared with (ADR-014) reads it but can't add
+ * to it or rewind it: they get the same 404 a stranger does, and continue the
+ * conversation through `POST …/fork` instead.
  */
 
 import { NextResponse } from "next/server";

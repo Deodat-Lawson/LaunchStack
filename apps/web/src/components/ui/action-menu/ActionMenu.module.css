@@ -8,11 +8,19 @@
     inset: 0;
     z-index: 200;
     background: transparent;
+    /*
+     * A modal sheet (the rail's drawer at phone width) sets
+     * `pointer-events: none` on <body> while it is open. The menu is portaled
+     * to <body>, so without this it inherits that and every click falls
+     * through to the row behind it.
+     */
+    pointer-events: auto;
 }
 
 .menu {
     position: fixed;
     z-index: 201;
+    pointer-events: auto;
     box-sizing: border-box;
     min-width: 228px;
     max-width: 280px;

@@ -1,101 +1,43 @@
 /**
  * Folder-level write access, and the category rows connectors write into.
  *
- * A folder is an engine `category` row. One with a `folder_settings` row is
- * restricted: only people holding `folders.manage`, or a `folder_grants` row
- * at `edit` or above whose principal reaches them (as a user, through one of
- * their groups, or through their role), may put documents into it. A folder
- * with no settings row is workspace-visible and any `documents.upload`
- * holder may write to it.
+ * A folder is an engine `category` row. Who may put documents into it is the
+ * edit level `~/server/workspace/item-access` resolves: a workspace-wide
+ * folder takes edit from the caller's role (`documents.upload`), a restricted
+ * one only from a grant at `edit` or above on the folder or a folder between
+ * it and its nearest restricted ancestor. No role reaches past a restriction
+ * (ADR-014).
  *
  * Read access is `DocumentScope`'s job (`~/lib/authz/scope`); this module is
  * only about who may add or move documents into a folder.
  */
 
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { category } from "@launchstack/store/schema";
 import { db } from "~/server/db";
-import { folderGrants, folderSettings, workspaceGroupMembers } from "~/server/db/schema";
-import { grantLevelAtLeast, isGrantLevel, normalizeRoleSlug } from "~/lib/authz/permissions";
-import { folderAncestors, normalizeFolderPath } from "~/lib/folders/path";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { canEditFolderPath } from "~/server/workspace/item-access";
 
 /** The slice of a workspace context the folder check needs. */
-export type FolderActor = Pick<WorkspaceContext, "companyId" | "userPk" | "role" | "can">;
+export type FolderActor = Pick<WorkspaceContext, "companyId" | "userPk" | "role" | "permissions">;
 
 /** The 403 body every upload path returns when a restricted folder refuses. */
 export const FOLDER_EDIT_DENIED = "You do not have edit access to this folder.";
 
 /**
- * May `ctx` add documents to the folder named `categoryName`?
- *
- * Costs nothing for a `folders.manage` holder; one indexed read for anyone
- * else when the folder is open; up to three when it is restricted.
+ * The 403 body for renaming, moving, replacing or deleting a file the caller
+ * can open but holds no edit level on (ADR-014's `canEditDocument`).
  */
+export const DOCUMENT_EDIT_DENIED = "You can view this file but not change it.";
+
+/** The 403 body when someone can edit a file but neither manages it nor holds `documents.delete`. */
+export const DOCUMENT_DELETE_DENIED =
+    "Only the person who added this file, or someone who manages it, can delete it.";
+
+/** May `ctx` add documents to the folder named `categoryName`? */
 export async function canEditFolder(ctx: FolderActor, categoryName: string): Promise<boolean> {
-    if (ctx.can("folders.manage")) return true;
-
-    // Folders are paths and a restriction covers everything beneath it, so
-    // the folder that governs this path is the deepest restricted one among
-    // the path and its ancestors.
-    const path = normalizeFolderPath(categoryName);
-    const lineage = [...folderAncestors(path), path];
-    const restrictedRows = await db
-        .select({ categoryId: folderSettings.categoryId, name: category.name })
-        .from(folderSettings)
-        .innerJoin(category, eq(category.id, folderSettings.categoryId))
-        .where(
-            and(
-                eq(category.companyId, ctx.companyId),
-                inArray(category.name, lineage),
-                eq(folderSettings.visibility, "restricted")
-            )
-        );
-    const restricted = restrictedRows
-        .map(row => ({ ...row, depth: normalizeFolderPath(row.name).split("/").length }))
-        .sort((a, b) => b.depth - a.depth)[0];
-    if (!restricted) return true;
-
-    const grants = await db
-        .select({
-            principalType: folderGrants.principalType,
-            principalId: folderGrants.principalId,
-            level: folderGrants.level,
-        })
-        .from(folderGrants)
-        .where(
-            and(
-                eq(folderGrants.companyId, ctx.companyId),
-                eq(folderGrants.categoryId, restricted.categoryId)
-            )
-        );
-
-    const editGrants = grants.filter(
-        grant => isGrantLevel(grant.level) && grantLevelAtLeast(grant.level, "edit")
-    );
-    if (editGrants.length === 0) return false;
-
-    const userPk = ctx.userPk.toString();
-    const role = normalizeRoleSlug(ctx.role);
-    for (const grant of editGrants) {
-        if (grant.principalType === "user" && grant.principalId === userPk) return true;
-        if (grant.principalType === "role" && normalizeRoleSlug(grant.principalId) === role) {
-            return true;
-        }
-    }
-
-    const groupGrantIds = editGrants
-        .filter(grant => grant.principalType === "group")
-        .map(grant => grant.principalId);
-    if (groupGrantIds.length === 0) return false;
-
-    const memberships = await db
-        .select({ groupId: workspaceGroupMembers.groupId })
-        .from(workspaceGroupMembers)
-        .where(eq(workspaceGroupMembers.userId, ctx.userPk));
-    const memberGroupIds = new Set(memberships.map(row => row.groupId.toString()));
-    return groupGrantIds.some(id => memberGroupIds.has(id));
+    return canEditFolderPath(ctx, categoryName);
 }
 
 /**

@@ -1,9 +1,14 @@
 import {
+    applyPinOrder,
+    byPinOrder,
     deriveSessionTitle,
     tidySessionTitle,
     filterHistory,
     groupHistoryByRecency,
+    movePin,
+    placePin,
     relativeTime,
+    sectionHistory,
     SESSION_TITLE_MAX,
     type HistoryEntry,
 } from "~/lib/workspace-history";
@@ -202,5 +207,74 @@ describe("filterHistory", () => {
 
     it("ignores case", () => {
         expect(filterHistory(entries, "INDEMNITY").map(e => e.id)).toEqual(["a"]);
+    });
+});
+
+/**
+ * ADR-014 §5: the rail's three sections and the pin order. Each entry lands in
+ * one section; the order of Pinned is the person's own, not recency.
+ */
+describe("sectionHistory", () => {
+    const pinnedOld = entry("p-old", "2020-01-01T00:00:00.000Z", { pinned: true, pinRank: 0 });
+    const pinnedNew = entry("p-new", NOW.toISOString(), { pinned: true, pinRank: 1 });
+    const unranked = entry("p-unranked", NOW.toISOString(), { pinned: true, pinRank: null });
+    const sharedPinned = entry("s-pin", NOW.toISOString(), {
+        pinned: true,
+        pinRank: -1,
+        sharedBy: "user-b",
+    });
+    const sharedOld = entry("s-old", "2026-09-04T10:00:00.000Z", { sharedBy: "user-b" });
+    const sharedNew = entry("s-new", "2026-09-05T13:00:00.000Z", { sharedBy: "user-c" });
+    const mine = entry("mine", "2026-09-05T12:00:00.000Z");
+    const run = entry("run", "2026-09-05T13:30:00.000Z", { kind: "email" });
+
+    it("puts pins first in manual order, then shared with you, then the rest by date", () => {
+        const sections = sectionHistory(
+            [mine, sharedOld, pinnedNew, run, unranked, sharedNew, pinnedOld, sharedPinned],
+            NOW
+        );
+        expect(sections.pinned.map(e => e.id)).toEqual(["s-pin", "p-old", "p-new", "p-unranked"]);
+        expect(sections.shared.map(e => e.id)).toEqual(["s-new", "s-old"]);
+        expect(sections.recent.map(g => [g.id, g.entries.map(e => e.id)])).toEqual([
+            ["today", ["run", "mine"]],
+        ]);
+    });
+});
+
+describe("pin order helpers", () => {
+    const order = ["a", "b", "c", "d"] as const;
+
+    it("moves one pin by index, clamped, and returns the same array when nothing moves", () => {
+        expect(movePin(order, "c", 0)).toEqual(["c", "a", "b", "d"]);
+        expect(movePin(order, "a", 99)).toEqual(["b", "c", "d", "a"]);
+        expect(movePin(order, "a", -1)).toBe(order);
+        expect(movePin(order, "zz", 1)).toBe(order);
+    });
+
+    it("drops a pin before or after another", () => {
+        expect(placePin(order, "d", "b", false)).toEqual(["a", "d", "b", "c"]);
+        expect(placePin(order, "a", "c", true)).toEqual(["b", "c", "a", "d"]);
+        expect(placePin(order, "b", "c", false)).toBe(order);
+        expect(placePin(order, "b", "b", true)).toBe(order);
+    });
+
+    it("restates an order as ranks on the pinned chats it names", () => {
+        const entries = [
+            entry("x", NOW.toISOString(), { pinned: true, pinRank: 5 }),
+            entry("y", NOW.toISOString(), { pinned: true, pinRank: 9 }),
+            entry("z", NOW.toISOString()),
+        ];
+        const next = applyPinOrder(entries, ["y", "x", "z"]);
+        expect(next.map(e => [e.id, e.pinRank])).toEqual([
+            ["x", 1],
+            ["y", 0],
+            ["z", undefined],
+        ]);
+        expect(
+            [...next]
+                .filter(e => e.pinned)
+                .sort(byPinOrder)
+                .map(e => e.id)
+        ).toEqual(["y", "x"]);
     });
 });

@@ -27,7 +27,10 @@ import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { documentDriveLinks } from "~/server/db/schema";
 import { uploadFile } from "~/lib/storage";
-import { processDocumentUpload } from "~/server/services/document-upload";
+import {
+    processDocumentUpload,
+    type DocumentUploadResult,
+} from "~/server/services/document-upload";
 
 import { DRIVE_FOLDER_NAME, isDriveLinkingEnabled } from "./config";
 import {
@@ -74,6 +77,8 @@ export interface CreateGoogleDocResult {
     documentId: number;
     driveFileId: string;
     url: string | null;
+    /** What ingestion inserted, so the route can give it the creator's defaults (ADR-014). */
+    upload: Pick<DocumentUploadResult, "document" | "createdDocuments">;
 }
 
 export async function createGoogleDocDocument(
@@ -192,6 +197,7 @@ export async function createGoogleDocDocument(
             documentId: upload.document.id,
             driveFileId: created.id,
             url: created.webViewLink ?? null,
+            upload: { document: upload.document, createdDocuments: upload.createdDocuments },
         };
     } catch (err) {
         try {

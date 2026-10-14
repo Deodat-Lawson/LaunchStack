@@ -32,6 +32,11 @@ const mockRepo = {
     truncateMessages: jest.fn(),
 };
 
+const mockReadSession = jest.fn();
+jest.mock("~/server/sessions/reader", () => ({
+    readSession: (...args: unknown[]) => mockReadSession(...args),
+}));
+
 jest.mock("~/server/sessions/repository", () => ({
     createSession: (...args: unknown[]) => mockRepo.createSession(...args),
     appendMessages: (...args: unknown[]) => mockRepo.appendMessages(...args),
@@ -160,17 +165,43 @@ describe("POST /api/workspace/sessions/{id}/messages", () => {
 });
 
 describe("GET/PATCH/DELETE /api/workspace/sessions/{id}", () => {
-    it("reads back a session the caller owns", async () => {
-        mockRepo.getSession.mockResolvedValue({ id: "s1", messages: [] });
+    it("reads a session through the access check, as the caller", async () => {
+        mockReadSession.mockResolvedValue({
+            id: "s1",
+            messages: [],
+            access: { level: "owner", ownerAuthUserId: "user-a", sharedAt: null },
+            hiddenCitations: 0,
+        });
 
         const response = await getSessionRoute(new Request("http://t"), params("s1"));
 
         expect(response.status).toBe(200);
-        expect(mockRepo.getSession.mock.calls[0]![0]).toEqual(OWNER);
+        const [ctx, id] = mockReadSession.mock.calls[0]!;
+        expect(ctx).toMatchObject({ companyId: BigInt(42), authUserId: "user-a" });
+        expect(id).toBe("s1");
+        await expect(response.json()).resolves.toMatchObject({
+            session: { access: { level: "owner" } },
+        });
     });
 
-    it("reads someone else's session as missing", async () => {
-        mockRepo.getSession.mockResolvedValue(null);
+    it("hands a reader the filtered transcript with view access (ADR-014)", async () => {
+        mockReadSession.mockResolvedValue({
+            id: "s2",
+            messages: [{ role: "assistant", text: "Five", citations: [], hiddenCitations: 2 }],
+            access: { level: "view", ownerAuthUserId: "user-b", sharedAt: "2026-10-10T00:00:00Z" },
+            hiddenCitations: 2,
+        });
+
+        const response = await getSessionRoute(new Request("http://t"), params("s2"));
+
+        expect(response.status).toBe(200);
+        await expect(response.json()).resolves.toMatchObject({
+            session: { access: { level: "view", ownerAuthUserId: "user-b" }, hiddenCitations: 2 },
+        });
+    });
+
+    it("reads a session the caller can't see as missing", async () => {
+        mockReadSession.mockResolvedValue(null);
 
         const response = await getSessionRoute(new Request("http://t"), params("nope"));
 
@@ -192,6 +223,20 @@ describe("GET/PATCH/DELETE /api/workspace/sessions/{id}", () => {
         expect(response.status).toBe(200);
         expect(mockRepo.updateSession.mock.calls[0]![0]).toEqual(OWNER);
         expect(mockRepo.updateSession.mock.calls[0]![2]).toEqual({ title: "Vendor review" });
+    });
+
+    it("no longer accepts a pin on the chat itself — pins are per person now", async () => {
+        const response = await patchSessionRoute(
+            new Request("http://t", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pinned: true }),
+            }),
+            params("s1")
+        );
+
+        expect(response.status).toBe(400);
+        expect(mockRepo.updateSession).not.toHaveBeenCalled();
     });
 
     it("refuses an empty patch instead of touching the row", async () => {

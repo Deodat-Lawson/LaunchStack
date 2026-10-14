@@ -269,6 +269,18 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
             item.type === "submenu" && item.id === openSubmenuId && !item.disabled
     );
 
+    // Place the submenu by its rendered height, not a guess: a long list
+    // ("Move to…" in a big workspace) is taller than any estimate, and placed
+    // by one it ran off the bottom of the screen, out of reach.
+    const submenuRef = useRef<HTMLDivElement>(null);
+    const [submenuHeight, setSubmenuHeight] = useState<number | null>(null);
+    useLayoutEffect(() => {
+        const height = submenuRef.current?.offsetHeight ?? 0;
+        // Zero means not laid out yet (or no layout at all, as in tests).
+        const measured = height > 0 ? height : null;
+        setSubmenuHeight(prev => (prev === measured ? prev : measured));
+    }, [openSubmenu]);
+
     let submenuPos = { left: left + MENU_MIN_WIDTH, top };
     if (openSubmenu) {
         const trigger = itemRefs.current[openSubmenu.id];
@@ -279,7 +291,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
             parentWidth: trigger?.offsetWidth ?? MENU_MIN_WIDTH,
             itemOffsetTop: offsetTop,
             width: MENU_MIN_WIDTH,
-            height: Math.min(openSubmenu.items.length * 32 + 8, 320),
+            height: submenuHeight ?? Math.min(openSubmenu.items.length * 32 + 8, 320),
             viewportWidth: typeof window === "undefined" ? 1280 : window.innerWidth,
             viewportHeight: typeof window === "undefined" ? 800 : window.innerHeight,
         });
@@ -417,6 +429,7 @@ const MenuPanel = forwardRef<HTMLDivElement, MenuPanelProps>(function MenuPanelI
             </div>
             {openSubmenu && (
                 <MenuPanel
+                    ref={submenuRef}
                     nested
                     items={openSubmenu.items}
                     left={submenuPos.left}

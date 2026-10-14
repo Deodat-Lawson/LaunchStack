@@ -17,6 +17,8 @@ export interface PickedPrincipal {
     principalType: PrincipalType;
     principalId: string;
     principalName: string;
+    /** For a person: their auth subject id, for their photo. */
+    authUserId?: string | null;
 }
 
 export function principalKey(type: PrincipalType, id: string): string {
@@ -69,6 +71,10 @@ export function PrincipalPicker({
     const pick = (principal: PickedPrincipal) => {
         onPick(principal);
         setQuery("");
+        // Close the list so the row just added is what you see next — left
+        // open, it covers the list and shifts whatever sits below it.
+        setFocused(false);
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     };
 
     const groups: { label: string; Icon: typeof User; items: PickedPrincipal[] }[] = results
@@ -80,6 +86,7 @@ export function PrincipalPicker({
                       principalType: "user" as const,
                       principalId: String(u.id),
                       principalName: u.name || u.email,
+                      authUserId: u.authUserId ?? null,
                   })),
               },
               {
@@ -126,7 +133,7 @@ export function PrincipalPicker({
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     disabled={disabled}
-                    placeholder="Add a person, group, or role…"
+                    placeholder="Add people, groups, or roles…"
                     aria-label="Add a person, group, or role"
                     aria-controls={listId}
                     aria-expanded={active && !disabled}

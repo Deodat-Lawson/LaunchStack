@@ -93,6 +93,10 @@ export interface Group {
     description: string | null;
     memberCount: number;
     members: { id: number; name: string; email: string }[];
+    /** Auth subject id of whoever created it; they manage it (ADR-014). */
+    createdBy?: string;
+    /** May the viewer rename, delete, or change who is in it. */
+    canManage?: boolean;
 }
 
 export interface Role {
@@ -142,6 +146,19 @@ export interface Grant {
     principalId: string;
     principalName: string;
     level: GrantLevel;
+    /** A person's auth subject id, for their photo. */
+    authUserId?: string | null;
+}
+
+/** What "not restricted" means for an item: the workspace, or the restricted folder above it. */
+export interface InheritedAudience {
+    path: string | null;
+    restricted: boolean;
+}
+
+export interface OwnerRef {
+    authUserId: string;
+    name: string;
 }
 
 export interface GrantInput {
@@ -156,6 +173,9 @@ export interface FolderAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience;
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface DocumentAccess {
@@ -164,10 +184,13 @@ export interface DocumentAccess {
     grants: Grant[];
     audienceCount: number;
     canManage: boolean;
+    inheritsFrom: InheritedAudience & { folder: string | null };
+    owner: OwnerRef | null;
+    workspaceName: string;
 }
 
 export interface Principals {
-    users: { id: number; name: string; email: string }[];
+    users: { id: number; authUserId?: string; name: string; email: string }[];
     groups: { id: number; name: string }[];
     roles: { slug: string; name: string }[];
 }
@@ -194,7 +217,8 @@ export function errorMessage(err: unknown, fallback = "Something went wrong."): 
     return fallback;
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+/** One call to a `/api/workspace/*` route: JSON in, JSON out, `ApiError` on failure. */
+export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     const headers: Record<string, string> = { ...(init.headers as Record<string, string>) };
     if (init.body !== undefined && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";

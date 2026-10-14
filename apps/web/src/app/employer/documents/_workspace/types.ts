@@ -113,6 +113,36 @@ export const DOC_DOMAINS: Record<DocDomain, { color: string; desc: string }> = {
     General: { color: "oklch(0.5 0.02 280)", desc: "Cross-references and attachments" },
 };
 
+/**
+ * Who can see an item, from the signed-in person's point of view (ADR-014):
+ * everyone in the workspace, specific people, or only them. The Sources rail
+ * files every top-level folder and loose file under the section this names.
+ */
+export type SourceAudience = "workspace" | "shared" | "private";
+
+/** The caller's access to one folder or file, as `/api/folders` and the documents list report it. */
+export interface ItemAccessView {
+    audience: SourceAudience;
+    /** True when the item sets its own audience; false when it inherits its folder's. */
+    ownAudience: boolean;
+    /** People, groups and roles the governing grants name — "Shared with 3". */
+    principalCount: number;
+    /** May add to it (a folder), or rename, move, replace or delete it (a file). */
+    canEdit: boolean;
+    /** May change who has access; for a folder also rename, move or delete it. */
+    canManage: boolean;
+    /** Files only: may delete it (manages it, or can edit it and holds `documents.delete`). */
+    canDelete?: boolean;
+    /** Folders only: the restricted folder that governs it, or null. */
+    governingPath?: string | null;
+}
+
+/** Who added a file — draw with `usePeople` for their current name in this workspace. */
+export interface SourceAddedBy {
+    authUserId: string;
+    name: string;
+}
+
 export interface WorkspaceSource {
     /**
      * Unique within the UI — DB-backed rows prefix with "d", staged locals
@@ -154,6 +184,10 @@ export interface WorkspaceSource {
     pending?: boolean;
     /** Limited to people with an explicit grant, not the whole workspace. */
     restricted?: boolean;
+    /** The caller's access; absent for rows the server has not described (staged uploads, older servers). */
+    access?: ItemAccessView;
+    /** Who added it, when a person did. */
+    addedBy?: SourceAddedBy | null;
 }
 
 export interface WorkspaceFolder {
@@ -164,6 +198,8 @@ export interface WorkspaceFolder {
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while only implied by its contents. */
     categoryId?: number | null;
+    /** The caller's access; absent for a folder only implied by what is in it. */
+    access?: ItemAccessView;
 }
 
 export interface ThreadReference {
@@ -205,6 +241,8 @@ export interface EphemeralAttachment {
 
 export interface ThreadMessage {
     forkedFromSessionId?: string;
+    /** Someone else's question, carried over by "Continue in a new chat" (auth subject id). */
+    askedBy?: string;
     intent?: "queued" | "interrupt";
     id?: string;
     createdAt?: string;
@@ -218,6 +256,11 @@ export interface ThreadMessage {
     /** Source IDs the user pinned for a user turn, or cited documents for an assistant turn. */
     refs?: string[];
     citations?: ThreadReference[];
+    /**
+     * Reading someone else's chat (ADR-014): citations the server removed
+     * because you can't open their source. Never stored.
+     */
+    hiddenCitations?: number;
     model?: string;
     /**
      * Total LLM tokens for the turn. Named for what it is: this used to be set

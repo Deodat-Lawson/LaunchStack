@@ -156,6 +156,7 @@ describe("crawlWebsite page lifecycle failures", () => {
                     jobId: `job-${documentId}`,
                     eventIds: [],
                     storageType: "s3",
+                    createdDocuments: [],
                     resolvedDocumentUrl: "https://storage.example/stored",
                 };
             }

@@ -325,6 +325,87 @@ export const workspaceAuditEvents = pgTable(
 );
 
 // ============================================================================
+// Team activity (ADR-014)
+// ============================================================================
+// What people did to shared work, for everyone to read — unlike the audit log,
+// which is governance and admin-only. A reader sees a row only when they can
+// see its target today, so a row never leaks a private file's name.
+
+export const workspaceActivity = pgTable(
+    "workspace_activity",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        /** Auth subject id of the person who did it. */
+        actorUserId: varchar("actor_user_id", { length: 256 }).notNull(),
+        /** `added` | `created_folder` | `renamed` | `moved` | `deleted` | `shared` | `unshared` | `forked`. */
+        verb: varchar("verb", { length: 32 }).notNull(),
+        /** `document` | `folder` | `chat` | `group`. */
+        targetType: varchar("target_type", { length: 16 }).notNull(),
+        targetId: varchar("target_id", { length: 64 }),
+        /** The target's name when it happened, so a renamed or deleted thing still reads. */
+        targetLabel: varchar("target_label", { length: 300 }).notNull(),
+        /** Folder path (folders) or the document's folder (documents), for visibility checks. */
+        targetPath: varchar("target_path", { length: 1024 }),
+        detail: jsonb("detail").$type<Record<string, unknown>>(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        companyCreatedIdx: index("workspace_activity_company_created_idx").on(
+            table.companyId,
+            table.createdAt
+        ),
+        companyActorIdx: index("workspace_activity_company_actor_idx").on(
+            table.companyId,
+            table.actorUserId
+        ),
+    })
+);
+
+// ============================================================================
+// Inbox (ADR-014)
+// ============================================================================
+// One row per person told about something — written in the transaction that
+// shared it. In-app only; there is no email.
+
+export const workspaceNotifications = pgTable(
+    "workspace_notifications",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        /** Auth subject id of the person being told. */
+        recipientUserId: varchar("recipient_user_id", { length: 256 }).notNull(),
+        /** Auth subject id of the person who did it. */
+        actorUserId: varchar("actor_user_id", { length: 256 }).notNull(),
+        /** `shared`. */
+        kind: varchar("kind", { length: 32 }).notNull(),
+        /** `document` | `folder` | `chat`. */
+        targetType: varchar("target_type", { length: 16 }).notNull(),
+        targetId: varchar("target_id", { length: 64 }).notNull(),
+        targetLabel: varchar("target_label", { length: 300 }).notNull(),
+        /** `{ level, via: { type, name } }` — how it reached them (a group, directly). */
+        detail: jsonb("detail").$type<Record<string, unknown>>(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        readAt: timestamp("read_at", { withTimezone: true }),
+    },
+    table => ({
+        recipientCreatedIdx: index("workspace_notifications_recipient_created_idx").on(
+            table.companyId,
+            table.recipientUserId,
+            table.createdAt
+        ),
+    })
+);
+
+// ============================================================================
 // Relations
 // ============================================================================
 
@@ -389,3 +470,5 @@ export type FolderGrant = InferSelectModel<typeof folderGrants>;
 export type DocumentSettings = InferSelectModel<typeof documentSettings>;
 export type DocumentGrant = InferSelectModel<typeof documentGrants>;
 export type WorkspaceAuditEvent = InferSelectModel<typeof workspaceAuditEvents>;
+export type WorkspaceActivityRow = InferSelectModel<typeof workspaceActivity>;
+export type WorkspaceNotificationRow = InferSelectModel<typeof workspaceNotifications>;

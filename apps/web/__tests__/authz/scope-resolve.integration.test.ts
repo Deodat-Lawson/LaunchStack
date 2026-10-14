@@ -6,7 +6,10 @@
  * Gated like the founder-weekly-review suites: runs only when
  * LAUNCHSTACK_TEST_DATABASE_URL (or DATABASE_URL) points at a local server.
  */
-import { eq } from "drizzle-orm";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { eq, sql } from "drizzle-orm";
 
 import { category, company, document } from "@launchstack/store/schema";
 import type { DbClient } from "@launchstack/store/client";
@@ -240,9 +243,23 @@ describeDb("resolveDocumentScope (integration)", () => {
         return rows.map(r => r.title).sort();
     }
 
-    it("gives an owner everything without touching the grant tables", async () => {
-        const scope = await scopeFor(ids.owner, "owner");
-        expect(scope.kind).toBe("everything");
+    it("gives an owner no way past a restriction until the ADR-014 carry-over grants exist", async () => {
+        // Private means private (ADR-014): with no grant, an owner sees what a member sees.
+        expect((await scopeFor(ids.owner, "owner")).kind).toBe("except");
+        expect(await visibleTitles(ids.owner, "owner")).toEqual(["Handbook"]);
+
+        // The migration's data statements give owners and admins back what was
+        // restricted before ADR-014, through explicit role grants.
+        const migration = readFileSync(
+            join(__dirname, "../../drizzle/20261014005705_private_by_default_sharing.sql"),
+            "utf8"
+        );
+        const carryOver = migration
+            .split("--> statement-breakpoint")
+            .filter(stmt => stmt.includes("system:adr-014"));
+        expect(carryOver).toHaveLength(2);
+        for (const stmt of carryOver) await test.db.execute(sql.raw(stmt));
+
         expect(await visibleTitles(ids.owner, "owner")).toEqual([
             "Board deck",
             "Budget",
@@ -250,6 +267,8 @@ describeDb("resolveDocumentScope (integration)", () => {
             "Ledger",
             "Plan",
         ]);
+        // A plain member is unaffected.
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Handbook"]);
     });
 
     it("hides the restricted folder, its subfolders, and the restricted document from a plain member", async () => {
@@ -319,6 +338,59 @@ describeDb("resolveDocumentScope (integration)", () => {
             .from(document)
             .where(scopedDocumentWhere(ids.companyId, scope));
         expect(rows).toEqual([]);
+    });
+
+    it("opens a folder or file to someone added to it, though it only inherits a restriction they're not on", async () => {
+        const { folderGrants, documentGrants } = await import("~/server/db/schema");
+        // Reports only inherits Finance's restriction; the member is added to it.
+        const [reports] = await test.db
+            .insert(category)
+            .values({ name: "Finance/Reports", companyId: ids.companyId })
+            .returning();
+        await test.db.insert(folderGrants).values({
+            companyId: ids.companyId,
+            categoryId: BigInt(reports!.id),
+            principalType: "user",
+            principalId: ids.member.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+        // The Ledger has no restriction of its own; the viewer is added to it.
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docFinance),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
+
+        expect(await visibleTitles(ids.member, "member")).toEqual(["Budget", "Handbook"]);
+        expect(await visibleTitles(ids.viewer, "viewer")).toEqual([
+            "Board deck",
+            "Handbook",
+            "Ledger",
+        ]);
+        // Nobody else gains anything from either.
+        expect(await visibleTitles(ids.groupMember, "member")).toEqual([
+            "Budget",
+            "Handbook",
+            "Ledger",
+        ]);
+
+        await test.db.delete(folderGrants).where(eq(folderGrants.categoryId, BigInt(reports!.id)));
+        await test.db.delete(category).where(eq(category.id, reports!.id));
+        await test.db
+            .delete(documentGrants)
+            .where(eq(documentGrants.principalId, ids.viewer.toString()));
+        await test.db.insert(documentGrants).values({
+            companyId: ids.companyId,
+            documentId: BigInt(ids.docBoardDeck),
+            principalType: "user",
+            principalId: ids.viewer.toString(),
+            level: "view",
+            grantedBy: "auth_owner",
+        });
     });
 
     it("collapses to everything once the workspace has nothing restricted", async () => {

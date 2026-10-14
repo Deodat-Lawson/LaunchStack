@@ -18,6 +18,7 @@ import {
     type UploadBatchFileRecord,
 } from "~/server/services/upload-batches";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { recordUpload } from "~/server/workspace/added-documents";
 
 const CommitSchema = z.object({
     preferredProvider: z.string().optional(),
@@ -136,6 +137,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                         mimeType: file.mimeType ?? undefined,
                         embeddingIndexKey,
                     });
+                    await recordUpload(ctx.data, uploadResult);
 
                     await db
                         .update(uploadBatchFiles)

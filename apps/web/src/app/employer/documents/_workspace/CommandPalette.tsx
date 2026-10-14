@@ -19,6 +19,7 @@ import {
     relativeTime,
 } from "~/lib/workspace-history";
 import type { IconProps } from "~/components/icons/types";
+import { usePeople } from "~/lib/profile/use-people";
 
 /** An agent's picture as a palette icon — the same avatar the chat shows. */
 function AgentPaletteIcon(agent: ChatAgentOption): ComponentType<IconProps> {
@@ -142,6 +143,14 @@ export function CommandPalette({
         [router]
     );
 
+    // Chats shared with you say whose they are (ADR-014); names resolve lazily.
+    const sharerIds = useMemo(
+        () =>
+            (history ?? []).map(entry => entry.sharedBy).filter((id): id is string => Boolean(id)),
+        [history]
+    );
+    const people = usePeople(sharerIds);
+
     const items = useMemo<PaletteItem[]>(() => {
         // The registry is read when the palette opens, so it reflects what is
         // mounted right now; `open` is in the deps for that reason.
@@ -200,11 +209,14 @@ export function CommandPalette({
         });
         const historyItem = (entry: HistoryEntry): PaletteItem => {
             const meta = HISTORY_KIND_META[entry.kind];
+            const sharer = entry.sharedBy ? people[entry.sharedBy]?.displayName : undefined;
             return {
                 kind: "history",
                 id: entry.id,
                 label: entry.title,
-                sub: `${meta.label} · ${relativeTime(entry.at)}`,
+                sub: entry.sharedBy
+                    ? `Shared by ${sharer ?? "a teammate"} · ${relativeTime(entry.at)}`
+                    : `${meta.label} · ${relativeTime(entry.at)}`,
                 Icon: HISTORY_KIND_ICONS[meta.icon],
                 onRun: () => onPickHistory?.(entry),
             };
@@ -260,6 +272,7 @@ export function CommandPalette({
         onPickHistory,
         navigate,
         predictiveGaps,
+        people,
     ]);
 
     useEffect(() => {

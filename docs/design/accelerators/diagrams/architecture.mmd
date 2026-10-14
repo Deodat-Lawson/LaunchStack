@@ -1,0 +1,34 @@
+flowchart TB
+  subgraph Browser["Founder's browser"]
+    UI["Accelerators tool tab<br/>workspace UI"]
+    EXT["Browser extension · MV3<br/>capture form + fill approved answers"]
+  end
+  subgraph App["app · Next.js · GHCR launchstack-web"]
+    API["/api/accelerators + /api/proposals<br/>inline runs by default"]
+    XAPI["/api/extension<br/>bearer token + CORS allowlist"]
+  end
+  INN["Inngest<br/>Cloud in prod · inngest-dev in Compose"]
+  subgraph Worker["worker · GHCR launchstack-web-worker"]
+    SEED["Seed sync on boot"]
+    CRON["Weekly catalogue refresh<br/>Mon 06:00 UTC + on-demand event"]
+    RUNS["Writing runs<br/>programs · draft · verify<br/>when PROPOSALS_EXECUTOR=worker"]
+  end
+  PG[("Postgres<br/>global catalogue + company tables")]
+  S3[("SeaweedFS / S3<br/>page snapshots · exported packets")]
+  LLM["Model provider<br/>via @launchstack/llm"]
+  WEB["Public program websites<br/>fetchReadable, SSRF-guarded"]
+  UI --> API
+  EXT --> XAPI
+  API -- events --> INN
+  INN --> CRON
+  INN --> RUNS
+  API --> PG
+  XAPI --> PG
+  SEED --> PG
+  CRON --> WEB
+  CRON --> S3
+  CRON --> PG
+  CRON --> LLM
+  RUNS --> LLM
+  RUNS --> PG
+  API --> LLM

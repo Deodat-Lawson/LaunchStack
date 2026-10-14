@@ -1,3 +1,12 @@
+# Line endings: LF in the repository AND in every working tree, on every OS.
+#
+# Git for Windows defaults to core.autocrlf=true, which checks text files out
+# with CRLF. Shell scripts run inside Linux containers then fail
+# (`/bin/sh^M: bad interpreter` — e.g. docker/seaweedfs-entrypoint.sh, mounted
+# by docker-compose.yml), and Prettier (endOfLine: "lf") flags every file.
+# `text=auto` leaves binaries alone; `eol=lf` overrides autocrlf for the rest.
+* text=auto eol=lf
+
 # Migration artifacts must never be auto-merged.
 #
 # Two PRs that each add a migration will both append an entry to _journal.json.

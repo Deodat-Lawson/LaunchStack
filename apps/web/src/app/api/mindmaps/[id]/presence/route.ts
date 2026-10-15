@@ -17,6 +17,7 @@ import { db } from "~/server/db";
 import { mindmapPresence, mindmaps } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
+import { draftVisibilityWhere, draftReader } from "~/server/mindmap/access";
 import { workspaceLooks } from "~/server/profile/store";
 
 /** A client is "here" if it checked in within this window. */
@@ -65,7 +66,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const [row] = await db
             .select({ id: mindmaps.id, revision: mindmaps.revision })
             .from(mindmaps)
-            .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
+            .where(and(eq(mindmaps.id, id), draftVisibilityWhere(await draftReader(ctx.data))))
             .limit(1);
         if (!row) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
 

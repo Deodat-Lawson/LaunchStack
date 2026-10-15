@@ -89,6 +89,30 @@ describe("mapMindmap", () => {
     it("skips the thumbnail URL when there is no image to serve", () => {
         expect(mapMindmap(summary({ hasThumbnail: false })).thumbnailUrl).toBeUndefined();
     });
+
+    it("files a draft by its own access, not its published copy's (ADR-014)", () => {
+        const draft = {
+            audience: "private" as const,
+            ownAudience: true,
+            principalCount: 1,
+            canEdit: true,
+            canManage: true,
+            canDelete: true,
+        };
+        const published = {
+            audience: "workspace" as const,
+            ownAudience: false,
+            principalCount: 0,
+            canEdit: false,
+            canManage: false,
+            canDelete: false,
+        };
+        const row = summary({ folder: "Unfiled", access: draft, publishedDocumentId: 99 });
+        const source = mapMindmap(row, { access: published } as never);
+        expect(source.access).toEqual(draft);
+        // An older server that described only the published copy still gets a label.
+        expect(mapMindmap(summary(), { access: published } as never).access).toEqual(published);
+    });
 });
 
 describe("useWorkspaceData", () => {

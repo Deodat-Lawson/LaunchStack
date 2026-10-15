@@ -1,17 +1,24 @@
 /**
  * Mindmap collection endpoint — list and create.
  *
- * Documents are workspace-scoped, not user-scoped: anyone in the company can
- * open a map their colleague drew, matching how Sources already behave.
+ * A draft is seen by whoever can open its folder, and an Unfiled draft only
+ * by whoever made it (ADR-014, `~/server/mindmap/access`). Creating one in a
+ * folder takes edit access to that folder, as adding a file does; a folder
+ * path that does not exist yet comes into being private to its creator.
  */
 
 import { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
+import { isUnfiledFolder, normalizeFolderPath, validateFolderPath } from "~/lib/folders/path";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { CreateMindmapSchema, serverError, validateRequestBody } from "~/lib/validation";
+import { describeDraftAccess, draftReader } from "~/server/mindmap/access";
 import { listFolders, listMindmaps, summariseDoc, toDetail } from "~/server/mindmap/repository";
+import { FOLDER_EDIT_DENIED } from "~/server/services/folder-access";
+import { canEditFolderPath } from "~/server/workspace/item-access";
+import { claimFolderPathForDraft } from "~/server/workspace/ownership";
 
 /** Trimmed value, or `undefined` when missing or blank (`??` can't do blank). */
 function nonEmpty(value: string | null | undefined): string | undefined {
@@ -32,9 +39,9 @@ export async function GET(request: Request) {
         // will answer.
         const includeThumbnails = searchParams.get("thumbnails") === "1";
 
+        const reader = await draftReader(ctx.data);
         const [rows, folders] = await Promise.all([
-            listMindmaps({
-                companyId: ctx.data.companyId,
+            listMindmaps(reader, {
                 scope,
                 folder: searchParams.get("folder") ?? undefined,
                 search: nonEmpty(searchParams.get("q")),
@@ -42,9 +49,14 @@ export async function GET(request: Request) {
                 createdByUserId: searchParams.get("mine") === "1" ? ctx.data.authUserId : undefined,
                 limit: Number(searchParams.get("limit")) || undefined,
             }),
-            listFolders(ctx.data.companyId),
+            listFolders(reader),
         ]);
-        const items = includeThumbnails ? rows : rows.map(row => ({ ...row, thumbnail: null }));
+        const access = await describeDraftAccess(ctx.data, rows);
+        const items = rows.map(row => ({
+            ...row,
+            thumbnail: includeThumbnails ? row.thumbnail : null,
+            access: access.get(row.id),
+        }));
 
         return NextResponse.json({ mindmaps: items, folders }, { status: 200 });
     } catch (error) {
@@ -75,31 +87,45 @@ export async function POST(request: Request) {
         };
         const stats = summariseDoc(doc);
 
-        const [row] = await db
-            .insert(mindmaps)
-            .values({
-                companyId: ctx.data.companyId,
-                createdByUserId: ctx.data.authUserId,
-                updatedByUserId: ctx.data.authUserId,
-                title: nonEmpty(body.title) ?? "Untitled mindmap",
-                description: body.description ?? null,
-                templateId: body.templateId ?? null,
-                folder: nonEmpty(body.folder) ?? "Unfiled",
-                doc,
-                docVersion:
-                    typeof (doc as { schemaVersion?: unknown }).schemaVersion === "number"
-                        ? (doc as { schemaVersion: number }).schemaVersion
-                        : 1,
-                revision: 1,
-                nodeCount: stats.nodeCount,
-                edgeCount: stats.edgeCount,
-                searchText: stats.searchText,
-                openedAt: new Date(),
-            })
-            .returning();
+        const folder = normalizeFolderPath(body.folder);
+        if (!isUnfiledFolder(folder)) {
+            const invalid = validateFolderPath(folder);
+            if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
+            if (!(await canEditFolderPath(ctx.data, folder))) {
+                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            }
+        }
+
+        const row = await db.transaction(async tx => {
+            await claimFolderPathForDraft(tx, ctx.data, folder);
+            const [inserted] = await tx
+                .insert(mindmaps)
+                .values({
+                    companyId: ctx.data.companyId,
+                    createdByUserId: ctx.data.authUserId,
+                    updatedByUserId: ctx.data.authUserId,
+                    title: nonEmpty(body.title) ?? "Untitled mindmap",
+                    description: body.description ?? null,
+                    templateId: body.templateId ?? null,
+                    folder,
+                    doc,
+                    docVersion:
+                        typeof (doc as { schemaVersion?: unknown }).schemaVersion === "number"
+                            ? (doc as { schemaVersion: number }).schemaVersion
+                            : 1,
+                    revision: 1,
+                    nodeCount: stats.nodeCount,
+                    edgeCount: stats.edgeCount,
+                    searchText: stats.searchText,
+                    openedAt: new Date(),
+                })
+                .returning();
+            return inserted;
+        });
 
         if (!row) return serverError("Failed to create mindmap");
-        return NextResponse.json({ mindmap: toDetail(row) }, { status: 201 });
+        const [access] = (await describeDraftAccess(ctx.data, [row])).values();
+        return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 201 });
     } catch (error) {
         console.error("[mindmaps] create failed:", error);
         return serverError("Failed to create mindmap");

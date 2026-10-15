@@ -15,7 +15,9 @@
  * Publishing adds a file to the library, so it takes what any upload takes
  * (ADR-014): `documents.upload`, edit access to the folder it lands in, and —
  * for a later publish — edit access to the copy it replaces. A first publish
- * into Unfiled is private to the publisher until they share it.
+ * into Unfiled is private to the publisher until they share it. It also writes
+ * the draft's published marker, so it takes edit access to the draft itself
+ * (`~/server/mindmap/access`); a draft the caller cannot see is a 404.
  */
 
 import { NextResponse } from "next/server";
@@ -42,6 +44,12 @@ import {
     FOLDER_EDIT_DENIED,
     canEditFolder,
 } from "~/server/services/folder-access";
+import {
+    DRAFT_EDIT_DENIED,
+    canEditDraftAt,
+    draftAccess,
+    draftReader,
+} from "~/server/mindmap/access";
 import { getMindmap, toDetail } from "~/server/mindmap/repository";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -82,8 +90,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const requestedCategory =
             trimmedCategory === undefined || trimmedCategory === "" ? undefined : trimmedCategory;
 
-        const map = await getMindmap(id, ctx.data.companyId);
+        const map = await getMindmap(id, await draftReader(ctx.data));
         if (!map) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!canEditDraftAt((await draftAccess(ctx.data, map)).level)) {
+            return NextResponse.json({ error: DRAFT_EDIT_DENIED }, { status: 403 });
+        }
 
         const documentCategory = requestedCategory ?? map.folder;
         if (!(await canEditFolder(ctx.data, documentCategory))) {

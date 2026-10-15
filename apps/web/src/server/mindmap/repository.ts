@@ -1,16 +1,18 @@
 /**
  * Data access for the Mindmap app.
  *
- * Every read is scoped by `companyId` here rather than in the route handlers,
- * so a missing `where` clause cannot leak another workspace's diagrams. Routes
- * pass the `WorkspaceContext` they already resolved and get back either the
- * row or `null`.
+ * Every read is scoped here rather than in the route handlers, so a missing
+ * `where` clause cannot leak another workspace's diagrams or a draft filed
+ * in a folder the caller cannot open (ADR-014, `./access`). Routes pass the
+ * `DraftReader` for their request and get back either the row or `null`.
  */
 
 import { and, desc, eq, ilike, isNotNull, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { mindmapRevisions, mindmaps, type Mindmap } from "~/server/db/schema";
+
+import { draftVisibilityWhere, type DraftAccessView, type DraftReader } from "./access";
 
 /** How many history snapshots to keep per document. */
 export const REVISION_LIMIT = 60;
@@ -46,6 +48,12 @@ export interface MindmapSummary {
     searchText: string | null;
     createdByUserId: string;
     updatedByUserId: string | null;
+    /**
+     * The caller's access to the draft (ADR-014): who can see it, from its
+     * folder, and what they may do with it. Set by the routes that know the
+     * caller; absent from `toSummary` alone.
+     */
+    access?: DraftAccessView;
     deletedAt: string | null;
     openedAt: string | null;
     createdAt: string;
@@ -98,7 +106,6 @@ export function toDetail(row: Mindmap): MindmapDetail {
 // ---------------------------------------------------------------------------
 
 export interface ListFilters {
-    companyId: bigint;
     /** `active` hides trashed maps; `trash` shows only those. */
     scope?: "active" | "trash";
     folder?: string;
@@ -109,8 +116,12 @@ export interface ListFilters {
     limit?: number;
 }
 
-export async function listMindmaps(filters: ListFilters): Promise<MindmapSummary[]> {
-    const conditions = [eq(mindmaps.companyId, filters.companyId)];
+/** The drafts `reader` may see, newest first. */
+export async function listMindmaps(
+    reader: DraftReader,
+    filters: ListFilters = {}
+): Promise<MindmapSummary[]> {
+    const conditions = [draftVisibilityWhere(reader)];
 
     conditions.push(
         filters.scope === "trash" ? isNotNull(mindmaps.deletedAt) : isNull(mindmaps.deletedAt)
@@ -137,20 +148,22 @@ export async function listMindmaps(filters: ListFilters): Promise<MindmapSummary
     return rows.map(toSummary);
 }
 
-export async function getMindmap(id: number, companyId: bigint): Promise<Mindmap | null> {
+/** One draft, or null when it does not exist or `reader` may not see it — the two read alike. */
+export async function getMindmap(id: number, reader: DraftReader): Promise<Mindmap | null> {
     const [row] = await db
         .select()
         .from(mindmaps)
-        .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, companyId)))
+        .where(and(eq(mindmaps.id, id), draftVisibilityWhere(reader)))
         .limit(1);
     return row ?? null;
 }
 
-export async function listFolders(companyId: bigint): Promise<string[]> {
+/** The folders `reader`'s drafts are filed in; a folder they cannot open is never named. */
+export async function listFolders(reader: DraftReader): Promise<string[]> {
     const rows = await db
         .selectDistinct({ folder: mindmaps.folder })
         .from(mindmaps)
-        .where(and(eq(mindmaps.companyId, companyId), isNull(mindmaps.deletedAt)));
+        .where(and(draftVisibilityWhere(reader), isNull(mindmaps.deletedAt)));
     return rows.map(r => r.folder).sort((a, b) => a.localeCompare(b));
 }
 

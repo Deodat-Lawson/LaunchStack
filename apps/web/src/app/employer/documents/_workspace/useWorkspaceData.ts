@@ -174,8 +174,10 @@ export function mindmapCitability(
 export function mapMindmap(
     map: MindmapSummary,
     /**
-     * The published copy, when the caller can see it: the map is shared as
-     * that file is, and is searchable once that file is indexed.
+     * The published copy, when the caller can see it: the map is searchable
+     * once that file is indexed. Who can see the map itself is the draft's
+     * own `access` (its folder's audience); the copy's stands in only for a
+     * server that did not describe the draft.
      */
     publishedDocument?: DocumentRow
 ): WorkspaceSource {
@@ -195,7 +197,10 @@ export function mapMindmap(
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
-        access: publishedDocument?.access ?? undefined,
+        // The draft's own access: it sits in the rail where its folder puts
+        // it, and its verbs act on the draft. The published copy's is the
+        // fallback for an older server that did not describe the draft.
+        access: map.access ?? publishedDocument?.access ?? undefined,
         addedBy: publishedDocument?.addedBy ?? null,
         indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
         errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,

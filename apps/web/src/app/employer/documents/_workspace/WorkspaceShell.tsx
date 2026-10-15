@@ -479,7 +479,8 @@ export function WorkspaceShell() {
             router.replace(sourceUrl(null));
             return;
         }
-        if (editParam && sourceApi.isMindmapSource(found)) {
+        // A draft the caller can only view opens in the viewer instead.
+        if (editParam && sourceApi.isMindmapSource(found) && found.access?.canEdit !== false) {
             setEditingSource(found);
             return;
         }

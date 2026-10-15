@@ -726,7 +726,7 @@ export function DocumentViewer({
 
     const openOriginal = () => {
         if (isMindmap) {
-            onEdit?.(source);
+            if (editable) onEdit?.(source);
             return;
         }
         if (!source.documentId) return;
@@ -819,7 +819,9 @@ export function DocumentViewer({
 
     /** The header's buttons, in the order they give way when room runs out. */
     const headerActions: HeaderAction[] = [
-        ...(isMindmap && onEdit
+        // A draft someone can only view opens here and nowhere else: its
+        // folder gives them no edit, so the editor would refuse every save.
+        ...(isMindmap && onEdit && editable
             ? [
                   {
                       id: "edit",
@@ -831,7 +833,7 @@ export function DocumentViewer({
                   },
               ]
             : []),
-        ...(isMindmap && source.citability !== "citable"
+        ...(isMindmap && editable && source.citability !== "citable"
             ? [
                   {
                       id: "publish",

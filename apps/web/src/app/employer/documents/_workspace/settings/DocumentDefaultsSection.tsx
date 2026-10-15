@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Section } from "~/components/layout/page-shell";
 import { getSetting, type SettingDefinition } from "~/lib/settings/registry";
 import type { SettingOption } from "~/lib/settings/types";
+import { usePermissions } from "~/lib/use-permissions";
 
 import type { SettingsSectionProps } from "./contract";
 import { SettingRow } from "./SettingRow";
@@ -31,8 +32,14 @@ const PROCESSING_DEFINITION = getSetting("documents.defaultProcessingMethod")!;
 
 export function DocumentDefaultsSection(_: SettingsSectionProps) {
     const [bootstrap, setBootstrap] = useState<Bootstrap | null>(null);
+    // The narrowed options matter only to someone who may pick one, and the
+    // bootstrap is refused to everyone else; their read-only rows keep the
+    // registry's full lists.
+    const { loaded, can } = usePermissions();
+    const mayEdit = loaded && can("settings.manage");
 
     useEffect(() => {
+        if (!mayEdit) return;
         let cancelled = false;
         void (async () => {
             try {
@@ -47,7 +54,7 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [mayEdit]);
 
     const providers = bootstrap?.availableProviders;
     const hasAnyOcr = providers

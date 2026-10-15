@@ -96,9 +96,13 @@ export function SettingRow({
         [setting, writeScope]
     );
 
+    // The description is quoted, not spliced into a sentence: some are verb
+    // phrases ("Send invitations…") and some are lists ("Workspace settings,
+    // processing, …"), and splicing a list read "people who can workspace
+    // settings".
     const permissionReason = !canEdit
         ? definition.permission
-            ? `Only people who can ${PERMISSION_DESCRIPTIONS[definition.permission].toLowerCase()} change this.`
+            ? `Changing this takes a role with “${PERMISSION_DESCRIPTIONS[definition.permission]}”.`
             : "Not editable at this scope."
         : null;
     const readOnlyReason = !loaded ? null : (disabledReason ?? permissionReason);

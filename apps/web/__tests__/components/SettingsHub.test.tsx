@@ -20,10 +20,28 @@ jest.mock("next/navigation", () => ({
     usePathname: () => "/employer/settings",
 }));
 
-// The chrome asks who is looking so it can mark a section read-only; an
-// owner sees everything editable.
+// The chrome asks who is looking: which sections to list, and which to mark
+// read-only. Unless a test says otherwise, an owner, who sees everything
+// editable.
+type MockPermissions = {
+    loaded: boolean;
+    error: string | null;
+    roleName: string | null;
+    permissions: ReadonlySet<string> | "all";
+};
+const OWNER: MockPermissions = { loaded: true, error: null, roleName: "Owner", permissions: "all" };
+let mockPermissions: MockPermissions = OWNER;
 jest.mock("~/lib/use-permissions", () => ({
-    usePermissions: () => ({ loaded: true, can: () => true }),
+    usePermissions: () => ({
+        loaded: mockPermissions.loaded,
+        error: mockPermissions.error,
+        roleName: mockPermissions.roleName,
+        can: (p: string | undefined) => {
+            if (p === undefined) return true;
+            if (!mockPermissions.loaded) return false;
+            return mockPermissions.permissions === "all" || mockPermissions.permissions.has(p);
+        },
+    }),
 }));
 
 // Member-scoped sections are registry rows over the settings store; the
@@ -87,6 +105,7 @@ import {
     SettingsHub,
     settingsSectionFromHash,
 } from "~/app/employer/documents/_workspace/SettingsHub";
+import { BUILTIN_ROLE_PERMISSIONS, ROLE_LABELS, type BuiltinRole } from "~/lib/authz/permissions";
 
 /** `next/dynamic` resolves on a microtask; wait for the real body to land. */
 async function findBody(testId: string) {
@@ -130,6 +149,7 @@ describe("SettingsHub", () => {
     beforeEach(() => {
         setHash("");
         mockReplace.mockReset();
+        mockPermissions = OWNER;
     });
 
     it("lists every section in one grouped rail", () => {
@@ -279,5 +299,133 @@ describe("SettingsHub", () => {
     it("offers no way back when it is a tab inside the Studio", () => {
         render(<SettingsHub embedded />);
         expect(screen.queryByTestId("rail-back-link")).not.toBeInTheDocument();
+    });
+});
+
+/**
+ * Settings is open to every role. The You sections are everyone's; each
+ * workspace section is listed for whoever may see it, read-only for whoever
+ * may only read it, and a link to one someone may not see says why.
+ */
+describe("SettingsHub by role", () => {
+    const as = (role: BuiltinRole) => {
+        mockPermissions = {
+            loaded: true,
+            error: null,
+            roleName: ROLE_LABELS[role],
+            permissions: BUILTIN_ROLE_PERMISSIONS[role],
+        };
+    };
+    const railLabels = () =>
+        within(screen.getByRole("navigation", { name: /settings sections/i }))
+            .getAllByRole("button")
+            .map(button => button.querySelector("span > span")?.textContent);
+
+    beforeEach(() => {
+        setHash("");
+        mockReplace.mockReset();
+    });
+    afterAll(() => {
+        mockPermissions = OWNER;
+    });
+
+    it("opens on Account for a Member, with the You sections first", async () => {
+        as("member");
+        render(<SettingsHub embedded />);
+
+        await findBody("body-account");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+            "Who you are, and where you are signed in"
+        );
+        expect(railLabels().slice(0, 3)).toEqual(["Account", "Appearance", "Shortcuts"]);
+    });
+
+    it("lists for a Member only the sections their role can read", () => {
+        as("member");
+        render(<SettingsHub embedded />);
+
+        expect(railLabels()).toEqual([
+            "Account",
+            "Appearance",
+            "Shortcuts",
+            "People and access",
+            "Company profile",
+            "Document defaults",
+            "Data and privacy",
+            "Labs",
+        ]);
+    });
+
+    it("gives a Viewer the same, and a Guest no member list", () => {
+        as("viewer");
+        const { unmount } = render(<SettingsHub embedded />);
+        expect(railLabels()).toContain("People and access");
+        unmount();
+
+        as("guest");
+        render(<SettingsHub embedded />);
+        expect(railLabels()).not.toContain("People and access");
+        expect(railLabels()).toEqual(
+            expect.arrayContaining(["Account", "Appearance", "Shortcuts", "Data and privacy"])
+        );
+    });
+
+    it("marks a section a Member may only read, and keeps its body", async () => {
+        as("member");
+        const user = userEvent.setup();
+        render(<SettingsHub embedded />);
+        await findBody("body-account");
+        expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: /Company profile/i }));
+        await findBody("body-company");
+        expect(screen.getByText("Read-only")).toBeInTheDocument();
+    });
+
+    it("tells a Member who follows a link to an admins' section why it is empty", async () => {
+        as("member");
+        setHash("#byok");
+        render(<SettingsHub embedded />);
+
+        await waitFor(() =>
+            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+                "How documents get indexed"
+            )
+        );
+        expect(
+            screen.getByText(
+                "Processing isn't part of your role (Member). Ask an admin if you need it."
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByTestId("body-processing")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
+    });
+
+    it("waits for the roles before saying anything about a gated section", () => {
+        mockPermissions = { loaded: false, error: null, roleName: null, permissions: new Set() };
+        setHash("#byok");
+        render(<SettingsHub embedded />);
+
+        expect(screen.getByText("Loading…")).toBeInTheDocument();
+        expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
+        // Fails closed: only the ungated sections are listed meanwhile.
+        expect(railLabels()).not.toContain("Processing");
+    });
+
+    it("says the roles failed to load, not that the section isn't theirs", () => {
+        mockPermissions = {
+            loaded: true,
+            error: "Could not load your permissions (500).",
+            roleName: null,
+            permissions: new Set(),
+        };
+        setHash("#byok");
+        render(<SettingsHub embedded />);
+
+        expect(screen.getByRole("alert")).toHaveTextContent(
+            "Could not load your permissions (500)."
+        );
+        expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
+        expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
     });
 });

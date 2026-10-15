@@ -3,6 +3,7 @@
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { searchSettings } from "~/lib/settings/registry";
+import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -165,15 +166,16 @@ export function CommandPalette({
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked. A Settings section ("People and
-            // access") opens the Settings app, so it carries Settings' gate.
+            // would do nothing when picked. Anyone may open Settings, so a
+            // row for one of its sections ("Self-host / BYOK") carries that
+            // section's gate instead: picked without it, the row would land
+            // on a section that only says it isn't theirs.
             .filter(f => {
-                const opens =
-                    resolveStudioFeature(f.id) ??
-                    (settingsSectionOf(f.href) !== undefined
-                        ? resolveStudioFeature("settings")
-                        : undefined);
-                return can(opens?.requires);
+                const app = resolveStudioFeature(f.id);
+                if (app) return can(app.requires);
+                const hash = settingsSectionOf(f.href);
+                const section = hash ? settingsSectionFromHash(hash) : null;
+                return section ? canSeeSettingsSection(section, can) : true;
             })
             .forEach(f =>
                 base.push({
@@ -262,8 +264,14 @@ export function CommandPalette({
                 .map(historyItem)
         );
         // Settings are searched by what people call them, so "dark mode"
-        // finds the theme row even though no label says it.
-        for (const definition of searchSettings(qq, 6)) {
+        // finds the theme row even though no label says it. Only rows in a
+        // section the person may see: one they may only read still answers
+        // "where is that set, and to what?". Every match is ranked before
+        // any is dropped, so a Member's six are their best six.
+        const visibleSettings = searchSettings(qq, Infinity)
+            .filter(definition => canSeeSettingsSection(definition.section, can))
+            .slice(0, 6);
+        for (const definition of visibleSettings) {
             matched.push({
                 kind: "setting",
                 id: definition.key,

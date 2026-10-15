@@ -105,7 +105,10 @@ import {
     SettingsHub,
     settingsSectionFromHash,
 } from "~/app/employer/documents/_workspace/SettingsHub";
+import { WorkspaceAnswerStyleRow } from "~/app/employer/documents/_workspace/settings/AnswerStyle";
 import { BUILTIN_ROLE_PERMISSIONS, ROLE_LABELS, type BuiltinRole } from "~/lib/authz/permissions";
+import type { ResolvedSetting, SettingWriteRequest } from "~/lib/settings/types";
+import { resetSettingsForTests } from "~/lib/settings/useSettings";
 
 /** `next/dynamic` resolves on a microtask; wait for the real body to land. */
 async function findBody(testId: string) {
@@ -132,6 +135,8 @@ describe("settingsSectionFromHash", () => {
     it("lands a registry key on its section", () => {
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         expect(settingsSectionFromHash("#retention.trashDays")).toBe("archive");
+        // The personal row, which every role can reach; not the admins' one.
+        expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");
     });
 
     it("is case-insensitive and tolerates a missing #", () => {
@@ -427,5 +432,207 @@ describe("SettingsHub by role", () => {
         );
         expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
         expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
+    });
+});
+
+/**
+ * The default assistant's answer style has a workspace default and a
+ * personal override. The override is under Appearance, where every role can
+ * change it; the default is under Agents and autonomy, written at workspace
+ * scope. Each row pins its scope: a plain row writes the member value, so an
+ * admin's "workspace" change used to be only their own.
+ */
+describe("The answer style", () => {
+    const KEY = "chat.responseStyle";
+    const LABEL = "Answer style of the default assistant";
+    let style: ResolvedSetting<string>;
+    let puts: SettingWriteRequest[];
+    const originalFetch = global.fetch;
+
+    const respond = (body: unknown) =>
+        Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
+
+    const resolved = (partial: Partial<ResolvedSetting<string>>): ResolvedSetting<string> => ({
+        key: KEY,
+        value: "concise",
+        source: "default",
+        sourceId: null,
+        updatedBy: null,
+        updatedAt: null,
+        canEdit: { workspace: true, folder: false, member: true },
+        stored: {},
+        ...partial,
+    });
+
+    const as = (role: BuiltinRole) => {
+        mockPermissions = {
+            loaded: true,
+            error: null,
+            roleName: ROLE_LABELS[role],
+            permissions: BUILTIN_ROLE_PERMISSIONS[role],
+        };
+    };
+
+    beforeAll(() => {
+        // Radix Select and the deep-link scroll reach for layout APIs jsdom lacks.
+        Element.prototype.scrollIntoView = jest.fn();
+        Element.prototype.hasPointerCapture = jest.fn(() => false);
+        Element.prototype.releasePointerCapture = jest.fn();
+    });
+
+    beforeEach(() => {
+        setHash("");
+        mockReplace.mockReset();
+        mockPermissions = OWNER;
+        resetSettingsForTests();
+        puts = [];
+        style = resolved({});
+        global.fetch = jest.fn((_url: string, init?: RequestInit) => {
+            if (init?.method === "PUT") {
+                const request = JSON.parse(init.body as string) as SettingWriteRequest;
+                puts.push(request);
+                return respond({ setting: { ...style, value: request.value } });
+            }
+            return respond({
+                settings: { [KEY]: style },
+                viewer: { authUserId: "u1", permissions: [] },
+                folder: null,
+            });
+        }) as unknown as typeof fetch;
+    });
+
+    afterAll(() => {
+        global.fetch = originalFetch;
+        mockPermissions = OWNER;
+    });
+
+    /** The answer-style row. The mock answers for this key alone, so its neighbours read as read-only. */
+    function answerRow(): HTMLElement {
+        const row = document.getElementById(`setting-${KEY}`);
+        if (!row) throw new Error("no answer-style row");
+        return row;
+    }
+
+    async function pick(optionLabel: string) {
+        const user = userEvent.setup();
+        await user.click(screen.getByRole("combobox", { name: LABEL }));
+        await user.click(await screen.findByRole("option", { name: optionLabel }));
+    }
+
+    it.each(["member", "viewer", "guest"] as const)(
+        "lands a %s's link on their own row under Appearance, editable",
+        async role => {
+            as(role);
+            style = resolved({
+                value: "organized",
+                source: "workspace",
+                stored: { workspace: "organized" },
+                canEdit: { workspace: false, folder: false, member: true },
+            });
+            setHash(`#${KEY}`);
+            render(<SettingsHub embedded />);
+
+            await waitFor(() =>
+                expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+                    "How the app looks, and how it answers you"
+                )
+            );
+            const combobox = await screen.findByRole("combobox", { name: LABEL });
+            await waitFor(() => expect(combobox).toBeEnabled());
+            expect(combobox).toHaveTextContent("Organized");
+            const row = within(answerRow());
+            expect(answerRow()).toHaveAttribute("data-highlight", "true");
+            expect(row.getByText("Inherited from workspace")).toBeInTheDocument();
+            expect(row.queryByText("Read-only")).not.toBeInTheDocument();
+            // Nothing to say until they pick their own; nowhere to send them.
+            expect(row.queryByText(/workspace default/)).not.toBeInTheDocument();
+            expect(row.queryByRole("link", { name: /Agents and autonomy/ })).toBeNull();
+
+            await pick("Detailed");
+            await waitFor(() =>
+                expect(puts).toEqual([
+                    { key: KEY, scope: "member", scopeId: null, value: "detailed" },
+                ])
+            );
+        }
+    );
+
+    it("tells a Member with their own choice what the workspace default is", async () => {
+        as("member");
+        style = resolved({
+            value: "detailed",
+            source: "member",
+            sourceId: "u1",
+            stored: { workspace: "organized", member: "detailed" },
+            canEdit: { workspace: false, folder: false, member: true },
+        });
+        setHash(`#${KEY}`);
+        render(<SettingsHub embedded />);
+
+        expect(await screen.findByText("The workspace default is Organized.")).toBeInTheDocument();
+        const row = within(answerRow());
+        expect(row.getByText("Your choice")).toBeInTheDocument();
+        expect(row.getByRole("button", { name: "Reset to the workspace" })).toBeInTheDocument();
+    });
+
+    it("points an admin on their own row to the workspace default", async () => {
+        style = resolved({
+            value: "organized",
+            source: "workspace",
+            stored: { workspace: "organized" },
+        });
+        setHash(`#${KEY}`);
+        render(<SettingsHub embedded />);
+
+        expect(
+            await screen.findByText(/gets the workspace default, Organized\./)
+        ).toBeInTheDocument();
+        await userEvent
+            .setup()
+            .click(screen.getByRole("link", { name: "Change it under Agents and autonomy" }));
+
+        await findBody("body-agents");
+    });
+
+    it("writes the workspace default from Agents and autonomy, showing the workspace's value", async () => {
+        // The admin has picked their own style too. The workspace row must
+        // show, and write, the workspace's.
+        style = resolved({
+            value: "detailed",
+            source: "member",
+            sourceId: "u1",
+            updatedBy: "u1",
+            stored: { workspace: "organized", member: "detailed" },
+        });
+        render(<WorkspaceAnswerStyleRow />);
+
+        const combobox = await screen.findByRole("combobox", { name: LABEL });
+        await waitFor(() => expect(combobox).toBeEnabled());
+        expect(combobox).toHaveTextContent("Organized");
+        expect(screen.getByText("Set at workspace level")).toBeInTheDocument();
+        expect(screen.queryByText(/Inherited from you/)).not.toBeInTheDocument();
+        expect(
+            screen.getByText(/Your own choice, Detailed, still applies to your chats\./)
+        ).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Change it under Appearance" })).toHaveAttribute(
+            "href",
+            `#${KEY}`
+        );
+
+        await pick("Academic");
+        await waitFor(() =>
+            expect(puts).toEqual([
+                { key: KEY, scope: "workspace", scopeId: null, value: "academic" },
+            ])
+        );
+    });
+
+    it("says nothing about a personal choice the admin has not made", async () => {
+        style = resolved({ value: "concise", source: "default" });
+        render(<WorkspaceAnswerStyleRow />);
+
+        await waitFor(() => expect(screen.getByRole("combobox", { name: LABEL })).toBeEnabled());
+        expect(screen.getByText("Default · nothing set")).toBeInTheDocument();
+        expect(screen.queryByText(/Your own choice/)).not.toBeInTheDocument();
     });
 });

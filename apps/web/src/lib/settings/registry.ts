@@ -31,7 +31,14 @@ import type { SettingControl, SettingsSectionId, StoredScope } from "./types";
 
 export interface SettingDefinition<T = unknown> {
     key: string;
+    /** Where the row lives, and where `#key` lands. */
     section: SettingsSectionId;
+    /**
+     * Where the workspace-scope row is drawn, when that is not `section`. Set
+     * when the personal row belongs with the other You preferences but the
+     * workspace default is policy for admins.
+     */
+    workspaceSection?: SettingsSectionId;
     /** Row label. Short. */
     label: string;
     /** What it does, one sentence. */
@@ -47,7 +54,11 @@ export interface SettingDefinition<T = unknown> {
     schema: z.ZodType<T>;
     default: T;
     control: SettingControl;
-    /** A feature surface renders this one; the generic row is not used. Still searchable. */
+    /**
+     * Placed by hand, so `SectionRows` leaves it out: a feature surface renders
+     * it, or its row is drawn somewhere specific (once per scope). Still
+     * searchable, and `#key` still lands on `section`.
+     */
     custom?: boolean;
     /** Lives in a legacy column, joined in by the server's bindings rather than `settings_values`. */
     bound?: boolean;
@@ -134,6 +145,57 @@ export const SETTINGS: readonly SettingDefinition[] = [
         },
     },
     {
+        key: "chat.responseStyle",
+        section: "appearance",
+        label: "Answer style of the default assistant",
+        description:
+            "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
+        aliases: [
+            "response style",
+            "concise",
+            "detailed",
+            "academic",
+            "organized",
+            "answer length",
+            "tone",
+        ],
+        // Two rows, one per scope: each person's own choice under Appearance,
+        // and the workspace default (what everyone else gets) under Agents and
+        // autonomy, which only admins see. `#chat.responseStyle` lands on the
+        // personal row, because everyone can reach that one.
+        workspaceSection: "agents",
+        scopes: ["workspace", "member"],
+        permission: "settings.manage",
+        schema: z.enum(AGENT_STYLE_IDS),
+        default: "concise",
+        control: {
+            kind: "select",
+            options: [
+                {
+                    value: "concise",
+                    label: "Concise",
+                    description: "Direct and short. Under 150 words when it can be.",
+                },
+                {
+                    value: "detailed",
+                    label: "Detailed",
+                    description: "Comprehensive, with context and background.",
+                },
+                {
+                    value: "academic",
+                    label: "Academic",
+                    description: "Analytical and precise, formal structure.",
+                },
+                {
+                    value: "organized",
+                    label: "Organized",
+                    description: "Sections and bullets, built to scan.",
+                },
+            ],
+        },
+        custom: true,
+    },
+    {
         key: "shortcuts.bindings",
         section: "shortcuts",
         label: "Keyboard shortcuts",
@@ -197,51 +259,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
                 label: AGENT_AUTONOMY_META[level].label,
                 description: AGENT_AUTONOMY_META[level].description,
             })),
-        },
-    },
-    {
-        key: "chat.responseStyle",
-        section: "agents",
-        label: "Answer style of the default assistant",
-        description:
-            "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
-        aliases: [
-            "response style",
-            "concise",
-            "detailed",
-            "academic",
-            "organized",
-            "answer length",
-            "tone",
-        ],
-        scopes: ["workspace", "member"],
-        permission: "settings.manage",
-        schema: z.enum(AGENT_STYLE_IDS),
-        default: "concise",
-        control: {
-            kind: "select",
-            options: [
-                {
-                    value: "concise",
-                    label: "Concise",
-                    description: "Direct and short. Under 150 words when it can be.",
-                },
-                {
-                    value: "detailed",
-                    label: "Detailed",
-                    description: "Comprehensive, with context and background.",
-                },
-                {
-                    value: "academic",
-                    label: "Academic",
-                    description: "Analytical and precise, formal structure.",
-                },
-                {
-                    value: "organized",
-                    label: "Organized",
-                    description: "Sections and bullets, built to scan.",
-                },
-            ],
         },
     },
     {

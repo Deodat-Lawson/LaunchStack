@@ -151,11 +151,11 @@ export const SECTIONS: SectionDef[] = [
         id: "appearance",
         group: "you",
         label: "Appearance",
-        blurb: "Theme, density, motion",
+        blurb: "Theme, density, motion, answers",
         eyebrow: "Appearance",
-        title: "How the app looks to you",
+        title: "How the app looks, and how it answers you",
         description:
-            "Three controls, not eleven. Board colours in a mindmap are part of the map, not the theme.",
+            "Four controls, not eleven: three for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme.",
         Icon: Palette,
     },
     {

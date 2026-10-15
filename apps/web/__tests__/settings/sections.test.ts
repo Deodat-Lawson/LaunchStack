@@ -1,0 +1,120 @@
+/**
+ * Who sees which Settings section, per built-in role.
+ *
+ * Settings is open to everyone; each section carries its own gate. The table
+ * below is the contract a reviewer reads: You is everyone's, a section whose
+ * data is refused to a role is left out for it, and a section a role may only
+ * read is shown read-only.
+ */
+
+import {
+    BUILTIN_ROLE_PERMISSIONS,
+    BUILTIN_ROLES,
+    type BuiltinRole,
+    type Permission,
+} from "~/lib/authz/permissions";
+import { SETTINGS } from "~/lib/settings/registry";
+import {
+    SETTINGS_SECTION_ACCESS,
+    canSeeSettingsSection,
+    settingsSectionFromHash,
+} from "~/lib/settings/sections";
+import { SETTINGS_SECTION_IDS, type SettingsSectionId } from "~/lib/settings/types";
+
+function canFor(role: BuiltinRole) {
+    return (p: Permission | undefined) => p === undefined || BUILTIN_ROLE_PERMISSIONS[role].has(p);
+}
+
+function visibleTo(role: BuiltinRole): SettingsSectionId[] {
+    return SETTINGS_SECTION_IDS.filter(id => canSeeSettingsSection(id, canFor(role)));
+}
+
+function readOnlyFor(role: BuiltinRole): SettingsSectionId[] {
+    const can = canFor(role);
+    return visibleTo(role).filter(id => !can(SETTINGS_SECTION_ACCESS[id].edit));
+}
+
+const YOU: SettingsSectionId[] = ["account", "appearance", "shortcuts"];
+
+describe("SETTINGS_SECTION_ACCESS", () => {
+    it("gives every role the You sections, editable", () => {
+        for (const role of BUILTIN_ROLES) {
+            expect(visibleTo(role)).toEqual(expect.arrayContaining(YOU));
+            for (const id of YOU) expect(readOnlyFor(role)).not.toContain(id);
+        }
+    });
+
+    it("shows an Owner and an Admin every section, none of them read-only", () => {
+        for (const role of ["owner", "admin"] as const) {
+            expect(visibleTo(role)).toEqual([...SETTINGS_SECTION_IDS]);
+            expect(readOnlyFor(role)).toEqual([]);
+        }
+    });
+
+    it("shows a Member and a Viewer the people list and the readable policy, read-only", () => {
+        for (const role of ["member", "viewer"] as const) {
+            expect(visibleTo(role)).toEqual([
+                "account",
+                "appearance",
+                "shortcuts",
+                "people",
+                "company",
+                "documents",
+                "privacy",
+                "labs",
+            ]);
+            expect(readOnlyFor(role)).toEqual(["company", "documents", "labs"]);
+        }
+    });
+
+    it("shows a Guest no member list", () => {
+        expect(visibleTo("guest")).toEqual([
+            "account",
+            "appearance",
+            "shortcuts",
+            "company",
+            "documents",
+            "privacy",
+            "labs",
+        ]);
+    });
+
+    it("leaves out every section whose own read the server refuses", () => {
+        // The API gates behind each section's mount-time GET. A section is
+        // never shown to someone its data would answer 403.
+        const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
+            models: "settings.manage", // GET /api/settings/models
+            usage: "analytics.view", // GET /api/settings/usage
+            archive: "settings.manage", // GET /api/settings/archive
+            people: "members.view", // GET /api/workspace/members
+        };
+        for (const [section, permission] of Object.entries(refusedReads)) {
+            expect(SETTINGS_SECTION_ACCESS[section as SettingsSectionId].view).toBe(permission);
+        }
+    });
+
+    it("keeps the registry's write permission and its section's edit gate in step", () => {
+        // A workspace-scoped row in a section gated on X is written with X.
+        for (const definition of SETTINGS) {
+            if (!definition.permission || !definition.scopes.includes("workspace")) continue;
+            // People's one row is a policy card above the member list, which
+            // every member may see; the row itself is read-only to them.
+            if (definition.section === "people") continue;
+            const { view, edit } = SETTINGS_SECTION_ACCESS[definition.section];
+            expect({ key: definition.key, gate: edit ?? view }).toEqual({
+                key: definition.key,
+                gate: definition.permission,
+            });
+        }
+    });
+});
+
+describe("settingsSectionFromHash", () => {
+    it("lands old deep links and registry keys where the hub did", () => {
+        expect(settingsSectionFromHash("#byok")).toBe("processing");
+        expect(settingsSectionFromHash("#profile")).toBe("company");
+        expect(settingsSectionFromHash("#keys")).toBe("processing");
+        expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
+        expect(settingsSectionFromHash("#nope")).toBeNull();
+    });
+});

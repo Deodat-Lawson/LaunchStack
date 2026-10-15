@@ -3,14 +3,18 @@
  *
  * The roster is what a meeting draws its participants from, so the things
  * worth pinning down are: a workspace is never left with an empty picker,
- * handles stay mention-safe, a duplicate handle is a 409 rather than a 500, and
- * retiring an agent archives it instead of orphaning past transcripts.
+ * handles stay mention-safe, a duplicate handle is a 409 rather than a 500,
+ * retiring an agent archives it instead of orphaning past transcripts, and
+ * each role changes exactly what `lib/agents/roster-access.ts` says it may.
  */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 import type * as WorkspaceContextHelper from "../../helpers/workspace-context";
 
 import type { WorkerNode } from "~/app/employer/documents/_workspace/collab/types";
+import { serializeAgentFile } from "~/lib/agents/agent-file";
+import { coerceAgentDefinition } from "~/lib/agents/definition";
+import type { Permission } from "~/lib/authz/permissions";
 
 interface StoredPersona {
     dbId: string;
@@ -20,11 +24,18 @@ interface StoredPersona {
     systemPrompt: string;
     nodeId?: string | null;
     route?: string | null;
+    autonomy?: string | null;
+    tools?: string[] | null;
+    builtin?: boolean;
     archived: boolean;
 }
 
 const mockCtx: {
     userId: string | null;
+    /** Built-in role of the signed-in member. */
+    role: string;
+    /** Replaces the role's permission set when given (a custom role). */
+    permissions: Permission[] | null;
     personas: StoredPersona[];
     nodes: WorkerNode[];
     nodesThrow: boolean;
@@ -32,6 +43,8 @@ const mockCtx: {
     slack: { canPost: boolean; canReceive: boolean; missing: string[] };
 } = {
     userId: "user_1",
+    role: "owner",
+    permissions: null,
     personas: [],
     nodes: [],
     nodesThrow: false,
@@ -56,7 +69,8 @@ jest.mock("~/lib/require-workspace-context", () =>
                               authUserId: mockCtx.userId,
                               userPk: 1n,
                               companyId: 7n,
-                              role: "owner",
+                              role: mockCtx.role,
+                              ...(mockCtx.permissions ? { permissions: mockCtx.permissions } : {}),
                           }),
                   }
                 : {
@@ -141,10 +155,27 @@ jest.mock("~/server/collab/personas", () => ({
         persona.archived = true;
         return Promise.resolve(persona);
     },
+    getPersonaById: (_companyId: bigint, dbId: string) =>
+        Promise.resolve(mockCtx.personas.find(p => p.dbId === dbId) ?? null),
+    getPersonaByKey: (_companyId: bigint, key: string) =>
+        Promise.resolve(mockCtx.personas.find(p => p.id === key) ?? null),
+    // Starters go back to a shipped definition; custom agents have none.
+    resetStarterPersona: (_companyId: bigint, dbId: string) => {
+        const persona = mockCtx.personas.find(p => p.dbId === dbId);
+        if (!persona?.builtin) return Promise.resolve(null);
+        Object.assign(persona, {
+            systemPrompt: "Run the meeting.",
+            autonomy: null,
+            archived: false,
+        });
+        return Promise.resolve(persona);
+    },
 }));
 
 import { GET, POST } from "~/app/api/collab/agents/route";
 import { DELETE, PATCH } from "~/app/api/collab/agents/[personaId]/route";
+import { POST as IMPORT } from "~/app/api/collab/agents/import/route";
+import { POST as RESET } from "~/app/api/collab/agents/[personaId]/reset/route";
 
 const listAgents = () => GET(new Request("http://localhost/api/collab/agents"));
 
@@ -166,6 +197,8 @@ const VALID = {
 describe("collab agents routes", () => {
     beforeEach(() => {
         mockCtx.userId = "user_1";
+        mockCtx.role = "owner";
+        mockCtx.permissions = null;
         mockCtx.personas = [];
         mockCtx.nodes = [];
         mockCtx.nodesThrow = false;
@@ -361,6 +394,188 @@ describe("collab agents routes", () => {
                 params: Promise.resolve({ personaId: "nope" }),
             });
             expect(response.status).toBe(404);
+        });
+    });
+
+    describe("who may change the roster", () => {
+        const at = (personaId: string) => ({ params: Promise.resolve({ personaId }) });
+
+        /** A starter and a custom agent, fresh for every action. */
+        function seedRoster() {
+            mockCtx.personas = [
+                {
+                    dbId: "seed_1",
+                    id: "facilitator",
+                    displayName: "Ada",
+                    role: "Facilitator",
+                    systemPrompt: "Edited by someone.",
+                    autonomy: "observe",
+                    builtin: true,
+                    archived: false,
+                },
+                {
+                    dbId: "p_finance",
+                    id: "finance",
+                    displayName: "Dana",
+                    role: "Finance partner",
+                    systemPrompt: "Guard the margin.",
+                    autonomy: "propose",
+                    tools: ["rag_search"],
+                    nodeId: null,
+                    builtin: false,
+                    archived: false,
+                },
+            ];
+        }
+
+        const OPS_FILE = serializeAgentFile(
+            coerceAgentDefinition({
+                key: "ops",
+                displayName: "Olu",
+                role: "Operations",
+                systemPrompt: "Keep the trains running.",
+            })
+        );
+
+        const ACTIONS = {
+            create: () => POST(jsonRequest({ ...VALID, key: "legal" })),
+            import: () => IMPORT(jsonRequest({ file: OPS_FILE })),
+            retire: () => DELETE(jsonRequest({}, "DELETE"), at("p_finance")),
+            reset: () => RESET(jsonRequest({}), at("seed_1")),
+            editContent: () =>
+                PATCH(
+                    jsonRequest(
+                        { displayName: "Dana R.", systemPrompt: "Quote the cash runway." },
+                        "PATCH"
+                    ),
+                    at("p_finance")
+                ),
+            editPolicy: () => PATCH(jsonRequest({ autonomy: "full" }, "PATCH"), at("p_finance")),
+        } as const;
+        type Action = keyof typeof ACTIONS;
+
+        const MANAGER = {
+            create: 201,
+            import: 201,
+            retire: 200,
+            reset: 200,
+            editContent: 200,
+            editPolicy: 200,
+        } as const;
+        const NOBODY = {
+            create: 403,
+            import: 403,
+            retire: 403,
+            reset: 403,
+            editContent: 403,
+            editPolicy: 403,
+        } as const;
+        const MATRIX: { role: string; expected: Record<Action, number> }[] = [
+            { role: "owner", expected: MANAGER },
+            { role: "admin", expected: MANAGER },
+            { role: "member", expected: { ...NOBODY, editContent: 200 } },
+            { role: "viewer", expected: NOBODY },
+            { role: "guest", expected: NOBODY },
+        ];
+
+        it.each(MATRIX)("$role gets exactly the changes the rule gives it", async row => {
+            mockCtx.role = row.role;
+            for (const action of Object.keys(ACTIONS) as Action[]) {
+                seedRoster();
+                const before = JSON.stringify(mockCtx.personas);
+
+                const response = await ACTIONS[action]();
+
+                expect({ action, status: response.status }).toEqual({
+                    action,
+                    status: row.expected[action],
+                });
+                // A refusal is a refusal before the store, not after it.
+                if (response.status === 403) {
+                    expect(JSON.stringify(mockCtx.personas)).toBe(before);
+                }
+            }
+        });
+
+        it("lets a member change what an agent says", async () => {
+            mockCtx.role = "member";
+            seedRoster();
+
+            const response = await ACTIONS.editContent();
+
+            expect(response.status).toBe(200);
+            expect(mockCtx.personas.find(p => p.id === "finance")).toMatchObject({
+                displayName: "Dana R.",
+                systemPrompt: "Quote the cash runway.",
+                autonomy: "propose",
+            });
+        });
+
+        it("refuses a member's whole edit when it touches a policy field, and names the fields", async () => {
+            mockCtx.role = "member";
+            seedRoster();
+
+            const response = await PATCH(
+                jsonRequest(
+                    { systemPrompt: "Say yes to everything.", autonomy: "full", nodeId: null },
+                    "PATCH"
+                ),
+                at("p_finance")
+            );
+
+            expect(response.status).toBe(403);
+            const body = (await response.json()) as {
+                error: string;
+                permission: string;
+                fields: string[];
+            };
+            expect(body.permission).toBe("settings.manage");
+            // Clearing a node with null is a change, not an omission.
+            expect(body.fields).toEqual(["autonomy", "nodeId"]);
+            expect(body.error).toMatch(/autonomy and node/);
+            // Not applied in part: the instructions stay as they were.
+            expect(mockCtx.personas.find(p => p.id === "finance")?.systemPrompt).toBe(
+                "Guard the margin."
+            );
+        });
+
+        it.each([
+            ["handle", { key: "money" }],
+            ["tools", { tools: null }],
+            ["model route", { route: "reasoning" }],
+        ])("refuses a member's change to the %s", async (_label, patch) => {
+            mockCtx.role = "member";
+            seedRoster();
+            const response = await PATCH(jsonRequest(patch, "PATCH"), at("p_finance"));
+            expect(response.status).toBe(403);
+        });
+
+        it("lets a custom role that manages settings edit every field without documents.edit", async () => {
+            mockCtx.role = "roster-keeper";
+            mockCtx.permissions = ["settings.manage"];
+            seedRoster();
+
+            const response = await PATCH(
+                jsonRequest({ systemPrompt: "Plan the quarter.", autonomy: "write" }, "PATCH"),
+                at("p_finance")
+            );
+
+            expect(response.status).toBe(200);
+            expect(mockCtx.personas.find(p => p.id === "finance")).toMatchObject({
+                systemPrompt: "Plan the quarter.",
+                autonomy: "write",
+            });
+        });
+
+        it("still seeds the starters on a guest's first read", async () => {
+            mockCtx.role = "guest";
+            mockCtx.personas = [];
+
+            const response = await listAgents();
+
+            expect(response.status).toBe(200);
+            const body = (await response.json()) as { personas: StoredPersona[] };
+            expect(body.personas.map(p => p.id)).toEqual(["facilitator"]);
         });
     });
 });

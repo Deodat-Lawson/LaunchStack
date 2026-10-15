@@ -3,11 +3,27 @@
  *
  * DELETE archives rather than removing: persona ids appear in past transcripts
  * and in frozen meeting rosters, and those must keep resolving.
+ *
+ * PATCH takes two permissions (see `lib/agents/roster-access.ts`): anyone who
+ * edits documents may change what an agent says; only the roster's managers
+ * may change its handle, autonomy, tools, model route or node. DELETE is the
+ * managers' alone.
  */
 
 import { NextResponse } from "next/server";
 
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    AGENT_CONTENT_PERMISSION,
+    AGENT_ROSTER_PERMISSION,
+    agentRosterAccess,
+    describePolicyFields,
+    policyFieldsIn,
+} from "~/lib/agents/roster-access";
+import {
+    forbiddenForPermission,
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
 import { UpdatePersonaSchema } from "~/server/collab/agent-schemas";
 import { archivePersona, getPersonaById, updatePersona } from "~/server/collab/personas";
 
@@ -33,12 +49,31 @@ export async function PATCH(
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
+    const access = agentRosterAccess(permission => ctx.data.can(permission));
+    if (!access.editContent) return forbiddenForPermission(AGENT_CONTENT_PERMISSION);
+
     const parsed = UpdatePersonaSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
             { error: "Invalid request", details: parsed.error.flatten() },
             { status: 400 }
         );
+    }
+
+    // Refused rather than dropped: a save that quietly kept the old autonomy
+    // would look like it worked.
+    if (!access.manageRoster) {
+        const locked = policyFieldsIn(parsed.data);
+        if (locked.length > 0) {
+            return NextResponse.json(
+                {
+                    error: `Only people who can manage workspace settings can change an agent's ${describePolicyFields(locked)}.`,
+                    permission: AGENT_ROSTER_PERMISSION,
+                    fields: locked,
+                },
+                { status: 403 }
+            );
+        }
     }
 
     const { personaId } = await params;
@@ -64,7 +99,7 @@ export async function DELETE(
     _request: Request,
     { params }: { params: Promise<{ personaId: string }> }
 ) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission(AGENT_ROSTER_PERMISSION);
     if (!ctx.success) return ctx.response;
 
     const { personaId } = await params;

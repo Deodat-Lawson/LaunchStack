@@ -1,14 +1,24 @@
+/**
+ * The workspace's processing configuration, for Settings › Processing.
+ *
+ * Gated on `settings.manage`, like the section that reads it and the
+ * `updateCompany` route that writes it: the answer carries the embedding
+ * provider, the tail of each stored key and the self-hosted endpoint. The
+ * legacy employer and employee passkeys are left out altogether: no screen
+ * reads them, and they are shared secrets.
+ */
+
 import { NextResponse } from "next/server";
 import { db } from "../../../server/db/index";
 import { company } from "@launchstack/store/schema";
 import { eq } from "drizzle-orm";
 
 import { getRedactedCredentials } from "@launchstack/llm/embeddings";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const ctx = await requireWorkspaceContext();
+        const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
         const companyId = ctx.data.companyId;
@@ -20,8 +30,6 @@ export async function GET() {
                 description: company.description,
                 industry: company.industry,
                 embeddingIndexKey: company.embeddingIndexKey,
-                employerpasskey: company.employerpasskey,
-                employeepasskey: company.employeepasskey,
                 numberOfEmployees: company.numberOfEmployees,
                 useUploadThing: company.useUploadThing,
                 createdAt: company.createdAt,
@@ -49,7 +57,7 @@ export async function GET() {
             { status: 200 }
         );
     } catch (error: unknown) {
-        console.error("Error fetching documents:", error);
-        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
+        console.error("Error fetching company:", error);
+        return NextResponse.json({ error: "Unable to fetch company" }, { status: 500 });
     }
 }

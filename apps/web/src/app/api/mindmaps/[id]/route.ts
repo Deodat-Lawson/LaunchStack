@@ -5,6 +5,14 @@
  * revision, another tab (or another person) saved in between and the write is
  * refused with 409 plus the winning document, so the editor can offer to
  * reload rather than silently discarding someone's work.
+ *
+ * Access follows the draft's folder (ADR-014, `~/server/mindmap/access`): a
+ * draft the caller cannot see is a 404 on every verb; view opens it; edit
+ * saves, renames, stars, restores and moves it; trashing takes manage (its
+ * creator) or edit plus `documents.delete`. A move also needs edit access to
+ * the destination, sends it to Unfiled only for its creator, and never shows
+ * it to someone new unless only its mover could see it (Drive's rule). The
+ * response says what a move did to its audience, as a file move does.
  */
 
 import { NextResponse } from "next/server";
@@ -12,8 +20,20 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
+import { isUnfiledFolder, normalizeFolderPath, validateFolderPath } from "~/lib/folders/path";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, UpdateMindmapSchema, validateRequestBody } from "~/lib/validation";
+import {
+    DRAFT_DELETE_DENIED,
+    DRAFT_EDIT_DENIED,
+    DRAFT_MOVE_WIDENS,
+    DRAFT_UNFILED_DENIED,
+    canEditDraftAt,
+    draftAccess,
+    draftAccessView,
+    draftMoveWidens,
+    draftReader,
+} from "~/server/mindmap/access";
 import {
     getMindmap,
     summariseDoc,
@@ -21,6 +41,10 @@ import {
     writeRevision,
     type MindmapDetail,
 } from "~/server/mindmap/repository";
+import { FOLDER_EDIT_DENIED } from "~/server/services/folder-access";
+import { activeMemberPrincipals } from "~/server/workspace/grants";
+import { canDeleteAtLevel, canEditFolderPath } from "~/server/workspace/item-access";
+import { claimFolderPathForDraft } from "~/server/workspace/ownership";
 
 function parseId(raw: string): number | null {
     const id = Number.parseInt(raw, 10);
@@ -31,6 +55,16 @@ function notFound() {
     return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
 }
 
+function forbidden(error: string) {
+    return NextResponse.json({ error }, { status: 403 });
+}
+
+/** A move refused inside its transaction, so the folder it claimed is rolled back too. */
+class MoveRefused extends Error {}
+
+/** What a move did to who can see the draft — the file move's vocabulary. */
+type DraftMoveAccess = "inherits_folder" | "made_private";
+
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const ctx = await requireWorkspaceContext();
@@ -39,8 +73,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         const id = parseId((await params).id);
         if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
-        const row = await getMindmap(id, ctx.data.companyId);
+        const row = await getMindmap(id, await draftReader(ctx.data));
         if (!row) return notFound();
+        const access = draftAccessView(await draftAccess(ctx.data, row), ctx.data);
 
         // Best-effort recency stamp for the "Recent" rail — a failure here must
         // never stop the document from opening.
@@ -50,7 +85,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
             .where(eq(mindmaps.id, id))
             .catch((err: unknown) => console.error("[mindmaps] openedAt stamp failed:", err));
 
-        return NextResponse.json({ mindmap: toDetail(row) }, { status: 200 });
+        return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] fetch failed:", error);
         return serverError("Failed to load mindmap");
@@ -69,8 +104,27 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         if (!validation.success) return validation.response;
         const body = validation.data;
 
-        const current = await getMindmap(id, ctx.data.companyId);
+        const current = await getMindmap(id, await draftReader(ctx.data));
         if (!current) return notFound();
+        const level = (await draftAccess(ctx.data, current)).level;
+        if (!canEditDraftAt(level)) return forbidden(DRAFT_EDIT_DENIED);
+
+        const fromFolder = normalizeFolderPath(current.folder);
+        const toFolder = body.folder === undefined ? fromFolder : normalizeFolderPath(body.folder);
+        const moving = toFolder !== fromFolder;
+        if (moving) {
+            if (isUnfiledFolder(toFolder)) {
+                if (current.createdByUserId !== ctx.data.authUserId) {
+                    return forbidden(DRAFT_UNFILED_DENIED);
+                }
+            } else {
+                const invalid = validateFolderPath(toFolder);
+                if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
+                if (!(await canEditFolderPath(ctx.data, toFolder))) {
+                    return forbidden(FOLDER_EDIT_DENIED);
+                }
+            }
+        }
 
         const savingDoc = body.doc !== undefined;
         if (
@@ -98,7 +152,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         };
         if (body.title !== undefined) patch.title = body.title.trim();
         if (body.description !== undefined) patch.description = body.description;
-        if (body.folder !== undefined) patch.folder = body.folder.trim();
+        if (moving) patch.folder = toFolder;
         if (body.starred !== undefined) patch.starred = body.starred;
         if (body.thumbnail !== undefined) patch.thumbnail = body.thumbnail;
         if (body.restore) patch.deletedAt = null;
@@ -118,11 +172,35 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             }
         }
 
-        const [row] = await db
-            .update(mindmaps)
-            .set(patch)
-            .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
-            .returning();
+        // Read before the transaction opens: it holds its connection throughout.
+        const members = moving ? await activeMemberPrincipals(ctx.data.companyId) : [];
+        let row: typeof current | undefined;
+        try {
+            row = await db.transaction(async tx => {
+                if (moving) {
+                    // A path that did not exist comes into being private to
+                    // the mover, so filing there widens nothing.
+                    const claimed = await claimFolderPathForDraft(tx, ctx.data, toFolder);
+                    if (
+                        !claimed &&
+                        (await draftMoveWidens(ctx.data, current, toFolder, members, tx))
+                    ) {
+                        throw new MoveRefused();
+                    }
+                }
+                const [updated] = await tx
+                    .update(mindmaps)
+                    .set(patch)
+                    .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
+                    .returning();
+                return updated;
+            });
+        } catch (error) {
+            if (error instanceof MoveRefused) {
+                return NextResponse.json({ error: DRAFT_MOVE_WIDENS }, { status: 409 });
+            }
+            throw error;
+        }
 
         if (!row) return notFound();
 
@@ -143,8 +221,27 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             }
         }
 
-        const detail: MindmapDetail = toDetail(row);
-        return NextResponse.json({ mindmap: detail }, { status: 200 });
+        const detail: MindmapDetail = {
+            ...toDetail(row),
+            access: draftAccessView(await draftAccess(ctx.data, row), ctx.data),
+        };
+        const moveAccess: DraftMoveAccess | null = moving
+            ? isUnfiledFolder(toFolder)
+                ? "made_private"
+                : "inherits_folder"
+            : null;
+        return NextResponse.json(
+            {
+                mindmap: detail,
+                // Present only for a move, as for a file: `inherits_folder` —
+                // now visible to whoever can open the new folder; `made_private`
+                // — filed loose, so only its creator.
+                ...(moveAccess
+                    ? { move: { from: fromFolder, to: toFolder, access: moveAccess } }
+                    : {}),
+            },
+            { status: 200 }
+        );
     } catch (error) {
         console.error("[mindmaps] update failed:", error);
         return serverError("Failed to save mindmap");
@@ -167,6 +264,12 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
         const id = parseId((await params).id);
         if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+        const current = await getMindmap(id, await draftReader(ctx.data));
+        if (!current) return notFound();
+        const level = (await draftAccess(ctx.data, current)).level;
+        if (!canEditDraftAt(level)) return forbidden(DRAFT_EDIT_DENIED);
+        if (!canDeleteAtLevel(level, ctx.data.permissions)) return forbidden(DRAFT_DELETE_DENIED);
 
         const scope = and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId));
         const purge = new URL(request.url).searchParams.get("purge") === "1";

@@ -134,7 +134,7 @@ describe("moveSource", () => {
         expect(body<{ category: string }>(1).category).toBe("Archive");
     });
 
-    it("hands back what the move did to a document's audience", async () => {
+    it("hands back what the move did to a document's or a draft's audience", async () => {
         fetchMock.mockResolvedValue({
             ok: true,
             status: 200,
@@ -147,8 +147,23 @@ describe("moveSource", () => {
         await expect(moveSource(doc(), "Archive")).resolves.toEqual({
             access: "inherits_folder",
         });
-        // A mindmap's route does not report one.
-        await expect(moveSource(map(), "Archive")).resolves.toEqual({});
+        await expect(moveSource(map(), "Archive")).resolves.toEqual({
+            access: "inherits_folder",
+        });
+    });
+
+    it("reports a draft move the server refused in its own words", async () => {
+        fetchMock.mockResolvedValue({
+            ok: false,
+            status: 409,
+            json: () =>
+                Promise.resolve({
+                    error: "Moving this mindmap there would show it to people who can't see it now.",
+                }),
+        });
+        await expect(moveSource(map(), "Everyone")).rejects.toThrow(
+            "Moving this mindmap there would show it to people who can't see it now."
+        );
     });
 });
 

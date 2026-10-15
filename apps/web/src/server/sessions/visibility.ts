@@ -11,25 +11,29 @@
  *
  * Source ids are the workspace's (`d12` a document, `m3` a mindmap):
  * - `d<id>` is visible when the document is in the reader's `DocumentScope`.
- * - `m<id>` follows the rule every mindmap route applies — any member of the
- *   workspace may open a map (`/api/mindmaps/:id`) — plus one more: a map's
- *   citations quote its *published document*, so when it has one that
- *   document must be in scope too.
+ * - `m<id>` follows the rule every mindmap route applies — the reader can open
+ *   the draft (its folder's audience, or only its creator when Unfiled; see
+ *   `~/server/mindmap/access`) — plus one more: a map's citations quote its
+ *   *published document*, so when it has one that document must be in scope
+ *   too.
  * - Anything else (a staged local `s…`, a malformed id) is dropped: fail closed.
  */
 
-import { and, eq, inArray } from "drizzle-orm";
+import { and, inArray } from "drizzle-orm";
 
 import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
+import { draftVisibilityWhere } from "~/server/mindmap/access";
 
 import type { SessionMessage } from "./repository";
 
 export interface VisibilityReader {
     companyId: bigint;
+    /** Auth subject id — an Unfiled draft is visible to its creator alone. */
+    authUserId: string;
     documentScope(): Promise<DocumentScope>;
 }
 
@@ -57,6 +61,7 @@ export async function visibleSourceIds(
     const visible = new Set<string>();
     if (docIds.size === 0 && mapIds.size === 0) return visible;
 
+    const scope = await reader.documentScope();
     const maps =
         mapIds.size === 0
             ? []
@@ -65,7 +70,11 @@ export async function visibleSourceIds(
                   .from(mindmaps)
                   .where(
                       and(
-                          eq(mindmaps.companyId, reader.companyId),
+                          draftVisibilityWhere({
+                              companyId: reader.companyId,
+                              authUserId: reader.authUserId,
+                              scope,
+                          }),
                           inArray(mindmaps.id, [...mapIds])
                       )
                   );
@@ -74,7 +83,6 @@ export async function visibleSourceIds(
         .filter((id): id is number => id !== null);
     const wantedDocs = [...new Set([...docIds, ...published])];
 
-    const scope = await reader.documentScope();
     const docs =
         wantedDocs.length === 0
             ? []

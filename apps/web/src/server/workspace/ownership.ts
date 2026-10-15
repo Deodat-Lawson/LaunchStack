@@ -12,7 +12,8 @@
  *   already has its own audience.
  * - A departing member's sole-managed items pass to an heir; deleting a role
  *   deletes its grants; deleting a folder carries its restriction onto the
- *   documents it re-homes.
+ *   documents it re-homes, and sends the drafts it governed to Unfiled.
+ * - A mindmap draft filed into a new folder path claims it as a file would.
  *
  * Every function takes the executor it should write through, so callers keep
  * the default and the change in one transaction.
@@ -26,12 +27,14 @@ import {
     documentSettings,
     folderGrants,
     folderSettings,
+    mindmaps,
     userCompanyMemberships,
     workspaceSessionGrants,
 } from "~/server/db/schema";
 import { grantLevelAtLeast, grantLevelRank, isGrantLevel } from "~/lib/authz/permissions";
 import {
     FOLDER_SEPARATOR,
+    UNFILED_FOLDER,
     folderParentPath,
     isFolderOrDescendant,
     isUnfiledFolder,
@@ -207,30 +210,46 @@ export async function applyDocumentCreationDefaults(
  * can do that; the UI creates the folder first) brings that folder into
  * being: it gets the same defaults as one created by hand — rows for the path
  * and its ancestors, a manage grant for its creator, and a private top level —
- * instead of quietly appearing to the whole workspace.
+ * instead of quietly appearing to the whole workspace. Returns whether it did.
  */
 async function claimNewFolderPath(
     executor: Executor,
     owner: OwnerRef,
     path: string,
     justAddedDocIds: readonly number[]
-): Promise<void> {
+): Promise<boolean> {
     const segments = path.split(FOLDER_SEPARATOR);
     const top = segments[0]!;
     const known = await folderIdsByPath(executor, owner.companyId, [top]);
-    if (known.has(top)) return;
-    const [other] = await executor
-        .select({ id: document.id })
-        .from(document)
-        .where(
-            and(
-                eq(document.companyId, owner.companyId),
-                or(eq(document.category, top), like(document.category, descendantPattern(top))),
-                notInArray(document.id, [...justAddedDocIds])
+    if (known.has(top)) return false;
+    const [[other], [otherDraft]] = await Promise.all([
+        executor
+            .select({ id: document.id })
+            .from(document)
+            .where(
+                and(
+                    eq(document.companyId, owner.companyId),
+                    or(eq(document.category, top), like(document.category, descendantPattern(top))),
+                    justAddedDocIds.length > 0
+                        ? notInArray(document.id, [...justAddedDocIds])
+                        : undefined
+                )
             )
-        )
-        .limit(1);
-    if (other) return; // An older implied folder: it keeps the audience it had.
+            .limit(1),
+        executor
+            .select({ id: mindmaps.id })
+            .from(mindmaps)
+            .where(
+                and(
+                    eq(mindmaps.companyId, owner.companyId),
+                    or(eq(mindmaps.folder, top), like(mindmaps.folder, descendantPattern(top)))
+                )
+            )
+            .limit(1),
+    ]);
+    // An older implied folder — through documents or drafts filed in it —
+    // keeps the audience it had.
+    if (other || otherDraft) return false;
 
     const lineage = segments.map((_, i) => segments.slice(0, i + 1).join(FOLDER_SEPARATOR));
     const present = await folderIdsByPath(executor, owner.companyId, lineage);
@@ -257,6 +276,23 @@ async function claimNewFolderPath(
             })
             .onConflictDoNothing();
     }
+    return true;
+}
+
+/**
+ * A mindmap draft filed into a folder path that does not exist yet brings it
+ * into being the way a file does (`claimNewFolderPath`). Call before the
+ * draft is written. Returns whether the folder was new — and so is now
+ * private to `owner`.
+ */
+export async function claimFolderPathForDraft(
+    executor: Executor,
+    owner: OwnerRef,
+    rawPath: string
+): Promise<boolean> {
+    const path = normalizeFolderPath(rawPath);
+    if (isUnfiledFolder(path)) return false;
+    return claimNewFolderPath(executor, owner, path, []);
 }
 
 // ---------------------------------------------------------------------------
@@ -489,6 +525,11 @@ function descendantPattern(path: string): string {
  * whose access came from a restricted folder inside the deleted subtree that
  * same restriction of its own, so deleting a private folder never publishes
  * what was in it. Documents that already have their own audience keep it.
+ *
+ * A mindmap draft has no audience of its own to carry one, so a draft whose
+ * access came from inside the subtree goes to Unfiled — private to whoever
+ * made it — instead of up into a folder more people can open. The rest move
+ * up with the documents (`deleteFolder`).
  */
 export async function carryRestrictionsBeforeFolderDelete(
     executor: Executor,
@@ -496,6 +537,7 @@ export async function carryRestrictionsBeforeFolderDelete(
     rawPath: string
 ): Promise<number> {
     const path = normalizeFolderPath(rawPath);
+    await unfileDraftsGovernedWithin(executor, owner.companyId, path);
     const docs = await executor
         .select({ id: document.id, category: document.category })
         .from(document)
@@ -563,6 +605,43 @@ export async function carryRestrictionsBeforeFolderDelete(
         carried++;
     }
     return carried;
+}
+
+/** Drafts in `path`'s subtree whose governing restriction sits inside it go to Unfiled. */
+async function unfileDraftsGovernedWithin(
+    executor: Executor,
+    companyId: bigint,
+    path: string
+): Promise<number> {
+    const drafts = await executor
+        .select({ id: mindmaps.id, folder: mindmaps.folder })
+        .from(mindmaps)
+        .where(
+            and(
+                eq(mindmaps.companyId, companyId),
+                or(eq(mindmaps.folder, path), like(mindmaps.folder, descendantPattern(path)))
+            )
+        );
+    if (drafts.length === 0) return 0;
+    const governedWithin = new Map<string, boolean>();
+    const unfile: number[] = [];
+    for (const draft of drafts) {
+        const folderPath = normalizeFolderPath(draft.folder);
+        let within = governedWithin.get(folderPath);
+        if (within === undefined) {
+            const lineage = await loadFolderLineage(companyId, folderPath, executor);
+            const governing = lineage.find(f => f.restricted);
+            within = governing !== undefined && isFolderOrDescendant(governing.path, path);
+            governedWithin.set(folderPath, within);
+        }
+        if (within) unfile.push(draft.id);
+    }
+    if (unfile.length === 0) return 0;
+    await executor
+        .update(mindmaps)
+        .set({ folder: UNFILED_FOLDER })
+        .where(and(eq(mindmaps.companyId, companyId), inArray(mindmaps.id, unfile)));
+    return unfile.length;
 }
 
 // ---------------------------------------------------------------------------

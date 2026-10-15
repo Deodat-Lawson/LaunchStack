@@ -67,7 +67,8 @@ export interface MoveOutcome {
     /**
      * `inherits_folder` — now visible to whoever can open the new folder;
      * `made_private` — filed loose, so only you; `unchanged` — it keeps its
-     * own audience. Absent for mindmaps, whose route does not report it.
+     * own audience. A mindmap draft has none of its own, so it reports only
+     * the first two.
      */
     access?: MoveAccessOutcome;
 }
@@ -81,7 +82,10 @@ export async function moveSource(source: WorkspaceSource, folder: string): Promi
             body: JSON.stringify({ folder }),
         });
         if (!res.ok) throw await readError(res, "Failed to move mindmap");
-        return {};
+        const body = (await res.json().catch(() => ({}))) as {
+            move?: { access?: MoveAccessOutcome };
+        };
+        return { access: body.move?.access };
     }
     if (kind === "document") {
         const res = await fetch(`/api/documents/${source.documentId}`, {

@@ -156,12 +156,21 @@ parent's stays inside the parent and shows a badge.
     - Everyone at <workspace>
     - Same as <parent>, when the item is nested
   - An "Added by" line.
-- **Team tab** in the rail, with three views:
-  - **People**: photo, title, role and groups. Open a person to see what you
-    share with each other, share with them, or invite someone.
-  - **Groups**: members can create groups. The creator manages their group;
-    `groups.manage` manages all groups.
-  - **Activity**: who added, shared, moved, renamed or deleted what. Rows come
+- **Team tab**: a Studio tab of its own (`?feature=team`, gated on
+  `members.view`), with its screens across the top like every tool. It was a
+  third tab of the rail until 2026-10-13; the rail makes, files and shares
+  sources, and who is on the team is a place of its own. Roles, invitations,
+  join links and the audit log stay in Settings › People and access, linked
+  from the tab as "Manage access" for those who may open Settings.
+  - **People** (`/people`, `/people/<id>`): photo, title, role and groups.
+    Open a person to see what you share with each other beside their
+    activity, share with them, or invite someone.
+  - **Groups** (`/groups`, `/groups/<id>`): members can create groups. The
+    creator manages their group; `groups.manage` manages all groups.
+  - **Activity** (`/activity?person=<id>&kind=<kind>`): by day, narrowed by
+    person and by kind (`ACTIVITY_KINDS`: added, sharing, moves and renames,
+    deletions — the route filters on their verbs). Who added, shared, moved,
+    renamed or deleted what. Rows come
     from `workspace_activity` and are filtered to what the reader can see now —
     folders by id (a renamed or deleted private folder's old name never
     shows), deleted items only to their actor unless they were workspace-wide.

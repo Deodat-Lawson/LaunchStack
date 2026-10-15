@@ -218,6 +218,8 @@ export interface UseWorkspaceDataResult {
     can: (permission: Permission | undefined) => boolean;
     /** True once the permission answer has arrived (even if it was "nothing"). */
     permissionsLoaded: boolean;
+    /** Set when that answer was a failure: an empty set then means "unknown", not "none". */
+    permissionsError: string | null;
     refresh: () => Promise<void>;
     /** Optimistically insert a row before the backend confirms it. */
     addOptimistic: (source: WorkspaceSource) => void;
@@ -254,6 +256,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         permissions,
         can,
         loaded: permissionsLoaded,
+        error: permissionsError,
     } = usePermissions();
 
     const fetchSources = useCallback(async () => {
@@ -401,6 +404,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         permissions,
         can,
         permissionsLoaded,
+        permissionsError,
         refresh,
         addOptimistic,
     };

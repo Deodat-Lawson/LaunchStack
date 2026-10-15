@@ -1,16 +1,18 @@
 "use client";
 
 /**
- * The few pieces every Team view draws: the named back button, a section
- * heading, a one-sentence empty state, loading rows, an avatar stack, and the
- * icon for a folder, file or chat.
+ * The few pieces every Team screen draws: the named back button, a filter
+ * box, a bordered panel with its heading, a section heading, a one-sentence
+ * empty state, loading rows, an avatar stack, and the icon for a folder, file
+ * or chat.
  */
 
 import React from "react";
-import { ChevronLeft, FileText, Folder, MessageSquare, Users } from "lucide-react";
+import { ChevronLeft, FileText, Folder, MessageSquare, Search, Users } from "lucide-react";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
@@ -32,6 +34,58 @@ export function BackButton({ label, onClick }: { label: string; onClick: () => v
     );
 }
 
+/** A screen's filter box: narrows the list below it, never searches the workspace. */
+export function FilterInput({
+    value,
+    onChange,
+    placeholder,
+    className,
+}: {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder: string;
+    className?: string;
+}) {
+    return (
+        <div className={cn("@max-md:w-full relative w-56", className)}>
+            <Search className="text-ink-4 pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
+            <Input
+                value={value}
+                onChange={e => onChange(e.target.value)}
+                placeholder={placeholder}
+                aria-label={placeholder}
+                className="h-8 pl-8 text-[13px]"
+                data-testid="team-filter"
+            />
+        </div>
+    );
+}
+
+/** A bordered block of a screen with its heading — "Shared with you by Ada", "Activity". */
+export function Panel({
+    title,
+    action,
+    children,
+    className,
+    testId,
+}: {
+    title: React.ReactNode;
+    action?: React.ReactNode;
+    children: React.ReactNode;
+    className?: string;
+    testId?: string;
+}) {
+    return (
+        <section
+            className={cn("border-line bg-panel min-w-0 rounded-lg border pb-2", className)}
+            data-testid={testId}
+        >
+            <SectionHeading action={action}>{title}</SectionHeading>
+            {children}
+        </section>
+    );
+}
+
 export function SectionHeading({
     children,
     action,
@@ -49,13 +103,38 @@ export function SectionHeading({
     );
 }
 
-export function EmptyLine({ children }: { children: React.ReactNode }) {
-    return <p className="text-ink-3 m-0 px-3.5 py-2 text-[12.5px] leading-relaxed">{children}</p>;
+/** One sentence where a list would be. `flush` drops the side padding for a full-width screen, so it lines up with the heading. */
+export function EmptyLine({
+    children,
+    flush = false,
+}: {
+    children: React.ReactNode;
+    flush?: boolean;
+}) {
+    return (
+        <p
+            className={cn(
+                "text-ink-3 m-0 py-2 text-[12.5px] leading-relaxed",
+                flush ? "px-0 text-[13px]" : "px-3.5"
+            )}
+        >
+            {children}
+        </p>
+    );
 }
 
-export function ErrorLine({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export function ErrorLine({
+    message,
+    onRetry,
+    flush = false,
+}: {
+    message: string;
+    onRetry?: () => void;
+    /** No side padding, for a full-width screen. */
+    flush?: boolean;
+}) {
     return (
-        <div className="flex items-center gap-2 px-3.5 py-2" role="alert">
+        <div className={cn("flex items-center gap-2 py-2", flush ? "px-0" : "px-3.5")} role="alert">
             <span className="text-danger min-w-0 flex-1 text-[12.5px]">{message}</span>
             {onRetry && (
                 <Button
@@ -71,9 +150,13 @@ export function ErrorLine({ message, onRetry }: { message: string; onRetry?: () 
     );
 }
 
-export function LoadingRows({ rows = 4 }: { rows?: number }) {
+export function LoadingRows({ rows = 4, flush = false }: { rows?: number; flush?: boolean }) {
     return (
-        <div className="flex flex-col gap-1 px-3.5 py-2" aria-busy="true" aria-label="Loading">
+        <div
+            className={cn("flex flex-col gap-1 py-2", flush ? "px-0" : "px-3.5")}
+            aria-busy="true"
+            aria-label="Loading"
+        >
             {Array.from({ length: rows }, (_, i) => (
                 <div key={i} className="flex h-10 items-center gap-2.5">
                     <Skeleton className="size-7 shrink-0 rounded-full" />

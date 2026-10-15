@@ -156,8 +156,19 @@ describe("GET /api/workspace/activity", () => {
         ]);
     });
 
-    it("refuses a bad cursor or limit", async () => {
-        for (const query of ["before=abc", "limit=0", "limit=500", "before=-3"]) {
+    it("narrows to one kind of activity by its verbs", async () => {
+        fakeDb.onSelect(workspaceActivity, []);
+
+        const res = await GET(jsonRequest("/api/workspace/activity?kind=shared", "GET"));
+
+        expect(res.status).toBe(200);
+        const [where] = recordingDb.wheres(workspaceActivity);
+        expect(where!.sql).toMatch(/workspace_activity"\."verb" in \(\$\d, \$\d\)/);
+        expect(where!.params).toEqual([5n, "shared", "unshared"]);
+    });
+
+    it("refuses a bad cursor, limit or kind", async () => {
+        for (const query of ["before=abc", "limit=0", "limit=500", "before=-3", "kind=liked"]) {
             const res = await GET(jsonRequest(`/api/workspace/activity?${query}`, "GET"));
             expect(res.status).toBe(400);
         }

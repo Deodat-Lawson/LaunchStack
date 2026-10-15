@@ -91,6 +91,26 @@ describe("studio registry", () => {
         expect(feature!.requires).toBeUndefined();
     });
 
+    it("lists Team beside Chat and Knowledge as a tab, gated on seeing members; its old palette row is People and access", () => {
+        const feature = STUDIO_FEATURES_BY_ID.team;
+        expect(feature?.label).toBe("Team");
+        expect(feature?.href).toBe("/employer/documents?feature=team");
+        expect(feature?.requires).toBe("members.view");
+        expect(STUDIO_GROUPS.find(g => g.id === "workspace")!.features.map(f => f.id)).toContain(
+            "team"
+        );
+        // ⌘K's "team" row opens the tab; Settings' people section keeps a row
+        // of its own under another id.
+        expect(DEMOTED_FEATURES.find(f => f.id === "team")?.href).toBe(
+            "/employer/documents?feature=team"
+        );
+        expect(demotedFeatureHref("team")).toBeUndefined();
+        const access = DEMOTED_FEATURES.find(f => f.id === "people-access")!;
+        expect(access.label).toBe("People and access");
+        expect(resolveStudioFeature(access.id)).toBeUndefined();
+        expect(settingsSectionOf(demotedFeatureHref(access.id)!)).toBe("people");
+    });
+
     it("no longer lists Marketing, Distribution or Prospects as Studio entries of their own", () => {
         for (const id of ["marketing", "distribution", "prospects"]) {
             expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
@@ -196,7 +216,7 @@ describe("studio registry", () => {
         // Brand is a place in Growth's tab, opened through TOOL_ALIASES, so
         // it has no destination beyond this page.
         expect(demotedFeatureHref("brand")).toBeUndefined();
-        expect(demotedFeatureHref("team")).toBe("/employer/settings#people");
+        expect(demotedFeatureHref("people-access")).toBe("/employer/settings#people");
         // Its href points back at this page, so following it would loop.
         expect(demotedFeatureHref("rewrite")).toBeUndefined();
         expect(demotedFeatureHref("nonsense")).toBeUndefined();

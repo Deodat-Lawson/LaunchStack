@@ -25,6 +25,7 @@ import {
     Shield as IconShield,
     Sparkles as IconSparkle,
     Users as IconUsers,
+    UsersRound as IconTeam,
     Video as IconVideo,
     Workflow as IconWorkflow,
 } from "lucide-react";
@@ -363,6 +364,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=agents",
     },
     {
+        id: "team",
+        label: "Team",
+        Icon: IconTeam,
+        desc: "People, groups, and who did what across the workspace",
+        href: "/employer/documents?feature=team",
+    },
+    {
         id: "draft",
         label: "Draft",
         Icon: IconPen,
@@ -466,10 +474,12 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/settings#analytics",
     },
     {
-        id: "team",
-        label: "Workspace",
+        // Not `team`: that is the Team app above, and the palette keys and
+        // routes its rows by id.
+        id: "people-access",
+        label: "People and access",
         Icon: IconUsers,
-        desc: "People, roles, invitations, audit",
+        desc: "Roles, invitations, join links, audit",
         href: "/employer/settings#people",
     },
     {
@@ -522,6 +532,13 @@ export interface StudioFeature {
      * gated tile never flashes for someone who may not open it.
      */
     requires?: Permission;
+    /**
+     * What to tell someone who follows a link to this app (a teammate's
+     * link, a shortcut) without its permission. The app does not open for
+     * them; this sentence says why instead of leaving them where they were.
+     * Unset, nothing is said.
+     */
+    deniedNote?: string;
 }
 
 export interface StudioGroup {
@@ -558,6 +575,19 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Agents",
                 Icon: IconAgents,
                 desc: "Who your agents are: try them, edit their instructions, import a definition file",
+            },
+            {
+                // Who is here and what they have been doing. It was a tab of
+                // the sidebar; the sidebar is for making, filing and sharing
+                // sources, so the team is a tab of its own like every app.
+                id: "team",
+                label: "Team",
+                Icon: IconTeam,
+                desc: "People and what you share with each, groups to share with in one step, and who added, shared or moved what",
+                href: "/employer/documents?feature=team",
+                requires: "members.view",
+                deniedNote:
+                    "Your role sees only what is shared with you, so there is no team list. New shares arrive in the bell at the top of the sidebar.",
             },
         ],
     },

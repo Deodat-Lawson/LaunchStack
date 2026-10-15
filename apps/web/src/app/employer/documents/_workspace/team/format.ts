@@ -31,6 +31,44 @@ export function shortAgo(iso: string, now: number = Date.now()): string {
     });
 }
 
+function startOfDay(ms: number): number {
+    const d = new Date(ms);
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+}
+
+/** The local calendar day an activity row falls on, as a stable key: "2026-10-13". */
+export function dayKey(iso: string): string {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** A day heading in the feed: "Today", "Yesterday", "Monday, Oct 6" (with the year once it is not this one). */
+export function dayLabel(iso: string, now: number = Date.now()): string {
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "";
+    const days = Math.round((startOfDay(now) - startOfDay(then)) / DAY);
+    if (days === 0) return "Today";
+    if (days === 1) return "Yesterday";
+    const date = new Date(then);
+    const sameYear = date.getFullYear() === new Date(now).getFullYear();
+    return date.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        ...(sameYear ? {} : { year: "numeric" }),
+    });
+}
+
+/** "2:14 PM" — the time on a row under its day heading. */
+export function timeOfDay(iso: string): string {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
 /** "Ada", "Ada and Ben", "Ada, Ben and 2 others". */
 export function joinNames(names: readonly string[], max = 2): string {
     const list = names.filter(n => n.trim().length > 0);

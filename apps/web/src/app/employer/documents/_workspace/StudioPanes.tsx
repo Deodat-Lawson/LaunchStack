@@ -8,6 +8,7 @@ import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
+import type { TeamToolProps } from "./team/TeamTool";
 import type { StudioFeature } from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
@@ -42,6 +43,11 @@ export interface StudioPaneContext {
         onSaveAsSource: (markdown: string) => void;
     };
     /**
+     * The Team tab opens what a row points at (a source tab, a folder in the
+     * sidebar, a chat) and the Share dialog — both the shell's.
+     */
+    team?: Pick<TeamToolProps, "onOpenTarget" | "onShare">;
+    /**
      * For tools with screens of their own: whether this tab is the focused
      * one, a location to show, where to remember the last one, and how to
      * reach other tabs. See `components/tool-app`.
@@ -63,6 +69,10 @@ const InvestorsPane = dynamic(
     () => import("./investors/InvestorsPane").then(m => m.InvestorsPane),
     { loading: () => <LoadingPage variant="pane" /> }
 );
+
+const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
 
 // Tools with screens of their own. Each is a tab with a rail inside it and
 // its own history; none of them is a page you navigate to any more.
@@ -832,6 +842,14 @@ export function renderStudioPane(
             return <MeetingsStudioPane onClose={onClose} context={context} />;
         case "agents":
             return <AgentsStudioPane onClose={onClose} context={context} />;
+        case "team":
+            return (
+                <TeamTool
+                    host={context?.tool}
+                    onOpenTarget={context?.team?.onOpenTarget}
+                    onShare={context?.team?.onShare}
+                />
+            );
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":

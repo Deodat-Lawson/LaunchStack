@@ -10,7 +10,14 @@ import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { usableAsPrimary } from "~/lib/agents/definition";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
-import { DEMOTED_FEATURES, SOURCE_META, type WorkspaceSource } from "./types";
+import { usePermissions } from "~/lib/use-permissions";
+import {
+    DEMOTED_FEATURES,
+    SOURCE_META,
+    resolveStudioFeature,
+    settingsSectionOf,
+    type WorkspaceSource,
+} from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
     HISTORY_KIND_META,
@@ -125,6 +132,7 @@ export function CommandPalette({
     const [q, setQ] = useState("");
     // The one lab that only surfaces a palette entry: hidden until it is on.
     const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
+    const { can } = usePermissions();
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -155,19 +163,31 @@ export function CommandPalette({
         // The registry is read when the palette opens, so it reflects what is
         // mounted right now; `open` is in the deps for that reason.
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
-        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps).forEach(f =>
-            base.push({
-                kind: "feature",
-                id: f.id,
-                label: f.label,
-                sub: f.desc,
-                Icon: f.Icon,
-                onRun: () => {
-                    if (onPickFeature) onPickFeature(f.id);
-                    else navigate(f.href);
-                },
+        DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
+            // A row for an app the person may not open (Team, for a Guest)
+            // would do nothing when picked. A Settings section ("People and
+            // access") opens the Settings app, so it carries Settings' gate.
+            .filter(f => {
+                const opens =
+                    resolveStudioFeature(f.id) ??
+                    (settingsSectionOf(f.href) !== undefined
+                        ? resolveStudioFeature("settings")
+                        : undefined);
+                return can(opens?.requires);
             })
-        );
+            .forEach(f =>
+                base.push({
+                    kind: "feature",
+                    id: f.id,
+                    label: f.label,
+                    sub: f.desc,
+                    Icon: f.Icon,
+                    onRun: () => {
+                        if (onPickFeature) onPickFeature(f.id);
+                        else navigate(f.href);
+                    },
+                })
+            );
         // Agents are searched by name, handle, role and what they are for, so
         // "margin" finds Dana and "pushback" finds Vera.
         agents.forEach(agent => {
@@ -273,6 +293,7 @@ export function CommandPalette({
         navigate,
         predictiveGaps,
         people,
+        can,
     ]);
 
     useEffect(() => {

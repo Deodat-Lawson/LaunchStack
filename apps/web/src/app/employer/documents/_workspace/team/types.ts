@@ -8,10 +8,7 @@ export type TeamTarget =
     | { type: "folder"; path: string }
     | { type: "chat"; id: string };
 
-export interface TeamRailProps {
-    /** The rail's filter box text. */
-    query: string;
+/** What the sidebar's inbox bell needs: somewhere to open what was shared. */
+export interface InboxRailProps {
     onOpenTarget: (target: TeamTarget) => void;
-    /** Open the Share dialog for something (from a person's page). */
-    onShare?: (target: TeamTarget & { name: string }) => void;
 }

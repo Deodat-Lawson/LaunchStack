@@ -1,8 +1,9 @@
 "use client";
 
 /**
- * One group, inside the Team tab: who is in it, and — for its creator or a
- * `groups.manage` holder — add people, remove them, rename, delete.
+ * One group, in the Team tab: who is in it, as cards that open each person,
+ * and — for its creator or a `groups.manage` holder — add people, remove
+ * them, rename, delete.
  */
 
 import React, { useMemo, useState } from "react";
@@ -10,6 +11,7 @@ import { MoreHorizontal, Pencil, Search, Trash2, UserPlus, X } from "lucide-reac
 import { toast } from "sonner";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import {
@@ -24,14 +26,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { errorMessage, peopleApi, type Group, type Member } from "../settings/people/api";
 import { plural } from "../settings/people/format";
 import { GroupDialog } from "../settings/people/GroupsTab";
-import { BackButton, EmptyLine, SectionHeading } from "./ui";
+import { teamPaths } from "./screens";
+import { BackButton, EmptyLine } from "./ui";
 
 export function GroupPage({
     group,
     members,
     byId,
     onBack,
-    onOpenPerson,
     onChanged,
     onDeleted,
 }: {
@@ -40,7 +42,6 @@ export function GroupPage({
     members: Member[];
     byId: Map<number, Member>;
     onBack: () => void;
-    onOpenPerson: (memberId: number) => void;
     onChanged: (group: Group) => void;
     onDeleted: (groupId: number) => void;
 }) {
@@ -94,22 +95,22 @@ export function GroupPage({
     };
 
     return (
-        <div className="pb-4" data-testid="team-group">
-            <div className="px-3.5 pb-2 pt-1">
+        <div className="mx-auto flex max-w-[1100px] flex-col gap-5" data-testid="team-group">
+            <div>
                 <BackButton label="Groups" onClick={onBack} />
             </div>
 
-            <div className="flex items-start gap-2 px-3.5">
-                <div className="min-w-0 flex-1">
-                    <h2 className="text-ink m-0 truncate text-[15px] font-semibold leading-tight">
+            <header className="@max-md:grid-cols-1 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                <div className="min-w-0">
+                    <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
                         {group.name}
-                    </h2>
+                    </h1>
                     {group.description && (
-                        <p className="text-ink-2 m-0 mt-0.5 text-[12.5px] leading-snug">
+                        <p className="text-ink-2 m-0 mt-1 max-w-[70ch] text-[13px] leading-snug">
                             {group.description}
                         </p>
                     )}
-                    <p className="text-ink-3 m-0 mt-1 truncate text-[11.5px]">
+                    <p className="text-ink-3 m-0 mt-1.5 text-[12px]">
                         {plural(group.memberCount, "member")}
                         {creator
                             ? ` · made by ${creator.isSelf ? "you" : creator.displayName}`
@@ -117,81 +118,89 @@ export function GroupPage({
                     </p>
                 </div>
                 {canManage && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="text-ink-3 size-7"
-                                aria-label={`Actions for ${group.name}`}
-                            >
-                                <MoreHorizontal className="size-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onSelect={() => setRenaming(true)}>
-                                <Pencil /> Rename
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                variant="destructive"
-                                onSelect={() => setDeleting(true)}
-                            >
-                                <Trash2 /> Delete group
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
-            </div>
-
-            <SectionHeading
-                action={
-                    canManage ? (
+                    <div className="flex items-center gap-1.5">
                         <AddPeople group={group} members={members} busy={busy} onAdd={add} />
-                    ) : undefined
-                }
-            >
-                People
-            </SectionHeading>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-ink-2 size-8"
+                                    aria-label={`Actions for ${group.name}`}
+                                >
+                                    <MoreHorizontal className="size-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onSelect={() => setRenaming(true)}>
+                                    <Pencil /> Rename
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    variant="destructive"
+                                    onSelect={() => setDeleting(true)}
+                                >
+                                    <Trash2 /> Delete group
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                )}
+            </header>
+
             {group.members.length === 0 ? (
-                <EmptyLine>
+                <EmptyLine flush>
                     {canManage
                         ? "Nobody is in this group yet. Add people, then share with the group in one step."
                         : "Nobody is in this group yet."}
                 </EmptyLine>
             ) : (
-                <ul className="m-0 list-none p-0">
+                <ul
+                    className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 p-0"
+                    data-testid="team-group-members"
+                >
                     {group.members.map(m => {
                         const person = byId.get(m.id);
                         const name = person?.displayName ?? (m.name || m.email);
-                        return (
-                            <li key={m.id} className="group/row flex items-center pr-2">
-                                <button
-                                    type="button"
-                                    onClick={() => onOpenPerson(m.id)}
-                                    disabled={!person}
-                                    className="hover:bg-panel-2 focus-visible:bg-panel-2 flex min-w-0 flex-1 items-center gap-2.5 rounded-md py-1.5 pl-3.5 pr-2 text-left outline-none disabled:cursor-default disabled:hover:bg-transparent"
-                                >
-                                    <ProfileAvatar
-                                        name={name}
-                                        email={m.email}
-                                        src={person?.avatarUrl}
-                                        className="size-7"
-                                        fallbackClassName="text-[10px]"
-                                    />
-                                    <span className="min-w-0 flex-1">
-                                        <span className="text-ink block truncate text-[13px]">
-                                            {name}
-                                            {person?.isSelf && (
-                                                <span className="text-ink-3"> (you)</span>
-                                            )}
-                                        </span>
-                                        {person?.title && (
-                                            <span className="text-ink-3 block truncate text-[11.5px]">
-                                                {person.title}
-                                            </span>
+                        const face = (
+                            <>
+                                <ProfileAvatar
+                                    name={name}
+                                    email={m.email}
+                                    src={person?.avatarUrl}
+                                    className="size-9"
+                                    fallbackClassName="text-[11px]"
+                                />
+                                <span className="min-w-0 flex-1">
+                                    <span className="text-ink block truncate text-[13px] font-medium">
+                                        {name}
+                                        {person?.isSelf && (
+                                            <span className="text-ink-3 font-normal"> (you)</span>
                                         )}
                                     </span>
-                                </button>
+                                    <span className="text-ink-3 block truncate text-[11.5px]">
+                                        {person?.title ?? m.email}
+                                    </span>
+                                </span>
+                            </>
+                        );
+                        return (
+                            <li
+                                key={m.id}
+                                className="border-line bg-panel group/row flex min-w-0 items-center rounded-lg border pr-1.5"
+                            >
+                                {person ? (
+                                    <ToolLink
+                                        href={teamPaths.person(m.id)}
+                                        className="hover:bg-panel-2 focus-visible:bg-panel-2 flex min-w-0 flex-1 items-center gap-2.5 rounded-l-lg p-3 no-underline outline-none"
+                                    >
+                                        {face}
+                                    </ToolLink>
+                                ) : (
+                                    // Not an active member any more: nothing to open.
+                                    <div className="flex min-w-0 flex-1 items-center gap-2.5 p-3">
+                                        {face}
+                                    </div>
+                                )}
                                 {canManage && (
                                     <Button
                                         variant="ghost"
@@ -199,7 +208,8 @@ export function GroupPage({
                                         disabled={busy}
                                         onClick={() => void remove(m.id, name)}
                                         aria-label={`Remove ${name} from ${group.name}`}
-                                        className="text-ink-3 hover:text-danger size-7 opacity-0 focus-visible:opacity-100 group-hover/row:opacity-100"
+                                        // Shown on hover; always on a touch screen, which has none.
+                                        className="text-ink-3 hover:text-danger size-7 shrink-0 opacity-0 focus-visible:opacity-100 group-hover/row:opacity-100 [@media(hover:none)]:opacity-100"
                                     >
                                         <X className="size-3.5" />
                                     </Button>
@@ -265,11 +275,7 @@ function AddPeople({
             }}
         >
             <PopoverTrigger asChild>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-ink-2 -mr-1.5 h-6 gap-1 px-1.5 text-[11.5px] normal-case tracking-normal"
-                >
+                <Button size="sm" data-testid="team-group-add">
                     <UserPlus className="size-3.5" />
                     Add people
                 </Button>

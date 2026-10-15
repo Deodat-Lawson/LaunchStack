@@ -4,6 +4,8 @@
  * the inbox, the activity feed, and "what we share".
  */
 
+import type { ActivityKind } from "~/lib/workspace-activity-kinds";
+
 import { request } from "../settings/people/api";
 
 export type ItemType = "folder" | "document" | "chat";
@@ -84,12 +86,20 @@ export const teamApi = {
                 body: JSON.stringify(ids ? { ids } : {}),
             }),
     },
-    activity: (params: { before?: number | null; limit?: number; actor?: string } = {}) =>
+    activity: (
+        params: {
+            before?: number | null;
+            limit?: number;
+            actor?: string;
+            kind?: ActivityKind;
+        } = {}
+    ) =>
         request<{ entries: ActivityRow[]; nextBefore: number | null }>(
             `/api/workspace/activity${query({
                 before: params.before,
                 limit: params.limit,
                 actor: params.actor,
+                kind: params.kind,
             })}`
         ),
     sharedWith: (userPk: number) =>

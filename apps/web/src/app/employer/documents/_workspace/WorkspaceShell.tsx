@@ -37,6 +37,7 @@ import {
     isFolderDescendant,
     isFolderOrDescendant,
     joinFolderPath,
+    normalizeFolderPath,
     replaceFolderPrefix,
     displayFolderPath,
 } from "~/lib/folders/path";
@@ -349,6 +350,8 @@ export function WorkspaceShell() {
     /** The folder or document whose access dialog is open. */
     /** What the Share dialog is open for — a folder, a file, or a chat (ADR-014). */
     const [accessTarget, setAccessTarget] = useState<ShareTarget | null>(null);
+    /** Bumped when a Share dialog saves, so open views read who can see what again. */
+    const [accessVersion, setAccessVersion] = useState(0);
     const [studioOpen, setStudioOpen] = useState(false);
     /**
      * Which apps are open, in which pane, and which one each pane shows — and
@@ -1438,6 +1441,12 @@ export function WorkspaceShell() {
         () => folders.filter(f => f.access?.canEdit !== false).map(f => f.name),
         [folders]
     );
+    /** Who can see each folder, for the Add dialog's "who can see it" line. */
+    const folderAccessByPath = useMemo(() => {
+        const out: Record<string, NonNullable<WorkspaceFolder["access"]>> = {};
+        for (const f of folders) if (f.access) out[normalizeFolderPath(f.name)] = f.access;
+        return out;
+    }, [folders]);
 
     /**
      * One call for every folder mutation; resolves to an error message or null.
@@ -2850,10 +2859,13 @@ export function WorkspaceShell() {
                           }
                         : undefined
                 }
-                restrictedFolders={folders.filter(f => f.restricted).map(f => f.name)}
-                privateFolders={folders
-                    .filter(f => f.access?.audience === "private")
-                    .map(f => f.name)}
+                knownFolders={folderPaths}
+                folderAccess={folderAccessByPath}
+                workspaceName={workspaceName}
+                onShareFolder={path =>
+                    setAccessTarget({ kind: "folder", path, name: displayFolderPath(path) })
+                }
+                accessVersion={accessVersion}
                 onUploaded={() => {
                     void refresh();
                 }}
@@ -2955,6 +2967,7 @@ export function WorkspaceShell() {
                 target={accessTarget}
                 onClose={() => setAccessTarget(null)}
                 onSaved={() => {
+                    setAccessVersion(v => v + 1);
                     void refresh();
                     void refreshHistory();
                 }}

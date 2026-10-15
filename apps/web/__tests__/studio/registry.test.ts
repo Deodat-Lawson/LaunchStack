@@ -18,6 +18,8 @@ import {
     resolveStudioFeature,
     settingsSectionOf,
 } from "~/app/employer/documents/_workspace/types";
+import { BUILTIN_ROLE_PERMISSIONS, type Permission } from "~/lib/authz/permissions";
+import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
 import { toolTargetFromHref } from "~/lib/tool-app/locations";
 
 const APP_ROOT = join(process.cwd(), "src", "app");
@@ -220,6 +222,34 @@ describe("studio registry", () => {
         // Its href points back at this page, so following it would loop.
         expect(demotedFeatureHref("rewrite")).toBeUndefined();
         expect(demotedFeatureHref("nonsense")).toBeUndefined();
+    });
+
+    /**
+     * The account menu offers Settings to everyone and opens it through the
+     * same gate as the picker. Gated on `settings.manage`, a Member who
+     * picked it got nothing at all.
+     */
+    it("lets every role open Settings: its sections carry the gates, not the app", () => {
+        const settings = STUDIO_FEATURES_BY_ID.settings;
+        expect(settings).toBeDefined();
+        expect(settings!.requires).toBeUndefined();
+        expect(settings!.desc).toMatch(/your account/i);
+    });
+
+    it("points every palette row into Settings at a section someone may see", () => {
+        const intoSettings = DEMOTED_FEATURES.filter(
+            f => !resolveStudioFeature(f.id) && settingsSectionOf(f.href) !== undefined
+        );
+        expect(intoSettings.map(f => f.id).sort()).toEqual(
+            ["agents-nodes", "deploy", "people-access", "profile"].sort()
+        );
+        const owner = (p: Permission | undefined) =>
+            p === undefined || BUILTIN_ROLE_PERMISSIONS.owner.has(p);
+        for (const row of intoSettings) {
+            const section = settingsSectionFromHash(settingsSectionOf(row.href)!);
+            expect(section).not.toBeNull();
+            expect(canSeeSettingsSection(section!, owner)).toBe(true);
+        }
     });
 
     it("reads the section out of a link into Settings, and nothing out of any other link", () => {

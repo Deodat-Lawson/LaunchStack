@@ -37,7 +37,6 @@ import { notifyShared } from "./notifications";
 import {
     activeMemberPrincipals,
     callerGroupIds,
-    canSeeFolder,
     diffGrants,
     hasManageGrant,
     principalNames,
@@ -179,17 +178,20 @@ export async function getFolderAccessByPath(
 
     const scope = await ctx.documentScope();
     if (!scopeAllowsCategory(scope, path)) throw notFound("Folder not found.");
-    const [members, inheritsFrom, wsName, access] = await Promise.all([
+    const [members, inheritsFrom, wsName, access, lineage] = await Promise.all([
         activeMemberPrincipals(ctx.companyId),
         inheritedAudience(ctx.companyId, folderParentPath(path)),
         workspaceName(ctx.companyId),
         folderAccess(ctx, path),
+        loadFolderLineage(ctx.companyId, path),
     ]);
     return {
         folder: { id: 0, name: path },
         visibility: "workspace",
         grants: [],
-        audienceCount: members.filter(m => canSeeFolder(m, false, [])).length,
+        // Implied inside a restricted folder, it is seen by that folder's
+        // audience — not the whole workspace.
+        audienceCount: countAudience(members, lineage),
         canManage: access.level === "manage",
         inheritsFrom,
         owner: null,

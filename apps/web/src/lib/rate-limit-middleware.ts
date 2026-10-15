@@ -1,5 +1,36 @@
+import { getSessionCookie } from "better-auth/cookies";
 import { NextResponse } from "next/server";
-import { createRateLimiter, type RateLimitConfig, type RateLimitInfo } from "./rate-limiter";
+
+import { getSessionFromHeaders } from "~/server/auth";
+import {
+    clientIpKey,
+    createRateLimiter,
+    type RateLimitConfig,
+    type RateLimitInfo,
+} from "./rate-limiter";
+
+/**
+ * Who a request counts against: the signed-in user when the session checks
+ * out, the client IP otherwise. Keying on the user keeps one person's polling
+ * from spending a colleague's budget behind the same office NAT.
+ *
+ * The session is verified here, not read from a header the middleware could
+ * forward: a header is only trustworthy on paths the middleware matcher
+ * covers, and a forged one would buy a fresh bucket per request. better-auth
+ * answers from its signed cookie cache, so this rarely touches the database.
+ */
+export async function rateLimitCaller(request: Request): Promise<string> {
+    // No session cookie means anonymous — skip the lookup (middleware.ts does the same).
+    if (getSessionCookie(request)) {
+        try {
+            const session = await getSessionFromHeaders(request.headers);
+            if (session?.user.id) return `user:${session.user.id}`;
+        } catch {
+            // An unreadable session counts as anonymous; the route's own auth decides the rest.
+        }
+    }
+    return clientIpKey(request);
+}
 
 /**
  * Apply rate limiting headers to a response
@@ -34,7 +65,11 @@ export function createRateLimitResponse(info: RateLimitInfo): NextResponse {
 }
 
 /**
- * Wrapper function to apply rate limiting to an API route handler
+ * Wrapper function to apply rate limiting to an API route handler.
+ *
+ * The budget is per route and method, per limit, and per caller
+ * (`rateLimitCaller` unless the config names its own key) — see
+ * `rateLimitBucketKey`.
  *
  * @example
  * ```ts
@@ -51,7 +86,10 @@ export async function withRateLimit(
     config: RateLimitConfig,
     handler: () => Promise<NextResponse>
 ): Promise<NextResponse> {
-    const rateLimiter = createRateLimiter(config);
+    const rateLimiter = createRateLimiter({
+        ...config,
+        keyGenerator: config.keyGenerator ?? rateLimitCaller,
+    });
     const info = await rateLimiter(request);
 
     if (!info.allowed) {

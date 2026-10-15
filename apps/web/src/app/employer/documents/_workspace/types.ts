@@ -658,12 +658,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             // survives as an id so old deep links open the right section.
             // Analytics is not one of them: it has its own pane and its own
             // permission, and Settings' `#analytics` only forwards to this tab.
+            //
+            // Ungated: everyone has an account, a theme and shortcuts to set,
+            // and the account menu offers Settings to everyone. Each section
+            // carries its own gate (`SETTINGS_SECTION_ACCESS`).
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile",
-                requires: "settings.manage",
+                desc: "Your account, appearance and shortcuts; the workspace's people, processing, agents and integrations",
             },
             {
                 id: "analytics",

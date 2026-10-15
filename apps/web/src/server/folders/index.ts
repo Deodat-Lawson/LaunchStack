@@ -2,13 +2,15 @@
  * Folder mutations over the path model (see `~/lib/folders/path`).
  *
  * A folder exists when a `category` row carries its path or a document lives
- * in it. Renaming, moving and deleting are prefix rewrites over both tables
- * in one transaction, so a folder and everything beneath it move together and
- * a deleted folder cannot come back from the documents that were inside it —
- * they are re-homed first.
+ * in it. Renaming, moving and deleting are prefix rewrites over the folder,
+ * document and mindmap-draft tables in one transaction, so a folder and
+ * everything beneath it move together and a deleted folder cannot come back
+ * from what was inside it — it is re-homed first. A draft's access is its
+ * folder's (ADR-014), so a draft left behind under a dead path would be one
+ * nobody restricts.
  */
 
-import { folderSettings } from "~/server/db/schema";
+import { folderSettings, mindmaps } from "~/server/db/schema";
 import { scopeAllowsCategory, type DocumentScope } from "~/lib/authz/scope-types";
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
@@ -87,9 +89,16 @@ function categorySubtree(companyId: bigint, path: string) {
     );
 }
 
+function draftSubtree(companyId: bigint, path: string) {
+    return and(
+        eq(mindmaps.companyId, companyId),
+        or(eq(mindmaps.folder, path), like(mindmaps.folder, descendantPattern(path)))
+    );
+}
+
 /** `to || substr(column, len(from) + 1)` — the prefix rewrite, in SQL. */
 function rewritePrefix(
-    column: typeof document.category | typeof category.name,
+    column: typeof document.category | typeof category.name | typeof mindmaps.folder,
     from: string,
     to: string
 ) {
@@ -315,6 +324,11 @@ export async function renameFolder(
             .where(documentSubtree(companyId, from))
             .returning({ id: document.id });
 
+        await tx
+            .update(mindmaps)
+            .set({ folder: rewritePrefix(mindmaps.folder, from, to) })
+            .where(draftSubtree(companyId, from));
+
         return { from, to, movedDocuments: moved.length, renamedFolders: renamed.length };
     });
 }
@@ -353,6 +367,9 @@ export async function deleteFolder(
             .set({ category: destination })
             .where(documentSubtree(companyId, path))
             .returning({ id: document.id });
+        // Drafts whose access came from inside the subtree were sent to
+        // Unfiled by `beforeMove`; the rest move up with the documents.
+        await tx.update(mindmaps).set({ folder: destination }).where(draftSubtree(companyId, path));
         const deleted = await tx
             .delete(category)
             .where(categorySubtree(companyId, path))

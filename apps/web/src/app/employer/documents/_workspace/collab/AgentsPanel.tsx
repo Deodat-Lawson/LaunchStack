@@ -30,6 +30,7 @@ import {
 import { AGENT_MODE_META, agentTool, disabledTools } from "~/lib/agents/definition";
 import { agentRosterAccess } from "~/lib/agents/roster-access";
 import { usePermissions } from "~/lib/use-permissions";
+import { WorkspaceAnswerStyleRow } from "../settings/AnswerStyle";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
@@ -111,10 +112,10 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
             <Section
                 title="The default assistant"
-                description="How Launchstack answers in chat when no agent is picked. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
+                description="How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
             >
                 <Card>
-                    <SettingRow settingKey="chat.responseStyle" />
+                    <WorkspaceAnswerStyleRow />
                 </Card>
             </Section>
 

@@ -7,7 +7,9 @@
  * map published into Unfiled is private to its publisher until they share it.
  *
  * These routes used to need nothing but a membership: a Viewer could publish
- * into a restricted folder they cannot see into.
+ * into a restricted folder they cannot see into. A mindmap's publish also
+ * writes the draft, so it takes edit access to the draft itself, and a draft
+ * the publisher cannot see reads as missing.
  */
 
 import type { NextResponse } from "next/server";
@@ -15,6 +17,7 @@ import type { NextResponse } from "next/server";
 import { POST as publishMindmap } from "~/app/api/mindmaps/[id]/publish/route";
 import { POST as publishExplanation } from "~/app/api/repo-explainer/publish/route";
 import { document } from "@launchstack/store/schema";
+import { draftAccess } from "~/server/mindmap/access";
 import { getMindmap } from "~/server/mindmap/repository";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
@@ -57,6 +60,12 @@ jest.mock("~/server/services/document-creation", () => ({
 jest.mock("~/server/mindmap/repository", () => ({
     getMindmap: jest.fn(),
     toDetail: (row: unknown) => row,
+}));
+jest.mock("~/server/mindmap/access", () => ({
+    DRAFT_EDIT_DENIED: "You can view this mindmap but not change it.",
+    canEditDraftAt: (level: string | null) => level === "edit" || level === "manage",
+    draftAccess: jest.fn(),
+    draftReader: jest.fn().mockResolvedValue({ companyId: BigInt(5), authUserId: "ada" }),
 }));
 jest.mock("~/app/employer/documents/_mindmap/model/serialize", () => ({
     parseDoc: () => ({}),
@@ -138,10 +147,30 @@ beforeEach(() => {
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: member });
     jest.mocked(canEditFolder).mockResolvedValue(true);
     jest.mocked(canEditDocument).mockResolvedValue(true);
+    jest.mocked(draftAccess).mockResolvedValue({ level: "manage" } as never);
     jest.mocked(processDocumentUpload).mockResolvedValue(UPLOAD as never);
 });
 
 describe("POST /api/mindmaps/[id]/publish", () => {
+    it("reads a draft the publisher cannot see as missing", async () => {
+        jest.mocked(getMindmap).mockResolvedValue(null);
+
+        const response = await publishMindmap(post("/api/mindmaps/8/publish", {}), mapParams);
+
+        expect(response.status).toBe(404);
+        expect(processDocumentUpload).not.toHaveBeenCalled();
+    });
+
+    it("refuses someone who can only view the draft", async () => {
+        jest.mocked(getMindmap).mockResolvedValue(map({ folder: "Plans" }) as never);
+        jest.mocked(draftAccess).mockResolvedValue({ level: "view" } as never);
+
+        const response = await publishMindmap(post("/api/mindmaps/8/publish", {}), mapParams);
+
+        expect(response.status).toBe(403);
+        expect(processDocumentUpload).not.toHaveBeenCalled();
+    });
+
     it("refuses a folder the publisher cannot add to", async () => {
         jest.mocked(getMindmap).mockResolvedValue(map({ folder: "Board" }) as never);
         jest.mocked(canEditFolder).mockResolvedValue(false);

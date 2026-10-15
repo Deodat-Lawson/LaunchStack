@@ -1,12 +1,22 @@
-/** Copy a mindmap into a new document in the same workspace. */
+/**
+ * Copy a mindmap into a new document in the same workspace.
+ *
+ * Anyone who can open a draft may copy it; the copy is theirs. It lands
+ * beside the original when they can add to that folder, and in their own
+ * Unfiled otherwise — a copy never files itself somewhere its maker could not
+ * (ADR-014).
+ */
 
 import { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
+import { UNFILED_FOLDER, isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
+import { describeDraftAccess, draftReader } from "~/server/mindmap/access";
 import { getMindmap, toDetail } from "~/server/mindmap/repository";
+import { canEditFolderPath } from "~/server/workspace/item-access";
 
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -18,8 +28,13 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             return NextResponse.json({ error: "Invalid id" }, { status: 400 });
         }
 
-        const source = await getMindmap(id, ctx.data.companyId);
+        const source = await getMindmap(id, await draftReader(ctx.data));
         if (!source) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        const sourceFolder = normalizeFolderPath(source.folder);
+        const folder =
+            isUnfiledFolder(sourceFolder) || (await canEditFolderPath(ctx.data, sourceFolder))
+                ? sourceFolder
+                : UNFILED_FOLDER;
 
         const [row] = await db
             .insert(mindmaps)
@@ -30,7 +45,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
                 title: `${source.title} copy`.slice(0, 300),
                 description: source.description,
                 templateId: source.templateId,
-                folder: source.folder,
+                folder,
                 doc: source.doc,
                 docVersion: source.docVersion,
                 revision: 1,
@@ -43,7 +58,8 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             .returning();
 
         if (!row) return serverError("Failed to duplicate mindmap");
-        return NextResponse.json({ mindmap: toDetail(row) }, { status: 201 });
+        const [access] = (await describeDraftAccess(ctx.data, [row])).values();
+        return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 201 });
     } catch (error) {
         console.error("[mindmaps] duplicate failed:", error);
         return serverError("Failed to duplicate mindmap");

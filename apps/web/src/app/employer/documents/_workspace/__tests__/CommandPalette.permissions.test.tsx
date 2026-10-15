@@ -111,6 +111,14 @@ describe("CommandPalette permissions", () => {
         expect(onPickSetting).toHaveBeenCalledWith("appearance.theme");
     });
 
+    it("finds a Guest's own answer style, which lives under Appearance", () => {
+        mockPerms = new Set(GUEST);
+        const onPickSetting = jest.fn();
+        search("response style", jest.fn(), onPickSetting);
+        fireEvent.click(screen.getByText("Answer style of the default assistant"));
+        expect(onPickSetting).toHaveBeenCalledWith("chat.responseStyle");
+    });
+
     it("doesn't offer a setting from a section the person may not see", () => {
         // Trash retention lives in Archive, whose read the server refuses a
         // Member; picked, it would land on a section that only says so.

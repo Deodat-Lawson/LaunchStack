@@ -100,12 +100,38 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             // People's one row is a policy card above the member list, which
             // every member may see; the row itself is read-only to them.
             if (definition.section === "people") continue;
-            const { view, edit } = SETTINGS_SECTION_ACCESS[definition.section];
+            const { view, edit } =
+                SETTINGS_SECTION_ACCESS[definition.workspaceSection ?? definition.section];
             expect({ key: definition.key, gate: edit ?? view }).toEqual({
                 key: definition.key,
                 gate: definition.permission,
             });
         }
+    });
+
+    it("puts a personal override where every role can change it", () => {
+        // A setting with both a workspace default and a member override is
+        // the member's to change; its row must not sit behind an admin gate.
+        for (const definition of SETTINGS) {
+            if (!definition.scopes.includes("member")) continue;
+            const { key, section } = definition;
+            for (const role of BUILTIN_ROLES) {
+                expect({
+                    key,
+                    role,
+                    sees: visibleTo(role).includes(section),
+                    readOnly: readOnlyFor(role).includes(section),
+                }).toEqual({ key, role, sees: true, readOnly: false });
+            }
+        }
+    });
+
+    it("draws the answer style twice: yours under Appearance, the workspace's for admins", () => {
+        const style = SETTINGS.find(definition => definition.key === "chat.responseStyle")!;
+        expect(style.section).toBe("appearance");
+        expect(style.workspaceSection).toBe("agents");
+        expect(visibleTo("member")).not.toContain("agents");
+        expect(visibleTo("admin")).toContain("agents");
     });
 });
 
@@ -115,6 +141,9 @@ describe("settingsSectionFromHash", () => {
         expect(settingsSectionFromHash("#profile")).toBe("company");
         expect(settingsSectionFromHash("#keys")).toBe("processing");
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
+        // Hashes arrive lower-cased; the personal row is the one everyone reaches.
+        expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");
+        expect(settingsSectionFromHash("#chat.responsestyle")).toBe("appearance");
         expect(settingsSectionFromHash("#nope")).toBeNull();
     });
 });

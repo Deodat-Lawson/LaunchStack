@@ -19,6 +19,7 @@ import {
     transcriptMarkerOf,
 } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
+import { nextSourcePollDelay } from "./sourcePolling";
 import type {
     ItemAccessView,
     SourceAddedBy,
@@ -237,9 +238,6 @@ interface FolderRow {
     access?: ItemAccessView;
 }
 
-// Match the Drive/Gmail sync cadence while source ingestion is still running.
-const SOURCE_POLL_INTERVAL_MS = 3000;
-
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
@@ -342,32 +340,58 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         ];
     }, [documents, mindmaps, optimistic]);
 
-    const hasProcessingSources = sources.some(source => source.indexStatus === "processing");
+    // Which sources are still processing. The poll schedule restarts whenever
+    // this changes — something finished or started — and backs off otherwise.
+    const processingKey = useMemo(
+        () =>
+            sources
+                .filter(source => source.indexStatus === "processing")
+                .map(source => source.id)
+                .sort()
+                .join("\n"),
+        [sources]
+    );
 
     useEffect(() => {
-        if (!userId || !hasProcessingSources) return;
+        if (!userId || !processingKey) return;
         let timer: number | undefined;
+        let tick = 0;
+        let cancelled = false;
 
         const stopPolling = () => {
-            window.clearInterval(timer);
+            window.clearTimeout(timer);
             timer = undefined;
         };
-        const updatePolling = () => {
+        // A poll that lands while another refresh is in flight rides on that
+        // one instead of queueing a second round of requests behind it.
+        const poll = () => refreshInFlight.current ?? refresh();
+        const schedule = () => {
+            stopPolling();
+            if (cancelled || document.visibilityState !== "visible") return;
+            const delay = nextSourcePollDelay(tick);
+            if (delay === null) return;
+            timer = window.setTimeout(() => {
+                timer = undefined;
+                tick += 1;
+                void poll().finally(schedule);
+            }, delay);
+        };
+        // Hidden: no polling at all. Visible again: catch up once now, then
+        // carry on with the backoff where it left off (or stay stopped).
+        const onVisibilityChange = () => {
             stopPolling();
             if (document.visibilityState !== "visible") return;
-            timer = window.setInterval(() => {
-                if (document.visibilityState !== "visible" || refreshInFlight.current) return;
-                void refresh();
-            }, SOURCE_POLL_INTERVAL_MS);
+            void poll().finally(schedule);
         };
 
-        updatePolling();
-        document.addEventListener("visibilitychange", updatePolling);
+        schedule();
+        document.addEventListener("visibilitychange", onVisibilityChange);
         return () => {
+            cancelled = true;
             stopPolling();
-            document.removeEventListener("visibilitychange", updatePolling);
+            document.removeEventListener("visibilitychange", onVisibilityChange);
         };
-    }, [userId, hasProcessingSources, refresh]);
+    }, [userId, processingKey, refresh]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         // Every folder a source sits in, every folder that exists while empty,

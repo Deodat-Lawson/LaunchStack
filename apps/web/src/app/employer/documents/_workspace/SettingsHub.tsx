@@ -548,7 +548,9 @@ function SectionHeader({
                         {actions?.primaryLabel && (
                             <Button
                                 onClick={() => void actions.onPrimary?.()}
-                                disabled={actions.busy ?? actions.disabled ?? false}
+                                // Either one disables. `busy ?? disabled` let a
+                                // section's `busy: false` hide its `disabled`.
+                                disabled={Boolean(actions.busy) || Boolean(actions.disabled)}
                                 className="px-4 py-[9px]"
                             >
                                 {actions.busy ? busyLabel : actions.primaryLabel}

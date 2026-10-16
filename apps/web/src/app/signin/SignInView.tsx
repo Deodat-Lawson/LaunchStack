@@ -57,10 +57,17 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
     // Only a session that was already here when the page loaded means "you're
     // already signed in". One that appears because this form just succeeded is
     // mid-redirect, and flashing the cycle-breaker card at it would confuse.
+    //
+    // An assistant's OAuth request (signed, hence `sig`) that asks for a
+    // fresh sign-in lands here with a session already present; it needs the
+    // form, not the card.
+    const reauthForAssistant = searchParams.has("sig");
     const [signedInOnArrival, setSignedInOnArrival] = useState<boolean | null>(null);
     useEffect(() => {
-        if (isAuthLoaded && signedInOnArrival === null) setSignedInOnArrival(isSignedIn);
-    }, [isAuthLoaded, isSignedIn, signedInOnArrival]);
+        if (isAuthLoaded && signedInOnArrival === null) {
+            setSignedInOnArrival(isSignedIn && !reauthForAssistant);
+        }
+    }, [isAuthLoaded, isSignedIn, signedInOnArrival, reauthForAssistant]);
 
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col">
@@ -83,6 +90,10 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                         ) : passwordReset ? (
                             <Notice tone="success">
                                 Password updated. Sign in with your new password.
+                            </Notice>
+                        ) : reauthForAssistant ? (
+                            <Notice tone="info">
+                                Sign in to connect your assistant to LaunchStack.
                             </Notice>
                         ) : next !== "/" && signedInOnArrival !== true ? (
                             <Notice tone="info">

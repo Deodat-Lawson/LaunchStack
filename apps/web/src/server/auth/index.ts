@@ -167,6 +167,8 @@ function mcpPlugins(db: Parameters<typeof workspacePostLogin>[0]) {
             loginPage: "/signin",
             consentPage: "/oauth/consent",
             scopes: [...MCP_OAUTH_SCOPES],
+            // Every grant is a person in a workspace; no client_credentials.
+            grantTypes: ["authorization_code", "refresh_token"],
             allowDynamicClientRegistration: true,
             allowUnauthenticatedClientRegistration: true,
             // Some MCP clients omit application_type at registration.

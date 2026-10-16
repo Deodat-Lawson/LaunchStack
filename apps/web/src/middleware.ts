@@ -64,6 +64,11 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/workspace/join-links/preview",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     "/api/ocr/benchmark",
+    // The MCP server for assistants (Claude, ChatGPT, Gemini). They call it
+    // with an OAuth access token or an access key, never a session cookie;
+    // the route authenticates every request itself and answers 401 with the
+    // RFC 9728 challenge that tells an assistant how to sign in.
+    "/api/mcp",
     // Prometheus scrapes without a session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     "/api/metrics",
@@ -291,6 +296,14 @@ export default async function middleware(req: NextRequest) {
                         return NextResponse.redirect(new URL("/employer/documents", req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
+                    // An assistant's OAuth request can ask for a fresh sign-in
+                    // (prompt=login) even with a session; better-auth then
+                    // sends the browser to /signin with the request signed in
+                    // the query. Bouncing that to the dashboard would strand
+                    // the assistant, so leave it on the page.
+                    if (pathname === "/signin" && req.nextUrl.searchParams.has("sig")) {
+                        return;
+                    }
                     // Signed-in member on / or /signup – send to their dashboard.
                     // Users with 2+ memberships pick a workspace first.
                     if (existingUser.membershipCount >= 2) {

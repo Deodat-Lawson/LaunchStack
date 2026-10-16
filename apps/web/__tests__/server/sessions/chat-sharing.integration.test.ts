@@ -230,22 +230,24 @@ describeDb("shared chats (integration)", () => {
         dPublic = `d${handbook}`;
         dSecret = `d${ledger}`;
 
-        const mkMap = async (title: string, published: number | null) => {
+        const mkMap = async (title: string, folder: string, published: number | null) => {
             const [m] = await test.db
                 .insert(mindmaps)
                 .values({
                     companyId,
                     createdByUserId: "auth_ada",
                     title,
+                    folder,
                     doc: {},
                     publishedDocumentId: published === null ? null : BigInt(published),
                 })
                 .returning();
             return `m${m!.id}`;
         };
-        mOpen = await mkMap("Open map", null);
+        // A draft takes its folder's audience (an Unfiled one is its maker's alone).
+        mOpen = await mkMap("Open map", "General", null);
         // Published into the restricted folder: its citations quote the Ledger copy.
-        mSecret = await mkMap("Finance map", ledger);
+        mSecret = await mkMap("Finance map", "General", ledger);
     });
 
     afterAll(async () => {

@@ -8,6 +8,11 @@
  * The trash retention window is applied here, when the archive is read,
  * because that is the only moment the app is looking — there is no nightly
  * job, and the setting says so.
+ *
+ * Trashed mindmap drafts are listed, restored and deleted only where the
+ * caller could do the same from the draft itself (ADR-014: a draft is seen by
+ * its folder's audience, and an Unfiled one by its maker alone — no role
+ * reads past that, Owners and Admins included).
  */
 
 import { and, eq, inArray, isNotNull, lt } from "drizzle-orm";
@@ -16,6 +21,7 @@ import { db } from "~/server/db";
 import { claudeArtifacts, collabAgentPersona, collabChannel, mindmaps } from "~/server/db/schema";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { describeDraftAccess, draftReader, draftVisibilityWhere } from "~/server/mindmap/access";
 import { badRequest } from "~/server/workspace/errors";
 
 import { readWorkspaceSetting } from "./store";
@@ -67,9 +73,11 @@ async function purgeExpiredTrash(companyId: bigint, trashDays: number): Promise<
     return maps.length + artifacts.length;
 }
 
-export async function archiveOverview(companyId: bigint): Promise<ArchiveOverview> {
+export async function archiveOverview(ctx: WorkspaceContext): Promise<ArchiveOverview> {
+    const companyId = ctx.companyId;
     const trashDays = await readWorkspaceSetting<number | null>(companyId, "retention.trashDays");
     const purged = trashDays ? await purgeExpiredTrash(companyId, trashDays) : 0;
+    const reader = await draftReader(ctx);
 
     const [maps, artifacts, agents, channels] = await Promise.all([
         db
@@ -80,7 +88,7 @@ export async function archiveOverview(companyId: bigint): Promise<ArchiveOvervie
                 deletedAt: mindmaps.deletedAt,
             })
             .from(mindmaps)
-            .where(and(eq(mindmaps.companyId, companyId), isNotNull(mindmaps.deletedAt))),
+            .where(and(draftVisibilityWhere(reader), isNotNull(mindmaps.deletedAt))),
         db
             .select({
                 id: claudeArtifacts.id,
@@ -180,9 +188,23 @@ export async function applyArchiveAction(
                 .filter(id => Number.isSafeInteger(id) && id > 0);
             switch (kind) {
                 case "mindmap": {
+                    const allowed = await draftsActionable(ctx, numeric, input.action);
+                    for (const id of numeric) {
+                        if (!allowed.includes(id)) {
+                            failed.push({
+                                kind,
+                                id: String(id),
+                                reason:
+                                    input.action === "restore"
+                                        ? "You can't change this mindmap."
+                                        : "You can't delete this mindmap.",
+                            });
+                        }
+                    }
+                    if (allowed.length === 0) break;
                     const where = and(
                         eq(mindmaps.companyId, ctx.companyId),
-                        inArray(mindmaps.id, numeric)
+                        inArray(mindmaps.id, allowed)
                     );
                     const rows =
                         input.action === "restore"
@@ -271,4 +293,31 @@ export async function applyArchiveAction(
     }
 
     return { done, failed };
+}
+
+/**
+ * The trashed drafts among `ids` the caller may restore (edit) or delete for
+ * good (manage, or edit plus `documents.delete`) — the draft routes' own rules.
+ */
+async function draftsActionable(
+    ctx: WorkspaceContext,
+    ids: number[],
+    action: ArchiveActionInput["action"]
+): Promise<number[]> {
+    if (ids.length === 0) return [];
+    const rows = await db
+        .select({
+            id: mindmaps.id,
+            folder: mindmaps.folder,
+            createdByUserId: mindmaps.createdByUserId,
+        })
+        .from(mindmaps)
+        .where(and(draftVisibilityWhere(await draftReader(ctx)), inArray(mindmaps.id, ids)));
+    const access = await describeDraftAccess(ctx, rows);
+    return rows
+        .filter(row => {
+            const view = access.get(row.id);
+            return action === "restore" ? view?.canEdit === true : view?.canDelete === true;
+        })
+        .map(row => row.id);
 }

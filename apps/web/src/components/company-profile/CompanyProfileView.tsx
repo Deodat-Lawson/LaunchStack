@@ -145,8 +145,7 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
             primaryLabel: rebuildLabel,
             primaryBusyLabel: "Reading sources…",
             onPrimary: () => void rebuild(),
-            // The hub reads `busy ?? disabled`; leave busy unset unless it is.
-            busy: building ? true : undefined,
+            busy: building,
             disabled: rebuildDisabled,
         });
         return () => onActions(null);

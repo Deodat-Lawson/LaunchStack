@@ -37,7 +37,7 @@ function jsonOk(body: unknown, status = 201) {
         ok: status < 400,
         status,
         json: () => Promise.resolve(body),
-        text: () => Promise.resolve(""),
+        text: () => Promise.resolve(JSON.stringify(body)),
     };
 }
 
@@ -96,12 +96,55 @@ function mount(props: Partial<React.ComponentProps<typeof AddSourceModal>> = {})
     );
 }
 
-describe("who will see it (ADR-014)", () => {
+/** What GET /api/workspace/folders/by-path answers for each folder in these tests. */
+let folderFacts: Record<string, Record<string, unknown>>;
+
+function access(audience: "private" | "shared" | "workspace", canManage = false) {
+    return {
+        audience,
+        ownAudience: true,
+        principalCount: audience === "private" ? 1 : audience === "shared" ? 3 : 0,
+        canEdit: true,
+        canManage,
+    };
+}
+
+function byPath(url: string): string | null {
+    const prefix = "/api/workspace/folders/by-path?path=";
+    return url.startsWith(prefix) ? decodeURIComponent(url.slice(prefix.length)) : null;
+}
+
+describe("where it goes and who will see it (ADR-014)", () => {
+    beforeEach(() => {
+        folderFacts = {};
+        fetchMock.mockImplementation((url: string) => {
+            const path = byPath(url);
+            if (path !== null) {
+                const facts = folderFacts[path];
+                return Promise.resolve(facts ? jsonOk(facts, 200) : jsonOk({ error: "x" }, 404));
+            }
+            return Promise.resolve(
+                url === "/api/connectors/google"
+                    ? jsonOk(googleStatus, 200)
+                    : jsonOk(defaultResponse)
+            );
+        });
+    });
+
+    it("shows the destination at the top, as a path", async () => {
+        mount({ defaultCategory: "Strategy/2027", folders: ["Strategy", "Strategy/2027"] });
+        expect(
+            screen.getByRole("button", { name: "Add to: Strategy / 2027. Change folder" })
+        ).toBeInTheDocument();
+        await settleStatus();
+    });
+
     it("says a loose file stays yours until you share it", async () => {
         mount({ defaultCategory: "Unfiled", initialTab: "paste" });
-        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
-            "Only you will see it until you share it."
-        );
+        const note = screen.getByTestId("add-source-audience");
+        expect(note).toHaveTextContent("Only you");
+        expect(note).toHaveTextContent("Files with no folder stay private until you share them.");
+        expect(screen.getByRole("button", { name: /Add to: No folder/ })).toBeInTheDocument();
         await settleStatus();
     });
 
@@ -109,20 +152,140 @@ describe("who will see it (ADR-014)", () => {
         mount({
             defaultCategory: "Strategy",
             initialTab: "paste",
-            restrictedFolders: ["Strategy"],
-            privateFolders: ["Strategy"],
+            folderAccess: { Strategy: access("private") },
         });
+        const note = screen.getByTestId("add-source-audience");
+        expect(note).toHaveTextContent("Only you");
+        expect(note).toHaveTextContent("Strategy is private to you.");
+        await settleStatus();
+    });
+
+    it("names the whole workspace, with a head count, for an open folder", async () => {
+        folderFacts.Strategy = {
+            visibility: "workspace",
+            grants: [],
+            audienceCount: 8,
+            canManage: false,
+            inheritsFrom: { path: null, restricted: false },
+            workspaceName: "Acme",
+        };
+        mount({
+            defaultCategory: "Strategy",
+            folderAccess: { Strategy: access("workspace") },
+            workspaceName: "Acme",
+        });
+        const note = screen.getByTestId("add-source-audience");
+        expect(note).toHaveTextContent("Everyone at Acme");
+        expect(note).toHaveTextContent("Anyone in the workspace can open Strategy.");
+        await waitFor(() => expect(note).toHaveTextContent("8 people"));
+    });
+
+    it("names the people and groups a shared folder is open to", async () => {
+        folderFacts.Strategy = {
+            visibility: "restricted",
+            grants: [
+                {
+                    principalType: "user",
+                    principalName: "Me",
+                    level: "manage",
+                    authUserId: "user_1",
+                },
+                {
+                    principalType: "user",
+                    principalName: "Ada Lovelace",
+                    level: "edit",
+                    authUserId: "ada",
+                },
+                { principalType: "group", principalName: "Design", level: "view" },
+            ],
+            audienceCount: 5,
+            canManage: true,
+            inheritsFrom: { path: null, restricted: false },
+            workspaceName: "Acme",
+        };
+        mount({ defaultCategory: "Strategy", folderAccess: { Strategy: access("shared") } });
+        const note = screen.getByTestId("add-source-audience");
+        await waitFor(() => expect(note).toHaveTextContent("Shared with 5 people"));
+        const people = screen.getByRole("list", { name: "People with access" });
+        expect(people).toHaveTextContent("You");
+        expect(people).toHaveTextContent("Ada Lovelace");
+        expect(people).toHaveTextContent("Designgroup");
+        expect(note).toHaveTextContent("Only the people Strategy is shared with can open it.");
+    });
+
+    it("offers the folder's Share dialog to someone who manages it", async () => {
+        const user = userEvent.setup();
+        const onShareFolder = jest.fn();
+        mount({
+            defaultCategory: "Strategy",
+            folderAccess: { Strategy: access("shared", true) },
+            onShareFolder,
+        });
+        await settleStatus();
+        await user.click(screen.getByRole("button", { name: "Change access" }));
+        expect(onShareFolder).toHaveBeenCalledWith("Strategy");
+    });
+
+    it("offers no Share to someone who can only add to the folder", async () => {
+        mount({
+            defaultCategory: "Strategy",
+            folderAccess: { Strategy: access("shared", false) },
+            onShareFolder: jest.fn(),
+        });
+        await settleStatus();
+        expect(screen.queryByRole("button", { name: "Change access" })).not.toBeInTheDocument();
+    });
+
+    it("lists each folder's audience in the picker", async () => {
+        const user = userEvent.setup();
+        mount({
+            defaultCategory: "Unfiled",
+            folders: ["Board", "Strategy", "Team", "Unfiled"],
+            folderAccess: {
+                Board: access("private"),
+                Strategy: access("shared"),
+                Team: access("workspace"),
+            },
+        });
+        await settleStatus();
+        await user.click(screen.getByRole("button", { name: /Add to: No folder/ }));
+        const options = screen.getAllByRole("option");
+        expect(options.map(o => o.textContent)).toEqual([
+            "No folderUnfiledOnly you",
+            "BoardOnly you",
+            "StrategyShared",
+            "TeamEveryone",
+        ]);
+    });
+
+    it("shows where a connector files things, and who sees them there", async () => {
+        folderFacts["Google Drive"] = {
+            visibility: "workspace",
+            grants: [],
+            audienceCount: 8,
+            canManage: false,
+            inheritsFrom: { path: null, restricted: false },
+            workspaceName: "Acme",
+        };
+        mount({ initialTab: "drive" });
+        expect(screen.getByTestId("add-destination-path")).toHaveTextContent("Google Drive");
+        expect(screen.queryByTestId("add-destination-picker")).not.toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.getByTestId("add-source-audience")).toHaveTextContent("Everyone at Acme")
+        );
+    });
+
+    it("says Gmail is private to its owner", async () => {
+        mount({ initialTab: "gmail" });
         expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
-            "Only you will see it until you share it."
+            "Mail lands in your own Gmail folder. Nobody else in the workspace can open it."
         );
         await settleStatus();
     });
 
-    it("says a filed one goes to whoever can open the folder", async () => {
-        mount({ defaultCategory: "Strategy", initialTab: "paste" });
-        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
-            "Visible to everyone who can open Strategy."
-        );
+    it("shows no destination where nothing is added to a folder", async () => {
+        mount({ initialTab: "slack" });
+        expect(screen.queryByTestId("add-destination")).not.toBeInTheDocument();
         await settleStatus();
     });
 });
@@ -135,17 +298,31 @@ describe("creating a folder from the picker", () => {
         mount({ defaultCategory: "Strategy", initialTab: "paste", onCreateFolder });
         await settleStatus();
 
-        await user.click(screen.getByRole("button", { name: "Strategy" }));
-        await user.type(screen.getByPlaceholderText("Find or create folder…"), "Board");
-        await user.click(screen.getByRole("button", { name: 'Create folder "Board"' }));
+        await user.click(screen.getByRole("button", { name: /Add to: Strategy/ }));
+        await user.type(screen.getByPlaceholderText("Find or create a folder…"), "Board");
+        expect(screen.getByRole("button", { name: /Create “Board”/ })).toHaveTextContent(
+            "Private to you"
+        );
+        await user.click(screen.getByRole("button", { name: /Create “Board”/ }));
 
         expect(onCreateFolder).toHaveBeenCalledWith("Board");
         await waitFor(() =>
-            expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
-                "Visible to everyone who can open Board (2)."
-            )
+            expect(screen.getByRole("button", { name: /Add to: Board \(2\)/ })).toBeInTheDocument()
         );
-        expect(screen.getByRole("button", { name: "Board (2)" })).toBeInTheDocument();
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "Board (2) is a new folder. New folders start private to you."
+        );
+    });
+
+    it("says a new subfolder follows the folder it is made in", async () => {
+        const user = userEvent.setup();
+        mount({ defaultCategory: "Strategy", onCreateFolder: jest.fn() });
+        await settleStatus();
+        await user.click(screen.getByRole("button", { name: /Add to: Strategy/ }));
+        await user.type(screen.getByPlaceholderText("Find or create a folder…"), "Strategy/Q3");
+        expect(screen.getByRole("button", { name: /Create “Strategy \/ Q3”/ })).toHaveTextContent(
+            "Inside Strategy · follows its sharing"
+        );
     });
 });
 
@@ -188,11 +365,13 @@ describe("creating a mindmap", () => {
 
     it("names the destination folder so the user knows where it lands", async () => {
         const user = userEvent.setup();
-        mount({ defaultCategory: "Strategy" });
+        mount({ defaultCategory: "Strategy", folderAccess: { Strategy: access("workspace") } });
         await user.click(screen.getByRole("button", { name: "Mindmap" }));
-        // The folder is named twice on purpose: in the panel copy and on the
-        // "Save to" picker in the footer.
-        expect(screen.getAllByText("Strategy").length).toBeGreaterThanOrEqual(1);
+        expect(screen.getByRole("button", { name: /Add to: Strategy/ })).toBeInTheDocument();
+        // Who can see a map is a question about its published copy.
+        expect(screen.getByTestId("add-source-audience")).toHaveTextContent(
+            "This applies to the published copy"
+        );
     });
 
     it("opens on the Mindmap tab when asked to", async () => {

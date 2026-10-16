@@ -1,7 +1,7 @@
 /**
  * Every mutating route in the document / folder / settings / connector /
- * analytics / campaign families refuses a membership that lacks the one
- * permission the route names — before it touches the database.
+ * analytics / campaign / agent-roster families refuses a membership that
+ * lacks the one permission the route names — before it touches the database.
  *
  * One table, one context per role, one assertion: 403. The positive paths
  * live with each route's own tests; this file exists so that a route which
@@ -197,6 +197,20 @@ jest.mock("~/server/services/agent-sessions-connector", () => ({
 }));
 // ESM-only; the commit route never reaches it before its gate.
 jest.mock("p-limit", () => () => (fn: () => unknown) => fn());
+// The agent roster routes: the store, the hub and Slack are all past the gate.
+jest.mock("~/server/collab/personas", () => ({
+    archivePersona: jest.fn(),
+    createPersona: jest.fn(),
+    ensureStarterPersonas: jest.fn(),
+    getPersonaById: jest.fn(),
+    getPersonaByKey: jest.fn(),
+    listPersonas: jest.fn(),
+    resetStarterPersona: jest.fn(),
+    updatePersona: jest.fn(),
+}));
+jest.mock("~/server/collab/runtime", () => ({ getHub: jest.fn(), listKnownNodes: jest.fn() }));
+jest.mock("~/server/collab/slack", () => ({ getSlackStatus: jest.fn() }));
+jest.mock("~/server/settings/store", () => ({ readWorkspaceSetting: jest.fn() }));
 
 // ---------------------------------------------------------------------------
 // Handlers
@@ -248,6 +262,14 @@ import { GET as documentStats } from "~/app/api/company/documents/[documentId]/s
 import { POST as approveCampaign } from "~/app/api/email-campaigns/[campaignId]/approve/route";
 import { POST as sendCampaign } from "~/app/api/email-campaigns/[campaignId]/send/route";
 import { POST as runCampaign } from "~/app/api/email-campaign-runs/route";
+import { GET as fetchCompany } from "~/app/api/fetchCompany/route";
+import { POST as createAgent } from "~/app/api/collab/agents/route";
+import { POST as importAgent } from "~/app/api/collab/agents/import/route";
+import {
+    DELETE as retireAgent,
+    PATCH as editAgent,
+} from "~/app/api/collab/agents/[personaId]/route";
+import { POST as resetAgent } from "~/app/api/collab/agents/[personaId]/reset/route";
 
 // ---------------------------------------------------------------------------
 // Table
@@ -359,6 +381,62 @@ const GATES: readonly Gate[] = [
         permission: "settings.manage",
         deniedRole: "member",
         call: () => uploadBootstrap(),
+    },
+    {
+        route: "GET /api/fetchCompany (key tails, Ollama endpoint)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => fetchCompany(),
+    },
+    // The agent roster: adding, retiring and restoring are the managers', and
+    // so are an agent's policy fields; what an agent says is any editor's.
+    {
+        route: "POST /api/collab/agents",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            createAgent(
+                json("/api/collab/agents", "POST", {
+                    key: "finance",
+                    displayName: "Dana",
+                    role: "Finance partner",
+                    systemPrompt: "Guard the margin.",
+                })
+            ),
+    },
+    {
+        route: "POST /api/collab/agents/import",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            importAgent(json("/api/collab/agents/import", "POST", { file: "---\n---\nHi" })),
+    },
+    {
+        route: "DELETE /api/collab/agents/[personaId]",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            retireAgent(json("/api/collab/agents/p1", "DELETE", {}), params({ personaId: "p1" })),
+    },
+    {
+        route: "POST /api/collab/agents/[personaId]/reset",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            resetAgent(
+                json("/api/collab/agents/p1/reset", "POST", {}),
+                params({ personaId: "p1" })
+            ),
+    },
+    {
+        route: "PATCH /api/collab/agents/[personaId] (autonomy)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            editAgent(
+                json("/api/collab/agents/p1", "PATCH", { autonomy: "full" }),
+                params({ personaId: "p1" })
+            ),
     },
     // documents.delete — deleting a file itself is gated by level, not role
     // (ADR-014: whoever manages a file may delete it); see
@@ -595,6 +673,16 @@ const GATES: readonly Gate[] = [
                     name: "n",
                     recipients: [{ email: "a@b.c" }],
                 })
+            ),
+    },
+    {
+        route: "PATCH /api/collab/agents/[personaId] (instructions)",
+        permission: "documents.edit",
+        deniedRole: "viewer",
+        call: () =>
+            editAgent(
+                json("/api/collab/agents/p1", "PATCH", { systemPrompt: "Be brief." }),
+                params({ personaId: "p1" })
             ),
     },
 ];

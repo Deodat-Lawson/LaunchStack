@@ -9,6 +9,11 @@
  * held with that agent over the workspace's sources, the same route the main
  * chat uses, so what you test is what you get. The definition-file tab is the
  * same agent as text, for review, export and import.
+ *
+ * Everyone reads, tries and exports. Anyone who edits documents may change
+ * what an agent says; adding, importing, duplicating, retiring and restoring
+ * are the roster managers' (`lib/agents/roster-access.ts`). Buttons the API
+ * would refuse are not drawn.
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -47,6 +52,7 @@ import {
     coerceAgentDefinition,
     type AgentDefinition,
 } from "~/lib/agents/definition";
+import { agentRosterAccess } from "~/lib/agents/roster-access";
 import { starterAgent } from "~/lib/agents/starter-agents";
 import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
@@ -88,6 +94,8 @@ function toDefinition(persona: AgentPersonaRecord): AgentDefinition {
 
 export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: AgentsPaneProps) {
     const { data, loading, error, refresh } = useAgents({ includeArchived: true });
+    const { can } = usePermissions();
+    const access = agentRosterAccess(can);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [query, setQuery] = useState("");
     const [editing, setEditing] = useState<{
@@ -263,23 +271,29 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                             event.target.value = "";
                         }}
                     />
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-7"
-                        title="Import a definition file"
-                        onClick={() => importInput.current?.click()}
-                    >
-                        <Upload className="size-3.5" />
-                    </Button>
-                    <Button
-                        size="icon"
-                        className="size-7"
-                        title="New agent"
-                        onClick={() => setEditing({ persona: null })}
-                    >
-                        <Plus className="size-3.5" />
-                    </Button>
+                    {access.manageRoster && (
+                        <>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-7"
+                                title="Import a definition file"
+                                aria-label="Import a definition file"
+                                onClick={() => importInput.current?.click()}
+                            >
+                                <Upload className="size-3.5" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                className="size-7"
+                                title="New agent"
+                                aria-label="New agent"
+                                onClick={() => setEditing({ persona: null })}
+                            >
+                                <Plus className="size-3.5" />
+                            </Button>
+                        </>
+                    )}
                 </div>
                 <div className="px-3 pt-3">
                     <label className="border-line bg-panel-2 text-ink-3 flex items-center gap-2 rounded-lg border px-2.5 py-1.5">
@@ -342,20 +356,30 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                         key={selected.dbId}
                         persona={selected}
                         defaultAutonomy={defaultAutonomy}
-                        onEdit={() => setEditing({ persona: selected })}
-                        onDuplicate={() =>
-                            setEditing({
-                                persona: null,
-                                seed: {
-                                    ...toDefinition(selected),
-                                    key: `${selected.id}-copy`,
-                                    displayName: `${selected.displayName} (copy)`,
-                                },
-                            })
+                        canImport={access.manageRoster}
+                        onEdit={
+                            access.editContent ? () => setEditing({ persona: selected }) : undefined
                         }
-                        onRetire={() => void retire(selected)}
-                        onRestore={() => void restore(selected)}
-                        onReset={selected.builtin ? () => void reset(selected) : undefined}
+                        onDuplicate={
+                            access.manageRoster
+                                ? () =>
+                                      setEditing({
+                                          persona: null,
+                                          seed: {
+                                              ...toDefinition(selected),
+                                              key: `${selected.id}-copy`,
+                                              displayName: `${selected.displayName} (copy)`,
+                                          },
+                                      })
+                                : undefined
+                        }
+                        onRetire={access.manageRoster ? () => void retire(selected) : undefined}
+                        onRestore={access.manageRoster ? () => void restore(selected) : undefined}
+                        onReset={
+                            access.manageRoster && selected.builtin
+                                ? () => void reset(selected)
+                                : undefined
+                        }
                         onUseInChat={onUseInChat ? () => onUseInChat(selected.id) : undefined}
                         onStartMeeting={
                             onStartMeeting ? () => onStartMeeting(selected.id) : undefined
@@ -365,7 +389,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                     <div className="text-ink-3 flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
                         <Bot className="size-8 opacity-50" />
                         <div className="text-ink text-[15px] font-medium">
-                            Pick an agent, or write one
+                            {access.manageRoster ? "Pick an agent, or write one" : "Pick an agent"}
                         </div>
                         <p className="max-w-sm text-[12.5px] leading-relaxed">
                             An agent is a name, a role and standing instructions grounded in a
@@ -380,6 +404,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 open={editing !== null}
                 persona={editing?.persona ?? null}
                 seed={editing?.seed ?? null}
+                contentOnly={!access.manageRoster}
                 nodeIds={(data?.nodes ?? []).map(node => node.nodeId)}
                 onClose={() => setEditing(null)}
                 onSaved={async persona => {
@@ -473,6 +498,7 @@ function RosterRow({
 function AgentDetail({
     persona,
     defaultAutonomy,
+    canImport,
     onEdit,
     onDuplicate,
     onRetire,
@@ -483,10 +509,13 @@ function AgentDetail({
 }: {
     persona: AgentPersonaRecord;
     defaultAutonomy: ReturnType<typeof effectiveAutonomy>;
-    onEdit: () => void;
-    onDuplicate: () => void;
-    onRetire: () => void;
-    onRestore: () => void;
+    /** Whether the definition-file tab may point at the import button. */
+    canImport: boolean;
+    /** Each action is passed only to someone the API would let do it. */
+    onEdit?: () => void;
+    onDuplicate?: () => void;
+    onRetire?: () => void;
+    onRestore?: () => void;
     onReset?: () => void;
     onUseInChat?: () => void;
     onStartMeeting?: () => void;
@@ -521,9 +550,11 @@ function AgentDetail({
                     </div>
                     <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
                         {persona.archived ? (
-                            <Button variant="outline" size="sm" onClick={onRestore}>
-                                <RotateCcw className="size-3.5" /> Bring back
-                            </Button>
+                            onRestore && (
+                                <Button variant="outline" size="sm" onClick={onRestore}>
+                                    <RotateCcw className="size-3.5" /> Bring back
+                                </Button>
+                            )
                         ) : (
                             <>
                                 {onUseInChat && (
@@ -545,38 +576,47 @@ function AgentDetail({
                                         <Users className="size-3.5" /> Put in a meeting
                                     </Button>
                                 )}
-                                <Button variant="outline" size="sm" onClick={onEdit}>
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="size-8"
-                                    title="Duplicate"
-                                    onClick={onDuplicate}
-                                >
-                                    <Copy className="size-3.5" />
-                                </Button>
+                                {onEdit && (
+                                    <Button variant="outline" size="sm" onClick={onEdit}>
+                                        Edit
+                                    </Button>
+                                )}
+                                {onDuplicate && (
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="size-8"
+                                        title="Duplicate"
+                                        aria-label="Duplicate"
+                                        onClick={onDuplicate}
+                                    >
+                                        <Copy className="size-3.5" />
+                                    </Button>
+                                )}
                                 {onReset && (
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         className="size-8"
                                         title="Restore the shipped definition"
+                                        aria-label="Restore the shipped definition"
                                         onClick={onReset}
                                     >
                                         <RotateCcw className="size-3.5" />
                                     </Button>
                                 )}
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="text-ink-3 hover:text-danger size-8"
-                                    title="Retire"
-                                    onClick={onRetire}
-                                >
-                                    <Trash2 className="size-3.5" />
-                                </Button>
+                                {onRetire && (
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="text-ink-3 hover:text-danger size-8"
+                                        title="Retire"
+                                        aria-label="Retire"
+                                        onClick={onRetire}
+                                    >
+                                        <Trash2 className="size-3.5" />
+                                    </Button>
+                                )}
                             </>
                         )}
                     </div>
@@ -680,7 +720,11 @@ function AgentDetail({
                     </div>
                 </TabsContent>
                 <TabsContent value="file" className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-                    <DefinitionFile definition={definition} personaDbId={persona.dbId} />
+                    <DefinitionFile
+                        definition={definition}
+                        personaDbId={persona.dbId}
+                        canImport={canImport}
+                    />
                 </TabsContent>
             </Tabs>
         </div>
@@ -690,9 +734,11 @@ function AgentDetail({
 function DefinitionFile({
     definition,
     personaDbId,
+    canImport,
 }: {
     definition: AgentDefinition;
     personaDbId: string;
+    canImport: boolean;
 }) {
     const text = useMemo(() => serializeAgentFile(definition), [definition]);
     const [copied, setCopied] = useState(false);
@@ -701,7 +747,7 @@ function DefinitionFile({
             <div className="text-ink-3 mb-3 text-[12.5px] leading-relaxed">
                 The same agent as a file — front matter for the settings, the body is the
                 instructions. It is the shape OpenCode and Claude Code agents use, so it moves
-                between tools. Import one with the upload button on the left.
+                between tools.{canImport ? " Import one with the upload button on the left." : ""}
             </div>
             <div className="border-line bg-panel overflow-hidden rounded-xl border">
                 <div className="border-line flex items-center gap-2 border-b px-3 py-2">

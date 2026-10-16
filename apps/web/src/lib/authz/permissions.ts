@@ -37,7 +37,8 @@ export type Permission = (typeof PERMISSIONS)[number];
 export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "documents.read": "Open, search, ask about, and download documents in folders they can see",
     "documents.upload": "Add documents and new versions into folders they can edit",
-    "documents.edit": "Rename, move, edit, and revert documents in folders they can edit",
+    "documents.edit":
+        "Rename, move, edit, and revert documents in folders they can edit; change what an agent says",
     "documents.delete": "Delete documents and versions",
     "folders.manage": "Create, rename, and delete folders; change who can see any folder",
     "members.view": "See who is in the workspace",
@@ -45,7 +46,8 @@ export const PERMISSION_DESCRIPTIONS: Record<Permission, string> = {
     "members.manage": "Approve, change roles, suspend, and remove members",
     "groups.manage": "Create groups and change their membership",
     "roles.manage": "Create and edit custom roles",
-    "settings.manage": "Workspace settings, processing, company profile, agents and nodes",
+    "settings.manage":
+        "Workspace settings, processing, company profile, and the agent roster (adding, retiring, autonomy, tools, nodes)",
     "connectors.manage": "Connect and disconnect Google Drive, Slack, GitHub, and agent connectors",
     "analytics.view": "The statistics dashboard and per-document stats",
     "audit.view": "Read the audit log",

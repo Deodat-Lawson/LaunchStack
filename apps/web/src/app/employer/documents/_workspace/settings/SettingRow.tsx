@@ -30,8 +30,18 @@ import { Switch } from "~/components/ui/switch";
 import { PERMISSION_DESCRIPTIONS } from "~/lib/authz/permissions";
 import { usePerson } from "~/lib/profile/use-people";
 import { settingsForSection, type SettingDefinition } from "~/lib/settings/registry";
-import type { SettingOption, SettingsSectionId, StoredScope } from "~/lib/settings/types";
-import { defaultWriteScope, useSetting, useSettingsPayload } from "~/lib/settings/useSettings";
+import type {
+    SettingOption,
+    SettingScope,
+    SettingsSectionId,
+    StoredScope,
+} from "~/lib/settings/types";
+import {
+    defaultWriteScope,
+    settingAtScope,
+    useSetting,
+    useSettingsPayload,
+} from "~/lib/settings/useSettings";
 import { cn } from "~/lib/utils";
 
 import { relativeTime } from "./people/format";
@@ -70,8 +80,11 @@ export function SettingRow({
     children,
 }: SettingRowProps) {
     const setting = useSetting(settingKey, { folder });
-    const { definition, resolved, value, loaded, saving, saveError } = setting;
+    const { definition, resolved, loaded, saving, saveError } = setting;
     const writeScope = scope ?? defaultWriteScope(definition, folder);
+    // A row pinned to a broader scope than the winning value shows that
+    // scope's value: the workspace row is not where an admin's own choice goes.
+    const { value, source } = settingAtScope(definition, resolved, writeScope);
     const canEdit = resolved ? resolved.canEdit[writeScope] : false;
     const disabled = !loaded || saving || !canEdit || Boolean(disabledReason);
     const [highlight, setHighlight] = useState(false);
@@ -97,14 +110,18 @@ export function SettingRow({
         [setting, writeScope]
     );
 
+    // The description is quoted, not spliced into a sentence: some are verb
+    // phrases ("Send invitations…") and some are lists ("Workspace settings,
+    // processing, …"), and splicing a list read "people who can workspace
+    // settings".
     const permissionReason = !canEdit
         ? definition.permission
-            ? `Only people who can ${PERMISSION_DESCRIPTIONS[definition.permission].toLowerCase()} change this.`
+            ? `Changing this takes a role with “${PERMISSION_DESCRIPTIONS[definition.permission]}”.`
             : "Not editable at this scope."
         : null;
     const readOnlyReason = !loaded ? null : (disabledReason ?? permissionReason);
 
-    const provenance = describeProvenance(definition, resolved, writeScope, folder);
+    const provenance = describeProvenance(resolved, source, writeScope, folder);
     const showReset =
         canEdit &&
         resolved &&
@@ -165,7 +182,7 @@ export function SettingRow({
                     <Layers size={11} aria-hidden />
                     {provenance.text}
                 </span>
-                {resolved?.updatedBy && resolved.source !== "member" && (
+                {resolved?.updatedBy && source === resolved.source && source !== "member" && (
                     <SetBy
                         updatedBy={resolved.updatedBy}
                         updatedAt={resolved.updatedAt}
@@ -231,8 +248,9 @@ function SetBy({
 }
 
 function describeProvenance(
-    definition: SettingDefinition,
     resolved: ReturnType<typeof useSetting>["resolved"],
+    /** Where the value this row shows came from, at its write scope. */
+    source: SettingScope,
     writeScope: StoredScope,
     folder: string | null
 ): { text: string; resetLabel: string } {
@@ -242,7 +260,7 @@ function describeProvenance(
         if (writeScope === "folder") return "the workspace";
         return "the default";
     };
-    if (resolved.source === writeScope) {
+    if (source === writeScope) {
         const where =
             writeScope === "folder" && folder
                 ? `Set on this folder`
@@ -252,13 +270,13 @@ function describeProvenance(
             resetLabel: `Reset to ${inheritsFrom()}`,
         };
     }
-    if (resolved.source === "default") {
+    if (source === "default") {
         return { text: `${SCOPE_LABEL.default} · nothing set`, resetLabel: "Reset" };
     }
     const from =
-        resolved.source === "folder" && resolved.sourceId
+        source === "folder" && resolved.source === "folder" && resolved.sourceId
             ? `folder “${resolved.sourceId}”`
-            : SCOPE_LABEL[resolved.source].toLowerCase();
+            : SCOPE_LABEL[source].toLowerCase();
     return {
         text: `Inherited from ${from}`,
         resetLabel: `Reset to ${inheritsFrom()}`,

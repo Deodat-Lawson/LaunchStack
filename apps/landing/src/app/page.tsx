@@ -21,7 +21,7 @@ const jsonLd = {
     applicationSubCategory: "DeveloperApplication",
     operatingSystem: "Web",
     description:
-        "Launchstack is a free, open-source AI platform that turns uploaded documents, recordings, and repository imports into a cited knowledge graph. Self-host with your own API keys.",
+        "Launchstack is a free, open-source AI platform that turns uploaded documents, recordings, and zipped repositories into a cited knowledge graph. Self-host with your own API keys.",
     url: SITE_URL,
     downloadUrl: GITHUB_REPO,
     offers: {

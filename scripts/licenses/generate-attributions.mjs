@@ -285,6 +285,9 @@ for (const svc of PYTHON_SERVICES) {
 }
 
 const adeuLicense = readFileSync(join(HERE, "adeu-LICENSE.txt"), "utf8").trim();
+const FONTS = join(ROOT, "packages", "design-tokens", "fonts");
+const interLicense = readFileSync(join(FONTS, "OFL-Inter.txt"), "utf8").trim();
+const jetbrainsMonoLicense = readFileSync(join(FONTS, "OFL-JetBrainsMono.txt"), "utf8").trim();
 
 const doc = `<!--
   GENERATED FILE — do not edit by hand.
@@ -322,6 +325,28 @@ Repository: <https://github.com/dealfluence/adeu> · Homepage: <https://adeu.ai>
 ${adeuLicense}
 \`\`\`
 
+## Fonts
+
+Inter and JetBrains Mono, self-hosted in \`packages/design-tokens/fonts\` and
+built into the app and landing images. Both are under the SIL Open Font
+License 1.1, whose text must travel with the fonts.
+
+### Inter
+
+Repository: <https://github.com/rsms/inter>
+
+\`\`\`
+${interLicense}
+\`\`\`
+
+### JetBrains Mono
+
+Repository: <https://github.com/JetBrains/JetBrainsMono>
+
+\`\`\`
+${jetbrainsMonoLicense}
+\`\`\`
+
 ${section(
     "App and worker images",
     "Everything in the pnpm workspace's production dependency tree, which is what CI builds into the two published images.",
@@ -353,7 +378,7 @@ The permissive licenses above (MIT, BSD-2-Clause, BSD-3-Clause, ISC, Apache-2.0,
 \`LICENSE\` file ships inside the image alongside its code, in
 \`node_modules/<pkg>/\` or \`site-packages/<dist>-<version>.dist-info/\`. The
 verbatim text for adeu is included above because this repository names it
-explicitly as a core dependency.
+explicitly as a core dependency, and for the fonts because the OFL requires it.
 
 ## Known gaps
 

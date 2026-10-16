@@ -14,6 +14,8 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
+import type * as SettingsContract from "~/app/employer/documents/_workspace/settings/contract";
+
 const mockReplace = jest.fn();
 jest.mock("next/navigation", () => ({
     useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
@@ -53,26 +55,30 @@ jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => (
 // Section bodies are exercised by their own tests and by the API tests. Here
 // they are replaced with probes that publish known actions, so the assertions
 // are about the chrome rather than about five unrelated data fetches.
+// Processing publishes whatever a test sets; unless it says otherwise, a Save
+// with nothing in its way.
+const SAVE: SettingsContract.SettingsSectionActions = {
+    primaryLabel: "Save changes",
+    onPrimary: () => undefined,
+    disabled: false,
+};
+let mockProcessingActions: SettingsContract.SettingsSectionActions = SAVE;
 jest.mock("~/app/employer/documents/_workspace/settings/ProcessingSettings", () => {
-    const { usePublishedActions } = jest.requireActual<
-        typeof import("~/app/employer/documents/_workspace/settings/contract")
-    >("~/app/employer/documents/_workspace/settings/contract");
+    const { usePublishedActions } = jest.requireActual<typeof SettingsContract>(
+        "~/app/employer/documents/_workspace/settings/contract"
+    );
     return {
         ProcessingSettings: ({ onActions }: { onActions?: unknown }) => {
-            usePublishedActions(
-                onActions as never,
-                { primaryLabel: "Save changes", onPrimary: () => undefined, disabled: false },
-                []
-            );
+            usePublishedActions(onActions as never, mockProcessingActions, []);
             return <div data-testid="body-processing">processing body</div>;
         },
     };
 });
 
 jest.mock("~/app/employer/documents/_workspace/collab/AgentsPanel", () => {
-    const { usePublishedActions } = jest.requireActual<
-        typeof import("~/app/employer/documents/_workspace/settings/contract")
-    >("~/app/employer/documents/_workspace/settings/contract");
+    const { usePublishedActions } = jest.requireActual<typeof SettingsContract>(
+        "~/app/employer/documents/_workspace/settings/contract"
+    );
     return {
         AgentsPanel: ({ onActions }: { onActions?: unknown }) => {
             usePublishedActions(
@@ -155,6 +161,7 @@ describe("SettingsHub", () => {
         setHash("");
         mockReplace.mockReset();
         mockPermissions = OWNER;
+        mockProcessingActions = SAVE;
     });
 
     it("lists every section in one grouped rail", () => {
@@ -236,6 +243,37 @@ describe("SettingsHub", () => {
 
         expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
+    });
+
+    it("disables the primary button a section disables, even when it is not busy", async () => {
+        // Processing publishes `busy: isSaving` beside `disabled: !dirty`. The
+        // chrome used to read `busy ?? disabled`, so busy's `false` won and
+        // Save stayed live with nothing edited.
+        const onPrimary = jest.fn();
+        mockProcessingActions = { ...SAVE, onPrimary, busy: false, disabled: true };
+        setHash("#byok");
+        const user = userEvent.setup();
+        render(<SettingsHub />);
+        await findBody("body-processing");
+
+        const save = screen.getByRole("button", { name: "Save changes" });
+        expect(save).toBeDisabled();
+        await user.click(save);
+        expect(onPrimary).not.toHaveBeenCalled();
+    });
+
+    it("disables the primary button while the section is busy, whatever it says about disabled", async () => {
+        mockProcessingActions = {
+            ...SAVE,
+            primaryBusyLabel: "Saving…",
+            busy: true,
+            disabled: false,
+        };
+        setHash("#byok");
+        render(<SettingsHub />);
+        await findBody("body-processing");
+
+        expect(screen.getByRole("button", { name: "Saving…" })).toBeDisabled();
     });
 
     it("opens the section named by the URL hash", async () => {

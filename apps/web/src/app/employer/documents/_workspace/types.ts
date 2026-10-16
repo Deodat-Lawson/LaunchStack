@@ -812,8 +812,18 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
             { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
-            { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
-            { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "slack",
+                label: "Slack",
+                Icon: IconSlack,
+                desc: "Mirror agent meetings to a channel",
+            },
+            {
+                id: "github",
+                label: "GitHub",
+                Icon: IconGithub,
+                desc: "Private repos for the Repo Explainer",
+            },
             {
                 id: "agent-sessions",
                 label: "Coding sessions",

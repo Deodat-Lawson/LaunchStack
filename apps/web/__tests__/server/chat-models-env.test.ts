@@ -13,6 +13,7 @@ import {
     translateLegacyEndpoint,
 } from "~/server/chat-models";
 import { hasConfiguredAiCredential } from "~/server/ai-credentials";
+import { isChatEndpointConfigured } from "~/server/chat-endpoint";
 
 describe("chat endpoint resolution", () => {
     it("prefers CHAT_BASE_URL and CHAT_API_KEY", () => {
@@ -155,6 +156,44 @@ describe("credential presence checks", () => {
         expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(false);
         expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "legacy-openai-key" })).toBe(false);
         expect(hasConfiguredAiCredential({ OLLAMA_BASE_URL: "http://x:11434" })).toBe(false);
+    });
+});
+
+describe("isChatEndpointConfigured", () => {
+    // Resolution warns once per process when nothing names an endpoint.
+    beforeEach(() => {
+        resetChatEndpointWarnings();
+        jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    });
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("counts an endpoint the operator named, keyed or not", () => {
+        expect(isChatEndpointConfigured({ CHAT_BASE_URL: "https://x/v1", CHAT_API_KEY: "k" })).toBe(
+            true
+        );
+        // A local server takes no key.
+        expect(isChatEndpointConfigured({ CHAT_BASE_URL: "http://localhost:11434/v1" })).toBe(true);
+        expect(isChatEndpointConfigured({ AI_BASE_URL: "https://x/v1" })).toBe(true);
+    });
+
+    it("counts the Gemini default only once it has its key", () => {
+        expect(isChatEndpointConfigured({ GOOGLE_AI_API_KEY: "AIza-x" })).toBe(true);
+        expect(isChatEndpointConfigured({})).toBe(false);
+        expect(isChatEndpointConfigured({ GOOGLE_AI_API_KEY: "  " })).toBe(false);
+    });
+
+    it("ignores credentials that name no endpoint", () => {
+        // They leave chat on the Gemini default, without the key it needs.
+        expect(
+            isChatEndpointConfigured({
+                CHAT_API_KEY: "k",
+                AI_API_KEY: "k",
+                OPENAI_API_KEY: "k",
+                OPENROUTER_API_KEY: "k",
+            })
+        ).toBe(false);
     });
 });
 

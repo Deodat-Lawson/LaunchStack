@@ -1,11 +1,11 @@
 export const LANDING_FAQS = [
     {
         question: "What is a startup operating system?",
-        answer: "One workspace for the context behind your company: documents, conversations, research, and code. Launchstack connects that knowledge so you can ask questions with cited answers, prepare founder reviews, and create source-grounded marketing content.",
+        answer: "One workspace for the context behind your company: documents, conversations, research, and code. Launchstack connects that knowledge so you can ask questions with cited answers, prepare your weekly founder meeting, and create source-grounded marketing content.",
     },
     {
         question: "What can I bring into Launchstack?",
-        answer: "Upload documents, images, audio and video recordings, Markdown, and ZIP archives, or import a GitHub repository. Configured instances also offer Google Drive, Slack, GitHub, and optional read-only Gmail connections. Notion exports can be uploaded as files; an export import does not continuously sync with the original app.",
+        answer: "Upload documents, images, audio and video recordings, Markdown, and ZIP archives, including zipped repositories. Configured instances can also connect Google Drive and optional read-only Gmail to sync their content. Slack and GitHub connections do not sync content: Slack mirrors agent meetings, and GitHub gives the Repo Explainer access to private repositories. Slack and Notion exports can be uploaded as files (for Slack, the JSON files rather than the ZIP); an export import does not continuously sync with the original app.",
     },
     {
         question: "Is Launchstack really free?",

@@ -1825,8 +1825,16 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "Handles Google Docs, Sheets, Slides",
         "Shared drives supported",
     ],
-    slack: ["Pick channels + DMs", "Threads stay together", "Files included"],
-    github: ["Code, issues, PRs, and READMEs", "Private repos supported", "Updates on each push"],
+    slack: [
+        "Mirrors agent meetings into a Slack channel",
+        "Messages and files aren't added to your sources",
+        "To search Slack, upload an export's JSON files",
+    ],
+    github: [
+        "Lets the Repo Explainer read your private repos",
+        "Code, issues and PRs aren't synced to your sources",
+        "To search a repo, upload it as a ZIP",
+    ],
     dropbox: ["Pick folders — kept in sync", "All file types indexed", "Shared folders supported"],
 };
 

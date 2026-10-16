@@ -87,7 +87,8 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone
-    // tries and edits an agent's instructions in the Agents app.
+    // tries an agent in the Agents app, and anyone who edits documents may
+    // change what it says there (lib/agents/roster-access.ts).
     agents: {
         view: "settings.manage",
         edit: "settings.manage",

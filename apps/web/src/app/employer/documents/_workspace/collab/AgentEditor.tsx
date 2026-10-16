@@ -8,6 +8,11 @@
  * Code agents are written in). Editing either updates the other, so a person
  * who thinks in files can paste one in and a person who thinks in fields
  * never has to see the front matter.
+ *
+ * Someone who may edit an agent but not manage the roster gets the same form
+ * with the policy fields (handle, autonomy, tools, model route, node) locked,
+ * and the file view read-only: an applied file would rewrite those too. The
+ * save sends only the fields they may change (`lib/agents/roster-access.ts`).
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -46,6 +51,7 @@ import {
     parseAgentFile,
     serializeAgentFile,
 } from "~/lib/agents/agent-file";
+import { contentFieldsOf } from "~/lib/agents/roster-access";
 import { cn } from "~/lib/utils";
 
 import { AgentAvatar, DEFAULT_AVATARS } from "./AgentAvatar";
@@ -89,7 +95,16 @@ export interface AgentEditorProps {
     onSaved: (persona: AgentPersonaRecord) => void | Promise<void>;
     /** A definition to start a new agent from (duplicate, or an imported file). */
     seed?: Partial<AgentDefinition> | null;
+    /**
+     * The person may change what the agent says but not its handle, autonomy,
+     * tools, model route or node. Ignored for a new agent, which only a roster
+     * manager can create.
+     */
+    contentOnly?: boolean;
 }
+
+/** Why a locked field is locked, in the field's hint. */
+const LOCKED_HINT = "Set by people who can manage workspace settings.";
 
 interface FormState {
     key: string;
@@ -205,6 +220,7 @@ export function AgentEditor({
     onClose,
     onSaved,
     seed,
+    contentOnly = false,
 }: AgentEditorProps) {
     const [form, setForm] = useState<FormState>(() => fromPersona(persona, seed));
     const [tab, setTab] = useState<"form" | "file">("form");
@@ -225,6 +241,7 @@ export function AgentEditor({
 
     const definition = useMemo(() => toDefinition(form), [form]);
     const isNew = persona === null;
+    const locked = contentOnly && !isNew;
     const canSave = Boolean(
         definition.key && definition.displayName && definition.role && definition.systemPrompt
     );
@@ -268,7 +285,9 @@ export function AgentEditor({
                 {
                     method: isNew ? "POST" : "PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(toPayload(definition)),
+                    body: JSON.stringify(
+                        locked ? contentFieldsOf(toPayload(definition)) : toPayload(definition)
+                    ),
                 }
             );
             const body = (await response.json().catch(() => ({}))) as {
@@ -346,13 +365,15 @@ export function AgentEditor({
                                 event.target.value = "";
                             }}
                         />
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => fileInput.current?.click()}
-                        >
-                            <Upload className="size-3.5" /> Import file
-                        </Button>
+                        {!locked && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => fileInput.current?.click()}
+                            >
+                                <Upload className="size-3.5" /> Import file
+                            </Button>
+                        )}
                         <Button variant="ghost" size="sm" onClick={download} disabled={!canSave}>
                             <Download className="size-3.5" /> Export
                         </Button>
@@ -377,12 +398,17 @@ export function AgentEditor({
                             </Field>
                             <Field
                                 label="Handle"
-                                hint="Written as @handle in transcripts and chat."
+                                hint={
+                                    locked
+                                        ? LOCKED_HINT
+                                        : "Written as @handle in transcripts and chat."
+                                }
                             >
                                 <TextInput
                                     value={form.key}
                                     onChange={e => update("key", toAgentKey(e.target.value))}
                                     placeholder="finance"
+                                    disabled={locked}
                                 />
                             </Field>
                         </div>
@@ -460,11 +486,16 @@ export function AgentEditor({
                             </Field>
                             <Field
                                 label="Model route"
-                                hint="Which configured route serves this agent's turns."
+                                hint={
+                                    locked
+                                        ? LOCKED_HINT
+                                        : "Which configured route serves this agent's turns."
+                                }
                             >
                                 <SelectInput
                                     value={form.route}
                                     onChange={e => update("route", e.target.value)}
+                                    disabled={locked}
                                 >
                                     {ROUTES.map(option => (
                                         <option key={option.value} value={option.value}>
@@ -476,14 +507,17 @@ export function AgentEditor({
                             <Field
                                 label="Autonomy"
                                 hint={
-                                    isAgentAutonomy(form.autonomy)
-                                        ? AGENT_AUTONOMY_META[form.autonomy].description
-                                        : "Inherits the workspace default (Settings → Agents)."
+                                    locked
+                                        ? LOCKED_HINT
+                                        : isAgentAutonomy(form.autonomy)
+                                          ? AGENT_AUTONOMY_META[form.autonomy].description
+                                          : "Inherits the workspace default (Settings → Agents)."
                                 }
                             >
                                 <SelectInput
                                     value={form.autonomy}
                                     onChange={e => update("autonomy", e.target.value)}
+                                    disabled={locked}
                                 >
                                     <option value="">Workspace default</option>
                                     {AGENT_AUTONOMY_LEVELS.map(level => (
@@ -526,9 +560,11 @@ export function AgentEditor({
                         <Field
                             label="Tools"
                             hint={
-                                form.tools === null
-                                    ? "Every tool, including ones added later. Untick one to restrict this agent."
-                                    : `${form.tools.length} of ${AGENT_TOOLS.length} tools. New tools stay off until you add them.`
+                                locked
+                                    ? LOCKED_HINT
+                                    : form.tools === null
+                                      ? "Every tool, including ones added later. Untick one to restrict this agent."
+                                      : `${form.tools.length} of ${AGENT_TOOLS.length} tools. New tools stay off until you add them.`
                             }
                         >
                             <div className="border-line bg-panel-2 divide-line divide-y rounded-lg border">
@@ -537,10 +573,14 @@ export function AgentEditor({
                                     return (
                                         <label
                                             key={tool.id}
-                                            className="flex cursor-pointer items-center gap-3 px-3 py-2.5"
+                                            className={cn(
+                                                "flex items-center gap-3 px-3 py-2.5",
+                                                locked ? "cursor-not-allowed" : "cursor-pointer"
+                                            )}
                                         >
                                             <Checkbox
                                                 checked={on}
+                                                disabled={locked}
                                                 onCheckedChange={checked => {
                                                     const current = enabledTools(form.tools);
                                                     const next = checked
@@ -647,13 +687,16 @@ export function AgentEditor({
                             </Field>
                             <Field
                                 label="Runs on node"
-                                hint="Leave blank to run in this app process."
+                                hint={
+                                    locked ? LOCKED_HINT : "Leave blank to run in this app process."
+                                }
                             >
                                 <TextInput
                                     value={form.nodeId}
                                     onChange={e => update("nodeId", e.target.value)}
                                     list="collab-node-ids"
                                     placeholder="gpu-box-1"
+                                    disabled={locked}
                                 />
                                 <datalist id="collab-node-ids">
                                     {nodeIds.map(node => (
@@ -675,13 +718,26 @@ export function AgentEditor({
                         className="flex min-h-0 flex-1 flex-col gap-2 px-5 pb-3 pt-4"
                     >
                         <div className="text-ink-3 text-[12px] leading-relaxed">
-                            The same agent as a file: front matter for the settings, the body is the
-                            instructions. Paste an agent written for OpenCode or Claude Code here
-                            and press <strong>Apply</strong>; export to carry this one elsewhere.
+                            {locked ? (
+                                <>
+                                    The same agent as a file: front matter for the settings, the
+                                    body is the instructions. Read-only for you, because a file
+                                    rewrites the handle, autonomy and tools too; change the
+                                    instructions on the Definition tab, or export this one.
+                                </>
+                            ) : (
+                                <>
+                                    The same agent as a file: front matter for the settings, the
+                                    body is the instructions. Paste an agent written for OpenCode or
+                                    Claude Code here and press <strong>Apply</strong>; export to
+                                    carry this one elsewhere.
+                                </>
+                            )}
                         </div>
                         <TextArea
                             value={fileText}
                             onChange={e => setFileText(e.target.value)}
+                            readOnly={locked}
                             spellCheck={false}
                             className="min-h-[320px] flex-1 font-mono text-[12px] leading-relaxed"
                         />
@@ -693,16 +749,20 @@ export function AgentEditor({
                         <div className="flex items-center gap-2">
                             <Badge variant="secondary">{agentFileName(definition)}</Badge>
                             <div className="flex-1" />
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setFileText(serializeAgentFile(definition))}
-                            >
-                                <RotateCcw className="size-3.5" /> Regenerate from form
-                            </Button>
-                            <Button size="sm" onClick={() => applyFile(fileText)}>
-                                Apply to form
-                            </Button>
+                            {!locked && (
+                                <>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setFileText(serializeAgentFile(definition))}
+                                    >
+                                        <RotateCcw className="size-3.5" /> Regenerate from form
+                                    </Button>
+                                    <Button size="sm" onClick={() => applyFile(fileText)}>
+                                        Apply to form
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </TabsContent>
                 </Tabs>
@@ -717,10 +777,18 @@ export function AgentEditor({
                 )}
 
                 <DialogFooter className="border-line bg-line-2 flex-row items-center border-t px-5 py-3">
-                    {!isNew && persona.builtin && (
+                    {locked ? (
                         <span className="text-ink-3 mr-auto text-[11.5px]">
-                            Starter agent — you can always restore the shipped version.
+                            Handle, autonomy, tools, route and node are set by people who can manage
+                            workspace settings.
                         </span>
+                    ) : (
+                        !isNew &&
+                        persona.builtin && (
+                            <span className="text-ink-3 mr-auto text-[11.5px]">
+                                Starter agent — you can always restore the shipped version.
+                            </span>
+                        )
                     )}
                     <Button variant="ghost" onClick={onClose}>
                         Cancel

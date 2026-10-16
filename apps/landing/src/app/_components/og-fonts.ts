@@ -1,10 +1,11 @@
 /**
  * Inter for the 1200×630 social cards. next/og (satori) cannot read the
  * next/font files, and without `fonts` it renders its bundled Noto Sans
- * Regular — no bold, and not the product typeface. The cards fetch Inter's
- * static TTF instances from Google Fonts (where next/font downloads it
- * from at build). Any failure yields `undefined` and the card still renders
- * in the bundled face; a failure is not memoised, so the next request retries.
+ * Regular — no bold, and not the product typeface. Satori takes TTF/OTF/WOFF,
+ * not the variable woff2 the app self-hosts, so the cards fetch Inter's
+ * static TTF instances from Google Fonts at request time. Any failure yields
+ * `undefined` and the card still renders in the bundled face; a failure is not
+ * memoised, so the next request retries.
  */
 type OgFont = { name: string; data: ArrayBuffer; weight: 400 | 600 | 700; style: "normal" };
 

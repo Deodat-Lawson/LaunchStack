@@ -155,6 +155,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A fresh checkout's `next dev --turbo` answered 500 on every route,
+  `/api/auth/*` included, whenever Google Fonts served its extensionless
+  `l/font?kit=…&skey=…` URLs, which Next 15.5 rejects; the same response failed
+  `next build` under webpack and quietly swapped webpack dev to Arial. Inter
+  and JetBrains Mono are now self-hosted in `packages/design-tokens/fonts`
+  (same glyphs and features as Google's files) and loaded with
+  `next/font/local`, so no build contacts Google
 - `/api/documents/[id]/content` answered 500 for every database-stored file
   (a relative `/api/files/{id}` URL passed to `NextResponse.redirect`); it now
   redirects with a relative `Location`

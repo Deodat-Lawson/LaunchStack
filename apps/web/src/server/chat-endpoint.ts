@@ -175,6 +175,26 @@ export function resolveChatEndpoint(server: AppChatModelEnvironment): ChatEndpoi
 }
 
 /**
+ * Whether chat has an endpoint that can be expected to answer: the operator
+ * named one, or the Gemini default has the credential it needs.
+ *
+ * Read off {@link resolveChatEndpoint}, so it cannot disagree with where chat
+ * actually goes and a new way of naming an endpoint needs no second edit. That
+ * resolution always yields an endpoint — a deployment that names none still
+ * boots on Gemini — so "something resolved" proves nothing; the one resolution
+ * that cannot answer is the default without its key. A named endpoint counts
+ * with or without a key, since a local server takes none.
+ *
+ * A presence check, not a validation. `hasConfiguredAiCredential` asks the
+ * narrower question of whether the operator *named* an endpoint, which is false
+ * on a Gemini-only deployment.
+ */
+export function isChatEndpointConfigured(server: AppChatModelEnvironment): boolean {
+    const endpoint = resolveChatEndpoint(server);
+    return endpoint.baseUrl !== GEMINI_BASE_URL || Boolean(endpoint.apiKey);
+}
+
+/**
  * Pre-PR variables that used to choose a *model*. Model ids now live in the
  * configuration file, so these are inert — and an inert variable that used to
  * work is worth a warning, not silence: an operator who set

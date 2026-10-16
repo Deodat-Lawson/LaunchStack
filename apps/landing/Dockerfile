@@ -46,6 +46,13 @@ COPY tsconfig.base.json ./
 COPY packages/design-tokens ./packages/design-tokens
 COPY apps/landing ./apps/landing
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* values are inlined into the bundle at build time, so the
+# container's runtime environment can't change them. Without these args every
+# self-hosted build linked "Sign in" to the hosted app.launchstack.app.
+ARG NEXT_PUBLIC_SITE_URL=""
+ARG NEXT_PUBLIC_APP_URL=""
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 RUN pnpm --filter @launchstack/landing build
 
 # ── Runner ───────────────────────────────────────────────────────────

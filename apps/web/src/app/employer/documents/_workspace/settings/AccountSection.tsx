@@ -23,6 +23,7 @@ import { Field, TextInput } from "~/components/field";
 import { authClient, useUser } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 
+import { AssistantsBlock } from "./AssistantsBlock";
 import type { SettingsSectionProps } from "./contract";
 import { relativeTime } from "./people/format";
 import { ProfileEditor } from "./ProfileEditor";
@@ -291,6 +292,8 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     </div>
                 )}
             </Section>
+
+            <AssistantsBlock />
         </>
     );
 }

@@ -17,6 +17,11 @@ const Body = z.object({ companyId: z.string().regex(/^\d+$/) });
 export async function POST(request: Request) {
     const session = await getServerSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // JSON only: a cross-site form can post text/plain with a session cookie
+    // attached, but cannot send application/json without a CORS preflight.
+    if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+        return NextResponse.json({ error: "Expected JSON" }, { status: 415 });
+    }
     const parsed = Body.safeParse(await request.json().catch(() => null));
     if (!parsed.success) return NextResponse.json({ error: "Pick a workspace" }, { status: 400 });
     const { companyId } = parsed.data;

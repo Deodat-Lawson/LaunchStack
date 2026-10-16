@@ -18,6 +18,7 @@ import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
+import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { Code, StatusNote, StatusRow } from "./ui";
 
@@ -438,6 +439,8 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     }}
                 />
             </Section>
+
+            <AssistantOAuthClients />
 
             <Section
                 title="Slack"

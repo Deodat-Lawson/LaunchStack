@@ -1,15 +1,17 @@
 "use client";
 
 /**
- * Conversation-shaped rendering for imported agent sessions.
+ * Conversation-shaped rendering for stored conversations: imported agent
+ * sessions (Claude Code / Codex) and conversations an assistant (Claude,
+ * ChatGPT, Gemini) saved over MCP.
  *
- * An imported Claude Code / Codex transcript is stored as Markdown, but it
- * reads as a conversation, not a document — so this viewer parses the
- * connector's fixed grammar back into turns (~/lib/session-transcript) and
- * lays them out as a chat: speaker turns, tool-call chips, collapsible tool
- * output. The stored Markdown stays one toggle away: a transcript that
- * drifted from the grammar degrades to the ordinary markdown view, never to
- * an error page.
+ * Both are stored as Markdown, but they read as conversations, not documents
+ * — so this viewer parses the fixed grammar back into turns
+ * (~/lib/session-transcript) and lays them out as a chat: speaker turns,
+ * tool-call chips, collapsible tool output. A saved conversation is labelled
+ * with the assistant it came from. The stored Markdown stays one toggle
+ * away: a transcript that drifted from the grammar degrades to the ordinary
+ * markdown view, never to an error page.
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -38,6 +40,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/component
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import {
     agentSessionMeta,
+    assistantConversationMeta,
+    isAssistantConversationDocument,
     parseSessionTranscript,
     type ParsedSessionTranscript,
     type TranscriptSegment,
@@ -52,10 +56,13 @@ interface ConversationViewerProps {
     document: DocumentType;
 }
 
+/** Badge for an imported agent session, by the tool that wrote it. */
 const TOOL_LABELS: Record<string, string> = {
     "claude-code": "Claude Code",
     codex: "Codex",
 };
+// A saved assistant conversation is badged by its assistant instead:
+// Claude / ChatGPT / Gemini / Assistant (ASSISTANT_LABELS in ~/lib/session-transcript).
 
 /** Markdown inside a turn: GFM, tight spacing, token colors. */
 function TurnMarkdown({ text }: { text: string }) {
@@ -113,10 +120,13 @@ function TurnMarkdown({ text }: { text: string }) {
 function SpeakerTurn({
     role,
     at,
+    assistantName = "Assistant",
     children,
 }: {
     role: "user" | "assistant";
     at?: string | null;
+    /** What to call the assistant: its name for a saved conversation. */
+    assistantName?: string;
     children: React.ReactNode;
 }) {
     const isUser = role === "user";
@@ -124,7 +134,7 @@ function SpeakerTurn({
     const bubble = useRef<HTMLDivElement>(null);
     const ctxTarget = useContextTarget({
         kind: "transcript-turn",
-        label: isUser ? "User turn" : "Assistant turn",
+        label: isUser ? "User turn" : `${assistantName} turn`,
         items: () => [
             {
                 type: "item",
@@ -149,7 +159,7 @@ function SpeakerTurn({
             <div className="min-w-0 flex-1">
                 <div className="mb-1 flex items-baseline gap-2">
                     <span className="text-ink text-xs font-semibold">
-                        {isUser ? "User" : "Assistant"}
+                        {isUser ? "User" : assistantName}
                     </span>
                     {at && <span className="text-ink-4 font-mono text-[10px]">{at}</span>}
                 </div>
@@ -266,11 +276,24 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
         void fetchContent();
     }, [fetchContent]);
 
+    const saved = isAssistantConversationDocument(document);
     const parsed: ParsedSessionTranscript | null = useMemo(
-        () => (content === null ? null : parseSessionTranscript(content)),
-        [content]
+        () =>
+            content === null
+                ? null
+                : parseSessionTranscript(content, {
+                      format: saved ? "assistant-conversation" : "agent-session",
+                  }),
+        [content, saved]
     );
     const meta = useMemo(() => agentSessionMeta(document), [document]);
+    const savedMeta = useMemo(() => assistantConversationMeta(document), [document]);
+    const badge = saved
+        ? savedMeta.label
+        : meta.tool
+          ? (TOOL_LABELS[meta.tool] ?? meta.tool)
+          : "Agent session";
+    const assistantName = saved ? savedMeta.label : "Assistant";
 
     const stats = useMemo(() => {
         if (!parsed) return { turns: 0, toolCalls: 0 };
@@ -313,11 +336,23 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
             <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between gap-3 border-b px-4 py-2">
                 <div className="text-ink-3 flex min-w-0 items-center gap-2 font-mono text-[10px]">
                     <span className="bg-brand-soft text-brand-ink rounded px-1.5 py-0.5 font-semibold">
-                        {meta.tool ? (TOOL_LABELS[meta.tool] ?? meta.tool) : "Agent session"}
+                        {badge}
                     </span>
                     <span>
-                        {stats.turns} turns &middot; {stats.toolCalls} tool calls
+                        {saved
+                            ? `${stats.turns} ${stats.turns === 1 ? "message" : "messages"}`
+                            : `${stats.turns} turns · ${stats.toolCalls} tool calls`}
                     </span>
+                    {saved &&
+                        savedMeta.clientName &&
+                        savedMeta.clientName !== savedMeta.label && (
+                            <span className="hidden truncate sm:inline">
+                                {savedMeta.clientName}
+                            </span>
+                        )}
+                    {saved && savedMeta.model && (
+                        <span className="hidden truncate lg:inline">{savedMeta.model}</span>
+                    )}
                     {meta.gitBranch && (
                         <span className="hidden items-center gap-1 sm:inline-flex">
                             <GitBranch className="h-3 w-3" />
@@ -406,7 +441,8 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                                     <SpeakerTurn
                                         key={i}
                                         role={segment.kind}
-                                        at={segment.kind === "user" ? segment.at : undefined}
+                                        at={segment.at}
+                                        assistantName={assistantName}
                                     >
                                         <TurnMarkdown text={segment.text} />
                                     </SpeakerTurn>

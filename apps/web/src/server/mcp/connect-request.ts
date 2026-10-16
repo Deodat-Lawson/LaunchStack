@@ -12,9 +12,11 @@
  * proves nothing. The page therefore also shows where the browser will be
  * sent back to (the redirect host) and whether the client's identity is a
  * metadata-document URL on its own domain (CIMD), which is the closest thing
- * to verification MCP offers. Clients a workspace admin created in Settings
- * say so. A self-named client's logo is not loaded: fetching a URL it chose
- * would tell it who is looking.
+ * to verification MCP offers. A client an admin of one of the person's own
+ * workspaces created in Settings says so; anyone can found a workspace, so a
+ * client from a workspace the person is not in is treated as self-named, and
+ * that workspace's name is not shown. A self-named client's logo is not
+ * loaded: fetching a URL it chose would tell it who is looking.
  */
 import { and, desc, eq } from "drizzle-orm";
 
@@ -33,7 +35,10 @@ export interface ConnectingClient {
     redirectHost: string | null;
     /** Set when the client id is a metadata URL on its own domain (CIMD). */
     verifiedDomain: string | null;
-    /** Set when a workspace admin created the client in Settings: that workspace's name. */
+    /**
+     * Set when an admin of one of the person's own workspaces created the
+     * client in Settings: that workspace's name.
+     */
     addedByWorkspace: string | null;
 }
 
@@ -57,7 +62,10 @@ function first(value: string | string[] | undefined): string | undefined {
     return Array.isArray(value) ? value[0] : value;
 }
 
-export async function loadConnectRequest(params: SearchParams): Promise<ConnectRequest> {
+export async function loadConnectRequest(
+    params: SearchParams,
+    authUserId: string
+): Promise<ConnectRequest> {
     const clientId = first(params.client_id);
     const scopes = (first(params.scope) ?? "").split(/\s+/).filter(Boolean);
     if (!clientId) return { client: null, scopes };
@@ -72,10 +80,10 @@ export async function loadConnectRequest(params: SearchParams): Promise<ConnectR
         .where(eq(authOauthClient.clientId, clientId))
         .limit(1);
     const cimdHost = clientId.startsWith("https://") ? host(clientId) : null;
-    const addedByWorkspace =
-        row?.referenceId && /^\d+$/.test(row.referenceId)
-            ? await workspaceName(row.referenceId)
-            : null;
+    const ownedBy = row?.referenceId && /^\d+$/.test(row.referenceId) ? row.referenceId : null;
+    const addedByWorkspace = ownedBy
+        ? ((await activeWorkspaceOptions(authUserId)).find(w => w.id === ownedBy)?.name ?? null)
+        : null;
     return {
         client: {
             clientId,
@@ -121,12 +129,18 @@ export async function workspaceName(companyId: string): Promise<string | null> {
 }
 
 /** Plain-language lines for the consent screen, one per thing granted. */
-export function describeScopes(scopes: string[], workspace: string): string[] {
+export function describeScopes(
+    scopes: string[],
+    workspace: string,
+    access: { canRead: boolean; canSave: boolean }
+): string[] {
     const lines: string[] = [];
-    if (scopes.includes(MCP_SCOPE_READ)) {
+    // A scope the person's role cannot use is never offered by the server
+    // (tools/list filters by permission), so it is not promised here either.
+    if (scopes.includes(MCP_SCOPE_READ) && access.canRead) {
         lines.push(`Search and read the files you can open in ${workspace}`);
     }
-    if (scopes.includes(MCP_SCOPE_WRITE)) {
+    if (scopes.includes(MCP_SCOPE_WRITE) && access.canSave) {
         lines.push(
             `Save conversations to ${workspace}, visible only to you, with a follow-up note LaunchStack writes`
         );

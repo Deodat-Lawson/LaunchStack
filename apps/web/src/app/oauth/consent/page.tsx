@@ -5,6 +5,7 @@
  */
 import { redirect } from "next/navigation";
 
+import { resolveMemberContext } from "~/lib/require-workspace-context";
 import { getServerSession } from "~/server/auth";
 import { db } from "~/server/db";
 import {
@@ -38,11 +39,20 @@ export default async function OAuthConsentPage({
     if (!session) redirect("/signin");
     const params = await searchParams;
     const [request, workspaceId, workspaces] = await Promise.all([
-        loadConnectRequest(params),
+        loadConnectRequest(params, session.user.id),
         resolveGrantWorkspace(db, session.user.id, session.session.id, flowKeyOf(toQuery(params))),
         activeWorkspaceOptions(session.user.id),
     ]);
-    const workspace = workspaceId ? await workspaceName(workspaceId) : null;
+    const [workspace, member] = workspaceId
+        ? await Promise.all([
+              workspaceName(workspaceId),
+              resolveMemberContext(session.user.id, BigInt(workspaceId)),
+          ])
+        : [null, null];
+    const access = {
+        canRead: member?.can("documents.read") ?? false,
+        canSave: member?.can("documents.upload") ?? false,
+    };
     return (
         <ConnectShell
             client={request.client}
@@ -52,7 +62,7 @@ export default async function OAuthConsentPage({
                 <ConsentForm
                     assistant={request.client.name}
                     workspace={workspace}
-                    lines={workspace ? describeScopes(request.scopes, workspace) : []}
+                    lines={workspace ? describeScopes(request.scopes, workspace, access) : []}
                     email={session.user.email}
                 />
             ) : (

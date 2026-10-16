@@ -20,15 +20,17 @@ export function ConnectShell({
     step: string;
     children: React.ReactNode;
 }) {
-    const name = client?.name ?? "An assistant";
+    const name = client?.name ?? "an assistant";
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col">
             <AuthChrome />
             <main className="flex flex-1 justify-center px-4 py-10 sm:px-6 sm:py-14">
                 <div className="w-full max-w-[460px]">
-                    <div className="text-ink-3 mb-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em]">
-                        {step}
-                    </div>
+                    {client ? (
+                        <div className="text-ink-3 mb-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em]">
+                            {step}
+                        </div>
+                    ) : null}
                     <h1 className="display text-ink mb-5 text-[28px] leading-[1.15] tracking-[-0.02em]">
                         Connect {name} to LaunchStack
                     </h1>

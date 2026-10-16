@@ -21,7 +21,7 @@ export default async function OAuthWorkspacePage({
     if (!session) redirect("/signin");
     const params = await searchParams;
     const [request, workspaces] = await Promise.all([
-        loadConnectRequest(params),
+        loadConnectRequest(params, session.user.id),
         activeWorkspaceOptions(session.user.id),
     ]);
     return (

@@ -1,3 +1,5 @@
+import { isChatEndpointConfigured } from "~/server/chat-endpoint";
+
 /**
  * Which way a run executes, decided from what the environment has.
  *
@@ -16,12 +18,8 @@ export interface RunEnvironment {
 
 export function readRunEnvironment(env: Record<string, string | undefined>): RunEnvironment {
     return {
-        hasModel: [
-            env.OPENAI_API_KEY,
-            env.OPENROUTER_API_KEY,
-            env.ANTHROPIC_API_KEY,
-            env.AI_API_KEY,
-        ].some(v => Boolean(v)),
+        // The model is whatever chat talks to: ask its resolution, never a list here.
+        hasModel: isChatEndpointConfigured(env),
         hasSearch: [env.EXA_API_KEY, env.SERPER_API_KEY, env.FOURSQUARE_SERVICE_KEY].some(v =>
             Boolean(v)
         ),

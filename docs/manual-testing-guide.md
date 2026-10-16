@@ -262,8 +262,8 @@ their switches are locked.
 
 **Run modes.** Find companies picks the mode from the environment:
 
-- **Keyless** (no model or search key configured, which is every fresh dev
-  setup): OpenStreetMap (Photon category search plus the OSM API, then
+- **Keyless** (no chat model or no search key configured, which is every fresh
+  dev setup): OpenStreetMap (Photon category search plus the OSM API, then
   Overpass, then Nominatim by native-language names) and the Y Combinator
   directory find organisations with a website in each territory; each site is read by the page profiler
   (home plus about/contact/careers pages) which records what the pages
@@ -274,8 +274,9 @@ their switches are locked.
   from the companies stamped so far. Expect 30 s to 4 min depending on how
   many sites answer. Nothing is paid for. The Runs header says when this is
   the mode in use.
-- **Live** (a model key plus Exa, Serper or Foursquare): queued to the
-  worker; the research agent profiles each company. Needs credits.
+- **Live** (a chat model, `GOOGLE_AI_API_KEY` or `CHAT_BASE_URL`, plus an
+  Exa, Serper or Foursquare key): queued to the worker; the research agent
+  profiles each company. Needs credits.
 - **Sample** (the switch on Runs): deterministic fixtures, inline, seconds.
 
 Profiles are published into Sources only when `FILE_ACCESS_TOKEN_SECRET` is

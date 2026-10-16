@@ -1,5 +1,5 @@
 {
-  "id": "e3801091-fe9c-41c5-be83-85861cc58e2c",
+  "id": "703e4bb1-51ea-4222-ba5b-29099623923b",
   "prevId": "797efbf6-7962-4b0d-aeeb-abb7cab2ad80",
   "version": "7",
   "dialect": "postgresql",
@@ -3260,21 +3260,6 @@
         }
       },
       "indexes": {
-        "auth_oauth_client_client_id_unique": {
-          "name": "auth_oauth_client_client_id_unique",
-          "columns": [
-            {
-              "expression": "client_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "auth_oauth_client_user_id_idx": {
           "name": "auth_oauth_client_user_id_idx",
           "columns": [
@@ -3307,7 +3292,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "auth_oauth_client_client_id_unique": {
+          "name": "auth_oauth_client_client_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "client_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -3919,26 +3912,18 @@
           "notNull": false
         }
       },
-      "indexes": {
-        "auth_oauth_resource_identifier_unique": {
-          "name": "auth_oauth_resource_identifier_unique",
-          "columns": [
-            {
-              "expression": "identifier",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "auth_oauth_resource_identifier_unique": {
+          "name": "auth_oauth_resource_identifier_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "identifier"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

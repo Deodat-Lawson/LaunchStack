@@ -132,7 +132,9 @@ export const authOauthClient = pgTable(
     "auth_oauth_client",
     {
         id: text("id").primaryKey(),
-        clientId: text("client_id").notNull(),
+        // Inline constraint, not a table index: other tables' foreign keys
+        // reference it, and drizzle-kit emits indexes after foreign keys.
+        clientId: text("client_id").notNull().unique("auth_oauth_client_client_id_unique"),
         clientSecret: text("client_secret"),
         clientDiscoveryId: text("client_discovery_id"),
         disabled: boolean("disabled").default(false),
@@ -169,34 +171,28 @@ export const authOauthClient = pgTable(
         metadata: jsonb("metadata"),
     },
     table => ({
-        clientIdUnique: uniqueIndex("auth_oauth_client_client_id_unique").on(table.clientId),
         userIdIdx: index("auth_oauth_client_user_id_idx").on(table.userId),
     })
 );
 
-export const authOauthResource = pgTable(
-    "auth_oauth_resource",
-    {
-        id: text("id").primaryKey(),
-        identifier: text("identifier").notNull(),
-        name: text("name").notNull(),
-        accessTokenTtl: integer("access_token_ttl"),
-        refreshTokenTtl: integer("refresh_token_ttl"),
-        signingAlgorithm: text("signing_algorithm"),
-        signingKeyId: text("signing_key_id"),
-        allowedScopes: text("allowed_scopes").array(),
-        customClaims: jsonb("custom_claims"),
-        dpopBoundAccessTokensRequired: boolean("dpop_bound_access_tokens_required").default(false),
-        disabled: boolean("disabled").default(false),
-        createdAt: timestamp("created_at", { withTimezone: true }),
-        updatedAt: timestamp("updated_at", { withTimezone: true }),
-        policyVersion: integer("policy_version").default(1),
-        metadata: jsonb("metadata"),
-    },
-    table => ({
-        identifierUnique: uniqueIndex("auth_oauth_resource_identifier_unique").on(table.identifier),
-    })
-);
+export const authOauthResource = pgTable("auth_oauth_resource", {
+    id: text("id").primaryKey(),
+    // Inline for the same reason as auth_oauth_client.client_id.
+    identifier: text("identifier").notNull().unique("auth_oauth_resource_identifier_unique"),
+    name: text("name").notNull(),
+    accessTokenTtl: integer("access_token_ttl"),
+    refreshTokenTtl: integer("refresh_token_ttl"),
+    signingAlgorithm: text("signing_algorithm"),
+    signingKeyId: text("signing_key_id"),
+    allowedScopes: text("allowed_scopes").array(),
+    customClaims: jsonb("custom_claims"),
+    dpopBoundAccessTokensRequired: boolean("dpop_bound_access_tokens_required").default(false),
+    disabled: boolean("disabled").default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+    policyVersion: integer("policy_version").default(1),
+    metadata: jsonb("metadata"),
+});
 
 export const authOauthClientResource = pgTable(
     "auth_oauth_client_resource",

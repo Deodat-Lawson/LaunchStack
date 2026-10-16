@@ -62,7 +62,8 @@ CREATE TABLE "pdr_ai_v2_auth_oauth_client" (
 	"require_pkce" boolean,
 	"dpop_bound_access_tokens" boolean DEFAULT false,
 	"reference_id" text,
-	"metadata" jsonb
+	"metadata" jsonb,
+	CONSTRAINT "auth_oauth_client_client_id_unique" UNIQUE("client_id")
 );
 --> statement-breakpoint
 CREATE TABLE "pdr_ai_v2_auth_oauth_client_assertion" (
@@ -126,7 +127,8 @@ CREATE TABLE "pdr_ai_v2_auth_oauth_resource" (
 	"created_at" timestamp with time zone,
 	"updated_at" timestamp with time zone,
 	"policy_version" integer DEFAULT 1,
-	"metadata" jsonb
+	"metadata" jsonb,
+	CONSTRAINT "auth_oauth_resource_identifier_unique" UNIQUE("identifier")
 );
 --> statement-breakpoint
 CREATE TABLE "pdr_ai_v2_assistant_conversations" (
@@ -191,7 +193,6 @@ CREATE INDEX "auth_oauth_access_token_session_id_idx" ON "pdr_ai_v2_auth_oauth_a
 CREATE INDEX "auth_oauth_access_token_user_id_idx" ON "pdr_ai_v2_auth_oauth_access_token" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_access_token_authorization_code_id_idx" ON "pdr_ai_v2_auth_oauth_access_token" USING btree ("authorization_code_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_access_token_refresh_id_idx" ON "pdr_ai_v2_auth_oauth_access_token" USING btree ("refresh_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "auth_oauth_client_client_id_unique" ON "pdr_ai_v2_auth_oauth_client" USING btree ("client_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_client_user_id_idx" ON "pdr_ai_v2_auth_oauth_client" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "auth_oauth_client_resource_client_resource_unique" ON "pdr_ai_v2_auth_oauth_client_resource" USING btree ("client_id","resource_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_client_resource_client_id_idx" ON "pdr_ai_v2_auth_oauth_client_resource" USING btree ("client_id");--> statement-breakpoint
@@ -203,7 +204,6 @@ CREATE INDEX "auth_oauth_refresh_token_client_id_idx" ON "pdr_ai_v2_auth_oauth_r
 CREATE INDEX "auth_oauth_refresh_token_session_id_idx" ON "pdr_ai_v2_auth_oauth_refresh_token" USING btree ("session_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_refresh_token_user_id_idx" ON "pdr_ai_v2_auth_oauth_refresh_token" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "auth_oauth_refresh_token_authorization_code_id_idx" ON "pdr_ai_v2_auth_oauth_refresh_token" USING btree ("authorization_code_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "auth_oauth_resource_identifier_unique" ON "pdr_ai_v2_auth_oauth_resource" USING btree ("identifier");--> statement-breakpoint
 CREATE UNIQUE INDEX "assistant_conversations_document_unique" ON "pdr_ai_v2_assistant_conversations" USING btree ("document_id");--> statement-breakpoint
 CREATE INDEX "assistant_conversations_company_saver_idx" ON "pdr_ai_v2_assistant_conversations" USING btree ("company_id","saved_by_user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "mcp_access_keys_secret_hash_unique" ON "pdr_ai_v2_mcp_access_keys" USING btree ("secret_hash");--> statement-breakpoint

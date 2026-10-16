@@ -47,7 +47,6 @@ jest.mock("~/server/mcp/connections", () => ({
     clientDisplayName: (...args: unknown[]) => mockClientDisplayName(...args),
 }));
 
-// eslint-disable-next-line import/first
 import { authenticateMcpRequest } from "~/server/mcp/principal";
 
 const saved = { ...process.env };
@@ -65,7 +64,12 @@ beforeEach(() => {
     process.env = { ...saved, BETTER_AUTH_URL: "http://localhost:3000" };
     delete process.env.MCP_SERVER_ENABLED;
     mockClaims = null;
-    for (const fn of [mockVerifyAccessKey, mockResolveMemberContext, mockHasLiveConsent, mockClientDisplayName]) {
+    for (const fn of [
+        mockVerifyAccessKey,
+        mockResolveMemberContext,
+        mockHasLiveConsent,
+        mockClientDisplayName,
+    ]) {
         fn.mockReset();
     }
 });

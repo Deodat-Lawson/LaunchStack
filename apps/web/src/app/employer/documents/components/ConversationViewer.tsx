@@ -343,13 +343,9 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                             ? `${stats.turns} ${stats.turns === 1 ? "message" : "messages"}`
                             : `${stats.turns} turns · ${stats.toolCalls} tool calls`}
                     </span>
-                    {saved &&
-                        savedMeta.clientName &&
-                        savedMeta.clientName !== savedMeta.label && (
-                            <span className="hidden truncate sm:inline">
-                                {savedMeta.clientName}
-                            </span>
-                        )}
+                    {saved && savedMeta.clientName && savedMeta.clientName !== savedMeta.label && (
+                        <span className="hidden truncate sm:inline">{savedMeta.clientName}</span>
+                    )}
                     {saved && savedMeta.model && (
                         <span className="hidden truncate lg:inline">{savedMeta.model}</span>
                     )}

@@ -155,7 +155,9 @@ export function normalizeConversationInput(input: {
     let model: string | null = null;
     if (input.model !== undefined && input.model !== null) {
         if (typeof input.model !== "string") {
-            throw invalid('model must be a string naming the model, e.g. "gpt-5" or "claude-opus".');
+            throw invalid(
+                'model must be a string naming the model, e.g. "gpt-5" or "claude-opus".'
+            );
         }
         model = oneLine(input.model, CONVERSATION_LIMITS.modelChars);
     }

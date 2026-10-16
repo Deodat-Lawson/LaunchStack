@@ -26,8 +26,9 @@ import { APIError } from "better-auth/api";
 import { and, eq, gt } from "drizzle-orm";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import { mcpOauthWorkspaceChoices } from "~/server/db/schema/mcp";
-import { userCompanyMemberships, users } from "~/server/db/schema/identity";
+// The schema barrel, as the middleware itself imports it: this module loads
+// with the auth instance, and route tests that mock the barrel stay intact.
+import { mcpOauthWorkspaceChoices, userCompanyMemberships, users } from "~/server/db/schema";
 import { MCP_WORKSPACE_CLAIM } from "./config";
 
 // Any schema: callers pass the auth module's client, typed for auth tables only.

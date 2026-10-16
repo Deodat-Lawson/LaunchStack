@@ -47,17 +47,23 @@ const args = z.object({
     model: z.string().trim().min(1).max(200).optional(),
 });
 
+/** The service's message as a clause: its own closing period dropped. */
+function clause(message: string): string {
+    return message.trim().replace(/[.!]+$/, "");
+}
+
 /** What the model is told when the service refuses, per error code. */
 export function describeSaveError(error: ConversationSaveError, conversationId?: number): string {
+    const reason = clause(error.message);
     switch (error.code) {
         case "invalid":
-            return `LaunchStack could not save this conversation: ${error.message}. Fix the arguments and try again.`;
+            return `LaunchStack could not save this conversation: ${reason}. Fix the arguments and try again.`;
         case "too_large":
-            return `This conversation is too large to save in one call: ${error.message}. Tell the person; do not drop or summarise turns to make it fit unless they ask you to.`;
+            return `This conversation is too large to save in one call: ${reason}. Tell the person; do not drop or summarise turns to make it fit unless they ask you to.`;
         case "not_found":
-            return `There is no saved conversation ${conversationId !== undefined ? `with conversationId ${conversationId} ` : ""}that this person can update in this workspace (${error.message}). To save it as a new conversation, call save_conversation again without conversationId.`;
+            return `There is no saved conversation ${conversationId !== undefined ? `with conversationId ${conversationId} ` : ""}that this person can update in this workspace (${reason}). To save it as a new conversation, call save_conversation again without conversationId.`;
         case "forbidden":
-            return `This person is not allowed to save conversations to this LaunchStack workspace: ${error.message}. Tell them; a workspace admin can change their permissions.`;
+            return `This person is not allowed to save conversations to this LaunchStack workspace: ${reason}. Tell them; a workspace admin can change their permissions.`;
     }
 }
 
@@ -146,7 +152,8 @@ export const saveConversationTool = defineTool({
     annotations: {
         readOnlyHint: false,
         destructiveHint: false,
-        // A save without conversationId creates a new conversation each time.
+        // Re-saving identical content is a no-op, but a changed chat adds a
+        // version, so a repeated call is not guaranteed to change nothing.
         idempotentHint: false,
         openWorldHint: false,
     },

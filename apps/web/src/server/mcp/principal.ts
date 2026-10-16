@@ -26,7 +26,7 @@ import { auth } from "~/server/auth";
 import { resolveMemberContext, type WorkspaceContext } from "~/lib/require-workspace-context";
 import type { AssistantClient } from "~/server/db/schema/mcp";
 import { verifyAccessKey, looksLikeAccessKey } from "./access-keys";
-import { MCP_SCOPE_READ, MCP_WORKSPACE_CLAIM, mcpAvailability } from "./config";
+import { MCP_SCOPE_READ, MCP_WORKSPACE_CLAIM, filled, mcpAvailability } from "./config";
 import { assistantFamily, clientDisplayName, hasLiveConsent } from "./connections";
 
 /** jose's JWTPayload, by way of better-auth (jose is not a direct dependency). */
@@ -78,7 +78,7 @@ function bearerToken(request: Request): string | null {
     const header = request.headers.get("authorization");
     if (!header) return null;
     const match = /^(?:Bearer|DPoP)\s+(.+)$/i.exec(header.trim());
-    return match?.[1]?.trim() || null;
+    return filled(match?.[1]) ?? null;
 }
 
 async function verifyOAuthToken(
@@ -93,7 +93,7 @@ async function verifyOAuthToken(
             // the issuer its tokens carry.
             issuer: context.baseURL,
             audience: resource,
-            jwksUrl: process.env.MCP_JWKS_URL?.trim() || `${context.baseURL}/jwks`,
+            jwksUrl: filled(process.env.MCP_JWKS_URL) ?? `${context.baseURL}/jwks`,
             challengeScopes: [MCP_SCOPE_READ],
             dpop: { replayStore: createDpopReplayStore(context.internalAdapter) },
         },

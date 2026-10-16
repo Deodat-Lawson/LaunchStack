@@ -80,6 +80,27 @@ async function companyEmbeddings(
     }
 }
 
+/** The query as the lexical leg splits it: lowercased words, edge punctuation trimmed. */
+function queryTerms(query: string): string[] {
+    return query
+        .toLowerCase()
+        .split(/\s+/)
+        .map(term => term.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ""))
+        .filter(term => term.length >= 2);
+}
+
+/**
+ * The lexical leg always returns its full quota, padding with passages that
+ * score zero; those share no word with the query. A search result list should
+ * not, so they are dropped. Vector hits are kept as ranked: closeness in
+ * meaning is the point of that leg.
+ */
+function isLexicalPadding(chunk: SearchResult, terms: readonly string[]): boolean {
+    if (terms.length === 0 || chunkSource(chunk) !== "bm25") return false;
+    const content = (chunk.pageContent ?? "").toLowerCase();
+    return !terms.some(term => content.includes(term));
+}
+
 function numericDocumentId(chunk: SearchResult): number | null {
     const raw = chunk.metadata?.documentId ?? chunk.documentId;
     if (raw === undefined || raw === null || raw === "") return null;
@@ -157,10 +178,12 @@ export async function searchWorkspace(
         searchScope: "mcp",
     });
 
+    const terms = queryTerms(input.query);
     const hits = new Map<number, WorkspaceSearchHit>();
     for (const chunk of gated) {
         const source = chunkSource(chunk);
         if (source !== undefined && NON_DOCUMENT_SOURCES.has(source)) continue;
+        if (isLexicalPadding(chunk, terms)) continue;
         const id = numericDocumentId(chunk);
         const row = id === null ? undefined : byId.get(id);
         if (id === null || !row) continue;

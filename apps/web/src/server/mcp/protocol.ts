@@ -107,7 +107,7 @@ export function errorAnswer(
 // ---------------------------------------------------------------------------
 
 /** A hand-written JSON Schema object (no `$ref`, no `$schema`: every client reads it). */
-export type JsonSchema = { [key: string]: unknown };
+export type JsonSchema = Record<string, unknown>;
 
 export interface McpToolAnnotations {
     title?: string;

@@ -21,7 +21,7 @@ import { company } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { authOauthClient } from "~/server/db/schema/auth";
 import { userCompanyMemberships, users } from "~/server/db/schema/identity";
-import { MCP_SCOPE_READ, MCP_SCOPE_WRITE } from "./config";
+import { MCP_SCOPE_READ, MCP_SCOPE_WRITE, filled } from "./config";
 
 export interface ConnectingClient {
     clientId: string;
@@ -66,11 +66,11 @@ export async function loadConnectRequest(params: SearchParams): Promise<ConnectR
         .from(authOauthClient)
         .where(eq(authOauthClient.clientId, clientId))
         .limit(1);
-    const cimdHost = /^https:\/\//.test(clientId) ? host(clientId) : null;
+    const cimdHost = clientId.startsWith("https://") ? host(clientId) : null;
     return {
         client: {
             clientId,
-            name: row?.name?.trim() || cimdHost || "An assistant",
+            name: filled(row?.name) ?? cimdHost ?? "An assistant",
             icon: row?.icon ?? null,
             redirectHost: host(first(params.redirect_uri)) ?? host(row?.redirectUris?.[0]),
             verifiedDomain: cimdHost,

@@ -300,7 +300,9 @@ function parseConversationTurns(lines: readonly string[], start: number): Transc
         const text = buffer.join("\n").trim();
         buffer = [];
         if (text.length === 0 || mode === null) return;
-        segments.push(mode === "user" ? { kind: "user", text, at } : { kind: "assistant", text, at });
+        segments.push(
+            mode === "user" ? { kind: "user", text, at } : { kind: "assistant", text, at }
+        );
     };
 
     for (let index = start; index < lines.length; index += 1) {

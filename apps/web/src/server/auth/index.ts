@@ -25,6 +25,7 @@
  * See ~/server/mcp. Off when ~/server/mcp/config says so.
  */
 import { betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "better-auth/crypto";
 import { nextCookies } from "better-auth/next-js";
@@ -178,7 +179,36 @@ function mcpPlugins(db: Parameters<typeof workspacePostLogin>[0]) {
             customAccessTokenClaims: workspaceAccessTokenClaims(db),
         }),
         cimd({ fetchClientMetadataResource, metadataProfile: "mcp-2026-07-28" }),
+        defaultMcpResource(availability.resource),
     ];
+}
+
+/**
+ * Fills in `resource` (RFC 8707) on an authorization request that has none.
+ *
+ * better-auth binds a token to the MCP server — a JWT whose audience is
+ * /api/mcp — only when the client names that resource. A client that leaves
+ * it out (the MCP spec says it should send it; Gemini Enterprise's manual
+ * OAuth fields have no place for it) would get an opaque token /api/mcp
+ * cannot verify. This server protects exactly one resource, so that is the
+ * default. The signed request the later steps resume from includes it, and
+ * so does the authorization code.
+ */
+function defaultMcpResource(resource: string) {
+    return {
+        id: "launchstack-mcp-default-resource",
+        hooks: {
+            before: [
+                {
+                    matcher: (ctx: { path?: string; query?: Record<string, unknown> }) =>
+                        ctx.path === "/oauth2/authorize" && !ctx.query?.resource,
+                    handler: createAuthMiddleware(async ctx => ({
+                        context: { query: { ...ctx.query, resource } },
+                    })),
+                },
+            ],
+        },
+    };
 }
 
 type Auth = ReturnType<typeof buildAuth>;

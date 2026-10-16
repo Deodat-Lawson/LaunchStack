@@ -17,6 +17,7 @@ import {
     authOauthRefreshToken,
 } from "~/server/db/schema/auth";
 import type { AssistantClient } from "~/server/db/schema/mcp";
+import { filled } from "./config";
 
 /**
  * Which assistant family a client is, from what it calls itself. Used for
@@ -85,7 +86,7 @@ export async function listConnections(input: {
     const lastByClient = new Map(activity.map(a => [a.clientId, a.last]));
 
     return consents.map(c => {
-        const name = c.name?.trim() || "Unnamed assistant";
+        const name = filled(c.name) ?? "Unnamed assistant";
         const last = lastByClient.get(c.clientId) ?? c.updatedAt ?? c.createdAt;
         return {
             clientId: c.clientId,
@@ -176,5 +177,5 @@ export async function clientDisplayName(clientId: string): Promise<string | null
         .from(authOauthClient)
         .where(eq(authOauthClient.clientId, clientId))
         .limit(1);
-    return row?.name?.trim() || null;
+    return filled(row?.name) ?? null;
 }

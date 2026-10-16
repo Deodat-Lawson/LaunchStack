@@ -376,7 +376,7 @@ function ClientsSection() {
                                             disabled={busy === client.clientId}
                                             onClick={() => setPending(client)}
                                         >
-                                            Delete
+                                            {busy === client.clientId ? "Deleting…" : "Delete"}
                                         </Button>
                                     </div>
                                 ))

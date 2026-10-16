@@ -101,7 +101,10 @@ function principal(
     options: { scopes?: string[]; role?: string; permissions?: Permission[] } = {}
 ): McpPrincipal {
     return {
-        ctx: makeWorkspaceContext({ role: options.role ?? "member", permissions: options.permissions }),
+        ctx: makeWorkspaceContext({
+            role: options.role ?? "member",
+            permissions: options.permissions,
+        }),
         scopes: new Set(options.scopes ?? ["launchstack:read", "launchstack:write"]),
         credential: { kind: "key", keyId: 1 },
         label: "Test key",
@@ -397,7 +400,11 @@ describe("tools/call", () => {
     });
 
     it("answers a tool this credential may not use with -32602", async () => {
-        const answer = await call("write", {}, { principal: principal({ scopes: ["launchstack:read"] }) });
+        const answer = await call(
+            "write",
+            {},
+            { principal: principal({ scopes: ["launchstack:read"] }) }
+        );
         expect(errorOf(answer)).toMatchObject({ error: { code: JSON_RPC.INVALID_PARAMS } });
         const viewer = await call("write", {}, { principal: principal({ role: "viewer" }) });
         expect(errorOf(viewer).error.code).toBe(JSON_RPC.INVALID_PARAMS);

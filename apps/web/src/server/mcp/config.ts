@@ -29,6 +29,12 @@ export const MCP_OAUTH_SCOPES = [
 /** JWT claim that carries the workspace (company id) a token is bound to. */
 export const MCP_WORKSPACE_CLAIM = "launchstack_workspace";
 
+/** A trimmed string, or undefined when there is nothing in it. */
+export function filled(value: string | null | undefined): string | undefined {
+    const trimmed = value?.trim();
+    return trimmed === "" ? undefined : trimmed;
+}
+
 /** Access keys start with this, which is also how the route tells them apart. */
 export const ACCESS_KEY_PREFIX = "lsk_";
 

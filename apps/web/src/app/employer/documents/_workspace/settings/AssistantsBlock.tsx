@@ -649,7 +649,9 @@ export function AssistantsBlock() {
                                                 })
                                             }
                                         >
-                                            Revoke
+                                            {busy === `connection:${connection.clientId}`
+                                                ? "Revoking…"
+                                                : "Revoke"}
                                         </Button>
                                     </div>
                                 ))
@@ -704,7 +706,7 @@ export function AssistantsBlock() {
                                                 })
                                             }
                                         >
-                                            Revoke
+                                            {busy === `key:${key.id}` ? "Revoking…" : "Revoke"}
                                         </Button>
                                     </div>
                                 ))

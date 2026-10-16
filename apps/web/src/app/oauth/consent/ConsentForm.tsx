@@ -60,8 +60,7 @@ export function ConsentForm({
                 ))}
             </ul>
             <p className="text-ink-3 mb-0 mt-3 text-[12.5px] leading-normal">
-                It can never see more than you can. Disconnect it any time in Settings ›
-                Integrations.
+                It can never see more than you can. Disconnect it any time in Settings › Account.
             </p>
             {error ? <FlowError>{error}</FlowError> : null}
             <div className="mt-5 flex flex-wrap gap-2.5">

@@ -77,7 +77,11 @@ export function sourceKindOf(doc: {
     const key = doc.creationKey ?? "";
     if (meta.kind === "mindmap" || key.startsWith("mindmap:")) return "mindmap";
     if (meta.kind === "claude-artifact") return "artifact";
-    if (meta.connector === "agent-sessions" || meta.connector === "agent-knowledge")
+    if (
+        meta.connector === "agent-sessions" ||
+        meta.connector === "agent-knowledge" ||
+        meta.connector === "assistant-conversations"
+    )
         return "conversation";
     if (meta.connector === "gmail" || key.startsWith("connector:gmail:")) return "gmail";
     if (

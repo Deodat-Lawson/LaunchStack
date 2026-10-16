@@ -22,6 +22,7 @@ import {
     bigserial,
     index,
     integer,
+    primaryKey,
     text,
     timestamp,
     uniqueIndex,
@@ -69,18 +70,30 @@ export const mcpAccessKeys = pgTable(
 
 export type McpAccessKey = InferSelectModel<typeof mcpAccessKeys>;
 
-export const mcpOauthWorkspaceChoices = pgTable("mcp_oauth_workspace_choices", {
-    /** One pending choice per browser session; a newer pick replaces it. */
-    sessionId: text("session_id")
-        .primaryKey()
-        .references(() => authSession.id, { onDelete: "cascade" }),
-    companyId: bigint("company_id", { mode: "bigint" })
-        .notNull()
-        .references(() => company.id, { onDelete: "cascade" }),
-    chosenAt: timestamp("chosen_at", { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull(),
-});
+export const mcpOauthWorkspaceChoices = pgTable(
+    "mcp_oauth_workspace_choices",
+    {
+        sessionId: text("session_id")
+            .notNull()
+            .references(() => authSession.id, { onDelete: "cascade" }),
+        /**
+         * Which authorization request the pick belongs to: a hash of its
+         * client, state, PKCE challenge and redirect. Keyed per request, not
+         * per browser session, so two connections started side by side in one
+         * browser can never trade workspaces.
+         */
+        flowKey: varchar("flow_key", { length: 64 }).notNull(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        chosenAt: timestamp("chosen_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        pk: primaryKey({ columns: [table.sessionId, table.flowKey] }),
+    })
+);
 
 /** Which assistant family saved a conversation; drives the viewer's label. */
 export const ASSISTANT_CLIENTS = ["claude", "chatgpt", "gemini", "other"] as const;

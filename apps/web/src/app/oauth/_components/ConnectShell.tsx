@@ -67,7 +67,12 @@ function ClientIdentity({ client }: { client: ConnectingClient }) {
                         </span>
                     </div>
                 ) : null}
-                {client.verifiedDomain ? (
+                {client.addedByWorkspace ? (
+                    <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
+                        <BadgeCheck className="size-3.5" aria-hidden />
+                        Added by an admin of {client.addedByWorkspace}
+                    </div>
+                ) : client.verifiedDomain ? (
                     <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
                         <BadgeCheck className="size-3.5" aria-hidden />
                         Identity published at {client.verifiedDomain}
@@ -80,6 +85,18 @@ function ClientIdentity({ client }: { client: ConnectingClient }) {
                     </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+/** Shown when the page is opened without an assistant's authorization request. */
+export function NoConnectionRequest() {
+    return (
+        <div className="border-line rounded-xl border p-5">
+            <p className="text-ink-2 m-0 text-[13.5px] leading-[1.55]">
+                There is nothing to approve here. This page is a step in connecting an assistant to
+                LaunchStack; start the connection from the assistant itself.
+            </p>
         </div>
     );
 }

@@ -22,7 +22,10 @@ function withEnv(env: Record<string, string | undefined>) {
 describe("mcpAvailability", () => {
     it("is on for an HTTPS origin, with the resource at /api/mcp", () => {
         expect(
-            withEnv({ BETTER_AUTH_URL: "https://launchstack.example/", MCP_SERVER_ENABLED: undefined })
+            withEnv({
+                BETTER_AUTH_URL: "https://launchstack.example/",
+                MCP_SERVER_ENABLED: undefined,
+            })
         ).toEqual({
             enabled: true,
             origin: "https://launchstack.example",

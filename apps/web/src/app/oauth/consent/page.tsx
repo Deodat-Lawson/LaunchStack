@@ -13,11 +13,21 @@ import {
     loadConnectRequest,
     workspaceName,
 } from "~/server/mcp/connect-request";
-import { resolveGrantWorkspace } from "~/server/mcp/oauth-workspace";
-import { ConnectShell } from "../_components/ConnectShell";
+import { flowKeyOf, resolveGrantWorkspace } from "~/server/mcp/oauth-workspace";
+import { ConnectShell, NoConnectionRequest } from "../_components/ConnectShell";
 import { ConsentForm } from "./ConsentForm";
 
 export const dynamic = "force-dynamic";
+
+function toQuery(params: Record<string, string | string[] | undefined>): URLSearchParams {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+        for (const v of Array.isArray(value) ? value : value === undefined ? [] : [value]) {
+            query.append(key, v);
+        }
+    }
+    return query;
+}
 
 export default async function OAuthConsentPage({
     searchParams,
@@ -29,7 +39,7 @@ export default async function OAuthConsentPage({
     const params = await searchParams;
     const [request, workspaceId, workspaces] = await Promise.all([
         loadConnectRequest(params),
-        resolveGrantWorkspace(db, session.user.id, session.session.id),
+        resolveGrantWorkspace(db, session.user.id, session.session.id, flowKeyOf(toQuery(params))),
         activeWorkspaceOptions(session.user.id),
     ]);
     const workspace = workspaceId ? await workspaceName(workspaceId) : null;
@@ -38,12 +48,16 @@ export default async function OAuthConsentPage({
             client={request.client}
             step={workspaces.length > 1 ? "Step 2 of 2 · Allow access" : "Allow access"}
         >
-            <ConsentForm
-                assistant={request.client?.name ?? "this assistant"}
-                workspace={workspace}
-                lines={workspace ? describeScopes(request.scopes, workspace) : []}
-                email={session.user.email}
-            />
+            {request.client ? (
+                <ConsentForm
+                    assistant={request.client.name}
+                    workspace={workspace}
+                    lines={workspace ? describeScopes(request.scopes, workspace) : []}
+                    email={session.user.email}
+                />
+            ) : (
+                <NoConnectionRequest />
+            )}
         </ConnectShell>
     );
 }

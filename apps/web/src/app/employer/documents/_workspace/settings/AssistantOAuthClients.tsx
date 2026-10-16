@@ -93,6 +93,10 @@ function Endpoints({ serverUrl, endpoints }: { serverUrl: string; endpoints: OAu
             <CopyRow label="Authorization URL" value={endpoints.authorization} />
             <CopyRow label="Token URL" value={endpoints.token} />
             <CopyRow label="Scopes" value={endpoints.scopes} />
+            <p className="text-ink-3 m-0 text-xs leading-normal">
+                Turn on PKCE in the assistant (Gemini Enterprise: tick Enable PKCE Support).
+                LaunchStack requires it to stay signed in.
+            </p>
         </>
     );
 }

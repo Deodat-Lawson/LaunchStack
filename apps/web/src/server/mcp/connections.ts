@@ -7,7 +7,7 @@
  * asks `hasLiveConsent` on every request: revoking here cuts an assistant off
  * at its next call instead of when its token expires.
  */
-import { and, desc, eq, isNull, max } from "drizzle-orm";
+import { and, desc, eq, max } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import {
@@ -103,8 +103,13 @@ export async function listConnections(input: {
 
 /**
  * Disconnects one assistant from one workspace for one person: the consent
- * goes, and every refresh and access token it issued is revoked. The other
+ * goes, and so do the refresh and access tokens issued for it. The other
  * workspaces that person connected the same assistant to are untouched.
+ *
+ * The token rows are deleted, not stamped `revoked`: better-auth treats a
+ * revoked refresh token presented again as a replay and then deletes every
+ * refresh token that assistant holds for the person — every workspace, not
+ * just this one. A deleted token is simply unknown (invalid_grant).
  */
 export async function revokeConnection(input: {
     authUserId: string;
@@ -112,7 +117,6 @@ export async function revokeConnection(input: {
     clientId: string;
 }): Promise<boolean> {
     const reference = String(input.companyId);
-    const now = new Date();
     return db.transaction(async tx => {
         const removed = await tx
             .delete(authOauthConsent)
@@ -124,26 +128,23 @@ export async function revokeConnection(input: {
                 )
             )
             .returning({ id: authOauthConsent.id });
+        // Access tokens first: they reference the refresh token they came from.
         await tx
-            .update(authOauthRefreshToken)
-            .set({ revoked: now })
-            .where(
-                and(
-                    eq(authOauthRefreshToken.clientId, input.clientId),
-                    eq(authOauthRefreshToken.userId, input.authUserId),
-                    eq(authOauthRefreshToken.referenceId, reference),
-                    isNull(authOauthRefreshToken.revoked)
-                )
-            );
-        await tx
-            .update(authOauthAccessToken)
-            .set({ revoked: now })
+            .delete(authOauthAccessToken)
             .where(
                 and(
                     eq(authOauthAccessToken.clientId, input.clientId),
                     eq(authOauthAccessToken.userId, input.authUserId),
-                    eq(authOauthAccessToken.referenceId, reference),
-                    isNull(authOauthAccessToken.revoked)
+                    eq(authOauthAccessToken.referenceId, reference)
+                )
+            );
+        await tx
+            .delete(authOauthRefreshToken)
+            .where(
+                and(
+                    eq(authOauthRefreshToken.clientId, input.clientId),
+                    eq(authOauthRefreshToken.userId, input.authUserId),
+                    eq(authOauthRefreshToken.referenceId, reference)
                 )
             );
         return removed.length > 0;

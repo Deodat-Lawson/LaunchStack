@@ -273,9 +273,9 @@ function ConnectSteps({ url, canManageClients }: { url: string; canManageClients
                     <li>Sign in to LaunchStack and pick this workspace.</li>
                 </Steps>
                 <Note>
-                    Full use, including saving conversations, needs a Business, Enterprise or Edu
-                    plan, where a workspace admin publishes the connector. On Pro, ChatGPT can only
-                    search and fetch.
+                    Which plans get developer mode, and whether a workspace admin has to turn it on
+                    and publish the connector, is set by OpenAI and changes; check OpenAI&rsquo;s
+                    developer-mode help page for your plan.
                 </Note>
             </TabsContent>
 
@@ -288,9 +288,13 @@ function ConnectSteps({ url, canManageClients }: { url: string; canManageClients
                     </li>
                     <li>
                         A Google Cloud admin opens{" "}
-                        <Menu>Gemini Enterprise › Connected data stores › Custom MCP Server</Menu>{" "}
-                        and pastes the server URL, authorization URL, token URL, client ID, client
-                        secret and scopes.
+                        <Menu>
+                            Gemini Enterprise › Data stores › Create data store › Custom MCP Server
+                        </Menu>
+                        , chooses OAuth 2.0, pastes the server URL, authorization URL, token URL,
+                        client ID, client secret and scopes, and ticks{" "}
+                        <Menu>Enable PKCE Support</Menu>. Without PKCE, LaunchStack refuses the
+                        sign-in.
                     </li>
                     <li>
                         Each person then signs in to LaunchStack from Gemini and picks this
@@ -299,8 +303,9 @@ function ConnectSteps({ url, canManageClients }: { url: string; canManageClients
                 </Steps>
                 <Note>
                     Google blocks custom MCP data stores by default: an organization policy admin
-                    has to turn off “Disable custom mcp server connector for gemini enterprise”, and
-                    whoever creates the data store needs the Discovery Engine Editor role.
+                    has to override that policy and allow LaunchStack&rsquo;s domain as an egress
+                    destination. Whoever creates the data store needs the Discovery Engine Editor
+                    role.
                 </Note>
             </TabsContent>
 

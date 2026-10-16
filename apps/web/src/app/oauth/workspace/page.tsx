@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 import { getServerSession } from "~/server/auth";
 import { activeWorkspaceOptions, loadConnectRequest } from "~/server/mcp/connect-request";
-import { ConnectShell } from "../_components/ConnectShell";
+import { ConnectShell, NoConnectionRequest } from "../_components/ConnectShell";
 import { WorkspaceChoice } from "./WorkspaceChoice";
 
 export const dynamic = "force-dynamic";
@@ -26,10 +26,11 @@ export default async function OAuthWorkspacePage({
     ]);
     return (
         <ConnectShell client={request.client} step="Step 1 of 2 · Workspace">
-            <WorkspaceChoice
-                assistant={request.client?.name ?? "this assistant"}
-                workspaces={workspaces}
-            />
+            {request.client ? (
+                <WorkspaceChoice assistant={request.client.name} workspaces={workspaces} />
+            ) : (
+                <NoConnectionRequest />
+            )}
         </ConnectShell>
     );
 }

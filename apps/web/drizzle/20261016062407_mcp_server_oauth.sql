@@ -162,9 +162,11 @@ CREATE TABLE "pdr_ai_v2_mcp_access_keys" (
 );
 --> statement-breakpoint
 CREATE TABLE "pdr_ai_v2_mcp_oauth_workspace_choices" (
-	"session_id" text PRIMARY KEY NOT NULL,
+	"session_id" text NOT NULL,
+	"flow_key" varchar(64) NOT NULL,
 	"company_id" bigint NOT NULL,
-	"chosen_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"chosen_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT "pdr_ai_v2_mcp_oauth_workspace_choices_session_id_flow_key_pk" PRIMARY KEY("session_id","flow_key")
 );
 --> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_auth_account" ALTER COLUMN "issuer" DROP NOT NULL;--> statement-breakpoint

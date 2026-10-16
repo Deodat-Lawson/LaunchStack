@@ -43,7 +43,7 @@ export function WorkspaceChoice({
         const saved = await fetch("/api/oauth/workspace-choice", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ companyId: choice }),
+            body: JSON.stringify({ companyId: choice, oauthQuery: window.location.search }),
         }).catch(() => null);
         if (!saved?.ok) {
             const body = (await saved?.json().catch(() => null)) as { error?: string } | null;

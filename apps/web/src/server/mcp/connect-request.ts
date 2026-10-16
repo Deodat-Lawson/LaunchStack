@@ -12,7 +12,9 @@
  * proves nothing. The page therefore also shows where the browser will be
  * sent back to (the redirect host) and whether the client's identity is a
  * metadata-document URL on its own domain (CIMD), which is the closest thing
- * to verification MCP offers.
+ * to verification MCP offers. Clients a workspace admin created in Settings
+ * say so. A self-named client's logo is not loaded: fetching a URL it chose
+ * would tell it who is looking.
  */
 import { and, desc, eq } from "drizzle-orm";
 
@@ -31,6 +33,8 @@ export interface ConnectingClient {
     redirectHost: string | null;
     /** Set when the client id is a metadata URL on its own domain (CIMD). */
     verifiedDomain: string | null;
+    /** Set when a workspace admin created the client in Settings: that workspace's name. */
+    addedByWorkspace: string | null;
 }
 
 export interface ConnectRequest {
@@ -62,18 +66,24 @@ export async function loadConnectRequest(params: SearchParams): Promise<ConnectR
             name: authOauthClient.name,
             icon: authOauthClient.icon,
             redirectUris: authOauthClient.redirectUris,
+            referenceId: authOauthClient.referenceId,
         })
         .from(authOauthClient)
         .where(eq(authOauthClient.clientId, clientId))
         .limit(1);
     const cimdHost = clientId.startsWith("https://") ? host(clientId) : null;
+    const addedByWorkspace =
+        row?.referenceId && /^\d+$/.test(row.referenceId)
+            ? await workspaceName(row.referenceId)
+            : null;
     return {
         client: {
             clientId,
             name: filled(row?.name) ?? cimdHost ?? "An assistant",
-            icon: row?.icon ?? null,
+            icon: cimdHost || addedByWorkspace ? (row?.icon ?? null) : null,
             redirectHost: host(first(params.redirect_uri)) ?? host(row?.redirectUris?.[0]),
             verifiedDomain: cimdHost,
+            addedByWorkspace,
         },
         scopes,
     };

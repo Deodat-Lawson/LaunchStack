@@ -1,5 +1,5 @@
 {
-  "id": "703e4bb1-51ea-4222-ba5b-29099623923b",
+  "id": "c903b6c5-255f-49d3-a55c-c498eb4ba889",
   "prevId": "797efbf6-7962-4b0d-aeeb-abb7cab2ad80",
   "version": "7",
   "dialect": "postgresql",
@@ -9984,7 +9984,13 @@
         "session_id": {
           "name": "session_id",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flow_key": {
+          "name": "flow_key",
+          "type": "varchar(64)",
+          "primaryKey": false,
           "notNull": true
         },
         "company_id": {
@@ -10030,7 +10036,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "pdr_ai_v2_mcp_oauth_workspace_choices_session_id_flow_key_pk": {
+          "name": "pdr_ai_v2_mcp_oauth_workspace_choices_session_id_flow_key_pk",
+          "columns": [
+            "session_id",
+            "flow_key"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

@@ -28,9 +28,10 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { PERMISSION_DESCRIPTIONS } from "~/lib/authz/permissions";
+import { usePerson } from "~/lib/profile/use-people";
 import { settingsForSection, type SettingDefinition } from "~/lib/settings/registry";
 import type { SettingOption, SettingsSectionId, StoredScope } from "~/lib/settings/types";
-import { defaultWriteScope, useSetting } from "~/lib/settings/useSettings";
+import { defaultWriteScope, useSetting, useSettingsPayload } from "~/lib/settings/useSettings";
 import { cn } from "~/lib/utils";
 
 import { relativeTime } from "./people/format";
@@ -165,10 +166,11 @@ export function SettingRow({
                     {provenance.text}
                 </span>
                 {resolved?.updatedBy && resolved.source !== "member" && (
-                    <span>
-                        Set {relativeTime(resolved.updatedAt)}
-                        {resolved.updatedBy ? ` by ${resolved.updatedBy}` : ""}
-                    </span>
+                    <SetBy
+                        updatedBy={resolved.updatedBy}
+                        updatedAt={resolved.updatedAt}
+                        folder={folder}
+                    />
                 )}
                 {showReset && (
                     <Button
@@ -191,6 +193,40 @@ export function SettingRow({
                 )}
             </div>
         </div>
+    );
+}
+
+/**
+ * "Set 2 min ago by Ada" — who last changed a shared value, by the name this
+ * workspace knows them by. The stored auth id never reaches the page: the
+ * viewer is "you", a member is their display name, someone no longer in the
+ * workspace is said to have left, and while the lookup is out (or if it
+ * fails) the line just says when.
+ */
+function SetBy({
+    updatedBy,
+    updatedAt,
+    folder,
+}: {
+    updatedBy: string;
+    updatedAt: string | null;
+    folder: string | null;
+}) {
+    const viewerId = useSettingsPayload(folder).payload?.viewer?.authUserId ?? null;
+    const isViewer = updatedBy === viewerId;
+    const person = usePerson(isViewer ? null : updatedBy);
+    const who = isViewer
+        ? "you"
+        : person.status === "member"
+          ? person.look.displayName
+          : person.status === "gone"
+            ? "someone who has left"
+            : null;
+    return (
+        <span>
+            Set {relativeTime(updatedAt)}
+            {who ? ` by ${who}` : ""}
+        </span>
     );
 }
 

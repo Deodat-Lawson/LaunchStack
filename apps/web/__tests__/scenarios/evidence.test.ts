@@ -34,7 +34,11 @@ jest.mock("~/server/db", () => {
 import { document } from "@launchstack/store/schema";
 
 import { brandComments } from "~/server/db/schema";
-import { gatherScenarioEvidence, ScenarioCreatorGoneError } from "~/server/scenarios/evidence";
+import {
+    bounded,
+    gatherScenarioEvidence,
+    ScenarioCreatorGoneError,
+} from "~/server/scenarios/evidence";
 
 const { __queue: queue } = jest.requireMock<{ __queue: (t: unknown, rows: unknown[]) => void }>(
     "~/server/db"
@@ -156,4 +160,17 @@ it("stops when the creator is no longer an active member", async () => {
     await expect(gatherScenarioEvidence(run({ notes: "x" }))).rejects.toBeInstanceOf(
         ScenarioCreatorGoneError
     );
+});
+
+it("goes on without a source that fails or takes too long", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    await expect(bounded("search", Promise.reject(new Error("embeddings down")))).resolves.toEqual(
+        []
+    );
+    await expect(bounded("search", new Promise<string[]>(() => undefined), 10)).resolves.toEqual(
+        []
+    );
+    await expect(bounded("search", Promise.resolve(["ok"]))).resolves.toEqual(["ok"]);
+    expect(warn).toHaveBeenCalledTimes(2);
+    warn.mockRestore();
 });

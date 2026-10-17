@@ -226,6 +226,41 @@ async function profileDrafts(
     }));
 }
 
+/** How long one source may take before the run goes on without it. */
+export const SOURCE_TIMEOUT_MS = 30_000;
+
+/**
+ * A source that errors or takes too long is skipped, not fatal: a run with
+ * four sources out of five is still worth having, and the evidence list
+ * shows exactly what was used.
+ */
+export async function bounded<T>(
+    label: string,
+    work: Promise<T[]>,
+    ms = SOURCE_TIMEOUT_MS
+): Promise<T[]> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<T[]>(resolve => {
+        timer = setTimeout(() => {
+            console.warn(
+                `[scenarios] ${label} took over ${Math.round(ms / 1000)}s; going on without it`
+            );
+            resolve([]);
+        }, ms);
+    });
+    try {
+        return await Promise.race([
+            work.catch((error: unknown) => {
+                console.warn(`[scenarios] ${label} failed; going on without it:`, error);
+                return [] as T[];
+            }),
+            timeout,
+        ]);
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 export async function gatherScenarioEvidence(run: ScenarioRunRecord): Promise<StoredEvidence[]> {
     const member = await resolveMemberContext(run.createdByUserId, run.companyId);
     if (!member) throw new ScenarioCreatorGoneError();
@@ -237,12 +272,17 @@ export async function gatherScenarioEvidence(run: ScenarioRunRecord): Promise<St
     const groups = await Promise.all([
         Promise.resolve(notesDrafts(s.notes)),
         s.documentIds.length > 0
-            ? pickedDocumentDrafts(run.companyId, scope, s.documentIds, subject)
+            ? bounded(
+                  "picked files",
+                  pickedDocumentDrafts(run.companyId, scope, s.documentIds, subject)
+              )
             : [],
-        s.searchFiles ? searchDrafts(run.companyId, scope, query) : [],
-        s.prospects ? prospectDrafts(run.companyId) : [],
-        s.brandComments ? commentDrafts(run.companyId) : [],
-        s.companyProfile ? profileDrafts(run.companyId, scope, query) : [],
+        s.searchFiles ? bounded("file search", searchDrafts(run.companyId, scope, query)) : [],
+        s.prospects ? bounded("prospects", prospectDrafts(run.companyId)) : [],
+        s.brandComments ? bounded("comments", commentDrafts(run.companyId)) : [],
+        s.companyProfile
+            ? bounded("company profile", profileDrafts(run.companyId, scope, query))
+            : [],
     ]);
     return buildEvidence(groups.flat(), { max: 40 });
 }

@@ -98,8 +98,12 @@ export async function advanceWithRetries(
     backoffMs = 1500
 ): Promise<boolean> {
     for (let attempt = 1; ; attempt++) {
+        const started = Date.now();
         try {
             const outcome = await advanceRun(ports, runId);
+            console.info(
+                `[scenarios] run ${runId}: ${outcome.state}${"step" in outcome ? ` to step ${outcome.step}` : ""} in ${Math.round((Date.now() - started) / 1000)}s`
+            );
             return outcome.state === "advanced";
         } catch (error) {
             if (attempt >= attempts) {
@@ -107,6 +111,10 @@ export async function advanceWithRetries(
                 await ports.store.finish(runId, "failed", errorMessage(error), ports.now());
                 return false;
             }
+            console.warn(
+                `[scenarios] run ${runId}: attempt ${attempt} of ${attempts} failed after ${Math.round((Date.now() - started) / 1000)}s, retrying:`,
+                errorMessage(error)
+            );
             await sleep(backoffMs * attempt);
         }
     }

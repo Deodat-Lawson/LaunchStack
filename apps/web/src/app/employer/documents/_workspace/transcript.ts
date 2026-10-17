@@ -48,7 +48,11 @@ export function transcriptMarkdown(thread: ThreadMessage[], sources: WorkspaceSo
             })
             .filter((line): line is string => Boolean(line));
         const grounded = cites.length ? `\n\n**Grounded in**\n\n${cites.join("\n")}` : "";
-        return `## Launchstack\n\n${msg.text}${grounded}`;
+        const web = (msg.webSources ?? []).map(
+            (source, index) => `${index + 1}. [${source.title}](${source.url})`
+        );
+        const webBlock = web.length ? `\n\n**Web sources**\n\n${web.join("\n")}` : "";
+        return `## Launchstack\n\n${msg.text}${grounded}${webBlock}`;
     });
     return `# Chat transcript\n\n${blocks.join("\n\n---\n\n")}\n`;
 }

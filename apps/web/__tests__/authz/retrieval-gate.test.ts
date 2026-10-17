@@ -124,11 +124,7 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 
 jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     normalizeModelContent: (content: unknown) => String(content),
-    performWebSearch: jest
-        .fn()
-        .mockResolvedValue({ content: "", results: [], refinedQuery: "", reasoning: "" }),
     getSystemPrompt: () => "system",
-    getWebSearchInstruction: () => "",
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
     buildReferences: () => [],
@@ -153,6 +149,7 @@ jest.mock("~/server/chat-request-compat", () => ({
 jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => ({ inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
+    addTokenUsage: (a: unknown) => a,
     getChatModelsSource: () => "deployment",
 }));
 

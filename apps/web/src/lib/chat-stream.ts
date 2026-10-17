@@ -6,6 +6,19 @@ export type ChatStreamEvent<T> =
     | { type: "result"; response: T }
     | { type: "error"; message: string };
 
+/**
+ * What the chat shows for a `status` event. The model-call phases are sent as
+ * keywords; a tool call sends its own sentence (`Searching the web for "…"`).
+ */
+const STATUS_LABELS: Record<string, string> = {
+    generating: "Generating…",
+    finalizing: "Finishing…",
+};
+
+export function chatStatusLabel(status: string): string {
+    return STATUS_LABELS[status] ?? status;
+}
+
 export function throwIfChatAborted(signal: AbortSignal): void {
     if (signal.aborted) throw new DOMException("Response stopped", "AbortError");
 }

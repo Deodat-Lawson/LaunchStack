@@ -1,7 +1,7 @@
 // POST /api/vantage/agendas/:id/topics — the founder adds a topic of their own
 import type { NextRequest } from "next/server";
 
-import { addTopic } from "@launchstack/pipelines/vantage";
+import { addTopicV1 } from "@launchstack/pipelines/vantage";
 
 import {
     error,
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const parsed = TopicSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
-        const topic = await addTopic({
+        const topic = await addTopicV1({
             companyId: auth.ctx.companyId,
             agendaId: id,
             input: {

@@ -46,6 +46,26 @@ describe("metric CSV import", () => {
         expect(problems.map(p => p.line)).toEqual([2, 3]);
     });
 
+    it("keeps valid rows while reporting impossible calendar dates by line", () => {
+        const { rows, problems } = parseMetricCsv(
+            [
+                "metric,value,period_start,period_end",
+                "signups,12,2026-02-01,2026-02-28",
+                "signups,15,2026-02-01,2026-02-30",
+                "active,7,2026-02-29,2026-03-01",
+                "active,9,2028-02-29,2028-02-29",
+            ].join("\n")
+        );
+        expect(rows.map(row => [row.line, row.metric, row.value, row.periodEnd])).toEqual([
+            [2, "signups", 12, "2026-02-28"],
+            [5, "active", 9, "2028-02-29"],
+        ]);
+        expect(problems).toEqual([
+            { line: 3, message: expect.stringContaining("real YYYY-MM-DD date") },
+            { line: 4, message: expect.stringContaining("real YYYY-MM-DD date") },
+        ]);
+    });
+
     it("parses numbers the way spreadsheets write them", () => {
         expect(parseNumber("1,200")).toBe(1200);
         expect(parseNumber("€40.50")).toBe(40.5);

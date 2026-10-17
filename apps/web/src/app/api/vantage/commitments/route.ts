@@ -4,8 +4,8 @@ import type { NextRequest } from "next/server";
 
 import {
     VANTAGE_COMMITMENT_STATUSES,
-    createCommitment,
-    listCommitments,
+    createCommitmentV1,
+    listCommitmentsV1,
 } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
                       (VANTAGE_COMMITMENT_STATUSES as readonly string[]).includes(s)
                   )
             : undefined;
-        const commitments = await listCommitments({ companyId: auth.ctx.companyId, status });
+        const commitments = await listCommitmentsV1({ companyId: auth.ctx.companyId, status });
         return json({ commitments });
     } catch (err) {
         return handleVantageError("GET commitments", err);
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     try {
         const parsed = CommitmentSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
-        const commitment = await createCommitment({
+        const commitment = await createCommitmentV1({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
             input: parsed.data,

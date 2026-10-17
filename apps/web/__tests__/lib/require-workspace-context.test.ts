@@ -146,6 +146,17 @@ describe("requireWorkspaceContext", () => {
         }
     });
 
+    it.each([undefined, null, "", "ACTIVE", "unknown"])(
+        "returns 403 for an unrecognized membership status: %p",
+        async status => {
+            signedInWithMembership({ role: "owner", status });
+            const result = await requireWorkspaceContext();
+            expect(result.success).toBe(false);
+            if (!result.success) expect(result.response.status).toBe(403);
+            expect(mockResolvePermissionsForRole).not.toHaveBeenCalled();
+        }
+    );
+
     it("returns a context with the membership role and its permissions", async () => {
         signedInWithMembership({ role: "owner", status: "active" });
 

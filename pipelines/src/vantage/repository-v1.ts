@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
 import {
     VantageError,
@@ -9,6 +9,9 @@ import {
     toEvidenceDto,
     toTopicDto,
     type TopicInput,
+    type CommitmentInput,
+    type ObservationInput,
+    createObservations,
 } from "./db";
 import {
     vantageAgendas as agendas,
@@ -18,6 +21,8 @@ import {
     vantageEvidence as evidence,
     vantageMetricDefinitions as definitions,
     vantageMetricObservations as observations,
+    type VantageAgendaStatus,
+    type VantageCommitmentStatus,
 } from "./schema";
 import type {
     AgendaV1Dto,
@@ -27,8 +32,8 @@ import type {
     ReportPeriod,
     TopicV1Dto,
 } from "./contract-v1";
-import type { MetricObservationDto, WeeklySignals } from "./types";
-import { calendarAdd, reportingDate } from "./period-v1";
+import type { CommitmentDto, MetricObservationDto, WeeklySignals } from "./types";
+import { calendarAdd, reportingDate, validDate } from "./period-v1";
 
 type Db = ReturnType<typeof getDb>;
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
@@ -105,7 +110,26 @@ async function read(
         db
             .select()
             .from(commitments)
-            .where(and(eq(commitments.companyId, companyId), eq(commitments.agendaId, row.id))),
+            .where(
+                and(
+                    eq(commitments.companyId, companyId),
+                    or(
+                        eq(commitments.agendaId, row.id),
+                        inArray(
+                            commitments.topicId,
+                            db
+                                .select({ id: topics.id })
+                                .from(topics)
+                                .where(
+                                    and(
+                                        eq(topics.companyId, companyId),
+                                        eq(topics.agendaId, row.id)
+                                    )
+                                )
+                        )
+                    )
+                )
+            ),
         state(db, companyId, row.id),
     ]);
     const dtoTopics = rows.map(t => {
@@ -152,7 +176,15 @@ export async function generationSnapshot(
     const last = period.kind === "completed-week" ? calendarAdd(endDate, -1) : endDate;
     const [agenda, defs, ev, obs, cm] = await Promise.all([
         read(db, companyId, { weekStart: period.weekStart }),
-        db.select().from(definitions).where(eq(definitions.companyId, companyId)),
+        db
+            .select()
+            .from(definitions)
+            .where(
+                and(
+                    eq(definitions.companyId, companyId),
+                    lte(definitions.createdAt, new Date(period.asOf))
+                )
+            ),
         db
             .select()
             .from(evidence)
@@ -207,10 +239,13 @@ export async function generationSnapshot(
         data: {
             metricDefinitions: defs.map(toDefinitionDto),
             currentEvidence: ev.map(toEvidenceDto),
-            currentObservations: obs.filter(o => o.periodStart >= period.weekStart).map(mapObs),
+            currentObservations: obs
+                .filter(o => names.has(o.metricId) && o.periodStart >= period.weekStart)
+                .map(mapObs),
             comparisonObservations: obs
                 .filter(
                     o =>
+                        names.has(o.metricId) &&
                         o.periodStart >= calendarAdd(period.weekStart, -7) &&
                         o.periodEnd <= calendarAdd(last, -7)
                 )
@@ -232,6 +267,7 @@ export async function generationSnapshot(
             .filter(
                 t =>
                     t.origin === "founder" ||
+                    t.commitmentId !== null ||
                     t.status !== "suggested" ||
                     t.decision !== null ||
                     t.contentVersion > 1
@@ -280,6 +316,7 @@ export async function saveGeneration(
                     t.origin !== "founder" &&
                     t.status === "suggested" &&
                     t.decision === null &&
+                    t.commitmentId === null &&
                     t.contentVersion === 1
             )
             .map(t => t.id);
@@ -343,6 +380,10 @@ export async function patchTopicV1(
         await lock(tx);
         const row = await ownedTopic(tx, companyId, id),
             s = await state(tx, companyId, row.agendaId);
+        if (patch.shared) throw new VantageError("Sharing is disabled.", 400, "validation_error");
+        const normalized = { ...patch };
+        for (const key of ["proposedOwner", "proposedDue", "helpRequested", "rationale"] as const)
+            if (normalized[key] !== undefined) normalized[key] = orNull(normalized[key]);
         const edited = Object.keys(patch).some(k => k !== "status");
         if (Object.keys(patch).length === 0)
             return (await read(tx, companyId, { id: row.agendaId }))!.topics.find(
@@ -350,7 +391,7 @@ export async function patchTopicV1(
             )!;
         await tx
             .update(topics)
-            .set({ ...patch, status: patch.status ?? (edited ? "kept" : row.status) })
+            .set({ ...normalized, status: patch.status ?? (edited ? "kept" : row.status) })
             .where(and(eq(topics.companyId, companyId), eq(topics.id, id)));
         s.data.topicVersions[id] = (s.data.topicVersions[id] ?? 1) + 1;
         await putState(tx, companyId, row.agendaId, s.version + 1, s.data);
@@ -371,6 +412,7 @@ export async function decideV1(args: {
         shared?: boolean;
     } | null;
 }) {
+    if (args.commitment) validateAction(args.commitment);
     return getDb().transaction(async tx => {
         await lock(tx);
         const row = await ownedTopic(tx, args.companyId, args.topicId),
@@ -486,4 +528,334 @@ export async function reviewEnhancement(
         await putState(tx, companyId, topic.agendaId, s.version + 1, s.data);
         return { enhancement: candidate, agendaVersion: s.version + 1 };
     });
+}
+
+export async function createObservationsV1(args: {
+    companyId: bigint;
+    userId: string;
+    inputs: ObservationInput[];
+}) {
+    const ids = [...new Set(args.inputs.map(o => o.metricId))];
+    if (ids.length) {
+        const found = await getDb()
+            .select({ id: definitions.id })
+            .from(definitions)
+            .where(and(eq(definitions.companyId, args.companyId), inArray(definitions.id, ids)));
+        if (found.length !== ids.length)
+            throw new VantageError("That metric is not here.", 404, "not_found");
+    }
+    return createObservations(args);
+}
+function validateAction(
+    action: Pick<CommitmentInput, "title" | "owner" | "dueOn" | "test" | "shared">
+) {
+    if (
+        !action.title.trim() ||
+        !action.owner.trim() ||
+        !validDate(action.dueOn) ||
+        !orNull(action.test) ||
+        action.shared
+    )
+        throw new VantageError(
+            "An action needs a title, owner, date and acceptance test; sharing is disabled.",
+            400,
+            "validation_error"
+        );
+}
+async function ownedAgenda(tx: Tx, companyId: bigint, id: string) {
+    const agenda = await read(tx, companyId, { id });
+    if (!agenda) throw new VantageError("That agenda is not here.", 404, "not_found");
+    return agenda;
+}
+async function touchAgenda(tx: Tx, companyId: bigint, agendaId: string, topicId?: string) {
+    const s = await state(tx, companyId, agendaId);
+    if (topicId) s.data.topicVersions[topicId] = (s.data.topicVersions[topicId] ?? 1) + 1;
+    await putState(tx, companyId, agendaId, s.version + 1, s.data);
+}
+export async function addTopicV1(args: { companyId: bigint; agendaId: string; input: TopicInput }) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const agenda = await ownedAgenda(tx, args.companyId, args.agendaId);
+        if (args.input.shared)
+            throw new VantageError("Sharing is disabled.", 400, "validation_error");
+        const id = randomUUID();
+        await tx.insert(topics).values({
+            ...args.input,
+            id,
+            companyId: args.companyId,
+            agendaId: args.agendaId,
+            position: Math.max(-1, ...agenda.topics.map(t => t.position)) + 1,
+            origin: "founder",
+            status: "kept",
+            shared: false,
+            title: args.input.title.trim(),
+            proposedOwner: orNull(args.input.proposedOwner),
+            proposedDue: orNull(args.input.proposedDue),
+            helpRequested: orNull(args.input.helpRequested),
+            rationale: orNull(args.input.rationale),
+        });
+        const s = await state(tx, args.companyId, args.agendaId);
+        s.data.topicVersions[id] = 1;
+        await putState(tx, args.companyId, args.agendaId, s.version + 1, s.data);
+        return (await read(tx, args.companyId, { id: args.agendaId }))!.topics.find(
+            t => t.id === id
+        )!;
+    });
+}
+export async function reorderTopicsV1(args: {
+    companyId: bigint;
+    agendaId: string;
+    ids: string[];
+}) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const agenda = await ownedAgenda(tx, args.companyId, args.agendaId);
+        const owned = new Set(agenda.topics.map(t => t.id));
+        if (new Set(args.ids).size !== args.ids.length || args.ids.some(id => !owned.has(id)))
+            throw new VantageError(
+                "Reorder only distinct topics from this agenda.",
+                400,
+                "validation_error"
+            );
+        const ordered = [
+            ...args.ids,
+            ...agenda.topics.map(t => t.id).filter(id => !args.ids.includes(id)),
+        ];
+        for (const [position, id] of ordered.entries())
+            await tx
+                .update(topics)
+                .set({ position })
+                .where(and(eq(topics.companyId, args.companyId), eq(topics.id, id)));
+        if (ordered.some((id, i) => agenda.topics[i]?.id !== id))
+            await touchAgenda(tx, args.companyId, args.agendaId);
+        return (await read(tx, args.companyId, { id: args.agendaId }))!;
+        return (await read(tx, args.companyId, { id: args.agendaId }))!;
+    });
+}
+export async function setAgendaStatusV1(args: {
+    companyId: bigint;
+    id: string;
+    status: VantageAgendaStatus;
+}) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const agenda = await ownedAgenda(tx, args.companyId, args.id);
+        if (agenda.status !== args.status) {
+            await tx
+                .update(agendas)
+                .set({
+                    status: args.status,
+                    ...(args.status === "held" ? { heldAt: new Date() } : {}),
+                })
+                .where(and(eq(agendas.companyId, args.companyId), eq(agendas.id, args.id)));
+            await touchAgenda(tx, args.companyId, args.id);
+        }
+        return (await read(tx, args.companyId, { id: args.id }))!;
+    });
+}
+export async function clearDecisionV1(args: {
+    companyId: bigint;
+    topicId: string;
+    commitmentId?: string | null;
+}) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const topic = await ownedTopic(tx, args.companyId, args.topicId);
+        if (args.commitmentId) {
+            const deleted = await tx
+                .delete(commitments)
+                .where(
+                    and(
+                        eq(commitments.companyId, args.companyId),
+                        eq(commitments.topicId, topic.id),
+                        eq(commitments.id, args.commitmentId)
+                    )
+                )
+                .returning();
+            if (!deleted.length)
+                throw new VantageError("That action is not linked here.", 404, "not_found");
+        }
+        if (topic.decision !== null || args.commitmentId) {
+            await tx
+                .update(topics)
+                .set({ decision: null, decidedAt: null })
+                .where(and(eq(topics.companyId, args.companyId), eq(topics.id, topic.id)));
+            await touchAgenda(tx, args.companyId, topic.agendaId, topic.id);
+        }
+        return (await read(tx, args.companyId, { id: topic.agendaId }))!.topics.find(
+            t => t.id === topic.id
+        )!;
+    });
+}
+export async function deleteTopicV1(args: { companyId: bigint; id: string }) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const topic = await ownedTopic(tx, args.companyId, args.id);
+        await tx
+            .delete(topics)
+            .where(and(eq(topics.companyId, args.companyId), eq(topics.id, args.id)));
+        const s = await state(tx, args.companyId, topic.agendaId);
+        delete s.data.topicVersions[args.id];
+        s.data.enhancements = s.data.enhancements.filter(e => e.topicId !== args.id);
+        await putState(tx, args.companyId, topic.agendaId, s.version + 1, s.data);
+    });
+}
+async function ownedCommitment(tx: Tx, companyId: bigint, id: string) {
+    const [row] = await tx
+        .select()
+        .from(commitments)
+        .where(and(eq(commitments.companyId, companyId), eq(commitments.id, id)));
+    if (!row) throw new VantageError("That action is not here.", 404, "not_found");
+    if (row.topicId) {
+        const topic = await ownedTopic(tx, companyId, row.topicId);
+        if (row.agendaId !== topic.agendaId)
+            throw new VantageError("Action links need review.", 409, "commitment_ambiguous");
+    }
+    if (row.agendaId) await ownedAgenda(tx, companyId, row.agendaId);
+    return row;
+}
+export async function createCommitmentV1(args: {
+    companyId: bigint;
+    userId: string;
+    input: CommitmentInput;
+}): Promise<CommitmentDto> {
+    validateAction(args.input);
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        let agendaId = args.input.agendaId ?? null;
+        let topicTitle: string | null = null;
+        if (args.input.topicId) {
+            const topic = await ownedTopic(tx, args.companyId, args.input.topicId);
+            if (agendaId && agendaId !== topic.agendaId) {
+                await ownedAgenda(tx, args.companyId, agendaId);
+                throw new VantageError("Topic and agenda do not match.", 400, "validation_error");
+            }
+            agendaId = topic.agendaId;
+            topicTitle = topic.title;
+            const existing = await tx
+                .select({ id: commitments.id })
+                .from(commitments)
+                .where(
+                    and(
+                        eq(commitments.companyId, args.companyId),
+                        eq(commitments.topicId, topic.id)
+                    )
+                );
+            if (existing.length)
+                throw new VantageError(
+                    "This topic already has a primary action.",
+                    409,
+                    existing.length > 1 ? "commitment_ambiguous" : "commitment_exists"
+                );
+        }
+        if (agendaId) await ownedAgenda(tx, args.companyId, agendaId);
+        const [row] = await tx
+            .insert(commitments)
+            .values({
+                id: randomUUID(),
+                companyId: args.companyId,
+                createdByUserId: args.userId,
+                agendaId,
+                topicId: args.input.topicId ?? null,
+                title: args.input.title.trim(),
+                owner: args.input.owner.trim(),
+                dueOn: args.input.dueOn,
+                test: orNull(args.input.test),
+                shared: false,
+            })
+            .returning();
+        if (agendaId)
+            await touchAgenda(tx, args.companyId, agendaId, args.input.topicId ?? undefined);
+        return toCommitmentDto(row!, topicTitle);
+    });
+}
+export async function updateCommitmentV1(args: {
+    companyId: bigint;
+    id: string;
+    patch: {
+        title?: string;
+        owner?: string;
+        dueOn?: string;
+        test?: string | null;
+        shared?: boolean;
+        status?: VantageCommitmentStatus;
+        outcome?: string | null;
+    };
+}): Promise<CommitmentDto> {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const row = await ownedCommitment(tx, args.companyId, args.id),
+            p = args.patch;
+        if (p.shared || (p.test !== undefined && !orNull(p.test)))
+            throw new VantageError(
+                "An action needs an acceptance test; sharing is disabled.",
+                400,
+                "validation_error"
+            );
+        const status = p.status ?? row.status,
+            outcome = p.outcome === undefined ? row.outcome : orNull(p.outcome);
+        if (status !== "open" && !outcome)
+            throw new VantageError(
+                "Record an outcome before resolving the action.",
+                400,
+                "validation_error"
+            );
+        if (!Object.keys(p).length) return toCommitmentDto(row, null);
+        const [updated] = await tx
+            .update(commitments)
+            .set({
+                ...p,
+                outcome,
+                ...(p.title !== undefined ? { title: p.title.trim() } : {}),
+                ...(p.owner !== undefined ? { owner: p.owner.trim() } : {}),
+                ...(p.test !== undefined ? { test: orNull(p.test) } : {}),
+                ...(p.status !== undefined
+                    ? {
+                          resolvedAt:
+                              status === "open"
+                                  ? null
+                                  : row.status === status
+                                    ? row.resolvedAt
+                                    : new Date(),
+                      }
+                    : {}),
+            })
+            .where(and(eq(commitments.companyId, args.companyId), eq(commitments.id, args.id)))
+            .returning();
+        if (row.agendaId)
+            await touchAgenda(tx, args.companyId, row.agendaId, row.topicId ?? undefined);
+        return toCommitmentDto(updated!, null);
+    });
+}
+export async function deleteCommitmentV1(args: { companyId: bigint; id: string }) {
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const row = await ownedCommitment(tx, args.companyId, args.id);
+        await tx
+            .delete(commitments)
+            .where(and(eq(commitments.companyId, args.companyId), eq(commitments.id, args.id)));
+        if (row.agendaId)
+            await touchAgenda(tx, args.companyId, row.agendaId, row.topicId ?? undefined);
+    });
+}
+export async function listCommitmentsV1(args: {
+    companyId: bigint;
+    status?: VantageCommitmentStatus[];
+    agendaId?: string;
+    sharedOnly?: boolean;
+}): Promise<CommitmentDto[]> {
+    const conditions = [eq(commitments.companyId, args.companyId)];
+    if (args.status?.length) conditions.push(inArray(commitments.status, args.status));
+    if (args.agendaId) conditions.push(eq(commitments.agendaId, args.agendaId));
+    if (args.sharedOnly) conditions.push(eq(commitments.shared, true));
+    const rows = await getDb()
+        .select({ row: commitments, title: topics.title })
+        .from(commitments)
+        .leftJoin(
+            topics,
+            and(eq(topics.id, commitments.topicId), eq(topics.companyId, args.companyId))
+        )
+        .where(and(...conditions))
+        .orderBy(asc(commitments.dueOn), desc(commitments.createdAt));
+    return rows.map(({ row, title }) => toCommitmentDto(row, title ?? null));
 }

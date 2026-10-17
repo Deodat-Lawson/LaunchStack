@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import {
     VANTAGE_EVIDENCE_KINDS,
     createEvidence,
-    isIsoDate,
+    validDate,
     listEvidence,
 } from "@launchstack/pipelines/vantage";
 
@@ -23,10 +23,12 @@ export async function GET(request: NextRequest) {
                 ? (kindParam as (typeof VANTAGE_EVIDENCE_KINDS)[number])
                 : undefined;
         const since = q.get("since");
+        if (since && !validDate(since))
+            return error("Use a real YYYY-MM-DD date.", 400, { code: "validation_error" });
         const items = await listEvidence({
             companyId: auth.ctx.companyId,
             kind,
-            since: since && isIsoDate(since) ? since : undefined,
+            since: since ?? undefined,
         });
         return json({ evidence: items });
     } catch (err) {

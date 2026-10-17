@@ -3,7 +3,7 @@
 // DELETE /api/vantage/agendas/:id
 import type { NextRequest } from "next/server";
 
-import { deleteAgenda, getAgendaV1, updateAgendaStatus } from "@launchstack/pipelines/vantage";
+import { deleteAgenda, getAgendaV1, setAgendaStatusV1 } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { AgendaStatusSchema } from "../../_schemas";
@@ -30,7 +30,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const parsed = AgendaStatusSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
-        const agenda = await updateAgendaStatus({
+        const agenda = await setAgendaStatusV1({
             companyId: auth.ctx.companyId,
             id,
             status: parsed.data.status,

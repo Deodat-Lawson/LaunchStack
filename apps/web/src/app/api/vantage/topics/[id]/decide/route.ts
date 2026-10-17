@@ -4,7 +4,7 @@
 //        one-click commit: the topic is undecided again, that commitment gone.
 import type { NextRequest } from "next/server";
 
-import { decideV1, undoDecision } from "@launchstack/pipelines/vantage";
+import { decideV1, clearDecisionV1 } from "@launchstack/pipelines/vantage";
 
 import {
     error,
@@ -49,7 +49,7 @@ export async function DELETE(request: NextRequest, { params }: Params) {
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
-        const topic = await undoDecision({
+        const topic = await clearDecisionV1({
             companyId: auth.ctx.companyId,
             topicId: id,
             commitmentId: request.nextUrl.searchParams.get("commitment"),

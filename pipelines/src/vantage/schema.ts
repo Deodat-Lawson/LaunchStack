@@ -296,6 +296,9 @@ export const vantageCommitments = pgTable(
             table.dueOn
         ),
         index("vantage_commitments_agenda_idx").on(table.agendaId),
+        uniqueIndex("vantage_commitments_primary_topic_unique")
+            .on(table.companyId, table.topicId)
+            .where(sql`${table.topicId} IS NOT NULL`),
     ]
 );
 

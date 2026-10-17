@@ -1,5 +1,5 @@
 // GET  /api/vantage/agendas?week=YYYY-MM-DD — that week's agenda (null when none), plus the list
-// POST /api/vantage/agendas — prepare: { weekStart? } → draft for that week (default by the Thursday rule)
+// POST /api/vantage/agendas — prepare: { weekStart?, generationMode? } using the Contract v1 reporting period
 import type { NextRequest } from "next/server";
 
 import {

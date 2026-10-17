@@ -2,7 +2,7 @@
 // DELETE /api/vantage/commitments/:id
 import type { NextRequest } from "next/server";
 
-import { deleteCommitment, updateCommitment } from "@launchstack/pipelines/vantage";
+import { deleteCommitmentV1, updateCommitmentV1 } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { CommitmentPatchSchema } from "../../_schemas";
@@ -16,7 +16,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const parsed = CommitmentPatchSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
-        const commitment = await updateCommitment({
+        const commitment = await updateCommitmentV1({
             companyId: auth.ctx.companyId,
             id,
             patch: parsed.data,
@@ -32,7 +32,7 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
-        await deleteCommitment({ companyId: auth.ctx.companyId, id });
+        await deleteCommitmentV1({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
         return handleVantageError("DELETE commitment", err);

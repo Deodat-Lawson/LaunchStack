@@ -16,6 +16,7 @@ import { VANTAGE_SHARING_DISABLED } from "~/server/vantage/access";
 export const isoDate = z.string().refine(validDate, "must be a real date (YYYY-MM-DD)");
 
 const optionalText = (max: number) => z.string().trim().max(max).optional().nullable();
+const actionTest = z.string().trim().min(1, "describe how to verify the action").max(1000);
 const privateOnly = z
     .boolean()
     .refine(shared => !shared, VANTAGE_SHARING_DISABLED)
@@ -109,7 +110,7 @@ export const DecisionSchema = z.object({
             title: z.string().trim().min(1, "name the action").max(300),
             owner: z.string().trim().min(1, "name an owner").max(200),
             dueOn: isoDate,
-            test: optionalText(1000),
+            test: actionTest,
             shared: privateOnly,
         })
         .nullable(),
@@ -119,7 +120,7 @@ export const CommitmentSchema = z.object({
     title: z.string().trim().min(1, "name the action").max(300),
     owner: z.string().trim().min(1, "name an owner").max(200),
     dueOn: isoDate,
-    test: optionalText(1000),
+    test: actionTest,
     shared: privateOnly,
     agendaId: z.string().optional().nullable(),
     topicId: z.string().optional().nullable(),

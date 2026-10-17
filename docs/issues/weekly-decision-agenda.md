@@ -4,12 +4,12 @@
 approval, 2026-10-16. A/B acknowledgement is not invented; implementation and
 milestone acceptance are separate. No teammate messages or remote issues were sent.
 
-| Owner | Work                                                                            | Input / output                                                                   | State                                                           |
-| ----- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| TL    | Test data access, authorization/API, storage, versions and submission integrity | Authenticated request -> GenerationInput; GenerationResult -> saved API response | Code present; focused checks passed; real DB validation pending |
-| B     | Evidence packing/signals, model generation, fallback and AI harness             | Frozen GenerationInput -> GenerationResult                                       | Left for B; adapter uninstalled                                 |
-| A     | Generate/progress/result/source/edit workflow and enhancement review            | API examples -> UI; user decisions -> stable-key requests                        | Left for A; browser acceptance pending                          |
-| TL    | Integration review and acceptance                                               | Model, DB/API and browser evidence -> pass/return decision                       | Pending                                                         |
+| Owner | Work                                                                            | Input / output                                                                   | State                                                                                       |
+| ----- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| TL    | Test data access, authorization/API, storage, versions and submission integrity | Authenticated request -> GenerationInput; GenerationResult -> saved API response | Isolated DB checks passed; TL-only publication authorized; live login/model/browser pending |
+| B     | Evidence packing/signals, model generation, fallback and AI harness             | Frozen GenerationInput -> GenerationResult                                       | Left for B; adapter uninstalled                                                             |
+| A     | Generate/progress/result/source/edit workflow and enhancement review            | API examples -> UI; user decisions -> stable-key requests                        | Left for A; browser acceptance pending                                                      |
+| TL    | Integration review and acceptance                                               | Model, DB/API and browser evidence -> pass/return decision                       | Pending                                                                                     |
 
 ## Starting independently
 

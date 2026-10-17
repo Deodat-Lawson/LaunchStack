@@ -42,7 +42,7 @@ jest.mock("@launchstack/pipelines/vantage", () => ({
     VANTAGE_VISIBILITIES: ["private", "shared"],
     VANTAGE_COMMITMENT_STATUSES: ["open", "done", "missed", "dropped"],
     isIsoDate: (value: unknown) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value),
-    undoDecision: (...args: unknown[]) => mockUndoDecision(...args),
+    clearDecisionV1: (...args: unknown[]) => mockUndoDecision(...args),
     recordDecision: (...args: unknown[]) => mockRecordDecision(...args),
 }));
 

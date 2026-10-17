@@ -1,8 +1,9 @@
 # Weekly Decision Agenda — integration brief
 
 Status, 2026-10-16: [Contract v1](weekly-decision-agenda-contract-v1.md) is frozen
-by TL approval. TL backend code is present; real database and integrated
-acceptance are pending. A owns frontend; B owns AI generation/fallback/harness.
+by TL approval. TL backend has passed isolated real-database verification;
+live login/model/browser integration remains pending. A owns frontend;
+B owns AI generation/fallback/harness. See the acceptance record for boundaries.
 
 ## Flow and ownership
 
@@ -40,8 +41,9 @@ Use a dedicated database, not production configuration. A read-only real-documen
 adapter is later work; this milestone does not collect real documents.
 
 A new forward product migration adds metadata and primary-action uniqueness.
-It has not been applied. Existing duplicate topic links must be reviewed before
-migration; no automatic deletion/repair is performed. Old migrations are preserved.
+It was applied and checked in a new disposable PostgreSQL database. Existing
+duplicate topic links must still be reviewed before applying it to any other
+target; no automatic deletion/repair is performed. Old migrations are preserved.
 The initial pilot uses short write serialization in the isolated DB; production
 throughput and rollout remain outside this acceptance.
 

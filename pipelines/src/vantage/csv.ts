@@ -9,7 +9,7 @@
  * not lose thirty rows to one typo.
  */
 
-import { isIsoDate } from "./week";
+import { validDate } from "./period-v1";
 
 export interface CsvMetricRow {
     line: number;
@@ -171,10 +171,10 @@ export function parseMetricCsv(text: string): CsvParseResult {
         }
         const periodStart = (record.periodStart ?? record.period ?? "").trim();
         const periodEnd = (record.periodEnd ?? record.period ?? "").trim();
-        if (!isIsoDate(periodStart) || !isIsoDate(periodEnd)) {
+        if (!validDate(periodStart) || !validDate(periodEnd)) {
             problems.push({
                 line,
-                message: `Period must be YYYY-MM-DD (got "${periodStart || "?"}" to "${periodEnd || "?"}").`,
+                message: `Period must be a real YYYY-MM-DD date (got "${periodStart || "?"}" to "${periodEnd || "?"}").`,
             });
             continue;
         }

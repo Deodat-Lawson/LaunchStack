@@ -9,7 +9,7 @@ import { VantageError } from "@launchstack/pipelines/vantage";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
-import { error, handleRouteError, json } from "~/server/distribution/http";
+import { error, json } from "~/server/distribution/http";
 import { canUseVantage, VANTAGE_FOUNDER_ONLY } from "~/server/vantage/access";
 
 export { error, json };
@@ -43,16 +43,22 @@ export async function vantageContext(): Promise<
 
 export function handleVantageError(scope: string, err: unknown): NextResponse {
     if (err instanceof VantageError) return error(err.message, err.status, { code: err.code });
-    return handleRouteError(`vantage ${scope}`, err);
+    // Database/provider errors can contain SQL parameters or source bodies.
+    // Keep those objects out of logs and return a stable public message.
+    console.error(`[vantage] ${scope} failed unexpectedly.`);
+    return error("Internal server error", 500);
 }
 
 export async function readBody(request: Request): Promise<Record<string, unknown>> {
+    let parsed: unknown;
     try {
-        const parsed: unknown = await request.json();
-        return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {};
+        parsed = await request.json();
     } catch {
-        return {};
+        throw new VantageError("Provide a valid JSON object.", 400, "validation_error");
     }
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+        throw new VantageError("Provide a valid JSON object.", 400, "validation_error");
+    return parsed as Record<string, unknown>;
 }
 
 /** A Zod failure as one sentence the form can show next to the control. */

@@ -197,12 +197,11 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
         return forbidden();
     }
 
-    const status: MembershipStatus = isMembershipStatus(membership.status)
-        ? membership.status
-        : "active";
-    if (status !== "active") {
+    // Unknown persisted values must not grant an active workspace context.
+    if (!isMembershipStatus(membership.status) || membership.status !== "active") {
         return forbidden();
     }
+    const status: MembershipStatus = membership.status;
 
     let permissions: ReadonlySet<Permission>;
     try {

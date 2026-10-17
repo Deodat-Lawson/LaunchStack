@@ -766,6 +766,23 @@ function EndpointEditor({
             initial && initial.provider === next ? initial.baseUrl : getModelProvider(next).baseUrl
         );
         setKeyless(next === "custom" && initial?.provider === "custom" && !initial.hasKey);
+        // "Follows a JSON schema" is a property of the provider's API as much
+        // as the model's: back on the saved provider it shows what was saved,
+        // on any other it starts from that provider's default again.
+        const savedChoices = draftsFrom(initial?.models ?? null);
+        const backToSaved = initial?.provider === next;
+        setDrafts(current => {
+            const reset = { ...current };
+            for (const route of Object.keys(current) as RouteId[]) {
+                reset[route] = {
+                    ...current[route],
+                    structuredOutput: backToSaved
+                        ? savedChoices[route].structuredOutput
+                        : undefined,
+                };
+            }
+            return reset;
+        });
         setSuggestions([]);
         setListing({ status: "idle" });
         test.reset();

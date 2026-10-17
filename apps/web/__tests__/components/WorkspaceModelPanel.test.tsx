@@ -216,6 +216,34 @@ describe("Settings › Models › Your own model", () => {
         expect(screen.getByLabelText("API key")).toHaveAttribute("type", "password");
     });
 
+    it("starts 'Follows a JSON schema' from the new provider's default when the provider changes", async () => {
+        stored = {
+            ...CONNECTED,
+            models: {
+                default: { id: "main-1", vision: false, reasoning: false, structuredOutput: true },
+            },
+        };
+        const user = userEvent.setup();
+        renderSection();
+
+        await user.click(await screen.findByRole("button", { name: "Edit" }));
+        const schemaBox = () =>
+            within(screen.getByRole("group", { name: /Main model/ })).getByRole("checkbox", {
+                name: /Follows a JSON schema/,
+            });
+        expect(schemaBox()).toBeChecked();
+
+        // Anthropic's compatible API ignores response_format.
+        await user.click(screen.getByRole("combobox", { name: "Provider" }));
+        await user.click(await screen.findByRole("option", { name: "Anthropic (Claude)" }));
+        expect(schemaBox()).not.toBeChecked();
+
+        // Back on the saved provider, the saved choice returns.
+        await user.click(screen.getByRole("combobox", { name: "Provider" }));
+        await user.click(await screen.findByRole("option", { name: "OpenAI" }));
+        expect(schemaBox()).toBeChecked();
+    });
+
     it("keeps the saved key by leaving apiKey out when the key is blank and the address unchanged", async () => {
         stored = CONNECTED;
         const user = userEvent.setup();

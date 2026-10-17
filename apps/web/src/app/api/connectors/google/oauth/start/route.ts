@@ -36,6 +36,7 @@ import {
     getOAuthRedirectUrl,
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
+import { publicOrigin } from "~/server/public-origin";
 
 function redirectToConsent(
     request: Request,
@@ -44,7 +45,7 @@ function redirectToConsent(
     const nonce = randomUUID();
     const url = buildAuthorizationUrl({
         clientId: getGoogleOAuthApp().clientId,
-        redirectUri: getOAuthRedirectUrl(new URL(request.url).origin),
+        redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         scopes: input.scopes,
         state: `${input.statePrefix}${nonce}`,
     });

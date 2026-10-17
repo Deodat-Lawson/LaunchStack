@@ -28,6 +28,7 @@ import { discoverLinkedInChannels } from "~/server/brand/channels";
 import { upsertConnection } from "~/server/services/connectors/connection-store";
 import { oauthNonceCookieName, verifyState } from "~/server/services/connectors/oauth-state";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { publicOrigin } from "~/server/public-origin";
 
 export const runtime = "nodejs";
 
@@ -44,7 +45,7 @@ function backToDocuments(
     provider: OAuthProvider | null,
     result: string
 ): NextResponse {
-    const url = new URL("/employer/documents", new URL(request.url).origin);
+    const url = new URL("/employer/documents", publicOrigin(request));
     if (provider === "linkedin") {
         url.searchParams.set("feature", "growth");
         // A code, never text: a crafted link cannot put words in the app's mouth.
@@ -107,7 +108,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         return backToDocuments(request, provider, "error");
     }
 
-    const config = getConnectorConfig(provider, new URL(request.url).origin);
+    const config = getConnectorConfig(provider, publicOrigin(request));
     if (!config) return backToDocuments(request, provider, "error");
 
     try {

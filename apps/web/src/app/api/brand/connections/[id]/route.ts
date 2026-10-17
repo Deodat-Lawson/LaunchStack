@@ -9,6 +9,7 @@ import type { NextRequest } from "next/server";
 import { BRAND_CONNECTION_PROVIDERS } from "~/server/brand/accounts";
 import { getConnectorConfig, PROVIDER_MODULES } from "~/server/services/connectors/config";
 import { deleteConnection, getConnectionById } from "~/server/services/connectors/connection-store";
+import { publicOrigin } from "~/server/public-origin";
 
 import { brandManageContext, error, handleBrandError, json } from "../../_http";
 
@@ -33,7 +34,7 @@ export async function DELETE(
         const tokens = await deleteConnection(id);
         let revoked = false;
         if (connection.provider === "linkedin") {
-            const config = getConnectorConfig("linkedin", new URL(request.url).origin);
+            const config = getConnectorConfig("linkedin", publicOrigin(request));
             const token = tokens?.accessToken ?? tokens?.refreshToken;
             if (config && token) {
                 try {

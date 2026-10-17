@@ -272,7 +272,9 @@ const serverSchema = z.object({
     // Publicly-reachable origin of this Next.js app. Required when the
     // document-converter is configured and documents live behind relative
     // /api/files URLs — the converter needs an absolute URL to fetch them
-    // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
+    // (and this origin must be in its ALLOWED_FETCH_ORIGINS). Connector OAuth
+    // redirect URIs use it too; links people receive go through
+    // server/public-origin.ts, which prefers BETTER_AUTH_URL.
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
     // without a session. Required alongside OCR_WORKER_URL when documents

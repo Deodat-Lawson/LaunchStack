@@ -19,6 +19,7 @@ const choiceSchema = z
         id: z.string().trim().min(1).max(200),
         vision: z.boolean(),
         reasoning: z.boolean(),
+        structuredOutput: z.boolean().optional(),
     })
     .strict();
 

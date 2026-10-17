@@ -28,6 +28,13 @@ export interface ModelProviderOption {
     keyUrl?: string;
     /** Whether a key is expected. A self-hosted server often takes none. */
     keyRequired: boolean;
+    /**
+     * What "Follows a JSON schema" starts as for a model on this provider. Only
+     * a starting point the admin sees and can change: OpenAI's and Google's
+     * APIs enforce `response_format: json_schema`, and OpenRouter forwards it;
+     * Anthropic's compatible API ignores it, and an unknown server may too.
+     */
+    structuredOutputByDefault: boolean;
     /** One line under the picker. */
     note?: string;
 }
@@ -39,6 +46,7 @@ export const MODEL_PROVIDERS: readonly ModelProviderOption[] = [
         baseUrl: "https://api.openai.com/v1",
         keyUrl: "https://platform.openai.com/api-keys",
         keyRequired: true,
+        structuredOutputByDefault: true,
     },
     {
         id: "anthropic",
@@ -46,6 +54,7 @@ export const MODEL_PROVIDERS: readonly ModelProviderOption[] = [
         baseUrl: "https://api.anthropic.com/v1",
         keyUrl: "https://platform.claude.com/settings/keys",
         keyRequired: true,
+        structuredOutputByDefault: false,
         note: "Uses Anthropic's OpenAI-compatible API. A Claude Pro or Max plan can't be used here; it needs an API key.",
     },
     {
@@ -54,6 +63,7 @@ export const MODEL_PROVIDERS: readonly ModelProviderOption[] = [
         baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
         keyUrl: "https://aistudio.google.com/apikey",
         keyRequired: true,
+        structuredOutputByDefault: true,
     },
     {
         id: "openrouter",
@@ -61,6 +71,7 @@ export const MODEL_PROVIDERS: readonly ModelProviderOption[] = [
         baseUrl: "https://openrouter.ai/api/v1",
         keyUrl: "https://openrouter.ai/keys",
         keyRequired: true,
+        structuredOutputByDefault: true,
         note: "One account, hundreds of models, billed to your OpenRouter credits.",
     },
     {
@@ -68,6 +79,7 @@ export const MODEL_PROVIDERS: readonly ModelProviderOption[] = [
         label: "Other OpenAI-compatible",
         baseUrl: "",
         keyRequired: false,
+        structuredOutputByDefault: false,
         note: "Any server that speaks the OpenAI chat-completions protocol, including one you host.",
     },
 ];

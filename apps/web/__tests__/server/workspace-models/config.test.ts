@@ -28,6 +28,11 @@ describe("workspace model configuration", () => {
             },
         });
         expect(behaviorForChoice(main).input).toEqual(["text"]);
+        // Structured output by prompting unless the admin says otherwise.
+        expect(behaviorForChoice(main).nativeStructuredOutput).toEqual([]);
+        expect(
+            behaviorForChoice({ ...main, structuredOutput: true }).nativeStructuredOutput
+        ).toEqual(["json-schema"]);
         expect(behaviorForChoice(main).reasoning).toEqual({ mode: "none" });
     });
 

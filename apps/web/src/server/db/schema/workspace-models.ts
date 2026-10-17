@@ -32,10 +32,15 @@ export type WorkspaceModelConnection = (typeof WORKSPACE_MODEL_CONNECTIONS)[numb
 export interface WorkspaceModelChoice {
     /** The id the endpoint serves, exactly as the provider spells it. */
     id: string;
-    /** Takes image input. Ignored when the id matches a verified preset. */
+    /** Takes image input. */
     vision: boolean;
-    /** Reasons on its own. Ignored when the id matches a verified preset. */
+    /** Reasons on its own. */
     reasoning: boolean;
+    /**
+     * Honours `response_format: json_schema`. When false (or unset, for rows
+     * saved before this existed) structured calls go by JSON prompting.
+     */
+    structuredOutput?: boolean;
 }
 
 /** Which model does which kind of work. Unset routes use `default`. */

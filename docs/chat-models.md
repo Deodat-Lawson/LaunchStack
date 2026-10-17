@@ -85,9 +85,13 @@ How it works:
 Rules it keeps:
 
 - **Behavior is declared, not inferred.** The admin says whether each model
-  reads images and whether it reasons. Nothing else is assumed: no
-  `temperature`, no output-token cap, and structured output by prompting.
-  These are the fields some compatible servers reject.
+  reads images, whether it reasons, and whether it follows a JSON schema
+  (`response_format: json_schema`). That last one starts ticked for OpenAI,
+  Gemini and OpenRouter and unticked for Anthropic and "Other". Nothing else is
+  assumed: no `temperature` and no output-token cap, because some compatible
+  servers reject them. A model that doesn't follow a schema gets its structured
+  calls by JSON prompting. If a server refuses the schema or silently ignores
+  it, the call falls back to prompting rather than failing.
 - **Fails closed.** If the workspace's endpoint can't be used (an unreadable
   key, a refused address, a provider error), the request fails with a message
   pointing at Settings. It never falls back to the server default.

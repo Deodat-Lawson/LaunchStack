@@ -309,6 +309,21 @@ describe("invokeStructuredWithUsage in json-schema mode", () => {
         warn.mockRestore();
     });
 
+    it("falls back to the prompt path when the endpoint ignores the schema", async () => {
+        // Some compatible servers accept `response_format` and drop it: the
+        // answer comes back unstructured, so there is nothing parsed.
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const { resolved, seen } = fakeResolved(null, {
+            text: '{"title":"t","priorities":[]}',
+        });
+
+        const { result } = await invokeStructuredWithUsage(resolved, schema, [], { name: "plan" });
+
+        expect(result).toEqual({ title: "t", priorities: [] });
+        expect(seen.plainCalls).toBe(1);
+        warn.mockRestore();
+    });
+
     it("retries without size bounds when the endpoint refuses the schema", async () => {
         // Gemini accepts the founder weekly review's schema once maxItems is gone.
         const refused = Object.assign(new Error("400 status code (no body)"), { status: 400 });

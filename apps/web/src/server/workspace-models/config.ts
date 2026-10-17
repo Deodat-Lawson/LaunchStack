@@ -14,8 +14,8 @@
  *   values the app sends),
  * - no output-token cap (OpenAI's reasoning models reject `max_tokens`, and a
  *   cap that counts reasoning tokens can leave an answer empty),
- * - structured output by prompting rather than a `response_format` the server
- *   may ignore.
+ * - structured output by JSON prompting, unless the admin says the model
+ *   follows a JSON schema (`response_format: json_schema`).
  */
 
 import {
@@ -46,7 +46,12 @@ export function behaviorForChoice(choice: WorkspaceModelChoice) {
     return {
         input: choice.vision ? (["text", "image"] as const) : (["text"] as const),
         reasoning: choice.reasoning ? { mode: "always" as const } : { mode: "none" as const },
-        nativeStructuredOutput: [] as const,
+        // Declared by the admin. The json-schema path already falls back to
+        // JSON prompting when an endpoint refuses the schema (400) or ignores
+        // it (no parsed value), so an over-claim costs a retry, not a failure.
+        nativeStructuredOutput: choice.structuredOutput
+            ? (["json-schema"] as "json-schema"[])
+            : ([] as "json-schema"[]),
         parameters: {
             temperature: "unsupported" as const,
             systemMessages: "supported" as const,

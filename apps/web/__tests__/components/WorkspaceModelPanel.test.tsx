@@ -237,7 +237,10 @@ describe("Settings › Models › Your own model", () => {
         expect(puts[0]).toEqual({
             provider: "openai",
             baseUrl: "https://api.openai.com/v1",
-            models: { default: { id: "main-2", vision: false, reasoning: false } },
+            // OpenAI enforces json_schema, so that box starts ticked.
+            models: {
+                default: { id: "main-2", vision: false, reasoning: false, structuredOutput: true },
+            },
         });
         expect(puts[0]).not.toHaveProperty("apiKey");
 
@@ -282,8 +285,26 @@ describe("Settings › Models › Your own model", () => {
         await pressPrimary();
 
         expect(puts[0]?.models).toEqual({
-            default: { id: "main-1", vision: false, reasoning: false },
-            reasoning: { id: "thinker-1", vision: false, reasoning: true },
+            default: { id: "main-1", vision: false, reasoning: false, structuredOutput: true },
+            reasoning: { id: "thinker-1", vision: false, reasoning: true, structuredOutput: true },
+        });
+    });
+
+    it("lets the admin say a model doesn't follow a JSON schema", async () => {
+        stored = CONNECTED;
+        const user = userEvent.setup();
+        renderSection();
+
+        await user.click(await screen.findByRole("button", { name: "Edit" }));
+        const main = screen.getByRole("group", { name: /Main model/ });
+        const box = within(main).getByRole("checkbox", { name: /Follows a JSON schema/ });
+        expect(box).toBeChecked();
+        await user.click(box);
+        await waitFor(() => expect(actions?.disabled).toBe(false));
+        await pressPrimary();
+
+        expect(puts[0]?.models).toEqual({
+            default: { id: "main-1", vision: false, reasoning: false, structuredOutput: false },
         });
     });
 

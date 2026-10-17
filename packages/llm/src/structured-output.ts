@@ -361,6 +361,18 @@ function statusOf(error: unknown): number | undefined {
 
 const refusedSchemas = new Set<string>();
 
+const warnedIgnoredStructure = new Set<string>();
+
+function warnStructureIgnoredOnce(modelId: string, name: string): void {
+    const key = `${modelId}:${name}`;
+    if (warnedIgnoredStructure.has(key)) return;
+    warnedIgnoredStructure.add(key);
+    console.warn(
+        `[structured-output] ${modelId} answered "${name}" without the requested structure; ` +
+            "using the prompt-based JSON path for it."
+    );
+}
+
 function warnSchemaRefusedOnce(modelId: string, name: string): void {
     const key = `${modelId}:${name}`;
     if (refusedSchemas.has(key)) return;
@@ -469,13 +481,13 @@ export async function invokeStructuredWithUsage<T>(
     }
     const usage = normalizeTokenUsage(response.raw);
     if (response.parsed === undefined || response.parsed === null) {
-        const detail =
-            response.raw === undefined
-                ? "no raw response"
-                : normalizeModelContent(
-                      (response.raw as { content?: unknown }).content ?? ""
-                  ).slice(0, 300);
-        throw new StructuredOutputError(resolved.modelId, `no parsed value (raw: ${detail})`);
+        // The endpoint accepted the request but answered without the structure
+        // it was asked for: some compatible servers silently ignore
+        // `response_format`. The model never saw the schema then, so ask again
+        // the way models without native support are asked.
+        warnStructureIgnoredOnce(resolved.modelId, options.name);
+        const fallback = await invokeJsonFallback(resolved, schema, messages, options);
+        return { ...fallback, usage: addTokenUsage(usage, fallback.usage) };
     }
     return {
         result:

@@ -57,6 +57,7 @@ export interface WorkspaceModelChoice {
     id: string;
     vision: boolean;
     reasoning: boolean;
+    structuredOutput?: boolean;
 }
 
 export interface WorkspaceModelSelection {
@@ -413,7 +414,11 @@ function inheritsMain(route: RouteId, main: WorkspaceModelChoice | undefined): b
 }
 
 function capabilities(choice: WorkspaceModelChoice): string {
-    const said = [choice.vision && "reads images", choice.reasoning && "reasons"].filter(Boolean);
+    const said = [
+        choice.vision && "reads images",
+        choice.reasoning && "reasons",
+        choice.structuredOutput && "JSON schema",
+    ].filter(Boolean);
     return said.length ? ` · ${said.join(", ")}` : "";
 }
 
@@ -541,6 +546,8 @@ interface ChoiceDraft {
     id: string;
     vision: boolean;
     reasoning: boolean;
+    /** Unset until the admin touches it: the provider's default stands. */
+    structuredOutput?: boolean;
 }
 
 type Drafts = Record<RouteId, ChoiceDraft>;
@@ -558,11 +565,13 @@ function draftsFrom(selection: WorkspaceModelSelection | null): Drafts {
     };
 }
 
-function selectionFrom(drafts: Drafts): WorkspaceModelSelection | null {
+function selectionFrom(drafts: Drafts, provider: ModelProviderId): WorkspaceModelSelection | null {
+    const structuredByDefault = getModelProvider(provider).structuredOutputByDefault;
     const pick = (draft: ChoiceDraft): WorkspaceModelChoice => ({
         id: draft.id.trim(),
         vision: draft.vision,
         reasoning: draft.reasoning,
+        structuredOutput: draft.structuredOutput ?? structuredByDefault,
     });
     if (!drafts.default.id.trim()) return null;
     const selection: WorkspaceModelSelection = { default: pick(drafts.default) };
@@ -659,7 +668,7 @@ function EndpointEditor({
         return body;
     }, [provider, trimmedUrl, key.value]);
 
-    const selection = selectionFrom(drafts);
+    const selection = selectionFrom(drafts, provider);
     const problems = Object.fromEntries(
         ROUTES.map(route => [route.id, routeProblem(route.id, drafts[route.id])])
     ) as Record<RouteId, string | null>;
@@ -699,7 +708,7 @@ function EndpointEditor({
     }, [focusModels, loadModels]);
 
     const save = useCallback(async () => {
-        const chosen = selectionFrom(drafts);
+        const chosen = selectionFrom(drafts, provider);
         if (!valid || !chosen) return;
         setSaving(true);
         setSaveError(null);
@@ -718,7 +727,7 @@ function EndpointEditor({
         } finally {
             setSaving(false);
         }
-    }, [valid, drafts, connection, onSaved]);
+    }, [valid, drafts, provider, connection, onSaved]);
 
     usePublishedActions(
         registerActions,
@@ -926,6 +935,7 @@ function EndpointEditor({
 
                 <RouteFields
                     route={ROUTES[0]!}
+                    structuredByDefault={preset.structuredOutputByDefault}
                     draft={drafts.default}
                     problem={problems.default}
                     listId={listId}
@@ -951,6 +961,7 @@ function EndpointEditor({
                             <RouteFields
                                 key={route.id}
                                 route={route}
+                                structuredByDefault={preset.structuredOutputByDefault}
                                 draft={drafts[route.id]}
                                 problem={problems[route.id]}
                                 listId={listId}
@@ -996,6 +1007,7 @@ function EndpointEditor({
 
 function RouteFields({
     route,
+    structuredByDefault,
     draft,
     problem,
     listId,
@@ -1003,6 +1015,8 @@ function RouteFields({
     onChange,
 }: {
     route: (typeof ROUTES)[number];
+    /** What the checkbox shows until the admin sets it. */
+    structuredByDefault: boolean;
     draft: ChoiceDraft;
     problem: string | null;
     listId: string;
@@ -1071,6 +1085,30 @@ function RouteFields({
                         Reasons step by step (reasoning model)
                     </Label>
                 </div>
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id={`${id}-structured`}
+                        checked={draft.structuredOutput ?? structuredByDefault}
+                        onCheckedChange={checked =>
+                            onChange({ structuredOutput: checked === true })
+                        }
+                        aria-describedby={`${id}-structured-hint`}
+                    />
+                    <Label
+                        htmlFor={`${id}-structured`}
+                        className="text-ink-2 text-[13px] font-normal"
+                    >
+                        Follows a JSON schema
+                    </Label>
+                </div>
+            </div>
+            <div
+                id={`${id}-structured-hint`}
+                className="text-ink-3 mt-1 text-[11px] leading-normal"
+            >
+                Structured output (response_format: json_schema). On for most OpenAI, Gemini and
+                OpenRouter models; off for Claude through Anthropic&rsquo;s compatible API. When
+                it&rsquo;s off, LaunchStack asks for JSON in the prompt instead.
             </div>
         </div>
     );

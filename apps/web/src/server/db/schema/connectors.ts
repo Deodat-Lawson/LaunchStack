@@ -231,8 +231,9 @@ export const googleDriveSyncState = pgTable("google_drive_sync_state", {
 });
 
 /**
- * What the admin selected in the Google Picker; under the drive.file scope
- * these are the entire universe the knowledge sync can see.
+ * What an admin picked in the Google Picker or pasted as a link. Under the
+ * drive.file scope these are the entire universe the knowledge sync can see;
+ * with drive.readonly a picked folder brings everything inside it.
  */
 export const googleDrivePickedItem = pgTable(
     "google_drive_picked_item",
@@ -250,6 +251,13 @@ export const googleDrivePickedItem = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        /**
+         * For a picked folder: the LaunchStack folder (category id) it was
+         * rebuilt as on its first sync. An id, not a path, so a rename or
+         * move in LaunchStack is followed. Null for picked files. No FK: the
+         * category table belongs to the engine schema.
+         */
+        folderCategoryId: bigint("folder_category_id", { mode: "number" }),
     },
     table => ({
         connectionFileUnique: uniqueIndex("gdrive_picked_conn_file_idx").on(

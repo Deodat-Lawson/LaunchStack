@@ -403,6 +403,15 @@ const serverSchema = z.object({
     // scope the consent screen must carry (and Google must verify unless the
     // app is Internal), so it stays dark until the operator flips this on.
     GMAIL_CONNECTOR_ENABLED: optionalString(),
+    // Google Drive folder import. drive.file (the default) only reaches files
+    // picked one by one, so a picked folder arrives empty; this flag adds
+    // drive.readonly, a restricted scope the consent screen must carry (and
+    // Google must verify unless the app is Internal), so it ships off.
+    GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: optionalString(),
+    // Development only: answer for Google (OAuth, Drive, Picker) from the
+    // stand-in `next dev` serves under /dev/stand-ins/google. Ignored when
+    // the /dev routes are off.
+    GOOGLE_STAND_IN_URL: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -617,6 +626,8 @@ function parseServerEnv() {
         GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
         GOOGLE_DOCS_SETTLE_MINUTES: process.env.GOOGLE_DOCS_SETTLE_MINUTES,
         GMAIL_CONNECTOR_ENABLED: process.env.GMAIL_CONNECTOR_ENABLED,
+        GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: process.env.GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED,
+        GOOGLE_STAND_IN_URL: process.env.GOOGLE_STAND_IN_URL,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,

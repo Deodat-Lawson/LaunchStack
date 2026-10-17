@@ -6,8 +6,9 @@
  * OAuth client — a half-configured deployment reads as "off", never as a
  * runtime error in the middle of a link.
  */
-import type { GoogleOAuthApp } from "@launchstack/google-drive";
+import { configureGoogleEndpoints, type GoogleOAuthApp } from "@launchstack/google-drive";
 
+import { devRoutesEnabled } from "~/app/dev/enabled";
 import { env } from "~/env";
 
 export const GOOGLE_DRIVE_PROVIDER = "google-drive";
@@ -15,15 +16,86 @@ export const GOOGLE_DRIVE_PROVIDER = "google-drive";
 /** CSRF nonce cookie for the Google OAuth round trip (set by /oauth/start). */
 export const GOOGLE_OAUTH_STATE_COOKIE = "gdrive_oauth_state";
 
+/** Files this app created or the user picked for it — nothing else. */
+export const DRIVE_FILE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+
 /**
- * drive.file only: the app can touch files it created, nothing else in the
- * user's Drive. openid+email identify which Google account holds the files.
+ * Read (never write) everything the account can see. The only way to import
+ * a folder: under drive.file, picking a folder grants the folder itself and
+ * none of what is inside it, so its listing comes back empty.
  */
-export const GOOGLE_DRIVE_SCOPES = [
-    "https://www.googleapis.com/auth/drive.file",
-    "openid",
-    "email",
-];
+export const DRIVE_READONLY_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
+
+/** Any of these lets a sync list a folder's contents. */
+const FOLDER_READING_SCOPES = [DRIVE_READONLY_SCOPE, "https://www.googleapis.com/auth/drive"];
+
+/**
+ * drive.readonly is a Google *restricted* scope: the consent screen must list
+ * it and, unless the app is Internal to one Google Workspace, Google must
+ * verify the app before anyone outside its test users can grant it. The flag
+ * is the operator saying that is done; off, a folder can't be imported.
+ */
+export function isDriveFolderAccessEnabled(): boolean {
+    const raw = env.server.GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED;
+    return raw === "true" || raw === "1";
+}
+
+/**
+ * drive.file always (Drive-linked files write through it); drive.readonly
+ * when folder import is on. openid+email identify which Google account
+ * holds the files.
+ */
+export function googleDriveScopes(): string[] {
+    return [
+        DRIVE_FILE_SCOPE,
+        ...(isDriveFolderAccessEnabled() ? [DRIVE_READONLY_SCOPE] : []),
+        "openid",
+        "email",
+    ];
+}
+
+/** Whether a stored grant (space-separated, as Google returns it) can read folders. */
+export function grantsFolderAccess(scopes: string | null | undefined): boolean {
+    const granted = (scopes ?? "").split(/\s+/);
+    return FOLDER_READING_SCOPES.some(scope => granted.includes(scope));
+}
+
+/**
+ * Development only: the Google stand-in `next dev` serves under
+ * /dev/stand-ins/google. Honoured only where the /dev routes are, so a
+ * production build can never send a refresh token anywhere but Google.
+ */
+export function googleStandInUrl(): string | null {
+    const raw = env.server.GOOGLE_STAND_IN_URL;
+    if (!raw || !devRoutesEnabled()) return null;
+    return raw.replace(/\/$/, "");
+}
+
+let endpointsApplied = false;
+
+/**
+ * Point @launchstack/google-drive at the stand-in, once, on first use. Lazy
+ * because env is read per call elsewhere too (tests swap it); every path that
+ * talks to Google goes through getGoogleOAuthApp() first, which calls this.
+ */
+function applyStandInEndpoints(): void {
+    if (endpointsApplied) return;
+    endpointsApplied = true;
+    const standIn = googleStandInUrl();
+    if (!standIn) return;
+    configureGoogleEndpoints({
+        authorizeUrl: `${standIn}/o/oauth2/v2/auth`,
+        tokenUrl: `${standIn}/token`,
+        driveApiBase: `${standIn}/drive/v3`,
+        driveUploadBase: `${standIn}/upload/drive/v3`,
+    });
+}
+
+/** Base URL for the knowledge-sync Drive client (pipelines' createDriveClient). */
+export function driveApiBaseUrl(): string | undefined {
+    const standIn = googleStandInUrl();
+    return standIn ? `${standIn}/drive/v3` : undefined;
+}
 
 /** Folder the linked copies live in, lazily created in the owner's My Drive. */
 export const DRIVE_FOLDER_NAME = "LaunchStack";
@@ -60,6 +132,7 @@ export function isGoogleConnectConfigured(): boolean {
 }
 
 export function getGoogleOAuthApp(): GoogleOAuthApp {
+    applyStandInEndpoints();
     const clientId = env.server.GOOGLE_OAUTH_CLIENT_ID;
     const clientSecret = env.server.GOOGLE_OAUTH_CLIENT_SECRET;
     if (!clientId || !clientSecret) {

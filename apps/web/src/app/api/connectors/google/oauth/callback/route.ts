@@ -28,7 +28,7 @@ import {
 import { ensurePrivateGmailFolder } from "~/server/services/connectors/gmail/folder";
 import { ensureSyncState as ensureGmailSyncState } from "~/server/services/connectors/gmail/store";
 import {
-    GOOGLE_DRIVE_SCOPES,
+    googleDriveScopes,
     GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
@@ -122,7 +122,7 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             providerAccountId: accountId,
             providerAccountEmail: claims.email ?? null,
             refreshToken: token.refresh_token,
-            scopes: token.scope ?? GOOGLE_DRIVE_SCOPES.join(" "),
+            scopes: token.scope ?? googleDriveScopes().join(" "),
         });
 
         await recordAuditEvent(db, {

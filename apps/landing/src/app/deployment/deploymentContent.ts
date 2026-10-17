@@ -570,8 +570,12 @@ export const GUIDES: Guide[] = [
                         name: "Gmail · opt-in",
                         detail: "The Google OAuth pair plus GMAIL_CONNECTOR_ENABLED=true. Uses a separate mailbox grant and the shared Google callback; reads mail without sending or deleting it.",
                     },
+                    {
+                        name: "Drive folder import · opt-in",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported.",
+                    },
                 ],
-                note: "Gmail uses the restricted gmail.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling it for users.",
+                note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",
             },
             {
                 title: "Google Picker and linked editing",

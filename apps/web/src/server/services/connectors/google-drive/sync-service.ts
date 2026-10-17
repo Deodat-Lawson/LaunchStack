@@ -12,11 +12,13 @@ import {
 } from "@launchstack/pipelines/connectors/google-drive";
 import { GoogleAuthError } from "@launchstack/google-drive";
 
-import { eq } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
+import { driveApiBaseUrl } from "~/server/services/google-drive/config";
 import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
+import type { OwnerRef } from "~/server/workspace/ownership";
 import { getConnectionById } from "../connection-store";
 import {
     claimSyncLease,
@@ -26,6 +28,7 @@ import {
     releaseSyncLease,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
+import { createDriveDestinations, type PickedRoot } from "./destinations";
 import {
     GOOGLE_DRIVE_CATEGORY,
     createGoogleDriveSink,
@@ -48,9 +51,42 @@ function reportCounts(report: GoogleDriveSyncResult): Record<string, unknown> {
         failed: report.failed.length,
         missing: report.missingSourceIds.length,
         accessLost: report.accessLost.length,
+        // Ids, not a count: the panel names the folders it couldn't read.
+        emptyFolders: report.emptyFolders,
         truncated: report.truncated,
         durationMs: report.durationMs,
     };
+}
+
+/**
+ * The people who picked items, as ADR-014 owners. Someone no longer an
+ * active member is absent: files the sync adds to their folder then take
+ * the folder's audience (handed over when they were removed) and no grant.
+ */
+async function ownersByUserPk(
+    companyId: bigint,
+    userPks: readonly (number | null)[]
+): Promise<Map<number, OwnerRef>> {
+    const wanted = [...new Set(userPks.filter((pk): pk is number => pk != null))];
+    if (wanted.length === 0) return new Map();
+    const rows = await db
+        .select({ id: users.id, authUserId: users.userId })
+        .from(users)
+        .innerJoin(
+            userCompanyMemberships,
+            and(
+                eq(userCompanyMemberships.userId, sql`${users.id}`),
+                eq(userCompanyMemberships.companyId, companyId),
+                eq(userCompanyMemberships.status, "active")
+            )
+        )
+        .where(inArray(users.id, wanted));
+    return new Map(
+        rows.map(row => [
+            Number(row.id),
+            { companyId, userPk: BigInt(row.id), authUserId: row.authUserId },
+        ])
+    );
 }
 
 export async function runGoogleDriveSync(
@@ -75,7 +111,7 @@ export async function runGoogleDriveSync(
 
     try {
         const accessToken = await getAccessTokenForConnection(connection);
-        const client = createDriveClient({ accessToken });
+        const client = createDriveClient({ accessToken, baseUrl: driveApiBaseUrl() });
 
         // The sink attributes uploads to the granting user's auth identity.
         if (connection.grantedByUserId == null) {
@@ -96,16 +132,33 @@ export async function runGoogleDriveSync(
         // can be restricted like any other folder.
         await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
-        const [syncState, pickedRows, knownSourceIds, sink] = await Promise.all([
+        const [syncState, pickedRows, knownSourceIds] = await Promise.all([
             getSyncState(connectionId),
             listPickedItems(connectionId),
             listKnownSourceIds(connection.companyId, connectionId),
-            createGoogleDriveSink({
-                companyId: connection.companyId,
-                connectionId,
-                userId: granter.authUserId,
-            }),
         ]);
+
+        // A picked folder belongs to whoever picked it (ADR-014); files
+        // picked one by one stay a workspace import, as before.
+        const pickers = await ownersByUserPk(
+            connection.companyId,
+            pickedRows.map(row => row.addedByUserPk)
+        );
+        const roots: PickedRoot[] = pickedRows.map(row => ({
+            id: row.id,
+            fileId: row.fileId,
+            kind: row.kind,
+            name: row.name,
+            folderCategoryId: row.folderCategoryId,
+            owner: row.addedByUserPk == null ? null : (pickers.get(row.addedByUserPk) ?? null),
+        }));
+        const destinations = createDriveDestinations({ companyId: connection.companyId, roots });
+        const sink = await createGoogleDriveSink({
+            companyId: connection.companyId,
+            connectionId,
+            userId: granter.authUserId,
+            place: item => destinations.placeFor(item),
+        });
 
         const report = await syncGoogleDrive({
             client,

@@ -5,43 +5,41 @@
  * `drive` in AddSourceModal's Connect group.
  *
  * States: loading → not-configured → not-connected → connected (picked list,
- * pick more, sync now, disconnect) → syncing (polls status) → revoked
- * (reconnect). All data comes from /api/connectors/google-drive/status; the
- * Picker's public config rides on the status payload, so no client env
- * inlining. With several Drive accounts connected, this panel manages the
- * primary (oldest) connection; the rest are listed under Settings →
- * Integrations.
+ * pick more, paste a folder link, sync now, disconnect) → syncing (polls
+ * status) → revoked (reconnect). All data comes from
+ * /api/connectors/google-drive/status; the Picker's public config rides on
+ * the status payload, so no client env inlining. With several Drive accounts
+ * connected, this panel manages the primary (oldest) connection; the rest
+ * are listed under Settings → Integrations.
+ *
+ * Whether a picked folder brings its contents depends on the grant
+ * (`folderAccess`, see driveStatus.ts): with drive.readonly it imports whole;
+ * a connection made before folder import was turned on needs one reconnect;
+ * and where the operator hasn't turned it on, only files picked one by one
+ * come in — the panel says so rather than letting a folder import nothing.
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { X as IconX } from "lucide-react";
+import { FileText, Folder, FolderOpen, Info, Link2, TriangleAlert, X } from "lucide-react";
 
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { driveIdFromLink } from "~/lib/integrations/google-drive-link";
+
+import {
+    emptyFolderNames,
+    folderAccessState,
+    listNames,
+    pickedItemDestination,
+    reportCount,
+    type DriveStatus,
+} from "./driveStatus";
 import type { AddSourceTab } from "./types";
 import { useGooglePicker, type PickedDoc } from "./useGooglePicker";
 
-interface PickedItem {
-    readonly fileId: string;
-    readonly kind: string;
-    readonly name: string;
-    readonly mimeType: string | null;
-}
-
-interface DriveStatus {
-    readonly configured: boolean;
-    readonly connected: boolean;
-    readonly connectionId?: string;
-    readonly status?: string;
-    readonly accountEmail?: string | null;
-    readonly pickedItems?: readonly PickedItem[];
-    readonly lastSyncAt?: string | null;
-    readonly lastSyncStatus?: string | null;
-    readonly lastSyncError?: string | null;
-    readonly lastSyncReport?: Record<string, unknown> | null;
-    readonly picker: { readonly apiKey: string | null; readonly appId: string | null };
-}
-
 const BASE = "/api/connectors/google-drive";
+const CONNECT_URL = "/api/connectors/google/oauth/start";
 
 async function fetchStatus(): Promise<DriveStatus | null> {
     const res = await fetch(`${BASE}/status`);
@@ -50,28 +48,47 @@ async function fetchStatus(): Promise<DriveStatus | null> {
     return payload.data ?? null;
 }
 
-function reportCount(report: Record<string, unknown> | null | undefined, key: string): number {
-    const value = report?.[key];
-    return typeof value === "number" ? value : 0;
+async function errorMessage(res: Response, fallback: string): Promise<string> {
+    try {
+        const body = (await res.json()) as { message?: string };
+        return body.message ?? fallback;
+    } catch {
+        return fallback;
+    }
 }
 
-const buttonStyle = (variant: "primary" | "quiet" | "danger", disabled: boolean) =>
-    ({
-        padding: "10px 16px",
-        borderRadius: 8,
-        fontSize: 13,
-        fontWeight: 600,
-        cursor: disabled ? "not-allowed" : "pointer",
-        border: variant === "quiet" ? "1px solid var(--line)" : "none",
-        background: disabled
-            ? "var(--line)"
-            : variant === "primary"
-              ? "var(--accent)"
-              : variant === "danger"
-                ? "var(--danger)"
-                : "var(--panel)",
-        color: disabled ? "var(--ink-3)" : variant === "quiet" ? "var(--ink-2)" : "white",
-    }) as const;
+function startSync(): Promise<Response> {
+    return fetch(`${BASE}/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+    });
+}
+
+function Notice({
+    tone,
+    children,
+}: {
+    tone: "info" | "warn" | "danger";
+    children: React.ReactNode;
+}) {
+    const Icon = tone === "info" ? Info : TriangleAlert;
+    const tones = {
+        info: "border-line bg-panel-2 text-ink-2",
+        warn: "border-warn bg-warn-soft text-ink",
+        danger: "border-danger bg-danger-soft text-ink",
+    } as const;
+    return (
+        <div
+            className={`mb-3 flex items-start gap-2.5 rounded-lg border px-3.5 py-2.5 text-[12.5px] leading-relaxed ${tones[tone]}`}
+        >
+            <Icon
+                className={`mt-0.5 size-4 shrink-0 ${tone === "info" ? "text-ink-3" : tone === "warn" ? "text-warn" : "text-danger"}`}
+            />
+            <div className="min-w-0 flex-1">{children}</div>
+        </div>
+    );
+}
 
 export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const Icon = tab.Icon;
@@ -79,6 +96,9 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const [loading, setLoading] = useState(true);
     const [busy, setBusy] = useState(false);
     const [confirmingDisconnect, setConfirmingDisconnect] = useState(false);
+    const [link, setLink] = useState("");
+    const [linkError, setLinkError] = useState<string | null>(null);
+    const [addingLink, setAddingLink] = useState(false);
     const { openPicker, opening } = useGooglePicker();
     const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -110,6 +130,13 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
         };
     }, [status?.lastSyncStatus, refresh]);
 
+    /** After something was added: start the sync and show it running. */
+    const syncAfterAdd = useCallback(async () => {
+        const res = await startSync();
+        if (res.ok) setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
+        void refresh();
+    }, [refresh]);
+
     const handlePicked = useCallback(
         async (docs: readonly PickedDoc[]) => {
             const res = await fetch(`${BASE}/items`, {
@@ -118,19 +145,46 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 body: JSON.stringify({ items: docs }),
             });
             if (res.ok) {
-                toast.success(`${docs.length} item(s) added — syncing`);
-                await fetch(`${BASE}/sync`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({}),
-                });
+                toast.success(
+                    docs.length === 1
+                        ? `“${docs[0]!.name}” added — syncing`
+                        : `${docs.length} items added — syncing`
+                );
+                await syncAfterAdd();
             } else {
-                toast.error("Could not save the selection");
+                toast.error(await errorMessage(res, "Could not save the selection"));
+                void refresh();
             }
-            void refresh();
         },
-        [refresh]
+        [refresh, syncAfterAdd]
     );
+
+    const addLink = useCallback(async () => {
+        const value = link.trim();
+        if (!driveIdFromLink(value)) {
+            setLinkError("That isn't a Google Drive link. In Drive, use Share › Copy link.");
+            return;
+        }
+        setAddingLink(true);
+        setLinkError(null);
+        try {
+            const res = await fetch(`${BASE}/items`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ link: value }),
+            });
+            if (!res.ok) {
+                setLinkError(await errorMessage(res, "Could not add that link"));
+                return;
+            }
+            const payload = (await res.json()) as { message?: string };
+            toast.success(`${payload.message ?? "Added."} Syncing now.`);
+            setLink("");
+            await syncAfterAdd();
+        } finally {
+            setAddingLink(false);
+        }
+    }, [link, syncAfterAdd]);
 
     const choose = useCallback(async () => {
         if (!status?.picker.apiKey || !status.picker.appId) {
@@ -153,11 +207,14 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 return;
             }
             await openPicker({
+                scriptUrl: status.picker.scriptUrl,
                 apiKey: status.picker.apiKey,
                 appId: status.picker.appId,
                 accessToken,
                 onPicked: docs => void handlePicked(docs),
             });
+        } catch {
+            toast.error("Google's picker didn't load — check your connection and try again");
         } finally {
             setBusy(false);
         }
@@ -166,16 +223,12 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            const res = await fetch(`${BASE}/sync`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({}),
-            });
+            const res = await startSync();
             if (res.ok) {
                 toast.success("Sync started");
                 setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
             } else {
-                toast.error("Could not start the sync");
+                toast.error(await errorMessage(res, "Could not start the sync"));
             }
         } finally {
             setBusy(false);
@@ -211,26 +264,13 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     }, [refresh, status?.connectionId]);
 
     if (loading) {
-        return (
-            <div style={{ padding: 24, fontSize: 13, color: "var(--ink-3)" }}>
-                Checking Google Drive…
-            </div>
-        );
+        return <div className="text-ink-3 p-6 text-[13px]">Checking Google Drive…</div>;
     }
 
     if (!status?.configured) {
         return (
-            <div
-                style={{
-                    padding: "16px 18px",
-                    background: "var(--line-2)",
-                    borderRadius: 12,
-                    fontSize: 13,
-                    color: "var(--ink-2)",
-                    lineHeight: 1.6,
-                }}
-            >
-                <div style={{ fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
+            <div className="bg-panel-2 text-ink-2 rounded-xl px-4 py-4 text-[13px] leading-relaxed">
+                <div className="text-ink mb-1.5 font-semibold">
                     Google Drive is not configured on this server
                 </div>
                 Ask your operator to set <code>GOOGLE_OAUTH_CLIENT_ID</code>,{" "}
@@ -242,53 +282,35 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
 
     if (!status.connected || status.status !== "active") {
         const reconnect = status.connected && status.status !== "active";
+        const folderImport = status.folderAccess?.enabled ?? false;
         return (
             <div>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 14,
-                        padding: "16px 18px",
-                        background: "var(--line-2)",
-                        borderRadius: 12,
-                        marginBottom: 16,
-                    }}
-                >
-                    <div
-                        style={{
-                            width: 44,
-                            height: 44,
-                            borderRadius: 10,
-                            background: "var(--panel)",
-                            border: "1px solid var(--line)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "var(--accent)",
-                        }}
-                    >
+                <div className="bg-panel-2 mb-4 flex items-center gap-3.5 rounded-xl px-4 py-4">
+                    <div className="bg-panel border-line text-brand flex size-11 shrink-0 items-center justify-center rounded-lg border">
                         <Icon size={22} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 15, fontWeight: 600 }}>
+                    <div className="min-w-0 flex-1">
+                        <div className="text-ink text-[15px] font-semibold">
                             {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
                         </div>
-                        <div style={{ fontSize: 13, color: "var(--ink-3)" }}>
+                        <div className="text-ink-3 text-[13px]">
                             {reconnect
                                 ? "Google access was revoked or expired — connect again to resume syncing."
-                                : "Pick files and folders in Google's picker; only what you pick is shared."}
+                                : folderImport
+                                  ? "LaunchStack gets read-only access and imports only the files and folders you pick or paste."
+                                  : "Pick files in Google's picker; only what you pick is shared."}
                         </div>
                     </div>
                 </div>
-                <button
+                <Button
+                    className="w-full"
+                    size="lg"
                     onClick={() => {
-                        window.location.href = "/api/connectors/google/oauth/start";
+                        window.location.href = CONNECT_URL;
                     }}
-                    style={{ ...buttonStyle("primary", false), width: "100%", padding: 12 }}
                 >
                     {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
-                </button>
+                </Button>
             </div>
         );
     }
@@ -297,26 +319,19 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncing = status.lastSyncStatus === "running";
     const report = status.lastSyncReport;
     const accessLost = reportCount(report, "accessLost");
+    const access = folderAccessState(status);
+    const empty = syncing ? [] : emptyFolderNames(status);
 
     return (
         <div>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 14px",
-                    background: "var(--line-2)",
-                    borderRadius: 10,
-                    marginBottom: 14,
-                    fontSize: 13,
-                }}
-            >
-                <span style={{ color: "var(--accent)", display: "flex" }}>
+            <div className="bg-panel-2 mb-3.5 flex flex-wrap items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-[13px]">
+                <span className="text-brand flex">
                     <Icon size={16} />
                 </span>
-                <span style={{ fontWeight: 600 }}>{status.accountEmail ?? "Connected"}</span>
-                <span style={{ marginLeft: "auto", color: "var(--ink-3)", fontSize: 12 }}>
+                <span className="text-ink min-w-0 truncate font-semibold">
+                    {status.accountEmail ?? "Connected"}
+                </span>
+                <span className="text-ink-3 ml-auto text-xs">
                     {syncing
                         ? "Syncing…"
                         : status.lastSyncAt
@@ -325,153 +340,193 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 </span>
             </div>
 
+            {access === "allow" ? (
+                <Notice tone="warn">
+                    <div className="text-ink font-semibold">
+                        Allow folder access to import folders
+                    </div>
+                    This connection can only open files picked one by one, so a folder brings
+                    nothing from inside it. Reconnect once to give LaunchStack read-only access;
+                    then folders come in whole, subfolders and later additions included.
+                    <div className="mt-2">
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                window.location.href = CONNECT_URL;
+                            }}
+                        >
+                            Allow folder access
+                        </Button>
+                    </div>
+                </Notice>
+            ) : access === "files-only" ? (
+                <Notice tone="info">
+                    Only files you pick one by one come in. Picking a folder brings nothing from
+                    inside it, because this server hasn&rsquo;t turned on folder import — open the
+                    folder in the picker and select its files instead. Operators: see{" "}
+                    <code>GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED</code> in <code>.env.example</code>.
+                </Notice>
+            ) : null}
+
             {status.lastSyncStatus === "error" && status.lastSyncError ? (
-                <div
-                    style={{
-                        padding: "10px 14px",
-                        borderRadius: 10,
-                        border: "1px solid var(--line)",
-                        color: "var(--danger)",
-                        fontSize: 12.5,
-                        marginBottom: 12,
-                    }}
-                >
-                    Last sync failed: {status.lastSyncError}
-                </div>
+                <Notice tone="danger">Last sync failed: {status.lastSyncError}</Notice>
             ) : null}
 
             {report && !syncing ? (
-                <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 12 }}>
+                <div className="text-ink-3 mb-3 text-[12.5px]">
                     Last run: {reportCount(report, "stored")} imported,{" "}
                     {reportCount(report, "unchanged")} unchanged, {reportCount(report, "failed")}{" "}
                     failed.
                 </div>
             ) : null}
 
-            {accessLost > 0 ? (
-                <div
-                    style={{
-                        padding: "10px 14px",
-                        borderRadius: 10,
-                        background: "var(--line-2)",
-                        fontSize: 12.5,
-                        color: "var(--ink-2)",
-                        marginBottom: 12,
-                    }}
-                >
-                    {accessLost} file(s) are no longer accessible — files added to a folder after
-                    you picked it need re-picking. Open the picker and select the folder again to
-                    refresh access.
-                </div>
+            {empty.length > 0 ? (
+                <Notice tone="warn">
+                    {access === "ready"
+                        ? `Nothing came in from ${listNames(empty)} — Drive lists ${empty.length === 1 ? "it" : "them"} as empty.`
+                        : `Nothing came in from ${listNames(empty)}: this connection can't see inside folders.`}
+                </Notice>
             ) : null}
 
-            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--ink-3)", marginBottom: 8 }}>
+            {accessLost > 0 ? (
+                <Notice tone="warn">
+                    {accessLost} file(s) can no longer be opened — deleted, unshared, or (for files
+                    picked one by one) the grant is gone. Pick them again to refresh access.
+                </Notice>
+            ) : null}
+
+            {access === "ready" ? (
+                <form
+                    className="mb-4"
+                    onSubmit={event => {
+                        event.preventDefault();
+                        void addLink();
+                    }}
+                >
+                    <label
+                        htmlFor="drive-folder-link"
+                        className="text-ink-3 mb-1.5 block text-xs font-semibold"
+                    >
+                        Paste a folder link
+                    </label>
+                    <div className="flex gap-2 max-sm:flex-col">
+                        <div className="relative min-w-0 flex-1">
+                            <Link2 className="text-ink-3 pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
+                            <Input
+                                id="drive-folder-link"
+                                value={link}
+                                onChange={event => {
+                                    setLink(event.target.value);
+                                    setLinkError(null);
+                                }}
+                                placeholder="https://drive.google.com/drive/folders/…"
+                                aria-invalid={linkError ? true : undefined}
+                                aria-describedby={linkError ? "drive-folder-link-error" : undefined}
+                                className="pl-8"
+                                autoComplete="off"
+                                spellCheck={false}
+                            />
+                        </div>
+                        <Button
+                            type="submit"
+                            variant="outline"
+                            disabled={addingLink || !link.trim()}
+                        >
+                            {addingLink ? "Adding…" : "Add folder"}
+                        </Button>
+                    </div>
+                    {linkError ? (
+                        <p id="drive-folder-link-error" className="text-danger mt-1.5 text-xs">
+                            {linkError}
+                        </p>
+                    ) : (
+                        <p className="text-ink-3 mt-1.5 text-xs">
+                            Works for any folder {status.accountEmail ?? "this account"} can open,
+                            including ones shared with it and shared drives.
+                        </p>
+                    )}
+                </form>
+            ) : null}
+
+            <div className="text-ink-3 mb-2 text-xs font-semibold">
                 SYNCED FROM DRIVE ({picked.length})
             </div>
-            <ul
-                style={{
-                    margin: 0,
-                    padding: 0,
-                    listStyle: "none",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 6,
-                    marginBottom: 16,
-                    maxHeight: 180,
-                    overflowY: "auto",
-                }}
-            >
+            <ul className="mb-4 flex max-h-48 flex-col gap-1.5 overflow-y-auto">
                 {picked.length === 0 ? (
-                    <li style={{ fontSize: 13, color: "var(--ink-3)" }}>
-                        Nothing picked yet — choose files or folders to start syncing.
+                    <li className="text-ink-3 text-[13px]">
+                        Nothing yet — choose files or folders to start syncing.
                     </li>
                 ) : (
-                    picked.map(item => (
-                        <li
-                            key={item.fileId}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 8,
-                                padding: "8px 12px",
-                                borderRadius: 8,
-                                border: "1px solid var(--line)",
-                                fontSize: 13,
-                            }}
-                        >
-                            <span style={{ color: "var(--ink-3)", fontSize: 12 }}>
-                                {item.kind === "folder" ? "📁" : "📄"}
-                            </span>
-                            <span
-                                style={{
-                                    flex: 1,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                }}
+                    picked.map(item => {
+                        const ItemIcon =
+                            item.kind === "folder"
+                                ? item.folderPath
+                                    ? FolderOpen
+                                    : Folder
+                                : FileText;
+                        return (
+                            <li
+                                key={item.fileId}
+                                className="border-line flex items-center gap-2.5 rounded-lg border px-3 py-2 text-[13px]"
                             >
-                                {item.name}
-                            </span>
-                            <button
-                                onClick={() => void removeItem(item.fileId)}
-                                title="Stop syncing (keeps imported documents)"
-                                style={{
-                                    background: "none",
-                                    border: "none",
-                                    color: "var(--ink-3)",
-                                    cursor: "pointer",
-                                    display: "flex",
-                                    padding: 2,
-                                }}
-                            >
-                                <IconX size={14} />
-                            </button>
-                        </li>
-                    ))
+                                <ItemIcon className="text-ink-3 size-4 shrink-0" />
+                                <span className="min-w-0 flex-1">
+                                    <span className="text-ink block truncate">{item.name}</span>
+                                    <span className="text-ink-3 block truncate text-[11.5px]">
+                                        {pickedItemDestination(item)}
+                                    </span>
+                                </span>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-7"
+                                    onClick={() => void removeItem(item.fileId)}
+                                    title="Stop syncing (keeps imported documents)"
+                                    aria-label={`Stop syncing ${item.name}`}
+                                >
+                                    <X className="size-3.5" />
+                                </Button>
+                            </li>
+                        );
+                    })
                 )}
             </ul>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button
-                    disabled={busy || opening}
-                    onClick={() => void choose()}
-                    style={buttonStyle("primary", busy || opening)}
-                >
-                    {opening ? "Opening picker…" : "Choose files & folders"}
-                </button>
-                <button
+            <div className="flex flex-wrap items-center gap-2">
+                <Button disabled={busy || opening} onClick={() => void choose()}>
+                    {opening ? "Opening picker…" : "Choose in Google Drive"}
+                </Button>
+                <Button
+                    variant="outline"
                     disabled={busy || syncing || picked.length === 0}
                     onClick={() => void syncNow()}
-                    style={buttonStyle("quiet", busy || syncing || picked.length === 0)}
                 >
                     {syncing ? "Syncing…" : "Sync now"}
-                </button>
+                </Button>
                 {confirmingDisconnect ? (
-                    <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <span style={{ fontSize: 12.5, color: "var(--ink-2)" }}>
+                    <span className="flex flex-wrap items-center gap-2">
+                        <span className="text-ink-2 text-[12.5px]">
                             Disconnect? Imported documents are kept.
                         </span>
-                        <button
+                        <Button
+                            variant="destructive"
                             disabled={busy}
                             onClick={() => void disconnect()}
-                            style={buttonStyle("danger", busy)}
                         >
                             Disconnect
-                        </button>
-                        <button
-                            onClick={() => setConfirmingDisconnect(false)}
-                            style={buttonStyle("quiet", false)}
-                        >
+                        </Button>
+                        <Button variant="outline" onClick={() => setConfirmingDisconnect(false)}>
                             Cancel
-                        </button>
+                        </Button>
                     </span>
                 ) : (
-                    <button
+                    <Button
+                        variant="ghost"
+                        className="ml-auto"
                         onClick={() => setConfirmingDisconnect(true)}
-                        style={{ ...buttonStyle("quiet", false), marginLeft: "auto" }}
                     >
                         Disconnect
-                    </button>
+                    </Button>
                 )}
             </div>
         </div>

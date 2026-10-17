@@ -6,8 +6,15 @@
  *
  * With several Drive accounts connected, the panel manages the primary
  * (oldest) connection; the rest appear in the generic connections list.
+ *
+ * `folderAccess` says whether a picked folder can be imported at all: the
+ * operator must have turned it on, and this connection must hold the grant
+ * (a connection made before it was turned on needs one reconnect).
  */
 
+import { and, eq, inArray } from "drizzle-orm";
+
+import { category } from "@launchstack/store/schema";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -15,6 +22,24 @@ import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState, listPickedItems } from "~/server/services/connectors/google-drive/store";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { db } from "~/server/db";
+import {
+    grantsFolderAccess,
+    isDriveFolderAccessEnabled,
+} from "~/server/services/google-drive/config";
+
+/** Current path of each folder a picked Drive folder was rebuilt as. */
+async function folderPaths(
+    companyId: bigint,
+    ids: readonly number[]
+): Promise<Map<number, string>> {
+    if (ids.length === 0) return new Map();
+    const rows = await db
+        .select({ id: category.id, name: category.name })
+        .from(category)
+        .where(and(eq(category.companyId, companyId), inArray(category.id, [...ids])));
+    return new Map(rows.map(row => [Number(row.id), row.name]));
+}
 
 export const runtime = "nodejs";
 
@@ -31,8 +56,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
 
             const configured = isConnectorConfigured("google-drive");
             const picker = getPickerPublicConfig();
+            const folderAccessEnabled = isDriveFolderAccessEnabled();
             if (!configured) {
-                return createSuccessResponse({ configured: false, connected: false, picker });
+                return createSuccessResponse({
+                    configured: false,
+                    connected: false,
+                    picker,
+                    folderAccess: { enabled: folderAccessEnabled, granted: false },
+                });
             }
 
             const [connection] = await listConnectionsForCompany(
@@ -40,24 +71,44 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 "google-drive"
             );
             if (!connection) {
-                return createSuccessResponse({ configured: true, connected: false, picker });
+                return createSuccessResponse({
+                    configured: true,
+                    connected: false,
+                    picker,
+                    folderAccess: { enabled: folderAccessEnabled, granted: false },
+                });
             }
 
             const [pickedItems, syncState] = await Promise.all([
                 listPickedItems(connection.id),
                 getSyncState(connection.id),
             ]);
+            const paths = await folderPaths(
+                guard.ctx.companyId,
+                pickedItems.flatMap(item =>
+                    item.folderCategoryId == null ? [] : [item.folderCategoryId]
+                )
+            );
             return createSuccessResponse({
                 configured: true,
                 connected: true,
                 connectionId: String(connection.id),
                 status: connection.status,
                 accountEmail: connection.providerAccountEmail,
+                folderAccess: {
+                    enabled: folderAccessEnabled,
+                    granted: grantsFolderAccess(connection.scopes),
+                },
                 pickedItems: pickedItems.map(item => ({
                     fileId: item.fileId,
                     kind: item.kind,
                     name: item.name,
                     mimeType: item.mimeType,
+                    // Where a picked folder's files are; null until its first sync.
+                    folderPath:
+                        item.folderCategoryId == null
+                            ? null
+                            : (paths.get(item.folderCategoryId) ?? null),
                 })),
                 lastSyncAt: syncState?.lastSyncAt?.toISOString() ?? null,
                 lastSyncStatus: syncState?.lastSyncStatus ?? null,

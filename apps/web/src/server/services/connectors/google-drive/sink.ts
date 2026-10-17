@@ -28,8 +28,16 @@ import {
     createDocumentVersionLifecycle,
     findDocumentByCreationKey,
 } from "../../document-creation";
+import { applyDocumentCreationDefaults, type OwnerRef } from "~/server/workspace/ownership";
 
 export const GOOGLE_DRIVE_CATEGORY = "Google Drive";
+
+/** Where one new file goes and who it belongs to (see ./destinations). */
+export interface SinkPlacement {
+    readonly category: string;
+    /** Set → the file gets ADR-014's defaults for this person and is attributed to them. */
+    readonly owner: OwnerRef | null;
+}
 
 /** Namespace for the document creation key. Keep stable — it is an identity. */
 const CREATION_KEY_PREFIX = "connector:google-drive:";
@@ -37,8 +45,15 @@ const CREATION_KEY_PREFIX = "connector:google-drive:";
 export interface GoogleDriveSinkContext {
     readonly companyId: bigint;
     readonly connectionId: number;
+    /** Auth id uploads are attributed to when a placement names no owner. */
     readonly userId: string;
     readonly category?: string;
+    /**
+     * Placement of a file seen for the first time. Without it every file
+     * goes to `category` as a workspace import. A file already ingested
+     * stays wherever it is now: people move them.
+     */
+    readonly place?: (item: KnowledgeItem) => Promise<SinkPlacement>;
     readonly embeddingIndexKey?: string;
     /** Origin used to absolutize a relative blob URL; APP_PUBLIC_URL otherwise. */
     readonly requestUrl?: string;
@@ -135,21 +150,25 @@ export async function createGoogleDriveSink(
             };
 
             const existing = await findDocumentByCreationKey(context.companyId, baseCreationKey);
+            const placement: SinkPlacement | null =
+                !existing && context.place ? await context.place(item) : null;
+            const userId = placement?.owner?.authUserId ?? context.userId;
 
             const blob = await uploadFile({
                 filename,
                 data: body,
                 contentType: item.mimeType,
-                userId: context.userId,
+                userId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 
             if (!existing) {
+                const placedIn = placement?.category ?? category;
                 const lifecycle = await createDocumentLifecycle({
                     companyId: context.companyId,
-                    userId: context.userId,
+                    userId,
                     title: item.title,
-                    category,
+                    category: placedIn,
                     url: blob.url,
                     processingUrl,
                     creationKey: baseCreationKey,
@@ -163,6 +182,15 @@ export async function createGoogleDriveSink(
                     },
                 });
 
+                // Someone imported this folder: the file is theirs the way an
+                // upload would be (it inherits their private folder, and they
+                // can share it on its own).
+                if (placement?.owner && lifecycle.created) {
+                    await applyDocumentCreationDefaults(db, placement.owner, [
+                        { id: lifecycle.documentId, category: placedIn },
+                    ]);
+                }
+
                 return {
                     sourceId: item.sourceId,
                     documentId: lifecycle.documentId,
@@ -175,9 +203,9 @@ export async function createGoogleDriveSink(
             const lifecycle = await createDocumentVersionLifecycle({
                 documentId: existing.id,
                 companyId: context.companyId,
-                userId: context.userId,
+                userId,
                 title: item.title,
-                category,
+                category: existing.category ?? category,
                 url: blob.url,
                 processingUrl,
                 // The fingerprint is part of the key so a re-sync of the same

@@ -225,6 +225,10 @@ const FIXED_DESTINATIONS: Record<string, string> = {
     "agent-sessions": "Agent Sessions",
 };
 
+/** A picked Drive folder doesn't land in "Google Drive" (server/…/google-drive/destinations.ts). */
+const DRIVE_FOLDER_NOTE =
+    "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.";
+
 /** Gmail's folder is per mailbox and its owner's alone (ADR-014). */
 const GMAIL_AUDIENCE: AudienceSummary = {
     tone: "private",
@@ -436,7 +440,12 @@ export function AddSourceModal({
         );
     } else if (FIXED_DESTINATIONS[active.id]) {
         destination = (
-            <AddDestinationBar mode="fixed" value={FIXED_DESTINATIONS[active.id]!} {...barProps} />
+            <AddDestinationBar
+                mode="fixed"
+                value={FIXED_DESTINATIONS[active.id]!}
+                audienceNote={active.id === "drive" ? DRIVE_FOLDER_NOTE : undefined}
+                {...barProps}
+            />
         );
     } else if (active.id === "gmail") {
         destination = (
@@ -1819,11 +1828,6 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "Pick workspaces, pages or databases",
         "Updates stream in real-time",
         "Preserves block structure",
-    ],
-    drive: [
-        "Pick folders — kept in sync",
-        "Handles Google Docs, Sheets, Slides",
-        "Shared drives supported",
     ],
     slack: [
         "Mirrors agent meetings into a Slack channel",

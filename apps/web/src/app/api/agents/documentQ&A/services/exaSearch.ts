@@ -1,6 +1,11 @@
 import { env } from "~/env";
 import type { WebSearchResult } from "./types";
 
+/** Whether Exa, the only provider chat web search uses, has a key to call it with. */
+export function isExaSearchConfigured(): boolean {
+    return Boolean(env.server.EXA_API_KEY);
+}
+
 /**
  * Performs a web search using the Exa API (auto mode: hybrid neural + keyword).
  * @param query - The search query

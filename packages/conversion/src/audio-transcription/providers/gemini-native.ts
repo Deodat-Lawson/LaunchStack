@@ -192,7 +192,8 @@ export function windowPrompt(window: Window, duration: number): string {
         "Never translate: keep every word in the language it was said in, including " +
         "mixed-language speech such as English terms inside Chinese. " +
         "Split it into segments at natural pauses, one or two sentences each. " +
-        "Give each segment's start and end in seconds from the beginning of the whole recording" +
+        "Give each segment's start and end as a number of seconds from the beginning of the whole " +
+        "recording (75.5 means 1:15.5), in the order the segments were spoken" +
         (whole
             ? ". "
             : `, so the first segment starts at about ${Math.round(window.start)} and the last ends by ${Math.round(window.end)}. `) +
@@ -227,15 +228,21 @@ export function mergeWindows(
     parts: WindowTranscript[],
     duration: number
 ): Pick<TranscriptionResult, "language" | "languages" | "segments" | "text"> {
-    const segments = parts
-        .flatMap(p => p.segments)
-        .map(s => {
-            const start = Math.min(Math.max(0, s.start), duration);
-            const end = Math.min(Math.max(start, s.end), duration);
-            return { start, end, text: s.text.trim() };
-        })
-        .filter(s => s.text.length > 0)
-        .sort((a, b) => a.start - b.start);
+    // Parts arrive in time order and a model writes lines in the order they
+    // were spoken, so that order is kept. Timestamps are the model's guess and
+    // can be wrong (flash-lite once timed an 8-second clip in fractions of a
+    // second, out of order); sorting by them would scramble the sentences, so
+    // a time that runs backwards is pulled forward instead.
+    const segments: { start: number; end: number; text: string }[] = [];
+    let floor = 0;
+    for (const s of parts.flatMap(p => p.segments)) {
+        const text = s.text.trim();
+        if (!text) continue;
+        const start = Math.min(Math.max(floor, s.start), duration);
+        const end = Math.min(Math.max(start, s.end), duration);
+        segments.push({ start, end, text });
+        floor = start;
+    }
 
     const deduped: typeof segments = [];
     for (const segment of segments) {

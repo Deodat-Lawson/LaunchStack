@@ -200,6 +200,27 @@ describe("mergeWindows", () => {
         expect(merged.text).toBe("大家好\n同一句\nOK");
     });
 
+    it("keeps the spoken order when a model's timestamps run backwards", () => {
+        const merged = mergeWindows(
+            [
+                {
+                    language: "zh",
+                    languages: [],
+                    segments: [
+                        { start: 0.05, end: 0.44, text: "大家好，" },
+                        { start: 0.65, end: 0.88, text: "今天的会议我们讨论" },
+                        { start: 0.16, end: 0.44, text: "第三季度的销售计划。" },
+                    ],
+                    tokens: 1,
+                },
+            ],
+            9
+        );
+        expect(merged.text).toBe("大家好，\n今天的会议我们讨论\n第三季度的销售计划。");
+        const starts = merged.segments!.map(s => s.start);
+        expect(starts).toEqual([...starts].sort((a, b) => a - b));
+    });
+
     it("says unknown when nothing intelligible was said", () => {
         const merged = mergeWindows([{ language: "", languages: [], segments: [], tokens: 0 }], 10);
         expect(merged.language).toBe("unknown");

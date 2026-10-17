@@ -262,7 +262,6 @@ export interface ThreadMessage {
      * because you can't open their source. Never stored.
      */
     hiddenCitations?: number;
-    model?: string;
     /**
      * Total LLM tokens for the turn. Named for what it is: this used to be set
      * from `chunksAnalyzed`, so the UI reported a retrieval count as a token

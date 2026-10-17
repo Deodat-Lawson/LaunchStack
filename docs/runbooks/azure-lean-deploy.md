@@ -181,6 +181,13 @@ outbox (ADR-003). Nothing is registered by hand and nothing outside the VM
 calls the worker. Details, checks and rollback:
 [Background jobs](#background-jobs-self-hosted-inngest).
 
+With the event key but no signing key, events are accepted and **nothing ever
+runs**: production ran that way until 2026-10-17, and Drive sat at "Not synced
+yet". Caddyfile changes need the Caddy container recreated (or at least
+restarted), not `caddy reload`: the file is a single-file bind mount, and a
+`git pull` that rewrites it swaps the inode, so the container keeps reading
+the old one.
+
 ---
 
 ## Step 4 — Point DNS at the VM
@@ -730,8 +737,9 @@ deployment. Keeping it on Vercel is the intended split:
 - `app.example.com` → this stack on the Azure VM
 
 Point the landing site's sign-in links at the app with `NEXT_PUBLIC_APP_URL`,
-and set `NEXT_PUBLIC_SITE_URL` on the app to the landing origin. On a
-self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
+and set `LANDING_PUBLIC_URL` on the app to the landing origin (a runtime
+variable, so the CI-built image picks it up; `NEXT_PUBLIC_SITE_URL` would
+need a rebuild). On a self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
 marketing pages itself.
 
 Running `apps/web` **on** Vercel is a different architecture, not a config flag:

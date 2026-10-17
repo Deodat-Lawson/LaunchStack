@@ -139,6 +139,17 @@ interface UploadRow {
     error?: string;
 }
 const ROUTES: ChatRouteName[] = ["default", "fast", "reasoning", "vision"];
+/**
+ * What each route is called on screen. The picker chooses a route, never a
+ * model: which model serves it is the operator's configuration and the screen
+ * does not name it.
+ */
+const ROUTE_LABELS: Record<ChatRouteName, { label: string; blurb: string }> = {
+    default: { label: "Standard", blurb: "Balanced answers for most questions" },
+    fast: { label: "Fast", blurb: "Quicker, lighter answers" },
+    reasoning: { label: "Reasoning", blurb: "Thinks longer before answering" },
+    vision: { label: "Vision", blurb: "Reads images you attach" },
+};
 function defaultSendKey(): ComposerPreferences["sendKey"] {
     return typeof window !== "undefined" &&
         typeof window.matchMedia === "function" &&
@@ -2120,7 +2131,7 @@ export function Composer({
                             <span className="truncate">
                                 {modelRoutes.length >= 2
                                     ? `${modelRoutes.length} models`
-                                    : (routeInfo?.model ?? "Model")}
+                                    : ROUTE_LABELS[modelRoute].label}
                             </span>
                             <ChevronDown className="size-3 shrink-0" />
                         </Button>
@@ -2183,7 +2194,7 @@ export function Composer({
                                 )
                                 .filter(route =>
                                     modelSearchMatches(
-                                        `${route} ${chatRoutes.config.routes[route]?.model ?? ""}`,
+                                        `${route} ${ROUTE_LABELS[route].label} ${ROUTE_LABELS[route].blurb}`,
                                         modelSearch
                                     )
                                 )
@@ -2206,10 +2217,10 @@ export function Composer({
                                             >
                                                 <span className="min-w-0 flex-1">
                                                     <span className="block truncate font-medium">
-                                                        {info?.model ?? `${route} route`}
+                                                        {ROUTE_LABELS[route].label}
                                                     </span>
-                                                    <span className="text-ink-3 block capitalize">
-                                                        {route}
+                                                    <span className="text-ink-3 block">
+                                                        {ROUTE_LABELS[route].blurb}
                                                         {!info?.available ? " · unavailable" : ""}
                                                     </span>
                                                 </span>
@@ -2266,9 +2277,7 @@ export function Composer({
                                                 )
                                             }
                                         />
-                                        <span>
-                                            {chatRoutes.config.routes[route].model} · {route}
-                                        </span>
+                                        <span>{ROUTE_LABELS[route].label}</span>
                                     </label>
                                 )
                             )}

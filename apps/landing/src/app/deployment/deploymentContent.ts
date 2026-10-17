@@ -156,7 +156,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Prepare the host and domains",
                 body: [
-                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, files to SeaweedFS, and the public site to landing:3001. The worker's Inngest endpoint stays inside the Compose network.",
+                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, files to SeaweedFS, and the public site to landing:3001. The worker stays private.",
                 ],
                 code: "DOMAIN=workspace.example.com\nACME_EMAIL=ops@example.com\nBETTER_AUTH_URL=https://workspace.example.com\nAPP_PUBLIC_URL=https://workspace.example.com\nOCR_DEFAULT_PROVIDER=AZURE\nAZURE_DOC_INTELLIGENCE_ENDPOINT=https://your-resource.cognitiveservices.azure.com\nAZURE_DOC_INTELLIGENCE_KEY=replace-with-your-resource-key\nCONVERTER_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com\nADEU_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com",
                 file: ".env · example public origins and cloud OCR",
@@ -438,7 +438,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Production Inngest",
                 body: [
-                    "The production overlay replaces the dev server with a self-hosted Inngest server (inngest start), keeping its history in an inngest database on the same Postgres and its queue in a small Redis. It finds the worker at http://worker:8020/api/inngest on its own. Set your own event key and signing key; Compose refuses to start without them.",
+                    "The production overlay replaces the dev server with a self-hosted Inngest server (inngest start), keeping its history in an inngest database on the same Postgres and its queue in a small Redis. It finds the worker at http://worker:8020/api/inngest on its own. Set your own event key and signing key; Compose refuses to start without them (with an event key and no signing key, jobs are accepted and never run).",
                 ],
                 code: "# each value: the output of openssl rand -hex 32\nINNGEST_EVENT_KEY=replace-with-64-hex-characters\nINNGEST_SIGNING_KEY=replace-with-64-hex-characters",
                 file: ".env",

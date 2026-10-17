@@ -1,6 +1,8 @@
 /**
  * What leaves this deployment — computed from the environment, never from a
- * claim. Hosts only: a credential is never read here, let alone returned.
+ * claim. A credential is never read here, let alone returned.
+ * AI capabilities report a category, not a host: the screen never names the
+ * model vendor (see {@link aiProvider}).
  *
  * This is the one place the answer to "which outside service sees my
  * document text" is written down, so it is deliberately derived from the
@@ -45,6 +47,43 @@ function hostOf(url: string | null | undefined): string | null {
 
 const GEMINI_HOST = "generativelanguage.googleapis.com";
 
+/**
+ * An AI capability as the page shows it: whether it is on, and that its text
+ * goes to an outside model provider — not which one. The host is still worked
+ * out above, because "is it configured" depends on it.
+ */
+function aiProvider(service: OutboundService): OutboundService {
+    if (!service.host) return service;
+    return {
+        ...service,
+        host: null,
+        note: `${isLocalHost(service.host) ? "Runs on this deployment's own servers." : "Sent to a third-party AI model provider."} ${service.note}`,
+    };
+}
+
+/**
+ * A host that never leaves the deployment: the transcription sidecar, a
+ * Compose service name (`transcription:8000`, `ollama:11434`), loopback, or a
+ * private-network name. Anything with a public domain counts as outside.
+ */
+function isLocalHost(host: string): boolean {
+    const name = host
+        .replace(/:\d+$/, "")
+        .replace(/^\[|\]$/g, "")
+        .toLowerCase();
+    return (
+        name === "sidecar" ||
+        !name.includes(".") ||
+        name === "::1" ||
+        name.startsWith("127.") ||
+        name.startsWith("10.") ||
+        name.startsWith("192.168.") ||
+        /^172\.(1[6-9]|2\d|3[01])\./.test(name) ||
+        name.endsWith(".local") ||
+        name.endsWith(".internal")
+    );
+}
+
 export function privacyOverview(): PrivacyOverview {
     const server = env.server;
     const chat = hostOf(resolveChatEndpoint(server).baseUrl);
@@ -67,38 +106,38 @@ export function privacyOverview(): PrivacyOverview {
             : (hostOf(server.OCR_ROUTER_URL) ?? hostOf(server.OCR_WORKER_URL));
 
     const services: OutboundService[] = [
-        {
+        aiProvider({
             id: "chat",
             label: "Chat and generation",
             host: chat,
             sends: "document-text",
             enabled: Boolean(chat),
             note: "Every question, the passages retrieved to answer it, and every generated document go here.",
-        },
-        {
+        }),
+        aiProvider({
             id: "embedding",
             label: "Embeddings",
             host: embeddingHost,
             sends: "document-text",
             enabled: Boolean(embeddingHost),
             note: "Every chunk of every indexed document is sent to be embedded. Companies with their own key or an Ollama endpoint override this per workspace.",
-        },
-        {
+        }),
+        aiProvider({
             id: "rerank",
             label: "Reranking",
             host: rerankHost,
             sends: "document-text",
             enabled: true,
             note: "Candidate passages for a question are sent to be reordered.",
-        },
-        {
+        }),
+        aiProvider({
             id: "ner",
             label: "Entity extraction",
             host: nerHost,
             sends: "document-text",
             enabled: true,
             note: "Runs only when entity extraction is turned on for a document.",
-        },
+        }),
         {
             id: "ocr",
             label: "OCR",
@@ -109,14 +148,14 @@ export function privacyOverview(): PrivacyOverview {
                 ? `Scanned pages go to the ${ocrProvider.toLowerCase().replace("_", " ")} provider through the document converter.`
                 : "Native PDF extraction only; nothing leaves the server.",
         },
-        {
+        aiProvider({
             id: "transcription",
             label: "Transcription",
             host: transcriptionHost,
             sends: "document-text",
             enabled: true,
             note: "Uploaded audio and video are transcribed here.",
-        },
+        }),
         {
             id: "email",
             label: "Outbound email",

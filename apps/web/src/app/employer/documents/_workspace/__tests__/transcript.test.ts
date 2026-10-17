@@ -45,14 +45,15 @@ describe("transcript helpers", () => {
             {
                 role: "assistant",
                 text: "**12 months** of fees.",
-                model: "sonnet",
                 citations: [{ sourceId: "d1", snippet: "capped at twelve months", page: 4 }],
             },
         ];
         const md = transcriptMarkdown(thread, [source]);
         expect(md).toContain("# Chat transcript");
         expect(md).toContain("## You\n\nWhat is the liability cap?\n\n_Asked over: Vendor MSA_");
-        expect(md).toContain("## Launchstack (sonnet)\n\n**12 months** of fees.");
+        // The heading never names a model: the transcript can become a source
+        // anyone in the workspace reads.
+        expect(md).toContain("## Launchstack\n\n**12 months** of fees.");
         expect(md).toContain("- “capped at twelve months” — Vendor MSA");
         expect(transcriptFilename(thread)).toBe("what-is-the-liability-cap.md");
         expect(transcriptFilename([])).toBe("chat.md");

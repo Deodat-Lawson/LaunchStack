@@ -52,12 +52,15 @@ export function describeChatResolutionFailure(error: unknown): {
     status: number;
     message: string;
 } {
+    // A request error's message was written for the caller and never names a
+    // model. A configuration error quotes the file path, model ids and preset
+    // names, so it goes to the server log and the caller gets a fixed message.
+    if (isChatRequestError(error)) return { status: error.status, message: error.message };
+    console.error("[chat] chat model configuration cannot serve this request:", error);
     return {
-        status: isChatRequestError(error) ? error.status : 500,
+        status: 500,
         message:
-            error instanceof Error
-                ? error.message
-                : "The configured chat models cannot serve this request",
+            "Chat models are not configured correctly. An administrator needs to check the server's chat model file.",
     };
 }
 

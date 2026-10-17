@@ -48,8 +48,7 @@ export function transcriptMarkdown(thread: ThreadMessage[], sources: WorkspaceSo
             })
             .filter((line): line is string => Boolean(line));
         const grounded = cites.length ? `\n\n**Grounded in**\n\n${cites.join("\n")}` : "";
-        const model = msg.model ? ` (${msg.model})` : "";
-        return `## Launchstack${model}\n\n${msg.text}${grounded}`;
+        return `## Launchstack\n\n${msg.text}${grounded}`;
     });
     return `# Chat transcript\n\n${blocks.join("\n\n---\n\n")}\n`;
 }

@@ -635,10 +635,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            const compatibility = validateDeprecatedChatSelection(
-                { provider, model: aiModel },
-                resolved
-            );
+            const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
             if (!compatibility.ok) {
                 recordResult("error");
                 return NextResponse.json(
@@ -1261,7 +1258,7 @@ export async function POST(request: Request) {
                         companyId: userCompanyId,
                         amount: tokenCost,
                         service: "llm_chat",
-                        description: `Chat query via ${selectedAiModel}`,
+                        description: `Chat query (${route} route)`,
                         metadata: { promptTokens, completionTokens, model: selectedAiModel, route },
                     }).catch(err => console.warn("[AIChat] Token debit failed:", err));
                 }
@@ -1324,7 +1321,6 @@ export async function POST(request: Request) {
                         : {}),
                     fusionWeights: [0.4, 0.6],
                     searchScope,
-                    aiModel: selectedAiModel,
                     agent: agentResponseInfo(agent),
                     webSources: enableWebSearchFlag ? webSearch.results : undefined,
                     webSearch: enableWebSearchFlag
@@ -1349,12 +1345,11 @@ export async function POST(request: Request) {
                     error => {
                         recordResult("error");
                         const friendly = describeChatError(error, selectedAiModel);
-                        return (
-                            friendly?.message ??
-                            (error instanceof Error
-                                ? error.message
-                                : "The chat response failed. Please retry.")
-                        );
+                        if (friendly) return friendly.message;
+                        // The provider's own text can name the vendor or its
+                        // billing page; it goes to the log, not the screen.
+                        console.error("[AIChat] Streamed response failed:", error);
+                        return "The chat response failed. Please retry.";
                     }
                 );
                 return new NextResponse(streamingResponse.body, {

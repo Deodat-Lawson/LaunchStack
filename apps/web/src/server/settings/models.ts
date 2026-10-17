@@ -1,48 +1,42 @@
 /**
- * The operator's view of chat model configuration: which model serves each
- * route, what each model declares, and where that declaration came from.
+ * The admin's view of chat model configuration: which configured model serves
+ * each route and what each model declares.
  *
  * Read-only by design. The YAML file is the source of truth and validated at
  * startup; this makes it legible without making it editable from a browser,
  * which would turn a 500-on-boot misconfiguration into a 500-on-first-ask.
- * Endpoint credentials are never included; the host is.
+ *
+ * Workspace admins are customers, not operators, so this never names the
+ * vendor: no endpoint host, no model id, no preset (preset names and notes
+ * are vendor-prefixed), no config file name. Those live in the server's
+ * configuration and logs.
  */
-
-import { basename } from "node:path";
 
 import {
     ChatRoutes,
     behaviorSupportsReasoning,
     behaviorSupportsVision,
-    getChatModelPreset,
     getChatModelsConfig,
     isChatRouteUnavailableError,
     resolveChatRoute,
     type ChatModelDefinition,
 } from "@launchstack/llm";
 import { env } from "~/env";
-import { configureAppChatModels, resolveChatModelsConfigPath } from "~/server/chat-models";
+import { configureAppChatModels } from "~/server/chat-models";
 
 export interface ModelRouteInfo {
     route: string;
     available: boolean;
-    /** Configured model name, e.g. `fast`. */
+    /** Configured model name, e.g. `fast` — the operator's label, not the wire id. */
     name?: string;
-    /** Model id sent to the endpoint. */
-    modelId?: string;
     inheritsDefault?: boolean;
     unavailableReason?: string;
 }
 
 export interface ModelInfo {
     name: string;
-    modelId: string;
-    /** Preset the behaviour started from, when one was referenced. */
-    preset: string | null;
-    /** Where the preset's behaviour was read from, and when it was last checked. */
-    presetSource: string | null;
-    verifiedOn: string | null;
-    presetNotes: string | null;
+    /** Whether the behaviour comes from a verified preset rather than the file. */
+    fromPreset: boolean;
     input: readonly string[];
     vision: boolean;
     reasoning: boolean;
@@ -55,29 +49,14 @@ export interface ModelInfo {
 }
 
 export interface ModelsOverview {
-    endpointHost: string | null;
-    configFile: string;
     routes: ModelRouteInfo[];
     models: ModelInfo[];
 }
 
-function hostOf(url: string): string | null {
-    try {
-        return new URL(url).host;
-    } catch {
-        return url || null;
-    }
-}
-
 function describeModel(name: string, definition: ChatModelDefinition, routes: string[]): ModelInfo {
-    const preset = definition.preset ? getChatModelPreset(definition.preset) : undefined;
     return {
         name,
-        modelId: definition.id,
-        preset: definition.preset ?? null,
-        presetSource: preset?.source ?? null,
-        verifiedOn: preset?.verifiedOn ?? null,
-        presetNotes: preset?.notes ?? null,
+        fromPreset: Boolean(definition.preset),
         input: definition.behavior.input,
         vision: behaviorSupportsVision(definition.behavior),
         reasoning: behaviorSupportsReasoning(definition.behavior),
@@ -102,7 +81,6 @@ export function modelsOverview(): ModelsOverview {
                 route,
                 available: true,
                 name: resolved.name,
-                modelId: resolved.definition.id,
                 inheritsDefault: resolved.inheritsDefault,
             });
             routesByModel.set(resolved.name, [...(routesByModel.get(resolved.name) ?? []), route]);
@@ -117,10 +95,5 @@ export function modelsOverview(): ModelsOverview {
         models.push(describeModel(name, definition, routesByModel.get(name) ?? []));
     }
 
-    return {
-        endpointHost: hostOf(config.endpoint.baseUrl),
-        configFile: basename(resolveChatModelsConfigPath(env.server, process.cwd())),
-        routes,
-        models,
-    };
+    return { routes, models };
 }

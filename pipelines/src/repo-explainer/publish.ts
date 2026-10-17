@@ -74,7 +74,8 @@ export function renderExplanationMarkdown(input: RenderExplanationInput): string
             `Generated: ${generatedAt.toISOString()}`,
             `Skill: ${result.provenance.skillVersion} (${result.provenance.skillHash.slice(0, 12)})`,
             `Prompt: ${result.provenance.promptVersion}`,
-            result.provenance.modelId ? `Model: ${result.provenance.modelId}` : undefined,
+            // No model line: the explainer is a workspace source people read,
+            // and the product never names the model (provenance keeps the id).
         ]
             .filter(Boolean)
             .map(line => `> ${line}`)

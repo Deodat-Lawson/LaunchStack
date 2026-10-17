@@ -426,6 +426,9 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
             ...(input.endpoint.apiKey && input.endpoint.apiKey.trim().length > 0
                 ? { apiKey: input.endpoint.apiKey.trim() }
                 : {}),
+            ...(input.endpoint.systemInstructions?.trim()
+                ? { systemInstructions: input.endpoint.systemInstructions.trim() }
+                : {}),
         },
         models,
         routes: {

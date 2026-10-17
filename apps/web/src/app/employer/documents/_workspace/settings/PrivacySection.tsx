@@ -71,7 +71,7 @@ export function PrivacySection(_: SettingsSectionProps) {
 
             <Section
                 title="Outside services"
-                description="Computed from this deployment's configuration. Hosts only — no credential is read to build this list."
+                description="Computed from this deployment's configuration. No credential is read to build this list."
             >
                 <Card>
                     {!overview ? (

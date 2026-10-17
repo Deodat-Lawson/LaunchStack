@@ -4,9 +4,9 @@
 # expiry notices from Let's Encrypt.
 
 {$DOMAIN} {
-	# The worker's /api/inngest is deliberately not routed: the self-hosted
-	# Inngest server calls worker:8020 inside the compose network, so nothing
-	# outside the VM needs it (the app does not serve it either, ADR-003).
+	# The worker's /api/inngest is not routed: the self-hosted Inngest server
+	# reaches it on the compose network. Only an Inngest Cloud setup needs a
+	# public route (`handle /api/inngest* { reverse_proxy worker:8020 }`).
 	handle {
 		reverse_proxy app:3000
 	}

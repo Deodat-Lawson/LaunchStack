@@ -1,5 +1,5 @@
 import type { ProviderResult } from "../types";
-import type { NERProvider, NERResult, ChunkEntities } from "./index";
+import type { NERProvider, NERResult, ChunkEntities, EntityResult } from "./index";
 import { getCapabilityConfig, resolveEndpoint, resolveModel } from "../registry";
 import { GEMINI_FAST_MODEL } from "../../types";
 import {
@@ -132,43 +132,57 @@ export class LLMNERProvider implements NERProvider {
 
         try {
             // Lenient: a workspace's model without JSON mode may fence its answer.
-            const parsed = extractJson(content) as
-                | { entities: Array<{ text: string; label: string; score: number }> }
-                | {
-                      chunks: Array<{
-                          entities: Array<{ text: string; label: string; score: number }>;
-                      }>;
-                  }
-                | Array<{ text: string; label: string; score: number }>;
-
-            if (chunks.length === 1) {
-                const entities = Array.isArray(parsed)
-                    ? parsed
-                    : "entities" in parsed
-                      ? parsed.entities
-                      : [];
-                return [{ text: chunks[0]!, entities }];
-            }
-
-            if ("chunks" in parsed && Array.isArray(parsed.chunks)) {
-                return chunks.map((text, i) => ({
-                    text,
-                    entities: parsed.chunks[i]?.entities ?? [],
-                }));
-            }
-
-            const allEntities = Array.isArray(parsed)
-                ? parsed
-                : "entities" in parsed
-                  ? parsed.entities
-                  : [];
-            return chunks.map((text, i) => ({
-                text,
-                entities: i === 0 ? allEntities : [],
-            }));
+            const perChunk = entitiesPerChunk(extractJson(content));
+            return chunks.map((text, i) => ({ text, entities: perChunk[i] ?? [] }));
         } catch {
             console.warn("[LLM-NER] Failed to parse response, returning empty entities");
             return chunks.map(text => ({ text, entities: [] }));
         }
     }
+}
+
+/** Entities from one list, dropping anything that is not one: storing reads `text` and `label`. */
+function toEntities(value: unknown): EntityResult[] {
+    if (!Array.isArray(value)) return [];
+    return value.flatMap(item => {
+        const entity = item as Partial<EntityResult> | null;
+        if (typeof entity?.text !== "string" || typeof entity.label !== "string") return [];
+        return [
+            {
+                text: entity.text,
+                label: entity.label,
+                score: typeof entity.score === "number" ? entity.score : 0,
+            },
+        ];
+    });
+}
+
+function entitiesOf(value: unknown): EntityResult[] {
+    return value !== null && typeof value === "object" && !Array.isArray(value)
+        ? toEntities((value as { entities?: unknown }).entities)
+        : [];
+}
+
+/**
+ * Each chunk's entities, from whichever shape the model answered in:
+ * `[{ entities }, …]` (what the batch prompt asks for, one per chunk),
+ * `{ chunks: [{ entities }, …] }`, `{ entities }`, or a flat list — the last
+ * two belong to the first chunk, as they always have.
+ */
+function entitiesPerChunk(parsed: unknown): EntityResult[][] {
+    if (Array.isArray(parsed)) {
+        const perChunk =
+            parsed.length > 0 &&
+            parsed.every(
+                item =>
+                    item !== null &&
+                    typeof item === "object" &&
+                    "entities" in item &&
+                    !("text" in item)
+            );
+        return perChunk ? parsed.map(entitiesOf) : [toEntities(parsed)];
+    }
+    const chunked = (parsed as { chunks?: unknown } | null)?.chunks;
+    if (Array.isArray(chunked)) return chunked.map(entitiesOf);
+    return [entitiesOf(parsed)];
 }

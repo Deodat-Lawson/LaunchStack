@@ -67,6 +67,14 @@ function contentOf(body: Record<string, unknown>, role: string): string {
 function answerFor(body: Record<string, unknown>): string {
     const system = contentOf(body, "system");
     if (system.includes("named entity recognition")) {
+        const user = contentOf(body, "user");
+        if (user.includes("--- Chunk 2 ---")) {
+            // A batch, answered the way the prompt asks: one element per chunk.
+            return JSON.stringify([
+                { entities: [{ text: "Acme Corp", label: "ORG", score: 0.9 }] },
+                { entities: [{ text: "Berlin", label: "LOC", score: 0.8 }, { label: "ORG" }] },
+            ]);
+        }
         // Fenced, as a model without JSON mode often answers.
         return '```json\n{"entities":[{"text":"Acme Corp","label":"ORG","score":0.9}]}\n```';
     }
@@ -354,6 +362,19 @@ describe("document ingestion in a workspace on its own model", () => {
         expect(requestsTo("workspace")).toHaveLength(3);
         expect(requestsTo("deployment")).toHaveLength(2);
         expect(requestsTo("deployment-ner")).toHaveLength(1);
+    });
+});
+
+describe("entity extraction answers", () => {
+    it("reads a batch answered one element per chunk, and drops entries that are not entities", async () => {
+        const out = await (
+            await getNERProvider()
+        ).extract(["Acme Corp opened an office.", "It is in Berlin."]);
+        expect(out.data.results.map(r => r.entities.map(e => e.text))).toEqual([
+            ["Acme Corp"],
+            ["Berlin"],
+        ]);
+        expect(out.data.totalEntities).toBe(2);
     });
 });
 

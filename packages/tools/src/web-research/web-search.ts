@@ -41,6 +41,14 @@ export interface WebSearchResponse {
 const EXA_SEARCH_URL = "https://api.exa.ai/search";
 const SERPER_SEARCH_URL = "https://google.serper.dev/search";
 
+/** A result's title, or its URL when the provider gave none. */
+function titleOf(title: string | undefined, url: string): string {
+    // An empty title falls back too, which `??` would not do.
+    const trimmed = title?.trim();
+    if (trimmed) return trimmed;
+    return url;
+}
+
 /** The provider a search would use now, or null when no search key is set. */
 export function configuredWebSearchProvider(): WebSearchProviderName | null {
     const exa = Boolean(getExaApiKey());
@@ -103,7 +111,7 @@ async function searchExa(
         .filter(item => typeof item.url === "string" && item.url.length > 0)
         .slice(0, maxResults)
         .map(item => ({
-            title: item.title?.trim() || item.url!,
+            title: titleOf(item.title, item.url!),
             url: item.url!,
             snippet: clip(item.text ?? "", snippetChars),
             ...(item.publishedDate ? { publishedDate: item.publishedDate } : {}),
@@ -129,7 +137,7 @@ async function searchSerper(
         .filter(item => typeof item.link === "string" && item.link.length > 0)
         .slice(0, maxResults)
         .map(item => ({
-            title: item.title?.trim() || item.link!,
+            title: titleOf(item.title, item.link!),
             url: item.link!,
             snippet: clip(item.snippet ?? "", options.snippetChars ?? 1200),
             ...(item.date ? { publishedDate: item.date } : {}),

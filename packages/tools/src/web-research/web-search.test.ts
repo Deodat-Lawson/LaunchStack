@@ -69,7 +69,7 @@ describe("searchWeb", () => {
         const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
         expect(url).toBe("https://api.exa.ai/search");
         expect((init.headers as Record<string, string>)["x-api-key"]).toBe("exa-test");
-        const body = JSON.parse(String(init.body)) as Record<string, unknown>;
+        const body = JSON.parse(init.body as string) as Record<string, unknown>;
         expect(body).toEqual({
             query: "latest node release",
             type: "auto",
@@ -102,7 +102,7 @@ describe("searchWeb", () => {
         expect(provider).toBe("serper");
         const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
         expect(url).toBe("https://google.serper.dev/search");
-        expect(JSON.parse(String(init.body))).toEqual({ q: "train timetable", num: 5 });
+        expect(JSON.parse(init.body as string)).toEqual({ q: "train timetable", num: 5 });
         expect(results).toEqual([
             { title: "Timetable", url: "https://example.com/t", snippet: "Trains." },
         ]);

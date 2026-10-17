@@ -60,7 +60,7 @@ export interface AnswerWithToolsOptions {
         onReasoning(delta: string): void;
     };
     /** A tool call started (its `describe` text), or the model resumed ("generating"). */
-    onStatus?(status: string): void;
+    onStatus?: (status: string) => void;
     /** Rounds in which the model may call tools before it must answer (default 3). */
     maxToolRounds?: number;
 }
@@ -128,8 +128,10 @@ interface RoundCall {
 function readToolCalls(message: unknown, round: number): RoundCall[] {
     const fields = message as { tool_calls?: unknown; invalid_tool_calls?: unknown };
     const calls: RoundCall[] = [];
-    const valid = Array.isArray(fields.tool_calls) ? fields.tool_calls : [];
-    const invalid = Array.isArray(fields.invalid_tool_calls) ? fields.invalid_tool_calls : [];
+    const valid: unknown[] = Array.isArray(fields.tool_calls) ? fields.tool_calls : [];
+    const invalid: unknown[] = Array.isArray(fields.invalid_tool_calls)
+        ? fields.invalid_tool_calls
+        : [];
     for (const raw of [...valid, ...invalid] as Array<Record<string, unknown>>) {
         if (typeof raw?.name !== "string" || !raw.name) continue;
         const isInvalid = invalid.includes(raw);

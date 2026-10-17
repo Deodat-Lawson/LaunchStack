@@ -34,6 +34,7 @@ import {
     type TranscriptTranslationResponse,
 } from "~/lib/media-document";
 import { validateRequestBody } from "~/lib/validation";
+import { isTranslationLanguage } from "~/lib/languages";
 
 export const maxDuration = 300;
 
@@ -58,9 +59,14 @@ export async function POST(request: Request, { params }: RouteParams) {
 
             const validation = await validateRequestBody(request, BodySchema);
             if (!validation.success) return validation.response;
+            // Only the languages the viewer offers: each new one is a paid model
+            // call any reader can trigger, and is stored on the transcript.
             const language = canonicalLanguage(validation.data.language);
-            if (!language) {
-                return NextResponse.json({ error: "Unknown language code" }, { status: 400 });
+            if (!language || !isTranslationLanguage(language)) {
+                return NextResponse.json(
+                    { error: "Translation into that language isn't offered" },
+                    { status: 400 }
+                );
             }
 
             const inScope = scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope());

@@ -2,15 +2,15 @@
  * Cut a recording into small speech-quality chunks with ffmpeg, so each
  * transcription call carries only its own minutes.
  *
- * Without this, a long recording is transcribed as prompts over time ranges of
- * the whole stored file, and Gemini bills (and rate-limits) every one of those
- * calls for the whole file's audio: an 82-minute meeting is 157k input tokens
- * per call. Chunked, the same meeting is three calls of ~58k — inside a free-tier
- * project's per-minute token budget — and the upload is a fraction of the size,
+ * Sending the whole file and naming a time range per call does not work: Gemini
+ * bills every such call for the whole file's audio (157k input tokens for an
+ * 82-minute meeting) and does not reliably obey the range. Chunked, each call
+ * carries ~19k tokens of its own ten minutes, and the upload shrinks too,
  * because Gemini downsamples to 16 kHz mono anyway.
  *
  * ffmpeg is an optional runtime dependency: the app image installs it, and a
- * host without it falls back to whole-file windows (see gemini-native.ts).
+ * host without it can transcribe only recordings that fit one chunk (see
+ * gemini-native.ts).
  */
 import { execFile } from "node:child_process";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";

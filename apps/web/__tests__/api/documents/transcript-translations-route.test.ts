@@ -164,6 +164,23 @@ describe("POST /api/documents/[id]/transcript/translations", () => {
         expect(mockDbSelect).not.toHaveBeenCalled();
     });
 
+    it("refuses a real language tag the menu does not offer, so readers cannot mint paid variants", async () => {
+        for (const language of ["en-x-1", "en-GB", "tlh"]) {
+            const { status } = await post({ language });
+            expect(status).toBe(400);
+        }
+        expect(mockDbSelect).not.toHaveBeenCalled();
+        expect(mockTranslate).not.toHaveBeenCalled();
+    });
+
+    it("accepts the menu's script-tagged Chinese in any case", async () => {
+        selectReturns([transcript({ source: "transcription", segments: SEGMENTS })]);
+        mockTranslate.mockResolvedValue({ lines: ["大家好", "我们开会"], model: "m", tokens: 1 });
+        const { status, body } = await post({ language: "zh-hans" });
+        expect(status).toBe(200);
+        expect(body.language).toBe("zh-Hans");
+    });
+
     it("passes on the reason a translation failed", async () => {
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
         selectReturns([transcript({ source: "transcription", segments: SEGMENTS })]);

@@ -49,12 +49,39 @@ export function languageNameOf(code: string): string {
 function systemPrompt(target: string): string {
     return (
         `You translate lines of a recorded conversation's transcript into ${languageNameOf(target)} (${target}). ` +
-        'Each input line is {"i": number, "t": text}. Return one {"i", "t"} for every input line, with the same ' +
-        "i and its translation as t: translate each line on its own, never merging, splitting or dropping " +
-        "lines, even one-word replies. Keep names, numbers, product and company terms as they are. A line " +
-        "already in the target language is returned unchanged. Translate faithfully, including filler and " +
-        "unfinished sentences; do not summarise or add notes."
+        'Each input line is {"i": number, "t": text}. Return one {"i", "s", "t"} for every input line: i is ' +
+        "its number, s is the first 12 characters of that input line copied exactly, and t is its translation. " +
+        "Translate each line on its own, never merging, splitting or dropping lines, even one-word replies. " +
+        "Keep names, numbers, product and company terms as they are. A line already in the target language is " +
+        "returned unchanged. Translate faithfully, including filler and unfinished sentences; do not summarise " +
+        "or add notes."
     );
+}
+
+/** Text for echo checks: lower case, letters and digits only. */
+function normalForm(text: string): string {
+    return text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+}
+
+/**
+ * Whether the reply's quote of a line (`s`) is that line. A model that merges
+ * two lines and renumbers the rest quotes the line it actually translated, so
+ * every shifted line fails this and is asked for again instead of being stored
+ * under the wrong timestamp.
+ */
+export function echoMatches(source: string, echo: string): boolean {
+    const want = normalForm(source);
+    const got = normalForm(echo);
+    if (!want || !got) return want === got;
+    const head = want.slice(0, Math.max(got.length + 4, 6));
+    if (got.length <= 2) return head.startsWith(got);
+    let pairs = 0;
+    let hits = 0;
+    for (let i = 0; i + 1 < got.length; i++) {
+        pairs++;
+        if (head.includes(got.slice(i, i + 2))) hits++;
+    }
+    return hits / pairs >= 0.6;
 }
 
 /** Lines a batch may end with untranslated (kept in the original) before it fails. */
@@ -77,7 +104,7 @@ async function requestTranslations(
     endpoint: Endpoint,
     model: string,
     fetchImpl: typeof fetch
-): Promise<{ byIndex: Map<number, string>; tokens: number }> {
+): Promise<{ byIndex: Map<number, string>; rejected: number; tokens: number }> {
     const isGemini = endpoint.baseUrl.startsWith(GEMINI_ROOT);
     const resp = await fetchImpl(`${endpoint.baseUrl}/chat/completions`, {
         method: "POST",
@@ -108,8 +135,12 @@ async function requestTranslations(
                                 type: "array",
                                 items: {
                                     type: "object",
-                                    properties: { i: { type: "integer" }, t: { type: "string" } },
-                                    required: ["i", "t"],
+                                    properties: {
+                                        i: { type: "integer" },
+                                        s: { type: "string" },
+                                        t: { type: "string" },
+                                    },
+                                    required: ["i", "s", "t"],
                                     additionalProperties: false,
                                 },
                             },
@@ -151,15 +182,25 @@ async function requestTranslations(
     }
     // Matched by number, not position: a model that merges two short replies
     // ("系。" "好。") shifts every line after them otherwise.
+    const asked = new Map(items.map(item => [item.i, item.t]));
     const byIndex = new Map<number, string>();
+    let rejected = 0;
     if (Array.isArray(out)) {
         for (const item of out) {
             if (!item || typeof item !== "object") continue;
-            const { i, t } = item as { i?: unknown; t?: unknown };
-            if (typeof i === "number" && typeof t === "string" && t.trim()) byIndex.set(i, t);
+            const { i, s, t } = item as { i?: unknown; s?: unknown; t?: unknown };
+            if (typeof i !== "number" || typeof t !== "string" || !t.trim()) continue;
+            const source = asked.get(i);
+            if (source === undefined) continue;
+            // A quote that is not this line means the reply's numbering slipped.
+            if (typeof s !== "string" || !echoMatches(source, s)) {
+                rejected++;
+                continue;
+            }
+            byIndex.set(i, t);
         }
     }
-    return { byIndex, tokens: data.usage?.total_tokens ?? 0 };
+    return { byIndex, rejected, tokens: data.usage?.total_tokens ?? 0 };
 }
 
 /** Whether a failed call is worth making again: not a spent daily quota. */
@@ -217,7 +258,11 @@ async function translateBatch(
         if (pending.length === asked.length) break; // no progress: stop asking
         if (pending.length > 0) {
             console.warn(
-                `[TranscriptTranslation] ${label}: ${pending.length} of ${lines.length} lines missing, asking for them`
+                `[TranscriptTranslation] ${label}: ${pending.length} of ${lines.length} lines missing` +
+                    (reply.rejected > 0
+                        ? ` (${reply.rejected} answered under the wrong number)`
+                        : "") +
+                    ", asking for them"
             );
         }
     }

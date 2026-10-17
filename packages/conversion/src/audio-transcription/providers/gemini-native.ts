@@ -300,6 +300,57 @@ export function normaliseLanguage(code: string | undefined): string | null {
     }
 }
 
+/** Text for overlap checks: lower case, letters and digits only. */
+export function normalForm(text: string): string {
+    return text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+}
+
+/** Longest common subsequence of `a` and `b`, as a share of `a`. */
+function inOrderShare(a: string, b: string): number {
+    if (!a) return 0;
+    let prev = new Array<number>(b.length + 1).fill(0);
+    for (let i = 1; i <= a.length; i++) {
+        const row = new Array<number>(b.length + 1).fill(0);
+        for (let j = 1; j <= b.length; j++) {
+            row[j] = a[i - 1] === b[j - 1] ? prev[j - 1]! + 1 : Math.max(prev[j]!, row[j - 1]!);
+        }
+        prev = row;
+    }
+    return prev[b.length]! / a.length;
+}
+
+type Line = WindowTranscript["segments"][number];
+
+/** How far back from a reply's end to look for speech the continuation repeats. */
+const REPEAT_SEARCH_LINES = 40;
+const REPEAT_SEARCH_CHARS = 800;
+
+/**
+ * `first` without the lines at its end that `rest` transcribes again.
+ *
+ * A reply can hear a whole window yet squeeze its timestamps, so its last line
+ * seems to end minutes early; the continuation then transcribes that speech a
+ * second time, correctly timed. The longest run of `first`'s last lines whose
+ * text appears, in order, at the start of `rest` (80% of its characters, as a
+ * common subsequence, so different line breaks or a changed word still match)
+ * is dropped, and the fresh clip's copy stays. Order is what keeps look-alike
+ * lines ("End of section 31." vs "End of section 48.") from matching.
+ */
+export function dropRepeatedTail(first: Line[], rest: Line[]): Line[] {
+    const restText = normalForm(rest.map(l => l.text).join(""));
+    if (!restText) return first;
+    let drop = 0;
+    let tail = "";
+    for (let k = 1; k <= Math.min(first.length, REPEAT_SEARCH_LINES); k++) {
+        tail = normalForm(first[first.length - k]!.text) + tail;
+        if (tail.length > REPEAT_SEARCH_CHARS || tail.length > restText.length * 1.1) break;
+        if (tail.length < 6) continue;
+        const head = restText.slice(0, Math.ceil(tail.length * 1.1));
+        if (inOrderShare(tail, head) >= 0.8) drop = k;
+    }
+    return drop > 0 ? first.slice(0, first.length - drop) : first;
+}
+
 /** Window transcripts timed from a clip's start, moved to the clip's place. */
 function shiftWindows(parts: WindowTranscript[], by: number): WindowTranscript[] {
     return parts.map(p => ({
@@ -724,7 +775,16 @@ export class GeminiNativeTranscriber {
             const rest = recut
                 ? await this.transcribeCut(recut, remainder, offset, continuation + 1)
                 : await this.transcribeWindow(media, remainder, duration, offset, continuation + 1);
-            return [part, ...rest];
+            const kept = dropRepeatedTail(
+                part.segments,
+                rest.flatMap(r => r.segments)
+            );
+            if (kept.length < part.segments.length) {
+                console.warn(
+                    `[Transcription] ${label}: ${part.segments.length - kept.length} line(s) heard again in the rest; kept the re-timed copy`
+                );
+            }
+            return [{ ...part, segments: kept }, ...rest];
         }
         return [part];
     }

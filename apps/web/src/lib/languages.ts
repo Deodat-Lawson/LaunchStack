@@ -22,6 +22,11 @@ export const TRANSLATION_LANGUAGES = [
     "it",
 ] as const;
 
+/** Whether `code` (canonical BCP-47) is one the Translate menu offers. */
+export function isTranslationLanguage(code: string): boolean {
+    return (TRANSLATION_LANGUAGES as readonly string[]).includes(code);
+}
+
 function displayName(code: string, inLocale: string): string | null {
     try {
         const name = new Intl.DisplayNames([inLocale], { type: "language" }).of(code);

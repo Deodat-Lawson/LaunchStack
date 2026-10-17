@@ -13,6 +13,8 @@ import { parseProvider } from "@launchstack/conversion/ocr/trigger";
 import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-storage-type";
 import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
+import { deleteDocumentCore } from "./document-delete";
+import { db } from "~/server/db";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
 import { buildInternalFileUrl } from "@launchstack/store/crypto";
@@ -212,6 +214,17 @@ export async function processDocumentUpload({
             throw error;
         }
 
+        // The transcript text is stored before any row exists, so the only
+        // step left that can fail after the recording row is the transcript
+        // row itself — and that failure removes the recording row below.
+        const textBlob = await uploadFile({
+            filename: `${documentName}-transcription.txt`,
+            data: Buffer.from(transcriptionResult.text, "utf-8"),
+            contentType: "text/plain",
+            userId: user.userId,
+            companyId: user.companyId,
+        });
+
         const audioLifecycle = await createDocumentLifecycle({
             companyId: user.companyId,
             userId: user.userId,
@@ -222,14 +235,6 @@ export async function processDocumentUpload({
             mimeType: mimeType ?? null,
             ocrEnabled: false,
             ocrProcessed: true,
-        });
-
-        const textBlob = await uploadFile({
-            filename: `${documentName}-transcription.txt`,
-            data: Buffer.from(transcriptionResult.text, "utf-8"),
-            contentType: "text/plain",
-            userId: user.userId,
-            companyId: user.companyId,
         });
 
         const transcriptionMetadata = {
@@ -250,25 +255,42 @@ export async function processDocumentUpload({
         };
 
         const transcriptName = `${documentName} (Transcription)`;
-        const transcriptLifecycle = await createDocumentLifecycle({
-            companyId: user.companyId,
-            userId: user.userId,
-            title: transcriptName,
-            category: documentCategory,
-            url: textBlob.url,
-            processingUrl: textBlob.url,
-            creationKey: `${baseCreationKey}:audio-transcript`,
-            mimeType: "text/plain",
-            ocrEnabled: true,
-            ocrProcessed: false,
-            ocrMetadata: transcriptionMetadata,
-            processing: {
-                preferredProvider,
-                originalFilename: `${documentName}-transcription.txt`,
-                transcriptionMetadata,
-                embeddingIndexKey: resolvedEmbeddingIndexKey,
-            },
-        });
+        let transcriptLifecycle: CreatedDocumentLifecycle;
+        try {
+            transcriptLifecycle = await createDocumentLifecycle({
+                companyId: user.companyId,
+                userId: user.userId,
+                title: transcriptName,
+                category: documentCategory,
+                url: textBlob.url,
+                processingUrl: textBlob.url,
+                creationKey: `${baseCreationKey}:audio-transcript`,
+                mimeType: "text/plain",
+                ocrEnabled: true,
+                ocrProcessed: false,
+                ocrMetadata: transcriptionMetadata,
+                processing: {
+                    preferredProvider,
+                    originalFilename: `${documentName}-transcription.txt`,
+                    transcriptionMetadata,
+                    embeddingIndexKey: resolvedEmbeddingIndexKey,
+                },
+            });
+        } catch (error) {
+            // A recording row this request created, with no transcript beside
+            // it, is the orphan the reordering above exists to prevent.
+            if (audioLifecycle.created) {
+                await db
+                    .transaction(tx => deleteDocumentCore(tx, audioLifecycle.document.id))
+                    .catch((cleanupError: unknown) =>
+                        console.error(
+                            `[DocumentUpload] Could not remove recording ${audioLifecycle.document.id} after its transcript failed:`,
+                            cleanupError
+                        )
+                    );
+            }
+            throw error;
+        }
 
         return {
             ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),

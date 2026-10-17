@@ -4,6 +4,7 @@ import { TranscriptionError } from "../errors";
 import {
     GeminiNativeTranscriber,
     INLINE_MAX_BYTES,
+    dropRepeatedTail,
     DEFAULT_CHUNK_SECONDS,
     gapLine,
     geminiNativeRoot,
@@ -245,6 +246,38 @@ describe("retryAfterSeconds", () => {
         const got = retryAfterSeconds(message);
         if (expected === null) expect(got).toBeNull();
         else expect(got).toBeCloseTo(expected, 3);
+    });
+});
+
+describe("dropRepeatedTail", () => {
+    const line = (start: number, text: string) => ({ start, end: start + 1, text });
+
+    it("drops the end of the first reply that the rest says again", () => {
+        const first = [
+            line(0, "大家好，今日我哋傾下個 FATCA form。"),
+            line(5, "呢個 client 有兩個 version。"),
+            line(8, "系。"),
+        ];
+        const rest = [
+            line(200, "呢個client有兩個version"),
+            line(204, "系"),
+            line(210, "下一個 case"),
+        ];
+        expect(dropRepeatedTail(first, rest).map(l => l.text)).toEqual([
+            "大家好，今日我哋傾下個 FATCA form。",
+        ]);
+    });
+
+    it("keeps the first reply when the rest is new speech", () => {
+        const first = [line(0, "Good afternoon everyone."), line(3, "Let's start with hiring.")];
+        const rest = [line(200, "We need two engineers before November.")];
+        expect(dropRepeatedTail(first, rest)).toEqual(first);
+    });
+
+    it("does not drop on a lone backchannel both happen to contain", () => {
+        const first = [line(0, "The plan is approved."), line(3, "OK.")];
+        const rest = [line(200, "OK. Next item is the budget.")];
+        expect(dropRepeatedTail(first, rest)).toEqual(first);
     });
 });
 
@@ -696,6 +729,57 @@ describe("GeminiNativeTranscriber", () => {
             [600, "c1 opening"],
             [785, "c1 rest"],
         ]);
+    });
+
+    it("keeps one copy when the rest re-hears speech the first reply already squeezed in", async () => {
+        // QA's case: the first reply hears all ten sentences of a 300 s chunk but
+        // times them 0–149 s; the continuation over 149–300 s hears S6–S10 again.
+        const chunker = vi.fn<SplitAudio>(async () => ({
+            duration: 300,
+            chunks: [{ start: 0, end: 300, bytes: Buffer.from("clip:0-300") }],
+        }));
+        const cutter = vi.fn<CutAudio>(async (_bytes, start, end) =>
+            Buffer.from(`clip:${start}-${end}`)
+        );
+        const sentence = (n: number) => `Sentence number ${n} of the test.`;
+        const { fetchImpl } = fakeGemini({
+            count: () => countReply(0),
+            generate: body => {
+                const data = (body.contents as { parts: { inlineData?: { data: string } }[] }[])[0]!
+                    .parts[0]!.inlineData!.data;
+                const [a, b] = Buffer.from(data, "base64")
+                    .toString()
+                    .slice(5)
+                    .split("-")
+                    .map(Number);
+                const segments =
+                    a === 0 && b === 300
+                        ? Array.from({ length: 10 }, (_, i) => ({
+                              start: i * 15,
+                              end: i * 15 + 14,
+                              text: sentence(i + 1),
+                          }))
+                        : Array.from({ length: 10 }, (_, i) => i * 30)
+                              .filter(t => t >= a! && t < b!)
+                              .map(t => ({
+                                  start: t - a!,
+                                  end: t - a! + 29,
+                                  text: sentence(t / 30 + 1),
+                              }));
+                return windowReply({ language: "en", segments });
+            },
+        });
+
+        const { result } = await transcriber(fetchImpl, chunker, cutter).transcribe(
+            Buffer.alloc(INLINE_MAX_BYTES + 1),
+            "a.m4a"
+        );
+
+        const texts = result.segments!.map(s => s.text);
+        expect(new Set(texts).size).toBe(texts.length);
+        expect(texts).toEqual(Array.from({ length: 10 }, (_, i) => sentence(i + 1)));
+        // The re-heard sentences carry the fresh clip's (true) times.
+        expect(result.segments!.find(s => s.text === sentence(6))!.start).toBe(150);
     });
 
     it("says a recording ffmpeg cannot decode can't be read", async () => {

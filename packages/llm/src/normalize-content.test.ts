@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { normalizeModelContent } from "./normalize-content";
+import { modelContentToText, normalizeModelContent } from "./normalize-content";
 
 const raw = String.raw;
 
@@ -16,6 +16,25 @@ describe("normalizeModelContent: flattening", () => {
 
     it("normalizes math in joined parts", () => {
         expect(normalizeModelContent([raw`Let \( x `, raw`\) be real.`])).toBe("Let $x$ be real.");
+    });
+});
+
+describe("modelContentToText", () => {
+    it("flattens the way normalizeModelContent does", () => {
+        expect(modelContentToText(["foo", { bar: 1 }])).toBe('foo{"bar":1}');
+        expect(modelContentToText({ baz: "qux" })).toBe('{"baz":"qux"}');
+        expect(modelContentToText(null)).toBe("");
+        expect(modelContentToText(undefined)).toBe("");
+    });
+
+    it.each([
+        raw`{"formula": "( \frac{1}{2} )"}`,
+        '{"exponent": "(x^{2} + 1)"}',
+        raw`Write inline math as \( x \).`,
+    ])("leaves text the normalizer would rewrite alone: %s", text => {
+        expect(normalizeModelContent(text)).not.toBe(text);
+        expect(modelContentToText(text)).toBe(text);
+        expect(modelContentToText([text])).toBe(text);
     });
 });
 

@@ -9,6 +9,7 @@
         "build": "pnpm --filter @launchstack/web build",
         "build:landing": "pnpm --filter @launchstack/landing build",
         "db:migrate": "pnpm --filter @launchstack/web db:migrate",
+        "test:tl": "node scripts/dev/vantage-tl-test.mjs",
         "check": "eslint . && pnpm -r typecheck",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",

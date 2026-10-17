@@ -44,6 +44,24 @@ has no B adapter and returns `503 generation_unavailable` until B is connected.
 Auth-context cases exercise the actual user, membership, active-workspace and
 company-scoped role queries; they do not validate a signed login cookie.
 
+## Local launcher verification, 2026-10-17
+
+An initial fresh-copy `pnpm test:tl` run based on `8e61bfd9` plus launcher/docs
+changes installed locked dependencies and passed 247 tests: 51 pipeline and 196
+web/server-history, including the same 41 real PostgreSQL cases. The source copy
+had no dependency directories, application `.env` or earlier excluded drafts;
+the install reused the existing pnpm cache. All 4 engine and 28 product migrations
+applied. The hardened launcher then repeated the frozen install and all 247 tests
+in a second fresh copy despite inherited production/Compose settings and invalid
+external database URLs. After `--stop`, a normal rerun passed all 247 tests and
+retained the same container ID, product migration-ledger fingerprint and local
+credential-file SHA. Stop preserved its data volume; occupied-port and remote
+Docker guards refused startup as intended. Four launcher helper tests also passed
+separately. See the
+[launcher verification record](weekly-decision-agenda-local-tests.md#launcher-verification-2026-10-17)
+for the separate setup results and Windows-only runtime boundary. The earlier
+dated clean-source evidence above is preserved.
+
 ## Defects corrected within TL ownership
 
 - Validate company ownership and matching agenda/topic links before creating an
@@ -62,22 +80,16 @@ company-scoped role queries; they do not validate a signed login cookie.
 
 ## Reproducing the TL checks
 
-Use a new disposable PostgreSQL 16 database with pgvector, bound only to local
-port 55434 and named `vantage_tl_contract_v1`. Choose credentials locally. Do not
-reset an existing database or substitute a business database. Run the commands
-below from the repository root in PowerShell, using only that explicit target.
+From the repository root:
 
-```powershell
-$env:VANTAGE_TL_TEST_DATABASE_URL = 'postgres://<local-user>:<local-password>@127.0.0.1:55434/vantage_tl_contract_v1'
-$env:DATABASE_URL = $env:VANTAGE_TL_TEST_DATABASE_URL
-node packages/store/scripts/migrate.mjs --set=engine
-node packages/store/scripts/migrate.mjs --set=product
-node packages/store/scripts/migrate.mjs --set=engine --check
-node packages/store/scripts/migrate.mjs --set=product --check
-pnpm --filter @launchstack/pipelines exec vitest run src/vantage
-pnpm --filter @launchstack/web exec jest --runInBand __tests__/api/vantage/contract-v1.integration.test.ts __tests__/server/vantage-auth-v1.integration.test.ts
+```sh
+pnpm test:tl
 ```
 
+Follow the [local TL checks runbook](weekly-decision-agenda-local-tests.md) for
+prerequisites, the dedicated Docker service, optional settings and how to stop it.
+The dated records above distinguish the earlier clean-source checks from the
+fresh-copy launcher, hardened-environment and stop/reuse verification.
 Without the explicit test URL, real database suites are skipped; a skip does not
 establish a database pass. Before launching the actual app, also configure
 `VANTAGE_TEST_MODE=true`, `VANTAGE_TEST_COMPANY_ID`, permitted

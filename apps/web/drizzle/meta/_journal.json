@@ -211,6 +211,13 @@
       "when": 1791941425860,
       "tag": "20261014013025_brand_channels",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1792131847989,
+      "tag": "20261016062407_mcp_server_oauth",
+      "breakpoints": true
     }
   ]
 }

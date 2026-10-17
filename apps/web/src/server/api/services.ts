@@ -352,6 +352,23 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         routes: ["connectors"],
         notes: "One connector today, environment-gated.",
     },
+    {
+        id: "assistants",
+        tier: "platform",
+        summary:
+            "Let Claude, ChatGPT and Gemini search the workspace and save conversations into it (the MCP server), and manage who is connected.",
+        scope: "mixed",
+        routes: ["mcp", "assistants", "oauth"],
+        unscopedRoutes: {
+            mcp: "Called by assistants with an OAuth access token or access key, never a session; the credential names the workspace.",
+            "oauth/workspace-choice":
+                "Runs mid-sign-in for an assistant, to pick the workspace the connection will be bound to.",
+        },
+        notes:
+            "The OAuth server itself is better-auth's mcp() plugin under `auth`, with its discovery " +
+            "documents at the origin's /.well-known paths. `assistants/*` is the Settings side: the " +
+            "member's own connections and access keys, and admin-created OAuth clients.",
+    },
 ];
 
 // ============================================================================

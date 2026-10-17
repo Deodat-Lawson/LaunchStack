@@ -18,6 +18,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
+    "src/app/**/.well-known/**/*.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules", "public/vad"]

@@ -280,6 +280,13 @@ const serverSchema = z.object({
     // Generate with:
     //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
     FILE_ACCESS_TOKEN_SECRET: optionalString(),
+    // The MCP server (/api/mcp) that lets Claude, ChatGPT and Gemini search
+    // this workspace and save conversations to it. On unless set to "false".
+    // Also off, with a warning, when BETTER_AUTH_URL is neither HTTPS nor a
+    // loopback address: OAuth for assistants needs one of the two. Read
+    // directly from process.env by ~/server/mcp/config (the auth module is in
+    // the middleware bundle).
+    MCP_SERVER_ENABLED: optionalString(),
     // Bearer token required by GET /api/metrics (Prometheus scrapers).
     // In production the endpoint returns 503 if this is unset.
     METRICS_SCRAPE_TOKEN: optionalString(),
@@ -571,6 +578,7 @@ function parseServerEnv() {
             | undefined,
         APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
         FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
+        MCP_SERVER_ENABLED: process.env.MCP_SERVER_ENABLED,
         METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
         EMAIL_UNSUBSCRIBE_SECRET: process.env.EMAIL_UNSUBSCRIBE_SECRET,
         EMAIL_SENDING_ENABLED: process.env.EMAIL_SENDING_ENABLED,

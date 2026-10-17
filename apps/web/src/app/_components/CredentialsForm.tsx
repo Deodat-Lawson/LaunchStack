@@ -35,7 +35,7 @@ import {
 import { withNext } from "~/components/auth/next-path";
 import { IconGithub, IconGoogle } from "~/components/icons/brand";
 import type { IconComponent } from "~/components/icons/types";
-import { authClient } from "~/lib/auth-client";
+import { authClient, oauthFlowRedirect } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 import type { SocialProvider } from "~/server/auth/providers";
 
@@ -302,9 +302,18 @@ export function SignInForm({
         setError(null);
         setPending("email");
         onAuthStart?.();
-        const failure = await attempt(hooks =>
-            authClient.signIn.email({ email: email.trim(), password, rememberMe }, hooks)
-        );
+        // Set when this sign-in is a step in an assistant's OAuth connection
+        // (see ~/server/mcp): better-auth answers with the next screen of
+        // that flow instead of a plain success.
+        let flowNext: string | null = null;
+        const failure = await attempt(async hooks => {
+            const result = await authClient.signIn.email(
+                { email: email.trim(), password, rememberMe },
+                hooks
+            );
+            flowNext = oauthFlowRedirect(result.data);
+            return result;
+        });
         if (failure) {
             const wrongCredentials = failure.status === 401 || failure.status === 400;
             fail(failure, signInFailureMessage(failure), wrongCredentials ? "password" : undefined);
@@ -312,7 +321,7 @@ export function SignInForm({
         }
         // Full navigation on purpose: middleware routes a fresh session to
         // the right dashboard by DB role. `pending` stays set until it lands.
-        window.location.assign(redirectTo);
+        window.location.assign(flowNext ?? redirectTo);
     };
 
     const sendResetLink = async () => {

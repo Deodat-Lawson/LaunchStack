@@ -4,7 +4,7 @@
  * and write is scoped by `companyId`; a document of another workspace is
  * "not found".
  */
-import { and, asc, eq, gte, isNotNull, isNull, lt, ne, or } from "drizzle-orm";
+import { and, asc, eq, gte, isNotNull, isNull, lt, ne, or, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 import { document, documentContextChunks, documentVersions } from "@launchstack/store/schema";
@@ -68,12 +68,19 @@ function toDocument(row: {
     };
 }
 
+/**
+ * Conversations a member saved from an assistant (Claude, ChatGPT, Gemini)
+ * are theirs alone; the company profile is read by the whole workspace, so
+ * it never reads them.
+ */
+const notSavedAssistantConversation = sql`coalesce(${document.ocrMetadata}->>'connector', '') <> 'assistant-conversations'`;
+
 export async function listWorkspaceDocuments(companyId: bigint): Promise<ProfileDocument[]> {
     const rows = await getDb()
         .select(documentColumns)
         .from(document)
         .leftJoin(documentVersions, eq(documentVersions.id, document.currentVersionId))
-        .where(eq(document.companyId, companyId))
+        .where(and(eq(document.companyId, companyId), notSavedAssistantConversation))
         .orderBy(asc(document.id));
     return rows.map(toDocument);
 }
@@ -86,7 +93,13 @@ export async function getWorkspaceDocument(
         .select(documentColumns)
         .from(document)
         .leftJoin(documentVersions, eq(documentVersions.id, document.currentVersionId))
-        .where(and(eq(document.companyId, companyId), eq(document.id, documentId)))
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                eq(document.id, documentId),
+                notSavedAssistantConversation
+            )
+        )
         .limit(1);
     return row ? toDocument(row) : null;
 }

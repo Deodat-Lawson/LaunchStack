@@ -2,6 +2,7 @@
 
 import { isArtifactDocument } from "~/lib/artifact-document";
 import { isMindmapDocument } from "~/lib/mindmap-document";
+import { isConversationConnector } from "~/lib/session-transcript";
 import {
     hasTranscriptTitle,
     mediaKindOfMime,
@@ -77,15 +78,17 @@ export function getDocumentDisplayType(doc: {
     title: string;
     mimeType?: string;
     /**
-     * When present, the agent-sessions connector marker inside it upgrades a
-     * markdown transcript to the conversation display. Callers that only have
-     * url/title/mime keep getting the plain classification.
+     * When present, a conversation connector marker inside it (an imported
+     * agent session, or a conversation an assistant saved over MCP) upgrades
+     * a markdown transcript to the conversation display. Callers that only
+     * have url/title/mime keep getting the plain classification.
      */
     ocrMetadata?: { connector?: unknown; [key: string]: unknown } | null;
 }): DocumentDisplayType {
-    // Imported agent sessions are stored as text/markdown, but they read as
-    // conversations — the sink's connector marker outranks the mime sniff.
-    if (doc.ocrMetadata?.connector === "agent-sessions") return "conversation";
+    // Imported agent sessions and saved assistant conversations are stored as
+    // text/markdown, but they read as conversations — the connector marker
+    // outranks the mime sniff.
+    if (isConversationConnector(doc.ocrMetadata?.connector)) return "conversation";
     // Likewise a published mindmap: a Markdown outline on disk, a diagram to
     // the reader.
     if (isMindmapDocument(doc.ocrMetadata)) return "mindmap";

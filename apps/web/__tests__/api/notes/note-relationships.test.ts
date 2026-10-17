@@ -10,16 +10,21 @@
 import { POST as createNote } from "~/app/api/notes/route";
 import { POST as aiCapture } from "~/app/api/notes/ai-capture/route";
 import { captureFromSelection } from "~/server/notes/ai-capture";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestNoteEmbedding } from "~/server/notes/embed-note";
+import { syncNoteLinks } from "~/server/notes/wiki-links";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
-jest.mock("~/lib/require-workspace-context", () => {
-    const actual = jest.requireActual("~/lib/require-workspace-context");
-    return { ...actual, requireWorkspaceContext: jest.fn() };
-});
+// The stub, not requireActual: the real module pulls in the auth graph
+// (and with it schema modules that need the drizzle-orm this file mocks).
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () =>
+    jest
+        .requireActual("../../helpers/mock-require-workspace-context")
+        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+);
 
 let mockQueuedRows: Record<string, unknown>[][] = [];
 const mockSelectCount = { value: 0 };
@@ -90,7 +95,7 @@ jest.mock("~/lib/authz/scope", () => ({
 }));
 
 jest.mock("~/server/notes/embed-note", () => ({
-    embedNoteAsync: jest.fn(),
+    requestNoteEmbedding: jest.fn().mockResolvedValue(undefined),
 }));
 
 jest.mock("~/server/notes/serialize", () => ({
@@ -138,13 +143,14 @@ function postRequest(url: string, body: unknown) {
 }
 
 const OWNED_DOCUMENT = [{ id: 42 }];
+const RICH_BODY = { type: "doc", content: [{ type: "paragraph" }] };
 
 describe("note target relationships", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockQueuedRows = [];
         mockSelectCount.value = 0;
-        (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+        mockRequireWorkspaceContext.mockReturnValue({
             success: true,
             data: CTX,
         });
@@ -203,7 +209,7 @@ describe("note target relationships", () => {
         });
 
         it("reads a document outside the caller's scope as missing", async () => {
-            (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+            mockRequireWorkspaceContext.mockReturnValue({
                 success: true,
                 data: makeWorkspaceContext({ role: "member", scope: FINANCE_HIDDEN }),
             });
@@ -235,6 +241,71 @@ describe("note target relationships", () => {
 
             expect(response.status).toBe(201);
             expect(mockInsert).toHaveBeenCalledTimes(1);
+        });
+
+        it("stores the body as sent and runs the embedding and link sync", async () => {
+            mockQueuedRows = [OWNED_DOCUMENT, [{ id: 99 }]];
+            const values = jest.fn(() => ({
+                returning: () =>
+                    Promise.resolve([{ id: 1, companyId: "5", contentRich: RICH_BODY }]),
+            }));
+            mockInsert.mockReturnValue({ values });
+
+            const response = await createNote(
+                postRequest("http://localhost/api/notes", {
+                    documentId: "42",
+                    versionId: 99,
+                    title: "note",
+                    content: "plain",
+                    contentRich: RICH_BODY,
+                    contentMarkdown: "**md**",
+                    anchor: { type: "text", quote: { exact: "quoted" } },
+                    anchorStatus: "drifted",
+                    tags: ["a", "b"],
+                })
+            );
+
+            expect(response.status).toBe(201);
+            expect(values).toHaveBeenCalledWith({
+                userId: CTX.authUserId,
+                documentId: "42",
+                companyId: "5",
+                versionId: BigInt(99),
+                title: "note",
+                content: "plain",
+                contentRich: RICH_BODY,
+                contentMarkdown: "**md**",
+                anchor: { type: "text", quote: { exact: "quoted" } },
+                anchorStatus: "drifted",
+                tags: ["a", "b"],
+            });
+            expect(requestNoteEmbedding).toHaveBeenCalledWith(1, "created", "5");
+            expect(syncNoteLinks).toHaveBeenCalledWith(
+                expect.objectContaining({ noteId: 1, rich: RICH_BODY, companyId: "5" })
+            );
+        });
+
+        it("defaults what the body leaves out", async () => {
+            const values = jest.fn(() => ({
+                returning: () => Promise.resolve([{ id: 2, companyId: "5", contentRich: null }]),
+            }));
+            mockInsert.mockReturnValue({ values });
+
+            await createNote(postRequest("http://localhost/api/notes", { title: "only a title" }));
+
+            expect(values).toHaveBeenCalledWith({
+                userId: CTX.authUserId,
+                documentId: null,
+                companyId: "5",
+                versionId: null,
+                title: "only a title",
+                content: null,
+                contentRich: null,
+                contentMarkdown: null,
+                anchor: null,
+                anchorStatus: "resolved",
+                tags: [],
+            });
         });
 
         it("accepts a freeform note with no target", async () => {

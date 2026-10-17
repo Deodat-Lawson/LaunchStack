@@ -9,7 +9,7 @@ import { HumanMessage } from "@langchain/core/messages";
 import {
     ChatConfigurationError,
     describeChatEndpointError,
-    normalizeModelContent,
+    modelContentToText,
     resolveChatModel,
 } from "@launchstack/llm";
 
@@ -140,7 +140,7 @@ export async function testEndpoint(
             const reply = await resolved.chat.invoke(
                 resolved.prepareMessages([new HumanMessage("Reply with the single word OK.")])
             );
-            const text = normalizeModelContent(reply.content).trim();
+            const text = modelContentToText(reply.content).trim();
             outcome = text
                 ? { modelId, ok: true, latencyMs: Date.now() - started }
                 : {

@@ -143,7 +143,7 @@ describe("the key never comes back out", () => {
                 companyId: 5,
                 provider: "openai",
                 baseUrl: "https://api.openai.com/v1",
-                apiKeyCiphertext: "c2VhbGVkLWNpcGhlcnRleHQ=",
+                apiKeyCiphertext: "SEALED-FIXTURE",
                 apiKeyLast4: "9xyz",
                 encryptionKeyVersion: 1,
                 models: selection,
@@ -160,7 +160,7 @@ describe("the key never comes back out", () => {
             active: true,
             updatedBy: "Ada",
         });
-        expect(JSON.stringify(view)).not.toContain("c2VhbGVk");
+        expect(JSON.stringify(view)).not.toContain("SEALED-FIXTURE");
     });
 });
 
@@ -356,7 +356,7 @@ describe("Connect OpenRouter", () => {
         const fetchSpy = jest
             .spyOn(global, "fetch")
             .mockResolvedValue(
-                new Response(JSON.stringify({ key: "sk-or-v1-user-key" }), { status: 200 })
+                new Response(JSON.stringify({ key: "openrouter-fixture-key" }), { status: 200 })
             );
         mockStore.row.mockResolvedValue(null);
         const response = await openRouterCallback(
@@ -376,7 +376,7 @@ describe("Connect OpenRouter", () => {
             expect.objectContaining({
                 provider: "openrouter",
                 baseUrl: "https://openrouter.ai/api/v1",
-                apiKey: "sk-or-v1-user-key",
+                apiKey: "openrouter-fixture-key",
                 models: null,
                 connectedVia: "openrouter",
             })
@@ -386,7 +386,7 @@ describe("Connect OpenRouter", () => {
 
     it("keeps an OpenRouter workspace's models when it reconnects", async () => {
         jest.spyOn(global, "fetch").mockResolvedValue(
-            new Response(JSON.stringify({ key: "sk-or-v1-new" }), { status: 200 })
+            new Response(JSON.stringify({ key: "openrouter-fixture-key-2" }), { status: 200 })
         );
         mockStore.row.mockResolvedValue({
             baseUrl: "https://openrouter.ai/api/v1",

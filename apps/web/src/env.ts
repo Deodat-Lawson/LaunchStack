@@ -671,6 +671,23 @@ function parseServerEnv() {
                 "dev server, to enable them."
         );
     }
+
+    // The half-configured state production ran in until 2026-10-17: the key
+    // lets events be sent, but with no signing key no Inngest server can call
+    // the worker's /api/inngest, so every event is accepted and none runs.
+    const inngestSigningKeyMissing =
+        !inngestKeyMissing &&
+        !process.env.INNGEST_DEV &&
+        (server.INNGEST_SIGNING_KEY == null || server.INNGEST_SIGNING_KEY.length === 0);
+
+    if (!skipValidation && inngestSigningKeyMissing) {
+        console.warn(
+            "[env] INNGEST_EVENT_KEY is set but INNGEST_SIGNING_KEY is not. Events will " +
+                "be accepted and never run — Google Drive and Gmail sync, crons and the " +
+                "other background verticals stay idle. Set INNGEST_SIGNING_KEY to the " +
+                "signing key of the Inngest server that calls this worker."
+        );
+    }
     return server;
 }
 

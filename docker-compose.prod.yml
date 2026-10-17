@@ -10,11 +10,13 @@
 #     cloud provider (packages/llm registry default) and OCR routes to the
 #     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
 #     containers move behind opt-in profiles.
-#   - No Inngest dev server. INNGEST_DEV is cleared; set INNGEST_EVENT_KEY /
-#     INNGEST_SIGNING_KEY to enable the background verticals via Inngest Cloud
-#     (ingestion itself runs through the outbox and needs neither).
-#   - Caddy terminates TLS for ${DOMAIN} (app, plus /api/inngest on the
-#     worker) and files.${DOMAIN} (SeaweedFS object URLs, anonymous read).
+#   - A self-hosted Inngest server (`inngest`) replaces the dev server. It
+#     runs the background verticals (Drive/Gmail sync, crons, prospector, …)
+#     against the worker over the compose network; INNGEST_EVENT_KEY and
+#     INNGEST_SIGNING_KEY (hex) must be set or nothing it schedules can run.
+#     Ingestion itself runs through the outbox and needs neither.
+#   - Caddy terminates TLS for ${DOMAIN} (app) and files.${DOMAIN} (SeaweedFS
+#     object URLs, anonymous read). The worker's /api/inngest stays internal.
 #   - No service publishes a host port except Caddy; the NSG only admits
 #     22/80/443 anyway, but the containers shouldn't offer more than the
 #     firewall happens to block.
@@ -33,9 +35,12 @@ services:
         condition: service_started
       document-converter:
         condition: service_started
+    networks: [default, inngest]
     environment:
       INNGEST_DEV: ""
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      # Events go to the self-hosted server below, not Inngest Cloud.
+      INNGEST_BASE_URL: http://inngest:8288
       # Public object-URL origin. Also the SDK endpoint — the app reaches its
       # own SeaweedFS through Caddy so that stored URLs and fetch checks agree
       # on one origin (lib/storage matches URLs by this prefix).
@@ -51,10 +56,49 @@ services:
     image: ghcr.io/deodat-lawson/launchstack-web-worker:latest
     build: !reset null
     ports: !reset []
+    networks: [default, inngest]
     environment:
       INNGEST_DEV: ""
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      INNGEST_BASE_URL: http://inngest:8288
+      # The SDK registers the URL a sync request arrived on unless this pins
+      # it, and its out-of-band sync (PUT) is unauthenticated.
+      INNGEST_SERVE_HOST: http://worker:8020
       NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
+
+  # Self-hosted Inngest: queue, scheduler and cron for every function the
+  # worker serves. Without it events are accepted and nothing ever runs
+  # (Drive stays at "Not synced yet"). State is SQLite plus the built-in
+  # Redis snapshot on the volume. It lives on its own network with only app and
+  # worker, so nothing that fetches user-supplied URLs (gotenberg, the
+  # document services) can reach its dashboard API, which has no login. Tunnel
+  # to it over SSH; never publish it.
+  inngest:
+    image: inngest/inngest:v1.46.0
+    container_name: pdr_ai_v2-inngest-server
+    restart: unless-stopped
+    command: inngest start
+    environment:
+      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
+      # Hex with an even number of characters (openssl rand -hex 32); the
+      # worker verifies every call with the same value.
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      INNGEST_SDK_URL: http://worker:8020/api/inngest
+      # Re-sync on an interval: the boot-time sync fails whenever the worker
+      # is not up yet, and a worker redeploy can add functions.
+      INNGEST_POLL_INTERVAL: "60"
+      INNGEST_SQLITE_DIR: /data
+    volumes:
+      - inngest_data:/data
+    networks: [inngest]
+    depends_on:
+      - worker
+    healthcheck:
+      test: ["CMD", "inngest", "alpha", "doctor", "healthcheck"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   db:
     ports: !reset []
@@ -81,7 +125,7 @@ services:
     profiles: ["whisper"]
     ports: !reset []
 
-  # Dev-only Inngest server; production uses Inngest Cloud (or none).
+  # Dev-only Inngest server; production runs `inngest` (above) instead.
   inngest-dev:
     profiles: ["inngest-dev"]
 
@@ -126,3 +170,8 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  inngest_data:
+
+networks:
+  # The Inngest server plus the two services that talk to it.
+  inngest:

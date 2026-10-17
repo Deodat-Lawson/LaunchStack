@@ -133,8 +133,9 @@ export function WorkspaceSelectClient({
     const { signOut } = useAuth();
     // Your profile photo (not a workspace's override): no workspace is open here.
     const myPhoto = useMyProfile().data?.profile.avatarUrl ?? null;
+    // Read only in the toggle's click handler. The server can't know the
+    // theme, so anything rendered from it would differ from the server's HTML.
     const { theme, setTheme, resolvedTheme } = useTheme();
-    const isDark = (resolvedTheme ?? theme) === "dark";
     // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
     // launchstack.app here showed self-hosters someone else's domain as theirs.
     const instanceHost = useInstanceHost();
@@ -400,9 +401,11 @@ export function WorkspaceSelectClient({
                     className={styles.iconBtn}
                     title="Toggle theme"
                     aria-label="Toggle theme"
-                    onClick={() => setTheme(isDark ? "light" : "dark")}
+                    onClick={() => setTheme((resolvedTheme ?? theme) === "dark" ? "light" : "dark")}
                 >
-                    {isDark ? <Moon size={15} /> : <Sun size={15} />}
+                    {/* Both icons ship; data-theme on <html> shows one. */}
+                    <Sun className={styles.themeIconLight} size={15} aria-hidden />
+                    <Moon className={styles.themeIconDark} size={15} aria-hidden />
                 </button>
             </div>
 

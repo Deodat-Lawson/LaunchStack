@@ -7,6 +7,9 @@ jest.mock("next/server", () => ({ after: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/lib/credits", () => ({ debitTokens: jest.fn() }));
 jest.mock("~/server/scenarios/evidence", () => ({ gatherScenarioEvidence: jest.fn() }));
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+}));
 jest.mock("@launchstack/pipelines/scenarios/db", () => ({
     claimLease: jest.fn(),
     createScenarioStore: jest.fn(),
@@ -98,7 +101,7 @@ it("keeps renewing the lease while a slow unit runs, so polls don't start a seco
     jest.useFakeTimers();
     try {
         leases.claimLease.mockResolvedValue(true);
-        leases.getRunById.mockResolvedValue({ roundCount: 1 });
+        leases.getRunById.mockResolvedValue({ roundCount: 1, companyId: 5n });
         leases.renewLease.mockResolvedValue(undefined);
         let finishUnit: (v: unknown) => void = () => undefined;
         advanceRun
@@ -110,6 +113,11 @@ it("keeps renewing the lease while a slow unit runs, so polls don't start a seco
         finishUnit({ state: "advanced", step: 1 });
         await driving;
         expect(leases.releaseLease).toHaveBeenCalledWith(4);
+        // Every unit ran on the workspace's own models.
+        const { withWorkspaceChatModels } = jest.requireMock<{
+            withWorkspaceChatModels: jest.Mock;
+        }>("~/server/workspace-models/scope");
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
         const renewals = leases.renewLease.mock.calls.length;
         await jest.advanceTimersByTimeAsync(LEASE_MS * 2);
         expect(leases.renewLease.mock.calls.length).toBe(renewals);

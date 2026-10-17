@@ -9,6 +9,7 @@ import { advanceRun } from "@launchstack/pipelines/scenarios";
 import { createScenarioStore } from "@launchstack/pipelines/scenarios/db";
 
 import { createScenarioPorts } from "~/server/scenarios/executor";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { inngest } from "../client";
 
@@ -47,8 +48,12 @@ export const scenarioRunJob = inngest.createFunction(
         const runId = Number(event.data.runId);
         let last = "skipped";
         for (let i = 0; i < MAX_UNITS; i++) {
+            // A step body doesn't inherit the handler's async context: enter the
+            // workspace's model scope inside the step.
             const outcome = await step.run(`unit-${i}`, () =>
-                advanceRun(createScenarioPorts(), runId)
+                withWorkspaceChatModels(BigInt(event.data.companyId), () =>
+                    advanceRun(createScenarioPorts(), runId)
+                )
             );
             last = outcome.state;
             if (outcome.state !== "advanced") break;

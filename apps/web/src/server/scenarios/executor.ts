@@ -29,6 +29,7 @@ import { llmChatTokens } from "@launchstack/store/credits";
 
 import { debitTokens } from "~/lib/credits";
 import { inngest } from "~/server/inngest/client";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { gatherScenarioEvidence } from "./evidence";
 
@@ -139,9 +140,14 @@ export async function driveRun(
     }, LEASE_MS / 3);
     try {
         const run = await getRunById(runId);
-        const limit = unitCount(run?.roundCount ?? 0) + 2;
+        if (!run) return;
+        const limit = unitCount(run.roundCount) + 2;
         for (let i = 0; i < limit; i++) {
-            if (!(await advanceWithRetries(ports, runId))) break;
+            // Each unit runs on the workspace's own models when it brings them.
+            const keepGoing = await withWorkspaceChatModels(run.companyId, () =>
+                advanceWithRetries(ports, runId)
+            );
+            if (!keepGoing) break;
         }
     } finally {
         clearInterval(heartbeat);

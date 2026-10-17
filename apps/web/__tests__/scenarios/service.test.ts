@@ -68,6 +68,9 @@ jest.mock("~/server/profile/store", () => ({
 jest.mock("~/lib/credits", () => ({ getBalance: jest.fn(), debitTokens: jest.fn() }));
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn(() => false) }));
 jest.mock("~/server/db", () => ({ db: {} }));
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+}));
 
 type Mocks<K extends string> = Record<K, jest.Mock>;
 const mockDb = jest.requireMock<
@@ -407,6 +410,11 @@ describe("interviews", () => {
         expect(mockCredits.debitTokens).toHaveBeenCalledWith(
             expect.objectContaining({ amount: 320, service: "scenario_simulation" })
         );
+        // The answer comes from the workspace's own models when it brings them.
+        const { withWorkspaceChatModels } = jest.requireMock<{
+            withWorkspaceChatModels: jest.Mock;
+        }>("~/server/workspace-models/scope");
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
     });
 });
 

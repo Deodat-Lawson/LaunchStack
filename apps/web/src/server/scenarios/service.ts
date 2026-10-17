@@ -72,6 +72,7 @@ import { db } from "~/server/db";
 import { brandComments, companyMetadata } from "~/server/db/schema";
 import { isMeteringEnforced } from "~/server/deployment";
 import { workspaceLooks } from "~/server/profile/store";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
@@ -503,7 +504,9 @@ export async function askScenario(
             ? buildAnalystRequest(world, run.report?.summary ?? "", question, history)
             : buildInterviewRequest(world, agentId, question, history);
     await requireCredits(ctx, 4_000);
-    const reply = await createLlmSimulationModel().complete(request);
+    const reply = await withWorkspaceChatModels(ctx.companyId, () =>
+        createLlmSimulationModel().complete(request)
+    );
     const credits = llmChatTokens(reply.usage?.inputTokens ?? 0, reply.usage?.outputTokens ?? 0);
     if (credits > 0) {
         await debitTokens({

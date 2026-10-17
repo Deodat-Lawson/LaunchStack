@@ -112,15 +112,19 @@ Kubernetes) alongside managed PostgreSQL with pgvector:
 3. Set the environment variables in the [summary table](#environment-variables-summary).
 4. **Deploy the worker image too.** The web app only accepts commands; without a
    worker, uploads are stored but never processed (ADR-003).
-5. Register the **worker's** public `/api/inngest` URL in Inngest Cloud — the
-   Next.js app no longer serves an Inngest endpoint.
+5. Give the worker an Inngest server: either self-host `inngest start` beside
+   it (what `docker-compose.prod.yml` does; set `INNGEST_BASE_URL` on app and
+   worker and `INNGEST_SERVE_HOST` on the worker), or register the **worker's**
+   public `/api/inngest` URL in Inngest Cloud. Either way set
+   `INNGEST_EVENT_KEY` **and** `INNGEST_SIGNING_KEY`; with only the event key,
+   jobs are accepted and never run. The Next.js app serves no Inngest endpoint.
 
 `apps/landing` is a separate app and has no deploy pipeline in this repo; it is
 not part of a self-hosted deployment.
 
 Optional integrations:
 
-- Inngest Cloud for background jobs (required in production)
+- Inngest for background jobs, self-hosted or Inngest Cloud (Drive/Gmail sync, crons and the other verticals need it)
 - LangSmith for LLM tracing
 - Compute services (`services/transcription`, `services/adeu-ai-docs-editing`,
   `services/document-converter`) deployed separately to Fly.io / Railway /

@@ -7,7 +7,7 @@
  * explains what happened. Shared here so both sides spell it the same way.
  */
 
-/** Short-lived, not httpOnly: the browser reads it and clears it. */
+/** Lasts a day, not httpOnly: the browser reads it once and clears it. */
 export const TAKEOVER_NOTICE_COOKIE = "ls_signin_notice";
 
 const PROVIDER_NAMES: Record<string, string> = { google: "Google", github: "GitHub" };

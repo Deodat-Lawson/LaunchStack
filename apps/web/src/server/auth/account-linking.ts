@@ -21,6 +21,13 @@
  * - every assistant connection and access key made for the account is revoked,
  * - Better Auth then marks the address confirmed and signs the person in.
  *
+ * Sessions end at once only because ~/server/auth keeps no session cookie
+ * cache; with one, a removed session lived on until the cache expired.
+ *
+ * What the account keeps: its workspaces, files and the people in them. A
+ * takeover cannot tell the owner's own work from a squatter's, so it leaves
+ * them and the notice asks the person to check who else is there.
+ *
  * A one-time cookie (`TAKEOVER_NOTICE_COOKIE`) tells the app to explain what
  * happened; see ~/components/auth/SignInNotice.
  *
@@ -143,7 +150,7 @@ export function accountLinkingHooks(db: Db): DatabaseHooks {
                     const notice = formatTakeoverNotice(account.providerId, removed);
                     ctx.setCookie(TAKEOVER_NOTICE_COOKIE, notice, {
                         path: "/",
-                        maxAge: 10 * 60,
+                        maxAge: 24 * 60 * 60,
                         sameSite: "lax",
                         secure: ctx.context.baseURL.startsWith("https://"),
                         httpOnly: false,

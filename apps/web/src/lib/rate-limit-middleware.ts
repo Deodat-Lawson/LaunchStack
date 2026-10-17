@@ -16,8 +16,8 @@ import {
  *
  * The session is verified here, not read from a header the middleware could
  * forward: a header is only trustworthy on paths the middleware matcher
- * covers, and a forged one would buy a fresh bucket per request. better-auth
- * answers from its signed cookie cache, so this rarely touches the database.
+ * covers, and a forged one would buy a fresh bucket per request. It costs one
+ * indexed read of the session row (better-auth has no cookie cache here).
  */
 export async function rateLimitCaller(request: Request): Promise<string> {
     // No session cookie means anonymous — skip the lookup (middleware.ts does the same).

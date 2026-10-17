@@ -11,8 +11,10 @@ import { and, eq } from "drizzle-orm";
 import { company } from "@launchstack/store/schema";
 import {
     authAccount,
+    authOauthAccessToken,
     authOauthClient,
     authOauthConsent,
+    authOauthRefreshToken,
     authUser,
     mcpAccessKeys,
     users,
@@ -134,8 +136,8 @@ class Browser {
     async session(): Promise<{
         user: { id: string; email: string; emailVerified: boolean };
     } | null> {
-        // Past the signed cookie cache: the database is what a revoked session loses.
-        const response = await this.send("/get-session?disableCookieCache=true");
+        // As the app reads it (middleware, route handlers): no cache to bypass.
+        const response = await this.send("/get-session");
         return (await response.json()) as never;
     }
 }
@@ -279,9 +281,11 @@ describeIfDatabase("social sign-in on an existing address", () => {
         expect(await providersOf(userId)).toEqual(["google"]);
 
         // Whoever held the password before is out: it no longer signs in, and
-        // the session it had is gone.
+        // the session it had is refused on its very next request, so there is
+        // no window in which to mint access that outlives it.
         expect(await passwordWorks(email)).toBe(false);
         expect(await earlier.session()).toBeNull();
+        expect((await earlier.send("/list-accounts")).status).toBe(401);
 
         // The next Google sign-in is an ordinary one.
         const again = new Browser(auth);
@@ -315,6 +319,23 @@ describeIfDatabase("social sign-in on an existing address", () => {
             referenceId: String(workspace!.id),
             scopes: ["launchstack:read"],
         });
+        await testDb.db.insert(authOauthRefreshToken).values({
+            id: "refresh-row",
+            token: "refresh-token",
+            clientId: "assistant-client",
+            userId,
+            referenceId: String(workspace!.id),
+            scopes: ["launchstack:read"],
+        });
+        await testDb.db.insert(authOauthAccessToken).values({
+            id: "access-row",
+            token: "access-token",
+            clientId: "assistant-client",
+            userId,
+            referenceId: String(workspace!.id),
+            refreshId: "refresh-row",
+            scopes: ["launchstack:read"],
+        });
         await testDb.db.insert(mcpAccessKeys).values({
             companyId: BigInt(workspace!.id),
             userId: BigInt(person!.id),
@@ -333,6 +354,16 @@ describeIfDatabase("social sign-in on an existing address", () => {
             .from(authOauthConsent)
             .where(eq(authOauthConsent.userId, userId));
         expect(consents).toHaveLength(0);
+        const refreshTokens = await testDb.db
+            .select()
+            .from(authOauthRefreshToken)
+            .where(eq(authOauthRefreshToken.userId, userId));
+        const accessTokens = await testDb.db
+            .select()
+            .from(authOauthAccessToken)
+            .where(eq(authOauthAccessToken.userId, userId));
+        expect(refreshTokens).toHaveLength(0);
+        expect(accessTokens).toHaveLength(0);
         const [key] = await testDb.db
             .select({ revokedAt: mcpAccessKeys.revokedAt })
             .from(mcpAccessKeys)
@@ -420,6 +451,20 @@ describeIfDatabase("social sign-in on an existing address", () => {
         expect(location.pathname).toBe("/employer/settings");
         expect(location.searchParams.get("error")).toBe("email_does_not_match");
         expect(location.hash).toBe("#account");
+        expect(await providersOf(userId)).toEqual(["credential"]);
+        expect(await emailVerified(userId)).toBe(false);
+    });
+
+    it("refuses to connect a Google account that has not confirmed the address", async () => {
+        const email = freshEmail();
+        const { browser, userId } = await signUp(email);
+
+        googleProfile = { sub: `g-${userId}`, email, emailVerified: false };
+        const callback = await providerSignIn(browser, "google", "link");
+
+        const location = new URL(callback.headers.get("location")!, BASE);
+        expect(location.pathname).toBe("/employer/settings");
+        expect(location.searchParams.get("error")).toBe("unable_to_link_account");
         expect(await providersOf(userId)).toEqual(["credential"]);
         expect(await emailVerified(userId)).toBe(false);
     });

@@ -107,13 +107,14 @@ const buildAuth = () => {
                         : verifyPassword({ hash, password }),
             },
         },
-        // Middleware and requireWorkspaceContext read the session on every
-        // request; the signed cookie cache answers most of those without a
-        // database round-trip. 60s staleness matches the spirit of the 10s
-        // role cache middleware already keeps.
-        session: {
-            cookieCache: { enabled: true, maxAge: 60 },
-        },
+        // No signed session cookie cache: every session read goes to the
+        // session row. A cached session cannot be revoked, so with one a
+        // session ended elsewhere kept working until the cache expired, long
+        // enough for whoever held it to mint an access key or approve an
+        // assistant that outlives it. That matters for "End session" and for
+        // a provider takeover (./account-linking), whose whole point is that
+        // the earlier holder is out at once. The cost is one indexed read per
+        // signed-in request.
         // A Google or GitHub sign-in on an address that already has an account
         // links to it even when the address was never confirmed (no password
         // sign-up confirms one here). The hooks make that safe: the provider

@@ -1,17 +1,16 @@
 /**
- * The simulation's model port over `@launchstack/llm`. Turns, casts, briefs
- * and reports use structured output (zod mirrors of the engine's JSON
- * shapes); interviews are plain text. The engine parses either way, so a
- * model without native structured output still works through the JSON
- * fallback in `invokeStructuredWithUsage`.
+ * The simulation's model port over `@launchstack/llm`. Every call — turns,
+ * casts, briefs, reports and interviews (`{answer}`) — uses structured output
+ * with a zod mirror of the engine's JSON shape. A model without native
+ * structured output still works through the JSON fallback in
+ * `invokeStructuredWithUsage`. Interviews were plain text until a local model
+ * that reasons first spent a plain call's whole budget before writing a word.
  */
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 
 import {
     invokeStructuredWithUsage,
-    modelContentToText,
-    normalizeTokenUsage,
     resolveChatModel,
     type ResolveChatModelOptions,
 } from "@launchstack/llm";
@@ -84,11 +83,14 @@ const reportSchema = z.object({
     watchFor: z.array(z.string()),
 });
 
-const SCHEMAS: Partial<Record<ModelRequest["purpose"], z.ZodType<unknown>>> = {
+const answerSchema = z.object({ answer: z.string() });
+
+const SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown>> = {
     decide: decisionSchema,
     cast: castSchema,
     brief: briefSchema,
     report: reportSchema,
+    interview: answerSchema,
 };
 
 export function createLlmSimulationModel(): SimulationModel {
@@ -100,28 +102,14 @@ export function createLlmSimulationModel(): SimulationModel {
                 maxOutputTokens: request.maxOutputTokens,
             });
             const messages = [new SystemMessage(request.system), new HumanMessage(request.prompt)];
-            const schema = SCHEMAS[request.purpose];
-            if (schema) {
-                const { result, usage } = await invokeStructuredWithUsage(
-                    resolved,
-                    schema,
-                    messages,
-                    {
-                        name: `scenario_${request.purpose}`,
-                    }
-                );
-                return {
-                    text: JSON.stringify(result),
-                    usage: {
-                        inputTokens: usage.inputTokens ?? 0,
-                        outputTokens: usage.outputTokens ?? 0,
-                    },
-                };
-            }
-            const response = await resolved.chat.invoke(resolved.prepareMessages(messages));
-            const usage = normalizeTokenUsage(response);
+            const { result, usage } = await invokeStructuredWithUsage(
+                resolved,
+                SCHEMAS[request.purpose],
+                messages,
+                { name: `scenario_${request.purpose}` }
+            );
             return {
-                text: modelContentToText(response.content),
+                text: JSON.stringify(result),
                 usage: {
                     inputTokens: usage.inputTokens ?? 0,
                     outputTokens: usage.outputTokens ?? 0,

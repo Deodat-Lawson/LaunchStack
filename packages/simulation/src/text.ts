@@ -68,3 +68,23 @@ export function clip(text: string, max: number): string {
     const t = text.replace(/\s+/g, " ").trim();
     return t.length <= max ? t : `${t.slice(0, max - 1).trimEnd()}…`;
 }
+
+/** TeX math some models write in plain prose ("Free $\\rightarrow$ Trial"), as the characters people expect. */
+const TEX_SYMBOLS: Array<[RegExp, string]> = [
+    [/\$?\s*\\(?:long)?rightarrow\s*\$?/g, "→"],
+    [/\$?\s*\\to\s*\$/g, "→"],
+    [/\$?\s*\\(?:long)?leftarrow\s*\$?/g, "←"],
+    [/\$\s*\\(?:geq|ge)\s*\$/g, "≥"],
+    [/\$\s*\\(?:leq|le)\s*\$/g, "≤"],
+    [/\$\s*\\times\s*\$/g, "×"],
+    [/\$\s*\\approx\s*\$/g, "≈"],
+];
+
+export function cleanProse(text: string): string {
+    let out = text;
+    for (const [pattern, symbol] of TEX_SYMBOLS) out = out.replace(pattern, ` ${symbol} `);
+    return out
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/ +([.,;:!?])/g, "$1")
+        .trim();
+}

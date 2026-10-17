@@ -15,7 +15,7 @@ import type { ScenarioDetail, ScenarioPerson, ScenarioPost } from "~/lib/scenari
 import { plural } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
 
-import { isLive, moodWords, signed } from "~/lib/scenarios/words";
+import { atHandle, isLive, moodWords, signed } from "~/lib/scenarios/words";
 import { Monogram } from "./Bits";
 
 const PAGE = 60;
@@ -229,7 +229,7 @@ export function PostCard({
                         {name}
                         {post.authorKind === "agent" && (
                             <span className="text-ink-3 truncate text-xs">
-                                @{post.authorHandle}
+                                {atHandle(post.authorHandle)}
                             </span>
                         )}
                     </div>
@@ -251,7 +251,7 @@ export function PostCard({
             )}
             {post.root && (
                 <blockquote className="border-line bg-surface mt-2 rounded-md border px-3 py-2 text-[13px] leading-snug">
-                    <span className="text-ink-3 text-xs">@{post.root.authorHandle}</span>
+                    <span className="text-ink-3 text-xs">{atHandle(post.root.authorHandle)}</span>
                     <p className="text-ink-2 mt-0.5 line-clamp-4 whitespace-pre-wrap">
                         {post.root.text}
                     </p>
@@ -292,7 +292,7 @@ export function PostCard({
                                 <span className="text-ink font-medium">{c.authorName}</span>
                             )}{" "}
                             <span className="text-ink-3 text-xs">
-                                @{c.authorHandle}
+                                {atHandle(c.authorHandle)}
                                 {c.round !== post.round ? ` · round ${c.round}` : ""}
                             </span>
                             <p className="text-ink-2 mt-0.5">{c.text}</p>

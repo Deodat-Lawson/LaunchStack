@@ -4,7 +4,7 @@
  */
 
 import { asArray, asRecord, asString, clampStance, extractJson } from "./json";
-import { clip } from "./text";
+import { cleanProse, clip } from "./text";
 import type {
     Action,
     ActionType,
@@ -187,7 +187,7 @@ export function parseDecision(
         const type = TYPE_ALIASES[(asString(item.type) ?? "").toLowerCase().trim()];
         if (!type) continue;
         const postId = normalizePostId(asString(item.postId) ?? asString(item.post_id));
-        const body = (asString(item.text) ?? asString(item.content) ?? "").trim();
+        const body = cleanProse(asString(item.text) ?? asString(item.content) ?? "");
         let action: Action | undefined;
         switch (type) {
             case "do_nothing":
@@ -222,7 +222,7 @@ export function parseDecision(
         actions.push(action);
     }
     return {
-        thought: clip(asString(root.thought) ?? "", 280),
+        thought: clip(cleanProse(asString(root.thought) ?? ""), 280),
         stance: clampStance(root.stance, agent.stance),
         actions: actions.length > 0 ? actions : [{ type: "do_nothing" }],
     };

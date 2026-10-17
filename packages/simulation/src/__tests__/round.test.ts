@@ -117,6 +117,7 @@ describe("after a run", () => {
         expect(req.prompt).toContain('you posted [p2]: "a1 thinks prices matter"');
         expect(req.prompt).toContain("undecided → strongly against");
         expect(req.prompt).toContain("Q: Hi?\nA: Hello.");
+        expect(req.schema).toBeDefined();
         expect(() => buildInterviewRequest(world, "a9", "?")).toThrow();
         expect(buildAnalystRequest(world, "Summary.", "Who moved?").prompt).toContain(
             "@person_a1 (Operator at a small firm): undecided → strongly against"

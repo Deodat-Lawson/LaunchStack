@@ -8,7 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { ScenarioDetail, ScenarioPerson } from "~/lib/scenarios/types";
 import { plural } from "~/lib/tools/format";
 
-import { isLive } from "~/lib/scenarios/words";
+import { atHandle, isLive } from "~/lib/scenarios/words";
 import { Monogram, StanceTrail, stanceMove } from "./Bits";
 
 type Filter = "all" | "grounded" | "invented";
@@ -101,7 +101,7 @@ export function PeopleTab({
                                         {person.name}
                                     </span>
                                     <span className="text-ink-3 block truncate text-xs">
-                                        @{person.handle}
+                                        {atHandle(person.handle)}
                                     </span>
                                 </span>
                             </span>

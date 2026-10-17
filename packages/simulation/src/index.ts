@@ -1,6 +1,6 @@
 export * from "./types";
 export { createRng, hashSeed, shuffle, type Rng } from "./rng";
-export { tokenize, cosine, clip } from "./text";
+export { tokenize, cosine, clip, cleanProse } from "./text";
 export {
     createWorld,
     buildInitialFollows,
@@ -70,6 +70,7 @@ export {
     buildInterviewRequest,
     buildAnalystRequest,
     cleanAnswer,
+    ANSWER_SCHEMA,
     MAX_QUESTION_CHARS,
     type InterviewTurn,
 } from "./interview";

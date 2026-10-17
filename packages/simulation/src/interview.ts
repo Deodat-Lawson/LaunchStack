@@ -5,7 +5,8 @@
  */
 
 import { personaSystem } from "./decide";
-import { clip } from "./text";
+import { asRecord, asString, extractJson } from "./json";
+import { cleanProse, clip } from "./text";
 import type { ModelRequest, World } from "./types";
 import { author, findAgent, stanceLabel } from "./world";
 
@@ -59,11 +60,11 @@ export function buildInterviewRequest(
         "",
         ...history.flatMap(t => [`Q: ${t.question}`, `A: ${t.answer}`]),
         `Q: ${clip(question, MAX_QUESTION_CHARS)}`,
-        "A:",
+        'Reply with JSON only: {"answer": "…"}',
     ]
         .filter(line => line !== "")
         .join("\n");
-    return { purpose: "interview", system, prompt, maxOutputTokens: 400 };
+    return { purpose: "interview", system, prompt, schema: ANSWER_SCHEMA, maxOutputTokens: 500 };
 }
 
 export function buildAnalystRequest(
@@ -112,13 +113,23 @@ export function buildAnalystRequest(
         "",
         ...history.flatMap(t => [`Q: ${t.question}`, `A: ${t.answer}`]),
         `Q: ${clip(question, MAX_QUESTION_CHARS)}`,
-        "A:",
+        'Reply with JSON only: {"answer": "…"}',
     ]
         .filter(line => line !== "")
         .join("\n");
-    return { purpose: "interview", system, prompt, maxOutputTokens: 500 };
+    return { purpose: "interview", system, prompt, schema: ANSWER_SCHEMA, maxOutputTokens: 600 };
 }
 
+/** Interviews come back as {"answer": "…"}; plain text is accepted too. */
+export const ANSWER_SCHEMA: Record<string, unknown> = {
+    type: "object",
+    additionalProperties: false,
+    properties: { answer: { type: "string" } },
+    required: ["answer"],
+};
+
 export function cleanAnswer(text: string): string {
-    return clip(text.replace(/^\s*A:\s*/i, ""), 1500);
+    const parsed = asRecord(extractJson(text));
+    const raw = parsed ? (asString(parsed.answer) ?? "") : text.replace(/^\s*A:\s*/i, "");
+    return clip(cleanProse(raw), 1500);
 }

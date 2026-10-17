@@ -132,6 +132,7 @@ export type Stance = -2 | -1 | 0 | 1 | 2;
 export interface ScenarioPerson {
     id: string;
     name: string;
+    /** With its leading "@", e.g. "@dana_ops" (as are all handles in this contract). */
     handle: string;
     role: string;
     bio: string;
@@ -282,7 +283,13 @@ export interface PostTestResult {
     text: string;
     reception: ScenarioReception | null;
     headline: string | null;
-    sampleComments: Array<{ name: string; handle: string; role: string; text: string; stance: Stance }>;
+    sampleComments: Array<{
+        name: string;
+        handle: string;
+        role: string;
+        text: string;
+        stance: Stance;
+    }>;
     error: string | null;
 }
 

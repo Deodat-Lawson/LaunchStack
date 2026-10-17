@@ -14,7 +14,7 @@ import {
     type FactionKey,
     type PostReception,
 } from "./metrics";
-import { clip } from "./text";
+import { cleanProse, clip } from "./text";
 import type { ModelRequest, World } from "./types";
 import { author, findAgent, stanceLabel } from "./world";
 
@@ -165,8 +165,8 @@ export function receptionLine(r: PostReception): string {
 export function parseReport(text: string, world: World): ScenarioReport | undefined {
     const root = asRecord(extractJson(text));
     if (!root) return undefined;
-    const headline = clip(asString(root.headline) ?? "", 200);
-    const summary = clip(asString(root.summary) ?? "", 1200);
+    const headline = clip(cleanProse(asString(root.headline) ?? ""), 200);
+    const summary = clip(cleanProse(asString(root.summary) ?? ""), 1200);
     if (!headline || !summary) return undefined;
     const ids = new Set(world.posts.map(p => p.id));
     const postIds = (v: unknown) => [
@@ -192,8 +192,8 @@ export function parseReport(text: string, world: World): ScenarioReport | undefi
         seenFactions.add(stance);
         factionList.push({
             stance,
-            label: clip(asString(item.label) ?? stance, 60),
-            text: clip(asString(item.text) ?? "", 400),
+            label: clip(cleanProse(asString(item.label) ?? stance), 60),
+            text: clip(cleanProse(asString(item.text) ?? ""), 400),
             share: Math.round((groups[stance].length / total) * 100) / 100,
             agentIds: groups[stance],
         });
@@ -217,19 +217,22 @@ export function parseReport(text: string, world: World): ScenarioReport | undefi
             .map(asRecord)
             .filter((d): d is Record<string, unknown> => !!d && !!asString(d.text))
             .slice(0, 6)
-            .map(d => ({ text: clip(asString(d.text)!, 400), postIds: postIds(d.postIds) })),
+            .map(d => ({
+                text: clip(cleanProse(asString(d.text)!), 400),
+                postIds: postIds(d.postIds),
+            })),
         turningPoints: asArray(root.turningPoints)
             .map(asRecord)
             .filter((d): d is Record<string, unknown> => !!d && !!asString(d.text))
             .slice(0, 5)
             .map(d => ({
                 round: Math.max(0, Math.min(world.round, Math.round(asNumber(d.round) ?? 0))),
-                text: clip(asString(d.text)!, 300),
+                text: clip(cleanProse(asString(d.text)!), 300),
                 postIds: postIds(d.postIds),
             })),
         factions: factionList,
         watchFor: asArray(root.watchFor)
-            .map(w => clip(asString(w) ?? "", 200))
+            .map(w => clip(cleanProse(asString(w) ?? ""), 200))
             .filter(Boolean)
             .slice(0, 4),
     };

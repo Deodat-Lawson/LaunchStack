@@ -175,3 +175,8 @@ export function percent(rate: number): string {
     if (p > 0 && p < 10) return `${p.toFixed(1)}%`;
     return `${Math.round(p)}%`;
 }
+
+/** A handle as people read it: exactly one leading "@" (the API sends handles with it). */
+export function atHandle(handle: string): string {
+    return `@${handle.replace(/^@+/, "")}`;
+}

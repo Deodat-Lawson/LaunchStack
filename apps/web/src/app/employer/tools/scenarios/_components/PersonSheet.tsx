@@ -13,7 +13,7 @@ import {
 import type { ScenarioDetail, ScenarioInterview } from "~/lib/scenarios/types";
 import { plural } from "~/lib/tools/format";
 
-import { SOURCE_KIND_LABEL, STANCE_LABEL } from "~/lib/scenarios/words";
+import { atHandle, SOURCE_KIND_LABEL, STANCE_LABEL } from "~/lib/scenarios/words";
 import { Monogram, StanceTrail } from "./Bits";
 import { AskBox, InterviewThread, askBlockedReason } from "./Interviews";
 import { GroundingBadge } from "./PeopleTab";
@@ -58,7 +58,7 @@ export function PersonSheet({
                                         {person.name}
                                     </SheetTitle>
                                     <SheetDescription className="text-ink-2 text-[13px]">
-                                        @{person.handle} · {person.role}
+                                        {atHandle(person.handle)} · {person.role}
                                     </SheetDescription>
                                 </div>
                             </div>

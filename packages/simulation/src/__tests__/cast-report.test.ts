@@ -187,3 +187,22 @@ describe("calibration", () => {
         expect(directionHits([], [])).toEqual({ hits: 0, total: 0 });
     });
 });
+
+describe("cleanProse", () => {
+    it("turns TeX arrows and symbols some models write into plain characters", async () => {
+        const { cleanProse } = await import("../text");
+        expect(cleanProse("Free $\\rightarrow$ Trial $\\rightarrow$ Read-only")).toBe(
+            "Free → Trial → Read-only"
+        );
+        expect(cleanProse("costs $\\geq$ 20% and $\\times$ 2 .")).toBe("costs ≥ 20% and × 2.");
+        expect(cleanProse("A $5 plan and a $10 plan")).toBe("A $5 plan and a $10 plan");
+    });
+});
+
+describe("cleanAnswer", () => {
+    it("reads a JSON answer or plain text", async () => {
+        const { cleanAnswer } = await import("../interview");
+        expect(cleanAnswer('{"answer": "Because of margins."}')).toBe("Because of margins.");
+        expect(cleanAnswer("A: Because of margins.")).toBe("Because of margins.");
+    });
+});

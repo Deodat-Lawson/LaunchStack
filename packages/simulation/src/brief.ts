@@ -5,7 +5,7 @@
 
 import { formatEvidence } from "./cast";
 import { asArray, asRecord, asString, extractJson } from "./json";
-import { clip } from "./text";
+import { cleanProse, clip } from "./text";
 import type { EvidenceItem, ModelRequest } from "./types";
 
 export const BRIEF_SCHEMA: Record<string, unknown> = {
@@ -54,7 +54,7 @@ export function buildBriefRequest(input: {
 export function parseBrief(text: string, evidenceIds: Set<string>): Brief | undefined {
     const root = asRecord(extractJson(text));
     if (!root) return undefined;
-    const brief = clip(asString(root.brief) ?? "", 1600);
+    const brief = clip(cleanProse(asString(root.brief) ?? ""), 1600);
     if (!brief) return undefined;
     // Keep only citations to evidence that exists.
     const cleaned = brief.replace(/\[(E\d+)\]/gi, (_match, id: string) =>
@@ -66,7 +66,7 @@ export function parseBrief(text: string, evidenceIds: Set<string>): Brief | unde
         .filter((v): v is string => !!v && evidenceIds.has(v));
     return {
         brief: cleaned.replace(/\s{2,}/g, " ").trim(),
-        openingPost: clip(stripCitations(asString(root.openingPost) ?? ""), 500),
+        openingPost: clip(cleanProse(stripCitations(asString(root.openingPost) ?? "")), 500),
         evidenceIds: [...new Set([...cited, ...declared])],
     };
 }

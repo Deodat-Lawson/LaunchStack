@@ -201,10 +201,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            const compatibility = validateDeprecatedChatSelection(
-                { provider, model: aiModel },
-                resolved
-            );
+            const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
             if (!compatibility.ok) {
                 return NextResponse.json(
                     { success: false, message: compatibility.message },

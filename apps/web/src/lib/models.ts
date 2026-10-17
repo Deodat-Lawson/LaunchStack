@@ -24,26 +24,17 @@ import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "@launchstack/retrieval/search-types";
-import { withAssistantIdentity } from "~/lib/ai/assistant-identity";
 import { configureAppChatModels } from "~/server/chat-models";
 import { env } from "~/env";
 
 export { selectChatRoute };
 
-/**
- * Resolve a route to a ready-to-invoke model for this deployment. Its
- * `prepareMessages` also adds the assistant identity rule, so no chat this app
- * sends lets the model name itself (see `~/lib/ai/assistant-identity`).
- */
+/** Resolve a route to a ready-to-invoke model for this deployment. */
 export function resolveConfiguredChatModel(
     options: ResolveChatModelOptions = {}
 ): ResolvedChatModel {
     configureAppChatModels(env.server);
-    const resolved = resolveChatModel(options);
-    return {
-        ...resolved,
-        prepareMessages: messages => resolved.prepareMessages(withAssistantIdentity(messages)),
-    };
+    return resolveChatModel(options);
 }
 
 /**
@@ -61,12 +52,15 @@ export function describeChatResolutionFailure(error: unknown): {
     status: number;
     message: string;
 } {
+    // A request error's message was written for the caller and never names a
+    // model. A configuration error quotes the file path, model ids and preset
+    // names, so it goes to the server log and the caller gets a fixed message.
+    if (isChatRequestError(error)) return { status: error.status, message: error.message };
+    console.error("[chat] chat model configuration cannot serve this request:", error);
     return {
-        status: isChatRequestError(error) ? error.status : 500,
+        status: 500,
         message:
-            error instanceof Error
-                ? error.message
-                : "The configured chat models cannot serve this request",
+            "Chat models are not configured correctly. An administrator needs to check the server's chat model file.",
     };
 }
 

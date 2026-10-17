@@ -16,8 +16,12 @@ export async function GET() {
         return NextResponse.json(getConfiguredPublicChatConfig());
     } catch (error) {
         // A broken configuration must not take the whole UI down — report every
-        // route unavailable so controls disable themselves cleanly.
-        const message = error instanceof Error ? error.message : "Chat models are not configured";
+        // route unavailable so controls disable themselves cleanly. The
+        // validation error quotes the file path, model ids and preset names,
+        // so it goes to the server log; every user sees this reason.
+        console.error("[config/ai-models] chat model configuration is invalid:", error);
+        const message =
+            "Chat models are not configured correctly. An administrator needs to check the server's chat model file.";
         return NextResponse.json(
             {
                 routes: {

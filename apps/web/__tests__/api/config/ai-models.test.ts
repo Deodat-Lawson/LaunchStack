@@ -72,8 +72,9 @@ describe("GET /api/config/ai-models", () => {
     });
 
     it("reports every route unavailable instead of 500-ing on a broken configuration", async () => {
+        const logged = jest.spyOn(console, "error").mockImplementation(() => {});
         mockPublicChatConfig.mockImplementation(() => {
-            throw new Error('chat-models.yaml: model "primary" is not declared');
+            throw new Error('/srv/chat-models.yaml: model "vendor/secret-9" is not declared');
         });
 
         const response = await GET();
@@ -82,7 +83,12 @@ describe("GET /api/config/ai-models", () => {
         const body = (await response.json()) as PublicChatConfig;
         for (const route of ["default", "fast", "reasoning", "vision"] as const) {
             expect(body.routes[route].available).toBe(false);
-            expect(body.routes[route].unavailableReason).toContain("not declared");
+            expect(body.routes[route].unavailableReason).toMatch(/not configured correctly/);
         }
+        // Every user sees this reason, so the error's path and model id stay
+        // in the server log.
+        expect(JSON.stringify(body)).not.toMatch(/secret-9|\/srv\//);
+        expect(logged).toHaveBeenCalled();
+        logged.mockRestore();
     });
 });

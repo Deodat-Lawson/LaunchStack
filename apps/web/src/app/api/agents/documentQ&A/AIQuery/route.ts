@@ -281,7 +281,7 @@ export async function POST(request: Request) {
             // Build prompts
             const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
             const webSearchInstruction = getWebSearchInstruction(
-                enableWebSearch ?? false,
+                webSearch.searched,
                 webSearch.results,
                 webSearch.refinedQuery,
                 webSearch.reasoning
@@ -335,8 +335,8 @@ export async function POST(request: Request) {
                 chunksAnalyzed: documents.length,
                 fusionWeights: [0.4, 0.6],
                 searchScope: "document",
-                webSources: enableWebSearch ? webSearch.results : undefined,
-                webSearch: enableWebSearch
+                webSources: webSearch.searched ? webSearch.results : undefined,
+                webSearch: webSearch.searched
                     ? {
                           refinedQuery: webSearch.refinedQuery || question,
                           reasoning: webSearch.reasoning,

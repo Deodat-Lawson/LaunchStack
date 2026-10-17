@@ -1113,7 +1113,7 @@ export async function POST(request: Request) {
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
             }
             const webSearchInstruction = getWebSearchInstruction(
-                enableWebSearchFlag,
+                webSearch.searched,
                 webSearch.results,
                 webSearch.refinedQuery,
                 webSearch.reasoning
@@ -1322,8 +1322,8 @@ export async function POST(request: Request) {
                     fusionWeights: [0.4, 0.6],
                     searchScope,
                     agent: agentResponseInfo(agent),
-                    webSources: enableWebSearchFlag ? webSearch.results : undefined,
-                    webSearch: enableWebSearchFlag
+                    webSources: webSearch.searched ? webSearch.results : undefined,
+                    webSearch: webSearch.searched
                         ? {
                               refinedQuery: webSearch.refinedQuery || question,
                               reasoning: webSearch.reasoning,

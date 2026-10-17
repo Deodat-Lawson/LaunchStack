@@ -1,4 +1,4 @@
-import { performExaSearch } from "./exaSearch";
+import { isExaSearchConfigured, performExaSearch } from "./exaSearch";
 import { executeWebSearchAgent } from "./webSearchAgent";
 import type { WebSearchResult } from "./types";
 
@@ -9,6 +9,12 @@ import type { WebSearchResult } from "./types";
  * Result from performWebSearch function
  */
 export interface PerformWebSearchResult {
+    /**
+     * Whether a search actually ran: the caller asked for one and a search
+     * provider is configured. Prompts and responses report this, not the
+     * request flag, so a deployment without a key never claims it searched.
+     */
+    searched: boolean;
     /** Array of web search results */
     results: WebSearchResult[];
     /** The refined search query used */
@@ -25,8 +31,11 @@ export async function performWebSearch(
     enableWebSearch = false,
     maxResults = 5
 ): Promise<PerformWebSearchResult> {
-    if (!enableWebSearch) {
+    // Without a provider key the search can only come back empty, and the
+    // query-refinement model call before it would add seconds to every turn.
+    if (!enableWebSearch || !isExaSearchConfigured()) {
         return {
+            searched: false,
             results: [],
             refinedQuery: question,
             content: "",
@@ -63,6 +72,7 @@ export async function performWebSearch(
                 .join("\n\n")}\n\n`;
 
             return {
+                searched: true,
                 results: agentResult.results,
                 refinedQuery: agentResult.refinedQuery,
                 reasoning: agentResult.reasoning,
@@ -71,6 +81,7 @@ export async function performWebSearch(
         } else {
             console.warn("⚠️ Web Search Agent: No relevant results found");
             return {
+                searched: true,
                 results: [],
                 refinedQuery: agentResult.refinedQuery,
                 reasoning: agentResult.reasoning,
@@ -92,6 +103,7 @@ export async function performWebSearch(
                     .join("\n\n")}\n\n`;
 
                 return {
+                    searched: true,
                     results: fallbackResults,
                     refinedQuery: question,
                     content: webSearchContent,
@@ -102,6 +114,7 @@ export async function performWebSearch(
         }
 
         return {
+            searched: true,
             results: [],
             refinedQuery: question,
             content: "",

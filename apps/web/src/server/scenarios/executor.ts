@@ -40,10 +40,22 @@ export function readScenariosExecutor(
     return env.SCENARIOS_EXECUTOR?.trim().toLowerCase() === "worker" ? "worker" : "inline";
 }
 
-/** How long one unit may hold the in-process lease before a poll may resume the run. */
-export const LEASE_MS = 3 * 60_000;
+/**
+ * How long the in-process lease lasts without a heartbeat. The executor
+ * renews it every LEASE_MS / 3 while a unit runs, so only a process that
+ * died (not a slow round) lets a poll resume the run.
+ */
+export const LEASE_MS = 2 * 60_000;
 /** Attempts per unit before the run is marked failed. */
 export const UNIT_ATTEMPTS = 3;
+
+/** Parallel model calls per round: SCENARIOS_CONCURRENCY, 1–16, default 6 (1 suits a single-slot local model). */
+export function readScenariosConcurrency(
+    env: Record<string, string | undefined> = process.env
+): number {
+    const n = Number.parseInt(env.SCENARIOS_CONCURRENCY ?? "", 10);
+    return Number.isFinite(n) ? Math.max(1, Math.min(16, n)) : 6;
+}
 
 export function createScenarioPorts(): ScenarioRunPorts {
     return {
@@ -63,7 +75,7 @@ export function createScenarioPorts(): ScenarioRunPorts {
             return result !== null;
         },
         now: () => new Date(),
-        concurrency: 6,
+        concurrency: readScenariosConcurrency(),
         log: (message, meta) => console.warn(`[scenarios] ${message}`, meta ?? {}),
     };
 }
@@ -107,14 +119,21 @@ export async function driveRun(
 ): Promise<void> {
     const now = ports.now();
     if (!(await claimLease(runId, now, new Date(now.getTime() + LEASE_MS)))) return;
+    // Heartbeat: a round on a slow model can outlast the lease; keep it fresh
+    // so a poll doesn't take it for a dead process and start a second driver.
+    const heartbeat = setInterval(() => {
+        renewLease(runId, new Date(Date.now() + LEASE_MS)).catch((error: unknown) =>
+            console.warn("[scenarios] lease renewal failed:", error)
+        );
+    }, LEASE_MS / 3);
     try {
         const run = await getRunById(runId);
         const limit = unitCount(run?.roundCount ?? 0) + 2;
         for (let i = 0; i < limit; i++) {
             if (!(await advanceWithRetries(ports, runId))) break;
-            await renewLease(runId, new Date(ports.now().getTime() + LEASE_MS));
         }
     } finally {
+        clearInterval(heartbeat);
         await releaseLease(runId);
     }
 }

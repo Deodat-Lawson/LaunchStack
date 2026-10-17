@@ -97,6 +97,10 @@ function memoryStore(initial: ScenarioRunRecord) {
             Object.assign(r, { status, error, finishedAt: at });
             return true;
         },
+        async markStarted(id, at) {
+            const r = runs.get(id)!;
+            if (r.status === "queued") Object.assign(r, { status: "running", startedAt: at });
+        },
         async pendingInjections(id) {
             return injections
                 .filter(i => i.runId === id && i.appliedRound === null)
@@ -224,6 +228,21 @@ describe("advanceRun", () => {
         const [a, b] = await Promise.all([advanceRun(p, 1), advanceRun(p, 1)]);
         expect([a.state, b.state].sort()).toEqual(["advanced", "skipped"]);
         expect(store.runs.get(1)!.step).toBe(1);
+    });
+
+    it("shows the run as running as soon as its first unit starts", async () => {
+        const store = memoryStore(baseRun());
+        let statusDuringGather = "";
+        await advanceRun(
+            ports(store, {
+                gatherEvidence: async () => {
+                    statusDuringGather = store.runs.get(1)!.status;
+                    return EVIDENCE;
+                },
+            }),
+            1
+        );
+        expect(statusDuringGather).toBe("running");
     });
 
     it("stops at the next unit once cancel is requested", async () => {

@@ -70,6 +70,8 @@ export interface ScenarioStore {
         at: Date
     ): Promise<boolean>;
     pendingInjections(runId: number): Promise<Array<{ id: number; text: string }>>;
+    /** queued → running as soon as a worker picks the run up, so the UI never says "queued" while it works. */
+    markStarted(runId: number, at: Date): Promise<void>;
 }
 
 export interface ScenarioRunPorts {
@@ -219,6 +221,7 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
 
     // 1. Gather evidence and write the shared brief.
     if (step === 0) {
+        if (run.status === "queued") await ports.store.markStarted(runId, ports.now());
         const evidence = await ports.gatherEvidence(run);
         const reply = await model.complete(
             buildBriefRequest({

@@ -24,11 +24,17 @@ import type { ScenarioRunPorts } from "@launchstack/pipelines/scenarios";
 
 import {
     advanceWithRetries,
+    driveRun,
+    LEASE_MS,
+    readScenariosConcurrency,
     readScenariosExecutor,
     resumeIfStalled,
 } from "~/server/scenarios/executor";
 
 const { after } = jest.requireMock<{ after: jest.Mock }>("next/server");
+const leases = jest.requireMock<
+    Record<"claimLease" | "getRunById" | "releaseLease" | "renewLease", jest.Mock>
+>("@launchstack/pipelines/scenarios/db");
 const { advanceRun } = jest.requireMock<{ advanceRun: jest.Mock }>(
     "@launchstack/pipelines/scenarios"
 );
@@ -86,4 +92,41 @@ it("resumes only unfinished inline runs whose lease has lapsed", () => {
     process.env.SCENARIOS_EXECUTOR = "worker";
     expect(readScenariosExecutor()).toBe("worker");
     expect(resumeIfStalled({ id: 1, status: "queued", leaseUntil: null }, now)).toBe(false);
+});
+
+it("keeps renewing the lease while a slow unit runs, so polls don't start a second driver", async () => {
+    jest.useFakeTimers();
+    try {
+        leases.claimLease.mockResolvedValue(true);
+        leases.getRunById.mockResolvedValue({ roundCount: 1 });
+        leases.renewLease.mockResolvedValue(undefined);
+        let finishUnit: (v: unknown) => void = () => undefined;
+        advanceRun
+            .mockImplementationOnce(() => new Promise(resolve => (finishUnit = resolve)))
+            .mockResolvedValue({ state: "done" });
+        const driving = driveRun(4, ports);
+        await jest.advanceTimersByTimeAsync(LEASE_MS * 2);
+        expect(leases.renewLease.mock.calls.length).toBeGreaterThanOrEqual(5);
+        finishUnit({ state: "advanced", step: 1 });
+        await driving;
+        expect(leases.releaseLease).toHaveBeenCalledWith(4);
+        const renewals = leases.renewLease.mock.calls.length;
+        await jest.advanceTimersByTimeAsync(LEASE_MS * 2);
+        expect(leases.renewLease.mock.calls.length).toBe(renewals);
+    } finally {
+        jest.useRealTimers();
+    }
+});
+
+it("does nothing when another process holds the lease", async () => {
+    leases.claimLease.mockResolvedValue(false);
+    await driveRun(4, ports);
+    expect(advanceRun).not.toHaveBeenCalled();
+});
+
+it("reads concurrency from the environment within 1–16", () => {
+    expect(readScenariosConcurrency({})).toBe(6);
+    expect(readScenariosConcurrency({ SCENARIOS_CONCURRENCY: "1" })).toBe(1);
+    expect(readScenariosConcurrency({ SCENARIOS_CONCURRENCY: "99" })).toBe(16);
+    expect(readScenariosConcurrency({ SCENARIOS_CONCURRENCY: "zero" })).toBe(6);
 });

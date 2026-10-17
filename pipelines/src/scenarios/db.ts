@@ -279,6 +279,12 @@ export function createScenarioStore(): ScenarioStore {
                 .returning({ id: scenarioRuns.id });
             return rows.length > 0;
         },
+        async markStarted(runId, at) {
+            await getDb()
+                .update(scenarioRuns)
+                .set({ status: "running", startedAt: at })
+                .where(and(eq(scenarioRuns.id, runId), eq(scenarioRuns.status, "queued")));
+        },
         async pendingInjections(runId) {
             return getDb()
                 .select({ id: scenarioInjections.id, text: scenarioInjections.text })

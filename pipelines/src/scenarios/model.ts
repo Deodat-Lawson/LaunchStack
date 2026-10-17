@@ -17,13 +17,17 @@ import {
 } from "@launchstack/llm";
 import { ACTION_TYPES, type ModelRequest, type SimulationModel } from "@launchstack/simulation";
 
-/** One model policy per purpose; turns run on the fast route because there are hundreds of them. */
+/**
+ * One model policy per purpose; turns run on the fast route because there are
+ * hundreds of them. Timeouts bound one call: a hung turn fails only that
+ * person's turn (the round tolerates a minority), never the whole run.
+ */
 export const SCENARIO_MODELS = {
-    decide: { route: "fast", temperature: 0.8 },
-    cast: { route: "fast", temperature: 0.7 },
-    brief: { route: "fast", temperature: 0.2 },
-    report: { route: "default", temperature: 0.3 },
-    interview: { route: "fast", temperature: 0.6 },
+    decide: { route: "fast", temperature: 0.8, timeoutMs: 90_000 },
+    cast: { route: "fast", temperature: 0.7, timeoutMs: 180_000 },
+    brief: { route: "fast", temperature: 0.2, timeoutMs: 180_000 },
+    report: { route: "default", temperature: 0.3, timeoutMs: 180_000 },
+    interview: { route: "fast", temperature: 0.6, timeoutMs: 90_000 },
 } as const satisfies Record<ModelRequest["purpose"], ResolveChatModelOptions>;
 
 // `.nullable()`, never `.optional()`: strict json-schema mode sends optional fields as required.

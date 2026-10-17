@@ -213,7 +213,6 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         const resolved = resolveConfiguredChatModel({ route: "fast" });
-        const modelId = resolved.modelId;
         const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
         if (!compatibility.ok) {
             return NextResponse.json(
@@ -290,7 +289,6 @@ export async function POST(request: Request) {
             ...(extras.summary ? { summary: extras.summary } : {}),
             ...(extras.issues ? { issues: extras.issues } : {}),
             processingTimeMs,
-            model: modelId,
         });
     } catch (error) {
         console.error("❌ [Grammar] Error:", error);

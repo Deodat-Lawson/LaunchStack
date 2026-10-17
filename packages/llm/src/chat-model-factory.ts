@@ -226,9 +226,11 @@ export function resolveChatRoute(
                 route,
                 reason: "route-not-configured",
                 missingCapabilities: [needed],
+                // Never the model id: this message reaches the browser as a
+                // disabled control's tooltip, and the screen does not name models.
                 message:
                     `No model is configured for the "${route}" route, and the default model ` +
-                    `"${fallback.id}" does not declare ${needed === "vision" ? "image input" : "a reasoning mode"}. ` +
+                    `does not declare ${needed === "vision" ? "image input" : "a reasoning mode"}. ` +
                     `Assign a "${route}" route in the chat model configuration.`,
             });
         }
@@ -296,7 +298,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             reason: "missing-capability",
             missingCapabilities: missing,
             message:
-                `Model "${resolved.definition.id}" serves the "${route}" route but does not support: ${missing.join(", ")}. ` +
+                `The model serving the "${route}" route does not support: ${missing.join(", ")}. ` +
                 `Assign a capable model to that route in the chat model configuration.`,
         });
     }

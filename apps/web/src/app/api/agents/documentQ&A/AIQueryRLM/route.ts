@@ -353,7 +353,6 @@ Provide a comprehensive answer based on the provided content. When referencing s
                 retrievalMethod: "rlm_hierarchical",
                 recommendedPages,
                 processingTimeMs: totalTime,
-                aiModel: selectedAiModel,
                 searchScope: "document",
                 webSources: enableWebSearch ? webSearch.results : undefined,
                 webSearch: enableWebSearch

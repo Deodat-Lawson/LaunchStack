@@ -211,7 +211,7 @@ export async function POST(request: Request) {
         const resolved = resolveConfiguredChatModel({
             route: action === "field_update" ? "fast" : "default",
         });
-        const { modelId, chat } = resolved;
+        const { chat } = resolved;
         const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
         if (!compatibility.ok) {
             return NextResponse.json(
@@ -335,7 +335,6 @@ Now refine it further:
                     action: "rewrite",
                     generatedContent: rewriteContent,
                     processingTimeMs: rewriteProcessingTimeMs,
-                    model: modelId,
                 });
 
             case "summarize":
@@ -379,7 +378,6 @@ Now refine it further:
                 action,
                 generatedContent: JSON.stringify(fieldUpdates),
                 processingTimeMs: Date.now() - startTime,
-                model: modelId,
             });
         }
 
@@ -399,7 +397,6 @@ Now refine it further:
             action,
             generatedContent,
             processingTimeMs,
-            model: modelId,
         });
     } catch (error) {
         console.error("[document-generator/generate] error:", error);

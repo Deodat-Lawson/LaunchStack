@@ -86,7 +86,6 @@ export interface AIChatResponse {
     tokenUsage?: { inputTokens: number; outputTokens: number; totalTokens: number };
     fusionWeights?: number[];
     searchScope?: "document" | "company" | "archive" | "selected" | "none";
-    aiModel?: string;
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
     agent?: AIChatAgentInfo | null;

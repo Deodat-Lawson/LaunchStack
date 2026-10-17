@@ -5,7 +5,7 @@
  *
  * Body only. The ledger already existed; this is its surface: a hero
  * balance, burn per day stacked by service, the same numbers as a table,
- * model attribution where the ledger has it, and the two settings the
+ * chat usage by route where the ledger has it, and the two settings the
  * numbers exist to inform. Cost is an estimate from a price the workspace
  * sets — the ledger counts unified tokens and knows nothing about invoices.
  *
@@ -54,7 +54,7 @@ interface UsageOverview {
     lifetime: { purchased: number; granted: number; used: number };
     daily: UsageDay[];
     byService: { service: string; tokens: number; operations: number }[];
-    byModel: { model: string; tokens: number; calls: number }[];
+    byRoute: { route: string; tokens: number; calls: number }[];
     recent: {
         id: number;
         type: string;
@@ -62,7 +62,6 @@ interface UsageOverview {
         balanceAfter: number;
         service: string | null;
         description: string | null;
-        model: string | null;
         createdAt: string;
     }[];
     pricePerMillionTokens: number;
@@ -373,25 +372,25 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            {overview && overview.byModel.length > 0 && (
+            {overview && overview.byRoute.length > 0 && (
                 <Section
-                    title="By model"
-                    description="Only chat debits record a model, so this covers Ask and meetings, not embeddings or OCR."
+                    title="By chat route"
+                    description="Only chat debits record a route, so this covers Ask and meetings, not embeddings or OCR."
                 >
                     <Card padding={0}>
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Model</TableHead>
+                                    <TableHead>Route</TableHead>
                                     <TableHead className="text-right">Calls</TableHead>
                                     <TableHead className="text-right">Tokens</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {overview.byModel.map(row => (
-                                    <TableRow key={row.model}>
-                                        <TableCell className="mono text-ink text-[12px]">
-                                            {row.model}
+                                {overview.byRoute.map(row => (
+                                    <TableRow key={row.route}>
+                                        <TableCell className="text-ink capitalize">
+                                            {row.route}
                                         </TableCell>
                                         <TableCell className="text-right tabular-nums">
                                             {row.calls.toLocaleString()}
@@ -443,11 +442,6 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                                     SERVICE_LABEL[row.service ?? ""] ??
                                                     row.type}
                                             </span>
-                                            {row.model && (
-                                                <span className="mono text-ink-3 ml-2 text-[11px]">
-                                                    {row.model}
-                                                </span>
-                                            )}
                                             {row.type !== "debit" && (
                                                 <Badge variant="secondary" className="ml-2">
                                                     {row.type}

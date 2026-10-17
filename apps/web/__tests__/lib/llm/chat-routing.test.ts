@@ -331,19 +331,18 @@ routes:
 });
 
 describe("public configuration", () => {
-    it("reports availability, effective model, and inheritance per route", () => {
+    it("reports availability and inheritance per route, never the model id", () => {
         const publicConfig = getPublicChatConfig(CAPABLE_DEPLOYMENT);
         expect(publicConfig.routes.default).toMatchObject({
             available: true,
-            model: "omni-model",
             inheritsDefault: false,
         });
         expect(publicConfig.routes.vision).toMatchObject({
             available: true,
-            model: "omni-model",
             inheritsDefault: true,
             vision: { supported: true },
         });
+        expect(JSON.stringify(publicConfig)).not.toContain("omni-model");
         expect(publicConfig.routes.reasoning?.reasoning).toEqual({
             mode: "toggle",
             controllable: true,
@@ -359,6 +358,8 @@ describe("public configuration", () => {
         expect(publicConfig.routes.vision.unavailableReason).toMatch(
             /does not declare image input/
         );
+        // The reason is a disabled control's tooltip, so it never names the model.
+        expect(JSON.stringify(publicConfig)).not.toContain("text-model");
         expect(publicConfig.routes.reasoning.available).toBe(false);
     });
 

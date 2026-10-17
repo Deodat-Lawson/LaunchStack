@@ -175,7 +175,7 @@ const serverSchema = z.object({
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
     // that provider; the redirect URI to register is
-    // <APP_PUBLIC_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github).
     // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
     // is nowhere safe to put a token, so the connector declines to exist.
     // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
@@ -190,7 +190,7 @@ const serverSchema = z.object({
     GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
     // LinkedIn app client pair for Growth › Brand: a workspace signs in and
     // posts as its members and the Pages they administer. Redirect URI to
-    // register: <APP_PUBLIC_URL>/api/connectors/linkedin/oauth/callback.
+    // register: <BETTER_AUTH_URL>/api/connectors/linkedin/oauth/callback.
     // LINKEDIN_OAUTH_SCOPES must list exactly the scopes the app's Auth tab
     // shows (space-separated); unset means the self-serve set
     // "openid profile email w_member_social" (profiles only, no Pages).
@@ -269,12 +269,11 @@ const serverSchema = z.object({
             }),
         })
         .optional(),
-    // Publicly-reachable origin of this Next.js app. Required when the
-    // document-converter is configured and documents live behind relative
-    // /api/files URLs — the converter needs an absolute URL to fetch them
-    // (and this origin must be in its ALLOWED_FETCH_ORIGINS). Connector OAuth
-    // redirect URIs use it too; links people receive go through
-    // server/public-origin.ts, which prefers BETTER_AUTH_URL.
+    // Where this app's other services (document converter, Word editor,
+    // worker) reach it to fetch /api/files URLs; it must be in their
+    // ALLOWED_FETCH_ORIGINS. Unset means the Compose service, http://app:3000.
+    // It may be an internal address, so nothing a person or OAuth provider
+    // opens is built on it — those use BETTER_AUTH_URL (server/public-origin.ts).
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
     // without a session. Required alongside OCR_WORKER_URL when documents
@@ -393,7 +392,7 @@ const serverSchema = z.object({
     GOOGLE_OAUTH_CLIENT_ID: optionalString(),
     GOOGLE_OAUTH_CLIENT_SECRET: optionalString(),
     // Absolute callback URL registered on the GCP OAuth client. Defaults to
-    // `${APP_PUBLIC_URL}/api/connectors/google/oauth/callback`, falling back
+    // `${BETTER_AUTH_URL}/api/connectors/google/oauth/callback`, falling back
     // to the request origin in dev.
     GOOGLE_OAUTH_REDIRECT_URL: optionalString(),
     // Quiet period before the reconciler pulls a Drive revision (minutes,

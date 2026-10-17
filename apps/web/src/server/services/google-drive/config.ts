@@ -146,13 +146,12 @@ export function getGoogleOAuthApp(): GoogleOAuthApp {
 
 /**
  * The redirect URL must byte-match what is registered on the GCP OAuth
- * client, so an explicit env override wins; otherwise it is derived from
- * APP_PUBLIC_URL, with the request origin as the dev fallback.
+ * client, so an explicit env override wins; otherwise it is built on the
+ * public origin the caller passes, `publicOrigin(request)` (BETTER_AUTH_URL).
  */
-export function getOAuthRedirectUrl(requestOrigin: string): string {
+export function getOAuthRedirectUrl(origin: string): string {
     if (env.server.GOOGLE_OAUTH_REDIRECT_URL) return env.server.GOOGLE_OAUTH_REDIRECT_URL;
-    const base = env.server.APP_PUBLIC_URL ?? requestOrigin;
-    return `${base.replace(/\/$/, "")}/api/connectors/google/oauth/callback`;
+    return `${origin.replace(/\/$/, "")}/api/connectors/google/oauth/callback`;
 }
 
 export function getSettleWindowMs(): number {

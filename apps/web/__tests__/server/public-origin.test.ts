@@ -33,22 +33,21 @@ describe("publicOrigin", () => {
         expect(publicOrigin(proxied("/x"))).toBe("https://app.example.com");
     });
 
-    it("prefers BETTER_AUTH_URL over an internal APP_PUBLIC_URL", () => {
-        // .env.example suggests APP_PUBLIC_URL="http://app:3000" for the converter.
+    it("never uses APP_PUBLIC_URL, the address other services fetch from", () => {
+        // Unset, it means the in-cluster http://app:3000 — not for a browser.
         setEnv("http://app:3000", "https://app.example.com");
         expect(publicOrigin(proxied("/x"))).toBe("https://app.example.com");
-    });
-
-    it("falls back to APP_PUBLIC_URL", () => {
-        setEnv("https://public.example.com/some/path/", undefined);
-        expect(publicOrigin(proxied("/x"))).toBe("https://public.example.com");
+        setEnv("https://public.example.com", undefined);
+        expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
     });
 
     it("skips a blank or malformed value instead of throwing", () => {
-        setEnv("   ", "localhost:3000");
+        setEnv(undefined, "   ");
         expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
-        setEnv("https://public.example.com", "not a url");
-        expect(publicOrigin(proxied("/x"))).toBe("https://public.example.com");
+        setEnv(undefined, "localhost:3000");
+        expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
+        setEnv(undefined, "not a url");
+        expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
     });
 
     it("uses the request only when nothing is configured (a dev server)", () => {
@@ -81,7 +80,7 @@ describe("publicOrigin", () => {
 });
 
 describe("links built from the public origin", () => {
-    beforeEach(() => setEnv("https://app.example.com", undefined));
+    beforeEach(() => setEnv("http://app:3000", "https://app.example.com"));
 
     it("sends the OAuth return leg to the public origin", async () => {
         const response = await providerOAuthCallback(

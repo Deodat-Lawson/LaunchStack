@@ -6,8 +6,32 @@ import { createHash } from "node:crypto";
 
 import { directionHits, spearman } from "@launchstack/simulation";
 
-import type { BrandPostMetrics } from "../marketing/schema";
-import type { LinkedPostTest } from "./db";
+/**
+ * A post's numbers as Brand reads them back (structurally Brand's
+ * `BrandPostMetrics`; declared here so this vertical doesn't reach into
+ * marketing's internals).
+ */
+export interface PostMetrics {
+    impressions: number | null;
+    reactions: number;
+    comments: number;
+    shares: number;
+    clicks?: number | null;
+    engagement: number | null;
+}
+
+/** One tested post with its prediction and real numbers; the host joins these. */
+export interface LinkedPostTest {
+    runId: number;
+    brandPostId: string;
+    platform: string;
+    status: string;
+    body: string;
+    publishedAt: Date | null;
+    metrics: PostMetrics | null;
+    /** The run's simulated engagement rate, 0–1. */
+    predicted: number | null;
+}
 
 /** Results needed before rank agreement is shown. */
 export const TRACK_RECORD_MINIMUM = 5;
@@ -27,7 +51,7 @@ export function hashDraft(text: string): string {
  * Null until impressions are known — counts alone can't be compared across
  * posts with different reach.
  */
-export function actualEngagement(metrics: BrandPostMetrics | null): number | null {
+export function actualEngagement(metrics: PostMetrics | null): number | null {
     if (!metrics) return null;
     if (typeof metrics.engagement === "number" && Number.isFinite(metrics.engagement)) {
         return Math.max(0, Math.min(1, metrics.engagement));

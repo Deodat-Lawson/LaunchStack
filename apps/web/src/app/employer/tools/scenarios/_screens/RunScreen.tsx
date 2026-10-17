@@ -360,12 +360,19 @@ function RunHeader({
                             )}
                         </div>
                     )}
-                    <p className="text-ink-2 mt-2 max-w-[75ch] text-[13.5px] leading-relaxed">
-                        <span className="text-ink-3">
-                            {run.kind === "post_test" ? "The draft tested: " : "What happens if: "}
-                        </span>
-                        {run.subject}
-                    </p>
+                    {/* A title taken from the situation would repeat it word for word. */}
+                    {(run.kind === "post_test" || !run.subject.startsWith(run.title)) && (
+                        <p className="text-ink-2 mt-2 max-w-[75ch] text-[13.5px] leading-relaxed">
+                            <span className="text-ink-3">
+                                {run.kind === "post_test"
+                                    ? "The draft tested: "
+                                    : "What happens if: "}
+                            </span>
+                            {run.kind === "post_test"
+                                ? (run.draft?.text ?? run.subject)
+                                : run.subject}
+                        </p>
+                    )}
                     <div className="text-ink-3 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                         <StatusPill run={run} />
                         <span aria-hidden>·</span>

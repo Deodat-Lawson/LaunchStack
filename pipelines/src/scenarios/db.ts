@@ -7,7 +7,6 @@ import { and, asc, desc, eq, inArray, isNotNull, isNull, lt, or, sql } from "dri
 
 import { getDb } from "@launchstack/store/client";
 
-import { brandPosts, type BrandPostMetrics } from "../marketing/schema";
 import type { RunPatch, ScenarioStore } from "./run";
 import {
     scenarioInjections,
@@ -364,47 +363,4 @@ export async function linkPostTest(
             target: scenarioPostLinks.brandPostId,
             set: { runId, createdAt: sql`CURRENT_TIMESTAMP` },
         });
-}
-
-export interface LinkedPostTest {
-    runId: number;
-    brandPostId: string;
-    platform: string;
-    status: string;
-    body: string;
-    publishedAt: Date | null;
-    metrics: BrandPostMetrics | null;
-    predicted: number | null;
-}
-
-/** Every tested post in the workspace with its prediction and real metrics. */
-export async function listLinkedPostTests(companyId: bigint): Promise<LinkedPostTest[]> {
-    const rows = await getDb()
-        .select({
-            runId: scenarioPostLinks.runId,
-            brandPostId: scenarioPostLinks.brandPostId,
-            platform: brandPosts.platform,
-            status: brandPosts.status,
-            body: brandPosts.body,
-            publishedAt: brandPosts.publishedAt,
-            metrics: brandPosts.metrics,
-            predicted: sql<string | null>`${scenarioRuns.reception} ->> 'engagementRate'`,
-        })
-        .from(scenarioPostLinks)
-        .innerJoin(scenarioRuns, eq(scenarioRuns.id, scenarioPostLinks.runId))
-        .innerJoin(
-            brandPosts,
-            and(
-                eq(brandPosts.id, scenarioPostLinks.brandPostId),
-                eq(brandPosts.companyId, companyId)
-            )
-        )
-        .where(and(eq(scenarioPostLinks.companyId, companyId), eq(scenarioRuns.status, "done")))
-        .orderBy(desc(brandPosts.publishedAt));
-    return rows.map(r => ({
-        ...r,
-        publishedAt: r.publishedAt ?? null,
-        metrics: r.metrics ?? null,
-        predicted: r.predicted === null ? null : Number(r.predicted),
-    }));
 }

@@ -12,6 +12,8 @@ export {
     actualEngagement,
     buildTrackRecord,
     hashDraft,
+    type LinkedPostTest,
+    type PostMetrics,
     normalizeDraft,
     TRACK_RECORD_MINIMUM,
     type TrackRecord,

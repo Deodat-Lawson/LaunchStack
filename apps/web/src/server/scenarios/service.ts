@@ -34,7 +34,6 @@ import {
     linkPostTest,
     listInjections,
     listInterviews,
-    listLinkedPostTests,
     listVisibleRuns,
     requestCancel,
     updateRunMeta,
@@ -75,6 +74,7 @@ import { isMeteringEnforced } from "~/server/deployment";
 import { workspaceLooks } from "~/server/profile/store";
 
 import { brandIdentity, visibleDocumentIds } from "./evidence";
+import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
 import { LEFT_WORKSPACE, recordSummary, toDetail, toPostTest, toSummary } from "./views";
 

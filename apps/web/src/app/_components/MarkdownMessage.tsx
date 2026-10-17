@@ -7,6 +7,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import clsx from "clsx";
 import "katex/dist/katex.min.css";
+import { escapeCurrencyDollars } from "~/lib/markdown-math";
 
 export interface MarkdownMessageProps {
     content: string;
@@ -67,7 +68,7 @@ const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, className })
                     ),
                 }}
             >
-                {content}
+                {escapeCurrencyDollars(content)}
             </ReactMarkdown>
         </div>
     );

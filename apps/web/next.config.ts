@@ -42,6 +42,7 @@ const config: NextConfig = {
         "@launchstack/evidence",
         "@launchstack/pipelines",
         "@launchstack/tools",
+        "@launchstack/design-tokens",
     ],
 
     // Production builds fail on type errors (ADR-006). Lint runs as its own

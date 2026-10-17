@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { SignInNotice } from "~/components/auth/SignInNotice";
+
 export default function WorkspacesLayout({ children }: { children: ReactNode }) {
     return (
         <div
@@ -9,6 +11,7 @@ export default function WorkspacesLayout({ children }: { children: ReactNode }) 
             }}
         >
             {children}
+            <SignInNotice />
         </div>
     );
 }

@@ -1,9 +1,11 @@
 import "@launchstack/design-tokens/tokens.css";
 import "~/styles/tailwind.css";
+import { THEME_BOOT_SCRIPT } from "@launchstack/design-tokens/theme";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";
 import { type Metadata } from "next";
 
+import { ThemeChoiceSync } from "./_components/ThemeChoiceSync";
 import { inter, jetbrainsMono } from "./fonts";
 import { SITE_URL } from "~/config/site";
 
@@ -72,6 +74,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
+            <head>
+                {/* A theme picked in the app shows here too: see design-tokens/theme.ts. */}
+                <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+            </head>
             <body suppressHydrationWarning>
                 {/*
           data-theme on <html> is the one dark-mode mechanism: the CSS
@@ -79,6 +85,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           darkMode selector matches the same attribute.
         */}
                 <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+                    <ThemeChoiceSync />
                     {children}
                     <Analytics />
                 </ThemeProvider>

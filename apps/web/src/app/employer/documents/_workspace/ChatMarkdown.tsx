@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { copyText } from "~/lib/context-menu";
+import { escapeCurrencyDollars } from "~/lib/markdown-math";
 import { ChatMediaGallery, type ChatMediaItem } from "./ChatMediaGallery";
 import "katex/dist/katex.min.css";
 import "highlight.js/styles/github-dark-dimmed.min.css";
@@ -421,6 +422,7 @@ function removeAlertMarker(children: React.ReactNode): React.ReactNode {
 export function ChatMarkdown({ text }: { text: string }) {
     const root = useRef<HTMLDivElement>(null);
     const [gallery, setGallery] = useState<{ items: ChatMediaItem[]; index: number } | null>(null);
+    const markdown = useMemo(() => escapeCurrencyDollars(text), [text]);
     const plugins = useMemo<
         NonNullable<React.ComponentProps<typeof ReactMarkdown>["rehypePlugins"]>
     >(() => [rehypeRaw, safeHtml, [rehypeKatex, { trust: false, strict: "ignore" }]], []);
@@ -572,7 +574,7 @@ export function ChatMarkdown({ text }: { text: string }) {
                     ),
                 }}
             >
-                {text}
+                {markdown}
             </ReactMarkdown>
             {gallery && (
                 <ChatMediaGallery

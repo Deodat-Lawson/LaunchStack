@@ -21,7 +21,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { writeSettingValue } from "~/lib/settings/useSettings";
 
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
 
@@ -147,17 +146,9 @@ export function AccountMenu({
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    onSelect={() => {
-                        const next = isDark ? "light" : "dark";
-                        setTheme(next);
-                        // Remembered as a preference, so the choice follows
-                        // the person to their next browser. Best effort.
-                        void writeSettingValue({
-                            key: "appearance.theme",
-                            scope: "member",
-                            value: next,
-                        }).catch(() => undefined);
-                    }}
+                    // PreferenceSync saves the change as a preference, so it
+                    // follows the person to their next browser.
+                    onSelect={() => setTheme(isDark ? "light" : "dark")}
                 >
                     {isDark ? <Sun /> : <Moon />}
                     Switch to {isDark ? "light" : "dark"} theme

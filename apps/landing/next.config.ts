@@ -17,6 +17,9 @@ const config: NextConfig = {
     // looking for a lockfile and emit noisy warnings.
     outputFileTracingRoot: path.join(__dirname, "../../"),
 
+    // design-tokens ships its theme cookie helper as TypeScript source.
+    transpilePackages: ["@launchstack/design-tokens"],
+
     // Same reason as apps/web: pin the Turbopack root to the monorepo root so
     // `next dev --turbo` can't land on a stray lockfile above the repo.
     turbopack: {

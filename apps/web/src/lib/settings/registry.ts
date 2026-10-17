@@ -93,7 +93,9 @@ export const SETTINGS: readonly SettingDefinition[] = [
         scopes: ["member"],
         permission: null,
         schema: z.enum(["system", "light", "dark"]),
-        default: "system",
+        // Dark, like the landing site and the sign-in screens: "system" here
+        // flipped people to light the moment they entered a workspace.
+        default: "dark",
         control: {
             kind: "radio",
             options: [

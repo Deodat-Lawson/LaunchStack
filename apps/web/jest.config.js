@@ -98,6 +98,7 @@ export const config = {
         "^@launchstack/store/crypto$": "<rootDir>/../../packages/store/src/crypto/index.ts",
         "^@launchstack/store/credits$": "<rootDir>/../../packages/store/src/credits/index.ts",
         "^@launchstack/llm$": "<rootDir>/../../packages/llm/src/index.ts",
+        "^@launchstack/design-tokens/theme$": "<rootDir>/../../packages/design-tokens/theme.ts",
         "^@launchstack/llm/embeddings$": "<rootDir>/../../packages/llm/src/embeddings/index.ts",
         "^@launchstack/llm/guardrails$": "<rootDir>/../../packages/llm/src/guardrails/index.ts",
         "^@launchstack/llm/providers$": "<rootDir>/../../packages/llm/src/providers/index.ts",

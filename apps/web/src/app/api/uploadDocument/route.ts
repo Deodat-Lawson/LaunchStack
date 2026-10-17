@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
-import { isTranscriptionError } from "@launchstack/conversion";
+import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/store/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";

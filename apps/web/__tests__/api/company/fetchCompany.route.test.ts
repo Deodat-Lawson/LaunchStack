@@ -74,6 +74,7 @@ describe("GET /api/fetchCompany", () => {
         mockSelected.length = 0;
         mockGetRedactedCredentials.mockResolvedValue({
             openAI: { hasKey: true, last4: "9xQz" },
+            openAIBaseUrl: "https://embeddings.example/v1",
             huggingFace: { hasKey: false, last4: null },
             ollamaBaseUrl: "http://gpu-box.internal:11434",
             ollamaModel: "nomic-embed-text",
@@ -116,6 +117,8 @@ describe("GET /api/fetchCompany", () => {
                 id: 5,
                 embeddingIndexKey: "ollama-768",
                 embeddingOpenAIApiKey: { hasKey: true, last4: "9xQz" },
+                // The endpoint the key belongs to is not a secret; the form shows it.
+                embeddingOpenAIBaseUrl: "https://embeddings.example/v1",
                 embeddingHuggingFaceApiKey: { hasKey: false, last4: null },
                 embeddingOllamaBaseUrl: "http://gpu-box.internal:11434",
                 embeddingOllamaModel: "nomic-embed-text",

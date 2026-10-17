@@ -41,6 +41,7 @@ import {
     resetSyncCursor,
 } from "~/server/services/connectors/google-drive/store";
 import { inngest } from "~/server/inngest/client";
+import { publicOrigin } from "~/server/public-origin";
 
 type Provider = "google-drive" | "gmail";
 
@@ -52,7 +53,7 @@ type Provider = "google-drive" | "gmail";
 function redirectToWorkspace(request: Request, provider: Provider, flag: string): NextResponse {
     const result = flag === "connected" ? "connected" : flag === "cancelled" ? "denied" : "error";
     const response = NextResponse.redirect(
-        new URL(`/employer/documents?connector=${provider}&result=${result}`, request.url)
+        new URL(`/employer/documents?connector=${provider}&result=${result}`, publicOrigin(request))
     );
     response.cookies.delete(
         provider === "gmail" ? GMAIL_OAUTH_STATE_COOKIE : GOOGLE_OAUTH_STATE_COOKIE
@@ -126,7 +127,7 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {
@@ -201,7 +202,7 @@ async function gmailCallback(request: Request, url: URL, state: string) {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {

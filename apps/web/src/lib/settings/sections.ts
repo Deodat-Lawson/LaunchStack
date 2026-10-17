@@ -80,11 +80,23 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         edit: "settings.manage",
         aliases: ["processing", "byok", "embedding", "keys"],
     },
-    // Its read is refused outright.
+    // Its read is refused outright. Also where a workspace brings its own
+    // model: an endpoint and API key, or OpenRouter.
     models: {
         view: "settings.manage",
         edit: "settings.manage",
-        aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
+        aliases: [
+            "models",
+            "routes",
+            "llm",
+            "chat model",
+            "gemini",
+            "openai",
+            "own model",
+            "api key",
+            "openrouter",
+            "endpoint",
+        ],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone
     // tries an agent in the Agents app, and anyone who edits documents may

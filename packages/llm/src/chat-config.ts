@@ -379,7 +379,9 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
 
     if (!input.endpoint.baseUrl || input.endpoint.baseUrl.trim().length === 0) {
         throw new ChatConfigurationError(
-            "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
+            input.endpoint.owner === "workspace"
+                ? "The workspace's model endpoint has no address."
+                : "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
         );
     }
 
@@ -429,6 +431,7 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
             ...(input.endpoint.systemInstructions?.trim()
                 ? { systemInstructions: input.endpoint.systemInstructions.trim() }
                 : {}),
+            ...(input.endpoint.owner ? { owner: input.endpoint.owner } : {}),
         },
         models,
         routes: {

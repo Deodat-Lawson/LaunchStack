@@ -65,7 +65,8 @@ x-shared-env: &shared-env
   # calls (a free-tier Gemini key gets 20 a day) but rougher timestamps.
   TRANSCRIPTION_CHUNK_MINUTES: ${TRANSCRIPTION_CHUNK_MINUTES:-}
   # Auth (the worker inherits these transitively through the shared
-  # composition root — see ADR-002 consequences; it never uses them)
+  # composition root — see ADR-002 consequences). BETTER_AUTH_URL is also the
+  # public origin every link and OAuth redirect URI is built on.
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
   BETTER_AUTH_URL: ${BETTER_AUTH_URL:-}
   # Services
@@ -185,7 +186,8 @@ x-shared-env: &shared-env
   REDDIT_CLIENT_ID: ${REDDIT_CLIENT_ID:-}
   REDDIT_CLIENT_SECRET: ${REDDIT_CLIENT_SECRET:-}
   REDDIT_USER_AGENT: ${REDDIT_USER_AGENT:-}
-  # Public origin of the app; the converter and the OAuth redirect derive from it.
+  # Where the converter, editor and worker reach this app to fetch /api/files.
+  # Never used for a URL a person or OAuth provider opens (BETTER_AUTH_URL is).
   APP_PUBLIC_URL: ${APP_PUBLIC_URL:-}
   # Public site (apps/landing) origin, read per request by /site, /privacy and
   # /terms. Unset falls back to the origin baked in at build time.

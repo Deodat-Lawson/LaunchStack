@@ -14,6 +14,7 @@ import {
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
 import { PrepareSchema } from "../_schemas";
 import { prepareWeek } from "~/server/vantage/service";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const maxDuration = 120;
 
@@ -45,11 +46,9 @@ export async function POST(request: NextRequest) {
         const weekStart = parsed.data.weekStart
             ? weekStartOf(parseIsoDate(parsed.data.weekStart)!)
             : defaultAgendaWeek(new Date());
-        const agenda = await prepareWeek({
-            companyId: auth.ctx.companyId,
-            userId: auth.ctx.userId,
-            weekStart,
-        });
+        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, () =>
+            prepareWeek({ companyId: auth.ctx.companyId, userId: auth.ctx.userId, weekStart })
+        );
         return json({ agenda }, 201);
     } catch (err) {
         return handleVantageError("POST prepare", err);

@@ -1,4 +1,10 @@
-import { getAuxiliaryOpenAIConfig, getOpenAIClient } from "@launchstack/llm";
+import {
+    auxiliaryRequestFields,
+    getAuxiliaryOpenAIConfig,
+    getOpenAIClient,
+    resolveAuxiliaryModel,
+    type AuxiliaryModel,
+} from "@launchstack/llm";
 import { GEMINI_DEFAULT_MODEL } from "@launchstack/llm/types";
 
 /**
@@ -12,6 +18,9 @@ import { GEMINI_DEFAULT_MODEL } from "@launchstack/llm/types";
  * chat endpoint's credential.
  *
  * Provider preference (first available wins):
+ *   0. The workspace's own model — when ingestion runs in the scope of a
+ *      workspace that brought one, its model for images and nothing else: no
+ *      such model means no description, never the deployment's provider.
  *   1. Ollama — if a VLM Ollama base URL is configured. Defaults to
  *      "llava:13b"; callers can override via options.model. Self-hosted.
  *   2. OpenAI-compatible — if an auxiliary API key is configured. Uses
@@ -35,6 +44,8 @@ export function configureVlmEnrichment(config: VlmEnrichmentConfig): void {
 
 /** Whether any VLM provider is reachable, without rendering a page first. */
 export function isVlmEnrichmentConfigured(): boolean {
+    const own = resolveAuxiliaryModel("vision");
+    if (own.owner === "workspace") return own.model !== null;
     return Boolean(vlmConfigSlot.get()?.ollamaBaseUrl ?? getAuxiliaryOpenAIConfig().apiKey);
 }
 
@@ -63,12 +74,35 @@ export async function enrichPageWithVlm(
     imageBuffer: Buffer,
     options?: VlmEnrichmentOptions
 ): Promise<string> {
+    const own = resolveAuxiliaryModel("vision");
+    if (own.owner === "workspace") {
+        if (!own.model) {
+            console.warn(`[VLM] Skipping enrichment: ${own.reason}`);
+            return "";
+        }
+        // The workspace chose its model; options.model names a deployment one.
+        return enrichWithOpenAI(imageBuffer, own.model, options);
+    }
+
     const ollamaBaseUrl = vlmConfigSlot.get()?.ollamaBaseUrl;
     if (ollamaBaseUrl) {
         return enrichWithOllama(imageBuffer, ollamaBaseUrl, options);
     }
     if (getAuxiliaryOpenAIConfig().apiKey) {
-        return enrichWithOpenAI(imageBuffer, options);
+        const openai = getOpenAIClient();
+        if (!openai) {
+            console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
+            return "";
+        }
+        return enrichWithOpenAI(
+            imageBuffer,
+            {
+                owner: "deployment",
+                client: openai,
+                modelId: options?.model ?? GEMINI_DEFAULT_MODEL,
+            },
+            options
+        );
     }
     console.warn(
         "[VLM] No VLM provider configured (call configureVlmEnrichment or configureAuxiliaryOpenAI), skipping enrichment"
@@ -122,14 +156,9 @@ async function enrichWithOllama(
 
 async function enrichWithOpenAI(
     imageBuffer: Buffer,
+    model: AuxiliaryModel,
     options?: VlmEnrichmentOptions
 ): Promise<string> {
-    const openai = getOpenAIClient();
-    if (!openai) {
-        console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
-        return "";
-    }
-    const model = options?.model ?? GEMINI_DEFAULT_MODEL;
     const detail = options?.detail ?? "auto";
     const maxTokens = options?.maxTokens ?? 500;
 
@@ -137,8 +166,8 @@ async function enrichWithOpenAI(
         const base64Image = imageBuffer.toString("base64");
         const dataUrl = `data:image/png;base64,${base64Image}`;
 
-        const response = await openai.chat.completions.create({
-            model,
+        const response = await model.client.chat.completions.create({
+            model: model.modelId,
             messages: [
                 { role: "system", content: SYSTEM_PROMPT },
                 {
@@ -149,7 +178,7 @@ async function enrichWithOpenAI(
                     ],
                 },
             ],
-            max_tokens: maxTokens,
+            ...auxiliaryRequestFields(model, { maxTokens }),
         });
 
         return (response.choices[0]?.message?.content ?? "").trim();

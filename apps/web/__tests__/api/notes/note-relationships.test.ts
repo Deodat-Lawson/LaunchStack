@@ -20,6 +20,11 @@ import { makeWorkspaceContext } from "../../helpers/workspace-context";
 // The stub, not requireActual: the real module pulls in the auth graph
 // (and with it schema modules that need the drizzle-orm this file mocks).
 const mockRequireWorkspaceContext = jest.fn();
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+}));
+
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual("../../helpers/mock-require-workspace-context")

@@ -77,6 +77,7 @@ const SignupPage: React.FC = () => {
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [openaiKey, setOpenaiKey] = useState("");
+    const [openaiBaseUrl, setOpenaiBaseUrl] = useState("");
     const [hfKey, setHfKey] = useState("");
     const [ollamaUrl, setOllamaUrl] = useState("");
     const [ollamaModel, setOllamaModel] = useState("");
@@ -199,6 +200,7 @@ const SignupPage: React.FC = () => {
                     numberOfEmployees: teamSize || "2",
                     embeddingIndexKey: defaultIndexKey,
                     embeddingOpenAIApiKey: openaiKey || null,
+                    embeddingOpenAIBaseUrl: openaiBaseUrl || null,
                     embeddingHuggingFaceApiKey: hfKey || null,
                     embeddingOllamaBaseUrl: ollamaUrl || null,
                     embeddingOllamaModel: ollamaModel || null,
@@ -338,6 +340,8 @@ const SignupPage: React.FC = () => {
                             setShowAdvanced={setShowAdvanced}
                             openaiKey={openaiKey}
                             setOpenaiKey={setOpenaiKey}
+                            openaiBaseUrl={openaiBaseUrl}
+                            setOpenaiBaseUrl={setOpenaiBaseUrl}
                             hfKey={hfKey}
                             setHfKey={setHfKey}
                             ollamaUrl={ollamaUrl}
@@ -754,6 +758,8 @@ function TeamCard({
     setShowAdvanced,
     openaiKey,
     setOpenaiKey,
+    openaiBaseUrl,
+    setOpenaiBaseUrl,
     hfKey,
     setHfKey,
     ollamaUrl,
@@ -774,6 +780,8 @@ function TeamCard({
     setShowAdvanced: (v: boolean) => void;
     openaiKey: string;
     setOpenaiKey: (v: string) => void;
+    openaiBaseUrl: string;
+    setOpenaiBaseUrl: (v: string) => void;
     hfKey: string;
     setHfKey: (v: string) => void;
     ollamaUrl: string;
@@ -896,12 +904,21 @@ function TeamCard({
                         </span>
                         .
                     </div>
-                    <Label>OpenAI API key</Label>
+                    <Label>OpenAI-compatible API key</Label>
                     <input
                         type="password"
                         value={openaiKey}
                         onChange={e => setOpenaiKey(e.target.value)}
                         placeholder="<your-api-key>"
+                        autoComplete="off"
+                        style={{ ...inputStyle, marginBottom: 10 }}
+                    />
+                    <Label>Embeddings endpoint URL</Label>
+                    <input
+                        type="url"
+                        value={openaiBaseUrl}
+                        onChange={e => setOpenaiBaseUrl(e.target.value)}
+                        placeholder="https://api.openai.com/v1"
                         autoComplete="off"
                         style={{ ...inputStyle, marginBottom: 10 }}
                     />

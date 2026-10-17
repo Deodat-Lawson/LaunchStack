@@ -9,8 +9,11 @@
  * off (`tool_choice: "none"`), so every turn ends in an answer.
  *
  * Tools travel as standard Chat Completions function definitions, so any
- * OpenAI-compatible endpoint that declares tool calling can host them —
- * no vendor-hosted tool, nothing tied to one provider.
+ * OpenAI-compatible endpoint can host them — no vendor-hosted tool, nothing
+ * tied to one provider. An endpoint that refuses the tools (HTTP 400/422 on
+ * the first request, before anything streamed) is asked again without them:
+ * offering tools to a model that turns out not to take them costs a retry,
+ * not the answer.
  *
  * Streaming is per round: text and reasoning deltas reach the caller as they
  * arrive, whichever round produced them.
@@ -81,6 +84,12 @@ export interface AnswerWithToolsResult {
 /** Calls the model may make in one round; more than this is a runaway. */
 const MAX_CALLS_PER_ROUND = 4;
 
+/** The endpoint rejected the request itself — here, the tools it was offered. */
+function isRequestRefusal(error: unknown): boolean {
+    const status = (error as { status?: unknown } | null)?.status;
+    return status === 400 || status === 422;
+}
+
 /** Extract only public reasoning deltas; raw provider payloads never leave the server. */
 function rawReasoningDelta(value: unknown): string | undefined {
     if (!value || typeof value !== "object") return undefined;
@@ -149,11 +158,57 @@ export async function answerWithTools(
         },
     }));
     const offered = tools.length > 0 && typeof chat.bindTools === "function";
-    const withTools = offered ? chat.bindTools!(specs) : null;
+    let withTools = offered ? chat.bindTools!(specs) : null;
     const conversation = [...options.messages];
     const toolCalls: ToolCallRecord[] = [];
     let usage: ChatTokenUsage = {};
     let streamedText = "";
+    let modelCalls = 0;
+
+    /** One model call; text and reasoning stream out as they arrive. */
+    const callModel = async (
+        model: Pick<BaseChatModel, "stream" | "invoke">
+    ): Promise<{ message: AIMessageChunk | AIMessage; roundText: string }> => {
+        modelCalls += 1;
+        if (!stream) {
+            const message = (await model.invoke(conversation, { signal })) as AIMessage;
+            return { message, roundText: contentText(message.content) };
+        }
+        let combined: AIMessageChunk | undefined;
+        let roundText = "";
+        for await (const chunk of await model.stream(conversation, { signal })) {
+            throwIfChatAborted(signal);
+            const wireReasoning = rawReasoningDelta(chunk.additional_kwargs?.__raw_response);
+            // Do not retain opaque provider metadata in the final chunk.
+            delete chunk.additional_kwargs.__raw_response;
+            combined = combined ? combined.concat(chunk) : chunk;
+            const text = contentText(chunk.content);
+            if (text) {
+                // A later round's text starts a new paragraph.
+                const lead = !roundText && streamedText && !/\s$/.test(streamedText);
+                const delta = lead ? `\n\n${text}` : text;
+                roundText += text;
+                streamedText += delta;
+                stream.onText(delta);
+            }
+            const reasoning =
+                chunk.additional_kwargs?.reasoning_content ??
+                chunk.additional_kwargs?.reasoning ??
+                wireReasoning;
+            if (typeof reasoning === "string" && reasoning) stream.onReasoning(reasoning);
+            if (Array.isArray(chunk.content)) {
+                for (const block of chunk.content) {
+                    if (typeof block !== "object" || !block) continue;
+                    if (block.type === "reasoning" || block.type === "thinking") {
+                        const delta: unknown = block.text ?? block.thinking;
+                        if (typeof delta === "string" && delta) stream.onReasoning(delta);
+                    }
+                }
+            }
+        }
+        if (!combined) throw new Error("The model stream ended without a response.");
+        return { message: combined, roundText };
+    };
 
     for (let round = 0; ; round++) {
         throwIfChatAborted(signal);
@@ -167,55 +222,28 @@ export async function answerWithTools(
             : chat;
 
         let message: AIMessageChunk | AIMessage;
-        let roundText = "";
-        if (stream) {
-            let combined: AIMessageChunk | undefined;
-            for await (const chunk of await model.stream(conversation, { signal })) {
-                throwIfChatAborted(signal);
-                const wireReasoning = rawReasoningDelta(chunk.additional_kwargs?.__raw_response);
-                // Do not retain opaque provider metadata in the final chunk.
-                delete chunk.additional_kwargs.__raw_response;
-                combined = combined ? combined.concat(chunk) : chunk;
-                const text = contentText(chunk.content);
-                if (text) {
-                    // A later round's text starts a new paragraph.
-                    const lead = !roundText && streamedText && !/\s$/.test(streamedText);
-                    const delta = lead ? `\n\n${text}` : text;
-                    roundText += text;
-                    streamedText += delta;
-                    stream.onText(delta);
-                }
-                const reasoning =
-                    chunk.additional_kwargs?.reasoning_content ??
-                    chunk.additional_kwargs?.reasoning ??
-                    wireReasoning;
-                if (typeof reasoning === "string" && reasoning) stream.onReasoning(reasoning);
-                if (Array.isArray(chunk.content)) {
-                    for (const block of chunk.content) {
-                        if (typeof block !== "object" || !block) continue;
-                        if (block.type === "reasoning" || block.type === "thinking") {
-                            const delta: unknown = block.text ?? block.thinking;
-                            if (typeof delta === "string" && delta) stream.onReasoning(delta);
-                        }
-                    }
-                }
-            }
-            if (!combined) throw new Error("The model stream ended without a response.");
-            message = combined;
-        } else {
-            message = (await model.invoke(conversation, { signal })) as AIMessage;
-            roundText = contentText(message.content);
+        let roundText: string;
+        try {
+            ({ message, roundText } = await callModel(model));
+        } catch (error) {
+            throwIfChatAborted(signal);
+            if (!(round === 0 && withTools && !streamedText && isRequestRefusal(error)))
+                throw error;
+            console.warn("[chat-tools] The endpoint refused the tools; answering without them.");
+            withTools = null;
+            ({ message, roundText } = await callModel(chat));
         }
         throwIfChatAborted(signal);
         usage = addTokenUsage(usage, normalizeTokenUsage(message));
 
-        const calls = mayCall ? readToolCalls(message, round).slice(0, MAX_CALLS_PER_ROUND) : [];
+        const calls =
+            mayCall && withTools ? readToolCalls(message, round).slice(0, MAX_CALLS_PER_ROUND) : [];
         if (calls.length === 0) {
             return {
                 finalText: stream ? roundText : "",
                 finalContent: message.content,
                 usage,
-                modelCalls: round + 1,
+                modelCalls,
                 toolCalls,
             };
         }

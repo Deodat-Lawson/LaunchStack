@@ -16,10 +16,15 @@ export interface RunEnvironment {
     hasSearch: boolean;
 }
 
-export function readRunEnvironment(env: Record<string, string | undefined>): RunEnvironment {
+export function readRunEnvironment(
+    env: Record<string, string | undefined>,
+    /** The workspace brought its own working model (Settings › Models). */
+    workspaceHasOwnModel = false
+): RunEnvironment {
     return {
-        // The model is whatever chat talks to: ask its resolution, never a list here.
-        hasModel: isChatEndpointConfigured(env),
+        // The model is whatever chat talks to: ask its resolution, never a list
+        // here. A workspace's own model counts even where the server has none.
+        hasModel: workspaceHasOwnModel || isChatEndpointConfigured(env),
         hasSearch: [env.EXA_API_KEY, env.SERPER_API_KEY, env.FOURSQUARE_SERVICE_KEY].some(v =>
             Boolean(v)
         ),

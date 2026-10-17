@@ -20,7 +20,11 @@ import { document, documentVersions, fileUploads } from "@launchstack/store/sche
 import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    forbiddenForPermission,
+    requireWorkspaceContext,
+    type WorkspaceContext,
+} from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 import { gateChunksByScope } from "~/server/rag/gate";
@@ -38,6 +42,7 @@ import {
     resolveConfiguredChatRoute,
     selectChatRoute,
 } from "~/lib/models";
+import { getChatModelsSource } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
@@ -49,6 +54,7 @@ import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types
 import { fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 import { extractChatPdfText } from "~/server/chat-pdf-text";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
+import { shouldDebitChatTokens } from "~/lib/credits/chat-source";
 import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
@@ -67,6 +73,7 @@ import {
     agentSystemPromptBlock,
     resolveChatAgent,
 } from "~/server/collab/chat-agent";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -470,6 +477,37 @@ export async function POST(request: Request) {
                 return forbiddenForPermission("documents.read");
             }
 
+            // Everything the answer runs (route resolution, web search, the model
+            // call, a streamed body) resolves against the workspace's own models
+            // when it brought them.
+            return await withWorkspaceChatModels(ctx.data.companyId, () => answer(ctx));
+        } catch (error) {
+            if (request.signal.aborted) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, cancelled: true, message: "Response stopped" },
+                    { status: 499 }
+                );
+            }
+            if (error instanceof AttachmentReadError) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: error.message },
+                    { status: error.status }
+                );
+            }
+            console.error("❌ [AIChat] Error in query processing:", error);
+            recordResult("error");
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "An error occurred while processing your question.",
+                },
+                { status: 500 }
+            );
+        }
+
+        async function answer(ctx: { data: WorkspaceContext }) {
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
@@ -629,6 +667,9 @@ export async function POST(request: Request) {
                 );
             }
             const { modelId: selectedAiModel, chat } = resolved;
+            // Read where the model was resolved: tokens a workspace's own
+            // endpoint serves are on its provider's bill, not its credits.
+            const debitChatTokens = shouldDebitChatTokens(getChatModelsSource());
             const streamsModel = Boolean(
                 wantsStreaming && resolved.behavior.parameters?.streaming === "supported"
             );
@@ -1048,12 +1089,17 @@ export async function POST(request: Request) {
 
             // Web search is a tool the model may call, not a step before the
             // answer: it is offered when the turn's agent may use the web, a
-            // search provider key is configured and the model declares tool
-            // calling. A question that needs no web pays nothing for it.
+            // search provider key is configured and the model takes tools. A
+            // question that needs no web pays nothing for it. A workspace's own
+            // model has no tool-calling answer to read (Settings asks about
+            // images, reasoning and JSON schema); nearly every OpenAI-compatible
+            // server takes function tools, and one that refuses them costs a
+            // retry without them (chat-tool-loop.ts), not the answer.
             const webTools =
                 enableWebSearch &&
                 webSearchAvailable() &&
-                resolved.behavior.nativeStructuredOutput.includes("tool-calling")
+                (resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
+                    getChatModelsSource() === "workspace")
                     ? createWebTools()
                     : null;
 
@@ -1157,7 +1203,7 @@ export async function POST(request: Request) {
             ) => {
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "generating" });
-                const answer = await answerWithTools({
+                const reply = await answerWithTools({
                     chat,
                     messages,
                     tools: webTools?.tools ?? [],
@@ -1172,14 +1218,15 @@ export async function POST(request: Request) {
                 emit?.({ type: "status", status: "finalizing" });
 
                 let summarizedAnswer = normalizeModelContent(
-                    emit ? answer.finalText : answer.finalContent
+                    emit ? reply.finalText : reply.finalContent
                 );
                 const totalTime = Date.now() - startTime;
 
                 // Log + meter LLM token usage, summed over every model call
                 // of the turn. Normalized at the chat boundary so credits are
-                // debited the same way whichever endpoint answered.
-                const usage = answer.usage;
+                // debited the same way whichever deployment endpoint answered;
+                // a workspace's own endpoint is never debited.
+                const usage = reply.usage;
                 const promptTokens = usage.inputTokens ?? 0;
                 const completionTokens = usage.outputTokens ?? 0;
                 console.log(
@@ -1187,8 +1234,8 @@ export async function POST(request: Request) {
                 );
                 if (webTools) {
                     console.log(
-                        `[AIChat] Tools: ${answer.modelCalls} model call(s); ${
-                            answer.toolCalls
+                        `[AIChat] Tools: ${reply.modelCalls} model call(s); ${
+                            reply.toolCalls
                                 .map(
                                     call => `${call.name}${call.ok ? "" : " (failed)"} ${call.ms}ms`
                                 )
@@ -1200,7 +1247,12 @@ export async function POST(request: Request) {
                 // is useful on a self-hosted instance too. This calls debitTokens
                 // directly rather than going through creditsDebitSafe (which would
                 // change the recorded metadata shape), so it needs its own guard.
-                if (isMeteringEnabled() && userCompanyId && promptTokens + completionTokens > 0) {
+                if (
+                    isMeteringEnabled() &&
+                    debitChatTokens &&
+                    userCompanyId &&
+                    promptTokens + completionTokens > 0
+                ) {
                     const tokenCost = llmChatTokens(promptTokens, completionTokens);
                     debitTokens({
                         companyId: userCompanyId,
@@ -1320,30 +1372,6 @@ export async function POST(request: Request) {
                 }
                 throw modelError;
             }
-        } catch (error) {
-            if (request.signal.aborted) {
-                recordResult("error");
-                return NextResponse.json(
-                    { success: false, cancelled: true, message: "Response stopped" },
-                    { status: 499 }
-                );
-            }
-            if (error instanceof AttachmentReadError) {
-                recordResult("error");
-                return NextResponse.json(
-                    { success: false, message: error.message },
-                    { status: error.status }
-                );
-            }
-            console.error("❌ [AIChat] Error in query processing:", error);
-            recordResult("error");
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: "An error occurred while processing your question.",
-                },
-                { status: 500 }
-            );
         }
     });
 }

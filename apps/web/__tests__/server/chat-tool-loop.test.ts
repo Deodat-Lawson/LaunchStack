@@ -13,8 +13,8 @@ import type { WebSearchResponse } from "@launchstack/tools/web-research";
 import { answerWithTools } from "~/server/chat-tool-loop";
 import { createWebTools, webToolsPrompt } from "~/server/chat-web-tools";
 
-/** One scripted model turn: streamed chunks, or one message when invoked. */
-type Turn = AIMessageChunk[];
+/** One scripted model turn: streamed chunks (one message when invoked), or a failed request. */
+type Turn = AIMessageChunk[] | Error;
 
 interface ModelCall {
     messages: BaseMessage[];
@@ -28,6 +28,7 @@ function scriptedChat(turns: Turn[]) {
     const next = () => {
         const turn = turns.shift();
         if (!turn) throw new Error("The model was called more times than scripted.");
+        if (turn instanceof Error) throw turn;
         return turn;
     };
     const runnable = (tools?: unknown[], kwargs?: Record<string, unknown>) => ({
@@ -303,6 +304,44 @@ describe("Ask web search as a model-called tool", () => {
         expect(answer.toolCalls).toEqual([expect.objectContaining({ ok: false })]);
         expect(answer.finalContent).toBe("I couldn't search the web just now.");
         expect(web.sources).toEqual([]);
+    });
+
+    it("answers without tools when the endpoint refuses them", async () => {
+        const refusal = Object.assign(new Error("400 tools are not supported"), { status: 400 });
+        const search = jest.fn();
+        const web = createWebTools({ search });
+        const { chat, calls } = scriptedChat([refusal, [text("Hello.")]]);
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        try {
+            const answer = await answerWithTools({
+                chat,
+                messages: [],
+                tools: web.tools,
+                signal: new AbortController().signal,
+                ...streamSink(),
+            });
+            expect(calls).toHaveLength(2);
+            expect(calls[0]!.tools).toHaveLength(2);
+            expect(calls[1]!.tools).toBeUndefined();
+            expect(answer).toMatchObject({ finalText: "Hello.", modelCalls: 2, toolCalls: [] });
+            expect(search).not.toHaveBeenCalled();
+        } finally {
+            warn.mockRestore();
+        }
+    });
+
+    it("does not retry an error that is not a refusal of the request", async () => {
+        const outage = Object.assign(new Error("503 unavailable"), { status: 503 });
+        const { chat, calls } = scriptedChat([outage]);
+        await expect(
+            answerWithTools({
+                chat,
+                messages: [],
+                tools: createWebTools({ search: jest.fn() }).tools,
+                signal: new AbortController().signal,
+            })
+        ).rejects.toThrow("503 unavailable");
+        expect(calls).toHaveLength(1);
     });
 
     it("binds nothing and calls the model once when no tools are offered", async () => {

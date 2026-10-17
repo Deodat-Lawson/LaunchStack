@@ -68,8 +68,9 @@ OpenAI-compatible endpoint in **Settings › Models › Your own model**:
   creates a key on the admin's own OpenRouter account. No client registration
   is needed. The workspace switches over once an admin picks a model.
 
-Once a model is chosen, **everything the workspace runs** uses it: Ask,
-drafting, meetings, notes, Studio tools and background jobs. Other workspaces
+Once a model is chosen, **every chat-model call made for the workspace** uses
+it: Ask, drafting, meetings, notes, Studio tools and background jobs (see "Not
+covered yet" below for what still runs on the server's own AI). Other workspaces
 on the same server keep the server default. The provider bills the workspace
 directly, so chat on its own endpoint spends no LaunchStack credits.
 
@@ -106,10 +107,14 @@ Rules it keeps:
 
 Subscriptions: a ChatGPT Plus/Pro plan can't be connected yet. OpenAI limits
 [Sign in with ChatGPT](https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt)
-to approved partners for hosted apps. A Claude Pro/Max plan can't be used by
-third-party apps under Anthropic's terms. Both work through an API key instead.
+to approved partners for hosted apps. A Claude Free/Pro/Max plan can't be used:
+Anthropic [does not permit third-party apps to offer Claude.ai login or use plan
+credentials](https://code.claude.com/docs/en/legal-and-compliance). Both vendors'
+API keys work through the key form, as does a Gemini API key from Google AI Studio.
 
-Not covered yet: image generation, transcription, OCR and reranking keep the
+Not covered yet: the AI that runs while documents are ingested (OCR table
+summaries, image descriptions, opt-in entity extraction) uses the server's
+auxiliary endpoint, and image generation, transcription and reranking keep the
 server's settings. Embeddings have their own per-workspace key and endpoint in
 Settings › Processing.
 

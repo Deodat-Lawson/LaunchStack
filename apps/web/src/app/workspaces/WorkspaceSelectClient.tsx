@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
 import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
-import { LANDING_CONTACT_URL } from "~/config/landing";
+import { LANDING_CONTACT_HREF } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { useInstanceHost } from "~/lib/instance-host";
@@ -900,7 +900,7 @@ export function WorkspaceSelectClient({
                     <a href="/signin">Use a different account</a>
                     <span className={styles.sepDot}>·</span>
                     {/* Cross-origin — support lives on the public site. */}
-                    <a href={LANDING_CONTACT_URL} rel="noopener">
+                    <a href={LANDING_CONTACT_HREF} rel="noopener">
                         Help
                     </a>
                     {/*

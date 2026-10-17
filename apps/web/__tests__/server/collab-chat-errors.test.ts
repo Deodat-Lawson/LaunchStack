@@ -25,6 +25,16 @@ import { createCollabChatFn } from "~/server/collab/chat";
 
 const turn = { messages: [{ role: "user" as const, content: "Your turn." }] };
 
+/** The error a turn fails with; a turn that succeeds fails the test. */
+function failure(): Promise<Error> {
+    return createCollabChatFn()(turn).then(
+        () => {
+            throw new Error("expected the turn to fail");
+        },
+        (error: unknown) => error as Error
+    );
+}
+
 beforeAll(() => {
     // describeChatError needs an installed configuration to know the endpoint.
     configureChatModels(
@@ -65,7 +75,7 @@ describe("collab chat failures", () => {
         mockInvoke.mockRejectedValue(
             new Error("402 Insufficient credits. Add more using https://vendor.example/credits")
         );
-        const error = await createCollabChatFn()(turn).catch((e: unknown) => e as Error);
+        const error = await failure();
         expect(error.message).toMatch(/usage limit/);
         expect(error.message).not.toMatch(/vendor/);
     });
@@ -74,13 +84,13 @@ describe("collab chat failures", () => {
         mockInvoke.mockRejectedValue(
             new Error("vendor.example exploded: model vendor/secret-model-9")
         );
-        const error = await createCollabChatFn()(turn).catch((e: unknown) => e as Error);
+        const error = await failure();
         expect(error.message).toBe("The AI service could not answer");
     });
 
     it("names the route, not the model, when a turn comes back empty", async () => {
         mockInvoke.mockResolvedValue({ content: "   " });
-        const error = await createCollabChatFn()(turn).catch((e: unknown) => e as Error);
+        const error = await failure();
         expect(error.message).toBe("The default model returned an empty turn");
     });
 });

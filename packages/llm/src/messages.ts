@@ -14,7 +14,7 @@ import {
     type BaseMessage,
     type BaseMessageLike,
 } from "@langchain/core/messages";
-import { normalizeModelContent } from "./normalize-content";
+import { modelContentToText } from "./normalize-content";
 import type { ChatModelBehavior } from "./types";
 
 function isSystem(message: BaseMessage): boolean {
@@ -34,7 +34,7 @@ export function applyMessageBehavior(
 
     const systemText = coerced
         .filter(isSystem)
-        .map(message => normalizeModelContent(message.content).trim())
+        .map(message => modelContentToText(message.content).trim())
         .filter(text => text.length > 0)
         .join("\n\n");
 

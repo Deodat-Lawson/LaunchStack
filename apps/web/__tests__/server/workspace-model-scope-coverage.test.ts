@@ -47,9 +47,14 @@ const SCANNED = [
         .map(entry => `packages/${entry.name}/src`),
 ];
 
-/** Calls that resolve a chat model or read the chat configuration it comes from. */
+/**
+ * Calls that resolve a chat model or read the chat configuration it comes
+ * from — and `resolveAuxiliaryModel`, which picks the model for the AI that
+ * runs during document ingestion (table summaries, page image descriptions,
+ * entity extraction) from the same scope.
+ */
 const CHAT_CALL =
-    /\b(resolveConfiguredChatModel|resolveConfiguredChatRoute|resolveChatModel|resolveChatRoute|generateStructured|invokeToolStructured|invokeStructured|getConfiguredPublicChatConfig|getPublicChatConfig|getChatModelsConfig|describeChatError)\s*\(/;
+    /\b(resolveConfiguredChatModel|resolveConfiguredChatRoute|resolveChatModel|resolveChatRoute|generateStructured|invokeToolStructured|invokeStructured|getConfiguredPublicChatConfig|getPublicChatConfig|getChatModelsConfig|describeChatError|resolveAuxiliaryModel)\s*\(/;
 
 type Coverage =
     /** Runs only inside these entry points, each of which enters the workspace's scope. */
@@ -80,6 +85,9 @@ const EMAIL_DRAFTS = [
     `${API}/distribution/outreach/route.ts`,
     `${API}/prospects/outreach/route.ts`,
 ];
+/** The worker's outbox handlers for source.version.created (extract) and evidence.version.extracted (index). */
+const INGESTION = "apps/worker/src/ports/ingestion.ts";
+const OCR_BENCHMARK = `${API}/ocr/benchmark/route.ts`;
 const CLIENT_PROSPECTOR_JOB = `${JOBS}/clientProspector.ts`;
 const DISTRIBUTION_JOB = `${JOBS}/distributionRun.ts`;
 const TREND_SEARCH_JOB = `${JOBS}/trendSearch.ts`;
@@ -185,6 +193,29 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         { scopedBy: [`${JOBS}/founderWeeklyReview.ts`], note: "generation job, step generate" },
     ],
     self(`${JOBS}/repoExplainerJob.ts`, "step explain, under the event's company"),
+
+    // --- Document ingestion (resolveAuxiliaryModel) ---------------------------
+    [
+        "packages/conversion/src/ocr-processing/chunker.ts",
+        {
+            scopedBy: [INGESTION],
+            note: "table summaries while chunking, in the index stage (chunkPages); nothing else chunks",
+        },
+    ],
+    [
+        "packages/conversion/src/ocr-processing/enrichment.ts",
+        {
+            scopedBy: [INGESTION, OCR_BENCHMARK],
+            note: "page image descriptions in normalizeDocument: the extract stage; the benchmark pins the deployment's",
+        },
+    ],
+    [
+        "packages/llm/src/providers/ner/llm.ts",
+        {
+            scopedBy: [INGESTION],
+            note: "entity extraction, the index stage's step F when ENABLE_ENTITY_EXTRACTION is on",
+        },
+    ],
 
     // --- Studio tools (feature packages + pipelines) ------------------------
     [
@@ -296,6 +327,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         { library: "the resolver; reads the scope in getChatModelsConfig" },
     ],
     ["packages/llm/src/public-config.ts", { library: "public route view over the resolver" }],
+    [
+        "packages/llm/src/auxiliary-model.ts",
+        {
+            library:
+                "picks the ingestion model from the scope; its callers are listed on their own",
+        },
+    ],
 ]);
 
 // --- Entry points that reach a call site but never call a model -------------
@@ -406,6 +444,25 @@ const NO_MODEL_CALL: Record<string, string> = {
     [`${API}/vantage/triage/route.ts`]:
         "loadTriage reads rows; only prepareWeek (vantage/agendas) resolves a model",
 };
+
+/**
+ * Composition roots: modules that import call-site modules at boot only to
+ * configure them (`configureVlmEnrichment` lives beside the image-description
+ * call; the engine barrels re-export the ingestion pipeline next to the outbox
+ * store). The walk does not climb past them — otherwise every module that
+ * opens the database would "reach" ingestion — and each must name none of
+ * the functions that run ingestion (INGESTION_RUNNERS), checked below.
+ */
+const COMPOSITION_ROOTS: Record<string, string> = {
+    "apps/web/src/server/engine.ts":
+        "the app's composition root: createEngine plus configure* calls (entity extraction from the indexing barrel); runs nothing",
+    "packages/engine/src/engine.ts":
+        "createEngine: configureVlmEnrichment, configureAuxiliaryOpenAI and the other slots; runs nothing",
+};
+
+/** Calls that run ingestion (or a stage of it) rather than configure it. */
+const INGESTION_RUNNERS =
+    /\b(runExtractionStage|runIndexingStage|runDocIngestionTool|normalizeDocument|chunkPages|chunkDocument|enrichPageWithVlm|extractAndStoreEntities|getNERProvider)\s*\(|\bnew\s+DocIngestionPipeline\b/;
 
 // --- Source scanning ----------------------------------------------------------
 
@@ -619,7 +676,6 @@ const entersScope = (file: string) =>
  */
 const seeds = callSites.filter(file => {
     const coverage = COVERAGE[file];
-    if (file.startsWith("packages/llm/")) return false;
     return !(coverage && ("library" in coverage || "unscoped" in coverage));
 });
 
@@ -637,7 +693,7 @@ const reachedEntryPoints: string[] = [];
     const queue = [...seeds];
     for (let file = queue.shift(); file !== undefined; file = queue.shift()) {
         if (isEntryPoint(file)) reachedEntryPoints.push(file);
-        if (entersScope(file)) continue;
+        if (entersScope(file) || file in COMPOSITION_ROOTS) continue;
         if (isEntryPoint(file) && !file.startsWith(WORKER)) continue;
         for (const importer of importers.get(file) ?? []) {
             if (toward.has(importer)) continue;
@@ -704,6 +760,8 @@ describe("workspace model scope reachability", () => {
         // A broken graph would pass the next assertion vacuously.
         expect(reachedEntryPoints.length).toBeGreaterThan(40);
         expect(reachedEntryPoints).toContain(`${API}/email-campaigns/route.ts`);
+        // Ingestion's model calls reach the worker through the indexing barrel.
+        expect(reachedEntryPoints).toContain(INGESTION);
     });
 
     it("finds no entry point that can reach a model outside its workspace's scope", () => {
@@ -721,6 +779,21 @@ describe("workspace model scope reachability", () => {
                     "job, record it in NO_MODEL_CALL with the reason."
             );
         }
+    });
+
+    it("keeps COMPOSITION_ROOTS to modules that configure and run nothing", () => {
+        const problems: string[] = [];
+        for (const root of Object.keys(COMPOSITION_ROOTS)) {
+            const code = CODE.get(root);
+            if (code === undefined) problems.push(`${root}: missing`);
+            else if (!toward.has(root))
+                problems.push(`${root}: no longer on a path to a call site`);
+            else if (INGESTION_RUNNERS.test(code) || CHAT_CALL.test(code))
+                problems.push(
+                    `${root}: runs ingestion or resolves a model, so it is an entry to scope`
+                );
+        }
+        expect(problems).toEqual([]);
     });
 
     it("keeps NO_MODEL_CALL honest", () => {

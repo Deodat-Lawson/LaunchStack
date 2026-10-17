@@ -180,7 +180,7 @@ export async function requestNoteEmbedding(
         return;
     }
 
-    const { DrizzleOutboxStore } = await import("@launchstack/engine");
+    const { DrizzleOutboxStore } = await import("@launchstack/orchestration");
     const { eventIds, PROTOCOL_VERSION } = await import(
         "@launchstack/orchestration/pipeline-events"
     );

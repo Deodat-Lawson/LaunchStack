@@ -69,7 +69,11 @@ function jsonInstruction(schema: z.ZodType<unknown>, name: string): string {
     ].join("\n");
 }
 
-function extractJson(text: string): unknown {
+/**
+ * Parse a model's JSON answer leniently: Markdown fences and a sentence
+ * before or after are tolerated. Throws when no JSON value can be recovered.
+ */
+export function extractJson(text: string): unknown {
     const withoutFence = text
         .trim()
         .replace(/^```(?:json)?\s*/i, "")

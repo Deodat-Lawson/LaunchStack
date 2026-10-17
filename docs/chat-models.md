@@ -69,10 +69,13 @@ OpenAI-compatible endpoint in **Settings › Models › Your own model**:
   is needed. The workspace switches over once an admin picks a model.
 
 Once a model is chosen, **every chat-model call made for the workspace** uses
-it: Ask, drafting, meetings, notes, Studio tools and background jobs (see "Not
-covered yet" below for what still runs on the server's own AI). Other workspaces
-on the same server keep the server default. The provider bills the workspace
-directly, so chat on its own endpoint spends no LaunchStack credits.
+it: Ask, drafting, meetings, notes, Studio tools and background jobs. So does
+the AI that runs while its documents are ingested: table summaries and entity
+extraction use its fast model, and page image descriptions use its model for
+images (see "Not covered yet" below for what still runs on the server's own
+AI). Other workspaces on the same server keep the server default. The provider
+bills the workspace directly, so chat and entity extraction on its own endpoint
+spend no LaunchStack credits.
 
 How it works:
 
@@ -80,7 +83,8 @@ How it works:
 | --- | --- |
 | Storage | `workspace_model_endpoints`: the key is sealed with the secret box (`EMBEDDING_SECRETS_KEY`), and only its last four characters are readable |
 | Scope | `withWorkspaceChatModels(companyId, fn)` (`apps/web/src/server/workspace-models/scope.ts`) runs work under `runWithChatModelsScope` (`packages/llm/src/chat-scope.ts`), so every `resolveChatModel()` inside resolves against the workspace's endpoint |
-| Coverage guard | `apps/web/__tests__/server/workspace-model-scope-coverage.test.ts` lists every call site that resolves a chat model and the entry point that scopes it |
+| Ingestion | `resolveAuxiliaryModel(route)` (`packages/llm/src/auxiliary-model.ts`) picks the model for table summaries, image descriptions and entity extraction from the same scope; the worker enters it per job in `apps/worker/src/ports/ingestion.ts` |
+| Coverage guard | `apps/web/__tests__/server/workspace-model-scope-coverage.test.ts` lists every call site that resolves a chat or ingestion model and the entry point that scopes it |
 | API | `/api/settings/models/workspace` (GET, PUT, DELETE), `/test`, `/models`, `/openrouter` (+ `/callback`) |
 
 Rules it keeps:
@@ -95,7 +99,10 @@ Rules it keeps:
   it, the call falls back to prompting rather than failing.
 - **Fails closed.** If the workspace's endpoint can't be used (an unreadable
   key, a refused address, a provider error), the request fails with a message
-  pointing at Settings. It never falls back to the server default.
+  pointing at Settings. It never falls back to the server default. Ingestion
+  still indexes the document, without the AI step: a plain table description,
+  no image description (also when none of the workspace's models reads images),
+  no entities.
 - **A key only goes where it was entered.** Changing the address requires
   entering the key again. Test and list refuse to send a saved key anywhere
   else, and workspace endpoints never follow redirects.
@@ -121,11 +128,10 @@ Subscriptions:
 API keys from all three vendors work through the key form, including a Gemini
 API key from Google AI Studio.
 
-Not covered yet: the AI that runs while documents are ingested (OCR table
-summaries, image descriptions, opt-in entity extraction) uses the server's
-auxiliary endpoint, and image generation, transcription and reranking keep the
-server's settings. Embeddings have their own per-workspace key and endpoint in
-Settings › Processing.
+Not covered yet: OCR itself (the document converter and the Azure, Landing AI
+or Datalab providers it routes to), image generation, transcription and
+reranking keep the server's settings. Embeddings have their own per-workspace
+key and endpoint in Settings › Processing.
 
 ## Routes
 

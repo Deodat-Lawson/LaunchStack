@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { getTranscriptionProvider } from "@launchstack/conversion";
+import { getTranscriptionProvider } from "@launchstack/conversion/audio-transcription";
 import { getEngine } from "~/server/engine";
 
 /**

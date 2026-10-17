@@ -28,9 +28,10 @@ export async function POST(request: Request) {
         if (!ctx.success) return ctx.response;
         const userId = ctx.data.authUserId;
 
-        // Parse multipart form data. A body that stops short (the tab closed or
-        // reloaded, the connection dropped) cannot be parsed; that is the
-        // uploader's interrupted request, not a server fault, so say so.
+        // Parse multipart form data. A body that cannot be parsed arrived
+        // incomplete: the connection dropped, or (Next 15.5.7) middleware handed
+        // the route a body it had not finished buffering — see
+        // patches/next@15.5.7.patch. Either way a retry is the next step.
         let formData: FormData;
         try {
             formData = await request.formData();
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
             );
             return NextResponse.json(
                 {
-                    error: "The upload was interrupted before the whole file arrived. Keep this tab open and try again.",
+                    error: "The file didn't arrive in one piece. Try again; if it keeps happening, ask an admin.",
                 },
                 { status: 400 }
             );

@@ -58,9 +58,10 @@ afterEach(() => {
 });
 
 describe("POST /api/upload-local", () => {
-    it("says an upload was interrupted when the body stops short", async () => {
+    it("says the file arrived incomplete when the body cannot be parsed", async () => {
         // A multipart body that never reaches its closing boundary — what the
-        // server gets when the tab closes or the connection drops mid-upload.
+        // route sees when a connection drops, or when Next 15.5.7's middleware
+        // hands it a body it has not finished buffering.
         const response = await POST(
             new Request("http://localhost/api/upload-local", {
                 method: "POST",
@@ -71,7 +72,7 @@ describe("POST /api/upload-local", () => {
 
         expect(response.status).toBe(400);
         expect((await response.json()) as unknown).toEqual({
-            error: "The upload was interrupted before the whole file arrived. Keep this tab open and try again.",
+            error: "The file didn't arrive in one piece. Try again; if it keeps happening, ask an admin.",
         });
         expect(mockUploadFile).not.toHaveBeenCalled();
     });

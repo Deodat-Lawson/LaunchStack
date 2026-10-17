@@ -334,9 +334,11 @@ const REPEAT_LOOKAHEAD = 4;
  * Each line is judged on its own pace — characters over the time until the
  * next line starts — so the correctly timed lines before a squeeze stay out
  * of it. A squeeze can hold the odd line given a believable few seconds, so
- * the run ends only at two believable lines in a row; one- to three-letter
- * lines ("系。") ride along. It takes at least three fast lines and 60
- * characters, so one mistimed line is not a squeeze.
+ * the run ends only at two believable lines in a row. One- to three-letter
+ * lines ("系。") are too short to time: they ride along inside a run but never
+ * start or extend one, so a correctly timed "系。" just before a squeeze stays.
+ * It takes at least three fast lines and 60 characters, so one mistimed line
+ * is not a squeeze.
  */
 function squeezedTail(first: Line[]): number {
     let start = first.length;
@@ -346,7 +348,8 @@ function squeezedTail(first: Line[]): number {
         const n = normalForm(line.text).length;
         const until = k + 1 < first.length ? first[k + 1]!.start : line.end;
         const seconds = Math.max(until - line.start, line.end - line.start, 0.2);
-        if (n <= 3 || n / seconds > MAX_SPEECH_CHARS_PER_SECOND) {
+        if (n <= 3) continue;
+        if (n / seconds > MAX_SPEECH_CHARS_PER_SECOND) {
             believable = 0;
             start = k;
         } else if (++believable >= 2) {
@@ -414,7 +417,9 @@ export function dropRepeatedTail(first: Line[], rest: Line[]): Line[] {
                 .slice(next, next + REPEAT_LOOKAHEAD)
                 .findIndex(r => sameLine(line.text, r.text, 0.9));
             if (at === -1) kept.push(line);
-            else next += at + 1;
+            // "系。" matches any backchannel ahead, so it never moves the walk on
+            // past the line the next squeezed sentence should find.
+            else if (normalForm(line.text).length > 3) next += at + 1;
         }
         if (kept.length < run.length) return [...first.slice(0, first.length - squeezed), ...kept];
     }

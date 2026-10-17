@@ -333,6 +333,29 @@ describe("dropRepeatedTail", () => {
         expect(kept).toEqual([...normal, half]);
     });
 
+    it("keeps a correctly timed backchannel just before a squeeze", () => {
+        const normal = [
+            line(0, "We looked at the vendor contracts first."),
+            line(4, "Then we compared the renewal dates."),
+            line(8, "系。"),
+        ];
+        const said = [
+            "The first contract renews in March next year.",
+            "系。",
+            "The second one renews in June after the audit.",
+            "The third one has no renewal date at all yet.",
+            "We will ask legal about the third one.",
+        ];
+        const squeezed = said.map((text, i) => ({
+            start: 9 + i * 0.3,
+            end: 9.2 + i * 0.3,
+            text,
+        }));
+        const rest = [line(200, "系。"), ...said.map((text, i) => line(202 + i * 4, text))];
+
+        expect(dropRepeatedTail([...normal, ...squeezed], rest)).toEqual(normal);
+    });
+
     it("does not drop on a lone backchannel both happen to contain", () => {
         const first = [line(0, "The plan is approved."), line(3, "OK.")];
         const rest = [line(200, "OK. Next item is the budget.")];

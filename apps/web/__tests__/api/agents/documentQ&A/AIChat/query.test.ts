@@ -223,6 +223,17 @@ jest.mock("~/server/chat-request-compat", () => ({
 jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => mockUsage,
+    getChatModelsSource: () => mockChatSource,
+}));
+
+// Whose models the answer ran under; the work itself runs as-is.
+let mockChatSource: "deployment" | "workspace" = "deployment";
+const mockScopes: unknown[] = [];
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+        mockScopes.push(companyId);
+        return fn();
+    },
 }));
 
 // Model/provider tables are still needed by the real request schema.
@@ -517,12 +528,38 @@ describe("chat transport and general scope", () => {
         useContext({ role: "owner" });
         mockBehavior = {};
         mockMeteringEnabled = false;
+        mockChatSource = "deployment";
+        mockScopes.length = 0;
         mockUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
         mockInvoke.mockReset().mockResolvedValue({ content: "answer", response_metadata: {} });
         mockStream.mockReset();
         (resolveConfiguredChatModel as jest.Mock).mockClear();
         (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
         (documentEnsembleSearch as jest.Mock).mockResolvedValue(RETRIEVED);
+    });
+
+    it("answers under the caller's workspace models", async () => {
+        await POST(queryRequest({ question: "hi", searchScope: "none" }));
+        expect(mockScopes).toEqual([BigInt(5)]);
+    });
+
+    it("debits chat tokens served by the deployment's models", async () => {
+        mockMeteringEnabled = true;
+        mockUsage = { inputTokens: 11, outputTokens: 7, totalTokens: 18 };
+        await POST(queryRequest({ question: "hi", searchScope: "none" }));
+        expect(debitTokens).toHaveBeenCalledTimes(1);
+    });
+
+    it("spends no credits on chat the workspace's own endpoint served", async () => {
+        mockMeteringEnabled = true;
+        mockChatSource = "workspace";
+        mockUsage = { inputTokens: 11, outputTokens: 7, totalTokens: 18 };
+        const response = await POST(queryRequest({ question: "hi", searchScope: "none" }));
+        expect(await response.json()).toMatchObject({
+            success: true,
+            tokenUsage: { totalTokens: 18 },
+        });
+        expect(debitTokens).not.toHaveBeenCalled();
     });
 
     it("answers general turns without embeddings, document lookups or retrieval", async () => {

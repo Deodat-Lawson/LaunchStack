@@ -5,6 +5,7 @@ import { FounderWeeklyReviewWorkerService } from "@launchstack/pipelines/founder
 import { generateFounderWeeklyReview } from "@launchstack/pipelines/founder-weekly-review";
 import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/pipelines/founder-weekly-review";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { canonicalFounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import {
     claimPendingDispatches,
@@ -326,11 +327,15 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
             const evidenceSnapshot = claimed.evidenceSnapshot;
             if (!evidenceSnapshot)
                 throw new Error("Evidence snapshot is required before generation.");
+            // A step body runs outside the handler's async context, so the
+            // workspace's models are entered here rather than around the handler.
             const generated = await step.run("generate", () =>
-                generateFounderWeeklyReview({
-                    evidenceSnapshot,
-                    generate: generateFounderWeeklyReviewStructured,
-                })
+                withWorkspaceChatModels(context.companyId, () =>
+                    generateFounderWeeklyReview({
+                        evidenceSnapshot,
+                        generate: generateFounderWeeklyReviewStructured,
+                    })
+                )
             );
             await step.run("persist", () =>
                 worker.saveGeneratedDraft(context, generated.reviewPayload, generated.modelMetadata)

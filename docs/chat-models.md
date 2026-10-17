@@ -54,6 +54,61 @@ A credential belonging to another vendor (`OPENAI_API_KEY`,
 placeholder credential is sent so the OpenAI SDK cannot fall back to an
 unrelated `OPENAI_API_KEY` in the environment.
 
+## A workspace's own model
+
+Everything above is the **server default**. A workspace admin (anyone with
+`settings.manage`) can instead point their whole workspace at their own
+OpenAI-compatible endpoint in **Settings › Models › Your own model**:
+
+- **API key.** Pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter,
+  or "Other OpenAI-compatible"). Picking one only fills in the address, which
+  stays editable. Then paste a key, load or type the model ids, test, and save.
+- **Connect OpenRouter.** A one-click OAuth PKCE sign-in
+  ([OpenRouter docs](https://openrouter.ai/docs/use-cases/oauth-pkce)) that
+  creates a key on the admin's own OpenRouter account. No client registration
+  is needed. The workspace switches over once an admin picks a model.
+
+Once a model is chosen, **everything the workspace runs** uses it: Ask,
+drafting, meetings, notes, Studio tools and background jobs. Other workspaces
+on the same server keep the server default. The provider bills the workspace
+directly, so chat on its own endpoint spends no LaunchStack credits.
+
+How it works:
+
+| Piece | Where |
+| --- | --- |
+| Storage | `workspace_model_endpoints`: the key is sealed with the secret box (`EMBEDDING_SECRETS_KEY`), and only its last four characters are readable |
+| Scope | `withWorkspaceChatModels(companyId, fn)` (`apps/web/src/server/workspace-models/scope.ts`) runs work under `runWithChatModelsScope` (`packages/llm/src/chat-scope.ts`), so every `resolveChatModel()` inside resolves against the workspace's endpoint |
+| Coverage guard | `apps/web/__tests__/server/workspace-model-scope-coverage.test.ts` lists every call site that resolves a chat model and the entry point that scopes it |
+| API | `/api/settings/models/workspace` (GET, PUT, DELETE), `/test`, `/models`, `/openrouter` (+ `/callback`) |
+
+Rules it keeps:
+
+- **Behavior is declared, not inferred.** The admin says whether each model
+  reads images and whether it reasons. Nothing else is assumed: no
+  `temperature`, no output-token cap, and structured output by prompting.
+  These are the fields some compatible servers reject.
+- **Fails closed.** If the workspace's endpoint can't be used (an unreadable
+  key, a refused address, a provider error), the request fails with a message
+  pointing at Settings. It never falls back to the server default.
+- **A key only goes where it was entered.** Changing the address requires
+  entering the key again. Test and list refuse to send a saved key anywhere
+  else, and workspace endpoints never follow redirects.
+- **Address policy.** With `DEPLOYMENT_MODE=cloud`, only `https` addresses that
+  resolve to public hosts are allowed. A self-hosted deployment may use plain
+  `http` and private addresses (a vLLM or LM Studio server on the LAN).
+- **The identity rule still applies**, so the assistant introduces itself as
+  Launchstack's AI assistant whichever model answers.
+
+Subscriptions: a ChatGPT Plus/Pro plan can't be connected yet. OpenAI limits
+[Sign in with ChatGPT](https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt)
+to approved partners for hosted apps. A Claude Pro/Max plan can't be used by
+third-party apps under Anthropic's terms. Both work through an API key instead.
+
+Not covered yet: image generation, transcription, OCR and reranking keep the
+server's settings. Embeddings have their own per-workspace key and endpoint in
+Settings › Processing.
+
 ## Routes
 
 A route is a **job**, not a model. Callers ask for the kind of work they need;

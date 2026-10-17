@@ -7,6 +7,20 @@ jest.mock("~/lib/models", () => ({
     getConfiguredPublicChatConfig: () => mockPublicChatConfig(),
 }));
 
+const mockWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockWorkspaceContext(),
+}));
+
+// Records whose models the route read under; runs the work as-is.
+const mockScopes: unknown[] = [];
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+        mockScopes.push(companyId);
+        return fn();
+    },
+}));
+
 import { GET } from "~/app/api/config/ai-models/route";
 
 const SANITIZED: PublicChatConfig = {
@@ -42,6 +56,24 @@ const SANITIZED: PublicChatConfig = {
 describe("GET /api/config/ai-models", () => {
     beforeEach(() => {
         mockPublicChatConfig.mockReset();
+        mockWorkspaceContext.mockResolvedValue({ success: true, data: { companyId: 42n } });
+        mockScopes.length = 0;
+    });
+
+    it("reads the routes under the caller's workspace models", async () => {
+        mockPublicChatConfig.mockReturnValue(SANITIZED);
+
+        await GET();
+        expect(mockScopes).toEqual([42n]);
+    });
+
+    it("reads the deployment's routes for a caller with no workspace", async () => {
+        mockPublicChatConfig.mockReturnValue(SANITIZED);
+        mockWorkspaceContext.mockResolvedValue({ success: false, response: new Response() });
+
+        const response = await GET();
+        expect(response.status).toBe(200);
+        expect(mockScopes).toEqual([null]);
     });
 
     it("returns the sanitized route configuration", async () => {

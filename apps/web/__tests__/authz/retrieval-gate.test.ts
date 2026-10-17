@@ -15,6 +15,11 @@ import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+}));
+
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");
     return { ...actual, requireWorkspaceContext: jest.fn() };
@@ -148,6 +153,7 @@ jest.mock("~/server/chat-request-compat", () => ({
 jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => ({ inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
+    getChatModelsSource: () => "deployment",
 }));
 
 jest.mock("@launchstack/llm/types", () => ({

@@ -32,6 +32,7 @@ import { scopeAllows } from "~/lib/authz/scope";
 import type { CompanyProfileDto } from "~/lib/company-profile/dto";
 import { generateStructured } from "~/lib/llm";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { isBuilding, toCompanyProfileDto } from "./adapter";
 
@@ -46,7 +47,11 @@ export class CompanyProfileError extends Error {
     }
 }
 
-/** The model the builder calls: the small extraction route, as the old extractor did. */
+/**
+ * The model the builder calls: the small extraction route, as the old extractor did.
+ * Every build here runs after the response, so each `after()` below enters the
+ * workspace's own models itself rather than relying on the request's scope.
+ */
 export function createProfilePorts(): ProfileBuildPorts {
     return {
         generate: input => generateStructured({ ...input, capability: "smallExtraction" }),
@@ -84,7 +89,9 @@ export async function startRebuild(ctx: Ctx): Promise<CompanyProfileDto> {
         const changedBy = ctx.authUserId;
         after(async () => {
             try {
-                await rebuildProfile(companyId, createProfilePorts(), { changedBy });
+                await withWorkspaceChatModels(companyId, () =>
+                    rebuildProfile(companyId, createProfilePorts(), { changedBy })
+                );
             } catch (error) {
                 console.error("[company-profile] rebuild failed:", error);
             }
@@ -133,7 +140,7 @@ async function buildAfterResponse(
     const token = await startBuildIfIdle(companyId);
     after(async () => {
         try {
-            await work();
+            await withWorkspaceChatModels(companyId, work);
             if (token) await finishBuild(companyId, token, "idle");
         } catch (error) {
             console.error(`[company-profile] ${label} failed:`, error);
@@ -186,7 +193,9 @@ export function reassembleAfterDelete(companyId: bigint, changedBy: string): voi
         try {
             const row = await getProfileRow(companyId);
             if (!row?.builtAt) return;
-            await catchUpAndAssemble(companyId, createProfilePorts(), { changedBy });
+            await withWorkspaceChatModels(companyId, () =>
+                catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
+            );
         } catch (error) {
             console.error("[company-profile] reassembly after delete failed:", error);
         }

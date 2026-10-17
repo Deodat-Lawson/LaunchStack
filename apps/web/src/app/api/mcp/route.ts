@@ -26,6 +26,7 @@ import {
     type ToolCallBudget,
 } from "~/server/mcp/protocol";
 import { MCP_TOOLS } from "~/server/mcp/tools";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -121,19 +122,24 @@ export async function POST(request: Request) {
                 );
             }
             try {
-                const answer = await handleMcpPost(
-                    {
-                        body: await request.text(),
-                        accept: request.headers.get("accept"),
-                        protocolVersion: request.headers.get("mcp-protocol-version"),
-                    },
-                    {
-                        principal,
-                        origin: availability.origin,
-                        tools: MCP_TOOLS,
-                        instructions: MCP_INSTRUCTIONS,
-                        chargeToolCall: toolBudget(request, principal),
-                    }
+                const body = await request.text();
+                // Tool calls (and the follow-up a saved conversation queues after
+                // the response) use the caller's workspace models.
+                const answer = await withWorkspaceChatModels(principal.ctx.companyId, () =>
+                    handleMcpPost(
+                        {
+                            body,
+                            accept: request.headers.get("accept"),
+                            protocolVersion: request.headers.get("mcp-protocol-version"),
+                        },
+                        {
+                            principal,
+                            origin: availability.origin,
+                            tools: MCP_TOOLS,
+                            instructions: MCP_INSTRUCTIONS,
+                            chargeToolCall: toolBudget(request, principal),
+                        }
+                    )
                 );
                 return toResponse(answer);
             } catch (error) {

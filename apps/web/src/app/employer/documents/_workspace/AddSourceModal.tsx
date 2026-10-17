@@ -8,6 +8,7 @@ import {
     Zap as IconBolt,
     Check as IconCheck,
     Folder as IconFolder,
+    Loader2,
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +22,8 @@ import { DriveConnectPanel } from "./DriveConnectPanel";
 import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 import { registerDocument, uploadFileToStorage } from "./sourceUpload";
+import { DOCUMENT_LIMITS } from "~/lib/constants";
+import { detectSourceType } from "@launchstack/conversion/types";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
 // Metadata only: the Create panel posts a `templateId` and the Mindmap editor
 // builds the document on open, so the shape library never enters this bundle.
@@ -142,17 +145,23 @@ interface GoogleConnectionStatus {
     connectUrl?: string;
 }
 
+/** Which half of a file's trip is running: the bytes, or registering it (which transcribes a recording). */
+type UploadPhase = "uploading" | "processing";
+
 async function uploadAndRegisterAll(params: {
     files: File[];
     category: string;
     onProgress?: (completed: number, total: number) => void;
+    onPhase?: (file: File, phase: UploadPhase) => void;
 }): Promise<{ successes: number; errors: string[] }> {
     let successes = 0;
     const errors: string[] = [];
     for (let i = 0; i < params.files.length; i++) {
         const file = params.files[i]!;
         try {
+            params.onPhase?.(file, "uploading");
             const up = await uploadFileToStorage(file);
+            params.onPhase?.(file, "processing");
             await registerDocument({
                 file,
                 url: up.url,
@@ -857,11 +866,14 @@ interface FilesPanelProps {
     onUploaded: () => void;
 }
 
+/** The server's per-file cap (upload-local), checked before the bytes leave. */
+const MAX_UPLOAD_BYTES = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const FILE_ACCEPT: Record<FilesPanelProps["kind"], string> = {
     files: "",
-    // Ingestion transcribes MP3 and MPEG-4 audio only — don't let the picker
-    // offer formats that fail (a WAV or FLAC is refused at upload).
-    audio: "audio/mpeg,audio/mp4,audio/x-m4a,.mp3,.m4a",
+    // The formats ingestion transcribes (shouldTranscribeFile) — don't let the
+    // picker offer ones that fail.
+    audio: "audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/aac,audio/flac,audio/ogg,.mp3,.m4a,.wav,.aac,.flac,.ogg",
     // Ingestion only accepts MP4 — don't let the picker offer formats that fail.
     video: "video/mp4,.mp4",
 };
@@ -872,19 +884,19 @@ const KIND_COPY: Record<
 > = {
     files: {
         title: "Drop files here",
-        hint: "PDF, DOCX, XLSX, PPTX, images, code files — up to 500 MB each",
+        hint: `PDF, DOCX, XLSX, PPTX, images, code files — up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB each`,
         browse: "Browse files",
         IconEl: SOURCE_META.doc.Icon,
     },
     audio: {
         title: "Drop audio files",
-        hint: "MP3, M4A — transcribed automatically, playable in the viewer",
+        hint: `MP3, M4A, WAV, AAC, FLAC, OGG up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB — transcribed in the language spoken, playable in the viewer`,
         browse: "Browse audio",
         IconEl: SOURCE_META.audio.Icon,
     },
     video: {
         title: "Drop video files",
-        hint: "MP4 only — transcribed automatically, playable in the viewer",
+        hint: `MP4 up to ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB — transcribed in the language spoken, playable in the viewer`,
         browse: "Browse video",
         IconEl: SOURCE_META.video.Icon,
     },
@@ -894,6 +906,7 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
     const [dragging, setDragging] = useState(false);
     const [staged, setStaged] = useState<File[]>([]);
     const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+    const [phase, setPhase] = useState<{ file: File; phase: UploadPhase } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const copy = KIND_COPY[kind];
     const IconEl = copy.IconEl;
@@ -902,7 +915,22 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
         if (!incoming) return;
         const arr = Array.from(incoming);
         if (arr.length === 0) return;
-        setStaged(prev => [...prev, ...arr]);
+        // The server refuses anything over the limit only after the whole body
+        // has crossed the network; say so before the wait, not after it.
+        const tooBig = arr.filter(f => f.size > MAX_UPLOAD_BYTES);
+        if (tooBig.length > 0) {
+            toast.error(
+                `${tooBig.length === 1 ? tooBig[0]!.name : `${tooBig.length} files`} ${tooBig.length === 1 ? "is" : "are"} over the ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB} MB limit`,
+                {
+                    description:
+                        tooBig.length === 1
+                            ? `It's ${formatSize(tooBig[0]!.size)}. Split it or export it at a lower quality.`
+                            : tooBig.map(f => `${f.name} (${formatSize(f.size)})`).join(" · "),
+                }
+            );
+        }
+        const ok = arr.filter(f => f.size <= MAX_UPLOAD_BYTES);
+        if (ok.length > 0) setStaged(prev => [...prev, ...ok]);
     };
 
     const removeStaged = (i: number) => setStaged(prev => prev.filter((_, idx) => idx !== i));
@@ -919,6 +947,7 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                 files: staged,
                 category,
                 onProgress: (done, total) => setProgress({ done, total }),
+                onPhase: (file, next) => setPhase({ file, phase: next }),
             });
             if (result.errors.length > 0) {
                 toast.error(
@@ -940,10 +969,14 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
             }
         } finally {
             setProgress(null);
+            setPhase(null);
         }
     };
 
     const busy = progress !== null;
+    const transcribing =
+        phase?.phase === "processing" &&
+        detectSourceType(phase.file.type || undefined, phase.file.name) === "audio";
 
     return (
         <div>
@@ -1108,37 +1141,25 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                             );
                         })}
                     </div>
-                    <div
-                        style={{
-                            marginTop: 12,
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                    >
-                        <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                    <div className="mt-3 flex items-center justify-between gap-3">
+                        <div className="text-ink-3 min-w-0 flex-1 text-[11px]" aria-live="polite">
                             {busy && progress
-                                ? `Uploading ${progress.done} / ${progress.total}…`
+                                ? transcribing && phase
+                                    ? `Transcribing ${phase.file.name}… a long recording takes a few minutes; keep this open.`
+                                    : `Uploading ${Math.min(progress.done + 1, progress.total)} / ${progress.total}…`
                                 : `${staged.length} file${staged.length !== 1 ? "s" : ""} ready to upload`}
                         </div>
-                        <button
+                        <Button
+                            className="shrink-0"
                             onClick={() => {
                                 void submit();
                             }}
                             disabled={busy || staged.length === 0}
-                            style={{
-                                background: busy ? "var(--line)" : "var(--accent)",
-                                color: busy ? "var(--ink-3)" : "white",
-                                padding: "8px 16px",
-                                borderRadius: 8,
-                                fontSize: 13,
-                                fontWeight: 600,
-                                cursor: busy ? "not-allowed" : "pointer",
-                            }}
                         >
+                            {busy && <Loader2 className="animate-spin" aria-hidden />}
                             Upload {staged.length} file{staged.length !== 1 ? "s" : ""}
                             {isUnfiledFolder(category) ? "" : ` to ${folderLeafName(category)}`}
-                        </button>
+                        </Button>
                     </div>
                 </div>
             )}

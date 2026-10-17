@@ -140,7 +140,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
                     documentId: doc.id,
                     title: doc.title,
                     language: marker?.language ?? null,
+                    languages: marker?.languages ?? null,
                     segments: marker?.segments ?? null,
+                    translations: marker?.translations ?? [],
                 },
                 durationSeconds: marker?.durationSeconds ?? null,
             };
@@ -182,7 +184,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
                       documentId: transcriptDoc.id,
                       title: transcriptDoc.title,
                       language: transcriptMarker?.language ?? null,
+                      languages: transcriptMarker?.languages ?? null,
                       segments: transcriptMarker?.segments ?? null,
+                      translations: transcriptMarker?.translations ?? [],
                   }
                 : null,
             durationSeconds: transcriptMarker?.durationSeconds ?? null,

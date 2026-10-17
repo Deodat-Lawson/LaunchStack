@@ -47,7 +47,9 @@ function preview(overrides: Partial<MediaPreview> = {}): MediaPreview {
             documentId: 3,
             title: "standup.mp4 (Transcription)",
             language: "en",
+            languages: null,
             segments: SEGMENTS,
+            translations: [],
         },
         durationSeconds: null,
         ...overrides,
@@ -192,7 +194,9 @@ describe("MediaViewer — a stored recording", () => {
                     documentId: 3,
                     title: "memo (Transcription)",
                     language: "unknown",
+                    languages: null,
                     segments: null,
+                    translations: [],
                 },
             })
         );
@@ -216,7 +220,9 @@ describe("MediaViewer — a stored recording", () => {
                     documentId: 3,
                     title: "memo (Transcription)",
                     language: "en",
+                    languages: null,
                     segments: null,
+                    translations: [],
                 },
             })
         );
@@ -298,6 +304,130 @@ describe("MediaViewer — a stored recording", () => {
 
         expect(await screen.findByText(/original recording isn.t available/)).toBeInTheDocument();
         expect(screen.getAllByRole("button", { name: /^Play from/ })).toHaveLength(3);
+    });
+});
+
+describe("MediaViewer — languages", () => {
+    const CANTONESE = [
+        { start: 0, end: 4, text: "大家好，今日我哋傾下個FATCA form。" },
+        { start: 4, end: 9, text: "呢個client有兩個version。" },
+    ];
+    const ENGLISH = [
+        "Hi everyone, today we'll talk about the FATCA form.",
+        "This client has two versions.",
+    ];
+
+    function respondWithTranslation(
+        translation: (body: { language: string }) => { status: number; body: unknown }
+    ) {
+        const media = JSON.stringify(
+            preview({
+                transcript: {
+                    documentId: 3,
+                    title: "memo.m4a (Transcription)",
+                    language: "yue",
+                    languages: ["yue", "en"],
+                    segments: CANTONESE,
+                    translations: [],
+                },
+            })
+        );
+        fetchMock.mockImplementation((url: string, init?: RequestInit) => {
+            if (url.endsWith("/media")) return reply(200, media);
+            if (url.endsWith("/transcript/translations")) {
+                const out = translation(JSON.parse(init?.body as string) as { language: string });
+                return reply(out.status, JSON.stringify(out.body));
+            }
+            return Promise.reject(new Error(`unexpected fetch ${url}`));
+        });
+    }
+
+    async function chooseTranslation(code: string) {
+        const trigger = await screen.findByRole("button", { name: "Translate transcript" });
+        fireEvent.keyDown(trigger, { key: "Enter" });
+        const item = (await screen.findAllByRole("menuitem")).find(
+            el => el.getAttribute("lang") === code
+        );
+        if (!item) throw new Error(`no menu item for ${code}`);
+        fireEvent.click(item);
+    }
+
+    it("names the spoken language and the others heard, and marks the text with it", async () => {
+        respondWithTranslation(() => ({ status: 500, body: {} }));
+        render(<MediaViewer document={DOC} />);
+
+        const badge = await screen.findByTestId("transcript-language");
+        expect(badge).toHaveTextContent("Cantonese");
+        expect(badge).toHaveTextContent("+ English");
+        expect(screen.getByText(CANTONESE[0]!.text).closest("[lang]")).toHaveAttribute(
+            "lang",
+            "yue"
+        );
+        expect(screen.getByText(CANTONESE[0]!.text)).toHaveAttribute("dir", "auto");
+    });
+
+    it("shows a translation line for line, each still playing from its moment", async () => {
+        const asked: string[] = [];
+        respondWithTranslation(({ language }) => {
+            asked.push(language);
+            return { status: 200, body: { language, lines: ENGLISH, cached: false } };
+        });
+        render(<MediaViewer document={DOC} />);
+
+        await chooseTranslation("en");
+
+        expect(await screen.findByText(ENGLISH[1]!)).toBeInTheDocument();
+        expect(asked).toEqual(["en"]);
+        expect(screen.queryByText(CANTONESE[1]!.text)).not.toBeInTheDocument();
+        expect(screen.getByText(ENGLISH[1]!).closest("[lang]")).toHaveAttribute("lang", "en");
+        expect(screen.getByRole("status")).toHaveTextContent("Machine translation into English");
+
+        fireEvent.click(screen.getByText(ENGLISH[1]!));
+        expect(video().currentTime).toBe(4);
+
+        fireEvent.click(screen.getByRole("button", { name: "Show original" }));
+        expect(await screen.findByText(CANTONESE[1]!.text)).toBeInTheDocument();
+    });
+
+    it("goes back to the original when a citation arrives", async () => {
+        respondWithTranslation(({ language }) => ({
+            status: 200,
+            body: { language, lines: ENGLISH, cached: true },
+        }));
+        const { rerender } = render(<MediaViewer document={DOC} />);
+        await chooseTranslation("en");
+        expect(await screen.findByText(ENGLISH[0]!)).toBeInTheDocument();
+
+        rerender(
+            <MediaViewer document={DOC} highlight={{ text: "呢個client有兩個version", nonce: 2 }} />
+        );
+
+        expect(await screen.findByText(CANTONESE[1]!.text)).toBeInTheDocument();
+        expect(screen.queryByText(ENGLISH[0]!)).not.toBeInTheDocument();
+    });
+
+    it("says why a translation failed and offers to try again", async () => {
+        let attempts = 0;
+        respondWithTranslation(({ language }) => {
+            attempts++;
+            return attempts === 1
+                ? {
+                      status: 502,
+                      body: {
+                          error: "The translation service is busy (rate limit). Try again in a minute.",
+                      },
+                  }
+                : { status: 200, body: { language, lines: ENGLISH, cached: false } };
+        });
+        render(<MediaViewer document={DOC} />);
+
+        await chooseTranslation("en");
+        expect(await screen.findByText(/translation service is busy/)).toBeInTheDocument();
+        // The original stays readable while the error shows.
+        expect(screen.getByText(CANTONESE[0]!.text)).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+        expect(await screen.findByText(ENGLISH[0]!)).toBeInTheDocument();
     });
 });
 

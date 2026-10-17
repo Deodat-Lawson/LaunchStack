@@ -115,8 +115,19 @@ export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
     "message/rfc822": "email",
     "application/vnd.ms-outlook": "email",
     "audio/mpeg": "audio",
+    "audio/mp3": "audio",
     "audio/mp4": "audio",
+    "audio/m4a": "audio",
+    "audio/x-m4a": "audio",
     "video/mp4": "audio",
+    "audio/wav": "audio",
+    "audio/x-wav": "audio",
+    "audio/wave": "audio",
+    "audio/aac": "audio",
+    "audio/x-aac": "audio",
+    "audio/flac": "audio",
+    "audio/x-flac": "audio",
+    "audio/ogg": "audio",
 };
 
 export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
@@ -147,6 +158,10 @@ export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
     ".mp3": "audio",
     ".mp4": "audio",
     ".m4a": "audio",
+    ".wav": "audio",
+    ".aac": "audio",
+    ".flac": "audio",
+    ".ogg": "audio",
 };
 
 export const ALLOWED_MIME_TYPES: string[] = Object.keys(MIME_TO_SOURCE_TYPE);

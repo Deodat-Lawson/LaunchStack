@@ -61,6 +61,9 @@ x-shared-env: &shared-env
   TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}
   TRANSCRIPTION_API_BASE_URL: ${TRANSCRIPTION_API_BASE_URL:-}
   TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+  # Minutes of audio per transcription call (default 10): longer means fewer
+  # calls (a free-tier Gemini key gets 20 a day) but rougher timestamps.
+  TRANSCRIPTION_CHUNK_MINUTES: ${TRANSCRIPTION_CHUNK_MINUTES:-}
   # Auth (the worker inherits these transitively through the shared
   # composition root — see ADR-002 consequences; it never uses them)
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}

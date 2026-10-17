@@ -51,6 +51,19 @@ export interface PickedRoot {
     readonly owner: OwnerRef | null;
 }
 
+/**
+ * Who owns what a pick brings in: the person who picked it while they are
+ * still an active member, otherwise whoever connected Drive — so a folder the
+ * sync creates is never left without an owner, and so open to the workspace.
+ */
+export function ownerForPick(
+    addedByUserPk: number | null,
+    activePickers: ReadonlyMap<number, OwnerRef>,
+    connectedBy: OwnerRef
+): OwnerRef {
+    return (addedByUserPk == null ? undefined : activePickers.get(addedByUserPk)) ?? connectedBy;
+}
+
 export interface DrivePlacement {
     readonly category: string;
     /** Who the new document belongs to (ADR-014 defaults); null = workspace import. */

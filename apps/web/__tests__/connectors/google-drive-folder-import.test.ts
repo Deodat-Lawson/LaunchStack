@@ -41,6 +41,7 @@ import type { ConnectorConnection } from "~/server/db/schema";
 import {
     folderSegmentFor,
     freeTopLevelPath,
+    ownerForPick,
     placementPath,
 } from "~/server/services/connectors/google-drive/destinations";
 import { resolveDriveLink } from "~/server/services/connectors/google-drive/resolve-link";
@@ -156,6 +157,22 @@ describe("where a synced file lands", () => {
         );
         const long = "y".repeat(80);
         expect(freeTopLevelPath(long, new Set([long]))).toHaveLength(80);
+    });
+});
+
+describe("who owns what a pick brings in", () => {
+    const ada = { companyId: 1n, userPk: 10n, authUserId: "auth_ada" };
+    const ben = { companyId: 1n, userPk: 11n, authUserId: "auth_ben" };
+    const pickers = new Map([[10, ada]]);
+
+    it("is the person who picked it while they are an active member", () => {
+        expect(ownerForPick(10, pickers, ben)).toBe(ada);
+    });
+
+    it("falls back to whoever connected Drive when the picker has left, or is unknown", () => {
+        // 12 is not in the active-member map: left the workspace.
+        expect(ownerForPick(12, pickers, ben)).toBe(ben);
+        expect(ownerForPick(null, pickers, ben)).toBe(ben);
     });
 });
 

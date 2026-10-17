@@ -572,7 +572,7 @@ export const GUIDES: Guide[] = [
                     },
                     {
                         name: "Drive folder import · opt-in",
-                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported.",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported. The connection belongs to the workspace, so with it on every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
                     },
                 ],
                 note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",

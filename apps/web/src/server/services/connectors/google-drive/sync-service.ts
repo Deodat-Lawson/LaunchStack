@@ -29,7 +29,7 @@ import {
     resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
-import { createDriveDestinations, type PickedRoot } from "./destinations";
+import { createDriveDestinations, ownerForPick, type PickedRoot } from "./destinations";
 import {
     GOOGLE_DRIVE_CATEGORY,
     createGoogleDriveSink,
@@ -145,9 +145,7 @@ export async function runGoogleDriveSync(
             connection.companyId,
             pickedRows.map(row => row.addedByUserPk)
         );
-        // Whoever connected Drive stands in for a picker who has since left, so
-        // a folder made now is never left without an owner (and so open to
-        // the whole workspace).
+        // Whoever connected Drive stands in for a picker who has since left.
         const granterOwner: OwnerRef = {
             companyId: connection.companyId,
             userPk: BigInt(connection.grantedByUserId),
@@ -159,9 +157,7 @@ export async function runGoogleDriveSync(
             kind: row.kind,
             name: row.name,
             folderCategoryId: row.folderCategoryId,
-            owner:
-                (row.addedByUserPk == null ? undefined : pickers.get(row.addedByUserPk)) ??
-                granterOwner,
+            owner: ownerForPick(row.addedByUserPk, pickers, granterOwner),
         }));
         const destinations = createDriveDestinations({
             companyId: connection.companyId,

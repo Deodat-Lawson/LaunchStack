@@ -28,6 +28,12 @@ function windowReply(
     });
 }
 
+/** Where a window prompt says its last line should end ("…the last ends by 1800"). */
+function endsBy(prompt: string): number | null {
+    const m = /ends by (\d+)/.exec(prompt);
+    return m ? Number(m[1]) : null;
+}
+
 function countReply(seconds: number) {
     return Response.json({
         totalTokens: seconds * 32,
@@ -271,10 +277,14 @@ describe("GeminiNativeTranscriber", () => {
             generate: (_body, prompt) => {
                 prompts.push(prompt);
                 const from = Number(/about (\d+)/.exec(prompt)?.[1] ?? 0);
+                const to = endsBy(prompt) ?? 4914;
                 return windowReply({
                     language: "yue",
                     languages: ["yue", "en"],
-                    segments: [{ start: from, end: from + 5, text: `line at ${from}` }],
+                    segments: [
+                        { start: from, end: from + 5, text: `line at ${from}` },
+                        { start: to - 30, end: to - 1, text: `last before ${to}` },
+                    ],
                 });
             },
         });
@@ -286,7 +296,9 @@ describe("GeminiNativeTranscriber", () => {
         );
 
         expect(prompts).toHaveLength(planWindows(4914).length);
-        expect(result.segments!.map(s => s.start)).toEqual(planWindows(4914).map(w => w.start));
+        expect(
+            result.segments!.filter(s => s.text.startsWith("line at")).map(s => s.start)
+        ).toEqual(planWindows(4914).map(w => w.start));
         expect(result.language).toBe("yue");
         expect(result.languages).toEqual(["yue", "en"]);
         const generate = calls.find(c => c.url.endsWith(":generateContent"))!;
@@ -310,9 +322,13 @@ describe("GeminiNativeTranscriber", () => {
                     return windowReply({ language: "en", segments: [] }, "MAX_TOKENS");
                 }
                 const from = Number(/about (\d+)/.exec(prompt)?.[1] ?? 0);
+                const to = endsBy(prompt) ?? 600;
                 return windowReply({
                     language: "en",
-                    segments: [{ start: from, end: from + 1, text: `half from ${from}` }],
+                    segments: [
+                        { start: from, end: from + 1, text: `half from ${from}` },
+                        { start: to - 10, end: to - 1, text: `end of ${to}` },
+                    ],
                 });
             },
         });
@@ -320,7 +336,12 @@ describe("GeminiNativeTranscriber", () => {
         const { result } = await transcriber(fetchImpl).transcribe(Buffer.from("x"), "a.mp3");
 
         expect(calls.filter(c => c.url.endsWith(":generateContent"))).toHaveLength(3);
-        expect(result.segments!.map(s => s.text)).toEqual(["half from 0", "half from 300"]);
+        expect(result.segments!.map(s => s.text)).toEqual([
+            "half from 0",
+            "end of 300",
+            "half from 300",
+            "end of 600",
+        ]);
     });
 
     it("still deletes the stored file when transcription fails", async () => {
@@ -347,6 +368,63 @@ describe("GeminiNativeTranscriber", () => {
             userMessage: expect.stringMatching(/busy/i),
         });
         expect(calls.some(c => c.method === "DELETE")).toBe(true);
+    });
+
+    it("asks for the rest when a reply stops well short of its window", async () => {
+        const asked: string[] = [];
+        const { fetchImpl } = fakeGemini({
+            count: () => countReply(1800),
+            generate: (_body, prompt) => {
+                asked.push(prompt);
+                // First answer: sections up to 18:46, then a premature stop.
+                if (asked.length === 1) {
+                    return windowReply({
+                        language: "en",
+                        segments: [
+                            { start: 0, end: 2, text: "Section one." },
+                            { start: 1123, end: 1126, text: "End of section thirty one." },
+                        ],
+                    });
+                }
+                return windowReply({
+                    language: "en",
+                    segments: [
+                        { start: 1127, end: 1130, text: "Section thirty two." },
+                        { start: 1795, end: 1799, text: "End of section forty eight." },
+                    ],
+                });
+            },
+        });
+
+        const { result } = await transcriber(fetchImpl).transcribe(Buffer.from("x"), "long.m4a");
+
+        expect(asked).toHaveLength(2);
+        expect(asked[1]).toContain("from 18:46 to 30:00");
+        expect(result.segments!.map(s => s.text)).toEqual([
+            "Section one.",
+            "End of section thirty one.",
+            "Section thirty two.",
+            "End of section forty eight.",
+        ]);
+    });
+
+    it("does not chase silence: an empty continuation ends the window", async () => {
+        let calls = 0;
+        const { fetchImpl } = fakeGemini({
+            count: () => countReply(1800),
+            generate: () => {
+                calls++;
+                return windowReply({
+                    language: "en",
+                    segments: calls === 1 ? [{ start: 0, end: 60, text: "Short memo." }] : [],
+                });
+            },
+        });
+
+        const { result } = await transcriber(fetchImpl).transcribe(Buffer.from("x"), "memo.m4a");
+
+        expect(calls).toBe(2);
+        expect(result.text).toBe("Short memo.");
     });
 
     it("retries Gemini's high-demand 503s, then carries on", async () => {
@@ -491,12 +569,15 @@ describe("GeminiNativeTranscriber", () => {
                 const media = (
                     body.contents as { parts: { inlineData?: { data: string } }[] }[]
                 )[0]!.parts[0]!;
-                sent.push(Buffer.from(media.inlineData!.data, "base64").toString());
+                const name = Buffer.from(media.inlineData!.data, "base64").toString();
+                sent.push(name);
+                // Each chunk's reply runs to its own end, timed from its own start.
+                const span = { c0: 1800, c1: 1800, c2: 1314 }[name] ?? 0;
                 return windowReply({
                     language: "yue",
                     segments: [
-                        { start: 0, end: 4, text: `first of ${sent.length}` },
-                        { start: 10, end: 12, text: `second of ${sent.length}` },
+                        { start: 0, end: 4, text: `first of ${name}` },
+                        { start: 10, end: span - 1, text: `rest of ${name}` },
                     ],
                 });
             },
@@ -520,7 +601,7 @@ describe("GeminiNativeTranscriber", () => {
         );
         expect(result.durationSeconds).toBe(4914);
         expect(result.segments!.map(s => s.start)).toEqual([0, 10, 1800, 1810, 3600, 3610]);
-        expect(result.segments!.at(-1)!.end).toBe(3612);
+        expect(result.segments!.at(-1)!.end).toBe(4913);
     });
 
     it("says a recording ffmpeg cannot decode can't be read", async () => {

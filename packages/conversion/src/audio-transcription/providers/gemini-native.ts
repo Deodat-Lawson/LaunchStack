@@ -60,6 +60,9 @@ const SAFETY_OFF = [
     "HARM_CATEGORY_DANGEROUS_CONTENT",
     "HARM_CATEGORY_CIVIC_INTEGRITY",
 ].map(category => ({ category, threshold: "BLOCK_NONE" }));
+/** A reply ending this long before its window does is asked to carry on. */
+const CONTINUE_AFTER_SECONDS = 90;
+const MAX_CONTINUATIONS = 3;
 /** More of the recording than this lost to unusable replies fails the upload instead. */
 const MAX_GAP_FRACTION = 0.5;
 const FILE_READY_TIMEOUT_MS = 5 * 60_000;
@@ -567,7 +570,9 @@ export class GeminiNativeTranscriber {
         window: Window,
         duration: number,
         /** Where this media starts in the whole recording, for log lines only. */
-        offset = 0
+        offset = 0,
+        /** How many times this window has already been asked to carry on. */
+        continuation = 0
     ): Promise<WindowTranscript[]> {
         const label = `${clock(offset + window.start)}–${clock(offset + window.end)}`;
         const started = Date.now();
@@ -641,18 +646,39 @@ export class GeminiNativeTranscriber {
             `[Transcription] ${label}: ${segments.length} lines, ` +
                 `lang=${parsed.language ?? "?"}, ${tokens} tokens, ${Date.now() - started}ms`
         );
-        return [
-            {
-                language: parsed.language ?? "unknown",
-                languages: Array.isArray(parsed.languages) ? parsed.languages : [],
-                segments: segments.map(s => ({
-                    start: s.start,
-                    end: typeof s.end === "number" ? s.end : s.start,
-                    text: s.text,
-                })),
-                tokens,
-            },
-        ];
+        const part: WindowTranscript = {
+            language: parsed.language ?? "unknown",
+            languages: Array.isArray(parsed.languages) ? parsed.languages : [],
+            segments: segments.map(s => ({
+                start: s.start,
+                end: typeof s.end === "number" ? s.end : s.start,
+                text: s.text,
+            })),
+            tokens,
+        };
+
+        // A reply can stop well short of its window with finishReason STOP
+        // (flash-lite left the last 11 minutes of a 30-minute chunk out).
+        // Ask for the rest; an empty answer means the remainder is silence.
+        const lastEnd = part.segments.reduce((m, seg) => Math.max(m, seg.end), window.start);
+        if (
+            part.segments.length > 0 &&
+            window.end - lastEnd > CONTINUE_AFTER_SECONDS &&
+            continuation < MAX_CONTINUATIONS
+        ) {
+            console.warn(
+                `[Transcription] ${label}: reply stopped at ${clock(offset + lastEnd)}; asking for the rest`
+            );
+            const rest = await this.transcribeWindow(
+                media,
+                { start: Math.floor(lastEnd), end: window.end },
+                duration,
+                offset,
+                continuation + 1
+            );
+            return [part, ...rest];
+        }
+        return [part];
     }
 
     /** Resumable Files API upload, then wait until Gemini has processed it. */

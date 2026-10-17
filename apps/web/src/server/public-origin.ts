@@ -9,8 +9,8 @@
  *   people can sign in already has it right. Everything here reads it.
  * - APP_PUBLIC_URL is only where this app's other services (document
  *   converter, Word editor, worker) reach it to fetch /api/files. It may be
- *   an internal address (`http://app:3000`, the default when unset) and is
- *   never used for a URL a person or provider opens.
+ *   an internal address (the converter assumes `http://app:3000` when it is
+ *   unset) and is never used for a URL a person or provider opens.
  *
  * Never derive the origin from `request.url` alone: the standalone server
  * builds that from the address it binds to (`HOSTNAME=0.0.0.0` in the image)

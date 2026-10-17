@@ -271,9 +271,12 @@ const serverSchema = z.object({
         .optional(),
     // Where this app's other services (document converter, Word editor,
     // worker) reach it to fetch /api/files URLs; it must be in their
-    // ALLOWED_FETCH_ORIGINS. Unset means the Compose service, http://app:3000.
-    // It may be an internal address, so nothing a person or OAuth provider
-    // opens is built on it — those use BETTER_AUTH_URL (server/public-origin.ts).
+    // ALLOWED_FETCH_ORIGINS. Unset, the converter and file reads use the
+    // Compose service http://app:3000, upload processing uses the request
+    // origin, and Drive sync and connector imports run by cron (no request)
+    // fail — so set it behind a proxy. It may be an internal address, so nothing a person or
+    // OAuth provider opens is built on it: those use BETTER_AUTH_URL
+    // (server/public-origin.ts).
     APP_PUBLIC_URL: optionalString(),
     // Signs short-lived tokens that let the OCR worker read /api/files URLs
     // without a session. Required alongside OCR_WORKER_URL when documents

@@ -171,7 +171,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Forward settings to both processes",
                 body: [
-                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings absent from the base file, including APP_PUBLIC_URL and any OAuth or feature flags you enable.",
+                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings the base file does not forward. The example also makes APP_PUBLIC_URL required, so Compose refuses to start without the origin your document services fetch files from.",
                 ],
                 code: "services:\n  app:\n    environment: &operator-env\n      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Set the origin the document services fetch files from}\n  worker:\n    environment: *operator-env",
                 file: "docker-compose.operator.yml",

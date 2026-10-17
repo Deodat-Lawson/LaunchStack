@@ -157,8 +157,12 @@ export async function testEndpoint(
                 modelId,
                 ok: false,
                 latencyMs: Date.now() - started,
+                // The admin is already in Settings; "fix it in Settings" is noise here.
                 message:
-                    described?.message ??
+                    described?.message.replace(
+                        /\s*A workspace admin can fix it in Settings › Models\.$/,
+                        ""
+                    ) ??
                     "The endpoint returned an error for this model. Check the model id and that the key can use it.",
             };
         }

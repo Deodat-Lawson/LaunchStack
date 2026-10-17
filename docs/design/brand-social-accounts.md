@@ -92,11 +92,11 @@ w_member_social`. Members post as themselves; tokens last 60 days and
      OAuth flow, posting to a Page and how comments appear — all of which
      Brand does.
 3. **Redirect URL.** Under the app's Auth tab add
-   `<APP_PUBLIC_URL>/api/connectors/linkedin/oauth/callback`
+   `<BETTER_AUTH_URL>/api/connectors/linkedin/oauth/callback`
    (e.g. `https://launchstack-internal.com/api/connectors/linkedin/oauth/callback`).
 4. **Server settings.** Set `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`,
    and `LINKEDIN_OAUTH_SCOPES` to exactly the scopes the Auth tab lists
-   (space-separated). `EMBEDDING_SECRETS_KEY` and `APP_PUBLIC_URL` must be set.
+   (space-separated). `EMBEDDING_SECRETS_KEY` and `BETTER_AUTH_URL` must be set.
    Compose passes all of them to the app and worker.
 5. **Connect.** An admin opens Growth › Brand › Accounts → Connect LinkedIn.
    The Pages they administer appear as channels, switched on; their own

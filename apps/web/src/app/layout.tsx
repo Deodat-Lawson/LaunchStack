@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 import { ContextMenuProvider } from "~/components/context-menu";
 import { ThemeChoiceSync } from "~/components/theme/ThemeChoiceSync";
+import { configuredPublicOrigin } from "~/server/public-origin";
 
 import { type Metadata } from "next";
 import { inter, jetbrainsMono } from "./fonts";
@@ -13,12 +14,12 @@ import { inter, jetbrainsMono } from "./fonts";
 // card, canonical, index:true — moved to apps/landing with the public site.
 // What is left is what a private application needs.
 //
-// APP_PUBLIC_URL is the existing variable for "the origin this instance is
-// served from" (see env.ts; it also feeds CoreConfig.ocr.appPublicUrl). When
-// nothing is set, metadataBase is omitted rather than defaulted: asserting
-// launchstack.app as a self-hosted instance's canonical origin is a lie, and
-// Next resolves relative URLs fine without it.
-const APP_URL = process.env.APP_PUBLIC_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
+// BETTER_AUTH_URL is the origin browsers reach this instance at (see
+// server/public-origin.ts). When nothing is set, metadataBase is omitted
+// rather than defaulted: asserting launchstack.app as a self-hosted
+// instance's canonical origin is a lie, and Next resolves relative URLs fine
+// without it.
+const APP_URL = configuredPublicOrigin() ?? process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
     title: {

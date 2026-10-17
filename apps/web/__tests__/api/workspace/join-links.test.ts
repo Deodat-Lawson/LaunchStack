@@ -310,7 +310,7 @@ describe("join link origin", () => {
         expect(link.url).toBe(`https://app.example.com/join/${CODE.toLowerCase()}`);
     });
 
-    it("prefers the auth URL, which browsers must use, over APP_PUBLIC_URL", async () => {
+    it("ignores APP_PUBLIC_URL, which may be the services' internal address", async () => {
         process.env.BETTER_AUTH_URL = "https://app.example.com";
         process.env.APP_PUBLIC_URL = "http://app:3000";
         gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
@@ -320,17 +320,6 @@ describe("join link origin", () => {
 
         const { link } = (await res.json()) as { link: { url: string } };
         expect(link.url).toBe(`https://app.example.com/join/${CODE.toLowerCase()}`);
-    });
-
-    it("falls back to APP_PUBLIC_URL when the auth URL is not set", async () => {
-        process.env.APP_PUBLIC_URL = "https://public.example.com";
-        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
-        fakeDb.onReturning(inviteCodes, [linkRow()]);
-
-        const res = await POST(proxiedCreate());
-
-        const { link } = (await res.json()) as { link: { url: string } };
-        expect(link.url).toBe(`https://public.example.com/join/${CODE.toLowerCase()}`);
     });
 
     it("lists existing links on the public URL — the card Settings › People renders", async () => {

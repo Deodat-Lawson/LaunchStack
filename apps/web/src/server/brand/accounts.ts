@@ -14,6 +14,7 @@ import { env } from "~/env";
 import { db } from "~/server/db";
 import { connectorConnections, type ConnectorConnection } from "~/server/db/schema/connectors";
 import { users } from "~/server/db/schema/identity";
+import { configuredPublicOrigin } from "~/server/public-origin";
 import {
     connectorCallbackPath,
     isConnectorConfigured,
@@ -69,7 +70,7 @@ export interface BrandAccountsView {
 const ORDER: MarketingPlatform[] = ["linkedin", "bluesky", "x", "reddit"];
 
 function redirectUrl(): string {
-    const base = env.server.APP_PUBLIC_URL ?? "<APP_PUBLIC_URL>";
+    const base = configuredPublicOrigin() ?? "<BETTER_AUTH_URL>";
     return `${base.replace(/\/+$/, "")}${connectorCallbackPath("linkedin")}`;
 }
 

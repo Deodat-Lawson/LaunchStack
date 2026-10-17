@@ -23,12 +23,6 @@ export const companyEmbeddingCredentials = pgTable("company_embedding_credential
         .references(() => company.id, { onDelete: "cascade" }),
     openAIApiKeyCiphertext: text("openai_api_key_ciphertext"),
     openAIApiKeyLast4: varchar("openai_api_key_last4", { length: 8 }),
-    /**
-     * The OpenAI-compatible embeddings endpoint the key above belongs to.
-     * Plaintext (not a secret). A company key is only ever sent to this
-     * address, never to the deployment's — see `resolveEffectiveEmbeddingConfig`.
-     */
-    openAIBaseUrl: text("openai_base_url"),
     huggingFaceApiKeyCiphertext: text("huggingface_api_key_ciphertext"),
     huggingFaceApiKeyLast4: varchar("huggingface_api_key_last4", { length: 8 }),
     ollamaBaseUrl: text("ollama_base_url"),
@@ -37,4 +31,14 @@ export const companyEmbeddingCredentials = pgTable("company_embedding_credential
     updatedAt: timestamp("updated_at", { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
+    /**
+     * The OpenAI-compatible embeddings endpoint the OpenAI key belongs to.
+     * Plaintext (not a secret). A company key is only ever sent to this
+     * address, never to the deployment's — see `resolveEffectiveEmbeddingConfig`.
+     *
+     * Declared last because it was added with ADD COLUMN, which appends: CI's
+     * migrations-apply job compares a migrated database with one pushed from
+     * this file, column order included.
+     */
+    openAIBaseUrl: text("openai_base_url"),
 });

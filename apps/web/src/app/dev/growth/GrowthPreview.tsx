@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -36,7 +37,17 @@ stubApi();
 const LINKEDIN_START = LINKEDIN_CONNECT_HREF.split("?")[0]!;
 
 /** Harness switches read from the address bar; they are not part of the tab's location. */
-const HARNESS_PARAMS = ["reset", "member", "viewer", "reconnect", "empty", "nosync"] as const;
+const HARNESS_PARAMS = [
+    "reset",
+    "member",
+    "viewer",
+    "reconnect",
+    "empty",
+    "nosync",
+    "fewtests",
+    "broke",
+    "theme",
+] as const;
 
 /**
  * `/dev/growth/prospects/companies?view=new` opens the tool at
@@ -46,7 +57,10 @@ const HARNESS_PARAMS = ["reset", "member", "viewer", "reconnect", "empty", "nosy
  *
  * Brand switches: `?member=1` reads Accounts as a non-admin, `?reconnect=1`
  * has Bluesky refuse its app password, `?empty=1` starts with nothing
- * connected, `?nosync=1` with no numbers read yet.
+ * connected, `?nosync=1` with no numbers read yet. Post tests: `?fewtests=1`
+ * starts the track record with too few results to compare, `?broke=1` refuses
+ * a new test for credits. `?theme=light|dark` picks the theme. "Open the full
+ * run" goes to the Scenarios harness.
  */
 export function GrowthPreview({ slug }: { slug: string[] }) {
     const path = `/${slug.join("/")}`;
@@ -54,8 +68,11 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
     // A completed OAuth round trip is a full page load in the real app; the
     // harness remounts the tool instead, at Accounts.
     const [mount, setMount] = useState(1);
+    const { setTheme } = useTheme();
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
+        const theme = params.get("theme");
+        if (theme === "light" || theme === "dark") setTheme(theme);
         if (params.get("reset") === "1") resetSimulator();
         configureBrandSim({
             canManage: params.get("member") !== "1" && params.get("viewer") !== "1",
@@ -63,11 +80,13 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
             reconnect: params.get("reconnect") === "1",
             empty: params.get("empty") === "1",
             nosync: params.get("nosync") === "1",
+            fewTests: params.get("fewtests") === "1",
+            broke: params.get("broke") === "1",
         });
         for (const key of HARNESS_PARAMS) params.delete(key);
         const query = params.toString();
         setAt(`${path}${query ? `?${query}` : ""}`);
-    }, [path]);
+    }, [path, setTheme]);
 
     // "Connect LinkedIn" is a real link to the OAuth start, which would leave
     // for LinkedIn. Catch it before the browser follows it and play the
@@ -91,7 +110,16 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
     }, []);
 
     const host = useMemo<ToolHost | null>(
-        () => (at === null ? null : { active: true, request: { at, nonce: mount } }),
+        () =>
+            at === null
+                ? null
+                : {
+                      active: true,
+                      request: { at, nonce: mount },
+                      // Another tool's tab is another harness here.
+                      openTool: (toolId: string, location: string) =>
+                          window.location.assign(`/dev/${toolId}${location}`),
+                  },
         [at, mount]
     );
     if (!host) return null;
@@ -102,7 +130,10 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
                 20-second run; Brand posts publish in memory and Connect LinkedIn signs in as Dana
                 Okafor. Add <span className="font-mono">?reset=1</span> to start over,{" "}
                 <span className="font-mono">?member=1</span> to read as a non-admin,{" "}
-                <span className="font-mono">?viewer=1</span> as a Viewer who cannot post.
+                <span className="font-mono">?viewer=1</span> as a Viewer who cannot post. Test this
+                post simulates readers in a few seconds;{" "}
+                <span className="font-mono">?fewtests=1</span> shows a track record without enough
+                results, <span className="font-mono">?broke=1</span> refuses a test for credits.
             </div>
             {/* The tab's box: the tool fills it and scrolls inside it, as it
                 does in the workspace. */}

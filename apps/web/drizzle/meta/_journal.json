@@ -232,6 +232,13 @@
       "when": 1792276629858,
       "tag": "20261017223709_workspace_model_endpoints",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1792279509930,
+      "tag": "20261017232509_scenario_simulation",
+      "breakpoints": true
     }
   ]
 }

@@ -23,6 +23,7 @@ google-drive                 ← beside the spine: Drive v3 + OAuth token client
 ```
 
 Beside the spine: **collab** (agent meetings, node builtins only),
+**simulation** (round-based social simulation in the OASIS design, zero dependencies),
 **editing** (tracked-changes Word editing), **document-conversion-engine** (the Gotenberg
 PDF-rendering client — Office/HTML/Markdown → PDF), **google-drive** (Drive v3
 and OAuth token endpoints with injected credentials), **schema-generator**

@@ -12,6 +12,15 @@
  * (the member and each Page they administer).
  */
 
+import type {
+    CreatePostTestInput,
+    PostTestLink,
+    PostTestResult,
+    TrackRecord,
+} from "~/lib/scenarios/types";
+
+export type { PostTestLink, PostTestResult, TrackRecord };
+
 export type BrandPlatform = "x" | "linkedin" | "bluesky" | "reddit";
 export const BRAND_PLATFORMS: readonly BrandPlatform[] = ["linkedin", "x", "bluesky", "reddit"];
 
@@ -162,6 +171,11 @@ export interface ComposeInput {
     scheduledAt?: string | null;
     publishNow?: boolean;
     source?: BrandPostSource;
+    /**
+     * A finished post test of this exact text. The server links it to the
+     * posts for the track record, or answers that it was stale.
+     */
+    postTestId?: number;
 }
 
 export interface PostPatch {
@@ -314,7 +328,7 @@ export const brandApi = {
             `/api/brand/posts${q(params)}`
         ),
     compose: (input: ComposeInput) =>
-        call<{ posts: BrandPost[] }>("/api/brand/posts", {
+        call<{ posts: BrandPost[]; postTest?: PostTestLink }>("/api/brand/posts", {
             method: "POST",
             body: JSON.stringify(input),
         }),
@@ -348,6 +362,16 @@ export const brandApi = {
             method: "POST",
             body: JSON.stringify({ text }),
         }),
+    /** Run a draft past simulated readers (needs social.publish). */
+    startPostTest: (input: CreatePostTestInput) =>
+        call<{ test: PostTestResult }>("/api/brand/post-tests", {
+            method: "POST",
+            body: JSON.stringify(input),
+        }),
+    postTest: (runId: number) => call<{ test: PostTestResult }>(`/api/brand/post-tests/${runId}`),
+    /** How tested posts did for real, against the simulation. */
+    trackRecord: () => call<{ record: TrackRecord }>("/api/brand/post-tests/track-record"),
+
     setHandled: (id: string, handled: boolean) =>
         call<{ comment: BrandComment }>(`/api/brand/comments/${id}`, {
             method: "PATCH",

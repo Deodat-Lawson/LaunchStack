@@ -156,6 +156,7 @@ const MOUNT_ON_FIRST_SHOW = new Set([
     "growth",
     "proposals",
     "vantage",
+    "scenarios",
     "investors",
     "draft",
     "rewrite",

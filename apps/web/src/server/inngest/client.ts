@@ -110,6 +110,15 @@ export type ProposalsRunEvent = {
     data: ProposalRunEventData;
 };
 
+export type ScenarioRunEvent = {
+    name: "scenarios/run.requested";
+    data: {
+        runId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+    };
+};
+
 export type GoogleDriveSyncEvent = {
     name: "google-drive/sync.requested";
     data: {
@@ -144,7 +153,8 @@ export type Events =
     | GoogleDriveSyncEvent
     | GmailSyncEvent
     | DistributionRunEvent
-    | ProposalsRunEvent;
+    | ProposalsRunEvent
+    | ScenarioRunEvent;
 
 /**
  * Create the Inngest client.

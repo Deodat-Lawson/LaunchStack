@@ -83,6 +83,7 @@ const SERVICE_LABEL: Record<string, string> = {
     rerank: "Reranking",
     ner: "Entity extraction",
     distribution_research: "Distribution research",
+    scenario_simulation: "Scenarios",
     other: "Other",
 };
 

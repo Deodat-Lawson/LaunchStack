@@ -56,6 +56,9 @@
         "./proposals/db": "./src/proposals/db.ts",
         "./proposals/schema": "./src/proposals/schema.ts",
         "./proposals/types": "./src/proposals/types.ts",
+        "./scenarios": "./src/scenarios/index.ts",
+        "./scenarios/db": "./src/scenarios/db.ts",
+        "./scenarios/schema": "./src/scenarios/schema.ts",
         "./vantage": "./src/vantage/index.ts",
         "./vantage/schema": "./src/vantage/schema.ts"
     },
@@ -246,6 +249,18 @@
                 "types": "./dist/proposals/types.d.ts",
                 "default": "./dist/proposals/types.js"
             },
+            "./scenarios": {
+                "types": "./dist/scenarios/index.d.ts",
+                "default": "./dist/scenarios/index.js"
+            },
+            "./scenarios/db": {
+                "types": "./dist/scenarios/db.d.ts",
+                "default": "./dist/scenarios/db.js"
+            },
+            "./scenarios/schema": {
+                "types": "./dist/scenarios/schema.d.ts",
+                "default": "./dist/scenarios/schema.js"
+            },
             "./vantage": {
                 "types": "./dist/vantage/index.d.ts",
                 "default": "./dist/vantage/index.js"
@@ -272,6 +287,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/runtime": "workspace:^",
+        "@launchstack/simulation": "workspace:^",
         "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",

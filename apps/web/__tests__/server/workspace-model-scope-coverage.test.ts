@@ -293,6 +293,17 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ],
     [
+        "pipelines/src/scenarios/model.ts",
+        {
+            scopedBy: [
+                "apps/web/src/server/scenarios/executor.ts",
+                `${JOBS}/scenarioRun.ts`,
+                "apps/web/src/server/scenarios/service.ts",
+            ],
+            note: "inline runs scope each unit in driveRun (after()); the worker scopes inside each unit step; interviews scope the call in askScenario",
+        },
+    ],
+    [
         "pipelines/src/repo-explainer/llm.ts",
         { scopedBy: [`${API}/repo-explainer/route.ts`], note: "POST body after auth" },
     ],

@@ -15,6 +15,7 @@ import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
 import { PostRow, PostsReadOnly } from "../_components/PostRow";
 import { StatStrip } from "../_components/StatStrip";
+import { TrackRecordSection } from "../_components/TrackRecord";
 import { tokenExpiry } from "../_lib/channels";
 import { compact } from "../_lib/numbers";
 import { openCount } from "../_lib/threads";
@@ -261,6 +262,8 @@ export function OverviewScreen() {
                         />
                     )}
                 </section>
+
+                <TrackRecordSection />
 
                 <section>
                     <SectionHeading

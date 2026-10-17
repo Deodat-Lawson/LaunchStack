@@ -64,6 +64,28 @@ export function ownerForPick(
     return (addedByUserPk == null ? undefined : activePickers.get(addedByUserPk)) ?? connectedBy;
 }
 
+/**
+ * The missing files worth flagging. A picked folder the grant can't read
+ * (drive.file only) lists empty, which says nothing about what is inside it:
+ * its files were not "removed from Drive", the sync just can't see them. So
+ * those keep their documents unflagged; everything else missing is flagged
+ * as before. `unreadableRoots` is empty whenever the grant can read folders,
+ * so a genuinely emptied folder still marks its files.
+ */
+export function missingToMark(
+    missingSourceIds: readonly string[],
+    known: readonly { readonly sourceId: string; readonly pickedRootId: string | null }[],
+    unreadableRoots: readonly string[]
+): string[] {
+    if (unreadableRoots.length === 0) return [...missingSourceIds];
+    const skip = new Set(unreadableRoots);
+    const rootOf = new Map(known.map(entry => [entry.sourceId, entry.pickedRootId]));
+    return missingSourceIds.filter(id => {
+        const root = rootOf.get(id);
+        return !(root && skip.has(root));
+    });
+}
+
 export interface DrivePlacement {
     readonly category: string;
     /** Who the new document belongs to (ADR-014 defaults); null = workspace import. */

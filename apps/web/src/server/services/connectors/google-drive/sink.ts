@@ -241,13 +241,23 @@ export async function createGoogleDriveSink(
     };
 }
 
-/** Source ids (Drive file ids) this connection has already ingested. */
-export async function listKnownSourceIds(
+/** A file this connection has already ingested, and the pick it came through. */
+export interface KnownSource {
+    readonly sourceId: string;
+    /** Null for documents imported before placements were recorded. */
+    readonly pickedRootId: string | null;
+}
+
+/** Everything this connection has already ingested. */
+export async function listKnownSources(
     companyId: bigint,
     connectionId: number
-): Promise<string[]> {
+): Promise<KnownSource[]> {
     const rows = await db
-        .select({ sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'` })
+        .select({
+            sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'`,
+            pickedRootId: sql<string | null>`${document.ocrMetadata} ->> 'pickedRootId'`,
+        })
         .from(document)
         .where(
             and(
@@ -256,7 +266,9 @@ export async function listKnownSourceIds(
                 sql`${document.ocrMetadata} ->> 'connectionId' = ${String(connectionId)}`
             )
         );
-    return rows.map(row => row.sourceId).filter((id): id is string => Boolean(id));
+    return rows.flatMap(row =>
+        row.sourceId ? [{ sourceId: row.sourceId, pickedRootId: row.pickedRootId ?? null }] : []
+    );
 }
 
 /**

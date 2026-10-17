@@ -41,6 +41,7 @@ import type { ConnectorConnection } from "~/server/db/schema";
 import {
     folderSegmentFor,
     freeTopLevelPath,
+    missingToMark,
     ownerForPick,
     placementPath,
 } from "~/server/services/connectors/google-drive/destinations";
@@ -173,6 +174,31 @@ describe("who owns what a pick brings in", () => {
         // 12 is not in the active-member map: left the workspace.
         expect(ownerForPick(12, pickers, ben)).toBe(ben);
         expect(ownerForPick(null, pickers, ben)).toBe(ben);
+    });
+});
+
+describe("which missing files get flagged as removed from Drive", () => {
+    const known = [
+        { sourceId: "plan", pickedRootId: "room" },
+        { sourceId: "memo", pickedRootId: "room" },
+        { sourceId: "solo", pickedRootId: "solo" },
+        { sourceId: "legacy", pickedRootId: null },
+    ];
+
+    it("flags everything missing when the grant can read folders", () => {
+        expect(missingToMark(["plan", "solo", "legacy"], known, [])).toEqual([
+            "plan",
+            "solo",
+            "legacy",
+        ]);
+    });
+
+    it("leaves files under a picked folder the grant couldn't read unflagged", () => {
+        // drive.file only: "room" listed empty, so its files are unseen, not gone.
+        expect(missingToMark(["plan", "memo", "solo", "legacy"], known, ["room"])).toEqual([
+            "solo",
+            "legacy",
+        ]);
     });
 });
 

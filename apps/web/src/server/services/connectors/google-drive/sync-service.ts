@@ -16,7 +16,7 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { userCompanyMemberships, users } from "~/server/db/schema";
-import { driveApiBaseUrl } from "~/server/services/google-drive/config";
+import { driveApiBaseUrl, grantsFolderAccess } from "~/server/services/google-drive/config";
 import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
 import type { OwnerRef } from "~/server/workspace/ownership";
 import { getConnectionById } from "../connection-store";
@@ -29,11 +29,16 @@ import {
     resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
-import { createDriveDestinations, ownerForPick, type PickedRoot } from "./destinations";
+import {
+    createDriveDestinations,
+    missingToMark,
+    ownerForPick,
+    type PickedRoot,
+} from "./destinations";
 import {
     GOOGLE_DRIVE_CATEGORY,
     createGoogleDriveSink,
-    listKnownSourceIds,
+    listKnownSources,
     markMissingDocuments,
 } from "./sink";
 
@@ -133,10 +138,10 @@ export async function runGoogleDriveSync(
         // can be restricted like any other folder.
         await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
-        const [syncState, pickedRows, knownSourceIds] = await Promise.all([
+        const [syncState, pickedRows, knownSources] = await Promise.all([
             getSyncState(connectionId),
             listPickedItems(connectionId),
-            listKnownSourceIds(connection.companyId, connectionId),
+            listKnownSources(connection.companyId, connectionId),
         ]);
 
         // A picked folder belongs to whoever picked it (ADR-014); files
@@ -179,12 +184,20 @@ export async function runGoogleDriveSync(
                 kind: row.kind === "folder" ? "folder" : "file",
             })),
             startPageToken: syncState?.startPageToken ?? undefined,
-            knownSourceIds,
+            knownSourceIds: knownSources.map(known => known.sourceId),
             force: options?.force,
         });
 
-        if (report.missingSourceIds.length > 0) {
-            await markMissingDocuments(connection.companyId, connectionId, report.missingSourceIds);
+        // Under drive.file an imported folder lists empty: its files are
+        // unseen, not removed from Drive, so they keep their documents
+        // unflagged until folder access shows what is really there.
+        const missing = missingToMark(
+            report.missingSourceIds,
+            knownSources,
+            grantsFolderAccess(connection.scopes) ? [] : report.emptyFolders
+        );
+        if (missing.length > 0) {
+            await markMissingDocuments(connection.companyId, connectionId, missing);
         }
 
         await releaseSyncLease(connectionId, {

@@ -5,6 +5,8 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 
+import { publicOrigin } from "~/server/public-origin";
+
 import { isWorkspaceError } from "./errors";
 
 /** `{ error }` with the service's status for expected failures; a logged 500 otherwise. */
@@ -30,9 +32,9 @@ export function invalidIdResponse(): NextResponse {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 }
 
-/** Where links in outbound email and in responses should point. */
+/** Where links in outbound email and in responses should point (see publicOrigin). */
 export function requestOrigin(request: Request): string {
-    return new URL(request.url).origin;
+    return publicOrigin(request);
 }
 
 /** A body that may legitimately be absent (DELETE with options). */

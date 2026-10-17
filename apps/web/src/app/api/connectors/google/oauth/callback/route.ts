@@ -35,6 +35,7 @@ import {
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
+import { publicOrigin } from "~/server/public-origin";
 
 type Provider = "google-drive" | "gmail";
 
@@ -46,7 +47,7 @@ type Provider = "google-drive" | "gmail";
 function redirectToWorkspace(request: Request, provider: Provider, flag: string): NextResponse {
     const result = flag === "connected" ? "connected" : flag === "cancelled" ? "denied" : "error";
     const response = NextResponse.redirect(
-        new URL(`/employer/documents?connector=${provider}&result=${result}`, request.url)
+        new URL(`/employer/documents?connector=${provider}&result=${result}`, publicOrigin(request))
     );
     response.cookies.delete(
         provider === "gmail" ? GMAIL_OAUTH_STATE_COOKIE : GOOGLE_OAUTH_STATE_COOKIE

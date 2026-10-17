@@ -52,6 +52,10 @@ function linkRow(overrides: Partial<Record<string, unknown>> = {}) {
 beforeEach(() => {
     fakeDb.reset();
     jest.clearAllMocks();
+    // Links are built on the configured public origin; the repo .env may set
+    // one, and these assertions are about the request fallback.
+    delete process.env.APP_PUBLIC_URL;
+    delete process.env.BETTER_AUTH_URL;
     session.mockResolvedValue({ user: { id: "user-x", email: "new@example.com", name: "Newt" } });
 });
 
@@ -280,6 +284,39 @@ describe("POST /api/workspace/join-links", () => {
             jsonRequest("/api/workspace/join-links", "POST", { role: "member" })
         );
         expect(res.status).toBe(403);
+    });
+});
+
+describe("join link origin", () => {
+    /** What the standalone server hands a route behind the proxy: its bind address, not the Host. */
+    function proxiedCreate() {
+        return new Request("https://0.0.0.0:3000/api/workspace/join-links", {
+            method: "POST",
+            headers: { "content-type": "application/json", host: "app.example.com" },
+            body: JSON.stringify({ role: "member" }),
+        });
+    }
+
+    it("points at the deployment's public URL, not the server's bind address", async () => {
+        process.env.APP_PUBLIC_URL = "https://app.example.com/";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onReturning(inviteCodes, [linkRow()]);
+
+        const res = await POST(proxiedCreate());
+
+        const { link } = (await res.json()) as { link: { url: string } };
+        expect(link.url).toBe(`https://app.example.com/join/${CODE.toLowerCase()}`);
+    });
+
+    it("falls back to the auth base URL when no public URL is set", async () => {
+        process.env.BETTER_AUTH_URL = "https://auth-base.example.com";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onReturning(inviteCodes, [linkRow()]);
+
+        const res = await POST(proxiedCreate());
+
+        const { link } = (await res.json()) as { link: { url: string } };
+        expect(link.url).toBe(`https://auth-base.example.com/join/${CODE.toLowerCase()}`);
     });
 });
 

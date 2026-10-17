@@ -746,6 +746,28 @@ describe("permission gates", () => {
         expect(location).toContain("result=error");
     });
 
+    it("GET /api/connectors/google/oauth/callback returns to the public origin, not the bind address", async () => {
+        signInAs("member");
+        const saved = process.env.APP_PUBLIC_URL;
+        process.env.APP_PUBLIC_URL = "https://app.example.com";
+        try {
+            // Behind Caddy the standalone server hands the route its bind address.
+            const response = await googleOAuthCallback(
+                new Request(
+                    "https://0.0.0.0:3000/api/connectors/google/oauth/callback?code=c&state=s"
+                )
+            );
+
+            expect(response.status).toBe(307);
+            const location = new URL(response.headers.get("location") ?? "");
+            expect(location.origin).toBe("https://app.example.com");
+            expect(location.pathname).toBe("/employer/documents");
+        } finally {
+            if (saved === undefined) delete process.env.APP_PUBLIC_URL;
+            else process.env.APP_PUBLIC_URL = saved;
+        }
+    });
+
     it("lets an admin through the same gate (the harness is not refusing everyone)", async () => {
         signInAs("admin");
         const rows = mockDbRows();

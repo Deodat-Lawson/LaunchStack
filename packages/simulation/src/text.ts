@@ -69,14 +69,19 @@ export function clip(text: string, max: number): string {
     return t.length <= max ? t : `${t.slice(0, max - 1).trimEnd()}…`;
 }
 
-/** TeX math some models write in plain prose ("Free $\\rightarrow$ Trial"), as the characters people expect. */
+/**
+ * TeX math some models write in plain prose ("Free $\\rightarrow$ Trial"), as
+ * the characters people expect. When the TeX sat inside a JSON string, the
+ * decoder has already turned "\\r" and "\\t" into a carriage return and a
+ * tab ("\\rightarrow" → CR + "ightarrow"), so both spellings are matched.
+ */
 const TEX_SYMBOLS: Array<[RegExp, string]> = [
-    [/\$?\s*\\(?:long)?rightarrow\s*\$?/g, "→"],
-    [/\$?\s*\\to\s*\$/g, "→"],
+    [/\$?\s*(?:\\(?:long)?r|\r)ightarrow\s*\$?/g, "→"],
     [/\$?\s*\\(?:long)?leftarrow\s*\$?/g, "←"],
+    [/\$\s*(?:\\t|\t)o\s*\$/g, "→"],
+    [/\$\s*(?:\\t|\t)imes\s*\$/g, "×"],
     [/\$\s*\\(?:geq|ge)\s*\$/g, "≥"],
     [/\$\s*\\(?:leq|le)\s*\$/g, "≤"],
-    [/\$\s*\\times\s*\$/g, "×"],
     [/\$\s*\\approx\s*\$/g, "≈"],
 ];
 

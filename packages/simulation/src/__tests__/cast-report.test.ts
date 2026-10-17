@@ -196,6 +196,10 @@ describe("cleanProse", () => {
         );
         expect(cleanProse("costs $\\geq$ 20% and $\\times$ 2 .")).toBe("costs ≥ 20% and × 2.");
         expect(cleanProse("A $5 plan and a $10 plan")).toBe("A $5 plan and a $10 plan");
+        // The same TeX after a JSON decoder turned \r and \t into control characters.
+        expect(cleanProse(JSON.parse('"Free $\\rightarrow$ Trial, x $\\times$ 2"'))).toBe(
+            "Free → Trial, x × 2"
+        );
     });
 });
 

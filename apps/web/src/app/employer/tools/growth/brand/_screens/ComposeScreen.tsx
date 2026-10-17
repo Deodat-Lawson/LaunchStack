@@ -1,6 +1,6 @@
 "use client";
 
-import { ImagePlus, RotateCw, X } from "lucide-react";
+import { FlaskConical, ImagePlus, RotateCw, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,6 +16,8 @@ import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
+import { SCENARIO_LIMITS, normalizeDraft } from "~/lib/scenarios/types";
+import { isLive, percent, progressWords } from "~/lib/scenarios/words";
 import { plural } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
@@ -23,6 +25,7 @@ import { cn } from "~/lib/utils";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
+import { PostTestSheet } from "../_components/PostTestSheet";
 import {
     KIND_WORD,
     byKindThenName,
@@ -45,12 +48,14 @@ import {
 import { count } from "../_lib/numbers";
 import { dayAndMonth, nextSlot, timeOfDay, toLocalInput } from "../_lib/time";
 import {
+    BrandApiError,
     COMPOSE_HANDOFF_KEY,
     brandApi,
     type BrandChannel,
     type BrandMedia,
     type BrandPostSource,
     type ComposeHandoff,
+    type PostTestResult,
 } from "../api";
 
 type When = "now" | "later" | "draft";
@@ -264,6 +269,24 @@ export function ComposeScreen() {
     const attachmentsRef = useRef(attachments);
     attachmentsRef.current = attachments;
 
+    // The latest post test of this draft. It is polled until it ends; a
+    // finished test of the exact text goes out with the post, so its result
+    // can be compared with the real one later.
+    const [testId, setTestId] = useState<number | null>(null);
+    const [testOpen, setTestOpen] = useState(false);
+    const [startingTest, setStartingTest] = useState(false);
+    const [testProblem, setTestProblem] = useState<string | null>(null);
+    const [testEnded, setTestEnded] = useState(false);
+    const testRes = useResource(
+        testId === null ? null : `brand:post-test:${testId}`,
+        () => brandApi.postTest(testId!),
+        { pollMs: testId !== null && !testEnded ? 1500 : null }
+    );
+    const test = testRes.data?.test.runId === testId ? (testRes.data?.test ?? null) : null;
+    const ended = test !== null && !isLive(test.status);
+    if (ended !== testEnded) setTestEnded(ended);
+    const testStale = test !== null && normalizeDraft(body) !== normalizeDraft(test.text);
+
     // A hand-off from Campaigns is read once (it is removed as it is read).
     useEffect(() => {
         if (handoffRead.current) return;
@@ -404,6 +427,33 @@ export function ComposeScreen() {
         setMediaProblem(null);
     };
 
+    const startTest = async () => {
+        setStartingTest(true);
+        setTestProblem(null);
+        try {
+            const networks = [...new Set(chosen.map(c => c.platform))];
+            const { test: started } = await brandApi.startPostTest({
+                text: body.trim(),
+                networks,
+            });
+            setTestEnded(!isLive(started.status));
+            setTestId(started.runId);
+            setTestOpen(true);
+        } catch (e) {
+            const status = e instanceof BrandApiError ? e.status : null;
+            const message = e instanceof Error ? e.message : "Could not start the test";
+            setTestProblem(
+                status === 403
+                    ? "Your role can read Brand but not test or post as the company. Ask an admin for Member access."
+                    : status === 402
+                      ? `Not enough credits to test this post. ${message}`
+                      : message
+            );
+        } finally {
+            setStartingTest(false);
+        }
+    };
+
     const submit = async () => {
         setSubmitting(true);
         try {
@@ -418,6 +468,8 @@ export function ComposeScreen() {
                 scheduledAt: when === "later" ? new Date(at).toISOString() : null,
                 publishNow: when === "now",
                 source,
+                // Only a finished test of exactly this text says anything about it.
+                postTestId: test && test.status === "done" && !testStale ? test.runId : undefined,
             });
             const name = (p: (typeof result.posts)[number]) =>
                 p.channel?.name ?? NETWORK_LABEL[p.platform];
@@ -435,6 +487,10 @@ export function ComposeScreen() {
             } else {
                 toast(`Saved ${plural(result.posts.length, "draft")}`);
             }
+            if (result.postTest?.stale)
+                toast.warning(
+                    "The post test was of an earlier draft, so it was not kept with the post."
+                );
             router.push(paths.brand("/calendar"));
         } catch (e) {
             toast.error(e instanceof Error ? e.message : "Could not save the post");
@@ -783,12 +839,39 @@ export function ComposeScreen() {
                                         ? "Schedule"
                                         : "Save draft"}
                             </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={!body.trim() || !canPublish || startingTest}
+                                onClick={() => void startTest()}
+                            >
+                                <FlaskConical aria-hidden />
+                                {startingTest ? "Starting test…" : "Test this post"}
+                            </Button>
                             {blocked && <span className="text-danger text-xs">{blocked}</span>}
                             {!blocked && chosen.length === 0 && seeded && (
                                 <span className="text-ink-3 text-xs">Pick a channel first.</span>
                             )}
                         </div>
+                        <PostTestNote
+                            problem={testProblem}
+                            test={test}
+                            stale={testStale}
+                            starting={startingTest}
+                            onView={() => setTestOpen(true)}
+                            onTestAgain={() => void startTest()}
+                        />
                     </div>
+                    <PostTestSheet
+                        open={testOpen}
+                        onOpenChange={setTestOpen}
+                        test={test}
+                        error={testRes.error}
+                        onRetry={() => void testRes.reload()}
+                        stale={testStale}
+                        testing={startingTest}
+                        onTestAgain={() => void startTest()}
+                    />
                 </div>
 
                 <aside className="flex flex-col gap-3">
@@ -812,5 +895,62 @@ export function ComposeScreen() {
                 </aside>
             </div>
         </div>
+    );
+}
+
+/**
+ * One line under the buttons about the latest post test: running, its
+ * result, or that the draft has changed since and the result no longer
+ * describes it.
+ */
+function PostTestNote({
+    problem,
+    test,
+    stale,
+    starting,
+    onView,
+    onTestAgain,
+}: {
+    problem: string | null;
+    test: PostTestResult | null;
+    stale: boolean;
+    starting: boolean;
+    onView: () => void;
+    onTestAgain: () => void;
+}) {
+    const link =
+        "text-ink-2 hover:text-ink focus-visible:ring-brand/50 rounded-sm underline underline-offset-2 outline-none focus-visible:ring-2";
+    if (problem) {
+        return (
+            <p role="alert" className="text-danger text-xs">
+                {problem}
+            </p>
+        );
+    }
+    if (!test) return null;
+    if (stale) {
+        return (
+            <p className="text-warn text-xs">
+                Draft changed since the test — test again.{" "}
+                <button type="button" className={link} disabled={starting} onClick={onTestAgain}>
+                    {starting ? "Starting…" : "Test again"}
+                </button>
+            </p>
+        );
+    }
+    const reception = test.reception;
+    return (
+        <p className="text-ink-3 text-xs" aria-live="polite">
+            {isLive(test.status)
+                ? `Testing with simulated readers: ${progressWords({ ...test, agents: SCENARIO_LIMITS.postTest.agents }).toLowerCase()}.`
+                : test.status === "done" && reception
+                  ? `Tested: ${reception.engaged} of ${reception.exposed} simulated readers engaged (${percent(reception.engagementRate)}). It is saved with the post, to compare with the real result.`
+                  : test.status === "failed"
+                    ? "The test failed."
+                    : "The test was cancelled."}{" "}
+            <button type="button" className={link} onClick={onView}>
+                {test.status === "done" ? "See the result" : "View"}
+            </button>
+        </p>
     );
 }

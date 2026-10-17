@@ -91,6 +91,11 @@ const VantageTool = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const ScenariosTool = dynamic(
+    () => import("~/app/employer/tools/scenarios/ScenariosTool").then(m => m.ScenariosTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
     loading: () => <LoadingPage variant="pane" />,
 });
@@ -870,6 +875,8 @@ export function renderStudioPane(
             return <ProposalsTool host={context?.tool} />;
         case "vantage":
             return <VantageTool host={context?.tool} />;
+        case "scenarios":
+            return <ScenariosTool host={context?.tool} />;
         // Company metadata is a section of Settings now. Its id survives so old
         // deep links open the right section rather than 404ing.
         case "metadata":

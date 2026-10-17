@@ -27,6 +27,7 @@ import {
     Users as IconUsers,
     UsersRound as IconTeam,
     Video as IconVideo,
+    Waypoints as IconScenarios,
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
@@ -445,6 +446,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=vantage",
     },
     {
+        id: "scenarios",
+        label: "Scenarios",
+        Icon: IconScenarios,
+        desc: "Simulate how people built from your records react to a situation",
+        href: "/employer/documents?feature=scenarios",
+    },
+    {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
@@ -633,6 +641,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconVantage,
                 desc: "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program",
                 href: "/employer/documents?feature=vantage",
+            },
+            {
+                // A simulated social network: people built from the
+                // workspace's records react to a situation over several
+                // rounds. List, form and runs are screens inside its tab.
+                id: "scenarios",
+                label: "Scenarios",
+                Icon: IconScenarios,
+                desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
+                href: "/employer/documents?feature=scenarios",
             },
             {
                 id: "draft",

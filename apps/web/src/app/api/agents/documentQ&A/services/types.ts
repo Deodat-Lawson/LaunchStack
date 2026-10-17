@@ -68,41 +68,6 @@ export interface WebSearchResult {
     relevanceScore?: number;
 }
 
-/**
- * Input parameters for web search agent
- *
- * @property userQuestion - The user's question to search for
- * @property documentContext - Optional document context to refine search
- * @property maxResults - Maximum number of results to return (default: 5)
- * @property searchDepth - Search depth level (default: "basic")
- */
-export interface WebSearchAgentInput {
-    /** The user's question to search for */
-    userQuestion: string;
-    /** Optional document context to refine search */
-    documentContext?: string;
-    /** Maximum number of results to return (default: 5) */
-    maxResults?: number;
-    /** Search depth level */
-    searchDepth?: "basic" | "advanced";
-}
-
-/**
- * Result from web search agent execution
- *
- * @property results - Array of web search results
- * @property refinedQuery - The refined search query used
- * @property reasoning - Optional reasoning for the search refinement
- */
-export interface WebSearchAgentResult {
-    /** Array of web search results */
-    results: WebSearchResult[];
-    /** The refined search query used */
-    refinedQuery: string;
-    /** Optional reasoning for the search refinement */
-    reasoning?: string;
-}
-
 // ============================================================================
 // Prompt Types
 // ============================================================================
@@ -133,20 +98,6 @@ export const AIPersonas = [
  */
 export function isAIPersona(value: string): value is AIPersona {
     return AIPersonas.includes(value as AIPersona);
-}
-
-/**
- * Parameters for generating web search instruction prompt
- */
-export interface WebSearchInstructionParams {
-    /** Whether web search is enabled */
-    enableWebSearch: boolean;
-    /** Array of web search results */
-    webSearchResults: WebSearchResult[];
-    /** Refined search query used */
-    refinedQuery?: string;
-    /** Reasoning for search refinement */
-    reasoning?: string;
 }
 
 // ============================================================================

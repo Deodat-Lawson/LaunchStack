@@ -1,7 +1,7 @@
 /**
  * Ask My Notes — chat scoped exclusively to the requester's notes.
  *
- * Cousin of `AIQuery` but with a much smaller surface: only the notes
+ * Cousin of `AIChat/query` but with a much smaller surface: only the notes
  * retriever (no document chunks, no BM25, no web search). Citations resolve
  * back to note ids so the client can deep-link.
  */

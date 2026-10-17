@@ -333,7 +333,10 @@ export default async function middleware(req: NextRequest) {
 //
 // Note that the upload-local / files exclusion below is a no-op in practice:
 // the first pattern already matches any path without one of those static file
-// extensions, so both routes do run through this middleware.
+// extensions, so both routes do run through this middleware. Upload bodies
+// survive it because patches/next@15.5.7.patch makes Next await its body
+// hand-off before the route handler reads the request (the "body stream
+// conflicts" below); see __tests__/middleware/request-body-after-middleware.test.ts.
 export const config = {
     runtime: "nodejs",
     matcher: [

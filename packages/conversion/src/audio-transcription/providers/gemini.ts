@@ -59,8 +59,14 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
         this.model = resolveModel(process.env.TRANSCRIPTION_MODEL, GEMINI_DEFAULT_MODEL);
         this.name = `transcription:${this.model}`;
         const root = geminiNativeRoot(this.baseUrl);
+        const chunkMinutes = Number(process.env.TRANSCRIPTION_CHUNK_MINUTES);
         this.native = root
-            ? new GeminiNativeTranscriber({ root, apiKey: this.apiKey, model: this.model })
+            ? new GeminiNativeTranscriber({
+                  root,
+                  apiKey: this.apiKey,
+                  model: this.model,
+                  ...(chunkMinutes > 0 ? { chunkSeconds: chunkMinutes * 60 } : {}),
+              })
             : null;
 
         if (!this.apiKey) {

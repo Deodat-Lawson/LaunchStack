@@ -122,3 +122,37 @@ export async function splitAudio(
         await rm(dir, { recursive: true, force: true });
     }
 }
+
+/**
+ * The stretch [start, end) seconds of an ffmpeg chunk, as its own MP3. Used to
+ * ask again for part of a chunk: a fresh clip timed from zero, because a
+ * prompt naming a time range is not reliably obeyed (flash-lite transcribed
+ * minute 2 when asked for 30:00–60:00 of a long file).
+ */
+export async function cutAudio(chunk: Buffer, start: number, end: number): Promise<Buffer> {
+    const dir = await mkdtemp(join(tmpdir(), "transcribe-cut-"));
+    try {
+        const input = join(dir, "chunk.mp3");
+        const output = join(dir, "cut.mp3");
+        await writeFile(input, chunk);
+        await run(
+            "ffmpeg",
+            [
+                "-v",
+                "error",
+                "-ss",
+                String(Math.max(0, start)),
+                "-t",
+                String(Math.max(0.1, end - start)),
+                "-i",
+                input,
+                ...CHUNK_ARGS,
+                output,
+            ],
+            { timeout: FFMPEG_TIMEOUT_MS, maxBuffer: 4 * 1024 * 1024 }
+        );
+        return await readFile(output);
+    } finally {
+        await rm(dir, { recursive: true, force: true });
+    }
+}

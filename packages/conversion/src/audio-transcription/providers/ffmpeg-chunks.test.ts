@@ -1,10 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { ffmpegAvailable, splitAudio } from "./ffmpeg-chunks";
+import { cutAudio, ffmpegAvailable, splitAudio } from "./ffmpeg-chunks";
 
 /** Real ffmpeg, when this machine has it (the app image does); skipped otherwise. */
 const hasFfmpeg = (() => {
@@ -60,6 +60,33 @@ describe.skipIf(!hasFfmpeg)("splitAudio (real ffmpeg)", () => {
         // MP3 (ffmpeg leads with an ID3 tag), and far smaller than the 128 kbit/s stereo original.
         expect(chunks[0]!.bytes.subarray(0, 3).toString("latin1")).toBe("ID3");
         expect(chunks.reduce((n, c) => n + c.bytes.length, 0)).toBeLessThan(m4a.length / 3);
+    });
+
+    it("cuts part of a chunk into its own clip, timed from zero", async () => {
+        const { chunks } = (await splitAudio(m4a, "memo.m4a", 60))!;
+        const clip = await cutAudio(chunks[0]!.bytes, 10, 40);
+        const dir2 = mkdtempSync(join(tmpdir(), "cut-test-"));
+        try {
+            const file = join(dir2, "clip.mp3");
+            writeFileSync(file, clip);
+            const seconds = Number(
+                execFileSync("ffprobe", [
+                    "-v",
+                    "error",
+                    "-show_entries",
+                    "format=duration",
+                    "-of",
+                    "csv=p=0",
+                    file,
+                ])
+                    .toString()
+                    .trim()
+            );
+            expect(seconds).toBeGreaterThan(29);
+            expect(seconds).toBeLessThan(31);
+        } finally {
+            rmSync(dir2, { recursive: true, force: true });
+        }
     });
 
     it("throws on bytes ffmpeg cannot decode", async () => {

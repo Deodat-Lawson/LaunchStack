@@ -4,7 +4,7 @@ import { TranscriptionError } from "../errors";
 import {
     GeminiNativeTranscriber,
     INLINE_MAX_BYTES,
-    WINDOW_SECONDS,
+    DEFAULT_CHUNK_SECONDS,
     gapLine,
     geminiNativeRoot,
     mergeWindows,
@@ -91,8 +91,12 @@ function fakeGemini(handlers: {
     return { fetchImpl: fetchImpl as unknown as typeof fetch, calls };
 }
 
-/** A host without ffmpeg, unless a test hands in a chunker. */
-function transcriber(fetchImpl: typeof fetch, splitAudio: SplitAudio | null = null) {
+/** A host without ffmpeg, unless a test hands in a chunker (and a cutter). */
+function transcriber(
+    fetchImpl: typeof fetch,
+    splitAudio: SplitAudio | null = null,
+    cutAudio?: CutAudio
+) {
     return new GeminiNativeTranscriber({
         root: ROOT,
         apiKey: "k",
@@ -100,9 +104,12 @@ function transcriber(fetchImpl: typeof fetch, splitAudio: SplitAudio | null = nu
         fetchImpl,
         pollMs: 0,
         splitAudio,
+        ...(cutAudio ? { cutAudio } : {}),
         retryDelaysMs: [0, 0, 0],
     });
 }
+
+type CutAudio = NonNullable<ConstructorParameters<typeof GeminiNativeTranscriber>[0]["cutAudio"]>;
 
 type SplitAudio = NonNullable<
     ConstructorParameters<typeof GeminiNativeTranscriber>[0]["splitAudio"]
@@ -147,13 +154,13 @@ describe("planWindows", () => {
         for (let i = 1; i < windows.length; i++) {
             expect(windows[i]!.start).toBe(windows[i - 1]!.end);
         }
-        expect(windows.every(w => w.end - w.start <= WINDOW_SECONDS + 60)).toBe(true);
+        expect(windows.every(w => w.end - w.start <= DEFAULT_CHUNK_SECONDS + 60)).toBe(true);
     });
 
     it("folds a sliver at the end into the last window", () => {
-        const windows = planWindows(WINDOW_SECONDS * 2 + 30);
+        const windows = planWindows(DEFAULT_CHUNK_SECONDS * 2 + 30);
         expect(windows).toHaveLength(2);
-        expect(windows[1]!.end).toBe(WINDOW_SECONDS * 2 + 30);
+        expect(windows[1]!.end).toBe(DEFAULT_CHUNK_SECONDS * 2 + 30);
     });
 });
 
@@ -291,37 +298,29 @@ describe("GeminiNativeTranscriber", () => {
         expect(calls.some(c => c.method === "DELETE")).toBe(false);
     });
 
-    it("stores a large recording through the Files API, transcribes it in windows, then deletes it", async () => {
-        const prompts: string[] = [];
+    it("stores a large short recording through the Files API, transcribes it, then deletes it", async () => {
         const { fetchImpl, calls } = fakeGemini({
-            count: () => countReply(4914),
-            generate: (_body, prompt) => {
-                prompts.push(prompt);
-                const from = Number(/about (\d+)/.exec(prompt)?.[1] ?? 0);
-                const to = endsBy(prompt) ?? 4914;
-                return windowReply({
+            count: () => countReply(540),
+            generate: () =>
+                windowReply({
                     language: "yue",
                     languages: ["yue", "en"],
                     segments: [
-                        { start: from, end: from + 5, text: `line at ${from}` },
-                        { start: to - 30, end: to - 1, text: `last before ${to}` },
+                        { start: 0, end: 5, text: "大家好" },
+                        { start: 500, end: 539, text: "last line" },
                     ],
-                });
-            },
+                }),
         });
 
         const { result } = await transcriber(fetchImpl).transcribe(
             Buffer.alloc(INLINE_MAX_BYTES + 1),
-            "oct_15_3_pm_HT.m4a",
-            { mimeType: "audio/x-m4a" }
+            "notes.wav",
+            { mimeType: "audio/wav" }
         );
 
-        expect(prompts).toHaveLength(planWindows(4914).length);
-        expect(
-            result.segments!.filter(s => s.text.startsWith("line at")).map(s => s.start)
-        ).toEqual(planWindows(4914).map(w => w.start));
         expect(result.language).toBe("yue");
         expect(result.languages).toEqual(["yue", "en"]);
+        expect(calls.filter(c => c.url.endsWith(":generateContent"))).toHaveLength(1);
         const generate = calls.find(c => c.url.endsWith(":generateContent"))!;
         const media = (generate.body!.contents as { parts: Record<string, unknown>[] }[])[0]!
             .parts[0]!;
@@ -331,6 +330,20 @@ describe("GeminiNativeTranscriber", () => {
         expect(calls.filter(c => c.method === "DELETE").map(c => c.url)).toEqual([
             `${ROOT}/v1beta/files/abc`,
         ]);
+    });
+
+    it("refuses a recording longer than one chunk when ffmpeg is not there to cut it", async () => {
+        const { fetchImpl, calls } = fakeGemini({
+            count: () => countReply(4914),
+            generate: () => windowReply({ language: "en", segments: [] }),
+        });
+
+        await expect(
+            transcriber(fetchImpl).transcribe(Buffer.alloc(INLINE_MAX_BYTES + 1), "meeting.m4a")
+        ).rejects.toMatchObject({ userMessage: expect.stringMatching(/need ffmpeg/) });
+        // No time-range prompts were tried, and the stored file was removed.
+        expect(calls.some(c => c.url.endsWith(":generateContent"))).toBe(false);
+        expect(calls.some(c => c.method === "DELETE")).toBe(true);
     });
 
     it("splits a window whose reply hit the output cap", async () => {
@@ -394,24 +407,24 @@ describe("GeminiNativeTranscriber", () => {
     it("asks for the rest when a reply stops well short of its window", async () => {
         const asked: string[] = [];
         const { fetchImpl } = fakeGemini({
-            count: () => countReply(1800),
+            count: () => countReply(600),
             generate: (_body, prompt) => {
                 asked.push(prompt);
-                // First answer: sections up to 18:46, then a premature stop.
+                // First answer: up to 4:46, then a premature stop.
                 if (asked.length === 1) {
                     return windowReply({
                         language: "en",
                         segments: [
                             { start: 0, end: 2, text: "Section one." },
-                            { start: 1123, end: 1126, text: "End of section thirty one." },
+                            { start: 283, end: 286, text: "End of section thirty one." },
                         ],
                     });
                 }
                 return windowReply({
                     language: "en",
                     segments: [
-                        { start: 1127, end: 1130, text: "Section thirty two." },
-                        { start: 1795, end: 1799, text: "End of section forty eight." },
+                        { start: 287, end: 290, text: "Section thirty two." },
+                        { start: 595, end: 599, text: "End of section forty eight." },
                     ],
                 });
             },
@@ -420,7 +433,7 @@ describe("GeminiNativeTranscriber", () => {
         const { result } = await transcriber(fetchImpl).transcribe(Buffer.from("x"), "long.m4a");
 
         expect(asked).toHaveLength(2);
-        expect(asked[1]).toContain("from 18:46 to 30:00");
+        expect(asked[1]).toContain("from 04:46 to 10:00");
         expect(result.segments!.map(s => s.text)).toEqual([
             "Section one.",
             "End of section thirty one.",
@@ -432,7 +445,7 @@ describe("GeminiNativeTranscriber", () => {
     it("does not chase silence: an empty continuation ends the window", async () => {
         let calls = 0;
         const { fetchImpl } = fakeGemini({
-            count: () => countReply(1800),
+            count: () => countReply(600),
             generate: () => {
                 calls++;
                 return windowReply({
@@ -613,7 +626,7 @@ describe("GeminiNativeTranscriber", () => {
         expect(chunker).toHaveBeenCalledWith(
             expect.any(Buffer),
             "oct_15_3_pm_HT.m4a",
-            WINDOW_SECONDS
+            DEFAULT_CHUNK_SECONDS
         );
         expect(sent.sort()).toEqual(["c0", "c1", "c2"]);
         // Nothing stored, nothing counted: the chunks went inline.
@@ -623,6 +636,66 @@ describe("GeminiNativeTranscriber", () => {
         expect(result.durationSeconds).toBe(4914);
         expect(result.segments!.map(s => s.start)).toEqual([0, 10, 1800, 1810, 3600, 3610]);
         expect(result.segments!.at(-1)!.end).toBe(4913);
+    });
+
+    it("asks again for the rest of a chunk as a fresh cut clip, not a time range", async () => {
+        const chunker = vi.fn<SplitAudio>(async () => ({
+            duration: 1200,
+            chunks: [
+                { start: 0, end: 600, bytes: Buffer.from("c0") },
+                { start: 600, end: 1200, bytes: Buffer.from("c1") },
+            ],
+        }));
+        const cuts: [string, number, number][] = [];
+        const cutter = vi.fn<CutAudio>(async (bytes, start, end) => {
+            cuts.push([bytes.toString(), start, end]);
+            return Buffer.from(`${bytes.toString()}[${start}-${end}]`);
+        });
+        const prompts: { media: string; prompt: string }[] = [];
+        const { fetchImpl } = fakeGemini({
+            count: () => countReply(0),
+            generate: (body, prompt) => {
+                const part = (body.contents as { parts: { inlineData?: { data: string } }[] }[])[0]!
+                    .parts[0]!;
+                const media = Buffer.from(part.inlineData!.data, "base64").toString();
+                prompts.push({ media, prompt });
+                // c1 stops at 3:00 of its 10 minutes; the cut clip of the rest is 7 min long.
+                if (media === "c1") {
+                    return windowReply({
+                        language: "en",
+                        segments: [{ start: 0, end: 180, text: "c1 opening" }],
+                    });
+                }
+                if (media === "c1[180-600]") {
+                    return windowReply({
+                        language: "en",
+                        segments: [{ start: 5, end: 419, text: "c1 rest" }],
+                    });
+                }
+                return windowReply({
+                    language: "en",
+                    segments: [{ start: 0, end: 599, text: `${media} whole` }],
+                });
+            },
+        });
+
+        const { result } = await transcriber(fetchImpl, chunker, cutter).transcribe(
+            Buffer.alloc(INLINE_MAX_BYTES + 1),
+            "meeting.m4a"
+        );
+
+        expect(cuts).toEqual([["c1", 180, 600]]);
+        const rest = prompts.find(p => p.media === "c1[180-600]")!;
+        expect(rest.prompt).toContain("Transcribe all of the speech");
+        expect(
+            prompts.every(p => !p.prompt.includes(" only the speech in this recording from "))
+        ).toBe(true);
+        // 600 (chunk) + 180 (cut) + 5 = 785.
+        expect(result.segments!.map(s => [s.start, s.text])).toEqual([
+            [0, "c0 whole"],
+            [600, "c1 opening"],
+            [785, "c1 rest"],
+        ]);
     });
 
     it("says a recording ffmpeg cannot decode can't be read", async () => {

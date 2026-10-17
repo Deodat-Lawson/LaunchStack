@@ -9,28 +9,35 @@
  * The native API takes the real container types and stores large media through
  * the Files API (2 GB, kept 48 h).
  *
- * A recording is transcribed in windows of {@link WINDOW_SECONDS}. One call
- * over a long meeting runs out of output tokens long before Gemini runs out of
- * input (dense Cantonese came to ~620 tokens a minute against a 65,536 cap), and
- * a cut-off JSON reply is lost whole.
- *
- * Where ffmpeg is installed (the app image has it) each window is its own small
- * chunk of the recording, sent inline ({@link splitAudio}). Without it, each
- * window is a prompt over a time range of the whole file, stored once through
- * the Files API; Gemini ignores clip offsets on audio, so every such call is
- * billed — and rate-limited — for the whole file's audio.
+ * A recording is transcribed in chunks of {@link DEFAULT_CHUNK_SECONDS}, each
+ * cut by ffmpeg into its own small MP3 and sent inline ({@link splitAudio}).
+ * Three things measured on a real 82-minute meeting set that design:
+ *   - Output runs out before input: dense Cantonese is ~620 tokens a minute
+ *     against a 65,536 cap, and a cut-off JSON reply is lost whole.
+ *   - Timestamps drift with distance into the audio: 10 s early ten minutes
+ *     into a 30-minute chunk, 40 s late twenty minutes in. Short chunks reset
+ *     the clock often enough for click-to-play to land on the right line.
+ *   - A prompt naming a time range is not reliably obeyed (asked for 30:00–
+ *     60:00 of a long file, flash-lite transcribed minute 2), and Gemini
+ *     ignores clip offsets on audio. So a part of a chunk is asked for again as
+ *     a fresh clip ({@link cutAudio}), never as a range.
+ * Without ffmpeg only recordings that fit one chunk are transcribed (stored
+ * through the Files API when over the inline cap); longer ones fail with a
+ * reason rather than risk a transcript of the wrong minutes.
  */
 import type { TranscriptionResult } from "./index";
 import { TranscriptionError } from "../errors";
-import { splitAudio } from "./ffmpeg-chunks";
+import { cutAudio, splitAudio } from "./ffmpeg-chunks";
 
 export const GEMINI_ROOT = "https://generativelanguage.googleapis.com";
 
 /**
- * Seconds of speech per transcription call: ~19k output tokens of dense speech,
- * well under the cap, and an 82-minute meeting in three calls.
+ * Seconds of speech per transcription call (TRANSCRIPTION_CHUNK_MINUTES).
+ * Ten minutes keeps timestamp drift to seconds and a reply to ~6k tokens; an
+ * 82-minute meeting is nine calls. A free-tier key (20 calls a day) may prefer
+ * longer chunks at the cost of timing.
  */
-export const WINDOW_SECONDS = 30 * 60;
+export const DEFAULT_CHUNK_SECONDS = 10 * 60;
 /** Windows below this are not split further when a reply is cut off. */
 const MIN_WINDOW_SECONDS = 2 * 60;
 const WINDOW_CONCURRENCY = 4;
@@ -127,7 +134,14 @@ export interface NativeTranscribeConfig {
     splitAudio?: typeof splitAudio | null;
     /** Test seam: waits between retries. */
     retryDelaysMs?: number[];
+    /** Seconds per chunk; default {@link DEFAULT_CHUNK_SECONDS}. */
+    chunkSeconds?: number;
+    /** Test seam: cuts part of a chunk into its own clip. */
+    cutAudio?: typeof cutAudio;
 }
+
+/** Media for [start, end) of a chunk, timed from zero. */
+type Recut = (start: number, end: number) => Promise<MediaPart>;
 
 type MediaPart =
     | { inlineData: { mimeType: string; data: string } }
@@ -204,7 +218,7 @@ export function windowPrompt(window: Window, duration: number): string {
 }
 
 /** Contiguous windows covering [0, duration). Exported for tests. */
-export function planWindows(duration: number, size = WINDOW_SECONDS): Window[] {
+export function planWindows(duration: number, size = DEFAULT_CHUNK_SECONDS): Window[] {
     if (duration <= size) return [{ start: 0, end: Math.max(duration, 0) }];
     const windows: Window[] = [];
     for (let start = 0; start < duration; start += size) {
@@ -286,6 +300,14 @@ export function normaliseLanguage(code: string | undefined): string | null {
     }
 }
 
+/** Window transcripts timed from a clip's start, moved to the clip's place. */
+function shiftWindows(parts: WindowTranscript[], by: number): WindowTranscript[] {
+    return parts.map(p => ({
+        ...p,
+        segments: p.segments.map(s => ({ start: s.start + by, end: s.end + by, text: s.text })),
+    }));
+}
+
 async function mapLimit<T, R>(
     items: T[],
     limit: number,
@@ -360,6 +382,13 @@ export class GeminiNativeTranscriber {
         return `${this.config.root}/v1beta`;
     }
 
+    private get chunkSeconds(): number {
+        const seconds = this.config.chunkSeconds;
+        return seconds && Number.isFinite(seconds) && seconds >= 60
+            ? seconds
+            : DEFAULT_CHUNK_SECONDS;
+    }
+
     private headers(json = true): Record<string, string> {
         return {
             "x-goog-api-key": this.config.apiKey,
@@ -421,7 +450,7 @@ export class GeminiNativeTranscriber {
         let chunked: Awaited<ReturnType<typeof splitAudio>> = null;
         if (split) {
             try {
-                chunked = await split(audio, filename, WINDOW_SECONDS);
+                chunked = await split(audio, filename, this.chunkSeconds);
             } catch (error) {
                 throw new TranscriptionError(
                     `ffmpeg could not decode ${filename}: ${error instanceof Error ? error.message : String(error)}`,
@@ -449,10 +478,15 @@ export class GeminiNativeTranscriber {
                     `This recording is ${(duration / 3600).toFixed(1)} hours long; the limit is 9.5 hours. Split it and upload the parts.`
                 );
             }
-            const parts = await mapLimit(planWindows(duration), WINDOW_CONCURRENCY, w =>
-                this.transcribeWindow(media, w, duration)
-            );
-            return this.finish(parts.flat(), duration, filename);
+            if (duration > this.chunkSeconds + 60) {
+                throw new TranscriptionError(
+                    `${filename} is ${Math.round(duration / 60)} min and ffmpeg is not installed to cut it`,
+                    `This server can transcribe recordings up to ${Math.round(this.chunkSeconds / 60)} minutes; ` +
+                        "longer ones need ffmpeg installed on the server. Ask an admin, or split the recording."
+                );
+            }
+            const parts = await this.transcribeWindow(media, { start: 0, end: duration }, duration);
+            return this.finish(parts, duration, filename);
         } finally {
             if (uploaded) await this.deleteFile(uploaded.name);
         }
@@ -464,27 +498,29 @@ export class GeminiNativeTranscriber {
         filename: string
     ): Promise<{ result: TranscriptionResult; tokens: number }> {
         console.log(
-            `[Transcription] ${filename}: ${Math.round(duration)}s in ${chunks.length} chunk(s) of ≤${WINDOW_SECONDS / 60} min`
+            `[Transcription] ${filename}: ${Math.round(duration)}s in ${chunks.length} chunk(s) of ≤${Math.round(this.chunkSeconds / 60)} min`
         );
+        const cut = this.config.cutAudio ?? cutAudio;
         const parts = await mapLimit(chunks, WINDOW_CONCURRENCY, async chunk => {
             const span = chunk.end - chunk.start;
             const media: MediaPart = {
                 inlineData: { mimeType: "audio/mp3", data: chunk.bytes.toString("base64") },
             };
+            const recut: Recut = async (start, end) => ({
+                inlineData: {
+                    mimeType: "audio/mp3",
+                    data: (await cut(chunk.bytes, start, end)).toString("base64"),
+                },
+            });
             const windows = await this.transcribeWindow(
                 media,
                 { start: 0, end: span },
                 span,
-                chunk.start
+                chunk.start,
+                0,
+                recut
             );
-            return windows.map(w => ({
-                ...w,
-                segments: w.segments.map(s => ({
-                    start: s.start + chunk.start,
-                    end: s.end + chunk.start,
-                    text: s.text,
-                })),
-            }));
+            return shiftWindows(windows, chunk.start);
         });
         return this.finish(parts.flat(), duration, filename);
     }
@@ -579,7 +615,9 @@ export class GeminiNativeTranscriber {
         /** Where this media starts in the whole recording, for log lines only. */
         offset = 0,
         /** How many times this window has already been asked to carry on. */
-        continuation = 0
+        continuation = 0,
+        /** Cuts part of this media into its own clip; without it, parts are asked for by time range. */
+        recut?: Recut
     ): Promise<WindowTranscript[]> {
         const label = `${clock(offset + window.start)}–${clock(offset + window.end)}`;
         const started = Date.now();
@@ -634,10 +672,16 @@ export class GeminiNativeTranscriber {
                 ];
             }
             const mid = window.start + span / 2;
-            const halves = await Promise.all([
-                this.transcribeWindow(media, { start: window.start, end: mid }, duration, offset),
-                this.transcribeWindow(media, { start: mid, end: window.end }, duration, offset),
-            ]);
+            const halves = await Promise.all(
+                [
+                    { start: window.start, end: mid },
+                    { start: mid, end: window.end },
+                ].map(half =>
+                    recut
+                        ? this.transcribeCut(recut, half, offset)
+                        : this.transcribeWindow(media, half, duration, offset)
+                )
+            );
             return halves.flat();
         }
 
@@ -676,16 +720,33 @@ export class GeminiNativeTranscriber {
             console.warn(
                 `[Transcription] ${label}: reply stopped at ${clock(offset + lastEnd)}; asking for the rest`
             );
-            const rest = await this.transcribeWindow(
-                media,
-                { start: Math.floor(lastEnd), end: window.end },
-                duration,
-                offset,
-                continuation + 1
-            );
+            const remainder = { start: Math.floor(lastEnd), end: window.end };
+            const rest = recut
+                ? await this.transcribeCut(recut, remainder, offset, continuation + 1)
+                : await this.transcribeWindow(media, remainder, duration, offset, continuation + 1);
             return [part, ...rest];
         }
         return [part];
+    }
+
+    /** [start, end) of a chunk as a fresh clip, transcribed whole, then shifted back into place. */
+    private async transcribeCut(
+        recut: Recut,
+        window: Window,
+        offset: number,
+        continuation = 0
+    ): Promise<WindowTranscript[]> {
+        const span = window.end - window.start;
+        const media = await recut(window.start, window.end);
+        const parts = await this.transcribeWindow(
+            media,
+            { start: 0, end: span },
+            span,
+            offset + window.start,
+            continuation,
+            (start, end) => recut(window.start + start, window.start + end)
+        );
+        return shiftWindows(parts, window.start);
     }
 
     /** Resumable Files API upload, then wait until Gemini has processed it. */

@@ -137,6 +137,7 @@ export async function getCompanyEmbeddingConfig(
     return {
         embeddingIndexKey: indexKey,
         openAIApiKey: creds?.openAIApiKey ?? null,
+        openAIBaseUrl: creds?.openAIBaseUrl ?? null,
         huggingFaceApiKey: creds?.huggingFaceApiKey ?? null,
         ollamaBaseUrl: creds?.ollamaBaseUrl ?? null,
         ollamaModel: creds?.ollamaModel ?? null,

@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_company_embedding_credentials" ADD COLUMN "openai_base_url" text;

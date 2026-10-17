@@ -9,7 +9,7 @@ import { pgTable } from "./helpers";
  * rest via AES-256-GCM (see `src/lib/crypto/secret-box.ts`).
  *
  * Mirrors Onyx's `CloudEmbeddingProvider` shape: non-secret config
- * (Ollama base URL / model) stays plaintext for operator convenience; the
+ * (endpoint URLs, Ollama model) stays plaintext for operator convenience; the
  * two real secrets (OpenAI, Hugging Face) are stored as base64 ciphertext
  * plus a 4-char suffix for UI feedback (`…ab12`).
  *
@@ -23,6 +23,12 @@ export const companyEmbeddingCredentials = pgTable("company_embedding_credential
         .references(() => company.id, { onDelete: "cascade" }),
     openAIApiKeyCiphertext: text("openai_api_key_ciphertext"),
     openAIApiKeyLast4: varchar("openai_api_key_last4", { length: 8 }),
+    /**
+     * The OpenAI-compatible embeddings endpoint the key above belongs to.
+     * Plaintext (not a secret). A company key is only ever sent to this
+     * address, never to the deployment's — see `resolveEffectiveEmbeddingConfig`.
+     */
+    openAIBaseUrl: text("openai_base_url"),
     huggingFaceApiKeyCiphertext: text("huggingface_api_key_ciphertext"),
     huggingFaceApiKeyLast4: varchar("huggingface_api_key_last4", { length: 8 }),
     ollamaBaseUrl: text("ollama_base_url"),

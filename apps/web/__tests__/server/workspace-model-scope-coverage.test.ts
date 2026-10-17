@@ -15,6 +15,16 @@
  * longer calls a model, or an entry point that no longer enters the scope,
  * also fails.
  *
+ * `COVERAGE` only checks the entry points someone thought to list, so a
+ * second check works from the other end: it follows the import graph back
+ * from every call site to every entry point (route handler, page, layout,
+ * server action, Inngest function, worker module). An entry point that can
+ * reach a call site must enter the scope itself, or be recorded in
+ * `NO_MODEL_CALL` with the reason it never calls a model at runtime. Imports
+ * over-approximate calls — a barrel import reaches every module behind it —
+ * which is why the allowlist exists; its reasons are checked against what the
+ * handler actually runs.
+ *
  * Two traps the notes below avoid:
  * - An Inngest `step.run` body does NOT inherit the handler's async context
  *   (inngest 3.x runs it from its own execution loop), so jobs enter the scope
@@ -63,8 +73,10 @@ const MARKETING_REFINE = `${API}/marketing-pipeline/refine/route.ts`;
 /** Every route that drafts an email template (generateTemplate / prepareEmailCampaign). */
 const EMAIL_DRAFTS = [
     `${API}/email-pipeline/generate/route.ts`,
+    `${API}/email-pipeline/send/route.ts`,
     `${API}/email-campaigns/route.ts`,
     `${API}/email-campaigns/[campaignId]/versions/route.ts`,
+    `${API}/email-campaign-runs/route.ts`,
     `${API}/distribution/outreach/route.ts`,
     `${API}/prospects/outreach/route.ts`,
 ];
@@ -286,8 +298,127 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     ["packages/llm/src/public-config.ts", { library: "public route view over the resolver" }],
 ]);
 
+// --- Entry points that reach a call site but never call a model -------------
+
+const PROPOSALS = `${API}/proposals`;
+const PROSPECTS = `${API}/prospects`;
+
+/** Proposals routes that start a run; every model call happens inside the run. */
+const PROPOSAL_RUN_STARTERS = [
+    `${PROPOSALS}/applications/route.ts`,
+    `${PROPOSALS}/applications/[id]/draft/route.ts`,
+    `${PROPOSALS}/applications/[id]/extract/route.ts`,
+    `${PROPOSALS}/applications/[id]/review/route.ts`,
+    `${PROPOSALS}/applications/[id]/sections/[sectionId]/rewrite/route.ts`,
+    `${PROPOSALS}/funders/search/route.ts`,
+];
+/** Proposals routes that only read and edit rows (export also uploads the rendered file). */
+const PROPOSAL_ROWS = [
+    `${PROPOSALS}/applications/[id]/route.ts`,
+    `${PROPOSALS}/applications/[id]/export/route.ts`,
+    `${PROPOSALS}/applications/[id]/markdown/route.ts`,
+    `${PROPOSALS}/applications/[id]/sections/route.ts`,
+    `${PROPOSALS}/applications/[id]/sections/[sectionId]/route.ts`,
+    `${PROPOSALS}/applications/[id]/sections/[sectionId]/library/route.ts`,
+    `${PROPOSALS}/counts/route.ts`,
+    `${PROPOSALS}/funders/route.ts`,
+    `${PROPOSALS}/funders/[id]/route.ts`,
+    `${PROPOSALS}/home/route.ts`,
+    `${PROPOSALS}/library/route.ts`,
+    `${PROPOSALS}/library/[id]/route.ts`,
+    `${PROPOSALS}/runs/route.ts`,
+    `${PROPOSALS}/runs/[id]/route.ts`,
+    `${PROPOSALS}/sources/route.ts`,
+];
+/** Prospects routes over ~/server/prospects/service other than outreach. */
+const PROSPECT_ROWS = [
+    `${PROSPECTS}/companies/route.ts`,
+    `${PROSPECTS}/companies/[id]/route.ts`,
+    `${PROSPECTS}/companies/exclude/route.ts`,
+    `${PROSPECTS}/deals/route.ts`,
+    `${PROSPECTS}/deals/[id]/route.ts`,
+    `${PROSPECTS}/home/route.ts`,
+    `${PROSPECTS}/people/route.ts`,
+    `${PROSPECTS}/runs/[id]/route.ts`,
+    `${PROSPECTS}/runs/[id]/stop/route.ts`,
+    `${PROSPECTS}/segments/route.ts`,
+    `${PROSPECTS}/segments/[id]/route.ts`,
+    `${PROSPECTS}/segments/[id]/confirm/route.ts`,
+    `${PROSPECTS}/segments/[id]/derive/route.ts`,
+    `${PROSPECTS}/sources/route.ts`,
+    `${PROSPECTS}/sources/[id]/route.ts`,
+];
+
+/**
+ * Entry points whose imports reach a chat call site but whose handlers never
+ * call a model, each with the reason. The reason must hold for what the
+ * handler runs — inline, through a promise it does not await, in after(), or
+ * in a pipeline function it calls — not merely for what it imports. A route
+ * that only queues an Inngest job belongs here; the job enters the scope in
+ * its own step and is checked on its own.
+ */
+const NO_MODEL_CALL: Record<string, string> = {
+    ...Object.fromEntries(
+        PROPOSAL_RUN_STARTERS.map(file => [
+            file,
+            "model work only inside startProposalRun: executor enters the scope in after(), the worker in proposalsRun's execute step",
+        ])
+    ),
+    ...Object.fromEntries(
+        PROPOSAL_ROWS.map(file => [
+            file,
+            "reads and edits proposal rows; the service reaches the pipeline's ports only through startProposalRun, never called here",
+        ])
+    ),
+    ...Object.fromEntries(
+        PROSPECT_ROWS.map(file => [
+            file,
+            "reads and edits prospect rows or answers 409; the service reaches the email pipeline only for draftOutreach (prospects/outreach)",
+        ])
+    ),
+    [`${API}/client-prospector/route.ts`]:
+        "POST only queues client-prospector/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
+    [`${API}/trend-search/route.ts`]:
+        "POST only queues trend-search/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
+    [`${API}/distribution/runs/route.ts`]:
+        "sample runs use fixture ports (scripted model, built plan); live runs queue distribution/run.requested, whose steps scope",
+    [`${PROSPECTS}/runs/route.ts`]:
+        "sample and keyless runs use fixture or keyless ports (no model); live runs queue distribution/run.requested, whose steps scope",
+    [`${API}/company/onboarding/route.ts`]:
+        "saves profile facts; the reassembly it asks for enters the scope itself in company-profile/service's after()",
+    [`${API}/document-generator/research/route.ts`]:
+        "takes getEmbeddings from the Q&A services barrel; Exa, arXiv and retrieval only, no chat model",
+    [`${API}/email-campaigns/[campaignId]/route.ts`]: "getCampaign reads rows",
+    [`${API}/email-campaigns/[campaignId]/approve/route.ts`]:
+        "approveEmailCampaign records a human approval of an existing version; nothing is generated",
+    [`${API}/email-campaigns/[campaignId]/send/route.ts`]:
+        "dispatchEmailCampaign delivers an approved version; nothing is generated",
+    [`${API}/email-pipeline/unsubscribe/[token]/route.ts`]:
+        "verifies an unsubscribe token and records a suppression",
+    [`${API}/marketing-pipeline/publish/route.ts`]:
+        "posts text that is already written and marks history; the marketing barrel is imported for its platform enum",
+    [`${API}/repo-explainer/publish/route.ts`]:
+        "renders a finished explanation to markdown and uploads it with the repo-explainer barrel's pure helpers",
+    [`${API}/repo-workspaces/route.ts`]:
+        "parseGitHubUrl from the repo-explainer barrel; queues repo-workspace/sync.requested, which calls no model",
+    [`${API}/vantage/overview/route.ts`]:
+        "loadOverview reads rows; only prepareWeek (vantage/agendas) resolves a model",
+    [`${API}/vantage/triage/route.ts`]:
+        "loadTriage reads rows; only prepareWeek (vantage/agendas) resolves a model",
+};
+
+// --- Source scanning ----------------------------------------------------------
+
+/**
+ * Source with comments removed and string literals kept, so a commented-out
+ * call or import counts for nothing while "//" or "/*" inside a string (a URL,
+ * a MIME glob) cuts nothing.
+ */
 function stripComments(source: string): string {
-    return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`\\])\/\/.*$/gm, "$1");
+    return source.replace(
+        /("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\[\s\S]|[^`\\])*`)|\/\*[\s\S]*?\*\/|\/\/[^\n]*/g,
+        (_match: string, literal: string | undefined) => literal ?? ""
+    );
 }
 
 function walk(dir: string): string[] {
@@ -312,10 +443,216 @@ function read(file: string): string {
     return fs.readFileSync(path.join(ROOT, file), "utf8");
 }
 
-const callSites = SCANNED.flatMap(dir => walk(path.join(ROOT, dir)))
-    .filter(file => CHAT_CALL.test(stripComments(fs.readFileSync(file, "utf8"))))
-    .map(file => path.relative(ROOT, file).split(path.sep).join("/"))
+/** Every scanned file (repo-relative, forward slashes) → its source without comments. */
+const CODE = new Map<string, string>(
+    SCANNED.flatMap(dir => walk(path.join(ROOT, dir))).map(file => [
+        path.relative(ROOT, file).split(path.sep).join("/"),
+        stripComments(fs.readFileSync(file, "utf8")),
+    ])
+);
+
+const callSites = [...CODE]
+    .filter(([, code]) => CHAT_CALL.test(code))
+    .map(([file]) => file)
     .sort();
+
+// --- The import graph -----------------------------------------------------------
+
+/** Workspace packages by name: where each lives and what its "exports" map says. */
+const PACKAGES = new Map<string, { dir: string; exports: unknown }>();
+for (const dir of [
+    ...fs.readdirSync(path.join(ROOT, "packages")).map(name => `packages/${name}`),
+    "pipelines",
+]) {
+    const manifest = path.join(ROOT, dir, "package.json");
+    if (!fs.existsSync(manifest)) continue;
+    const json = JSON.parse(fs.readFileSync(manifest, "utf8")) as {
+        name?: string;
+        exports?: unknown;
+    };
+    if (json.name) PACKAGES.set(json.name, { dir, exports: json.exports ?? {} });
+}
+
+/** The path an "exports" value points at: a string, or the first usable condition. */
+function exportTarget(value: unknown): string | null {
+    if (typeof value === "string") return value;
+    if (value === null || typeof value !== "object") return null;
+    const conditions = value as Record<string, unknown>;
+    for (const condition of ["default", "import", "node", "require", "types"]) {
+        const target = exportTarget(conditions[condition]);
+        if (target) return target;
+    }
+    return null;
+}
+
+/** `@launchstack/<name>/<subpath>` → the repo path its "exports" map names, "./*" patterns included. */
+function resolvePackage(specifier: string): string | null {
+    const match = /^(@launchstack\/[^/]+)(\/.*)?$/.exec(specifier);
+    const pkg = match ? PACKAGES.get(match[1]!) : undefined;
+    if (!match || !pkg) return null;
+    const subpath = `.${match[2] ?? ""}`;
+    const exportsMap =
+        typeof pkg.exports === "string"
+            ? { ".": pkg.exports }
+            : (pkg.exports as Record<string, unknown>);
+
+    let target = exportTarget(exportsMap[subpath]);
+    if (!target) {
+        // Node picks the pattern with the longest prefix before its "*".
+        let bestPrefix = -1;
+        for (const [key, value] of Object.entries(exportsMap)) {
+            const star = key.indexOf("*");
+            if (star < 0) continue;
+            const prefix = key.slice(0, star);
+            const suffix = key.slice(star + 1);
+            if (
+                prefix.length <= bestPrefix ||
+                subpath.length < prefix.length + suffix.length ||
+                !subpath.startsWith(prefix) ||
+                !subpath.endsWith(suffix)
+            )
+                continue;
+            const pattern = exportTarget(value);
+            if (!pattern) continue;
+            bestPrefix = prefix.length;
+            target = pattern.replace(
+                "*",
+                subpath.slice(prefix.length, subpath.length - suffix.length)
+            );
+        }
+    }
+    return target ? path.posix.join(pkg.dir, target) : null;
+}
+
+/**
+ * A workspace module specifier → the scanned file it loads, else the repo
+ * path it names (a stylesheet, a file outside the scan), else null.
+ */
+function resolveSpecifier(specifier: string, from: string): string | null {
+    let base: string | null = null;
+    if (specifier.startsWith(".")) base = path.posix.join(path.posix.dirname(from), specifier);
+    else if (specifier.startsWith("~/")) base = `apps/web/src/${specifier.slice(2)}`;
+    else if (specifier.startsWith("@launchstack/")) base = resolvePackage(specifier);
+    if (base === null) return null;
+    const stem = base.replace(/\.(js|mjs|ts|tsx|mts)$/, "");
+    for (const candidate of [
+        base,
+        `${stem}.ts`,
+        `${stem}.tsx`,
+        `${stem}.mts`,
+        `${stem}/index.ts`,
+        `${stem}/index.tsx`,
+    ])
+        if (CODE.has(candidate)) return candidate;
+    return base;
+}
+
+const isWorkspaceSpecifier = (specifier: string) => /^(\.|~\/|@launchstack\/)/.test(specifier);
+
+/** `import type …`, `export type …`, and braces holding only `type` names load nothing. */
+function isTypeOnly(typeKeyword: string | undefined, clause: string): boolean {
+    if (typeKeyword) return true;
+    const braces = /^\{([\s\S]*)\}$/.exec(clause.trim());
+    if (!braces) return false;
+    const names = braces[1]!
+        .split(",")
+        .map(name => name.trim())
+        .filter(Boolean);
+    return names.length > 0 && names.every(name => name.startsWith("type "));
+}
+
+/** Every value import in `code`: static, re-export, side-effect, `import()`, `require()`. */
+function valueImports(code: string): string[] {
+    const out: string[] = [];
+    for (const match of code.matchAll(
+        /^[ \t]*(?:import|export)\s+(type\s+)?([\w$*{},\s]*?)\s*from\s*["']([^"'\n]+)["']/gm
+    )) {
+        if (!isTypeOnly(match[1], match[2]!)) out.push(match[3]!);
+    }
+    for (const match of code.matchAll(/^[ \t]*import\s*["']([^"'\n]+)["']/gm)) out.push(match[1]!);
+    for (const match of code.matchAll(/\b(?:import|require)\(\s*["']([^"'\n]+)["']\s*\)/g))
+        out.push(match[1]!);
+    return out;
+}
+
+/** File → the scanned files that import it; plus the imports nothing could resolve. */
+const importers = new Map<string, Set<string>>();
+const unresolvedImports: string[] = [];
+for (const [file, code] of CODE) {
+    for (const specifier of valueImports(code)) {
+        if (!isWorkspaceSpecifier(specifier)) continue;
+        const target = resolveSpecifier(specifier, file);
+        if (target === null || (!CODE.has(target) && !fs.existsSync(path.join(ROOT, target)))) {
+            unresolvedImports.push(`${file}: ${specifier}`);
+            continue;
+        }
+        if (!CODE.has(target)) continue;
+        let set = importers.get(target);
+        if (!set) importers.set(target, (set = new Set()));
+        set.add(file);
+    }
+}
+
+const WORKER = "apps/worker/src/";
+
+/** Where work for a workspace starts: requests, pages, server actions, jobs, the worker. */
+function isEntryPoint(file: string): boolean {
+    return (
+        /^apps\/web\/src\/app\/(?:.*\/)?(?:route|page|layout|template|default|not-found)\.tsx?$/.test(
+            file
+        ) ||
+        /^apps\/web\/src\/app\/(?:.*\/)?actions\.tsx?$/.test(file) ||
+        /^\s*["']use server["']/.test(CODE.get(file) ?? "") ||
+        /^apps\/web\/src\/(?:middleware|instrumentation)\.ts$/.test(file) ||
+        file.startsWith(`${JOBS}/`) ||
+        file.startsWith(WORKER)
+    );
+}
+
+const entersScope = (file: string) =>
+    /\b(?:withWorkspaceChatModels|runWithChatModelsScope)\s*\(/.test(CODE.get(file) ?? "");
+
+/**
+ * Where reachability starts: every call site except the resolver itself
+ * (packages/llm, the app's wrapper) and the files that deliberately use the
+ * deployment's models — their callers are recorded on their own.
+ */
+const seeds = callSites.filter(file => {
+    const coverage = COVERAGE[file];
+    if (file.startsWith("packages/llm/")) return false;
+    return !(coverage && ("library" in coverage || "unscoped" in coverage));
+});
+
+/**
+ * Walk the graph backwards from the seeds. `toward` records, for each file
+ * reached, the file it imports on the way to a seed, so a failure can print
+ * the chain. A file that enters the scope covers everything it calls, and
+ * nothing imports a route or a job to call it (the Inngest serve route imports
+ * every job only to register it), so the walk stops at both. Worker modules
+ * are entry points that import each other, so the walk continues through them.
+ */
+const toward = new Map<string, string | null>(seeds.map(seed => [seed, null]));
+const reachedEntryPoints: string[] = [];
+{
+    const queue = [...seeds];
+    for (let file = queue.shift(); file !== undefined; file = queue.shift()) {
+        if (isEntryPoint(file)) reachedEntryPoints.push(file);
+        if (entersScope(file)) continue;
+        if (isEntryPoint(file) && !file.startsWith(WORKER)) continue;
+        for (const importer of importers.get(file) ?? []) {
+            if (toward.has(importer)) continue;
+            toward.set(importer, file);
+            queue.push(importer);
+        }
+    }
+    reachedEntryPoints.sort();
+}
+
+function chainFrom(file: string): string {
+    const chain: string[] = [];
+    for (let at: string | null | undefined = file; at; at = toward.get(at)) chain.push(at);
+    return chain.join("\n      -> ");
+}
 
 describe("workspace model scope coverage", () => {
     it("finds the call sites it guards", () => {
@@ -354,5 +691,43 @@ describe("workspace model scope coverage", () => {
             }
         }
         expect([...notScoping]).toEqual([]);
+    });
+});
+
+describe("workspace model scope reachability", () => {
+    it("resolves every workspace import it follows", () => {
+        // An import the graph cannot follow is a blind spot, not a pass.
+        expect(unresolvedImports).toEqual([]);
+    });
+
+    it("reaches the entry points it guards", () => {
+        // A broken graph would pass the next assertion vacuously.
+        expect(reachedEntryPoints.length).toBeGreaterThan(40);
+        expect(reachedEntryPoints).toContain(`${API}/email-campaigns/route.ts`);
+    });
+
+    it("finds no entry point that can reach a model outside its workspace's scope", () => {
+        const leaks = reachedEntryPoints.filter(
+            file => !entersScope(file) && !(file in NO_MODEL_CALL)
+        );
+        if (leaks.length > 0) {
+            throw new Error(
+                `These entry points can reach a chat call site and never enter the workspace's scope:\n\n    ${leaks
+                    .map(chainFrom)
+                    .join("\n\n    ")}\n\n` +
+                    "If the handler can call a model at runtime (inline, in after(), through a " +
+                    "pipeline or tool), wrap its body after auth in withWorkspaceChatModels. If it " +
+                    "only imports the module (a barrel, a schema, a pure helper) or only queues a " +
+                    "job, record it in NO_MODEL_CALL with the reason."
+            );
+        }
+    });
+
+    it("keeps NO_MODEL_CALL honest", () => {
+        const stale = Object.keys(NO_MODEL_CALL).filter(
+            file => !reachedEntryPoints.includes(file) || entersScope(file)
+        );
+        // Each of these no longer reaches a call site, or now enters the scope: drop it.
+        expect(stale).toEqual([]);
     });
 });

@@ -6,6 +6,7 @@ import {
     mediaKindOfName,
     mediaMimeFromName,
     normalizeSegments,
+    storedTranslationOf,
     stripTranscriptSuffix,
     transcriptMarkerOf,
     transcriptMediaKind,
@@ -71,12 +72,36 @@ describe("transcriptMarkerOf", () => {
             mediaMimeType: "video/mp4",
             videoUrl: null,
             language: "en",
+            languages: null,
             durationSeconds: null,
             segments: [
                 { start: 0, end: 3.5, text: "Welcome." },
                 { start: 3.5, end: 9, text: "Agenda." },
             ],
+            translations: [],
         });
+    });
+
+    it("reads the languages heard, the length and the stored translations", () => {
+        const marker = transcriptMarkerOf({
+            ...UPLOAD_TRANSCRIPT,
+            language: "YUE",
+            languages: ["yue", "en", "en", "not a code!"],
+            durationSeconds: 4914.2,
+            translations: { en: { lines: ["Welcome.", "Agenda."] }, "zh-hant": { lines: [] } },
+        });
+        expect(marker).toMatchObject({
+            language: "yue",
+            languages: ["yue", "en"],
+            durationSeconds: 4914.2,
+            translations: ["en", "zh-Hant"],
+        });
+    });
+
+    it("treats an unknown language as none", () => {
+        expect(
+            transcriptMarkerOf({ ...UPLOAD_TRANSCRIPT, language: "unknown" })?.language
+        ).toBeNull();
     });
 
     it("reads a URL import's transcript", () => {
@@ -268,5 +293,35 @@ describe("getDocumentDisplayType for media", () => {
         expect(
             getDocumentDisplayType({ url: "/api/files/2", mimeType: "text/plain", title: "x" })
         ).toBe("text");
+    });
+});
+
+describe("storedTranslationOf", () => {
+    const metadata = {
+        ...UPLOAD_TRANSCRIPT,
+        translations: {
+            en: {
+                lines: ["Hello.", "Agenda."],
+                model: "gemini-3.8-flash",
+                translatedAt: "2026-10-17",
+            },
+            fr: { lines: ["Bonjour."] },
+            de: { lines: ["Hallo", 3] },
+        },
+    };
+
+    it("returns a translation that lines up with the transcript", () => {
+        expect(storedTranslationOf(metadata, "en", 2)).toEqual({
+            lines: ["Hello.", "Agenda."],
+            model: "gemini-3.8-flash",
+            translatedAt: "2026-10-17",
+        });
+    });
+
+    it("ignores a translation with the wrong number of lines, or not all text", () => {
+        expect(storedTranslationOf(metadata, "fr", 2)).toBeNull();
+        expect(storedTranslationOf(metadata, "de", 2)).toBeNull();
+        expect(storedTranslationOf(metadata, "es", 2)).toBeNull();
+        expect(storedTranslationOf(null, "en", 2)).toBeNull();
     });
 });

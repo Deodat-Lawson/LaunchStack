@@ -80,10 +80,69 @@ export interface TranscriptMarker {
     mediaMimeType: string | null;
     /** The page the transcript was pulled from, for a URL import. */
     videoUrl: string | null;
+    /** Main spoken language, a BCP-47 code; null when the transcriber could not tell. */
     language: string | null;
+    /** Every language heard, main one first, when the transcriber reported them. */
+    languages: string[] | null;
     durationSeconds: number | null;
     /** Timestamped spans, or null when the transcriber reported none. */
     segments: TranscriptSegment[] | null;
+    /** Languages this transcript has a stored translation into. */
+    translations: string[];
+}
+
+/**
+ * A stored translation (`ocrMetadata.translations[code]`): one line per
+ * transcript line — per segment when there are segments, else per text line —
+ * so each keeps its original's timestamp.
+ */
+export interface StoredTranscriptTranslation {
+    lines: string[];
+    model: string;
+    translatedAt: string;
+}
+
+/** `POST /api/documents/[id]/transcript/translations`: the lines, in order, and whether they were stored already. */
+export interface TranscriptTranslationResponse {
+    language: string;
+    lines: string[];
+    cached: boolean;
+}
+
+/** The stored translation into `language`, when it is complete for `lineCount` lines. */
+export function storedTranslationOf(
+    ocrMetadata: unknown,
+    language: string,
+    lineCount: number
+): StoredTranscriptTranslation | null {
+    if (!ocrMetadata || typeof ocrMetadata !== "object" || Array.isArray(ocrMetadata)) return null;
+    const translations = (ocrMetadata as Record<string, unknown>).translations;
+    if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
+        return null;
+    }
+    const entry = (translations as Record<string, unknown>)[language];
+    if (!entry || typeof entry !== "object") return null;
+    const { lines, model, translatedAt } = entry as Record<string, unknown>;
+    if (!Array.isArray(lines) || lines.length !== lineCount) return null;
+    const text = lines.filter((l): l is string => typeof l === "string");
+    if (text.length !== lines.length) return null;
+    return {
+        lines: text,
+        model: typeof model === "string" ? model : "",
+        translatedAt: typeof translatedAt === "string" ? translatedAt : "",
+    };
+}
+
+/** "  zh_hant " → "zh-Hant"; null for anything that is not a language tag. */
+export function canonicalLanguage(code: unknown): string | null {
+    if (typeof code !== "string") return null;
+    const raw = code.trim().replace(/_/g, "-");
+    if (!raw || raw.length > 20 || /^(und|unknown)$/i.test(raw)) return null;
+    try {
+        return Intl.getCanonicalLocales(raw)[0] ?? null;
+    } catch {
+        return null;
+    }
 }
 
 const MARKER_SOURCES: Record<string, TranscriptOrigin> = {
@@ -97,6 +156,12 @@ function stringOrNull(value: unknown): string | null {
 
 function finiteOrNull(value: unknown): number | null {
     return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function languagesOrNull(value: unknown): string[] | null {
+    if (!Array.isArray(value)) return null;
+    const codes = [...new Set(value.flatMap(v => canonicalLanguage(v) ?? []))];
+    return codes.length > 0 ? codes : null;
 }
 
 /**
@@ -138,9 +203,16 @@ export function transcriptMarkerOf(ocrMetadata: unknown): TranscriptMarker | nul
         mediaFilename: stringOrNull(record.audioFilename),
         mediaMimeType: stringOrNull(record.mediaMimeType),
         videoUrl: stringOrNull(record.videoUrl),
-        language: stringOrNull(record.language),
+        language: canonicalLanguage(record.language),
+        languages: languagesOrNull(record.languages),
         durationSeconds: finiteOrNull(record.videoDuration) ?? finiteOrNull(record.durationSeconds),
         segments: normalizeSegments(record.segments),
+        translations:
+            record.translations &&
+            typeof record.translations === "object" &&
+            !Array.isArray(record.translations)
+                ? Object.keys(record.translations).flatMap(k => canonicalLanguage(k) ?? [])
+                : [],
     };
 }
 
@@ -226,7 +298,11 @@ export interface MediaPreview {
         documentId: number;
         title: string;
         language: string | null;
+        /** Every language heard, main one first; null when not reported. */
+        languages: string[] | null;
         segments: TranscriptSegment[] | null;
+        /** Languages with a stored translation, ready without a wait. */
+        translations: string[];
     } | null;
     durationSeconds: number | null;
 }

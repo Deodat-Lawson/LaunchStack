@@ -46,6 +46,8 @@ export interface ChatTurnMetadata {
     send?: ChatSendPayload;
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     chunksAnalyzed?: number;
+    /** Web pages the answer was shown, in its [Source N] order. */
+    webSources?: { title: string; url: string }[];
 }
 
 export interface ChatQueueItem {

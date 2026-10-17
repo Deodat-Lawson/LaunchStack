@@ -69,6 +69,8 @@ export interface WebSource {
 
 export interface WebSearchInfo {
     refinedQuery?: string;
+    /** What the model searched for, in order. */
+    queries?: string[];
     reasoning?: string;
     resultsCount?: number;
 }

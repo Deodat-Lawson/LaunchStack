@@ -18,7 +18,6 @@ import type { DocumentScope } from "~/lib/authz/scope-types";
 import { recordAuthzDenied } from "~/server/metrics/authz";
 import { documentEnsembleSearch, multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import { resolveConfiguredChatModel, resolveConfiguredChatRoute } from "~/lib/models";
-import { performWebSearch } from "~/app/api/agents/documentQ&A/services";
 import type { ChatModelBehavior, ChatReasoningBehavior } from "@launchstack/llm/types";
 import type { AppliedReasoning } from "@launchstack/llm/chat-model-factory";
 import type * as ChatModelFactory from "@launchstack/llm/chat-model-factory";
@@ -154,11 +153,7 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 
 jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     normalizeModelContent: (content: unknown) => String(content),
-    performWebSearch: jest
-        .fn()
-        .mockResolvedValue({ content: "", results: [], refinedQuery: "", reasoning: "" }),
     getSystemPrompt: () => "system",
-    getWebSearchInstruction: () => "",
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
     buildReferences: () => [],
@@ -167,6 +162,15 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
 
 const mockInvoke = jest.fn();
 const mockStream = jest.fn();
+/** Tools are bound on the same scripted model; the specs are recorded. */
+const mockBindTools = jest.fn(() => ({ invoke: mockInvoke, stream: mockStream }));
+let mockSearchProvider: "exa" | null = null;
+const mockSearchWeb = jest.fn();
+jest.mock("@launchstack/tools/web-research", () => ({
+    configuredWebSearchProvider: () => mockSearchProvider,
+    searchWeb: (...args: unknown[]) => mockSearchWeb(...args),
+    fetchReadable: jest.fn(),
+}));
 let mockBehavior: Record<string, unknown> = {};
 let mockMeteringEnabled = false;
 let mockUsage: { inputTokens?: number; outputTokens?: number; totalTokens?: number } = {
@@ -190,7 +194,7 @@ jest.mock("~/lib/models", () => ({
     }),
     resolveConfiguredChatModel: jest.fn(() => ({
         modelId: "gpt-4o-mini",
-        chat: { invoke: mockInvoke, stream: mockStream },
+        chat: { invoke: mockInvoke, stream: mockStream, bindTools: mockBindTools },
         behavior: mockBehavior,
         prepareMessages: (messages: unknown) => messages,
     })),
@@ -223,6 +227,18 @@ jest.mock("~/server/chat-request-compat", () => ({
 jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => mockUsage,
+    addTokenUsage: (
+        a: Record<string, number | undefined>,
+        b: Record<string, number | undefined>
+    ) => {
+        const add = (x?: number, y?: number) =>
+            x === undefined && y === undefined ? undefined : (x ?? 0) + (y ?? 0);
+        return {
+            inputTokens: add(a.inputTokens, b.inputTokens),
+            outputTokens: add(a.outputTokens, b.outputTokens),
+            totalTokens: add(a.totalTokens, b.totalTokens),
+        };
+    },
     getChatModelsSource: () => mockChatSource,
 }));
 
@@ -268,6 +284,17 @@ jest.mock("@langchain/core/messages", () => ({
                 content && typeof content === "object" && "content" in content
                     ? content.content
                     : content;
+        }
+    },
+    // The tool loop's history entries: the model's call and the tool's result.
+    AIMessage: class {
+        constructor(fields: Record<string, unknown>) {
+            Object.assign(this, { kind: "ai" }, fields);
+        }
+    },
+    ToolMessage: class {
+        constructor(fields: Record<string, unknown>) {
+            Object.assign(this, { kind: "tool" }, fields);
         }
     },
 }));
@@ -744,12 +771,8 @@ describe("chat transport and general scope", () => {
                 expect(applications).toEqual([
                     expect.objectContaining({ enabled, requestPatch: patch }),
                 ]);
-                expect(performWebSearch).toHaveBeenCalledWith(
-                    expect.any(String),
-                    undefined,
-                    true,
-                    5
-                );
+                // No search provider key: no tools offered, one plain model call.
+                expect(mockBindTools).not.toHaveBeenCalled();
             }
         );
 
@@ -826,12 +849,7 @@ describe("chat transport and general scope", () => {
                         reasoningControl: { enabled: false, effort: undefined },
                     })
                 );
-                expect(performWebSearch).toHaveBeenCalledWith(
-                    expect.any(String),
-                    undefined,
-                    false,
-                    5
-                );
+                expect(mockBindTools).not.toHaveBeenCalled();
                 expect(await response.json()).toMatchObject({
                     agent: {
                         notes: [
@@ -866,7 +884,7 @@ describe("chat transport and general scope", () => {
                 requestPatch: { think: false },
             });
             expect(resolveConfiguredChatRoute).not.toHaveBeenCalled();
-            expect(performWebSearch).toHaveBeenCalledWith(expect.any(String), undefined, false, 5);
+            expect(mockBindTools).not.toHaveBeenCalled();
         });
 
         it("keeps explicit true API reasoning strict for an unsupported model", async () => {
@@ -1596,5 +1614,234 @@ describe("selected passages", () => {
         const prompt = userPrompt();
         expect(prompt).toContain(`Selected passage 1 — "Pasted text":\n"""\n${PASSAGE}\n"""`);
         expect(prompt).not.toContain("Surrounding text");
+    });
+});
+
+describe("web search as a tool the model calls", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: {
+            temperature: "supported",
+            systemMessages: "supported",
+            streaming: "supported",
+            maxOutputTokens: "supported",
+        },
+    };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        useContext({ role: "owner" });
+        mockBehavior = TOOL_MODEL;
+        mockSearchProvider = "exa";
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockStream.mockReset();
+        mockSearchWeb.mockReset().mockResolvedValue({
+            provider: "exa",
+            results: [
+                {
+                    title: "Launch week recap",
+                    url: "https://news.example.com/launch-week",
+                    snippet: "Three products shipped on October 15.",
+                },
+            ],
+        });
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+    });
+
+    afterAll(() => {
+        mockSearchProvider = null;
+        mockBehavior = {};
+    });
+
+    const toolNames = () =>
+        (mockBindTools.mock.calls[0] as unknown as [{ function: { name: string } }[]])[0].map(
+            tool => tool.function.name
+        );
+
+    it("answers a question that needs no web with one model call and no search", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "17 × 23 = 391.", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({
+                question: "What is 17 × 23?",
+                searchScope: "none",
+                enableWebSearch: true,
+            })
+        );
+
+        expect(response.status).toBe(200);
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(body).toMatchObject({ success: true, summarizedAnswer: "17 × 23 = 391." });
+        expect(body.webSources).toBeUndefined();
+        expect(body.webSearch).toBeUndefined();
+        // The tools were offered; the model answered without them.
+        expect(toolNames()).toEqual(["search_web", "fetch_page"]);
+        // No extra latency: one model call, no search, and no query-rewriting
+        // call on another route before it.
+        expect(mockInvoke).toHaveBeenCalledTimes(1);
+        expect(mockSearchWeb).not.toHaveBeenCalled();
+        expect(resolveConfiguredChatModel).toHaveBeenCalledTimes(1);
+        const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+        expect(messages[0]?.content).toContain("## Web search");
+        expect(messages[0]?.content).toContain("Do not search for arithmetic");
+    });
+
+    it("searches when the model calls search_web and returns the sources it cites", async () => {
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [
+                    { id: "call_1", name: "search_web", args: { query: "launch week news" } },
+                ],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({
+                content: "Three products shipped this week [Source 1].",
+                response_metadata: {},
+            });
+
+        const response = await POST(
+            queryRequest({
+                question: "What shipped this week?",
+                searchScope: "none",
+                enableWebSearch: true,
+            })
+        );
+
+        expect(response.status).toBe(200);
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(mockSearchWeb).toHaveBeenCalledTimes(1);
+        expect(mockSearchWeb).toHaveBeenCalledWith("launch week news", expect.anything());
+        expect(mockInvoke).toHaveBeenCalledTimes(2);
+        const [followUp] = mockInvoke.mock.calls[1] as [Record<string, unknown>[]];
+        expect(followUp.find(m => m.kind === "tool")).toMatchObject({
+            tool_call_id: "call_1",
+            content: expect.stringContaining("[Source 1] Launch week recap"),
+        });
+        expect(body).toMatchObject({
+            success: true,
+            summarizedAnswer: "Three products shipped this week [Source 1].",
+            webSources: [
+                {
+                    title: "Launch week recap",
+                    url: "https://news.example.com/launch-week",
+                    snippet: "Three products shipped on October 15.",
+                },
+            ],
+            webSearch: { queries: ["launch week news"], resultsCount: 1 },
+            // Both model calls are metered.
+            tokenUsage: { inputTokens: 20, outputTokens: 4, totalTokens: 24 },
+        });
+    });
+
+    it("streams a Searching… status while the tool runs", async () => {
+        const chunk = (content: string, toolCalls?: unknown[]): Record<string, unknown> => ({
+            content,
+            tool_calls: toolCalls ?? [],
+            additional_kwargs: {},
+            response_metadata: {},
+            concat(other: { content: string; tool_calls: unknown[] }) {
+                return chunk(content + other.content, [...(toolCalls ?? []), ...other.tool_calls]);
+            },
+        });
+        mockStream
+            .mockImplementationOnce(async function* () {
+                yield chunk("", [{ id: "call_1", name: "search_web", args: { query: "news" } }]);
+            })
+            .mockImplementationOnce(async function* () {
+                yield chunk("The news [Source 1].");
+            });
+
+        const response = await POST(
+            queryRequest({
+                question: "What is in the news?",
+                searchScope: "none",
+                enableWebSearch: true,
+                stream: true,
+            })
+        );
+
+        const events = (await response.text())
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line) as Record<string, unknown>);
+        expect(events.filter(event => event.type === "status").map(event => event.status)).toEqual([
+            "generating",
+            "Searching the web for “news”",
+            "generating",
+            "finalizing",
+        ]);
+        expect(events.find(event => event.type === "result")?.response).toMatchObject({
+            summarizedAnswer: "The news [Source 1].",
+            webSources: [expect.objectContaining({ url: "https://news.example.com/launch-week" })],
+        });
+    });
+
+    it("offers no tools without a search provider key, and the prompt never mentions them", async () => {
+        mockSearchProvider = null;
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "hi", searchScope: "none", enableWebSearch: true }));
+
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(mockInvoke).toHaveBeenCalledTimes(1);
+        const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+        expect(messages[0]?.content).not.toContain("Web search");
+        expect(messages[1]?.content).not.toContain("[Source");
+    });
+
+    it("offers no tools to a model that does not declare tool calling", async () => {
+        mockBehavior = { ...TOOL_MODEL, nativeStructuredOutput: ["json-schema"] };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "hi", searchScope: "none", enableWebSearch: true }));
+
+        expect(mockBindTools).not.toHaveBeenCalled();
+    });
+
+    it("offers the tools on a workspace's own model, which has no tool-calling setting", async () => {
+        mockBehavior = { ...TOOL_MODEL, nativeStructuredOutput: [] };
+        mockChatSource = "workspace";
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(
+                queryRequest({ question: "hi", searchScope: "none", enableWebSearch: true })
+            );
+            expect(toolNames()).toEqual(["search_web", "fetch_page"]);
+        } finally {
+            mockChatSource = "deployment";
+        }
+    });
+
+    it("offers no tools when the turn did not ask for web search", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "hi", searchScope: "none", enableWebSearch: false }));
+
+        expect(mockBindTools).not.toHaveBeenCalled();
+    });
+
+    it("keeps the agent's web permission as the gate", async () => {
+        mockAgentTools = ["retrieval"];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            const response = await POST(
+                queryRequest({
+                    question: "What is in the news?",
+                    searchScope: "none",
+                    enableWebSearch: true,
+                    agentKey: "restricted",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(mockBindTools).not.toHaveBeenCalled();
+            expect(mockSearchWeb).not.toHaveBeenCalled();
+        } finally {
+            mockAgentTools = null;
+        }
     });
 });

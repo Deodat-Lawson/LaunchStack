@@ -74,6 +74,7 @@ import { ChatMarkdown } from "./ChatMarkdown";
 import { PassageCard } from "./PassageCard";
 import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
+import { WebSources } from "./WebSources";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -999,6 +1000,7 @@ const Message = React.memo(function Message({
                     })}
                 </div>
             )}
+            {msg.webSources && <WebSources sources={msg.webSources} />}
             {(msg.hiddenCitations ?? 0) > 0 && (
                 <p
                     className="text-ink-3 m-0 mt-2 flex items-center gap-1.5 text-[11px]"

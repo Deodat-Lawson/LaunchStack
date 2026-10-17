@@ -344,26 +344,6 @@ export const UpdateUploadPreferenceSchema = z.object({
 });
 
 // ============================================================================
-// RLM (Recursive Language Model) Query Schema
-// ============================================================================
-
-const semanticTypeOptions = [
-    "narrative",
-    "procedural",
-    "tabular",
-    "legal",
-    "financial",
-    "technical",
-    "reference",
-] as const;
-
-const prioritizeOptions = ["start", "end", "relevance"] as const;
-
-/**
- * Schema for RLM-style hierarchical document queries
- * Extends QuestionSchema with cost-aware retrieval options
- */
-// ============================================================================
 // Signup & Auth Schemas
 // ============================================================================
 
@@ -740,58 +720,6 @@ export const UpdateExecutionStepSchema = z.object({
     output: z.unknown().optional(),
     reasoning: z.string().max(10000).optional(),
 });
-
-// ============================================================================
-// RLM (Recursive Language Model) Query Schema
-// ============================================================================
-
-export const RLMQuestionSchema = z
-    .object({
-        documentId: z.number().int().positive("Document ID must be a positive integer"),
-        question: z.string().min(1, "Question is required"),
-        // Standard options
-        style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-        enableWebSearch: z.boolean().optional().default(false),
-        aiPersona: z.enum(aiPersonaOptions).optional(),
-        aiModel: z.string().min(1).optional(),
-        provider: z.string().min(1).optional(),
-        conversationHistory: z.string().optional(),
-        embeddingIndexKey: z.string().min(1).optional(),
-        // RLM-specific options
-        maxTokens: z.number().int().min(500).max(100000).optional(),
-        includeOverview: z.boolean().optional(),
-        includePreviews: z.boolean().optional(),
-        semanticTypes: z.array(z.enum(semanticTypeOptions)).optional(),
-        prioritize: z.enum(prioritizeOptions).optional(),
-        pageRange: z
-            .object({
-                start: z.number().int().min(0),
-                end: z.number().int().min(0),
-            })
-            .refine(data => data.end >= data.start, {
-                message: "pageRange.end must be >= pageRange.start",
-            })
-            .optional(),
-    })
-    .transform(data => {
-        return {
-            documentId: data.documentId,
-            question: data.question,
-            style: data.style ?? "concise",
-            enableWebSearch: data.enableWebSearch ?? false,
-            aiPersona: data.aiPersona ?? "general",
-            aiModel: data.aiModel,
-            provider: data.provider,
-            conversationHistory: data.conversationHistory,
-            embeddingIndexKey: data.embeddingIndexKey,
-            maxTokens: data.maxTokens ?? 4000,
-            includeOverview: data.includeOverview ?? true,
-            includePreviews: data.includePreviews ?? false,
-            semanticTypes: data.semanticTypes,
-            prioritize: data.prioritize ?? "relevance",
-            pageRange: data.pageRange,
-        };
-    });
 
 // ============================================================================
 // Mindmap (the diagramming app)

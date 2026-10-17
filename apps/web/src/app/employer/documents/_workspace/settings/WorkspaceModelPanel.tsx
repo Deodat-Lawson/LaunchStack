@@ -292,6 +292,13 @@ export function WorkspaceModelPanel({
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [disconnecting, setDisconnecting] = useState(false);
     const openedForModels = useRef(false);
+    const noteRef = useRef<HTMLDivElement>(null);
+
+    // Saving from the bottom of a long form leaves the pane scrolled past the
+    // outcome; bring the note into view so the admin sees what happened.
+    useEffect(() => {
+        if (note) noteRef.current?.scrollIntoView?.({ block: "nearest" });
+    }, [note]);
 
     useEffect(() => {
         if (!openAtModels || openedForModels.current || !endpoint) return;
@@ -349,7 +356,11 @@ export function WorkspaceModelPanel({
             title="Your own model"
             description="Run this workspace's AI on your own provider account. Chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits."
         >
-            {note && <StatusNote tone={note.tone}>{note.message}</StatusNote>}
+            {note && (
+                <div ref={noteRef} role="status">
+                    <StatusNote tone={note.tone}>{note.message}</StatusNote>
+                </div>
+            )}
 
             {!loaded ? (
                 <StatusNote tone="muted">Checking for a model of your own…</StatusNote>

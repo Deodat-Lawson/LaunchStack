@@ -129,7 +129,14 @@ export async function testEndpoint(
         const started = Date.now();
         let outcome: Omit<ModelTestResult, "route">;
         try {
-            const resolved = resolveChatModel({ config, route, timeoutMs: TEST_TIMEOUT_MS });
+            // One attempt: the admin is waiting, and a retry would only repeat
+            // what the first attempt already showed.
+            const resolved = resolveChatModel({
+                config,
+                route,
+                timeoutMs: TEST_TIMEOUT_MS,
+                maxRetries: 0,
+            });
             const reply = await resolved.chat.invoke(
                 resolved.prepareMessages([new HumanMessage("Reply with the single word OK.")])
             );

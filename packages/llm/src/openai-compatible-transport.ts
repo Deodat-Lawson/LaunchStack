@@ -30,6 +30,7 @@ import {
 export const KEYLESS_PLACEHOLDER_API_KEY = "launchstack-no-key";
 
 const DEFAULT_TIMEOUT_MS = 600_000;
+const WORKSPACE_ENDPOINT_MAX_RETRIES = 2;
 
 export interface CreateCompatibleChatOptions {
     endpoint: ChatEndpointConfig;
@@ -42,6 +43,13 @@ export interface CreateCompatibleChatOptions {
     /** Applied only when the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /**
+     * Retries after a failed attempt. Defaults to the client's own (six, with
+     * backoff) for the deployment's endpoint and to two for a workspace's:
+     * an address a workspace typed that refuses connections should say so in
+     * seconds, not after a minute and a half of backoff.
+     */
+    maxRetries?: number;
     /** Operator-declared reasoning fields, already resolved for this request. */
     requestPatch?: ChatRequestPatch;
 }
@@ -99,6 +107,11 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
             ),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+        ...(options.maxRetries !== undefined
+            ? { maxRetries: options.maxRetries }
+            : endpoint.owner === "workspace"
+              ? { maxRetries: WORKSPACE_ENDPOINT_MAX_RETRIES }
+              : {}),
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
             ? { temperature: options.temperature }
             : {}),
@@ -196,6 +209,10 @@ export function describeChatEndpointError(
     }
 
     if (
+        // The OpenAI SDK's APIConnectionError says only "Connection error.";
+        // APIConnectionTimeoutError says "Request timed out."
+        message.includes("connection error") ||
+        message.includes("request timed out") ||
         message.includes("fetch failed") ||
         message.includes("econnrefused") ||
         message.includes("enotfound") ||

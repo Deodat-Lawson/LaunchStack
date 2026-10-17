@@ -274,6 +274,8 @@ export interface ResolveChatModelOptions {
     /** Ignored unless the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /** Retries after a failed attempt; see the transport for the defaults. */
+    maxRetries?: number;
     config?: ChatModelsConfig;
 }
 
@@ -334,6 +336,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             maxOutputTokens: options.maxOutputTokens,
             streaming: options.streaming,
             timeoutMs: options.timeoutMs,
+            maxRetries: options.maxRetries,
             requestPatch: reasoning.requestPatch,
         }),
         prepareMessages: messages => applyMessageBehavior(behavior, messages),

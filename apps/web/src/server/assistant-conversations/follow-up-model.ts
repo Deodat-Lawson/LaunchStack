@@ -9,7 +9,7 @@
  * one. No vendor SDK is involved here.
  */
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { invokeStructured } from "@launchstack/llm";
+import { getChatModelsSource, invokeStructured } from "@launchstack/llm";
 import { GEMINI_BASE_URL } from "@launchstack/llm/types";
 import { z } from "zod";
 
@@ -51,6 +51,9 @@ export function followUpModelUnavailable(): string | null {
     } catch (error) {
         return `No chat model is configured: ${error instanceof Error ? error.message : String(error)}`;
     }
+    // A workspace that brought its own model resolved to it just above; the
+    // server's own endpoint (checked next) is not what it will use.
+    if (getChatModelsSource() === "workspace") return null;
     // With no endpoint named, chat falls back to Gemini — which, without a
     // Google key, rejects every request. That is "not configured", not a failure.
     const endpoint = resolveChatEndpoint(env.server);

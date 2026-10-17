@@ -177,12 +177,30 @@ describe("workspace endpoint failures", () => {
         ["402 Payment Required", 503, "run out of credit"],
         ["429 Rate limit reached", 429, "rate-limiting"],
         ["fetch failed", 502, "Couldn't reach"],
+        // What the OpenAI SDK says when the address refuses connections.
+        ["Connection error.", 502, "Couldn't reach"],
+        ["Request timed out.", 502, "Couldn't reach"],
         ["404 model_not_found", 400, "doesn't serve the chosen model"],
     ])("words %s for the workspace's admins", (raw, status, words) => {
         const described = describeChatEndpointError(new Error(raw), workspace, "m");
         expect(described?.status).toBe(status);
         expect(described?.message).toContain(words);
         expect(described?.message).not.toMatch(/CHAT_API_KEY|CHAT_BASE_URL|a\.example/);
+    });
+
+    it("gives up on a workspace's endpoint after two retries, not the default six", () => {
+        const retriesOf = (config: ChatModelsConfig) =>
+            (resolveChatModel({ config }).chat as unknown as { caller: { maxRetries: number } })
+                .caller.maxRetries;
+        expect(retriesOf(WORKSPACE_A)).toBe(2);
+        expect(retriesOf(DEPLOYMENT)).toBe(6);
+        expect(
+            (
+                resolveChatModel({ config: WORKSPACE_A, maxRetries: 0 }).chat as unknown as {
+                    caller: { maxRetries: number };
+                }
+            ).caller.maxRetries
+        ).toBe(0);
     });
 
     it("keeps the operator wording for the deployment's own endpoint", () => {

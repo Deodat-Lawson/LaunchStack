@@ -10,7 +10,9 @@
  *
  * The verifier and state ride in a short-lived httpOnly cookie scoped to the
  * callback path, together with the workspace the flow started in; the
- * callback refuses if any of them don't match.
+ * callback refuses if any of them don't match. OpenRouter returns `state`
+ * unchanged on the callback (https://openrouter.ai/docs/guides/overview/auth/oauth),
+ * except on a denial, which arrives without a code and is handled first.
  */
 
 import { createHash, randomBytes } from "node:crypto";

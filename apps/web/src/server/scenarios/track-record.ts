@@ -36,7 +36,8 @@ export async function listLinkedPostTests(companyId: bigint): Promise<LinkedPost
             )
         )
         .where(and(eq(scenarioPostLinks.companyId, companyId), eq(scenarioRuns.status, "done")))
-        .orderBy(desc(brandPosts.publishedAt));
+        // Published posts first, newest first; drafts and scheduled posts after.
+        .orderBy(sql`${brandPosts.publishedAt} desc nulls last`, desc(brandPosts.createdAt));
     return rows.map(r => ({
         ...r,
         publishedAt: r.publishedAt ?? null,

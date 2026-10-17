@@ -70,11 +70,12 @@ export function emptyFolderNames(status: DriveStatus): string[] {
 }
 
 /** The line under a picked item: where its files are in LaunchStack. */
-export function pickedItemDestination(item: DrivePickedItem): string {
+export function pickedItemDestination(item: DrivePickedItem, access: FolderAccessState): string {
     if (item.kind !== "folder") return "In Google Drive";
-    return item.folderPath
-        ? `In ${displayFolderPath(item.folderPath)}`
-        : "Becomes its own folder on the next sync";
+    if (item.folderPath) return `In ${displayFolderPath(item.folderPath)}`;
+    return access === "ready"
+        ? "Becomes its own folder on the next sync"
+        : "Its contents need folder access";
 }
 
 /** "a", "a and b", "a, b and 2 more". */

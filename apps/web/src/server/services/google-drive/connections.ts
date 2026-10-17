@@ -131,16 +131,26 @@ export async function disconnectGoogleConnections(companyId: bigint): Promise<nu
 
 /**
  * Access tokens live ~1h; cache per connection and refresh 5 minutes early.
- * In-process only — a stale entry costs one extra refresh, never correctness.
+ * In-process only. Each entry remembers the grant it was minted from (the
+ * stored refresh-token ciphertext, new on every reconnect): the web app and
+ * the worker are separate processes, so a reconnect in one — say, one that
+ * added drive.readonly — must not leave the other syncing with a token from
+ * the old, narrower grant for the rest of the hour.
  */
-const accessTokenCache = new Map<number, { token: string; expiresAt: number }>();
+const accessTokenCache = new Map<number, { token: string; expiresAt: number; grant: string }>();
 const EXPIRY_MARGIN_MS = 5 * 60_000;
 
 export async function getAccessTokenForConnection(
     connection: ConnectorConnection
 ): Promise<string> {
     const cached = accessTokenCache.get(connection.id);
-    if (cached && cached.expiresAt > Date.now()) return cached.token;
+    if (
+        cached &&
+        cached.expiresAt > Date.now() &&
+        cached.grant === connection.refreshTokenCiphertext
+    ) {
+        return cached.token;
+    }
 
     getEngine();
     if (!connection.refreshTokenCiphertext) {
@@ -154,6 +164,7 @@ export async function getAccessTokenForConnection(
         accessTokenCache.set(connection.id, {
             token: token.access_token,
             expiresAt: Date.now() + token.expires_in * 1000 - EXPIRY_MARGIN_MS,
+            grant: connection.refreshTokenCiphertext,
         });
         return token.access_token;
     } catch (err) {

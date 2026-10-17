@@ -35,6 +35,12 @@ import {
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
+import {
+    ensureSyncState,
+    listPickedItems,
+    resetSyncCursor,
+} from "~/server/services/connectors/google-drive/store";
+import { inngest } from "~/server/inngest/client";
 
 type Provider = "google-drive" | "gmail";
 
@@ -68,6 +74,27 @@ export async function GET(request: Request) {
 // ---------------------------------------------------------------------------
 // Google Drive — workspace-scoped
 // ---------------------------------------------------------------------------
+
+/**
+ * A reconnect can widen what the grant sees (drive.file → drive.readonly is
+ * how a picked folder's contents become readable), and nothing in Drive
+ * changed, so the changes feed would call the next run clean and skip it.
+ * Forget the cursor and start the sync now, when something is picked. A
+ * runner that is down must not undo a good connect: the cron retries.
+ */
+async function resyncAfterReconnect(connectionId: number, companyId: bigint | number) {
+    try {
+        await ensureSyncState(connectionId);
+        await resetSyncCursor(connectionId);
+        if ((await listPickedItems(connectionId)).length === 0) return;
+        await inngest.send({
+            name: "google-drive/sync.requested",
+            data: { connectionId: String(connectionId), companyId: companyId.toString() },
+        });
+    } catch (err) {
+        console.warn("[google-oauth] connected, but the follow-up sync did not start:", err);
+    }
+}
 
 async function driveCallback(request: Request, url: URL, state: string | null) {
     if (!isGoogleConnectConfigured()) {
@@ -133,6 +160,8 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             targetId: "google-drive",
             detail: { connectionId: connection.id, accountEmail: claims.email ?? null },
         });
+
+        await resyncAfterReconnect(connection.id, ctx.data.companyId);
 
         return redirectToWorkspace(request, "google-drive", "connected");
     } catch (err) {

@@ -26,6 +26,7 @@ import {
     getSyncState,
     listPickedItems,
     releaseSyncLease,
+    resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
 import { createDriveDestinations, type PickedRoot } from "./destinations";
@@ -181,6 +182,11 @@ export async function runGoogleDriveSync(
             startPageToken: report.nextStartPageToken,
             report: reportCounts(report),
         });
+        // A picked folder that listed empty is usually one the grant can't
+        // read yet. Nothing in Drive changes when access is granted, so a
+        // cursor would call every later run clean; walk it again instead
+        // (one listing per empty folder per run).
+        if (report.emptyFolders.length > 0) await resetSyncCursor(connectionId);
 
         return { outcome: report.dirty ? "synced" : "clean", report };
     } catch (error) {

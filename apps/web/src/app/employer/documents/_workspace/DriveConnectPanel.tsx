@@ -94,6 +94,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const Icon = tab.Icon;
     const [status, setStatus] = useState<DriveStatus | null>(null);
     const [loading, setLoading] = useState(true);
+    const [loadFailed, setLoadFailed] = useState(false);
     const [busy, setBusy] = useState(false);
     const [confirmingDisconnect, setConfirmingDisconnect] = useState(false);
     const [link, setLink] = useState("");
@@ -103,8 +104,11 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const refresh = useCallback(async () => {
-        const next = await fetchStatus();
+        const next = await fetchStatus().catch(() => null);
         if (next) setStatus(next);
+        // A failed check is not "not configured": keep the last good status
+        // and say the check failed.
+        setLoadFailed(next === null);
         setLoading(false);
         return next;
     }, []);
@@ -134,6 +138,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncAfterAdd = useCallback(async () => {
         const res = await startSync();
         if (res.ok) setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
+        else toast.error("Added, but the sync didn't start — try Sync now");
         void refresh();
     }, [refresh]);
 
@@ -265,6 +270,19 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
 
     if (loading) {
         return <div className="text-ink-3 p-6 text-[13px]">Checking Google Drive…</div>;
+    }
+
+    if (!status && loadFailed) {
+        return (
+            <Notice tone="danger">
+                Couldn&rsquo;t check Google Drive just now.
+                <div className="mt-2">
+                    <Button size="sm" variant="outline" onClick={() => void refresh()}>
+                        Try again
+                    </Button>
+                </div>
+            </Notice>
+        );
     }
 
     if (!status?.configured) {
@@ -473,7 +491,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                                 <span className="min-w-0 flex-1">
                                     <span className="text-ink block truncate">{item.name}</span>
                                     <span className="text-ink-3 block truncate text-[11.5px]">
-                                        {pickedItemDestination(item)}
+                                        {pickedItemDestination(item, access)}
                                     </span>
                                 </span>
                                 <Button

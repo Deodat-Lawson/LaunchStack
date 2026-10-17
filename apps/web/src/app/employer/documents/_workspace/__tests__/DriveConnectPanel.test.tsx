@@ -117,6 +117,7 @@ describe("DriveConnectPanel folder access", () => {
                 "Nothing came in from “Acme Seed Data Room”: this connection can't see inside folders."
             )
         ).toBeInTheDocument();
+        expect(screen.getByText("Its contents need folder access")).toBeInTheDocument();
     });
 
     it("shows where each picked folder's files are", async () => {
@@ -138,6 +139,17 @@ describe("DriveConnectPanel folder access", () => {
         expect(await screen.findByText("In Acme Seed Data Room")).toBeInTheDocument();
         expect(screen.getByText("Becomes its own folder on the next sync")).toBeInTheDocument();
         expect(screen.getByText("In Google Drive")).toBeInTheDocument();
+    });
+});
+
+describe("DriveConnectPanel status check", () => {
+    it("says a failed check failed, instead of calling Drive not configured", async () => {
+        fetchMock.mockImplementation(() => respond({ message: "Database connection error" }, 503));
+        render(<DriveConnectPanel tab={driveTab} />);
+
+        expect(await screen.findByText(/Couldn.t check Google Drive just now/)).toBeInTheDocument();
+        expect(screen.queryByText(/not configured on this server/)).not.toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
     });
 });
 

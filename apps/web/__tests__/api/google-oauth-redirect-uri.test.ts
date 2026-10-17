@@ -8,7 +8,8 @@
 jest.mock("~/env", () => ({
     env: {
         server: {
-            APP_PUBLIC_URL: undefined,
+            // The services' fetch address; it must never reach Google.
+            APP_PUBLIC_URL: "http://app:3000",
             GOOGLE_OAUTH_CLIENT_ID: "cid",
             GOOGLE_OAUTH_CLIENT_SECRET: "sec",
             GOOGLE_OAUTH_REDIRECT_URL: undefined,

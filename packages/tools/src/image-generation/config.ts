@@ -96,7 +96,8 @@ function attributionHeaders(
     baseUrl: string
 ): Record<string, string> | undefined {
     if (!baseUrl.includes("openrouter.ai")) return undefined;
-    const referer = nonEmpty(env.APP_PUBLIC_URL) ?? nonEmpty(env.BETTER_AUTH_URL);
+    // BETTER_AUTH_URL is the public origin; APP_PUBLIC_URL may be internal.
+    const referer = nonEmpty(env.BETTER_AUTH_URL);
     if (!referer) return undefined;
     return { "HTTP-Referer": referer, "X-Title": "LaunchStack" };
 }

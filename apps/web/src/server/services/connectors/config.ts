@@ -13,6 +13,7 @@
 
 import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import { configuredPublicOrigin } from "~/server/public-origin";
 import { googleStandInUrl } from "../google-drive/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
@@ -81,17 +82,17 @@ export function isConnectorConfigured(provider: ConnectorProvider): boolean {
 }
 
 /**
- * @param requestOrigin Origin of the current request (e.g. `http://localhost:3000`),
- * used only when APP_PUBLIC_URL is not set.
+ * @param origin The public origin of the current request, `publicOrigin(request)`.
+ * Without one (a refresh in the worker) BETTER_AUTH_URL's origin is used.
  */
 export function getConnectorConfig(
     provider: OAuthProvider,
-    requestOrigin?: string
+    origin?: string
 ): ProviderOAuthConfig | null {
     const pair = clientPair(provider);
     if (!pair || !env.server.EMBEDDING_SECRETS_KEY) return null;
 
-    const base = env.server.APP_PUBLIC_URL ?? requestOrigin;
+    const base = origin ?? configuredPublicOrigin();
 
     return {
         ...pair,

@@ -171,9 +171,9 @@ export const GUIDES: Guide[] = [
             {
                 title: "Forward settings to both processes",
                 body: [
-                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings absent from the base file, including APP_PUBLIC_URL and any OAuth or feature flags you enable.",
+                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings the base file does not forward. The example also makes APP_PUBLIC_URL required, so Compose refuses to start without the origin your document services fetch files from.",
                 ],
-                code: "services:\n  app:\n    environment: &operator-env\n      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Set the public app origin}\n  worker:\n    environment: *operator-env",
+                code: "services:\n  app:\n    environment: &operator-env\n      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Set the origin the document services fetch files from}\n  worker:\n    environment: *operator-env",
                 file: "docker-compose.operator.yml",
                 note: "Add provider client IDs, secrets, and feature flags to this shared block when enabling connections or optional capabilities. Existing base values are retained by the Compose merge.",
             },
@@ -242,7 +242,7 @@ export const GUIDES: Guide[] = [
                 ],
                 code: "DATABASE_URL=postgresql://postgres:your-password@localhost:5433/pdr_ai_v2\nBETTER_AUTH_URL=http://localhost:3000\nAPP_PUBLIC_URL=http://host.docker.internal:3000\nTRANSCRIPTION_SERVICE_URL=http://localhost:8000\nDOCUMENT_CONVERTER_URL=http://localhost:8002\nADEU_SERVICE_URL=http://localhost:8003\nGOTENBERG_SERVICE_URL=http://localhost:8004",
                 file: ".env · host-run processes",
-                note: "host.docker.internal lets Docker Desktop services fetch database-backed files from your host. Linux hosts need an equivalent host-gateway mapping. Allow that exact origin in the converter/editing fetch allowlists. Use a browser-reachable APP_PUBLIC_URL when testing OAuth callbacks.",
+                note: "host.docker.internal lets Docker Desktop services fetch database-backed files from your host. Linux hosts need an equivalent host-gateway mapping. Allow that exact origin in the converter/editing fetch allowlists. OAuth callbacks are built on BETTER_AUTH_URL, so they stay on localhost.",
                 links: [
                     guideLink("Storage configuration", "storage"),
                     guideLink("Document services", "processing"),
@@ -384,6 +384,7 @@ export const GUIDES: Guide[] = [
                 title: "Required account configuration",
                 body: [
                     "The app uses Better Auth with its PostgreSQL database. Generate a stable BETTER_AUTH_SECRET and set BETTER_AUTH_URL to the actual public product origin, particularly behind a reverse proxy.",
+                    "Invite links, emails and OAuth callbacks are built on BETTER_AUTH_URL. APP_PUBLIC_URL is only where the document services fetch files from; behind a proxy it is usually the same origin.",
                 ],
                 code: "BETTER_AUTH_SECRET=replace-with-a-random-secret\nBETTER_AUTH_URL=https://workspace.example.com\nAPP_PUBLIC_URL=https://workspace.example.com\nDEPLOYMENT_MODE=self-hosted",
                 file: ".env",
@@ -551,7 +552,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Provider configuration",
                 body: [
-                    "Register each callback on your public APP_PUBLIC_URL. Connection credentials are separate from AUTH_GOOGLE_* and AUTH_GITHUB_* social sign-in credentials.",
+                    "Register each callback on BETTER_AUTH_URL, your public product origin. Connection credentials are separate from AUTH_GOOGLE_* and AUTH_GITHUB_* social sign-in credentials.",
                 ],
                 rows: [
                     {

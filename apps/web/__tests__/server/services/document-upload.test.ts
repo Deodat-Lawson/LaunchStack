@@ -1,6 +1,9 @@
-jest.mock("@launchstack/conversion", () => ({
+jest.mock("@launchstack/conversion/audio-transcription", () => ({
     shouldTranscribeFile: jest.fn(() => true),
     transcribeAudioFromUrl: jest.fn(),
+}));
+
+jest.mock("@launchstack/conversion/video-transcription", () => ({
     isVideoUrl: jest.fn(() => false),
     transcribeVideoFromUrl: jest.fn(),
 }));
@@ -38,9 +41,8 @@ jest.mock("@launchstack/store/credits", () => ({
 import {
     transcribeAudioFromUrl,
     shouldTranscribeFile,
-    isVideoUrl,
-    transcribeVideoFromUrl,
-} from "@launchstack/conversion";
+} from "@launchstack/conversion/audio-transcription";
+import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/video-transcription";
 import { processDocumentUpload, processVideoUrlUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { putFile } from "~/server/storage/vercel-blob";

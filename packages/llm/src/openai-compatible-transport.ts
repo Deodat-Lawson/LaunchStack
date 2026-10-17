@@ -14,6 +14,7 @@
 
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { ChatOpenAI } from "@langchain/openai";
+import OpenAI from "openai";
 import { createEndpointFetch } from "./endpoint-fetch";
 import {
     DEFAULT_MAX_OUTPUT_TOKENS_FIELD,
@@ -85,6 +86,20 @@ export function buildModelKwargs(
 const fetchWithoutRedirects: typeof fetch = (input, init) =>
     fetch(input, { ...init, redirect: "error" });
 
+/** Instructions in, provider error text out (see endpoint-fetch.ts); no redirects for a workspace's address. */
+function endpointFetch(endpoint: ChatEndpointConfig, behavior: ChatModelBehavior) {
+    return createEndpointFetch(
+        endpoint,
+        behavior,
+        endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined
+    );
+}
+
+function retriesFor(endpoint: ChatEndpointConfig, maxRetries: number | undefined) {
+    if (maxRetries !== undefined) return { maxRetries };
+    return endpoint.owner === "workspace" ? { maxRetries: WORKSPACE_ENDPOINT_MAX_RETRIES } : {};
+}
+
 export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions): BaseChatModel {
     const { endpoint, modelId, behavior } = options;
     const { parameters } = behavior;
@@ -97,21 +112,12 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
     return new ChatOpenAI({
         apiKey: endpoint.apiKey ?? KEYLESS_PLACEHOLDER_API_KEY,
         modelName: modelId,
-        // Instructions in, provider error text out: see endpoint-fetch.ts.
         configuration: {
             baseURL: endpoint.baseUrl,
-            fetch: createEndpointFetch(
-                endpoint,
-                behavior,
-                endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined
-            ),
+            fetch: endpointFetch(endpoint, behavior),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
-        ...(options.maxRetries !== undefined
-            ? { maxRetries: options.maxRetries }
-            : endpoint.owner === "workspace"
-              ? { maxRetries: WORKSPACE_ENDPOINT_MAX_RETRIES }
-              : {}),
+        ...retriesFor(endpoint, options.maxRetries),
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
             ? { temperature: options.temperature }
             : {}),
@@ -128,6 +134,30 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
             ? { __includeRawResponse: true }
             : {}),
         ...(Object.keys(modelKwargs).length > 0 ? { modelKwargs } : {}),
+    });
+}
+
+/**
+ * A plain OpenAI SDK client for the same endpoint, under the same rules as
+ * {@link createOpenAiCompatibleChat}: the keyless placeholder, the endpoint's
+ * instructions and error scrubbing, no redirects and fewer retries for a
+ * workspace's address. For callers that build the request body themselves
+ * (document ingestion's table summaries, image descriptions and entity
+ * extraction); they must still send only the fields the model declares.
+ */
+export function createOpenAiCompatibleClient(options: {
+    endpoint: ChatEndpointConfig;
+    behavior: ChatModelBehavior;
+    timeoutMs?: number;
+    maxRetries?: number;
+}): OpenAI {
+    const { endpoint, behavior } = options;
+    return new OpenAI({
+        apiKey: endpoint.apiKey ?? KEYLESS_PLACEHOLDER_API_KEY,
+        baseURL: endpoint.baseUrl,
+        fetch: endpointFetch(endpoint, behavior),
+        timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+        ...retriesFor(endpoint, options.maxRetries),
     });
 }
 

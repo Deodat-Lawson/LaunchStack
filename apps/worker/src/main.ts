@@ -20,8 +20,8 @@ import {
     createPipelineProcessor,
     runOutboxTick,
     DEFAULT_RETRY_POLICY,
+    DrizzleOutboxStore,
 } from "@launchstack/orchestration";
-import { DocIngestionPipeline, DrizzleOutboxStore } from "@launchstack/engine";
 
 import { parseWorkerEnv, resolveChatModelsConfig } from "./env";
 import { createLogger } from "./logger";
@@ -72,11 +72,13 @@ async function main(): Promise<void> {
 
     const [
         { createInngestHandler },
+        { createIngestionPipelinePort },
         { createCompanyProjectionPort },
         { createNoteEmbeddingPort, createNoteRehydrationPort },
         { createDeadEventHandler, createValidationDeadHandler },
     ] = await Promise.all([
         import("./inngest"),
+        import("./ports/ingestion"),
         import("./ports/projection"),
         import("./ports/notes"),
         import("./ports/failure"),
@@ -90,7 +92,7 @@ async function main(): Promise<void> {
         onValidationDead: createValidationDeadHandler(logger),
     });
     const processor = createPipelineProcessor({
-        pipeline: new DocIngestionPipeline(logger),
+        pipeline: createIngestionPipelinePort(logger),
         projection: createCompanyProjectionPort(logger),
         noteRehydration: createNoteRehydrationPort(logger),
         noteEmbedding: createNoteEmbeddingPort(logger),

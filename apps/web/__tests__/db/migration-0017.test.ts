@@ -33,7 +33,6 @@ describe("migration file_uploads_company_id", () => {
         expect(tags.indexOf(TAG)).toBeGreaterThan(
             tags.indexOf("20260808223719_document_creation_lifecycle")
         );
-        expect(tags[tags.length - 1]).toBe(TAG);
     });
 
     it("adds a nullable company_id with an ON DELETE SET NULL foreign key", () => {

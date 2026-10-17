@@ -139,6 +139,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
     const [sessions, setSessions] = useState<SessionRow[] | null>(null);
     const [accounts, setAccounts] = useState<AccountRow[] | null>(null);
+    // A failed list must not read as "no password, nothing linked": that
+    // would offer to set a password the person already has.
+    const [accountsFailed, setAccountsFailed] = useState(false);
     const [offered, setOffered] = useState<SocialProvider[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [connectFailure, setConnectFailure] = useState<{
@@ -160,7 +163,8 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     )
                     .catch(() => null),
             ]);
-            setAccounts(linked.error ? [] : ((linked.data ?? []) as AccountRow[]));
+            setAccountsFailed(Boolean(linked.error));
+            if (!linked.error) setAccounts((linked.data ?? []) as AccountRow[]);
             setOffered(signIn?.providers ?? []);
             if (list.error) throw new Error(list.error.message ?? "Could not list sessions.");
             setSessions((list.data ?? []) as SessionRow[]);
@@ -280,7 +284,11 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     </StatusNote>
                 )}
                 <Card>
-                    {accounts === null ? (
+                    {accountsFailed ? (
+                        <StatusNote tone="danger" style={{ marginBottom: 0 }}>
+                            Couldn&apos;t load how you sign in. Reload the page to try again.
+                        </StatusNote>
+                    ) : accounts === null ? (
                         <StatusNote tone="muted" style={{ marginBottom: 0 }}>
                             Loading…
                         </StatusNote>
@@ -368,6 +376,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     )}
                 </Card>
                 {accounts !== null &&
+                    !accountsFailed &&
                     (hasPassword ? <PasswordCard /> : <SetPasswordCard onSet={refresh} />)}
             </Section>
 

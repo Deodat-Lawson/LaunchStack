@@ -5,7 +5,9 @@
  * account whose email address had never been confirmed
  * (~/server/auth/account-linking). The server leaves a short-lived cookie on
  * that sign-in; this reads it once, clears it, and says what changed, so a
- * reload or a later visit never shows it again.
+ * reload or a later visit never shows it again. The cookie lasts a day, so a
+ * sign-in that lands outside these layouts first (onboarding starts on
+ * /signup) still gets the note on the first page that has one.
  *
  * Mounted wherever a sign-in can land: the employer layout and /workspaces.
  */
@@ -45,7 +47,10 @@ export function SignInNotice() {
     const [notice, setNotice] = useState<TakeoverNotice | null>(null);
 
     useEffect(() => {
-        setNotice(takeNotice());
+        // Only ever set: a second run (Strict Mode) finds the cookie already
+        // taken and must not clear what the first run found.
+        const found = takeNotice();
+        if (found) setNotice(found);
     }, []);
 
     if (!notice) return null;
@@ -69,11 +74,11 @@ export function SignInNotice() {
                         every other browser was signed out.
                     </DialogDescription>
                 </DialogHeader>
-                {passwordRemoved && (
-                    <p className="text-ink-3 m-0 text-center text-[13px] leading-relaxed sm:text-left">
-                        Want to sign in with a password too? Set a new one in Settings.
-                    </p>
-                )}
+                <p className="text-ink-3 m-0 text-center text-[13px] leading-relaxed sm:text-left">
+                    If you didn&apos;t create this account yourself, check who else is in its
+                    workspaces under Settings › People and access.
+                    {passwordRemoved && " Want a password too? Set a new one in Settings."}
+                </p>
                 <DialogFooter>
                     {passwordRemoved && (
                         <Button asChild variant="outline" onClick={close}>

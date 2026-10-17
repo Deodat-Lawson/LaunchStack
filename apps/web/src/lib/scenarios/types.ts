@@ -295,7 +295,8 @@ export interface PostTestLink {
 
 export interface TrackRecordRow {
     runId: number;
-    postId: number;
+    /** brand_posts.id (a string id). */
+    postId: string;
     network: string;
     publishedAt: string | null;
     text: string;

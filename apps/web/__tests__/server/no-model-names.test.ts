@@ -3,10 +3,11 @@
  *
  * Which model answers is the operator's configuration. These tests pin the
  * server-side places a name could otherwise reach a browser: the admin
- * settings payloads, the usage ledger, and the model introducing itself.
+ * settings payloads, the usage ledger and job results. The model introducing
+ * itself is covered on the wire (chat-endpoint.test.ts) and by the endpoint
+ * the app installs (below).
  */
 
-import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import {
     configureChatModels,
     createChatModelsConfig,
@@ -25,7 +26,8 @@ jest.mock("~/server/chat-models", () => ({
 }));
 jest.mock("~/server/deployment", () => ({ getDeploymentMode: () => "cloud" }));
 
-import { ASSISTANT_IDENTITY_RULE, withAssistantIdentity } from "~/lib/ai/assistant-identity";
+import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
+import { serializeExplainerJob } from "~/server/services/repo-explainer-jobs";
 import { modelsOverview } from "~/server/settings/models";
 import { privacyOverview } from "~/server/settings/privacy";
 import { ledgerDescription } from "~/server/settings/usage";
@@ -33,31 +35,44 @@ import { ledgerDescription } from "~/server/settings/usage";
 const serverEnv = jest.requireMock<{ env: { server: Record<string, string> } }>("~/env").env.server;
 
 describe("assistant identity rule", () => {
-    it("folds into the caller's system message rather than adding a second one", () => {
-        const messages = withAssistantIdentity([
-            new SystemMessage("Answer from the workspace."),
-            new HumanMessage("Which model are you?"),
-        ]);
-        expect(messages.map(message => message.getType())).toEqual(["system", "human"]);
-        expect(messages[0]!.content).toBe(
-            `Answer from the workspace.\n\n${ASSISTANT_IDENTITY_RULE}`
-        );
+    it("is worded to keep both the model and its maker unnamed", () => {
+        expect(ASSISTANT_IDENTITY_RULE).toMatch(/Never name or hint at the underlying AI model/);
+        expect(ASSISTANT_IDENTITY_RULE).toMatch(/company that built or hosts it/);
     });
+});
 
-    it("adds a system message when the caller sent none", () => {
-        const messages = withAssistantIdentity([["human", "hi"]]);
-        expect(messages.map(message => message.getType())).toEqual(["system", "human"]);
-        expect(messages[0]!.content).toBe(ASSISTANT_IDENTITY_RULE);
-    });
-
-    it("keeps multimodal system content intact", () => {
-        const messages = withAssistantIdentity([
-            new SystemMessage({ content: [{ type: "text", text: "Be brief." }] }),
-        ]);
-        expect(messages[0]!.content).toEqual([
-            { type: "text", text: "Be brief." },
-            { type: "text", text: ASSISTANT_IDENTITY_RULE },
-        ]);
+describe("repo explainer job results", () => {
+    it("keep their provenance but not the model id", () => {
+        const job = serializeExplainerJob({
+            id: "j",
+            workspaceId: "w",
+            status: "succeeded",
+            diagramType: "flowchart",
+            instructions: null,
+            sha: "abc",
+            result: {
+                summary: "s",
+                mermaidCode: "graph TD",
+                filesRead: [],
+                path: "fast",
+                turns: 1,
+                provenance: {
+                    sha: "abc",
+                    skillVersion: "v1",
+                    skillHash: "h",
+                    modelId: VENDOR_ID,
+                    promptVersion: "p1",
+                },
+            },
+            errorMessage: null,
+            publishedDocumentId: null,
+            staleAt: null,
+            createdAt: new Date(0),
+            startedAt: null,
+            completedAt: null,
+        } as unknown as Parameters<typeof serializeExplainerJob>[0]);
+        expect(JSON.stringify(job)).not.toContain(VENDOR_ID);
+        expect(job.result?.provenance).toMatchObject({ sha: "abc", promptVersion: "p1" });
     });
 });
 
@@ -132,5 +147,19 @@ routes:
         expect(JSON.stringify(ai)).not.toMatch(/vendor|googleapis/);
         // Integrations the workspace connects itself still name their host.
         expect(overview.services.find(service => service.id === "slack")?.host).toBe("slack.com");
+    });
+
+    it("Privacy calls a service on the deployment's own network local, not third-party", () => {
+        Object.assign(serverEnv, {
+            EMBEDDING_API_BASE_URL: "http://ollama:11434/v1",
+            TRANSCRIPTION_API_BASE_URL: "http://10.0.0.7:9000/v1",
+        });
+        const services = privacyOverview().services;
+        for (const id of ["embedding", "transcription"]) {
+            const service = services.find(s => s.id === id)!;
+            expect(service.host).toBeNull();
+            expect(service.note).toMatch(/Runs on this deployment's own servers/);
+        }
+        expect(services.find(s => s.id === "chat")!.note).toMatch(/third-party AI model provider/);
     });
 });

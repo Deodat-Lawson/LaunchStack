@@ -14,6 +14,7 @@
 
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { ChatOpenAI } from "@langchain/openai";
+import { createEndpointFetch } from "./endpoint-fetch";
 import {
     DEFAULT_MAX_OUTPUT_TOKENS_FIELD,
     type ChatEndpointConfig,
@@ -78,7 +79,11 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
     return new ChatOpenAI({
         apiKey: endpoint.apiKey ?? KEYLESS_PLACEHOLDER_API_KEY,
         modelName: modelId,
-        configuration: { baseURL: endpoint.baseUrl },
+        // Instructions in, provider error text out: see endpoint-fetch.ts.
+        configuration: {
+            baseURL: endpoint.baseUrl,
+            fetch: createEndpointFetch(endpoint, behavior),
+        },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
             ? { temperature: options.temperature }
@@ -114,9 +119,16 @@ export function describeChatEndpointError(
     if (!(error instanceof Error)) return null;
     const message = error.message.toLowerCase();
     const where = `${endpoint.baseUrl} (model ${modelId})`;
+    // The SDK's status when it has one; otherwise a status code standing alone
+    // in the text, so a token count like "140291" is not read as a 402.
+    const sdkStatus = (error as { status?: unknown }).status;
+    const status =
+        typeof sdkStatus === "number"
+            ? sdkStatus
+            : Number(/(?:^|\s)([45]\d\d)(?=\s|$|:)/.exec(message)?.[1] ?? NaN);
 
     if (
-        message.includes("402") ||
+        status === 402 ||
         message.includes("insufficient credits") ||
         message.includes("insufficient_quota") ||
         message.includes("exceeded your current quota") ||
@@ -130,7 +142,7 @@ export function describeChatEndpointError(
         };
     }
 
-    if (message.includes("429") || message.includes("rate limit")) {
+    if (status === 429 || message.includes("rate limit")) {
         console.warn(`[chat] ${where} rate-limited: ${error.message}`);
         return {
             status: 429,
@@ -139,8 +151,8 @@ export function describeChatEndpointError(
     }
 
     if (
-        message.includes("401") ||
-        message.includes("403") ||
+        status === 401 ||
+        status === 403 ||
         message.includes("authentication") ||
         message.includes("invalid api key") ||
         message.includes("no auth credentials") ||

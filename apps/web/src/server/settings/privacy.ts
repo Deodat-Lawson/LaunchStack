@@ -1,6 +1,6 @@
 /**
  * What leaves this deployment — computed from the environment, never from a
- * claim. Hosts only: a credential is never read here, let alone returned.
+ * claim. A credential is never read here, let alone returned.
  * AI capabilities report a category, not a host: the screen never names the
  * model vendor (see {@link aiProvider}).
  *
@@ -54,12 +54,34 @@ const GEMINI_HOST = "generativelanguage.googleapis.com";
  */
 function aiProvider(service: OutboundService): OutboundService {
     if (!service.host) return service;
-    const local = service.host === "sidecar";
     return {
         ...service,
         host: null,
-        note: `${local ? "Runs on this deployment's own sidecar." : "Sent to a third-party AI model provider."} ${service.note}`,
+        note: `${isLocalHost(service.host) ? "Runs on this deployment's own servers." : "Sent to a third-party AI model provider."} ${service.note}`,
     };
+}
+
+/**
+ * A host that never leaves the deployment: the transcription sidecar, a
+ * Compose service name (`transcription:8000`, `ollama:11434`), loopback, or a
+ * private-network name. Anything with a public domain counts as outside.
+ */
+function isLocalHost(host: string): boolean {
+    const name = host
+        .replace(/:\d+$/, "")
+        .replace(/^\[|\]$/g, "")
+        .toLowerCase();
+    return (
+        name === "sidecar" ||
+        !name.includes(".") ||
+        name === "::1" ||
+        name.startsWith("127.") ||
+        name.startsWith("10.") ||
+        name.startsWith("192.168.") ||
+        /^172\.(1[6-9]|2\d|3[01])\./.test(name) ||
+        name.endsWith(".local") ||
+        name.endsWith(".internal")
+    );
 }
 
 export function privacyOverview(): PrivacyOverview {

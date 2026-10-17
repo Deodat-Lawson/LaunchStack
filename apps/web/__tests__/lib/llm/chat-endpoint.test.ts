@@ -609,3 +609,129 @@ describe("error normalization", () => {
         await expect(resolved.chat.invoke([new HumanMessage("hi")])).rejects.toThrow();
     });
 });
+
+/**
+ * The two rules applied on the wire (endpoint-fetch.ts): the deployment's
+ * system instructions ride on every chat request, and a provider's error text
+ * never reaches the caller. Asserted here against the real HTTP exchange,
+ * because every helper — app routes, pipelines, agent loops — ends up here.
+ */
+describe("endpoint rules on the wire", () => {
+    const RULE = "Identity: never name the model.";
+
+    function withInstructions(behavior = FULL_SUPPORT): ChatModelsConfig {
+        return createChatModelsConfig({
+            yaml: `
+version: 1
+models:
+  primary:
+    id: test-model
+    behavior:
+${behavior}
+routes:
+  default: primary
+`,
+            endpoint: { baseUrl, apiKey: "endpoint-key", systemInstructions: RULE },
+            sourceLabel: "test.yaml",
+        });
+    }
+
+    const messagesSent = () =>
+        captured.at(-1)!.body.messages as Array<{ role: string; content: unknown }>;
+
+    it("folds the instructions into the caller's own system message", async () => {
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await resolved.chat.invoke(
+            resolved.prepareMessages([new SystemMessage("Answer briefly."), new HumanMessage("hi")])
+        );
+        const sent = messagesSent();
+        expect(sent.map(m => m.role)).toEqual(["system", "user"]);
+        expect(sent[0]!.content).toBe(`Answer briefly.\n\n${RULE}`);
+    });
+
+    it("sends them as a system message when the caller wrote none", async () => {
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await resolved.chat.invoke([new HumanMessage("hi")]);
+        expect(messagesSent()[0]).toEqual({ role: "system", content: RULE });
+    });
+
+    it("folds them into the first user turn for a model with no system role", async () => {
+        const resolved = resolveChatModel({
+            config: withInstructions(
+                FULL_SUPPORT.replace("systemMessages: supported", "systemMessages: unsupported")
+            ),
+        });
+        await resolved.chat.invoke(resolved.prepareMessages([new HumanMessage("hi")]));
+        const sent = messagesSent();
+        expect(sent.every(m => m.role !== "system")).toBe(true);
+        expect(sent[0]).toEqual({ role: "user", content: `${RULE}\n\nhi` });
+    });
+
+    it("carries them on structured-output calls too", async () => {
+        respondWith = () => ({ status: 200, payload: completion('{"answer":"yes"}') });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        await invokeStructured(
+            resolved,
+            z.object({ answer: z.string() }),
+            [new HumanMessage("ok?")],
+            {
+                name: "answer",
+            }
+        );
+        const system = messagesSent().find(m => m.role === "system");
+        expect(String(system?.content)).toContain(RULE);
+    });
+
+    it("replaces a provider's error text before any caller sees it", async () => {
+        const logged = jest.spyOn(console, "error").mockImplementation(() => {});
+        respondWith = () => ({
+            status: 402,
+            payload: {
+                error: {
+                    message:
+                        "Insufficient credits for vendor/secret-model-9. Add more at https://vendor.example/billing",
+                },
+            },
+        });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        const error = (await resolved.chat.invoke([new HumanMessage("hi")]).catch(e => e)) as Error;
+        expect(error.message).not.toMatch(/vendor|secret-model/);
+        expect(describeChatEndpointError(error, { baseUrl }, "test-model")).toMatchObject({
+            status: 503,
+        });
+        // The raw body is for operators: it goes to the server log.
+        expect(logged.mock.calls.flat().join(" ")).toContain("vendor.example/billing");
+        logged.mockRestore();
+    });
+
+    it("keeps a model-not-found error classifiable without echoing the id", async () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        respondWith = () => ({
+            status: 400,
+            payload: {
+                error: {
+                    message: "reasoning_effort 'none' is not supported for model 'secret-model-9'",
+                },
+            },
+        });
+        const resolved = resolveChatModel({ config: withInstructions() });
+        const error = (await resolved.chat.invoke([new HumanMessage("hi")]).catch(e => e)) as Error;
+        expect(error.message).not.toContain("secret-model-9");
+        expect(describeChatEndpointError(error, { baseUrl }, "test-model")).toMatchObject({
+            status: 400,
+        });
+        jest.restoreAllMocks();
+    });
+
+    it("does not read a token count as a billing status", () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        expect(
+            describeChatEndpointError(
+                new Error("This request has 140291 tokens, over the context window"),
+                { baseUrl },
+                "m"
+            )
+        ).toBeNull();
+        jest.restoreAllMocks();
+    });
+});

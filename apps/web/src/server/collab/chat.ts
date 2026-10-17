@@ -13,7 +13,7 @@ import type { BaseMessage } from "@langchain/core/messages";
 
 import type { CollabChatFn, CollabChatMessage } from "@launchstack/collab";
 import { describeChatError, normalizeModelContent } from "@launchstack/llm";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 
 function toLangChain(message: CollabChatMessage): BaseMessage {
     switch (message.role) {
@@ -34,13 +34,22 @@ export interface CollabChatOptions {
 
 export function createCollabChatFn(options: CollabChatOptions = {}): CollabChatFn {
     return async ({ messages, route, temperature, maxTokens }) => {
-        const resolved = resolveConfiguredChatModel({
-            route:
-                route === "fast" || route === "reasoning" || route === "vision" ? route : "default",
-            temperature,
-            maxOutputTokens: maxTokens ?? options.maxOutputTokens ?? 800,
-            timeoutMs: options.timeoutMs,
-        });
+        let resolved;
+        try {
+            resolved = resolveConfiguredChatModel({
+                route:
+                    route === "fast" || route === "reasoning" || route === "vision"
+                        ? route
+                        : "default",
+                temperature,
+                maxOutputTokens: maxTokens ?? options.maxOutputTokens ?? 800,
+                timeoutMs: options.timeoutMs,
+            });
+        } catch (error) {
+            // Posted in the meeting channel like a turn failure, so the same
+            // rule applies: the fixed reason, never the configuration error.
+            throw new Error(describeChatResolutionFailure(error).message);
+        }
 
         let reply;
         try {

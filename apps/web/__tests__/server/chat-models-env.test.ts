@@ -14,6 +14,7 @@ import {
 } from "~/server/chat-models";
 import { hasConfiguredAiCredential } from "~/server/ai-credentials";
 import { isChatEndpointConfigured } from "~/server/chat-endpoint";
+import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
 
 describe("chat endpoint resolution", () => {
     it("prefers CHAT_BASE_URL and CHAT_API_KEY", () => {
@@ -222,6 +223,11 @@ describe("configuration file loading", () => {
         expect(config.routes.default).toBeTruthy();
         expect(config.models.get(config.routes.default)).toBeTruthy();
         expect(config.endpoint.baseUrl).toBe("https://endpoint.example/v1");
+    });
+
+    it("installs the assistant identity rule on the endpoint, so every chat carries it", () => {
+        const config = getAppChatModelsConfig(endpoint, process.cwd());
+        expect(config.endpoint.systemInstructions).toBe(ASSISTANT_IDENTITY_RULE);
     });
 
     it("caches per path and endpoint", () => {

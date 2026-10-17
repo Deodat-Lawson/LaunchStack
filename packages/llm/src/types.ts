@@ -137,6 +137,12 @@ export interface ChatEndpointConfig {
      * from another service's environment variable.
      */
     apiKey?: string;
+    /**
+     * Deployment-wide instructions sent with every chat completion to this
+     * endpoint, folded into the request's system message (or sent as one).
+     * The app sets the assistant identity rule here; see `endpoint-fetch.ts`.
+     */
+    systemInstructions?: string;
 }
 
 // ---------------------------------------------------------------------------

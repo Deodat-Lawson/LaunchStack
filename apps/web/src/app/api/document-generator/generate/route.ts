@@ -212,7 +212,7 @@ export async function POST(request: Request) {
             route: action === "field_update" ? "fast" : "default",
         });
         const { chat } = resolved;
-        const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
+        const compatibility = validateDeprecatedChatSelection({ model: options?.model });
         if (!compatibility.ok) {
             return NextResponse.json(
                 { success: false, message: compatibility.message },

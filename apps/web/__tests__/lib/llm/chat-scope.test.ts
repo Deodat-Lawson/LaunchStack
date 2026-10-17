@@ -6,7 +6,7 @@
  */
 
 import {
-    ChatConfigurationError,
+    ChatScopeUnavailableError,
     configureChatModels,
     createChatModelsConfig,
     describeChatError,
@@ -115,7 +115,7 @@ describe("chat model scope", () => {
     });
 
     it("fails closed when the scope cannot be used", () => {
-        const broken = new ChatConfigurationError("Your workspace's own model can't be used.");
+        const broken = new ChatScopeUnavailableError("Your workspace's own model can't be used.");
         runWithChatModelsScope({ source: "workspace", error: broken }, () => {
             expect(isChatConfigured()).toBe(true);
             expect(() => getChatModelsConfig()).toThrow(broken);

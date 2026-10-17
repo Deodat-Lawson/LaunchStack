@@ -16,6 +16,21 @@
 
 import { AsyncLocalStorage } from "node:async_hooks";
 import type { ChatModelsConfig } from "./chat-config";
+import { ChatConfigurationError } from "./types";
+
+/**
+ * A workspace brought its own endpoint and it can't be used right now. Unlike
+ * a deployment configuration error, its message is written for the people who
+ * can fix it (the workspace's admins) and names no model, so callers show it
+ * as is.
+ */
+export class ChatScopeUnavailableError extends ChatConfigurationError {
+    readonly status = 503 as const;
+}
+
+export function isChatScopeUnavailableError(error: unknown): error is ChatScopeUnavailableError {
+    return error instanceof ChatScopeUnavailableError;
+}
 
 export type ChatModelsSource = "deployment" | "workspace";
 
@@ -34,7 +49,7 @@ export interface ChatModelsScope {
      * it instead of falling back: work a workspace pointed at its own provider
      * must never quietly go to someone else's.
      */
-    error?: Error;
+    error?: ChatScopeUnavailableError;
 }
 
 /**

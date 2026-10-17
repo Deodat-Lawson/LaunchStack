@@ -15,6 +15,7 @@
 
 import {
     ChatConfigurationError,
+    ChatScopeUnavailableError,
     runWithChatModelsScope,
     type ChatModelsScope,
 } from "@launchstack/llm";
@@ -58,7 +59,7 @@ export function resetWorkspaceChatModelsCache(): void {
 function unusable(reason: string): ChatModelsScope {
     return {
         source: "workspace",
-        error: new ChatConfigurationError(
+        error: new ChatScopeUnavailableError(
             `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Settings › Models.`
         ),
     };
@@ -96,7 +97,15 @@ async function loadScope(companyId: number): Promise<ChatModelsScope> {
         });
         return { source: "workspace", config };
     } catch (error) {
-        if (error instanceof ChatConfigurationError) return unusable(error.message);
+        if (error instanceof ChatConfigurationError) {
+            // The detail can quote model ids, and this reason reaches every
+            // member's chat, so it goes to the log.
+            console.error(
+                `[workspace-models] workspace ${companyId}'s setup is invalid:`,
+                error.message
+            );
+            return unusable("its saved model setup isn't valid, so open it and save it again.");
+        }
         throw error;
     }
 }

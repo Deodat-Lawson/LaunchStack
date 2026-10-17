@@ -109,7 +109,9 @@ describe("GET /api/documents/[id]/media", () => {
                 documentId: 3,
                 title: "standup.mp4 (Transcription)",
                 language: "en",
+                languages: null,
                 segments: SEGMENTS,
+                translations: [],
             },
             durationSeconds: null,
         });

@@ -4,7 +4,8 @@
  * Two Google products share this door, told apart by `?provider=`:
  *
  * - (default) `google-drive` — workspace-scoped. A `connectors.manage`
- *   holder grants drive.file for the whole workspace.
+ *   holder grants drive.file for the whole workspace, plus drive.readonly
+ *   when folder import is on (GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED).
  * - `gmail` — per-user. Any `documents.upload` holder grants gmail.readonly
  *   for their own mailbox; the connection belongs to them, and the mail
  *   lands in a folder only they can see.
@@ -29,12 +30,13 @@ import {
     isGmailConnectorConfigured,
 } from "~/server/services/connectors/gmail/config";
 import {
-    GOOGLE_DRIVE_SCOPES,
+    googleDriveScopes,
     GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
+import { publicOrigin } from "~/server/public-origin";
 
 function redirectToConsent(
     request: Request,
@@ -43,7 +45,7 @@ function redirectToConsent(
     const nonce = randomUUID();
     const url = buildAuthorizationUrl({
         clientId: getGoogleOAuthApp().clientId,
-        redirectUri: getOAuthRedirectUrl(new URL(request.url).origin),
+        redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         scopes: input.scopes,
         state: `${input.statePrefix}${nonce}`,
     });
@@ -82,7 +84,7 @@ export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return ctx.response;
     return redirectToConsent(request, {
-        scopes: GOOGLE_DRIVE_SCOPES,
+        scopes: googleDriveScopes(),
         cookieName: GOOGLE_OAUTH_STATE_COOKIE,
         statePrefix: "",
     });

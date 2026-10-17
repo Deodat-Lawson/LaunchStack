@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { runEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
+
+import { publicOrigin } from "~/server/public-origin";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+
 import { resolveActor } from "../../email-campaigns/_lib/context";
 
 export const runtime = "nodejs";
@@ -77,7 +80,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            const origin = new URL(request.url).origin;
+            const origin = publicOrigin(request);
             const result = await runEmailCampaign({
                 companyId: actor.companyId,
                 name: parsed.data.name,

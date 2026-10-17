@@ -1,5 +1,5 @@
 {
-  "id": "eb2211f5-fd33-494b-86fb-6cd705ffa74a",
+  "id": "c97c335d-5a3b-4a62-9f80-aacc3eba8146",
   "prevId": "c903b6c5-255f-49d3-a55c-c498eb4ba889",
   "version": "7",
   "dialect": "postgresql",
@@ -6160,6 +6160,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "folder_category_id": {
+          "name": "folder_category_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -10045,116 +10051,6 @@
           ]
         }
       },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_workspace_model_endpoints": {
-      "name": "pdr_ai_v2_workspace_model_endpoints",
-      "schema": "",
-      "columns": {
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "base_url": {
-          "name": "base_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "api_key_ciphertext": {
-          "name": "api_key_ciphertext",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "api_key_last4": {
-          "name": "api_key_last4",
-          "type": "varchar(8)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "encryption_key_version": {
-          "name": "encryption_key_version",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
-        },
-        "models": {
-          "name": "models",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "connected_via": {
-          "name": "connected_via",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'key'"
-        },
-        "updated_by_user_id": {
-          "name": "updated_by_user_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "pdr_ai_v2_workspace_model_endpoints_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_workspace_model_endpoints_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_model_endpoints",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_workspace_model_endpoints_updated_by_user_id_pdr_ai_v2_users_id_fk": {
-          "name": "pdr_ai_v2_workspace_model_endpoints_updated_by_user_id_pdr_ai_v2_users_id_fk",
-          "tableFrom": "pdr_ai_v2_workspace_model_endpoints",
-          "tableTo": "pdr_ai_v2_users",
-          "columnsFrom": [
-            "updated_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

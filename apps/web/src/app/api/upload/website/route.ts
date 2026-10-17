@@ -24,6 +24,7 @@ import { inngest } from "~/server/inngest/client";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
+import { hasReadableText, websiteDocumentMarker, websiteHost } from "~/lib/website-document";
 
 const WebsiteUploadSchema = z.object({
     url: z.string().url("A valid URL is required"),
@@ -211,6 +212,18 @@ export async function POST(request: Request) {
                 );
             }
 
+            // A page that builds itself with JavaScript arrives as an empty
+            // shell. Saved, it is a source with nothing in it that the profile
+            // or Ask could quote, so it is refused rather than kept.
+            if (!hasReadableText(page.html)) {
+                return NextResponse.json(
+                    {
+                        error: `There is no text on ${websiteHost(page.finalUrl || url)} we can read; sites that build their pages with JavaScript look empty to us`,
+                    },
+                    { status: 422 }
+                );
+            }
+
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty trimmed titles must fall back.
             const resolvedTitle = title?.trim() || deriveTitle(page.html, url);
 
@@ -249,6 +262,8 @@ export async function POST(request: Request) {
                 mimeType: "text/html",
                 originalFilename: filename,
                 isWebsite: true,
+                // The viewer shows a saved page by this, not as its HTML.
+                ocrMetadata: { ...websiteDocumentMarker({ url: normalizedSourceUrl.href }) },
             });
             await recordUpload(ctx.data, uploadResult);
 

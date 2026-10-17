@@ -275,7 +275,7 @@ export async function POST(request: Request) {
                 // Build prompts with RLM-specific context
                 const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
                 const webSearchInstruction = getWebSearchInstruction(
-                    enableWebSearch ?? false,
+                    webSearch.searched,
                     webSearch.results,
                     webSearch.refinedQuery,
                     webSearch.reasoning
@@ -292,10 +292,10 @@ export async function POST(request: Request) {
 
                 const userPrompt = `User's question: "${question}"${conversationContext}${overviewContext}
 
-    Relevant document content (${searchResult.totalTokensUsed} tokens from ${searchResult.sections.length} sections):
-    ${searchResult.combinedContent}${webSearch.content}${webSearchInstruction}
+Relevant document content (${searchResult.totalTokensUsed} tokens from ${searchResult.sections.length} sections):
+${searchResult.combinedContent}${webSearch.content}${webSearchInstruction}
 
-    Provide a comprehensive answer based on the provided content. When referencing specific sections, mention the page number if available. When using information from web sources, cite them using [Source X] format.`;
+Provide a comprehensive answer based on the provided content. When referencing specific sections, mention the page number if available. When using information from web sources, cite them using [Source X] format.`;
 
                 let response;
                 try {
@@ -356,8 +356,8 @@ export async function POST(request: Request) {
                     recommendedPages,
                     processingTimeMs: totalTime,
                     searchScope: "document",
-                    webSources: enableWebSearch ? webSearch.results : undefined,
-                    webSearch: enableWebSearch
+                    webSources: webSearch.searched ? webSearch.results : undefined,
+                    webSearch: webSearch.searched
                         ? {
                               refinedQuery: webSearch.refinedQuery || question,
                               reasoning: webSearch.reasoning,

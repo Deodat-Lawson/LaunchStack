@@ -1,12 +1,32 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FileText, Loader2, LocateFixed, RotateCw } from "lucide-react";
+import { Check, FileText, Languages, Loader2, LocateFixed, RotateCw, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
-import { formatMediaTime, type MediaPreview } from "~/lib/media-document";
+import {
+    formatMediaTime,
+    type MediaPreview,
+    type TranscriptTranslationResponse,
+} from "~/lib/media-document";
+import {
+    TRANSLATION_LANGUAGES,
+    baseLanguage,
+    languageLabel,
+    languageName,
+    nativeLanguageName,
+    suggestedTranslation,
+} from "~/lib/languages";
 
 type Transcript = NonNullable<MediaPreview["transcript"]>;
 
@@ -31,6 +51,31 @@ interface Rect {
 /** How long a hand on the scroll wheel keeps follow-along from scrolling. */
 const MANUAL_SCROLL_GRACE_MS = 4000;
 
+/** The reader's last Translate choice; a convenience, so storage failures are ignored. */
+const TRANSLATE_TO_KEY = "launchstack.transcript.translateTo";
+
+function readTranslateTo(): string | null {
+    try {
+        return window.localStorage.getItem(TRANSLATE_TO_KEY);
+    } catch {
+        return null;
+    }
+}
+
+function rememberTranslateTo(code: string) {
+    try {
+        window.localStorage.setItem(TRANSLATE_TO_KEY, code);
+    } catch {
+        // private window or blocked storage: nothing to remember
+    }
+}
+
+type TranslationState =
+    | { status: "original" }
+    | { status: "loading"; language: string }
+    | { status: "error"; language: string; message: string }
+    | { status: "shown"; language: string; lines: string[] };
+
 /** Scroll `child` into view inside `container` only — never the panes around it. */
 function scrollWithin(container: HTMLElement, child: HTMLElement, mode: "nearest" | "center") {
     const box = container.getBoundingClientRect();
@@ -52,11 +97,16 @@ function segmentIndexOf(node: Node): number {
 }
 
 /**
- * The transcript beside a recording. With timestamps (Whisper reports them)
- * each line plays from its moment, the line under the playhead is marked and
- * kept in view, and a citation cues the player to the cited line. Without
- * them (the cloud transcriber reports none) it is the plain text, with the
- * cited passage highlighted the way the other viewers do it.
+ * The transcript beside a recording. With timestamps (Whisper and Gemini
+ * report them) each line plays from its moment, the line under the playhead is
+ * marked and kept in view, and a citation cues the player to the cited line.
+ * Without them it is the plain text, with the cited passage highlighted the
+ * way the other viewers do it.
+ *
+ * The transcript is in the language spoken, named in the header. Translate
+ * shows it in another language line for line, so a translated line still
+ * plays from its moment; citations always point into the original, so one
+ * arriving switches back to it.
  */
 export function TranscriptPanel({
     transcript,
@@ -77,6 +127,75 @@ export function TranscriptPanel({
     const [reload, setReload] = useState(0);
     const [cited, setCited] = useState<{ first: number; last: number } | null>(null);
     const [citeRects, setCiteRects] = useState<Rect[]>([]);
+    const [translation, setTranslation] = useState<TranslationState>({ status: "original" });
+    const [readyTranslations, setReadyTranslations] = useState<string[]>(
+        transcript.translations ?? []
+    );
+    const translateRequest = useRef(0);
+
+    // A different transcript starts in its own language.
+    useEffect(() => {
+        translateRequest.current++;
+        setTranslation({ status: "original" });
+        setReadyTranslations(transcript.translations ?? []);
+    }, [transcript.documentId, transcript.translations]);
+
+    // A citation quotes the original: show the original to find it in.
+    useEffect(() => {
+        if (highlight) {
+            translateRequest.current++;
+            setTranslation({ status: "original" });
+        }
+    }, [highlight]);
+
+    const translateTo = useCallback(
+        async (language: string) => {
+            rememberTranslateTo(language);
+            const request = ++translateRequest.current;
+            setTranslation({ status: "loading", language });
+            try {
+                const res = await fetch(
+                    `/api/documents/${transcript.documentId}/transcript/translations`,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ language }),
+                    }
+                );
+                const body = (await res.json().catch(() => null)) as
+                    | (TranscriptTranslationResponse & { error?: undefined })
+                    | { error?: string }
+                    | null;
+                if (request !== translateRequest.current) return;
+                if (!res.ok || !body || !("lines" in body)) {
+                    const message =
+                        body && typeof body.error === "string"
+                            ? body.error
+                            : `Translation failed (HTTP ${res.status})`;
+                    setTranslation({ status: "error", language, message });
+                    return;
+                }
+                setTranslation({ status: "shown", language: body.language, lines: body.lines });
+                setReadyTranslations(prev =>
+                    prev.includes(body.language) ? prev : [...prev, body.language]
+                );
+            } catch {
+                if (request === translateRequest.current) {
+                    setTranslation({
+                        status: "error",
+                        language,
+                        message: "Couldn't reach the server. Check your connection and try again.",
+                    });
+                }
+            }
+        },
+        [transcript.documentId]
+    );
+
+    const showOriginal = () => {
+        translateRequest.current++;
+        setTranslation({ status: "original" });
+    };
 
     // Plain transcripts are read from the document's own content.
     useEffect(() => {
@@ -188,19 +307,45 @@ export function TranscriptPanel({
         lastManualScroll.current = Date.now();
     };
 
-    const languageLabel =
-        transcript.language && transcript.language !== "unknown"
-            ? transcript.language.toUpperCase()
-            : null;
+    const spoken =
+        transcript.language && transcript.language !== "unknown" ? transcript.language : null;
+    const otherLanguages = (transcript.languages ?? []).filter(
+        code => !spoken || baseLanguage(code) !== baseLanguage(spoken)
+    );
+    const shown = translation.status === "shown" ? translation : null;
+    /** The language the visible lines are in, for `lang` (glyph choice, hyphenation, screen readers). */
+    const visibleLanguage = shown?.language ?? spoken ?? undefined;
+    const hasText = segments ? segments.length > 0 : Boolean(text);
+    const suggested = suggestedTranslation(
+        spoken,
+        typeof navigator === "undefined" ? [] : navigator.languages
+    );
+    const remembered = typeof window === "undefined" ? null : readTranslateTo();
+    const menuLanguages = [
+        ...new Set([
+            ...(remembered && (TRANSLATION_LANGUAGES as readonly string[]).includes(remembered)
+                ? [remembered]
+                : []),
+            suggested,
+            ...TRANSLATION_LANGUAGES,
+        ]),
+    ];
+    const visibleText = shown && !segments ? shown.lines.join("\n") : text;
 
     return (
         <section aria-label="Transcript" className="flex min-h-0 flex-1 flex-col">
-            <header className="border-line flex items-center gap-2 border-b px-4 py-2">
+            <header className="border-line flex flex-wrap items-center gap-x-2 gap-y-1 border-b px-4 py-2">
                 <FileText className="text-ink-3 size-4 shrink-0" aria-hidden />
                 <h3 className="text-ink text-sm font-semibold">Transcript</h3>
-                {languageLabel && (
-                    <span className="bg-panel-2 text-ink-3 rounded px-1.5 py-0.5 font-mono text-[10px] font-medium">
-                        {languageLabel}
+                {spoken && (
+                    <span
+                        className="bg-panel-2 text-ink-2 rounded px-1.5 py-0.5 text-[11px] font-medium"
+                        title={`Spoken: ${[spoken, ...otherLanguages].map(languageName).join(", ")}`}
+                        data-testid="transcript-language"
+                    >
+                        {languageLabel(spoken)}
+                        {otherLanguages.length > 0 &&
+                            ` + ${otherLanguages.map(languageName).join(", ")}`}
                     </span>
                 )}
                 {segments && (
@@ -209,6 +354,53 @@ export function TranscriptPanel({
                     </span>
                 )}
                 <span className="flex-1" />
+                {hasText && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className={cn("text-xs", shown ? "text-brand-ink" : "text-ink-3")}
+                                aria-label="Translate transcript"
+                            >
+                                {translation.status === "loading" ? (
+                                    <Loader2 className="animate-spin" />
+                                ) : (
+                                    <Languages />
+                                )}
+                                {shown ? languageName(shown.language) : "Translate"}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="max-h-80 w-60 overflow-y-auto">
+                            <DropdownMenuLabel className="text-ink-3 text-xs font-medium">
+                                Show the transcript in
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem onSelect={showOriginal}>
+                                <span className="flex-1">
+                                    Original{spoken ? ` (${languageName(spoken)})` : ""}
+                                </span>
+                                {!shown && <Check className="text-brand-ink" aria-hidden />}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            {menuLanguages.map(code => (
+                                <DropdownMenuItem
+                                    key={code}
+                                    onSelect={() => void translateTo(code)}
+                                    lang={code}
+                                >
+                                    <span className="flex-1">{nativeLanguageName(code)}</span>
+                                    <span className="text-ink-4 text-[11px]" lang="en">
+                                        {shown?.language === code
+                                            ? "showing"
+                                            : readyTranslations.includes(code)
+                                              ? "ready"
+                                              : languageName(code)}
+                                    </span>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
                 {segments && (
                     <Button
                         variant="ghost"
@@ -227,16 +419,70 @@ export function TranscriptPanel({
                 )}
             </header>
 
+            {translation.status !== "original" && (
+                <div
+                    role="status"
+                    className={cn(
+                        "border-line flex items-center gap-2 border-b px-4 py-1.5 text-xs",
+                        translation.status === "error"
+                            ? "bg-danger-soft text-danger"
+                            : "bg-panel-2 text-ink-3"
+                    )}
+                >
+                    {translation.status === "loading" && (
+                        <>
+                            <Loader2 className="size-3.5 animate-spin" aria-hidden />
+                            <span className="flex-1">
+                                Translating into {languageName(translation.language)}… a long
+                                recording takes up to a minute.
+                            </span>
+                        </>
+                    )}
+                    {translation.status === "error" && (
+                        <>
+                            <span className="flex-1">{translation.message}</span>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 text-xs"
+                                onClick={() => void translateTo(translation.language)}
+                            >
+                                <RotateCw />
+                                Try again
+                            </Button>
+                        </>
+                    )}
+                    {translation.status === "shown" && (
+                        <span className="flex-1">
+                            Machine translation into {languageName(translation.language)}. Search
+                            and citations use the original.
+                        </span>
+                    )}
+                    {translation.status !== "loading" && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 text-xs"
+                            onClick={showOriginal}
+                        >
+                            <X />
+                            Show original
+                        </Button>
+                    )}
+                </div>
+            )}
+
             <div
                 ref={scrollRef}
                 className="min-h-0 flex-1 overflow-y-auto px-2 py-2"
                 onWheel={markManualScroll}
                 onTouchMove={markManualScroll}
             >
-                <div ref={bodyRef} className="relative">
+                <div ref={bodyRef} className="relative" lang={visibleLanguage}>
                     {segments ? (
                         <ol className="space-y-0.5">
                             {segments.map((segment, i) => {
+                                const lineText = shown?.lines[i] ?? segment.text;
                                 const isActive = i === activeIndex;
                                 const isCited =
                                     cited !== null && i >= cited.first && i <= cited.last;
@@ -247,7 +493,7 @@ export function TranscriptPanel({
                                             data-segment-index={i}
                                             data-cited={isCited || undefined}
                                             aria-current={isActive ? "time" : undefined}
-                                            aria-label={`Play from ${formatMediaTime(segment.start)}: ${segment.text}`}
+                                            aria-label={`Play from ${formatMediaTime(segment.start)}: ${lineText}`}
                                             onClick={() => onSeek(segment.start)}
                                             className={cn(
                                                 "group flex w-full items-start gap-3 rounded-lg border-l-2 border-transparent px-3 py-1.5 text-left transition-colors",
@@ -267,8 +513,11 @@ export function TranscriptPanel({
                                             >
                                                 {formatMediaTime(segment.start)}
                                             </span>
-                                            <span className="text-ink text-sm leading-relaxed">
-                                                {segment.text}
+                                            <span
+                                                dir="auto"
+                                                className="text-ink min-w-0 flex-1 text-start text-sm leading-relaxed"
+                                            >
+                                                {lineText}
                                             </span>
                                         </button>
                                     </li>
@@ -292,7 +541,7 @@ export function TranscriptPanel({
                                 Try again
                             </Button>
                         </div>
-                    ) : text ? (
+                    ) : visibleText ? (
                         <>
                             {citeRects.map((r, i) => (
                                 <div
@@ -308,8 +557,11 @@ export function TranscriptPanel({
                                     }}
                                 />
                             ))}
-                            <p className="text-ink relative whitespace-pre-wrap px-3 py-1 text-sm leading-relaxed">
-                                {text}
+                            <p
+                                dir="auto"
+                                className="text-ink relative whitespace-pre-wrap px-3 py-1 text-sm leading-relaxed"
+                            >
+                                {visibleText}
                             </p>
                         </>
                     ) : (

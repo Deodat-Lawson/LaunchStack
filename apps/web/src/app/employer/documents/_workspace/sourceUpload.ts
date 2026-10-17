@@ -21,7 +21,7 @@ export async function uploadFileToStorage(file: File): Promise<UploadResult> {
     const res = await fetch("/api/upload-local", { method: "POST", body: form });
     if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? `Upload failed (HTTP ${res.status})`);
+        throw new Error(`${file.name}: ${body.error ?? `upload failed (HTTP ${res.status})`}`);
     }
     const data = (await res.json()) as {
         url: string;
@@ -63,7 +63,17 @@ export async function registerDocument(params: {
         body: JSON.stringify(body),
     });
     if (!res.ok) {
+        // The route answers with one readable sentence (a recording that could
+        // not be transcribed says why); show that, not the raw JSON.
         const text = await res.text().catch(() => "");
-        throw new Error(`Document registration failed (HTTP ${res.status}) ${text}`);
+        let message = text;
+        try {
+            message = (JSON.parse(text) as { error?: string }).error ?? text;
+        } catch {
+            // not JSON: keep the text
+        }
+        throw new Error(
+            `${params.file.name}: ${message || `couldn't be added (HTTP ${res.status})`}`
+        );
     }
 }

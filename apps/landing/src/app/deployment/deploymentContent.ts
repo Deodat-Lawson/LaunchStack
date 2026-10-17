@@ -207,7 +207,7 @@ export const GUIDES: Guide[] = [
                 ],
                 code: "docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml --env-file .env config --services\ndocker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml --env-file .env up --build -d\ndocker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml logs --tail=100 migrate app worker caddy",
                 file: "Terminal",
-                note: "The lean overlay disables local Whisper and the Inngest dev server. Configure cloud transcription and OCR, or explicitly enable the relevant profiles. The supplied files hostname serves objects anonymously by URL; choose storage and access controls that fit your deployment.",
+                note: "The lean overlay disables local Whisper and the Inngest dev server, and runs a self-hosted Inngest server instead. Configure cloud transcription and OCR, or explicitly enable the relevant profiles. The supplied files hostname serves objects anonymously by URL; choose storage and access controls that fit your deployment.",
                 links: [
                     guideLink("Workers & scheduled jobs", "workers"),
                     guideLink("Health, updates & backups", "operations"),
@@ -438,11 +438,11 @@ export const GUIDES: Guide[] = [
             {
                 title: "Production Inngest",
                 body: [
-                    "The production overlay replaces the dev server with a self-hosted Inngest server on a private network with the app and worker. Google Drive and Gmail sync, the scheduled jobs, and the other background workflows run through it. Set both keys: with an event key and no signing key, jobs are accepted and never run.",
+                    "The production overlay replaces the dev server with a self-hosted Inngest server (inngest start), keeping its history in an inngest database on the same Postgres and its queue in a small Redis. It finds the worker at http://worker:8020/api/inngest on its own. Set your own event key and signing key; Compose refuses to start without them (with an event key and no signing key, jobs are accepted and never run).",
                 ],
-                code: "INNGEST_EVENT_KEY=$(openssl rand -hex 24)\nINNGEST_SIGNING_KEY=$(openssl rand -hex 32)",
+                code: "# each value: the output of openssl rand -hex 32\nINNGEST_EVENT_KEY=replace-with-64-hex-characters\nINNGEST_SIGNING_KEY=replace-with-64-hex-characters",
                 file: ".env",
-                note: "The signing key must be hex. The worker's serve endpoint is not published; to use Inngest Cloud instead, add a Caddy route for /api/inngest to worker:8020 and register that URL.",
+                note: "Nothing outside the server calls the worker, so Caddy does not route /api/inngest. The Inngest dashboard has no login: it listens on 127.0.0.1 only, so reach it over an SSH tunnel. To use Inngest Cloud instead, see the runbook in docs/runbooks/azure-lean-deploy.md.",
                 links: [
                     {
                         label: "Serving Inngest functions",
@@ -570,8 +570,12 @@ export const GUIDES: Guide[] = [
                         name: "Gmail · opt-in",
                         detail: "The Google OAuth pair plus GMAIL_CONNECTOR_ENABLED=true. Uses a separate mailbox grant and the shared Google callback; reads mail without sending or deleting it.",
                     },
+                    {
+                        name: "Drive folder import · opt-in",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported. The connection belongs to the workspace, so with it on every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
+                    },
                 ],
-                note: "Gmail uses the restricted gmail.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling it for users.",
+                note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",
             },
             {
                 title: "Google Picker and linked editing",

@@ -46,6 +46,19 @@ export async function ensureSyncState(
         });
 }
 
+/**
+ * Forget the changes-feed cursor so the next run walks everything picked.
+ * A new pick changes nothing in Drive, so without this an idle feed would
+ * short-circuit the very sync meant to import it. Fingerprints still stop
+ * unchanged files from downloading again.
+ */
+export async function resetSyncCursor(connectionId: number): Promise<void> {
+    await db
+        .update(googleDriveSyncState)
+        .set({ startPageToken: null })
+        .where(eq(googleDriveSyncState.connectionId, connectionId));
+}
+
 /** True when this call claimed the lease; false when another sync holds it. */
 export async function claimSyncLease(connectionId: number): Promise<boolean> {
     const staleBefore = new Date(Date.now() - SYNC_LEASE_STALE_MS);

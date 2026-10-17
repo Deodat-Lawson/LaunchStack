@@ -53,6 +53,7 @@ import {
 } from "~/server/db/schema/auth";
 import { MCP_OAUTH_SCOPES, mcpAvailability } from "~/server/mcp/config";
 import { workspaceAccessTokenClaims, workspacePostLogin } from "~/server/mcp/oauth-workspace";
+import { accountLinkingHooks } from "./account-linking";
 import { sendAuthEmail } from "./email";
 import { enabledSocialProviders } from "./providers";
 
@@ -113,6 +114,15 @@ const buildAuth = () => {
         session: {
             cookieCache: { enabled: true, maxAge: 60 },
         },
+        // A Google or GitHub sign-in on an address that already has an account
+        // links to it even when the address was never confirmed (no password
+        // sign-up confirms one here). The hooks make that safe: the provider
+        // takes the account over instead of joining whoever made it. See
+        // ./account-linking.
+        account: {
+            accountLinking: { requireLocalEmailVerified: false },
+        },
+        databaseHooks: accountLinkingHooks(db),
         // OAuth failures that happen before a sign-in's own errorCallbackURL
         // is known (a lost state cookie, a malformed callback) land here
         // instead of better-auth's bare /api/auth/error page. The sign-in page

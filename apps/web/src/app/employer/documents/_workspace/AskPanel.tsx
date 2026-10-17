@@ -761,11 +761,6 @@ const Message = React.memo(function Message({
                 {agent?.role && (
                     <span style={{ fontSize: 11, color: "var(--ink-3)" }}>{agent.role}</span>
                 )}
-                {msg.model && (
-                    <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                        · {msg.model}
-                    </span>
-                )}
                 {msg.gapCheck && (
                     <span
                         title={`Predictive gap analysis ran across ${msg.gapCheck.domain} docs`}

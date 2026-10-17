@@ -1,6 +1,7 @@
 /**
- * The chat model configuration, made legible. Gated on `settings.manage`:
- * it names the endpoint host and the model ids, which is operator detail.
+ * The chat model configuration, made legible. Gated on `settings.manage`.
+ * It names routes and capabilities only; the endpoint and model ids stay on
+ * the server (see `~/server/settings/models`).
  */
 
 import { NextResponse } from "next/server";
@@ -16,11 +17,14 @@ export async function GET() {
     try {
         return NextResponse.json(modelsOverview());
     } catch (error) {
-        // A misconfigured file is exactly what this page exists to show.
-        const message =
-            error instanceof Error
-                ? error.message
-                : "The chat model configuration could not be read.";
-        return NextResponse.json({ error: message }, { status: 500 });
+        // The validation error quotes model ids and preset names, so the detail
+        // goes to the server log and the page says only that the file is wrong.
+        console.error("[settings/models] chat model configuration is invalid:", error);
+        return NextResponse.json(
+            {
+                error: "The chat model configuration could not be read. The server log has the details.",
+            },
+            { status: 500 }
+        );
     }
 }

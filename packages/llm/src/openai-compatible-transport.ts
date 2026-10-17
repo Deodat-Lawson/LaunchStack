@@ -102,6 +102,9 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
 /**
  * Translate transport failures into operator-actionable messages. Kept here
  * because the wording depends on how this transport authenticates.
+ *
+ * The message is shown to whoever asked, so it names configuration variables
+ * but never the endpoint host or the model id; those go to the server log.
  */
 export function describeChatEndpointError(
     error: unknown,
@@ -110,6 +113,30 @@ export function describeChatEndpointError(
 ): { status: number; message: string } | null {
     if (!(error instanceof Error)) return null;
     const message = error.message.toLowerCase();
+    const where = `${endpoint.baseUrl} (model ${modelId})`;
+
+    if (
+        message.includes("402") ||
+        message.includes("insufficient credits") ||
+        message.includes("insufficient_quota") ||
+        message.includes("exceeded your current quota") ||
+        message.includes("payment required")
+    ) {
+        console.error(`[chat] ${where} refused for billing: ${error.message}`);
+        return {
+            status: 503,
+            message:
+                "The AI service has reached its usage limit and can't answer right now. An administrator needs to restore it.",
+        };
+    }
+
+    if (message.includes("429") || message.includes("rate limit")) {
+        console.warn(`[chat] ${where} rate-limited: ${error.message}`);
+        return {
+            status: 429,
+            message: "The AI service is busy right now. Try again in a moment.",
+        };
+    }
 
     if (
         message.includes("401") ||
@@ -134,9 +161,11 @@ export function describeChatEndpointError(
         message.includes("socket hang up") ||
         message.includes("timeout")
     ) {
+        console.error(`[chat] could not reach ${where}: ${error.message}`);
         return {
             status: 502,
-            message: `Unable to reach the chat endpoint at ${endpoint.baseUrl}. Confirm the server is running and CHAT_BASE_URL is correct.`,
+            message:
+                "Unable to reach the chat endpoint. Confirm the server is running and CHAT_BASE_URL is correct.",
         };
     }
 
@@ -146,9 +175,11 @@ export function describeChatEndpointError(
         message.includes("unknown model") ||
         message.includes("no such model")
     ) {
+        console.error(`[chat] ${where} does not serve the model: ${error.message}`);
         return {
             status: 400,
-            message: `The chat endpoint does not serve model "${modelId}". Update the model id in the chat model configuration.`,
+            message:
+                "The chat endpoint does not serve the configured model. Update the model id in the chat model configuration.",
         };
     }
 

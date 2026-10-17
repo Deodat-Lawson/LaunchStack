@@ -12,6 +12,8 @@ jest.mock("~/env", () => ({
             GOOGLE_OAUTH_CLIENT_ID: "cid",
             GOOGLE_OAUTH_CLIENT_SECRET: "sec",
             GOOGLE_OAUTH_REDIRECT_URL: undefined,
+            GMAIL_CONNECTOR_ENABLED: "true",
+            EMBEDDING_SECRETS_KEY: "test-key",
         },
         client: {},
     },
@@ -35,6 +37,10 @@ import {
     requireWorkspaceContext,
     requireWorkspacePermission,
 } from "~/lib/require-workspace-context";
+import {
+    GMAIL_OAUTH_STATE_COOKIE,
+    GMAIL_STATE_PREFIX,
+} from "~/server/services/connectors/gmail/config";
 import { GOOGLE_OAUTH_STATE_COOKIE } from "~/server/services/google-drive/config";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
@@ -63,19 +69,33 @@ afterEach(() => {
     else process.env.BETTER_AUTH_URL = saved;
 });
 
-it("sends Google the same public redirect_uri on consent and on the token exchange", async () => {
-    const consent = await start(new Request(`${PROXIED}/api/connectors/google/oauth/start`));
-    expect(consent.status).toBe(307);
-    const authorize = new URL(consent.headers.get("location") ?? "");
-    expect(authorize.searchParams.get("redirect_uri")).toBe(CALLBACK);
-    const state = authorize.searchParams.get("state") ?? "";
+it.each([
+    { flow: "Drive", query: "", cookie: GOOGLE_OAUTH_STATE_COOKIE, prefix: "" },
+    {
+        flow: "Gmail",
+        query: "?provider=gmail",
+        cookie: GMAIL_OAUTH_STATE_COOKIE,
+        prefix: GMAIL_STATE_PREFIX,
+    },
+])(
+    "$flow: sends Google the same public redirect_uri on consent and on the token exchange",
+    async ({ query, cookie, prefix }) => {
+        const consent = await start(
+            new Request(`${PROXIED}/api/connectors/google/oauth/start${query}`)
+        );
+        expect(consent.status).toBe(307);
+        const authorize = new URL(consent.headers.get("location") ?? "");
+        expect(authorize.searchParams.get("redirect_uri")).toBe(CALLBACK);
+        const state = authorize.searchParams.get("state") ?? "";
+        expect(state.startsWith(prefix)).toBe(true);
 
-    const back = await callback(
-        new Request(`${PROXIED}/api/connectors/google/oauth/callback?code=c&state=${state}`, {
-            headers: { cookie: `${GOOGLE_OAUTH_STATE_COOKIE}=${state}` },
-        })
-    );
+        const back = await callback(
+            new Request(`${PROXIED}/api/connectors/google/oauth/callback?code=c&state=${state}`, {
+                headers: { cookie: `${cookie}=${state.slice(prefix.length)}` },
+            })
+        );
 
-    expect(exchange).toHaveBeenCalledWith(expect.objectContaining({ redirectUri: CALLBACK }));
-    expect(new URL(back.headers.get("location") ?? "").origin).toBe("https://app.example.com");
-});
+        expect(exchange).toHaveBeenCalledWith(expect.objectContaining({ redirectUri: CALLBACK }));
+        expect(new URL(back.headers.get("location") ?? "").origin).toBe("https://app.example.com");
+    }
+);

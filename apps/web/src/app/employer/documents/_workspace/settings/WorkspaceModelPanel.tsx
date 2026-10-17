@@ -401,6 +401,17 @@ export function WorkspaceModelPanel({
 // Connected summary
 // ---------------------------------------------------------------------------
 
+/**
+ * Whether an unset route really falls back to the main model. Images and
+ * reasoning only do when the main model can do them; otherwise the server
+ * refuses those requests, and saying "Main model" would hide that.
+ */
+function inheritsMain(route: RouteId, main: WorkspaceModelChoice | undefined): boolean {
+    if (route === "vision") return Boolean(main?.vision);
+    if (route === "reasoning") return Boolean(main?.reasoning);
+    return true;
+}
+
 function capabilities(choice: WorkspaceModelChoice): string {
     const said = [choice.vision && "reads images", choice.reasoning && "reasons"].filter(Boolean);
     return said.length ? ` · ${said.join(", ")}` : "";
@@ -465,8 +476,15 @@ function EndpointSummary({
                                     </>
                                 ) : route.id === "default" ? (
                                     <span className="text-ink-3">Not chosen</span>
-                                ) : (
+                                ) : inheritsMain(route.id, endpoint.models?.default) ? (
                                     <span className="text-ink-3">Main model</span>
+                                ) : (
+                                    <span className="text-ink-3">
+                                        Off: the main model{" "}
+                                        {route.id === "vision"
+                                            ? "doesn't read images"
+                                            : "doesn't reason"}
+                                    </span>
                                 )}
                             </dd>
                         </React.Fragment>

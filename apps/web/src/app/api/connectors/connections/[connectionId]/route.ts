@@ -21,6 +21,7 @@ import {
 import { deleteConnection, getConnectionById } from "~/server/services/connectors/connection-store";
 import { revokeGoogleToken } from "~/server/services/connectors/gmail/connections";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { publicOrigin } from "~/server/public-origin";
 
 export const runtime = "nodejs";
 
@@ -51,7 +52,7 @@ export async function DELETE(
             // Slack's auth.revoke and GitHub's grant delete want the access token.
             let revoked = false;
             if (isOAuthProvider(provider)) {
-                const config = getConnectorConfig(provider, new URL(request.url).origin);
+                const config = getConnectorConfig(provider, publicOrigin(request));
                 const token = tokens?.accessToken ?? tokens?.refreshToken;
                 if (config && token) {
                     try {

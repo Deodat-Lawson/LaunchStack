@@ -9,7 +9,8 @@ import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
 import { readFact } from "@launchstack/tools/company-context/facts";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -132,6 +133,14 @@ RULES:
 // ─── POST handler ──────────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+    // The reply and the wording of its failure both use the workspace's own
+    // models when it brought them, so the catch below runs in the scope too.
+    return withWorkspaceChatModels(ctx.data.companyId, () => legalChat(request, ctx));
+}
+
+async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
     // Recorded as soon as the model resolves, so the catch below can describe a
     // transport failure without resolving a second time. Resolving there would
     // re-read the configuration, and on a configuration fault that throws out of
@@ -140,9 +149,6 @@ export async function POST(request: Request) {
     let selectedModelId: string | undefined;
 
     try {
-        const ctx = await requireWorkspaceContext();
-        if (!ctx.success) return ctx.response;
-
         let body: unknown;
         try {
             body = (await request.json()) as unknown;

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { listCampaigns, prepareEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, readJson, resolveActor } from "./_lib/context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -25,30 +26,32 @@ export async function POST(request: Request) {
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        const parsed = CreateSchema.safeParse(await readJson(request));
-        if (!parsed.success) {
-            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
-        }
+        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+            const parsed = CreateSchema.safeParse(await readJson(request));
+            if (!parsed.success) {
+                return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+            }
 
-        const prepared = await prepareEmailCampaign({
-            companyId: actor.actor.companyId,
-            name: parsed.data.name,
-            ...(parsed.data.goal !== undefined ? { goal: parsed.data.goal } : {}),
-            ...(parsed.data.recipients ? { recipients: parsed.data.recipients } : {}),
-            actorUserId: actor.actor.userId,
+            const prepared = await prepareEmailCampaign({
+                companyId: actor.actor.companyId,
+                name: parsed.data.name,
+                ...(parsed.data.goal !== undefined ? { goal: parsed.data.goal } : {}),
+                ...(parsed.data.recipients ? { recipients: parsed.data.recipients } : {}),
+                actorUserId: actor.actor.userId,
+            });
+
+            return ok(
+                {
+                    campaignId: prepared.campaign.id,
+                    status: prepared.campaign.status,
+                    templateVersionId: prepared.version.id,
+                    version: prepared.version.version,
+                    template: prepared.template,
+                    review: prepared.review,
+                },
+                201
+            );
         });
-
-        return ok(
-            {
-                campaignId: prepared.campaign.id,
-                status: prepared.campaign.status,
-                templateVersionId: prepared.version.id,
-                version: prepared.version.version,
-                template: prepared.template,
-                review: prepared.review,
-            },
-            201
-        );
     } catch (error) {
         return handleRouteError("email-campaigns/create", error);
     }

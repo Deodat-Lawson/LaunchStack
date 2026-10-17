@@ -37,6 +37,7 @@ import { env } from "~/env";
 import { createCollabChatFn } from "./chat";
 import { getChannelStore, type PostgresChannelStore } from "./store";
 import { getSlackClientForCompany } from "./slack";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 type MeetingRow = typeof collabMeeting.$inferSelect;
 
@@ -168,12 +169,30 @@ async function persistState(meetingId: string, state: MeetingState): Promise<voi
 // Runtime assembly
 // ---------------------------------------------------------------------------
 
-function buildRuntimes(): AgentRuntime[] {
+/**
+ * The local runtime, taking each turn under the meeting's workspace models.
+ *
+ * The runtime is process-wide and turns are driven from wherever the meeting
+ * happens to advance (a request, the Slack bridge, a turn chained off the
+ * last), so the workspace is entered per turn rather than trusted to the
+ * caller. A remote node answers with its own models and is left alone.
+ */
+function workspaceLocalRuntime(companyId: bigint): AgentRuntime {
+    const local = getLocalRuntime();
+    return {
+        nodeId: local.nodeId,
+        serves: persona => local.serves(persona),
+        takeTurn: request => withWorkspaceChatModels(companyId, () => local.takeTurn(request)),
+    };
+}
+
+function buildRuntimes(companyId: bigint): AgentRuntime[] {
     const hub = getHub();
+    const local = workspaceLocalRuntime(companyId);
     // Remote first: a persona pinned to a connected worker node must not be
     // silently served by the local model just because the local runtime is
     // willing to take any persona.
-    return hub ? [hub.remoteRuntime(), getLocalRuntime()] : [getLocalRuntime()];
+    return hub ? [hub.remoteRuntime(), local] : [local];
 }
 
 async function buildBridge(
@@ -229,7 +248,7 @@ export async function getMeetingRuntime(
     const orchestrator = new MeetingOrchestrator({
         store,
         config,
-        runtimes: buildRuntimes(),
+        runtimes: buildRuntimes(row.companyId),
         initialState: rowToState(row),
     });
 

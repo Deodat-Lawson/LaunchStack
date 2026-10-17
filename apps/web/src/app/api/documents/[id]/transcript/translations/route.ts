@@ -19,7 +19,10 @@ import { z } from "zod";
 
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
-import { isTranscriptionError, translateTranscriptLines } from "@launchstack/conversion";
+import {
+    isTranscriptionError,
+    translateTranscriptLines,
+} from "@launchstack/conversion/audio-transcription";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { withRateLimit } from "~/lib/rate-limit-middleware";

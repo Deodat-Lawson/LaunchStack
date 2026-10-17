@@ -16,6 +16,8 @@ import { join } from "node:path";
 import { routeDocument, normalizeDocument } from "@launchstack/conversion/ocr/processor";
 import { ingestDocument } from "@launchstack/conversion/extraction-router";
 
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+
 export const runtime = "nodejs";
 // Keep benchmarks within the 300s default shared by current Vercel plans.
 export const maxDuration = 300;
@@ -43,19 +45,23 @@ export async function POST(request: Request) {
     try {
         const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
 
-        if (isPdf) {
-            const decision = await routeDocument(fileUrl);
-            const result = await normalizeDocument(fileUrl, decision);
-            return NextResponse.json({
-                provider: decision.selectedProvider,
-                pages: result.pages,
-            });
-        }
+        // No workspace: the operator's benchmark runs on the deployment's
+        // models, and says so (image descriptions read the scope).
+        return await withWorkspaceChatModels(null, async () => {
+            if (isPdf) {
+                const decision = await routeDocument(fileUrl);
+                const result = await normalizeDocument(fileUrl, decision);
+                return NextResponse.json({
+                    provider: decision.selectedProvider,
+                    pages: result.pages,
+                });
+            }
 
-        const doc = await ingestDocument(buf, { filename: file.name, mimeType: file.type });
-        return NextResponse.json({
-            provider: doc.metadata.provider,
-            pages: doc.pages,
+            const doc = await ingestDocument(buf, { filename: file.name, mimeType: file.type });
+            return NextResponse.json({
+                provider: doc.metadata.provider,
+                pages: doc.pages,
+            });
         });
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);

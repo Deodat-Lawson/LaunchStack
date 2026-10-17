@@ -1,5 +1,5 @@
 {
-  "id": "11c123df-650b-41c9-bd74-cb7a0ca242be",
+  "id": "72fd958a-ce97-45f4-963d-45541476fe98",
   "prevId": "c97c335d-5a3b-4a62-9f80-aacc3eba8146",
   "version": "7",
   "dialect": "postgresql",
@@ -10056,6 +10056,116 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.pdr_ai_v2_workspace_model_endpoints": {
+      "name": "pdr_ai_v2_workspace_model_endpoints",
+      "schema": "",
+      "columns": {
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "base_url": {
+          "name": "base_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "api_key_ciphertext": {
+          "name": "api_key_ciphertext",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "api_key_last4": {
+          "name": "api_key_last4",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "encryption_key_version": {
+          "name": "encryption_key_version",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "models": {
+          "name": "models",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "connected_via": {
+          "name": "connected_via",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'key'"
+        },
+        "updated_by_user_id": {
+          "name": "updated_by_user_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pdr_ai_v2_workspace_model_endpoints_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_workspace_model_endpoints_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_workspace_model_endpoints",
+          "tableTo": "pdr_ai_v2_company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pdr_ai_v2_workspace_model_endpoints_updated_by_user_id_pdr_ai_v2_users_id_fk": {
+          "name": "pdr_ai_v2_workspace_model_endpoints_updated_by_user_id_pdr_ai_v2_users_id_fk",
+          "tableFrom": "pdr_ai_v2_workspace_model_endpoints",
+          "tableTo": "pdr_ai_v2_users",
+          "columnsFrom": [
+            "updated_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.pdr_ai_v2_trend_search_jobs": {
       "name": "pdr_ai_v2_trend_search_jobs",
       "schema": "",
@@ -16931,604 +17041,6 @@
           "tableTo": "pdr_ai_v2_proposal_applications",
           "columnsFrom": [
             "application_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_scenario_injections": {
-      "name": "pdr_ai_v2_scenario_injections",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "text": {
-          "name": "text",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "applied_round": {
-          "name": "applied_round",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "scenario_injections_run_idx": {
-          "name": "scenario_injections_run_idx",
-          "columns": [
-            {
-              "expression": "run_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "applied_round",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_scenario_injections_run_id_pdr_ai_v2_scenario_runs_id_fk": {
-          "name": "pdr_ai_v2_scenario_injections_run_id_pdr_ai_v2_scenario_runs_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_injections",
-          "tableTo": "pdr_ai_v2_scenario_runs",
-          "columnsFrom": [
-            "run_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_scenario_injections_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_scenario_injections_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_injections",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_scenario_interviews": {
-      "name": "pdr_ai_v2_scenario_interviews",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "asked_by_user_id": {
-          "name": "asked_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "agent_id": {
-          "name": "agent_id",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "question": {
-          "name": "question",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "answer": {
-          "name": "answer",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "scenario_interviews_run_asker_idx": {
-          "name": "scenario_interviews_run_asker_idx",
-          "columns": [
-            {
-              "expression": "run_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "asked_by_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_scenario_interviews_run_id_pdr_ai_v2_scenario_runs_id_fk": {
-          "name": "pdr_ai_v2_scenario_interviews_run_id_pdr_ai_v2_scenario_runs_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_interviews",
-          "tableTo": "pdr_ai_v2_scenario_runs",
-          "columnsFrom": [
-            "run_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_scenario_interviews_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_scenario_interviews_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_interviews",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_scenario_post_links": {
-      "name": "pdr_ai_v2_scenario_post_links",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "brand_post_id": {
-          "name": "brand_post_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        }
-      },
-      "indexes": {
-        "scenario_post_links_post_unique": {
-          "name": "scenario_post_links_post_unique",
-          "columns": [
-            {
-              "expression": "brand_post_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "scenario_post_links_company_idx": {
-          "name": "scenario_post_links_company_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_scenario_post_links_run_id_pdr_ai_v2_scenario_runs_id_fk": {
-          "name": "pdr_ai_v2_scenario_post_links_run_id_pdr_ai_v2_scenario_runs_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_post_links",
-          "tableTo": "pdr_ai_v2_scenario_runs",
-          "columnsFrom": [
-            "run_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_scenario_post_links_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_scenario_post_links_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_post_links",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.pdr_ai_v2_scenario_runs": {
-      "name": "pdr_ai_v2_scenario_runs",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_by_user_id": {
-          "name": "created_by_user_id",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "kind": {
-          "name": "kind",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(200)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "subject": {
-          "name": "subject",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'queued'"
-        },
-        "step": {
-          "name": "step",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "agent_count": {
-          "name": "agent_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "round_count": {
-          "name": "round_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "seed": {
-          "name": "seed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sources": {
-          "name": "sources",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "evidence": {
-          "name": "evidence",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "brief": {
-          "name": "brief",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "world": {
-          "name": "world",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "report": {
-          "name": "report",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "reception": {
-          "name": "reception",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "estimate": {
-          "name": "estimate",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "usage": {
-          "name": "usage",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "draft": {
-          "name": "draft",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "draft_hash": {
-          "name": "draft_hash",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "error": {
-          "name": "error",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "shared_at": {
-          "name": "shared_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cancel_requested_at": {
-          "name": "cancel_requested_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "lease_until": {
-          "name": "lease_until",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "started_at": {
-          "name": "started_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "finished_at": {
-          "name": "finished_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "scenario_runs_company_creator_idx": {
-          "name": "scenario_runs_company_creator_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_by_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "scenario_runs_company_kind_idx": {
-          "name": "scenario_runs_company_kind_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "kind",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "scenario_runs_status_idx": {
-          "name": "scenario_runs_status_idx",
-          "columns": [
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_scenario_runs_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_scenario_runs_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_scenario_runs",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
           ],
           "columnsTo": [
             "id"

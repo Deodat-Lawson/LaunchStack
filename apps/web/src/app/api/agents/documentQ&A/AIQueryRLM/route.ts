@@ -35,6 +35,7 @@ import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/store/schema";
 import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 
@@ -159,206 +160,211 @@ export async function POST(request: Request) {
                 return forbiddenForPermission("documents.read");
             }
 
-            // Parse and validate request
-            const body = (await request.json()) as RLMQueryRequest;
-            const validation = validateRequest(body);
+            return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+                // Parse and validate request
+                const body = (await request.json()) as RLMQueryRequest;
+                const validation = validateRequest(body);
 
-            if (!validation.success) {
-                return NextResponse.json(
-                    { success: false, message: validation.error },
-                    { status: 400 }
-                );
-            }
-
-            const {
-                documentId,
-                question,
-                style,
-                aiModel,
-                provider,
-                enableWebSearch,
-                aiPersona,
-                conversationHistory,
-                maxTokens,
-                includeOverview,
-                includePreviews,
-                semanticTypes,
-                prioritize,
-                pageRange,
-            } = validation.data;
-
-            // Then resolve, still before the hierarchical search runs: an
-            // unavailable route is a 400, and RLM retrieval is the expensive
-            // part.
-            let resolved;
-            try {
-                resolved = resolveConfiguredChatModel();
-            } catch (modelError) {
-                const failure = describeChatResolutionFailure(modelError);
-                return NextResponse.json(
-                    { success: false, message: failure.message },
-                    { status: failure.status }
-                );
-            }
-
-            const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
-            if (!compatibility.ok) {
-                return NextResponse.json(
-                    { success: false, message: compatibility.message },
-                    { status: compatibility.status }
-                );
-            }
-            const { modelId: selectedAiModel, chat } = resolved;
-
-            // A document outside the caller's scope reads as missing: 404, never 403.
-            // RLM navigates within this one document, so proving it is enough.
-            const scope = await ctx.data.documentScope();
-            observeScopeSize(scope);
-            const [targetDocument] = await db
-                .select({ id: document.id, title: document.title })
-                .from(document)
-                .where(
-                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
-                )
-                .limit(1);
-
-            if (!targetDocument) {
-                return NextResponse.json(
-                    { success: false, message: "Document not found." },
-                    { status: 404 }
-                );
-            }
-
-            // Perform RLM search
-            const searchOptions: RLMSearchOptions = {
-                maxTokens: maxTokens ?? 4000,
-                includeOverview: includeOverview ?? true,
-                includePreviews: includePreviews ?? false,
-                semanticTypes,
-                prioritize: prioritize ?? "relevance",
-                pageRange,
-            };
-
-            console.log(`🔍 [AIQueryRLM] Processing query for document ${documentId}`);
-
-            const searchResult = await performRLMSearch(documentId, question, searchOptions);
-
-            if (searchResult.sections.length === 0) {
-                return NextResponse.json({
-                    success: false,
-                    message:
-                        "No relevant content found. The document may not have been processed with RLM indexing yet.",
-                });
-            }
-
-            // Perform web search if enabled
-            const webSearch = await performWebSearch(
-                question,
-                searchResult.combinedContent,
-                enableWebSearch,
-                5
-            );
-
-            const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
-
-            // Build conversation context
-            let conversationContext = "";
-            if (conversationHistory) {
-                conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
-            }
-
-            // Build prompts with RLM-specific context
-            const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
-            const webSearchInstruction = getWebSearchInstruction(
-                enableWebSearch ?? false,
-                webSearch.results,
-                webSearch.refinedQuery,
-                webSearch.reasoning
-            );
-
-            // Enhanced user prompt with document overview
-            let overviewContext = "";
-            if (searchResult.overview) {
-                overviewContext = `\n\nDocument Overview:\n- Title: ${searchResult.overview.title}\n- Total Pages: ${searchResult.overview.totalPages}\n- Document Type: ${searchResult.overview.documentClass ?? "Unknown"}\n- Topics: ${searchResult.overview.topicTags.join(", ") || "Not specified"}`;
-                if (searchResult.overview.summary) {
-                    overviewContext += `\n- Summary: ${searchResult.overview.summary}`;
+                if (!validation.success) {
+                    return NextResponse.json(
+                        { success: false, message: validation.error },
+                        { status: 400 }
+                    );
                 }
-            }
 
-            const userPrompt = `User's question: "${question}"${conversationContext}${overviewContext}
+                const {
+                    documentId,
+                    question,
+                    style,
+                    aiModel,
+                    provider,
+                    enableWebSearch,
+                    aiPersona,
+                    conversationHistory,
+                    maxTokens,
+                    includeOverview,
+                    includePreviews,
+                    semanticTypes,
+                    prioritize,
+                    pageRange,
+                } = validation.data;
+
+                // Then resolve, still before the hierarchical search runs: an
+                // unavailable route is a 400, and RLM retrieval is the expensive
+                // part.
+                let resolved;
+                try {
+                    resolved = resolveConfiguredChatModel();
+                } catch (modelError) {
+                    const failure = describeChatResolutionFailure(modelError);
+                    return NextResponse.json(
+                        { success: false, message: failure.message },
+                        { status: failure.status }
+                    );
+                }
+
+                const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
+                if (!compatibility.ok) {
+                    return NextResponse.json(
+                        { success: false, message: compatibility.message },
+                        { status: compatibility.status }
+                    );
+                }
+                const { modelId: selectedAiModel, chat } = resolved;
+
+                // A document outside the caller's scope reads as missing: 404, never 403.
+                // RLM navigates within this one document, so proving it is enough.
+                const scope = await ctx.data.documentScope();
+                observeScopeSize(scope);
+                const [targetDocument] = await db
+                    .select({ id: document.id, title: document.title })
+                    .from(document)
+                    .where(
+                        and(
+                            eq(document.id, documentId),
+                            scopedDocumentWhere(ctx.data.companyId, scope)
+                        )
+                    )
+                    .limit(1);
+
+                if (!targetDocument) {
+                    return NextResponse.json(
+                        { success: false, message: "Document not found." },
+                        { status: 404 }
+                    );
+                }
+
+                // Perform RLM search
+                const searchOptions: RLMSearchOptions = {
+                    maxTokens: maxTokens ?? 4000,
+                    includeOverview: includeOverview ?? true,
+                    includePreviews: includePreviews ?? false,
+                    semanticTypes,
+                    prioritize: prioritize ?? "relevance",
+                    pageRange,
+                };
+
+                console.log(`🔍 [AIQueryRLM] Processing query for document ${documentId}`);
+
+                const searchResult = await performRLMSearch(documentId, question, searchOptions);
+
+                if (searchResult.sections.length === 0) {
+                    return NextResponse.json({
+                        success: false,
+                        message:
+                            "No relevant content found. The document may not have been processed with RLM indexing yet.",
+                    });
+                }
+
+                // Perform web search if enabled
+                const webSearch = await performWebSearch(
+                    question,
+                    searchResult.combinedContent,
+                    enableWebSearch,
+                    5
+                );
+
+                const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
+
+                // Build conversation context
+                let conversationContext = "";
+                if (conversationHistory) {
+                    conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
+                }
+
+                // Build prompts with RLM-specific context
+                const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
+                const webSearchInstruction = getWebSearchInstruction(
+                    webSearch.searched,
+                    webSearch.results,
+                    webSearch.refinedQuery,
+                    webSearch.reasoning
+                );
+
+                // Enhanced user prompt with document overview
+                let overviewContext = "";
+                if (searchResult.overview) {
+                    overviewContext = `\n\nDocument Overview:\n- Title: ${searchResult.overview.title}\n- Total Pages: ${searchResult.overview.totalPages}\n- Document Type: ${searchResult.overview.documentClass ?? "Unknown"}\n- Topics: ${searchResult.overview.topicTags.join(", ") || "Not specified"}`;
+                    if (searchResult.overview.summary) {
+                        overviewContext += `\n- Summary: ${searchResult.overview.summary}`;
+                    }
+                }
+
+                const userPrompt = `User's question: "${question}"${conversationContext}${overviewContext}
 
 Relevant document content (${searchResult.totalTokensUsed} tokens from ${searchResult.sections.length} sections):
 ${searchResult.combinedContent}${webSearch.content}${webSearchInstruction}
 
 Provide a comprehensive answer based on the provided content. When referencing specific sections, mention the page number if available. When using information from web sources, cite them using [Source X] format.`;
 
-            let response;
-            try {
-                response = await chat.invoke(
-                    resolved.prepareMessages([
-                        new SystemMessage(systemPrompt),
-                        new HumanMessage(userPrompt),
-                    ])
-                );
-            } catch (modelError) {
-                const friendly = describeChatError(modelError, selectedAiModel);
-                if (friendly) {
-                    return NextResponse.json(
-                        {
-                            success: false,
-                            message: friendly.message,
-                        },
-                        { status: friendly.status }
+                let response;
+                try {
+                    response = await chat.invoke(
+                        resolved.prepareMessages([
+                            new SystemMessage(systemPrompt),
+                            new HumanMessage(userPrompt),
+                        ])
                     );
+                } catch (modelError) {
+                    const friendly = describeChatError(modelError, selectedAiModel);
+                    if (friendly) {
+                        return NextResponse.json(
+                            {
+                                success: false,
+                                message: friendly.message,
+                            },
+                            { status: friendly.status }
+                        );
+                    }
+                    throw modelError;
                 }
-                throw modelError;
-            }
 
-            const summarizedAnswer = normalizeModelContent(response.content);
-            const totalTime = Date.now() - startTime;
+                const summarizedAnswer = normalizeModelContent(response.content);
+                const totalTime = Date.now() - startTime;
 
-            // Extract page numbers from sections
-            const recommendedPages = [
-                ...new Set(
-                    searchResult.sections
-                        .map(s => s.pageNumber)
-                        .filter((p): p is number => p !== null)
-                ),
-            ].sort((a, b) => a - b);
+                // Extract page numbers from sections
+                const recommendedPages = [
+                    ...new Set(
+                        searchResult.sections
+                            .map(s => s.pageNumber)
+                            .filter((p): p is number => p !== null)
+                    ),
+                ].sort((a, b) => a - b);
 
-            console.log(`✅ [AIQueryRLM] Completed in ${totalTime}ms`);
+                console.log(`✅ [AIQueryRLM] Completed in ${totalTime}ms`);
 
-            return NextResponse.json({
-                success: true,
-                summarizedAnswer,
-                // RLM-specific metadata
-                documentOverview: searchResult.overview
-                    ? {
-                          title: searchResult.overview.title,
-                          totalPages: searchResult.overview.totalPages,
-                          totalTokens: searchResult.overview.totalTokens,
-                          documentClass: searchResult.overview.documentClass,
-                          topicTags: searchResult.overview.topicTags,
-                          summary: searchResult.overview.summary,
-                      }
-                    : undefined,
-                sectionsUsed: searchResult.sections.length,
-                tokensUsed: searchResult.totalTokensUsed,
-                tokenBudget: searchResult.tokenBudget,
-                usedSemanticSearch: searchResult.usedSemanticSearch,
-                // Standard fields
-                retrievalMethod: "rlm_hierarchical",
-                recommendedPages,
-                processingTimeMs: totalTime,
-                searchScope: "document",
-                webSources: enableWebSearch ? webSearch.results : undefined,
-                webSearch: enableWebSearch
-                    ? {
-                          refinedQuery: webSearch.refinedQuery || question,
-                          reasoning: webSearch.reasoning,
-                          resultsCount: webSearch.results.length,
-                      }
-                    : undefined,
+                return NextResponse.json({
+                    success: true,
+                    summarizedAnswer,
+                    // RLM-specific metadata
+                    documentOverview: searchResult.overview
+                        ? {
+                              title: searchResult.overview.title,
+                              totalPages: searchResult.overview.totalPages,
+                              totalTokens: searchResult.overview.totalTokens,
+                              documentClass: searchResult.overview.documentClass,
+                              topicTags: searchResult.overview.topicTags,
+                              summary: searchResult.overview.summary,
+                          }
+                        : undefined,
+                    sectionsUsed: searchResult.sections.length,
+                    tokensUsed: searchResult.totalTokensUsed,
+                    tokenBudget: searchResult.tokenBudget,
+                    usedSemanticSearch: searchResult.usedSemanticSearch,
+                    // Standard fields
+                    retrievalMethod: "rlm_hierarchical",
+                    recommendedPages,
+                    processingTimeMs: totalTime,
+                    searchScope: "document",
+                    webSources: webSearch.searched ? webSearch.results : undefined,
+                    webSearch: webSearch.searched
+                        ? {
+                              refinedQuery: webSearch.refinedQuery || question,
+                              reasoning: webSearch.reasoning,
+                              resultsCount: webSearch.results.length,
+                          }
+                        : undefined,
+                });
             });
         } catch (error) {
             console.error("❌ [AIQueryRLM] Error in query processing:", error);

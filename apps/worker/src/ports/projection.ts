@@ -13,14 +13,19 @@ import type { LoggerPort } from "@launchstack/runtime";
 import { countFacts, refreshForDocument } from "@launchstack/pipelines/company-metadata";
 
 import { generateStructured } from "~/lib/llm";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export function createCompanyProjectionPort(logger: LoggerPort): CompanyProjectionPort {
     return {
         async projectCompanyState({ companyId, sourceId, traceId }) {
-            const metadata = await refreshForDocument(BigInt(companyId), sourceId, {
-                generate: input => generateStructured({ ...input, capability: "smallExtraction" }),
-                modelId: "smallExtraction",
-            });
+            // Read with the workspace's own models when it brought them.
+            const metadata = await withWorkspaceChatModels(companyId, () =>
+                refreshForDocument(BigInt(companyId), sourceId, {
+                    generate: input =>
+                        generateStructured({ ...input, capability: "smallExtraction" }),
+                    modelId: "smallExtraction",
+                })
+            );
             logger.info(
                 {
                     traceId,

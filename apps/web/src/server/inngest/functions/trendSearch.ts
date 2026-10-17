@@ -7,6 +7,7 @@ import {
     type TrendSearchOutput,
 } from "@launchstack/pipelines/trend-search";
 import type { TrendSearchPipelineStage } from "@launchstack/pipelines/trend-search/run";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 function toErrorMessage(error: unknown): string {
     if (error instanceof Error && error.message) {
@@ -103,9 +104,13 @@ export const trendSearchJob = inngest.createFunction(
 
             await onStageChange("searching");
 
-            return runTrendSearch(toPipelineInput(eventData), {
-                onStageChange,
-            });
+            // A step body runs outside the handler's async context, so the
+            // workspace's models are entered here rather than around the handler.
+            return withWorkspaceChatModels(companyId, () =>
+                runTrendSearch(toPipelineInput(eventData), {
+                    onStageChange,
+                })
+            );
         })) as TrendSearchOutput;
 
         return (await step.run("persist", async () => {

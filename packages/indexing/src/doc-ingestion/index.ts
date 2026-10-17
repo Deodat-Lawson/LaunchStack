@@ -37,11 +37,8 @@ import {
     ocrProviderToTokenKey,
 } from "@launchstack/store/credits";
 
-import type {
-    DocIngestionToolInput,
-    DocIngestionToolResult,
-    DocIngestionToolRuntimeOptions,
-} from "./types";
+import { createStepRunner } from "./step-runner";
+import type { DocIngestionToolInput, DocIngestionToolResult } from "./types";
 
 const DEFAULT_EMBEDDING_BATCH_SIZE = 50;
 
@@ -107,15 +104,6 @@ function splitIntoBatches<T>(arr: T[], size: number): T[][] {
         batches.push(arr.slice(i, i + size));
     }
     return batches;
-}
-
-function createStepRunner(runtime?: DocIngestionToolRuntimeOptions) {
-    if (runtime?.runStep) {
-        return async <T>(stepName: string, fn: () => Promise<T>): Promise<T> =>
-            runtime.runStep?.(stepName, fn) ?? fn();
-    }
-
-    return async <T>(_stepName: string, fn: () => Promise<T>): Promise<T> => fn();
 }
 
 async function maybeMarkProcessing(jobId: string, shouldUpdateStatus: boolean): Promise<void> {

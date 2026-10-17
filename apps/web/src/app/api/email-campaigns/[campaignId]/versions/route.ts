@@ -15,6 +15,7 @@ import {
     readJson,
     resolveActor,
 } from "../../_lib/context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -42,35 +43,39 @@ export async function POST(
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        const campaignId = parseCampaignId((await params).campaignId);
-        if (campaignId === null) return fail("Invalid campaign ID", 400);
+        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+            const campaignId = parseCampaignId((await params).campaignId);
+            if (campaignId === null) return fail("Invalid campaign ID", 400);
 
-        const parsed = CreateVersionSchema.safeParse((await readJson(request)) ?? {});
-        if (!parsed.success) {
-            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
-        }
+            const parsed = CreateVersionSchema.safeParse((await readJson(request)) ?? {});
+            if (!parsed.success) {
+                return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+            }
 
-        const prepared = await prepareEmailCampaign({
-            companyId: actor.actor.companyId,
-            campaignId,
-            ...(parsed.data.goal !== undefined ? { goal: parsed.data.goal } : {}),
-            ...(parsed.data.template ? { template: parsed.data.template } : {}),
-            ...(parsed.data.skipReview !== undefined ? { skipReview: parsed.data.skipReview } : {}),
-            actorUserId: actor.actor.userId,
+            const prepared = await prepareEmailCampaign({
+                companyId: actor.actor.companyId,
+                campaignId,
+                ...(parsed.data.goal !== undefined ? { goal: parsed.data.goal } : {}),
+                ...(parsed.data.template ? { template: parsed.data.template } : {}),
+                ...(parsed.data.skipReview !== undefined
+                    ? { skipReview: parsed.data.skipReview }
+                    : {}),
+                actorUserId: actor.actor.userId,
+            });
+
+            return ok(
+                {
+                    campaignId: prepared.campaign.id,
+                    status: prepared.campaign.status,
+                    templateVersionId: prepared.version.id,
+                    version: prepared.version.version,
+                    source: prepared.version.source,
+                    template: prepared.template,
+                    review: prepared.review,
+                },
+                201
+            );
         });
-
-        return ok(
-            {
-                campaignId: prepared.campaign.id,
-                status: prepared.campaign.status,
-                templateVersionId: prepared.version.id,
-                version: prepared.version.version,
-                source: prepared.version.source,
-                template: prepared.template,
-                review: prepared.review,
-            },
-            201
-        );
     } catch (error) {
         return handleRouteError("email-campaigns/versions/create", error);
     }

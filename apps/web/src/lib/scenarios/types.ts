@@ -241,7 +241,8 @@ export interface ScenarioDetail extends ScenarioSummary {
     people: ScenarioPerson[];
     /** All posts, oldest first. */
     posts: ScenarioPost[];
-    rounds: ScenarioRoundStats[];
+    /** Numbers per completed round (the summary's `rounds` is the planned count). */
+    roundStats: ScenarioRoundStats[];
     report: ScenarioReport | null;
     reception: ScenarioReception | null;
     injections: ScenarioInjection[];
@@ -295,7 +296,7 @@ export interface PostTestLink {
 
 export interface TrackRecordRow {
     runId: number;
-    postId: number;
+    postId: string;
     network: string;
     publishedAt: string | null;
     text: string;

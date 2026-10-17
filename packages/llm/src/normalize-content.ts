@@ -1,10 +1,14 @@
 /**
- * Post-process LLM chat responses into clean markdown.
+ * Turn LLM message content into a string, and chat answers into clean markdown.
  *
  * Several LangChain providers return `AIMessageChunk.content` as either a
- * string or an array of content parts (text + tool use + images). This
- * helper flattens that to a string, then rewrites LaTeX math delimiters into
- * the dollar notation remark-math reads:
+ * string or an array of content parts (text + tool use + images).
+ * `modelContentToText` only flattens that to a string. Use it when the text
+ * is parsed (JSON, paths) or sent back to a model as a prompt.
+ *
+ * `normalizeModelContent` flattens the same way, then rewrites LaTeX math
+ * delimiters into the dollar notation remark-math reads. Use it only for
+ * answers rendered as markdown:
  *
  * - `\(x\)` becomes `$x$`, trimmed so `\( x \)` gives `$x$`;
  * - `\[x\]` becomes `$$x$$`, unless it reads as escaped brackets (`\[1\]`);
@@ -237,16 +241,16 @@ function normalizeMath(markdown: string): string {
     return out.join("\n");
 }
 
-export function normalizeModelContent(content: unknown): string {
+/** Flatten message content to a string. Never rewrites the text. */
+export function modelContentToText(content: unknown): string {
     if (typeof content === "string") {
-        return normalizeMath(content);
+        return content;
     }
 
     if (Array.isArray(content)) {
-        const joined = content
+        return content
             .map(part => (typeof part === "string" ? part : JSON.stringify(part)))
             .join("");
-        return normalizeMath(joined);
     }
 
     if (content == null) {
@@ -258,4 +262,11 @@ export function normalizeModelContent(content: unknown): string {
     } catch {
         return Object.prototype.toString.call(content);
     }
+}
+
+/** Flatten message content, then rewrite its math for remark-math. */
+export function normalizeModelContent(content: unknown): string {
+    const text = modelContentToText(content);
+    // A lone object is serialized data, not prose: leave its JSON alone.
+    return typeof content === "string" || Array.isArray(content) ? normalizeMath(text) : text;
 }

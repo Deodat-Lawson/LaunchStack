@@ -35,6 +35,7 @@ import {
     pickedItemDestination,
     reportCount,
     type DriveStatus,
+    type FolderAccessState,
 } from "./driveStatus";
 import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
@@ -85,7 +86,18 @@ function Notice({
     );
 }
 
-export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
+export function DriveConnectPanel({
+    tab,
+    onFolderAccess,
+}: {
+    tab: AddSourceTab;
+    /**
+     * Whether a picked folder can import right now (null until known, or
+     * while not connected): the modal's destination bar only promises a
+     * folder of its own when it can.
+     */
+    onFolderAccess?: (state: FolderAccessState | null) => void;
+}) {
     const Icon = tab.Icon;
     const [status, setStatus] = useState<DriveStatus | null>(null);
     const [loading, setLoading] = useState(true);
@@ -110,6 +122,14 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     useEffect(() => {
         void refresh();
     }, [refresh]);
+
+    const liveAccess =
+        status?.configured && status.connected && status.status === "active"
+            ? folderAccessState(status)
+            : null;
+    useEffect(() => {
+        onFolderAccess?.(liveAccess);
+    }, [liveAccess, onFolderAccess]);
 
     // Polls while a sync is starting or running, so the counts land without
     // a manual refresh.
@@ -289,7 +309,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                             {reconnect
                                 ? "Google access was revoked or expired — connect again to resume syncing."
                                 : folderImport
-                                  ? "LaunchStack gets read-only access and imports only the files and folders you pick or paste."
+                                  ? "LaunchStack can read what this Google account can open, and imports only the files and folders you pick or paste."
                                   : "Pick files in Google's picker; only what you pick is shared."}
                         </div>
                     </div>
@@ -337,7 +357,7 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                         Allow folder access to import folders
                     </div>
                     This connection can only open files picked one by one, so a folder brings
-                    nothing from inside it. Reconnect once to give LaunchStack read-only access;
+                    nothing from inside it. Reconnect once and allow LaunchStack to read your Drive;
                     then folders come in whole, subfolders and later additions included.
                     <div className="mt-2">
                         <Button

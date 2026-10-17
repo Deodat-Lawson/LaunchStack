@@ -67,6 +67,9 @@ interface StoredMetadata {
     readonly driveFileId: unknown;
     readonly driveMimeType: unknown;
     readonly relativePath: string;
+    /** Where it sat in what was picked; lets a re-picked folder find its old home. */
+    readonly pickedRootId: unknown;
+    readonly folderPath: unknown;
     readonly modifiedAt: string;
     readonly syncedAt: string;
 }
@@ -145,6 +148,8 @@ export async function createGoogleDriveSink(
                 driveFileId: item.metadata.driveFileId,
                 driveMimeType: item.metadata.driveMimeType,
                 relativePath: item.location.relativePath,
+                pickedRootId: item.metadata.pickedRootId ?? null,
+                folderPath: item.metadata.folderPath ?? [],
                 modifiedAt: item.modifiedAt,
                 syncedAt,
             };

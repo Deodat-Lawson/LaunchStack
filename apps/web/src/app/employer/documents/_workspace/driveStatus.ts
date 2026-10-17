@@ -15,6 +15,8 @@ export interface DrivePickedItem {
     readonly mimeType: string | null;
     /** A picked folder's LaunchStack folder; null until its first sync. */
     readonly folderPath?: string | null;
+    /** Imported into a folder private to someone else, so its name isn't shown. */
+    readonly folderHidden?: boolean;
 }
 
 export interface DriveStatus {
@@ -73,6 +75,7 @@ export function emptyFolderNames(status: DriveStatus): string[] {
 export function pickedItemDestination(item: DrivePickedItem, access: FolderAccessState): string {
     if (item.kind !== "folder") return "In Google Drive";
     if (item.folderPath) return `In ${displayFolderPath(item.folderPath)}`;
+    if (item.folderHidden) return "In a private folder of whoever picked it";
     return access === "ready"
         ? "Becomes its own folder on the next sync"
         : "Its contents need folder access";

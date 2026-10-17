@@ -7,7 +7,9 @@
  *   with a manage grant for them on every folder the sync adds. The folder's
  *   id is remembered on the picked row, so a rename or move in LaunchStack is
  *   followed rather than undone, and a name someone else already uses gets
- *   " (2)" instead of mixing two imports.
+ *   " (2)" instead of mixing two imports. A folder picked again after "Stop
+ *   syncing" (which forgets the row) finds its old home through the
+ *   documents it already brought in.
  * - A picked **file** keeps today's behaviour: the workspace's "Google Drive"
  *   folder.
  *
@@ -16,9 +18,9 @@
  * insert it.
  */
 
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 
-import { category } from "@launchstack/store/schema";
+import { category, document } from "@launchstack/store/schema";
 import {
     FOLDER_SEPARATOR,
     MAX_FOLDER_DEPTH,
@@ -26,6 +28,7 @@ import {
     MAX_FOLDER_PATH_CHARS,
     UNFILED_FOLDER,
     normalizeFolderPath,
+    splitFolderPath,
 } from "~/lib/folders/path";
 import { db } from "~/server/db";
 import { googleDrivePickedItem } from "~/server/db/schema/connectors";
@@ -106,9 +109,11 @@ export interface DriveDestinations {
 
 export function createDriveDestinations(params: {
     readonly companyId: bigint;
+    /** Whose documents to look through when re-adopting a re-picked folder. */
+    readonly connectionId: number;
     readonly roots: readonly PickedRoot[];
 }): DriveDestinations {
-    const { companyId } = params;
+    const { companyId, connectionId } = params;
     const rootsByFileId = new Map(params.roots.map(root => [root.fileId, root]));
     const rootPaths = new Map<string, Promise<string>>();
     const ensured = new Map<string, Promise<void>>();
@@ -130,23 +135,68 @@ export function createDriveDestinations(params: {
         return row ? normalizeFolderPath(row.name) : null;
     }
 
+    /** Remember `path` as this pick's folder, by id, so renames are followed. */
+    async function remember(root: PickedRoot, path: string): Promise<boolean> {
+        const [row] = await db
+            .select({ id: category.id })
+            .from(category)
+            .where(and(eq(category.companyId, companyId), eq(category.name, path)))
+            .limit(1);
+        if (!row) return false;
+        await db
+            .update(googleDrivePickedItem)
+            .set({ folderCategoryId: Number(row.id) })
+            .where(eq(googleDrivePickedItem.id, root.id));
+        return true;
+    }
+
+    /**
+     * The folder an earlier pick of this Drive folder filled: from the
+     * documents it brought in, each knowing its subfolders, work back to the
+     * top. Only a match that reproduces the document's actual folder counts.
+     */
+    async function previousFolder(root: PickedRoot): Promise<string | null> {
+        const depth = sql`jsonb_array_length(coalesce(${document.ocrMetadata} -> 'folderPath', '[]'::jsonb))`;
+        const rows = await db
+            .select({
+                category: document.category,
+                folderPath: sql<unknown>`${document.ocrMetadata} -> 'folderPath'`,
+            })
+            .from(document)
+            .where(
+                and(
+                    eq(document.companyId, companyId),
+                    sql`${document.ocrMetadata} ->> 'connector' = 'google-drive'`,
+                    sql`${document.ocrMetadata} ->> 'connectionId' = ${String(connectionId)}`,
+                    sql`${document.ocrMetadata} ->> 'pickedRootId' = ${root.fileId}`
+                )
+            )
+            .orderBy(asc(depth))
+            .limit(20);
+        for (const row of rows) {
+            const subfolders = Array.isArray(row.folderPath)
+                ? row.folderPath.filter((s): s is string => typeof s === "string")
+                : [];
+            const segments = splitFolderPath(row.category);
+            if (segments.length <= subfolders.length) continue;
+            const candidate = segments
+                .slice(0, segments.length - subfolders.length)
+                .join(FOLDER_SEPARATOR);
+            if (placementPath(candidate, subfolders) !== normalizeFolderPath(row.category)) {
+                continue;
+            }
+            if (await remember(root, candidate)) return candidate;
+        }
+        return null;
+    }
+
     async function createRootFolder(root: PickedRoot): Promise<string> {
         const taken = new Set((await listFolders(companyId)).map(folder => folder.path));
         const path = freeTopLevelPath(root.name, taken);
         await createFolder(companyId, path, async (tx, created) => {
             if (root.owner) await applyFolderCreationDefaults(tx, root.owner, created);
         });
-        const [row] = await db
-            .select({ id: category.id })
-            .from(category)
-            .where(and(eq(category.companyId, companyId), eq(category.name, path)))
-            .limit(1);
-        if (row) {
-            await db
-                .update(googleDrivePickedItem)
-                .set({ folderCategoryId: Number(row.id) })
-                .where(eq(googleDrivePickedItem.id, root.id));
-        }
+        await remember(root, path);
         return path;
     }
 
@@ -160,7 +210,7 @@ export function createDriveDestinations(params: {
                     root.folderCategoryId == null
                         ? null
                         : await currentPathOf(root.folderCategoryId);
-                return remembered ?? (await createRootFolder(root));
+                return remembered ?? (await previousFolder(root)) ?? (await createRootFolder(root));
             });
             rootPaths.set(root.fileId, pending);
         }

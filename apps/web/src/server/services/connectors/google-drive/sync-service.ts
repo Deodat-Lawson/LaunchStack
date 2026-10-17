@@ -145,15 +145,29 @@ export async function runGoogleDriveSync(
             connection.companyId,
             pickedRows.map(row => row.addedByUserPk)
         );
+        // Whoever connected Drive stands in for a picker who has since left, so
+        // a folder made now is never left without an owner (and so open to
+        // the whole workspace).
+        const granterOwner: OwnerRef = {
+            companyId: connection.companyId,
+            userPk: BigInt(connection.grantedByUserId),
+            authUserId: granter.authUserId,
+        };
         const roots: PickedRoot[] = pickedRows.map(row => ({
             id: row.id,
             fileId: row.fileId,
             kind: row.kind,
             name: row.name,
             folderCategoryId: row.folderCategoryId,
-            owner: row.addedByUserPk == null ? null : (pickers.get(row.addedByUserPk) ?? null),
+            owner:
+                (row.addedByUserPk == null ? undefined : pickers.get(row.addedByUserPk)) ??
+                granterOwner,
         }));
-        const destinations = createDriveDestinations({ companyId: connection.companyId, roots });
+        const destinations = createDriveDestinations({
+            companyId: connection.companyId,
+            connectionId,
+            roots,
+        });
         const sink = await createGoogleDriveSink({
             companyId: connection.companyId,
             connectionId,

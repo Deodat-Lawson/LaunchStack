@@ -16,6 +16,7 @@ import { and, eq, inArray } from "drizzle-orm";
 
 import { category } from "@launchstack/store/schema";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
+import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/connectors/config";
@@ -83,12 +84,21 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 listPickedItems(connection.id),
                 getSyncState(connection.id),
             ]);
-            const paths = await folderPaths(
-                guard.ctx.companyId,
-                pickedItems.flatMap(item =>
-                    item.folderCategoryId == null ? [] : [item.folderCategoryId]
-                )
-            );
+            const [paths, scope] = await Promise.all([
+                folderPaths(
+                    guard.ctx.companyId,
+                    pickedItems.flatMap(item =>
+                        item.folderCategoryId == null ? [] : [item.folderCategoryId]
+                    )
+                ),
+                guard.ctx.documentScope(),
+            ]);
+            // A picked folder is private to whoever picked it (ADR-014); another
+            // admin learns that it was imported, never what it is called now.
+            const visiblePath = (categoryId: number | null) => {
+                const path = categoryId == null ? undefined : paths.get(categoryId);
+                return path && scopeAllowsCategory(scope, path) ? path : null;
+            };
             return createSuccessResponse({
                 configured: true,
                 connected: true,
@@ -104,11 +114,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                     kind: item.kind,
                     name: item.name,
                     mimeType: item.mimeType,
-                    // Where a picked folder's files are; null until its first sync.
-                    folderPath:
-                        item.folderCategoryId == null
-                            ? null
-                            : (paths.get(item.folderCategoryId) ?? null),
+                    // Where a picked folder's files are; null until its first sync,
+                    // and for a folder the caller can't open (folderHidden).
+                    folderPath: visiblePath(item.folderCategoryId),
+                    folderHidden:
+                        item.folderCategoryId != null &&
+                        paths.has(item.folderCategoryId) &&
+                        visiblePath(item.folderCategoryId) === null,
                 })),
                 lastSyncAt: syncState?.lastSyncAt?.toISOString() ?? null,
                 lastSyncStatus: syncState?.lastSyncStatus ?? null,

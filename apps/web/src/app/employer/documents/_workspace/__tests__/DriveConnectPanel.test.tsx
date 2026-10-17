@@ -142,6 +142,39 @@ describe("DriveConnectPanel folder access", () => {
     });
 });
 
+describe("DriveConnectPanel tells the modal what a folder pick will do", () => {
+    it("reports whether folder import works, and names no folder it can't open", async () => {
+        status = connected({
+            pickedItems: [
+                {
+                    fileId: "f9",
+                    kind: "folder",
+                    name: "Someone else's room",
+                    mimeType: null,
+                    folderPath: null,
+                    folderHidden: true,
+                },
+            ],
+        });
+        const onFolderAccess = jest.fn();
+        render(<DriveConnectPanel tab={driveTab} onFolderAccess={onFolderAccess} />);
+
+        expect(
+            await screen.findByText("In a private folder of whoever picked it")
+        ).toBeInTheDocument();
+        expect(onFolderAccess).toHaveBeenLastCalledWith("ready");
+    });
+
+    it("reports files-only when the grant can't read folders", async () => {
+        status = connected({ folderAccess: { enabled: false, granted: false } });
+        const onFolderAccess = jest.fn();
+        render(<DriveConnectPanel tab={driveTab} onFolderAccess={onFolderAccess} />);
+
+        await screen.findByText(/Only files you pick one by one come in/);
+        expect(onFolderAccess).toHaveBeenLastCalledWith("files-only");
+    });
+});
+
 describe("DriveConnectPanel status check", () => {
     it("says a failed check failed, instead of calling Drive not configured", async () => {
         fetchMock.mockImplementation(() => respond({ message: "Database connection error" }, 503));

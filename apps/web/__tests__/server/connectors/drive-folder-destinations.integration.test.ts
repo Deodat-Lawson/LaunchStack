@@ -124,6 +124,7 @@ describeDb("Drive folder destinations (integration)", () => {
 
         const destinations = createDriveDestinations({
             companyId,
+            connectionId,
             roots: [
                 { ...room, folderCategoryId: null, owner: owner() },
                 { ...solo, folderCategoryId: null, owner: owner() },
@@ -229,6 +230,7 @@ describeDb("Drive folder destinations (integration)", () => {
             .where(eq(googleDrivePickedItem.fileId, "room"));
         const next = createDriveDestinations({
             companyId,
+            connectionId,
             roots: [{ ...room!, owner: owner() }],
         });
         const placed = await next.placeFor({
@@ -240,11 +242,55 @@ describeDb("Drive folder destinations (integration)", () => {
         const twin = await pickRow("twin", "folder", "Acme deal room");
         const withTwin = createDriveDestinations({
             companyId,
+            connectionId,
             roots: [{ ...twin, folderCategoryId: null, owner: owner() }],
         });
         const twinPlaced = await withTwin.placeFor({
             metadata: { pickedRootId: "twin", folderPath: [] },
         });
         expect(twinPlaced.category).toBe("Acme deal room (2)");
+    });
+
+    it("finds the old folder again when a removed pick is picked again", async () => {
+        const { createDriveDestinations } = await import(
+            "~/server/services/connectors/google-drive/destinations"
+        );
+        const { googleDrivePickedItem } = await import("~/server/db/schema/connectors");
+        // A file the earlier pick brought in, one subfolder down.
+        await test.db.insert(document).values({
+            companyId,
+            url: "local://legal-memo",
+            category: "Acme deal room/Legal",
+            title: "Legal memo",
+            ocrMetadata: {
+                connector: "google-drive",
+                connectionId: String(connectionId),
+                pickedRootId: "room",
+                folderPath: ["Legal"],
+            },
+        });
+        // "Stop syncing" deletes the row; picking it again inserts a fresh one.
+        await test.db.delete(googleDrivePickedItem).where(eq(googleDrivePickedItem.fileId, "room"));
+        const again = await pickRow("room", "folder", "Acme Seed Data Room");
+
+        const destinations = createDriveDestinations({
+            companyId,
+            connectionId,
+            roots: [{ ...again, folderCategoryId: null, owner: owner() }],
+        });
+        const placed = await destinations.placeFor({
+            metadata: { pickedRootId: "room", folderPath: ["Financials"] },
+        });
+
+        expect(placed.category).toBe("Acme deal room/Financials");
+        const [row] = await test.db
+            .select({ folderCategoryId: googleDrivePickedItem.folderCategoryId })
+            .from(googleDrivePickedItem)
+            .where(eq(googleDrivePickedItem.id, again.id));
+        const [folder] = await test.db
+            .select({ id: category.id })
+            .from(category)
+            .where(and(eq(category.companyId, companyId), eq(category.name, "Acme deal room")));
+        expect(row?.folderCategoryId).toBe(Number(folder!.id));
     });
 });

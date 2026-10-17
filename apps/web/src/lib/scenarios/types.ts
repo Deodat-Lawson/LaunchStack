@@ -241,7 +241,8 @@ export interface ScenarioDetail extends ScenarioSummary {
     people: ScenarioPerson[];
     /** All posts, oldest first. */
     posts: ScenarioPost[];
-    rounds: ScenarioRoundStats[];
+    /** Numbers per completed round (the summary's `rounds` is the planned count). */
+    roundStats: ScenarioRoundStats[];
     report: ScenarioReport | null;
     reception: ScenarioReception | null;
     injections: ScenarioInjection[];

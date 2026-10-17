@@ -119,72 +119,178 @@ export default function PrivacyPage() {
                 produce the result you asked for, through their business APIs.
             </p>
 
-            <h2 id="google-user-data">Google user data</h2>
+            <h2 id="google-user-data">How Launchstack uses Google user data</h2>
             <p>
-                Launchstack can connect to your Google account. Here is exactly what it accesses and
-                why.
+                Launchstack (the app at <strong>{appHost}</strong>) can connect to your Google
+                account. This section describes exactly which Google user data the app accesses, how
+                it uses, stores, protects and shares that data, how long it keeps it, and how you
+                can have it deleted. It applies only to data received through Google APIs.
+            </p>
+
+            <h3>1. Data accessed</h3>
+            <div className={styles.legalTable}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Google permission</th>
+                            <th>Data the app accesses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sign in with Google</td>
+                            <td>
+                                <code>openid</code>, <code>email</code>, <code>profile</code>
+                            </td>
+                            <td>Your name, email address and profile photo</td>
+                        </tr>
+                        <tr>
+                            <td>Google Drive (optional)</td>
+                            <td>
+                                <code>drive.file</code>
+                            </td>
+                            <td>
+                                Only the files you choose with the Google file picker in
+                                Launchstack, and the files Launchstack creates for you: their names,
+                                types, contents and modification dates. The app cannot see any other
+                                file in your Drive.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Gmail (optional)</td>
+                            <td>
+                                <code>gmail.readonly</code>
+                            </td>
+                            <td>
+                                Your email messages and their attachments: sender, recipients,
+                                subject, date, message body and attached files. Read-only: the app
+                                never sends, changes or deletes email.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>2. How we use it</h3>
+            <ul>
+                <li>
+                    <strong>Sign-in data</strong> creates and identifies your Launchstack account
+                    and shows your name and photo to the people in your workspace.
+                </li>
+                <li>
+                    <strong>Drive files</strong> you choose are copied into your workspace so you
+                    can search them and ask questions about them. When you create or link a Google
+                    Doc from Launchstack, the app writes it to a &ldquo;LaunchStack&rdquo; folder in
+                    your Drive and keeps the two copies in sync.
+                </li>
+                <li>
+                    <strong>Gmail messages</strong> are copied into a private folder in your
+                    workspace that only you can see, so you can search them and get answers that
+                    cite them.
+                </li>
+                <li>
+                    To answer a question you ask, the relevant passages, which may come from these
+                    files or emails, are sent to the AI providers listed below to produce your
+                    answer.
+                </li>
+            </ul>
+            <p>
+                We use Google user data only to provide and improve these user-facing features. We
+                do not use it for advertising, we do not sell it, and we do not use it to determine
+                credit-worthiness or for lending. We do not use Google Workspace API data to
+                develop, improve or train generalized or non-personalized AI or machine-learning
+                models.
+            </p>
+
+            <h3>3. How we store it</h3>
+            <p>
+                Data from Google is stored in Launchstack&rsquo;s database and file storage on
+                Microsoft Azure servers in the United States, for as long as described in section 6.
+                The OAuth refresh token Google gives us is encrypted before it is stored, and access
+                tokens are short-lived.
+            </p>
+
+            <h3>4. How we protect it</h3>
+            <ul>
+                <li>
+                    All traffic to and from Launchstack and Google is encrypted with HTTPS (TLS).
+                </li>
+                <li>
+                    Servers run on encrypted disks, and service credentials are kept in a managed
+                    secrets vault.
+                </li>
+                <li>
+                    Synced Gmail messages are visible only to you. Drive files follow the sharing
+                    settings of your workspace, which are private to you by default.
+                </li>
+                <li>
+                    Our team does not read your Google data, unless you ask us to for support, it is
+                    needed to investigate abuse or a security problem, or the law requires it.
+                </li>
+            </ul>
+
+            <h3>5. Who we share it with</h3>
+            <p>
+                We do not sell or rent Google user data, and we do not share it with advertisers or
+                data brokers. We transfer it only:
             </p>
             <ul>
                 <li>
-                    <strong>Sign in with Google</strong> uses your name, email address and profile
-                    photo to create and identify your account.
+                    to the service providers that run the features above, namely Microsoft Azure for
+                    hosting and storage, and the AI providers reached through OpenRouter to answer
+                    your questions, each only as needed to provide the feature;
                 </li>
                 <li>
-                    <strong>Google Drive</strong> (the <code>drive.file</code> permission) gives
-                    access only to files you pick in Launchstack or that Launchstack creates. We
-                    read those files to add them to your workspace, and we create and update linked
-                    copies in a &ldquo;LaunchStack&rdquo; folder in your Drive. We can&rsquo;t see
-                    any other files in your Drive.
+                    when the law requires it, or to protect people&rsquo;s safety or the security of
+                    the service;
                 </li>
                 <li>
-                    <strong>Gmail</strong> (the <code>gmail.readonly</code> permission) lets us read
-                    your email messages so they can be searched and cited in your workspace. Synced
-                    messages go into a private folder that only you can see. Launchstack never
-                    sends, changes or deletes email.
+                    as part of a merger or sale of the service, in which case this policy keeps
+                    applying to the data;
                 </li>
+                <li>with your explicit permission.</li>
             </ul>
-            <p>How we treat this data:</p>
+
+            <h3>6. How long we keep it, and how to delete it</h3>
             <ul>
                 <li>
-                    We use it only to provide the features you turned on, which are visible to you
-                    in the product.
+                    <strong>Sign-in data</strong> is kept while your account exists.
                 </li>
                 <li>
-                    We transfer it only to the service providers needed to run those features
-                    (hosting, and the AI processing described above), when the law requires it, or
-                    with your permission.
-                </li>
-                <li>We don&rsquo;t sell it and we don&rsquo;t use it for advertising.</li>
-                <li>
-                    We don&rsquo;t use it to develop, improve or train generalized or
-                    non-personalized AI or machine-learning models.
+                    <strong>Drive and Gmail copies</strong> stay in your workspace until you delete
+                    them. You can delete any synced file or email at any time.
                 </li>
                 <li>
-                    People don&rsquo;t read it, unless you ask us to for support, it&rsquo;s needed
-                    to investigate abuse or a security problem, or the law requires it.
+                    <strong>Disconnecting</strong> Google Drive or Gmail in Launchstack&rsquo;s
+                    settings, or removing Launchstack at{" "}
+                    <a
+                        href="https://myaccount.google.com/permissions"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        myaccount.google.com/permissions
+                    </a>
+                    , deletes our stored token and revokes our access immediately. Files in your
+                    Google Drive and emails in your Gmail are never deleted.
+                </li>
+                <li>
+                    <strong>To delete all Google data</strong> we hold about you, including synced
+                    copies, write to <a href={mailto}>{PRIVACY_EMAIL}</a>. We delete it within 30
+                    days, and copies in database backups expire within a further 30 days.
                 </li>
             </ul>
+
+            <h3>Limited Use</h3>
             <p>
                 Launchstack&rsquo;s use and transfer of information received from Google APIs to any
                 other app will adhere to the{" "}
                 <a href={GOOGLE_USER_DATA_POLICY} target="_blank" rel="noopener noreferrer">
                     Google API Services User Data Policy
                 </a>
-                , including the Limited Use requirements.
-            </p>
-            <p>
-                <strong>Disconnecting.</strong> You can disconnect Google Drive or Gmail in
-                Launchstack&rsquo;s settings, or remove Launchstack at{" "}
-                <a
-                    href="https://myaccount.google.com/permissions"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    myaccount.google.com/permissions
-                </a>
-                . Disconnecting deletes our access token and revokes our access with Google. Files
-                in your Google Drive are never deleted. Emails and documents already synced into
-                your workspace stay there until you delete them, or until you ask us to delete them.
+                , including the Limited Use requirements. If we ever change how we use Google user
+                data, we will update this policy and ask for your consent before the change applies
+                to you.
             </p>
 
             <h2 id="sharing">Who we share data with</h2>

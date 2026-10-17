@@ -8,6 +8,7 @@ import { SignUpForm } from "~/app/_components/CredentialsForm";
 import { AlertCircle, ArrowRight, ChevronDown, Rocket, Ticket, Users } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
+import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
 import { safeNextPath, withNext } from "~/components/auth/next-path";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -400,6 +401,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             >
                 {children}
             </div>
+            <AuthLegalLinks className="px-6 pb-6" />
             <style>{`
                 @media (max-width: 960px) {
                     .auth-brand-col { display: none !important; }

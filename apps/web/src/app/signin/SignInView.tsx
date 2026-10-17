@@ -13,6 +13,7 @@ import { safeNextPath, withNext } from "~/components/auth/next-path";
 import { SignInForm } from "~/app/_components/CredentialsForm";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
+import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
 import { LANDING_URL } from "~/config/landing";
 import type { SocialProvider } from "~/server/auth/providers";
 
@@ -122,6 +123,7 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                                 Start a free workspace →
                             </Link>
                         </div>
+                        <AuthLegalLinks className="mt-4" />
                     </div>
                 </main>
                 {/*

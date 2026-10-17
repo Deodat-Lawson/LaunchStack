@@ -372,6 +372,26 @@ describe("GeminiNativeTranscriber", () => {
         expect(calls.filter(c => c.url.endsWith(":generateContent"))).toHaveLength(3);
     });
 
+    it("gives up on a 503 that outlasts the retries, saying Gemini is overloaded", async () => {
+        const { fetchImpl, calls } = fakeGemini({
+            count: () => countReply(60),
+            generate: () =>
+                Response.json(
+                    { error: { message: "This model is currently experiencing high demand." } },
+                    { status: 503 }
+                ),
+        });
+
+        await expect(
+            transcriber(fetchImpl).transcribe(Buffer.from("x"), "a.mp3")
+        ).rejects.toMatchObject({
+            status: 502,
+            userMessage: expect.stringMatching(/overloaded/),
+        });
+        // The first try and one per retry delay.
+        expect(calls.filter(c => c.url.endsWith(":generateContent"))).toHaveLength(4);
+    });
+
     it("does not retry a spent daily quota, and says so plainly", async () => {
         const { fetchImpl, calls } = fakeGemini({
             count: () => countReply(60),

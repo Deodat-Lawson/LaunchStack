@@ -46,7 +46,7 @@ const AUDIO_TOKENS_PER_SECOND = 32;
 export const MAX_AUDIO_SECONDS = 9.5 * 60 * 60;
 const CALL_TIMEOUT_MS = 10 * 60_000;
 /** Waits before retrying a 5xx or a short 429; Gemini answers "high demand" 503s in bursts. */
-const RETRY_DELAYS_MS = [3_000, 10_000, 30_000];
+const RETRY_DELAYS_MS = [3_000, 10_000, 30_000, 60_000];
 /** A 429 asking for a longer wait than this is a spent quota, not a burst: fail now. */
 const MAX_RETRY_WAIT_SECONDS = 60;
 /**
@@ -325,11 +325,13 @@ async function vendorError(resp: Response, what: string): Promise<TranscriptionE
               "limited plan). Try again tomorrow, or ask an admin to enable billing on the Gemini API project."
             : resp.status === 429
               ? "The transcription service is busy (rate limit). Try again in a minute."
-              : resp.status === 401 || resp.status === 403
-                ? "The transcription service rejected this workspace's API key. Ask an admin to check the transcription key."
-                : resp.status >= 500
-                  ? "The transcription service had a problem. Try again in a few minutes."
-                  : `The transcription service couldn't read this recording: ${detail}`;
+              : resp.status === 503 && /high demand|overloaded/i.test(detail)
+                ? "Gemini is overloaded right now and didn't recover within two minutes. Try again in a few minutes."
+                : resp.status === 401 || resp.status === 403
+                  ? "The transcription service rejected this workspace's API key. Ask an admin to check the transcription key."
+                  : resp.status >= 500
+                    ? "The transcription service had a problem. Try again in a few minutes."
+                    : `The transcription service couldn't read this recording: ${detail}`;
     return new TranscriptionError(
         `${what} failed (${resp.status}): ${detail}`,
         userMessage,

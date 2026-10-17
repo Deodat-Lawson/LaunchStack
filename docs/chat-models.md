@@ -105,12 +105,21 @@ Rules it keeps:
 - **The identity rule still applies**, so the assistant introduces itself as
   Launchstack's AI assistant whichever model answers.
 
-Subscriptions: a ChatGPT Plus/Pro plan can't be connected yet. OpenAI limits
-[Sign in with ChatGPT](https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt)
-to approved partners for hosted apps. A Claude Free/Pro/Max plan can't be used:
-Anthropic [does not permit third-party apps to offer Claude.ai login or use plan
-credentials](https://code.claude.com/docs/en/legal-and-compliance). Both vendors'
-API keys work through the key form, as does a Gemini API key from Google AI Studio.
+Subscriptions:
+
+- **ChatGPT Plus/Pro** isn't built yet. OpenAI's plan-usage sign-in is
+  [self-serve for open-source and locally or self-hosted apps](https://developers.openai.com/siwc/token-sharing-open-source),
+  including an open-source app on a
+  [remote VM](https://developers.openai.com/siwc/token-sharing-open-source/self-hosted-vms):
+  you sign in on your own machine, then move the credential to the server. A
+  paid or remotely hosted app, such as a hosted LaunchStack, needs OpenAI's
+  approval through the interest form. Each sign-in is one person's plan, and
+  requests go through the Responses API only.
+- **Claude Free/Pro/Max** can't be used: Anthropic
+  [does not permit third-party apps to offer Claude.ai login or use plan credentials](https://code.claude.com/docs/en/legal-and-compliance).
+
+API keys from all three vendors work through the key form, including a Gemini
+API key from Google AI Studio.
 
 Not covered yet: the AI that runs while documents are ingested (OCR table
 summaries, image descriptions, opt-in entity extraction) uses the server's

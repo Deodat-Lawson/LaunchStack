@@ -25,6 +25,7 @@ import {
     type ChatRoute,
 } from "@launchstack/llm";
 
+import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
 import type {
     WorkspaceModelChoice,
     WorkspaceModelSelection,
@@ -111,6 +112,9 @@ export function buildWorkspaceChatModelsConfig(input: WorkspaceEndpointInput): C
             baseUrl: input.baseUrl,
             ...(input.apiKey ? { apiKey: input.apiKey } : {}),
             owner: "workspace",
+            // The same identity rule the deployment's own endpoint carries:
+            // whichever model answers, it introduces itself as the assistant.
+            systemInstructions: ASSISTANT_IDENTITY_RULE,
         },
         sourceLabel: "Your workspace's model settings",
     });

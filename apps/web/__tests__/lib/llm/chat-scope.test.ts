@@ -191,3 +191,51 @@ describe("workspace endpoint failures", () => {
         );
     });
 });
+
+describe("a workspace endpoint on the wire", () => {
+    afterEach(() => jest.restoreAllMocks());
+
+    it("carries the identity rule and never follows a redirect", async () => {
+        const fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue(
+            new Response(
+                JSON.stringify({
+                    id: "x",
+                    object: "chat.completion",
+                    created: 0,
+                    model: "m",
+                    choices: [
+                        {
+                            index: 0,
+                            finish_reason: "stop",
+                            message: { role: "assistant", content: "OK" },
+                        },
+                    ],
+                }),
+                { status: 200, headers: { "content-type": "application/json" } }
+            )
+        );
+        const config = createChatModelsConfig({
+            yaml: `
+version: 1
+models:
+  primary:
+    id: ws-model
+    behavior:${BEHAVIOR}
+routes:
+  default: primary
+`,
+            endpoint: {
+                baseUrl: "https://a.example/v1",
+                apiKey: "k",
+                owner: "workspace",
+                systemInstructions: "Identity: you are the assistant.",
+            },
+        });
+        const resolved = resolveChatModel({ config });
+        await resolved.chat.invoke(resolved.prepareMessages([["human", "hi"]]));
+
+        const [, init] = fetchSpy.mock.calls[0]!;
+        expect(init?.redirect).toBe("error");
+        expect(String(init?.body)).toContain("Identity: you are the assistant.");
+    });
+});

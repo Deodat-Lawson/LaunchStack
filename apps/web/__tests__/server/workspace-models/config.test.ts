@@ -5,6 +5,7 @@
 
 import { ChatConfigurationError, resolveChatModel, resolveChatRoute } from "@launchstack/llm";
 
+import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
 import {
     behaviorForChoice,
     buildWorkspaceChatModelsConfig,
@@ -43,6 +44,8 @@ describe("workspace model configuration", () => {
             baseUrl: "https://api.example.com/v1",
             apiKey: "sk-test-123456",
             owner: "workspace",
+            // Whichever model answers, it introduces itself as the assistant.
+            systemInstructions: ASSISTANT_IDENTITY_RULE,
         });
         expect(resolveChatRoute("default", config).definition.id).toBe("acme/chat-large");
         expect(resolveChatRoute("fast", config).definition.id).toBe("acme/chat-small");

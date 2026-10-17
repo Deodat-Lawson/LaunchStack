@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getConfiguredPublicChatConfig } from "~/lib/models";
+import { describeChatResolutionFailure, getConfiguredPublicChatConfig } from "~/lib/models";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -26,12 +26,11 @@ export async function GET() {
         );
     } catch (error) {
         // A broken configuration must not take the whole UI down — report every
-        // route unavailable so controls disable themselves cleanly. The
-        // validation error quotes the file path, model ids and preset names,
-        // so it goes to the server log; every user sees this reason.
-        console.error("[config/ai-models] chat model configuration is invalid:", error);
-        const message =
-            "Chat models are not configured correctly. An administrator needs to check the server's chat model file.";
+        // route unavailable so controls disable themselves cleanly.
+        // describeChatResolutionFailure logs the detail and keeps only words
+        // fit for every user: the fixed reason for a broken server file, or
+        // the workspace's own "fix it in Settings" when its endpoint is down.
+        const { message } = describeChatResolutionFailure(error);
         return NextResponse.json(
             {
                 routes: {

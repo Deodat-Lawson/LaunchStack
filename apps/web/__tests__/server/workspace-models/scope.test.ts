@@ -89,7 +89,7 @@ describe("loadWorkspaceChatModelsScope", () => {
         mockRow.mockResolvedValue(row());
         const scope = await loadWorkspaceChatModelsScope(5);
         expect(scope.source).toBe("workspace");
-        expect(scope.config?.endpoint).toEqual({
+        expect(scope.config?.endpoint).toMatchObject({
             baseUrl: "https://models.example.com/v1",
             apiKey: "sk-workspace-123456",
             owner: "workspace",

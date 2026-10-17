@@ -1,10 +1,13 @@
-import type { PublicChatConfig } from "@launchstack/llm";
+import { ChatScopeUnavailableError, type PublicChatConfig } from "@launchstack/llm";
 
 // jest.mock is hoisted; only `mock*`-prefixed names may be referenced inside it.
 const mockPublicChatConfig = jest.fn<PublicChatConfig, []>();
 
 jest.mock("~/lib/models", () => ({
     getConfiguredPublicChatConfig: () => mockPublicChatConfig(),
+    describeChatResolutionFailure:
+        jest.requireActual<typeof import("~/lib/models")>("~/lib/models")
+            .describeChatResolutionFailure,
 }));
 
 const mockWorkspaceContext = jest.fn();
@@ -122,5 +125,17 @@ describe("GET /api/config/ai-models", () => {
         expect(JSON.stringify(body)).not.toMatch(/secret-9|\/srv\//);
         expect(logged).toHaveBeenCalled();
         logged.mockRestore();
+    });
+
+    it("shows the workspace's own reason when its endpoint can't be used", async () => {
+        const reason =
+            "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Settings › Models.";
+        mockPublicChatConfig.mockImplementation(() => {
+            throw new ChatScopeUnavailableError(reason);
+        });
+
+        const body = (await (await GET()).json()) as PublicChatConfig;
+        expect(body.routes.default.available).toBe(false);
+        expect(body.routes.default.unavailableReason).toBe(reason);
     });
 });

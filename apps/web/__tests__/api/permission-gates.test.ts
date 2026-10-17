@@ -748,8 +748,9 @@ describe("permission gates", () => {
 
     it("GET /api/connectors/google/oauth/callback returns to the public origin, not the bind address", async () => {
         signInAs("member");
-        const saved = process.env.APP_PUBLIC_URL;
-        process.env.APP_PUBLIC_URL = "https://app.example.com";
+        const saved = { auth: process.env.BETTER_AUTH_URL, app: process.env.APP_PUBLIC_URL };
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
+        delete process.env.APP_PUBLIC_URL;
         try {
             // Behind Caddy the standalone server hands the route its bind address.
             const response = await googleOAuthCallback(
@@ -763,8 +764,10 @@ describe("permission gates", () => {
             expect(location.origin).toBe("https://app.example.com");
             expect(location.pathname).toBe("/employer/documents");
         } finally {
-            if (saved === undefined) delete process.env.APP_PUBLIC_URL;
-            else process.env.APP_PUBLIC_URL = saved;
+            if (saved.auth === undefined) delete process.env.BETTER_AUTH_URL;
+            else process.env.BETTER_AUTH_URL = saved.auth;
+            if (saved.app === undefined) delete process.env.APP_PUBLIC_URL;
+            else process.env.APP_PUBLIC_URL = saved.app;
         }
     });
 

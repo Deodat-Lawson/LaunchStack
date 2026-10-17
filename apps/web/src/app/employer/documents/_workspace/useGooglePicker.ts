@@ -2,9 +2,11 @@
 
 /**
  * Loads Google's Picker (the one external script the Drive connector needs)
- * and opens it with a server-minted, drive.file-scoped access token. Picking
- * is what grants the app access under drive.file — the Picker is not just UI,
- * it is the permission surface.
+ * and opens it with a server-minted access token. Under drive.file, picking
+ * is what grants the app access — the Picker is not just UI, it is the
+ * permission surface. It opens on three views, because a folder someone
+ * shared with you is easy to miss in the default list and a shared drive is
+ * not shown unless asked for: Drive, Shared with me, and Shared drives.
  */
 
 import { useCallback, useState } from "react";
@@ -17,7 +19,6 @@ export interface PickedDoc {
 }
 
 const GOOGLE_FOLDER_MIME = "application/vnd.google-apps.folder";
-const GAPI_SRC = "https://apis.google.com/js/api.js";
 
 interface PickerDocument {
     id: string;
@@ -30,9 +31,11 @@ interface PickerResponse {
     docs?: PickerDocument[];
 }
 
-interface PickerView {
+export interface PickerView {
     setIncludeFolders(value: boolean): PickerView;
     setSelectFolderEnabled(value: boolean): PickerView;
+    setOwnedByMe(me: boolean): PickerView;
+    setEnableDrives(enabled: boolean): PickerView;
 }
 
 interface PickerBuilder {
@@ -46,11 +49,22 @@ interface PickerBuilder {
     build(): { setVisible(visible: boolean): void };
 }
 
-interface PickerNamespace {
+export interface PickerNamespace {
     PickerBuilder: new () => PickerBuilder;
     DocsView: new () => PickerView;
     Feature: { MULTISELECT_ENABLED: string };
     Action: { PICKED: string; CANCEL: string };
+}
+
+/**
+ * The Picker's tabs: everything (the view it always had), Shared with me, and
+ * Shared drives. Google's rules: `setEnableDrives` can't be combined with
+ * `setOwnedByMe` or `setParent`, so each view sets only its own filter.
+ */
+export function buildDriveViews(picker: Pick<PickerNamespace, "DocsView">): PickerView[] {
+    const browsable = () =>
+        new picker.DocsView().setIncludeFolders(true).setSelectFolderEnabled(true);
+    return [browsable(), browsable().setOwnedByMe(false), browsable().setEnableDrives(true)];
 }
 
 interface GoogleGlobals {
@@ -60,7 +74,7 @@ interface GoogleGlobals {
 
 let pickerReady: Promise<PickerNamespace> | null = null;
 
-function loadPicker(): Promise<PickerNamespace> {
+function loadPicker(scriptUrl: string): Promise<PickerNamespace> {
     pickerReady ??= new Promise<PickerNamespace>((resolve, reject) => {
         const globals = window as unknown as GoogleGlobals;
 
@@ -77,7 +91,7 @@ function loadPicker(): Promise<PickerNamespace> {
             return;
         }
         const script = document.createElement("script");
-        script.src = GAPI_SRC;
+        script.src = scriptUrl;
         script.async = true;
         script.onload = onGapi;
         script.onerror = () => {
@@ -90,6 +104,8 @@ function loadPicker(): Promise<PickerNamespace> {
 }
 
 export interface OpenPickerOptions {
+    /** Google's api.js, or the dev stand-in's copy — from the status route. */
+    readonly scriptUrl: string;
     /** Browser API key (NEXT_PUBLIC_GOOGLE_API_KEY), from the status route. */
     readonly apiKey: string;
     /** Cloud project number — registers picks to our OAuth client. Mandatory. */
@@ -105,12 +121,11 @@ export function useGooglePicker() {
     const openPicker = useCallback(async (options: OpenPickerOptions) => {
         setOpening(true);
         try {
-            const picker = await loadPicker();
-            const view = new picker.DocsView().setIncludeFolders(true).setSelectFolderEnabled(true);
+            const picker = await loadPicker(options.scriptUrl);
+            const builder = new picker.PickerBuilder().setTitle("Pick files and folders to sync");
+            for (const view of buildDriveViews(picker)) builder.addView(view);
 
-            new picker.PickerBuilder()
-                .setTitle("Pick files and folders to sync")
-                .addView(view)
+            builder
                 .setOAuthToken(options.accessToken)
                 .setDeveloperKey(options.apiKey)
                 .setAppId(options.appId)

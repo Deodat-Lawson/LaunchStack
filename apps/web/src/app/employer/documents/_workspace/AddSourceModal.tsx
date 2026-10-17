@@ -18,6 +18,7 @@ import { AddDestinationBar } from "./AddDestinationBar";
 import { destinationLabel, planFolderUpload, type AudienceSummary } from "./addDestination";
 import { ADD_TABS, SOURCE_META, type AddSourceTab, type ItemAccessView } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
+import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 import { registerDocument, uploadFileToStorage } from "./sourceUpload";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
@@ -225,6 +226,14 @@ const FIXED_DESTINATIONS: Record<string, string> = {
     "agent-sessions": "Agent Sessions",
 };
 
+/**
+ * A picked Drive folder doesn't land in "Google Drive" (server/…/google-drive/
+ * destinations.ts) — shown only while folder import actually works, since a
+ * drive.file-only connection imports nothing from a folder.
+ */
+const DRIVE_FOLDER_NOTE =
+    "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.";
+
 /** Gmail's folder is per mailbox and its owner's alone (ADR-014). */
 const GMAIL_AUDIENCE: AudienceSummary = {
     tone: "private",
@@ -256,6 +265,7 @@ export function AddSourceModal({
     /** The Folder tab's new folder, made inside `folder`; null until one is picked. */
     const [folderChild, setFolderChild] = useState<string | null>(null);
     const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
+    const [driveFolderAccess, setDriveFolderAccess] = useState<FolderAccessState | null>(null);
     const shellRef = useRef<HTMLDivElement>(null);
     const known = useMemo(() => knownFolders ?? folders, [knownFolders, folders]);
     // Settings → Document defaults: open on Google Doc when Drive linking is
@@ -370,7 +380,7 @@ export function AddSourceModal({
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
-        panel = <DriveConnectPanel tab={active} />;
+        panel = <DriveConnectPanel tab={active} onFolderAccess={setDriveFolderAccess} />;
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} />;
     } else if (tab === "artifact") {
@@ -436,7 +446,16 @@ export function AddSourceModal({
         );
     } else if (FIXED_DESTINATIONS[active.id]) {
         destination = (
-            <AddDestinationBar mode="fixed" value={FIXED_DESTINATIONS[active.id]!} {...barProps} />
+            <AddDestinationBar
+                mode="fixed"
+                value={FIXED_DESTINATIONS[active.id]!}
+                audienceNote={
+                    active.id === "drive" && driveFolderAccess === "ready"
+                        ? DRIVE_FOLDER_NOTE
+                        : undefined
+                }
+                {...barProps}
+            />
         );
     } else if (active.id === "gmail") {
         destination = (
@@ -1819,11 +1838,6 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "Pick workspaces, pages or databases",
         "Updates stream in real-time",
         "Preserves block structure",
-    ],
-    drive: [
-        "Pick folders — kept in sync",
-        "Handles Google Docs, Sheets, Slides",
-        "Shared drives supported",
     ],
     slack: [
         "Mirrors agent meetings into a Slack channel",

@@ -13,6 +13,7 @@
 
 import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import { googleStandInUrl } from "../google-drive/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
 import * as linkedin from "./providers/linkedin";
@@ -122,11 +123,29 @@ export function linkedInRequestedScopes(): readonly string[] {
     return linkedInOverrides().scopes ?? linkedin.LINKEDIN_DEFAULT_SCOPES;
 }
 
-/** Browser-side Google Picker config; both values are public by design. */
-export function getPickerPublicConfig(): { apiKey: string | null; appId: string | null } {
+export const GOOGLE_PICKER_SCRIPT = "https://apis.google.com/js/api.js";
+
+export interface PickerPublicConfig {
+    readonly apiKey: string | null;
+    readonly appId: string | null;
+    /** Where the Picker's script loads from: Google, or the dev stand-in's copy. */
+    readonly scriptUrl: string;
+}
+
+/** Browser-side Google Picker config; every value is public by design. */
+export function getPickerPublicConfig(): PickerPublicConfig {
+    const standIn = googleStandInUrl();
+    if (standIn) {
+        return {
+            apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? "stand-in-api-key",
+            appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? "stand-in-app",
+            scriptUrl: `${standIn}/picker/api.js`,
+        };
+    }
     return {
         apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? null,
         appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? null,
+        scriptUrl: GOOGLE_PICKER_SCRIPT,
     };
 }
 

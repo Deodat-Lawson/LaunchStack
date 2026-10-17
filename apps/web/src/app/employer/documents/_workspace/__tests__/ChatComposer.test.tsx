@@ -36,6 +36,8 @@ jest.mock("../../hooks/useChatRoutes", () => ({
         visionEnabled: true,
         reasoningEnabled: true,
         config: {
+            // `model` mimics an older server that still sent the id: the
+            // composer must never render it.
             routes: {
                 default: { available: true, model: "Default model" },
                 fast: { available: true, model: "Speed model" },
@@ -606,8 +608,11 @@ describe("Composer uploads and completion", () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
         await user.click(screen.getByRole("button", { name: "Choose model" }));
-        await user.type(screen.getByRole("textbox", { name: "Search models" }), "Thinking");
-        await user.click(screen.getByRole("option", { name: /Thinking model/ }));
+        expect(
+            screen.queryByText(/Default model|Speed model|Thinking model|Image model/)
+        ).not.toBeInTheDocument();
+        await user.type(screen.getByRole("textbox", { name: "Search models" }), "Reason");
+        await user.click(screen.getByRole("option", { name: /Reasoning/ }));
         await user.click(screen.getByRole("button", { name: "Choose model" }));
         await user.selectOptions(
             screen.getByRole("combobox", { name: "Reasoning effort" }),
@@ -870,9 +875,7 @@ describe("Composer uploads and completion", () => {
         fireEvent.click(screen.getByText("With an image"));
         await act(async () => {});
         expect(box).toHaveValue("With an image");
-        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent(
-            "Default model"
-        );
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Standard");
     });
 
     it("retains an actionable marker when an upload was interrupted by reload", () => {
@@ -907,9 +910,7 @@ describe("Composer uploads and completion", () => {
         fireEvent.change(box, { target: { value: "Comparison question" } });
         fireEvent.keyDown(box, { key: "Enter" });
         await waitFor(() => expect(box).toHaveValue("Comparison question"));
-        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent(
-            "Speed model"
-        );
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Fast");
         const retry = jest.fn<boolean, [ComposerSend]>(() => true);
         rerender(<Composer {...props} onSend={retry} />);
         fireEvent.keyDown(box, { key: "Enter" });

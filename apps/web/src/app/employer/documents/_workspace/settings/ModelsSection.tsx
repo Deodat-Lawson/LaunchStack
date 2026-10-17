@@ -4,10 +4,9 @@
  * Models and routes — read-only in v1.
  *
  * Body only. Renders what the server resolved from the chat configuration
- * file: a table of routes, then a card per model saying what it declares
- * and where that came from (a bundled preset with a verified-on date, or an
- * operator override in the file). The point is to make the YAML legible
- * before anyone asks to make it editable.
+ * file: a table of routes, then a card per configured model saying what it
+ * can do. It never names the vendor, the endpoint, or the model id — the
+ * server doesn't send them (see `~/server/settings/models`).
  */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -30,18 +29,13 @@ interface ModelRouteInfo {
     route: string;
     available: boolean;
     name?: string;
-    modelId?: string;
     inheritsDefault?: boolean;
     unavailableReason?: string;
 }
 
 interface ModelInfo {
     name: string;
-    modelId: string;
-    preset: string | null;
-    presetSource: string | null;
-    verifiedOn: string | null;
-    presetNotes: string | null;
+    fromPreset: boolean;
     input: readonly string[];
     vision: boolean;
     reasoning: boolean;
@@ -53,8 +47,6 @@ interface ModelInfo {
 }
 
 interface ModelsOverview {
-    endpointHost: string | null;
-    configFile: string;
     routes: ModelRouteInfo[];
     models: ModelInfo[];
 }
@@ -118,13 +110,13 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                 <>
                     <Section
                         title="Endpoint"
-                        description="One OpenAI-compatible endpoint serves every route. Its credential stays on the server."
+                        description="One AI endpoint serves every route. Its address and credential stay on the server."
                     >
                         <Card>
                             <div className="text-ink-2 text-[13px]">
-                                Talking to <Code>{overview.endpointHost ?? "unknown"}</Code>,
-                                configured in <Code>{overview.configFile}</Code>. Edit that file and
-                                restart to change a model; nothing here writes to it.
+                                Models are set in the server&rsquo;s chat model file, named by{" "}
+                                <Code>CHAT_MODELS_CONFIG</Code>. Edit that file and restart to
+                                change a model; nothing here writes to it.
                             </div>
                         </Card>
                     </Section>
@@ -155,12 +147,7 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                             </TableCell>
                                             <TableCell>
                                                 {route.available ? (
-                                                    <>
-                                                        <div className="text-ink">{route.name}</div>
-                                                        <div className="mono text-ink-3 text-[11.5px]">
-                                                            {route.modelId}
-                                                        </div>
-                                                    </>
+                                                    <div className="text-ink">{route.name}</div>
                                                 ) : (
                                                     <span className="text-ink-3">—</span>
                                                 )}
@@ -187,7 +174,7 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
 
                     <Section
                         title="Declared models"
-                        description="What each model is declared to do. A preset is a verified catalog entry; an override is the operator's own word, taken as given."
+                        description="What each configured model is declared to do. A preset is a verified catalog entry; an override is the operator's own word, taken as given."
                     >
                         <div className="grid gap-3.5 md:grid-cols-2">
                             {overview.models.map(model => (
@@ -196,9 +183,6 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                         <div className="min-w-0 flex-1">
                                             <div className="text-ink text-[13.5px] font-semibold">
                                                 {model.name}
-                                            </div>
-                                            <div className="mono text-ink-3 text-[11.5px]">
-                                                {model.modelId}
                                             </div>
                                         </div>
                                         {model.routes.length > 0 && (
@@ -214,32 +198,9 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                     <dl className="text-ink-2 mt-3 grid grid-cols-[110px_1fr] gap-y-1 text-[12.5px]">
                                         <dt className="text-ink-3">Behaviour from</dt>
                                         <dd className="m-0">
-                                            {model.preset ? (
-                                                <>
-                                                    preset <Code>{model.preset}</Code>
-                                                    {model.verifiedOn && (
-                                                        <>
-                                                            , checked {model.verifiedOn}
-                                                            {model.presetSource && (
-                                                                <>
-                                                                    {" "}
-                                                                    against{" "}
-                                                                    <a
-                                                                        href={model.presetSource}
-                                                                        target="_blank"
-                                                                        rel="noreferrer"
-                                                                        className="text-brand-ink underline"
-                                                                    >
-                                                                        its source
-                                                                    </a>
-                                                                </>
-                                                            )}
-                                                        </>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                "the configuration file (operator override)"
-                                            )}
+                                            {model.fromPreset
+                                                ? "a verified preset"
+                                                : "the configuration file (operator override)"}
                                         </dd>
                                         <dt className="text-ink-3">Input</dt>
                                         <dd className="m-0">{model.input.join(", ")}</dd>
@@ -271,11 +232,6 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                             </>
                                         )}
                                     </dl>
-                                    {model.presetNotes && (
-                                        <p className="text-ink-3 m-0 mt-2 text-[12px] leading-normal">
-                                            {model.presetNotes}
-                                        </p>
-                                    )}
                                 </Card>
                             ))}
                         </div>

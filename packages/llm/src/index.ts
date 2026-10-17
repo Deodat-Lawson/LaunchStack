@@ -7,6 +7,7 @@ export * from "./structured-output";
 export * from "./public-config";
 export * from "./usage";
 export { applyMessageBehavior, systemMessageFor } from "./messages";
+export { addSystemInstructions, createEndpointFetch, neutralErrorMessage } from "./endpoint-fetch";
 export { normalizeModelContent } from "./normalize-content";
 export {
     KEYLESS_PLACEHOLDER_API_KEY,

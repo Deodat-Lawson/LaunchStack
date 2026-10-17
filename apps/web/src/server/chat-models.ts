@@ -24,6 +24,7 @@ import {
     trimmed,
     type AppChatModelEnvironment,
 } from "./chat-endpoint";
+import { ASSISTANT_IDENTITY_RULE } from "../lib/ai/assistant-identity";
 
 export {
     findIgnoredModelVariables,
@@ -87,7 +88,12 @@ export function getAppChatModelsConfig(
     server: AppChatModelEnvironment,
     cwd: string = process.cwd()
 ): ChatModelsConfig {
-    const endpoint = resolveChatEndpoint(server);
+    // Every chat this deployment sends carries the identity rule, whichever
+    // helper resolved the model (app routes, pipelines, agent loops).
+    const endpoint = {
+        ...resolveChatEndpoint(server),
+        systemInstructions: ASSISTANT_IDENTITY_RULE,
+    };
     const path = resolveChatModelsConfigPath(server, cwd);
     const key = `${path}::${endpoint.baseUrl}::${endpoint.apiKey ?? ""}`;
     if (cached?.key === key) return cached.config;

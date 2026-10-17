@@ -35,7 +35,6 @@ export interface AIQueryResponse {
     chunksAnalyzed?: number;
     fusionWeights?: number[];
     searchScope?: "document";
-    aiModel?: string;
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
     message?: string;

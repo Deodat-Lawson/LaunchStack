@@ -17,7 +17,7 @@ import type { MembershipStatus } from "~/lib/authz/permissions";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Card, PageShell } from "~/components/layout/page-shell";
 import { Button } from "~/components/ui/button";
-import { LANDING_CONTACT_URL } from "~/config/landing";
+import { LANDING_CONTACT_HREF } from "~/config/landing";
 
 interface UserInfo {
     name?: string;
@@ -139,7 +139,7 @@ export default function PendingApproval() {
                         <p className="text-ink-3 mt-5 text-xs">
                             Stuck? Ask the person who invited you, or{" "}
                             <a
-                                href={LANDING_CONTACT_URL}
+                                href={LANDING_CONTACT_HREF}
                                 rel="noopener"
                                 className="text-brand font-semibold"
                             >

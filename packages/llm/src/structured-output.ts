@@ -34,8 +34,10 @@ export class StructuredOutputError extends Error {
     readonly modelId: string;
 
     constructor(modelId: string, cause: string) {
+        // The message travels to screens (run histories, answer bubbles), so it
+        // never names the model; `modelId` stays on the error for logs.
         super(
-            `Model "${modelId}" did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
+            `The model did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
         );
         this.modelId = modelId;
     }

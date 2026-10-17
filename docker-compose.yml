@@ -183,6 +183,9 @@ x-shared-env: &shared-env
   REDDIT_USER_AGENT: ${REDDIT_USER_AGENT:-}
   # Public origin of the app; the converter and the OAuth redirect derive from it.
   APP_PUBLIC_URL: ${APP_PUBLIC_URL:-}
+  # Public site (apps/landing) origin, read per request by /site, /privacy and
+  # /terms. Unset falls back to the origin baked in at build time.
+  LANDING_PUBLIC_URL: ${LANDING_PUBLIC_URL:-}
   # Campaign email: HMAC key for unsubscribe links, and the send switch
   # (anything but "true" is a dry run).
   EMAIL_UNSUBSCRIBE_SECRET: ${EMAIL_UNSUBSCRIBE_SECRET:-}
@@ -377,7 +380,7 @@ services:
       # First alternative is Gotenberg's own default (block file: outside its
       # /tmp working dir) — overriding the flag replaces it, so it is repeated.
       - >-
-        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|inngest|gotenberg)(?::[0-9]+)?(?:/.*)?$$
     environment:
       GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
       GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}

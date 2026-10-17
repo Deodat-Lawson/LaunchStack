@@ -24,7 +24,6 @@ export interface MessageContent {
     pages?: number[];
     references?: SourceReference[];
     webSources?: Array<{ title: string; url: string; snippet: string }>;
-    aiModel?: string;
 }
 
 export interface Message {
@@ -35,7 +34,6 @@ export interface Message {
     messageType: "text" | "tool_call" | "tool_result" | "thinking";
     parentMessageId?: string;
     createdAt: string;
-    aiModel?: string;
 }
 
 interface CreateChatParams {

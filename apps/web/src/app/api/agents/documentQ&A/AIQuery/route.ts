@@ -114,10 +114,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            const compatibility = validateDeprecatedChatSelection(
-                { provider, model: aiModel },
-                resolved
-            );
+            const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
             if (!compatibility.ok) {
                 recordResult("error");
                 return NextResponse.json(
@@ -338,7 +335,6 @@ export async function POST(request: Request) {
                 chunksAnalyzed: documents.length,
                 fusionWeights: [0.4, 0.6],
                 searchScope: "document",
-                aiModel: resolvedModel,
                 webSources: enableWebSearch ? webSearch.results : undefined,
                 webSearch: enableWebSearch
                     ? {

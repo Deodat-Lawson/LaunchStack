@@ -18,7 +18,7 @@ import { z } from "zod";
 import { zodToJsonSchema, type JsonSchema7Type } from "zod-to-json-schema";
 import type { ResolvedChatModel } from "./chat-model-factory";
 import { applyMessageBehavior, systemMessageFor } from "./messages";
-import { normalizeModelContent } from "./normalize-content";
+import { modelContentToText } from "./normalize-content";
 import type { NativeStructuredOutputMode } from "./types";
 import type { ChatTokenUsage } from "./usage";
 import { addTokenUsage, normalizeTokenUsage } from "./usage";
@@ -120,7 +120,7 @@ async function invokeJsonFallback<T>(
     ]);
 
     const first = await resolved.chat.invoke(instructed);
-    const firstText = normalizeModelContent(first.content);
+    const firstText = modelContentToText(first.content);
     let usage = normalizeTokenUsage(first);
 
     try {
@@ -139,7 +139,7 @@ async function invokeJsonFallback<T>(
             const second = await resolved.chat.invoke(repair);
             usage = addTokenUsage(usage, normalizeTokenUsage(second));
             return {
-                result: schema.parse(extractJson(normalizeModelContent(second.content))),
+                result: schema.parse(extractJson(modelContentToText(second.content))),
                 usage,
                 modelId: resolved.modelId,
             };

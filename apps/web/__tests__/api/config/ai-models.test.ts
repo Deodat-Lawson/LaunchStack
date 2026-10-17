@@ -1,13 +1,14 @@
 import { ChatScopeUnavailableError, type PublicChatConfig } from "@launchstack/llm";
 
+import type * as ModelsModule from "~/lib/models";
+
 // jest.mock is hoisted; only `mock*`-prefixed names may be referenced inside it.
 const mockPublicChatConfig = jest.fn<PublicChatConfig, []>();
 
 jest.mock("~/lib/models", () => ({
     getConfiguredPublicChatConfig: () => mockPublicChatConfig(),
     describeChatResolutionFailure:
-        jest.requireActual<typeof import("~/lib/models")>("~/lib/models")
-            .describeChatResolutionFailure,
+        jest.requireActual<typeof ModelsModule>("~/lib/models").describeChatResolutionFailure,
 }));
 
 const mockWorkspaceContext = jest.fn();

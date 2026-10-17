@@ -6,6 +6,7 @@
  */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
+import type * as StoreModule from "~/server/workspace-models/store";
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
@@ -31,9 +32,8 @@ const mockStore = {
 };
 jest.mock("~/server/workspace-models/store", () => ({
     // The pure projection is under test; everything that touches the database is stubbed.
-    toEndpointView: jest.requireActual<typeof import("~/server/workspace-models/store")>(
-        "~/server/workspace-models/store"
-    ).toEndpointView,
+    toEndpointView: jest.requireActual<typeof StoreModule>("~/server/workspace-models/store")
+        .toEndpointView,
     get KeyNeededForNewAddressError() {
         return MockKeyNeededError;
     },
@@ -321,7 +321,7 @@ describe("Connect OpenRouter", () => {
         expect(new URL(response.headers.get("location")!).hash).toBe("#models");
         const [url, init] = fetchSpy.mock.calls[0]!;
         expect(url).toBe("https://openrouter.ai/api/v1/auth/keys");
-        expect(JSON.parse(String(init?.body))).toEqual({
+        expect(JSON.parse(init?.body as string)).toEqual({
             code: "abc",
             code_verifier: "verifier",
             code_challenge_method: "S256",

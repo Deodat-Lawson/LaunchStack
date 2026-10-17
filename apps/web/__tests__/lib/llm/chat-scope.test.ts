@@ -236,6 +236,6 @@ routes:
 
         const [, init] = fetchSpy.mock.calls[0]!;
         expect(init?.redirect).toBe("error");
-        expect(String(init?.body)).toContain("Identity: you are the assistant.");
+        expect(init?.body as string).toContain("Identity: you are the assistant.");
     });
 });

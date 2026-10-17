@@ -76,12 +76,13 @@ const ROUTE_BLURB: Record<string, string> = {
     vision: "Requests that carry an image.",
 };
 
-type OpenRouterOutcome = "connected" | "denied" | "expired" | "error";
+type OpenRouterOutcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 const OPENROUTER_OUTCOMES: readonly OpenRouterOutcome[] = [
     "connected",
     "denied",
     "expired",
+    "unavailable",
     "error",
 ];
 
@@ -105,6 +106,12 @@ function openRouterNote(
             };
         case "expired":
             return { tone: "warn", message: "That sign-in expired, try again." };
+        case "unavailable":
+            return {
+                tone: "danger",
+                message:
+                    "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
+            };
         case "error":
             return {
                 tone: "danger",

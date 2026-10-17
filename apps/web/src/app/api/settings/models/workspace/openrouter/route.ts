@@ -5,6 +5,7 @@
 
 import { NextResponse } from "next/server";
 
+import { env } from "~/env";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
     OPENROUTER_CALLBACK_PATH,
@@ -22,6 +23,16 @@ export const runtime = "nodejs";
 export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
+
+    // Without a key to seal it with, the server could not keep what OpenRouter
+    // hands back; say so before sending the admin away to approve one.
+    if (!env.server.EMBEDDING_SECRETS_KEY) {
+        const back = new URL("/employer/documents", new URL(request.url).origin);
+        back.searchParams.set("feature", "settings");
+        back.searchParams.set("openrouter", "unavailable");
+        back.hash = "models";
+        return NextResponse.redirect(back);
+    }
 
     const origin = appOrigin(request);
     const flow = createPkceFlow();

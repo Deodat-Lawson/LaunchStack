@@ -7,6 +7,7 @@
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 import type * as StoreModule from "~/server/workspace-models/store";
+import type * as CryptoModule from "@launchstack/store/crypto";
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
@@ -18,6 +19,13 @@ jest.mock("~/lib/require-workspace-context", () =>
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
 jest.mock("~/server/deployment", () => ({ isCloudDeployment: () => false }));
+const mockServerEnv: { EMBEDDING_SECRETS_KEY?: string } = { EMBEDDING_SECRETS_KEY: "sealed" };
+// A getter: the factory runs before the line above has initialised.
+jest.mock("~/env", () => ({
+    get env() {
+        return { server: mockServerEnv };
+    },
+}));
 
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/engine", () => ({ getEngine: () => undefined }));
@@ -37,6 +45,8 @@ jest.mock("~/server/workspace-models/store", () => ({
     get KeyNeededForNewAddressError() {
         return MockKeyNeededError;
     },
+    NO_SECRETS_KEY_MESSAGE:
+        "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
     getWorkspaceEndpointRow: (...args: unknown[]) => mockStore.row(...args),
     getWorkspaceEndpointView: (...args: unknown[]) => mockStore.view(...args),
     saveWorkspaceEndpoint: (...args: unknown[]) => mockStore.save(...args),
@@ -212,6 +222,30 @@ describe("PUT", () => {
     });
 });
 
+describe("a server with no key to seal credentials", () => {
+    it("says so instead of a bare 500 when saving", async () => {
+        const { MissingSecretsKeyError } = jest.requireActual<typeof CryptoModule>(
+            "@launchstack/store/crypto"
+        );
+        mockStore.save.mockRejectedValue(new MissingSecretsKeyError());
+        const response = await PUT(
+            json(
+                {
+                    provider: "openai",
+                    baseUrl: "https://api.openai.com/v1",
+                    apiKey: "sk-live-abcdefgh",
+                    models: selection,
+                },
+                "PUT"
+            )
+        );
+        expect(response.status).toBe(503);
+        await expect(response.json()).resolves.toEqual({
+            error: expect.stringMatching(/EMBEDDING_SECRETS_KEY/),
+        });
+    });
+});
+
 describe("DELETE", () => {
     it("disconnects and forgets the cached scope", async () => {
         const response = await DELETE();
@@ -274,6 +308,18 @@ describe("Connect OpenRouter", () => {
         expect(createHash("sha256").update(flow.v).digest("base64url")).toBe(
             target.searchParams.get("code_challenge")
         );
+    });
+
+    it("says the server can't store keys before sending anyone to OpenRouter", async () => {
+        mockServerEnv.EMBEDDING_SECRETS_KEY = undefined;
+        try {
+            const response = await startOpenRouter(new Request("http://localhost:3000/api/x"));
+            const target = new URL(response.headers.get("location")!);
+            expect(target.origin).toBe("http://localhost:3000");
+            expect(target.searchParams.get("openrouter")).toBe("unavailable");
+        } finally {
+            mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
+        }
     });
 
     function callback(query: string, flow?: { v: string; s: string; c: string }) {

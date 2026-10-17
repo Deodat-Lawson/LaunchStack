@@ -9,6 +9,8 @@
 
 import { NextResponse } from "next/server";
 
+import { MissingSecretsKeyError } from "@launchstack/store/crypto";
+
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { selectionProblem } from "~/server/workspace-models/config";
 import {
@@ -19,6 +21,7 @@ import { saveEndpointSchema } from "~/server/workspace-models/requests";
 import { invalidateWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     KeyNeededForNewAddressError,
+    NO_SECRETS_KEY_MESSAGE,
     deleteWorkspaceEndpoint,
     getWorkspaceEndpointView,
     saveWorkspaceEndpoint,
@@ -65,6 +68,9 @@ export async function PUT(request: Request) {
             error instanceof KeyNeededForNewAddressError
         ) {
             return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+        if (error instanceof MissingSecretsKeyError) {
+            return NextResponse.json({ error: NO_SECRETS_KEY_MESSAGE }, { status: 503 });
         }
         console.error("[settings/models/workspace] save failed:", error);
         return NextResponse.json({ error: "Couldn't save the model setup." }, { status: 500 });

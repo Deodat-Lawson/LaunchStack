@@ -12,7 +12,7 @@
 
 import { NextResponse } from "next/server";
 
-import { timingSafeStringEqual } from "@launchstack/store/crypto";
+import { MissingSecretsKeyError, timingSafeStringEqual } from "@launchstack/store/crypto";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
@@ -29,7 +29,7 @@ import { getWorkspaceEndpointRow, saveWorkspaceEndpoint } from "~/server/workspa
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-type Outcome = "connected" | "denied" | "expired" | "error";
+type Outcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 function backToSettings(request: Request, outcome: Outcome): NextResponse {
     const url = new URL("/employer/documents", new URL(request.url).origin);
@@ -75,15 +75,20 @@ export async function GET(request: Request) {
     }
 
     const existing = await getWorkspaceEndpointRow(ctx.data.companyId);
-    await saveWorkspaceEndpoint({
-        companyId: ctx.data.companyId,
-        userId: ctx.data.userPk,
-        provider: "openrouter",
-        baseUrl: OPENROUTER_BASE_URL,
-        apiKey: key,
-        models: existing?.baseUrl === OPENROUTER_BASE_URL ? (existing.models ?? null) : null,
-        connectedVia: "openrouter",
-    });
+    try {
+        await saveWorkspaceEndpoint({
+            companyId: ctx.data.companyId,
+            userId: ctx.data.userPk,
+            provider: "openrouter",
+            baseUrl: OPENROUTER_BASE_URL,
+            apiKey: key,
+            models: existing?.baseUrl === OPENROUTER_BASE_URL ? (existing.models ?? null) : null,
+            connectedVia: "openrouter",
+        });
+    } catch (error) {
+        if (error instanceof MissingSecretsKeyError) return backToSettings(request, "unavailable");
+        throw error;
+    }
     invalidateWorkspaceChatModels(ctx.data.companyId);
     return backToSettings(request, "connected");
 }

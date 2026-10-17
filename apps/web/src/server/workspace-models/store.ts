@@ -114,6 +114,14 @@ export interface SaveWorkspaceEndpointInput {
     connectedVia: WorkspaceModelConnection;
 }
 
+/**
+ * Shown when the server has no key to seal credentials with. Names the
+ * variable because whoever reads it next has to hand it to whoever runs the
+ * server.
+ */
+export const NO_SECRETS_KEY_MESSAGE =
+    "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.";
+
 export class KeyNeededForNewAddressError extends Error {
     constructor() {
         super(

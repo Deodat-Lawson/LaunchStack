@@ -17,6 +17,7 @@ import {
     updateBatchStatus,
     type UploadBatchFileRecord,
 } from "~/server/services/upload-batches";
+import { isTranscriptionError } from "@launchstack/conversion";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { recordUpload } from "~/server/workspace/added-documents";
 
@@ -162,7 +163,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                         jobId: uploadResult.jobId,
                     };
                 } catch (error) {
-                    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+                    const errorMessage = isTranscriptionError(error)
+                        ? error.userMessage
+                        : error instanceof Error
+                          ? error.message
+                          : "Unknown error";
                     await markFileFailed(batchId, file.id, errorMessage);
 
                     return { fileId: file.id, status: "failed" as const, error: errorMessage };

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { getTranscriptionProvider } from "@launchstack/conversion";
+import { getTranscriptionProvider, isTranscriptionError } from "@launchstack/conversion";
 import { getEngine } from "~/server/engine";
 
 /**
@@ -58,11 +58,18 @@ export async function POST(request: Request) {
         getEngine();
 
         const provider = await getTranscriptionProvider();
-        const result = await provider.transcribe(buffer, filename);
+        // Dictation wants the words, fast: no timestamps or language pass.
+        const result = await provider.transcribe(buffer, filename, {
+            mimeType: audioFile.type || undefined,
+            timestamps: false,
+        });
 
         return NextResponse.json({ text: result.data.text }, { status: 200 });
     } catch (error) {
         console.error("Error in speech-to-text:", error);
+        if (isTranscriptionError(error)) {
+            return NextResponse.json({ error: error.userMessage }, { status: error.status });
+        }
         return NextResponse.json({ error: "Failed to transcribe audio" }, { status: 500 });
     }
 }

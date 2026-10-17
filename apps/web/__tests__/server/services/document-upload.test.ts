@@ -25,6 +25,15 @@ jest.mock("~/server/services/document-creation", () => ({
     createDocumentLifecycle: jest.fn(),
 }));
 
+const mockDeleteDocumentCore = jest.fn().mockResolvedValue(undefined);
+jest.mock("~/server/services/document-delete", () => ({
+    deleteDocumentCore: (...args: unknown[]) => mockDeleteDocumentCore(...args) as unknown,
+}));
+
+jest.mock("~/server/db", () => ({
+    db: { transaction: (fn: (tx: unknown) => Promise<unknown>) => fn("tx") },
+}));
+
 jest.mock("~/lib/credits", () => ({
     hasTokens: jest.fn(),
 }));
@@ -112,6 +121,118 @@ describe("processDocumentUpload audio lifecycle", () => {
             expect.objectContaining({ creationKey: "upload:meeting:audio-transcript" })
         );
         expect(mockUploadFile).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe("processDocumentUpload when transcription fails", () => {
+    it("creates no document at all, so a retry starts clean", async () => {
+        const failure = new Error("Gemini said no");
+        mockTranscribeAudioFromUrl.mockRejectedValue(failure);
+
+        await expect(
+            processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "oct_15_3_pm_HT.m4a",
+                rawDocumentUrl: "https://files.test/oct_15_3_pm_HT.m4a",
+                requestUrl: "https://app.test/upload",
+                mimeType: "audio/x-m4a",
+                originalFilename: "oct_15_3_pm_HT.m4a",
+            })
+        ).rejects.toBe(failure);
+
+        expect(mockCreateDocumentLifecycle).not.toHaveBeenCalled();
+        expect(mockUploadFile).not.toHaveBeenCalled();
+    });
+
+    it("removes the recording row it made when the transcript row then fails", async () => {
+        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const rowFailure = new Error("transcript row insert failed");
+        mockTranscribeAudioFromUrl.mockResolvedValue({
+            text: "大家好",
+            language: "yue",
+            confidence: 0,
+            segments: [{ start: 0, end: 1, text: "大家好" }],
+        });
+        mockUploadFile.mockResolvedValue({ url: "/api/files/9" });
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce({
+                document: { id: 41, title: "memo.m4a", url: "/api/files/8", category: "" },
+                created: true,
+                jobId: null,
+                eventIds: [],
+            })
+            .mockRejectedValueOnce(rowFailure);
+
+        try {
+            await expect(
+                processDocumentUpload({
+                    user: { userId: "user-1", companyId: 7n },
+                    documentName: "memo.m4a",
+                    rawDocumentUrl: "https://files.test/memo.m4a",
+                    requestUrl: "https://app.test/upload",
+                    mimeType: "audio/x-m4a",
+                    originalFilename: "memo.m4a",
+                })
+            ).rejects.toBe(rowFailure);
+
+            expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41);
+            // The transcript text was stored before either row.
+            expect(mockUploadFile.mock.invocationCallOrder[0]).toBeLessThan(
+                mockCreateDocumentLifecycle.mock.invocationCallOrder[0]!
+            );
+        } finally {
+            consoleErrorSpy.mockRestore();
+        }
+    });
+
+    it("leaves an earlier upload's recording row alone when this attempt fails", async () => {
+        mockTranscribeAudioFromUrl.mockResolvedValue({
+            text: "hi",
+            language: "en",
+            confidence: 0,
+            segments: [],
+        });
+        mockUploadFile.mockResolvedValue({ url: "/api/files/9" });
+        mockCreateDocumentLifecycle
+            .mockResolvedValueOnce({
+                document: { id: 42, title: "memo.m4a", url: "/api/files/8", category: "" },
+                created: false,
+                jobId: null,
+                eventIds: [],
+            })
+            .mockRejectedValueOnce(new Error("insert failed"));
+
+        await expect(
+            processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "memo.m4a",
+                rawDocumentUrl: "https://files.test/memo.m4a",
+                requestUrl: "https://app.test/upload",
+                mimeType: "audio/x-m4a",
+                originalFilename: "memo.m4a",
+            })
+        ).rejects.toThrow("insert failed");
+        expect(mockDeleteDocumentCore).not.toHaveBeenCalled();
+    });
+
+    it("hands the browser's type to the transcriber", async () => {
+        mockTranscribeAudioFromUrl.mockRejectedValue(new Error("stop here"));
+
+        await processDocumentUpload({
+            user: { userId: "user-1", companyId: 7n },
+            documentName: "memo",
+            rawDocumentUrl: "https://files.test/memo",
+            requestUrl: "https://app.test/upload",
+            mimeType: "audio/x-m4a",
+            originalFilename: "memo.m4a",
+        }).catch(() => undefined);
+
+        expect(mockTranscribeAudioFromUrl).toHaveBeenCalledWith(
+            "https://files.test/memo",
+            "memo.m4a",
+            7n,
+            "audio/x-m4a"
+        );
     });
 });
 

@@ -11,7 +11,8 @@
  * - a single `$` pairs with the next single `$` in its paragraph;
  * - the pair is math only if the closing `$` is not followed by a digit
  *   ("$5–$10") and the inside is tight at both ends ("$x^2$") or padded at
- *   both ends ("$ x^2 $", what `\( x^2 \)` normalizes to);
+ *   both ends ("$ x^2 $", how answers saved before the server trimmed
+ *   `\( x^2 \)` read);
  * - otherwise the opening `$` is a literal and the closing one may open the
  *   next pair ("$5 and $x$" keeps `x` as math).
  *

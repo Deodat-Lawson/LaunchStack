@@ -10,16 +10,20 @@
 #     cloud provider (packages/llm registry default) and OCR routes to the
 #     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
 #     containers move behind opt-in profiles.
-#   - A self-hosted Inngest server (`inngest`) replaces the dev server. It
-#     runs the background verticals (Drive/Gmail sync, crons, prospector, …)
-#     against the worker over the compose network; INNGEST_EVENT_KEY and
-#     INNGEST_SIGNING_KEY (hex) must be set or nothing it schedules can run.
-#     Ingestion itself runs through the outbox and needs neither.
-#   - Caddy terminates TLS for ${DOMAIN} (app) and files.${DOMAIN} (SeaweedFS
-#     object URLs, anonymous read). The worker's /api/inngest stays internal.
-#   - No service publishes a host port except Caddy; the NSG only admits
+#   - Inngest is self-hosted: the `inngest` service runs `inngest start` (the
+#     production server, not the dev server) with its history in an `inngest`
+#     database on the shared Postgres and its queue in `inngest-redis`. app and
+#     worker talk to it in signed mode with our own INNGEST_EVENT_KEY /
+#     INNGEST_SIGNING_KEY, both required (`openssl rand -hex 32` each). The
+#     background verticals need it; ingestion runs through the outbox and
+#     does not.
+#   - Caddy terminates TLS for ${DOMAIN} (the app) and files.${DOMAIN}
+#     (SeaweedFS object URLs, anonymous read). Nothing outside the VM calls the
+#     worker any more, so /api/inngest is not routed.
+#   - No service publishes a public host port except Caddy; the NSG only admits
 #     22/80/443 anyway, but the containers shouldn't offer more than the
-#     firewall happens to block.
+#     firewall happens to block. The Inngest dashboard has no login, so it binds
+#     to 127.0.0.1 on the VM and is reached over an SSH tunnel.
 
 services:
   app:
@@ -37,10 +41,12 @@ services:
         condition: service_started
     networks: [default, inngest]
     environment:
+      # An empty INNGEST_DEV is an explicit "not dev" to the SDK (same as "0"):
+      # events are sent with INNGEST_EVENT_KEY and every call is signed. The
+      # base stack's value points at the dev server, so it must be overridden.
       INNGEST_DEV: ""
-      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
-      # Events go to the self-hosted server below, not Inngest Cloud.
       INNGEST_BASE_URL: http://inngest:8288
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
       # Public object-URL origin. Also the SDK endpoint — the app reaches its
       # own SeaweedFS through Caddy so that stored URLs and fetch checks agree
       # on one origin (lib/storage matches URLs by this prefix).
@@ -59,49 +65,19 @@ services:
     networks: [default, inngest]
     environment:
       INNGEST_DEV: ""
-      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
       INNGEST_BASE_URL: http://inngest:8288
-      # The SDK registers the URL a sync request arrived on unless this pins
-      # it, and its out-of-band sync (PUT) is unauthenticated.
+      # Verifies every request the server makes to /api/inngest; without it
+      # the SDK rejects them all ("No signing key found").
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
+      # The serve URL the SDK registers. Pinned so a sync triggered from
+      # inside the container (localhost) can't register an address the
+      # server cannot reach.
       INNGEST_SERVE_HOST: http://worker:8020
       NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
 
-  # Self-hosted Inngest: queue, scheduler and cron for every function the
-  # worker serves. Without it events are accepted and nothing ever runs
-  # (Drive stays at "Not synced yet"). State is SQLite plus the built-in
-  # Redis snapshot on the volume. It lives on its own network with only app and
-  # worker, so nothing that fetches user-supplied URLs (gotenberg, the
-  # document services) can reach its dashboard API, which has no login. Tunnel
-  # to it over SSH; never publish it.
-  inngest:
-    image: inngest/inngest:v1.46.0
-    container_name: pdr_ai_v2-inngest-server
-    restart: unless-stopped
-    command: inngest start
-    environment:
-      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
-      # Hex with an even number of characters (openssl rand -hex 32); the
-      # worker verifies every call with the same value.
-      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:-}
-      INNGEST_SDK_URL: http://worker:8020/api/inngest
-      # Re-sync on an interval: the boot-time sync fails whenever the worker
-      # is not up yet, and a worker redeploy can add functions.
-      INNGEST_POLL_INTERVAL: "60"
-      INNGEST_SQLITE_DIR: /data
-    volumes:
-      - inngest_data:/data
-    networks: [inngest]
-    depends_on:
-      - worker
-    healthcheck:
-      test: ["CMD", "inngest", "alpha", "doctor", "healthcheck"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
   db:
     ports: !reset []
+    networks: [default, inngest]
 
   # The base stack leaves seaweedfs with Docker's default restart policy, so a
   # single failed start (a slow db, a host reboot) leaves object storage down
@@ -125,9 +101,115 @@ services:
     profiles: ["whisper"]
     ports: !reset []
 
-  # Dev-only Inngest server; production runs `inngest` (above) instead.
+  # Dev-only Inngest server (`inngest dev`: unsigned, no keys). Production runs
+  # the `inngest` service below instead.
   inngest-dev:
     profiles: ["inngest-dev"]
+
+  # ── Self-hosted Inngest ────────────────────────────────────────────────
+  # Executes the worker's background functions: Drive and Gmail sync and
+  # their crons, brand publishing, Prospects/Proposals runs, the founder
+  # weekly review, reindex, crawls. Its network (`inngest`) holds only the
+  # server, its Redis, and the services it works with (app, worker, db; the
+  # one-time Postgres recreate when db first joins is expected), so nothing
+  # that fetches user-supplied URLs (gotenberg, the document services) can
+  # reach its unauthenticated dashboard API. Runbook: "Background jobs
+  # (self-hosted Inngest)" in docs/runbooks/azure-lean-deploy.md.
+
+  # Creates Inngest's database on the shared Postgres if it is missing, then
+  # exits. docker/init-db.sql only runs on a fresh volume, and production's
+  # volume predates this service.
+  inngest-db-init:
+    image: pgvector/pgvector:pg16
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD:-password}
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        psql -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname = 'inngest'" | grep -q 1
+        || psql -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE inngest"
+    restart: "no"
+
+  # Queue and in-flight run state. External rather than the server's built-in
+  # in-memory Redis, which is only snapshotted periodically: a crash or OOM
+  # kill between snapshots would drop queued runs. AOF fsyncs every second.
+  # noeviction because an evicted key is a lost step; the cap makes Redis
+  # refuse writes before the container limit kills it.
+  inngest-redis:
+    image: redis:7.4.11-alpine
+    container_name: pdr_ai_v2-inngest-redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --maxmemory
+      - 192mb
+      - --maxmemory-policy
+      - noeviction
+    volumes:
+      - inngest_redis_data:/data
+    networks: [inngest]
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  inngest:
+    # Pinned: `inngest start` is the production server and its Postgres schema
+    # migrates on boot, so upgrades are deliberate (bump, read the release
+    # notes, redeploy). v1.46.0 carries the dashboard CVE fix (TanStack Start).
+    image: inngest/inngest:v1.46.0
+    container_name: pdr_ai_v2-inngest-server
+    restart: unless-stopped
+    command:
+      - inngest
+      - start
+      # Syncs the worker's functions at boot, then re-checks every 60s so a
+      # worker redeploy (new or changed functions) is picked up on its own.
+      - --sdk-url=http://worker:8020/api/inngest
+      - --poll-interval=60
+      # The shared Postgres also serves the app (max_connections 100); keep
+      # Inngest's pool small. Its default is 100 open connections.
+      - --postgres-max-open-conns=10
+      - --postgres-max-idle-conns=2
+    environment:
+      # The server accepts events only with this key and signs every request
+      # to the worker with this one. Same values app + worker read.
+      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?set INNGEST_EVENT_KEY (openssl rand -hex 32), see docs/runbooks/azure-lean-deploy.md}
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?set INNGEST_SIGNING_KEY (openssl rand -hex 32), see docs/runbooks/azure-lean-deploy.md}
+      INNGEST_POSTGRES_URI: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/inngest?sslmode=disable
+      INNGEST_REDIS_URI: redis://inngest-redis:6379
+    # Dashboard + API, loopback only: it has no login. Reach it with
+    # `ssh -N -L 8288:127.0.0.1:8288 <admin>@<vm>`.
+    ports:
+      - "127.0.0.1:8288:8288"
+    depends_on:
+      inngest-db-init:
+        condition: service_completed_successfully
+      inngest-redis:
+        condition: service_healthy
+      # Ordering only: the 60s poll syncs a worker that comes up later, and
+      # the app must be able to send events even while the worker restarts.
+      worker:
+        condition: service_started
+    networks: [inngest]
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "inngest", "alpha", "doctor", "healthcheck"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   # The marketing site — the "home page" a signed-out visitor lands on.
   # apps/web's `/` is the product's front door and redirects to /signin by
@@ -170,8 +252,9 @@ services:
 volumes:
   caddy_data:
   caddy_config:
-  inngest_data:
+  inngest_redis_data:
 
 networks:
-  # The Inngest server plus the two services that talk to it.
+  # Inngest's network: the server, its Redis, and app/worker/db (see the
+  # self-hosted Inngest block above).
   inngest:

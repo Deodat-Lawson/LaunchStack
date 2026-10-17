@@ -791,7 +791,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "files", label: "Files", Icon: IconFile, desc: "PDF, DOCX, XLSX, images" },
             { id: "folder", label: "Folder", Icon: IconFolder, desc: "Bulk — keeps structure" },
-            { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, M4A — transcribed" },
+            {
+                id: "audio",
+                label: "Audio",
+                Icon: IconAudio,
+                desc: "MP3, M4A, WAV and more — transcribed",
+            },
             { id: "video", label: "Video", Icon: IconVideo, desc: "MP4 — transcribed" },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
@@ -810,7 +815,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
-            { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
+            {
+                id: "drive",
+                label: "Google Drive",
+                Icon: IconDrive,
+                desc: "Docs, Sheets, PDFs — kept in sync",
+            },
             {
                 id: "slack",
                 label: "Slack",

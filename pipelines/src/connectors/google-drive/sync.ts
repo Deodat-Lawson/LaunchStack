@@ -56,6 +56,8 @@ export interface GoogleDriveSyncResult extends KnowledgeSyncReport {
     readonly missingSourceIds: readonly string[];
     /** Files answering 403/404 — deleted or de-granted; re-pick refreshes access. */
     readonly accessLost: readonly string[];
+    /** Picked folders that listed empty — see DriveDiscovery.emptyFolders. */
+    readonly emptyFolders: readonly string[];
     readonly truncated: boolean;
 }
 
@@ -175,6 +177,7 @@ export async function syncGoogleDrive(
                 failed: [],
                 missingSourceIds: [],
                 accessLost: [],
+                emptyFolders: [],
                 truncated: false,
             });
         }
@@ -230,6 +233,7 @@ export async function syncGoogleDrive(
         failed,
         missingSourceIds,
         accessLost: [...accessLost],
+        emptyFolders: discovery.emptyFolders,
         truncated: discovery.truncated,
     });
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { SystemMessage, HumanMessage, type AIMessageChunk } from "@langchain/core/messages";
+import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray, like, or } from "drizzle-orm";
 import {
@@ -26,9 +26,7 @@ import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 import { gateChunksByScope } from "~/server/rag/gate";
 import {
     normalizeModelContent,
-    performWebSearch,
     getSystemPrompt,
-    getWebSearchInstruction,
     describeChatError,
     getEmbeddings,
     buildReferences,
@@ -40,10 +38,11 @@ import {
     resolveConfiguredChatRoute,
     selectChatRoute,
 } from "~/lib/models";
-import { normalizeTokenUsage } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
+import { answerWithTools } from "~/server/chat-tool-loop";
+import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
@@ -98,20 +97,6 @@ async function knownAgentKeys(companyId: bigint, question: string): Promise<stri
         console.warn("[AIChat] could not read the agent roster for mentions:", err);
         return [];
     }
-}
-
-/** Extract only public reasoning deltas; raw provider payloads never leave the server. */
-function rawReasoningDelta(value: unknown): string | undefined {
-    if (!value || typeof value !== "object") return undefined;
-    const choices: unknown = (value as Record<string, unknown>).choices;
-    if (!Array.isArray(choices)) return undefined;
-    const first: unknown = choices[0];
-    if (!first || typeof first !== "object") return undefined;
-    const delta: unknown = (first as Record<string, unknown>).delta;
-    if (!delta || typeof delta !== "object") return undefined;
-    const fields = delta as Record<string, unknown>;
-    const reasoning = fields.reasoning_content ?? fields.reasoning;
-    return typeof reasoning === "string" ? reasoning : undefined;
 }
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
@@ -447,7 +432,7 @@ async function buildAttachmentTextBlock(
  * This endpoint provides comprehensive document Q&A capabilities:
  * - Answers over one document, or over a set of documents
  * - Advanced retrieval with multiple fallback strategies
- * - Web search integration
+ * - Web search as a tool the model calls when it needs one
  * - Conversation context support
  * - Rich response metadata
  *
@@ -1061,19 +1046,16 @@ export async function POST(request: Request) {
             // Build references for document highlights and page navigation
             const references = buildReferences(retrievalQuery, documents, 5);
 
-            // Perform comprehensive web search if enabled
-            const documentContext =
-                documents.length > 0
-                    ? documents.map(doc => doc.pageContent).join("\n\n")
-                    : undefined;
-
-            const enableWebSearchFlag = Boolean(enableWebSearch ?? false);
-            const webSearch = await performWebSearch(
-                retrievalQuery,
-                documentContext,
-                enableWebSearchFlag,
-                5
-            );
+            // Web search is a tool the model may call, not a step before the
+            // answer: it is offered when the turn's agent may use the web, a
+            // search provider key is configured and the model declares tool
+            // calling. A question that needs no web pays nothing for it.
+            const webTools =
+                enableWebSearch &&
+                webSearchAvailable() &&
+                resolved.behavior.nativeStructuredOutput.includes("tool-calling")
+                    ? createWebTools()
+                    : null;
 
             const attachmentContext = { request, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
@@ -1112,19 +1094,14 @@ export async function POST(request: Request) {
                 systemPrompt +=
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
             }
-            const webSearchInstruction = getWebSearchInstruction(
-                webSearch.searched,
-                webSearch.results,
-                webSearch.refinedQuery,
-                webSearch.reasoning
-            );
+            if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
 
             const passageBlock = passageSection ? `${passageSection}\n\n` : "";
             const documentContent =
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${webSearch.content}${attachmentTextBlock}${webSearchInstruction}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1180,74 +1157,45 @@ export async function POST(request: Request) {
             ) => {
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "generating" });
-                let response;
-                let streamedText = "";
-                if (emit) {
-                    const chunks = await chat.stream(messages, { signal });
-                    let combined: AIMessageChunk | undefined;
-                    for await (const chunk of chunks) {
-                        throwIfChatAborted(signal);
-                        const wireReasoning = rawReasoningDelta(
-                            chunk.additional_kwargs?.__raw_response
-                        );
-                        // Do not retain opaque provider metadata in the final chunk.
-                        delete chunk.additional_kwargs.__raw_response;
-                        combined = combined ? combined.concat(chunk) : chunk;
-                        const content = chunk.content;
-                        const text =
-                            typeof content === "string"
-                                ? content
-                                : content
-                                      .map(part => {
-                                          if (typeof part === "string") return part;
-                                          return part.type === "text" &&
-                                              typeof part.text === "string"
-                                              ? part.text
-                                              : "";
-                                      })
-                                      .join("");
-                        if (text) {
-                            streamedText += text;
-                            emit({ type: "text", delta: text });
-                        }
-                        const reasoning =
-                            chunk.additional_kwargs?.reasoning_content ??
-                            chunk.additional_kwargs?.reasoning ??
-                            wireReasoning;
-                        if (typeof reasoning === "string" && reasoning)
-                            emit({ type: "reasoning", delta: reasoning });
-                        if (Array.isArray(content)) {
-                            for (const block of content) {
-                                if (typeof block !== "object" || !block) continue;
-                                if (block.type === "reasoning" || block.type === "thinking") {
-                                    const delta: unknown = block.text ?? block.thinking;
-                                    if (typeof delta === "string" && delta)
-                                        emit({ type: "reasoning", delta });
-                                }
-                            }
-                        }
-                    }
-                    if (!combined) throw new Error("The model stream ended without a response.");
-                    response = combined;
-                } else {
-                    response = await chat.invoke(messages, { signal });
-                }
+                const answer = await answerWithTools({
+                    chat,
+                    messages,
+                    tools: webTools?.tools ?? [],
+                    signal,
+                    stream: emit && {
+                        onText: delta => emit({ type: "text", delta }),
+                        onReasoning: delta => emit({ type: "reasoning", delta }),
+                    },
+                    onStatus: status => emit?.({ type: "status", status }),
+                });
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
 
                 let summarizedAnswer = normalizeModelContent(
-                    emit ? streamedText : response.content
+                    emit ? answer.finalText : answer.finalContent
                 );
                 const totalTime = Date.now() - startTime;
 
-                // Log + meter LLM token usage. Normalized at the chat boundary so
-                // credits are debited the same way whichever endpoint answered.
-                const usage = normalizeTokenUsage(response);
+                // Log + meter LLM token usage, summed over every model call
+                // of the turn. Normalized at the chat boundary so credits are
+                // debited the same way whichever endpoint answered.
+                const usage = answer.usage;
                 const promptTokens = usage.inputTokens ?? 0;
                 const completionTokens = usage.outputTokens ?? 0;
                 console.log(
                     `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
                 );
+                if (webTools) {
+                    console.log(
+                        `[AIChat] Tools: ${answer.modelCalls} model call(s); ${
+                            answer.toolCalls
+                                .map(
+                                    call => `${call.name}${call.ok ? "" : " (failed)"} ${call.ms}ms`
+                                )
+                                .join(", ") || "no tool calls"
+                        }`
+                    );
+                }
                 // isMeteringEnabled, not isMeteringEnforced: recording chat usage
                 // is useful on a self-hosted instance too. This calls debitTokens
                 // directly rather than going through creditsDebitSafe (which would
@@ -1322,14 +1270,16 @@ export async function POST(request: Request) {
                     fusionWeights: [0.4, 0.6],
                     searchScope,
                     agent: agentResponseInfo(agent),
-                    webSources: webSearch.searched ? webSearch.results : undefined,
-                    webSearch: webSearch.searched
-                        ? {
-                              refinedQuery: webSearch.refinedQuery || question,
-                              reasoning: webSearch.reasoning,
-                              resultsCount: webSearch.results.length,
-                          }
-                        : undefined,
+                    // The pages the model was shown, in the [Source N] order it cites.
+                    webSources: webTools?.sources.length ? webTools.sources : undefined,
+                    webSearch:
+                        webTools && webTools.queries.length > 0
+                            ? {
+                                  refinedQuery: webTools.queries.join(" · "),
+                                  queries: webTools.queries,
+                                  resultsCount: webTools.sources.length,
+                              }
+                            : undefined,
                     disclaimer: supervision.disclaimer,
                     guardrails: !supervision.approved
                         ? {

@@ -272,6 +272,8 @@ export interface ThreadMessage {
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     /** Retrieved chunks the answer was grounded in — a different number. */
     chunksAnalyzed?: number;
+    /** Web pages the model read, in the [Source N] order its answer cites. */
+    webSources?: { title: string; url: string }[];
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];

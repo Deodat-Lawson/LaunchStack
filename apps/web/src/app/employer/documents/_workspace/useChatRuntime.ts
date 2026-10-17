@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
+import { chatStatusLabel } from "~/lib/chat-stream";
 import { conversationContext } from "~/lib/chat-turns";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
@@ -86,6 +87,7 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             send: message.send,
             tokenBreakdown: message.tokenBreakdown,
             chunksAnalyzed: message.chunksAnalyzed,
+            webSources: message.webSources,
         },
     };
 }
@@ -308,7 +310,7 @@ export function useChatRuntime(input: {
             if (event.type === "text") answer.text += event.delta;
             if (event.type === "reasoning")
                 answer.reasoning = (answer.reasoning ?? "") + event.delta;
-            if (event.type === "status") answer.stage = event.status;
+            if (event.type === "status") answer.stage = chatStatusLabel(event.status);
             answer.elapsedMs = performance.now() - started;
             emit(context);
         };
@@ -805,6 +807,12 @@ function applyResponse(
           }
         : undefined;
     answer.chunksAnalyzed = response.chunksAnalyzed;
+    // Kept within what the session store accepts, so saving the turn never fails on them.
+    const webSources = (response.webSources ?? [])
+        .filter(({ url }) => /^https?:\/\//i.test(url) && url.length <= 2000 && URL.canParse(url))
+        .slice(0, 20)
+        .map(({ title, url }) => ({ title: title.slice(0, 500), url }));
+    answer.webSources = webSources.length > 0 ? webSources : undefined;
     answer.citations = (response.references ?? []).flatMap(reference => {
         const source = sources.find(s => s.documentId === Number(reference.documentId));
         return source

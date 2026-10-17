@@ -977,6 +977,10 @@ export const SessionMessageSchema = z.object({
                 })
                 .optional(),
             chunksAnalyzed: z.number().nonnegative().optional(),
+            webSources: z
+                .array(z.object({ title: z.string().max(500), url: z.string().url().max(2000) }))
+                .max(20)
+                .optional(),
         })
         .optional(),
 });

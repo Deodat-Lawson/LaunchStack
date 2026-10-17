@@ -57,18 +57,27 @@ function systemPrompt(target: string): string {
     );
 }
 
-/** Lines a reply may leave out (kept in the original) before the batch is asked again. */
+/** Lines a batch may end with untranslated (kept in the original) before it fails. */
 function tolerableMisses(count: number): number {
     return Math.max(2, Math.floor(count * 0.02));
 }
 
-async function translateBatch(
-    lines: string[],
+/** Rounds of asking again for just the lines a reply left out. */
+const REPAIR_ROUNDS = 3;
+
+interface Endpoint {
+    baseUrl: string;
+    apiKey: string;
+}
+
+/** One call: the numbered lines in, whatever numbered translations came back. */
+async function requestTranslations(
+    items: { i: number; t: string }[],
     target: string,
-    endpoint: { baseUrl: string; apiKey: string },
+    endpoint: Endpoint,
     model: string,
     fetchImpl: typeof fetch
-): Promise<{ lines: string[]; tokens: number; missed: number }> {
+): Promise<{ byIndex: Map<number, string>; tokens: number }> {
     const isGemini = endpoint.baseUrl.startsWith(GEMINI_ROOT);
     const resp = await fetchImpl(`${endpoint.baseUrl}/chat/completions`, {
         method: "POST",
@@ -85,10 +94,7 @@ async function translateBatch(
             ...(isGemini ? { reasoning_effort: "low" } : {}),
             messages: [
                 { role: "system", content: systemPrompt(target) },
-                {
-                    role: "user",
-                    content: JSON.stringify({ lines: lines.map((t, i) => ({ i, t })) }),
-                },
+                { role: "user", content: JSON.stringify({ lines: items }) },
             ],
             response_format: {
                 type: "json_schema",
@@ -153,34 +159,88 @@ async function translateBatch(
             if (typeof i === "number" && typeof t === "string" && t.trim()) byIndex.set(i, t);
         }
     }
-    const missed = lines.filter((_, i) => !byIndex.has(i)).length;
-    if (missed > tolerableMisses(lines.length)) {
-        throw new TranscriptionError(
-            `Translation returned ${lines.length - missed} of ${lines.length} lines`,
-            "The translation came back incomplete. Try again.",
-            502
-        );
-    }
-    return {
-        lines: lines.map((original, i) => byIndex.get(i) ?? original),
-        tokens: data.usage?.total_tokens ?? 0,
-        missed,
-    };
+    return { byIndex, tokens: data.usage?.total_tokens ?? 0 };
 }
 
-/** Whether a failed batch is worth asking again: not a spent daily quota. */
+/** Whether a failed call is worth making again: not a spent daily quota. */
 function worthRetrying(error: unknown): boolean {
     if (!(error instanceof TranscriptionError)) return true;
     const wait = retryAfterSeconds(error.message);
     return wait === null || wait <= 60;
 }
 
+/** A call, retried after each delay when it fails for a reason that passes. */
+async function withRetries<T>(delays: number[], what: string, call: () => Promise<T>): Promise<T> {
+    for (let attempt = 0; ; attempt++) {
+        try {
+            return await call();
+        } catch (error) {
+            if (attempt >= delays.length || !worthRetrying(error)) throw error;
+            console.warn(
+                `[TranscriptTranslation] ${what} failed (${
+                    error instanceof Error ? error.message.slice(0, 120) : String(error)
+                }), retry ${attempt + 1}`
+            );
+            await new Promise(r => setTimeout(r, delays[attempt]));
+        }
+    }
+}
+
 /**
- * Translate transcript lines into `target` (a BCP-47 code). A batch that
- * fails — overloaded, rate-limited, or answered with lines missing — is asked
- * again after each of the retry delays before the whole call fails, so a
- * stored translation is complete (a line or two a model skipped stays in the
- * original).
+ * One batch. Lines a reply leaves out are asked for again on their own (a
+ * small model dropped 16–41 of 250), so a repair costs a short call, not the
+ * whole batch over.
+ */
+async function translateBatch(
+    lines: string[],
+    target: string,
+    endpoint: Endpoint,
+    model: string,
+    fetchImpl: typeof fetch,
+    delays: number[],
+    label: string
+): Promise<{ lines: string[]; tokens: number; missed: number }> {
+    const translated = new Map<number, string>();
+    let pending = lines.map((t, i) => ({ i, t }));
+    let tokens = 0;
+    for (let round = 0; round <= REPAIR_ROUNDS && pending.length > 0; round++) {
+        const asked = pending;
+        const reply = await withRetries(delays, label, () =>
+            requestTranslations(asked, target, endpoint, model, fetchImpl)
+        );
+        tokens += reply.tokens;
+        for (const { i } of asked) {
+            const t = reply.byIndex.get(i);
+            if (t !== undefined) translated.set(i, t);
+        }
+        pending = asked.filter(({ i }) => !translated.has(i));
+        if (pending.length === asked.length) break; // no progress: stop asking
+        if (pending.length > 0) {
+            console.warn(
+                `[TranscriptTranslation] ${label}: ${pending.length} of ${lines.length} lines missing, asking for them`
+            );
+        }
+    }
+    if (pending.length > tolerableMisses(lines.length)) {
+        throw new TranscriptionError(
+            `Translation returned ${lines.length - pending.length} of ${lines.length} lines`,
+            "The translation came back incomplete. Try again.",
+            502
+        );
+    }
+    return {
+        lines: lines.map((original, i) => translated.get(i) ?? original),
+        tokens,
+        missed: pending.length,
+    };
+}
+
+/**
+ * Translate transcript lines into `target` (a BCP-47 code). A call that
+ * fails (overloaded, rate-limited) is made again after each of the retry
+ * delays, and lines a reply leaves out are asked for again on their own, so a
+ * stored translation is complete; a line or two a model will not translate
+ * stays in the original.
  */
 export async function translateTranscriptLines(
     lines: string[],
@@ -218,21 +278,15 @@ export async function translateTranscriptLines(
     const worker = async () => {
         while (next < batches.length) {
             const i = next++;
-            const batch = batches[i]!;
-            for (let attempt = 0; ; attempt++) {
-                try {
-                    results[i] = await translateBatch(batch, target, endpoint, model, fetchImpl);
-                    break;
-                } catch (error) {
-                    if (attempt >= delays.length || !worthRetrying(error)) throw error;
-                    console.warn(
-                        `[TranscriptTranslation] batch ${i + 1}/${batches.length} failed (${
-                            error instanceof Error ? error.message.slice(0, 120) : String(error)
-                        }), retry ${attempt + 1}`
-                    );
-                    await new Promise(r => setTimeout(r, delays[attempt]));
-                }
-            }
+            results[i] = await translateBatch(
+                batches[i]!,
+                target,
+                endpoint,
+                model,
+                fetchImpl,
+                delays,
+                `batch ${i + 1}/${batches.length}`
+            );
         }
     };
     await Promise.all(

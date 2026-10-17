@@ -75,16 +75,14 @@ describe("translateTranscriptLines", () => {
         expect(result.lines).toEqual(["Hello.", "Yes. OK.", "好。", "Next week."]);
     });
 
-    it("asks again when too many lines are missing, then takes the full answer", async () => {
-        let calls = 0;
+    it("asks again for just the lines a reply left out", async () => {
+        const asked: number[][] = [];
         const fetchImpl = vi.fn(async (_url: string, init?: RequestInit) => {
-            calls++;
             const lines = inputLines(init);
-            return reply(
-                calls === 1
-                    ? lines.slice(0, 2)
-                    : lines.map(({ i, t }) => ({ i, t: t.toUpperCase() }))
-            );
+            asked.push(lines.map(l => l.i));
+            // First reply covers two of six lines; the repair covers the rest.
+            const answer = asked.length === 1 ? lines.slice(0, 2) : lines;
+            return reply(answer.map(({ i, t }) => ({ i, t: t.toUpperCase() })));
         }) as unknown as typeof fetch;
 
         const result = await translateTranscriptLines(["a", "b", "c", "d", "e", "f"], "en", {
@@ -93,7 +91,10 @@ describe("translateTranscriptLines", () => {
         });
 
         expect(result.lines).toEqual(["A", "B", "C", "D", "E", "F"]);
-        expect(fetchImpl).toHaveBeenCalledTimes(2);
+        expect(asked).toEqual([
+            [0, 1, 2, 3, 4, 5],
+            [2, 3, 4, 5],
+        ]);
     });
 
     it("rides out a 503 burst", async () => {
@@ -132,7 +133,8 @@ describe("translateTranscriptLines", () => {
             name: "TranscriptionError",
             userMessage: expect.stringMatching(/incomplete/),
         });
-        expect(fetchImpl).toHaveBeenCalledTimes(5);
+        // A round that makes no progress ends the asking.
+        expect(fetchImpl).toHaveBeenCalledTimes(1);
     });
 });
 

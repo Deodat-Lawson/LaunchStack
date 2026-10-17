@@ -790,7 +790,6 @@ function DefinitionFile({
 interface PlayTurn {
     role: "user" | "assistant";
     text: string;
-    model?: string;
     citations?: number;
     notes?: string[];
     error?: boolean;
@@ -849,7 +848,6 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                 {
                     role: "assistant",
                     text: data.summarizedAnswer ?? "(no answer)",
-                    model: data.aiModel,
                     citations: data.references?.length ?? 0,
                     notes: data.agent?.notes,
                 },
@@ -915,11 +913,6 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                                     <span className="text-ink text-[12.5px] font-semibold">
                                         {turn.role === "user" ? "You" : persona.displayName}
                                     </span>
-                                    {turn.model && (
-                                        <span className="mono text-ink-3 text-[10px]">
-                                            · {turn.model}
-                                        </span>
-                                    )}
                                     {turn.citations !== undefined && turn.citations > 0 && (
                                         <span className="text-ink-3 text-[10.5px]">
                                             · {turn.citations} passage

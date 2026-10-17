@@ -9,19 +9,29 @@
  * that currently holds a cookie for this person, with the device it came
  * from and a way to end it.
  *
- * The password form is the person's own form for their own password; the
- * values go to `/api/auth/change-password` and nowhere else.
+ * The password forms are the person's own forms for their own password: a
+ * change goes to `/api/auth/change-password`, and setting one on an account
+ * that has none (made with Google or GitHub) to `/api/profile/sign-in`.
+ *
+ * "Connect" links a provider the deployment offers to this account; the
+ * round trip through the provider comes back to `/employer/settings` with
+ * `?connect=<provider>` and, when it failed, Better Auth's `&error=<code>`.
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
+import { connectErrorMessage } from "~/components/auth/auth-errors";
+import { IconGithub, IconGoogle } from "~/components/icons/brand";
+import type { IconComponent } from "~/components/icons/types";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { Field, TextInput } from "~/components/field";
 import { authClient, useUser } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
+import type { SocialProvider } from "~/server/auth/providers";
 
 import { AssistantsBlock } from "./AssistantsBlock";
 import type { SettingsSectionProps } from "./contract";
@@ -51,6 +61,41 @@ const PROVIDER_LABEL: Record<string, string> = {
     google: "Google",
     github: "GitHub",
 };
+
+const PROVIDER_ICON: Record<string, IconComponent> = {
+    credential: KeyRound,
+    google: IconGoogle,
+    github: IconGithub,
+};
+
+/** Where a "Connect" round trip lands, success or failure. */
+function connectReturnPath(provider: SocialProvider): string {
+    return `/employer/settings?connect=${provider}#account`;
+}
+
+interface Arrival {
+    /** Back from a "Connect" round trip: which provider, and Better Auth's error code if it failed. */
+    connect: { provider: string; error: string | null } | null;
+    /** Open on the Sign-in block: a connect result, or `?show=sign-in` (the takeover notice). */
+    showSignIn: boolean;
+}
+
+/**
+ * What the address bar says about how this page was reached, read once and
+ * then dropped from it so a reload doesn't replay it.
+ */
+function takeArrival(): Arrival {
+    const url = new URL(window.location.href);
+    const provider = url.searchParams.get("connect");
+    const connect = provider ? { provider, error: url.searchParams.get("error") } : null;
+    const showSignIn = connect !== null || url.searchParams.get("show") === "sign-in";
+    const keys = ["connect", "error", "error_description", "show"];
+    if (keys.some(key => url.searchParams.has(key))) {
+        for (const key of keys) url.searchParams.delete(key);
+        window.history.replaceState(window.history.state, "", url);
+    }
+    return { connect, showSignIn };
+}
 
 /** "Chrome on macOS" from a user-agent string, or the raw string's first words. */
 function describeAgent(userAgent: string | null | undefined): string {
@@ -94,18 +139,35 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
     const [sessions, setSessions] = useState<SessionRow[] | null>(null);
     const [accounts, setAccounts] = useState<AccountRow[] | null>(null);
+    // A failed list must not read as "no password, nothing linked": that
+    // would offer to set a password the person already has.
+    const [accountsFailed, setAccountsFailed] = useState(false);
+    const [offered, setOffered] = useState<SocialProvider[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [connectFailure, setConnectFailure] = useState<{
+        provider: string;
+        error: string;
+    } | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
+    const signInRef = useRef<HTMLDivElement>(null);
+    const [showSignIn, setShowSignIn] = useState(false);
 
     const refresh = useCallback(async () => {
         try {
-            const [list, linked] = await Promise.all([
+            const [list, linked, signIn] = await Promise.all([
                 authClient.listSessions(),
                 authClient.listAccounts(),
+                fetch("/api/profile/sign-in", { credentials: "same-origin" })
+                    .then(res =>
+                        res.ok ? (res.json() as Promise<{ providers: SocialProvider[] }>) : null
+                    )
+                    .catch(() => null),
             ]);
+            setAccountsFailed(Boolean(linked.error));
+            if (!linked.error) setAccounts((linked.data ?? []) as AccountRow[]);
+            setOffered(signIn?.providers ?? []);
             if (list.error) throw new Error(list.error.message ?? "Could not list sessions.");
             setSessions((list.data ?? []) as SessionRow[]);
-            setAccounts(linked.error ? [] : ((linked.data ?? []) as AccountRow[]));
             setError(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Could not load your account.");
@@ -115,6 +177,55 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     useEffect(() => {
         void refresh();
     }, [refresh]);
+
+    // Back from a "Connect" round trip, or sent here to set a password: say
+    // how it went, once, and open on the Sign-in block.
+    useEffect(() => {
+        const arrival = takeArrival();
+        // Only ever set: a second run (Strict Mode) finds the address already
+        // cleaned and must not undo the first.
+        if (arrival.showSignIn) setShowSignIn(true);
+        const connected = arrival.connect;
+        if (!connected) return;
+        if (connected.error) {
+            setConnectFailure({ provider: connected.provider, error: connected.error });
+        } else {
+            toast.success(`${PROVIDER_LABEL[connected.provider] ?? "Account"} connected`);
+        }
+    }, []);
+
+    // Once the block has its rows, so it doesn't move after the jump.
+    useEffect(() => {
+        if (!showSignIn || accounts === null) return;
+        signInRef.current?.scrollIntoView({ block: "start" });
+        setShowSignIn(false);
+    }, [showSignIn, accounts]);
+
+    const connect = async (provider: SocialProvider) => {
+        setBusy(`connect:${provider}`);
+        setConnectFailure(null);
+        try {
+            // Leaves the page for the provider on success; Better Auth's client
+            // follows the redirect it answers with.
+            const result = await authClient.linkSocial({
+                provider,
+                callbackURL: connectReturnPath(provider),
+                errorCallbackURL: connectReturnPath(provider),
+            });
+            if (result.error) {
+                throw new Error(
+                    result.error.message ?? `Could not connect ${PROVIDER_LABEL[provider]}.`
+                );
+            }
+        } catch (err) {
+            toast.error(
+                err instanceof Error
+                    ? err.message
+                    : `Could not connect ${PROVIDER_LABEL[provider]}.`
+            );
+            setBusy(null);
+        }
+    };
 
     const revoke = async (token: string) => {
         setBusy(token);
@@ -147,6 +258,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     };
 
     const hasPassword = accounts?.some(account => account.providerId === "credential") ?? false;
+    const unlinked = offered.filter(
+        provider => !accounts?.some(account => account.providerId === provider)
+    );
     const others = (sessions ?? []).filter(row => row.token !== currentToken);
 
     return (
@@ -155,12 +269,26 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
             <ProfileEditor onActions={onActions} emailVerified={user ? user.emailVerified : null} />
 
+            <div ref={signInRef} className="scroll-mt-4" />
             <Section
                 title="Sign-in"
                 description="How you get in, and any accounts linked to yours."
             >
+                {connectFailure && (
+                    <StatusNote tone="danger">
+                        {connectErrorMessage(
+                            connectFailure.error,
+                            connectFailure.provider,
+                            user?.email
+                        )}
+                    </StatusNote>
+                )}
                 <Card>
-                    {accounts === null ? (
+                    {accountsFailed ? (
+                        <StatusNote tone="danger" style={{ marginBottom: 0 }}>
+                            Couldn&apos;t load how you sign in. Reload the page to try again.
+                        </StatusNote>
+                    ) : accounts === null ? (
                         <StatusNote tone="muted" style={{ marginBottom: 0 }}>
                             Loading…
                         </StatusNote>
@@ -174,6 +302,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                         index > 0 && "border-line border-t"
                                     )}
                                 >
+                                    <ProviderMark providerId={account.providerId} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
                                             {PROVIDER_LABEL[account.providerId] ??
@@ -218,10 +347,37 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     )}
                                 </li>
                             ))}
+                            {unlinked.map((provider, index) => (
+                                <li
+                                    key={provider}
+                                    className={cn(
+                                        "flex items-center gap-3 py-2.5",
+                                        (accounts.length > 0 || index > 0) && "border-line border-t"
+                                    )}
+                                >
+                                    <ProviderMark providerId={provider} />
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-ink text-[13px] font-semibold">
+                                            {PROVIDER_LABEL[provider]}
+                                        </div>
+                                        <div className="text-ink-3 text-[12px]">Not connected</div>
+                                    </div>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={busy?.startsWith("connect:") ?? false}
+                                        onClick={() => void connect(provider)}
+                                    >
+                                        {busy === `connect:${provider}` ? "Connecting…" : "Connect"}
+                                    </Button>
+                                </li>
+                            ))}
                         </ul>
                     )}
                 </Card>
-                {hasPassword && <PasswordCard />}
+                {accounts !== null &&
+                    !accountsFailed &&
+                    (hasPassword ? <PasswordCard /> : <SetPasswordCard onSet={refresh} />)}
             </Section>
 
             <Section
@@ -295,6 +451,103 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
 
             <AssistantsBlock />
         </>
+    );
+}
+
+function ProviderMark({ providerId }: { providerId: string }) {
+    const Icon = PROVIDER_ICON[providerId] ?? KeyRound;
+    return (
+        <span
+            aria-hidden
+            className="border-line bg-panel-2 text-ink-2 grid size-8 shrink-0 place-items-center rounded-lg border"
+        >
+            <Icon size={15} />
+        </span>
+    );
+}
+
+/**
+ * For an account with no password: one made with Google or GitHub, or one
+ * whose unconfirmed password a provider sign-in removed. No current password
+ * to ask for, so the session is the proof (see /api/profile/sign-in).
+ */
+function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
+    const [next, setNext] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const canSave = next.length >= 8 && next.length <= 128 && next === confirm;
+
+    const submit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (!canSave) return;
+        setSaving(true);
+        setError(null);
+        try {
+            const res = await fetch("/api/profile/sign-in", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ newPassword: next }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                throw new Error(body?.error ?? "Could not set a password.");
+            }
+            toast.success("Password set. You can now sign in with your email and password.");
+            setNext("");
+            setConfirm("");
+            await onSet();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Could not set a password.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    return (
+        <Card className="mt-3.5">
+            <form onSubmit={submit}>
+                <div className="text-ink text-[13px] font-semibold">Set a password</div>
+                <p className="text-ink-3 mb-3 mt-1 text-[12.5px] leading-normal">
+                    Sign in with your email and a password as well as the accounts above.
+                </p>
+                <div className="grid gap-3.5 md:grid-cols-2">
+                    <Field label="New password" hint="At least 8 characters.">
+                        <TextInput
+                            type="password"
+                            autoComplete="new-password"
+                            value={next}
+                            onChange={e => setNext(e.target.value)}
+                        />
+                    </Field>
+                    <Field
+                        label="Repeat it"
+                        error={confirm && confirm !== next ? "Does not match." : undefined}
+                    >
+                        <TextInput
+                            type="password"
+                            autoComplete="new-password"
+                            value={confirm}
+                            onChange={e => setConfirm(e.target.value)}
+                        />
+                    </Field>
+                </div>
+                {error && (
+                    <div className="mt-3">
+                        <StatusNote tone="danger" style={{ marginBottom: 0 }}>
+                            {error}
+                        </StatusNote>
+                    </div>
+                )}
+                <div className="mt-4 flex justify-end">
+                    <Button type="submit" disabled={!canSave || saving}>
+                        {saving ? "Setting…" : "Set password"}
+                    </Button>
+                </div>
+            </form>
+        </Card>
     );
 }
 

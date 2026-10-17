@@ -633,6 +633,20 @@ export function toTopicDto(row: VantageAgendaTopicRow, commitmentId: string | nu
     };
 }
 
+/**
+ * The agenda's generation metadata as the browser gets it: how it was made
+ * (`mode`, `fallback`), never which model or provider made it. The row keeps
+ * the full record for operators.
+ */
+function publicModelMetadata(
+    metadata: Record<string, unknown> | null | undefined
+): Record<string, unknown> | null {
+    if (!metadata) return null;
+    return Object.fromEntries(
+        Object.entries(metadata).filter(([key]) => !["model", "modelId", "provider"].includes(key))
+    );
+}
+
 function toAgendaDto(row: VantageAgendaRow, topics: TopicDto[]): AgendaDto {
     return {
         id: row.id,
@@ -641,7 +655,7 @@ function toAgendaDto(row: VantageAgendaRow, topics: TopicDto[]): AgendaDto {
         status: row.status,
         summary: row.summary ?? null,
         signals: (row.signals as WeeklySignals | null) ?? null,
-        modelMetadata: row.modelMetadata ?? null,
+        modelMetadata: publicModelMetadata(row.modelMetadata),
         generatedAt: iso(row.generatedAt),
         heldAt: iso(row.heldAt),
         createdAt: row.createdAt.toISOString(),

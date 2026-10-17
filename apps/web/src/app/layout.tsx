@@ -1,8 +1,10 @@
 import "@launchstack/design-tokens/tokens.css";
 import "~/styles/globals.css";
+import { THEME_BOOT_SCRIPT } from "@launchstack/design-tokens/theme";
 import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 import { ContextMenuProvider } from "~/components/context-menu";
+import { ThemeChoiceSync } from "~/components/theme/ThemeChoiceSync";
 
 import { type Metadata } from "next";
 import { inter, jetbrainsMono } from "./fonts";
@@ -46,8 +48,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
+            <head>
+                {/* A theme picked on the landing site shows here too: see design-tokens/theme.ts. */}
+                <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+            </head>
             <body suppressHydrationWarning>
                 <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+                    <ThemeChoiceSync />
                     <ContextMenuProvider>{children}</ContextMenuProvider>
                     <CloudAnalytics />
                 </ThemeProvider>

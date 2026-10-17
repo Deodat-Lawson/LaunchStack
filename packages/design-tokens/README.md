@@ -1,9 +1,10 @@
 # @launchstack/design-tokens
 
 The single source of truth for colour, type, spacing, radius, shadow and
-z-index, shared by apps/web and apps/landing. Pure CSS, no build step, no
-React. It deliberately does not contain component styles — components
-consume semantic tokens; only this file may reference primitives.
+z-index, shared by apps/web and apps/landing, plus the theme-choice cookie
+both apps read. No build step, no React. It deliberately does not contain
+component styles — components consume semantic tokens; only this file may
+reference primitives.
 
 ## Use
 
@@ -13,9 +14,10 @@ consume semantic tokens; only this file may reference primitives.
 
 ## API
 
-| Export         | What it is                                                                                     |
-| -------------- | ---------------------------------------------------------------------------------------------- |
-| `./tokens.css` | primitives (hue, scales, fonts) feeding semantic tokens (surfaces, ink, lines, accent, status) |
+| Export         | What it is                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| `./tokens.css` | primitives (hue, scales, fonts) feeding semantic tokens (surfaces, ink, lines, accent, status)         |
+| `./theme`      | the `ls-theme` cookie: the latest theme chosen on either site, and the `<head>` script that applies it |
 
 Type: `--font-sans` (Inter) and `--font-mono` (JetBrains Mono) resolve to
 the next/font variables each app's `src/app/fonts.ts` sets from the files in
@@ -26,6 +28,25 @@ Two selectors only: `:root` (light) and `[data-theme="dark"]`. The ink
 ladder is a measured contrast contract — each tier carries its ratio in a
 comment. The code surface and the mindmap's paper palette deliberately
 ignore the app theme.
+
+## Theme choice
+
+The landing site and the app are separate origins, so next-themes'
+localStorage never crosses between them. `theme.ts` keeps the latest choice
+in a cookie on the domain they share (the registrable domain, found by
+probing: the browser refuses a public suffix; host-only on localhost, where
+ports share cookies anyway). Its value is `<theme>.<ms>`.
+
+- Each app's root layout inlines `THEME_BOOT_SCRIPT` in `<head>`. It copies
+  the cookie into next-themes' localStorage before next-themes' own script
+  runs, so the first paint is already in the latest choice.
+- Each app's `ThemeChoiceSync` writes the cookie whenever the theme changes.
+- Inside a workspace, apps/web's `PreferenceSync` compares the cookie's time
+  with the account setting's `updatedAt`; the later one wins, and a newer
+  browser choice is saved to the account.
+
+Both apps list this package in `transpilePackages` (the module is
+TypeScript source).
 
 ## Fonts
 

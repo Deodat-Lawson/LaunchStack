@@ -171,13 +171,37 @@ ADEU_ALLOWED_FETCH_ORIGINS=http://app:3000,http://seaweedfs:8333,https://files.$
 DEPLOYMENT_MODE=self-hosted
 ```
 
-**Optional — Inngest.** `INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY` enable the
-background verticals (trend search, prospector, founder weekly review,
-predictive analysis, reindex). Document **ingestion does not need them** — that
-runs through the Postgres transactional outbox (ADR-003). Leave them empty and
-you get a warning at boot and a working instance. To enable, register the
-**worker's** `https://$DOMAIN/api/inngest` in Inngest Cloud; the app no longer
-serves that endpoint.
+**Inngest (background jobs).** The overlay runs a self-hosted Inngest server
+(`inngest` service, `inngest start`) that schedules everything the worker's
+`/api/inngest` serves: Google Drive and Gmail sync, the 15-minute crons, trend
+search, prospector, founder weekly review, website crawl, reindex. Document
+**ingestion does not need it** (ADR-003's outbox). It needs two values, and
+**both** must be set:
+
+```bash
+INNGEST_EVENT_KEY=$(openssl rand -hex 24)    # any string; app + worker send with it
+INNGEST_SIGNING_KEY=$(openssl rand -hex 32)  # hex, even length; server signs, worker verifies
+```
+
+With the event key but no signing key, events are accepted and **nothing ever
+runs**. Production ran that way until 2026-10-17, and Drive sat at "Not synced
+yet". App and worker log a warning at boot in that state. The server re-syncs
+the worker every 60 seconds (`INNGEST_POLL_INTERVAL`), so start order doesn't
+matter and new functions appear after a worker redeploy without a restart.
+
+The server sits on its own `inngest` network with only app and worker: its
+dashboard API has no login, so nothing that fetches user-supplied URLs may
+reach it. Check it with `docker logs pdr_ai_v2-inngest-server`, or tunnel to
+the dashboard (`ssh -L 8288:<inngest-container-ip>:8288 <vm>`, then
+`http://localhost:8288`; Apps should list the worker with its functions). The
+worker's endpoint is not routed publicly. To use Inngest Cloud instead, remove
+the `inngest` service and `INNGEST_BASE_URL`, use the Cloud keys, add a Caddy
+route `handle /api/inngest* { reverse_proxy worker:8020 }`, and register the
+worker's `https://$DOMAIN/api/inngest`.
+
+Caddyfile changes need `docker restart pdr_ai_v2-caddy`, not `caddy reload`:
+the file is a single-file bind mount, and a `git pull` that rewrites it swaps
+the inode, so the container keeps reading the old one.
 
 ---
 
@@ -446,8 +470,9 @@ deployment. Keeping it on Vercel is the intended split:
 - `app.example.com` → this stack on the Azure VM
 
 Point the landing site's sign-in links at the app with `NEXT_PUBLIC_APP_URL`,
-and set `NEXT_PUBLIC_SITE_URL` on the app to the landing origin. On a
-self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
+and set `LANDING_PUBLIC_URL` on the app to the landing origin (a runtime
+variable, so the CI-built image picks it up; `NEXT_PUBLIC_SITE_URL` would
+need a rebuild). On a self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
 marketing pages itself.
 
 Running `apps/web` **on** Vercel is a different architecture, not a config flag:

@@ -6,18 +6,21 @@
  *
  * States: loading → not-configured → not-connected → connected (picked list,
  * pick more, sync now, disconnect) → syncing (polls status) → revoked
- * (reconnect). All data comes from /api/connectors/google-drive/status; the
+ * (reconnect). A sync that was requested but never starts says so (see
+ * useConnectorSync). All data comes from /api/connectors/google-drive/status; the
  * Picker's public config rides on the status payload, so no client env
  * inlining. With several Drive accounts connected, this panel manages the
  * primary (oldest) connection; the rest are listed under Settings →
  * Integrations.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { X as IconX } from "lucide-react";
 
 import type { AddSourceTab } from "./types";
+import { SyncStalledNotice } from "./SyncStalledNotice";
+import { syncStatusLabel, useConnectorSync } from "./useConnectorSync";
 import { useGooglePicker, type PickedDoc } from "./useGooglePicker";
 
 interface PickedItem {
@@ -80,7 +83,6 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const [busy, setBusy] = useState(false);
     const [confirmingDisconnect, setConfirmingDisconnect] = useState(false);
     const { openPicker, opening } = useGooglePicker();
-    const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const refresh = useCallback(async () => {
         const next = await fetchStatus();
@@ -93,22 +95,9 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
         void refresh();
     }, [refresh]);
 
-    // Poll while a sync is running so the counts land without a manual refresh.
-    useEffect(() => {
-        if (status?.lastSyncStatus === "running" && !pollRef.current) {
-            pollRef.current = setInterval(() => void refresh(), 3000);
-        }
-        if (status?.lastSyncStatus !== "running" && pollRef.current) {
-            clearInterval(pollRef.current);
-            pollRef.current = null;
-        }
-        return () => {
-            if (pollRef.current) {
-                clearInterval(pollRef.current);
-                pollRef.current = null;
-            }
-        };
-    }, [status?.lastSyncStatus, refresh]);
+    // Polls while a sync is starting or running, so the counts land without
+    // a manual refresh.
+    const { phase, requestSync } = useConnectorSync(status, refresh, `${BASE}/sync`);
 
     const handlePicked = useCallback(
         async (docs: readonly PickedDoc[]) => {
@@ -117,19 +106,16 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: docs }),
             });
-            if (res.ok) {
-                toast.success(`${docs.length} item(s) added — syncing`);
-                await fetch(`${BASE}/sync`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({}),
-                });
-            } else {
+            if (!res.ok) {
                 toast.error("Could not save the selection");
+            } else if (await requestSync()) {
+                toast.success(`${docs.length} item(s) added — syncing`);
+            } else {
+                toast.error(`${docs.length} item(s) added, but the sync could not start`);
             }
             void refresh();
         },
-        [refresh]
+        [refresh, requestSync]
     );
 
     const choose = useCallback(async () => {
@@ -166,21 +152,12 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            const res = await fetch(`${BASE}/sync`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({}),
-            });
-            if (res.ok) {
-                toast.success("Sync started");
-                setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
-            } else {
-                toast.error("Could not start the sync");
-            }
+            if (await requestSync()) toast.success("Sync requested");
+            else toast.error("Could not start the sync");
         } finally {
             setBusy(false);
         }
-    }, []);
+    }, [requestSync]);
 
     const removeItem = useCallback(
         async (fileId: string) => {
@@ -294,7 +271,8 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
     }
 
     const picked = status.pickedItems ?? [];
-    const syncing = status.lastSyncStatus === "running";
+    const syncing = phase === "running";
+    const starting = phase === "starting";
     const report = status.lastSyncReport;
     const accessLost = reportCount(report, "accessLost");
 
@@ -316,14 +294,12 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                     <Icon size={16} />
                 </span>
                 <span style={{ fontWeight: 600 }}>{status.accountEmail ?? "Connected"}</span>
-                <span style={{ marginLeft: "auto", color: "var(--ink-3)", fontSize: 12 }}>
-                    {syncing
-                        ? "Syncing…"
-                        : status.lastSyncAt
-                          ? `Last sync ${new Date(status.lastSyncAt).toLocaleString()}`
-                          : "Not synced yet"}
+                <span className="text-ink-3 ml-auto text-xs">
+                    {syncStatusLabel(phase, status.lastSyncAt)}
                 </span>
             </div>
+
+            {phase === "stalled" ? <SyncStalledNotice /> : null}
 
             {status.lastSyncStatus === "error" && status.lastSyncError ? (
                 <div
@@ -440,11 +416,11 @@ export function DriveConnectPanel({ tab }: { tab: AddSourceTab }) {
                     {opening ? "Opening picker…" : "Choose files & folders"}
                 </button>
                 <button
-                    disabled={busy || syncing || picked.length === 0}
+                    disabled={busy || syncing || starting || picked.length === 0}
                     onClick={() => void syncNow()}
-                    style={buttonStyle("quiet", busy || syncing || picked.length === 0)}
+                    style={buttonStyle("quiet", busy || syncing || starting || picked.length === 0)}
                 >
-                    {syncing ? "Syncing…" : "Sync now"}
+                    {syncing ? "Syncing…" : starting ? "Starting…" : "Sync now"}
                 </button>
                 {confirmingDisconnect ? (
                     <span style={{ display: "flex", gap: 8, alignItems: "center" }}>

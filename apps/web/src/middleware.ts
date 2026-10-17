@@ -159,9 +159,9 @@ export default async function middleware(req: NextRequest) {
     const requestStart = Date.now();
     let dbQueryMs: number | null = null;
     // Fast-path: no session cookie at all means anonymous — skip the session
-    // lookup entirely. With a cookie present, getSession answers from the
-    // signed cookie cache most of the time and hits Postgres only when the
-    // cache has expired.
+    // lookup entirely. With a cookie present, getSession reads the session
+    // row (there is no cookie cache; see ~/server/auth), so an ended session
+    // is refused on its very next request.
     let userId: string | null = null;
     if (getSessionCookie(req)) {
         try {

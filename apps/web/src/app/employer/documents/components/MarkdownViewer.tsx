@@ -12,6 +12,7 @@ import { Loader2, AlertTriangle, RotateCw, Copy, Check, List, Code2, BookOpen } 
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
+import { escapeCurrencyDollars } from "~/lib/markdown-math";
 import { CodeViewer } from "./CodeViewer";
 
 interface MarkdownViewerProps {
@@ -288,6 +289,7 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
         const kb = new Blob([content]).size / 1024;
         return { words, minutes, kb };
     }, [content]);
+    const markdown = useMemo(() => escapeCurrencyDollars(content), [content]);
 
     if (loading) {
         return (
@@ -493,7 +495,7 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
                                 ),
                             }}
                         >
-                            {content}
+                            {markdown}
                         </ReactMarkdown>
                     </div>
                 </div>

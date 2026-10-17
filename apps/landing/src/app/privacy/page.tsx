@@ -112,11 +112,11 @@ export default function PrivacyPage() {
             <p>
                 When you ask a question, upload a file or use an AI feature, the relevant text is
                 sent to an AI model to produce the result: your question plus the passages from your
-                workspace it needs. Models are reached through OpenRouter, which forwards each
-                request to the model provider, such as Google or OpenAI. Audio and video are
-                transcribed with Google&rsquo;s Gemini API, and scanned documents are read with
-                Microsoft Azure Document Intelligence. We send content to these providers only to
-                produce the result you asked for, through their business APIs.
+                workspace it needs. Answers, summaries and generated text come from a third-party AI
+                model provider. Search indexing, and transcription of audio and video, use
+                Google&rsquo;s Gemini API, and scanned documents are read with Microsoft Azure
+                Document Intelligence. We send content to these providers only to produce the result
+                you asked for, through their business APIs.
             </p>
 
             <h2 id="google-user-data">How Launchstack uses Google user data</h2>
@@ -238,8 +238,8 @@ export default function PrivacyPage() {
             <ul>
                 <li>
                     to the service providers that run the features above, namely Microsoft Azure for
-                    hosting and storage, and the AI providers reached through OpenRouter to answer
-                    your questions, each only as needed to provide the feature;
+                    hosting and storage, and the AI model providers that answer your questions and
+                    index your files, each only as needed to provide the feature;
                 </li>
                 <li>
                     when the law requires it, or to protect people&rsquo;s safety or the security of
@@ -319,15 +319,15 @@ export default function PrivacyPage() {
                             <td>The data stored in the service, and scanned pages you upload</td>
                         </tr>
                         <tr>
-                            <td>OpenRouter, and the model providers it routes to</td>
-                            <td>AI answers, summaries and search indexing</td>
+                            <td>Third-party AI model providers</td>
+                            <td>AI answers, summaries and generated text</td>
                             <td>Your question and the passages from your workspace it needs</td>
                         </tr>
                         <tr>
                             <td>Google</td>
                             <td>
-                                Sign-in, Drive and Gmail when you connect them, and transcription
-                                through the Gemini API
+                                Sign-in, Drive and Gmail when you connect them, and search indexing
+                                and transcription through the Gemini API
                             </td>
                             <td>What each feature needs, as described above</td>
                         </tr>

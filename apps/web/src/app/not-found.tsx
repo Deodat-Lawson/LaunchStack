@@ -4,7 +4,7 @@ import { IconGithub } from "~/components/icons/brand";
 import type { Metadata } from "next";
 import { LaunchstackMark } from "./_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
-import { LANDING_DEPLOYMENT_URL } from "~/config/landing";
+import { LANDING_DEPLOYMENT_HREF } from "~/config/landing";
 
 export const metadata: Metadata = {
     title: "Page Not Found",
@@ -50,7 +50,7 @@ export default function NotFound() {
 
                 <div className="text-ink-3 flex flex-wrap justify-center gap-6 text-sm">
                     <a
-                        href={LANDING_DEPLOYMENT_URL}
+                        href={LANDING_DEPLOYMENT_HREF}
                         rel="noopener"
                         className="hover:text-brand-ink flex items-center gap-1.5 transition-colors"
                     >

@@ -94,6 +94,8 @@ describe("dossier rendering", () => {
         expect(md).toContain("Exclusivity terms unknown");
         expect(md).toContain("_Not run (no screening provider configured)._");
         expect(md).toContain("> Playbook: abcdef123456");
+        // A published dossier is read on screen; it never names the model.
+        expect(md).not.toContain("test-model");
     });
 
     it("renders honestly when no dossier could be produced", () => {

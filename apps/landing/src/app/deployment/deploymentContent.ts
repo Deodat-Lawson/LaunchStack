@@ -156,7 +156,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Prepare the host and domains",
                 body: [
-                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, /api/inngest to worker:8020, files to SeaweedFS, and the public site to landing:3001.",
+                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, files to SeaweedFS, and the public site to landing:3001. The worker stays private.",
                 ],
                 code: "DOMAIN=workspace.example.com\nACME_EMAIL=ops@example.com\nBETTER_AUTH_URL=https://workspace.example.com\nAPP_PUBLIC_URL=https://workspace.example.com\nOCR_DEFAULT_PROVIDER=AZURE\nAZURE_DOC_INTELLIGENCE_ENDPOINT=https://your-resource.cognitiveservices.azure.com\nAZURE_DOC_INTELLIGENCE_KEY=replace-with-your-resource-key\nCONVERTER_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com\nADEU_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com",
                 file: ".env · example public origins and cloud OCR",
@@ -438,11 +438,11 @@ export const GUIDES: Guide[] = [
             {
                 title: "Production Inngest",
                 body: [
-                    "The production overlay clears INNGEST_DEV and removes the dev server from the default stack. For workflows using Inngest, configure an event key and signing key, then register the worker's publicly reachable serve URL with your Inngest environment.",
+                    "The production overlay replaces the dev server with a self-hosted Inngest server on a private network with the app and worker. Google Drive and Gmail sync, the scheduled jobs, and the other background workflows run through it. Set both keys: with an event key and no signing key, jobs are accepted and never run.",
                 ],
-                code: "INNGEST_EVENT_KEY=replace-with-your-event-key\nINNGEST_SIGNING_KEY=replace-with-your-signing-key",
+                code: "INNGEST_EVENT_KEY=$(openssl rand -hex 24)\nINNGEST_SIGNING_KEY=$(openssl rand -hex 32)",
                 file: ".env",
-                note: "The supplied Caddy route serves the worker at https://your-domain/api/inngest. Keep the signing key consistent with the registered Inngest environment.",
+                note: "The signing key must be hex. The worker's serve endpoint is not published; to use Inngest Cloud instead, add a Caddy route for /api/inngest to worker:8020 and register that URL.",
                 links: [
                     {
                         label: "Serving Inngest functions",

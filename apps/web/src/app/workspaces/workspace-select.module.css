@@ -161,6 +161,17 @@
     color: var(--ink);
     border-color: var(--line);
 }
+/* The theme toggle renders both icons and CSS picks one, so the server's
+   HTML (which can't know the theme) matches the first client render. */
+.themeIconDark {
+    display: none;
+}
+:global([data-theme="dark"]) .themeIconLight {
+    display: none;
+}
+:global([data-theme="dark"]) .themeIconDark {
+    display: block;
+}
 .signout {
     font-size: 12.5px;
     color: var(--ink-3);

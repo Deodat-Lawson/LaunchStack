@@ -72,7 +72,6 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
         refs: message.refs,
         citations: message.citations,
         attachments: message.attachments,
-        model: message.model,
         tokens: message.tokens,
         agentKey: message.agent?.key ?? null,
         metadata: {
@@ -781,7 +780,6 @@ function threadFromStored(stored: sessions.StoredSession): ThreadMessage[] {
         attachments: message.attachments as ThreadMessage["attachments"],
         citations: message.citations as ThreadMessage["citations"],
         hiddenCitations: message.hiddenCitations,
-        model: message.model ?? undefined,
         tokens: message.tokens ?? undefined,
         agent: message.agentKey
             ? { key: message.agentKey, displayName: "", role: "", accent: null }
@@ -799,7 +797,6 @@ function applyResponse(
     answer.text = response.success
         ? (response.summarizedAnswer ?? answer.text)
         : (response.message ?? response.error ?? "Couldn't get a response.");
-    answer.model = response.aiModel;
     answer.tokens = response.tokenUsage?.totalTokens;
     answer.tokenBreakdown = response.tokenUsage
         ? {

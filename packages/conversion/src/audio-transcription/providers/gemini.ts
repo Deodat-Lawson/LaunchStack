@@ -1,7 +1,9 @@
 import type { ProviderResult } from "@launchstack/llm/providers";
-import type { TranscriptionProvider, TranscriptionResult } from "./index";
+import type { TranscribeOptions, TranscriptionProvider, TranscriptionResult } from "./index";
 import { resolveEndpoint, resolveModel } from "@launchstack/llm/providers/registry";
 import { GEMINI_DEFAULT_MODEL } from "@launchstack/llm/types";
+import { TranscriptionError } from "../errors";
+import { GeminiNativeTranscriber, geminiNativeRoot } from "./gemini-native";
 
 /** Transcription is billed per minute. 5000 tokens/minute matches the
  *  historical TOKEN_COSTS.transcription rate; callers that need a
@@ -13,57 +15,39 @@ function transcriptionTokens(durationSeconds: number): number {
 }
 
 /**
- * Audio formats Gemini accepts. Notably absent: WebM/Opus, which is what
- * `MediaRecorder` produces in every Chromium and Firefox browser — callers are
- * expected to convert before arriving here (see `lib/voice/encodeWav.ts`).
+ * What an OpenAI-compatible `input_audio` part accepts: wav and mp3, nothing
+ * else (OpenAI's schema, and Gemini's compatibility layer enforces the same —
+ * it answered every .m4a with `Invalid audio format "aac"`). Only endpoints
+ * that are not Google's take this path; Google's goes native.
  */
-const SUPPORTED_EXTENSIONS: Record<string, string> = {
+const COMPAT_FORMATS: Record<string, string> = {
     wav: "wav",
     mp3: "mp3",
-    aiff: "aiff",
-    aac: "aac",
-    ogg: "ogg",
-    flac: "flac",
-    // MPEG-4 containers carrying AAC. The ingestion pipeline accepts these —
-    // `isAudioFileName` lists .mp4 and .m4a, and `isAudioMimeType` accepts
-    // video/mp4 — so rejecting them here would fail an upload the app had
-    // already promised to transcribe. Declared as "aac", the codec inside.
-    m4a: "aac",
-    mp4: "aac",
 };
 
-/**
- * Accepted for ingestion but not transcribable here.
- *
- * `isAudioFileName` lets .wma through and Gemini has no format for it, so the
- * error names the self-hosted transcription service rather than leaving the
- * operator to guess: that path decodes with ffmpeg and handles anything.
- */
-const NEEDS_SIDECAR = new Set(["wma"]);
-
 const PROMPT =
-    "Transcribe this audio verbatim. Reply with the transcript text only — " +
+    "Transcribe this audio verbatim in the language spoken. Reply with the transcript text only — " +
     "no preamble, no commentary, no quotation marks. If there is no " +
     "intelligible speech, reply with nothing at all.";
 
 /**
- * Transcription via Gemini's audio understanding.
+ * Cloud transcription, defaulting to Gemini.
  *
- * There is no `/audio/transcriptions` endpoint anywhere in Google's stack, so
- * this is not a repointed Whisper client: audio goes in as an `input_audio`
- * content part on an ordinary `/chat/completions` call, and the transcript
- * comes back as chat text. That keeps transcription on the same
- * OpenAI-compatible endpoint as everything else in the deployment.
+ * On Google's endpoint this uses the native API ({@link GeminiNativeTranscriber}):
+ * real container types (m4a, mp4, aac, flac, ogg…), the Files API for large
+ * recordings, windowed calls so long meetings are not cut off, and a
+ * timestamped transcript with the spoken language.
  *
- * The trade-off is that the response carries no `language`, `duration` or
- * per-word confidence the way Whisper's `verbose_json` did. Those fields are
- * reported honestly below rather than invented.
+ * Any other OpenAI-compatible endpoint (TRANSCRIPTION_API_BASE_URL) gets audio
+ * as an `input_audio` part on `/chat/completions`, which limits it to wav and
+ * mp3 and reports no language or timestamps.
  */
 export class GeminiTranscriptionProvider implements TranscriptionProvider {
     name: string;
     private baseUrl: string;
     private apiKey: string;
     private model: string;
+    private native: GeminiNativeTranscriber | null;
 
     constructor() {
         const endpoint = resolveEndpoint(
@@ -74,6 +58,10 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
         this.apiKey = endpoint.apiKey;
         this.model = resolveModel(process.env.TRANSCRIPTION_MODEL, GEMINI_DEFAULT_MODEL);
         this.name = `transcription:${this.model}`;
+        const root = geminiNativeRoot(this.baseUrl);
+        this.native = root
+            ? new GeminiNativeTranscriber({ root, apiKey: this.apiKey, model: this.model })
+            : null;
 
         if (!this.apiKey) {
             console.warn(
@@ -86,19 +74,46 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
     async transcribe(
         audioBuffer: Buffer,
         filename: string,
-        durationSeconds = 0
+        options: TranscribeOptions = {}
+    ): Promise<ProviderResult<TranscriptionResult>> {
+        if (!this.apiKey) {
+            throw new TranscriptionError(
+                "No transcription API key configured",
+                "Transcription isn't set up on this server (no API key). Ask an admin to add GOOGLE_AI_API_KEY.",
+                502
+            );
+        }
+
+        if (this.native) {
+            const { result, tokens } = await this.native.transcribe(audioBuffer, filename, options);
+            const durationSeconds = result.durationSeconds ?? 0;
+            return {
+                data: result,
+                usage: {
+                    tokensUsed: tokens || transcriptionTokens(durationSeconds),
+                    details: {
+                        durationSeconds,
+                        estimatedMinutes: Math.ceil(durationSeconds / 60),
+                    },
+                },
+            };
+        }
+
+        return this.transcribeCompat(audioBuffer, filename);
+    }
+
+    private async transcribeCompat(
+        audioBuffer: Buffer,
+        filename: string
     ): Promise<ProviderResult<TranscriptionResult>> {
         const extension = filename.split(".").pop()?.toLowerCase() ?? "";
-        const format = SUPPORTED_EXTENSIONS[extension];
+        const format = COMPAT_FORMATS[extension];
         if (!format) {
-            throw new Error(
-                NEEDS_SIDECAR.has(extension)
-                    ? `".${extension}" cannot be transcribed by the cloud provider — ` +
-                      "Gemini has no format for it. Run the self-hosted transcription " +
-                      "service (TRANSCRIPTION_SERVICE_URL, TRANSCRIPTION_PROVIDER=sidecar), " +
-                      "which decodes any container, or convert the file to wav or mp3 first."
-                    : `Unsupported audio format ".${extension}" for transcription. ` +
-                      `Accepted: ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")}.`
+            throw new TranscriptionError(
+                `".${extension}" is not an input_audio format on ${this.baseUrl}`,
+                `The configured transcription endpoint only accepts MP3 and WAV. Convert this .${extension} ` +
+                    "file, or point transcription at Gemini (unset TRANSCRIPTION_API_BASE_URL) or the " +
+                    "self-hosted service (TRANSCRIPTION_PROVIDER=sidecar)."
             );
         }
 
@@ -130,7 +145,11 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
 
         if (!resp.ok) {
             const text = await resp.text();
-            throw new Error(`Transcription failed (${resp.status}): ${text}`);
+            throw new TranscriptionError(
+                `Transcription failed (${resp.status}): ${text}`,
+                `The transcription service couldn't read this recording (HTTP ${resp.status}).`,
+                resp.status >= 500 || resp.status === 429 ? 502 : 422
+            );
         }
 
         const data = (await resp.json()) as {
@@ -139,7 +158,7 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
         };
 
         const text = data.choices?.[0]?.message?.content?.trim() ?? "";
-        const tokens = data.usage?.total_tokens ?? transcriptionTokens(durationSeconds);
+        const tokens = data.usage?.total_tokens ?? transcriptionTokens(0);
 
         return {
             data: {
@@ -149,14 +168,11 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
                 // number chosen to look like Whisper's.
                 language: "unknown",
                 confidence: 0,
-                durationSeconds,
+                durationSeconds: 0,
             },
             usage: {
                 tokensUsed: tokens,
-                details: {
-                    durationSeconds,
-                    estimatedMinutes: Math.ceil(durationSeconds / 60),
-                },
+                details: { durationSeconds: 0, estimatedMinutes: 0 },
             },
         };
     }

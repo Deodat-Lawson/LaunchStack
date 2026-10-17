@@ -22,19 +22,28 @@ const SEGMENTS = [
 ];
 
 describe("shouldTranscribeFile", () => {
-    it.each(["audio/mpeg", "audio/mp3", "video/mp4", "audio/mp4", "audio/x-m4a", "audio/m4a"])(
-        "transcribes %s",
-        mime => {
-            expect(shouldTranscribeFile(mime, "anything")).toBe(true);
-        }
-    );
+    it.each([
+        "audio/mpeg",
+        "audio/mp3",
+        "video/mp4",
+        "audio/mp4",
+        "audio/x-m4a",
+        "audio/m4a",
+        "audio/wav",
+        "audio/x-wav",
+        "audio/aac",
+        "audio/flac",
+        "audio/ogg",
+    ])("transcribes %s", mime => {
+        expect(shouldTranscribeFile(mime, "anything")).toBe(true);
+    });
 
     it("reads the type case-insensitively", () => {
         expect(shouldTranscribeFile("Audio/X-M4A", "memo.m4a")).toBe(true);
     });
 
     it("trusts a specific type over the file name", () => {
-        expect(shouldTranscribeFile("audio/wav", "memo.mp3")).toBe(false);
+        expect(shouldTranscribeFile("audio/x-ms-wma", "memo.mp3")).toBe(false);
         expect(shouldTranscribeFile("application/pdf", "clip.mp4")).toBe(false);
     });
 
@@ -43,7 +52,8 @@ describe("shouldTranscribeFile", () => {
             expect(shouldTranscribeFile(mime, "memo.m4a")).toBe(true);
             expect(shouldTranscribeFile(mime, "talk.MP3")).toBe(true);
             expect(shouldTranscribeFile(mime, "clip.mp4")).toBe(true);
-            expect(shouldTranscribeFile(mime, "notes.wav")).toBe(false);
+            expect(shouldTranscribeFile(mime, "notes.wav")).toBe(true);
+            expect(shouldTranscribeFile(mime, "notes.wma")).toBe(false);
         }
         expect(shouldTranscribeFile(undefined, undefined)).toBe(false);
     });

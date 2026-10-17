@@ -106,6 +106,8 @@ export interface ScenarioRunRecord {
     createdAt: Date;
     startedAt: Date | null;
     finishedAt: Date | null;
+    /** The final round has started: no more events can be added. */
+    eventsClosedAt: Date | null;
 }
 
 /** Units in a run: brief, cast, one per round, report. */

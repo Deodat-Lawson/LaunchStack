@@ -25,7 +25,7 @@ import {
     type ScenarioSourcesInput,
 } from "@launchstack/pipelines/scenarios";
 import {
-    addInjection,
+    addInjectionIfOpen,
     addInterview,
     createScenarioRun,
     createScenarioStore,
@@ -419,7 +419,7 @@ export async function addScenarioEvent(
             "not_running"
         );
     }
-    if (run.step >= 2 + run.roundCount) {
+    if (run.step >= 2 + run.roundCount || run.eventsClosedAt) {
         throw new ScenarioError(
             "The last round has finished; this event would never appear.",
             409,
@@ -435,12 +435,20 @@ export async function addScenarioEvent(
             "invalid"
         );
     }
-    const row = await addInjection({
+    // Atomic with the final round closing the window: accepted means applied.
+    const row = await addInjectionIfOpen({
         companyId: ctx.companyId,
         runId: id,
         createdByUserId: ctx.authUserId,
         text,
     });
+    if (!row) {
+        throw new ScenarioError(
+            "The last round has started; this event would never appear.",
+            409,
+            "not_running"
+        );
+    }
     return toInjection(row);
 }
 

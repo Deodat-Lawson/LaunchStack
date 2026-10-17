@@ -56,6 +56,7 @@ function toRecord(row: ScenarioRunRow): ScenarioRunRecord {
         createdAt: row.createdAt,
         startedAt: row.startedAt ?? null,
         finishedAt: row.finishedAt ?? null,
+        eventsClosedAt: row.eventsClosedAt ?? null,
     };
 }
 
@@ -278,6 +279,16 @@ export function createScenarioStore(): ScenarioStore {
                 .returning({ id: scenarioRuns.id });
             return rows.length > 0;
         },
+        async closeEvents(runId, at) {
+            // Takes the run's row lock: an event insert in flight finishes first
+            // (and is then read as pending), or sees the window closed.
+            await getDb()
+                .update(scenarioRuns)
+                .set({
+                    eventsClosedAt: sql`coalesce(${scenarioRuns.eventsClosedAt}, ${at.toISOString()}::timestamptz)`,
+                })
+                .where(eq(scenarioRuns.id, runId));
+        },
         async markStarted(runId, at) {
             await getDb()
                 .update(scenarioRuns)
@@ -301,14 +312,36 @@ export function createScenarioStore(): ScenarioStore {
 
 // ─── Injections and interviews ───────────────────────────────────────────────
 
-export async function addInjection(args: {
+/**
+ * Add an event while a round can still pick it up. The conditional update
+ * takes the run's row lock, so it serializes with the final round's
+ * `closeEvents`: the event is inserted before the window closes (and the
+ * final round reads it) or refused. Undefined when the window is closed.
+ */
+export async function addInjectionIfOpen(args: {
     companyId: bigint;
     runId: number;
     createdByUserId: string;
     text: string;
-}): Promise<ScenarioInjectionRow> {
-    const [row] = await getDb().insert(scenarioInjections).values(args).returning();
-    return row!;
+}): Promise<ScenarioInjectionRow | undefined> {
+    return getDb().transaction(async tx => {
+        const open = await tx
+            .update(scenarioRuns)
+            .set({ updatedAt: new Date() })
+            .where(
+                and(
+                    eq(scenarioRuns.id, args.runId),
+                    eq(scenarioRuns.companyId, args.companyId),
+                    inArray(scenarioRuns.status, ["queued", "running"]),
+                    isNull(scenarioRuns.eventsClosedAt),
+                    sql`${scenarioRuns.step} < 2 + ${scenarioRuns.roundCount}`
+                )
+            )
+            .returning({ id: scenarioRuns.id });
+        if (open.length === 0) return undefined;
+        const [row] = await tx.insert(scenarioInjections).values(args).returning();
+        return row;
+    });
 }
 
 export async function listInjections(runId: number): Promise<ScenarioInjectionRow[]> {

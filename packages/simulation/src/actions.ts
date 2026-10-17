@@ -49,10 +49,11 @@ export function applyAction(
             if (!target) return { ok: false, reason: "unknown post" };
             const root = rootOf(world, target);
             if (root.authorId === agentId) return { ok: false, reason: "own post" };
-            const exists = world.reactions.some(
-                r => r.agentId === agentId && r.postId === root.id && r.kind === action.type
+            // One reaction per agent per post: a like and a dislike can't both stand.
+            const existing = world.reactions.find(
+                r => r.agentId === agentId && r.postId === root.id
             );
-            if (exists) return { ok: false, reason: `already ${action.type}d` };
+            if (existing) return { ok: false, reason: `already ${existing.kind}d` };
             world.reactions.push({ agentId, postId: root.id, kind: action.type, round });
             if (action.type === "like") root.likes += 1;
             else root.dislikes += 1;

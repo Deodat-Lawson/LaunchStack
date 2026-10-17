@@ -225,6 +225,10 @@ export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDe
               }
             : null,
         injections: ctx.injections,
+        eventsOpen:
+            (run.status === "queued" || run.status === "running") &&
+            !run.eventsClosedAt &&
+            run.step < 2 + run.roundCount,
         error: run.error,
         estimate: { calls: run.estimate.calls, credits: run.estimate.credits },
         usage: { calls: run.usage.calls, credits: run.usage.credits },

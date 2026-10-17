@@ -62,6 +62,7 @@ function baseRun(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord 
         createdAt: new Date("2026-10-17T00:00:00Z"),
         startedAt: null,
         finishedAt: null,
+        eventsClosedAt: null,
         ...overrides,
     };
 }
@@ -74,9 +75,15 @@ function memoryStore(initial: ScenarioRunRecord) {
         text: string;
         appliedRound: number | null;
     }> = [];
-    const store: ScenarioStore & { runs: typeof runs; injections: typeof injections } = {
+    const calls: string[] = [];
+    const store: ScenarioStore & {
+        runs: typeof runs;
+        injections: typeof injections;
+        calls: string[];
+    } = {
         runs,
         injections,
+        calls,
         async get(id) {
             const r = runs.get(id);
             return r ? structuredClone(r) : undefined;
@@ -101,7 +108,13 @@ function memoryStore(initial: ScenarioRunRecord) {
             const r = runs.get(id)!;
             if (r.status === "queued") Object.assign(r, { status: "running", startedAt: at });
         },
+        async closeEvents(id, at) {
+            calls.push("closeEvents");
+            const r = runs.get(id)!;
+            r.eventsClosedAt ??= at;
+        },
         async pendingInjections(id) {
+            calls.push("pendingInjections");
             return injections
                 .filter(i => i.runId === id && i.appliedRound === null)
                 .map(({ id: iid, text }) => ({ id: iid, text }));
@@ -279,6 +292,41 @@ describe("advanceRun", () => {
                 .filter(r => r.purpose === "decide")
                 .every(r => r.prompt.includes("A rival halves its prices."))
         ).toBe(true);
+    });
+
+    it("closes the event window before the final round reads pending events", async () => {
+        const store = memoryStore(baseRun());
+        const p = ports(store);
+        await advanceRun(p, 1); // brief
+        await advanceRun(p, 1); // cast
+        await advanceRun(p, 1); // round 1 of 2
+        expect(store.runs.get(1)!.eventsClosedAt).toBeNull();
+        expect(store.calls).toEqual(["pendingInjections"]);
+        await advanceRun(p, 1); // round 2, the last
+        expect(store.calls).toEqual(["pendingInjections", "closeEvents", "pendingInjections"]);
+        expect(store.runs.get(1)!.eventsClosedAt).toEqual(new Date("2026-10-17T12:00:00Z"));
+    });
+
+    it("charges the report before storing it, and fails the run without a report when refused", async () => {
+        const store = memoryStore(baseRun());
+        const units: string[] = [];
+        let refuseReport = true;
+        const p = ports(store, {
+            charge: async (_r, _c, unit) => {
+                units.push(unit);
+                return !(unit === "report" && refuseReport);
+            },
+        });
+        for (let i = 0; i < 4; i++) await advanceRun(p, 1); // brief, cast, 2 rounds
+        expect(await advanceRun(p, 1)).toEqual({ state: "failed" });
+        const run = store.runs.get(1)!;
+        expect(run).toMatchObject({
+            status: "failed",
+            report: null,
+            error: "The workspace ran out of credits during this run.",
+        });
+        expect(units).toEqual(["brief", "cast", "round 1", "round 2", "report"]);
+        refuseReport = false;
     });
 
     it("fails the run when the workspace runs out of credits, keeping the finished unit", async () => {

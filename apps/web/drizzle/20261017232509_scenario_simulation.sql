@@ -56,7 +56,8 @@ CREATE TABLE "pdr_ai_v2_scenario_runs" (
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp with time zone,
 	"started_at" timestamp with time zone,
-	"finished_at" timestamp with time zone
+	"finished_at" timestamp with time zone,
+	"events_closed_at" timestamp with time zone
 );
 --> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_scenario_injections" ADD CONSTRAINT "pdr_ai_v2_scenario_injections_run_id_pdr_ai_v2_scenario_runs_id_fk" FOREIGN KEY ("run_id") REFERENCES "public"."pdr_ai_v2_scenario_runs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

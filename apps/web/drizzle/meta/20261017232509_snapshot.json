@@ -1,5 +1,5 @@
 {
-  "id": "c0a03e04-8b7c-4cbc-8b94-72f93704dff0",
+  "id": "74a33822-2b28-453f-bedd-9c39cdf4e5b5",
   "prevId": "72fd958a-ce97-45f4-963d-45541476fe98",
   "version": "7",
   "dialect": "postgresql",
@@ -17556,6 +17556,12 @@
         },
         "finished_at": {
           "name": "finished_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "events_closed_at": {
+          "name": "events_closed_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false

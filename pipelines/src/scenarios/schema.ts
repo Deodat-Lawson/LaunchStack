@@ -76,6 +76,12 @@ export const scenarioRuns = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
         startedAt: timestamp("started_at", { withTimezone: true }),
         finishedAt: timestamp("finished_at", { withTimezone: true }),
+        /**
+         * Set when the final round starts, before it reads pending events.
+         * Adding an event checks this under the same row lock, so an event is
+         * either applied in a round or refused, never accepted and dropped.
+         */
+        eventsClosedAt: timestamp("events_closed_at", { withTimezone: true }),
     },
     table => [
         index("scenario_runs_company_creator_idx").on(

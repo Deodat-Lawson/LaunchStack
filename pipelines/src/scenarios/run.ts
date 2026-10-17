@@ -70,6 +70,11 @@ export interface ScenarioStore {
         at: Date
     ): Promise<boolean>;
     pendingInjections(runId: number): Promise<Array<{ id: number; text: string }>>;
+    /**
+     * Close the event window (the final round is starting). Must serialize
+     * with event inserts, so every accepted event is read by some round.
+     */
+    closeEvents(runId: number, at: Date): Promise<void>;
     /** queued → running as soon as a worker picks the run up, so the UI never says "queued" while it works. */
     markStarted(runId: number, at: Date): Promise<void>;
 }
@@ -197,13 +202,26 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
 
     const step = run.step;
     const { model, usage } = metered(ports.model);
-    /** Commit the unit with its usage, then debit it; a lost race commits and charges nothing. */
+    const outOfCredits = async (): Promise<AdvanceOutcome> => {
+        await ports.store.finish(runId, "failed", new OutOfCreditsError().message, ports.now());
+        return { state: "failed" };
+    };
+    /**
+     * Commit the unit with its usage, then debit it, so a worker that lost a
+     * race commits and charges nothing. The report is the exception: it is
+     * charged before it is stored, so a refused charge fails the run instead of
+     * handing out a finished report nobody paid for. (Two drivers racing on the
+     * report would both be charged; the lease and Inngest's single execution
+     * make that the rare case, and the alternative is worse.)
+     */
     const commit = async (
         unit: string,
         patch: RunPatch,
         applied?: { injectionIds: number[]; round: number }
     ): Promise<AdvanceOutcome> => {
         const credits = ports.creditsFor(usage);
+        const finishing = patch.status === "done";
+        if (finishing && !(await ports.charge(run, credits, unit))) return outOfCredits();
         const ok = await ports.store.commitUnit(
             runId,
             step,
@@ -211,12 +229,9 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
             applied
         );
         if (!ok) return { state: "skipped", reason: "raced" };
-        const paid = await ports.charge(run, credits, unit);
-        if (!paid && patch.status !== "done") {
-            await ports.store.finish(runId, "failed", new OutOfCreditsError().message, ports.now());
-            return { state: "failed" };
-        }
-        return patch.status === "done" ? { state: "done" } : { state: "advanced", step: step + 1 };
+        if (finishing) return { state: "done" };
+        if (!(await ports.charge(run, credits, unit))) return outOfCredits();
+        return { state: "advanced", step: step + 1 };
     };
 
     // 1. Gather evidence and write the shared brief.
@@ -280,6 +295,9 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
     // 3. One round.
     if (step < 2 + run.roundCount) {
         if (!run.world) throw new Error("Run has no world");
+        // The last round is the last chance to apply an event: close the
+        // window first, then read what is pending.
+        if (step === 1 + run.roundCount) await ports.store.closeEvents(runId, ports.now());
         const pending = await ports.store.pendingInjections(runId);
         const start = structuredClone(run.world);
         for (const event of pending) injectEvent(start, event.text);

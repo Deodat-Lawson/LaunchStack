@@ -91,6 +91,7 @@ function run(sources: Partial<ScenarioRunRecord["sources"]>): ScenarioRunRecord 
         createdAt: new Date(),
         startedAt: null,
         finishedAt: null,
+        eventsClosedAt: null,
     };
 }
 

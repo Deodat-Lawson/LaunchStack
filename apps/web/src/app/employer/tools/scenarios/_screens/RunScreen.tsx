@@ -464,7 +464,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
     const [adding, setAdding] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const max = SCENARIO_LIMITS.eventMax;
-    const closed = run.stage === "reporting";
+    const closed = !run.eventsOpen;
 
     const add = async () => {
         setAdding(true);
@@ -484,7 +484,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
         <section className="border-line bg-panel flex flex-col gap-3 rounded-lg border p-4">
             <SectionHeading
                 title="Add an event"
-                aside={closed ? "The last round has finished" : "It appears in the next round"}
+                aside={closed ? "The last round has started" : "It appears in the next round"}
                 className="mb-0"
             />
             <Textarea

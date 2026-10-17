@@ -512,8 +512,16 @@ function detailAt(run: SimRun, now: number): ScenarioDetail {
         : [];
 
     const done = phase.status === "done";
+    const summary = summaryOf(run, phase);
+    // Like the server: events close when the final round starts.
+    const going = phase.status === "queued" || phase.status === "running";
+    const eventsOpen =
+        going &&
+        (phase.stage === "gathering" ||
+            phase.stage === "casting" ||
+            (phase.stage === "simulating" && r < summary.rounds - 1));
     return {
-        ...summaryOf(run, phase),
+        ...summary,
         brief: sourcesVisible && script.brief ? script.brief : null,
         sourcesUsed: run.sourcesUsed,
         sources: sourcesVisible ? script.sources : [],
@@ -531,6 +539,7 @@ function detailAt(run: SimRun, now: number): ScenarioDetail {
                     : null,
             createdAt: new Date(i.createdAt).toISOString(),
         })),
+        eventsOpen,
         error: run.progress.kind === "failed" ? run.progress.error : null,
         estimate: run.estimate,
         usage: {

@@ -247,6 +247,8 @@ export interface ScenarioDetail extends ScenarioSummary {
     report: ScenarioReport | null;
     reception: ScenarioReception | null;
     injections: ScenarioInjection[];
+    /** Events can still be added: the final round hasn't started. */
+    eventsOpen: boolean;
     error: string | null;
     estimate: { calls: number; credits: number };
     usage: { calls: number; credits: number };

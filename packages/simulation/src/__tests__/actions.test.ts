@@ -17,6 +17,19 @@ describe("applyAction (OASIS platform rules)", () => {
         expect(world.posts[0]!.likes).toBe(1);
     });
 
+    it("keeps one reaction per agent per post: a like then a dislike is refused", () => {
+        const world = smallWorld();
+        expect(applyAction(world, "a1", { type: "like", postId: "p1" }, 1).ok).toBe(true);
+        expect(applyAction(world, "a1", { type: "dislike", postId: "p1" }, 1)).toEqual({
+            ok: false,
+            reason: "already liked",
+        });
+        expect(applyAction(world, "a2", { type: "dislike", postId: "p1" }, 1).ok).toBe(true);
+        expect(applyAction(world, "a2", { type: "like", postId: "p1" }, 1).ok).toBe(false);
+        expect(world.posts[0]).toMatchObject({ likes: 1, dislikes: 1 });
+        expect(world.reactions).toHaveLength(2);
+    });
+
     it("resolves likes, comments, reposts and quotes of a repost to the root", () => {
         const world = smallWorld();
         const repost = applyAction(world, "a2", { type: "repost", postId: "p1" }, 1);

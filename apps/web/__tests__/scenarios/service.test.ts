@@ -33,7 +33,7 @@ jest.mock("@launchstack/pipelines/scenarios/db", () => {
         requestCancel: jest.fn(),
         listInjections: jest.fn(),
         listInterviews: jest.fn(),
-        addInjection: jest.fn(),
+        addInjectionIfOpen: jest.fn(),
         addInterview: jest.fn(),
         linkPostTest: jest.fn(),
         listLinkedPostTests: jest.fn(),
@@ -81,7 +81,7 @@ const mockDb = jest.requireMock<
         | "requestCancel"
         | "listInjections"
         | "listInterviews"
-        | "addInjection"
+        | "addInjectionIfOpen"
         | "addInterview"
         | "linkPostTest"
         | "finish"
@@ -203,6 +203,7 @@ function run(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord {
         createdAt: new Date("2026-10-17T00:00:00Z"),
         startedAt: null,
         finishedAt: null,
+        eventsClosedAt: null,
         ...overrides,
     };
 }
@@ -314,7 +315,7 @@ describe("managing a run", () => {
         mockDb.getCompanyRun.mockResolvedValue(run({ step: 6 }));
         await expectError(addScenarioEvent(as("creator"), 3, "A rival cuts prices."), 409);
         mockDb.getCompanyRun.mockResolvedValue(run());
-        mockDb.addInjection.mockResolvedValue({
+        mockDb.addInjectionIfOpen.mockResolvedValue({
             id: 1,
             text: "A rival cuts prices.",
             appliedRound: null,
@@ -323,9 +324,15 @@ describe("managing a run", () => {
         expect(await addScenarioEvent(as("creator"), 3, " A rival cuts prices. ")).toMatchObject({
             round: null,
         });
-        expect(mockDb.addInjection).toHaveBeenCalledWith(
+        expect(mockDb.addInjectionIfOpen).toHaveBeenCalledWith(
             expect.objectContaining({ text: "A rival cuts prices." })
         );
+        // The final round closed the window between the check and the insert.
+        mockDb.addInjectionIfOpen.mockResolvedValue(undefined);
+        await expectError(addScenarioEvent(as("creator"), 3, "Too late."), 409, "not_running");
+        // Already closed when read.
+        mockDb.getCompanyRun.mockResolvedValue(run({ eventsClosedAt: new Date() }));
+        await expectError(addScenarioEvent(as("creator"), 3, "Too late."), 409);
     });
 });
 

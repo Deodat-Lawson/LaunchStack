@@ -19,6 +19,7 @@ import {
     MessagesSquare,
     Network,
     AppWindow,
+    Globe,
 } from "lucide-react";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -54,6 +55,10 @@ const ArtifactDocumentViewer = dynamic(
     () => import("./ArtifactDocumentViewer").then(m => m.ArtifactDocumentViewer),
     { ssr: false }
 );
+// A saved web page shows its address and the text read from it.
+const WebsiteViewer = dynamic(() => import("./WebsiteViewer").then(m => m.WebsiteViewer), {
+    ssr: false,
+});
 import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
@@ -95,6 +100,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
     conversation: "Agent Session",
     mindmap: "Mindmap",
     artifact: "Claude artifact",
+    website: "Website",
     code: "Source Code",
     zip: "Archive",
     audio: "Audio",
@@ -113,6 +119,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
     conversation: MessagesSquare,
     mindmap: Network,
     artifact: AppWindow,
+    website: Globe,
     code: FileCode,
     zip: Archive,
     audio: Music,
@@ -297,6 +304,8 @@ export function DocumentViewer({
                 return <MindmapDocumentViewer document={document} highlight={highlight} />;
             case "artifact":
                 return <ArtifactDocumentViewer document={document} />;
+            case "website":
+                return <WebsiteViewer document={document} highlight={highlight} />;
             case "code":
                 return (
                     <CodeViewer

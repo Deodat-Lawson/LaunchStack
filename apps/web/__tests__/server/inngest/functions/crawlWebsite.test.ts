@@ -81,10 +81,15 @@ const mockProcessDocumentUpload = processDocumentUpload as jest.MockedFunction<
     typeof processDocumentUpload
 >;
 
-const pages: CrawlPage[] = [
+/** Enough words to be worth keeping as a source. */
+const COPY =
+    "<p>Example builds reusable rockets for small satellite teams, with launch windows every week and pricing that starts low enough for a seed-stage company.</p>";
+
+let pages: CrawlPage[] = [];
+const readablePages: CrawlPage[] = [
     {
         url: "https://example.com/",
-        html: "<html><head></head><body>home</body></html>",
+        html: `<html><head></head><body><h1>Home</h1>${COPY}</body></html>`,
         title: "Home",
         depth: 0,
         parentUrl: null,
@@ -92,7 +97,7 @@ const pages: CrawlPage[] = [
     },
     {
         url: "https://example.com/about",
-        html: "<html><head></head><body>about</body></html>",
+        html: `<html><head></head><body><h1>About</h1>${COPY}</body></html>`,
         title: "About",
         depth: 1,
         parentUrl: "https://example.com/",
@@ -122,9 +127,62 @@ function createStep(): CrawlStep {
     };
 }
 
+function storeEverything() {
+    mockUploadFile.mockImplementation(
+        async ({ filename }): Promise<UploadResult> => ({
+            url: `https://storage.example/${filename}`,
+            pathname: filename,
+            contentType: "text/html",
+            provider: "s3",
+        })
+    );
+    let nextDocumentId = 200;
+    mockProcessDocumentUpload.mockImplementation(async (): Promise<DocumentUploadResult> => {
+        const documentId = nextDocumentId++;
+        return {
+            document: {
+                id: documentId,
+                title: "stored",
+                url: "https://storage.example/stored",
+                category: "Research",
+            },
+            jobId: `job-${documentId}`,
+            eventIds: [],
+            storageType: "s3",
+            createdDocuments: [],
+            resolvedDocumentUrl: "https://storage.example/stored",
+        };
+    });
+}
+
 describe("crawlWebsite page lifecycle failures", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        pages = readablePages;
+    });
+
+    it("marks each stored page as a website, and skips an empty shell without failing the crawl", async () => {
+        storeEverything();
+        pages = [
+            readablePages[0]!,
+            {
+                ...readablePages[1]!,
+                url: "https://example.com/app",
+                // What a page built with JavaScript serves before its scripts run.
+                html: '<html><head></head><body><noscript>Enable JavaScript.</noscript><div id="root"></div></body></html>',
+            },
+        ];
+        const handler = (crawlWebsite as unknown as MockCrawlFunction).fn;
+
+        const result = await handler({ event: { data: eventData }, step: createStep() });
+
+        expect(result).toMatchObject({ success: true, pagesStored: 1 });
+        expect(mockUploadFile).toHaveBeenCalledTimes(1);
+        expect(mockProcessDocumentUpload).toHaveBeenCalledTimes(1);
+        expect(mockProcessDocumentUpload.mock.calls[0]?.[0].ocrMetadata).toMatchObject({
+            kind: "website",
+            url: "https://example.com/",
+        });
     });
 
     it("attempts every page, rejects after a partial failure, and reuses stable keys on retry", async () => {

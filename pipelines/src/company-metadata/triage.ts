@@ -91,7 +91,9 @@ export function sourceKindOf(doc: {
         key.startsWith("gdocs:")
     )
         return "google-drive";
-    if (key.startsWith("website:") || key.startsWith("crawl:")) return "website";
+    // Creation keys are stored hashed, so the importers' marker is what says it.
+    if (meta.kind === "website" || key.startsWith("website:") || key.startsWith("crawl:"))
+        return "website";
     if (key.startsWith("upload:") || key.startsWith("batch:")) return "upload";
     return "other";
 }

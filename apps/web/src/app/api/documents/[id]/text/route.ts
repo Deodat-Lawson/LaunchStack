@@ -4,12 +4,20 @@ import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { readableMarkdown } from "~/lib/indexed-text";
 
 interface RouteParams {
     params: Promise<{ id: string }>;
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+/**
+ * The text ingestion read from a document, in reading order.
+ *
+ * `?format=markdown` returns it as Markdown, with the headings the stored
+ * breadcrumbs carry put back (the website viewer renders it); the default is
+ * the older escaped-HTML rendering.
+ */
+export async function GET(request: Request, { params }: RouteParams) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -59,6 +67,17 @@ export async function GET(_request: Request, { params }: RouteParams) {
                           asc(documentContextChunks.pageNumber),
                           asc(documentContextChunks.id)
                       );
+
+        if (new URL(request.url).searchParams.get("format") === "markdown") {
+            return NextResponse.json({
+                markdown: readableMarkdown(
+                    chunks.map(c => c.content),
+                    doc.title
+                ),
+                chunkCount: chunks.length,
+                documentId: docId,
+            });
+        }
 
         if (chunks.length === 0) {
             return NextResponse.json({

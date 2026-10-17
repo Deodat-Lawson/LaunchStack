@@ -212,7 +212,7 @@ export const SECTIONS: SectionDef[] = [
         eyebrow: "Models",
         title: "Which model serves each kind of request",
         description:
-            "The chat models this deployment is configured with, the route each one serves, and where that behaviour was declared. Read-only here: the configuration file is the source of truth.",
+            "Run this workspace on your own provider account, or on the server's default models. The default's routes and models are set in the server's configuration file and shown here read-only.",
         Icon: Sparkles,
     },
     {
@@ -324,7 +324,16 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
         if (typeof window === "undefined") return;
         const applyHash = () => {
             const hash = window.location.hash.replace("#", "").toLowerCase();
-            if (!hash) return;
+            if (!hash) {
+                // OpenRouter's return leg (`?feature=settings&openrouter=…#models`)
+                // belongs on Models, whose body reads the outcome. The shell's
+                // `?feature=` cleanup can drop the hash before this lazy hub
+                // mounts, so the parameter alone is enough.
+                if (new URLSearchParams(window.location.search).has("openrouter")) {
+                    setSection("models");
+                }
+                return;
+            }
             const moved = MOVED_TO_STUDIO[hash];
             if (moved) {
                 router.replace(moved);

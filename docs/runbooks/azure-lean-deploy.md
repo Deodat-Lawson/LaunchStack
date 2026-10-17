@@ -413,12 +413,12 @@ How it fits together:
 
 ### Cutting the live VM over (from the interim server)
 
-Since 2026-10-17 the VM has run an interim `inngest` service added as **local,
-uncommitted edits** to `docker-compose.prod.yml`, `docker-compose.yml` (the
-Gotenberg deny-list) and `docker/Caddyfile.prod`: same service name and
-container (`pdr_ai_v2-inngest-server`), v1.43.0, SQLite plus the built-in
-Redis on the `launchstack_inngest_data` volume. This deploy replaces it in
-place. Its SQLite history and anything queued in it are dropped; the crons
+Since 2026-10-17 the VM has run an interim `inngest` service: first as
+**local, uncommitted edits** to `docker-compose.prod.yml`, `docker-compose.yml`
+(the Gotenberg deny-list) and `docker/Caddyfile.prod`, then the same design
+merged to main as PR #487. Same service name and container
+(`pdr_ai_v2-inngest-server`), SQLite plus the built-in Redis on the
+`launchstack_inngest_data` volume. This deploy replaces it in place. Its SQLite history and anything queued in it are dropped; the crons
 start again on the new server within a minute.
 
 **Reuse the keys already in Key Vault.** `INNGEST-EVENT-KEY` and
@@ -436,11 +436,14 @@ values, and new keys would put them out of step with the server.
 
    ```bash
    cd ~/LaunchStack
-   git status --short                                  # expect the three files above
+   git status --short                                  # the three files above, or nothing
    cp docker-compose.prod.yml ~/docker-compose.prod.yml.interim-inngest
    git stash push -m "interim inngest $(date +%F)" -- docker-compose.prod.yml docker-compose.yml docker/Caddyfile.prod
    git pull
    ```
+
+   If `git status` shows nothing, the VM is already on PR #487's committed
+   version: skip the `git stash` line (keep the `cp`, it is the rollback copy).
 
    The stashed `docker-compose.yml` edit adds `inngest` to Gotenberg's
    deny-list. If it has not been committed by then, losing it is harmless:

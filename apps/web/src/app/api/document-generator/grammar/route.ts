@@ -15,6 +15,7 @@ import { z } from "zod";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -199,96 +200,100 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = (await request.json()) as unknown;
-        const validation = GrammarSchema.safeParse(body);
+        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            const body = (await request.json()) as unknown;
+            const validation = GrammarSchema.safeParse(body);
 
-        if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
-                { status: 400 }
-            );
-        }
-
-        const { action, content, options } = validation.data;
-        const startTime = Date.now();
-
-        const resolved = resolveConfiguredChatModel({ route: "fast" });
-        const compatibility = validateDeprecatedChatSelection({ model: options?.model });
-        if (!compatibility.ok) {
-            return NextResponse.json(
-                { success: false, message: compatibility.message },
-                { status: compatibility.status }
-            );
-        }
-
-        let systemPrompt: string;
-        let userPrompt = `Analyze the following text:\n\n"${content}"`;
-
-        switch (action) {
-            case "check":
-                systemPrompt = GRAMMAR_CHECK_PROMPT;
-                if (options?.focus && options.focus.length > 0) {
-                    userPrompt += `\n\nFocus especially on: ${options.focus.join(", ")}`;
-                }
-                break;
-
-            case "improve_clarity":
-                systemPrompt = CLARITY_PROMPT;
-                break;
-
-            case "adjust_formality":
-                const formalityLevel = options?.formalityLevel ?? "formal";
-                systemPrompt = FORMALITY_PROMPT.replace(
-                    "{{FORMALITY_LEVEL}}",
-                    formalityLevel.replace("_", " ")
-                );
-                userPrompt += `\n\nAdjust to: ${formalityLevel.replace("_", " ")} tone`;
-                break;
-
-            case "consistency":
-                systemPrompt = CONSISTENCY_PROMPT;
-                break;
-
-            default:
+            if (!validation.success) {
                 return NextResponse.json(
-                    { success: false, message: "Invalid action" },
+                    { success: false, message: "Invalid request", errors: validation.error.errors },
                     { status: 400 }
                 );
-        }
+            }
 
-        const extras = await invokeStructured(
-            resolved,
-            GrammarResponseSchema,
-            [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
-            { name: "grammar_response" }
-        );
-        const suggestions: GrammarSuggestion[] = extras.suggestions.map((suggestion, index) => ({
-            ...suggestion,
-            id: String(suggestion.id ?? index + 1),
-        }));
-        const processingTimeMs = Date.now() - startTime;
+            const { action, content, options } = validation.data;
+            const startTime = Date.now();
 
-        console.log(
-            `✅ [Grammar] ${action} completed in ${processingTimeMs}ms with ${suggestions.length} suggestions`
-        );
+            const resolved = resolveConfiguredChatModel({ route: "fast" });
+            const compatibility = validateDeprecatedChatSelection({ model: options?.model });
+            if (!compatibility.ok) {
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status }
+                );
+            }
 
-        return NextResponse.json({
-            success: true,
-            action,
-            suggestions,
-            stats: {
-                total: suggestions.length,
-                errors: suggestions.filter(s => s.severity === "error").length,
-                warnings: suggestions.filter(s => s.severity === "warning").length,
-                suggestions: suggestions.filter(s => s.severity === "suggestion").length,
-            },
-            ...(extras.overallScore !== undefined ? { overallScore: extras.overallScore } : {}),
-            ...(extras.readabilityScore !== undefined
-                ? { readabilityScore: extras.readabilityScore }
-                : {}),
-            ...(extras.summary ? { summary: extras.summary } : {}),
-            ...(extras.issues ? { issues: extras.issues } : {}),
-            processingTimeMs,
+            let systemPrompt: string;
+            let userPrompt = `Analyze the following text:\n\n"${content}"`;
+
+            switch (action) {
+                case "check":
+                    systemPrompt = GRAMMAR_CHECK_PROMPT;
+                    if (options?.focus && options.focus.length > 0) {
+                        userPrompt += `\n\nFocus especially on: ${options.focus.join(", ")}`;
+                    }
+                    break;
+
+                case "improve_clarity":
+                    systemPrompt = CLARITY_PROMPT;
+                    break;
+
+                case "adjust_formality":
+                    const formalityLevel = options?.formalityLevel ?? "formal";
+                    systemPrompt = FORMALITY_PROMPT.replace(
+                        "{{FORMALITY_LEVEL}}",
+                        formalityLevel.replace("_", " ")
+                    );
+                    userPrompt += `\n\nAdjust to: ${formalityLevel.replace("_", " ")} tone`;
+                    break;
+
+                case "consistency":
+                    systemPrompt = CONSISTENCY_PROMPT;
+                    break;
+
+                default:
+                    return NextResponse.json(
+                        { success: false, message: "Invalid action" },
+                        { status: 400 }
+                    );
+            }
+
+            const extras = await invokeStructured(
+                resolved,
+                GrammarResponseSchema,
+                [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+                { name: "grammar_response" }
+            );
+            const suggestions: GrammarSuggestion[] = extras.suggestions.map(
+                (suggestion, index) => ({
+                    ...suggestion,
+                    id: String(suggestion.id ?? index + 1),
+                })
+            );
+            const processingTimeMs = Date.now() - startTime;
+
+            console.log(
+                `✅ [Grammar] ${action} completed in ${processingTimeMs}ms with ${suggestions.length} suggestions`
+            );
+
+            return NextResponse.json({
+                success: true,
+                action,
+                suggestions,
+                stats: {
+                    total: suggestions.length,
+                    errors: suggestions.filter(s => s.severity === "error").length,
+                    warnings: suggestions.filter(s => s.severity === "warning").length,
+                    suggestions: suggestions.filter(s => s.severity === "suggestion").length,
+                },
+                ...(extras.overallScore !== undefined ? { overallScore: extras.overallScore } : {}),
+                ...(extras.readabilityScore !== undefined
+                    ? { readabilityScore: extras.readabilityScore }
+                    : {}),
+                ...(extras.summary ? { summary: extras.summary } : {}),
+                ...(extras.issues ? { issues: extras.issues } : {}),
+                processingTimeMs,
+            });
         });
     } catch (error) {
         console.error("❌ [Grammar] Error:", error);

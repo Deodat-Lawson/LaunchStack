@@ -143,6 +143,12 @@ export interface ChatEndpointConfig {
      * The app sets the assistant identity rule here; see `endpoint-fetch.ts`.
      */
     systemInstructions?: string;
+    /**
+     * Who configured this endpoint. `workspace` means a workspace admin brought
+     * it in Settings, so failures are worded for them rather than for the
+     * operator's environment variables. Omitted means the deployment's.
+     */
+    owner?: "deployment" | "workspace";
 }
 
 // ---------------------------------------------------------------------------

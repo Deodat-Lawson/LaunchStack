@@ -18,6 +18,7 @@ import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -179,224 +180,226 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        let body: unknown;
-        try {
-            body = (await request.json()) as unknown;
-        } catch {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid JSON body",
-                    error: "Request body must be valid JSON",
-                },
-                { status: 400 }
-            );
-        }
-        const validation = GenerateSchema.safeParse(body);
-
-        if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
-                { status: 400 }
-            );
-        }
-
-        const { action, content, prompt, context, options } = validation.data;
-        const startTime = Date.now();
-        const containsEditableHtml =
-            (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
-
-        // Field updates are short structured extractions — cheap enough for
-        // the operator's fast route; prose generation uses the default.
-        const resolved = resolveConfiguredChatModel({
-            route: action === "field_update" ? "fast" : "default",
-        });
-        const { chat } = resolved;
-        const compatibility = validateDeprecatedChatSelection({ model: options?.model });
-        if (!compatibility.ok) {
-            return NextResponse.json(
-                { success: false, message: compatibility.message },
-                { status: compatibility.status }
-            );
-        }
-
-        // Build the system prompt
-        let systemPrompt = ACTION_PROMPTS[action];
-
-        if (containsEditableHtml) {
-            systemPrompt += `\n\nThe input may contain an HTML fragment with editable <mark data-field-key="...">...</mark> tags.
-- Preserve all existing HTML structure unless the user explicitly asks to rewrite surrounding wording
-- Preserve every <mark> tag and its data-field-key attribute exactly
-- If the user asks to change a field value, only change the text inside the relevant <mark> tag
-- Return ONLY the updated HTML fragment with no markdown fences or wrapper text`;
-        }
-
-        // Add tone context for change_tone action
-        if (action === "change_tone" && options?.tone) {
-            systemPrompt += `\n\nTarget tone: ${options.tone.toUpperCase()}\n${TONE_DESCRIPTIONS[options.tone] ?? ""}`;
-        }
-
-        // Add audience context if specified
-        if (options?.audience) {
-            systemPrompt += `\n\nTarget audience: ${options.audience}. Adjust vocabulary and complexity accordingly.`;
-        }
-
-        // Add length guidance if specified
-        if (options?.length) {
-            const lengthGuide: Record<string, string> = {
-                brief: "Keep the response concise, around 50-100 words.",
-                medium: "Aim for a moderate length, around 150-250 words.",
-                detailed: "Provide detailed content, around 300-500 words.",
-                comprehensive: "Be thorough and comprehensive, 500+ words as needed.",
-            };
-            systemPrompt += `\n\n${lengthGuide[options.length]}`;
-        }
-
-        // Build the user prompt based on action
-        let userPrompt = "";
-
-        switch (action) {
-            case "generate_section":
-                userPrompt = `Generate a section about: ${prompt ?? "the topic"}`;
-                if (context?.documentTitle) {
-                    userPrompt += `\n\nThis is for a document titled: "${context.documentTitle}"`;
-                }
-                if (context?.documentDescription) {
-                    userPrompt += `\n\nDocument description: ${context.documentDescription}`;
-                }
-                if (context?.fullContent) {
-                    userPrompt += `\n\nExisting document content for context:\n${context.fullContent.slice(0, 2000)}...`;
-                }
-                break;
-
-            case "expand":
-                userPrompt = `Expand the following text:\n\n"${content}"`;
-                if (prompt) {
-                    userPrompt += `\n\nAdditional instructions: ${prompt}`;
-                }
-                break;
-
-            case "rewrite":
-                userPrompt = containsEditableHtml
-                    ? `Update the following HTML fragment.\n\nUser instruction: ${prompt ?? "Rewrite this section while preserving structure."}\n\nHTML fragment:\n${content ?? ""}`
-                    : `Rewrite the following text:\n\n"${content}"`;
-                if (prompt) {
-                    userPrompt += `\n\nAdditional instructions: ${prompt}`;
-                }
-
-                // Writing first pass
-                const firstPass = await chat.invoke(
-                    resolved.prepareMessages([
-                        new SystemMessage(systemPrompt),
-                        new HumanMessage(userPrompt),
-                    ])
+        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            let body: unknown;
+            try {
+                body = (await request.json()) as unknown;
+            } catch {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Invalid JSON body",
+                        error: "Request body must be valid JSON",
+                    },
+                    { status: 400 }
                 );
+            }
+            const validation = GenerateSchema.safeParse(body);
 
-                // Normalizing
-                const firstDraft = normalizeModelContent(firstPass.content);
-
-                // Refining through second pass
-                const refinementInstructions = [
-                    "Improve sentence flow and rhythm",
-                    "Remove any redundancy or filler phrases",
-                    "Ensure it reads naturally, not like it was AI-generated",
-                    "Preserve all factual information, names, numbers, and technical terms",
-                    containsEditableHtml
-                        ? "IMPORTANT: Preserve the HTML structure and every <mark data-field-key> tag exactly. If the user requested a field change, update only the text inside the correct mark tag."
-                        : "Keep the output as plain text unless the original formatting requires otherwise",
-                    prompt
-                        ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " +
-                          prompt
-                        : "Do not change the meaning or add new information beyond what was requested",
-                    containsEditableHtml
-                        ? "Output ONLY the refined HTML fragment: no quotation marks, no wrapper phrases"
-                        : "Output ONLY the refined text: no quotation marks, no wrapper phrases",
-                ].join("\n- ");
-
-                const secondPass = await chat.invoke(
-                    resolved.prepareMessages([
-                        new SystemMessage(systemPrompt),
-                        new HumanMessage(`Here is a rewritten version of the original text:
-
-"${firstDraft}"
-
-Now refine it further:
-- ${refinementInstructions}`),
-                    ])
+            if (!validation.success) {
+                return NextResponse.json(
+                    { success: false, message: "Invalid request", errors: validation.error.errors },
+                    { status: 400 }
                 );
+            }
 
-                // Use the refined second pass for rewrite (skip the generic call below)
-                const rewriteContent = stripRewriteQuotes(
-                    normalizeModelContent(secondPass.content)
+            const { action, content, prompt, context, options } = validation.data;
+            const startTime = Date.now();
+            const containsEditableHtml =
+                (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
+
+            // Field updates are short structured extractions — cheap enough for
+            // the operator's fast route; prose generation uses the default.
+            const resolved = resolveConfiguredChatModel({
+                route: action === "field_update" ? "fast" : "default",
+            });
+            const { chat } = resolved;
+            const compatibility = validateDeprecatedChatSelection({ model: options?.model });
+            if (!compatibility.ok) {
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status }
                 );
-                const rewriteProcessingTimeMs = Date.now() - startTime;
+            }
+
+            // Build the system prompt
+            let systemPrompt = ACTION_PROMPTS[action];
+
+            if (containsEditableHtml) {
+                systemPrompt += `\n\nThe input may contain an HTML fragment with editable <mark data-field-key="...">...</mark> tags.
+    - Preserve all existing HTML structure unless the user explicitly asks to rewrite surrounding wording
+    - Preserve every <mark> tag and its data-field-key attribute exactly
+    - If the user asks to change a field value, only change the text inside the relevant <mark> tag
+    - Return ONLY the updated HTML fragment with no markdown fences or wrapper text`;
+            }
+
+            // Add tone context for change_tone action
+            if (action === "change_tone" && options?.tone) {
+                systemPrompt += `\n\nTarget tone: ${options.tone.toUpperCase()}\n${TONE_DESCRIPTIONS[options.tone] ?? ""}`;
+            }
+
+            // Add audience context if specified
+            if (options?.audience) {
+                systemPrompt += `\n\nTarget audience: ${options.audience}. Adjust vocabulary and complexity accordingly.`;
+            }
+
+            // Add length guidance if specified
+            if (options?.length) {
+                const lengthGuide: Record<string, string> = {
+                    brief: "Keep the response concise, around 50-100 words.",
+                    medium: "Aim for a moderate length, around 150-250 words.",
+                    detailed: "Provide detailed content, around 300-500 words.",
+                    comprehensive: "Be thorough and comprehensive, 500+ words as needed.",
+                };
+                systemPrompt += `\n\n${lengthGuide[options.length]}`;
+            }
+
+            // Build the user prompt based on action
+            let userPrompt = "";
+
+            switch (action) {
+                case "generate_section":
+                    userPrompt = `Generate a section about: ${prompt ?? "the topic"}`;
+                    if (context?.documentTitle) {
+                        userPrompt += `\n\nThis is for a document titled: "${context.documentTitle}"`;
+                    }
+                    if (context?.documentDescription) {
+                        userPrompt += `\n\nDocument description: ${context.documentDescription}`;
+                    }
+                    if (context?.fullContent) {
+                        userPrompt += `\n\nExisting document content for context:\n${context.fullContent.slice(0, 2000)}...`;
+                    }
+                    break;
+
+                case "expand":
+                    userPrompt = `Expand the following text:\n\n"${content}"`;
+                    if (prompt) {
+                        userPrompt += `\n\nAdditional instructions: ${prompt}`;
+                    }
+                    break;
+
+                case "rewrite":
+                    userPrompt = containsEditableHtml
+                        ? `Update the following HTML fragment.\n\nUser instruction: ${prompt ?? "Rewrite this section while preserving structure."}\n\nHTML fragment:\n${content ?? ""}`
+                        : `Rewrite the following text:\n\n"${content}"`;
+                    if (prompt) {
+                        userPrompt += `\n\nAdditional instructions: ${prompt}`;
+                    }
+
+                    // Writing first pass
+                    const firstPass = await chat.invoke(
+                        resolved.prepareMessages([
+                            new SystemMessage(systemPrompt),
+                            new HumanMessage(userPrompt),
+                        ])
+                    );
+
+                    // Normalizing
+                    const firstDraft = normalizeModelContent(firstPass.content);
+
+                    // Refining through second pass
+                    const refinementInstructions = [
+                        "Improve sentence flow and rhythm",
+                        "Remove any redundancy or filler phrases",
+                        "Ensure it reads naturally, not like it was AI-generated",
+                        "Preserve all factual information, names, numbers, and technical terms",
+                        containsEditableHtml
+                            ? "IMPORTANT: Preserve the HTML structure and every <mark data-field-key> tag exactly. If the user requested a field change, update only the text inside the correct mark tag."
+                            : "Keep the output as plain text unless the original formatting requires otherwise",
+                        prompt
+                            ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " +
+                              prompt
+                            : "Do not change the meaning or add new information beyond what was requested",
+                        containsEditableHtml
+                            ? "Output ONLY the refined HTML fragment: no quotation marks, no wrapper phrases"
+                            : "Output ONLY the refined text: no quotation marks, no wrapper phrases",
+                    ].join("\n- ");
+
+                    const secondPass = await chat.invoke(
+                        resolved.prepareMessages([
+                            new SystemMessage(systemPrompt),
+                            new HumanMessage(`Here is a rewritten version of the original text:
+
+    "${firstDraft}"
+
+    Now refine it further:
+    - ${refinementInstructions}`),
+                        ])
+                    );
+
+                    // Use the refined second pass for rewrite (skip the generic call below)
+                    const rewriteContent = stripRewriteQuotes(
+                        normalizeModelContent(secondPass.content)
+                    );
+                    const rewriteProcessingTimeMs = Date.now() - startTime;
+                    return NextResponse.json({
+                        success: true,
+                        action: "rewrite",
+                        generatedContent: rewriteContent,
+                        processingTimeMs: rewriteProcessingTimeMs,
+                    });
+
+                case "summarize":
+                    userPrompt = `Summarize the following text:\n\n"${content}"`;
+                    if (prompt) {
+                        userPrompt += `\n\nFocus on: ${prompt}`;
+                    }
+                    break;
+
+                case "change_tone":
+                    userPrompt = `Change the tone of the following text to ${options?.tone ?? "professional"}:\n\n"${content}"`;
+                    break;
+
+                case "continue":
+                    userPrompt = `Continue writing from where this content ends:\n\n"${content?.slice(-1500)}"`;
+                    if (prompt) {
+                        userPrompt += `\n\nContinue with: ${prompt}`;
+                    }
+                    if (context?.documentTitle) {
+                        userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
+                    }
+                    break;
+
+                case "field_update":
+                    userPrompt = `User request:\n${prompt ?? "Update the requested field values."}\n\nEditable fields:\n${content ?? "[]"}`;
+                    if (context?.documentTitle) {
+                        userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
+                    }
+                    break;
+            }
+
+            if (action === "field_update") {
+                const fieldUpdates = await invokeStructured(
+                    resolved,
+                    FieldUpdateSchema,
+                    [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+                    { name: "field_updates" }
+                );
                 return NextResponse.json({
                     success: true,
-                    action: "rewrite",
-                    generatedContent: rewriteContent,
-                    processingTimeMs: rewriteProcessingTimeMs,
+                    action,
+                    generatedContent: JSON.stringify(fieldUpdates),
+                    processingTimeMs: Date.now() - startTime,
                 });
+            }
 
-            case "summarize":
-                userPrompt = `Summarize the following text:\n\n"${content}"`;
-                if (prompt) {
-                    userPrompt += `\n\nFocus on: ${prompt}`;
-                }
-                break;
-
-            case "change_tone":
-                userPrompt = `Change the tone of the following text to ${options?.tone ?? "professional"}:\n\n"${content}"`;
-                break;
-
-            case "continue":
-                userPrompt = `Continue writing from where this content ends:\n\n"${content?.slice(-1500)}"`;
-                if (prompt) {
-                    userPrompt += `\n\nContinue with: ${prompt}`;
-                }
-                if (context?.documentTitle) {
-                    userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
-                }
-                break;
-
-            case "field_update":
-                userPrompt = `User request:\n${prompt ?? "Update the requested field values."}\n\nEditable fields:\n${content ?? "[]"}`;
-                if (context?.documentTitle) {
-                    userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
-                }
-                break;
-        }
-
-        if (action === "field_update") {
-            const fieldUpdates = await invokeStructured(
-                resolved,
-                FieldUpdateSchema,
-                [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
-                { name: "field_updates" }
+            // Call the AI model
+            const response = await chat.invoke(
+                resolved.prepareMessages([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(userPrompt),
+                ])
             );
+
+            const generatedContent = normalizeModelContent(response.content);
+            const processingTimeMs = Date.now() - startTime;
+
             return NextResponse.json({
                 success: true,
                 action,
-                generatedContent: JSON.stringify(fieldUpdates),
-                processingTimeMs: Date.now() - startTime,
+                generatedContent,
+                processingTimeMs,
             });
-        }
-
-        // Call the AI model
-        const response = await chat.invoke(
-            resolved.prepareMessages([
-                new SystemMessage(systemPrompt),
-                new HumanMessage(userPrompt),
-            ])
-        );
-
-        const generatedContent = normalizeModelContent(response.content);
-        const processingTimeMs = Date.now() - startTime;
-
-        return NextResponse.json({
-            success: true,
-            action,
-            generatedContent,
-            processingTimeMs,
         });
     } catch (error) {
         console.error("[document-generator/generate] error:", error);

@@ -256,6 +256,13 @@ export const UpdateCompanySchema = z
             .trim()
             .optional()
             .nullable(),
+        /** The OpenAI-compatible embeddings endpoint the key above belongs to. */
+        embeddingOpenAIBaseUrl: z
+            .string()
+            .max(1024, "Embeddings endpoint URL is too long")
+            .trim()
+            .optional()
+            .nullable(),
         embeddingHuggingFaceApiKey: z
             .string()
             .max(5000, "Hugging Face API key is too long")
@@ -299,6 +306,12 @@ export const UpdateCompanySchema = z
                 ? data.embeddingOpenAIApiKey
                 : data.embeddingOpenAIApiKey.trim()
                   ? data.embeddingOpenAIApiKey.trim()
+                  : null,
+        embeddingOpenAIBaseUrl:
+            data.embeddingOpenAIBaseUrl == null
+                ? data.embeddingOpenAIBaseUrl
+                : data.embeddingOpenAIBaseUrl.trim()
+                  ? data.embeddingOpenAIBaseUrl.trim()
                   : null,
         embeddingHuggingFaceApiKey:
             data.embeddingHuggingFaceApiKey == null
@@ -361,6 +374,7 @@ export const EmployerCompanySignupSchema = z.object({
     numberOfEmployees: z.string().max(9).optional().default("0"),
     embeddingIndexKey: z.string().trim().optional(),
     embeddingOpenAIApiKey: z.string().nullish(),
+    embeddingOpenAIBaseUrl: z.string().max(1024).nullish(),
     embeddingHuggingFaceApiKey: z.string().nullish(),
     embeddingOllamaBaseUrl: z.string().nullish(),
     embeddingOllamaModel: z.string().nullish(),

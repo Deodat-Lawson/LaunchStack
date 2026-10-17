@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { generateTemplate, reviewTemplate } from "@launchstack/pipelines/email";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -21,33 +22,35 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        let json: unknown;
-        try {
-            json = await request.json();
-        } catch {
-            json = {};
-        }
-        const parsed = BodySchema.safeParse(json);
-        if (!parsed.success) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid input",
-                    errors: parsed.error.flatten(),
-                },
-                { status: 400 }
-            );
-        }
+        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            let json: unknown;
+            try {
+                json = await request.json();
+            } catch {
+                json = {};
+            }
+            const parsed = BodySchema.safeParse(json);
+            if (!parsed.success) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Invalid input",
+                        errors: parsed.error.flatten(),
+                    },
+                    { status: 400 }
+                );
+            }
 
-        const companyId = Number(ctx.data.companyId);
+            const companyId = Number(ctx.data.companyId);
 
-        const { template, companyContext } = await generateTemplate({
-            companyId,
-            goal: parsed.data.goal,
+            const { template, companyContext } = await generateTemplate({
+                companyId,
+                goal: parsed.data.goal,
+            });
+            const review = await reviewTemplate({ template, companyContext });
+
+            return NextResponse.json({ success: true, data: { template, review } });
         });
-        const review = await reviewTemplate({ template, companyContext });
-
-        return NextResponse.json({ success: true, data: { template, review } });
     } catch (error) {
         console.error("[email-pipeline/generate] failed:", error);
         return NextResponse.json(

@@ -19,6 +19,17 @@ describe("run mode", () => {
         jest.restoreAllMocks();
     });
 
+    it("counts a workspace's own model where the server has none", () => {
+        expect(readRunEnvironment({ EXA_API_KEY: "y" }, true)).toEqual({
+            hasModel: true,
+            hasSearch: true,
+        });
+        expect(pickRunMode("auto", readRunEnvironment({ EXA_API_KEY: "y" }, true))).toBe("live");
+        expect(pickRunMode("auto", readRunEnvironment({ EXA_API_KEY: "y" }, false))).toBe(
+            "keyless"
+        );
+    });
+
     it("reads search availability from the environment", () => {
         expect(readRunEnvironment({})).toEqual({ hasModel: false, hasSearch: false });
         expect(readRunEnvironment({ EXA_API_KEY: "y" }).hasSearch).toBe(true);

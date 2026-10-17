@@ -44,12 +44,14 @@ export async function GET() {
 
         // Embedding provider credentials come from the encrypted table; the
         // API route only ever surfaces a redacted summary (hasKey + last4).
+        // The endpoint URL is not a secret and comes back whole.
         const creds = await getRedactedCredentials(Number(companyId));
 
         return NextResponse.json(
             {
                 ...companyRecord,
                 embeddingOpenAIApiKey: creds.openAI,
+                embeddingOpenAIBaseUrl: creds.openAIBaseUrl,
                 embeddingHuggingFaceApiKey: creds.huggingFace,
                 embeddingOllamaBaseUrl: creds.ollamaBaseUrl,
                 embeddingOllamaModel: creds.ollamaModel,

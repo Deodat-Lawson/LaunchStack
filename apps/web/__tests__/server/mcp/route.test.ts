@@ -11,6 +11,11 @@ import { DELETE, GET, POST } from "~/app/api/mcp/route";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+}));
+
 jest.mock("~/server/mcp/principal", () => ({ authenticateMcpRequest: jest.fn() }));
 jest.mock("~/server/mcp/config", () => ({
     mcpAvailability: () => ({

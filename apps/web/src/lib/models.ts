@@ -13,6 +13,7 @@
 import {
     getPublicChatConfig,
     isChatRequestError,
+    isChatScopeUnavailableError,
     resolveChatModel,
     resolveChatRoute,
     selectChatRoute,
@@ -56,6 +57,9 @@ export function describeChatResolutionFailure(error: unknown): {
     // model. A configuration error quotes the file path, model ids and preset
     // names, so it goes to the server log and the caller gets a fixed message.
     if (isChatRequestError(error)) return { status: error.status, message: error.message };
+    // A workspace's own endpoint that can't be used: its message is written for
+    // the workspace's admins and names no model, so it is shown as is.
+    if (isChatScopeUnavailableError(error)) return { status: error.status, message: error.message };
     console.error("[chat] chat model configuration cannot serve this request:", error);
     return {
         status: 500,

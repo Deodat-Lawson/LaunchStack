@@ -4,7 +4,7 @@
  */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
-import type * as Conversion from "@launchstack/conversion";
+import type * as Conversion from "@launchstack/conversion/audio-transcription";
 
 import { TranscriptionError } from "@launchstack/conversion";
 import { POST } from "~/app/api/documents/[id]/transcript/translations/route";
@@ -33,8 +33,10 @@ jest.mock("~/lib/storage", () => ({
 }));
 
 const mockTranslate = jest.fn();
-jest.mock("@launchstack/conversion", () => {
-    const actual = jest.requireActual<typeof Conversion>("@launchstack/conversion");
+jest.mock("@launchstack/conversion/audio-transcription", () => {
+    const actual = jest.requireActual<typeof Conversion>(
+        "@launchstack/conversion/audio-transcription"
+    );
     return {
         ...actual,
         translateTranscriptLines: (...args: unknown[]) => mockTranslate(...args) as unknown,

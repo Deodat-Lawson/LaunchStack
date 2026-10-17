@@ -2,9 +2,8 @@ import { normalizeFolderPath } from "~/lib/folders/path";
 import {
     shouldTranscribeFile,
     transcribeAudioFromUrl,
-    isVideoUrl,
-    transcribeVideoFromUrl,
-} from "@launchstack/conversion";
+} from "@launchstack/conversion/audio-transcription";
+import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/video-transcription";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";

@@ -28,6 +28,8 @@ export interface LoadHistoryInput {
     limit?: number;
     /** Restrict to these kinds. Omit for everything. */
     kinds?: readonly HistoryKind[];
+    /** Resolved by the workspace context; absence fails closed for the founder pilot. */
+    canUseVantage?: boolean;
 }
 
 export interface HistoryPage {
@@ -58,6 +60,7 @@ async function loadChatEntries(ctx: HistoryLoaderContext): Promise<HistoryEntry[
 export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<HistoryPage> {
     const limit = Math.min(Math.max(input.limit ?? DEFAULT_HISTORY_LIMIT, 1), MAX_HISTORY_LIMIT);
     const wanted = new Set<HistoryKind>(input.kinds ?? HISTORY_KINDS);
+    if (!input.canUseVantage) wanted.delete("vantage");
 
     const jobs: { kind: HistoryKind; run: () => Promise<HistoryEntry[]> }[] = [];
     const ctx: HistoryLoaderContext = { companyId: input.companyId, userId: input.userId, limit };
@@ -110,7 +113,9 @@ export async function deleteHistoryEntry(input: {
     userId: string;
     kind: HistoryKind;
     refId: string;
+    canUseVantage?: boolean;
 }): Promise<boolean> {
+    if (input.kind === "vantage" && !input.canUseVantage) return false;
     const loader = PIPELINE_LOADERS.find(candidate => candidate.kind === input.kind);
     if (!loader?.remove) return false;
     return loader.remove({ companyId: input.companyId, userId: input.userId }, input.refId);

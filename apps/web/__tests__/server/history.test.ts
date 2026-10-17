@@ -11,6 +11,7 @@ import type { HistoryEntry, HistoryKind } from "~/lib/workspace-history";
 
 const mockListSessions = jest.fn();
 const mockLoad: Record<string, jest.Mock> = {};
+const mockRemoveVantage = jest.fn();
 
 jest.mock("~/server/sessions/repository", () => ({
     listSessions: (...args: unknown[]) => mockListSessions(...args),
@@ -33,11 +34,12 @@ jest.mock("~/server/history/loaders", () => {
                 mockLoad[kind] ??= jest.fn().mockResolvedValue([]);
                 return mockLoad[kind](...args);
             },
+            remove: (...args: unknown[]) => mockRemoveVantage(...args),
         })),
     };
 });
 
-import { loadWorkspaceHistory, parseKindsParam } from "~/server/history";
+import { deleteHistoryEntry, loadWorkspaceHistory, parseKindsParam } from "~/server/history";
 
 function run(kind: HistoryKind, entries: HistoryEntry[]) {
     mockLoad[kind] = jest.fn().mockResolvedValue(entries);
@@ -47,7 +49,7 @@ function entry(id: string, kind: HistoryKind, at: string): HistoryEntry {
     return { id, kind, refId: id, title: id, status: "done", at };
 }
 
-const OWNER = { companyId: BigInt(5), userId: "user-a" };
+const OWNER = { companyId: BigInt(5), userId: "user-a", canUseVantage: true };
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -56,6 +58,24 @@ beforeEach(() => {
 });
 
 describe("loadWorkspaceHistory", () => {
+    it("does not collect founder agenda summaries when Vantage access is absent", async () => {
+        run("vantage", [entry("a1", "vantage", "2026-10-12T12:00:00.000Z")]);
+
+        const page = await loadWorkspaceHistory({
+            companyId: OWNER.companyId,
+            userId: "workspace-admin",
+            kinds: ["vantage"],
+        });
+
+        expect(page).toEqual({ entries: [], degraded: [] });
+        expect(mockLoad.vantage).not.toHaveBeenCalled();
+    });
+
+    it("includes founder agendas when the resolved actor is allowed", async () => {
+        run("vantage", [entry("a1", "vantage", "2026-10-12T12:00:00.000Z")]);
+        const page = await loadWorkspaceHistory({ ...OWNER, kinds: ["vantage"] });
+        expect(page.entries.map(row => row.id)).toEqual(["a1"]);
+    });
     it("interleaves chats and runs strictly by recency", async () => {
         mockListSessions.mockResolvedValue([
             {
@@ -140,6 +160,27 @@ describe("loadWorkspaceHistory", () => {
         const page = await loadWorkspaceHistory({ ...OWNER, limit: 2 });
 
         expect(page.entries.map(e => e.id)).toEqual(["e1", "e2"]);
+    });
+});
+
+describe("deleteHistoryEntry founder boundary", () => {
+    it("denies a Vantage deletion before calling its repository without explicit access", async () => {
+        expect(await deleteHistoryEntry({
+            companyId: OWNER.companyId,
+            userId: "workspace-admin",
+            kind: "vantage",
+            refId: "a1",
+        })).toBe(false);
+        expect(mockRemoveVantage).not.toHaveBeenCalled();
+    });
+
+    it("allows the founder to remove their workspace's agenda", async () => {
+        mockRemoveVantage.mockResolvedValue(true);
+        expect(await deleteHistoryEntry({ ...OWNER, kind: "vantage", refId: "a1" })).toBe(true);
+        expect(mockRemoveVantage).toHaveBeenCalledWith({
+            companyId: OWNER.companyId,
+            userId: OWNER.userId,
+        }, "a1");
     });
 });
 

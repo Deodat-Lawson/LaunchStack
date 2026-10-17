@@ -3,7 +3,7 @@
 // DELETE /api/vantage/agendas/:id
 import type { NextRequest } from "next/server";
 
-import { deleteAgenda, getAgenda, updateAgendaStatus } from "@launchstack/pipelines/vantage";
+import { deleteAgenda, getAgendaV1, updateAgendaStatus } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { AgendaStatusSchema } from "../../_schemas";
@@ -15,8 +15,8 @@ export async function GET(_request: NextRequest, { params }: Params) {
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
-        const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
-        if (!agenda) return error("That agenda is not here.", 404);
+        const agenda = await getAgendaV1(auth.ctx.companyId, { id });
+        if (!agenda) return error("That agenda is not here.", 404, { code: "not_found" });
         return json({ agenda });
     } catch (err) {
         return handleVantageError("GET agenda", err);

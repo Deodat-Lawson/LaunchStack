@@ -317,6 +317,21 @@ export const vantageProgramDeadlines = pgTable(
     table => [index("vantage_program_deadlines_company_due_idx").on(table.companyId, table.dueOn)]
 );
 
+/** Version/review/submission metadata; canonical content stays in Vantage tables. */
+export const vantageContractState = pgTable("vantage_contract_state", {
+    agendaId: varchar("agenda_id", { length: 64 })
+        .primaryKey()
+        .references(() => vantageAgendas.id, { onDelete: "cascade" }),
+    companyId: bigint("company_id", { mode: "bigint" })
+        .notNull()
+        .references(() => company.id, { onDelete: "cascade" }),
+    version: integer("version").notNull().default(0),
+    payload: jsonb("payload")
+        .$type<Record<string, unknown>>()
+        .notNull()
+        .default(sql`'{}'::jsonb`),
+});
+
 export type VantageEvidenceRow = InferSelectModel<typeof vantageEvidence>;
 export type VantageMetricDefinitionRow = InferSelectModel<typeof vantageMetricDefinitions>;
 export type VantageMetricObservationRow = InferSelectModel<typeof vantageMetricObservations>;

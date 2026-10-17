@@ -1,7 +1,6 @@
 /**
- * GET /api/vantage/triage is the program's side of the table: the UI only
- * shows it to `settings.manage`, and the route has to refuse everyone else
- * before it reads anything — hiding the rail entry is not the gate.
+ * Week 1 disables the program view even for founders, before any shared
+ * evidence can be collected. Non-owner workspace roles cannot use Vantage.
  */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
@@ -41,9 +40,8 @@ jest.mock("@launchstack/pipelines/vantage", () => ({
     },
 }));
 
-import { VantageError } from "@launchstack/pipelines/vantage";
-
 import { GET } from "~/app/api/vantage/triage/route";
+import { VANTAGE_FOUNDER_ONLY, VANTAGE_SHARING_DISABLED } from "~/server/vantage/access";
 
 const triage = {
     today: "2026-10-03",
@@ -70,41 +68,52 @@ function signInAs(role: string, permissions?: Permission[]) {
 
 beforeEach(() => {
     jest.clearAllMocks();
+    process.env.VANTAGE_TEST_MODE = "false";
     mockLoadTriage.mockResolvedValue(triage);
 });
 
 describe("GET /api/vantage/triage", () => {
-    it.each(["member", "viewer"])("returns 403 to a %s without reading", async role => {
-        signInAs(role);
-        expect(makeWorkspaceContext({ role }).can("settings.manage")).toBe(false);
+    it.each(["admin", "member", "viewer", "guest"])(
+        "returns 403 to a %s without reading",
+        async role => {
+            signInAs(role);
+
+            const response = await GET();
+
+            expect(response.status).toBe(403);
+            expect(await response.json()).toEqual({
+                error: VANTAGE_FOUNDER_ONLY,
+                code: "pilot_access_denied",
+            });
+            expect(mockLoadTriage).not.toHaveBeenCalled();
+        }
+    );
+
+    it("keeps program sharing disabled for the owner", async () => {
+        process.env.VANTAGE_TEST_MODE = "true";
+        process.env.VANTAGE_TEST_COMPANY_ID = "42";
+        process.env.VANTAGE_TEST_USER_IDS = "user-1";
+        process.env.DATABASE_URL = "postgres://test:test@localhost:55434/vantage_test";
+        process.env.VANTAGE_TEST_DATABASE_URL = process.env.DATABASE_URL;
+        signInAs("owner");
 
         const response = await GET();
 
         expect(response.status).toBe(403);
         expect(await response.json()).toEqual({
-            error: "Only a workspace admin can see program triage.",
-            permission: "settings.manage",
+            error: VANTAGE_SHARING_DISABLED,
+            code: "sharing_disabled",
         });
         expect(mockLoadTriage).not.toHaveBeenCalled();
     });
 
-    it.each(["admin", "owner"])("returns the workspace's triage to an %s", async role => {
-        signInAs(role);
-
-        const response = await GET();
-
-        expect(response.status).toBe(200);
-        expect(await response.json()).toEqual(triage);
-        expect(mockLoadTriage).toHaveBeenCalledWith({ companyId: BigInt(42) });
-    });
-
-    it("gates on the permission, not the role name", async () => {
+    it("does not treat program permissions as founder ownership", async () => {
         signInAs("program-lead", ["settings.manage"]);
 
         const response = await GET();
 
-        expect(response.status).toBe(200);
-        expect(mockLoadTriage).toHaveBeenCalledTimes(1);
+        expect(response.status).toBe(403);
+        expect(mockLoadTriage).not.toHaveBeenCalled();
     });
 
     it("passes an auth failure through untouched", async () => {
@@ -120,14 +129,9 @@ describe("GET /api/vantage/triage", () => {
         expect(response.status).toBe(401);
         expect(mockLoadTriage).not.toHaveBeenCalled();
     });
+});
 
-    it("maps a VantageError from the read to its own status", async () => {
-        signInAs("admin");
-        mockLoadTriage.mockRejectedValue(new VantageError("Gone", 404, "not_found"));
-
-        const response = await GET();
-
-        expect(response.status).toBe(404);
-        expect(await response.json()).toEqual({ error: "Gone", code: "not_found" });
-    });
+const savedEnvironment = { ...process.env };
+afterEach(() => {
+    process.env = { ...savedEnvironment };
 });

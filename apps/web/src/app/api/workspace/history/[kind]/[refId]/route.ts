@@ -17,6 +17,7 @@ import { isHistoryKind } from "~/lib/workspace-history";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
 import { deleteHistoryEntry } from "~/server/history";
+import { canUseVantage, VANTAGE_FOUNDER_ONLY } from "~/server/vantage/access";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,9 @@ export async function DELETE(
     const { kind, refId } = await params;
     if (!isHistoryKind(kind)) {
         return NextResponse.json({ error: "Unknown history kind" }, { status: 400 });
+    }
+    if (kind === "vantage" && !canUseVantage(ctx.data)) {
+        return NextResponse.json({ error: VANTAGE_FOUNDER_ONLY }, { status: 403 });
     }
     // Chat sessions are personal, not workspace-scoped, and have their own
     // delete. Routing them through here would apply the wrong ownership rule.
@@ -47,6 +51,7 @@ export async function DELETE(
         const deleted = await deleteHistoryEntry({
             companyId: ctx.data.companyId,
             userId: ctx.data.authUserId,
+            canUseVantage: canUseVantage(ctx.data),
             kind,
             refId: decoded,
         });

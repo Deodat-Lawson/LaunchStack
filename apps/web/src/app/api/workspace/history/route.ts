@@ -16,6 +16,7 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
 import { loadWorkspaceHistory, parseKindsParam } from "~/server/history";
+import { canUseVantage } from "~/server/vantage/access";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,7 @@ export async function GET(request: Request) {
         const page = await loadWorkspaceHistory({
             companyId: ctx.data.companyId,
             userId: ctx.data.authUserId,
+            canUseVantage: canUseVantage(ctx.data),
             limit: Number(searchParams.get("limit")) || undefined,
             kinds: parseKindsParam(searchParams.getAll("kind")),
         });

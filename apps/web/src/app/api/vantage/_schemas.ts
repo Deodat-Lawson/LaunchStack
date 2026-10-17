@@ -9,12 +9,17 @@ import {
     VANTAGE_COMMITMENT_STATUSES,
     VANTAGE_EVIDENCE_KINDS,
     VANTAGE_VISIBILITIES,
-    isIsoDate,
+    validDate,
 } from "@launchstack/pipelines/vantage";
+import { VANTAGE_SHARING_DISABLED } from "~/server/vantage/access";
 
-export const isoDate = z.string().refine(isIsoDate, "must be a date (YYYY-MM-DD)");
+export const isoDate = z.string().refine(validDate, "must be a real date (YYYY-MM-DD)");
 
 const optionalText = (max: number) => z.string().trim().max(max).optional().nullable();
+const privateOnly = z
+    .boolean()
+    .refine(shared => !shared, VANTAGE_SHARING_DISABLED)
+    .optional();
 
 export const EvidenceSchema = z.object({
     kind: z.enum(VANTAGE_EVIDENCE_KINDS),
@@ -26,7 +31,10 @@ export const EvidenceSchema = z.object({
         .optional()
         .nullable(),
     observedAt: isoDate,
-    visibility: z.enum(VANTAGE_VISIBILITIES).optional(),
+    visibility: z
+        .enum(VANTAGE_VISIBILITIES)
+        .refine(visibility => visibility === "private", VANTAGE_SHARING_DISABLED)
+        .optional(),
     tags: z.array(z.string().trim().min(1).max(40)).max(12).optional(),
 });
 
@@ -87,7 +95,7 @@ export const TopicSchema = z.object({
         )
         .max(6)
         .optional(),
-    shared: z.boolean().optional(),
+    shared: privateOnly,
 });
 
 export const TopicPatchSchema = TopicSchema.partial().extend({
@@ -102,7 +110,7 @@ export const DecisionSchema = z.object({
             owner: z.string().trim().min(1, "name an owner").max(200),
             dueOn: isoDate,
             test: optionalText(1000),
-            shared: z.boolean().optional(),
+            shared: privateOnly,
         })
         .nullable(),
 });
@@ -112,7 +120,7 @@ export const CommitmentSchema = z.object({
     owner: z.string().trim().min(1, "name an owner").max(200),
     dueOn: isoDate,
     test: optionalText(1000),
-    shared: z.boolean().optional(),
+    shared: privateOnly,
     agendaId: z.string().optional().nullable(),
     topicId: z.string().optional().nullable(),
 });
@@ -136,4 +144,7 @@ export const AgendaStatusSchema = z.object({
     status: z.enum(["draft", "ready", "held", "closed"]),
 });
 
-export const PrepareSchema = z.object({ weekStart: isoDate.optional() });
+export const PrepareSchema = z.object({
+    weekStart: isoDate.optional(),
+    generationMode: z.enum(["rules", "configured-model"]).default("configured-model"),
+});

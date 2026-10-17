@@ -4,7 +4,7 @@
 //        one-click commit: the topic is undecided again, that commitment gone.
 import type { NextRequest } from "next/server";
 
-import { recordDecision, undoDecision } from "@launchstack/pipelines/vantage";
+import { decideV1, undoDecision } from "@launchstack/pipelines/vantage";
 
 import {
     error,
@@ -25,12 +25,18 @@ export async function POST(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const parsed = DecisionSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
-        const topic = await recordDecision({
+        const key = request.headers.get("Idempotency-Key");
+        if (!key || !/^[\x21-\x7e]{1,128}$/.test(key))
+            return error("Provide a stable Idempotency-Key for this submission.", 400, {
+                code: "idempotency_key_required",
+            });
+        const topic = await decideV1({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
             topicId: id,
             decision: parsed.data.decision,
             commitment: parsed.data.commitment,
+            key,
         });
         return json({ topic });
     } catch (err) {

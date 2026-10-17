@@ -1,0 +1,1895 @@
+{
+    "contractVersion": "1.0",
+    "status": "Normative examples; not observed runtime output",
+    "clock": "2026-10-17T14:00:00.000Z",
+    "scenarioNote": "Scenarios are independent unless named as retries. Authentication uses an existing server session; credentials are intentionally absent. Error examples specify response shape; their invalid inputs are illustrative.",
+    "internal": {
+        "input": {
+            "contractVersion": "v1",
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-1",
+            "reportPeriod": {
+                "weekStart": "2026-10-12",
+                "timeZone": "America/New_York",
+                "startInclusive": "2026-10-12T04:00:00.000Z",
+                "endExclusive": "2026-10-17T14:00:00.000Z",
+                "asOf": "2026-10-17T14:00:00.000Z",
+                "kind": "week-to-date"
+            },
+            "generationMode": "configured-model",
+            "data": {
+                "metricDefinitions": [
+                    {
+                        "id": "metric-demo-1",
+                        "key": "demo_signups",
+                        "name": "Demo signups",
+                        "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+                        "unit": "count",
+                        "createdAt": "2026-10-05T12:00:00.000Z"
+                    }
+                ],
+                "currentEvidence": [
+                    {
+                        "id": "ev-demo-1",
+                        "kind": "interview",
+                        "title": "Onboarding feedback",
+                        "body": "The tester could not find the create-project action.",
+                        "source": "Synthetic onboarding interview",
+                        "sourceUrl": null,
+                        "observedAt": "2026-10-16",
+                        "visibility": "private",
+                        "tags": ["synthetic"],
+                        "createdAt": "2026-10-16T15:00:00.000Z"
+                    }
+                ],
+                "currentObservations": [
+                    {
+                        "id": "obs-demo-1",
+                        "metricId": "metric-demo-1",
+                        "metricKey": "demo_signups",
+                        "metricName": "Demo signups",
+                        "value": 120,
+                        "periodStart": "2026-10-12",
+                        "periodEnd": "2026-10-17",
+                        "source": "Synthetic analytics export",
+                        "note": "Partial-week observation available at the captured cutoff.",
+                        "createdAt": "2026-10-17T13:00:00.000Z"
+                    }
+                ],
+                "comparisonObservations": [
+                    {
+                        "id": "obs-demo-previous",
+                        "metricId": "metric-demo-1",
+                        "metricKey": "demo_signups",
+                        "metricName": "Demo signups",
+                        "value": 100,
+                        "periodStart": "2026-10-05",
+                        "periodEnd": "2026-10-10",
+                        "source": "Synthetic analytics export",
+                        "note": "Comparable previous-period observation; comparison context only.",
+                        "createdAt": "2026-10-10T13:00:00.000Z"
+                    }
+                ],
+                "resolvedCommitments": [],
+                "carryForwardCommitments": []
+            },
+            "reviewedTopics": []
+        },
+        "success": {
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-1",
+            "draft": {
+                "summary": "One synthetic interview suggests testing clearer navigation.",
+                "topics": [
+                    {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation."
+                    }
+                ],
+                "origin": "ai",
+                "modelMetadata": {
+                    "mode": "ai",
+                    "modelId": "configured-model-alias",
+                    "promptVersion": "vantage-agenda/v1"
+                }
+            },
+            "signals": {
+                "weekStart": "2026-10-12",
+                "since": "2026-10-12",
+                "computedAt": "2026-10-17T14:00:00.000Z",
+                "metricChanges": [],
+                "metricConflicts": [],
+                "metricsWithoutData": [],
+                "newEvidence": [
+                    {
+                        "kind": "interview",
+                        "count": 1
+                    }
+                ],
+                "recentEvidenceIds": ["ev-demo-1"],
+                "overdueCommitmentIds": [],
+                "dueThisWeekCommitmentIds": [],
+                "resolvedCommitmentIds": [],
+                "daysSinceLastEntry": 0
+            },
+            "enhancements": [],
+            "execution": {
+                "outcome": "generated",
+                "mode": "ai",
+                "fallbackReason": null,
+                "modelId": "configured-model-alias",
+                "promptVersion": "vantage-agenda/v1",
+                "attempts": 1,
+                "durationMs": 1200
+            }
+        },
+        "fallback": {
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-1",
+            "draft": {
+                "summary": "One synthetic interview suggests testing clearer navigation.",
+                "topics": [
+                    {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation."
+                    }
+                ],
+                "origin": "rules",
+                "modelMetadata": {
+                    "mode": "rules",
+                    "fallback": "timeout"
+                }
+            },
+            "signals": {
+                "weekStart": "2026-10-12",
+                "since": "2026-10-12",
+                "computedAt": "2026-10-17T14:00:00.000Z",
+                "metricChanges": [],
+                "metricConflicts": [],
+                "metricsWithoutData": [],
+                "newEvidence": [
+                    {
+                        "kind": "interview",
+                        "count": 1
+                    }
+                ],
+                "recentEvidenceIds": ["ev-demo-1"],
+                "overdueCommitmentIds": [],
+                "dueThisWeekCommitmentIds": [],
+                "resolvedCommitmentIds": [],
+                "daysSinceLastEntry": 0
+            },
+            "enhancements": [],
+            "execution": {
+                "outcome": "generated",
+                "mode": "rules",
+                "fallbackReason": "timeout",
+                "modelId": null,
+                "promptVersion": "vantage-agenda/v1",
+                "attempts": 2,
+                "durationMs": 41000
+            }
+        },
+        "empty": {
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-empty",
+            "draft": {
+                "summary": "No eligible evidence is available for this period.",
+                "topics": [],
+                "origin": "rules",
+                "modelMetadata": {
+                    "mode": "rules"
+                }
+            },
+            "signals": {
+                "weekStart": "2026-10-12",
+                "since": "2026-10-12",
+                "computedAt": "2026-10-17T14:00:00.000Z",
+                "metricChanges": [],
+                "metricConflicts": [],
+                "metricsWithoutData": [],
+                "newEvidence": [],
+                "recentEvidenceIds": [],
+                "overdueCommitmentIds": [],
+                "dueThisWeekCommitmentIds": [],
+                "resolvedCommitmentIds": [],
+                "daysSinceLastEntry": 0
+            },
+            "enhancements": [],
+            "execution": {
+                "outcome": "empty",
+                "mode": "rules",
+                "fallbackReason": null,
+                "modelId": null,
+                "promptVersion": "vantage-agenda/v1",
+                "attempts": 0,
+                "durationMs": 1
+            }
+        },
+        "enrichment": {
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-reviewed",
+            "draft": {
+                "summary": "One synthetic interview suggests testing clearer navigation.",
+                "topics": [
+                    {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation."
+                    }
+                ],
+                "origin": "ai",
+                "modelMetadata": {
+                    "mode": "ai",
+                    "modelId": "configured-model-alias",
+                    "promptVersion": "vantage-agenda/v1"
+                }
+            },
+            "signals": {
+                "weekStart": "2026-10-12",
+                "since": "2026-10-12",
+                "computedAt": "2026-10-17T14:00:00.000Z",
+                "metricChanges": [],
+                "metricConflicts": [],
+                "metricsWithoutData": [],
+                "newEvidence": [
+                    {
+                        "kind": "interview",
+                        "count": 1
+                    }
+                ],
+                "recentEvidenceIds": ["ev-demo-1"],
+                "overdueCommitmentIds": [],
+                "dueThisWeekCommitmentIds": [],
+                "resolvedCommitmentIds": [],
+                "daysSinceLastEntry": 0
+            },
+            "enhancements": [
+                {
+                    "topicId": "topic-demo-1",
+                    "baseTopicVersion": 2,
+                    "kind": "question",
+                    "text": "Does a navigation label change improve completion?",
+                    "refs": [
+                        {
+                            "ref": "ev:ev-demo-1",
+                            "label": "Synthetic onboarding interview",
+                            "date": "2026-10-16"
+                        }
+                    ],
+                    "rationale": "Proposed follow-up question grounded in the supplied interview."
+                }
+            ],
+            "execution": {
+                "outcome": "generated",
+                "mode": "ai",
+                "fallbackReason": null,
+                "modelId": "configured-model-alias",
+                "promptVersion": "vantage-agenda/v1",
+                "attempts": 1,
+                "durationMs": 1200
+            }
+        },
+        "enrichmentInput": {
+            "contractVersion": "v1",
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-reviewed",
+            "reportPeriod": {
+                "weekStart": "2026-10-12",
+                "timeZone": "America/New_York",
+                "startInclusive": "2026-10-12T04:00:00.000Z",
+                "endExclusive": "2026-10-17T14:00:00.000Z",
+                "asOf": "2026-10-17T14:00:00.000Z",
+                "kind": "week-to-date"
+            },
+            "generationMode": "configured-model",
+            "data": {
+                "metricDefinitions": [
+                    {
+                        "id": "metric-demo-1",
+                        "key": "demo_signups",
+                        "name": "Demo signups",
+                        "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+                        "unit": "count",
+                        "createdAt": "2026-10-05T12:00:00.000Z"
+                    }
+                ],
+                "currentEvidence": [
+                    {
+                        "id": "ev-demo-1",
+                        "kind": "interview",
+                        "title": "Onboarding feedback",
+                        "body": "The tester could not find the create-project action.",
+                        "source": "Synthetic onboarding interview",
+                        "sourceUrl": null,
+                        "observedAt": "2026-10-16",
+                        "visibility": "private",
+                        "tags": ["synthetic"],
+                        "createdAt": "2026-10-16T15:00:00.000Z"
+                    }
+                ],
+                "currentObservations": [
+                    {
+                        "id": "obs-demo-1",
+                        "metricId": "metric-demo-1",
+                        "metricKey": "demo_signups",
+                        "metricName": "Demo signups",
+                        "value": 120,
+                        "periodStart": "2026-10-12",
+                        "periodEnd": "2026-10-17",
+                        "source": "Synthetic analytics export",
+                        "note": "Partial-week observation available at the captured cutoff.",
+                        "createdAt": "2026-10-17T13:00:00.000Z"
+                    }
+                ],
+                "comparisonObservations": [
+                    {
+                        "id": "obs-demo-previous",
+                        "metricId": "metric-demo-1",
+                        "metricKey": "demo_signups",
+                        "metricName": "Demo signups",
+                        "value": 100,
+                        "periodStart": "2026-10-05",
+                        "periodEnd": "2026-10-10",
+                        "source": "Synthetic analytics export",
+                        "note": "Comparable previous-period observation; comparison context only.",
+                        "createdAt": "2026-10-10T13:00:00.000Z"
+                    }
+                ],
+                "resolvedCommitments": [],
+                "carryForwardCommitments": []
+            },
+            "reviewedTopics": [
+                {
+                    "topic": {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation.",
+                        "id": "topic-demo-1",
+                        "agendaId": "agenda-demo-1",
+                        "position": 0,
+                        "status": "kept",
+                        "origin": "ai",
+                        "shared": false,
+                        "decision": null,
+                        "decidedAt": null,
+                        "commitmentId": null,
+                        "contentVersion": 2
+                    },
+                    "contentVersion": 2
+                }
+            ]
+        },
+        "emptyInput": {
+            "contractVersion": "v1",
+            "runId": "run-demo-1",
+            "inputVersion": "input-demo-empty",
+            "reportPeriod": {
+                "weekStart": "2026-10-12",
+                "timeZone": "America/New_York",
+                "startInclusive": "2026-10-12T04:00:00.000Z",
+                "endExclusive": "2026-10-17T14:00:00.000Z",
+                "asOf": "2026-10-17T14:00:00.000Z",
+                "kind": "week-to-date"
+            },
+            "generationMode": "configured-model",
+            "data": {
+                "metricDefinitions": [],
+                "currentEvidence": [],
+                "currentObservations": [],
+                "comparisonObservations": [],
+                "resolvedCommitments": [],
+                "carryForwardCommitments": []
+            },
+            "reviewedTopics": []
+        }
+    },
+    "http": [
+        {
+            "name": "Create private evidence",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/evidence",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "kind": "interview",
+                    "title": "Onboarding feedback",
+                    "body": "The tester could not find the create-project action.",
+                    "source": "Synthetic onboarding interview",
+                    "sourceUrl": null,
+                    "observedAt": "2026-10-16",
+                    "visibility": "private",
+                    "tags": ["synthetic"]
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "evidence": {
+                        "id": "ev-demo-1",
+                        "kind": "interview",
+                        "title": "Onboarding feedback",
+                        "body": "The tester could not find the create-project action.",
+                        "source": "Synthetic onboarding interview",
+                        "sourceUrl": null,
+                        "observedAt": "2026-10-16",
+                        "visibility": "private",
+                        "tags": ["synthetic"],
+                        "createdAt": "2026-10-16T15:00:00.000Z"
+                    }
+                }
+            }
+        },
+        {
+            "name": "List evidence",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/evidence",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "evidence": [
+                        {
+                            "id": "ev-demo-1",
+                            "kind": "interview",
+                            "title": "Onboarding feedback",
+                            "body": "The tester could not find the create-project action.",
+                            "source": "Synthetic onboarding interview",
+                            "sourceUrl": null,
+                            "observedAt": "2026-10-16",
+                            "visibility": "private",
+                            "tags": ["synthetic"],
+                            "createdAt": "2026-10-16T15:00:00.000Z"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create metric definition",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/metrics",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "key": "demo_signups",
+                    "name": "Demo signups",
+                    "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+                    "unit": "count"
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "definition": {
+                        "id": "metric-demo-1",
+                        "key": "demo_signups",
+                        "name": "Demo signups",
+                        "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+                        "unit": "count",
+                        "createdAt": "2026-10-05T12:00:00.000Z"
+                    }
+                }
+            }
+        },
+        {
+            "name": "List metrics",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/metrics",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "definitions": [
+                        {
+                            "id": "metric-demo-1",
+                            "key": "demo_signups",
+                            "name": "Demo signups",
+                            "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+                            "unit": "count",
+                            "createdAt": "2026-10-05T12:00:00.000Z"
+                        }
+                    ],
+                    "observations": [
+                        {
+                            "id": "obs-demo-previous",
+                            "metricId": "metric-demo-1",
+                            "metricKey": "demo_signups",
+                            "metricName": "Demo signups",
+                            "value": 100,
+                            "periodStart": "2026-10-05",
+                            "periodEnd": "2026-10-10",
+                            "source": "Synthetic analytics export",
+                            "note": "Comparable previous-period observation; comparison context only.",
+                            "createdAt": "2026-10-10T13:00:00.000Z"
+                        },
+                        {
+                            "id": "obs-demo-1",
+                            "metricId": "metric-demo-1",
+                            "metricKey": "demo_signups",
+                            "metricName": "Demo signups",
+                            "value": 120,
+                            "periodStart": "2026-10-12",
+                            "periodEnd": "2026-10-17",
+                            "source": "Synthetic analytics export",
+                            "note": "Partial-week observation available at the captured cutoff.",
+                            "createdAt": "2026-10-17T13:00:00.000Z"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create metric observation",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/metrics/observations",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "metricId": "metric-demo-1",
+                    "value": 120,
+                    "periodStart": "2026-10-12",
+                    "periodEnd": "2026-10-17",
+                    "source": "Synthetic analytics export",
+                    "note": "Partial-week observation available at the captured cutoff."
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "observations": [
+                        {
+                            "id": "obs-demo-1",
+                            "metricId": "metric-demo-1",
+                            "metricKey": "demo_signups",
+                            "metricName": "Demo signups",
+                            "value": 120,
+                            "periodStart": "2026-10-12",
+                            "periodEnd": "2026-10-17",
+                            "source": "Synthetic analytics export",
+                            "note": "Partial-week observation available at the captured cutoff.",
+                            "createdAt": "2026-10-17T13:00:00.000Z"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "CSV import with a reported bad row",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/metrics/import",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "csv": "metric,value,period_start,period_end,source,note\ndemo_signups,120,2026-10-12,2026-10-17,Synthetic analytics export,partial week\ndemo_signups,invalid,2026-10-12,2026-10-17,Synthetic analytics export,bad row",
+                    "source": "Synthetic CSV"
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "imported": 1,
+                    "problems": [
+                        {
+                            "line": 3,
+                            "message": "value must be a finite number"
+                        }
+                    ],
+                    "createdMetrics": []
+                }
+            }
+        },
+        {
+            "name": "Generate AI agenda",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-12",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "One synthetic interview suggests testing clearer navigation.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [
+                                {
+                                    "kind": "interview",
+                                    "count": 1
+                                }
+                            ],
+                            "recentEvidenceIds": ["ev-demo-1"],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "ai",
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [
+                            {
+                                "title": "Clarify the onboarding next step",
+                                "facts": [
+                                    {
+                                        "text": "One synthetic tester could not find the create-project action.",
+                                        "refs": [
+                                            {
+                                                "ref": "ev:ev-demo-1",
+                                                "label": "Synthetic onboarding interview",
+                                                "date": "2026-10-16"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                                "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                                "proposedNextStep": "Test navigation with five synthetic accounts",
+                                "proposedOwner": null,
+                                "proposedDue": "2026-10-24",
+                                "helpRequested": null,
+                                "unknowns": ["Whether other testers encounter the same problem"],
+                                "conflicts": [],
+                                "rationale": "A small test can investigate a concrete usability observation.",
+                                "id": "topic-demo-1",
+                                "agendaId": "agenda-demo-1",
+                                "position": 0,
+                                "status": "suggested",
+                                "origin": "ai",
+                                "shared": false,
+                                "decision": null,
+                                "decidedAt": null,
+                                "commitmentId": null,
+                                "contentVersion": 1
+                            }
+                        ],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "generated",
+                            "mode": "ai",
+                            "fallbackReason": null,
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 1,
+                            "durationMs": 1200
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Read saved agenda",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/agendas/agenda-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "One synthetic interview suggests testing clearer navigation.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [
+                                {
+                                    "kind": "interview",
+                                    "count": 1
+                                }
+                            ],
+                            "recentEvidenceIds": ["ev-demo-1"],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "ai",
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [
+                            {
+                                "title": "Clarify the onboarding next step",
+                                "facts": [
+                                    {
+                                        "text": "One synthetic tester could not find the create-project action.",
+                                        "refs": [
+                                            {
+                                                "ref": "ev:ev-demo-1",
+                                                "label": "Synthetic onboarding interview",
+                                                "date": "2026-10-16"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                                "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                                "proposedNextStep": "Test navigation with five synthetic accounts",
+                                "proposedOwner": null,
+                                "proposedDue": "2026-10-24",
+                                "helpRequested": null,
+                                "unknowns": ["Whether other testers encounter the same problem"],
+                                "conflicts": [],
+                                "rationale": "A small test can investigate a concrete usability observation.",
+                                "id": "topic-demo-1",
+                                "agendaId": "agenda-demo-1",
+                                "position": 0,
+                                "status": "suggested",
+                                "origin": "ai",
+                                "shared": false,
+                                "decision": null,
+                                "decidedAt": null,
+                                "commitmentId": null,
+                                "contentVersion": 1
+                            }
+                        ],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "generated",
+                            "mode": "ai",
+                            "fallbackReason": null,
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 1,
+                            "durationMs": 1200
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "List selected week",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/agendas?week=2026-10-12",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "week": "2026-10-12",
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "One synthetic interview suggests testing clearer navigation.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [
+                                {
+                                    "kind": "interview",
+                                    "count": 1
+                                }
+                            ],
+                            "recentEvidenceIds": ["ev-demo-1"],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "ai",
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [
+                            {
+                                "title": "Clarify the onboarding next step",
+                                "facts": [
+                                    {
+                                        "text": "One synthetic tester could not find the create-project action.",
+                                        "refs": [
+                                            {
+                                                "ref": "ev:ev-demo-1",
+                                                "label": "Synthetic onboarding interview",
+                                                "date": "2026-10-16"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                                "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                                "proposedNextStep": "Test navigation with five synthetic accounts",
+                                "proposedOwner": null,
+                                "proposedDue": "2026-10-24",
+                                "helpRequested": null,
+                                "unknowns": ["Whether other testers encounter the same problem"],
+                                "conflicts": [],
+                                "rationale": "A small test can investigate a concrete usability observation.",
+                                "id": "topic-demo-1",
+                                "agendaId": "agenda-demo-1",
+                                "position": 0,
+                                "status": "suggested",
+                                "origin": "ai",
+                                "shared": false,
+                                "decision": null,
+                                "decidedAt": null,
+                                "commitmentId": null,
+                                "contentVersion": 1
+                            }
+                        ],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "generated",
+                            "mode": "ai",
+                            "fallbackReason": null,
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 1,
+                            "durationMs": 1200
+                        }
+                    },
+                    "agendas": [
+                        {
+                            "id": "agenda-demo-1",
+                            "weekStart": "2026-10-12",
+                            "weekEnd": "2026-10-18",
+                            "status": "draft",
+                            "generatedAt": "2026-10-17T14:00:01.200Z",
+                            "heldAt": null,
+                            "topicCount": 1,
+                            "decidedCount": 0
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Week without a saved report",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/agendas?week=2026-10-05",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "week": "2026-10-05",
+                    "agenda": null,
+                    "agendas": [
+                        {
+                            "id": "agenda-demo-1",
+                            "weekStart": "2026-10-12",
+                            "weekEnd": "2026-10-18",
+                            "status": "draft",
+                            "generatedAt": "2026-10-17T14:00:01.200Z",
+                            "heldAt": null,
+                            "topicCount": 1,
+                            "decidedCount": 0
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Edit topic",
+            "request": {
+                "method": "PATCH",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "unknowns": ["Does the problem recur with other testers?"]
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "topic": {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Does the problem recur with other testers?"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation.",
+                        "id": "topic-demo-1",
+                        "agendaId": "agenda-demo-1",
+                        "position": 0,
+                        "status": "kept",
+                        "origin": "ai",
+                        "shared": false,
+                        "decision": null,
+                        "decidedAt": null,
+                        "commitmentId": null,
+                        "contentVersion": 2
+                    }
+                }
+            }
+        },
+        {
+            "name": "Record decision and primary action",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/decide",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Idempotency-Key": "decision-demo-1"
+                },
+                "body": {
+                    "decision": "Test clearer navigation before increasing acquisition",
+                    "commitment": {
+                        "title": "Test navigation with five synthetic accounts",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "topic": {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation.",
+                        "id": "topic-demo-1",
+                        "agendaId": "agenda-demo-1",
+                        "position": 0,
+                        "status": "kept",
+                        "origin": "ai",
+                        "shared": false,
+                        "decision": "Test clearer navigation before increasing acquisition",
+                        "decidedAt": "2026-10-17T14:05:00.000Z",
+                        "commitmentId": "commitment-demo-1",
+                        "contentVersion": 2
+                    }
+                }
+            }
+        },
+        {
+            "name": "Retry the same logical submission",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/decide",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Idempotency-Key": "decision-demo-1"
+                },
+                "body": {
+                    "decision": "Test clearer navigation before increasing acquisition",
+                    "commitment": {
+                        "title": "Test navigation with five synthetic accounts",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "topic": {
+                        "title": "Clarify the onboarding next step",
+                        "facts": [
+                            {
+                                "text": "One synthetic tester could not find the create-project action.",
+                                "refs": [
+                                    {
+                                        "ref": "ev:ev-demo-1",
+                                        "label": "Synthetic onboarding interview",
+                                        "date": "2026-10-16"
+                                    }
+                                ]
+                            }
+                        ],
+                        "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                        "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                        "proposedNextStep": "Test navigation with five synthetic accounts",
+                        "proposedOwner": null,
+                        "proposedDue": "2026-10-24",
+                        "helpRequested": null,
+                        "unknowns": ["Whether other testers encounter the same problem"],
+                        "conflicts": [],
+                        "rationale": "A small test can investigate a concrete usability observation.",
+                        "id": "topic-demo-1",
+                        "agendaId": "agenda-demo-1",
+                        "position": 0,
+                        "status": "kept",
+                        "origin": "ai",
+                        "shared": false,
+                        "decision": "Test clearer navigation before increasing acquisition",
+                        "decidedAt": "2026-10-17T14:05:00.000Z",
+                        "commitmentId": "commitment-demo-1",
+                        "contentVersion": 2
+                    }
+                }
+            }
+        },
+        {
+            "name": "List commitments",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/commitments",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "commitments": [
+                        {
+                            "id": "commitment-demo-1",
+                            "agendaId": "agenda-demo-1",
+                            "topicId": "topic-demo-1",
+                            "topicTitle": "Clarify the onboarding next step",
+                            "title": "Test navigation with five synthetic accounts",
+                            "owner": "Demo Founder",
+                            "dueOn": "2026-10-24",
+                            "test": "At least four of five complete a project without help",
+                            "shared": false,
+                            "status": "open",
+                            "outcome": null,
+                            "resolvedAt": null,
+                            "createdAt": "2026-10-17T14:05:00.000Z"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Record outcome",
+            "request": {
+                "method": "PATCH",
+                "url": "http://localhost:3000/api/vantage/commitments/commitment-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "status": "done",
+                    "outcome": "Four of five synthetic accounts completed a project"
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "commitment": {
+                        "id": "commitment-demo-1",
+                        "agendaId": "agenda-demo-1",
+                        "topicId": "topic-demo-1",
+                        "topicTitle": "Clarify the onboarding next step",
+                        "title": "Test navigation with five synthetic accounts",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false,
+                        "status": "done",
+                        "outcome": "Four of five synthetic accounts completed a project",
+                        "resolvedAt": "2026-10-24T14:00:00.000Z",
+                        "createdAt": "2026-10-17T14:05:00.000Z"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Accept a linked enhancement",
+            "request": {
+                "method": "PATCH",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/enhancements/enhancement-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "status": "accepted",
+                    "baseTopicVersion": 2
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "enhancement": {
+                        "id": "enhancement-demo-1",
+                        "topicId": "topic-demo-1",
+                        "baseTopicVersion": 2,
+                        "kind": "question",
+                        "text": "Does a navigation label change improve completion?",
+                        "refs": [
+                            {
+                                "ref": "ev:ev-demo-1",
+                                "label": "Synthetic onboarding interview",
+                                "date": "2026-10-16"
+                            }
+                        ],
+                        "rationale": "Proposed follow-up question grounded in the supplied interview.",
+                        "status": "accepted",
+                        "createdAt": "2026-10-17T14:10:00.000Z"
+                    },
+                    "agendaVersion": 3
+                }
+            }
+        },
+        {
+            "name": "Dismiss a linked enhancement",
+            "request": {
+                "method": "PATCH",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/enhancements/enhancement-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "status": "dismissed",
+                    "baseTopicVersion": 2
+                }
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "enhancement": {
+                        "id": "enhancement-demo-1",
+                        "topicId": "topic-demo-1",
+                        "baseTopicVersion": 2,
+                        "kind": "question",
+                        "text": "Does a navigation label change improve completion?",
+                        "refs": [
+                            {
+                                "ref": "ev:ev-demo-1",
+                                "label": "Synthetic onboarding interview",
+                                "date": "2026-10-16"
+                            }
+                        ],
+                        "rationale": "Proposed follow-up question grounded in the supplied interview.",
+                        "status": "dismissed",
+                        "createdAt": "2026-10-17T14:10:00.000Z"
+                    },
+                    "agendaVersion": 3
+                }
+            }
+        },
+        {
+            "name": "Reject changed payload for reused key",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/decide",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Idempotency-Key": "decision-demo-1"
+                },
+                "body": {
+                    "decision": "Choose a different experiment",
+                    "commitment": {
+                        "title": "Test navigation with five synthetic accounts",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false
+                    }
+                }
+            },
+            "response": {
+                "status": 409,
+                "body": {
+                    "error": "Reject changed payload for reused key",
+                    "code": "idempotency_conflict"
+                }
+            },
+            "precondition": "The original key/payload has already succeeded."
+        },
+        {
+            "name": "Reject stale generation result",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-12",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 409,
+                "body": {
+                    "error": "Reject stale generation result",
+                    "code": "stale_agenda"
+                }
+            },
+            "precondition": "Founder saves a topic edit after the generation input was loaded."
+        },
+        {
+            "name": "Reject stale enhancement",
+            "request": {
+                "method": "PATCH",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/enhancements/enhancement-demo-1",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "status": "accepted",
+                    "baseTopicVersion": 1
+                }
+            },
+            "response": {
+                "status": 409,
+                "body": {
+                    "error": "Reject stale enhancement",
+                    "code": "stale_topic"
+                }
+            },
+            "precondition": "The current topic contentVersion is 2."
+        },
+        {
+            "name": "Reject second primary action",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/decide",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Idempotency-Key": "decision-demo-2"
+                },
+                "body": {
+                    "decision": "Test clearer navigation before increasing acquisition",
+                    "commitment": {
+                        "title": "A different action",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false
+                    }
+                }
+            },
+            "response": {
+                "status": 409,
+                "body": {
+                    "error": "Reject second primary action",
+                    "code": "commitment_exists"
+                }
+            },
+            "precondition": "The topic already has its primary commitment."
+        },
+        {
+            "name": "Reject future week",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-26",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 400,
+                "body": {
+                    "error": "Reject future week",
+                    "code": "future_week"
+                }
+            }
+        },
+        {
+            "name": "Reject unauthorized test actor",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {}
+            },
+            "response": {
+                "status": 403,
+                "body": {
+                    "error": "Reject unauthorized test actor",
+                    "code": "pilot_access_denied"
+                }
+            },
+            "precondition": "The authenticated actor is not an allowlisted test operator."
+        },
+        {
+            "name": "Reject unknown company record",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/agendas/another-company-agenda",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 404,
+                "body": {
+                    "error": "Reject unknown company record",
+                    "code": "not_found"
+                }
+            }
+        },
+        {
+            "name": "Reject missing submission key",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/topics/topic-demo-1/decide",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "decision": "Test clearer navigation before increasing acquisition",
+                    "commitment": {
+                        "title": "Test navigation with five synthetic accounts",
+                        "owner": "Demo Founder",
+                        "dueOn": "2026-10-24",
+                        "test": "At least four of five complete a project without help",
+                        "shared": false
+                    }
+                }
+            },
+            "response": {
+                "status": 400,
+                "body": {
+                    "error": "Reject missing submission key",
+                    "code": "idempotency_key_required"
+                }
+            }
+        },
+        {
+            "name": "Report generation failure",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-12",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 500,
+                "body": {
+                    "error": "Report generation failure",
+                    "code": "generation_failed"
+                }
+            },
+            "precondition": "Generation and fallback both fail; prior saved report remains."
+        },
+        {
+            "name": "Generate fallback agenda",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-12",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "One synthetic interview suggests testing clearer navigation.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [
+                                {
+                                    "kind": "interview",
+                                    "count": 1
+                                }
+                            ],
+                            "recentEvidenceIds": ["ev-demo-1"],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "rules",
+                            "fallback": "timeout"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [
+                            {
+                                "title": "Clarify the onboarding next step",
+                                "facts": [
+                                    {
+                                        "text": "One synthetic tester could not find the create-project action.",
+                                        "refs": [
+                                            {
+                                                "ref": "ev:ev-demo-1",
+                                                "label": "Synthetic onboarding interview",
+                                                "date": "2026-10-16"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                                "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                                "proposedNextStep": "Test navigation with five synthetic accounts",
+                                "proposedOwner": null,
+                                "proposedDue": "2026-10-24",
+                                "helpRequested": null,
+                                "unknowns": ["Whether other testers encounter the same problem"],
+                                "conflicts": [],
+                                "rationale": "A small test can investigate a concrete usability observation.",
+                                "id": "topic-demo-1",
+                                "agendaId": "agenda-demo-1",
+                                "position": 0,
+                                "status": "suggested",
+                                "origin": "rules",
+                                "shared": false,
+                                "decision": null,
+                                "decidedAt": null,
+                                "commitmentId": null,
+                                "contentVersion": 1
+                            }
+                        ],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "generated",
+                            "mode": "rules",
+                            "fallbackReason": "timeout",
+                            "modelId": null,
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 2,
+                            "durationMs": 41000
+                        }
+                    }
+                }
+            },
+            "precondition": "Use the corresponding fallback input/provider scenario."
+        },
+        {
+            "name": "Generate empty agenda",
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/vantage/agendas",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "weekStart": "2026-10-12",
+                    "generationMode": "configured-model"
+                }
+            },
+            "response": {
+                "status": 201,
+                "body": {
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "No eligible evidence is available for this period.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [],
+                            "recentEvidenceIds": [],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "rules"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "empty",
+                            "mode": "rules",
+                            "fallbackReason": null,
+                            "modelId": null,
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 0,
+                            "durationMs": 1
+                        }
+                    }
+                }
+            },
+            "precondition": "Use the corresponding empty input/provider scenario."
+        },
+        {
+            "name": "Read period-scoped overview",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/vantage/overview",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": null
+            },
+            "response": {
+                "status": 200,
+                "body": {
+                    "today": "2026-10-17",
+                    "agendaWeek": "2026-10-12",
+                    "agendaWeekEnd": "2026-10-18",
+                    "agenda": {
+                        "id": "agenda-demo-1",
+                        "weekStart": "2026-10-12",
+                        "weekEnd": "2026-10-18",
+                        "status": "draft",
+                        "summary": "One synthetic interview suggests testing clearer navigation.",
+                        "signals": {
+                            "weekStart": "2026-10-12",
+                            "since": "2026-10-12",
+                            "computedAt": "2026-10-17T14:00:00.000Z",
+                            "metricChanges": [],
+                            "metricConflicts": [],
+                            "metricsWithoutData": [],
+                            "newEvidence": [
+                                {
+                                    "kind": "interview",
+                                    "count": 1
+                                }
+                            ],
+                            "recentEvidenceIds": ["ev-demo-1"],
+                            "overdueCommitmentIds": [],
+                            "dueThisWeekCommitmentIds": [],
+                            "resolvedCommitmentIds": [],
+                            "daysSinceLastEntry": 0
+                        },
+                        "modelMetadata": {
+                            "mode": "ai",
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1"
+                        },
+                        "generatedAt": "2026-10-17T14:00:01.200Z",
+                        "heldAt": null,
+                        "createdAt": "2026-10-17T14:00:00.000Z",
+                        "topics": [
+                            {
+                                "title": "Clarify the onboarding next step",
+                                "facts": [
+                                    {
+                                        "text": "One synthetic tester could not find the create-project action.",
+                                        "refs": [
+                                            {
+                                                "ref": "ev:ev-demo-1",
+                                                "label": "Synthetic onboarding interview",
+                                                "date": "2026-10-16"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "whyItMatters": "This is one interview, not evidence of a general conversion problem.",
+                                "decisionQuestion": "Test clearer navigation before increasing acquisition?",
+                                "proposedNextStep": "Test navigation with five synthetic accounts",
+                                "proposedOwner": null,
+                                "proposedDue": "2026-10-24",
+                                "helpRequested": null,
+                                "unknowns": ["Whether other testers encounter the same problem"],
+                                "conflicts": [],
+                                "rationale": "A small test can investigate a concrete usability observation.",
+                                "id": "topic-demo-1",
+                                "agendaId": "agenda-demo-1",
+                                "position": 0,
+                                "status": "suggested",
+                                "origin": "ai",
+                                "shared": false,
+                                "decision": null,
+                                "decidedAt": null,
+                                "commitmentId": null,
+                                "contentVersion": 1
+                            }
+                        ],
+                        "reportPeriod": {
+                            "weekStart": "2026-10-12",
+                            "timeZone": "America/New_York",
+                            "startInclusive": "2026-10-12T04:00:00.000Z",
+                            "endExclusive": "2026-10-17T14:00:00.000Z",
+                            "asOf": "2026-10-17T14:00:00.000Z",
+                            "kind": "week-to-date"
+                        },
+                        "version": 1,
+                        "enhancements": [],
+                        "execution": {
+                            "outcome": "generated",
+                            "mode": "ai",
+                            "fallbackReason": null,
+                            "modelId": "configured-model-alias",
+                            "promptVersion": "vantage-agenda/v1",
+                            "attempts": 1,
+                            "durationMs": 1200
+                        }
+                    },
+                    "previousAgenda": null,
+                    "signals": {
+                        "weekStart": "2026-10-12",
+                        "since": "2026-10-12",
+                        "computedAt": "2026-10-17T14:00:00.000Z",
+                        "metricChanges": [],
+                        "metricConflicts": [],
+                        "metricsWithoutData": [],
+                        "newEvidence": [
+                            {
+                                "kind": "interview",
+                                "count": 1
+                            }
+                        ],
+                        "recentEvidenceIds": ["ev-demo-1"],
+                        "overdueCommitmentIds": [],
+                        "dueThisWeekCommitmentIds": [],
+                        "resolvedCommitmentIds": [],
+                        "daysSinceLastEntry": 0
+                    },
+                    "checkIns": [],
+                    "recentEvidence": [
+                        {
+                            "id": "ev-demo-1",
+                            "kind": "interview",
+                            "title": "Onboarding feedback",
+                            "body": "The tester could not find the create-project action.",
+                            "source": "Synthetic onboarding interview",
+                            "sourceUrl": null,
+                            "observedAt": "2026-10-16",
+                            "visibility": "private",
+                            "tags": ["synthetic"],
+                            "createdAt": "2026-10-16T15:00:00.000Z"
+                        }
+                    ],
+                    "counts": {
+                        "evidenceThisWindow": 1,
+                        "openCommitments": 0,
+                        "metricsWithData": 1
+                    },
+                    "lastEntryAt": "2026-10-17T13:00:00.000Z",
+                    "daysSinceLastEntry": null,
+                    "reportPeriod": {
+                        "weekStart": "2026-10-12",
+                        "timeZone": "America/New_York",
+                        "startInclusive": "2026-10-12T04:00:00.000Z",
+                        "endExclusive": "2026-10-17T14:00:00.000Z",
+                        "asOf": "2026-10-17T14:00:00.000Z",
+                        "kind": "week-to-date"
+                    }
+                }
+            }
+        }
+    ]
+}

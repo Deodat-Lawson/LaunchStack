@@ -2,7 +2,7 @@
 // DELETE /api/vantage/topics/:id
 import type { NextRequest } from "next/server";
 
-import { deleteTopic, updateTopic } from "@launchstack/pipelines/vantage";
+import { deleteTopic, patchTopicV1 } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { TopicPatchSchema } from "../../_schemas";
@@ -18,7 +18,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
         const patch = { ...parsed.data };
         if (patch.proposedDue === "") patch.proposedDue = null;
-        const topic = await updateTopic({ companyId: auth.ctx.companyId, id, patch });
+        const topic = await patchTopicV1(auth.ctx.companyId, id, patch);
         return json({ topic });
     } catch (err) {
         return handleVantageError("PATCH topic", err);

@@ -64,7 +64,7 @@ const undone = {
 function signIn() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
-        data: makeWorkspaceContext({ role: "member", authUserId: "user-1", companyId: BigInt(42) }),
+        data: makeWorkspaceContext({ role: "owner", authUserId: "user-1", companyId: BigInt(42) }),
     });
 }
 
@@ -79,8 +79,18 @@ function undo(topicId: string, query = "") {
 
 beforeEach(() => {
     jest.clearAllMocks();
+    process.env.VANTAGE_TEST_MODE = "true";
+    process.env.VANTAGE_TEST_COMPANY_ID = "42";
+    process.env.VANTAGE_TEST_USER_IDS = "user-1";
+    process.env.DATABASE_URL = "postgres://test:test@localhost:55434/vantage_test";
+    process.env.VANTAGE_TEST_DATABASE_URL = process.env.DATABASE_URL;
     signIn();
     mockUndoDecision.mockResolvedValue(undone);
+});
+
+const savedEnvironment = { ...process.env };
+afterEach(() => {
+    process.env = { ...savedEnvironment };
 });
 
 describe("DELETE /api/vantage/topics/:id/decide", () => {

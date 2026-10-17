@@ -190,6 +190,13 @@
       "when": 1791135190912,
       "tag": "20261004173310_chatbox_parity",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1792152000000,
+      "tag": "20261016120000_vantage_contract_v1",
+      "breakpoints": true
     }
   ]
 }

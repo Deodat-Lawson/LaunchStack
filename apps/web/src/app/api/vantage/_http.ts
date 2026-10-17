@@ -10,6 +10,7 @@ import { VantageError } from "@launchstack/pipelines/vantage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
 import { error, handleRouteError, json } from "~/server/distribution/http";
+import { canUseVantage, VANTAGE_FOUNDER_ONLY } from "~/server/vantage/access";
 
 export { error, json };
 
@@ -24,6 +25,12 @@ export async function vantageContext(): Promise<
 > {
     const result = await requireWorkspaceContext();
     if (!result.success) return { ok: false, response: result.response };
+    if (!canUseVantage(result.data)) {
+        return {
+            ok: false,
+            response: error(VANTAGE_FOUNDER_ONLY, 403, { code: "pilot_access_denied" }),
+        };
+    }
     return {
         ok: true,
         ctx: {

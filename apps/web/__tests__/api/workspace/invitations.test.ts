@@ -15,6 +15,7 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { POST as ACCEPT } from "~/app/api/workspace/invitations/accept/route";
 import { GET as PREVIEW } from "~/app/api/workspace/invitations/preview/route";
 import { GET as LIST, POST } from "~/app/api/workspace/invitations/route";
+import { POST as RESEND } from "~/app/api/workspace/invitations/[id]/resend/route";
 import { getServerSession } from "~/server/auth";
 import { sendAuthEmail } from "~/server/auth/email";
 import {
@@ -27,7 +28,7 @@ import { hashInvitationToken } from "~/server/workspace/invitations";
 
 import { fakeDb } from "../../helpers/fake-db";
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
-import { gateFor, jsonRequest } from "./_setup";
+import { gateFor, jsonRequest, params } from "./_setup";
 
 const gate = requireWorkspacePermission as jest.Mock;
 const session = getServerSession as jest.Mock;
@@ -200,7 +201,7 @@ describe("POST /api/workspace/invitations", () => {
 
 describe("invitation links behind the proxy", () => {
     it("point at the deployment's public URL, not the server's bind address", async () => {
-        process.env.APP_PUBLIC_URL = "https://app.example.com";
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
         gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "owner" })));
         fakeDb.onSelect(userCompanyMemberships, []);
         fakeDb.onSelect(workspaceInvitations, []);
@@ -218,6 +219,26 @@ describe("invitation links behind the proxy", () => {
         );
 
         expect(res.status).toBe(201);
+        const { acceptUrl } = (await res.json()) as { acceptUrl: string };
+        expect(acceptUrl).toMatch(/^https:\/\/app\.example\.com\/invite\/[A-Za-z0-9_-]{40,}$/);
+    });
+
+    it("resends on the public URL too", async () => {
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "owner" })));
+        fakeDb.onSelect(workspaceInvitations, [invitationRow()]);
+        fakeDb.onSelect(company, [{ name: "Acme" }]);
+        fakeDb.onSelect(users, [{ userId: "user-a", name: "Ann", email: "ann@example.com" }]);
+
+        const res = await RESEND(
+            new Request("https://0.0.0.0:3000/api/workspace/invitations/41/resend", {
+                method: "POST",
+                headers: { host: "app.example.com" },
+            }),
+            params({ id: "41" })
+        );
+
+        expect(res.status).toBe(200);
         const { acceptUrl } = (await res.json()) as { acceptUrl: string };
         expect(acceptUrl).toMatch(/^https:\/\/app\.example\.com\/invite\/[A-Za-z0-9_-]{40,}$/);
     });

@@ -28,26 +28,55 @@ function setEnv(app: string | undefined, auth: string | undefined) {
 afterEach(() => setEnv(saved.app, saved.auth));
 
 describe("publicOrigin", () => {
-    it("uses APP_PUBLIC_URL, reduced to its origin", () => {
-        setEnv("https://app.example.com/some/path/", "https://auth.example.com");
+    it("uses BETTER_AUTH_URL, reduced to its origin", () => {
+        setEnv("https://public.example.com", "https://app.example.com/api/auth/");
         expect(publicOrigin(proxied("/x"))).toBe("https://app.example.com");
     });
 
-    it("falls back to BETTER_AUTH_URL", () => {
-        setEnv(undefined, "https://auth.example.com/api/auth");
-        expect(publicOrigin(proxied("/x"))).toBe("https://auth.example.com");
+    it("prefers BETTER_AUTH_URL over an internal APP_PUBLIC_URL", () => {
+        // .env.example suggests APP_PUBLIC_URL="http://app:3000" for the converter.
+        setEnv("http://app:3000", "https://app.example.com");
+        expect(publicOrigin(proxied("/x"))).toBe("https://app.example.com");
+    });
+
+    it("falls back to APP_PUBLIC_URL", () => {
+        setEnv("https://public.example.com/some/path/", undefined);
+        expect(publicOrigin(proxied("/x"))).toBe("https://public.example.com");
     });
 
     it("skips a blank or malformed value instead of throwing", () => {
         setEnv("   ", "localhost:3000");
         expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
-        setEnv("not a url", "https://auth.example.com");
-        expect(publicOrigin(proxied("/x"))).toBe("https://auth.example.com");
+        setEnv("https://public.example.com", "not a url");
+        expect(publicOrigin(proxied("/x"))).toBe("https://public.example.com");
     });
 
     it("uses the request only when nothing is configured (a dev server)", () => {
         setEnv(undefined, undefined);
         expect(publicOrigin(new Request("http://localhost:3010/x"))).toBe("http://localhost:3010");
+    });
+
+    it("warns once when production falls back to the request", () => {
+        setEnv(undefined, "launchstack-internal.com");
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        const env = process.env as Record<string, string | undefined>;
+        const nodeEnv = env.NODE_ENV;
+        env.NODE_ENV = "production";
+        try {
+            jest.isolateModules(() => {
+                // A fresh module, so the warn-once flag starts unset.
+                const fresh = jest.requireActual<{ publicOrigin: typeof publicOrigin }>(
+                    "~/server/public-origin"
+                );
+                expect(fresh.publicOrigin(proxied("/x"))).toBe(PROXIED);
+                expect(fresh.publicOrigin(proxied("/y"))).toBe(PROXIED);
+            });
+            expect(warn).toHaveBeenCalledTimes(1);
+            expect(String(warn.mock.calls[0]?.[0])).toContain("BETTER_AUTH_URL");
+        } finally {
+            env.NODE_ENV = nodeEnv;
+            warn.mockRestore();
+        }
     });
 });
 

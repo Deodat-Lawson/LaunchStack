@@ -127,7 +127,7 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {
@@ -202,7 +202,7 @@ async function gmailCallback(request: Request, url: URL, state: string) {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {

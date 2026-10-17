@@ -104,6 +104,7 @@ jobs:
           --filter @launchstack/conversion
           --filter @launchstack/retrieval
           --filter @launchstack/document-conversion-engine
+          --filter @launchstack/simulation
           --filter @launchstack/worker test
 
       # Includes the outbox + lifecycle integration tests against the real

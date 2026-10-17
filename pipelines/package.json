@@ -272,6 +272,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/runtime": "workspace:^",
+        "@launchstack/simulation": "workspace:^",
         "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",

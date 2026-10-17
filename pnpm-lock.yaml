@@ -204,6 +204,9 @@ importers:
       '@launchstack/schema-generator':
         specifier: workspace:^
         version: link:../../packages/schema-generator
+      '@launchstack/simulation':
+        specifier: workspace:^
+        version: link:../../packages/simulation
       '@launchstack/store':
         specifier: workspace:^
         version: link:../../packages/store
@@ -1004,6 +1007,15 @@ importers:
         specifier: ^3.0.5
         version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2(@noble/hashes@2.4.0))(tsx@4.21.0)(yaml@2.9.0)
 
+  packages/simulation:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.1)(jiti@2.5.1)(jsdom@29.0.2(@noble/hashes@2.4.0))(tsx@4.21.0)(yaml@2.9.0)
+
   packages/store:
     dependencies:
       '@launchstack/runtime':
@@ -1095,6 +1107,9 @@ importers:
       '@launchstack/runtime':
         specifier: workspace:^
         version: link:../packages/runtime
+      '@launchstack/simulation':
+        specifier: workspace:^
+        version: link:../packages/simulation
       '@launchstack/store':
         specifier: workspace:^
         version: link:../packages/store

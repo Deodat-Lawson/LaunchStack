@@ -393,6 +393,7 @@ const eslintConfig = [
                 "document-conversion-engine",
                 "google-drive",
                 "collab",
+                "simulation",
                 "schema-generator",
                 "pipelines",
                 "design-tokens",
@@ -536,6 +537,20 @@ const eslintConfig = [
                         frameworkBan,
                         noPipelines,
                         only([], "@launchstack/collab"),
+                    ]),
+                    ...noEnv,
+                },
+            },
+            // @launchstack/simulation — the OASIS-style social simulation.
+            // Zero dependencies like collab: the host injects the model.
+            {
+                files: ["packages/simulation/src/**/*.ts"],
+                rules: {
+                    ...restrict([
+                        legacyBan,
+                        frameworkBan,
+                        noPipelines,
+                        only([], "@launchstack/simulation"),
                     ]),
                     ...noEnv,
                 },

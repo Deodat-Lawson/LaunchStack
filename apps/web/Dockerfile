@@ -24,6 +24,7 @@ COPY packages/retrieval/package.json ./packages/retrieval/
 COPY packages/orchestration/package.json ./packages/orchestration/
 COPY packages/editing/package.json ./packages/editing/
 COPY packages/collab/package.json ./packages/collab/
+COPY packages/simulation/package.json ./packages/simulation/
 COPY packages/engine/package.json ./packages/engine/
 COPY packages/schema-generator/package.json ./packages/schema-generator/
 COPY packages/tools/package.json ./packages/tools/

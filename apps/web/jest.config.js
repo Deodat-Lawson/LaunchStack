@@ -142,6 +142,7 @@ export const config = {
             "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",
         "^@launchstack/orchestration/(.*)$": "<rootDir>/../../packages/orchestration/src/$1",
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
+        "^@launchstack/simulation$": "<rootDir>/../../packages/simulation/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
         "^@launchstack/document-conversion-engine$":

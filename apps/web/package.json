@@ -48,6 +48,7 @@
         "@langchain/openai": "^0.6.11",
         "@langchain/textsplitters": "^0.1.0",
         "@launchstack/collab": "workspace:^",
+        "@launchstack/simulation": "workspace:^",
         "@launchstack/conversion": "workspace:^",
         "@launchstack/design-tokens": "workspace:*",
         "@launchstack/document-conversion-engine": "workspace:^",

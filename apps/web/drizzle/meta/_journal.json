@@ -218,6 +218,13 @@
       "when": 1792131847989,
       "tag": "20261016062407_mcp_server_oauth",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1792253802746,
+      "tag": "20261017161642_workspace_model_endpoints",
+      "breakpoints": true
     }
   ]
 }

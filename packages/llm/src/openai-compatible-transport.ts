@@ -67,6 +67,16 @@ export function buildModelKwargs(
     return kwargs;
 }
 
+/**
+ * A workspace's own endpoint is an address a workspace admin typed, checked
+ * against the deployment's address policy when it was saved. Following a
+ * redirect would let that address hand the request — prompt and credential —
+ * to somewhere the check never saw. Chat-completions servers do not redirect,
+ * so refusing to is free.
+ */
+const fetchWithoutRedirects: typeof fetch = (input, init) =>
+    fetch(input, { ...init, redirect: "error" });
+
 export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions): BaseChatModel {
     const { endpoint, modelId, behavior } = options;
     const { parameters } = behavior;
@@ -82,7 +92,11 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
         // Instructions in, provider error text out: see endpoint-fetch.ts.
         configuration: {
             baseURL: endpoint.baseUrl,
-            fetch: createEndpointFetch(endpoint, behavior),
+            fetch: createEndpointFetch(
+                endpoint,
+                behavior,
+                endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined
+            ),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
@@ -126,6 +140,10 @@ export function describeChatEndpointError(
         typeof sdkStatus === "number"
             ? sdkStatus
             : Number(/(?:^|\s)([45]\d\d)(?=\s|$|:)/.exec(message)?.[1] ?? NaN);
+    // A workspace's own endpoint is fixed by its admins in Settings, not by
+    // whoever runs the server, so its failures say so.
+    const ownedByWorkspace = endpoint.owner === "workspace";
+    const fixInSettings = "A workspace admin can fix it in Settings › Models.";
 
     if (
         status === 402 ||
@@ -137,8 +155,9 @@ export function describeChatEndpointError(
         console.error(`[chat] ${where} refused for billing: ${error.message}`);
         return {
             status: 503,
-            message:
-                "The AI service has reached its usage limit and can't answer right now. An administrator needs to restore it.",
+            message: ownedByWorkspace
+                ? `Your workspace's AI provider account has run out of credit or quota. ${fixInSettings}`
+                : "The AI service has reached its usage limit and can't answer right now. An administrator needs to restore it.",
         };
     }
 
@@ -146,7 +165,9 @@ export function describeChatEndpointError(
         console.warn(`[chat] ${where} rate-limited: ${error.message}`);
         return {
             status: 429,
-            message: "The AI service is busy right now. Try again in a moment.",
+            message: ownedByWorkspace
+                ? "Your workspace's AI provider is rate-limiting requests. Try again in a moment."
+                : "The AI service is busy right now. Try again in a moment.",
         };
     }
 
@@ -158,6 +179,14 @@ export function describeChatEndpointError(
         message.includes("no auth credentials") ||
         message.includes("unauthorized")
     ) {
+        if (ownedByWorkspace) {
+            return {
+                status: 401,
+                message: endpoint.apiKey
+                    ? `Your workspace's AI provider rejected its API key. ${fixInSettings}`
+                    : `Your workspace's AI provider needs an API key. ${fixInSettings}`,
+            };
+        }
         return {
             status: 401,
             message: endpoint.apiKey
@@ -176,8 +205,9 @@ export function describeChatEndpointError(
         console.error(`[chat] could not reach ${where}: ${error.message}`);
         return {
             status: 502,
-            message:
-                "Unable to reach the chat endpoint. Confirm the server is running and CHAT_BASE_URL is correct.",
+            message: ownedByWorkspace
+                ? `Couldn't reach your workspace's AI provider. ${fixInSettings}`
+                : "Unable to reach the chat endpoint. Confirm the server is running and CHAT_BASE_URL is correct.",
         };
     }
 
@@ -190,8 +220,9 @@ export function describeChatEndpointError(
         console.error(`[chat] ${where} does not serve the model: ${error.message}`);
         return {
             status: 400,
-            message:
-                "The chat endpoint does not serve the configured model. Update the model id in the chat model configuration.",
+            message: ownedByWorkspace
+                ? `Your workspace's AI provider doesn't serve the chosen model. ${fixInSettings}`
+                : "The chat endpoint does not serve the configured model. Update the model id in the chat model configuration.",
         };
     }
 

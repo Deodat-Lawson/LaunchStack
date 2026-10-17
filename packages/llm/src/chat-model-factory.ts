@@ -20,6 +20,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import type { BaseMessage, BaseMessageLike } from "@langchain/core/messages";
 import { createSlot } from "@launchstack/runtime";
 import type { ChatModelsConfig } from "./chat-config";
+import { getChatModelsScope, reportUnscopedChatResolution } from "./chat-scope";
 import { applyMessageBehavior } from "./messages";
 import {
     createOpenAiCompatibleChat,
@@ -47,7 +48,15 @@ export function configureChatModels(config: ChatModelsConfig): void {
     configSlot.set(config);
 }
 
+/**
+ * The configuration resolution should use here: the current scope's when work
+ * runs inside {@link runWithChatModelsScope} (a workspace that brought its own
+ * endpoint), otherwise the deployment's.
+ */
 export function getChatModelsConfig(): ChatModelsConfig {
+    const scope = getChatModelsScope();
+    if (scope?.error) throw scope.error;
+    if (scope?.config) return scope.config;
     const config = configSlot.get();
     if (!config) {
         throw new ChatConfigurationError(
@@ -58,6 +67,10 @@ export function getChatModelsConfig(): ChatModelsConfig {
 }
 
 export function isChatConfigured(): boolean {
+    const scope = getChatModelsScope();
+    // A scope that cannot be used still counts: resolving must reach its error
+    // rather than let a caller skip chat as if nothing were set up.
+    if (scope?.config || scope?.error) return true;
     return configSlot.get() !== undefined;
 }
 
@@ -286,6 +299,7 @@ export interface ResolvedChatModel {
  * for something the configuration cannot serve.
  */
 export function resolveChatModel(options: ResolveChatModelOptions = {}): ResolvedChatModel {
+    if (!options.config) reportUnscopedChatResolution();
     const config = options.config ?? getChatModelsConfig();
     const route = options.route ?? "default";
     const resolved = resolveChatRoute(route, config);
@@ -355,7 +369,8 @@ export function describeChatError(
     error: unknown,
     modelId: string
 ): { status: number; message: string } | null {
-    const config = configSlot.get();
+    const scope = getChatModelsScope();
+    const config = scope?.config ?? (scope?.error ? undefined : configSlot.get());
     if (!config) return null;
     return describeChatEndpointError(error, config.endpoint, modelId);
 }

@@ -115,6 +115,47 @@ describe("processDocumentUpload audio lifecycle", () => {
     });
 });
 
+describe("processDocumentUpload when transcription fails", () => {
+    it("creates no document at all, so a retry starts clean", async () => {
+        const failure = new Error("Gemini said no");
+        mockTranscribeAudioFromUrl.mockRejectedValue(failure);
+
+        await expect(
+            processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "oct_15_3_pm_HT.m4a",
+                rawDocumentUrl: "https://files.test/oct_15_3_pm_HT.m4a",
+                requestUrl: "https://app.test/upload",
+                mimeType: "audio/x-m4a",
+                originalFilename: "oct_15_3_pm_HT.m4a",
+            })
+        ).rejects.toBe(failure);
+
+        expect(mockCreateDocumentLifecycle).not.toHaveBeenCalled();
+        expect(mockUploadFile).not.toHaveBeenCalled();
+    });
+
+    it("hands the browser's type to the transcriber", async () => {
+        mockTranscribeAudioFromUrl.mockRejectedValue(new Error("stop here"));
+
+        await processDocumentUpload({
+            user: { userId: "user-1", companyId: 7n },
+            documentName: "memo",
+            rawDocumentUrl: "https://files.test/memo",
+            requestUrl: "https://app.test/upload",
+            mimeType: "audio/x-m4a",
+            originalFilename: "memo.m4a",
+        }).catch(() => undefined);
+
+        expect(mockTranscribeAudioFromUrl).toHaveBeenCalledWith(
+            "https://files.test/memo",
+            "memo.m4a",
+            7n,
+            "audio/x-m4a"
+        );
+    });
+});
+
 /**
  * The transcript row's metadata is what the media viewer reads: which
  * recording to play, whether it has a picture, and the timestamped lines.

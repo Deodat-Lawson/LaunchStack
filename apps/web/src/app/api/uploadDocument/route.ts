@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
+import { isTranscriptionError } from "@launchstack/conversion";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/store/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
@@ -127,6 +128,15 @@ export async function POST(request: Request) {
         } catch (error) {
             if (error instanceof UploadAuthorizationError) {
                 return NextResponse.json({ error: error.message }, { status: error.status });
+            }
+            // A recording that could not be transcribed: say why, in words the
+            // uploader can act on, rather than "failed to start processing".
+            if (isTranscriptionError(error)) {
+                console.error(`[UploadDocument] Transcription failed: ${error.message}`);
+                return NextResponse.json(
+                    { error: error.userMessage, code: "transcription_failed" },
+                    { status: error.status }
+                );
             }
             console.error("[UploadDocument] Error triggering document processing:", error);
             return NextResponse.json(

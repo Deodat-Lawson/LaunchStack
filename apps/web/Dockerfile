@@ -92,6 +92,12 @@ WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# ffmpeg cuts long recordings into small speech-quality chunks before they go
+# to the transcriber, so each call carries only its own minutes (see
+# packages/conversion/src/audio-transcription/providers/ffmpeg-chunks.ts).
+# Without it transcription still works, sending the whole file per window.
+RUN apk add --no-cache ffmpeg
+
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 

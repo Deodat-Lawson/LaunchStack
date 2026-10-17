@@ -182,13 +182,36 @@ export async function processDocumentUpload({
         embeddingIndexKey ?? (await resolveIngestIndexKey(user.companyId)) ?? undefined;
 
     // ------------------------------------------------------------------
-    // Audio file: save the original audio as a document, then create a
-    // separate transcript document that goes through the embedding pipeline.
+    // Audio file: transcribe first, then save the original audio as a
+    // document and a separate transcript document that goes through the
+    // embedding pipeline. Transcribing before any row exists means a failed
+    // transcription leaves nothing behind: no recording without a transcript,
+    // and a retry starts clean.
     // ------------------------------------------------------------------
     if (shouldTranscribeFile(mimeType, originalFilename)) {
         console.log(`[DocumentUpload] Audio file detected: ${documentName}, transcribing...`);
 
         const baseCreationKey = creationKey ?? `upload:${rawDocumentUrl}`;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
+        const audioFilename = originalFilename || documentName;
+
+        let transcriptionResult: Awaited<ReturnType<typeof transcribeAudioFromUrl>>;
+        try {
+            getEngine();
+            transcriptionResult = await transcribeAudioFromUrl(
+                resolvedDocumentUrl,
+                audioFilename,
+                user.companyId,
+                mimeType
+            );
+        } catch (error) {
+            console.error(
+                `[DocumentUpload] Audio transcription failed for ${documentName}:`,
+                error
+            );
+            throw error;
+        }
+
         const audioLifecycle = await createDocumentLifecycle({
             companyId: user.companyId,
             userId: user.userId,
@@ -201,71 +224,58 @@ export async function processDocumentUpload({
             ocrProcessed: true,
         });
 
-        try {
-            getEngine();
-            const transcriptionResult = await transcribeAudioFromUrl(
-                resolvedDocumentUrl,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
-                originalFilename || documentName,
-                user.companyId
-            );
+        const textBlob = await uploadFile({
+            filename: `${documentName}-transcription.txt`,
+            data: Buffer.from(transcriptionResult.text, "utf-8"),
+            contentType: "text/plain",
+            userId: user.userId,
+            companyId: user.companyId,
+        });
 
-            const textBlob = await uploadFile({
-                filename: `${documentName}-transcription.txt`,
-                data: Buffer.from(transcriptionResult.text, "utf-8"),
-                contentType: "text/plain",
-                userId: user.userId,
-                companyId: user.companyId,
-            });
+        const transcriptionMetadata = {
+            source: "transcription",
+            audioFilename,
+            audioDocumentId: audioLifecycle.document.id,
+            audioUrl: resolvedDocumentUrl,
+            // Tells the viewer whether the recording has a picture.
+            mediaMimeType: mimeType ?? null,
+            language: transcriptionResult.language,
+            ...(transcriptionResult.languages ? { languages: transcriptionResult.languages } : {}),
+            confidence: transcriptionResult.confidence,
+            ...(transcriptionResult.durationSeconds
+                ? { durationSeconds: transcriptionResult.durationSeconds }
+                : {}),
+            segments: transcriptionResult.segments,
+            transcribedAt: new Date().toISOString(),
+        };
 
-            const transcriptionMetadata = {
-                source: "transcription",
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
-                audioFilename: originalFilename || documentName,
-                audioDocumentId: audioLifecycle.document.id,
-                audioUrl: resolvedDocumentUrl,
-                // Tells the viewer whether the recording has a picture.
-                mediaMimeType: mimeType ?? null,
-                language: transcriptionResult.language,
-                confidence: transcriptionResult.confidence,
-                segments: transcriptionResult.segments,
-                transcribedAt: new Date().toISOString(),
-            };
+        const transcriptName = `${documentName} (Transcription)`;
+        const transcriptLifecycle = await createDocumentLifecycle({
+            companyId: user.companyId,
+            userId: user.userId,
+            title: transcriptName,
+            category: documentCategory,
+            url: textBlob.url,
+            processingUrl: textBlob.url,
+            creationKey: `${baseCreationKey}:audio-transcript`,
+            mimeType: "text/plain",
+            ocrEnabled: true,
+            ocrProcessed: false,
+            ocrMetadata: transcriptionMetadata,
+            processing: {
+                preferredProvider,
+                originalFilename: `${documentName}-transcription.txt`,
+                transcriptionMetadata,
+                embeddingIndexKey: resolvedEmbeddingIndexKey,
+            },
+        });
 
-            const transcriptName = `${documentName} (Transcription)`;
-            const transcriptLifecycle = await createDocumentLifecycle({
-                companyId: user.companyId,
-                userId: user.userId,
-                title: transcriptName,
-                category: documentCategory,
-                url: textBlob.url,
-                processingUrl: textBlob.url,
-                creationKey: `${baseCreationKey}:audio-transcript`,
-                mimeType: "text/plain",
-                ocrEnabled: true,
-                ocrProcessed: false,
-                ocrMetadata: transcriptionMetadata,
-                processing: {
-                    preferredProvider,
-                    originalFilename: `${documentName}-transcription.txt`,
-                    transcriptionMetadata,
-                    embeddingIndexKey: resolvedEmbeddingIndexKey,
-                },
-            });
-
-            return {
-                ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),
-                jobId: transcriptLifecycle.jobId ?? "",
-                eventIds: transcriptLifecycle.eventIds,
-                createdDocuments: createdDocumentsOf(audioLifecycle, transcriptLifecycle),
-            };
-        } catch (error) {
-            console.error(
-                `[DocumentUpload] Audio transcription failed for ${documentName}:`,
-                error
-            );
-            throw error;
-        }
+        return {
+            ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),
+            jobId: transcriptLifecycle.jobId ?? "",
+            eventIds: transcriptLifecycle.eventIds,
+            createdDocuments: createdDocumentsOf(audioLifecycle, transcriptLifecycle),
+        };
     }
 
     // ------------------------------------------------------------------

@@ -9,7 +9,7 @@ export const maxDuration = 60;
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/store/schema";
-import { uploadFile, resolveStorageBackend } from "~/lib/storage";
+import { StorageError, uploadFile, resolveStorageBackend } from "~/lib/storage";
 import { isUploadAccepted } from "~/lib/upload-accepted";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -17,7 +17,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const UNSUPPORTED_TYPE_MESSAGE =
-    "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.), audio (MP3, MP4).";
+    "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.), audio (MP3, M4A, MP4, WAV, AAC, FLAC, OGG).";
 
 export async function POST(request: Request) {
     const uploadStart = Date.now();
@@ -28,8 +28,24 @@ export async function POST(request: Request) {
         if (!ctx.success) return ctx.response;
         const userId = ctx.data.authUserId;
 
-        // Parse multipart form data
-        const formData = await request.formData();
+        // Parse multipart form data. A body that stops short (the tab closed or
+        // reloaded, the connection dropped) cannot be parsed; that is the
+        // uploader's interrupted request, not a server fault, so say so.
+        let formData: FormData;
+        try {
+            formData = await request.formData();
+        } catch (error) {
+            console.warn(
+                `[UploadLocal] Rejected: body could not be read as form data after ${Date.now() - uploadStart}ms:`,
+                error
+            );
+            return NextResponse.json(
+                {
+                    error: "The upload was interrupted before the whole file arrived. Keep this tab open and try again.",
+                },
+                { status: 400 }
+            );
+        }
         const file = formData.get("file") as File | null;
 
         if (!file) {
@@ -116,6 +132,16 @@ export async function POST(request: Request) {
     } catch (error) {
         const elapsed = Date.now() - uploadStart;
         console.error(`[UploadLocal] Failed after ${elapsed}ms:`, error);
+        // The file arrived; keeping it did not. Say which, so a retry is the
+        // obvious next step rather than a guess.
+        if (error instanceof StorageError) {
+            return NextResponse.json(
+                {
+                    error: "The file arrived but couldn't be saved to storage. Try again in a moment; if it keeps failing, ask an admin to check file storage.",
+                },
+                { status: 502 }
+            );
+        }
         return NextResponse.json(
             {
                 error: "Failed to upload file",

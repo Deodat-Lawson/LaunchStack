@@ -42,8 +42,16 @@ export function estimateRun(input: {
         calls: 1 + castCalls + turns + 1,
         turns,
         inputTokens:
-            t.brief.input + castCalls * t.castBase.input + agents * t.castPerPersona.input + turns * t.decide.input + t.report.input,
+            t.brief.input +
+            castCalls * t.castBase.input +
+            agents * t.castPerPersona.input +
+            turns * t.decide.input +
+            t.report.input,
         outputTokens:
-            t.brief.output + castCalls * t.castBase.output + agents * t.castPerPersona.output + turns * t.decide.output + t.report.output,
+            t.brief.output +
+            castCalls * t.castBase.output +
+            agents * t.castPerPersona.output +
+            turns * t.decide.output +
+            t.report.output,
     };
 }

@@ -22,9 +22,16 @@ export function smallWorld(overrides: { personas?: Persona[]; seed?: number } = 
     return createWorld({
         subject: "Acme raises prices by 20%",
         brief: "Acme sells invoicing software to small firms.",
-        personas: overrides.personas ?? [persona("a1"), persona("a2"), persona("a3"), persona("a4")],
+        personas: overrides.personas ?? [
+            persona("a1"),
+            persona("a2"),
+            persona("a3"),
+            persona("a4"),
+        ],
         accounts: [{ id: "narrator", name: "Newswire", handle: "@newswire" }],
-        seedPosts: [{ authorId: "narrator", text: "Acme announces a 20% price increase for all plans." }],
+        seedPosts: [
+            { authorId: "narrator", text: "Acme announces a 20% price increase for all plans." },
+        ],
         config: { seed: overrides.seed ?? 7, swapRate: 0 },
     });
 }
@@ -69,6 +76,12 @@ export const chattyScript: Script = request => {
         actions.push({ type: "like", postId: ids[0], text: null, handle: null });
         actions.push({ type: "comment", postId: ids[0], text: `${agent} says hi`, handle: null });
     }
-    if (round === 1) actions.push({ type: "create_post", postId: null, text: `${agent} thinks prices matter`, handle: null });
+    if (round === 1)
+        actions.push({
+            type: "create_post",
+            postId: null,
+            text: `${agent} thinks prices matter`,
+            handle: null,
+        });
     return { thought: `${agent} is reading`, stance: agent === "a1" ? -2 : 1, actions };
 };

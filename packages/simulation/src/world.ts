@@ -146,7 +146,12 @@ export function injectEvent(world: World, text: string): Post {
     if (!world.accounts.some(a => a.id === "narrator")) {
         world.accounts.push({ id: "narrator", name: "Newswire", handle: "@newswire" });
     }
-    return addPost(world, { authorId: "narrator", round: world.round + 1, kind: "event", text: trimmed });
+    return addPost(world, {
+        authorId: "narrator",
+        round: world.round + 1,
+        kind: "event",
+        text: trimmed,
+    });
 }
 
 /** The first round in which a post can appear in a feed. */

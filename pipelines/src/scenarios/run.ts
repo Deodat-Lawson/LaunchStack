@@ -63,7 +63,12 @@ export interface ScenarioStore {
         applied?: { injectionIds: number[]; round: number }
     ): Promise<boolean>;
     /** Set a terminal status unless the run already has one. */
-    finish(runId: number, status: "failed" | "cancelled", error: string | null, at: Date): Promise<boolean>;
+    finish(
+        runId: number,
+        status: "failed" | "cancelled",
+        error: string | null,
+        at: Date
+    ): Promise<boolean>;
     pendingInjections(runId: number): Promise<Array<{ id: number; text: string }>>;
 }
 
@@ -127,7 +132,8 @@ function addUsage(total: RunUsage, unit: Usage, credits: number): RunUsage {
 
 function audienceFor(run: ScenarioRunRecord): string {
     if (run.kind === "post_test" && run.draft) {
-        const where = run.draft.networks.length > 0 ? run.draft.networks.join(" and ") : "social media";
+        const where =
+            run.draft.networks.length > 0 ? run.draft.networks.join(" and ") : "social media";
         return `people who would see ${run.draft.brandName}'s post on ${where}: followers, customers, prospects, peers in the industry, and a few skeptics`;
     }
     return "people who would plausibly hear about this situation and have a view on it: customers, prospects, people in the market, critics and bystanders";
@@ -142,7 +148,8 @@ async function buildCast(
     const evidence = run.evidence ?? [];
     const evidenceIds = new Set(evidence.map(e => e.id));
     const batches: number[] = [];
-    for (let left = run.agentCount; left > 0; left -= CAST_BATCH_SIZE) batches.push(Math.min(CAST_BATCH_SIZE, left));
+    for (let left = run.agentCount; left > 0; left -= CAST_BATCH_SIZE)
+        batches.push(Math.min(CAST_BATCH_SIZE, left));
     const takenHandles = new Set<string>(["@newswire"]);
     if (run.draft) takenHandles.add(run.draft.brandHandle.toLowerCase());
     // Batches run in parallel but parse in order, so ids and handles are stable.
@@ -179,7 +186,8 @@ async function buildCast(
 export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promise<AdvanceOutcome> {
     const run = await ports.store.get(runId);
     if (!run) return { state: "skipped", reason: "missing" };
-    if (TERMINAL_STATUSES.includes(run.status)) return { state: run.status as "done" | "failed" | "cancelled" };
+    if (TERMINAL_STATUSES.includes(run.status))
+        return { state: run.status as "done" | "failed" | "cancelled" };
     if (run.cancelRequestedAt) {
         await ports.store.finish(runId, "cancelled", null, ports.now());
         return { state: "cancelled" };
@@ -213,14 +221,23 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
     if (step === 0) {
         const evidence = await ports.gatherEvidence(run);
         const reply = await model.complete(
-            buildBriefRequest({ subject: run.subject, evidence, mode: run.kind === "post_test" ? "post_test" : "scenario" })
+            buildBriefRequest({
+                subject: run.subject,
+                evidence,
+                mode: run.kind === "post_test" ? "post_test" : "scenario",
+            })
         );
         const brief: Brief = parseBrief(reply.text, new Set(evidence.map(e => e.id))) ?? {
             brief: "",
             openingPost: "",
             evidenceIds: [],
         };
-        return commit("brief", { status: "running", startedAt: run.startedAt ?? ports.now(), evidence, brief });
+        return commit("brief", {
+            status: "running",
+            startedAt: run.startedAt ?? ports.now(),
+            evidence,
+            brief,
+        });
     }
 
     // 2. Build the cast and the starting world.
@@ -228,14 +245,24 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
         const brief = stripCitations(run.brief?.brief ?? "");
         const personas = await buildCast(run, ports, model, brief);
         const minimum = Math.min(3, run.agentCount);
-        if (personas.length < minimum) throw new Error(`Only ${personas.length} people could be built from the sources`);
+        if (personas.length < minimum)
+            throw new Error(`Only ${personas.length} people could be built from the sources`);
         const isPostTest = run.kind === "post_test" && run.draft;
         const accounts: Account[] = isPostTest
-            ? [{ id: "brand", name: run.draft!.brandName, handle: run.draft!.brandHandle }, NARRATOR]
+            ? [
+                  { id: "brand", name: run.draft!.brandName, handle: run.draft!.brandHandle },
+                  NARRATOR,
+              ]
             : [NARRATOR];
         const opening = isPostTest
             ? { authorId: "brand" as const, text: run.draft!.text }
-            : { authorId: "narrator" as const, text: run.brief?.openingPost || run.subject };
+            : {
+                  authorId: "narrator" as const,
+                  text:
+                      run.brief && run.brief.openingPost.length > 0
+                          ? run.brief.openingPost
+                          : run.subject,
+              };
         const world = createWorld({
             subject: run.subject,
             brief,
@@ -262,7 +289,9 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
         return commit(
             `round ${world.round}`,
             { world },
-            pending.length > 0 ? { injectionIds: pending.map(p => p.id), round: world.round } : undefined
+            pending.length > 0
+                ? { injectionIds: pending.map(p => p.id), round: world.round }
+                : undefined
         );
     }
 

@@ -29,7 +29,10 @@ export const REPORT_SCHEMA: Record<string, unknown> = {
             items: {
                 type: "object",
                 additionalProperties: false,
-                properties: { text: { type: "string" }, postIds: { type: "array", items: { type: "string" } } },
+                properties: {
+                    text: { type: "string" },
+                    postIds: { type: "array", items: { type: "string" } },
+                },
                 required: ["text", "postIds"],
             },
         },
@@ -69,7 +72,13 @@ export interface ScenarioReport {
     summary: string;
     dynamics: Array<{ text: string; postIds: string[] }>;
     turningPoints: Array<{ round: number; text: string; postIds: string[] }>;
-    factions: Array<{ stance: FactionKey; label: string; text: string; share: number; agentIds: string[] }>;
+    factions: Array<{
+        stance: FactionKey;
+        label: string;
+        text: string;
+        share: number;
+        agentIds: string[];
+    }>;
     /** Signals worth watching for in reality. */
     watchFor: string[];
 }
@@ -81,7 +90,10 @@ function postLine(world: World, id: string): string {
     return `[${post.id}] round ${post.round} ${who.handle} (${post.kind}) · ${post.likes} likes · ${post.comments} comments · ${post.shares} shares: "${clip(post.text, 220)}"`;
 }
 
-export function buildReportRequest(world: World, options: { targetPostId?: string } = {}): ModelRequest {
+export function buildReportRequest(
+    world: World,
+    options: { targetPostId?: string } = {}
+): ModelRequest {
     const roundsTable = world.rounds
         .map(
             r =>
@@ -105,7 +117,10 @@ export function buildReportRequest(world: World, options: { targetPostId?: strin
     });
     const events = world.posts
         .filter(p => p.kind === "event" || p.kind === "seed")
-        .map(p => `[${p.id}] round ${p.round} ${author(world, p.authorId).handle}: "${clip(p.text, 200)}"`);
+        .map(
+            p =>
+                `[${p.id}] round ${p.round} ${author(world, p.authorId).handle}: "${clip(p.text, 200)}"`
+        );
     let reception = "";
     if (options.targetPostId) {
         const r = postReception(world, options.targetPostId);
@@ -114,7 +129,7 @@ export function buildReportRequest(world: World, options: { targetPostId?: strin
     const system = [
         "You write the report on a finished social-network simulation for a founder team.",
         "This is a scenario, not a forecast: describe what happened among these simulated people and why, never what will happen in reality.",
-        "Use only the data given. Cite posts by id in postIds (e.g. \"p12\"). Keep it concrete and short.",
+        'Use only the data given. Cite posts by id in postIds (e.g. "p12"). Keep it concrete and short.',
         "headline: one sentence, at most 20 words. summary: at most 120 words.",
         "dynamics: three to five things that drove the conversation. turningPoints: up to four moments, by round.",
         "factions: one entry per group present (supportive, neutral, critical), with a short label and what they cared about.",
@@ -154,8 +169,17 @@ export function parseReport(text: string, world: World): ScenarioReport | undefi
     const summary = clip(asString(root.summary) ?? "", 1200);
     if (!headline || !summary) return undefined;
     const ids = new Set(world.posts.map(p => p.id));
-    const postIds = (v: unknown) =>
-        [...new Set(asArray(v).map(x => asString(x)?.trim().replace(/^\[|\]$/g, "")).filter((x): x is string => !!x && ids.has(x)))];
+    const postIds = (v: unknown) => [
+        ...new Set(
+            asArray(v)
+                .map(x =>
+                    asString(x)
+                        ?.trim()
+                        .replace(/^\[|\]$/g, "")
+                )
+                .filter((x): x is string => !!x && ids.has(x))
+        ),
+    ];
     const groups = factions(world);
     const total = Math.max(1, world.agents.length);
     const seenFactions = new Set<FactionKey>();

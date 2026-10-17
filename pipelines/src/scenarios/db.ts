@@ -102,7 +102,10 @@ export async function getRunById(id: number): Promise<ScenarioRunRecord | undefi
     return row ? toRecord(row) : undefined;
 }
 
-export async function getCompanyRun(companyId: bigint, id: number): Promise<ScenarioRunRecord | undefined> {
+export async function getCompanyRun(
+    companyId: bigint,
+    id: number
+): Promise<ScenarioRunRecord | undefined> {
     const [row] = await getDb()
         .select()
         .from(scenarioRuns)
@@ -156,12 +159,19 @@ export async function listVisibleRuns(args: {
             and(
                 eq(scenarioRuns.companyId, args.companyId),
                 eq(scenarioRuns.kind, args.kind),
-                or(eq(scenarioRuns.createdByUserId, args.viewerUserId), isNotNull(scenarioRuns.sharedAt))
+                or(
+                    eq(scenarioRuns.createdByUserId, args.viewerUserId),
+                    isNotNull(scenarioRuns.sharedAt)
+                )
             )
         )
         .orderBy(desc(scenarioRuns.createdAt))
         .limit(args.limit ?? 100);
-    return rows.map(r => ({ ...r, sharedAt: r.sharedAt ?? null, finishedAt: r.finishedAt ?? null }));
+    return rows.map(r => ({
+        ...r,
+        sharedAt: r.sharedAt ?? null,
+        finishedAt: r.finishedAt ?? null,
+    }));
 }
 
 export async function updateRunMeta(
@@ -181,7 +191,9 @@ export async function updateRunMeta(
 }
 
 export async function deleteRun(companyId: bigint, id: number): Promise<void> {
-    await getDb().delete(scenarioRuns).where(and(eq(scenarioRuns.id, id), eq(scenarioRuns.companyId, companyId)));
+    await getDb()
+        .delete(scenarioRuns)
+        .where(and(eq(scenarioRuns.id, id), eq(scenarioRuns.companyId, companyId)));
 }
 
 /** Ask a run to stop; a queued run that no executor holds stops at once. */
@@ -258,7 +270,12 @@ export function createScenarioStore(): ScenarioStore {
             const rows = await getDb()
                 .update(scenarioRuns)
                 .set({ status, error, finishedAt: at, leaseUntil: null })
-                .where(and(eq(scenarioRuns.id, runId), inArray(scenarioRuns.status, ["queued", "running"])))
+                .where(
+                    and(
+                        eq(scenarioRuns.id, runId),
+                        inArray(scenarioRuns.status, ["queued", "running"])
+                    )
+                )
                 .returning({ id: scenarioRuns.id });
             return rows.length > 0;
         },
@@ -266,7 +283,12 @@ export function createScenarioStore(): ScenarioStore {
             return getDb()
                 .select({ id: scenarioInjections.id, text: scenarioInjections.text })
                 .from(scenarioInjections)
-                .where(and(eq(scenarioInjections.runId, runId), isNull(scenarioInjections.appliedRound)))
+                .where(
+                    and(
+                        eq(scenarioInjections.runId, runId),
+                        isNull(scenarioInjections.appliedRound)
+                    )
+                )
                 .orderBy(asc(scenarioInjections.id));
         },
     };
@@ -304,18 +326,30 @@ export async function addInterview(args: {
     return row!;
 }
 
-export async function listInterviews(runId: number, askedByUserId: string): Promise<ScenarioInterviewRow[]> {
+export async function listInterviews(
+    runId: number,
+    askedByUserId: string
+): Promise<ScenarioInterviewRow[]> {
     return getDb()
         .select()
         .from(scenarioInterviews)
-        .where(and(eq(scenarioInterviews.runId, runId), eq(scenarioInterviews.askedByUserId, askedByUserId)))
+        .where(
+            and(
+                eq(scenarioInterviews.runId, runId),
+                eq(scenarioInterviews.askedByUserId, askedByUserId)
+            )
+        )
         .orderBy(asc(scenarioInterviews.id));
 }
 
 // ─── Post tests ──────────────────────────────────────────────────────────────
 
 /** Point each post at this test (a re-test of the same post replaces the old link). */
-export async function linkPostTest(companyId: bigint, runId: number, brandPostIds: string[]): Promise<void> {
+export async function linkPostTest(
+    companyId: bigint,
+    runId: number,
+    brandPostIds: string[]
+): Promise<void> {
     if (brandPostIds.length === 0) return;
     await getDb()
         .insert(scenarioPostLinks)
@@ -354,7 +388,10 @@ export async function listLinkedPostTests(companyId: bigint): Promise<LinkedPost
         .innerJoin(scenarioRuns, eq(scenarioRuns.id, scenarioPostLinks.runId))
         .innerJoin(
             brandPosts,
-            and(eq(brandPosts.id, scenarioPostLinks.brandPostId), eq(brandPosts.companyId, companyId))
+            and(
+                eq(brandPosts.id, scenarioPostLinks.brandPostId),
+                eq(brandPosts.companyId, companyId)
+            )
         )
         .where(and(eq(scenarioPostLinks.companyId, companyId), eq(scenarioRuns.status, "done")))
         .orderBy(desc(brandPosts.publishedAt));

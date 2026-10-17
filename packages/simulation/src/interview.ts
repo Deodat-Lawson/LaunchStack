@@ -27,10 +27,16 @@ export function buildInterviewRequest(
     const own = [
         ...world.posts
             .filter(p => p.authorId === agentId && p.kind !== "repost")
-            .map(p => ({ round: p.round, line: `Round ${p.round}, you posted [${p.id}]: "${clip(p.text, 200)}"` })),
+            .map(p => ({
+                round: p.round,
+                line: `Round ${p.round}, you posted [${p.id}]: "${clip(p.text, 200)}"`,
+            })),
         ...world.comments
             .filter(c => c.authorId === agentId)
-            .map(c => ({ round: c.round, line: `Round ${c.round}, you commented on [${c.postId}]: "${clip(c.text, 160)}"` })),
+            .map(c => ({
+                round: c.round,
+                line: `Round ${c.round}, you commented on [${c.postId}]: "${clip(c.text, 160)}"`,
+            })),
     ]
         .sort((a, b) => a.round - b.round)
         .map(x => x.line);
@@ -42,7 +48,8 @@ export function buildInterviewRequest(
     ].join("\n");
     const prompt = [
         "What you remember:",
-        agent.memory.map(m => `- Round ${m.round}: ${m.text}`).join("\n") || "- You mostly watched.",
+        agent.memory.map(m => `- Round ${m.round}: ${m.text}`).join("\n") ||
+            "- You mostly watched.",
         "",
         "What you wrote:",
         own.join("\n") || "- Nothing.",
@@ -68,12 +75,21 @@ export function buildAnalystRequest(
     const posts = world.posts
         .filter(p => p.kind !== "repost")
         .slice(-60)
-        .map(p => `[${p.id}] round ${p.round} ${author(world, p.authorId).handle}: "${clip(p.text, 160)}" (${p.likes} likes, ${p.comments} comments, ${p.shares} shares)`);
+        .map(
+            p =>
+                `[${p.id}] round ${p.round} ${author(world, p.authorId).handle}: "${clip(p.text, 160)}" (${p.likes} likes, ${p.comments} comments, ${p.shares} shares)`
+        );
     const rounds = world.rounds
-        .map(r => `round ${r.round}: ${r.active} active, ${r.posts} posts, ${r.comments} comments, mean stance ${r.meanStance}`)
+        .map(
+            r =>
+                `round ${r.round}: ${r.active} active, ${r.posts} posts, ${r.comments} comments, mean stance ${r.meanStance}`
+        )
         .join("\n");
     const people = world.agents
-        .map(a => `${a.persona.handle} (${a.persona.role}): ${stanceLabel(a.stanceHistory[0] ?? a.stance)} → ${stanceLabel(a.stance)}`)
+        .map(
+            a =>
+                `${a.persona.handle} (${a.persona.role}): ${stanceLabel(a.stanceHistory[0] ?? a.stance)} → ${stanceLabel(a.stance)}`
+        )
         .join("\n");
     const system = [
         "You answer questions about a finished social-network simulation run for a founder team.",

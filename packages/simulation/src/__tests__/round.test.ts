@@ -15,7 +15,14 @@ describe("runRound", () => {
 
         expect(world).toEqual(before); // input untouched
         expect(next.round).toBe(1);
-        expect(summary).toMatchObject({ round: 1, active: 4, failed: 0, posts: 4, likes: 4, comments: 4 });
+        expect(summary).toMatchObject({
+            round: 1,
+            active: 4,
+            failed: 0,
+            posts: 4,
+            likes: 4,
+            comments: 4,
+        });
         expect(summary.usage).toEqual({ calls: 4, inputTokens: 400, outputTokens: 80 });
         expect(next.posts[0]).toMatchObject({ id: "p1", likes: 4, comments: 4 });
         expect(next.agents.find(a => a.persona.id === "a1")!.stance).toBe(-2);
@@ -46,14 +53,21 @@ describe("runRound", () => {
 
     it("lets a minority of failed turns do nothing, and fails the round on a majority", async () => {
         const errors: string[] = [];
-        const oneFails = fakeModel(r => (agentOf(r) === "a2" ? new Error("timeout") : chattyScript(r)));
-        const { summary, world } = await runRound(smallWorld(), { model: oneFails, onAgentError: id => errors.push(id) });
+        const oneFails = fakeModel(r =>
+            agentOf(r) === "a2" ? new Error("timeout") : chattyScript(r)
+        );
+        const { summary, world } = await runRound(smallWorld(), {
+            model: oneFails,
+            onAgentError: id => errors.push(id),
+        });
         expect(summary.failed).toBe(1);
         expect(errors).toEqual(["a2"]);
         expect(world.agents.find(a => a.persona.id === "a2")!.activeRounds).toEqual([]);
 
         const mostFail = fakeModel(r => (agentOf(r) === "a1" ? chattyScript(r) : "not json"));
-        await expect(runRound(smallWorld(), { model: mostFail })).rejects.toBeInstanceOf(RoundFailedError);
+        await expect(runRound(smallWorld(), { model: mostFail })).rejects.toBeInstanceOf(
+            RoundFailedError
+        );
     });
 
     it("feeds an event injected between rounds into the next round's prompts", async () => {
@@ -64,7 +78,9 @@ describe("runRound", () => {
         ({ world } = await runRound(world, { model }));
         const round2 = model.requests.slice(before);
         expect(round2.length).toBeGreaterThan(0);
-        expect(round2.every(r => r.prompt.includes("Breaking: a rival halves its prices."))).toBe(true);
+        expect(round2.every(r => r.prompt.includes("Breaking: a rival halves its prices."))).toBe(
+            true
+        );
         expect(round2.every(r => r.prompt.includes("(pinned)"))).toBe(true);
     });
 
@@ -81,19 +97,29 @@ describe("runRound", () => {
 describe("after a run", () => {
     it("measures how the opening post was received", async () => {
         const { world } = await runRound(smallWorld(), { model: fakeModel(chattyScript) });
-        expect(postReception(world, "p1")).toMatchObject({ exposed: 4, engaged: 4, engagementRate: 1, likes: 4, comments: 4 });
+        expect(postReception(world, "p1")).toMatchObject({
+            exposed: 4,
+            engaged: 4,
+            engagementRate: 1,
+            likes: 4,
+            comments: 4,
+        });
         expect(postReception(world, "p404")).toBeUndefined();
     });
 
     it("builds interview prompts from what the agent wrote and remembers", async () => {
         const { world } = await runRound(smallWorld(), { model: fakeModel(chattyScript) });
-        const req = buildInterviewRequest(world, "a1", "Why are you against it?", [{ question: "Hi?", answer: "Hello." }]);
+        const req = buildInterviewRequest(world, "a1", "Why are you against it?", [
+            { question: "Hi?", answer: "Hello." },
+        ]);
         expect(req.purpose).toBe("interview");
         expect(req.system).toContain("You are Person a1 (@person_a1)");
         expect(req.prompt).toContain('you posted [p2]: "a1 thinks prices matter"');
         expect(req.prompt).toContain("undecided → strongly against");
         expect(req.prompt).toContain("Q: Hi?\nA: Hello.");
         expect(() => buildInterviewRequest(world, "a9", "?")).toThrow();
-        expect(buildAnalystRequest(world, "Summary.", "Who moved?").prompt).toContain("@person_a1 (Operator at a small firm): undecided → strongly against");
+        expect(buildAnalystRequest(world, "Summary.", "Who moved?").prompt).toContain(
+            "@person_a1 (Operator at a small firm): undecided → strongly against"
+        );
     });
 });

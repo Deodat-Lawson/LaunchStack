@@ -14,6 +14,7 @@ export interface EvidenceDraft {
     text: string;
     ref: { type: string; id: string };
     href: string | null;
+    documentIds?: number[];
 }
 
 export function buildEvidence(
@@ -51,5 +52,6 @@ export function buildEvidence(
         text: clip(d.text, maxChars),
         ref: d.ref,
         href: d.href,
+        documentIds: d.documentIds ?? [],
     }));
 }

@@ -229,6 +229,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Stateless: every search reads SEC EDGAR live (keyless, paced under SEC's 10 req/s). Pitch drafting is the chat, seeded from the Studio pane.",
     },
     {
+        id: "scenarios",
+        tier: "tool",
+        summary:
+            "Simulate how people built from the workspace's own records react to a situation: a social network in rounds (the OASIS design), a cited report, and interviews with any simulated person. Brand's post tests run on it too.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/scenarios",
+        routes: ["scenarios"],
+        notes: "Runs are private to their creator until shared with the workspace; evidence from files a shared reader can't open is redacted for them. Runs execute after the response in the web process (resuming on poll after a restart) or, with SCENARIOS_EXECUTOR=worker, one Inngest step per round. Brand's /api/brand/post-tests routes use the same service.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",

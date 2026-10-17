@@ -225,6 +225,13 @@
       "when": 1792253874646,
       "tag": "20261017161754_drive_folder_import",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1792270492478,
+      "tag": "20261017205452_scenario_simulation",
+      "breakpoints": true
     }
   ]
 }

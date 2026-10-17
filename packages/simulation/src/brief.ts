@@ -57,7 +57,9 @@ export function parseBrief(text: string, evidenceIds: Set<string>): Brief | unde
     const brief = clip(asString(root.brief) ?? "", 1600);
     if (!brief) return undefined;
     // Keep only citations to evidence that exists.
-    const cleaned = brief.replace(/\[(E\d+)\]/gi, (_match, id: string) => (evidenceIds.has(id.toUpperCase()) ? `[${id.toUpperCase()}]` : ""));
+    const cleaned = brief.replace(/\[(E\d+)\]/gi, (_match, id: string) =>
+        evidenceIds.has(id.toUpperCase()) ? `[${id.toUpperCase()}]` : ""
+    );
     const cited = [...cleaned.matchAll(/\[(E\d+)\]/g)].map(m => m[1]!);
     const declared = asArray(root.evidenceIds)
         .map(v => asString(v)?.toUpperCase())
@@ -71,5 +73,9 @@ export function parseBrief(text: string, evidenceIds: Set<string>): Brief | unde
 
 /** The brief as agents read it: without citation markers. */
 export function stripCitations(text: string): string {
-    return text.replace(/\s*\[E\d+\]/gi, "").replace(/\s+([.,;:!?])/g, "$1").replace(/\s{2,}/g, " ").trim();
+    return text
+        .replace(/\s*\[E\d+\]/gi, "")
+        .replace(/\s+([.,;:!?])/g, "$1")
+        .replace(/\s{2,}/g, " ")
+        .trim();
 }

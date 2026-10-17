@@ -9,8 +9,20 @@ import type { ScenarioRunRecord, StoredEvidence } from "./types";
 import { EMPTY_USAGE, roundsDone, stageOf, unitCount } from "./types";
 
 const EVIDENCE: StoredEvidence[] = buildEvidence([
-    { kind: "document", label: "Interviews.pdf", text: "Customers say price drives churn.", ref: { type: "document", id: "7" }, href: "/doc/7" },
-    { kind: "brand_comment", label: "Comment on LinkedIn", text: "Renewal emails annoy me.", ref: { type: "brand_comment", id: "3" }, href: null },
+    {
+        kind: "document",
+        label: "Interviews.pdf",
+        text: "Customers say price drives churn.",
+        ref: { type: "document", id: "7" },
+        href: "/doc/7",
+    },
+    {
+        kind: "brand_comment",
+        label: "Comment on LinkedIn",
+        text: "Renewal emails annoy me.",
+        ref: { type: "brand_comment", id: "3" },
+        href: null,
+    },
 ]);
 
 function baseRun(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord {
@@ -26,7 +38,14 @@ function baseRun(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord 
         agentCount: 6,
         roundCount: 2,
         seed: 11,
-        sources: { documentIds: [7], searchFiles: false, prospects: false, brandComments: true, companyProfile: false, notes: "" },
+        sources: {
+            documentIds: [7],
+            searchFiles: false,
+            prospects: false,
+            brandComments: true,
+            companyProfile: false,
+            notes: "",
+        },
         evidence: null,
         brief: null,
         world: null,
@@ -49,7 +68,12 @@ function baseRun(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord 
 
 function memoryStore(initial: ScenarioRunRecord) {
     const runs = new Map([[initial.id, structuredClone(initial)]]);
-    const injections: Array<{ id: number; runId: number; text: string; appliedRound: number | null }> = [];
+    const injections: Array<{
+        id: number;
+        runId: number;
+        text: string;
+        appliedRound: number | null;
+    }> = [];
     const store: ScenarioStore & { runs: typeof runs; injections: typeof injections } = {
         runs,
         injections,
@@ -59,9 +83,12 @@ function memoryStore(initial: ScenarioRunRecord) {
         },
         async commitUnit(id, expected, patch: RunPatch, applied) {
             const r = runs.get(id);
-            if (!r || r.step !== expected || !["queued", "running"].includes(r.status)) return false;
+            if (!r || r.step !== expected || !["queued", "running"].includes(r.status))
+                return false;
             Object.assign(r, patch, { step: expected + 1 });
-            if (applied) for (const i of injections) if (applied.injectionIds.includes(i.id)) i.appliedRound = applied.round;
+            if (applied)
+                for (const i of injections)
+                    if (applied.injectionIds.includes(i.id)) i.appliedRound = applied.round;
             return true;
         },
         async finish(id, status, error, at) {
@@ -71,7 +98,9 @@ function memoryStore(initial: ScenarioRunRecord) {
             return true;
         },
         async pendingInjections(id) {
-            return injections.filter(i => i.runId === id && i.appliedRound === null).map(({ id: iid, text }) => ({ id: iid, text }));
+            return injections
+                .filter(i => i.runId === id && i.appliedRound === null)
+                .map(({ id: iid, text }) => ({ id: iid, text }));
         },
     };
     return store;
@@ -83,7 +112,14 @@ const model: SimulationModel & { requests: ModelRequest[] } = {
         this.requests.push(request);
         const usage = { inputTokens: 100, outputTokens: 10 };
         if (request.purpose === "brief") {
-            return { text: JSON.stringify({ brief: "Price drives churn [E1].", openingPost: "Acme raises prices 20%.", evidenceIds: ["E1"] }), usage };
+            return {
+                text: JSON.stringify({
+                    brief: "Price drives churn [E1].",
+                    openingPost: "Acme raises prices 20%.",
+                    evidenceIds: ["E1"],
+                }),
+                usage,
+            };
         }
         if (request.purpose === "cast") {
             const n = Number(/Return exactly (\d+) personas/.exec(request.prompt)?.[1] ?? 1);
@@ -107,7 +143,9 @@ const model: SimulationModel & { requests: ModelRequest[] } = {
                 text: JSON.stringify({
                     thought: "Hm.",
                     stance: 1,
-                    actions: first ? [{ type: "like", postId: first, text: null, handle: null }] : [],
+                    actions: first
+                        ? [{ type: "like", postId: first, text: null, handle: null }]
+                        : [],
                 }),
                 usage,
             };
@@ -159,9 +197,18 @@ describe("advanceRun", () => {
         expect(run.brief?.brief).toBe("Price drives churn [E1].");
         expect(run.world?.round).toBe(2);
         expect(run.world?.agents).toHaveLength(6);
-        expect(run.world?.agents[0]?.persona).toMatchObject({ grounding: "invented", sourceIds: [] });
-        expect(run.world?.agents[1]?.persona).toMatchObject({ grounding: "grounded", sourceIds: ["E1"] });
-        expect(run.world?.posts[0]).toMatchObject({ authorId: "narrator", text: "Acme raises prices 20%." });
+        expect(run.world?.agents[0]?.persona).toMatchObject({
+            grounding: "invented",
+            sourceIds: [],
+        });
+        expect(run.world?.agents[1]?.persona).toMatchObject({
+            grounding: "grounded",
+            sourceIds: ["E1"],
+        });
+        expect(run.world?.posts[0]).toMatchObject({
+            authorId: "narrator",
+            text: "Acme raises prices 20%.",
+        });
         expect(run.world?.brief).toBe("Price drives churn.");
         expect(run.report?.headline).toBe("Most people warmed to it.");
         expect(run.reception).toBeNull();
@@ -194,21 +241,42 @@ describe("advanceRun", () => {
         await advanceRun(p, 1); // brief
         await advanceRun(p, 1); // cast
         await advanceRun(p, 1); // round 1
-        store.injections.push({ id: 9, runId: 1, text: "A rival halves its prices.", appliedRound: null });
+        store.injections.push({
+            id: 9,
+            runId: 1,
+            text: "A rival halves its prices.",
+            appliedRound: null,
+        });
         model.requests.length = 0;
         await advanceRun(p, 1); // round 2
         const run = store.runs.get(1)!;
         expect(store.injections[0]!.appliedRound).toBe(2);
-        expect(run.world?.posts.find(x => x.kind === "event")).toMatchObject({ round: 2, text: "A rival halves its prices." });
-        expect(model.requests.filter(r => r.purpose === "decide").every(r => r.prompt.includes("A rival halves its prices."))).toBe(true);
+        expect(run.world?.posts.find(x => x.kind === "event")).toMatchObject({
+            round: 2,
+            text: "A rival halves its prices.",
+        });
+        expect(
+            model.requests
+                .filter(r => r.purpose === "decide")
+                .every(r => r.prompt.includes("A rival halves its prices."))
+        ).toBe(true);
     });
 
     it("fails the run when the workspace runs out of credits, keeping the finished unit", async () => {
         const store = memoryStore(baseRun());
         const charged: number[] = [];
-        expect(await advanceRun(ports(store, { charge: async (_r, credits) => (charged.push(credits), false) }), 1)).toEqual({ state: "failed" });
+        expect(
+            await advanceRun(
+                ports(store, { charge: async (_r, credits) => (charged.push(credits), false) }),
+                1
+            )
+        ).toEqual({ state: "failed" });
         const run = store.runs.get(1)!;
-        expect(run).toMatchObject({ status: "failed", step: 1, error: "The workspace ran out of credits during this run." });
+        expect(run).toMatchObject({
+            status: "failed",
+            step: 1,
+            error: "The workspace ran out of credits during this run.",
+        });
         expect(charged).toEqual([110]);
     });
 
@@ -221,15 +289,33 @@ describe("advanceRun", () => {
     });
 
     it("tests a draft post: the brand posts first and the report carries its reception", async () => {
-        const draft = { text: "We just shipped invoices in 30 currencies.", networks: ["linkedin"], brandName: "Acme", brandHandle: "@acme" };
-        const store = memoryStore(baseRun({ kind: "post_test", draft, draftHash: hashDraft(draft.text), roundCount: 1 }));
+        const draft = {
+            text: "We just shipped invoices in 30 currencies.",
+            networks: ["linkedin"],
+            brandName: "Acme",
+            brandHandle: "@acme",
+        };
+        const store = memoryStore(
+            baseRun({ kind: "post_test", draft, draftHash: hashDraft(draft.text), roundCount: 1 })
+        );
         const cast = model.requests.length;
         await drive(ports(store));
         const run = store.runs.get(1)!;
-        expect(run.world?.posts[0]).toMatchObject({ authorId: "brand", kind: "seed", text: draft.text });
+        expect(run.world?.posts[0]).toMatchObject({
+            authorId: "brand",
+            kind: "seed",
+            text: draft.text,
+        });
         expect(run.world?.accounts.map(a => a.handle)).toEqual(["@acme", "@newswire"]);
-        expect(model.requests.slice(cast).find(r => r.purpose === "cast")?.prompt).toContain("people who would see Acme's post on linkedin");
-        expect(run.reception).toMatchObject({ postId: "p1", exposed: 6, engaged: 6, engagementRate: 1 });
+        expect(model.requests.slice(cast).find(r => r.purpose === "cast")?.prompt).toContain(
+            "people who would see Acme's post on linkedin"
+        );
+        expect(run.reception).toMatchObject({
+            postId: "p1",
+            exposed: 6,
+            engaged: 6,
+            engagementRate: 1,
+        });
     });
 
     it("reports stage and rounds done from the step", () => {
@@ -244,9 +330,27 @@ describe("advanceRun", () => {
 describe("evidence", () => {
     it("numbers evidence, drops duplicates and keeps every source represented", () => {
         const drafts = [
-            ...Array.from({ length: 10 }, (_, i) => ({ kind: "document" as const, label: `Doc ${i}`, text: `text ${i}`, ref: { type: "document", id: String(i) }, href: null })),
-            { kind: "prospect" as const, label: "Prospect", text: "A logistics firm.", ref: { type: "prospect", id: "p" }, href: null },
-            { kind: "prospect" as const, label: "Prospect", text: "A logistics firm.", ref: { type: "prospect", id: "p" }, href: null },
+            ...Array.from({ length: 10 }, (_, i) => ({
+                kind: "document" as const,
+                label: `Doc ${i}`,
+                text: `text ${i}`,
+                ref: { type: "document", id: String(i) },
+                href: null,
+            })),
+            {
+                kind: "prospect" as const,
+                label: "Prospect",
+                text: "A logistics firm.",
+                ref: { type: "prospect", id: "p" },
+                href: null,
+            },
+            {
+                kind: "prospect" as const,
+                label: "Prospect",
+                text: "A logistics firm.",
+                ref: { type: "prospect", id: "p" },
+                href: null,
+            },
         ];
         const out = buildEvidence(drafts, { max: 3 });
         expect(out.map(e => [e.id, e.kind])).toEqual([
@@ -265,9 +369,36 @@ describe("post tests", () => {
 
     it("reads real engagement from the network's figure or impressions", () => {
         expect(actualEngagement(null)).toBeNull();
-        expect(actualEngagement({ impressions: null, reactions: 5, comments: 1, shares: 0, clicks: null, engagement: null })).toBeNull();
-        expect(actualEngagement({ impressions: 200, reactions: 5, comments: 3, shares: 2, clicks: null, engagement: null })).toBe(0.05);
-        expect(actualEngagement({ impressions: 200, reactions: 5, comments: 3, shares: 2, clicks: null, engagement: 0.08 })).toBe(0.08);
+        expect(
+            actualEngagement({
+                impressions: null,
+                reactions: 5,
+                comments: 1,
+                shares: 0,
+                clicks: null,
+                engagement: null,
+            })
+        ).toBeNull();
+        expect(
+            actualEngagement({
+                impressions: 200,
+                reactions: 5,
+                comments: 3,
+                shares: 2,
+                clicks: null,
+                engagement: null,
+            })
+        ).toBe(0.05);
+        expect(
+            actualEngagement({
+                impressions: 200,
+                reactions: 5,
+                comments: 3,
+                shares: 2,
+                clicks: null,
+                engagement: 0.08,
+            })
+        ).toBe(0.08);
     });
 
     it("withholds agreement until five tested posts have results", () => {
@@ -279,11 +410,25 @@ describe("post tests", () => {
                 status: "published",
                 body: `post ${i}`,
                 publishedAt: new Date(`2026-10-0${i + 1}T00:00:00Z`),
-                metrics: { impressions: 100, reactions: i * 2, comments: 0, shares: 0, clicks: null, engagement: null },
+                metrics: {
+                    impressions: 100,
+                    reactions: i * 2,
+                    comments: 0,
+                    shares: 0,
+                    clicks: null,
+                    engagement: null,
+                },
                 predicted: i / 10,
             }));
         const few = buildTrackRecord(linked(4));
-        expect(few).toMatchObject({ tested: 4, withResults: 4, minimum: 5, spearman: null, hits: 0, total: 0 });
+        expect(few).toMatchObject({
+            tested: 4,
+            withResults: 4,
+            minimum: 5,
+            spearman: null,
+            hits: 0,
+            total: 0,
+        });
         const enough = buildTrackRecord(linked(5));
         expect(enough.spearman).toBe(1);
         expect(enough.total).toBe(5);

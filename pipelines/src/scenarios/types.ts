@@ -2,7 +2,13 @@
  * Scenarios vertical — domain types shared by the schema, the run loop and
  * the host. The simulation itself lives in `@launchstack/simulation`.
  */
-import type { Brief, EvidenceItem, PostReception, ScenarioReport, World } from "@launchstack/simulation";
+import type {
+    Brief,
+    EvidenceItem,
+    PostReception,
+    ScenarioReport,
+    World,
+} from "@launchstack/simulation";
 
 export const SCENARIO_KINDS = ["scenario", "post_test"] as const;
 export type ScenarioKind = (typeof SCENARIO_KINDS)[number];
@@ -21,7 +27,14 @@ export interface ScenarioSourcesInput {
     notes: string;
 }
 
-export const EVIDENCE_KINDS = ["document", "search", "prospect", "brand_comment", "company_profile", "notes"] as const;
+export const EVIDENCE_KINDS = [
+    "document",
+    "search",
+    "prospect",
+    "brand_comment",
+    "company_profile",
+    "notes",
+] as const;
 export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
 
 /**
@@ -32,6 +45,11 @@ export interface StoredEvidence extends EvidenceItem {
     kind: EvidenceKind;
     /** Where to open it in the app, if anywhere. */
     href: string | null;
+    /**
+     * Files this evidence was read from. A reader of a shared run who can see
+     * none of them gets the item redacted; empty means no file behind it.
+     */
+    documentIds: number[];
 }
 
 export interface RunUsage {
@@ -95,7 +113,9 @@ export function unitCount(rounds: number): number {
     return 3 + rounds;
 }
 
-export function stageOf(run: Pick<ScenarioRunRecord, "status" | "step" | "roundCount">): ScenarioStage {
+export function stageOf(
+    run: Pick<ScenarioRunRecord, "status" | "step" | "roundCount">
+): ScenarioStage {
     if (run.status === "done") return "done";
     if (run.step <= 0) return "gathering";
     if (run.step === 1) return "casting";

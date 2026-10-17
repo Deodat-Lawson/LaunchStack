@@ -1,5 +1,7 @@
 // GET  /api/brand/posts?from=&to=&status= — the calendar's rows
-// POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow? }
+// POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow?, postTestId? }
+//   (with `postTestId`, a finished post test of the same text is linked to the
+//   new posts for Brand's track record; the answer then carries `postTest`)
 //   (a deployment account is a channel too: `deployment:<network>`, offered
 //   only while the workspace has no account of its own on that network)
 //
@@ -20,10 +22,12 @@ import {
     type BrandPostTarget,
 } from "@launchstack/pipelines/marketing/posts";
 
+import type { PostTestLink } from "~/lib/scenarios/types";
 import { listBrandChannels } from "~/server/brand/accounts";
 import { getBrandMediaRows, networkMediaProblem } from "~/server/brand/media";
 import { toPostViews } from "~/server/brand/post-views";
 import { publishForWorkspace } from "~/server/brand/publish";
+import { linkComposedPosts } from "~/server/scenarios/service";
 
 import {
     brandContext,
@@ -57,7 +61,32 @@ const CreateSchema = z.object({
             historyId: z.number().int().optional(),
         })
         .optional(),
+    /** A finished "Test this post" run; linked when the body is the tested text. */
+    postTestId: z.number().int().positive().optional(),
 });
+
+/** Link the composed posts to their post test. Never fails the compose. */
+async function linkTest(
+    ctx: { companyId: bigint; userId: string },
+    postTestId: number | undefined,
+    body: string,
+    postIds: string[]
+): Promise<{ postTest?: PostTestLink }> {
+    if (postTestId === undefined) return {};
+    try {
+        return {
+            postTest: await linkComposedPosts(
+                { companyId: ctx.companyId, authUserId: ctx.userId },
+                postTestId,
+                body,
+                postIds
+            ),
+        };
+    } catch (linkError) {
+        console.error("[brand] linking a post test failed:", linkError);
+        return { postTest: { runId: postTestId, linked: false, stale: false } };
+    }
+}
 
 function parseDate(value: string | null): Date | undefined {
     if (!value) return undefined;
@@ -166,8 +195,14 @@ export async function POST(request: NextRequest) {
             scheduledAt: scheduledAt ?? null,
             source: input.source ?? { kind: "compose" },
         });
+        const link = await linkTest(
+            auth.ctx,
+            input.postTestId,
+            input.body,
+            created.map(p => p.id)
+        );
         if (!input.publishNow)
-            return json({ posts: await toPostViews(auth.ctx.companyId, created) }, 201);
+            return json({ posts: await toPostViews(auth.ctx.companyId, created), ...link }, 201);
         const posts = [];
         for (const post of created)
             posts.push(
@@ -175,7 +210,7 @@ export async function POST(request: NextRequest) {
                     publish: publishForWorkspace,
                 })
             );
-        return json({ posts: await toPostViews(auth.ctx.companyId, posts) }, 201);
+        return json({ posts: await toPostViews(auth.ctx.companyId, posts), ...link }, 201);
     } catch (err) {
         return handleBrandError("POST posts", err);
     }

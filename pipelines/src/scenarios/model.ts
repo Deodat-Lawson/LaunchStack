@@ -67,9 +67,15 @@ const reportSchema = z.object({
     headline: z.string(),
     summary: z.string(),
     dynamics: z.array(z.object({ text: z.string(), postIds: z.array(z.string()) })),
-    turningPoints: z.array(z.object({ round: z.number(), text: z.string(), postIds: z.array(z.string()) })),
+    turningPoints: z.array(
+        z.object({ round: z.number(), text: z.string(), postIds: z.array(z.string()) })
+    ),
     factions: z.array(
-        z.object({ stance: z.enum(["supportive", "neutral", "critical"]), label: z.string(), text: z.string() })
+        z.object({
+            stance: z.enum(["supportive", "neutral", "critical"]),
+            label: z.string(),
+            text: z.string(),
+        })
     ),
     watchFor: z.array(z.string()),
 });
@@ -85,23 +91,37 @@ export function createLlmSimulationModel(): SimulationModel {
     return {
         async complete(request) {
             const policy = SCENARIO_MODELS[request.purpose];
-            const resolved = resolveChatModel({ ...policy, maxOutputTokens: request.maxOutputTokens });
+            const resolved = resolveChatModel({
+                ...policy,
+                maxOutputTokens: request.maxOutputTokens,
+            });
             const messages = [new SystemMessage(request.system), new HumanMessage(request.prompt)];
             const schema = SCHEMAS[request.purpose];
             if (schema) {
-                const { result, usage } = await invokeStructuredWithUsage(resolved, schema, messages, {
-                    name: `scenario_${request.purpose}`,
-                });
+                const { result, usage } = await invokeStructuredWithUsage(
+                    resolved,
+                    schema,
+                    messages,
+                    {
+                        name: `scenario_${request.purpose}`,
+                    }
+                );
                 return {
                     text: JSON.stringify(result),
-                    usage: { inputTokens: usage.inputTokens ?? 0, outputTokens: usage.outputTokens ?? 0 },
+                    usage: {
+                        inputTokens: usage.inputTokens ?? 0,
+                        outputTokens: usage.outputTokens ?? 0,
+                    },
                 };
             }
             const response = await resolved.chat.invoke(resolved.prepareMessages(messages));
             const usage = normalizeTokenUsage(response);
             return {
                 text: modelContentToText(response.content),
-                usage: { inputTokens: usage.inputTokens ?? 0, outputTokens: usage.outputTokens ?? 0 },
+                usage: {
+                    inputTokens: usage.inputTokens ?? 0,
+                    outputTokens: usage.outputTokens ?? 0,
+                },
             };
         },
     };

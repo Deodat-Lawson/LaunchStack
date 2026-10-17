@@ -10,13 +10,33 @@ import type { EvidenceItem } from "../types";
 import { chattyScript, fakeModel, smallWorld } from "./helpers";
 
 const evidence: EvidenceItem[] = [
-    { id: "E1", kind: "document", label: "Customer interviews.pdf", text: "Small firms say price is the main reason they churn.", ref: { type: "document", id: "11" } },
-    { id: "E2", kind: "brand_comment", label: "Comment on your LinkedIn post", text: "Love the product, hate the renewal email.", ref: { type: "brand_comment", id: "5" } },
+    {
+        id: "E1",
+        kind: "document",
+        label: "Customer interviews.pdf",
+        text: "Small firms say price is the main reason they churn.",
+        ref: { type: "document", id: "11" },
+    },
+    {
+        id: "E2",
+        kind: "brand_comment",
+        label: "Comment on your LinkedIn post",
+        text: "Love the product, hate the renewal email.",
+        ref: { type: "brand_comment", id: "5" },
+    },
 ];
 
 describe("cast", () => {
     it("asks for grounded personas and forbids real names", () => {
-        const req = buildCastRequest({ subject: "s", brief: "b", evidence, count: 3, takenHandles: ["@ana"], audience: "customers", maxInvented: 1 });
+        const req = buildCastRequest({
+            subject: "s",
+            brief: "b",
+            evidence,
+            count: 3,
+            takenHandles: ["@ana"],
+            audience: "customers",
+            maxInvented: 1,
+        });
         expect(req.purpose).toBe("cast");
         expect(req.system).toContain("Never use the name or handle of a real person");
         expect(req.prompt).toContain("[E2] (brand_comment) Comment on your LinkedIn post");
@@ -27,13 +47,62 @@ describe("cast", () => {
         const taken = new Set(["@ana"]);
         const reply = {
             personas: [
-                { name: "Ana Ruiz", handle: "@ana", role: "Bookkeeper", bio: "x", interests: ["tax"], stance: -1, activity: 3, influence: -1, sourceIds: ["E1", "E9"], invented: false },
-                { name: "Bo Lin", handle: "bo lin", role: "Founder", bio: "y", interests: [], stance: 9, activity: 0.5, influence: 0.5, sourceIds: ["E7"], invented: false },
-                { name: "Cy", handle: "@cy", role: "", bio: "", interests: [], stance: 0, activity: 0.5, influence: 0.5, sourceIds: [], invented: true },
-                { name: "Di", handle: "@di", role: "Analyst", bio: "", interests: [], stance: 0, activity: 0.5, influence: 0.5, sourceIds: ["E2"], invented: true },
+                {
+                    name: "Ana Ruiz",
+                    handle: "@ana",
+                    role: "Bookkeeper",
+                    bio: "x",
+                    interests: ["tax"],
+                    stance: -1,
+                    activity: 3,
+                    influence: -1,
+                    sourceIds: ["E1", "E9"],
+                    invented: false,
+                },
+                {
+                    name: "Bo Lin",
+                    handle: "bo lin",
+                    role: "Founder",
+                    bio: "y",
+                    interests: [],
+                    stance: 9,
+                    activity: 0.5,
+                    influence: 0.5,
+                    sourceIds: ["E7"],
+                    invented: false,
+                },
+                {
+                    name: "Cy",
+                    handle: "@cy",
+                    role: "",
+                    bio: "",
+                    interests: [],
+                    stance: 0,
+                    activity: 0.5,
+                    influence: 0.5,
+                    sourceIds: [],
+                    invented: true,
+                },
+                {
+                    name: "Di",
+                    handle: "@di",
+                    role: "Analyst",
+                    bio: "",
+                    interests: [],
+                    stance: 0,
+                    activity: 0.5,
+                    influence: 0.5,
+                    sourceIds: ["E2"],
+                    invented: true,
+                },
             ],
         };
-        const out = parseCast(JSON.stringify(reply), { evidenceIds: new Set(["E1", "E2"]), startIndex: 4, takenHandles: taken, limit: 10 });
+        const out = parseCast(JSON.stringify(reply), {
+            evidenceIds: new Set(["E1", "E2"]),
+            startIndex: 4,
+            takenHandles: taken,
+            limit: 10,
+        });
         expect(out.map(p => [p.id, p.handle, p.grounding, p.sourceIds])).toEqual([
             ["a4", "@ana2", "grounded", ["E1"]],
             ["a5", "@bo_lin", "invented", []],
@@ -48,14 +117,20 @@ describe("cast", () => {
 describe("brief", () => {
     it("keeps only citations to evidence that exists", () => {
         const parsed = parseBrief(
-            JSON.stringify({ brief: "Churn is about price [E1]. Renewals annoy people [E2][E5].", openingPost: "Acme raised prices [E1].", evidenceIds: ["E2", "E8"] }),
+            JSON.stringify({
+                brief: "Churn is about price [E1]. Renewals annoy people [E2][E5].",
+                openingPost: "Acme raised prices [E1].",
+                evidenceIds: ["E2", "E8"],
+            }),
             new Set(["E1", "E2"])
         )!;
         expect(parsed.brief).toBe("Churn is about price [E1]. Renewals annoy people [E2].");
         expect(parsed.openingPost).toBe("Acme raised prices.");
         expect(parsed.evidenceIds.sort()).toEqual(["E1", "E2"]);
         expect(stripCitations(parsed.brief)).toBe("Churn is about price. Renewals annoy people.");
-        expect(buildBriefRequest({ subject: "s", evidence, mode: "post_test" }).system).toContain('openingPost: ""');
+        expect(buildBriefRequest({ subject: "s", evidence, mode: "post_test" }).system).toContain(
+            'openingPost: ""'
+        );
     });
 });
 
@@ -92,7 +167,9 @@ describe("estimate", () => {
         const big = estimateRun({ agents: 30, rounds: 8 });
         expect(big.calls).toBeGreaterThan(small.calls);
         expect(big.inputTokens).toBeGreaterThan(small.inputTokens);
-        expect(estimateRun({ agents: 10_000, rounds: 3 })).toEqual(estimateRun({ agents: MAX_AGENTS, rounds: 3 }));
+        expect(estimateRun({ agents: 10_000, rounds: 3 })).toEqual(
+            estimateRun({ agents: MAX_AGENTS, rounds: 3 })
+        );
     });
 });
 

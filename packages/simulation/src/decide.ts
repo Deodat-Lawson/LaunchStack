@@ -5,7 +5,15 @@
 
 import { asArray, asRecord, asString, clampStance, extractJson } from "./json";
 import { clip } from "./text";
-import type { Action, ActionType, AgentDecision, AgentState, FeedItem, ModelRequest, World } from "./types";
+import type {
+    Action,
+    ActionType,
+    AgentDecision,
+    AgentState,
+    FeedItem,
+    ModelRequest,
+    World,
+} from "./types";
 import { followeesOf, followersOf, stanceLabel } from "./world";
 
 export const ACTION_TYPES: ActionType[] = [
@@ -23,7 +31,10 @@ export const DECISION_SCHEMA: Record<string, unknown> = {
     type: "object",
     additionalProperties: false,
     properties: {
-        thought: { type: "string", description: "One or two private sentences: what you think and why you act." },
+        thought: {
+            type: "string",
+            description: "One or two private sentences: what you think and why you act.",
+        },
         stance: { type: "integer", minimum: -2, maximum: 2 },
         actions: {
             type: "array",
@@ -71,7 +82,11 @@ function formatFeed(feed: FeedItem[]): string {
     return feed
         .map(item => {
             const tag =
-                item.reason === "pinned" ? " (pinned)" : item.reason === "following" ? " (you follow them)" : "";
+                item.reason === "pinned"
+                    ? " (pinned)"
+                    : item.reason === "following"
+                      ? " (you follow them)"
+                      : "";
             const stats = `${item.likes} likes · ${item.shares} shares · ${item.comments} comments`;
             const head =
                 item.kind === "repost" && item.root
@@ -79,13 +94,19 @@ function formatFeed(feed: FeedItem[]): string {
                     : item.kind === "quote" && item.root
                       ? `[${item.postId}] ${item.authorName} ${item.authorHandle}${tag} quoting ${item.root.handle} · ${stats}\n  "${item.text}"\n  > "${item.root.text}"`
                       : `[${item.postId}] ${item.authorName} ${item.authorHandle}${tag} · ${stats}\n  "${item.text}"`;
-            const comments = item.recentComments.map(c => `  ↳ ${c.handle}: "${c.text}"`).join("\n");
+            const comments = item.recentComments
+                .map(c => `  ↳ ${c.handle}: "${c.text}"`)
+                .join("\n");
             return comments ? `${head}\n${comments}` : head;
         })
         .join("\n\n");
 }
 
-export function buildDecisionRequest(world: World, agent: AgentState, feed: FeedItem[]): ModelRequest {
+export function buildDecisionRequest(
+    world: World,
+    agent: AgentState,
+    feed: FeedItem[]
+): ModelRequest {
     const id = agent.persona.id;
     const round = world.round + 1;
     const memory = agent.memory.slice(-8).map(m => `- Round ${m.round}: ${m.text}`);
@@ -184,8 +205,11 @@ export function parseDecision(
                 if (postId && feedIds.has(postId)) action = { type, postId };
                 break;
             case "follow": {
-                const handle = (asString(item.handle) ?? asString(item.agentId) ?? "").trim().toLowerCase();
-                const target = handles.get(handle.startsWith("@") ? handle : `@${handle}`) ??
+                const handle = (asString(item.handle) ?? asString(item.agentId) ?? "")
+                    .trim()
+                    .toLowerCase();
+                const target =
+                    handles.get(handle.startsWith("@") ? handle : `@${handle}`) ??
                     world.agents.find(a => a.persona.id === handle)?.persona.id;
                 if (target && target !== agent.persona.id) action = { type, agentId: target };
                 break;

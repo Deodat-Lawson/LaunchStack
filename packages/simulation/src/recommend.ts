@@ -29,7 +29,12 @@ export interface FeedOptions {
 }
 
 /** Reddit's hot score, as OASIS implements it, with seconds taken from rounds. */
-export function hotScore(likes: number, dislikes: number, visibleRound: number, minutesPerRound: number): number {
+export function hotScore(
+    likes: number,
+    dislikes: number,
+    visibleRound: number,
+    minutesPerRound: number
+): number {
     const s = likes - dislikes;
     const order = Math.log10(Math.max(Math.abs(s), 1));
     const sign = s > 0 ? 1 : s < 0 ? -1 : 0;
@@ -48,8 +53,15 @@ export function profileText(world: World, agentId: string): string {
     const agent = world.agents.find(a => a.persona.id === agentId);
     if (!agent) return "";
     const p = agent.persona;
-    const latest = [...world.posts].reverse().find(post => post.authorId === agentId && post.kind !== "repost");
-    return [p.role, p.bio, p.interests.join(", "), latest ? `Recent post: ${latest.text}` : ""].join(" ");
+    const latest = [...world.posts]
+        .reverse()
+        .find(post => post.authorId === agentId && post.kind !== "repost");
+    return [
+        p.role,
+        p.bio,
+        p.interests.join(", "),
+        latest ? `Recent post: ${latest.text}` : "",
+    ].join(" ");
 }
 
 function postText(world: World, post: Post): string {
@@ -127,7 +139,12 @@ export function buildFeeds(
         const chosen = new Map<string, FeedItem["reason"]>();
 
         const pinned = candidates
-            .filter(p => (p.kind === "seed" || p.kind === "event") && current - visibleFrom(p) <= 1 && !seen.has(p.id))
+            .filter(
+                p =>
+                    (p.kind === "seed" || p.kind === "event") &&
+                    current - visibleFrom(p) <= 1 &&
+                    !seen.has(p.id)
+            )
             .slice(-2);
         for (const p of pinned) chosen.set(p.id, "pinned");
 
@@ -144,9 +161,15 @@ export function buildFeeds(
                 const root = rootOf(world, p);
                 const age = current - visibleFrom(p);
                 const interest = Math.max(0, similarity(profile, postText(world, p)));
-                const hot = hotScore(root.likes, root.dislikes, visibleFrom(p), cfg.minutesPerRound);
+                const hot = hotScore(
+                    root.likes,
+                    root.dislikes,
+                    visibleFrom(p),
+                    cfg.minutesPerRound
+                );
                 const hotTerm = Math.max(-1, Math.min(1, hot / 2));
-                let score = (0.75 * interest + 0.25 * hotTerm) * timeDecay(age, cfg.minutesPerRound);
+                let score =
+                    (0.75 * interest + 0.25 * hotTerm) * timeDecay(age, cfg.minutesPerRound);
                 if (seen.has(p.id)) score *= 0.35;
                 return { post: p, score };
             })
@@ -155,7 +178,8 @@ export function buildFeeds(
 
         const rest = scored.slice(cfg.recommendCount).map(s => s.post);
         const swapped = recommended.map(p => {
-            if (rest.length === 0 || rng() >= cfg.swapRate) return { post: p, reason: "recommended" as const };
+            if (rest.length === 0 || rng() >= cfg.swapRate)
+                return { post: p, reason: "recommended" as const };
             const unseen = rest.filter(r => !seen.has(r.id));
             const replacement = pick(unseen.length > 0 ? unseen : rest, rng)!;
             rest.splice(rest.indexOf(replacement), 1);

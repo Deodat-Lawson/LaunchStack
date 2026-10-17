@@ -39,7 +39,11 @@ export class RoundFailedError extends Error {
     }
 }
 
-export async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+export async function mapLimit<T, R>(
+    items: T[],
+    limit: number,
+    fn: (item: T) => Promise<R>
+): Promise<R[]> {
     const results = new Array<R>(items.length);
     let next = 0;
     const workers = Array.from({ length: Math.max(1, Math.min(limit, items.length)) }, async () => {
@@ -66,7 +70,10 @@ export function selectActive(world: World, round: number): string[] {
     return active;
 }
 
-export async function runRound(input: World, deps: RoundDeps): Promise<{ world: World; summary: RoundSummary }> {
+export async function runRound(
+    input: World,
+    deps: RoundDeps
+): Promise<{ world: World; summary: RoundSummary }> {
     const world = structuredClone(input);
     const round = world.round + 1;
     const active = selectActive(world, round);
@@ -93,7 +100,8 @@ export async function runRound(input: World, deps: RoundDeps): Promise<{ world: 
     });
 
     const failed = turns.filter(t => !t.decision).length;
-    if (failed > 0 && failed * 2 > active.length) throw new RoundFailedError(round, failed, active.length);
+    if (failed > 0 && failed * 2 > active.length)
+        throw new RoundFailedError(round, failed, active.length);
 
     // Everyone who was active saw their feed, whether or not their turn succeeded.
     for (const { agentId, feed } of turns) {
@@ -133,11 +141,20 @@ export async function runRound(input: World, deps: RoundDeps): Promise<{ world: 
     return { world, summary };
 }
 
-function remember(world: World, agentId: string, round: number, feed: FeedItem[], done: string[]): void {
+function remember(
+    world: World,
+    agentId: string,
+    round: number,
+    feed: FeedItem[],
+    done: string[]
+): void {
     const agent = world.agents.find(a => a.persona.id === agentId)!;
     const notable = feed
         .slice()
-        .sort((a, b) => b.likes + b.comments * 2 + b.shares * 3 - (a.likes + a.comments * 2 + a.shares * 3))
+        .sort(
+            (a, b) =>
+                b.likes + b.comments * 2 + b.shares * 3 - (a.likes + a.comments * 2 + a.shares * 3)
+        )
         .slice(0, 2)
         .map(f => `${f.authorHandle}: "${clip(f.root?.text ?? f.text, 90)}"`);
     if (notable.length > 0) agent.memory.push({ round, text: `You saw ${notable.join("; ")}` });

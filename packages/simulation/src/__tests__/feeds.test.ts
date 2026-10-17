@@ -36,9 +36,17 @@ describe("buildFeeds", () => {
         const world = smallWorld();
         const post = addPost(world, { authorId: "a2", round: 1, kind: "post", text: "fresh" });
         expect(visibleFrom(post)).toBe(2);
-        expect(buildFeeds(world, ["a1"], rng()).get("a1")!.map(f => f.postId)).not.toContain(post.id);
+        expect(
+            buildFeeds(world, ["a1"], rng())
+                .get("a1")!
+                .map(f => f.postId)
+        ).not.toContain(post.id);
         world.round = 1;
-        expect(buildFeeds(world, ["a1"], rng()).get("a1")!.map(f => f.postId)).toContain(post.id);
+        expect(
+            buildFeeds(world, ["a1"], rng())
+                .get("a1")!
+                .map(f => f.postId)
+        ).toContain(post.id);
     });
 
     it("shows an injected event, pinned, in the very next round", () => {
@@ -53,7 +61,12 @@ describe("buildFeeds", () => {
         const world = smallWorld();
         world.follows = [["a1", "a2"]];
         world.round = 1;
-        const quiet = addPost(world, { authorId: "a2", round: 0, kind: "post", text: "quiet note" });
+        const quiet = addPost(world, {
+            authorId: "a2",
+            round: 0,
+            kind: "post",
+            text: "quiet note",
+        });
         const loud = addPost(world, { authorId: "a2", round: 0, kind: "post", text: "loud note" });
         loud.likes = 9;
         world.config.followingCount = 1;
@@ -67,14 +80,28 @@ describe("buildFeeds", () => {
             subject: "s",
             brief: "",
             personas: [
-                persona("a1", { role: "Gardener", bio: "Grows tomatoes and roses.", interests: ["tomatoes", "roses", "compost"] }),
+                persona("a1", {
+                    role: "Gardener",
+                    bio: "Grows tomatoes and roses.",
+                    interests: ["tomatoes", "roses", "compost"],
+                }),
                 persona("a2"),
             ],
             config: { swapRate: 0, recommendCount: 1 },
         });
         world.round = 1;
-        addPost(world, { authorId: "a2", round: 0, kind: "post", text: "quarterly invoicing software pricing update" });
-        const garden = addPost(world, { authorId: "a2", round: 0, kind: "post", text: "best compost for tomatoes and roses" });
+        addPost(world, {
+            authorId: "a2",
+            round: 0,
+            kind: "post",
+            text: "quarterly invoicing software pricing update",
+        });
+        const garden = addPost(world, {
+            authorId: "a2",
+            round: 0,
+            kind: "post",
+            text: "best compost for tomatoes and roses",
+        });
         world.follows = [];
         const feed = buildFeeds(world, ["a1"], rng()).get("a1")!;
         expect(feed.map(f => f.postId)).toEqual([garden.id]);
@@ -89,8 +116,18 @@ describe("buildFeeds", () => {
         });
         world.follows = [];
         world.round = 1;
-        const first = addPost(world, { authorId: "a2", round: 0, kind: "post", text: "pricing pricing pricing" });
-        const second = addPost(world, { authorId: "a2", round: 0, kind: "post", text: "pricing news" });
+        const first = addPost(world, {
+            authorId: "a2",
+            round: 0,
+            kind: "post",
+            text: "pricing pricing pricing",
+        });
+        const second = addPost(world, {
+            authorId: "a2",
+            round: 0,
+            kind: "post",
+            text: "pricing news",
+        });
         expect(buildFeeds(world, ["a1"], rng()).get("a1")![0]!.postId).toBe(first.id);
         world.seen.a1 = [first.id];
         expect(buildFeeds(world, ["a1"], rng()).get("a1")![0]!.postId).toBe(second.id);
@@ -99,7 +136,8 @@ describe("buildFeeds", () => {
     it("swaps recommendations for random posts at the swap rate", () => {
         const world = smallWorld();
         world.round = 1;
-        for (let i = 0; i < 12; i++) addPost(world, { authorId: "a2", round: 0, kind: "post", text: `post number ${i}` });
+        for (let i = 0; i < 12; i++)
+            addPost(world, { authorId: "a2", round: 0, kind: "post", text: `post number ${i}` });
         world.follows = [];
         world.config.swapRate = 1;
         const feed = buildFeeds(world, ["a1"], rng()).get("a1")!;
@@ -113,8 +151,13 @@ describe("buildFeeds", () => {
         expect(applyAction(world, "a2", { type: "repost", postId: "p1" }, 1).ok).toBe(true);
         world.round = 2;
         world.follows = [["a1", "a2"]];
-        const item = buildFeeds(world, ["a1"], rng()).get("a1")!.find(f => f.kind === "repost")!;
-        expect(item.root).toEqual({ handle: "@newswire", text: "Acme announces a 20% price increase for all plans." });
+        const item = buildFeeds(world, ["a1"], rng())
+            .get("a1")!
+            .find(f => f.kind === "repost")!;
+        expect(item.root).toEqual({
+            handle: "@newswire",
+            text: "Acme announces a 20% price increase for all plans.",
+        });
         expect(item.shares).toBe(1);
     });
 });
@@ -129,7 +172,11 @@ describe("createWorld", () => {
 
     it("rejects duplicate handles", () => {
         expect(() =>
-            createWorld({ subject: "s", brief: "", personas: [persona("a1"), persona("a2", { handle: "@person_a1" })] })
+            createWorld({
+                subject: "s",
+                brief: "",
+                personas: [persona("a1"), persona("a2", { handle: "@person_a1" })],
+            })
         ).toThrow(/Duplicate handle/);
     });
 });

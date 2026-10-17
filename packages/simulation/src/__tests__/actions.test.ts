@@ -73,18 +73,34 @@ describe("parseDecision", () => {
 
     it("reads fenced JSON, caps actions, and falls back to doing nothing", () => {
         const ctx = setup();
-        const many = { thought: "", stance: 1, actions: Array.from({ length: 6 }, (_, i) => ({ type: "create_post", text: `t${i}` })) };
-        expect(parseDecision("```json\n" + JSON.stringify(many) + "\n```", ctx)!.actions).toHaveLength(3);
-        expect(parseDecision('{"thought":"meh","stance":0,"actions":[{"type":"like","postId":"p42"}]}', ctx)!.actions).toEqual([
-            { type: "do_nothing" },
-        ]);
+        const many = {
+            thought: "",
+            stance: 1,
+            actions: Array.from({ length: 6 }, (_, i) => ({ type: "create_post", text: `t${i}` })),
+        };
+        expect(
+            parseDecision("```json\n" + JSON.stringify(many) + "\n```", ctx)!.actions
+        ).toHaveLength(3);
+        expect(
+            parseDecision(
+                '{"thought":"meh","stance":0,"actions":[{"type":"like","postId":"p42"}]}',
+                ctx
+            )!.actions
+        ).toEqual([{ type: "do_nothing" }]);
         expect(parseDecision("I would like the post.", ctx)).toBeUndefined();
     });
 
     it("refuses to follow yourself and ignores comments with no text", () => {
         const ctx = setup();
         const d = parseDecision(
-            JSON.stringify({ thought: "", stance: 0, actions: [{ type: "follow", handle: "@person_a1" }, { type: "comment", postId: "p1", text: " " }] }),
+            JSON.stringify({
+                thought: "",
+                stance: 0,
+                actions: [
+                    { type: "follow", handle: "@person_a1" },
+                    { type: "comment", postId: "p1", text: " " },
+                ],
+            }),
             ctx
         )!;
         expect(d.actions).toEqual([{ type: "do_nothing" }]);

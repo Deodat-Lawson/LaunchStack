@@ -9,7 +9,17 @@
  */
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
-import { bigint, index, integer, jsonb, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import {
+    bigint,
+    index,
+    integer,
+    jsonb,
+    serial,
+    text,
+    timestamp,
+    uniqueIndex,
+    varchar,
+} from "drizzle-orm/pg-core";
 
 import type { Brief, PostReception, ScenarioReport, World } from "@launchstack/simulation";
 import { company } from "@launchstack/store/schema";
@@ -35,7 +45,9 @@ export const scenarioRuns = pgTable(
         kind: varchar("kind", { length: 16, enum: SCENARIO_KINDS }).notNull(),
         title: varchar("title", { length: 200 }).notNull(),
         subject: text("subject").notNull(),
-        status: varchar("status", { length: 16, enum: SCENARIO_STATUSES }).notNull().default("queued"),
+        status: varchar("status", { length: 16, enum: SCENARIO_STATUSES })
+            .notNull()
+            .default("queued"),
         /** Units completed; every unit commits with a compare-and-set on this. */
         step: integer("step").notNull().default(0),
         agentCount: integer("agent_count").notNull(),
@@ -58,13 +70,19 @@ export const scenarioRuns = pgTable(
         cancelRequestedAt: timestamp("cancel_requested_at", { withTimezone: true }),
         /** The in-process executor's claim; a stale lease lets a poll resume the run. */
         leaseUntil: timestamp("lease_until", { withTimezone: true }),
-        createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
         startedAt: timestamp("started_at", { withTimezone: true }),
         finishedAt: timestamp("finished_at", { withTimezone: true }),
     },
     table => [
-        index("scenario_runs_company_creator_idx").on(table.companyId, table.createdByUserId, table.createdAt),
+        index("scenario_runs_company_creator_idx").on(
+            table.companyId,
+            table.createdByUserId,
+            table.createdAt
+        ),
         index("scenario_runs_company_kind_idx").on(table.companyId, table.kind, table.createdAt),
         index("scenario_runs_status_idx").on(table.status),
     ]
@@ -86,7 +104,9 @@ export const scenarioInjections = pgTable(
         text: text("text").notNull(),
         /** The round it appeared in; null while waiting. */
         appliedRound: integer("applied_round"),
-        createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
     },
     table => [index("scenario_injections_run_idx").on(table.runId, table.appliedRound)]
 );
@@ -108,9 +128,17 @@ export const scenarioInterviews = pgTable(
         agentId: varchar("agent_id", { length: 32 }).notNull(),
         question: text("question").notNull(),
         answer: text("answer").notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
     },
-    table => [index("scenario_interviews_run_asker_idx").on(table.runId, table.askedByUserId, table.createdAt)]
+    table => [
+        index("scenario_interviews_run_asker_idx").on(
+            table.runId,
+            table.askedByUserId,
+            table.createdAt
+        ),
+    ]
 );
 export type ScenarioInterviewRow = InferSelectModel<typeof scenarioInterviews>;
 
@@ -130,7 +158,9 @@ export const scenarioPostLinks = pgTable(
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
         brandPostId: varchar("brand_post_id", { length: 64 }).notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
     },
     table => [
         uniqueIndex("scenario_post_links_post_unique").on(table.brandPostId),

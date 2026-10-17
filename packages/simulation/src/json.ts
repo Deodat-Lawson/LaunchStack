@@ -10,7 +10,8 @@ export function extractJson(text: string): unknown {
     if (fenced?.[1]) attempts.push(fenced[1].trim());
     const firstBrace = trimmed.indexOf("{");
     const lastBrace = trimmed.lastIndexOf("}");
-    if (firstBrace >= 0 && lastBrace > firstBrace) attempts.push(trimmed.slice(firstBrace, lastBrace + 1));
+    if (firstBrace >= 0 && lastBrace > firstBrace)
+        attempts.push(trimmed.slice(firstBrace, lastBrace + 1));
     for (const candidate of attempts) {
         try {
             return JSON.parse(candidate) as unknown;
@@ -39,7 +40,8 @@ export function asArray(value: unknown): unknown[] {
 
 export function asNumber(value: unknown): number | undefined {
     if (typeof value === "number" && Number.isFinite(value)) return value;
-    if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value))) return Number(value);
+    if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value)))
+        return Number(value);
     return undefined;
 }
 

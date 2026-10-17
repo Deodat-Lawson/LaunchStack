@@ -81,20 +81,28 @@ export function postReception(world: World, postId: string): PostReception | und
     const relatedIds = new Set(
         world.posts.filter(p => p.id === root.id || p.rootId === root.id).map(p => p.id)
     );
-    const exposedAgents = world.agents.filter(a => (world.seen[a.persona.id] ?? []).some(id => relatedIds.has(id)));
+    const exposedAgents = world.agents.filter(a =>
+        (world.seen[a.persona.id] ?? []).some(id => relatedIds.has(id))
+    );
     const engagedIds = new Set<string>();
-    for (const r of world.reactions) if (r.postId === root.id && r.kind === "like") engagedIds.add(r.agentId);
+    for (const r of world.reactions)
+        if (r.postId === root.id && r.kind === "like") engagedIds.add(r.agentId);
     for (const c of world.comments) if (c.postId === root.id) engagedIds.add(c.authorId);
     for (const p of world.posts) if (p.rootId === root.id) engagedIds.add(p.authorId);
     const exposedIds = new Set(exposedAgents.map(a => a.persona.id));
     const engaged = [...engagedIds].filter(id => exposedIds.has(id)).length;
     const mean = (values: number[]) =>
-        values.length === 0 ? 0 : Math.round((values.reduce((s, v) => s + v, 0) / values.length) * 100) / 100;
+        values.length === 0
+            ? 0
+            : Math.round((values.reduce((s, v) => s + v, 0) / values.length) * 100) / 100;
     return {
         postId: root.id,
         exposed: exposedAgents.length,
         engaged,
-        engagementRate: exposedAgents.length === 0 ? 0 : Math.round((engaged / exposedAgents.length) * 1000) / 1000,
+        engagementRate:
+            exposedAgents.length === 0
+                ? 0
+                : Math.round((engaged / exposedAgents.length) * 1000) / 1000,
         likes: root.likes,
         dislikes: root.dislikes,
         comments: root.comments,
@@ -127,7 +135,11 @@ export function stanceShifts(world: World, limit: number): StanceShift[] {
     return world.agents
         .map(a => ({ agentId: a.persona.id, from: a.stanceHistory[0] ?? a.stance, to: a.stance }))
         .filter(s => s.from !== s.to)
-        .sort((x, y) => Math.abs(y.to - y.from) - Math.abs(x.to - x.from) || (x.agentId < y.agentId ? -1 : 1))
+        .sort(
+            (x, y) =>
+                Math.abs(y.to - y.from) - Math.abs(x.to - x.from) ||
+                (x.agentId < y.agentId ? -1 : 1)
+        )
         .slice(0, limit);
 }
 

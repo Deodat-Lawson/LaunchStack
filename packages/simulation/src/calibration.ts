@@ -51,7 +51,10 @@ function median(values: number[]): number {
  * For each pair: did the simulation put the post on the same side of the
  * median as reality did? Pairs exactly on a median count as misses.
  */
-export function directionHits(predicted: number[], actual: number[]): { hits: number; total: number } {
+export function directionHits(
+    predicted: number[],
+    actual: number[]
+): { hits: number; total: number } {
     if (predicted.length !== actual.length || predicted.length === 0) return { hits: 0, total: 0 };
     const mp = median(predicted);
     const ma = median(actual);

@@ -63,7 +63,9 @@ export interface CastRequestInput {
 
 export function formatEvidence(evidence: EvidenceItem[], maxChars = 600): string {
     if (evidence.length === 0) return "(no evidence)";
-    return evidence.map(e => `[${e.id}] (${e.kind}) ${e.label}\n${clip(e.text, maxChars)}`).join("\n\n");
+    return evidence
+        .map(e => `[${e.id}] (${e.kind}) ${e.label}\n${clip(e.text, maxChars)}`)
+        .join("\n\n");
 }
 
 export function buildCastRequest(input: CastRequestInput): ModelRequest {
@@ -85,12 +87,20 @@ export function buildCastRequest(input: CastRequestInput): ModelRequest {
         formatEvidence(input.evidence),
         "",
         `Return exactly ${input.count} personas.`,
-        input.takenHandles.length > 0 ? `Handles already taken: ${input.takenHandles.join(", ")}` : "",
+        input.takenHandles.length > 0
+            ? `Handles already taken: ${input.takenHandles.join(", ")}`
+            : "",
         'Shape: {"personas": [{"name": "…", "handle": "@…", "role": "…", "bio": "…", "interests": ["…"], "stance": 0, "activity": 0.3, "influence": 0.2, "sourceIds": ["E1"], "invented": false}]}',
     ]
         .filter(Boolean)
         .join("\n");
-    return { purpose: "cast", system, prompt, schema: CAST_SCHEMA, maxOutputTokens: 400 * input.count + 200 };
+    return {
+        purpose: "cast",
+        system,
+        prompt,
+        schema: CAST_SCHEMA,
+        maxOutputTokens: 400 * input.count + 200,
+    };
 }
 
 function slugHandle(raw: string, fallbackName: string): string {
@@ -110,7 +120,12 @@ function slugHandle(raw: string, fallbackName: string): string {
  */
 export function parseCast(
     text: string,
-    context: { evidenceIds: Set<string>; startIndex: number; takenHandles: Set<string>; limit: number }
+    context: {
+        evidenceIds: Set<string>;
+        startIndex: number;
+        takenHandles: Set<string>;
+        limit: number;
+    }
 ): Persona[] {
     const root = asRecord(extractJson(text));
     if (!root) return [];
@@ -124,7 +139,8 @@ export function parseCast(
         if (!name || !role) continue;
         let handle = slugHandle(asString(item.handle) ?? "", name);
         let n = 2;
-        while (context.takenHandles.has(handle.toLowerCase())) handle = `${handle.replace(/\d+$/, "")}${n++}`;
+        while (context.takenHandles.has(handle.toLowerCase()))
+            handle = `${handle.replace(/\d+$/, "")}${n++}`;
         context.takenHandles.add(handle.toLowerCase());
         const sourceIds = asArray(item.sourceIds)
             .map(s => asString(s)?.trim().toUpperCase())

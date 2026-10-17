@@ -572,6 +572,8 @@ export function LandingClient() {
                                 >
                                     Feedback <ArrowUpRight size={12} aria-hidden="true" />
                                 </a>
+                                <Link href="/privacy">Privacy Policy</Link>
+                                <Link href="/terms">Terms of Service</Link>
                             </div>
                         </div>
                     </div>

@@ -89,6 +89,11 @@ services:
       context: .
       dockerfile: apps/landing/Dockerfile
       target: runner
+      # Build-time, because Next inlines NEXT_PUBLIC_* into the bundle; the
+      # `environment` copies below only reach server-side code.
+      args:
+        NEXT_PUBLIC_SITE_URL: https://home.${DOMAIN}
+        NEXT_PUBLIC_APP_URL: https://${DOMAIN}
     container_name: pdr_ai_v2-landing
     restart: unless-stopped
     environment:

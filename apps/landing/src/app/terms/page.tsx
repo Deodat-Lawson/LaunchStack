@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import { LegalPage } from "../_components/LegalPage";
-import { APP_URL, GITHUB_REPO, PRIVACY_EMAIL } from "~/config/site";
+import { APP_URL, GITHUB_REPO, PRIVACY_EMAIL, TERMS_UPDATED } from "~/config/site";
 
 export const metadata: Metadata = {
     title: "Terms of Service",
@@ -19,6 +19,7 @@ export default function TermsPage() {
         <LegalPage
             eyebrow="Legal"
             title="Terms of Service"
+            effective={TERMS_UPDATED}
             summary={
                 <p>
                     You own what you put into Launchstack. We host and process it only to run the

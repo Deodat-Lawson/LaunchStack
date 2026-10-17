@@ -240,7 +240,7 @@ flowchart LR
   Runtime -->|injected storage port| Storage
   Seaweed["SeaweedFS<br/>(local S3)"] -. local .-> Storage
 
-  Web -->|emit events| Inngest["Inngest dev/cloud"]
+  Web -->|emit events| Inngest["Inngest dev / self-hosted"]
   Inngest -->|/api/inngest| Worker
 
   Conversion -->|route / render / convert| Converter["services/document-converter<br/>:8002"]
@@ -293,8 +293,10 @@ and note embedding use the PostgreSQL outbox instead of Inngest.
 In development, start the web and worker separately with their `dev`
 scripts; `pnpm --filter @launchstack/web inngest:dev` targets the worker's
 `http://localhost:8020/api/inngest`. Docker's Inngest dev container calls
-that same worker endpoint. The production overlay disables the dev server;
-Inngest Cloud can reach the worker through the reverse proxy.
+that same worker endpoint. The production overlay disables the dev server and
+runs a self-hosted `inngest start` server on the same host instead, with its
+history in Postgres and its queue in Redis; the reverse proxy does not route
+`/api/inngest` (see `docs/runbooks/azure-lean-deploy.md`).
 
 ## Data and tenancy
 

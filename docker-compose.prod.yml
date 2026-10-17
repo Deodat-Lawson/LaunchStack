@@ -189,6 +189,11 @@ services:
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?set INNGEST_SIGNING_KEY (openssl rand -hex 32), see docs/runbooks/azure-lean-deploy.md}
       INNGEST_POSTGRES_URI: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/inngest?sslmode=disable
       INNGEST_REDIS_URI: redis://inngest-redis:6379
+      # Without this the CLI posts usage events to Inngest's cloud event API
+      # (`cli/command.executed` at every start, `cli/dev_ui.loaded` on each
+      # dashboard load; pkg/api/tel). The privacy policy lists no Inngest
+      # processing, so keep it set.
+      DO_NOT_TRACK: "1"
     # Dashboard + API, loopback only: it has no login. Reach it with
     # `ssh -N -L 8288:127.0.0.1:8288 <admin>@<vm>`.
     ports:

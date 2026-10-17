@@ -15,12 +15,15 @@ import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find
 import { escapeCurrencyDollars } from "~/lib/markdown-math";
 import { CodeViewer } from "./CodeViewer";
 
-interface MarkdownViewerProps {
-    url: string;
+type MarkdownViewerProps = {
     title: string;
     /** Cited passage to locate, scroll to, and highlight in the rendered view. */
     highlight?: ViewerHighlight | null;
-}
+} & (
+    | { url: string; text?: undefined }
+    /** The Markdown itself, when the caller already has it: nothing is fetched and there is no source view. */
+    | { text: string; url?: undefined }
+);
 
 interface HighlightRect {
     top: number;
@@ -160,7 +163,7 @@ function MermaidBlock({ code }: { code: string }) {
     return <div className="md-mermaid" dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
-export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerProps) {
+export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownViewerProps) {
     const [content, setContent] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -174,6 +177,11 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const fetchContent = useCallback(async () => {
+        if (url === undefined) {
+            setContent(text ?? "");
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         setError(null);
         try {
@@ -185,7 +193,7 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
         } finally {
             setLoading(false);
         }
-    }, [url]);
+    }, [url, text]);
 
     useEffect(() => {
         void fetchContent();
@@ -321,7 +329,7 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
         );
     }
 
-    if (viewMode === "source") {
+    if (viewMode === "source" && url !== undefined) {
         return (
             <div className="flex h-full flex-col overflow-hidden">
                 <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
@@ -372,22 +380,24 @@ export function MarkdownViewer({ url, title, highlight = null }: MarkdownViewerP
                             </TooltipContent>
                         </Tooltip>
 
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    aria-label="View source"
-                                    className="text-ink-3 hover:bg-brand-soft hover:text-brand-ink h-7 w-7 rounded-md"
-                                    onClick={() => setViewMode("source")}
-                                >
-                                    <Code2 className="h-3.5 w-3.5" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom">
-                                <p className="text-xs">View source</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        {url !== undefined && (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        aria-label="View source"
+                                        className="text-ink-3 hover:bg-brand-soft hover:text-brand-ink h-7 w-7 rounded-md"
+                                        onClick={() => setViewMode("source")}
+                                    >
+                                        <Code2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom">
+                                    <p className="text-xs">View source</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        )}
 
                         <Tooltip>
                             <TooltipTrigger asChild>

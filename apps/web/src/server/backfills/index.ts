@@ -10,6 +10,7 @@ import {
     countUsersMissingMembership,
     provisionMissingMemberships,
 } from "./user-company-memberships";
+import { countUnmarkedWebsiteSources, markWebsiteSources } from "./website-source-markers";
 import { applyWorkspaceAccessBackfill, countWorkspaceAccessRows } from "./workspace-access";
 
 /**
@@ -190,10 +191,32 @@ const workspaceAccessBackfill: Backfill = {
     },
 };
 
+/**
+ * Mark the web pages saved before the importers wrote the website marker, so
+ * they open as the site (address, Open site, the text read from it) instead
+ * of their HTML in a script-less frame, a white page for most sites. See
+ * ./website-source-markers.ts.
+ */
+const websiteSourceMarkersBackfill: Backfill = {
+    id: "2026-10-website-source-markers",
+    description: "Mark website sources saved before the website marker (ocrMetadata.kind)",
+    requiresEngine: false,
+
+    estimate: ({ db }) => countUnmarkedWebsiteSources(db),
+
+    async step({ db }) {
+        const remaining = await countUnmarkedWebsiteSources(db);
+        await markWebsiteSources(db);
+        // One statement covers every row, so there is never a resume point.
+        return { cursor: null, processed: remaining };
+    },
+};
+
 export const BACKFILLS: Backfill[] = [
     noteEmbeddings,
     documentVersionsBackfill,
     fileUploadsCompanyId,
     userCompanyMembershipsBackfill,
     workspaceAccessBackfill,
+    websiteSourceMarkersBackfill,
 ];

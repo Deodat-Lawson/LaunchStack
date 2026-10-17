@@ -60,6 +60,7 @@ function mapDocType(doc: DocumentType): SourceTypeId {
         return mediaEmbedFor(marker?.videoUrl)?.provider === "youtube" ? "youtube" : "video";
     }
     if (t === "artifact") return "artifact";
+    if (t === "website") return "web";
     return "doc";
 }
 

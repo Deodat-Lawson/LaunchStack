@@ -17,7 +17,6 @@ export interface SessionMessagePayload {
     refs?: string[];
     citations?: unknown[];
     attachments?: unknown[];
-    model?: string | null;
     tokens?: number | null;
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
     agentKey?: string | null;

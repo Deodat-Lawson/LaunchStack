@@ -12,7 +12,7 @@ import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages
 import type { BaseMessage } from "@langchain/core/messages";
 
 import type { CollabChatFn, CollabChatMessage } from "@launchstack/collab";
-import { normalizeModelContent } from "@launchstack/llm";
+import { describeChatError, normalizeModelContent } from "@launchstack/llm";
 import { resolveConfiguredChatModel } from "~/lib/models";
 
 function toLangChain(message: CollabChatMessage): BaseMessage {
@@ -42,11 +42,21 @@ export function createCollabChatFn(options: CollabChatOptions = {}): CollabChatF
             timeoutMs: options.timeoutMs,
         });
 
-        const reply = await resolved.chat.invoke(
-            resolved.prepareMessages(messages.map(toLangChain))
-        );
+        let reply;
+        try {
+            reply = await resolved.chat.invoke(resolved.prepareMessages(messages.map(toLangChain)));
+        } catch (error) {
+            // The meeting posts this message in the channel. A provider's own
+            // text can name the vendor or its billing page, so only the mapped
+            // message is posted and the raw error is logged.
+            const friendly = describeChatError(error, resolved.modelId);
+            if (friendly) throw new Error(friendly.message);
+            console.error("[collab] Agent turn failed:", error);
+            throw new Error("The AI service could not answer");
+        }
         const text = normalizeModelContent(reply.content).trim();
-        if (!text) throw new Error(`Model "${resolved.modelId}" returned an empty turn`);
+        // Shown in the meeting as the failure detail, so it names the route, not the model.
+        if (!text) throw new Error(`The ${resolved.route} model returned an empty turn`);
         return text;
     };
 }

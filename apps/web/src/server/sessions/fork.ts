@@ -89,7 +89,6 @@ export async function forkSession(
                 refs: message.refs ?? null,
                 citations: message.citations ?? null,
                 attachments: message.attachments ?? null,
-                model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
                 metadata: Object.keys(metadata).length > 0 ? metadata : null,

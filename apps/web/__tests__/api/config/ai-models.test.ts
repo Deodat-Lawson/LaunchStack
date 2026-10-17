@@ -13,7 +13,6 @@ const SANITIZED: PublicChatConfig = {
     routes: {
         default: {
             available: true,
-            model: "vendor/default",
             inheritsDefault: false,
             vision: { supported: false },
             reasoning: { mode: "none", controllable: false },
@@ -21,7 +20,6 @@ const SANITIZED: PublicChatConfig = {
         },
         fast: {
             available: true,
-            model: "vendor/default",
             inheritsDefault: true,
             vision: { supported: false },
             reasoning: { mode: "none", controllable: false },
@@ -33,7 +31,6 @@ const SANITIZED: PublicChatConfig = {
         },
         vision: {
             available: true,
-            model: "vendor/looker",
             inheritsDefault: false,
             vision: { supported: true, mimeTypes: ["image/png"], maxImages: 3 },
             reasoning: { mode: "none", controllable: false },

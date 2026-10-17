@@ -29,7 +29,7 @@ import {
 import LoadingPage from "~/app/_components/loading";
 // A just-signed-out user is a public-site audience, and the public site is a
 // separate origin now (apps/landing).
-import { LANDING_URL } from "~/config/landing";
+import { LANDING_HREF } from "~/config/landing";
 import {
     UNFILED_FOLDER,
     folderLeafName,
@@ -2298,7 +2298,7 @@ export function WorkspaceShell() {
             userTitle={me?.title}
             avatarUrl={me?.avatarUrl}
             onOpenSettings={() => expandFeature("settings")}
-            onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+            onSignOut={() => signOut({ redirectUrl: LANDING_HREF })}
         />
     );
 

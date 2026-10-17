@@ -6,7 +6,7 @@ import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
-import { LANDING_URL } from "~/config/landing";
+import { LANDING_HREF } from "~/config/landing";
 
 /**
  * Top bar used on /signin and /signup.
@@ -53,7 +53,7 @@ export function AuthChrome() {
                         {user.email || "Signed in"}
                     </span>
                     {/* A just-signed-out user is a public-site audience. */}
-                    <UserMenu afterSignOutUrl={LANDING_URL} />
+                    <UserMenu afterSignOutUrl={LANDING_HREF} />
                 </>
             )}
         </nav>

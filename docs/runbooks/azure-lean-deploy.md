@@ -470,8 +470,9 @@ deployment. Keeping it on Vercel is the intended split:
 - `app.example.com` → this stack on the Azure VM
 
 Point the landing site's sign-in links at the app with `NEXT_PUBLIC_APP_URL`,
-and set `NEXT_PUBLIC_SITE_URL` on the app to the landing origin. On a
-self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
+and set `LANDING_PUBLIC_URL` on the app to the landing origin (a runtime
+variable, so the CI-built image picks it up; `NEXT_PUBLIC_SITE_URL` would
+need a rebuild). On a self-hosted instance `/` redirects to `/signin`, so the app never tries to serve
 marketing pages itself.
 
 Running `apps/web` **on** Vercel is a different architecture, not a config flag:

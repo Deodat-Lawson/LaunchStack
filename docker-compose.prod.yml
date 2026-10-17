@@ -46,9 +46,11 @@ services:
       # on one origin (lib/storage matches URLs by this prefix).
       NEXT_PUBLIC_S3_ENDPOINT: https://files.${DOMAIN}
       NEXT_PUBLIC_APP_URL: https://${DOMAIN}
-      # Read per request by /privacy and /terms (server/landing-redirect.ts);
-      # the image is built in CI, so a build-time value can't carry DOMAIN.
-      LANDING_PUBLIC_URL: https://home.${DOMAIN}
+      # Read per request by /site/... (the logo, sign-out, Help), /privacy and
+      # /terms (server/landing-redirect.ts); the image is built in CI, so a
+      # build-time value can't carry DOMAIN. Set it in .env when the public
+      # site lives somewhere other than home.${DOMAIN}.
+      LANDING_PUBLIC_URL: ${LANDING_PUBLIC_URL:-https://home.${DOMAIN}}
 
   worker:
     image: ghcr.io/deodat-lawson/launchstack-web-worker:latest

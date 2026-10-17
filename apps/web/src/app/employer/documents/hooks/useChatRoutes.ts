@@ -33,7 +33,6 @@ export interface ChatReasoningInfo {
 
 export interface ChatRouteInfo {
     available: boolean;
-    model?: string;
     inheritsDefault?: boolean;
     vision?: ChatVisionInfo;
     reasoning?: ChatReasoningInfo;

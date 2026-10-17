@@ -542,24 +542,58 @@ describe("error normalization", () => {
         expect(described!.message).toMatch(/requires a credential/);
     });
 
-    it("maps an unreachable endpoint to 502 naming the base URL", () => {
+    // These messages reach whoever asked, so they name the variable to fix but
+    // never the endpoint host or the model id; those go to the server log.
+    const quietly = () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        jest.spyOn(console, "warn").mockImplementation(() => {});
+    };
+    afterEach(() => jest.restoreAllMocks());
+
+    it("maps an unreachable endpoint to 502 naming CHAT_BASE_URL, not the host", () => {
+        quietly();
         const described = describeChatEndpointError(
             new Error("fetch failed: ECONNREFUSED"),
             endpoint,
             "m"
         );
         expect(described).toMatchObject({ status: 502 });
-        expect(described!.message).toContain(endpoint.baseUrl);
+        expect(described!.message).toContain("CHAT_BASE_URL");
+        expect(described!.message).not.toContain("endpoint.example");
     });
 
-    it("maps an unknown model to 400 naming the model id", () => {
+    it("maps an unknown model to 400 without naming the model id", () => {
+        quietly();
         const described = describeChatEndpointError(
             new Error("model_not_found"),
             endpoint,
             "vendor/typo"
         );
         expect(described).toMatchObject({ status: 400 });
-        expect(described!.message).toContain("vendor/typo");
+        expect(described!.message).toContain("chat model configuration");
+        expect(described!.message).not.toContain("vendor/typo");
+    });
+
+    it("maps an exhausted balance to 503 without the provider's billing text", () => {
+        quietly();
+        const described = describeChatEndpointError(
+            new Error("402 Insufficient credits. Add more using https://vendor.example/credits"),
+            endpoint,
+            "vendor/model"
+        );
+        expect(described).toMatchObject({ status: 503 });
+        expect(described!.message).toMatch(/usage limit/);
+        expect(described!.message).not.toMatch(/vendor/);
+    });
+
+    it("maps a rate limit to 429", () => {
+        quietly();
+        const described = describeChatEndpointError(
+            new Error("429 Rate limit exceeded"),
+            endpoint,
+            "m"
+        );
+        expect(described).toMatchObject({ status: 429 });
     });
 
     it("returns null for an error it cannot classify", () => {

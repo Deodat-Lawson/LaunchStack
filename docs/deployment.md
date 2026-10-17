@@ -198,7 +198,8 @@ being picked up.
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |
 | `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Origin the public site (`apps/landing`) is served from |
+| `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
+| `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
 | `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
 | `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |

@@ -14,7 +14,7 @@ import { SignInForm } from "~/app/_components/CredentialsForm";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
-import { LANDING_URL } from "~/config/landing";
+import { LANDING_HREF } from "~/config/landing";
 import type { SocialProvider } from "~/server/auth/providers";
 
 /**
@@ -202,7 +202,7 @@ function AlreadySignedIn({ continueHref }: { continueHref: string }) {
                 <Button
                     type="button"
                     variant="outline"
-                    onClick={() => void signOut({ redirectUrl: LANDING_URL })}
+                    onClick={() => void signOut({ redirectUrl: LANDING_HREF })}
                 >
                     Sign out
                 </Button>

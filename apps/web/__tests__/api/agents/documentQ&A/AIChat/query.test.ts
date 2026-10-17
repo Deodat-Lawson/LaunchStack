@@ -691,10 +691,11 @@ describe("chat transport and general scope", () => {
                     })
                 );
                 expect(response.status).toBe(200);
-                expect(await response.json()).toMatchObject({
-                    success: true,
-                    aiModel: "selected-model",
-                });
+                const body = (await response.json()) as Record<string, unknown>;
+                expect(body).toMatchObject({ success: true });
+                // The response never names the model that answered.
+                expect(body).not.toHaveProperty("aiModel");
+                expect(JSON.stringify(body)).not.toContain("selected-model");
                 expect(resolveConfiguredChatRoute).toHaveBeenCalledWith("fast");
                 expect(resolveConfiguredChatModel).toHaveBeenCalledWith(
                     expect.objectContaining({
@@ -973,14 +974,16 @@ describe("chat transport and general scope", () => {
         mockBehavior = { parameters: { streaming: "supported" } };
         mockStream.mockImplementation(async function* () {
             yield fakeChunk("Partial");
-            throw new Error("Provider unavailable");
+            throw new Error("Provider unavailable. Add credits at https://vendor.example/billing");
         });
         const response = await POST(
             queryRequest({ question: "hi", searchScope: "none", stream: true })
         );
         const text = await response.text();
         expect(text).toContain('"type":"error"');
-        expect(text).toContain("Provider unavailable");
+        expect(text).toContain("The chat response failed. Please retry.");
+        // The provider's own text can name the vendor; it stays in the log.
+        expect(text).not.toContain("vendor.example");
         expect(text).not.toContain('"type":"result"');
         expect(mockInsertValues).not.toHaveBeenCalled();
     });

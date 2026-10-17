@@ -338,7 +338,6 @@ export async function POST(request: Request) {
                 chunksAnalyzed: documents.length,
                 fusionWeights: [0.4, 0.6],
                 searchScope: "document",
-                aiModel: resolvedModel,
                 webSources: enableWebSearch ? webSearch.results : undefined,
                 webSearch: enableWebSearch
                     ? {

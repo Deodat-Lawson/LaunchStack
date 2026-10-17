@@ -24,17 +24,26 @@ import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "@launchstack/retrieval/search-types";
+import { withAssistantIdentity } from "~/lib/ai/assistant-identity";
 import { configureAppChatModels } from "~/server/chat-models";
 import { env } from "~/env";
 
 export { selectChatRoute };
 
-/** Resolve a route to a ready-to-invoke model for this deployment. */
+/**
+ * Resolve a route to a ready-to-invoke model for this deployment. Its
+ * `prepareMessages` also adds the assistant identity rule, so no chat this app
+ * sends lets the model name itself (see `~/lib/ai/assistant-identity`).
+ */
 export function resolveConfiguredChatModel(
     options: ResolveChatModelOptions = {}
 ): ResolvedChatModel {
     configureAppChatModels(env.server);
-    return resolveChatModel(options);
+    const resolved = resolveChatModel(options);
+    return {
+        ...resolved,
+        prepareMessages: messages => resolved.prepareMessages(withAssistantIdentity(messages)),
+    };
 }
 
 /**

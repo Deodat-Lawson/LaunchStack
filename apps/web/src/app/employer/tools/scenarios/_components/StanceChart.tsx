@@ -74,6 +74,8 @@ export function StanceChart({
                         tickLine={false}
                         axisLine={false}
                         allowDecimals={false}
+                        // The stack always sums to everyone, so the scale ends there.
+                        domain={[0, Math.max(1, people.length)]}
                         width={32}
                         tick={{ fill: "var(--ink-3)", fontSize: 11 }}
                     />

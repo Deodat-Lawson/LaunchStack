@@ -69,7 +69,10 @@ export function createScenarioPorts(): ScenarioRunPorts {
                 companyId: run.companyId,
                 amount: credits,
                 service: "scenario_simulation",
-                description: `${run.kind === "post_test" ? "Post test" : "Scenario"} "${run.title}": ${unit}`,
+                description:
+                    run.kind === "post_test"
+                        ? `${run.title} (${unit})`
+                        : `Scenario "${run.title}" (${unit})`,
                 referenceId: `scenario:${run.id}`,
             });
             return result !== null;

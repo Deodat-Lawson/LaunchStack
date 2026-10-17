@@ -15,7 +15,11 @@ export type StatusTone = "ok" | "warn" | "danger" | "muted";
 const TONES: Record<StatusTone, { bg: string; fg: string; border: string }> = {
     ok: { bg: "var(--accent-soft)", fg: "var(--accent-ink)", border: "var(--accent-glow)" },
     warn: { bg: "oklch(0.96 0.07 70)", fg: "oklch(0.4 0.13 55)", border: "oklch(0.85 0.12 70)" },
-    danger: { bg: "oklch(0.96 0.05 25)", fg: "var(--danger)", border: "oklch(0.85 0.09 25)" },
+    danger: {
+        bg: "var(--danger-soft)",
+        fg: "var(--danger)",
+        border: "color-mix(in oklch, var(--danger) 35%, var(--danger-soft))",
+    },
     muted: { bg: "var(--panel-2)", fg: "var(--ink-3)", border: "var(--line)" },
 };
 

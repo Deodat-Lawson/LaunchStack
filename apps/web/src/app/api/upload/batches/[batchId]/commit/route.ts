@@ -17,7 +17,7 @@ import {
     updateBatchStatus,
     type UploadBatchFileRecord,
 } from "~/server/services/upload-batches";
-import { isTranscriptionError } from "@launchstack/conversion";
+import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { recordUpload } from "~/server/workspace/added-documents";
 

@@ -129,7 +129,8 @@ API keys from all three vendors work through the key form, including a Gemini
 API key from Google AI Studio.
 
 Not covered yet: OCR itself (the document converter and the Azure, Landing AI
-or Datalab providers it routes to), image generation, transcription and
+or Datalab providers it routes to), image generation, transcription (and
+transcript translation, which runs on the transcription endpoint) and
 reranking keep the server's settings. Embeddings have their own per-workspace
 key and endpoint in Settings › Processing.
 

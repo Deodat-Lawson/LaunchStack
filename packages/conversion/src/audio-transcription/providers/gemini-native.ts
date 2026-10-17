@@ -321,34 +321,112 @@ function inOrderShare(a: string, b: string): number {
 
 type Line = WindowTranscript["segments"][number];
 
-/** How far back from a reply's end to look for speech the continuation repeats. */
-const REPEAT_SEARCH_LINES = 40;
-const REPEAT_SEARCH_CHARS = 800;
+/** Faster than anyone speaks, in letters (or CJK characters) a second. */
+const MAX_SPEECH_CHARS_PER_SECOND = 30;
+/** Bounds on the text compared, so a pathological reply stays cheap. */
+const REPEAT_COMPARE_CHARS = 6000;
+/** How far ahead in `rest` a squeezed line may find its repeat. */
+const REPEAT_LOOKAHEAD = 4;
+
+/**
+ * How many of `first`'s last lines claim too little time for their words: a
+ * squeezed clock (one reply put six sections of speech, ~220 s, into 5 s).
+ * Each line is judged on its own pace — characters over the time until the
+ * next line starts — so the correctly timed lines before a squeeze stay out
+ * of it. A squeeze can hold the odd line given a believable few seconds, so
+ * the run ends only at two believable lines in a row; one- to three-letter
+ * lines ("系。") ride along. It takes at least three fast lines and 60
+ * characters, so one mistimed line is not a squeeze.
+ */
+function squeezedTail(first: Line[]): number {
+    let start = first.length;
+    let believable = 0;
+    for (let k = first.length - 1; k >= 0; k--) {
+        const line = first[k]!;
+        const n = normalForm(line.text).length;
+        const until = k + 1 < first.length ? first[k + 1]!.start : line.end;
+        const seconds = Math.max(until - line.start, line.end - line.start, 0.2);
+        if (n <= 3 || n / seconds > MAX_SPEECH_CHARS_PER_SECOND) {
+            believable = 0;
+            start = k;
+        } else if (++believable >= 2) {
+            break;
+        }
+    }
+    const run = first.slice(start);
+    let fast = 0;
+    let chars = 0;
+    run.forEach((line, i) => {
+        const n = normalForm(line.text).length;
+        const next = run[i + 1];
+        const seconds = Math.max(
+            (next ? next.start : line.end) - line.start,
+            line.end - line.start,
+            0.2
+        );
+        if (n > 3 && n / seconds > MAX_SPEECH_CHARS_PER_SECOND) fast++;
+        chars += n;
+    });
+    return fast >= 3 && chars >= 60 ? run.length : 0;
+}
+
+/** Two lines that say the same thing: near-identical text, identical numbers. */
+function sameLine(a: string, b: string, threshold = 0.95): boolean {
+    const x = normalForm(a);
+    const y = normalForm(b);
+    if (x.length < 4 || y.length < 4) return x.length > 0 && x === y;
+    if (x.replace(/\D+/g, "") !== y.replace(/\D+/g, "")) return false;
+    return inOrderShare(x, y) >= threshold && inOrderShare(y, x) >= threshold;
+}
 
 /**
  * `first` without the lines at its end that `rest` transcribes again.
  *
  * A reply can hear a whole window yet squeeze its timestamps, so its last line
- * seems to end minutes early; the continuation then transcribes that speech a
- * second time, correctly timed. The longest run of `first`'s last lines whose
- * text appears, in order, at the start of `rest` (80% of its characters, as a
- * common subsequence, so different line breaks or a changed word still match)
- * is dropped, and the fresh clip's copy stays. Order is what keeps look-alike
- * lines ("End of section 31." vs "End of section 48.") from matching.
+ * seems to end early; the continuation then transcribes that speech a second
+ * time, correctly timed. Only two things count as a repeat, because a reply
+ * that genuinely stopped early is followed by new speech that can sound much
+ * like the old ("Section 31…", "Section 32…"), and dropping that is losing
+ * the recording:
+ *   - lines of a tail whose claimed times cannot hold its words (faster than
+ *     anyone speaks) that `rest`, walked in step with them, says again (90%
+ *     the same both ways, same digits): the clock is wrong, so the fresh
+ *     clip's copy is the one to keep. The squeeze's other lines stay — a
+ *     continuation can start mid-sentence, so the first half of that sentence
+ *     exists only here, if roughly timed;
+ *   - a run of last lines equal, one for one and in order, to `rest`'s first
+ *     lines (95% the same both ways, same digits).
  */
 export function dropRepeatedTail(first: Line[], rest: Line[]): Line[] {
-    const restText = normalForm(rest.map(l => l.text).join(""));
-    if (!restText) return first;
-    let drop = 0;
-    let tail = "";
-    for (let k = 1; k <= Math.min(first.length, REPEAT_SEARCH_LINES); k++) {
-        tail = normalForm(first[first.length - k]!.text) + tail;
-        if (tail.length > REPEAT_SEARCH_CHARS || tail.length > restText.length * 1.1) break;
-        if (tail.length < 6) continue;
-        const head = restText.slice(0, Math.ceil(tail.length * 1.1));
-        if (inOrderShare(tail, head) >= 0.8) drop = k;
+    const restText = normalForm(rest.map(l => l.text).join("")).slice(0, REPEAT_COMPARE_CHARS);
+    if (!restText || first.length === 0) return first;
+
+    const squeezed = squeezedTail(first);
+    if (squeezed > 0) {
+        // Walk the squeeze and `rest` together, in order: a line goes only if
+        // the next few lines of `rest` say it again, so a look-alike from a
+        // later section ("…matters more than marketing…") cannot match.
+        const run = first.slice(-squeezed);
+        const kept: Line[] = [];
+        let next = 0;
+        for (const line of run) {
+            const at = rest
+                .slice(next, next + REPEAT_LOOKAHEAD)
+                .findIndex(r => sameLine(line.text, r.text, 0.9));
+            if (at === -1) kept.push(line);
+            else next += at + 1;
+        }
+        if (kept.length < run.length) return [...first.slice(0, first.length - squeezed), ...kept];
     }
-    return drop > 0 ? first.slice(0, first.length - drop) : first;
+
+    let repeated = 0;
+    for (let k = 1; k <= Math.min(first.length, rest.length); k++) {
+        const tail = first.slice(-k);
+        if (tail.every((line, m) => sameLine(line.text, rest[m]!.text))) repeated = k;
+    }
+    const substantial =
+        repeated >= 2 || (repeated === 1 && normalForm(first[first.length - 1]!.text).length >= 12);
+    return substantial ? first.slice(0, first.length - repeated) : first;
 }
 
 /** Window transcripts timed from a clip's start, moved to the clip's place. */

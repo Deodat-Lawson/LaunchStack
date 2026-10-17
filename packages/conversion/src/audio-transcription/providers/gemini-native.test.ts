@@ -5,6 +5,7 @@ import {
     GeminiNativeTranscriber,
     INLINE_MAX_BYTES,
     dropRepeatedTail,
+    normalForm,
     DEFAULT_CHUNK_SECONDS,
     gapLine,
     geminiNativeRoot,
@@ -272,6 +273,64 @@ describe("dropRepeatedTail", () => {
         const first = [line(0, "Good afternoon everyone."), line(3, "Let's start with hiring.")];
         const rest = [line(200, "We need two engineers before November.")];
         expect(dropRepeatedTail(first, rest)).toEqual(first);
+    });
+
+    /** Five lines of one templated "section", like the timed test file. */
+    const section = (n: number, a: string, b: string) => [
+        `Section ${n}.`,
+        `This is checkpoint number ${n} of the long recording.`,
+        `The team agreed that ${a} matters more than ${b} this month.`,
+        "We will keep notes, share them with everyone, and come back after lunch.",
+        `End of section ${n}.`,
+    ];
+
+    it("keeps everything after a true early stop, even when the next speech sounds the same", () => {
+        // Correctly timed (~3 s a line), stopping at section 31; the rest is sections 32-33.
+        const first = [...section(30, "design", "pricing"), ...section(31, "hiring", "budget")].map(
+            (text, i) => line(i * 3, text)
+        );
+        const rest = [...section(32, "design", "pricing"), ...section(33, "hiring", "budget")].map(
+            (text, i) => line(100 + i * 3, text)
+        );
+        expect(dropRepeatedTail(first, rest)).toEqual(first);
+    });
+
+    it("drops a long squeezed copy line by line, keeping a believable line and a half-sentence", () => {
+        const normal = section(113, "pricing", "budget").map((text, i) => ({
+            start: 4200 + i * 6,
+            end: 4205 + i * 6,
+            text,
+        }));
+        const half = {
+            start: 4253.5,
+            end: 4253.5,
+            text: "The team agreed that feedback matters more than quarter this month.",
+        };
+        // Sections 114-119 squeezed into 4253.5-4258 s, one line given a believable 4 s.
+        const squeezed = [114, 115, 116, 117, 118, 119].flatMap(n =>
+            section(n, "design", "partners")
+                .slice(n === 114 ? 3 : 0)
+                .map((text, i) => ({
+                    start: 4254 + (n - 114) * 0.5 + i * 0.05,
+                    end: 4254 + (n - 114) * 0.5 + i * 0.05 + (n === 116 && i === 3 ? 4 : 0),
+                    text,
+                }))
+        );
+        const first = [...normal, half, ...squeezed];
+        // The fresh clip starts mid-sentence, then re-hears 114-119 correctly timed.
+        const rest = [
+            line(4260, "this month."),
+            ...[114, 115, 116, 117, 118, 119].flatMap((n, k) =>
+                section(n, "design", "partners")
+                    .slice(n === 114 ? 3 : 0)
+                    .map((text, i) => line(4262 + k * 37 + i * 7, text))
+            ),
+        ];
+        expect(normalForm(squeezed.map(l => l.text).join("")).length).toBeGreaterThan(800);
+
+        const kept = dropRepeatedTail(first, rest);
+
+        expect(kept).toEqual([...normal, half]);
     });
 
     it("does not drop on a lone backchannel both happen to contain", () => {

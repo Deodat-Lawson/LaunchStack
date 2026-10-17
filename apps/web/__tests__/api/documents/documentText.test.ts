@@ -168,8 +168,8 @@ function queueSelectBatches(...batches: SelectBatch[]): void {
     });
 }
 
-function requestFor(documentId = "42") {
-    return GET(new Request(`http://localhost/api/documents/${documentId}/text`), {
+function requestFor(documentId = "42", query = "") {
+    return GET(new Request(`http://localhost/api/documents/${documentId}/text${query}`), {
         params: Promise.resolve({ id: documentId }),
     });
 }
@@ -234,6 +234,47 @@ describe("GET /api/documents/[id]/text", () => {
         expect(payload.html).toContain("current v2 text");
         expect(payload.html).not.toContain("stale v1 text");
         expect(payload.html).not.toContain("legacy unversioned text");
+    });
+
+    it("returns the current version's text as Markdown, in order, when asked", async () => {
+        queueSelectBatches(
+            { rows: [documentRow()] },
+            {
+                ordered: true,
+                rows: [
+                    { versionId: 2n, content: "# Acme\n\nWe make rockets.\n", pageNumber: 1 },
+                    { versionId: 1n, content: "stale v1 text", pageNumber: 1 },
+                    {
+                        versionId: 2n,
+                        content: "## Pricing\n\n<b>Free</b> to start.",
+                        pageNumber: 2,
+                    },
+                ],
+            }
+        );
+
+        const response = await requestFor("42", "?format=markdown");
+        const payload = (await response.json()) as Record<string, unknown>;
+
+        expect(response.status).toBe(200);
+        expect(payload).toEqual({
+            // Raw Markdown, not escaped: the viewer renders it without raw HTML.
+            markdown: "# Acme\n\nWe make rockets.\n\n## Pricing\n\n<b>Free</b> to start.",
+            chunkCount: 2,
+            documentId: 42,
+        });
+    });
+
+    it("returns empty Markdown when the document has no current text", async () => {
+        queueSelectBatches({ rows: [documentRow({ currentVersionId: null })] });
+
+        const response = await requestFor("42", "?format=markdown");
+
+        await expect(response.json()).resolves.toEqual({
+            markdown: "",
+            chunkCount: 0,
+            documentId: 42,
+        });
     });
 
     it("returns the empty response when the current pointer is null", async () => {

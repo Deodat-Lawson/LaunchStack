@@ -118,6 +118,13 @@ describe("sourceKindOf", () => {
         expect(sourceKindOf({ creationKey: "website:https://acme.com", ocrMetadata: null })).toBe(
             "website"
         );
+        // Stored creation keys are hashes; a saved web page says what it is by its marker.
+        expect(
+            sourceKindOf({
+                creationKey: "ad23933240d74591bf2e58bae5c73404ebcf19e5612d0abc4c781f0a55e4e42f",
+                ocrMetadata: { kind: "website", url: "https://acme.com/" },
+            })
+        ).toBe("website");
         expect(sourceKindOf({ creationKey: "upload:xyz", ocrMetadata: {} })).toBe("upload");
         expect(
             sourceKindOf({ creationKey: null, ocrMetadata: { connector: "agent-sessions" } })

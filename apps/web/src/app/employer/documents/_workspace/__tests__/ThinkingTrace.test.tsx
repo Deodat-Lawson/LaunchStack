@@ -43,6 +43,13 @@ describe("ThinkingTrace", () => {
         expect(think).toContainElement(screen.getByText("Section 12.2 sets 60 days."));
     });
 
+    it("never shows half-arrived Markdown in live reasoning", () => {
+        render(<ThinkingTrace msg={{ ...working, reasoning: "Notice is given **60 da" }} />);
+        const box = screen.getByTestId("trace-reasoning");
+        expect(box).not.toHaveTextContent("**");
+        expect(box.querySelector("strong")).toHaveTextContent("60 da");
+    });
+
     it("folds to 'Thought for Ns' when the first word arrives", () => {
         const { rerender } = render(<ThinkingTrace msg={working} />);
         rerender(<ThinkingTrace msg={{ ...working, text: "Either party", thoughtMs: 4200 }} />);

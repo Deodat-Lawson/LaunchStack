@@ -7,6 +7,7 @@ import { Spinner } from "~/components/ui/spinner";
 import { cn } from "~/lib/utils";
 import type { ChatTurnStep } from "~/lib/chat-turns";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { closeOpenMarkdown } from "./smoothText";
 import { currentStep, formatDuration, formatThought } from "./turnTrace";
 import type { ThreadMessage } from "./types";
 
@@ -53,7 +54,10 @@ function ReasoningText({ text, live }: { text: string; live: boolean }) {
             }}
             className="border-line text-ink-3 my-1.5 max-h-64 overflow-y-auto border-l pl-3"
         >
-            <ChatMarkdown text={text} className="text-[13px] leading-[1.6]" />
+            <ChatMarkdown
+                text={live ? closeOpenMarkdown(text) : text}
+                className="text-[13px] leading-[1.6]"
+            />
         </div>
     );
 }

@@ -333,6 +333,7 @@ export function useChatRuntime(input: {
         // need the saved row, and waiting for it held back every first step
         // by a full round trip. A save that fails stops the request.
         let saveFailure: Error | undefined;
+        let stoppedAt: number | undefined;
         const saving = (
             persistedUser
                 ? Promise.resolve()
@@ -492,7 +493,8 @@ export function useChatRuntime(input: {
             ) {
                 answer.status = "stopped";
                 answer.stage = "Stopped";
-                answer.elapsedMs = performance.now() - started;
+                stoppedAt = performance.now() - started;
+                answer.elapsedMs = stoppedAt;
                 answer.steps = settleSteps(answer.steps, answer.elapsedMs);
                 emit(context);
             }
@@ -508,7 +510,8 @@ export function useChatRuntime(input: {
                     error instanceof Error ? error.message : "Couldn't send this message.";
             context.held = true;
         } finally {
-            answer.elapsedMs = performance.now() - started;
+            // A stop's time is when it stopped, not when the save behind it finished.
+            answer.elapsedMs = stoppedAt ?? performance.now() - started;
             answer.steps = settleSteps(answer.steps, answer.elapsedMs);
             if (savedUser && context.sessionId) {
                 try {

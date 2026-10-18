@@ -271,12 +271,15 @@ test("a stop shows at once even while the chat is still saving", async () => {
         result.current.runtime.stop();
     });
     await waitFor(() => expect(result.current.thread[1]?.status).toBe("stopped"));
+    const stoppedAfter = result.current.thread[1]!.elapsedMs;
     expect(sessions.appendMessages).not.toHaveBeenCalled();
     await act(async () => {
         finishCreate({ id: "slow-save" } as unknown as sessions.StoredSession);
         await sending!;
     });
     expect(result.current.thread[1]?.status).toBe("stopped");
+    // It keeps the time it stopped at, not the time the save took.
+    expect(result.current.thread[1]?.elapsedMs).toBe(stoppedAfter);
     expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-save");
 });
 

@@ -97,6 +97,10 @@ describe("closeOpenMarkdown", () => {
         );
         const table = "| Clause | Notice |\n|---|---|\n| Renewal | 60 days |";
         expect(closeOpenMarkdown(table)).toBe(table);
+        // A row that happens to end on a pipe mid-way still has too few cells.
+        expect(closeOpenMarkdown("| Clause | Notice |\n|---|---|\n| Convenience |")).toBe(
+            "| Clause | Notice |\n|---|---|"
+        );
     });
 });
 

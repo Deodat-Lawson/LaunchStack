@@ -8,6 +8,7 @@ import type {
     WorkspaceSource,
 } from "~/app/employer/documents/_workspace/types";
 import { useChatRuntime } from "~/app/employer/documents/_workspace/useChatRuntime";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { StoredSession } from "~/app/employer/documents/_workspace/sessionApi";
 import type { AskStartersPayload } from "~/lib/ask-starters/contract";
 import { previewScript, type PreviewMode, type PreviewRequest } from "./script";
@@ -19,7 +20,7 @@ import { previewScript, type PreviewMode, type PreviewRequest } from "./script";
  * the session routes keep the chat in this tab's sessionStorage, so a reload
  * restores it from what the runtime saved.
  *
- * Query flags: `?mode=hidden|visible|fail` picks the answer script (also
+ * Query flags: `?mode=hidden|visible|fast|fail` picks the answer script (also
  * switchable on the page), `?slow=1` stretches every delay 3×. Gated by the page.
  */
 
@@ -96,6 +97,7 @@ const STORE_KEY = "ask-chat-preview.sessions";
 const MODES: { id: PreviewMode; label: string }[] = [
     { id: "hidden", label: "Hidden reasoning (production)" },
     { id: "visible", label: "Visible reasoning" },
+    { id: "fast", label: "Fast reply" },
     { id: "fail", label: "Fails midway" },
 ];
 
@@ -298,9 +300,9 @@ export function AskChatPreview() {
     useEffect(() => {
         const flags = new URLSearchParams(window.location.search);
         const initial = flags.get("mode");
-        if (initial === "visible" || initial === "fail" || initial === "hidden") {
-            modeRef.current = initial;
-            setMode(initial);
+        if (MODES.some(option => option.id === initial)) {
+            modeRef.current = initial as PreviewMode;
+            setMode(initial as PreviewMode);
         }
         const restore = installFetchStub(modeRef, flags.get("slow") === "1" ? 3 : 1);
         setReady(true);
@@ -310,32 +312,31 @@ export function AskChatPreview() {
     if (!ready) return null;
     return (
         <div className="bg-surface text-ink flex h-screen flex-col">
-            <div
-                role="radiogroup"
-                aria-label="Answer script"
-                data-testid="preview-modes"
-                className="border-line bg-panel flex flex-wrap items-center gap-1.5 border-b px-3 py-1.5 text-[12px]"
-            >
-                <span className="text-ink-3 mr-1">Sample answer:</span>
-                {MODES.map(option => (
-                    <button
-                        key={option.id}
-                        type="button"
-                        role="radio"
-                        aria-checked={mode === option.id}
-                        onClick={() => {
-                            modeRef.current = option.id;
-                            setMode(option.id);
-                        }}
-                        className={
-                            mode === option.id
-                                ? "bg-brand-soft text-brand rounded-full px-2.5 py-0.5 font-semibold"
-                                : "text-ink-2 hover:bg-line-2 rounded-full px-2.5 py-0.5"
-                        }
-                    >
-                        {option.label}
-                    </button>
-                ))}
+            <div className="border-line bg-panel flex flex-wrap items-center gap-2 border-b px-3 py-1.5 text-[12px]">
+                <span className="text-ink-3">Sample answer:</span>
+                <ToggleGroup
+                    type="single"
+                    size="sm"
+                    aria-label="Sample answer"
+                    data-testid="preview-modes"
+                    value={mode}
+                    onValueChange={value => {
+                        if (!value) return;
+                        modeRef.current = value as PreviewMode;
+                        setMode(value as PreviewMode);
+                    }}
+                    className="flex-wrap justify-start"
+                >
+                    {MODES.map(option => (
+                        <ToggleGroupItem
+                            key={option.id}
+                            value={option.id}
+                            className="h-7 px-2.5 text-[12px] font-normal"
+                        >
+                            {option.label}
+                        </ToggleGroupItem>
+                    ))}
+                </ToggleGroup>
             </div>
             <div className="flex min-h-0 flex-1">
                 <ChatHarness />

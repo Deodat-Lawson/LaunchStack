@@ -904,18 +904,18 @@ const Message = React.memo(function Message({
                                 onOpen={onOpenCitation}
                                 onToggleContext={toggleContext}
                             >
-                                <button
+                                <Button
                                     type="button"
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => onOpenCitation?.(c)}
                                     aria-label={`Open ${s.title} at the cited passage`}
                                     title={c.snippet ? `“${c.snippet}”` : undefined}
-                                    className="border-line bg-panel text-ink-2 hover:bg-line-2 hover:text-ink inline-flex max-w-[260px] items-center gap-1.5 rounded-full border px-2 py-0.5 text-[12px] transition-colors focus-visible:outline"
+                                    className="text-ink-2 h-auto max-w-[260px] gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-normal"
                                 >
-                                    <span className="flex shrink-0" style={{ color: meta.color }}>
-                                        <Icon size={12} />
-                                    </span>
+                                    <Icon size={12} className="text-ink-3 shrink-0" />
                                     <span className="truncate">{s.title}</span>
-                                </button>
+                                </Button>
                             </CitationTarget>
                         );
                     })}

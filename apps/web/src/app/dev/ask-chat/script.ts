@@ -7,9 +7,10 @@ import type { AIChatResponse, AIChatStreamEvent } from "~/app/employer/documents
  * - `hidden`: the production shape. The model thinks without sharing its
  *   reasoning, then sends the whole answer in a few chunks at once.
  * - `visible`: a model that streams its reasoning, then the answer token by token.
+ * - `fast`: the fast route: barely any thinking, the answer streamed token by token.
  * - `fail`: the model call fails partway.
  */
-export type PreviewMode = "hidden" | "visible" | "fail";
+export type PreviewMode = "hidden" | "visible" | "fast" | "fail";
 
 export interface ScriptedEvent {
     /** Wait before sending this event, in ms. */
@@ -153,9 +154,11 @@ export function previewScript(request: PreviewRequest, mode: PreviewMode): Scrip
     if (mode === "visible") {
         for (const delta of pieces(reasoning, 7)) push(28, { type: "reasoning", delta });
     }
-    const firstWordAfter = mode === "visible" ? 250 : 2800;
-    const answerPieces =
-        mode === "visible" ? pieces(answer, 5) : pieces(answer, Math.ceil(answer.length / 3));
+    const firstWordAfter = mode === "visible" ? 250 : mode === "fast" ? 350 : 2800;
+    const streamed = mode === "visible" || mode === "fast";
+    const answerPieces = streamed
+        ? pieces(answer, 5)
+        : pieces(answer, Math.ceil(answer.length / 3));
     answerPieces.forEach((delta, i) => {
         if (i === 0) {
             push(firstWordAfter, {
@@ -167,7 +170,7 @@ export function previewScript(request: PreviewRequest, mode: PreviewMode): Scrip
                 step: { id: "write", label: "Writing the answer", state: "active" },
             });
         }
-        push(i === 0 ? 0 : mode === "visible" ? 22 : 40, { type: "text", delta });
+        push(i === 0 ? 0 : streamed ? 22 : 40, { type: "text", delta });
     });
     push(60, { type: "step", step: { id: "write", label: "Wrote the answer", state: "done" } });
     push(20, { type: "status", status: "finalizing" });

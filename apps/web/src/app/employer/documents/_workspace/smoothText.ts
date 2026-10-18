@@ -70,18 +70,27 @@ export function closeOpenMarkdown(partial: string): string {
 const TABLE_ROW = /^\s*\|/;
 const TABLE_DIVIDER = /^\s*\|?\s*:?-{3,}/;
 
+/** Cells in a table row: its pipes, minus an escaped `\|`. */
+function pipes(line: string): number {
+    return (line.replace(/\\\|/g, "").match(/\|/g) ?? []).length;
+}
+
 /**
- * A table shows row by row: a row still arriving is held back, and so is a
+ * A table shows row by row: a row still arriving is held back (it ends
+ * without a pipe, or has fewer cells than the header so far), and so is a
  * header until its divider line has arrived (before that it's just pipes).
  */
 function withoutPartialTable(text: string): string {
     const lines = text.split("\n");
-    const last = lines[lines.length - 1] ?? "";
-    if (TABLE_ROW.test(last) && !last.trimEnd().endsWith("|")) lines.pop();
     let start = lines.length;
     while (start > 0 && TABLE_ROW.test(lines[start - 1]!)) start--;
+    if (start === lines.length) return text;
+    const header = lines[start]!;
+    const last = lines[lines.length - 1]!;
+    if (lines.length - start > 1 && (!last.trimEnd().endsWith("|") || pipes(last) < pipes(header)))
+        lines.pop();
     const rows = lines.length - start;
-    if (rows > 0 && (rows < 2 || !TABLE_DIVIDER.test(lines[start + 1]!))) lines.splice(start);
+    if (rows < 2 || !TABLE_DIVIDER.test(lines[start + 1]!)) lines.splice(start);
     return lines.join("\n");
 }
 

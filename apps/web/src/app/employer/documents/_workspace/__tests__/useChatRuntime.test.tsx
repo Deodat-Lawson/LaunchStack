@@ -156,6 +156,68 @@ test("records the answer's steps, reasoning and first-word time, and saves them 
     expect(saved.metadata).toMatchObject({ steps: turn.steps, thoughtMs: 3_100 });
 });
 
+test("the question goes out while the new chat is still saving, and the answer is saved after it", async () => {
+    let finishCreate: (value: sessions.StoredSession) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise(resolve => {
+                finishCreate = resolve;
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Fast first step"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+    await act(async () => {
+        finishCreate({ id: "slow-session" } as unknown as sessions.StoredSession);
+        await sending!;
+    });
+    expect(sessions.appendMessages).toHaveBeenCalledTimes(1);
+    expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-session");
+    expect(result.current.thread[1]).toMatchObject({ status: "complete", text: "The response" });
+});
+
+test("a chat that can't be saved stops its request and says why", async () => {
+    let finishCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                finishCreate = reject;
+            })
+    );
+    let requestSignal: AbortSignal | undefined;
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                requestSignal = options.signal;
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Will not save"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    await act(async () => {
+        finishCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(requestSignal?.aborted).toBe(true);
+    expect(result.current.thread[1]).toMatchObject({
+        status: "error",
+        text: "Failed to save this chat",
+    });
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
 test("a referenced chat is read as its own step", async () => {
     jest.mocked(sessions.fetchSession).mockResolvedValue({
         id: "older",

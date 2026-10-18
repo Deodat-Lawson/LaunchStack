@@ -2038,7 +2038,7 @@ describe("streamed progress steps", () => {
             queryRequest({ question: "hi", documentId: 42, searchScope: "document", stream: true })
         );
         const steps: ChatStep[] = [];
-        // The client's own reader rejects any step over the limit.
+        // The client's reader drops any step over the limit, so this one must fit.
         await expect(
             readChatStream(response, new AbortController().signal, event => {
                 if (event.type === "step") steps.push(event.step);

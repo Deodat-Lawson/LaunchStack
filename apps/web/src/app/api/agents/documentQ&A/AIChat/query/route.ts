@@ -934,6 +934,12 @@ export async function POST(request: Request) {
                         if (error instanceof AttachmentReadError) return error.message;
                         const friendly = describeChatError(error, selectedAiModel);
                         if (friendly) return friendly.message;
+                        // A stop is the reader's choice, not a failure worth a stack trace.
+                        if (
+                            request.signal.aborted ||
+                            (error as { name?: unknown })?.name === "AbortError"
+                        )
+                            return "Response stopped";
                         // The provider's own text can name the vendor or its
                         // billing page; it goes to the log, not the screen.
                         console.error("[AIChat] Streamed response failed:", error);

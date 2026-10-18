@@ -321,57 +321,67 @@ export function useChatRuntime(input: {
             emit(context);
         };
         let savedUser = Boolean(persistedUser);
+        // The question goes out while it is being saved: the answer doesn't
+        // need the saved row, and waiting for it held back every first step
+        // by a full round trip. A save that fails stops the request.
+        let saveFailure: Error | undefined;
+        const saving = (
+            persistedUser
+                ? Promise.resolve()
+                : serial(context, async () => {
+                      if (context.sessionId) {
+                          await sessions.appendMessages(context.sessionId, {
+                              messages: [storedMessage(user)],
+                              contextSourceIds: send.refs,
+                              agentKey: send.agentKey,
+                          });
+                      } else {
+                          const opening = [...prior, user];
+                          const created = await sessions.createSession({
+                              messages: opening.slice(0, MAX_SESSION_APPEND).map(storedMessage),
+                              ...(send.passages?.length
+                                  ? { title: deriveSessionTitle(send.text, send.passages) }
+                                  : {}),
+                              contextSourceIds: send.refs,
+                              continuation: context.continuation,
+                              agentKey: send.agentKey,
+                          });
+                          context.sessionId = created.id;
+                          contexts.current.set(created.id, context);
+                          const identity = readIdentity(scopeKey);
+                          const entries = Object.entries({
+                              ...identity.sessions,
+                              [created.id]: context.key,
+                          }).slice(-1000);
+                          saveIdentity(scopeKey, {
+                              activeNew:
+                                  identity.activeNew === context.key ? null : identity.activeNew,
+                              sessions: Object.fromEntries(entries),
+                          });
+                          for (
+                              let offset = MAX_SESSION_APPEND;
+                              offset < opening.length;
+                              offset += MAX_SESSION_APPEND
+                          ) {
+                              await sessions.appendMessages(created.id, {
+                                  messages: opening
+                                      .slice(offset, offset + MAX_SESSION_APPEND)
+                                      .map(storedMessage),
+                              });
+                          }
+                          if (keyRef.current === context.key) {
+                              currentInput.current.sessionIdRef.current = created.id;
+                              currentInput.current.hydratedSession.current = created.id;
+                              currentInput.current.setSessionParam(created.id);
+                          }
+                      }
+                      savedUser = true;
+                  })
+        ).catch((error: unknown) => {
+            saveFailure = error instanceof Error ? error : new Error("Couldn't save this chat.");
+            context.controller?.abort();
+        });
         try {
-            if (!persistedUser)
-                await serial(context, async () => {
-                    if (context.sessionId) {
-                        await sessions.appendMessages(context.sessionId, {
-                            messages: [storedMessage(user)],
-                            contextSourceIds: send.refs,
-                            agentKey: send.agentKey,
-                        });
-                    } else {
-                        const opening = [...prior, user];
-                        const created = await sessions.createSession({
-                            messages: opening.slice(0, MAX_SESSION_APPEND).map(storedMessage),
-                            ...(send.passages?.length
-                                ? { title: deriveSessionTitle(send.text, send.passages) }
-                                : {}),
-                            contextSourceIds: send.refs,
-                            continuation: context.continuation,
-                            agentKey: send.agentKey,
-                        });
-                        context.sessionId = created.id;
-                        contexts.current.set(created.id, context);
-                        const identity = readIdentity(scopeKey);
-                        const entries = Object.entries({
-                            ...identity.sessions,
-                            [created.id]: context.key,
-                        }).slice(-1000);
-                        saveIdentity(scopeKey, {
-                            activeNew:
-                                identity.activeNew === context.key ? null : identity.activeNew,
-                            sessions: Object.fromEntries(entries),
-                        });
-                        for (
-                            let offset = MAX_SESSION_APPEND;
-                            offset < opening.length;
-                            offset += MAX_SESSION_APPEND
-                        ) {
-                            await sessions.appendMessages(created.id, {
-                                messages: opening
-                                    .slice(offset, offset + MAX_SESSION_APPEND)
-                                    .map(storedMessage),
-                            });
-                        }
-                        if (keyRef.current === context.key) {
-                            currentInput.current.sessionIdRef.current = created.id;
-                            currentInput.current.hydratedSession.current = created.id;
-                            currentInput.current.setSessionParam(created.id);
-                        }
-                    }
-                    savedUser = true;
-                });
             if (signal.aborted) throw new DOMException("Stopped", "AbortError");
             answer.stage = "Preparing response";
             emit(context);
@@ -451,13 +461,18 @@ export function useChatRuntime(input: {
                 },
                 { stream: true, onEvent, signal, independent: true }
             );
+            await saving;
+            if (saveFailure) throw saveFailure;
             if (signal.aborted || response.cancelled)
                 throw new DOMException("Stopped", "AbortError");
             applyResponse(answer, response, sourceList);
             if (!response.success) context.held = true;
         } catch (error) {
+            await saving;
+            if (saveFailure) error = saveFailure;
             const stopped =
-                signal.aborted || (error instanceof Error && error.name === "AbortError");
+                !saveFailure &&
+                (signal.aborted || (error instanceof Error && error.name === "AbortError"));
             answer.status = stopped ? "stopped" : "error";
             answer.stage = stopped ? "Stopped" : "Failed";
             if (!stopped)

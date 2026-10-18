@@ -116,6 +116,8 @@ describe("ThinkingTrace", () => {
             />
         );
         expect(screen.getByText("Stopped after 2s")).toBeInTheDocument();
+        rerender(<ThinkingTrace msg={{ role: "assistant", text: "Part", status: "stopped" }} />);
+        expect(screen.getByText("Stopped")).toBeInTheDocument();
     });
 
     it("marks a step cut off by a stop as unfinished, not running", () => {

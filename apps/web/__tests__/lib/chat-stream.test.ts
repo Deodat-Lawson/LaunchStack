@@ -56,13 +56,18 @@ describe("chat stream protocol", () => {
         ["an unknown state", { id: "search", state: "running", label: "Searching" }],
         ["a missing id", { state: "active", label: "Searching" }],
         ["an over-long label", { id: "search", state: "active", label: "x".repeat(501) }],
-    ])("rejects a step event with %s", async (_case, step) => {
+    ])("skips a step event with %s and still delivers the answer", async (_case, step) => {
+        const onEvent = jest.fn();
         await expect(
             readChatStream(
-                new Response(`${JSON.stringify({ type: "step", step })}\n`),
-                new AbortController().signal
+                new Response(
+                    `${JSON.stringify({ type: "step", step })}\n{"type":"text","delta":"Hi"}\n{"type":"result","response":{"success":true}}\n`
+                ),
+                new AbortController().signal,
+                onEvent
             )
-        ).rejects.toThrow("Invalid chat stream event");
+        ).resolves.toEqual({ success: true });
+        expect(onEvent.mock.calls.map(([event]) => event.type)).toEqual(["text", "result"]);
     });
 
     it("propagates request aborts to server work and never emits a final result", async () => {

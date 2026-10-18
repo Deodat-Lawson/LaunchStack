@@ -25,10 +25,14 @@ function useNow(on: boolean): number {
 function headline(msg: ThreadMessage, liveMs: number | undefined): string {
     const streaming = msg.status === "streaming";
     if (streaming && !msg.text) return currentStep(msg.steps)?.label ?? "Thinking";
-    const waited = msg.thoughtMs ?? msg.elapsedMs ?? liveMs ?? 0;
-    if (msg.status === "stopped") return `Stopped after ${formatThought(msg.elapsedMs ?? waited)}`;
-    if (msg.status === "error") return `Failed after ${formatThought(msg.elapsedMs ?? waited)}`;
-    return `Thought for ${formatThought(waited)}`;
+    // A turn saved without timings says what happened, not a made-up "1s".
+    const ended = msg.elapsedMs ?? msg.thoughtMs;
+    if (msg.status === "stopped")
+        return ended === undefined ? "Stopped" : `Stopped after ${formatThought(ended)}`;
+    if (msg.status === "error")
+        return ended === undefined ? "Failed" : `Failed after ${formatThought(ended)}`;
+    const waited = msg.thoughtMs ?? msg.elapsedMs ?? liveMs;
+    return waited === undefined ? "Thought process" : `Thought for ${formatThought(waited)}`;
 }
 
 /** Follows new reasoning text down unless the reader scrolled up to reread. */

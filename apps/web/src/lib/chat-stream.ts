@@ -41,7 +41,12 @@ export function throwIfChatAborted(signal: AbortSignal): void {
     if (signal.aborted) throw new DOMException("Response stopped", "AbortError");
 }
 
-function parseEvent<T>(line: string): ChatStreamEvent<T> {
+/**
+ * One NDJSON line as an event. A malformed step comes back as null and is
+ * skipped: steps only describe the work, so a bad one must never cost the
+ * reader the answer.
+ */
+function parseEvent<T>(line: string): ChatStreamEvent<T> | null {
     let value: unknown;
     try {
         value = JSON.parse(line);
@@ -50,9 +55,9 @@ function parseEvent<T>(line: string): ChatStreamEvent<T> {
     }
     if (!value || typeof value !== "object") throw new Error("Invalid chat stream event");
     const event = value as Record<string, unknown>;
+    if (event.type === "step") return isChatStep(event.step) ? (value as ChatStreamEvent<T>) : null;
     if (
         (event.type === "status" && typeof event.status === "string") ||
-        (event.type === "step" && isChatStep(event.step)) ||
         ((event.type === "text" || event.type === "reasoning") &&
             typeof event.delta === "string") ||
         (event.type === "error" && typeof event.message === "string") ||
@@ -96,6 +101,7 @@ export async function readChatStream<T>(
             for (const line of lines) {
                 if (!line.trim()) continue;
                 const event = parseEvent<T>(line);
+                if (!event) continue;
                 throwIfChatAborted(signal);
                 onEvent?.(event);
                 if (event.type === "error") throw new Error(event.message);

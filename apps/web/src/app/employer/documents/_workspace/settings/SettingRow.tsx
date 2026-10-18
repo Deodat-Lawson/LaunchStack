@@ -316,26 +316,45 @@ function Control({
         case "select": {
             const list = options ?? control.options;
             const index = list.findIndex(option => sameValue(option.value, value));
+            // A closed menu shows only the label; what the chosen option does
+            // (the OCR order behind "Automatic", say) is said under it.
+            const chosen = index >= 0 ? list[index] : undefined;
+            const describedBy = chosen?.description ? `${id}-description` : undefined;
             return (
-                <Select
-                    value={index >= 0 ? String(index) : ""}
-                    disabled={disabled}
-                    onValueChange={next => {
-                        const option = list[Number(next)];
-                        if (option) onChange(option.value);
-                    }}
-                >
-                    <SelectTrigger id={id} className="w-full" aria-label={definition.label}>
-                        <SelectValue placeholder="Choose…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {list.map((option, i) => (
-                            <SelectItem key={i} value={String(i)}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div>
+                    <Select
+                        value={index >= 0 ? String(index) : ""}
+                        disabled={disabled}
+                        onValueChange={next => {
+                            const option = list[Number(next)];
+                            if (option) onChange(option.value);
+                        }}
+                    >
+                        <SelectTrigger
+                            id={id}
+                            className="w-full"
+                            aria-label={definition.label}
+                            aria-describedby={describedBy}
+                        >
+                            <SelectValue placeholder="Choose…" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {list.map((option, i) => (
+                                <SelectItem key={i} value={String(i)}>
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {chosen?.description && (
+                        <p
+                            id={describedBy}
+                            className="text-ink-3 m-0 mt-1.5 text-[12px] leading-normal"
+                        >
+                            {chosen.description}
+                        </p>
+                    )}
+                </div>
             );
         }
         case "radio": {

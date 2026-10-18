@@ -46,7 +46,12 @@ function automaticDescription(providers: Bootstrap["availableProviders"]): strin
     }
     const [first, ...rest] = order;
     const fallback = rest.length > 0 ? `, then ${rest.join(", then ")} if it fails` : "";
-    return `${first} reads every page${fallback}. The PDF's own text is the last resort.`;
+    // Docling is the fallback the deployment is meant to have; when it is not
+    // answering, say so rather than leave it out without a word.
+    const doclingDown = providers.docling
+        ? ""
+        : " Docling, the self-hosted fallback, isn't running on this server.";
+    return `${first} reads every page${fallback}. The PDF's own text is the last resort.${doclingDown}`;
 }
 
 export function DocumentDefaultsSection(_: SettingsSectionProps) {

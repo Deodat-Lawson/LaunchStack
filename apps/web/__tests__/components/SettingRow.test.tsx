@@ -140,3 +140,56 @@ describe("SettingRow — who set it", () => {
         expect(container).not.toHaveTextContent(ADA);
     });
 });
+
+describe("SettingRow — a select says what the chosen option does", () => {
+    const fetchMock = jest.fn();
+
+    beforeEach(() => {
+        fetchMock.mockReset();
+        global.fetch = fetchMock as unknown as typeof fetch;
+        resetSettingsForTests();
+        act(() => resetPeopleCache());
+        fetchMock.mockImplementation(async (input: string) => {
+            const url = String(input);
+            if (url.startsWith("/api/settings")) {
+                return json({
+                    settings: {
+                        "documents.defaultProcessingMethod": {
+                            key: "documents.defaultProcessingMethod",
+                            value: "auto",
+                            source: "default",
+                            sourceId: null,
+                            updatedBy: null,
+                            updatedAt: null,
+                            canEdit: { workspace: true, folder: true, member: false },
+                            stored: {},
+                        },
+                    },
+                    viewer: { authUserId: VIEWER, permissions: ["settings.manage"] },
+                    folder: null,
+                } satisfies SettingsPayload);
+            }
+            throw new Error(`unexpected fetch ${url}`);
+        });
+    });
+
+    it("shows the chosen option's description under the closed menu, tied to it", async () => {
+        render(
+            <SettingRow
+                settingKey="documents.defaultProcessingMethod"
+                options={[
+                    {
+                        value: "auto",
+                        label: "Automatic",
+                        description: "Azure reads every page, then Docling if it fails.",
+                    },
+                    { value: "standard", label: "Text layer only" },
+                ]}
+            />
+        );
+
+        const note = await screen.findByText("Azure reads every page, then Docling if it fails.");
+        const trigger = screen.getByRole("combobox", { name: /default processing method/i });
+        expect(trigger).toHaveAttribute("aria-describedby", note.id);
+    });
+});

@@ -1533,7 +1533,7 @@ export function AskPanel({
           ? "New conversation"
           : "Ask over your sources";
     const subText = isEmpty
-        ? "Ask anything, or add sources for grounded answers."
+        ? "Ask anything, or add sources to focus the answer."
         : `${thread.length} message${thread.length !== 1 ? "s" : ""}${isSending ? " · working" : ""}`;
 
     const handleSend = useCallback((send: ComposerSend) => sendMessage(send), [sendMessage]);
@@ -1966,7 +1966,7 @@ export function AskPanel({
                                 ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
                                 : selected.length
                                   ? "Answers use your selected sources and cite what they rely on."
-                                  : "General chat · add sources to ground your answers."}
+                                  : "Add sources to focus the answer on them."}
                         </div>
                     </>
                 )}

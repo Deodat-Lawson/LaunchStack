@@ -410,6 +410,11 @@ How it fits together:
 - **The dashboard has no login.** It binds to `127.0.0.1:8288` on the VM only.
   Anyone who can reach it can read event payloads and replay or cancel runs,
   so never route it through Caddy or open 8288 in the NSG.
+- **No telemetry.** `DO_NOT_TRACK=1` on the service stops the usage events the
+  CLI otherwise posts to Inngest's cloud event API (`cli/command.executed` at
+  every start, `cli/dev_ui.loaded` on each dashboard load). With it set,
+  nothing the server does reaches Inngest. The privacy policy relies on this:
+  it lists no Inngest processing.
 
 ### Cutting the live VM over (from the interim server)
 
@@ -617,7 +622,10 @@ services:
 
 — put back a `handle /api/inngest* { reverse_proxy worker:8020 }` block in
 `docker/Caddyfile.prod`, and register `https://$DOMAIN/api/inngest` in the
-Inngest Cloud dashboard.
+Inngest Cloud dashboard. Inngest then receives every event payload and step
+result, so add it back to the provider table in
+`apps/landing/src/app/privacy/page.tsx` (and bump `PRIVACY_UPDATED`) before
+you switch.
 
 ---
 

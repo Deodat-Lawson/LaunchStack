@@ -166,6 +166,7 @@ export function CommandPalette({
             // nodes") carries that screen's gate instead: picked without it,
             // the row would land on a screen that only says it isn't theirs.
             .filter(f => {
+                if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
                 if (app) return can(app.requires);
                 const section = settingsSectionOfHref(f.href);

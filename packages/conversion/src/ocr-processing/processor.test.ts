@@ -42,7 +42,12 @@ beforeAll(async () => {
     const doc = await PDFDocument.create();
     const font = await doc.embedFont(StandardFonts.Helvetica);
     for (const n of [1, 2, 3]) {
-        doc.addPage([400, 300]).drawText(`Text layer page ${n}`, { x: 40, y: 200, size: 14, font });
+        doc.addPage([400, 300]).drawText(`Text layer page ${n}: revenue grew in every region`, {
+            x: 40,
+            y: 200,
+            size: 12,
+            font,
+        });
     }
     pdfBytes = await doc.save();
 });
@@ -159,9 +164,9 @@ describe("normalizeDocument", () => {
         expect(docling).not.toHaveBeenCalled();
         expect(result.provider).toBe("NATIVE_PDF");
         expect(result.pages.map(p => p.textBlocks.join(" "))).toEqual([
-            "Text layer page 1",
-            "Text layer page 2",
-            "Text layer page 3",
+            "Text layer page 1: revenue grew in every region",
+            "Text layer page 2: revenue grew in every region",
+            "Text layer page 3: revenue grew in every region",
         ]);
         expect(result.ocrRouting?.attempts.map(a => a.provider)).toEqual(["AZURE", "NATIVE_PDF"]);
     });
@@ -206,7 +211,13 @@ describe("normalizeDocument", () => {
 
     it("treats Azure returning fewer pages than the PDF as partial (the F0 two-page trap)", async () => {
         configureOcr({ azure: AZURE_CFG });
-        azure.mockResolvedValue(ocrResult("AZURE", 2));
+        const partial = ocrResult("AZURE", 2);
+        // A scan's pages read in full: far more text than the text layer's
+        // one line a page.
+        partial.pages.forEach(page =>
+            page.textBlocks.push("A full paragraph of scanned text. ".repeat(6))
+        );
+        azure.mockResolvedValue(partial);
 
         const result = await normalizeDocument(DOC_URL, decision("AZURE"));
 
@@ -274,6 +285,33 @@ describe("normalizeDocument", () => {
 
             await expect(normalizeDocument(DOC_URL, decision("AZURE"))).rejects.toThrow(
                 /OCR failed and the PDF has no text layer to fall back on.*AZURE: Azure Document Intelligence error 401/
+            );
+        });
+
+        it("does not take page numbers alone for a text layer", async () => {
+            const doc = await PDFDocument.create();
+            const font = await doc.embedFont(StandardFonts.Helvetica);
+            for (let n = 1; n <= 12; n++) {
+                doc.addPage([400, 300]).drawText(`Page ${n} of 12`, {
+                    x: 40,
+                    y: 20,
+                    size: 9,
+                    font,
+                });
+            }
+            const stamped = await doc.save();
+            configureStorage({
+                provider: "test",
+                upload: vi.fn(),
+                delete: vi.fn(),
+                download: vi.fn(async () => new Response(new Uint8Array(stamped), { status: 200 })),
+            });
+            configureOcr({ azure: AZURE_CFG, converter: CONVERTER });
+            stubConverter({ docling: "unreachable" });
+            azure.mockRejectedValue(new Error("Azure down"));
+
+            await expect(normalizeDocument(DOC_URL, decision("AZURE"))).rejects.toThrow(
+                /no text layer to fall back on/
             );
         });
 

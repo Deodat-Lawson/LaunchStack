@@ -338,6 +338,8 @@ export interface DemotedFeature {
     kbd?: string;
     desc: string;
     href: string;
+    /** Permission the row's action needs; without it the row is left out. */
+    requires?: Permission;
 }
 
 /**
@@ -490,7 +492,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "workspace",
         label: "Workspace",
         Icon: IconWorkspace,
-        desc: "The workspace's settings: its name and URL, people and access, models, agents, document defaults, integrations and usage",
+        desc: "Its name and URL, people and access, models, agents, document defaults, integrations and usage",
         href: "/employer/documents?feature=workspace",
     },
     {
@@ -500,6 +502,8 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconWorkspace,
         desc: "Name, URL, description, industry, team size and colour",
         href: "/employer/documents?feature=workspace&at=%2Fgeneral",
+        // Everyone may read General; only those who can change it are offered a rename.
+        requires: "settings.manage",
     },
     {
         id: "settings",

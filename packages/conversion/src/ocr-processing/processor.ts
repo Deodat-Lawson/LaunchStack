@@ -263,10 +263,12 @@ function describeProviderError(error: unknown): string {
 }
 
 /**
- * Below this many non-space characters a text layer holds nothing worth
- * indexing (a scan's stray page numbers), so it is not a fallback for OCR.
+ * Below this many non-space characters per page, on average, a text layer
+ * holds nothing worth indexing — a scan's page or Bates numbers — so it is
+ * not a fallback for OCR. Per page, so a long scan stamped "Page N of 40"
+ * does not pass on the stamps alone.
  */
-const MIN_TEXT_LAYER_CHARS = 20;
+const MIN_TEXT_LAYER_CHARS_PER_PAGE = 20;
 
 function meaningfulTextLength(doc: NormalizedDocument): number {
     return doc.pages.reduce(
@@ -394,7 +396,8 @@ export async function normalizeDocument(
     if (
         requested !== "NATIVE_PDF" &&
         normalizedDoc.metadata.provider === "NATIVE_PDF" &&
-        meaningfulTextLength(normalizedDoc) < MIN_TEXT_LAYER_CHARS
+        meaningfulTextLength(normalizedDoc) <
+            MIN_TEXT_LAYER_CHARS_PER_PAGE * Math.max(1, normalizedDoc.pages.length)
     ) {
         const summary = attempts
             .filter(a => !a.ok)

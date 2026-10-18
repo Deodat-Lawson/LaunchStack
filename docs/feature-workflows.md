@@ -16,8 +16,9 @@ Launchstack follows this loop:
    Intelligence when it is configured, Docling (via
    `services/document-converter` and docling-serve) when Azure fails or is
    absent, then Landing AI or Datalab if configured; the PDF's own text layer
-   is the last resort when no OCR provider is reachable (a scan with no text
-   layer fails and is retried instead of indexing blank). Office docs go
+   is the last resort when no OCR provider is reachable. When an OCR engine
+   was tried and every one failed on a scan with no text layer, the job fails
+   and is retried instead of indexing blank. Office docs go
    through Docling or the built-in parsers; audio/video goes through
    `services/transcription`
 5. **Chunk** — split content into sections

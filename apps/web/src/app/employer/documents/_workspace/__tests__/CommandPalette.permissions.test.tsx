@@ -100,6 +100,22 @@ describe("CommandPalette permissions", () => {
         expect(onPickFeature).toHaveBeenCalledWith("agents-nodes");
     });
 
+    it("offers a rename only to someone who may change the workspace's details", () => {
+        mockPerms = new Set(ADMIN);
+        const onPickFeature = search("rename");
+        fireEvent.click(screen.getByText("Rename the workspace"));
+        expect(onPickFeature).toHaveBeenCalledWith("workspace-general");
+        cleanup();
+
+        mockPerms = new Set(MEMBER);
+        search("rename");
+        expect(screen.queryByText("Rename the workspace")).not.toBeInTheDocument();
+        cleanup();
+        // The tab itself is for everyone: a Member reads General there.
+        search("workspace");
+        expect(screen.getByText("Workspace")).toBeInTheDocument();
+    });
+
     it("no longer offers the self-host / BYOK row", () => {
         mockPerms = new Set(ADMIN);
         search("byok");

@@ -238,10 +238,10 @@ path for non-text files.
 as the fallback; with none reachable PDFs are read from their text layer), VLM
 enrichment.
 
-| Kind          | Stages                                                                                                                         | Effect                                                                                                            |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| **Fail-hard** | embedding, DB storage; OCR once every provider in the order has failed, or every OCR engine failed on a PDF with no text layer | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
-| **Fail-soft** | VLM enrichment, Step F, Step G                                                                                                 | Doc still marked `completed`                                                                                      |
+| Kind          | Stages                                                                                                                         | Effect                                                                                                                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fail-hard** | embedding, DB storage; OCR once every provider in the order has failed, or every OCR engine failed on a PDF with no text layer | Outbox retries up to 8× (backoff 30 s → 32 min, about an hour; the job reads "processing" meanwhile) → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
+| **Fail-soft** | VLM enrichment, Step F, Step G                                                                                                 | Doc still marked `completed`                                                                                                                                                                         |
 
 **“Sidecar” naming trap:** the historical `SIDECAR_URL` setting referred to an
 **external** ML worker (`/embed`, `/extract-entities`, `/rerank`). The former

@@ -246,6 +246,59 @@ describe("normalizeDocument", () => {
             /Every OCR provider failed \(AZURE: Azure down; NATIVE_PDF: Fetch failed: 404\)/
         );
     });
+
+    describe("a scan with no text layer", () => {
+        let blankPdf: Uint8Array;
+
+        beforeAll(async () => {
+            const doc = await PDFDocument.create();
+            for (let n = 0; n < 3; n++) doc.addPage([400, 300]);
+            blankPdf = await doc.save();
+        });
+
+        beforeEach(() => {
+            configureStorage({
+                provider: "test",
+                upload: vi.fn(),
+                delete: vi.fn(),
+                download: vi.fn(
+                    async () => new Response(new Uint8Array(blankPdf), { status: 200 })
+                ),
+            });
+        });
+
+        it("fails the job when every OCR engine fails, rather than index a blank document", async () => {
+            configureOcr({ azure: AZURE_CFG, converter: CONVERTER });
+            stubConverter({ docling: "unreachable" });
+            azure.mockRejectedValue(new Error("Azure Document Intelligence error 401"));
+
+            await expect(normalizeDocument(DOC_URL, decision("AZURE"))).rejects.toThrow(
+                /OCR failed and the PDF has no text layer to fall back on.*AZURE: Azure Document Intelligence error 401/
+            );
+        });
+
+        it("still finishes when OCR reads it after an earlier engine failed", async () => {
+            configureOcr({ azure: AZURE_CFG, converter: CONVERTER });
+            stubConverter({ docling: "ok" });
+            azure.mockRejectedValue(new Error("Azure down"));
+            docling.mockResolvedValue(ocrResult("DOCLING"));
+
+            const result = await normalizeDocument(DOC_URL, decision("AZURE"));
+
+            expect(result.provider).toBe("DOCLING");
+            expect(result.ocrRouting?.fellBack).toBe(true);
+        });
+
+        it("keeps a chosen text-only method blank instead of failing", async () => {
+            configureOcr({ azure: AZURE_CFG, converter: CONVERTER });
+            stubConverter({ docling: "ok" });
+
+            const result = await normalizeDocument(DOC_URL, decision("NATIVE_PDF"));
+
+            expect(azure).not.toHaveBeenCalled();
+            expect(result.provider).toBe("NATIVE_PDF");
+        });
+    });
 });
 
 describe("routeDocument", () => {

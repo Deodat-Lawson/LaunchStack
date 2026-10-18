@@ -262,6 +262,19 @@ function describeProviderError(error: unknown): string {
     return message.replace(/(https?:\/\/[^\s?"']+)\?[^\s"']*/g, "$1?…").slice(0, 300);
 }
 
+/**
+ * Below this many non-space characters a text layer holds nothing worth
+ * indexing (a scan's stray page numbers), so it is not a fallback for OCR.
+ */
+const MIN_TEXT_LAYER_CHARS = 20;
+
+function meaningfulTextLength(doc: NormalizedDocument): number {
+    return doc.pages.reduce(
+        (sum, page) => sum + page.textBlocks.join("").replace(/\s+/g, "").length,
+        0
+    );
+}
+
 function textLength(doc: NormalizedDocument): number {
     return doc.pages.reduce(
         (sum, page) =>
@@ -369,6 +382,27 @@ export async function normalizeDocument(
     if (!normalizedDoc) {
         const summary = attempts.map(a => `${a.provider}: ${a.error ?? "failed"}`).join("; ");
         const error = new Error(`Every OCR provider failed (${summary})`);
+        (error as Error & { cause?: unknown }).cause = lastError;
+        throw error;
+    }
+
+    // OCR was wanted, every engine failed, and the text layer is empty: a
+    // scan. Finishing would index a blank document and call it done, so fail
+    // instead — the job shows as failed, and the outbox retries it later
+    // (a passing Azure outage recovers on its own). "Text layer only" was a
+    // choice and keeps whatever the text layer holds.
+    if (
+        requested !== "NATIVE_PDF" &&
+        normalizedDoc.metadata.provider === "NATIVE_PDF" &&
+        meaningfulTextLength(normalizedDoc) < MIN_TEXT_LAYER_CHARS
+    ) {
+        const summary = attempts
+            .filter(a => !a.ok)
+            .map(a => `${a.provider}: ${a.error ?? "failed"}`)
+            .join("; ");
+        const error = new Error(
+            `OCR failed and the PDF has no text layer to fall back on, so nothing could be read (${summary})`
+        );
         (error as Error & { cause?: unknown }).cause = lastError;
         throw error;
     }

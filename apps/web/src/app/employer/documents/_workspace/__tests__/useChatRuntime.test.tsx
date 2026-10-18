@@ -283,6 +283,47 @@ test("a stop shows at once even while the chat is still saving", async () => {
     expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-save");
 });
 
+test("a stop followed by a failed save keeps what the reader had", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.onEvent({ type: "text", delta: "Short version: a SAFE is" });
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop, then fail to save"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.text).toBe("Short version: a SAFE is"));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await waitFor(() => expect(result.current.thread[1]?.status).toBe("stopped"));
+    await act(async () => {
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({
+        status: "stopped",
+        text: "Short version: a SAFE is",
+    });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining("Failed to save this chat"));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
 test("every update hands the panel a new object for the live answer", async () => {
     let release: () => void = () => undefined;
     mockRequest.mockImplementationOnce(async (_params, options) => {

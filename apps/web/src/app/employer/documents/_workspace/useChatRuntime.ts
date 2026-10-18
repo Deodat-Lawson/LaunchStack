@@ -499,15 +499,22 @@ export function useChatRuntime(input: {
                 emit(context);
             }
             await saving;
-            if (saveFailure) error = saveFailure;
-            const stopped =
-                !saveFailure &&
-                (signal.aborted || (error instanceof Error && error.name === "AbortError"));
-            answer.status = stopped ? "stopped" : "error";
-            answer.stage = stopped ? "Stopped" : "Failed";
-            if (!stopped)
-                answer.text =
-                    error instanceof Error ? error.message : "Couldn't send this message.";
+            if (saveFailure && stoppedAt !== undefined) {
+                // Stopped first: what the reader kept stays; only the chat is lost.
+                toast.error(
+                    `This answer is visible but the chat couldn't be saved (${saveFailure.message}). Copy it before leaving.`
+                );
+            } else {
+                if (saveFailure) error = saveFailure;
+                const stopped =
+                    !saveFailure &&
+                    (signal.aborted || (error instanceof Error && error.name === "AbortError"));
+                answer.status = stopped ? "stopped" : "error";
+                answer.stage = stopped ? "Stopped" : "Failed";
+                if (!stopped)
+                    answer.text =
+                        error instanceof Error ? error.message : "Couldn't send this message.";
+            }
             context.held = true;
         } finally {
             // A stop's time is when it stopped, not when the save behind it finished.

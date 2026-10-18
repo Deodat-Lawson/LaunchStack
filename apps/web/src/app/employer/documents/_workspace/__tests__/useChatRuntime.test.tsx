@@ -324,6 +324,43 @@ test("a stop followed by a failed save keeps what the reader had", async () => {
     expect(sessions.appendMessages).not.toHaveBeenCalled();
 });
 
+test("a stop before any answer, then a failed save, just says the chat wasn't saved", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop before anything"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await act(async () => {
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({ status: "stopped", text: "" });
+    expect(toast.error).toHaveBeenCalledWith(
+        "This chat couldn't be saved (Failed to save this chat)."
+    );
+});
+
 test("every update hands the panel a new object for the live answer", async () => {
     let release: () => void = () => undefined;
     mockRequest.mockImplementationOnce(async (_params, options) => {

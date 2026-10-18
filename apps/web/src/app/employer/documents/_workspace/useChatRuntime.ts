@@ -502,7 +502,9 @@ export function useChatRuntime(input: {
             if (saveFailure && stoppedAt !== undefined) {
                 // Stopped first: what the reader kept stays; only the chat is lost.
                 toast.error(
-                    `This answer is visible but the chat couldn't be saved (${saveFailure.message}). Copy it before leaving.`
+                    answer.text
+                        ? `This answer is visible but the chat couldn't be saved (${saveFailure.message}). Copy it before leaving.`
+                        : `This chat couldn't be saved (${saveFailure.message}).`
                 );
             } else {
                 if (saveFailure) error = saveFailure;

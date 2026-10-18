@@ -1,6 +1,37 @@
+/**
+ * One piece of work the answer did, named for the reader ("Searching Pitch
+ * deck.pdf", then "Found 5 passages in 2 sources"). The server sends a step
+ * as active, then again as done under the same id; the client upserts by id
+ * and times each step itself.
+ */
+export interface ChatStep {
+    id: string;
+    label: string;
+    state: "active" | "done";
+    detail?: string;
+}
+
+const STEP_TEXT_LIMIT = 500;
+
+function isChatStep(value: unknown): value is ChatStep {
+    if (!value || typeof value !== "object") return false;
+    const step = value as Record<string, unknown>;
+    return (
+        typeof step.id === "string" &&
+        step.id.length > 0 &&
+        step.id.length <= 64 &&
+        typeof step.label === "string" &&
+        step.label.length <= STEP_TEXT_LIMIT &&
+        (step.state === "active" || step.state === "done") &&
+        (step.detail === undefined ||
+            (typeof step.detail === "string" && step.detail.length <= STEP_TEXT_LIMIT))
+    );
+}
+
 /** NDJSON chat protocol shared by the server and client. Each result is final. */
 export type ChatStreamEvent<T> =
     | { type: "status"; status: string }
+    | { type: "step"; step: ChatStep }
     | { type: "text"; delta: string }
     | { type: "reasoning"; delta: string }
     | { type: "result"; response: T }
@@ -21,6 +52,7 @@ function parseEvent<T>(line: string): ChatStreamEvent<T> {
     const event = value as Record<string, unknown>;
     if (
         (event.type === "status" && typeof event.status === "string") ||
+        (event.type === "step" && isChatStep(event.step)) ||
         ((event.type === "text" || event.type === "reasoning") &&
             typeof event.delta === "string") ||
         (event.type === "error" && typeof event.message === "string") ||

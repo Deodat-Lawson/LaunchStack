@@ -32,6 +32,39 @@ describe("chat stream protocol", () => {
         ).rejects.toThrow("Invalid chat stream event");
     });
 
+    it("passes a well-formed step event to the reader", async () => {
+        const step = {
+            id: "search",
+            state: "done",
+            label: "Found 2 passages in 1 source",
+            detail: "Pitch deck.pdf",
+        };
+        const onEvent = jest.fn();
+        await expect(
+            readChatStream(
+                new Response(
+                    `${JSON.stringify({ type: "step", step })}\n{"type":"result","response":{"success":true}}\n`
+                ),
+                new AbortController().signal,
+                onEvent
+            )
+        ).resolves.toEqual({ success: true });
+        expect(onEvent).toHaveBeenCalledWith({ type: "step", step });
+    });
+
+    it.each([
+        ["an unknown state", { id: "search", state: "running", label: "Searching" }],
+        ["a missing id", { state: "active", label: "Searching" }],
+        ["an over-long label", { id: "search", state: "active", label: "x".repeat(501) }],
+    ])("rejects a step event with %s", async (_case, step) => {
+        await expect(
+            readChatStream(
+                new Response(`${JSON.stringify({ type: "step", step })}\n`),
+                new AbortController().signal
+            )
+        ).rejects.toThrow("Invalid chat stream event");
+    });
+
     it("propagates request aborts to server work and never emits a final result", async () => {
         const caller = new AbortController();
         let workSignal!: AbortSignal;

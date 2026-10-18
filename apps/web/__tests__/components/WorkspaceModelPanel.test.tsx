@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 /**
- * Settings › Models › Your own model.
+ * Workspace › Models › Your own model.
  *
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
@@ -14,19 +14,17 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-// For the hub test at the end: an owner, with no router or account body.
+// For the Workspace tab test at the end: an owner, with no router.
 jest.mock("next/navigation", () => ({
-    useRouter: () => ({ replace: jest.fn(), push: jest.fn() }),
+    useRouter: () => ({ replace: jest.fn(), push: jest.fn(), refresh: jest.fn() }),
     usePathname: () => "/employer/documents",
 }));
 jest.mock("~/lib/use-permissions", () => ({
     usePermissions: () => ({ loaded: true, error: null, roleName: "Owner", can: () => true }),
-}));
-jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => ({
-    AccountSection: () => <div data-testid="body-account">account body</div>,
+    setWorkspaceNameLocally: jest.fn(),
 }));
 
-import { SettingsHub } from "~/app/employer/documents/_workspace/SettingsHub";
+import { WorkspaceTool } from "~/app/employer/documents/_workspace/WorkspaceTool";
 import { ModelsSection } from "~/app/employer/documents/_workspace/settings/ModelsSection";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
 import type { WorkspaceEndpointView } from "~/app/employer/documents/_workspace/settings/WorkspaceModelPanel";
@@ -443,12 +441,13 @@ describe("Settings › Models › Your own model", () => {
         expect(window.location.hash).toBe("#models");
     });
 
-    it("lands the OpenRouter return on Models even after the shell dropped the #models hash", async () => {
-        // The workspace shell strips `?feature=settings` with a router.replace
-        // that loses the hash, usually before the lazy hub mounts.
+    it("lands the OpenRouter return on Workspace › Models with its outcome", async () => {
+        // The callback sends `?feature=workspace&at=/models&openrouter=…`; the
+        // shell opens the tab on Models and strips `feature` and `at`,
+        // leaving the outcome for Models to read.
         window.history.replaceState(null, "", "/employer/documents?openrouter=connected");
         stored = OPENROUTER_FRESH;
-        render(<SettingsHub embedded />);
+        render(<WorkspaceTool host={{ active: true, request: { at: "/models", nonce: 1 } }} />);
 
         await waitFor(() =>
             expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(

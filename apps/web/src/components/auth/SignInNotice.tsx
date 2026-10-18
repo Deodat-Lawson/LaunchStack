@@ -76,7 +76,7 @@ export function SignInNotice() {
                 </DialogHeader>
                 <p className="text-ink-3 m-0 text-center text-[13px] leading-relaxed sm:text-left">
                     If you didn&apos;t create this account yourself, check who else is in its
-                    workspaces under Settings › People and access.
+                    workspaces under Workspace › People and access.
                     {passwordRemoved && " Want a password too? Set a new one in Settings."}
                 </p>
                 <DialogFooter>

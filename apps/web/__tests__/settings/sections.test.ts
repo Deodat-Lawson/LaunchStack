@@ -1,10 +1,10 @@
 /**
- * Who sees which Settings section, per built-in role.
+ * Who sees which settings section, per built-in role.
  *
- * Settings is open to everyone; each section carries its own gate. The table
- * below is the contract a reviewer reads: You is everyone's, a section whose
- * data is refused to a role is left out for it, and a section a role may only
- * read is shown read-only.
+ * Settings (yours alone) and the Workspace tab are open to everyone; each
+ * section carries its own gate. The table below is the contract a reviewer
+ * reads: You is everyone's, a section whose data is refused to a role is
+ * left out for it, and a section a role may only read is shown read-only.
  */
 
 import {
@@ -57,13 +57,14 @@ describe("SETTINGS_SECTION_ACCESS", () => {
                 "account",
                 "appearance",
                 "shortcuts",
+                "general",
                 "people",
                 "company",
                 "documents",
                 "privacy",
                 "labs",
             ]);
-            expect(readOnlyFor(role)).toEqual(["company", "documents", "labs"]);
+            expect(readOnlyFor(role)).toEqual(["general", "company", "documents", "labs"]);
         }
     });
 
@@ -72,11 +73,18 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             "account",
             "appearance",
             "shortcuts",
+            "general",
             "company",
             "documents",
             "privacy",
             "labs",
         ]);
+    });
+
+    it("lets everyone read the workspace's own details, and only settings.manage change them", () => {
+        // The same gate as PATCH /api/workspace/details.
+        expect(SETTINGS_SECTION_ACCESS.general.view).toBeUndefined();
+        expect(SETTINGS_SECTION_ACCESS.general.edit).toBe("settings.manage");
     });
 
     it("leaves out every section whose own read the server refuses", () => {
@@ -137,9 +145,11 @@ describe("SETTINGS_SECTION_ACCESS", () => {
 
 describe("settingsSectionFromHash", () => {
     it("lands old deep links and registry keys where the hub did", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
+        // Processing is gone from the UI; its links land on Models, where a
+        // workspace brings its own model.
+        expect(settingsSectionFromHash("#byok")).toBe("models");
         expect(settingsSectionFromHash("#profile")).toBe("company");
-        expect(settingsSectionFromHash("#keys")).toBe("processing");
+        expect(settingsSectionFromHash("#keys")).toBe("models");
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         // Hashes arrive lower-cased; the personal row is the one everyone reaches.
         expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");

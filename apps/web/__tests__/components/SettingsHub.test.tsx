@@ -1,12 +1,14 @@
 /** @jest-environment jsdom */
 
 /**
- * The unified settings surface.
+ * Settings — yours alone.
  *
- * The point of the hub is that five sections share one header and one action
- * area. So the things worth asserting are structural: every section is
- * reachable, old deep links still land on the right one, exactly one primary
- * button exists at a time, and it belongs to the section currently on screen.
+ * Settings used to hold the workspace too; those sections are the Workspace
+ * tab now. So the things worth asserting here: the rail is the four personal
+ * sections and one way to the Workspace tab, every old deep link lands where
+ * it belongs now (here, or forwarded to the Workspace tab), and the shared
+ * section chrome still gives exactly one primary button, owned by the
+ * section on screen.
  */
 
 import React from "react";
@@ -18,13 +20,11 @@ import type * as SettingsContract from "~/app/employer/documents/_workspace/sett
 
 const mockReplace = jest.fn();
 jest.mock("next/navigation", () => ({
-    useRouter: () => ({ replace: mockReplace, push: jest.fn() }),
+    useRouter: () => ({ replace: mockReplace, push: jest.fn(), refresh: jest.fn() }),
     usePathname: () => "/employer/settings",
 }));
 
-// The chrome asks who is looking: which sections to list, and which to mark
-// read-only. Unless a test says otherwise, an owner, who sees everything
-// editable.
+// The chrome asks who is looking. Unless a test says otherwise, an owner.
 type MockPermissions = {
     loaded: boolean;
     error: string | null;
@@ -44,71 +44,40 @@ jest.mock("~/lib/use-permissions", () => ({
             return mockPermissions.permissions === "all" || mockPermissions.permissions.has(p);
         },
     }),
+    setWorkspaceNameLocally: jest.fn(),
 }));
 
-// Member-scoped sections are registry rows over the settings store; the
-// chrome tests do not need a network.
 jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => ({
     AccountSection: () => <div data-testid="body-account">account body</div>,
 }));
 
-// Section bodies are exercised by their own tests and by the API tests. Here
-// they are replaced with probes that publish known actions, so the assertions
-// are about the chrome rather than about five unrelated data fetches.
-// Processing publishes whatever a test sets; unless it says otherwise, a Save
-// with nothing in its way.
+// Shortcuts publishes whatever a test sets; unless it says otherwise, a Save
+// with nothing in its way. Privacy publishes nothing — a section with no
+// action must not leave the previous section's button behind.
 const SAVE: SettingsContract.SettingsSectionActions = {
     primaryLabel: "Save changes",
     onPrimary: () => undefined,
     disabled: false,
 };
-let mockProcessingActions: SettingsContract.SettingsSectionActions = SAVE;
-jest.mock("~/app/employer/documents/_workspace/settings/ProcessingSettings", () => {
+let mockShortcutActions: SettingsContract.SettingsSectionActions = SAVE;
+jest.mock("~/app/employer/documents/_workspace/settings/ShortcutsSection", () => {
     const { usePublishedActions } = jest.requireActual<typeof SettingsContract>(
         "~/app/employer/documents/_workspace/settings/contract"
     );
     return {
-        ProcessingSettings: ({ onActions }: { onActions?: unknown }) => {
-            usePublishedActions(onActions as never, mockProcessingActions, []);
-            return <div data-testid="body-processing">processing body</div>;
+        ShortcutsSection: ({ onActions }: { onActions?: unknown }) => {
+            usePublishedActions(onActions as never, mockShortcutActions, []);
+            return <div data-testid="body-shortcuts">shortcuts body</div>;
         },
     };
 });
-
-jest.mock("~/app/employer/documents/_workspace/collab/AgentsPanel", () => {
-    const { usePublishedActions } = jest.requireActual<typeof SettingsContract>(
-        "~/app/employer/documents/_workspace/settings/contract"
-    );
-    return {
-        AgentsPanel: ({ onActions }: { onActions?: unknown }) => {
-            usePublishedActions(
-                onActions as never,
-                { primaryLabel: "New agent", onPrimary: () => undefined },
-                []
-            );
-            return <div data-testid="body-agents">agents body</div>;
-        },
-    };
-});
-
-jest.mock("~/app/employer/documents/_workspace/settings/IntegrationsPanel", () => ({
-    // Deliberately publishes nothing — a read-only section must not leave a
-    // stale button behind from whichever section preceded it.
-    IntegrationsPanel: () => <div data-testid="body-integrations">integrations body</div>,
-}));
-
-// The company section is the shared company profile, drawn as a section body
-// (the hub owns the title); its own test covers what it shows.
-jest.mock("~/components/company-profile/CompanyProfileView", () => ({
-    CompanyProfileView: ({ variant }: { variant: string }) => (
-        <div data-testid="body-company" data-variant={variant}>
-            company body
-        </div>
-    ),
+jest.mock("~/app/employer/documents/_workspace/settings/PrivacySection", () => ({
+    PrivacySection: () => <div data-testid="body-privacy">privacy body</div>,
 }));
 
 import {
     SettingsHub,
+    WORKSPACE_TAB_HREF,
     settingsSectionFromHash,
 } from "~/app/employer/documents/_workspace/SettingsHub";
 import { WorkspaceAnswerStyleRow } from "~/app/employer/documents/_workspace/settings/AnswerStyle";
@@ -121,14 +90,22 @@ async function findBody(testId: string) {
     return waitFor(() => screen.getByTestId(testId));
 }
 
-function setHash(hash: string) {
-    window.history.replaceState(null, "", `/employer/settings${hash}`);
+function setUrl(hash: string, search = "") {
+    window.history.replaceState(null, "", `/employer/settings${search}${hash}`);
 }
+
+const rail = () => screen.getByRole("navigation", { name: /settings sections/i });
+const railLabels = () =>
+    within(rail())
+        .getAllByRole("button")
+        .map(button => button.querySelector("span > span")?.textContent);
 
 describe("settingsSectionFromHash", () => {
     it("maps every documented alias, including the ones that used to be routes", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
-        expect(settingsSectionFromHash("#embedding")).toBe("processing");
+        // The retired Processing section's links land on Models.
+        expect(settingsSectionFromHash("#byok")).toBe("models");
+        expect(settingsSectionFromHash("#embedding")).toBe("models");
+        expect(settingsSectionFromHash("#processing")).toBe("models");
         expect(settingsSectionFromHash("#agents")).toBe("agents");
         expect(settingsSectionFromHash("#nodes")).toBe("agents");
         expect(settingsSectionFromHash("#slack")).toBe("integrations");
@@ -136,6 +113,7 @@ describe("settingsSectionFromHash", () => {
         expect(settingsSectionFromHash("#company")).toBe("company");
         expect(settingsSectionFromHash("#password")).toBe("account");
         expect(settingsSectionFromHash("#trash")).toBe("archive");
+        expect(settingsSectionFromHash("#general")).toBe("general");
     });
 
     it("lands a registry key on its section", () => {
@@ -146,7 +124,7 @@ describe("settingsSectionFromHash", () => {
     });
 
     it("is case-insensitive and tolerates a missing #", () => {
-        expect(settingsSectionFromHash("BYOK")).toBe("processing");
+        expect(settingsSectionFromHash("BYOK")).toBe("models");
         expect(settingsSectionFromHash("#Agents")).toBe("agents");
     });
 
@@ -158,38 +136,40 @@ describe("settingsSectionFromHash", () => {
 
 describe("SettingsHub", () => {
     beforeEach(() => {
-        setHash("");
+        setUrl("");
         mockReplace.mockReset();
         mockPermissions = OWNER;
-        mockProcessingActions = SAVE;
+        mockShortcutActions = SAVE;
     });
 
-    it("lists every section in one grouped rail", () => {
+    it("lists only what is yours, and one way to the workspace's settings", () => {
         render(<SettingsHub />);
-        const rail = screen.getByRole("navigation", { name: /settings sections/i });
 
-        for (const label of [
-            "Account",
-            "Appearance",
-            "Shortcuts",
+        expect(railLabels()).toEqual(["Account", "Appearance", "Shortcuts", "Data and privacy"]);
+        for (const gone of [
             "People and access",
             "Company profile",
             "Processing",
-            "Models and routes",
-            "Agents and autonomy",
+            "Models",
+            "Agents",
             "Document defaults",
             "Integrations",
-            "Usage and costs",
-            "Archive and retention",
-            "Data and privacy",
+            "Usage",
+            "Archive",
             "Labs",
+            "Analytics",
         ]) {
-            expect(within(rail).getByText(label)).toBeInTheDocument();
+            expect(within(rail()).queryByText(gone)).not.toBeInTheDocument();
         }
-        for (const group of ["You", "Workspace", "Workspace data"]) {
-            expect(within(rail).getByText(group)).toBeInTheDocument();
-        }
-        expect(within(rail).queryByText("Analytics")).not.toBeInTheDocument();
+        const pointer = within(rail()).getByTestId("settings-open-workspace");
+        expect(pointer).toHaveTextContent("Workspace settings");
+        expect(pointer).toHaveAttribute("href", "/employer/documents?feature=workspace");
+        expect(WORKSPACE_TAB_HREF).toBe("/employer/documents?feature=workspace");
+        // The compact picker, for a tab under 640px, carries the same way out.
+        expect(screen.getByTestId("settings-open-workspace-compact")).toHaveAttribute(
+            "href",
+            WORKSPACE_TAB_HREF
+        );
     });
 
     it("opens on Account and gives it the one page heading", async () => {
@@ -206,12 +186,12 @@ describe("SettingsHub", () => {
         render(<SettingsHub />);
         await findBody("body-account");
 
-        await user.click(screen.getByRole("button", { name: /Agents and autonomy/i }));
+        await user.click(within(rail()).getByRole("button", { name: /Shortcuts/i }));
 
-        await findBody("body-agents");
+        await findBody("body-shortcuts");
         expect(screen.queryByTestId("body-account")).not.toBeInTheDocument();
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            "Who shows up to a meeting"
+            "What the keyboard does"
         );
     });
 
@@ -220,41 +200,23 @@ describe("SettingsHub", () => {
         render(<SettingsHub />);
         await findBody("body-account");
 
-        await user.click(screen.getByRole("button", { name: /^Processing/i }));
-        await findBody("body-processing");
-        expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
+        await user.click(within(rail()).getByRole("button", { name: /Shortcuts/i }));
+        await findBody("body-shortcuts");
+        expect(screen.getAllByRole("button", { name: "Save changes" })).toHaveLength(1);
 
-        await user.click(screen.getByRole("button", { name: /Agents and autonomy/i }));
-        await findBody("body-agents");
-
-        expect(screen.getByRole("button", { name: "New agent" })).toBeInTheDocument();
+        await user.click(within(rail()).getByRole("button", { name: /Data and privacy/i }));
+        await findBody("body-privacy");
         // The previous section's Save must not survive the switch.
         expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
     });
 
-    it("shows no primary action for a read-only section", async () => {
-        const user = userEvent.setup();
-        render(<SettingsHub />);
-        await findBody("body-account");
-
-        await user.click(screen.getByRole("button", { name: /Integrations/i }));
-        await findBody("body-integrations");
-
-        expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
-    });
-
     it("disables the primary button a section disables, even when it is not busy", async () => {
-        // Processing publishes `busy: isSaving` beside `disabled: !dirty`. The
-        // chrome used to read `busy ?? disabled`, so busy's `false` won and
-        // Save stayed live with nothing edited.
         const onPrimary = jest.fn();
-        mockProcessingActions = { ...SAVE, onPrimary, busy: false, disabled: true };
-        setHash("#byok");
+        mockShortcutActions = { ...SAVE, onPrimary, busy: false, disabled: true };
+        setUrl("#shortcuts");
         const user = userEvent.setup();
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-shortcuts");
 
         const save = screen.getByRole("button", { name: "Save changes" });
         expect(save).toBeDisabled();
@@ -263,34 +225,73 @@ describe("SettingsHub", () => {
     });
 
     it("disables the primary button while the section is busy, whatever it says about disabled", async () => {
-        mockProcessingActions = {
-            ...SAVE,
-            primaryBusyLabel: "Saving…",
-            busy: true,
-            disabled: false,
-        };
-        setHash("#byok");
+        mockShortcutActions = { ...SAVE, primaryBusyLabel: "Saving…", busy: true, disabled: false };
+        setUrl("#keybindings");
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-shortcuts");
 
         expect(screen.getByRole("button", { name: "Saving…" })).toBeDisabled();
     });
 
     it("opens the section named by the URL hash", async () => {
-        setHash("#byok");
+        setUrl("#privacy");
         render(<SettingsHub />);
 
-        await findBody("body-processing");
+        await findBody("body-privacy");
         expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            "How documents get indexed"
+            "What leaves this deployment, and what stays"
+        );
+        expect(mockReplace).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        ["#people", "/employer/documents?feature=workspace&at=%2Fpeople"],
+        ["#company", "/employer/documents?feature=workspace&at=%2Fcompany"],
+        ["#metadata", "/employer/documents?feature=workspace&at=%2Fcompany"],
+        ["#byok", "/employer/documents?feature=workspace&at=%2Fmodels"],
+        ["#agents", "/employer/documents?feature=workspace&at=%2Fagents"],
+        [
+            "#audit",
+            // People opens on its audit tab.
+            "/employer/documents?feature=workspace&at=%2Fpeople%3Ffocus%3Daudit",
+        ],
+        [
+            "#usage.pricePerMillionTokens",
+            // The row scrolls itself into view on its screen.
+            "/employer/documents?feature=workspace&at=%2Fusage%3Ffocus%3Dusage.pricePerMillionTokens",
+        ],
+        ["#statistics", "/employer/documents?feature=analytics"],
+    ])("forwards %s to where it lives now", async (hash, href) => {
+        setUrl(hash);
+        render(<SettingsHub />);
+        await waitFor(() => expect(mockReplace).toHaveBeenCalledWith(href));
+    });
+
+    it("sends the old OpenRouter return leg to Workspace › Models with its outcome", async () => {
+        setUrl("", "?openrouter=connected");
+        render(<SettingsHub />);
+        await waitFor(() =>
+            expect(mockReplace).toHaveBeenCalledWith(
+                "/employer/documents?feature=workspace&at=%2Fmodels&openrouter=connected"
+            )
         );
     });
 
-    it("sends the analytics hashes to the Studio, where the dashboard lives now", async () => {
-        setHash("#statistics");
-        render(<SettingsHub />);
-        await waitFor(() =>
-            expect(mockReplace).toHaveBeenCalledWith("/employer/documents?feature=analytics")
+    it("inside the workspace, leaves a hash the Workspace tab put there alone, and follows a link", async () => {
+        // The shell has already opened the Workspace tab for this one.
+        setUrl("#audit");
+        render(<SettingsHub embedded />);
+        await findBody("body-account");
+        expect(mockReplace).not.toHaveBeenCalled();
+
+        // A link followed from a Settings section (Privacy links to the trash
+        // retention row) is a hash change: that one is forwarded.
+        setUrl("#retention.trashDays");
+        act(() => {
+            window.dispatchEvent(new HashChangeEvent("hashchange"));
+        });
+        expect(mockReplace).toHaveBeenCalledWith(
+            "/employer/documents?feature=workspace&at=%2Farchive%3Ffocus%3Dretention.trashDays"
         );
     });
 
@@ -298,32 +299,32 @@ describe("SettingsHub", () => {
         render(<SettingsHub />);
         await findBody("body-account");
 
-        setHash("#metadata");
+        setUrl("#hotkeys");
         act(() => {
             window.dispatchEvent(new HashChangeEvent("hashchange"));
         });
 
-        const body = await findBody("body-company");
-        expect(body).toHaveAttribute("data-variant", "settings");
+        await findBody("body-shortcuts");
     });
 
     it("lets an explicit initialSection win over the hash", async () => {
-        setHash("#byok");
-        render(<SettingsHub initialSection="agents" />);
+        setUrl("#privacy");
+        render(<SettingsHub initialSection="shortcuts" />);
 
-        await findBody("body-agents");
+        await findBody("body-shortcuts");
     });
 
     it("marks the open section for assistive tech", async () => {
         const user = userEvent.setup();
         render(<SettingsHub />);
 
-        const rail = screen.getByRole("navigation", { name: /settings sections/i });
-        expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent("Account");
+        expect(within(rail()).getByRole("button", { current: "page" })).toHaveTextContent(
+            "Account"
+        );
 
-        await user.click(screen.getByRole("button", { name: /Company profile/i }));
-        expect(within(rail).getByRole("button", { current: "page" })).toHaveTextContent(
-            "Company profile"
+        await user.click(within(rail()).getByRole("button", { name: /Data and privacy/i }));
+        expect(within(rail()).getByRole("button", { current: "page" })).toHaveTextContent(
+            "Data and privacy"
         );
     });
 
@@ -345,11 +346,7 @@ describe("SettingsHub", () => {
     });
 });
 
-/**
- * Settings is open to every role. The You sections are everyone's; each
- * workspace section is listed for whoever may see it, read-only for whoever
- * may only read it, and a link to one someone may not see says why.
- */
+/** Settings is everyone's, whatever their role, and nothing in it is read-only. */
 describe("SettingsHub by role", () => {
     const as = (role: BuiltinRole) => {
         mockPermissions = {
@@ -359,126 +356,50 @@ describe("SettingsHub by role", () => {
             permissions: BUILTIN_ROLE_PERMISSIONS[role],
         };
     };
-    const railLabels = () =>
-        within(screen.getByRole("navigation", { name: /settings sections/i }))
-            .getAllByRole("button")
-            .map(button => button.querySelector("span > span")?.textContent);
 
     beforeEach(() => {
-        setHash("");
+        setUrl("");
         mockReplace.mockReset();
     });
     afterAll(() => {
         mockPermissions = OWNER;
     });
 
-    it("opens on Account for a Member, with the You sections first", async () => {
-        as("member");
-        render(<SettingsHub embedded />);
+    it.each(["member", "viewer", "guest"] as const)(
+        "gives a %s the same four sections, none of them read-only",
+        async role => {
+            as(role);
+            const user = userEvent.setup();
+            render(<SettingsHub embedded />);
 
-        await findBody("body-account");
-        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            "Who you are, and where you are signed in"
-        );
-        expect(railLabels().slice(0, 3)).toEqual(["Account", "Appearance", "Shortcuts"]);
-    });
+            expect(railLabels()).toEqual([
+                "Account",
+                "Appearance",
+                "Shortcuts",
+                "Data and privacy",
+            ]);
+            await findBody("body-account");
+            for (const label of ["Shortcuts", "Data and privacy"]) {
+                await user.click(within(rail()).getByRole("button", { name: new RegExp(label) }));
+                expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
+            }
+        }
+    );
 
-    it("lists for a Member only the sections their role can read", () => {
-        as("member");
-        render(<SettingsHub embedded />);
-
-        expect(railLabels()).toEqual([
-            "Account",
-            "Appearance",
-            "Shortcuts",
-            "People and access",
-            "Company profile",
-            "Document defaults",
-            "Data and privacy",
-            "Labs",
-        ]);
-    });
-
-    it("gives a Viewer the same, and a Guest no member list", () => {
-        as("viewer");
-        const { unmount } = render(<SettingsHub embedded />);
-        expect(railLabels()).toContain("People and access");
-        unmount();
-
-        as("guest");
-        render(<SettingsHub embedded />);
-        expect(railLabels()).not.toContain("People and access");
-        expect(railLabels()).toEqual(
-            expect.arrayContaining(["Account", "Appearance", "Shortcuts", "Data and privacy"])
-        );
-    });
-
-    it("marks a section a Member may only read, and keeps its body", async () => {
-        as("member");
-        const user = userEvent.setup();
-        render(<SettingsHub embedded />);
-        await findBody("body-account");
-        expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
-
-        await user.click(screen.getByRole("button", { name: /Company profile/i }));
-        await findBody("body-company");
-        expect(screen.getByText("Read-only")).toBeInTheDocument();
-    });
-
-    it("tells a Member who follows a link to an admins' section why it is empty", async () => {
-        as("member");
-        setHash("#byok");
-        render(<SettingsHub embedded />);
-
-        await waitFor(() =>
-            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-                "How documents get indexed"
-            )
-        );
-        expect(
-            screen.getByText(
-                "Processing isn't part of your role (Member). Ask an admin if you need it."
-            )
-        ).toBeInTheDocument();
-        expect(screen.queryByTestId("body-processing")).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
-    });
-
-    it("waits for the roles before saying anything about a gated section", () => {
+    it("shows the personal sections while the roles are still loading", async () => {
         mockPermissions = { loaded: false, error: null, roleName: null, permissions: new Set() };
-        setHash("#byok");
         render(<SettingsHub embedded />);
 
-        expect(screen.getByText("Loading…")).toBeInTheDocument();
-        expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
-        // Fails closed: only the ungated sections are listed meanwhile.
-        expect(railLabels()).not.toContain("Processing");
-    });
-
-    it("says the roles failed to load, not that the section isn't theirs", () => {
-        mockPermissions = {
-            loaded: true,
-            error: "Could not load your permissions (500).",
-            roleName: null,
-            permissions: new Set(),
-        };
-        setHash("#byok");
-        render(<SettingsHub embedded />);
-
-        expect(screen.getByRole("alert")).toHaveTextContent(
-            "Could not load your permissions (500)."
-        );
-        expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
-        expect(screen.queryByText("Read-only")).not.toBeInTheDocument();
+        expect(railLabels()).toHaveLength(4);
+        await findBody("body-account");
     });
 });
 
 /**
  * The default assistant's answer style has a workspace default and a
- * personal override. The override is under Appearance, where every role can
- * change it; the default is under Agents and autonomy, written at workspace
- * scope. Each row pins its scope: a plain row writes the member value, so an
- * admin's "workspace" change used to be only their own.
+ * personal override. The override is under Settings › Appearance, where every
+ * role can change it; the default is under Workspace › Agents, written at
+ * workspace scope. Each row pins its scope, and links to the other tab.
  */
 describe("The answer style", () => {
     const KEY = "chat.responseStyle";
@@ -519,7 +440,7 @@ describe("The answer style", () => {
     });
 
     beforeEach(() => {
-        setHash("");
+        setUrl("");
         mockReplace.mockReset();
         mockPermissions = OWNER;
         resetSettingsForTests();
@@ -567,7 +488,7 @@ describe("The answer style", () => {
                 stored: { workspace: "organized" },
                 canEdit: { workspace: false, folder: false, member: true },
             });
-            setHash(`#${KEY}`);
+            setUrl(`#${KEY}`);
             render(<SettingsHub embedded />);
 
             await waitFor(() =>
@@ -584,7 +505,8 @@ describe("The answer style", () => {
             expect(row.queryByText("Read-only")).not.toBeInTheDocument();
             // Nothing to say until they pick their own; nowhere to send them.
             expect(row.queryByText(/workspace default/)).not.toBeInTheDocument();
-            expect(row.queryByRole("link", { name: /Agents and autonomy/ })).toBeNull();
+            expect(row.queryByRole("link", { name: /Workspace › Agents/ })).toBeNull();
+            expect(mockReplace).not.toHaveBeenCalled();
 
             await pick("Detailed");
             await waitFor(() =>
@@ -604,7 +526,7 @@ describe("The answer style", () => {
             stored: { workspace: "organized", member: "detailed" },
             canEdit: { workspace: false, folder: false, member: true },
         });
-        setHash(`#${KEY}`);
+        setUrl(`#${KEY}`);
         render(<SettingsHub embedded />);
 
         expect(await screen.findByText("The workspace default is Organized.")).toBeInTheDocument();
@@ -613,26 +535,24 @@ describe("The answer style", () => {
         expect(row.getByRole("button", { name: "Reset to the workspace" })).toBeInTheDocument();
     });
 
-    it("points an admin on their own row to the workspace default", async () => {
+    it("points an admin on their own row to the workspace default, in the Workspace tab", async () => {
         style = resolved({
             value: "organized",
             source: "workspace",
             stored: { workspace: "organized" },
         });
-        setHash(`#${KEY}`);
+        setUrl(`#${KEY}`);
         render(<SettingsHub embedded />);
 
         expect(
             await screen.findByText(/gets the workspace default, Organized\./)
         ).toBeInTheDocument();
-        await userEvent
-            .setup()
-            .click(screen.getByRole("link", { name: "Change it under Agents and autonomy" }));
-
-        await findBody("body-agents");
+        expect(
+            screen.getByRole("link", { name: "Change it under Workspace › Agents" })
+        ).toHaveAttribute("href", "/employer/documents?feature=workspace&at=%2Fagents");
     });
 
-    it("writes the workspace default from Agents and autonomy, showing the workspace's value", async () => {
+    it("writes the workspace default from Workspace › Agents, showing the workspace's value", async () => {
         // The admin has picked their own style too. The workspace row must
         // show, and write, the workspace's.
         style = resolved({
@@ -652,10 +572,9 @@ describe("The answer style", () => {
         expect(
             screen.getByText(/Your own choice, Detailed, still applies to your chats\./)
         ).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: "Change it under Appearance" })).toHaveAttribute(
-            "href",
-            `#${KEY}`
-        );
+        expect(
+            screen.getByRole("link", { name: "Change it under Settings › Appearance" })
+        ).toHaveAttribute("href", `/employer/settings#${KEY}`);
 
         await pick("Academic");
         await waitFor(() =>

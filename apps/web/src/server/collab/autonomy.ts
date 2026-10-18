@@ -65,7 +65,7 @@ export async function assertRoomMayRun(
     const levels = await effectiveLevelsFor(companyId, participantKeys);
     if (!canRunUnattended(levels)) {
         throw badRequest(
-            'An agent in this room is set to "Read only", so turns only happen when someone presses Step. Raise its autonomy under Settings → Agents to let the meeting run on its own.'
+            'An agent in this room is set to "Read only", so turns only happen when someone presses Step. Raise its autonomy under Workspace › Agents to let the meeting run on its own.'
         );
     }
 }

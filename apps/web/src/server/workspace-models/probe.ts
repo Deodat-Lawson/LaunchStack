@@ -167,7 +167,7 @@ export async function testEndpoint(
                 // The admin is already in Settings; "fix it in Settings" is noise here.
                 message:
                     described?.message.replace(
-                        /\s*A workspace admin can fix it in Settings › Models\.$/,
+                        /\s*A workspace admin can fix it in Workspace › Models\.$/,
                         ""
                     ) ??
                     "The endpoint returned an error for this model. Check the model id and that the key can use it.",

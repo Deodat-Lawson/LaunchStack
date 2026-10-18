@@ -5,6 +5,8 @@
  */
 
 import { roleLabel } from "~/lib/authz/permissions";
+import { WORKSPACE_DETAIL_WORDS } from "~/lib/workspace-details";
+
 import type { AuditEvent } from "./api";
 
 const MINUTE = 60_000;
@@ -299,6 +301,10 @@ export function auditSentence(
                           : "a new value";
                 return `${actor} set “${label}”${where} to ${shown}`;
             }
+            // Workspace › General (and the audit retention policy) record
+            // `changes: { field: { from, to } }`.
+            const changed = workspaceChangeWords(detail.changes);
+            if (changed) return `${actor} ${changed}`;
             // A retired setting; its events stay readable in the log.
             const policy = pick(detail, "joinPolicy");
             if (policy === "open") return `${actor} let anyone with a link join immediately`;
@@ -311,6 +317,36 @@ export function auditSentence(
             return `${actor} ${verb || "changed"} ${what}`.trim();
         }
     }
+}
+
+const WORKSPACE_FIELD_WORDS: Record<string, string> = {
+    ...WORKSPACE_DETAIL_WORDS,
+    auditRetentionDays: "audit log retention",
+};
+
+/**
+ * "renamed the workspace to “Northwind Labs”", "changed the workspace's URL
+ * and colour" — for a `changes` map, or null when there is none.
+ */
+function workspaceChangeWords(changes: unknown): string | null {
+    if (!changes || typeof changes !== "object") return null;
+    const fields = Object.keys(changes);
+    if (fields.length === 0) return null;
+    const rename = (changes as Record<string, { to?: unknown }>).name;
+    const others = fields
+        .filter(field => !(field === "name" && str(rename?.to)))
+        .map(field => WORKSPACE_FIELD_WORDS[field] ?? field);
+    const list =
+        others.length <= 1
+            ? (others[0] ?? "")
+            : `${others.slice(0, -1).join(", ")} and ${others[others.length - 1]}`;
+    const renamed = str(rename?.to);
+    if (renamed) {
+        return others.length > 0
+            ? `renamed the workspace to “${renamed}” and changed its ${list}`
+            : `renamed the workspace to “${renamed}”`;
+    }
+    return `changed the workspace's ${list}`;
 }
 
 /** A short label for the action filter: `member.role_changed` → "Member · role changed". */

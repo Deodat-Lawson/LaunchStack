@@ -4,17 +4,21 @@
  * The default assistant's answer style, drawn twice: once per scope.
  *
  * `chat.responseStyle` is a workspace default with a personal override. The
- * personal row sits under Appearance, where every role can reach it; the
- * workspace row sits under Agents and autonomy, which only admins see. Each
- * row is pinned to its scope (a plain row would write the member value for
- * everyone, admins included) and says what the other scope holds, because
- * the two disagree in exactly the case that confuses people: an admin who
- * changes the default and still gets their own style back.
+ * personal row sits under Settings › Appearance, where every role can reach
+ * it; the workspace row sits under Workspace › Agents, which only admins see.
+ * Each row is pinned to its scope (a plain row would write the member value
+ * for everyone, admins included) and says what the other scope holds,
+ * because the two disagree in exactly the case that confuses people: an
+ * admin who changes the default and still gets their own style back.
  */
 
-import React, { type MouseEvent, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
+import Link from "next/link";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useOptionalToolNav } from "~/components/tool-app/nav";
 import type { SettingDefinition } from "~/lib/settings/registry";
+import { SETTINGS_PATH, workspaceHref } from "~/lib/settings/surfaces";
 import { settingAtScope, useSetting } from "~/lib/settings/useSettings";
 
 import { SettingRow } from "./SettingRow";
@@ -29,19 +33,22 @@ function styleLabel(definition: SettingDefinition, value: unknown): string {
 }
 
 /**
- * A link to another place in Settings. The hub follows the hash; following
- * the one already in the address bar fires no event, so re-announce it.
+ * A link from one tab's row to the other's: Settings and the Workspace tab
+ * are tabs of the workspace, so inside a tool's tab the link is handed to the
+ * workspace (`ToolLink`), and from Settings it is an ordinary link the shell
+ * opens in place.
  */
-function SettingsHashLink({ hash, children }: { hash: string; children: ReactNode }) {
-    const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
-        if (window.location.hash.replace(/^#/, "") !== hash) return;
-        event.preventDefault();
-        window.dispatchEvent(new HashChangeEvent("hashchange"));
-    };
-    return (
-        <a href={`#${hash}`} onClick={onClick} className="text-brand-ink underline">
+function OtherTabLink({ href, children }: { href: string; children: ReactNode }) {
+    const inTool = useOptionalToolNav() !== null;
+    const className = "text-brand-ink underline";
+    return inTool ? (
+        <ToolLink href={href} className={className}>
             {children}
-        </a>
+        </ToolLink>
+    ) : (
+        <Link href={href} className={className}>
+            {children}
+        </Link>
     );
 }
 
@@ -49,7 +56,7 @@ function Note({ children }: { children: ReactNode }) {
     return <p className="text-ink-3 m-0 mt-2 text-[12px] leading-normal">{children}</p>;
 }
 
-/** Appearance: this person's own style. Everyone may set it. */
+/** Settings › Appearance: this person's own style. Everyone may set it. */
 export function PersonalAnswerStyleRow() {
     const { definition, resolved } = useSetting(KEY);
     const workspace = settingAtScope(definition, resolved, "workspace");
@@ -61,9 +68,9 @@ export function PersonalAnswerStyleRow() {
         note = (
             <>
                 Everyone who hasn&apos;t picked their own gets the workspace default, {label}.{" "}
-                <SettingsHashLink hash="agents">
-                    Change it under Agents and autonomy
-                </SettingsHashLink>
+                <OtherTabLink href={workspaceHref("agents")}>
+                    Change it under Workspace › Agents
+                </OtherTabLink>
                 .
             </>
         );
@@ -78,7 +85,7 @@ export function PersonalAnswerStyleRow() {
     );
 }
 
-/** Agents and autonomy: what everyone gets until they pick their own. */
+/** Workspace › Agents: what everyone gets until they pick their own. */
 export function WorkspaceAnswerStyleRow() {
     const { definition, resolved } = useSetting(KEY);
     const own = resolved?.stored.member;
@@ -88,7 +95,10 @@ export function WorkspaceAnswerStyleRow() {
             {own !== undefined && (
                 <Note>
                     Your own choice, {styleLabel(definition, own)}, still applies to your chats.{" "}
-                    <SettingsHashLink hash={KEY}>Change it under Appearance</SettingsHashLink>.
+                    <OtherTabLink href={`${SETTINGS_PATH}#${KEY}`}>
+                        Change it under Settings › Appearance
+                    </OtherTabLink>
+                    .
                 </Note>
             )}
         </SettingRow>

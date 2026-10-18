@@ -126,7 +126,7 @@ async function moveLegacyArtifact(artifact: LegacyArtifact, category: string): P
         sourceUrl: detail.sourceUrl,
         category,
     });
-    // Soft delete: the old copy goes to Settings → Archive, where it can be
+    // Soft delete: the old copy goes to Workspace › Archive, where it can be
     // restored, rather than being destroyed the moment its source exists.
     const removed = await fetch(`/api/artifacts/${artifact.id}`, { method: "DELETE" });
     if (!removed.ok)
@@ -239,7 +239,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
         const moved = items.length - failures.length;
         if (moved > 0) {
             toast.success(
-                `${moved} artifact${moved === 1 ? "" : "s"} added to "${category}". The old copies are in Settings → Archive.`
+                `${moved} artifact${moved === 1 ? "" : "s"} added to "${category}". The old copies are in Workspace › Archive.`
             );
         }
         if (failures.length > 0) toast.error(failures.join("\n"));
@@ -392,7 +392,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                             {legacy.length} artifact{legacy.length === 1 ? "" : "s"} from before
                         </span>{" "}
                         they were sources. Add them to &ldquo;{category}&rdquo; to search and cite
-                        them; the old copies move to Settings → Archive.
+                        them; the old copies move to Workspace › Archive.
                     </p>
                     <Button
                         type="button"

@@ -44,6 +44,7 @@ import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
@@ -1774,7 +1775,7 @@ export function AskPanel({
                             startersRevisionKey={startersRevisionKey}
                             disabled={isSending}
                             onAsk={handleAskStarter}
-                            onOpenProfile={() => onStudioNavigate("/employer/settings#company")}
+                            onOpenProfile={() => onStudioNavigate(workspaceHref("company"))}
                         />
                     ) : (
                         <>

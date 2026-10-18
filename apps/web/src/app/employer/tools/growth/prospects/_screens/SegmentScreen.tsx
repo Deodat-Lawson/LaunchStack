@@ -240,7 +240,7 @@ export function SegmentScreen() {
             {s && !s.basis.hasProfile && (
                 <p className="text-ink-2 text-[13px]">
                     There is no company profile yet, so this draft leans on documents alone. Add one
-                    under Settings to sharpen it.
+                    under Workspace › Company profile to sharpen it.
                 </p>
             )}
         </div>

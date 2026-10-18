@@ -12,6 +12,7 @@ import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { useInstanceHost } from "~/lib/instance-host";
 import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
+import { WORKSPACE_TEAM_SIZES } from "~/lib/workspace-details";
 
 import styles from "./workspace-select.module.css";
 
@@ -146,7 +147,7 @@ export function WorkspaceSelectClient({
     const [slugValue, setSlugValue] = useState("");
     const [slugEdited, setSlugEdited] = useState(false);
     const [swatch, setSwatch] = useState(1);
-    const [teamSize, setTeamSize] = useState("Just me — I'm a solo founder");
+    const [teamSize, setTeamSize] = useState<string>(WORKSPACE_TEAM_SIZES[0]);
     const [description, setDescription] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -810,10 +811,10 @@ export function WorkspaceSelectClient({
                                     value={teamSize}
                                     onChange={e => setTeamSize(e.target.value)}
                                 >
-                                    <option>Just me — I&apos;m a solo founder</option>
-                                    <option>2–5 people</option>
-                                    <option>6–20 people</option>
-                                    <option>20+ people</option>
+                                    {/* The same options Workspace › General offers afterwards. */}
+                                    {WORKSPACE_TEAM_SIZES.map(size => (
+                                        <option key={size}>{size}</option>
+                                    ))}
                                 </select>
                             </div>
 

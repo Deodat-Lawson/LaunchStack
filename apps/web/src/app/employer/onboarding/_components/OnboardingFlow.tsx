@@ -20,6 +20,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { companyProfileApi } from "~/lib/company-profile/api";
 import type { CompanyProfileDto, ProfileSourceDto } from "~/lib/company-profile/dto";
 import { normalizeWebsite } from "~/lib/company-profile/website";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import { cn } from "~/lib/utils";
 import {
     registerDocument,
@@ -28,6 +29,9 @@ import {
 
 /** Where onboarding puts what it imports; the source sorter reads the folder name as a hint. */
 const FOLDER = "Company";
+
+/** Where the profile is reviewed and changed afterwards: Workspace › Company profile. */
+const COMPANY_PROFILE_HREF = workspaceHref("company");
 
 const INDUSTRIES = [
     "Technology",
@@ -438,7 +442,7 @@ function CompanyStep({
             <StepHeader title={`Tell us about ${companyName}`}>
                 We read your website and documents and build a profile of the company that every
                 tool here uses: chat answers, proposals, outreach. What you write here is kept as
-                your own facts; you can change any of it later in Settings › Company.
+                your own facts; you can change any of it later in Workspace › Company profile.
             </StepHeader>
             <div className="flex flex-col gap-5 px-6 py-6 max-sm:px-4">
                 <div className="grid gap-1.5">
@@ -763,7 +767,7 @@ function UnderstoodStep({
                                 <span className="text-danger text-xs">
                                     {websiteImport.message}
                                     {!websiteImport.retry &&
-                                        ". It stays your website; change it in Settings › Company."}
+                                        ". It stays your website; change it in Workspace › Company profile."}
                                 </span>
                                 {websiteImport.retry && (
                                     <Button
@@ -825,7 +829,7 @@ function UnderstoodStep({
                         </dl>
                         {more > 0 && (
                             <Link
-                                href="/employer/settings#company"
+                                href={COMPANY_PROFILE_HREF}
                                 className="text-brand-ink self-start text-xs hover:underline"
                             >
                                 {more} more in the company profile
@@ -902,7 +906,7 @@ function UnderstoodStep({
                 </Button>
                 <div className="flex-1 max-sm:hidden" />
                 <Button asChild variant="outline">
-                    <Link href="/employer/settings#company">Review the company profile</Link>
+                    <Link href={COMPANY_PROFILE_HREF}>Review the company profile</Link>
                 </Button>
                 <Button type="button" onClick={onFinish}>
                     Open your workspace
@@ -949,7 +953,7 @@ function ReadOnly({ companyName, onLeave }: { companyName: string; onLeave: () =
                 <div className="h-6" />
                 <StepFooter>
                     <Button asChild variant="outline">
-                        <Link href="/employer/settings#company">See the company profile</Link>
+                        <Link href={COMPANY_PROFILE_HREF}>See the company profile</Link>
                     </Button>
                     <div className="flex-1 max-sm:hidden" />
                     <Button type="button" onClick={onLeave}>

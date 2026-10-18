@@ -1,11 +1,12 @@
 /**
- * Who may see each Settings section, and who may change it.
+ * Who may see each settings section, and who may change it.
  *
- * Settings is open to everyone in a workspace: Account, Appearance and
- * Shortcuts are theirs, whatever their role. Each workspace section carries
- * its own gate instead of the whole hub carrying one: the Settings app used
- * to require `settings.manage`, so a Member who picked "Settings" got
- * nothing at all.
+ * Settings (Account, Appearance, Shortcuts, Data and privacy) is everyone's,
+ * whatever their role. The Workspace tab is open to everyone too, and each of
+ * its screens carries its own gate instead of the whole tab carrying one: the
+ * Settings app used to require `settings.manage`, so a Member who picked
+ * "Settings" got nothing at all. Which surface draws which section is
+ * `./surfaces`.
  *
  * Two gates per section, both optional:
  *
@@ -55,7 +56,13 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         ],
     },
     appearance: { aliases: ["appearance", "theme", "dark", "light"] },
-    shortcuts: { aliases: ["shortcuts", "keys", "keybindings", "hotkeys"] },
+    shortcuts: { aliases: ["shortcuts", "keybindings", "hotkeys"] },
+    // The workspace's own details: name, URL, description, industry, team
+    // size, colour. Everyone reads them; admins change them.
+    general: {
+        edit: "settings.manage",
+        aliases: ["general", "workspace", "details", "name", "rename", "slug", "url", "swatch"],
+    },
     // Each tab gates its own controls (invite, roles, audit); the member list
     // is the floor. A Guest sees only what is shared with them.
     people: {
@@ -74,18 +81,18 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
     // Everyone reads the profile (agents cite it to everyone) and may rebuild
     // it; the body says so, and withholds the curation actions.
     company: { edit: "settings.manage", aliases: ["company", "metadata", "profile"] },
-    // Keys and endpoints. The form would take edits it can never save.
-    processing: {
-        view: "settings.manage",
-        edit: "settings.manage",
-        aliases: ["processing", "byok", "embedding", "keys"],
-    },
     // Its read is refused outright. Also where a workspace brings its own
-    // model: an endpoint and API key, or OpenRouter.
+    // model: an endpoint and API key, or OpenRouter — so the links that went
+    // to the retired Processing section (the embedding index and its keys,
+    // `#byok`) land here.
     models: {
         view: "settings.manage",
         edit: "settings.manage",
         aliases: [
+            "processing",
+            "byok",
+            "embedding",
+            "keys",
             "models",
             "routes",
             "llm",

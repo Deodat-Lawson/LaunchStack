@@ -33,7 +33,7 @@ export async function GET() {
         if (!result) {
             return NextResponse.json({
                 metadata: null,
-                message: "No company profile yet. Build it from Settings › Company.",
+                message: "No company profile yet. Build it from Workspace › Company profile.",
             });
         }
 

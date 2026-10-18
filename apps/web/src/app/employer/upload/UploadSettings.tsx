@@ -16,7 +16,7 @@ interface UploadSettingsProps {
     onBatchSettingsChange: React.Dispatch<React.SetStateAction<BatchSettings>>;
     onApplyBatchSettings: () => void;
     processingMethods: { value: string; label: string; description: string }[];
-    /** Where uploads go; shown as a note, changed under Settings → Document defaults. */
+    /** Where uploads go; shown as a note, changed under Workspace › Document defaults. */
     currentStorageValue: string;
     onAddCategory?: (name: string) => Promise<void>;
     storageProvider?: "s3" | "database";
@@ -373,7 +373,7 @@ export function UploadSettings({
                             : currentStorageValue === "cloud"
                               ? "with UploadThing"
                               : "in the built-in storage"}
-                        . Change that under Settings → Document defaults.
+                        . Change that under Workspace › Document defaults.
                     </div>
 
                     <div>

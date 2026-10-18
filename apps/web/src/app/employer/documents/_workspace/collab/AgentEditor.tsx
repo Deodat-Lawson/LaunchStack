@@ -511,7 +511,7 @@ export function AgentEditor({
                                         ? LOCKED_HINT
                                         : isAgentAutonomy(form.autonomy)
                                           ? AGENT_AUTONOMY_META[form.autonomy].description
-                                          : "Inherits the workspace default (Settings → Agents)."
+                                          : "Inherits the workspace default (Workspace › Agents)."
                                 }
                             >
                                 <SelectInput

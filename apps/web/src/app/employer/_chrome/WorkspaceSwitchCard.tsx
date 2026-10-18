@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn } from "~/lib/utils";
 
 import { useEmployerWorkspaceSwitcher } from "./EmployerWorkspaceSwitcherContext";
-import pill from "./WorkspaceSwitcherPill.module.css";
+import { WorkspaceMark } from "./WorkspaceMark";
 
 /**
  * Which workspace these settings belong to, and the way to a different one.
@@ -20,7 +20,6 @@ import pill from "./WorkspaceSwitcherPill.module.css";
 export function WorkspaceSwitchCard({ className }: { className?: string }) {
     const workspace = useEmployerWorkspaceSwitcher();
     if (!workspace) return null;
-    const swatch = pill[`gradient${workspace.swatch ?? 1}`] ?? pill.gradient1;
     const others = Math.max(0, workspace.membershipCount - 1);
 
     return (
@@ -33,7 +32,11 @@ export function WorkspaceSwitchCard({ className }: { className?: string }) {
                 className
             )}
         >
-            <span className={cn(pill.mark, swatch, "shrink-0")}>{workspace.initials}</span>
+            <WorkspaceMark
+                swatch={workspace.swatch}
+                initials={workspace.initials}
+                className="shrink-0"
+            />
             <span className="min-w-0 flex-1">
                 <span className="text-ink block truncate text-[12.5px] font-semibold">
                     {workspace.name}

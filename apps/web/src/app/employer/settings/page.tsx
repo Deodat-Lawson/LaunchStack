@@ -1,9 +1,11 @@
 "use client";
 
 /**
- * `/employer/settings` renders the same unified settings surface the workspace
- * mounts as a Studio pane — one implementation, two entry points. Existing
- * deep links (`#byok`, `#slack`, …) still land on the right section.
+ * `/employer/settings` renders Settings — yours alone — the same surface the
+ * workspace mounts as a Studio tab. Every deep link that ever pointed here
+ * still lands: `#account` or `#appearance.theme` on its section, and what
+ * belongs to the workspace now (`#people`, `#byok`, `#usage.…`) on its
+ * screen of the Workspace tab (see `~/lib/settings/surfaces`).
  */
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";

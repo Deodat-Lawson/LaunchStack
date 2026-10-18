@@ -60,7 +60,7 @@ function unusable(reason: string): ChatModelsScope {
     return {
         source: "workspace",
         error: new ChatScopeUnavailableError(
-            `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Settings › Models.`
+            `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Workspace › Models.`
         ),
     };
 }

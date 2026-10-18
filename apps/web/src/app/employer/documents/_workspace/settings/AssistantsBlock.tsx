@@ -283,8 +283,8 @@ function ConnectSteps({ url, canManageClients }: { url: string; canManageClients
                 <Steps>
                     <li>
                         {canManageClients
-                            ? "Create an OAuth client in Settings › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste."
-                            : "A LaunchStack admin creates an OAuth client in Settings › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste."}
+                            ? "Create an OAuth client in Workspace › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste."
+                            : "A LaunchStack admin creates an OAuth client in Workspace › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste."}
                     </li>
                     <li>
                         A Google Cloud admin opens{" "}

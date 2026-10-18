@@ -3,7 +3,8 @@
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { searchSettings } from "~/lib/settings/registry";
-import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
+import { canSeeSettingsSection } from "~/lib/settings/sections";
+import { isPersonalSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
 import { useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -12,13 +13,7 @@ import { usableAsPrimary } from "~/lib/agents/definition";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
 import { usePermissions } from "~/lib/use-permissions";
-import {
-    DEMOTED_FEATURES,
-    SOURCE_META,
-    resolveStudioFeature,
-    settingsSectionOf,
-    type WorkspaceSource,
-} from "./types";
+import { DEMOTED_FEATURES, SOURCE_META, resolveStudioFeature, type WorkspaceSource } from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
     HISTORY_KIND_META,
@@ -166,15 +161,14 @@ export function CommandPalette({
         const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked. Anyone may open Settings, so a
-            // row for one of its sections ("Self-host / BYOK") carries that
-            // section's gate instead: picked without it, the row would land
-            // on a section that only says it isn't theirs.
+            // would do nothing when picked. Anyone may open Settings and the
+            // Workspace tab, so a row for one of their screens ("Agents &
+            // nodes") carries that screen's gate instead: picked without it,
+            // the row would land on a screen that only says it isn't theirs.
             .filter(f => {
                 const app = resolveStudioFeature(f.id);
                 if (app) return can(app.requires);
-                const hash = settingsSectionOf(f.href);
-                const section = hash ? settingsSectionFromHash(hash) : null;
+                const section = settingsSectionOfHref(f.href);
                 return section ? canSeeSettingsSection(section, can) : true;
             })
             .forEach(f =>
@@ -276,7 +270,8 @@ export function CommandPalette({
                 kind: "setting",
                 id: definition.key,
                 label: definition.label,
-                sub: `Settings · ${definition.description}`,
+                // Where picking it goes: Settings, or the Workspace tab.
+                sub: `${isPersonalSection(definition.section) ? "Settings" : "Workspace"} · ${definition.description}`,
                 Icon: Settings,
                 onRun: () => {
                     if (onPickSetting) onPickSetting(definition.key);

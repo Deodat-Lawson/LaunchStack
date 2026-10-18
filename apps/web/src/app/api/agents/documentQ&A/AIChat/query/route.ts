@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
-import { SystemMessage, HumanMessage, type AIMessageChunk } from "@langchain/core/messages";
+import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray, like, or } from "drizzle-orm";
 import {
@@ -31,22 +31,19 @@ import { observeScopeSize, recordAuthzDenied } from "~/server/metrics/authz";
 import { gateChunksByScope } from "~/server/rag/gate";
 import {
     normalizeModelContent,
-    performWebSearch,
     getSystemPrompt,
-    getWebSearchInstruction,
     describeChatError,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
-import { isExaSearchConfigured } from "../../services/exaSearch";
 import {
     describeChatResolutionFailure,
     resolveConfiguredChatModel,
     resolveConfiguredChatRoute,
     selectChatRoute,
 } from "~/lib/models";
-import { getChatModelsSource, normalizeTokenUsage } from "@launchstack/llm";
+import { getChatModelsSource } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import {
@@ -55,6 +52,15 @@ import {
     type ChatStep,
     type ChatStreamEvent,
 } from "~/lib/chat-stream";
+import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
+import {
+    citedPassages,
+    createSourceTools,
+    loadSourcesOverview,
+    noSourceToolsPrompt,
+    sourceToolsPrompt,
+} from "~/server/chat-source-tools";
+import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
@@ -112,20 +118,6 @@ async function knownAgentKeys(companyId: bigint, question: string): Promise<stri
         console.warn("[AIChat] could not read the agent roster for mentions:", err);
         return [];
     }
-}
-
-/** Extract only public reasoning deltas; raw provider payloads never leave the server. */
-function rawReasoningDelta(value: unknown): string | undefined {
-    if (!value || typeof value !== "object") return undefined;
-    const choices: unknown = (value as Record<string, unknown>).choices;
-    if (!Array.isArray(choices)) return undefined;
-    const first: unknown = choices[0];
-    if (!first || typeof first !== "object") return undefined;
-    const delta: unknown = (first as Record<string, unknown>).delta;
-    if (!delta || typeof delta !== "object") return undefined;
-    const fields = delta as Record<string, unknown>;
-    const reasoning = fields.reasoning_content ?? fields.reasoning;
-    return typeof reasoning === "string" ? reasoning : undefined;
 }
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
@@ -203,14 +195,6 @@ function stepEvent(
         type: "step",
         step: { id, state, label: clip(label), ...(detail ? { detail: clip(detail, 240) } : {}) },
     };
-}
-
-function hostname(url: string): string | undefined {
-    try {
-        return new URL(url).hostname.replace(/^www\./, "");
-    } catch {
-        return undefined;
-    }
 }
 
 const qaAnnOptimizer = new ANNOptimizer({
@@ -544,7 +528,7 @@ async function buildAttachmentTextBlock(
  * This endpoint provides comprehensive document Q&A capabilities:
  * - Answers over one document, or over a set of documents
  * - Advanced retrieval with multiple fallback strategies
- * - Web search integration
+ * - Web search as a tool the model calls when it needs one
  * - Conversation context support
  * - Rich response metadata
  *
@@ -1271,8 +1255,6 @@ export async function POST(request: Request) {
                     recordResult("empty");
                     return refusal("No relevant content found for the given question.");
                 }
-            } else if (passages.length === 0) {
-                step("search", "done", "No sources selected", "Answering from general knowledge");
             }
             throwIfChatAborted(signal);
 
@@ -1316,35 +1298,48 @@ export async function POST(request: Request) {
                 `✅ [AIChat] Built context with pages: ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
             );
 
-            // Build references for document highlights and page navigation
-            const references = buildReferences(retrievalQuery, documents, 5);
+            // A workspace's own model has no tool-calling answer to read
+            // (Settings asks about images, reasoning and JSON schema); nearly
+            // every OpenAI-compatible server takes function tools, and one that
+            // refuses them costs a retry without them (chat-tool-loop.ts), not
+            // the answer.
+            const takesTools =
+                resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
+                getChatModelsSource() === "workspace";
 
-            // Perform comprehensive web search if enabled
-            const documentContext =
-                documents.length > 0
-                    ? documents.map(doc => doc.pageContent).join("\n\n")
-                    : undefined;
+            // Web search is a tool the model may call, not a step before the
+            // answer: it is offered when the turn's agent may use the web, a
+            // search provider key is configured and the model takes tools. A
+            // question that needs no web pays nothing for it.
+            const webTools =
+                enableWebSearch && webSearchAvailable() && takesTools ? createWebTools() : null;
 
-            const enableWebSearchFlag = Boolean(enableWebSearch ?? false);
-            const searchesWeb = enableWebSearchFlag && isExaSearchConfigured();
-            if (searchesWeb) step("web", "active", "Searching the web");
-            const webSearch = await performWebSearch(
-                retrievalQuery,
-                documentContext,
-                enableWebSearchFlag,
-                5
-            );
-            if (searchesWeb) {
-                const hosts = webSearch.results.flatMap(result => hostname(result.url) ?? []);
-                step(
-                    "web",
-                    "done",
-                    webSearch.results.length > 0
-                        ? `Read ${count(webSearch.results.length, "web result")}`
-                        : "No useful web results",
-                    nameList(hosts)
-                );
-            }
+            // The workspace's sources are tools too, offered whenever the model
+            // takes tools, the agent may use retrieval and the person can open
+            // at least one source. Without them a message with nothing attached
+            // searched nothing, and "what's in my Google Drive" was answered
+            // with "I don't have access to your Drive".
+            const sourcesAllowed = agent ? agent.turn.sources : true;
+            const sourcesOverview =
+                (takesTools && sourcesAllowed) || searchScope === "none"
+                    ? await loadSourcesOverview(ctx.data).catch((error: unknown) => {
+                          // Not knowing what is there must not cost the answer.
+                          console.warn("[AIChat] could not read the sources overview:", error);
+                          return null;
+                      })
+                    : null;
+            const sourceTools =
+                takesTools &&
+                sourcesAllowed &&
+                sourcesOverview &&
+                sourcesOverview.inventory.total > 0
+                    ? createSourceTools(ctx.data)
+                    : null;
+            const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
+            // Nothing attached and no way to look through the sources: say so,
+            // rather than leave the reader to guess what the answer drew on.
+            if (searchScope === "none" && passages.length === 0 && !sourceTools)
+                step("search", "done", "No sources selected", "Answering from general knowledge");
 
             const attachmentCount = textAttachments.length + imageAttachments.length;
             if (attachmentCount > 0)
@@ -1381,31 +1376,29 @@ export async function POST(request: Request) {
             let systemPrompt = agent
                 ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
                 : stylePrompt;
+            if (sourceTools && sourcesOverview) {
+                systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
+            } else if (searchScope === "none") {
+                systemPrompt += `\n\n${noSourceToolsPrompt(sourcesOverview)}`;
+            }
             if (searchScope === "none") {
-                systemPrompt +=
-                    "\n\nThis turn has no indexed document sources. Answer general questions using your knowledge and the user attachments when present. Do not invent document citations or claim access to workspace sources.";
                 if (passages.length > 0) {
                     systemPrompt +=
-                        " The user did select passage(s) from their documents: those passages, and any surrounding text shown with them, are in the message and may be quoted.";
+                        "\n\nThe user did select passage(s) from their documents: those passages, and any surrounding text shown with them, are in the message and may be quoted.";
                 }
             }
             if (chatMode === "plan") {
                 systemPrompt +=
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
             }
-            const webSearchInstruction = getWebSearchInstruction(
-                webSearch.searched,
-                webSearch.results,
-                webSearch.refinedQuery,
-                webSearch.reasoning
-            );
+            if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
 
             const passageBlock = passageSection ? `${passageSection}\n\n` : "";
             const documentContent =
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${webSearch.content}${attachmentTextBlock}${webSearchInstruction}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1457,82 +1450,102 @@ export async function POST(request: Request) {
             ) => {
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "generating" });
-                let response;
-                let streamedText = "";
-                if (emit) {
-                    step("think", "active", "Thinking");
-                    const chunks = await chat.stream(messages, { signal });
-                    let combined: AIMessageChunk | undefined;
-                    for await (const chunk of chunks) {
-                        throwIfChatAborted(signal);
-                        const wireReasoning = rawReasoningDelta(
-                            chunk.additional_kwargs?.__raw_response
-                        );
-                        // Do not retain opaque provider metadata in the final chunk.
-                        delete chunk.additional_kwargs.__raw_response;
-                        combined = combined ? combined.concat(chunk) : chunk;
-                        const content = chunk.content;
-                        const text =
-                            typeof content === "string"
-                                ? content
-                                : content
-                                      .map(part => {
-                                          if (typeof part === "string") return part;
-                                          return part.type === "text" &&
-                                              typeof part.text === "string"
-                                              ? part.text
-                                              : "";
-                                      })
-                                      .join("");
-                        if (text) {
-                            if (!streamedText) {
-                                step("think", "done", "Thought it through");
+                // The trace: thinking, each tool call as its own step (its id
+                // says which kind, so a shared reader can be shown a generic
+                // label), thinking again after the tools, then writing.
+                let calling = "";
+                const tracked: ChatTool[] = tools.map(tool => ({
+                    ...tool,
+                    describe: args => {
+                        calling = tool.name;
+                        return tool.describe(args);
+                    },
+                }));
+                const webToolNames = new Set((webTools?.tools ?? []).map(tool => tool.name));
+                let round = 1;
+                let thinking: string | null = null;
+                let toolCall: { id: string; label: string } | null = null;
+                let toolCount = 0;
+                let wrote = false;
+                const startThinking = () => {
+                    thinking = round === 1 ? "think" : `think-${round}`;
+                    step(thinking, "active", "Thinking");
+                };
+                const endThinking = () => {
+                    if (thinking) step(thinking, "done", "Thought it through");
+                    thinking = null;
+                };
+                const endToolCall = () => {
+                    if (toolCall) step(toolCall.id, "done", toolCall.label);
+                    toolCall = null;
+                };
+                if (emit) startThinking();
+                const reply = await answerWithTools({
+                    chat,
+                    messages,
+                    tools: tracked,
+                    signal,
+                    stream: emit && {
+                        onText: delta => {
+                            if (!wrote) {
+                                endToolCall();
+                                endThinking();
                                 step("write", "active", "Writing the answer");
+                                wrote = true;
                             }
-                            streamedText += text;
-                            emit({ type: "text", delta: text });
+                            emit({ type: "text", delta });
+                        },
+                        onReasoning: delta => emit({ type: "reasoning", delta }),
+                    },
+                    onStatus: status => {
+                        emit?.({ type: "status", status });
+                        if (!emit) return;
+                        endToolCall();
+                        if (status === "generating") {
+                            round += 1;
+                            startThinking();
+                            return;
                         }
-                        const reasoning =
-                            chunk.additional_kwargs?.reasoning_content ??
-                            chunk.additional_kwargs?.reasoning ??
-                            wireReasoning;
-                        if (typeof reasoning === "string" && reasoning)
-                            emit({ type: "reasoning", delta: reasoning });
-                        if (Array.isArray(content)) {
-                            for (const block of content) {
-                                if (typeof block !== "object" || !block) continue;
-                                if (block.type === "reasoning" || block.type === "thinking") {
-                                    const delta: unknown = block.text ?? block.thinking;
-                                    if (typeof delta === "string" && delta)
-                                        emit({ type: "reasoning", delta });
-                                }
-                            }
-                        }
-                    }
-                    if (streamedText) step("write", "done", "Wrote the answer");
-                    else step("think", "done", "Thought it through");
-                    if (!combined) throw new Error("The model stream ended without a response.");
-                    response = combined;
-                } else {
-                    response = await chat.invoke(messages, { signal });
+                        endThinking();
+                        const kind = webToolNames.has(calling) ? "web" : "source";
+                        toolCall = { id: `${kind}-${++toolCount}`, label: status };
+                        step(toolCall.id, "active", status);
+                    },
+                });
+                if (emit) {
+                    endToolCall();
+                    if (wrote) step("write", "done", "Wrote the answer");
+                    else endThinking();
                 }
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
 
                 let summarizedAnswer = normalizeModelContent(
-                    emit ? streamedText : response.content
+                    emit ? reply.finalText : reply.finalContent
                 );
                 const totalTime = Date.now() - startTime;
 
-                // Log + meter LLM token usage. Normalized at the chat boundary so
-                // credits are debited the same way whichever deployment endpoint
-                // answered; a workspace's own endpoint is never debited.
-                const usage = normalizeTokenUsage(response);
+                // Log + meter LLM token usage, summed over every model call
+                // of the turn. Normalized at the chat boundary so credits are
+                // debited the same way whichever deployment endpoint answered;
+                // a workspace's own endpoint is never debited.
+                const usage = reply.usage;
                 const promptTokens = usage.inputTokens ?? 0;
                 const completionTokens = usage.outputTokens ?? 0;
                 console.log(
                     `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
                 );
+                if (tools.length > 0) {
+                    console.log(
+                        `[AIChat] Tools: ${reply.modelCalls} model call(s); ${
+                            reply.toolCalls
+                                .map(
+                                    call => `${call.name}${call.ok ? "" : " (failed)"} ${call.ms}ms`
+                                )
+                                .join(", ") || "no tool calls"
+                        }`
+                    );
+                }
                 // isMeteringEnabled, not isMeteringEnforced: recording chat usage
                 // is useful on a self-hosted instance too. This calls debitTokens
                 // directly rather than going through creditsDebitSafe (which would
@@ -1553,9 +1566,12 @@ export async function POST(request: Request) {
                     }).catch(err => console.warn("[AIChat] Token debit failed:", err));
                 }
 
-                // The passages and their surrounding text are sources too.
+                // The passages and their surrounding text are sources too, and
+                // so is whatever the source tools showed the model.
+                const toolPassages = sourceTools?.passages ?? [];
                 const sourceTexts = [
                     ...documents.map(d => d.pageContent),
+                    ...(sourceTools?.texts ?? []),
                     ...passages.map(passage => passage.text),
                     ...passageAnchors.flat().map(anchor => anchor.content),
                 ];
@@ -1589,6 +1605,14 @@ export async function POST(request: Request) {
                 throwIfChatAborted(signal);
                 recordResult("success");
 
+                // Citations: the attached sources' passages first, then what
+                // the model found with search_sources and drew on.
+                const references = buildReferences(
+                    retrievalQuery,
+                    [...documents, ...citedPassages(toolPassages, summarizedAnswer)],
+                    5
+                );
+
                 return {
                     success: true,
                     summarizedAnswer,
@@ -1596,7 +1620,7 @@ export async function POST(request: Request) {
                     references: references.length > 0 ? references : undefined,
                     retrievalMethod,
                     processingTimeMs: totalTime,
-                    chunksAnalyzed: documents.length,
+                    chunksAnalyzed: documents.length + toolPassages.length,
                     // A silent provider reports no usage; do not show fake zeroes.
                     ...(usage.inputTokens !== undefined ||
                     usage.outputTokens !== undefined ||
@@ -1612,14 +1636,16 @@ export async function POST(request: Request) {
                     fusionWeights: [0.4, 0.6],
                     searchScope,
                     agent: agentResponseInfo(agent),
-                    webSources: webSearch.searched ? webSearch.results : undefined,
-                    webSearch: webSearch.searched
-                        ? {
-                              refinedQuery: webSearch.refinedQuery || question,
-                              reasoning: webSearch.reasoning,
-                              resultsCount: webSearch.results.length,
-                          }
-                        : undefined,
+                    // The pages the model was shown, in the [Source N] order it cites.
+                    webSources: webTools?.sources.length ? webTools.sources : undefined,
+                    webSearch:
+                        webTools && webTools.queries.length > 0
+                            ? {
+                                  refinedQuery: webTools.queries.join(" · "),
+                                  queries: webTools.queries,
+                                  resultsCount: webTools.sources.length,
+                              }
+                            : undefined,
                     disclaimer: supervision.disclaimer,
                     guardrails: !supervision.approved
                         ? {

@@ -1221,3 +1221,69 @@ test("auth hydration switches from unknown scope to the persisted user's new-cha
     second.rerender({ scope: "user:company" });
     expect(second.result.current.key).toBe("new-authenticated");
 });
+
+test("shows a web search as the answer's stage, then keeps and saves the sources it cited", async () => {
+    let release!: () => void;
+    const searching = new Promise<void>(resolve => (release = resolve));
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({ type: "status", status: "generating" });
+        options.onEvent({ type: "status", status: "Searching the web for “launch news”" });
+        await searching;
+        return {
+            success: true,
+            summarizedAnswer: "It shipped [Source 1].",
+            webSources: [
+                {
+                    title: "Launch recap",
+                    url: "https://news.example.com/launch",
+                    snippet: "It shipped.",
+                },
+                { title: "Not a web page", url: "javascript:alert(1)", snippet: "" },
+            ],
+        };
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("What launched?"));
+    });
+    await waitFor(() =>
+        expect(result.current.thread[1]?.stage).toBe("Searching the web for “launch news”")
+    );
+    await act(async () => {
+        release();
+        await running;
+    });
+
+    expect(result.current.thread[1]).toMatchObject({
+        text: "It shipped [Source 1].",
+        webSources: [{ title: "Launch recap", url: "https://news.example.com/launch" }],
+    });
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata?.webSources).toEqual([
+        { title: "Launch recap", url: "https://news.example.com/launch" },
+    ]);
+});
+
+test("labels the model-call phases instead of showing their keywords", async () => {
+    let release!: () => void;
+    const generating = new Promise<void>(resolve => (release = resolve));
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({ type: "status", status: "generating" });
+        await generating;
+        return answer("Done");
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("Hi"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.stage).toBe("Generating…"));
+    await act(async () => {
+        release();
+        await running;
+    });
+});

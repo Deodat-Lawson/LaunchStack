@@ -137,14 +137,18 @@ function citationSourceId(citation: unknown): string | null {
  * A reader's copy of an answer's steps. A step's detail lists what it read
  * (document titles, file names, the owner's other chats) and isn't tied to
  * source ids the scope check could test, so it never leaves for a reader; a
- * search caught mid-way says what it was doing without saying where.
+ * search caught mid-way, and each tool call, says what it did without saying
+ * what it searched for or which file it read.
  */
 function readerSteps(steps: readonly ChatTurnStep[]): ChatTurnStep[] {
-    return steps.map(({ detail: _detail, ...step }) =>
-        step.id === "search" && step.state === "active"
-            ? { ...step, label: "Searching your sources" }
-            : step
-    );
+    return steps.map(({ detail: _detail, ...step }) => {
+        if (step.id === "search" && step.state === "active")
+            return { ...step, label: "Searching your sources" };
+        // A tool call's label is its query or the file it read.
+        if (step.id.startsWith("web-")) return { ...step, label: "Searched the web" };
+        if (step.id.startsWith("source-")) return { ...step, label: "Looked through the sources" };
+        return step;
+    });
 }
 
 export interface ReaderMessage extends SessionMessage {

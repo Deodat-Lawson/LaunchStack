@@ -1,21 +1,17 @@
 /**
  * Shared services for document Q&A endpoints
  *
- * This module provides common functionality used by:
- * - AIQuery: Fast, efficient query search on one document (ensemble BM25 + Vector)
- * - AIQueryRLM: Hierarchical, cost-aware search for large documents (RLM-style)
- * - AIChat: Comprehensive search solution with conversation management
+ * This module provides common functionality used by AIChat, the document
+ * Q&A endpoint: answers with conversation management, retrieval and web search.
  *
  * All types are exported from ./types for better organization and tree-shaking
  */
 
 // Functions
 export { normalizeModelContent } from "./normalizeModelContent";
-export { performWebSearch } from "./webSearch";
-export { buildReferences, extractRecommendedPages, filterPagesByAICitation } from "./references";
+export { buildReferences, extractRecommendedPages } from "./references";
 export { performExaSearch } from "./exaSearch";
-export { executeWebSearchAgent } from "./webSearchAgent";
-export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
+export { SYSTEM_PROMPTS, getSystemPrompt } from "./prompts";
 export {
     resolveConfiguredChatModel,
     resolveConfiguredChatRoute,
@@ -24,17 +20,6 @@ export {
 } from "./models";
 export { describeChatError } from "@launchstack/llm";
 export { ChatRoutes, isChatRoute } from "./types";
-
-// RLM Search (hierarchical, cost-aware retrieval for large documents)
-export {
-    performRLMSearch,
-    getDocumentOverviewForPlanning,
-    getDocumentOverviewsBatch,
-    getDocumentStructureTree,
-    getSectionsByPath,
-    type RLMSearchOptions,
-    type RLMSearchResult,
-} from "@launchstack/retrieval/tools/rlm-search";
 
 // Types - Centralized export from types.ts
 export type {
@@ -47,11 +32,8 @@ export type {
     SourceReference,
     // Web Search Types
     WebSearchResult,
-    WebSearchAgentInput,
-    WebSearchAgentResult,
     // Prompt Types
     AIPersona,
-    WebSearchInstructionParams,
     // Search Scope Types
     SearchScope,
     // Utility Types
@@ -62,6 +44,3 @@ export type {
 
 // Type guards
 export { isResponseStyle, isAIPersona, isSearchScope } from "./types";
-
-// Additional types from specific modules
-export type { PerformWebSearchResult } from "./webSearch";

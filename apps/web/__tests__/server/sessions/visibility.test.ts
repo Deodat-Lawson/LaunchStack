@@ -140,6 +140,16 @@ describe("filterMessagesForReader", () => {
                                 state: "done",
                                 detail: "salaries.xlsx",
                             },
+                            {
+                                id: "source-1",
+                                label: "Reading “Acquisition LOI - CONFIDENTIAL.pdf”",
+                                state: "done",
+                            },
+                            {
+                                id: "web-2",
+                                label: "Searching the web for “layoffs at our biggest client”",
+                                state: "done",
+                            },
                         ],
                     },
                 }),
@@ -176,6 +186,8 @@ describe("filterMessagesForReader", () => {
                 endMs: 700,
             },
             { id: "attachments", label: "Read 1 attachment", state: "done" },
+            { id: "source-1", label: "Looked through the sources", state: "done" },
+            { id: "web-2", label: "Searched the web", state: "done" },
         ]);
         expect(messages[1]!.metadata?.steps).toEqual([
             {

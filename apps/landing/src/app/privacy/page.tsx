@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 import { LegalPage } from "../_components/LegalPage";
 import styles from "../../styles/marketing.module.css";
-import { APP_URL, PRIVACY_EMAIL } from "~/config/site";
+import { APP_URL, PRIVACY_EMAIL, PRIVACY_UPDATED } from "~/config/site";
 
 export const metadata: Metadata = {
     title: "Privacy Policy",
@@ -22,6 +22,7 @@ export default function PrivacyPage() {
         <LegalPage
             eyebrow="Legal"
             title="Privacy Policy"
+            effective={PRIVACY_UPDATED}
             summary={
                 <p>
                     Launchstack stores the files, notes and chats you put into your workspace so you
@@ -313,8 +314,8 @@ export default function PrivacyPage() {
                         <tr>
                             <td>Microsoft Azure (United States)</td>
                             <td>
-                                Hosting, file storage, database backups, and reading scanned
-                                documents
+                                Hosting the service and its background jobs, file storage, database
+                                backups, and reading scanned documents
                             </td>
                             <td>The data stored in the service, and scanned pages you upload</td>
                         </tr>
@@ -330,11 +331,6 @@ export default function PrivacyPage() {
                                 and transcription through the Gemini API
                             </td>
                             <td>What each feature needs, as described above</td>
-                        </tr>
-                        <tr>
-                            <td>Inngest</td>
-                            <td>Scheduling background tasks</td>
-                            <td>The details a task needs to run</td>
                         </tr>
                         <tr>
                             <td>LinkedIn and Bluesky</td>

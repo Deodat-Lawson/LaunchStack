@@ -129,18 +129,14 @@ describe("route resolution precedes expensive work", () => {
     // These handlers all run retrieval and/or web search. Resolving after that
     // means an unavailable route is discovered only once the request has paid
     // for context it is about to throw away.
-    const handlers = [
-        "apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts",
-        "apps/web/src/app/api/agents/documentQ&A/AIQuery/route.ts",
-        "apps/web/src/app/api/agents/documentQ&A/AIQueryRLM/route.ts",
-    ];
+    const handlers = ["apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts"];
 
     it.each(handlers)("%s resolves before retrieval and web search", file => {
         const source = read(file);
         const resolveAt = source.indexOf("resolveConfiguredChatModel(");
         expect(resolveAt).toBeGreaterThan(-1);
 
-        for (const expensive of ["performWebSearch(", "getEmbeddings("]) {
+        for (const expensive of ["createWebTools(", "getEmbeddings("]) {
             const at = source.indexOf(expensive);
             if (at === -1) continue;
             expect(resolveAt).toBeLessThan(at);
@@ -155,11 +151,7 @@ describe("authentication precedes chat resolution", () => {
      * auth lets an anonymous caller probe the configuration and turns a
      * request that should be a flat 401/403 into a 400 about capabilities.
      */
-    const handlers = [
-        "apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts",
-        "apps/web/src/app/api/agents/documentQ&A/AIQuery/route.ts",
-        "apps/web/src/app/api/agents/documentQ&A/AIQueryRLM/route.ts",
-    ];
+    const handlers = ["apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts"];
 
     it.each(handlers)("%s authenticates first", file => {
         const source = read(file);
@@ -210,11 +202,10 @@ describe("env.ts stays a light import", () => {
     // walk follows exactly what the bundler would — no hand-maintained
     // subpath table to drift.
     const exportMaps = new Map<string, { dir: string; exports: Record<string, string> }>();
-    for (const [name, dir] of [
-        ...readdirSync(join(repoRoot, "packages")).map(
-            p => [`@launchstack/${p}`, join("packages", p)] as const
-        ),
-        ["@launchstack/pipelines", "pipelines"] as const,
+    // Keyed by each package.json's own name, read below.
+    for (const dir of [
+        ...readdirSync(join(repoRoot, "packages")).map(p => join("packages", p)),
+        "pipelines",
     ]) {
         try {
             const pkg = JSON.parse(read(join(dir, "package.json"))) as {

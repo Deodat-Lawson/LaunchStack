@@ -133,7 +133,7 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
 
             <Section
                 title="Processing and destination"
-                description="The processing method applies to new PDFs — uploads, Drive and Gmail imports, and new versions — unless the person adding one picks otherwise or a folder overrides it for what lands there."
+                description="The processing method applies to every new PDF: uploads, Drive and Gmail imports, and new versions. The folder an upload lands in is pre-selected in the upload dialog."
             >
                 <Card>
                     {providers && !hasAnyOcr && (

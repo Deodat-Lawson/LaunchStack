@@ -163,7 +163,7 @@ export const SECTION_DEFS: Record<SettingsSectionId, SectionDef> = {
         eyebrow: "Documents",
         title: "What a new document gets unless someone says otherwise",
         description:
-            "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc. Folders can override the processing default.",
+            "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc.",
         Icon: FileText,
     },
     integrations: {

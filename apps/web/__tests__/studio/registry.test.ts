@@ -259,7 +259,7 @@ describe("studio registry", () => {
             f => !resolveStudioFeature(f.id) && settingsSectionOfHref(f.href) !== null
         );
         expect(intoSettings.map(f => f.id).sort()).toEqual(
-            ["agents-nodes", "people-access", "profile"].sort()
+            ["agents-nodes", "people-access", "profile", "workspace-general"].sort()
         );
         expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || f.label.includes("BYOK"))).toBe(
             false

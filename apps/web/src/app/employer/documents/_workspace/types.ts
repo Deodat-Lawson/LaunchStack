@@ -487,6 +487,28 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     // is how picking the row opens the tab on its screen; the href is the
     // same place as a link.
     {
+        id: "workspace",
+        label: "Workspace",
+        Icon: IconWorkspace,
+        desc: "The workspace's settings: its name and URL, people and access, models, agents, document defaults, integrations and usage",
+        href: "/employer/documents?feature=workspace",
+    },
+    {
+        // A screen of the Workspace tab, so "rename" or "colour" finds it.
+        id: "workspace-general",
+        label: "Rename the workspace",
+        Icon: IconWorkspace,
+        desc: "Name, URL, description, industry, team size and colour",
+        href: "/employer/documents?feature=workspace&at=%2Fgeneral",
+    },
+    {
+        id: "settings",
+        label: "Settings",
+        Icon: IconSettings,
+        desc: "Yours alone: account, appearance, shortcuts and privacy",
+        href: "/employer/documents?feature=settings",
+    },
+    {
         // Not `team`: that is the Team app above, and the palette keys and
         // routes its rows by id.
         id: "people-access",

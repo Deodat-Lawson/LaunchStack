@@ -295,7 +295,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         section: "documents",
         label: "Default processing method",
         description:
-            "How a new PDF is read unless the person adding it picks otherwise. Images always get OCR in the automatic order.",
+            "How every new PDF is read: uploads, Drive and Gmail imports, and new versions. Images always get OCR in the automatic order.",
         aliases: ["ocr", "processing", "docling", "azure", "landing ai", "datalab", "scan"],
         scopes: ["workspace", "folder"],
         permission: "settings.manage",

@@ -112,7 +112,7 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
             <Section
                 title="The default assistant"
-                description="How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
+                description="How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Settings › Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
             >
                 <Card>
                     <WorkspaceAnswerStyleRow />

@@ -312,7 +312,7 @@ export const GUIDES: Guide[] = [
                 title: "Supporting capabilities and workspace settings",
                 body: [
                     "AI_BASE_URL + AI_API_KEY provide a global endpoint pair for non-chat capabilities. Per-capability EMBEDDING_*, RERANK_*, NER_*, and TRANSCRIPTION_* API pairs can override it. Keep each key paired with its intended endpoint.",
-                    "Workspace Settings → Models shows the resolved chat models and routes as a read-only view. Settings → Processing manages workspace embedding settings. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
+                    "Workspace › Models shows the resolved chat models and routes, and is where a workspace brings its own model endpoint. Embeddings use the server's EMBEDDING_* settings; there is no per-workspace embedding screen. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
                 ],
                 note: "GOOGLE_MODEL is not the chat model selector. Use the mounted YAML. Do not replace the embedding index just to change the chat model.",
             },
@@ -474,7 +474,7 @@ export const GUIDES: Guide[] = [
                 title: "Document parsing and OCR",
                 body: [
                     "Every PDF and image is read with OCR, in one order: Azure Document Intelligence when it is configured, then Docling when docling-serve is running (--profile ocr), then Landing AI and Datalab if configured. A provider that fails hands the document to the next one; the PDF's own text layer is the last resort when none is reachable. Set provider credentials on both app and worker.",
-                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. Workspaces can also pick a provider, or the text-only method, per workspace or folder under Workspace › Document defaults.",
+                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. A workspace can also pick a provider, or the text-only method, under Workspace › Document defaults.",
                 ],
                 rows: [
                     {

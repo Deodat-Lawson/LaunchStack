@@ -131,8 +131,9 @@ API key from Google AI Studio.
 Not covered yet: OCR itself (the document converter and the Azure, Landing AI
 or Datalab providers it routes to), image generation, transcription (and
 transcript translation, which runs on the transcription endpoint) and
-reranking keep the server's settings. Embeddings have their own per-workspace
-key and endpoint in Settings › Processing.
+reranking keep the server's settings. Embeddings use the server's `EMBEDDING_*`
+settings; the per-workspace embedding screen was removed (the stored
+credentials, if any, still apply and are set through `/api/updateCompany`).
 
 ## Routes
 

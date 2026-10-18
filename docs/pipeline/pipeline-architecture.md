@@ -144,7 +144,10 @@ docling-serve answers) → Landing AI → Datalab → the PDF's own text layer
 (pdfjs) or Tesseract for images, last. A workspace (or folder) can pick a
 provider or the text-only method under Workspace › Document defaults; with none picked, the order
 decides. Step B tries the chosen provider and, on any error, the next one, and
-records which provider produced the text and why the others did not.
+records which provider produced the text and why the others did not. A scan
+whose OCR engines all fail and whose text layer is empty fails the job (and the
+outbox retries it) rather than indexing a blank document; only the text-only
+method keeps a blank result.
 
 Every processing event and `runDocIngestionTool` call supplies a required
 `versionId`. Stage C/D writes carry that version; downstream document work
@@ -235,10 +238,10 @@ path for non-text files.
 as the fallback; with none reachable PDFs are read from their text layer), VLM
 enrichment.
 
-| Kind          | Stages                         | Effect                                                                                                            |
-| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| **Fail-hard** | embedding, DB storage; OCR only once every provider in the order, the text layer included, has failed | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
-| **Fail-soft** | VLM enrichment, Step F, Step G | Doc still marked `completed`                                                                                      |
+| Kind          | Stages                                                                                                                         | Effect                                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **Fail-hard** | embedding, DB storage; OCR once every provider in the order has failed, or every OCR engine failed on a PDF with no text layer | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
+| **Fail-soft** | VLM enrichment, Step F, Step G                                                                                                 | Doc still marked `completed`                                                                                      |
 
 **“Sidecar” naming trap:** the historical `SIDECAR_URL` setting referred to an
 **external** ML worker (`/embed`, `/extract-entities`, `/rerank`). The former

@@ -96,6 +96,7 @@ export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
     prospects: { toolId: "growth", at: "/prospects" },
     marketing: { toolId: "growth", at: "/brand/campaigns" },
     distribution: { toolId: "growth", at: "/prospects" },
+    "workspace-general": { toolId: "workspace", at: "/general" },
     "people-access": { toolId: "workspace", at: "/people" },
     profile: { toolId: "workspace", at: "/company" },
     metadata: { toolId: "workspace", at: "/company" },

@@ -185,11 +185,14 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             } = validation.data;
 
             // Same cold-start ordering as processDocumentUpload: configure OCR
-            // before defaultProvider / authorizeInternalFileRef.
+            // before authorizeInternalFileRef.
             getEngine();
 
-            const effectiveProvider =
-                parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+            // Only the uploader's explicit pick is pinned here. Without one the
+            // lifecycle applies the folder's (or workspace's) processing method,
+            // and "auto" leaves the choice to the converter's order — the
+            // operator pin is honoured there, not copied onto every version.
+            const effectiveProvider = parseProvider(preferredProvider);
 
             // A new version can point at an internal file row, which the OCR worker
             // will later fetch with a signed token. Prove the workspace owns it

@@ -295,25 +295,53 @@ export const SETTINGS: readonly SettingDefinition[] = [
         section: "documents",
         label: "Default processing method",
         description:
-            "What a new upload is processed with unless the person uploading picks otherwise.",
-        aliases: ["ocr", "processing", "docling", "azure", "landing ai", "datalab"],
+            "How a new PDF is read unless the person adding it picks otherwise. Images always get OCR in the automatic order.",
+        aliases: ["ocr", "processing", "docling", "azure", "landing ai", "datalab", "scan"],
         scopes: ["workspace", "folder"],
         permission: "settings.manage",
+        // "standard" is the stored value of the text-only method; the name
+        // predates this label and existing rows keep it.
         schema: z.enum(["standard", "auto", "azure", "landing_ai", "datalab", "docling"]),
-        default: "standard",
+        default: "auto",
         control: {
             kind: "select",
             options: [
                 {
-                    value: "standard",
-                    label: "Standard",
-                    description: "No OCR. For text-based PDFs.",
+                    value: "auto",
+                    label: "Automatic",
+                    description:
+                        "OCR reads every page with the best service this server has: Azure first, Docling if Azure fails. The PDF's own text is the last resort.",
                 },
-                { value: "auto", label: "Auto", description: "Pick the best method per document." },
-                { value: "azure", label: "Azure OCR" },
-                { value: "landing_ai", label: "Landing AI" },
-                { value: "datalab", label: "Datalab" },
-                { value: "docling", label: "Docling" },
+                {
+                    value: "azure",
+                    label: "Azure OCR",
+                    description:
+                        "Azure Document Intelligence reads every page. If it fails, the automatic order takes over.",
+                },
+                {
+                    value: "docling",
+                    label: "Docling",
+                    description:
+                        "Docling on this server reads every page. If it fails, the automatic order takes over.",
+                },
+                {
+                    value: "landing_ai",
+                    label: "Landing AI",
+                    description:
+                        "Landing AI reads every page. If it fails, the automatic order takes over.",
+                },
+                {
+                    value: "datalab",
+                    label: "Datalab",
+                    description:
+                        "Datalab reads every page. If it fails, the automatic order takes over.",
+                },
+                {
+                    value: "standard",
+                    label: "Text layer only",
+                    description:
+                        "No OCR. Reads only the text already inside the PDF, so scanned pages come out blank.",
+                },
             ],
         },
     },

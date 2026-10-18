@@ -11,6 +11,8 @@ import { createAzureAdapter } from "./adapters/azureAdapter";
 import { createLandingAIAdapter } from "./adapters/landingAdapter";
 import { createDatalabAdapter } from "./adapters/datalabAdapter";
 import { createDoclingAdapter } from "./adapters/ossAdapter";
+import { getOcrConfig } from "./config";
+import { availableOcrEngines, ocrFallbackChain } from "./provider-order";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "./chunker";
 import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import {
@@ -113,14 +115,40 @@ export interface RouterDecisionResult {
     visionScore?: number;
 }
 
+/** One provider normalizeDocument tried, and how it went. */
+export interface ProviderAttempt {
+    provider: OCRProvider;
+    ok: boolean;
+    /** Why it did not produce the text: the error, shortened, URL query strings removed. */
+    error?: string;
+    durationMs: number;
+}
+
+/**
+ * How a document's text was produced — written into ocr metadata so "which
+ * OCR read this, and why not the one it was meant to" has an answer.
+ */
+export interface OcrRoutingRecord {
+    /** What routing chose: a person's pick, the operator pin, or the order. */
+    requestedProvider: OCRProvider;
+    /** What produced the text. */
+    provider: OCRProvider;
+    /** True when `provider` is not `requestedProvider`. */
+    fellBack: boolean;
+    routingReason: string;
+    attempts: ProviderAttempt[];
+}
+
 /**
  * Normalization result from Step B
  */
 export interface NormalizationResult {
     pages: PageContent[];
+    /** The provider that actually produced the text. */
     provider: OCRProvider;
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: OcrRoutingRecord;
 }
 
 /** Office extensions that must go through the ingestion layer (not Azure OCR). */
@@ -145,12 +173,26 @@ function isValidOCRProvider(p: string): p is (typeof OCR_ONLY_PROVIDERS)[number]
     return OCR_ONLY_PROVIDERS.includes(p as (typeof OCR_ONLY_PROVIDERS)[number]);
 }
 
+export interface RouteDocumentOptions {
+    forceOCR?: boolean;
+    preferredProvider?: OCRProvider;
+    mimeType?: string;
+    filename?: string;
+}
+
 /**
- * Determine how to route the document for processing
+ * Determine how to route the document for processing.
+ *
+ * An explicit provider wins. Otherwise the converter decides in the shared
+ * order (./provider-order.ts) — an OCR engine for every PDF whenever one can
+ * run. This process calls the engines, so its own view of what can run is
+ * the one that counts: when the converter answers NATIVE_PDF but an engine is
+ * configured here (the converter's environment is missing a key), the engine
+ * reads the document anyway.
  */
 export async function routeDocument(
     documentUrl: string,
-    options?: { forceOCR?: boolean; preferredProvider?: OCRProvider }
+    options?: RouteDocumentOptions
 ): Promise<RouterDecisionResult> {
     const preferred = options?.preferredProvider;
 
@@ -166,31 +208,29 @@ export async function routeDocument(
     }
 
     const { determineDocumentRouting } = await import("./complexity");
-    const decision: RoutingDecision = await determineDocumentRouting(documentUrl);
+    const decision: RoutingDecision = await determineDocumentRouting(documentUrl, {
+        forceOCR: options?.forceOCR,
+        mimeType: options?.mimeType,
+        filename: options?.filename,
+    });
 
-    const isNativePDF = decision.provider === "NATIVE_PDF";
-
-    if (options?.forceOCR === true && isNativePDF) {
-        const isComplex = decision.signals.visionLabel
-            ? ["handwritten", "complex", "blurry", "messy"].some(k =>
-                  decision.signals.visionLabel?.includes(k)
-              )
-            : false;
-
-        const ocrProvider: OCRProvider = isComplex ? "LANDING_AI" : "AZURE";
-
-        return {
-            isNativePDF: false,
-            pageCount: decision.pageCount,
-            selectedProvider: ocrProvider,
-            reason: `Force OCR enabled (Original: ${decision.provider}), switching to ${ocrProvider}`,
-            visionLabel: decision.signals.visionLabel,
-            visionScore: decision.signals.visionScore,
-        };
+    const textLayerPinned = getOcrConfig().defaultProvider === "NATIVE_PDF" && !options?.forceOCR;
+    if (decision.provider === "NATIVE_PDF" && !textLayerPinned) {
+        const [engine] = await availableOcrEngines();
+        if (engine) {
+            return {
+                isNativePDF: false,
+                pageCount: decision.pageCount,
+                selectedProvider: engine,
+                reason: `${decision.reason}; the converter offered no OCR engine, ${engine} is configured here`,
+                visionLabel: decision.signals.visionLabel,
+                visionScore: decision.signals.visionScore,
+            };
+        }
     }
 
     return {
-        isNativePDF,
+        isNativePDF: decision.provider === "NATIVE_PDF",
         pageCount: decision.pageCount,
         selectedProvider: decision.provider,
         reason: decision.reason,
@@ -216,42 +256,140 @@ async function getPageCount(documentUrl: string): Promise<number> {
 // Step B: Normalize - Run OCR or native extraction
 // ============================================================================
 
+/** An error as a short, loggable line — URL query strings (signed tokens) removed. */
+function describeProviderError(error: unknown): string {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.replace(/(https?:\/\/[^\s?"']+)\?[^\s"']*/g, "$1?…").slice(0, 300);
+}
+
+function textLength(doc: NormalizedDocument): number {
+    return doc.pages.reduce(
+        (sum, page) =>
+            sum +
+            page.textBlocks.join("").length +
+            page.tables.reduce((t, table) => t + table.markdown.length, 0),
+        0
+    );
+}
+
+async function runProvider(
+    provider: OCRProvider,
+    documentUrl: string
+): Promise<NormalizedDocument> {
+    switch (provider) {
+        case "AZURE":
+            return processWithAzure(documentUrl);
+        case "LANDING_AI":
+            return processWithLandingAI(documentUrl);
+        case "DATALAB":
+            return processWithDatalab(documentUrl);
+        case "DOCLING":
+            return processWithDocling(documentUrl);
+        default:
+            return processNativePDF(documentUrl);
+    }
+}
+
 /**
- * Normalize document content using the appropriate provider
+ * Normalize a PDF with the provider routing chose, falling back instead of
+ * failing: on any error (credentials, 4xx/5xx, a 503 from a converter with no
+ * docling-serve, a timeout) the next engine that can run is tried, then the
+ * PDF's own text layer. NATIVE_PDF as the choice — the text-only method —
+ * stays exactly that. The result names the provider that produced the text
+ * and carries every attempt, so a fallback is on the record.
+ *
+ * Azure returning fewer pages than the PDF has is treated as a partial read
+ * (a free F0 resource reads only the first two pages): the chain continues,
+ * and whichever result holds more text is kept.
  */
 export async function normalizeDocument(
     documentUrl: string,
     routerDecision: RouterDecisionResult
 ): Promise<NormalizationResult> {
-    console.log(`[Normalize] Processing with provider: ${routerDecision.selectedProvider}`);
+    const requested: OCRProvider = routerDecision.isNativePDF
+        ? "NATIVE_PDF"
+        : routerDecision.selectedProvider;
+    const chain = ocrFallbackChain(
+        requested,
+        requested === "NATIVE_PDF" ? [] : await availableOcrEngines(),
+        { isPdf: true }
+    );
+    console.log(`[Normalize] Provider chain: ${chain.join(" → ")}`);
 
-    let normalizedDoc: NormalizedDocument;
+    const attempts: ProviderAttempt[] = [];
+    let normalizedDoc: NormalizedDocument | undefined;
+    let partial: { doc: NormalizedDocument; attempt: ProviderAttempt } | undefined;
+    let lastError: unknown;
 
-    if (routerDecision.isNativePDF) {
-        normalizedDoc = await processNativePDF(documentUrl);
-    } else {
-        switch (routerDecision.selectedProvider) {
-            case "AZURE":
-                normalizedDoc = await processWithAzure(documentUrl);
-                break;
-            case "LANDING_AI":
-                normalizedDoc = await processWithLandingAI(documentUrl);
-                break;
-            case "DATALAB":
-                normalizedDoc = await processWithDatalab(documentUrl);
-                break;
-            case "DOCLING":
-                normalizedDoc = await processWithDocling(documentUrl);
-                break;
-            case "NATIVE_PDF":
-                normalizedDoc = await processNativePDF(documentUrl);
-                break;
-            default:
-                console.warn(
-                    `[Normalize] Unknown provider "${routerDecision.selectedProvider}", falling back to native PDF extraction`
-                );
-                normalizedDoc = await processNativePDF(documentUrl);
+    for (const provider of chain) {
+        const started = Date.now();
+        try {
+            const doc = await runProvider(provider, documentUrl);
+            const expected = routerDecision.pageCount;
+            if (provider === "AZURE" && expected > 0 && doc.pages.length < expected) {
+                const attempt: ProviderAttempt = {
+                    provider,
+                    ok: false,
+                    error: `returned ${doc.pages.length} of ${expected} pages (a free F0 Document Intelligence resource reads only the first two)`,
+                    durationMs: Date.now() - started,
+                };
+                attempts.push(attempt);
+                console.warn(`[Normalize] ${provider} ${attempt.error}; trying the next provider`);
+                partial ??= { doc, attempt };
+                continue;
+            }
+            attempts.push({ provider, ok: true, durationMs: Date.now() - started });
+            normalizedDoc = doc;
+            break;
+        } catch (error) {
+            lastError = error;
+            const described = describeProviderError(error);
+            attempts.push({
+                provider,
+                ok: false,
+                error: described,
+                durationMs: Date.now() - started,
+            });
+            console.warn(`[Normalize] ${provider} failed: ${described}`);
         }
+    }
+
+    // A partial Azure read beats a later result that holds less text (the
+    // text layer of a scan); the record keeps the shortfall either way.
+    if (partial && (!normalizedDoc || textLength(partial.doc) > textLength(normalizedDoc))) {
+        const later = attempts.find(a => a.ok);
+        if (later) {
+            later.ok = false;
+            later.error = `read less text than ${partial.attempt.provider}'s partial result`;
+        }
+        partial.attempt.ok = true;
+        normalizedDoc = partial.doc;
+    }
+
+    if (!normalizedDoc) {
+        const summary = attempts.map(a => `${a.provider}: ${a.error ?? "failed"}`).join("; ");
+        const error = new Error(`Every OCR provider failed (${summary})`);
+        (error as Error & { cause?: unknown }).cause = lastError;
+        throw error;
+    }
+
+    const ocrRouting: OcrRoutingRecord = {
+        requestedProvider: requested,
+        provider: normalizedDoc.metadata.provider,
+        fellBack: normalizedDoc.metadata.provider !== requested,
+        routingReason: routerDecision.reason,
+        attempts,
+    };
+    if (ocrRouting.fellBack) {
+        console.warn(
+            `[Normalize] Fell back from ${requested} to ${ocrRouting.provider}: ` +
+                attempts
+                    .filter(a => !a.ok)
+                    .map(a => `${a.provider} (${a.error})`)
+                    .join(", ")
+        );
+    } else {
+        console.log(`[Normalize] Processed with provider: ${ocrRouting.provider}`);
     }
 
     // --- VLM Enrichment Step ---
@@ -327,6 +465,7 @@ export async function normalizeDocument(
         provider: normalizedDoc.metadata.provider,
         processingTimeMs: normalizedDoc.metadata.processingTimeMs,
         confidenceScore: normalizedDoc.metadata.confidenceScore,
+        ocrRouting,
     };
 }
 
@@ -822,6 +961,8 @@ export async function finalizeStorage(
         processingTimeMs: number;
         confidenceScore?: number;
         embeddingIndexKey?: string;
+        /** Which provider was meant to read the document, which did, and why. */
+        ocrRouting?: OcrRoutingRecord;
     },
     pipelineStartTime: number,
     versionId: number
@@ -886,6 +1027,7 @@ export async function finalizeStorage(
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
             embeddingIndexKey: meta.embeddingIndexKey,
+            ...(meta.ocrRouting ? { ocrRouting: meta.ocrRouting } : {}),
             processedAt: new Date().toISOString(),
         };
 
@@ -930,6 +1072,7 @@ export async function finalizeStorage(
                 completedAt: new Date(),
                 processingDurationMs: Date.now() - pipelineStartTime,
                 pageCount: meta.totalPages,
+                ...(meta.ocrRouting ? { primaryProvider: meta.ocrRouting.requestedProvider } : {}),
                 actualProvider: meta.provider,
                 confidenceScore: toStoredConfidencePercent(meta.confidenceScore),
             })

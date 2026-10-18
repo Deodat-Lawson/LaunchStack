@@ -473,19 +473,20 @@ export const GUIDES: Guide[] = [
             {
                 title: "Document parsing and OCR",
                 body: [
-                    "OCR_DEFAULT_PROVIDER selects the parser. Local Compose defaults to DOCLING, which needs --profile ocr. Cloud options include AZURE, LANDING_AI, and DATALAB; set the selected provider's credentials on both app and worker.",
+                    "Every PDF and image is read with OCR, in one order: Azure Document Intelligence when it is configured, then Docling when docling-serve is running (--profile ocr), then Landing AI and Datalab if configured. A provider that fails hands the document to the next one; the PDF's own text layer is the last resort when none is reachable. Set provider credentials on both app and worker.",
+                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. Workspaces can also pick a provider, or the text-only method, per workspace or folder under Workspace › Document defaults.",
                 ],
                 rows: [
                     {
                         name: "AZURE",
-                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY.",
+                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY. Use a paid S0 resource: the free F0 tier reads only the first two pages of each document.",
+                    },
+                    {
+                        name: "DOCLING",
+                        detail: "Local Docling service through the document converter; enable the ocr profile. Used only while docling-serve answers its health check.",
                     },
                     { name: "LANDING_AI", detail: "LANDING_AI_API_KEY." },
                     { name: "DATALAB", detail: "DATALAB_API_KEY." },
-                    {
-                        name: "DOCLING",
-                        detail: "Local Docling service through the document converter; enable the ocr profile.",
-                    },
                 ],
                 note: "Use DOCUMENT_CONVERTER_URL for the current conversion service. OCR_WORKER_URL is obsolete; OCR_ROUTER_URL is a deprecated fallback.",
             },

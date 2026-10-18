@@ -106,6 +106,12 @@ jest.mock("~/lib/rate-limiter", () => ({
     RateLimitPresets: { permissive: {}, standard: {}, strict: {} },
 }));
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
+jest.mock("~/server/ocr-availability", () => ({
+    ocrOverview: jest.fn().mockResolvedValue({
+        availableProviders: { azure: false, datalab: false, landingAI: false, docling: false },
+        order: [],
+    }),
+}));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
 jest.mock("~/lib/storage", () => ({

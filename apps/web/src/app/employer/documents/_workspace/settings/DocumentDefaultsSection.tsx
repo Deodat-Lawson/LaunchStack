@@ -6,8 +6,11 @@
  * Body only. Gathers settings that used to live on the upload screen (the
  * storage preference) and in nobody's hands (processing method, destination
  * folder, Google Doc on create) into registry rows. The processing options
- * are narrowed to the OCR providers this server actually has, read from the
- * same bootstrap the upload dialog uses.
+ * are narrowed to the OCR providers this server actually has — Docling only
+ * while docling-serve answers — read from the same bootstrap the upload
+ * dialog uses, and Automatic spells out the order those providers run in.
+ * The method is applied server-side to every new PDF that arrives without an
+ * explicit choice (uploads, Drive and Gmail imports, new versions).
  */
 
 import React, { useEffect, useState } from "react";
@@ -29,6 +32,22 @@ interface Bootstrap {
 }
 
 const PROCESSING_DEFINITION = getSetting("documents.defaultProcessingMethod")!;
+
+/** The automatic order as it runs on this server (the converter's order, minus what is not set up). */
+function automaticDescription(providers: Bootstrap["availableProviders"]): string {
+    const order = [
+        providers.azure && "Azure",
+        providers.docling && "Docling",
+        providers.landingAI && "Landing AI",
+        providers.datalab && "Datalab",
+    ].filter((name): name is string => Boolean(name));
+    if (order.length === 0) {
+        return "No OCR service is set up on this server, so this reads only the text already inside the PDF.";
+    }
+    const [first, ...rest] = order;
+    const fallback = rest.length > 0 ? `, then ${rest.join(", then ")} if it fails` : "";
+    return `${first} reads every page${fallback}. The PDF's own text is the last resort.`;
+}
 
 export function DocumentDefaultsSection(_: SettingsSectionProps) {
     const [bootstrap, setBootstrap] = useState<Bootstrap | null>(null);
@@ -65,13 +84,18 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
         definition: SettingDefinition
     ): readonly SettingOption[] | undefined => {
         if (definition.control.kind !== "select" || !providers) return undefined;
-        const allowed = new Set<string>(["standard"]);
-        if (hasAnyOcr) allowed.add("auto");
+        const allowed = new Set<string>(["auto", "standard"]);
         if (providers.azure) allowed.add("azure");
         if (providers.landingAI) allowed.add("landing_ai");
         if (providers.datalab) allowed.add("datalab");
         if (providers.docling) allowed.add("docling");
-        return definition.control.options.filter(option => allowed.has(String(option.value)));
+        return definition.control.options
+            .filter(option => allowed.has(String(option.value)))
+            .map(option =>
+                option.value === "auto"
+                    ? { ...option, description: automaticDescription(providers) }
+                    : option
+            );
     };
 
     const s3 = bootstrap?.storageProvider === "s3";
@@ -104,9 +128,16 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
 
             <Section
                 title="Processing and destination"
-                description="Pre-filled in the upload dialog; the person uploading can still change either per batch. Folders may override the processing method for what lands in them."
+                description="The processing method applies to new PDFs — uploads, Drive and Gmail imports, and new versions — unless the person adding one picks otherwise or a folder overrides it for what lands there."
             >
                 <Card>
+                    {providers && !hasAnyOcr && (
+                        <StatusNote tone="muted">
+                            No OCR service is reachable on this server, so every method reads only
+                            the text already inside a PDF. Set AZURE_DOC_INTELLIGENCE_ENDPOINT and
+                            AZURE_DOC_INTELLIGENCE_KEY, or run docling-serve, to turn OCR on.
+                        </StatusNote>
+                    )}
                     <SettingRow
                         settingKey="documents.defaultProcessingMethod"
                         options={processingOptions(PROCESSING_DEFINITION)}

@@ -1,6 +1,6 @@
 /**
- * Document complexity analysis and OCR provider selection, ported from
- * ocr-router's complexity.ts with the ADR-004 fixes:
+ * Document analysis and OCR provider selection, ported from ocr-router's
+ * complexity.ts with the ADR-004 fixes:
  *
  * - Provider/vision configuration comes ONLY from the typed startup config —
  *   the per-request env map (`applyRequestEnv`) and its documented
@@ -9,11 +9,11 @@
  *   `signals` holding real measurements (vision label/score, interactive
  *   form presence, sampled text length). The 0.99/0.95/0.5 constants do not
  *   exist here.
- * - Provider selection priority is preserved from the old
- *   getDefaultOCRProvider/getComplexDocProvider, with the old
- *   `OCR_WORKER_URL` presence check replaced by its consolidation-era
- *   equivalent, DOCLING_SERVE_URL. MARKER no longer exists as a provider
- *   name (rejected at startup, see config.ts).
+ * - One provider order for every document (./providers.ts): an OCR engine
+ *   reads every PDF whenever one can run — text layer or not, form or not.
+ *   The text-layer and AcroForm shortcuts to NATIVE_PDF apply only when no
+ *   OCR engine is available. `reason` says what was measured about the
+ *   document ("native-text-layer": it has one); `provider` says what reads it.
  */
 import { createRequire } from "node:module";
 
@@ -23,6 +23,7 @@ import type { Config, OcrProvider } from "./config.js";
 import type { RouteRequest, RouteResponse, RouteSignals, RoutingReason } from "./contracts.js";
 import { errorMessage } from "./errors.js";
 import { log } from "./logger.js";
+import { defaultProvider, forcedOcrProvider } from "./providers.js";
 import type { PageRenderer } from "./render.js";
 import { COMPLEX_LABELS, COMPLEXITY_SCORE_THRESHOLD, type VisionClassifier } from "./vision.js";
 
@@ -31,6 +32,8 @@ export interface RoutingDeps {
     fetchDocument: (url: string) => Promise<Buffer>;
     renderPages: PageRenderer;
     classify: VisionClassifier;
+    /** Whether docling-serve is answering right now (cached probe). */
+    doclingReachable: () => Promise<boolean>;
 }
 
 const MIN_PAGES_TO_SAMPLE = 3;
@@ -55,33 +58,6 @@ export function selectSamplePages(totalPages: number): number[] {
     return Array.from(pages)
         .sort((a, b) => a - b)
         .slice(0, MAX_PAGES_TO_SAMPLE);
-}
-
-/**
- * Default provider priority (preserved from ocr-router):
- * operator-pinned OCR_DEFAULT_PROVIDER > Docling (self-hosted, zero cost)
- * > Azure > LandingAI > Datalab > Docling.
- */
-export function getDefaultOcrProvider(config: Config): OcrProvider {
-    if (config.defaultProvider) return config.defaultProvider;
-    if (config.doclingServeUrl) return "DOCLING";
-    if (config.azureKey && config.azureEndpoint) return "AZURE";
-    if (config.landingAiApiKey) return "LANDING_AI";
-    if (config.datalabApiKey) return "DATALAB";
-    return "DOCLING";
-}
-
-/**
- * Complex-document priority (preserved): Docling > LandingAI > Azure >
- * Datalab > Docling. Deliberately does NOT honor the operator default —
- * same as the old router.
- */
-export function getComplexDocProvider(config: Config): OcrProvider {
-    if (config.doclingServeUrl) return "DOCLING";
-    if (config.landingAiApiKey) return "LANDING_AI";
-    if (config.azureKey && config.azureEndpoint) return "AZURE";
-    if (config.datalabApiKey) return "DATALAB";
-    return "DOCLING";
 }
 
 function looksLikePdf(buffer: Buffer): boolean {
@@ -151,19 +127,21 @@ export async function determineRouting(
         return decision(request.preferredProvider, "preferred-provider", {});
     }
 
-    // forceOCR means "run real OCR, never the native text path" — so the
-    // default provider applies, remapped off NATIVE_PDF via the complex-doc
-    // chain (which never yields NATIVE_PDF).
+    const doclingReachable = await deps.doclingReachable();
+    const provider = defaultProvider(config, doclingReachable);
+
+    // forceOCR means "run real OCR, never the native text path": the first
+    // OCR engine, past a NATIVE_PDF pin. Only when none can run does it come
+    // back NATIVE_PDF — the honest answer, rather than naming an engine that
+    // will fail.
     if (request.forceOCR) {
-        let provider = getDefaultOcrProvider(config);
-        if (provider === "NATIVE_PDF") provider = getComplexDocProvider(config);
-        return decision(provider, "force-ocr", {});
+        return decision(forcedOcrProvider(config, doclingReachable), "force-ocr", {});
     }
 
     const buffer = await deps.fetchDocument(request.documentUrl);
 
     if (!looksLikePdf(buffer)) {
-        return decision(getDefaultOcrProvider(config), "not-a-pdf", {});
+        return decision(provider, "not-a-pdf", {});
     }
 
     let pageCount: number | undefined;
@@ -176,13 +154,10 @@ export async function determineRouting(
         pageCount = doc.getPageCount();
         hasInteractiveForm = doc.getForm().getFields().length > 0;
 
+        // A form's filled-in values live in widget annotations the text
+        // layer does not carry, so OCR reads it when it can.
         if (hasInteractiveForm) {
-            return decision(
-                "NATIVE_PDF",
-                "interactive-form",
-                { hasInteractiveForm: true },
-                pageCount
-            );
+            return decision(provider, "interactive-form", { hasInteractiveForm: true }, pageCount);
         }
     } catch (err) {
         log("warn", "routing: pdf structure load failed", {
@@ -201,9 +176,13 @@ export async function determineRouting(
             pageCount = data.numpages;
         }
 
+        // A real text layer: OCR still reads it when an engine can run (it
+        // recovers tables and reading order the layer loses); the text layer
+        // is what reads it otherwise. Vision is skipped either way — it only
+        // ever informed the scanned-page path.
         if (sampleText.length > 50) {
             return decision(
-                "NATIVE_PDF",
+                provider,
                 "native-text-layer",
                 { hasInteractiveForm, textSampleChars },
                 pageCount
@@ -219,13 +198,17 @@ export async function determineRouting(
         }
     }
 
+    // Little or no text layer: a scan. The vision label no longer picks the
+    // engine (one order for every document); it is still measured because the
+    // app's VLM enrichment reads it to decide whether scanned pages get a
+    // visual description — the only text a scan gets when no OCR engine runs.
     try {
         const pagesToSample = selectSamplePages(pageCount ?? 1);
         const images = await deps.renderPages(buffer, pagesToSample);
 
         if (images.length === 0) {
             return decision(
-                getDefaultOcrProvider(config),
+                provider,
                 "vision-unavailable",
                 { hasInteractiveForm, textSampleChars },
                 pageCount
@@ -241,17 +224,15 @@ export async function determineRouting(
             textSampleChars,
         };
 
-        if (COMPLEX_LABELS.includes(vision.label) && visionScore > COMPLEXITY_SCORE_THRESHOLD) {
-            return decision(getComplexDocProvider(config), "vision-complex", signals, pageCount);
-        }
-
-        return decision(getDefaultOcrProvider(config), "vision-simple", signals, pageCount);
+        const complex =
+            COMPLEX_LABELS.includes(vision.label) && visionScore > COMPLEXITY_SCORE_THRESHOLD;
+        return decision(provider, complex ? "vision-complex" : "vision-simple", signals, pageCount);
     } catch (err) {
         log("warn", "routing: vision path failed", {
             message: errorMessage(err),
         });
         return decision(
-            getDefaultOcrProvider(config),
+            provider,
             "vision-unavailable",
             { hasInteractiveForm, textSampleChars },
             pageCount

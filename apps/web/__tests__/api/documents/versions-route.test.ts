@@ -202,6 +202,26 @@ describe("POST /api/documents/[id]/versions", () => {
         );
     });
 
+    it("pins nothing when the uploader picked nothing — the lifecycle applies the workspace method", async () => {
+        // It used to copy OCR_DEFAULT_PROVIDER onto every version, which both
+        // skipped the workspace/folder setting and froze the operator pin.
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: {
+                documentUrl: "https://app.example/api/files/123/?source=upload",
+                mimeType: "application/pdf",
+                originalFilename: "contract.pdf",
+            },
+        });
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(202);
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({ documentId: 55, preferredProvider: undefined })
+        );
+    });
+
     it("returns 403 for a viewer (no documents.upload)", async () => {
         setupAuthenticatedRequest(makeWorkspaceContext({ role: "viewer", companyId: BigInt(10) }));
 

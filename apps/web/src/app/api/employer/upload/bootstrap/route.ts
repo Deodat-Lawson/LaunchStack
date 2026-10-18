@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
-import { env } from "~/env";
 import { db } from "~/server/db";
 import { category, company } from "@launchstack/store/schema";
 import { folderSettings } from "~/server/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { ocrOverview, type OcrProviderAvailability } from "~/server/ocr-availability";
 
 type BootstrapCategory = {
     id: string;
@@ -24,12 +24,8 @@ type UploadBootstrapResponse = {
     categories: BootstrapCategory[];
     company: BootstrapCompany;
     isUploadThingConfigured: boolean;
-    availableProviders: {
-        azure: boolean;
-        datalab: boolean;
-        landingAI: boolean;
-        docling: boolean;
-    };
+    /** What ingestion can run right now; Docling only while docling-serve answers. */
+    availableProviders: OcrProviderAvailability;
     storageProvider: "s3" | "database";
     s3Endpoint?: string;
 };
@@ -43,7 +39,7 @@ export async function GET() {
 
         const companyId = ctx.data.companyId;
 
-        const [categoriesRaw, companyRaw] = await Promise.all([
+        const [categoriesRaw, companyRaw, ocr] = await Promise.all([
             db
                 .select({
                     id: category.id,
@@ -62,6 +58,7 @@ export async function GET() {
                 .from(company)
                 .where(and(eq(company.id, Number(companyId))))
                 .limit(1),
+            ocrOverview(),
         ]);
 
         const response: UploadBootstrapResponse = {
@@ -78,15 +75,7 @@ export async function GET() {
                   }
                 : null,
             isUploadThingConfigured: Boolean(process.env.UPLOADTHING_TOKEN),
-            availableProviders: {
-                azure:
-                    Boolean(process.env.AZURE_DOC_INTELLIGENCE_KEY) &&
-                    Boolean(process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT),
-                datalab: Boolean(process.env.DATALAB_API_KEY),
-                landingAI: Boolean(process.env.LANDING_AI_API_KEY),
-                // Docling is reached through services/document-converter (ADR-004).
-                docling: Boolean(env.server.DOCUMENT_CONVERTER_URL),
-            },
+            availableProviders: ocr.availableProviders,
             storageProvider: resolveStorageBackend(),
             ...(resolveStorageBackend() === "s3" && process.env.NEXT_PUBLIC_S3_ENDPOINT
                 ? {

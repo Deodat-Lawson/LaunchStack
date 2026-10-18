@@ -31,7 +31,7 @@ below use these names.
 | SSH | `ssh <ADMIN_USER>@<PUBLIC_IP>` |
 | Open ports | 22, 80, 443 (Azure NSG) — nothing else is reachable from outside |
 | Stack location | `/home/<ADMIN_USER>/LaunchStack` |
-| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, F0 free tier (500 pages/month) |
+| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, S0 (pay per page). It reads every PDF and image; there is no docling-serve on this VM, so the fallback is the PDF's own text layer |
 | Secrets | Key Vault `<VAULT_NAME>` |
 | Backups | Storage account `<BACKUP_ACCOUNT>`, container `db-backups`, 30-day retention |
 
@@ -94,14 +94,18 @@ az vm list-skus -l eastus2 --resource-type virtualMachines --query \
   "[?!restrictions[0]].name" -o tsv | sort -u
 ```
 
-Then provision OCR (free tier) and the backup storage account:
+Then provision OCR and the backup storage account. Use **S0**: Azure reads
+every PDF and image, and the free F0 tier reads only the **first two pages of
+each document** (and 500 pages a month) — it looks like it works on a short
+test file and silently truncates everything real. The production resource was
+moved F0 → S0 on 2026-10-17.
 
 ```bash
 az provider register --namespace Microsoft.CognitiveServices   # once per subscription
 
 az cognitiveservices account create \
   -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> \
-  --kind FormRecognizer --sku F0 -l eastus2 --yes
+  --kind FormRecognizer --sku S0 -l eastus2 --yes
 
 az storage account create -n <unique-name> -g <RESOURCE_GROUP> -l eastus2 \
   --sku Standard_LRS --kind StorageV2 --access-tier Cool --allow-blob-public-access false
@@ -160,7 +164,11 @@ three):
 **Lean-stack specifics:**
 
 ```bash
-OCR_DEFAULT_PROVIDER=AZURE
+# OCR: with the endpoint and key set, the automatic order reads every PDF and
+# image with Azure first (Docling next, then the text layer). Pinning
+# OCR_DEFAULT_PROVIDER=AZURE is optional and changes nothing here. The VM runs
+# no docling-serve, so a failed Azure read falls back to the PDF's text layer;
+# Docling as the fallback needs `--profile ocr` (see "Scaling up later").
 AZURE_DOC_INTELLIGENCE_ENDPOINT=https://<name>.cognitiveservices.azure.com/
 AZURE_DOC_INTELLIGENCE_KEY=<key>          # az cognitiveservices account keys list
 
@@ -647,11 +655,14 @@ alive, or rewrite `document_versions.url` if you migrate before real traffic.
 
 - **Whisper back on-box:** `--profile whisper` plus
   `TRANSCRIPTION_PROVIDER=sidecar`. Budget ~1.5 GB.
-- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`.
-  Budget ~1.2 GB.
+- **Docling back on-box:** `--profile ocr`. Once docling-serve answers its
+  health check the converter offers it as Azure's fallback automatically;
+  set `OCR_DEFAULT_PROVIDER=DOCLING` only to make it read first. Budget ~1.2 GB.
 - Either one needs a bigger VM first: stop it, `az vm resize -g <RESOURCE_GROUP>
   -n <VM_NAME> --size Standard_D4as_v7` (16 GB), start it.
-- **Document Intelligence** F0 caps at 500 pages/month. Upgrade in place:
+- **Document Intelligence** on F0 reads only the first two pages of each
+  document and caps at 500 pages/month. Upgrade in place (done for production
+  on 2026-10-17):
   `az cognitiveservices account update -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> --sku S0`.
 - **Managed Postgres** (Azure Flexible Server, ~$15/mo and up) is the first
   upgrade worth buying once you have users whose data you cannot lose — it
@@ -720,7 +731,7 @@ to that error at call time.
 | Managed disk (64 GB StandardSSD) | ~$5 |
 | Static public IP | ~$4 |
 | Backup storage (Cool, small) | ~$1 |
-| Document Intelligence F0 | $0 (500 pages/mo) |
+| Document Intelligence S0 | Per page read (Layout model) — every PDF and image is read, so it scales with pages ingested; see the Azure pricing page |
 | **Total** | **~$72** |
 
 After a month of stable running, a 1-year reservation or savings plan takes the

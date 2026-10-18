@@ -1060,7 +1060,10 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                     }}
                 >
                     <IconBolt size={14} />
-                    <span>OCR runs automatically on scanned PDFs and images.</span>
+                    <span>
+                        PDFs and images are read with OCR by default; admins can change how PDFs are
+                        read.
+                    </span>
                 </div>
             )}
 

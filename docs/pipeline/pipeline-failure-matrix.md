@@ -52,11 +52,11 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 | ID        | Stage           | Dependency                             | Failure mode                                                                       | Status                 |
 | --------- | --------------- | -------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
-| [B1](#b1) | OCR / Normalize | Object storage + `pdfjs-serverless`    | `processNativePDF` throws on storage-download failure or corrupted/unparseable PDF | Needs fix (High)       |
+| [B1](#b1) | OCR / Normalize | Object storage + `pdfjs-serverless`    | `processNativePDF` throws on storage-download failure or corrupted/unparseable PDF | Last link of the chain |
 | [B2](#b2) | OCR / Normalize | Object storage (HEAD request)          | Content-type sniffing for non-`.pdf`-named URLs fails silently                     | Needs discussion (Low) |
-| [B3](#b3) | OCR / Normalize | —                                      | Unrecognized `selectedProvider` silently falls back to native PDF extraction       | Working as intended    |
-| [B4](#b4) | OCR / Normalize | Azure Document Intelligence (external) | 5 unhandled throw points + 120s poll timeout                                       | Needs fix (High)       |
-| [B5](#b5) | OCR / Normalize | ocr-worker service (self-hosted)       | Unreachable, 10-min timeout, or non-200 response                                   | Needs fix (High)       |
+| [B3](#b3) | OCR / Normalize | —                                      | Unrecognized `selectedProvider` reads the PDF's text layer only                    | Working as intended    |
+| [B4](#b4) | OCR / Normalize | Azure Document Intelligence (external) | Any Azure error or the 5-minute poll timeout → next provider (Docling, text layer) | Fixed: falls back      |
+| [B5](#b5) | OCR / Normalize | document converter → docling-serve     | Unreachable, 503 (no docling-serve), 10-min timeout, or non-200 → next provider    | Fixed: falls back      |
 
 | ID        | Stage | Dependency                     | Failure mode                                                                       | Status                             |
 | --------- | ----- | ------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------- |
@@ -170,7 +170,7 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 Sidecar unreachable/non-200 → silent fallback provider, `pageCount` forced to `0` · ocr-router sidecar (external) · Needs fix (Medium-High)
 
-- What happens: `determineDocumentRouting` (`[complexity.ts:L?]`) wraps its sidecar call in its own try/catch. On any failure it logs a warning and returns a synthetic fallback: a static provider from `getDefaultOCRProvider()` (env-config only, no document inspection), `confidence: 0.5`, `pageCount: 0`. Never throws to its caller.
+- What happens: `determineDocumentRouting` (`complexity.ts`) wraps its converter call in its own try/catch. On any failure it logs a warning and returns a local decision in the shared order (`provider-order.ts`) minus Docling, which goes through the converter: the operator pin, then Azure, Landing AI, Datalab, else the text layer — with reason `vision-unavailable` and `pageCount: 0`, no confidence. Never throws to its caller.
 - Left behind: No error surfaces anywhere except a log line. Routing quality silently degrades (no vision-based complexity detection) for every document processed during an outage. `pageCount: 0` flows into `createRootStructure`'s `endPage` field downstream.
 - Notes: Opposite failure shape from the fail-hard stages — degrades silently instead of getting stuck. Worth discussing whether `pageCount: 0` was intentional and whether degraded routing should be surfaced somewhere.
 
@@ -192,11 +192,11 @@ Invalid/unrecognized `preferredProvider` value silently ignored, falls back to a
 
 ### B1
 
-`processNativePDF` throws on storage-download failure or corrupted/unparseable PDF · Object storage + pdfjs-serverless · Needs fix (High)
+`processNativePDF` throws on storage-download failure or corrupted/unparseable PDF · Object storage + pdfjs-serverless · Last link of the chain
 
-- What happens: No error handling anywhere in `processNativePDF` (`[processor.ts:L?]`). Failed download throws explicitly; malformed PDF causes `pdfjs-serverless`'s `getDocument(...).promise` to reject. Propagates unhandled to the outer pipeline catch → Inngest retry (5×) → `onFailure`.
-- Left behind: `ocr_jobs.status` stuck at `queued`; `document.ocrProcessed` incorrectly set `true` after retries exhaust; real error only in `ocrMetadata`.
-- Notes: Also reachable indirectly via the provider-switch `default` case (unrecognized provider falls back to `processNativePDF`), which could hit this on non-PDF content. Cross-reference with B3.
+- What happens: The text layer is the last provider `normalizeDocument` tries (and the only one for the text-only method). If it throws too — the download failed, or the PDF does not parse — `normalizeDocument` throws `Every OCR provider failed (AZURE: …; NATIVE_PDF: …)`, naming every attempt, and the pipeline's retry/`onFailure` path runs as before.
+- Left behind: A failed job whose error lists what each provider said.
+- Notes: Native is no longer reached by a provider error in the middle of the chain going unrecorded — see B4.
 
 ### B2
 
@@ -208,27 +208,27 @@ Content-type sniffing for non-`.pdf`-named URLs fails silently · Object storage
 
 ### B3
 
-Unrecognized `selectedProvider` silently falls back to native PDF extraction · — · Working as intended
+Unrecognized `selectedProvider` reads the PDF's text layer only · — · Working as intended
 
-- What happens: `normalizeDocument`'s provider `switch` default case logs a warning and calls `processNativePDF` regardless of actual file type.
+- What happens: `ocrFallbackChain` (`provider-order.ts`) turns anything that is not an OCR engine into `["NATIVE_PDF"]`, so `normalizeDocument` reads the text layer.
 - Left behind: Could cascade into B1 if the content isn't actually a valid PDF.
 - Notes: Cross-reference with B1.
 
 ### B4
 
-Azure Document Intelligence adapter fails: missing credentials, fetch-document failure, submit failure, poll failure, or 120s poll timeout · Azure Document Intelligence (external) · Needs fix (High)
+Azure Document Intelligence fails: missing credentials, fetch-document failure, submit failure (401/403/429/5xx), poll failure, or the poll timeout · Azure Document Intelligence (external) · Fixed: falls back
 
-- What happens: `AzureDocumentIntelligenceAdapter` (`[azureAdapter.ts:L?]`) throws unhandled at five distinct points — none locally caught. Includes a manual 60-poll × 2s (120s total) timeout that throws if Azure never resolves.
-- Left behind: Same "queued forever" signature as B1.
-- Notes: Two stacked timeout layers — Azure's own 120s internal timeout vs. Inngest's 120-minute function timeout. Worth checking whether re-polling for 120s on each of 5 Inngest retries is an efficient use of the retry budget.
+- What happens: `normalizeDocument` (`processor.ts`) catches the error and tries the next provider in the shared order (`packages/conversion/src/ocr-processing/provider-order.ts`): Docling when the converter reports docling-serve answering, then Landing AI and Datalab when configured, then the PDF's own text layer. The poll budget is 150 × 2s (5 minutes): a paid S0 resource reads every page, and a long scan outgrew the old 120s.
+- Left behind: The document indexes with whatever the next provider read. `document.ocr_metadata.ocrRouting` records the requested provider, the one that produced the text, `fellBack`, and every attempt with its error (URL query strings removed); `ocr_jobs.primary_provider` / `actual_provider` hold the requested and actual provider.
+- Notes: Azure returning fewer pages than the PDF has — a free F0 resource reads only the first two pages of each document — counts as a partial read: the chain continues and the result with more text is kept, with the shortfall on the record.
 
 ### B5
 
-Self-hosted OCR worker (Marker/Docling) unreachable, times out (10 min), or returns non-200 · ocr-worker service (self-hosted) · Needs fix (High)
+Docling unreachable, not running (503), times out (10 min), or returns non-200 · document converter → docling-serve (self-hosted) · Fixed: falls back
 
-- What happens: `OssOCRAdapter.uploadDocument` (`[ossAdapter.ts:L?]`) wraps fetch in try/catch; network failure or the 10-minute `AbortController` timeout throws a rewrapped error; non-OK response also throws. Nothing swallowed.
-- Left behind: Same signature as B1/B4.
-- Notes: Third provider implementation confirming the same fail-hard shape across native PDF, Azure, and OSS worker. Landing.AI/Datalab assumed consistent but not independently verified.
+- What happens: `OssOCRAdapter.uploadDocument` (`ossAdapter.ts`) calls the converter's `POST /convert`, which answers a typed 503 when docling-serve is not configured and 502 when it is unreachable; the adapter throws, and `normalizeDocument` moves on to the next provider. Routing no longer sends documents there in the first place unless the converter's cached health probe (`GET /capabilities`) says docling-serve is answering — Compose sets `DOCLING_SERVE_URL` even when the `ocr` profile is not running.
+- Left behind: Same record as B4.
+- Notes: Landing AI and Datalab fail the same way and fall back the same way.
 
 ### X1
 

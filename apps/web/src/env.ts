@@ -257,18 +257,23 @@ const serverSchema = z.object({
     OCR_WORKER_URL: optionalString(),
     // Model for OCR vision classification (default: gemini-3.8-flash). Any OpenAI-compatible vision model.
     OCR_VISION_MODEL: optionalString(),
+    // Optional pin on the OCR order (Azure → Docling → Landing AI → Datalab →
+    // text layer). Empty means unpinned — Compose passes "" when it is unset.
     // The Marker provider was removed by ADR-004 (it always aliased Docling),
     // so it is deliberately absent here and rejected with an actionable error.
-    OCR_DEFAULT_PROVIDER: z
-        .enum(["DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"], {
-            errorMap: () => ({
-                message:
-                    "OCR_DEFAULT_PROVIDER must be one of DOCLING, NATIVE_PDF, AZURE, LANDING_AI, DATALAB. " +
-                    "The Marker provider was removed (ADR-004): it never had a real implementation and " +
-                    "silently aliased Docling — set OCR_DEFAULT_PROVIDER=DOCLING instead.",
-            }),
-        })
-        .optional(),
+    OCR_DEFAULT_PROVIDER: z.preprocess(
+        normalize,
+        z
+            .enum(["DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"], {
+                errorMap: () => ({
+                    message:
+                        "OCR_DEFAULT_PROVIDER must be one of DOCLING, NATIVE_PDF, AZURE, LANDING_AI, DATALAB. " +
+                        "The Marker provider was removed (ADR-004): it never had a real implementation and " +
+                        "silently aliased Docling — set OCR_DEFAULT_PROVIDER=DOCLING instead.",
+                }),
+            })
+            .optional()
+    ),
     // Where this app's other services (document converter, Word editor,
     // worker) reach it to fetch /api/files URLs; it must be in their
     // ALLOWED_FETCH_ORIGINS. Unset, the converter and file reads use the

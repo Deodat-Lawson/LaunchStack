@@ -126,7 +126,7 @@ export function PrivacySection(_: SettingsSectionProps) {
                         offLabel={typeof auditDays === "number" ? `${auditDays} days` : "…"}
                         detail={
                             <>
-                                Set under People and access.{" "}
+                                Set under Workspace › People and access.{" "}
                                 <a
                                     href="#workspace.auditRetentionDays"
                                     className="text-brand-ink underline"
@@ -146,7 +146,7 @@ export function PrivacySection(_: SettingsSectionProps) {
                         }
                         detail={
                             <>
-                                Trashed maps and artifacts. Set under Archive and retention.{" "}
+                                Trashed maps and artifacts. Set under Workspace › Archive.{" "}
                                 <a href="#retention.trashDays" className="text-brand-ink underline">
                                     Change it
                                 </a>
@@ -155,10 +155,10 @@ export function PrivacySection(_: SettingsSectionProps) {
                         }
                     />
                     <StatusRow
-                        label="Embedding credentials"
+                        label="Stored credentials"
                         ok
                         okLabel="Encrypted at rest"
-                        detail="Per-workspace keys are encrypted with EMBEDDING_SECRETS_KEY and only ever shown as their last four characters."
+                        detail="API keys, connector tokens and app passwords a workspace saves are encrypted with EMBEDDING_SECRETS_KEY and never shown in full. Where document text goes for embedding is under Outside services."
                     />
                 </Card>
             </Section>

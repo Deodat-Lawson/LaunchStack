@@ -258,11 +258,14 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
     }
 
     /**
-     * Poll Azure for analysis completion
+     * Poll Azure for analysis completion. Five minutes: a paid (S0) resource
+     * reads every page, and a long scan takes well over the two minutes that
+     * were enough when the free tier stopped after page two — timing out
+     * there only sent the document to the next provider.
      */
     private async pollForResult(
         operationLocation: string,
-        maxPolls = 60,
+        maxPolls = 150,
         pollIntervalMs = 2000
     ): Promise<AzureOperationResponse> {
         console.log(

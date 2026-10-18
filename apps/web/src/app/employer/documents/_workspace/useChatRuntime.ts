@@ -146,7 +146,15 @@ export function useChatRuntime(input: {
 
     const emit = useCallback((context: Conversation) => {
         if (keyRef.current !== context.key || contexts.current.get(context.key) !== context) return;
-        currentInput.current.setThread([...context.messages]);
+        // A turn is updated in place while it streams, and the panel memoises
+        // each message by identity: the live turn goes out as a new object, or
+        // its steps and text wait for an unrelated re-render to show.
+        const last = context.messages.length - 1;
+        currentInput.current.setThread(
+            context.messages.map((message, i) =>
+                message.status === "streaming" || i === last ? { ...message } : message
+            )
+        );
         setView({
             key: context.key,
             busy: context.busy,

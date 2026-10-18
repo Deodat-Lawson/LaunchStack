@@ -218,6 +218,39 @@ test("a chat that can't be saved stops its request and says why", async () => {
     expect(sessions.appendMessages).not.toHaveBeenCalled();
 });
 
+test("every update hands the panel a new object for the live answer", async () => {
+    let release: () => void = () => undefined;
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "Searching", state: "active" },
+        });
+        await new Promise<void>(resolve => {
+            release = resolve;
+        });
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "Found 1 passage", state: "done" },
+        });
+        return answer("Done");
+    });
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Which clause?"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.steps?.[0]?.label).toBe("Searching"));
+    // The panel memoises messages by identity, so an update in place would never paint.
+    const shown = result.current.thread[1]!;
+    await act(async () => {
+        release();
+        await sending!;
+    });
+    expect(result.current.thread[1]).not.toBe(shown);
+    expect(result.current.thread[1]!.steps?.[0]?.label).toBe("Found 1 passage");
+    expect(shown.steps?.[0]?.label).toBe("Searching");
+});
+
 test("a referenced chat is read as its own step", async () => {
     jest.mocked(sessions.fetchSession).mockResolvedValue({
         id: "older",

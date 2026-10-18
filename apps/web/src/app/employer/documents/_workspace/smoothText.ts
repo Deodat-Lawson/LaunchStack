@@ -127,6 +127,18 @@ export function useSmoothText(target: string, live: boolean): { text: string; re
 
     useEffect(() => {
         if (!behind) return;
+        // A hidden tab gets no animation frames: show what has arrived rather
+        // than make the reader wait for it to catch up when they come back.
+        const flushWhileHidden = () => {
+            if (!document.hidden) return;
+            shown.current = latest.current.length;
+            repaint(n => n + 1);
+        };
+        document.addEventListener("visibilitychange", flushWhileHidden);
+        if (document.hidden) {
+            flushWhileHidden();
+            return () => document.removeEventListener("visibilitychange", flushWhileHidden);
+        }
         let frame = 0;
         let last = performance.now();
         let painted = last;
@@ -146,7 +158,10 @@ export function useSmoothText(target: string, live: boolean): { text: string; re
             if (shown.current < current.length) frame = requestAnimationFrame(tick);
         };
         frame = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(frame);
+        return () => {
+            cancelAnimationFrame(frame);
+            document.removeEventListener("visibilitychange", flushWhileHidden);
+        };
     }, [behind, target]);
 
     if (!animated.current || reduced) return { text: target, revealing: false };

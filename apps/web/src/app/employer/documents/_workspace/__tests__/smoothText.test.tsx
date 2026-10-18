@@ -165,6 +165,19 @@ describe("useSmoothText", () => {
         expect(result.current.text).toBe("The ball costs 5 cents total.");
     });
 
+    it("doesn't hold text back in a hidden tab, where nothing animates", () => {
+        const hidden = jest.spyOn(document, "hidden", "get").mockReturnValue(true);
+        const { result, rerender } = renderHook(({ text }) => useSmoothText(text, true), {
+            initialProps: { text: "" },
+        });
+        rerender({ text: "Everything that arrived while you were away." });
+        expect(result.current).toEqual({
+            text: "Everything that arrived while you were away.",
+            revealing: false,
+        });
+        hidden.mockRestore();
+    });
+
     it("shows everything at once under reduced motion", () => {
         Object.defineProperty(window, "matchMedia", {
             configurable: true,

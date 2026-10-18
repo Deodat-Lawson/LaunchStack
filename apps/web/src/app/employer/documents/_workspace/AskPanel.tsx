@@ -33,7 +33,6 @@ import {
     Lock,
     Users,
     Zap as IconBolt,
-    ChevronRight as IconChevronRight,
     Plus as IconPlus,
     Shield as IconShield,
     User as IconUser,
@@ -72,6 +71,8 @@ import { Composer } from "./ChatComposer";
 import { ChatAttachmentChip as AttachmentChip } from "./ChatAttachmentChip";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { PassageCard } from "./PassageCard";
+import { closeOpenMarkdown, useSmoothText } from "./smoothText";
+import { PendingTrace, ThinkingTrace } from "./ThinkingTrace";
 import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
 
@@ -438,6 +439,10 @@ const Message = React.memo(function Message({
     asker,
 }: MessageProps) {
     const isUser = msg.role === "user";
+    const live = !isUser && msg.status === "streaming";
+    const reveal = useSmoothText(isUser ? "" : msg.text, live);
+    // Sources and actions arrive with the finished answer, not ahead of its text.
+    const arriving = live || (msg.status === "complete" && reveal.revealing);
     const bodyRef = useRef<HTMLDivElement>(null);
     const [selectedPassage, setSelectedPassage] = useState("");
     const [quoteComment, setQuoteComment] = useState("");
@@ -783,7 +788,7 @@ const Message = React.memo(function Message({
                     </span>
                 )}
             </div>
-            <MessageActivity msg={msg} />
+            <ThinkingTrace msg={msg} />
             {msg.status === "error" && !dismissedError && (
                 <div
                     role="alert"
@@ -816,7 +821,7 @@ const Message = React.memo(function Message({
                 ref={bodyRef}
                 onMouseUp={captureSelection}
                 onKeyUp={captureSelection}
-                style={{ fontSize: 14, lineHeight: 1.65, color: "var(--ink-2)" }}
+                className="text-ink"
             >
                 {isPlan ? (
                     <ProposedPlan
@@ -826,7 +831,7 @@ const Message = React.memo(function Message({
                         active={active}
                     />
                 ) : (
-                    <ChatMarkdown text={msg.text} />
+                    <AnswerProse msg={msg} shown={reveal.text} arriving={arriving} />
                 )}
             </div>
             {selectedPassage && (
@@ -873,37 +878,26 @@ const Message = React.memo(function Message({
                     </button>
                 </div>
             )}
-            {cites.length > 0 && (
+            {cites.length > 0 && !arriving && (
                 <div
-                    style={{
-                        marginTop: 14,
-                        padding: "12px 14px",
-                        borderRadius: 10,
-                        background: "var(--line-2)",
-                        border: "1px solid var(--line)",
-                    }}
+                    className="mt-3 flex flex-wrap items-center gap-1.5"
+                    role="group"
+                    aria-label="Sources"
+                    data-testid="answer-sources"
                 >
-                    <div
-                        className="mono"
-                        style={{
-                            fontSize: 10,
-                            fontWeight: 600,
-                            letterSpacing: "0.08em",
-                            color: "var(--ink-3)",
-                            textTransform: "uppercase",
-                            marginBottom: 8,
-                        }}
-                    >
-                        Grounded in {cites.length} source{cites.length !== 1 ? "s" : ""}
-                    </div>
+                    <span className="text-ink-3 mr-0.5 text-[12px]">Sources</span>
                     {cites.map((c, i) => {
                         const s = sources.find(x => x.id === c.sourceId);
                         if (!s) return null;
+                        // One chip per source; it opens the first passage cited from it.
+                        // No page is claimed: every chunk is indexed as page 1.
+                        if (cites.findIndex(other => other.sourceId === c.sourceId) !== i)
+                            return null;
                         const meta = SOURCE_META[s.type];
                         const Icon = meta.Icon;
                         return (
                             <CitationTarget
-                                key={i}
+                                key={c.sourceId}
                                 cite={c}
                                 source={s}
                                 inContext={selected.includes(s.id)}
@@ -913,86 +907,14 @@ const Message = React.memo(function Message({
                                 <button
                                     type="button"
                                     onClick={() => onOpenCitation?.(c)}
-                                    title="Open the source at this passage"
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: 10,
-                                        width: "100%",
-                                        textAlign: "left",
-                                        padding: "8px 8px",
-                                        margin: "0 -8px",
-                                        borderRadius: 8,
-                                        borderTop: i > 0 ? "1px solid var(--line)" : "none",
-                                        background: "transparent",
-                                        cursor: onOpenCitation ? "pointer" : "default",
-                                        transition: "background 120ms",
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.background = "var(--panel)";
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.background = "transparent";
-                                    }}
+                                    aria-label={`Open ${s.title} at the cited passage`}
+                                    title={c.snippet ? `“${c.snippet}”` : undefined}
+                                    className="border-line bg-panel text-ink-2 hover:bg-line-2 hover:text-ink inline-flex max-w-[260px] items-center gap-1.5 rounded-full border px-2 py-0.5 text-[12px] transition-colors focus-visible:outline"
                                 >
-                                    <div
-                                        style={{
-                                            width: 22,
-                                            height: 22,
-                                            borderRadius: 5,
-                                            background: "var(--panel)",
-                                            border: "1px solid var(--line)",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            color: meta.color,
-                                            flexShrink: 0,
-                                            marginTop: 1,
-                                        }}
-                                    >
+                                    <span className="flex shrink-0" style={{ color: meta.color }}>
                                         <Icon size={12} />
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 6,
-                                                fontSize: 12,
-                                                fontWeight: 600,
-                                                color: "var(--ink)",
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    whiteSpace: "nowrap",
-                                                }}
-                                            >
-                                                {s.title}
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                fontSize: 12,
-                                                color: "var(--ink-3)",
-                                                marginTop: 2,
-                                                lineHeight: 1.5,
-                                            }}
-                                        >
-                                            {c.snippet}
-                                        </div>
-                                    </div>
-                                    <span
-                                        style={{
-                                            color: "var(--ink-3)",
-                                            flexShrink: 0,
-                                            alignSelf: "center",
-                                        }}
-                                    >
-                                        <IconChevronRight size={12} />
                                     </span>
+                                    <span className="truncate">{s.title}</span>
                                 </button>
                             </CitationTarget>
                         );
@@ -1010,89 +932,38 @@ const Message = React.memo(function Message({
                         : `${msg.hiddenCitations} sources you can’t open are hidden.`}
                 </p>
             )}
-            {actions}
-            {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
-                <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
-                    <span style={{ marginLeft: "auto" }} className="mono">
-                        <span
-                            style={{ fontSize: 10, color: "var(--ink-3)" }}
-                            title={
-                                msg.tokenBreakdown
-                                    ? `${msg.tokenBreakdown.inputTokens.toLocaleString()} prompt + ${msg.tokenBreakdown.outputTokens.toLocaleString()} completion`
-                                    : undefined
-                            }
-                        >
-                            {/* Two different numbers, told apart: tokens are what
-                                the model billed, chunks are what it read. */}
-                            {typeof msg.tokens === "number"
-                                ? `${msg.tokens.toLocaleString()} tokens`
-                                : null}
-                            {typeof msg.tokens === "number" &&
-                            typeof msg.chunksAnalyzed === "number"
-                                ? " · "
-                                : null}
-                            {typeof msg.chunksAnalyzed === "number"
-                                ? `${msg.chunksAnalyzed} ${msg.chunksAnalyzed === 1 ? "chunk" : "chunks"}`
-                                : null}
-                        </span>
-                    </span>
-                </div>
-            )}
+            {!arriving && actions}
         </div>
     );
 });
 
-function MessageActivity({ msg }: { msg: ThreadMessage }) {
-    const [now, setNow] = useState(Date.now());
-    useEffect(() => {
-        if (msg.status !== "streaming") return;
-        const timer = setInterval(() => setNow(Date.now()), 1000);
-        return () => clearInterval(timer);
-    }, [msg.status]);
-    const start = msg.createdAt ? Date.parse(msg.createdAt) : NaN;
-    const elapsed =
-        msg.status === "streaming" && Number.isFinite(start)
-            ? Math.max(0, now - start)
-            : msg.elapsedMs;
-    return (
-        <>
-            {msg.status && (
-                <div
-                    role="status"
-                    className="my-2 flex items-center gap-2 text-xs text-[var(--ink-3)]"
-                >
-                    <span>
-                        {msg.status === "streaming"
-                            ? msg.stage?.trim()
-                                ? msg.stage
-                                : "Working…"
-                            : msg.status === "stopped"
-                              ? "Stopped"
-                              : msg.status === "error"
-                                ? "Failed"
-                                : "Completed"}
-                    </span>
-                    {elapsed !== undefined && (
-                        <span>{(elapsed / 1000).toFixed(elapsed < 10000 ? 1 : 0)}s</span>
-                    )}
-                </div>
-            )}
-            {msg.reasoning && (
-                <details className="my-2 rounded-lg border border-[var(--line)] p-3 text-xs text-[var(--ink-3)]">
-                    <summary className="cursor-pointer font-semibold">Reasoning</summary>
-                    <ChatMarkdown text={msg.reasoning} />
-                </details>
-            )}
-        </>
-    );
-}
+/** One reading size for answers: larger and darker than the chrome around them. */
+const ANSWER_PROSE =
+    "text-[15px] leading-[1.7] [&_p]:my-3 [&_li]:my-1.5 [&_h1]:mt-6 [&_h1]:mb-3 [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:mt-4 [&_h3]:mb-2";
 
-function TypingIndicator() {
+/**
+ * The answer as it arrives: revealed at a steady pace even when the model
+ * sends it in one burst (`shown`, from useSmoothText), with a caret until it's
+ * done. A stopped or failed turn shows what it has at once.
+ */
+function AnswerProse({
+    msg,
+    shown,
+    arriving,
+}: {
+    msg: ThreadMessage;
+    shown: string;
+    arriving: boolean;
+}) {
+    if (msg.status === "error" || msg.status === "stopped")
+        return <ChatMarkdown text={msg.text} className={ANSWER_PROSE} />;
+    if (!shown && arriving) return null;
     return (
-        <div role="status" className="mb-7 flex items-center gap-2 text-xs text-[var(--ink-3)]">
-            <IconBolt size={16} />
-            Working…
-        </div>
+        <ChatMarkdown
+            text={arriving ? closeOpenMarkdown(shown) : shown}
+            streaming={arriving}
+            className={ANSWER_PROSE}
+        />
     );
 }
 
@@ -1816,7 +1687,7 @@ export function AskPanel({
                                     />
                                 );
                             })}
-                            {showTyping && <TypingIndicator />}
+                            {showTyping && <PendingTrace />}
                         </>
                     )}
                 </div>

@@ -109,6 +109,73 @@ test("normal follow-ups carry real prior turns and use general chat with no read
     expect(sessions.appendMessages).toHaveBeenCalledTimes(3);
 });
 
+test("records the answer's steps, reasoning and first-word time, and saves them with the turn", async () => {
+    const clock = jest.spyOn(performance, "now");
+    let now = 1_000;
+    clock.mockImplementation(() => now);
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        now = 1_080;
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "No sources selected", state: "done" },
+        });
+        now = 1_100;
+        options.onEvent({
+            type: "step",
+            step: { id: "think", label: "Thinking", state: "active" },
+        });
+        now = 2_000;
+        options.onEvent({ type: "reasoning", delta: "Weigh the clauses." });
+        now = 4_100;
+        options.onEvent({
+            type: "step",
+            step: { id: "think", label: "Thought it through", state: "done" },
+        });
+        options.onEvent({ type: "text", delta: "The answer" });
+        now = 4_300;
+        options.onEvent({ type: "text", delta: " is here." });
+        return answer("The answer is here.");
+    });
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit(send("Which clause wins?"));
+    });
+    clock.mockRestore();
+    const turn = result.current.thread[1]!;
+    expect(turn).toMatchObject({
+        status: "complete",
+        text: "The answer is here.",
+        reasoning: "Weigh the clauses.",
+        thoughtMs: 3_100,
+        steps: [
+            { id: "search", label: "No sources selected", state: "done", startMs: 80, endMs: 80 },
+            { id: "think", label: "Thought it through", state: "done", startMs: 100, endMs: 3_100 },
+        ],
+    });
+    const saved = jest.mocked(sessions.appendMessages).mock.calls.at(-1)![1].messages[0]!;
+    expect(saved.metadata).toMatchObject({ steps: turn.steps, thoughtMs: 3_100 });
+});
+
+test("a referenced chat is read as its own step", async () => {
+    jest.mocked(sessions.fetchSession).mockResolvedValue({
+        id: "older",
+        title: "Pricing call notes",
+        messages: [],
+    } as unknown as sessions.StoredSession);
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit({ ...send("Use those notes"), threadRefs: ["older"] });
+    });
+    expect(result.current.thread[1]!.steps).toEqual([
+        expect.objectContaining({
+            id: "thread-refs",
+            label: "Read a referenced chat",
+            state: "done",
+            detail: "Pricing call notes",
+        }),
+    ]);
+});
+
 test("stop retains partial response and holds durable queued follow-ups until resume", async () => {
     mockRequest.mockImplementationOnce(
         (_params, options) =>

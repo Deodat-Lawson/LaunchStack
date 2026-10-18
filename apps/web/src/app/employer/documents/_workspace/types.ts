@@ -2,6 +2,7 @@ import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
+import type { ChatTurnStep } from "~/lib/chat-turns";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -252,6 +253,10 @@ export interface ThreadMessage {
     stage?: string;
     reasoning?: string;
     elapsedMs?: number;
+    /** The answer's work, shown in its thinking trace. */
+    steps?: ChatTurnStep[];
+    /** Time from the send to the answer's first word ("Thought for 4s"). */
+    thoughtMs?: number;
     send?: ComposerSend;
     role: "user" | "assistant";
     text: string;

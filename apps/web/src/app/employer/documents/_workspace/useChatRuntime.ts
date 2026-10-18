@@ -11,6 +11,7 @@ import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
 import type { ComposerSend, ThreadMessage, WorkspaceSource } from "./types";
 import type { ChatAgentOption } from "./collab/types";
 import * as sessions from "./sessionApi";
+import { applyStep, settleSteps } from "./turnTrace";
 
 interface RuntimeIdentity {
     activeNew?: string | null;
@@ -83,6 +84,8 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             status: message.status === "streaming" ? undefined : message.status,
             reasoning: message.reasoning,
             elapsedMs: message.elapsedMs,
+            steps: message.steps?.length ? message.steps : undefined,
+            thoughtMs: message.thoughtMs,
             send: message.send,
             tokenBreakdown: message.tokenBreakdown,
             chunksAnalyzed: message.chunksAnalyzed,
@@ -305,11 +308,16 @@ export function useChatRuntime(input: {
 
         const onEvent = (event: AIChatStreamEvent) => {
             if (signal.aborted) return;
-            if (event.type === "text") answer.text += event.delta;
+            const at = performance.now() - started;
+            if (event.type === "text") {
+                answer.text += event.delta;
+                answer.thoughtMs ??= at;
+            }
             if (event.type === "reasoning")
                 answer.reasoning = (answer.reasoning ?? "") + event.delta;
             if (event.type === "status") answer.stage = event.status;
-            answer.elapsedMs = performance.now() - started;
+            if (event.type === "step") answer.steps = applyStep(answer.steps, event.step, at);
+            answer.elapsedMs = at;
             emit(context);
         };
         let savedUser = Boolean(persistedUser);
@@ -368,18 +376,43 @@ export function useChatRuntime(input: {
             answer.stage = "Preparing response";
             emit(context);
             const references: string[] = [];
-            for (const id of send.threadRefs ?? []) {
+            const referencedTitles: string[] = [];
+            const threadRefs = send.threadRefs ?? [];
+            const chats =
+                threadRefs.length === 1
+                    ? "a referenced chat"
+                    : `${threadRefs.length} referenced chats`;
+            for (const id of threadRefs) {
                 if (signal.aborted) throw new DOMException("Stopped", "AbortError");
                 answer.stage = "Reading referenced conversation";
+                answer.steps = applyStep(
+                    answer.steps,
+                    { id: "thread-refs", label: `Reading ${chats}`, state: "active" },
+                    performance.now() - started
+                );
                 emit(context);
                 const referenced = await sessions.fetchSession(id);
                 if (!referenced)
                     throw new Error(
                         "A referenced chat is unavailable. Remove its context chip and try again."
                     );
+                referencedTitles.push(referenced.title);
                 references.push(
                     `Referenced conversation: ${referenced.title}\n${conversationContext(referenced.messages ?? []) ?? "(empty)"}`
                 );
+            }
+            if (threadRefs.length > 0) {
+                answer.steps = applyStep(
+                    answer.steps,
+                    {
+                        id: "thread-refs",
+                        label: `Read ${chats}`,
+                        state: "done",
+                        detail: referencedTitles.join(", ").slice(0, 500),
+                    },
+                    performance.now() - started
+                );
+                emit(context);
             }
             const ids = send.refs
                 .map(id => sourceList.find(s => s.id === id)?.documentId)
@@ -433,6 +466,7 @@ export function useChatRuntime(input: {
             context.held = true;
         } finally {
             answer.elapsedMs = performance.now() - started;
+            answer.steps = settleSteps(answer.steps, answer.elapsedMs);
             if (savedUser && context.sessionId) {
                 try {
                     await serial(context, () =>

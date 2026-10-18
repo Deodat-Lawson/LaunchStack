@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useChatRuntime } from "../useChatRuntime";
 import type { ComposerSend, ThreadMessage, WorkspaceSource } from "../types";
 import * as sessions from "../sessionApi";
+import { toast } from "sonner";
 
 const mockRequest = jest.fn();
 jest.mock("../../hooks/useAIChat", () => ({ useAIChat: () => ({ sendQuery: mockRequest }) }));
@@ -216,6 +217,67 @@ test("a chat that can't be saved stops its request and says why", async () => {
         text: "Failed to save this chat",
     });
     expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
+test("a save that fails after the answer arrived keeps the answer and says the chat wasn't saved", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Answer first, save later"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    await act(async () => {
+        await Promise.resolve();
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({ status: "complete", text: "The response" });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining("Failed to save this chat"));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
+test("a stop shows at once even while the chat is still saving", async () => {
+    let finishCreate: (value: sessions.StoredSession) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise(resolve => {
+                finishCreate = resolve;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop me"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await waitFor(() => expect(result.current.thread[1]?.status).toBe("stopped"));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+    await act(async () => {
+        finishCreate({ id: "slow-save" } as unknown as sessions.StoredSession);
+        await sending!;
+    });
+    expect(result.current.thread[1]?.status).toBe("stopped");
+    expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-save");
 });
 
 test("every update hands the panel a new object for the live answer", async () => {

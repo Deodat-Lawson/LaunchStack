@@ -181,12 +181,15 @@ function clip(text: string, limit = 120): string {
     return chars.length > limit ? `${chars.slice(0, limit - 1).join("")}…` : text;
 }
 
-/** Up to three distinct names in order, then "and N more". */
-function nameList(names: readonly string[]): string | undefined {
+/**
+ * Up to three distinct names in order, then "and N more" — counting `total`
+ * when some of the things counted have no name to show.
+ */
+function nameList(names: readonly string[], total = 0): string | undefined {
     const distinct = Array.from(new Set(names.filter(Boolean)));
     if (distinct.length === 0) return undefined;
     const shown = distinct.slice(0, 3).map(name => clip(name, 60));
-    const more = distinct.length - shown.length;
+    const more = Math.max(distinct.length, total) - shown.length;
     return `${shown.join(", ")}${more > 0 ? ` and ${more} more` : ""}`;
 }
 
@@ -1248,7 +1251,10 @@ export async function POST(request: Request) {
                         "search",
                         "done",
                         `Found ${count(documents.length, "passage")} in ${count(Math.max(sourceCount, 1), "source")}`,
-                        nameList(sources.flatMap(source => source.title ?? []))
+                        nameList(
+                            sources.flatMap(source => source.title ?? []),
+                            sourceCount
+                        )
                     );
                 } else {
                     step(

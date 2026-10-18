@@ -469,13 +469,33 @@ export function useChatRuntime(input: {
                 },
                 { stream: true, onEvent, signal, independent: true }
             );
-            await saving;
-            if (saveFailure) throw saveFailure;
-            if (signal.aborted || response.cancelled)
+            // A stop shows at once, without waiting for the save. (A failed
+            // save cancels the request too, but it says why below.)
+            if (!saveFailure && (signal.aborted || response.cancelled))
                 throw new DOMException("Stopped", "AbortError");
+            await saving;
+            // A save that fails after the answer arrived keeps the answer on
+            // screen: only the chat is lost, and the reader is told so.
+            const answered = response.success && !response.cancelled;
+            if (saveFailure && !answered) throw saveFailure;
             applyResponse(answer, response, sourceList);
-            if (!response.success) context.held = true;
+            if (!response.success || saveFailure) context.held = true;
+            if (saveFailure)
+                toast.error(
+                    `This answer is visible but the chat couldn't be saved (${saveFailure.message}). Copy it before leaving.`
+                );
         } catch (error) {
+            // A stop shows at once, even while the chat is still saving.
+            if (
+                !saveFailure &&
+                (signal.aborted || (error instanceof Error && error.name === "AbortError"))
+            ) {
+                answer.status = "stopped";
+                answer.stage = "Stopped";
+                answer.elapsedMs = performance.now() - started;
+                answer.steps = settleSteps(answer.steps, answer.elapsedMs);
+                emit(context);
+            }
             await saving;
             if (saveFailure) error = saveFailure;
             const stopped =

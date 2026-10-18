@@ -1794,6 +1794,40 @@ describe("streamed progress steps", () => {
         ]);
     });
 
+    it("counts a source it can't name in the names it lists", async () => {
+        mockQueuedRows = [[1, 2, 3].map(id => ({ id }))];
+        (multiDocEnsembleSearch as jest.Mock).mockResolvedValue(
+            [
+                { documentId: 1, documentTitle: "Plan" },
+                { documentId: 2 },
+                { documentId: 3, documentTitle: "Memo" },
+            ].map((metadata, index) => ({
+                pageContent: `chunk ${index}`,
+                metadata: { page: 1, ...metadata },
+            }))
+        );
+
+        const events = await streamEvents(
+            await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "selected",
+                    selectedDocumentIds: [1, 2, 3],
+                    stream: true,
+                })
+            )
+        );
+
+        expect(stepsOf(events).find(step => step.id === "search" && step.state === "done")).toEqual(
+            {
+                id: "search",
+                state: "done",
+                label: "Found 3 passages in 3 sources",
+                detail: "Plan, Memo and 1 more",
+            }
+        );
+    });
+
     it.each<[string, Record<string, unknown>[][], () => void]>([
         ["no readable documents", [[]], () => undefined],
         [

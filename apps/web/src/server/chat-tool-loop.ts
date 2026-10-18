@@ -21,6 +21,7 @@
 
 import {
     AIMessage,
+    HumanMessage,
     ToolMessage,
     type AIMessageChunk,
     type BaseMessage,
@@ -83,6 +84,10 @@ export interface AnswerWithToolsResult {
 
 /** Calls the model may make in one round; more than this is a runaway. */
 const MAX_CALLS_PER_ROUND = 4;
+
+/** Said before a round in which the model may no longer call tools. */
+export const OUT_OF_TOOL_ROUNDS =
+    "Answer now, from what the tool results above show; do not call another tool. If they did not have what was asked, say what you looked at and what was missing.";
 
 /** The endpoint rejected the request itself — here, the tools it was offered. */
 function isRequestRefusal(error: unknown): boolean {
@@ -166,6 +171,8 @@ export async function answerWithTools(
     let usage: ChatTokenUsage = {};
     let streamedText = "";
     let modelCalls = 0;
+    /** Set when a round after a tool call came back with no text: one more, tools off. */
+    let mustAnswer = false;
 
     /** One model call; text and reasoning stream out as they arrive. */
     const callModel = async (
@@ -214,7 +221,11 @@ export async function answerWithTools(
 
     for (let round = 0; ; round++) {
         throwIfChatAborted(signal);
-        const mayCall = Boolean(withTools) && round < maxToolRounds;
+        const mayCall = Boolean(withTools) && round < maxToolRounds && !mustAnswer;
+        // Out of tool rounds: say so. `tool_choice: "none"` alone is not
+        // enough for every endpoint — some ignore it, the model calls a tool
+        // anyway, and with that call dropped the answer comes back empty.
+        if (withTools && !mayCall) conversation.push(new HumanMessage(OUT_OF_TOOL_ROUNDS));
         // After the last tool round the tools stay declared (the history
         // holds tool messages) but the model may not call them.
         const model = withTools
@@ -241,6 +252,14 @@ export async function answerWithTools(
         const calls =
             mayCall && withTools ? readToolCalls(message, round).slice(0, MAX_CALLS_PER_ROUND) : [];
         if (calls.length === 0) {
+            // A model can read a tool result and stop without a word (all its
+            // output spent on reasoning). Every turn ends in an answer, so it
+            // is asked once more, with the tools off.
+            const said = stream ? roundText : contentText(message.content);
+            if (!said.trim() && mayCall && toolCalls.length > 0) {
+                mustAnswer = true;
+                continue;
+            }
             return {
                 finalText: stream ? roundText : "",
                 finalContent: message.content,

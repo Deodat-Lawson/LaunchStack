@@ -5,12 +5,12 @@
  * answer cites the numbered sources the response returns.
  */
 
-import { AIMessage, AIMessageChunk, ToolMessage } from "@langchain/core/messages";
+import { AIMessage, AIMessageChunk, HumanMessage, ToolMessage } from "@langchain/core/messages";
 import type { BaseMessage } from "@langchain/core/messages";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { WebSearchResponse } from "@launchstack/tools/web-research";
 
-import { answerWithTools } from "~/server/chat-tool-loop";
+import { OUT_OF_TOOL_ROUNDS, answerWithTools } from "~/server/chat-tool-loop";
 import { createWebTools, webToolsPrompt } from "~/server/chat-web-tools";
 
 /** One scripted model turn: streamed chunks (one message when invoked), or a failed request. */
@@ -281,6 +281,59 @@ describe("Ask web search as a model-called tool", () => {
         expect(calls[0]!.kwargs).toBeUndefined();
         expect(calls[2]!.kwargs).toEqual({ tool_choice: "none" });
         expect(answer.finalContent).toBe("Answer from what I found [Source 1].");
+        // The last round is told, in words, that the tools are spent: an
+        // endpoint that ignores tool_choice otherwise answers with a dropped
+        // tool call and no text.
+        const told = (call: ModelCall) =>
+            call.messages.some(m => m instanceof HumanMessage && m.content === OUT_OF_TOOL_ROUNDS);
+        expect(calls.map(told)).toEqual([false, false, true]);
+        expect(calls[2]!.messages.at(-1)).toBeInstanceOf(HumanMessage);
+    });
+
+    it("asks once more, tools off, when the model reads a result and says nothing", async () => {
+        const web = createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) });
+        const { chat, calls } = scriptedChat([
+            [toolCall("search_web", { query: "news" })],
+            [text("")],
+            [text("Three products shipped [Source 1].")],
+        ]);
+
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: web.tools,
+            signal: new AbortController().signal,
+        });
+
+        expect(calls).toHaveLength(3);
+        expect(calls[1]!.kwargs).toBeUndefined();
+        expect(calls[2]!.kwargs).toEqual({ tool_choice: "none" });
+        expect(calls[2]!.messages.at(-1)).toEqual(new HumanMessage(OUT_OF_TOOL_ROUNDS));
+        expect(answer.finalContent).toBe("Three products shipped [Source 1].");
+        expect(answer.modelCalls).toBe(3);
+    });
+
+    it("does not ask again when a turn that used no tool comes back empty", async () => {
+        const { chat, calls } = scriptedChat([[text("")]]);
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: createWebTools({ search: jest.fn() }).tools,
+            signal: new AbortController().signal,
+        });
+        expect(calls).toHaveLength(1);
+        expect(answer.finalContent).toBe("");
+    });
+
+    it("says nothing about spent tools to a turn that never used one", async () => {
+        const { chat, calls } = scriptedChat([[text("391.")]]);
+        await answerWithTools({
+            chat,
+            messages: [],
+            tools: createWebTools({ search: jest.fn() }).tools,
+            signal: new AbortController().signal,
+        });
+        expect(calls[0]!.messages.some(m => m instanceof HumanMessage)).toBe(false);
     });
 
     it("reports a failed search to the model instead of failing the answer", async () => {

@@ -4,16 +4,13 @@
  * `{id,title,text,url,metadata}` as the text content.
  *
  * The text is the current version's context chunks, in reading order, as
- * plain text (the same rows the in-app text view renders as HTML). A missing
- * id and an unreadable one get the same answer.
+ * plain text (`readSourceText` in server/workspace-sources.ts, which Ask's
+ * `read_source` shares). A missing id and an unreadable one get the same
+ * answer.
  */
-import { and, asc, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { document, documentContextChunks } from "@launchstack/store/schema";
-
-import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { db } from "~/server/db";
+import { SOURCE_TEXT_MAX_CHARS, readSourceText } from "~/server/workspace-sources";
 
 import { defineTool } from "../protocol";
 import {
@@ -24,10 +21,10 @@ import {
     parseDocumentId,
 } from "./shared";
 
-/** About fifty pages of dense text; longer documents are cut and say so. */
-export const FETCH_MAX_CHARS = 200_000;
+export { joinChunkText } from "~/server/workspace-sources";
 
-const CHUNK_SEPARATOR = "\n\n";
+/** About fifty pages of dense text; longer documents are cut and say so. */
+export const FETCH_MAX_CHARS = SOURCE_TEXT_MAX_CHARS;
 
 const args = z.object({
     id: z
@@ -52,17 +49,6 @@ export interface FetchedDocument {
         indexed: boolean;
         mimeType?: string;
     };
-}
-
-/** Joins chunks in order, stopping at `max` characters. */
-export function joinChunkText(
-    chunks: readonly string[],
-    max = FETCH_MAX_CHARS
-): { text: string; characters: number; truncated: boolean } {
-    const parts = chunks.map(chunk => chunk.trim()).filter(chunk => chunk.length > 0);
-    const full = parts.join(CHUNK_SEPARATOR);
-    if (full.length <= max) return { text: full, characters: full.length, truncated: false };
-    return { text: full.slice(0, max), characters: full.length, truncated: true };
 }
 
 export const fetchTool = defineTool({
@@ -123,62 +109,24 @@ export const fetchTool = defineTool({
         const documentId = parseDocumentId(id);
         if (documentId === null) return { ok: false, message: documentNotFound(id) };
 
-        const { ctx } = principal;
-        const [row] = await db
-            .select({
-                id: document.id,
-                title: document.title,
-                category: document.category,
-                currentVersionId: document.currentVersionId,
-                mimeType: document.mimeType,
-                createdAt: document.createdAt,
-                updatedAt: document.updatedAt,
-            })
-            .from(document)
-            .where(
-                and(
-                    eq(document.id, documentId),
-                    scopedDocumentWhere(ctx.companyId, await ctx.documentScope())
-                )
-            )
-            .limit(1);
-        if (!row) return { ok: false, message: documentNotFound(id) };
+        const source = await readSourceText(principal.ctx, documentId);
+        if (!source) return { ok: false, message: documentNotFound(id) };
 
-        // A document without a current version has no current text; never fall
-        // back to an older version's chunks.
-        const chunks =
-            row.currentVersionId === null
-                ? []
-                : await db
-                      .select({ content: documentContextChunks.content })
-                      .from(documentContextChunks)
-                      .where(
-                          and(
-                              eq(documentContextChunks.documentId, BigInt(documentId)),
-                              eq(documentContextChunks.versionId, row.currentVersionId)
-                          )
-                      )
-                      .orderBy(
-                          asc(documentContextChunks.pageNumber),
-                          asc(documentContextChunks.id)
-                      );
-
-        const { text, characters, truncated } = joinChunkText(chunks.map(c => c.content));
         const fetched: FetchedDocument = {
-            id: String(row.id),
-            title: row.title,
-            text,
-            url: documentUrl(origin, Number(row.id)),
+            id: String(source.id),
+            title: source.title,
+            text: source.text,
+            url: documentUrl(origin, source.id),
             metadata: {
-                folder: row.category,
-                createdAt: row.createdAt.toISOString(),
-                updatedAt: (row.updatedAt ?? row.createdAt).toISOString(),
-                truncated,
-                characters,
-                indexed: chunks.length > 0,
+                folder: source.folder,
+                createdAt: source.createdAt.toISOString(),
+                updatedAt: source.updatedAt.toISOString(),
+                truncated: source.truncated,
+                characters: source.characters,
+                indexed: source.indexed,
             },
         };
-        if (row.mimeType) fetched.metadata.mimeType = row.mimeType;
+        if (source.mimeType) fetched.metadata.mimeType = source.mimeType;
         const structured = fetched as unknown as Record<string, unknown>;
         return { ok: true, text: JSON.stringify(fetched), structured };
     },

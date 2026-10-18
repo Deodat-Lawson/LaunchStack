@@ -156,8 +156,70 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     getSystemPrompt: () => "system",
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
-    buildReferences: () => [],
+    buildReferences: (...args: unknown[]) => mockBuildReferences(...args),
     extractRecommendedPages: () => [1],
+}));
+
+const mockBuildReferences = jest.fn((..._args: unknown[]) => [] as unknown[]);
+
+// The workspace's sources as tools. What the person can open is scripted per
+// test (nothing, by default, so a turn offers no source tools); the tools'
+// own behaviour is tested in __tests__/server/chat-source-tools.test.ts.
+const NO_SOURCES = { inventory: { total: 0, byOrigin: [] }, connected: [] };
+let mockSourcesOverview: unknown = NO_SOURCES;
+const mockLoadSourcesOverview = jest.fn(async (..._args: unknown[]) => mockSourcesOverview);
+const mockListSources = jest.fn(async (..._args: unknown[]) => "no listing");
+const mockSearchSources = jest.fn(async (..._args: unknown[]) => "no passages");
+const mockCreateSourceTools = jest.fn((..._args: unknown[]) => {
+    const session = {
+        passages: [] as unknown[],
+        texts: [] as string[],
+        tools: [
+            {
+                name: "list_sources",
+                description: "list",
+                parameters: { type: "object", properties: {} },
+                describe: () => "Looking through your sources",
+                run: async (args: unknown) => {
+                    const text = await mockListSources(args);
+                    session.texts.push(text);
+                    return text;
+                },
+            },
+            {
+                name: "search_sources",
+                description: "search",
+                parameters: { type: "object", properties: {} },
+                describe: () => "Searching your sources",
+                run: async (args: unknown) => {
+                    const text = await mockSearchSources(args);
+                    session.passages.push({
+                        pageContent: "Jane Doe — software engineer, Python",
+                        metadata: { documentId: 81, documentTitle: "Jane Doe resume.pdf" },
+                    });
+                    session.texts.push(text);
+                    return text;
+                },
+            },
+            {
+                name: "read_source",
+                description: "read",
+                parameters: { type: "object", properties: {} },
+                describe: () => "Reading a source",
+                run: async () => "full text",
+            },
+        ],
+    };
+    return session;
+});
+jest.mock("~/server/chat-source-tools", () => ({
+    citedPassages: (passages: unknown[]) => passages,
+    loadSourcesOverview: (...args: unknown[]) => mockLoadSourcesOverview(...args),
+    createSourceTools: (...args: unknown[]) => mockCreateSourceTools(...args),
+    sourceToolsPrompt: (_overview: unknown, attached: boolean) =>
+        `## The workspace's sources (attached: ${attached})`,
+    noSourceToolsPrompt: (overview: unknown) =>
+        overview ? "No source is attached; you did not look." : "No overview; you did not look.",
 }));
 
 const mockInvoke = jest.fn();
@@ -195,7 +257,8 @@ jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: jest.fn(() => ({
         modelId: "gpt-4o-mini",
         chat: { invoke: mockInvoke, stream: mockStream, bindTools: mockBindTools },
-        behavior: mockBehavior,
+        // Every configured model declares its structured-output modes.
+        behavior: { nativeStructuredOutput: [], ...mockBehavior },
         prepareMessages: (messages: unknown) => messages,
     })),
     resolveConfiguredChatRoute: jest.fn(() => ({ definition: { behavior: mockBehavior } })),
@@ -1843,5 +1906,215 @@ describe("web search as a tool the model calls", () => {
         } finally {
             mockAgentTools = null;
         }
+    });
+});
+
+describe("the workspace's sources as tools the model calls", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: { temperature: "supported", systemMessages: "supported" },
+    };
+    const DRIVE_WORKSPACE = {
+        inventory: { total: 37, byOrigin: [{ from: "google-drive", count: 37 }] },
+        connected: [{ provider: "google-drive", status: "active", lastSyncAt: null }],
+    };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        useContext({ role: "owner" });
+        mockBehavior = TOOL_MODEL;
+        mockSearchProvider = null;
+        mockChatSource = "deployment";
+        mockSourcesOverview = DRIVE_WORKSPACE;
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockStream.mockReset();
+        mockBuildReferences.mockImplementation(() => []);
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+        (documentEnsembleSearch as jest.Mock).mockResolvedValue(RETRIEVED);
+    });
+
+    afterAll(() => {
+        mockSourcesOverview = NO_SOURCES;
+        mockBehavior = {};
+    });
+
+    const toolNames = () =>
+        (mockBindTools.mock.calls[0] as unknown as [{ function: { name: string } }[]])[0].map(
+            tool => tool.function.name
+        );
+    const systemPrompt = (call = 0) =>
+        String((mockInvoke.mock.calls[call] as [{ content: unknown }[]])[0][0]?.content);
+
+    it("offers the source tools on a message with nothing attached, and never says there is no access", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({ question: "Hi, what's in my Google Drive", searchScope: "none" })
+        );
+
+        expect(response.status).toBe(200);
+        expect(toolNames()).toEqual(["list_sources", "search_sources", "read_source"]);
+        expect(mockCreateSourceTools).toHaveBeenCalledWith(
+            expect.objectContaining({ companyId: BigInt(5) })
+        );
+        expect(systemPrompt()).toContain("## The workspace's sources (attached: false)");
+        expect(systemPrompt()).not.toContain("claim access to workspace sources");
+        expect(systemPrompt()).not.toContain("no indexed document sources");
+        // A message with nothing attached still retrieves nothing up front.
+        expect(multiDocEnsembleSearch).not.toHaveBeenCalled();
+        expect(documentEnsembleSearch).not.toHaveBeenCalled();
+    });
+
+    it("answers what is in the Drive from list_sources", async () => {
+        mockListSources.mockResolvedValueOnce(
+            '37 sources in 1 folder.\n- "Jane Doe resume.pdf" (d81) — in Resumes, from Google Drive'
+        );
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [
+                    { id: "call_1", name: "list_sources", args: { from: "google-drive" } },
+                ],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({
+                content: "Your Drive import holds 37 resumes, including Jane Doe's.",
+                response_metadata: {},
+            });
+
+        const response = await POST(
+            queryRequest({ question: "Hi, what's in my Google Drive", searchScope: "none" })
+        );
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(mockListSources).toHaveBeenCalledWith({ from: "google-drive" });
+        const [followUp] = mockInvoke.mock.calls[1] as [Record<string, unknown>[]];
+        expect(followUp.find(m => m.kind === "tool")).toMatchObject({
+            tool_call_id: "call_1",
+            content: expect.stringContaining("from Google Drive"),
+        });
+        expect(body).toMatchObject({
+            success: true,
+            summarizedAnswer: "Your Drive import holds 37 resumes, including Jane Doe's.",
+        });
+        // What the model was shown is what the grounding check scores against.
+        expect(validateQAResponse).toHaveBeenCalledWith(
+            expect.any(String),
+            expect.arrayContaining([expect.stringContaining("Jane Doe resume.pdf")]),
+            "general"
+        );
+    });
+
+    it("cites the passages search_sources showed the model", async () => {
+        mockBuildReferences.mockImplementation(() => [
+            { documentId: 81, snippet: "Jane Doe — software engineer", page: 1 },
+        ]);
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [{ id: "call_1", name: "search_sources", args: { query: "Python" } }],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({ content: "Jane Doe knows Python.", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({ question: "Who knows Python?", searchScope: "none" })
+        );
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(mockBuildReferences).toHaveBeenCalledWith(
+            "Who knows Python?",
+            [expect.objectContaining({ metadata: expect.objectContaining({ documentId: 81 }) })],
+            5
+        );
+        expect(body).toMatchObject({
+            references: [expect.objectContaining({ documentId: 81 })],
+            chunksAnalyzed: 1,
+        });
+    });
+
+    it("keeps the attached sources' passages first and offers the tools beside them", async () => {
+        mockQueuedRows = [[{ id: 42, title: "Owned Report" }]];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(
+            queryRequest({ documentId: 42, question: "summarize", searchScope: "document" })
+        );
+
+        expect(documentEnsembleSearch).toHaveBeenCalledTimes(1);
+        expect(toolNames()).toEqual(["list_sources", "search_sources", "read_source"]);
+        expect(systemPrompt()).toContain("## The workspace's sources (attached: true)");
+        expect(mockBuildReferences).toHaveBeenCalledWith("summarize", RETRIEVED, 5);
+    });
+
+    it("offers no source tools when the person can open no sources", async () => {
+        mockSourcesOverview = NO_SOURCES;
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "what's in my Drive", searchScope: "none" }));
+
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(mockCreateSourceTools).not.toHaveBeenCalled();
+        expect(systemPrompt()).toContain("No source is attached; you did not look.");
+    });
+
+    it("offers no source tools to an agent without workspace retrieval", async () => {
+        mockAgentTools = ["web", "reasoning"];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(
+                queryRequest({
+                    question: "what's in my Drive",
+                    searchScope: "none",
+                    agentKey: "restricted",
+                })
+            );
+            expect(mockCreateSourceTools).not.toHaveBeenCalled();
+            expect(mockBindTools).not.toHaveBeenCalled();
+            expect(systemPrompt()).toContain("you did not look");
+        } finally {
+            mockAgentTools = null;
+        }
+    });
+
+    it("offers no source tools to a model that does not take tools, and says it did not look", async () => {
+        mockBehavior = { ...TOOL_MODEL, nativeStructuredOutput: ["json-schema"] };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "what's in my Drive", searchScope: "none" }));
+
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(systemPrompt()).toContain("No source is attached; you did not look.");
+    });
+
+    it("still answers when what the person can open cannot be read", async () => {
+        mockLoadSourcesOverview.mockRejectedValueOnce(new Error("db down"));
+        jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        const response = await POST(queryRequest({ question: "hi", searchScope: "none" }));
+
+        expect(response.status).toBe(200);
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(systemPrompt()).toContain("No overview; you did not look.");
+    });
+
+    it("offers source and web tools together, sources first", async () => {
+        mockSearchProvider = "exa";
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "hi", searchScope: "none", enableWebSearch: true }));
+
+        expect(toolNames()).toEqual([
+            "list_sources",
+            "search_sources",
+            "read_source",
+            "search_web",
+            "fetch_page",
+        ]);
     });
 });

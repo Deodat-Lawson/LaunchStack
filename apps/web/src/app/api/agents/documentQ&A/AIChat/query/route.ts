@@ -47,6 +47,13 @@ import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import { answerWithTools } from "~/server/chat-tool-loop";
+import {
+    citedPassages,
+    createSourceTools,
+    loadSourcesOverview,
+    noSourceToolsPrompt,
+    sourceToolsPrompt,
+} from "~/server/chat-source-tools";
 import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
@@ -1084,24 +1091,44 @@ export async function POST(request: Request) {
                 `✅ [AIChat] Built context with pages: ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
             );
 
-            // Build references for document highlights and page navigation
-            const references = buildReferences(retrievalQuery, documents, 5);
+            // A workspace's own model has no tool-calling answer to read
+            // (Settings asks about images, reasoning and JSON schema); nearly
+            // every OpenAI-compatible server takes function tools, and one that
+            // refuses them costs a retry without them (chat-tool-loop.ts), not
+            // the answer.
+            const takesTools =
+                resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
+                getChatModelsSource() === "workspace";
 
             // Web search is a tool the model may call, not a step before the
             // answer: it is offered when the turn's agent may use the web, a
             // search provider key is configured and the model takes tools. A
-            // question that needs no web pays nothing for it. A workspace's own
-            // model has no tool-calling answer to read (Settings asks about
-            // images, reasoning and JSON schema); nearly every OpenAI-compatible
-            // server takes function tools, and one that refuses them costs a
-            // retry without them (chat-tool-loop.ts), not the answer.
+            // question that needs no web pays nothing for it.
             const webTools =
-                enableWebSearch &&
-                webSearchAvailable() &&
-                (resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
-                    getChatModelsSource() === "workspace")
-                    ? createWebTools()
+                enableWebSearch && webSearchAvailable() && takesTools ? createWebTools() : null;
+
+            // The workspace's sources are tools too, offered whenever the model
+            // takes tools, the agent may use retrieval and the person can open
+            // at least one source. Without them a message with nothing attached
+            // searched nothing, and "what's in my Google Drive" was answered
+            // with "I don't have access to your Drive".
+            const sourcesAllowed = agent ? agent.turn.sources : true;
+            const sourcesOverview =
+                (takesTools && sourcesAllowed) || searchScope === "none"
+                    ? await loadSourcesOverview(ctx.data).catch((error: unknown) => {
+                          // Not knowing what is there must not cost the answer.
+                          console.warn("[AIChat] could not read the sources overview:", error);
+                          return null;
+                      })
                     : null;
+            const sourceTools =
+                takesTools &&
+                sourcesAllowed &&
+                sourcesOverview &&
+                sourcesOverview.inventory.total > 0
+                    ? createSourceTools(ctx.data)
+                    : null;
+            const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
 
             const attachmentContext = { request, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
@@ -1128,12 +1155,15 @@ export async function POST(request: Request) {
             let systemPrompt = agent
                 ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
                 : stylePrompt;
+            if (sourceTools && sourcesOverview) {
+                systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
+            } else if (searchScope === "none") {
+                systemPrompt += `\n\n${noSourceToolsPrompt(sourcesOverview)}`;
+            }
             if (searchScope === "none") {
-                systemPrompt +=
-                    "\n\nThis turn has no indexed document sources. Answer general questions using your knowledge and the user attachments when present. Do not invent document citations or claim access to workspace sources.";
                 if (passages.length > 0) {
                     systemPrompt +=
-                        " The user did select passage(s) from their documents: those passages, and any surrounding text shown with them, are in the message and may be quoted.";
+                        "\n\nThe user did select passage(s) from their documents: those passages, and any surrounding text shown with them, are in the message and may be quoted.";
                 }
             }
             if (chatMode === "plan") {
@@ -1147,7 +1177,7 @@ export async function POST(request: Request) {
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope === "none" ? "using the user attachments when present and your general knowledge" : "based primarily on the provided content"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1206,7 +1236,7 @@ export async function POST(request: Request) {
                 const reply = await answerWithTools({
                     chat,
                     messages,
-                    tools: webTools?.tools ?? [],
+                    tools,
                     signal,
                     stream: emit && {
                         onText: delta => emit({ type: "text", delta }),
@@ -1232,7 +1262,7 @@ export async function POST(request: Request) {
                 console.log(
                     `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
                 );
-                if (webTools) {
+                if (tools.length > 0) {
                     console.log(
                         `[AIChat] Tools: ${reply.modelCalls} model call(s); ${
                             reply.toolCalls
@@ -1263,9 +1293,12 @@ export async function POST(request: Request) {
                     }).catch(err => console.warn("[AIChat] Token debit failed:", err));
                 }
 
-                // The passages and their surrounding text are sources too.
+                // The passages and their surrounding text are sources too, and
+                // so is whatever the source tools showed the model.
+                const toolPassages = sourceTools?.passages ?? [];
                 const sourceTexts = [
                     ...documents.map(d => d.pageContent),
+                    ...(sourceTools?.texts ?? []),
                     ...passages.map(passage => passage.text),
                     ...passageAnchors.flat().map(anchor => anchor.content),
                 ];
@@ -1299,6 +1332,14 @@ export async function POST(request: Request) {
                 throwIfChatAborted(signal);
                 recordResult("success");
 
+                // Citations: the attached sources' passages first, then what
+                // the model found with search_sources and drew on.
+                const references = buildReferences(
+                    retrievalQuery,
+                    [...documents, ...citedPassages(toolPassages, summarizedAnswer)],
+                    5
+                );
+
                 return {
                     success: true,
                     summarizedAnswer,
@@ -1306,7 +1347,7 @@ export async function POST(request: Request) {
                     references: references.length > 0 ? references : undefined,
                     retrievalMethod,
                     processingTimeMs: totalTime,
-                    chunksAnalyzed: documents.length,
+                    chunksAnalyzed: documents.length + toolPassages.length,
                     // A silent provider reports no usage; do not show fake zeroes.
                     ...(usage.inputTokens !== undefined ||
                     usage.outputTokens !== undefined ||

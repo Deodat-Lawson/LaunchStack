@@ -137,9 +137,20 @@ jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: () => ({
         modelId: "gpt-4o-mini",
         chat: { invoke: mockInvoke },
-        behavior: {},
+        behavior: { nativeStructuredOutput: [] },
         prepareMessages: (messages: unknown) => messages,
     }),
+}));
+
+// The model above takes no tools, so the source tools are never offered.
+jest.mock("~/server/chat-source-tools", () => ({
+    citedPassages: (passages: unknown[]) => passages,
+    loadSourcesOverview: async () => null,
+    createSourceTools: () => {
+        throw new Error("source tools are not offered in these tests");
+    },
+    sourceToolsPrompt: () => "",
+    noSourceToolsPrompt: () => "",
 }));
 
 jest.mock("~/server/chat-request-compat", () => ({

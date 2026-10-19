@@ -943,12 +943,13 @@ export async function completeRun(
     });
 }
 
-/** A worker failure or executor error cannot overwrite an existing terminal result. */
+/** Restrict failure to the caller's expected state, without replacing terminal results. */
 export async function failRun(
     companyId: bigint,
     id: string,
     error: string,
-    steps?: RunStep[]
+    steps: RunStep[] | undefined,
+    expectedStatus: "queued" | "running"
 ): Promise<RunRecord | null> {
     await expireRuns(companyId, id);
     const set: Partial<typeof proposalRuns.$inferInsert> = {
@@ -965,7 +966,7 @@ export async function failRun(
             and(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
-                inArray(proposalRuns.status, ["queued", "running"])
+                eq(proposalRuns.status, expectedStatus)
             )
         )
         .returning();

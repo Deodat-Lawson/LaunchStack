@@ -11,6 +11,7 @@ import { company } from "@launchstack/store/schema";
 import {
     createDefaultPorts,
     executeProposalRun,
+    failProposalRun,
     PROPOSAL_CREDITS,
     queueProposalRun,
     type ProposalPorts,
@@ -800,4 +801,78 @@ describeDb("proposal run claim and absolute running expiry (integration)", () =>
             expect(debit).not.toHaveBeenCalled();
         }
     );
+
+    it("external preparation failure cannot abort the delivery that owns a running run", async () => {
+        const run = await queueRewrite();
+        const runCtx = executionCtx(run);
+        const entered = deferred();
+        const release = deferred();
+        const fixture = fixturePorts({
+            beforeModel: async () => {
+                entered.resolve();
+                await release.promise;
+            },
+        });
+        const execution = executeProposalRun(runCtx, fixture.ports);
+        let beforeFailure!: RunDto;
+        let afterFailure!: RunDto;
+        let completed!: RunRecord;
+        try {
+            await Promise.race([
+                entered.promise,
+                execution.then(result => {
+                    throw new Error(
+                        `Run ended before model barrier: ${result.status}: ${result.error}`
+                    );
+                }),
+            ]);
+            beforeFailure = await loadRun(ctx(), run.id);
+            await failProposalRun(runCtx, "Writer preparation failed");
+            afterFailure = await loadRun(ctx(), run.id);
+        } finally {
+            release.resolve();
+            completed = await execution;
+        }
+
+        expect(beforeFailure.status).toBe("running");
+        expect(afterFailure).toEqual(beforeFailure);
+        expect(completed).toMatchObject({
+            status: "completed",
+            error: null,
+            creditsUsed: PROPOSAL_CREDITS.rewrite,
+        });
+        expect(await loadRun(ctx(), run.id)).toMatchObject({
+            status: "completed",
+            error: null,
+            credits: PROPOSAL_CREDITS.rewrite,
+        });
+        expect(fixture.model).toHaveBeenCalledTimes(1);
+        expect(fixture.debit).toHaveBeenCalledTimes(1);
+        expect(fixture.debit.mock.calls[0]![0]).toMatchObject({
+            amount: PROPOSAL_CREDITS.rewrite,
+            referenceId: run.id,
+        });
+    });
+
+    it("external preparation failure still visibly fails an unclaimed queued run", async () => {
+        const run = await queueRewrite();
+        const runCtx = executionCtx(run);
+        const fixture = fixturePorts();
+        await failProposalRun(runCtx, "Writer preparation failed");
+
+        const failed = await loadRun(ctx(), run.id);
+        expect(failed).toMatchObject({
+            status: "failed",
+            error: "Writer preparation failed",
+            credits: 0,
+        });
+        expect(failed.completedAt).not.toBeNull();
+        expect(await executeProposalRun(runCtx, fixture.ports)).toMatchObject({
+            status: "failed",
+            error: "Writer preparation failed",
+            creditsUsed: 0,
+        });
+        expect(fixture.model).not.toHaveBeenCalled();
+        expect(fixture.debit).not.toHaveBeenCalled();
+    });
 });

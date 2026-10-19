@@ -228,15 +228,21 @@ export async function executeProposalRun(
         return finished;
     } catch (error) {
         const message = errorMessage(error);
-        const failed = await failRun(ctx.companyId, ctx.runId, message, log.failedSteps(message));
+        const failed = await failRun(
+            ctx.companyId,
+            ctx.runId,
+            message,
+            log.failedSteps(message),
+            "running"
+        );
         if (!failed) throw new Error("Run not found");
         return failed;
     }
 }
 
-/** Mark a run failed from outside the executor without overwriting a terminal result. */
+/** An external hook can fail an unclaimed run, but cannot cancel another delivery's claim. */
 export async function failProposalRun(ctx: ProposalRunContext, message: string): Promise<void> {
-    await failRun(ctx.companyId, ctx.runId, message);
+    await failRun(ctx.companyId, ctx.runId, message, undefined, "queued");
 }
 
 // ─── Per kind ────────────────────────────────────────────────────────────────

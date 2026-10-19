@@ -103,12 +103,20 @@ when it settles. Both execution modes use `executeProposalRun` in the vertical.
   keyless Prospects runs do.
 - **worker** — `PROPOSALS_EXECUTOR=worker` sends `proposals/run.requested`;
   the worker's `proposalsRunJob` executes the same function under Inngest
-  retries and marks the run failed on final failure.
+  retries; its final-failure hook can fail only a still-queued run.
 
 A tenant-scoped conditional `UPDATE … RETURNING` claims `queued → running`.
 Only the winning delivery executes stages or becomes eligible to debit;
 concurrent deliveries and retries return the persisted running or terminal
 state. A running row is never reclaimed for another execution.
+
+Admission/preparation failures and generic worker failure hooks do not own
+a running delivery. Their `failProposalRun` update is atomically restricted
+to `queued`, so a stale admission read cannot cancel a different delivery
+that has since claimed the run. The owning executor's catch path may fail
+its `running` row. If that executor disappears without recording failure,
+the orphaned row follows the normal 15-minute lazy-expiry path instead of
+being cancelled by an unowned hook.
 
 The running deadline is **15 minutes from `startedAt`**, not from the last
 step or `updatedAt`. Expiry is lazy: detail, list, and live-run reads

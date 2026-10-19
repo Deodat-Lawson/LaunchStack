@@ -11,6 +11,7 @@ import { getDb } from "@launchstack/store/client";
 
 import { getProfileRow, profileView } from "../company-metadata";
 import { orgProfileFromView } from "./profile";
+import type { ProposalDebitExecutor } from "./ports";
 
 import {
     proposalApplications,
@@ -41,7 +42,6 @@ import type {
     RunInput,
     RunKind,
     RunRecord,
-    RunStatus,
     RunStep,
     RunSummary,
     SectionRecord,
@@ -718,6 +718,30 @@ export async function noteLibraryUses(companyId: bigint, ids: string[]): Promise
 
 // ─── Runs ────────────────────────────────────────────────────────────────────
 
+const expiredRunCondition = sql`${proposalRuns.startedAt} < clock_timestamp() - interval '15 minutes'`;
+const freshRunCondition = sql`not (${expiredRunCondition})`;
+const expiredRunPatch = {
+    status: "failed" as const,
+    error: "The run timed out after 15 minutes. Start a new run to try again.",
+    completedAt: sql`clock_timestamp()`,
+    updatedAt: sql`clock_timestamp()`,
+};
+
+/** Expiry is absolute from startedAt; queued work and recent step writes do not affect it. */
+async function expireRuns(companyId: bigint, id?: string): Promise<void> {
+    await getDb()
+        .update(proposalRuns)
+        .set(expiredRunPatch)
+        .where(
+            and(
+                eq(proposalRuns.companyId, companyId),
+                id !== undefined ? eq(proposalRuns.id, id) : undefined,
+                eq(proposalRuns.status, "running"),
+                expiredRunCondition
+            )
+        );
+}
+
 export async function createRun(input: {
     companyId: bigint;
     userId: string;
@@ -744,6 +768,7 @@ export async function createRun(input: {
 }
 
 export async function getRun(id: string, companyId: bigint): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
@@ -756,6 +781,7 @@ export async function listRuns(
     companyId: bigint,
     options: { applicationId?: string; limit?: number } = {}
 ): Promise<RunRecord[]> {
+    await expireRuns(companyId);
     const where = options.applicationId
         ? and(
               eq(proposalRuns.companyId, companyId),
@@ -773,6 +799,7 @@ export async function listRuns(
 
 /** The run in progress, if any: one at a time per workspace keeps the credits story simple. */
 export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> {
+    await expireRuns(companyId);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
@@ -787,32 +814,146 @@ export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> 
     return row ? toRun(row) : null;
 }
 
-export async function updateRun(
+/** Only the delivery that changes queued to running may execute or debit this run. */
+export async function claimRun(companyId: bigint, id: string): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
+    const [row] = await getDb()
+        .update(proposalRuns)
+        .set({ status: "running", startedAt: new Date(), updatedAt: new Date() })
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "queued")
+            )
+        )
+        .returning();
+    return row ? toRun(row) : null;
+}
+
+export async function isRunActive(companyId: bigint, id: string): Promise<boolean> {
+    await expireRuns(companyId, id);
+    const [row] = await getDb()
+        .select({ id: proposalRuns.id })
+        .from(proposalRuns)
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "running"),
+                freshRunCondition
+            )
+        )
+        .limit(1);
+    return row !== undefined;
+}
+
+export async function updateRunSteps(
     companyId: bigint,
     id: string,
-    patch: {
-        status?: RunStatus;
-        steps?: RunStep[];
-        summary?: RunSummary | null;
-        error?: string | null;
-        creditsUsed?: number;
-        startedAt?: Date;
-        completedAt?: Date | null;
-    }
+    steps: RunStep[]
+): Promise<boolean> {
+    await expireRuns(companyId, id);
+    const rows = await getDb()
+        .update(proposalRuns)
+        .set({ steps, updatedAt: new Date() })
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "running"),
+                freshRunCondition
+            )
+        )
+        .returning({ id: proposalRuns.id });
+    return rows.length > 0;
+}
+
+/**
+ * Serialize expiry/failure with metering and completion. The host receives
+ * this transaction so its ledger writes share the run's connection and commit.
+ * A genuinely external sink still cannot be rolled back by Postgres.
+ */
+export async function completeRun(
+    companyId: bigint,
+    id: string,
+    summary: RunSummary,
+    debit: (executor: ProposalDebitExecutor) => Promise<number>
 ): Promise<RunRecord | null> {
-    const set: Partial<typeof proposalRuns.$inferInsert> = { updatedAt: new Date() };
-    if (patch.status !== undefined) set.status = patch.status;
-    if (patch.steps !== undefined) set.steps = patch.steps;
-    if (patch.summary !== undefined) set.summary = patch.summary;
-    if (patch.error !== undefined) set.error = patch.error;
-    if (patch.creditsUsed !== undefined) set.creditsUsed = patch.creditsUsed;
-    if (patch.startedAt !== undefined) set.startedAt = patch.startedAt;
-    if (patch.completedAt !== undefined) set.completedAt = patch.completedAt;
-    await getDb()
+    return getDb().transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(proposalRuns)
+            .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)))
+            .for("update");
+        if (!row) return null;
+        if (row.status !== "running") return toRun(row);
+
+        // Recheck with the database clock after acquiring the lock, not with
+        // a timestamp captured before a potentially blocking SELECT.
+        const [expired] = await tx
+            .update(proposalRuns)
+            .set(expiredRunPatch)
+            .where(
+                and(
+                    eq(proposalRuns.id, id),
+                    eq(proposalRuns.companyId, companyId),
+                    eq(proposalRuns.status, "running"),
+                    expiredRunCondition
+                )
+            )
+            .returning();
+        if (expired) return toRun(expired);
+
+        const creditsUsed = await debit(tx);
+        const [completed] = await tx
+            .update(proposalRuns)
+            .set({
+                status: "completed",
+                summary,
+                creditsUsed,
+                completedAt: new Date(),
+                updatedAt: new Date(),
+            })
+            .where(
+                and(
+                    eq(proposalRuns.id, id),
+                    eq(proposalRuns.companyId, companyId),
+                    eq(proposalRuns.status, "running")
+                )
+            )
+            .returning();
+        return completed ? toRun(completed) : null;
+    });
+}
+
+/** A worker failure or executor error cannot overwrite an existing terminal result. */
+export async function failRun(
+    companyId: bigint,
+    id: string,
+    error: string,
+    steps?: RunStep[]
+): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
+    const set: Partial<typeof proposalRuns.$inferInsert> = {
+        status: "failed",
+        error,
+        completedAt: new Date(),
+        updatedAt: new Date(),
+    };
+    if (steps !== undefined) set.steps = steps;
+    const [row] = await getDb()
         .update(proposalRuns)
         .set(set)
-        .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)));
-    return getRun(id, companyId);
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                inArray(proposalRuns.status, ["queued", "running"])
+            )
+        )
+        .returning();
+    return row ? toRun(row) : getRun(id, companyId);
 }
 
 export async function deleteRun(companyId: bigint, id: string): Promise<boolean> {

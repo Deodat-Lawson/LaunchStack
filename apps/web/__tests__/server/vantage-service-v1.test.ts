@@ -18,6 +18,7 @@ jest.mock("@launchstack/pipelines/vantage", () => ({
 }));
 jest.mock("~/lib/models", () => ({ resolveConfiguredChatModel: jest.fn() }));
 import { prepareWeekV1, validateGenerationResult } from "~/server/vantage/service-v1";
+import { resolveConfiguredChatModel } from "~/lib/models";
 import type { GenerationInput, GenerationResult } from "@launchstack/pipelines/vantage";
 const examples = JSON.parse(
     readFileSync(
@@ -89,11 +90,43 @@ it("preserves state when access is revoked", async () => {
     ).rejects.toMatchObject({ code: "generation_failed" });
     expect(mockSave).not.toHaveBeenCalled();
 });
-it("does not fabricate success when B has not connected the generation port", async () => {
-    await expect(prepareWeekV1({ companyId: 42n, userId: "u" })).rejects.toMatchObject({
-        status: 503,
-        code: "generation_unavailable",
+it("uses B's default rules adapter and revalidates access before saving", async () => {
+    input.generationMode = "rules";
+    const original = structuredClone(input);
+    const revalidate = jest.fn(async () => {
+        expect(mockSave).not.toHaveBeenCalled();
     });
+    await expect(
+        prepareWeekV1({ companyId: 42n, userId: "u", generationMode: "rules" }, { revalidate })
+    ).resolves.toEqual({ id: "saved" });
+    expect(resolveConfiguredChatModel).not.toHaveBeenCalled();
+    expect(revalidate).toHaveBeenCalledTimes(1);
+    expect(input).toEqual(original);
+    expect(mockSave).toHaveBeenCalledTimes(1);
+    const saved = mockSave.mock.calls[0]![3] as GenerationResult;
+    expect(saved).toMatchObject({
+        runId: input.runId,
+        inputVersion: input.inputVersion,
+        execution: { outcome: "generated", mode: "rules", attempts: 0, fallbackReason: null },
+    });
+    expect(saved.draft.topics.length).toBeGreaterThan(0);
+    expect(saved.draft.topics.some(topic => topic.facts.some(fact => fact.refs.length > 0))).toBe(
+        true
+    );
+});
+it("does not save the default adapter's result after access is revoked", async () => {
+    input.generationMode = "rules";
+    await expect(
+        prepareWeekV1(
+            { companyId: 42n, userId: "u", generationMode: "rules" },
+            {
+                revalidate: async () => {
+                    throw new Error("revoked");
+                },
+            }
+        )
+    ).rejects.toMatchObject({ code: "generation_failed" });
+    expect(resolveConfiguredChatModel).not.toHaveBeenCalled();
     expect(mockSave).not.toHaveBeenCalled();
 });
 

@@ -12,3 +12,12 @@ organisation-profile loading. Filter profile provenance and library answers to
 readable same-workspace sources, check stored request sources, and refuse
 rewrite/review reuse of drafts backed by inaccessible evidence or saved answers.
 Rewrite and review continue to use existing evidence without fresh retrieval.
+
+Persist complete draft dependencies, including uncited retrieval and quoteless
+profile inputs. Preserve them through rewrites and manual edits; legacy generated
+prose without proof requires a redraft under constrained scopes.
+
+Store durable library-source snapshots in the existing evidence JSONB, with
+explicit provenance for new manual answers. Legacy evidence arrays remain
+readable/editable but are excluded from generation until replaced by a proven
+snapshot or an explicitly new manual entry. No SQL migration is required.

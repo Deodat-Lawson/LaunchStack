@@ -162,12 +162,26 @@ its stored evidence is unreadable, missing, or belongs to another workspace.
 An application's stored request source must also remain readable before its
 content or extracted requirements can be used.
 
-Rewrite and review do not retrieve new sources. Before either sends existing
-draft prose to the model, its saved evidence and referenced library answers
-must still be readable. Otherwise the run fails and asks for a redraft from
-readable sources; dropping citations alone would leave the private prose in
-the prompt. These are generation checks, not a change to read-side access
-policy for shared application and library screens.
+New drafts record complete `sourceDocumentIds` for their document inputs:
+retrieved excerpts whether cited or not, profile dependencies even without
+quotes, the request source, and reused library snapshots. Rewrite carries
+these dependencies forward. Rewrite and review do not retrieve new sources;
+before sending existing prose, all its dependencies, saved evidence, and
+referenced library answers must remain readable. Otherwise the run fails and
+asks for a redraft. Dropping citations alone would leave private prose in
+the prompt. Legacy generated prose without complete proof requires a redraft
+under a constrained scope; a broad-scope rewrite does not manufacture proof.
+
+New library answers store explicit manual provenance or an immutable source
+snapshot in a version-1 envelope inside the existing `evidence` JSONB. The
+API still returns an evidence array. Saved source dependencies survive edits
+and deletion of the originating application. Legacy evidence arrays have
+unknown provenance: they remain readable and editable but are not reused
+automatically. Replace them with a proven snapshot or an explicitly new
+manual answer. No SQL migration is needed.
+
+These are generation checks, not a change to read-side access policy for
+shared application and library screens.
 
 ## Stages, briefly
 

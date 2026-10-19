@@ -13,6 +13,7 @@ import {
     blankToNull,
     makeApplicationFilename,
     renderApplicationMarkdown,
+    sectionSourceProvenance,
     slugKey,
     syncSectionRequirements,
     toggleRequirement,
@@ -673,6 +674,14 @@ export async function saveSectionToLibrary(
     if (!section || section.applicationId !== applicationId)
         throw new ProposalsError("Section not found", 404);
     if (!section.draft?.trim()) throw new ProposalsError("Write the answer before saving it", 409);
+    const application = await getApplication(applicationId, ctx.companyId);
+    if (!application) throw new ProposalsError("Application not found", 404);
+    let provenance = sectionSourceProvenance(section);
+    if (provenance.kind !== "unknown" && application.requestDocumentId !== null) {
+        const ids = new Set(provenance.kind === "sources" ? provenance.sourceDocumentIds : []);
+        ids.add(application.requestDocumentId);
+        provenance = { kind: "sources", sourceDocumentIds: [...ids] };
+    }
     const cited = new Set(section.draftMeta?.cites ?? []);
     const item = await createLibraryItem({
         companyId: ctx.companyId,
@@ -684,6 +693,7 @@ export async function saveSectionToLibrary(
             .filter(Boolean)
             .slice(0, 10),
         evidence: (section.draftMeta?.evidence ?? []).filter(e => cited.has(e.n)),
+        provenance,
         sourceApplicationId: applicationId,
         sourceSectionKey: section.key,
     });
@@ -704,6 +714,7 @@ export async function newLibraryItem(
             .filter(Boolean)
             .slice(0, 10),
         evidence: [],
+        provenance: { kind: "manual" },
         sourceApplicationId: null,
         sourceSectionKey: null,
     });

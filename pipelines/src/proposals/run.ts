@@ -499,9 +499,21 @@ async function assertReadableDraftEvidence(
             legacyLibraryIds.push(...(section.draftMeta?.libraryItemIds ?? []));
         } else if (provenance.kind === "sources") sourceIds.push(...provenance.sourceDocumentIds);
     }
+    // Admission to a new prompt and reuse of old prose are different checks.
+    // Broad legacy reuse may retain unknown proof, but its referenced records
+    // and all known source dependencies must still exist in this workspace.
+    const libraryIds = [...new Set(legacyLibraryIds)];
+    const library =
+        libraryIds.length > 0
+            ? await listLibraryItems(ctx.companyId, { ids: libraryIds, limit: libraryIds.length })
+            : [];
+    for (const item of library) {
+        evidence.push(...item.evidence);
+        if (item.provenance.kind === "sources")
+            sourceIds.push(...item.provenance.sourceDocumentIds);
+    }
     for (const item of evidence) if (item.documentId !== null) sourceIds.push(item.documentId);
     const readable = await loadReadableDocumentIds(ctx.companyId, ctx.scope, sourceIds);
-    const library = legacyLibraryIds.length > 0 ? await loadReadableLibrary(ctx) : [];
     const readableLibraryIds = new Set(library.map(item => item.id));
     if (
         evidence.some(e => e.documentId === null || !readable.has(e.documentId)) ||

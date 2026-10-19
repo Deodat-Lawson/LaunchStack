@@ -21,3 +21,7 @@ Store durable library-source snapshots in the existing evidence JSONB, with
 explicit provenance for new manual answers. Legacy evidence arrays remain
 readable/editable but are excluded from generation until replaced by a proven
 snapshot or an explicitly new manual entry. No SQL migration is required.
+
+Clearing text removes citation and gap annotations, not its source provenance.
+This prevents both false source attribution and accidental declassification when
+the author restores or replaces the text.

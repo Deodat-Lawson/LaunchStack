@@ -612,11 +612,14 @@ export async function patchSection(
         throw new ProposalsError("Write the answer before approving it", 409);
     const updated = await updateSection(ctx.companyId, sectionId, {
         draft: input.draft,
+        draftMeta:
+            input.draft !== undefined && !input.draft?.trim() && current.draftMeta
+                ? { ...current.draftMeta, cites: [], gaps: [] }
+                : undefined,
         status,
         question: blankToNull(input.question) ?? undefined,
         guidance: input.guidance,
         wordLimit: input.wordLimit,
-        draftMeta: input.draft !== undefined && !input.draft?.trim() ? null : undefined,
     });
     if (!updated) throw new ProposalsError("Section not found", 404);
     await refreshReadiness(ctx, applicationId);

@@ -24,13 +24,17 @@ import {
     createApplication,
     createLibraryItem,
     deleteApplication,
+    getApplication,
     getLibraryItem,
     getRun,
     listSections,
     replaceSections,
     updateSection,
 } from "@launchstack/pipelines/proposals/db";
-import type { ProposalRunEventData } from "@launchstack/pipelines/proposals";
+import {
+    renderApplicationMarkdown,
+    type ProposalRunEventData,
+} from "@launchstack/pipelines/proposals";
 import { proposalLibraryItems, proposalRuns } from "@launchstack/pipelines/proposals/schema";
 import { companyMetadata } from "@launchstack/tools/company-context/schema";
 
@@ -44,7 +48,7 @@ import {
 } from "~/server/db/schema";
 import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { startProposalRun, type ProposalsExecutor } from "~/server/proposals/executor";
-import { newLibraryItem, saveSectionToLibrary } from "~/server/proposals/service";
+import { newLibraryItem, patchSection, saveSectionToLibrary } from "~/server/proposals/service";
 import { createAppRagPort } from "~/server/rag/port";
 
 import {
@@ -162,6 +166,12 @@ const SAVED_REQUEST_EVIDENCE: Array<
     ["inline", "public", "deleted"],
     ["worker", "empty", "deleted"],
     ["worker", "public", "deleted"],
+];
+const CLEAR_RESTORE_PROOFS: Array<[ProposalsExecutor, "known-private" | "legacy-unknown"]> = [
+    ["inline", "known-private"],
+    ["inline", "legacy-unknown"],
+    ["worker", "known-private"],
+    ["worker", "legacy-unknown"],
 ];
 
 type Person = "ada" | "bea" | "cy";
@@ -627,6 +637,131 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
     );
 
     it.each(NON_RETRIEVING_RUNS)(
+        "%s %s preserves unrestricted legacy library-backed prose without promoting unknown proof",
+        async (executor, kind) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                const member = await resolveMemberContext("auth_bea", companyId);
+                expect(member).not.toBeNull();
+                expect((await member!.documentScope()).kind).toBe("everything");
+                const legacyAnswer =
+                    "LEGACY_LIBRARY_PUBLIC_ANSWER: volunteers supported 120 learners.";
+                const legacy = await newLibraryItem(
+                    { companyId, userId: "auth_ada" },
+                    { question: QUESTION, answer: legacyAnswer }
+                );
+                const evidence = [
+                    {
+                        n: 1,
+                        documentId: publicId,
+                        title: "Programme report",
+                        page: 1,
+                        quote: PUBLIC_CHUNK,
+                        url: null,
+                    },
+                ];
+                await test.db
+                    .update(proposalLibraryItems)
+                    .set({ evidence })
+                    .where(
+                        and(
+                            eq(proposalLibraryItems.id, legacy.id),
+                            eq(proposalLibraryItems.companyId, companyId)
+                        )
+                    );
+                expect((await getLibraryItem(companyId, legacy.id))?.provenance).toEqual({
+                    kind: "unknown",
+                });
+                const pending = await schedule(executor, "bea", "bea", kind);
+                await updateSection(companyId, pending.sectionId, {
+                    draft: legacyAnswer,
+                    status: "drafted",
+                    draftMeta: {
+                        cites: [1],
+                        gaps: [],
+                        evidence,
+                        libraryItemIds: [legacy.id],
+                        modelId: "legacy-library-model",
+                        promptVersion: "legacy",
+                    },
+                });
+                const reused = await pending.execute();
+                expect(reused.run.status).toBe("completed");
+                expect(reused.run.error).toBeNull();
+                expect(reused.prompt).toContain(legacyAnswer);
+                expect(mockRetrievals).toHaveLength(0);
+                expect(mockPrompts).toHaveLength(1);
+                expect(mockDebitCredits).toHaveBeenCalledTimes(1);
+                expect(reused.section.draftMeta?.sourceDocumentIds).toBeUndefined();
+
+                // Broad access permits reuse of this existing prose, not
+                // admission of unknown library answers into a fresh draft.
+                const fresh = await (await schedule(executor, "bea")).execute();
+                expect(fresh.run.status).toBe("completed");
+                expect(fresh.prompt).not.toContain(legacyAnswer);
+                expect(fresh.section.draftMeta?.libraryItemIds).not.toContain(legacy.id);
+
+                const [deletedSource] = await test.db
+                    .insert(document)
+                    .values({
+                        companyId,
+                        title: "Deleted legacy evidence",
+                        category: "Team",
+                        url: "local://deleted-legacy-evidence",
+                    })
+                    .returning({ id: document.id });
+                await test.db.delete(document).where(eq(document.id, deletedSource!.id));
+                for (const invalidSourceId of [publicDocumentId, deletedSource!.id]) {
+                    // An unrestricted scope is still tenant-bound and cannot
+                    // make a missing or foreign document readable.
+                    await test.db
+                        .update(proposalLibraryItems)
+                        .set({ evidence: [{ ...evidence[0]!, documentId: invalidSourceId }] })
+                        .where(
+                            and(
+                                eq(proposalLibraryItems.id, legacy.id),
+                                eq(proposalLibraryItems.companyId, companyId)
+                            )
+                        );
+                    mockDebitCredits.mockClear();
+                    const blocked = await (
+                        await schedule(executor, "bea", "bea", kind, pending.applicationId)
+                    ).execute();
+                    expect(blocked.run.status).toBe("failed");
+                    expect(mockPrompts).toHaveLength(0);
+                    expect(mockRetrievals).toHaveLength(0);
+                    expect(mockDebitCredits).not.toHaveBeenCalled();
+                }
+                for (const invalidLibraryId of [restrictedLibraryId, legacy.id]) {
+                    if (invalidLibraryId === legacy.id)
+                        await test.db
+                            .delete(proposalLibraryItems)
+                            .where(
+                                and(
+                                    eq(proposalLibraryItems.id, legacy.id),
+                                    eq(proposalLibraryItems.companyId, companyId)
+                                )
+                            );
+                    await updateSection(companyId, pending.sectionId, {
+                        draftMeta: {
+                            ...reused.section.draftMeta!,
+                            libraryItemIds: [invalidLibraryId],
+                        },
+                    });
+                    mockDebitCredits.mockClear();
+                    const blocked = await (
+                        await schedule(executor, "bea", "bea", kind, pending.applicationId)
+                    ).execute();
+                    expect(blocked.run.status).toBe("failed");
+                    expect(mockPrompts).toHaveLength(0);
+                    expect(mockRetrievals).toHaveLength(0);
+                    expect(mockDebitCredits).not.toHaveBeenCalled();
+                }
+            });
+        }
+    );
+
+    it.each(NON_RETRIEVING_RUNS)(
         "%s %s refuses legacy generated prose with unknown source provenance in a constrained scope",
         async (executor, kind) => {
             await inIsolatedWorkspace(async () => {
@@ -894,6 +1029,200 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
             });
         }
     );
+
+    it.each(CLEAR_RESTORE_PROOFS)(
+        "%s retains %s provenance through clear and restore before saved-answer generation",
+        async (executor, proofKind) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                const privateId = await addUnindexedPrivateDocument();
+                const application = await createApplication({
+                    companyId,
+                    createdByUserId: "auth_ada",
+                    title: "Clear and restore provenance",
+                    funder: "Community Foundation",
+                    opportunityId: null,
+                    deadline: null,
+                    requestText: null,
+                    requestUrl: null,
+                    requestDocumentId: null,
+                });
+                const [sourceSection, manualSection] = await replaceSections(
+                    companyId,
+                    application.id,
+                    [
+                        {
+                            key: "impact",
+                            question: QUESTION,
+                            guidance: null,
+                            wordLimit: 300,
+                            required: true,
+                        },
+                        {
+                            key: "manual",
+                            question: QUESTION,
+                            guidance: null,
+                            wordLimit: 300,
+                            required: true,
+                        },
+                    ]
+                );
+                await updateSection(companyId, sourceSection!.id, {
+                    draft: RESTRICTED_FACT,
+                    status: "drafted",
+                    draftMeta: {
+                        cites: [1],
+                        gaps: [],
+                        libraryItemIds: [],
+                        modelId: "prior-profile-model",
+                        promptVersion: "prior",
+                        draftedAt: NOW.toISOString(),
+                        ...(proofKind === "known-private"
+                            ? { sourceDocumentIds: [publicId, privateId] }
+                            : {}),
+                        evidence: [
+                            {
+                                n: 1,
+                                documentId: publicId,
+                                title: "Programme report",
+                                page: 1,
+                                quote: PUBLIC_CHUNK,
+                                url: null,
+                            },
+                        ],
+                    },
+                });
+                const manualAnswer =
+                    "CLEAR_RESTORE_MANUAL_PUBLIC: volunteers lead reading sessions.";
+                await updateSection(companyId, manualSection!.id, {
+                    draft: manualAnswer,
+                    status: "edited",
+                    draftMeta: null,
+                });
+                const ctx = { companyId, userId: "auth_ada" };
+                const cleared = await patchSection(ctx, application.id, sourceSection!.id, {
+                    draft: "",
+                });
+                expect(cleared.status).toBe("empty");
+                const restored = await patchSection(ctx, application.id, sourceSection!.id, {
+                    draft: RESTRICTED_FACT,
+                });
+                expect(restored.status).toBe("edited");
+                expect(restored.draft).toBe(RESTRICTED_FACT);
+                const saved = await saveSectionToLibrary(ctx, application.id, sourceSection!.id, [
+                    "programme outcomes",
+                ]);
+
+                // A genuinely manual section starts and remains source-free
+                // through the same clear/pause/restore workflow.
+                expect(
+                    (
+                        await patchSection(ctx, application.id, manualSection!.id, {
+                            draft: "",
+                        })
+                    ).status
+                ).toBe("empty");
+                await patchSection(ctx, application.id, manualSection!.id, {
+                    draft: manualAnswer,
+                });
+                const manual = await saveSectionToLibrary(ctx, application.id, manualSection!.id, [
+                    "programme outcomes",
+                ]);
+                expect((await getLibraryItem(companyId, manual.id))?.provenance).toEqual({
+                    kind: "manual",
+                });
+                const outside = await (await schedule(executor, "bea")).execute();
+                expect(outside.run.status).toBe("completed");
+                expect(outside.prompt).toContain(PUBLIC_CHUNK);
+                expect({
+                    privateFactSentToModel: outside.prompt.includes(RESTRICTED_FACT),
+                    reusedTaintedAnswer: outside.section.draftMeta?.libraryItemIds.includes(
+                        saved.id
+                    ),
+                    manualAnswerUsable:
+                        outside.prompt.includes(manualAnswer) &&
+                        outside.section.draftMeta?.libraryItemIds.includes(manual.id),
+                }).toEqual({
+                    privateFactSentToModel: false,
+                    reusedTaintedAnswer: false,
+                    manualAnswerUsable: true,
+                });
+            });
+        }
+    );
+
+    it("clearing then writing different prose drops stale rendered source and gap annotations", async () => {
+        await inIsolatedWorkspace(async () => {
+            const oldSourceTitle = "CLEARED_UNIQUE_SOURCE_TITLE";
+            const oldGapMarker = "CLEARED_OLD_GAP_MARKER";
+            const sourceId = await addDocument(oldSourceTitle, PUBLIC_CHUNK);
+            const application = await createApplication({
+                companyId,
+                createdByUserId: "auth_ada",
+                title: "Replacement answer rendering",
+                funder: "Community Foundation",
+                opportunityId: null,
+                deadline: null,
+                requestText: null,
+                requestUrl: null,
+                requestDocumentId: null,
+            });
+            const [section] = await replaceSections(companyId, application.id, [
+                {
+                    key: "impact",
+                    question: QUESTION,
+                    guidance: null,
+                    wordLimit: 300,
+                    required: true,
+                },
+            ]);
+            await updateSection(companyId, section!.id, {
+                draft: "The earlier generated answer described the previous programme.",
+                status: "drafted",
+                draftMeta: {
+                    cites: [1],
+                    gaps: [oldGapMarker],
+                    sourceDocumentIds: [sourceId],
+                    libraryItemIds: [],
+                    modelId: "prior-annotation-model",
+                    promptVersion: "prior",
+                    evidence: [
+                        {
+                            n: 1,
+                            documentId: sourceId,
+                            title: oldSourceTitle,
+                            page: 1,
+                            quote: PUBLIC_CHUNK,
+                            url: null,
+                        },
+                    ],
+                },
+            });
+            const original = renderApplicationMarkdown({
+                application,
+                sections: await listSections(companyId, application.id),
+                exportedAt: NOW,
+            });
+            expect(original).toContain(oldSourceTitle);
+            expect(original).toContain(oldGapMarker);
+            const ctx = { companyId, userId: "auth_ada" };
+            expect(
+                (await patchSection(ctx, application.id, section!.id, { draft: "" })).status
+            ).toBe("empty");
+            const newProse = "A completely different answer focuses on volunteer training.";
+            expect(
+                (await patchSection(ctx, application.id, section!.id, { draft: newProse })).status
+            ).toBe("edited");
+            const rendered = renderApplicationMarkdown({
+                application: (await getApplication(application.id, companyId))!,
+                sections: await listSections(companyId, application.id),
+                exportedAt: NOW,
+            });
+            expect(rendered).toContain(newProse);
+            expect(rendered).not.toContain(oldSourceTitle);
+            expect(rendered).not.toContain(oldGapMarker);
+        });
+    });
 
     it.each<ProposalsExecutor>(["inline", "worker"])(
         "%s leaves a running duplicate unchanged when the writer's membership was revoked",

@@ -671,12 +671,18 @@ export async function deleteSection(companyId: bigint, id: string): Promise<bool
 
 export async function listLibraryItems(
     companyId: bigint,
-    options: { limit?: number } = {}
+    options: { limit?: number; ids?: string[] } = {}
 ): Promise<LibraryItemRecord[]> {
+    if (options.ids?.length === 0) return [];
     const rows = await getDb()
         .select()
         .from(proposalLibraryItems)
-        .where(eq(proposalLibraryItems.companyId, companyId))
+        .where(
+            and(
+                eq(proposalLibraryItems.companyId, companyId),
+                options.ids ? inArray(proposalLibraryItems.id, options.ids) : undefined
+            )
+        )
         .orderBy(desc(proposalLibraryItems.updatedAt), desc(proposalLibraryItems.createdAt))
         .limit(options.limit ?? 500);
     return rows.map(toLibraryItem);

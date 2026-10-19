@@ -380,6 +380,7 @@ describeDb("proposal export audience (integration)", () => {
 
     it("requires the writer to be able to reach the export destination", async () => {
         const cited = await source();
+        await restrictDocument(cited, userGrants("writer", "reader"));
         await restrictFolder("Proposals", userGrants("reader"));
         await expectDenied(await draftApplication([evidence(cited.id)]));
     });

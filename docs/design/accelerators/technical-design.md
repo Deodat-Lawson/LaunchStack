@@ -1951,6 +1951,16 @@ gantt
 | Is non-news program discovery in v1 or v1.1? The proposed pilot uses the curated catalogue; discovery is optional.                                                                             | Product                          | By the end of Week 3 (**Nov 6**), before Week 4 discovery/hardening work.                  |
 | Is Inngest required for catalogue refresh in self-host? **[PROPOSED]** Without it, seed sync still runs at worker boot, weekly refresh is off, and rate-limited on-demand refresh runs inline. | TLs                              | Week 1 contracts session (**Oct 19**), before the refresh job and fallback contract merge. |
 
+### Week 1 findings — Person C (Oct 19)
+
+A real-model Northwind Cold Chain **Proposals draft-stage** run produced three sections. Manual review found **18 supported, 0 unsupported and 0 stale company/product factual sentences**: an observed unsupported rate of **0/18 = 0%**. Two accurate statements about missing inputs are audited but excluded from that denominator. [C4 report and Claim contract, PR #513](https://github.com/Deodat-Lawson/LaunchStack/pull/513) preserve the exact drafts, numbered quotes, fixture hashes, model/prompt identity, timestamps and sentence-level labels. The contract is ready for Person B's review.
+
+**Boundary:** the unchanged `draftSection` and real configured model received all seven fixture-document sections through injected retrieval. This did not measure ingestion, indexing, search relevance, access control, persisted profile extraction, run execution or credit charging. One company and three outputs do not establish a population rate or determine success threshold X.
+
+**Findings:** section-level citations do not bind each sentence to its supporting source; some team/product facts came from the supplied profile rather than numbered document quotes. Two outputs also included inline bracket citations contrary to the current prompt. The document's May 12 review date alone does not establish expiry: no freshness threshold was adopted, and “supported” means supported by the supplied inputs, not independently recertified in October.
+
+**Week 2 input [PROPOSED]:** settle claim-to-document/profile provenance and freshness semantics, retain separate proof of indexed/scoped retrieval, and evaluate known unsupported numbers and explicitly superseded or dated metrics before relying on verification for approval/fill. TLs and product still decide X and the freshness policy. Issue #510, not the older Week 1 table above, governs this week's lane scope.
+
 ---
 
 LaunchStack / Technical Design

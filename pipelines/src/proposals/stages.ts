@@ -231,7 +231,7 @@ export interface DraftSectionInput {
     section: Pick<SectionRecord, "key" | "question" | "guidance" | "wordLimit">;
     profile: OrgProfile | null;
     library: LibraryItemRecord[];
-    scope?: DocumentScope;
+    scope: DocumentScope;
 }
 
 export interface DraftSectionResult {

@@ -57,7 +57,8 @@
         "./proposals/schema": "./src/proposals/schema.ts",
         "./proposals/types": "./src/proposals/types.ts",
         "./vantage": "./src/vantage/index.ts",
-        "./vantage/schema": "./src/vantage/schema.ts"
+        "./vantage/schema": "./src/vantage/schema.ts",
+        "./vantage/generation-v1": "./src/vantage/generation-v1.ts"
     },
     "files": [
         "dist",
@@ -253,6 +254,10 @@
             "./vantage/schema": {
                 "types": "./dist/vantage/schema.d.ts",
                 "default": "./dist/vantage/schema.js"
+            },
+            "./vantage/generation-v1": {
+                "types": "./dist/vantage/generation-v1.d.ts",
+                "default": "./dist/vantage/generation-v1.js"
             }
         }
     },
@@ -260,7 +265,9 @@
         "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs && node ./scripts/copy-skill-assets.mjs",
         "clean": "rm -rf dist .tsbuildinfo",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "vitest run"
+        "test": "vitest run",
+        "test:ai": "vitest run src/vantage/generation-v1.test.ts",
+        "harness:ai": "node --import tsx scripts/vantage-ai-harness.mjs"
     },
     "dependencies": {
         "@langchain/core": "^0.3.74",

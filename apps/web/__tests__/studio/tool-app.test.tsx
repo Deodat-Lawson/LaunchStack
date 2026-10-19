@@ -307,3 +307,47 @@ describe("ToolNavProvider", () => {
         expect(window.localStorage.getItem("tool.location.v1:u1:c1:example")).toBeNull();
     });
 });
+
+describe("isolated preview links", () => {
+    it("uses preview destinations for copied or new-tab links while preserving real workspace defaults", () => {
+        mount({ hrefForToolPath: at => `/dev/example${at}` });
+        expect(screen.getByRole("link", { name: "Thing 7" })).toHaveAttribute(
+            "href",
+            "/dev/example/things/7"
+        );
+        expect(screen.getByRole("link", { name: "New only" })).toHaveAttribute(
+            "href",
+            "/dev/example/things?view=new"
+        );
+        expect(screen.getByRole("link", { name: "Old URL of this tool" })).toHaveAttribute(
+            "href",
+            "/employer/tools/example/things"
+        );
+        expect(screen.getByRole("link", { name: "A source" })).toHaveAttribute(
+            "href",
+            "/employer/documents?source=d12"
+        );
+        expect(screen.getByRole("link", { name: "Other tool" })).toHaveAttribute(
+            "href",
+            "/employer/tools/other/screen"
+        );
+        fireEvent.click(screen.getByRole("link", { name: "Thing 7" }));
+        expect(here()).toBe("/things/7");
+    });
+});
+
+it("maps legacy Vantage links into the preview when a preview host supplies the URL", () => {
+    render(
+        <ToolNavProvider
+            toolId="vantage"
+            roots={["agenda"]}
+            host={{ hrefForToolPath: at => `/dev/vantage${at}` }}
+        >
+            <ToolLink href="/employer/tools/vantage/agenda?week=2026-10-12">Legacy agenda</ToolLink>
+        </ToolNavProvider>
+    );
+    expect(screen.getByRole("link", { name: "Legacy agenda" })).toHaveAttribute(
+        "href",
+        "/dev/vantage/agenda?week=2026-10-12"
+    );
+});

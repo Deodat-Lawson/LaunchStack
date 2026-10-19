@@ -1,10 +1,9 @@
 /** Formatting in the product's words; all inputs are ISO dates or numbers. */
 
+import { reportingDate, calendarAdd } from "./reporting";
+
 export function todayIso(now = new Date()): string {
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    const d = String(now.getDate()).padStart(2, "0");
-    return `${y}-${m}-${d}`;
+    return reportingDate(now);
 }
 
 function parse(iso: string | null | undefined): Date | null {
@@ -90,8 +89,7 @@ export function fmtChange(pct: number | null, delta: number | null, unit = "coun
 }
 
 export function addDaysIso(iso: string, days: number): string {
-    const d = parse(iso) ?? new Date();
-    return todayIso(new Date(d.getFullYear(), d.getMonth(), d.getDate() + days));
+    return calendarAdd(iso, days);
 }
 
 /** "just now", "3 days ago", "12 Sep" */

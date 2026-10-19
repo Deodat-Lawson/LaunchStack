@@ -5,6 +5,11 @@
  */
 import type {
     AgendaDto,
+    AgendaV1Dto,
+    TopicV1Dto,
+    EnhancementDto,
+    ReportPeriod,
+    ExecutionRecord,
     AgendaSummaryDto,
     CommitmentDto,
     DeadlineDto,
@@ -21,10 +26,16 @@ import type {
     VantageVisibility,
     WeeklySignals,
 } from "@launchstack/pipelines/vantage";
+import { decisionKey, normalizeDecision, completeDecision } from "./_lib/submission";
 import type { OverviewDto, TriageDto } from "~/server/vantage/service";
 
 export type {
     AgendaDto,
+    AgendaV1Dto,
+    TopicV1Dto,
+    EnhancementDto,
+    ReportPeriod,
+    ExecutionRecord,
     AgendaSummaryDto,
     CommitmentDto,
     DeadlineDto,
@@ -153,6 +164,12 @@ export class VantageApiError extends Error {
         super(message);
         this.name = "VantageApiError";
     }
+    get code(): string | undefined {
+        const body = this.body;
+        return body && typeof body === "object" && "code" in body && typeof body.code === "string"
+            ? body.code
+            : undefined;
+    }
 }
 
 async function call<T>(url: string, init?: RequestInit): Promise<T> {
@@ -198,9 +215,13 @@ export const vantageApi = {
     addEvidence: (input: EvidenceInput) =>
         post<{ evidence: EvidenceDto }>("/api/vantage/evidence", input),
     patchEvidence: (id: string, patch: Partial<EvidenceInput>) =>
-        post<{ evidence: EvidenceDto }>(`/api/vantage/evidence/${id}`, patch, "PATCH"),
+        post<{ evidence: EvidenceDto }>(
+            `/api/vantage/evidence/${encodeURIComponent(id)}`,
+            patch,
+            "PATCH"
+        ),
     deleteEvidence: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/evidence/${id}`, { method: "DELETE" }),
+        call<{ ok: true }>(`/api/vantage/evidence/${encodeURIComponent(id)}`, { method: "DELETE" }),
 
     metrics: () =>
         call<{ definitions: MetricDefinitionDto[]; observations: MetricObservationDto[] }>(
@@ -209,43 +230,95 @@ export const vantageApi = {
     defineMetric: (input: MetricDefinitionInput) =>
         post<{ definition: MetricDefinitionDto }>("/api/vantage/metrics", input),
     patchMetric: (id: string, patch: Partial<Omit<MetricDefinitionInput, "key">>) =>
-        post<{ definition: MetricDefinitionDto }>(`/api/vantage/metrics/${id}`, patch, "PATCH"),
+        post<{ definition: MetricDefinitionDto }>(
+            `/api/vantage/metrics/${encodeURIComponent(id)}`,
+            patch,
+            "PATCH"
+        ),
     deleteMetric: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/metrics/${id}`, { method: "DELETE" }),
+        call<{ ok: true }>(`/api/vantage/metrics/${encodeURIComponent(id)}`, { method: "DELETE" }),
     addObservation: (input: ObservationInput) =>
         post<{ observations: MetricObservationDto[] }>("/api/vantage/metrics/observations", input),
     deleteObservation: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/metrics/observations/${id}`, { method: "DELETE" }),
+        call<{ ok: true }>(`/api/vantage/metrics/observations/${encodeURIComponent(id)}`, {
+            method: "DELETE",
+        }),
     importMetrics: (csv: string, source?: string | null) =>
         post<ImportResult>("/api/vantage/metrics/import", { csv, source: source ?? null }),
 
     agendas: (week?: string) =>
-        call<{ week: string; agenda: AgendaDto | null; agendas: AgendaSummaryDto[] }>(
+        call<{ week: string; agenda: AgendaV1Dto | null; agendas: AgendaSummaryDto[] }>(
             `/api/vantage/agendas${q({ week })}`
         ),
-    prepare: (weekStart?: string) =>
-        post<{ agenda: AgendaDto }>("/api/vantage/agendas", { weekStart }),
-    agenda: (id: string) => call<{ agenda: AgendaDto }>(`/api/vantage/agendas/${id}`),
+    prepare: (
+        weekStart?: string,
+        generationMode: "configured-model" | "rules" = "configured-model",
+        signal?: AbortSignal
+    ) =>
+        call<{ agenda: AgendaV1Dto }>("/api/vantage/agendas", {
+            method: "POST",
+            body: JSON.stringify({ weekStart, generationMode }),
+            signal,
+        }),
+    agenda: (id: string) =>
+        call<{ agenda: AgendaV1Dto }>(`/api/vantage/agendas/${encodeURIComponent(id)}`),
     setAgendaStatus: (id: string, status: VantageAgendaStatus) =>
-        post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${id}`, { status }, "PATCH"),
+        post<{ agenda: AgendaDto }>(
+            `/api/vantage/agendas/${encodeURIComponent(id)}`,
+            { status },
+            "PATCH"
+        ),
     addTopic: (agendaId: string, input: TopicInput) =>
-        post<{ topic: TopicDto }>(`/api/vantage/agendas/${agendaId}/topics`, input),
+        post<{ topic: TopicV1Dto }>(
+            `/api/vantage/agendas/${encodeURIComponent(agendaId)}/topics`,
+            input
+        ),
     reorder: (agendaId: string, ids: string[]) =>
-        post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${agendaId}/reorder`, { ids }),
+        post<{ agenda: AgendaDto }>(
+            `/api/vantage/agendas/${encodeURIComponent(agendaId)}/reorder`,
+            { ids }
+        ),
     weeklyUpdate: (agendaId: string, includePrivate = false) =>
         call<{ markdown: string }>(
-            `/api/vantage/agendas/${agendaId}/update${includePrivate ? "?private=1" : ""}`
+            `/api/vantage/agendas/${encodeURIComponent(agendaId)}/update${includePrivate ? "?private=1" : ""}`
         ),
     patchTopic: (id: string, patch: TopicPatch) =>
-        post<{ topic: TopicDto }>(`/api/vantage/topics/${id}`, patch, "PATCH"),
+        post<{ topic: TopicV1Dto }>(
+            `/api/vantage/topics/${encodeURIComponent(id)}`,
+            patch,
+            "PATCH"
+        ),
     deleteTopic: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/topics/${id}`, { method: "DELETE" }),
-    decide: (topicId: string, input: DecisionInput) =>
-        post<{ topic: TopicDto }>(`/api/vantage/topics/${topicId}/decide`, input),
+        call<{ ok: true }>(`/api/vantage/topics/${encodeURIComponent(id)}`, { method: "DELETE" }),
+    decide: async (topicId: string, input: DecisionInput) => {
+        const payload = normalizeDecision(input);
+        const key = await decisionKey(topicId, payload);
+        const result = await call<{ topic: TopicV1Dto }>(
+            `/api/vantage/topics/${encodeURIComponent(topicId)}/decide`,
+            {
+                method: "POST",
+                headers: { "Idempotency-Key": key },
+                body: JSON.stringify(payload),
+            }
+        );
+        completeDecision(topicId);
+        return result;
+    },
+    reviewEnhancement: (
+        topicId: string,
+        enhancementId: string,
+        status: "accepted" | "dismissed",
+        baseTopicVersion: number
+    ) =>
+        post<{ enhancement: EnhancementDto; agendaVersion: number }>(
+            `/api/vantage/topics/${encodeURIComponent(topicId)}/enhancements/${encodeURIComponent(enhancementId)}`,
+            { status, baseTopicVersion },
+            "PATCH"
+        ),
     /** The Undo after a one-click commit: undecided again, that commitment removed. */
     undoDecision: (topicId: string, commitmentId: string | null) =>
         call<{ topic: TopicDto }>(
-            `/api/vantage/topics/${topicId}/decide${q({ commitment: commitmentId ?? undefined })}`,
+            `/api/vantage/topics/${encodeURIComponent(topicId)}/decide${q({ commitment: commitmentId ?? undefined })}`,
             { method: "DELETE" }
         ),
 
@@ -254,13 +327,56 @@ export const vantageApi = {
     addCommitment: (input: CommitmentInput) =>
         post<{ commitment: CommitmentDto }>("/api/vantage/commitments", input),
     patchCommitment: (id: string, patch: CommitmentPatch) =>
-        post<{ commitment: CommitmentDto }>(`/api/vantage/commitments/${id}`, patch, "PATCH"),
+        post<{ commitment: CommitmentDto }>(
+            `/api/vantage/commitments/${encodeURIComponent(id)}`,
+            patch,
+            "PATCH"
+        ),
     deleteCommitment: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/commitments/${id}`, { method: "DELETE" }),
+        call<{ ok: true }>(`/api/vantage/commitments/${encodeURIComponent(id)}`, {
+            method: "DELETE",
+        }),
 
     deadlines: () => call<{ deadlines: DeadlineDto[] }>("/api/vantage/deadlines"),
     addDeadline: (input: { title: string; dueOn: string; note?: string | null }) =>
         post<{ deadline: DeadlineDto }>("/api/vantage/deadlines", input),
     deleteDeadline: (id: string) =>
-        call<{ ok: true }>(`/api/vantage/deadlines/${id}`, { method: "DELETE" }),
+        call<{ ok: true }>(`/api/vantage/deadlines/${encodeURIComponent(id)}`, {
+            method: "DELETE",
+        }),
 };
+
+export function vantageErrorMessage(error: unknown): string {
+    if (error instanceof VantageApiError) {
+        const messages: Record<string, string> = {
+            generation_unavailable:
+                "Generation is not available yet. The generation adapter has not been connected. Your saved report is unchanged.",
+            generation_failed:
+                "Generation failed. Your saved report is unchanged. You can try again.",
+            stale_agenda:
+                "The report changed during generation. Your saved edits are safe. Reload the report before generating again.",
+            stale_topic:
+                "This topic changed after the addition was suggested. Reload to review its current version.",
+            enhancement_finalized:
+                "This addition has already been reviewed. Reload to see its saved status.",
+            idempotency_conflict:
+                "This submission key was already used with different content. Reload and verify the saved decision before submitting a new change.",
+            commitment_exists:
+                "This topic already has a primary action. Edit the existing action from Commitments.",
+            commitment_ambiguous:
+                "This topic has conflicting action links. Ask the test workspace administrator to resolve them.",
+            future_week: "Choose the current week or an earlier week to generate a report.",
+            pilot_access_denied:
+                "This account is not a configured test operator in the isolated test workspace.",
+        };
+        if (error.code && messages[error.code]) return messages[error.code]!;
+        if (error.status === 401)
+            return "Your session has expired. Sign in again before continuing.";
+        if (error.status === 403)
+            return "You do not have access to this operation in the test workspace.";
+        if (error.status === 404)
+            return "This record is unavailable or you no longer have access to it.";
+        return error.message;
+    }
+    return "The request could not be confirmed. Check your connection and retry.";
+}

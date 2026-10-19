@@ -180,6 +180,10 @@ asks for a redraft. Dropping citations alone would leave private prose in
 the prompt. Legacy generated prose without complete proof requires a redraft
 under a constrained scope; a broad-scope rewrite does not manufacture proof.
 
+Clearing a draft keeps its source dependencies and generation history, but
+clears citation and gap annotations. Later prose cannot inherit those old
+annotations; undoing the text alone does not restore citations.
+
 New library answers store explicit manual provenance or an immutable source
 snapshot in a version-1 envelope inside the existing `evidence` JSONB. The
 API still returns an evidence array. Saved source dependencies survive edits

@@ -69,7 +69,7 @@ export async function executeProposalRunForMember(
 ): Promise<RunRecord> {
     const run = await getRun(runId, companyId);
     if (!run) throw new Error("Run not found");
-    if (run.status === "completed" || run.status === "failed") return run;
+    if (run.status !== "queued") return run;
     const ctx = { runId, companyId, userId: run.userId };
     const member = await resolveMemberContext(run.userId, companyId);
     if (!member) throw new Error("The run's writer is no longer an active workspace member.");

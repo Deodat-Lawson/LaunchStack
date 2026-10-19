@@ -21,6 +21,7 @@ import {
     updateSection,
     upsertOpportunity,
 } from "./db";
+import { sectionSourceProvenance } from "./evidence";
 import { PROPOSAL_CREDITS, type ProposalPorts } from "./ports";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
@@ -401,16 +402,24 @@ async function runExtract(
 
 /** A saved answer's wording can carry any of the evidence it was written from. */
 async function loadReadableLibrary(ctx: ProposalRunContext): Promise<LibraryItemRecord[]> {
-    const items = await listLibraryItems(ctx.companyId);
+    // An old evidence array cannot prove that a saved answer was manually
+    // authored or that its now-mutable/deleted origin was the only input.
+    const items = (await listLibraryItems(ctx.companyId)).filter(
+        item => item.provenance.kind !== "unknown"
+    );
     const readable = await loadReadableDocumentIds(
         ctx.companyId,
         ctx.scope,
-        items.flatMap(item =>
-            item.evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId]))
-        )
+        items.flatMap(item => [
+            ...item.evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId])),
+            ...(item.provenance.kind === "sources" ? item.provenance.sourceDocumentIds : []),
+        ])
     );
-    return items.filter(item =>
-        item.evidence.every(e => e.documentId !== null && readable.has(e.documentId))
+    return items.filter(
+        item =>
+            item.evidence.every(e => e.documentId !== null && readable.has(e.documentId)) &&
+            (item.provenance.kind !== "sources" ||
+                item.provenance.sourceDocumentIds.every(id => readable.has(id)))
     );
 }
 
@@ -478,17 +487,26 @@ async function assertReadableDraftEvidence(
     sections: SectionRecord[]
 ): Promise<void> {
     const evidence = sections.flatMap(section => section.draftMeta?.evidence ?? []);
-    const readable = await loadReadableDocumentIds(
-        ctx.companyId,
-        ctx.scope,
-        evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId]))
-    );
-    const libraryIds = sections.flatMap(section => section.draftMeta?.libraryItemIds ?? []);
-    const library = libraryIds.length > 0 ? await loadReadableLibrary(ctx) : [];
+    const sourceIds: number[] = [];
+    const legacyLibraryIds: string[] = [];
+    for (const section of sections) {
+        const provenance = sectionSourceProvenance(section);
+        if (provenance.kind === "unknown") {
+            if (ctx.scope.kind !== "everything")
+                throw new Error(
+                    "This draft has unknown source evidence provenance. Redraft from readable sources first."
+                );
+            legacyLibraryIds.push(...(section.draftMeta?.libraryItemIds ?? []));
+        } else if (provenance.kind === "sources") sourceIds.push(...provenance.sourceDocumentIds);
+    }
+    for (const item of evidence) if (item.documentId !== null) sourceIds.push(item.documentId);
+    const readable = await loadReadableDocumentIds(ctx.companyId, ctx.scope, sourceIds);
+    const library = legacyLibraryIds.length > 0 ? await loadReadableLibrary(ctx) : [];
     const readableLibraryIds = new Set(library.map(item => item.id));
     if (
         evidence.some(e => e.documentId === null || !readable.has(e.documentId)) ||
-        libraryIds.some(id => !readableLibraryIds.has(id))
+        sourceIds.some(id => !readable.has(id)) ||
+        legacyLibraryIds.some(id => !readableLibraryIds.has(id))
     )
         throw new Error(
             "This draft uses evidence you can no longer read. Redraft from readable sources first."

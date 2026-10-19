@@ -26,6 +26,7 @@ import {
     type ProposalRunRow,
     type ProposalSectionRow,
 } from "./schema";
+import { SourceProvenanceSchema } from "./types";
 import type {
     ApplicationRecord,
     ApplicationStatus,
@@ -48,6 +49,7 @@ import type {
     RunSummary,
     SectionRecord,
     SectionStatus,
+    SourceProvenance,
 } from "./types";
 
 // ─── Mappers ─────────────────────────────────────────────────────────────────
@@ -123,13 +125,19 @@ function toSection(row: ProposalSectionRow): SectionRecord {
 }
 
 function toLibraryItem(row: ProposalLibraryItemRow): LibraryItemRecord {
+    const stored = row.evidence;
+    const parsed =
+        Array.isArray(stored) || stored.version !== 1
+            ? null
+            : SourceProvenanceSchema.safeParse(stored.provenance);
     return {
         id: row.id,
         companyId: row.companyId,
         question: row.question,
         answer: row.answer,
         tags: row.tags ?? [],
-        evidence: row.evidence ?? [],
+        evidence: Array.isArray(stored) ? stored : stored.evidence,
+        provenance: parsed?.success ? parsed.data : { kind: "unknown" },
         sourceApplicationId: row.sourceApplicationId ?? null,
         sourceSectionKey: row.sourceSectionKey ?? null,
         uses: row.uses,
@@ -693,22 +701,25 @@ export async function createLibraryItem(input: {
     answer: string;
     tags: string[];
     evidence: Evidence[];
+    provenance: SourceProvenance;
     sourceApplicationId: string | null;
     sourceSectionKey: string | null;
 }): Promise<LibraryItemRecord> {
     const id = newId();
-    await getDb().insert(proposalLibraryItems).values({
-        id,
-        companyId: input.companyId,
-        question: input.question,
-        answer: input.answer,
-        tags: input.tags,
-        evidence: input.evidence,
-        sourceApplicationId: input.sourceApplicationId,
-        sourceSectionKey: input.sourceSectionKey,
-        uses: 0,
-        createdByUserId: input.createdByUserId,
-    });
+    await getDb()
+        .insert(proposalLibraryItems)
+        .values({
+            id,
+            companyId: input.companyId,
+            question: input.question,
+            answer: input.answer,
+            tags: input.tags,
+            evidence: { version: 1, evidence: input.evidence, provenance: input.provenance },
+            sourceApplicationId: input.sourceApplicationId,
+            sourceSectionKey: input.sourceSectionKey,
+            uses: 0,
+            createdByUserId: input.createdByUserId,
+        });
     const created = await getLibraryItem(input.companyId, id);
     if (!created) throw new Error("Library item vanished after insert");
     return created;

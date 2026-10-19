@@ -23,12 +23,15 @@ import { createEmptyMetadata, type MetadataFact } from "@launchstack/pipelines/c
 import {
     createApplication,
     createLibraryItem,
+    deleteApplication,
+    getLibraryItem,
     getRun,
     listSections,
     replaceSections,
     updateSection,
 } from "@launchstack/pipelines/proposals/db";
 import type { ProposalRunEventData } from "@launchstack/pipelines/proposals";
+import { proposalLibraryItems, proposalRuns } from "@launchstack/pipelines/proposals/schema";
 import { companyMetadata } from "@launchstack/tools/company-context/schema";
 
 import { resolveMemberContext } from "~/lib/require-workspace-context";
@@ -41,6 +44,7 @@ import {
 } from "~/server/db/schema";
 import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { startProposalRun, type ProposalsExecutor } from "~/server/proposals/executor";
+import { newLibraryItem, saveSectionToLibrary } from "~/server/proposals/service";
 import { createAppRagPort } from "~/server/rag/port";
 
 import {
@@ -54,6 +58,7 @@ const mockEvents: ProposalRunEventData[] = [];
 const mockPrompts: string[] = [];
 const mockRetrievals: RagSearchResult[][] = [];
 const mockDebitCredits = jest.fn(async (_args: unknown) => undefined);
+let mockDraftUsesPrivateProfile = false;
 
 type WorkerHandler = (ctx: {
     event: { data: ProposalRunEventData };
@@ -110,11 +115,15 @@ jest.mock("@launchstack/llm", () => ({
         messages: Array<{ content: unknown }>,
         options: { name: string }
     ) => {
-        mockPrompts.push(messages.map(message => String(message.content)).join("\n"));
+        const prompt = messages.map(message => String(message.content)).join("\n");
+        mockPrompts.push(prompt);
         if (options.name === "application_review")
             return schema.parse({ summary: "The public draft is ready for review.", findings: [] });
         return schema.parse({
-            draft: "Our reading programme supports learners in the community.",
+            draft:
+                mockDraftUsesPrivateProfile && prompt.includes(RESTRICTED_FACT)
+                    ? `Our planned budget is ${RESTRICTED_FACT}`
+                    : "Our reading programme supports learners in the community.",
             cites: [1, 2, 3, 4, 5, 6, 7, 8],
             gaps: [],
         });
@@ -141,6 +150,18 @@ const NON_RETRIEVING_RUNS: Array<[ProposalsExecutor, "rewrite" | "review"]> = [
     ["inline", "review"],
     ["worker", "rewrite"],
     ["worker", "review"],
+];
+const SAVED_REQUEST_EVIDENCE: Array<
+    [ProposalsExecutor, "empty" | "public", "retained" | "deleted"]
+> = [
+    ["inline", "empty", "retained"],
+    ["inline", "public", "retained"],
+    ["worker", "empty", "retained"],
+    ["worker", "public", "retained"],
+    ["inline", "empty", "deleted"],
+    ["inline", "public", "deleted"],
+    ["worker", "empty", "deleted"],
+    ["worker", "public", "deleted"],
 ];
 
 type Person = "ada" | "bea" | "cy";
@@ -188,7 +209,11 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
         return doc!.id;
     }
 
-    function fact(value: string, documentId: number): MetadataFact {
+    function fact(
+        value: string,
+        documentId: number,
+        quote = documentId === publicDocumentId ? PUBLIC_CHUNK : RESTRICTED_CHUNK
+    ): MetadataFact {
         return {
             value,
             visibility: "public",
@@ -204,10 +229,60 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
                         documentId === publicDocumentId ? "Programme report" : "Board minutes",
                     extracted_at: NOW.toISOString(),
                     page: 1,
-                    quote: documentId === publicDocumentId ? PUBLIC_CHUNK : RESTRICTED_CHUNK,
+                    quote,
                 },
             ],
         };
+    }
+
+    async function inIsolatedWorkspace(run: () => Promise<void>): Promise<void> {
+        const previousCompanyId = companyId;
+        const [co] = await test.db
+            .insert(company)
+            .values({ name: "Isolated generation provenance", numberOfEmployees: "20" })
+            .returning({ id: company.id });
+        const isolatedCompanyId = BigInt(co!.id);
+        companyId = isolatedCompanyId;
+        try {
+            for (const person of ["ada", "bea"] as const)
+                await test.db.insert(userCompanyMemberships).values({
+                    userId: pk[person],
+                    companyId,
+                    role: "member",
+                    status: "active",
+                });
+            await run();
+        } finally {
+            companyId = previousCompanyId;
+            await test.db.delete(company).where(eq(company.id, Number(isolatedCompanyId)));
+        }
+    }
+
+    async function addUnindexedPrivateDocument(): Promise<number> {
+        const [source] = await test.db
+            .insert(document)
+            .values({
+                companyId,
+                title: "Board minutes",
+                category: "Team",
+                url: "local://private-origin-without-retrieval-chunks",
+            })
+            .returning({ id: document.id });
+        await test.db.insert(documentSettings).values({
+            companyId,
+            documentId: BigInt(source!.id),
+            restricted: true,
+            updatedBy: "auth_ada",
+        });
+        await test.db.insert(documentGrants).values({
+            companyId,
+            documentId: BigInt(source!.id),
+            principalType: "user",
+            principalId: pk.ada.toString(),
+            level: "manage",
+            grantedBy: "auth_ada",
+        });
+        return source!.id;
     }
 
     beforeAll(async () => {
@@ -296,6 +371,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
                         url: null,
                     },
                 ],
+                provenance: { kind: "sources", sourceDocumentIds: [documentId] },
                 sourceApplicationId: null,
                 sourceSectionKey: null,
             });
@@ -308,6 +384,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
         mockEvents.length = 0;
         mockPrompts.length = 0;
         mockRetrievals.length = 0;
+        mockDraftUsesPrivateProfile = false;
         mockDebitCredits.mockClear();
     });
 
@@ -325,20 +402,23 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
         executor: ProposalsExecutor,
         writer: Person,
         eventActor = writer,
-        kind: "draft" | "rewrite" | "review" = "draft"
+        kind: "draft" | "rewrite" | "review" = "draft",
+        existingApplicationId?: string
     ) {
         process.env.PROPOSALS_EXECUTOR = executor;
-        const application = await createApplication({
-            companyId,
-            createdByUserId: `auth_${writer}`,
-            title: "Zebra learner grant",
-            funder: "Community Foundation",
-            opportunityId: null,
-            deadline: null,
-            requestText: null,
-            requestUrl: null,
-            requestDocumentId: null,
-        });
+        const application = existingApplicationId
+            ? { id: existingApplicationId }
+            : await createApplication({
+                  companyId,
+                  createdByUserId: `auth_${writer}`,
+                  title: "Zebra learner grant",
+                  funder: "Community Foundation",
+                  opportunityId: null,
+                  deadline: null,
+                  requestText: null,
+                  requestUrl: null,
+                  requestDocumentId: null,
+              });
         const [section] = await replaceSections(companyId, application.id, [
             { key: "impact", question: QUESTION, guidance: null, wordLimit: 300, required: true },
         ]);
@@ -360,15 +440,17 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
 
         return {
             run,
+            applicationId: application.id,
             sectionId: section!.id,
             async execute() {
                 mockPrompts.length = 0;
                 mockRetrievals.length = 0;
+                let schedulerResult: unknown;
                 if (callback) await callback();
                 else {
                     const data = { ...event!, userId: `auth_${eventActor}` };
                     try {
-                        await job.handler({
+                        schedulerResult = await job.handler({
                             event: { data },
                             step: { run: async (_name, op) => op() },
                         });
@@ -387,6 +469,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
                     section: section!,
                     prompt: mockPrompts.join("\n"),
                     hits: mockRetrievals.flat(),
+                    schedulerResult,
                 };
             },
         };
@@ -465,6 +548,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
                     cites: [1],
                     gaps: [],
                     libraryItemIds: [],
+                    sourceDocumentIds: [publicDocumentId],
                     evidence: [
                         {
                             n: 1,
@@ -539,6 +623,327 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
             expect(mockRetrievals).toHaveLength(0);
             expect(mockPrompts).toHaveLength(0);
             expect(mockDebitCredits).not.toHaveBeenCalled();
+        }
+    );
+
+    it.each(NON_RETRIEVING_RUNS)(
+        "%s %s refuses legacy generated prose with unknown source provenance in a constrained scope",
+        async (executor, kind) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                await addUnindexedPrivateDocument();
+                const pending = await schedule(executor, "bea", "bea", kind);
+                await updateSection(companyId, pending.sectionId, {
+                    draft: `A legacy generated answer says ${RESTRICTED_FACT}`,
+                    status: "drafted",
+                    draftMeta: {
+                        cites: [1],
+                        gaps: [],
+                        libraryItemIds: [],
+                        modelId: "legacy-profile-copy",
+                        promptVersion: "legacy",
+                        draftedAt: NOW.toISOString(),
+                        evidence: [
+                            {
+                                n: 1,
+                                documentId: publicId,
+                                title: "Programme report",
+                                page: 1,
+                                quote: PUBLIC_CHUNK,
+                                url: null,
+                            },
+                        ],
+                    },
+                });
+                const outside = await pending.execute();
+                expect({
+                    status: outside.run.status,
+                    hasVisibleError: !!outside.run.error,
+                    privateFactSentToModel: outside.prompt.includes(RESTRICTED_FACT),
+                    retrievals: mockRetrievals.length,
+                    modelCalls: mockPrompts.length,
+                    debits: mockDebitCredits.mock.calls.length,
+                }).toEqual({
+                    status: "failed",
+                    hasVisibleError: true,
+                    privateFactSentToModel: false,
+                    retrievals: 0,
+                    modelCalls: 0,
+                    debits: 0,
+                });
+            });
+        }
+    );
+
+    it.each(NON_RETRIEVING_RUNS)(
+        "%s %s refuses prior generated prose carrying a profile-only private fact despite public retrieval",
+        async (executor, kind) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                const profileSourceId = await addUnindexedPrivateDocument();
+                const privateFact = fact(RESTRICTED_FACT, profileSourceId, RESTRICTED_FACT);
+                for (const source of privateFact.sources) delete source.quote;
+                const metadata = createEmptyMetadata(companyId.toString(), NOW);
+                metadata.profile = {
+                    facts: {
+                        annual_budget: {
+                            ...privateFact,
+                            label: "Annual budget",
+                        },
+                    },
+                };
+                await test.db.insert(companyMetadata).values({ companyId, metadata, builtAt: NOW });
+
+                // The canned model copies a fact only when that actual profile
+                // value reaches its prompt. The private source has no chunks,
+                // so retrieval cannot accidentally supply its provenance.
+                mockDraftUsesPrivateProfile = true;
+                const first = await schedule(executor, "ada");
+                const granted = await first.execute();
+                expect(granted.run.status).toBe("completed");
+                expect(granted.prompt).toContain(RESTRICTED_FACT);
+                expect(granted.section.draft).toContain(RESTRICTED_FACT);
+                expect(granted.hits.length).toBeGreaterThan(0);
+                expect(granted.hits.every(hit => documentIdOf(hit) === publicId)).toBe(true);
+                expect(granted.section.draftMeta?.evidence.length).toBeGreaterThan(0);
+                expect(
+                    granted.section.draftMeta?.evidence.every(item => item.documentId === publicId)
+                ).toBe(true);
+                expect(granted.section.draftMeta?.sourceDocumentIds).toEqual(
+                    expect.arrayContaining([publicId, profileSourceId])
+                );
+                const saved = await saveSectionToLibrary(
+                    { companyId, userId: "auth_ada" },
+                    first.applicationId,
+                    first.sectionId,
+                    ["programme outcomes"]
+                );
+                const reused = await (await schedule(executor, "bea")).execute();
+                expect(reused.run.status).toBe("completed");
+                expect(reused.prompt).not.toContain(RESTRICTED_FACT);
+                expect(reused.section.draftMeta?.libraryItemIds).not.toContain(saved.id);
+
+                const pending = await schedule(executor, "bea", "bea", kind, first.applicationId);
+                mockDebitCredits.mockClear();
+                const outside = await pending.execute();
+                expect({
+                    status: outside.run.status,
+                    hasVisibleError: !!outside.run.error,
+                    privateFactSentToModel: outside.prompt.includes(RESTRICTED_FACT),
+                    retrievals: mockRetrievals.length,
+                    modelCalls: mockPrompts.length,
+                    debits: mockDebitCredits.mock.calls.length,
+                }).toEqual({
+                    status: "failed",
+                    hasVisibleError: true,
+                    privateFactSentToModel: false,
+                    retrievals: 0,
+                    modelCalls: 0,
+                    debits: 0,
+                });
+            });
+        }
+    );
+
+    it.each<ProposalsExecutor>(["inline", "worker"])(
+        "%s decodes legacy library evidence without treating unknown origin as manual",
+        async executor => {
+            await inIsolatedWorkspace(async () => {
+                await addDocument("Programme report", PUBLIC_CHUNK);
+                await addUnindexedPrivateDocument();
+                const legacyAnswer =
+                    "LEGACY_UNKNOWN_ANSWER: a private source may have supplied this.";
+                const legacy = await newLibraryItem(
+                    { companyId, userId: "auth_ada" },
+                    { question: QUESTION, answer: legacyAnswer }
+                );
+                // Legacy storage had only an array: null origin fields cannot
+                // turn lost dependency proof into an explicit manual snapshot.
+                await test.db
+                    .update(proposalLibraryItems)
+                    .set({ evidence: [] })
+                    .where(
+                        and(
+                            eq(proposalLibraryItems.id, legacy.id),
+                            eq(proposalLibraryItems.companyId, companyId)
+                        )
+                    );
+                const decoded = await getLibraryItem(companyId, legacy.id);
+                expect(decoded?.evidence).toEqual([]);
+                expect(decoded?.provenance).toEqual({ kind: "unknown" });
+                const manualAnswer = "NEW_MANUAL_ANSWER: volunteers lead public reading sessions.";
+                const manual = await newLibraryItem(
+                    { companyId, userId: "auth_ada" },
+                    { question: QUESTION, answer: manualAnswer }
+                );
+                const outside = await (await schedule(executor, "bea")).execute();
+                expect(outside.run.status).toBe("completed");
+                expect(outside.prompt).not.toContain(legacyAnswer);
+                expect(outside.prompt).toContain(manualAnswer);
+                expect(outside.section.draftMeta?.libraryItemIds).toEqual([manual.id]);
+            });
+        }
+    );
+
+    it.each(SAVED_REQUEST_EVIDENCE)(
+        "%s excludes saved answers from a private original request with %s evidence and %s origin",
+        async (executor, evidenceKind, originState) => {
+            await inIsolatedWorkspace(async () => {
+                const publicId = await addDocument("Programme report", PUBLIC_CHUNK);
+                const requestSourceId = await addUnindexedPrivateDocument();
+                const secretQuestion = `${QUESTION} PRIVATE_REQUEST_QUESTION: explain the acquisition.`;
+                const secretAnswer =
+                    "PRIVATE_REQUEST_ANSWER: use the confidential acquisition reserve.";
+                const manualAnswer =
+                    "MANUAL_PUBLIC_ANSWER: community volunteers lead weekly reading.";
+                const manual = await newLibraryItem(
+                    { companyId, userId: "auth_ada" },
+                    { question: QUESTION, answer: manualAnswer, tags: ["programme outcomes"] }
+                );
+                const origin = await createApplication({
+                    companyId,
+                    createdByUserId: "auth_ada",
+                    title: "Application from a private request",
+                    funder: "Community Foundation",
+                    opportunityId: null,
+                    deadline: null,
+                    requestText: secretQuestion,
+                    requestUrl: null,
+                    requestDocumentId: requestSourceId,
+                });
+                const [sourceSection] = await replaceSections(companyId, origin.id, [
+                    {
+                        key: "impact",
+                        question: secretQuestion,
+                        guidance: null,
+                        wordLimit: 300,
+                        required: true,
+                    },
+                ]);
+                await updateSection(companyId, sourceSection!.id, {
+                    draft: secretAnswer,
+                    status: "edited",
+                    draftMeta:
+                        evidenceKind === "empty"
+                            ? null
+                            : {
+                                  cites: [1],
+                                  gaps: [],
+                                  libraryItemIds: [],
+                                  evidence: [
+                                      {
+                                          n: 1,
+                                          documentId: publicId,
+                                          title: "Programme report",
+                                          page: 1,
+                                          quote: PUBLIC_CHUNK,
+                                          url: null,
+                                      },
+                                  ],
+                              },
+                });
+                const saved = await saveSectionToLibrary(
+                    { companyId, userId: "auth_ada" },
+                    origin.id,
+                    sourceSection!.id,
+                    ["programme outcomes"]
+                );
+                const item = await getLibraryItem(companyId, saved.id);
+                expect(item?.sourceApplicationId).toBe(origin.id);
+                expect(item?.question).toBe(secretQuestion);
+                expect(item?.answer).toBe(secretAnswer);
+                expect(item?.evidence.map(e => e.documentId)).toEqual(
+                    evidenceKind === "empty" ? [] : [publicId]
+                );
+
+                const granted = await (await schedule(executor, "ada")).execute();
+                expect(granted.run.status).toBe("completed");
+                expect(granted.prompt).toContain(secretQuestion);
+                expect(granted.prompt).toContain(secretAnswer);
+                expect(granted.section.draftMeta?.libraryItemIds).toContain(saved.id);
+                if (originState === "deleted") {
+                    await deleteApplication(companyId, origin.id);
+                    const orphaned = await getLibraryItem(companyId, saved.id);
+                    expect(orphaned?.sourceApplicationId).toBeNull();
+                    expect(orphaned?.sourceSectionKey).toBe("impact");
+                    const grantedAfterDeletion = await (await schedule(executor, "ada")).execute();
+                    expect(grantedAfterDeletion.run.status).toBe("completed");
+                    expect(grantedAfterDeletion.prompt).toContain(secretQuestion);
+                    expect(grantedAfterDeletion.prompt).toContain(secretAnswer);
+                    expect(grantedAfterDeletion.section.draftMeta?.libraryItemIds).toContain(
+                        saved.id
+                    );
+                }
+
+                const outside = await (await schedule(executor, "bea")).execute();
+                expect(outside.run.status).toBe("completed");
+                expect(outside.prompt).toContain(PUBLIC_CHUNK);
+                expect(outside.prompt).toContain(manualAnswer);
+                expect(outside.section.draftMeta?.libraryItemIds).toContain(manual.id);
+                expect({
+                    privateRequestPhrasesSentToModel: [secretQuestion, secretAnswer].filter(
+                        phrase => outside.prompt.includes(phrase)
+                    ),
+                    reusedPrivateOrigin: outside.section.draftMeta?.libraryItemIds.includes(
+                        saved.id
+                    ),
+                }).toEqual({
+                    privateRequestPhrasesSentToModel: [],
+                    reusedPrivateOrigin: false,
+                });
+            });
+        }
+    );
+
+    it.each<ProposalsExecutor>(["inline", "worker"])(
+        "%s leaves a running duplicate unchanged when the writer's membership was revoked",
+        async executor => {
+            const pending = await schedule(executor, "cy");
+            await test.db
+                .update(proposalRuns)
+                .set({ status: "running", startedAt: new Date() })
+                .where(
+                    and(eq(proposalRuns.id, pending.run.id), eq(proposalRuns.companyId, companyId))
+                );
+            const active = await getRun(pending.run.id, companyId);
+            expect(active?.status).toBe("running");
+            const [originalSection] = await listSections(companyId, active!.applicationId!);
+            await test.db
+                .delete(userCompanyMemberships)
+                .where(
+                    and(
+                        eq(userCompanyMemberships.userId, pk.cy),
+                        eq(userCompanyMemberships.companyId, companyId)
+                    )
+                );
+            try {
+                const outcome = await pending.execute();
+                expect({
+                    run: outcome.run,
+                    section: outcome.section,
+                    retrievals: mockRetrievals.length,
+                    modelCalls: mockPrompts.length,
+                    debits: mockDebitCredits.mock.calls.length,
+                }).toEqual({
+                    run: active,
+                    section: originalSection,
+                    retrievals: 0,
+                    modelCalls: 0,
+                    debits: 0,
+                });
+                if (executor === "worker")
+                    expect(outcome.schedulerResult).toEqual({
+                        status: "running",
+                        headline: active?.summary?.headline ?? null,
+                    });
+            } finally {
+                await test.db.insert(userCompanyMemberships).values({
+                    userId: pk.cy,
+                    companyId,
+                    role: "member",
+                    status: "active",
+                });
+            }
         }
     );
 

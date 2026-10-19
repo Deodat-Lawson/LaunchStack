@@ -110,9 +110,12 @@ state. A running row is never reclaimed for another execution.
 The running deadline is **15 minutes from `startedAt`**, not from the last
 step or `updatedAt`. Expiry is lazy: detail, list, and live-run reads
 (including the home screen), progress writes, and execution delivery mark
-overdue running rows failed with an error and completion time. There is no
-queued-run expiry policy. The failed row stays terminal, and the person can
-start a fresh run with a new id. An executor resuming after expiry cannot
+overdue running rows failed with an error and completion time. The same
+atomic update marks running steps failed with the timeout detail and a
+completion timestamp, skips waiting steps, and preserves completed metadata
+and step order. There is no queued-run expiry policy. The failed row stays
+terminal, and the person can start a fresh run with a new id. An executor
+resuming after expiry cannot
 revive that row or initiate its debit; post-model checks also stop it from
 persisting a late result once it observes expiry.
 

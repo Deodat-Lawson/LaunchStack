@@ -81,6 +81,7 @@ import {
     toSectionDto,
 } from "./adapter";
 import { startProposalRun } from "./executor";
+import { canExportApplication, PROPOSALS_EXPORT_CATEGORY } from "./export-audience";
 
 export interface ProposalsCtx {
     companyId: bigint;
@@ -507,6 +508,13 @@ export async function exportApplication(
     if (sections.every(s => !s.draft?.trim()))
         throw new ProposalsError("Nothing has been written yet", 409, { code: "nothing_written" });
     const exportedAt = new Date();
+    const creationKey = makeApplicationCreationKey(record.id, exportedAt);
+    if (!(await canExportApplication({ ...ctx, creationKey, sections })))
+        throw new ProposalsError(
+            "This application cannot be exported safely with its current citations and access settings",
+            403,
+            { code: "export_audience_denied" }
+        );
     const markdown = renderApplicationMarkdown({ application: record, sections, exportedAt });
     const filename = makeApplicationFilename(record);
     const stored = await uploadFile({
@@ -520,8 +528,8 @@ export async function exportApplication(
         user: { userId: ctx.userId, companyId: ctx.companyId },
         documentName: `${record.title} — proposal`,
         rawDocumentUrl: stored.url,
-        creationKey: makeApplicationCreationKey(record.id, exportedAt),
-        category: "Proposals",
+        creationKey,
+        category: PROPOSALS_EXPORT_CATEGORY,
         explicitStorageType: stored.provider,
         mimeType: "text/markdown",
         originalFilename: filename,

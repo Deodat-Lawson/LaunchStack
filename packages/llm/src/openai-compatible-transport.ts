@@ -154,3 +154,38 @@ export function describeChatEndpointError(
 
     return null;
 }
+
+/** Isolate per-call limits without mutating a shared resolved model or its retry caller. */
+export function singleAttemptChat(
+    chat: BaseChatModel,
+    behavior: ChatModelBehavior,
+    limits: {
+        timeoutMs: number;
+        maxOutputTokens: number;
+    }
+): BaseChatModel {
+    if (!(chat instanceof ChatOpenAI)) {
+        // Custom transports must explicitly disable their own retries.
+        if (chat.lc_kwargs.maxRetries !== 0) throw new Error("Single-attempt transport required.");
+        return chat;
+    }
+    const field = behavior.parameters.maxOutputTokensField ?? DEFAULT_MAX_OUTPUT_TOKENS_FIELD;
+    const supported = behavior.parameters.maxOutputTokens === "supported";
+    const originalCap: unknown =
+        field === DEFAULT_MAX_OUTPUT_TOKENS_FIELD ? chat.maxTokens : chat.modelKwargs?.[field];
+    const cap =
+        typeof originalCap === "number" && originalCap > 0
+            ? Math.min(originalCap, limits.maxOutputTokens)
+            : limits.maxOutputTokens;
+    return new ChatOpenAI({
+        ...chat.lc_kwargs,
+        maxRetries: 0,
+        timeout: Math.min(chat.timeout ?? limits.timeoutMs, limits.timeoutMs),
+        streaming: false,
+        ...(supported && field === DEFAULT_MAX_OUTPUT_TOKENS_FIELD ? { maxTokens: cap } : {}),
+        modelKwargs: {
+            ...chat.modelKwargs,
+            ...(supported && field !== DEFAULT_MAX_OUTPUT_TOKENS_FIELD ? { [field]: cap } : {}),
+        },
+    });
+}

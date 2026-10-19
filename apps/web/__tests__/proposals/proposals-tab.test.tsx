@@ -9,11 +9,12 @@
  */
 
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import { resetProposalsSim, simulateProposals } from "~/app/dev/proposals/simulator";
 import { ProposalsTool } from "~/app/employer/tools/proposals/ProposalsTool";
+import { proposalsApi } from "~/app/employer/tools/proposals/api";
 import type { ToolHost } from "~/components/tool-app/nav";
 
 /** jsdom has no fetch `Response`; the simulator and `api.ts` need this much of one. */
@@ -115,6 +116,46 @@ describe("the Proposals tab", () => {
 
         fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
         expect(await screen.findByRole("heading", { name: /your proposals/i })).toBeVisible();
+    });
+
+    it("refreshes readiness and the checklist after editing and approving an answer", async () => {
+        const { application } = await proposalsApi.createApplication({
+            title: "Section approval refresh",
+        });
+        const { section } = await proposalsApi.addSection(application.id, {
+            question: "What outcomes will you measure and how?",
+        });
+        await proposalsApi.patchSection(application.id, section.id, {
+            draft: "We serve 420 children each year.",
+            status: "approved",
+        });
+        mount(`/write/${application.id}`);
+        const answer = await screen.findByRole("textbox", {
+            name: `Answer: ${section.question}`,
+        });
+        expect(screen.getByRole("tab", { name: "Checklist · 1/1" })).toBeVisible();
+        expect(screen.getByText("Ready 100%")).toBeVisible();
+
+        jest.useFakeTimers();
+        try {
+            fireEvent.change(answer, {
+                target: { value: "We now serve 640 children each year." },
+            });
+            await act(async () => {
+                jest.advanceTimersByTime(800);
+            });
+        } finally {
+            jest.useRealTimers();
+        }
+
+        expect(await screen.findByRole("tab", { name: "Checklist · 0/1" })).toBeVisible();
+        expect(screen.getByText("Edited")).toBeVisible();
+        expect(screen.getByText("Ready 85%")).toBeVisible();
+
+        fireEvent.click(screen.getByRole("button", { name: "Approve" }));
+        expect(await screen.findByRole("tab", { name: "Checklist · 1/1" })).toBeVisible();
+        expect(screen.getByText("Approved")).toBeVisible();
+        expect(screen.getByText("Ready 100%")).toBeVisible();
     });
 
     it("says so for a path it has no screen for, and goes home from there", async () => {

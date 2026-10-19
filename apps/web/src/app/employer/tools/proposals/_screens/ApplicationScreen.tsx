@@ -897,7 +897,7 @@ export function ApplicationScreen({ id }: { id: string }) {
     const selectedIndex = selected ? sections.findIndex(s => s.id === selected.id) : -1;
 
     const setApp = (next: ApplicationDetail) => res.mutate(() => ({ application: next }));
-    const setSection = (next: SectionDto) =>
+    const setSection = (next: SectionDto) => {
         res.mutate(current => ({
             application: {
                 ...current.application,
@@ -906,6 +906,8 @@ export function ApplicationScreen({ id }: { id: string }) {
                 ),
             },
         }));
+        void reload();
+    };
 
     const run = async (start: () => Promise<{ run: RunDto }>, what: string) => {
         try {

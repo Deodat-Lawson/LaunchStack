@@ -15,8 +15,15 @@ import {
     queueProposalRun,
     type ProposalPorts,
     type RunRecord,
+    type RunStep,
 } from "@launchstack/pipelines/proposals";
-import { addSection, createApplication, updateSection } from "@launchstack/pipelines/proposals/db";
+import {
+    addSection,
+    completeRun,
+    createApplication,
+    getRun,
+    updateSection,
+} from "@launchstack/pipelines/proposals/db";
 import { proposalRuns } from "@launchstack/pipelines/proposals/schema";
 import type { RunDto } from "~/app/employer/tools/proposals/api";
 import { env } from "~/env";
@@ -723,6 +730,74 @@ describeDb("proposal run claim and absolute running expiry (integration)", () =>
                     await pendingDebit?.catch(() => undefined);
                 }
             });
+        }
+    );
+
+    it.each(["read", "locked finalization"] as const)(
+        "%s terminalizes timed-out run steps without changing completed work or order",
+        async mode => {
+            const run = await queueProposalRun({
+                ...ctx(),
+                kind: "funders",
+                input: { funders: { keywords: ["community"] } },
+            });
+            const startedAt = new Date(Date.now() - 16 * 60_000);
+            const completed: RunStep = {
+                ...run.steps[0]!,
+                status: "done",
+                detail: "Search plan ready",
+                startedAt: startedAt.toISOString(),
+                completedAt: new Date(startedAt.getTime() + 30_000).toISOString(),
+            };
+            const active: RunStep = {
+                ...run.steps[1]!,
+                status: "running",
+                detail: "Waiting for Grants.gov",
+                startedAt: completed.completedAt,
+            };
+            const waiting = run.steps.slice(2);
+            const steps = [completed, active, ...waiting];
+            await test.db
+                .update(proposalRuns)
+                .set({ status: "running", startedAt, updatedAt: new Date(), steps })
+                .where(and(eq(proposalRuns.id, run.id), eq(proposalRuns.companyId, companyId)));
+            const debit = jest.fn(async () => PROPOSAL_CREDITS.funders);
+
+            const observed =
+                mode === "read"
+                    ? await loadRun(ctx(), run.id)
+                    : await completeRun(
+                          companyId,
+                          run.id,
+                          { headline: "Must not complete" },
+                          debit
+                      );
+            const sheet = await loadRun(ctx(), run.id);
+            const expired = await getRun(run.id, companyId);
+            if (!observed || !expired) throw new Error("The expired run was not found");
+
+            expect(observed.status).toBe("failed");
+            expect(sheet.steps.map(step => step.status)).toEqual([
+                "done",
+                "failed",
+                "skipped",
+                "skipped",
+            ]);
+            expect(expired.steps.map(step => step.id)).toEqual(steps.map(step => step.id));
+            expect(expired.steps[0]).toEqual(completed);
+            expect(expired.steps[1]).toMatchObject({
+                ...active,
+                status: "failed",
+                detail: expired.error,
+            });
+            expect(expired.error).toBeTruthy();
+            const failedAt = expired.steps[1]!.completedAt;
+            expect(failedAt).toEqual(expect.any(String));
+            expect(Number.isFinite(Date.parse(failedAt!))).toBe(true);
+            expect(expired.steps.slice(2)).toEqual(
+                waiting.map(step => ({ ...step, status: "skipped" }))
+            );
+            expect(debit).not.toHaveBeenCalled();
         }
     );
 });

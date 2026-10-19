@@ -761,11 +761,27 @@ export async function noteLibraryUses(companyId: bigint, ids: string[]): Promise
 
 const expiredRunCondition = sql`${proposalRuns.startedAt} < clock_timestamp() - interval '15 minutes'`;
 const freshRunCondition = sql`not (${expiredRunCondition})`;
+const expiredRunError = "The run timed out after 15 minutes. Start a new run to try again.";
 const expiredRunPatch = {
     status: "failed" as const,
-    error: "The run timed out after 15 minutes. Start a new run to try again.",
+    error: expiredRunError,
     completedAt: sql`clock_timestamp()`,
     updatedAt: sql`clock_timestamp()`,
+    steps: sql`coalesce((
+        select jsonb_agg(
+            case step.value ->> 'status'
+                when 'running' then step.value || jsonb_build_object(
+                    'status', 'failed',
+                    'detail', ${expiredRunError}::text,
+                    'completedAt', clock_timestamp()
+                )
+                when 'waiting' then step.value || '{"status":"skipped"}'::jsonb
+                else step.value
+            end order by step.ordinality
+        )
+        from jsonb_array_elements(${proposalRuns.steps})
+            with ordinality as step(value, ordinality)
+    ), '[]'::jsonb)`,
 };
 
 /** Expiry is absolute from startedAt; queued work and recent step writes do not affect it. */

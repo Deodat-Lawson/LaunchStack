@@ -1,0 +1,28 @@
+name: vantage-integration-e2e-20261019
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: vantage-integration-e2e-20261019-db
+    labels:
+      io.launchstack.integration-e2e: vantage-integration-e2e-20261019
+    environment:
+      POSTGRES_DB: vantage_integration_e2e_20261019
+      POSTGRES_USER: vantage_integration_e2e
+      POSTGRES_PASSWORD: ${VANTAGE_INTEGRATION_PASSWORD:?Use the integration runtime controller}
+    ports:
+      - "127.0.0.1:55435:5432"
+    volumes:
+      - integration-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U vantage_integration_e2e -d vantage_integration_e2e_20261019"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  integration-data:
+    name: vantage-integration-e2e-20261019-data
+    labels:
+      io.launchstack.integration-e2e: vantage-integration-e2e-20261019

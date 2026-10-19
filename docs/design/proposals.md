@@ -130,6 +130,14 @@ Credits: a pre-check when metering is enforced, a debit per completed run
 - **Review** — deterministic findings merged with the model's, blockers
   first; readiness = 70% required sections + 30% checklist.
 
+Approval belongs to the exact saved answer: changing approved text, including
+whitespace-only changes, returns it to _edited_; clearing it returns it to
+_empty_. Saving identical text preserves approval, and an explicit Approve
+request can save and approve new text together. After a section save, the
+editor refreshes the application so readiness and section checklist rows
+immediately reflect the current approval. A saved review remains available
+but does not freeze the current readiness score.
+
 ## Tests
 
 - `packages/tools` — Grants.gov parsing, query building, web listing filter,

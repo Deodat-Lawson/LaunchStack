@@ -312,6 +312,7 @@ describe("draftSection", () => {
         });
         const result = await draftSection(p, {
             companyId: 1,
+            scope: { kind: "everything" },
             application: application(),
             section: section({
                 key: "outcomes",

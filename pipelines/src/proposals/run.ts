@@ -4,6 +4,8 @@
  * or the worker); `executeProposalRun` does the reading and writing around the
  * stages and records each step so the run sheet can show progress.
  */
+import type { DocumentScope } from "@launchstack/retrieval";
+
 import {
     createRun,
     getApplication,
@@ -12,6 +14,7 @@ import {
     listSections,
     noteLibraryUses,
     loadOrgProfile,
+    loadReadableDocumentIds,
     replaceSections,
     updateApplication,
     updateRun,
@@ -30,12 +33,21 @@ import {
     MAX_REQUEST_CHARS,
 } from "./stages";
 import { wordCount } from "./text";
-import type { RunInput, RunKind, RunRecord, RunStep, RunSummary } from "./types";
+import type {
+    LibraryItemRecord,
+    RunInput,
+    RunKind,
+    RunRecord,
+    RunStep,
+    RunSummary,
+    SectionRecord,
+} from "./types";
 
 export interface ProposalRunContext {
     runId: string;
     companyId: bigint;
     userId: string;
+    scope: DocumentScope;
 }
 
 /** The steps a run of each kind will show before it starts. */
@@ -245,7 +257,10 @@ export async function executeProposalRun(
 }
 
 /** Mark a run failed from outside the executor (a worker's onFailure hook). */
-export async function failProposalRun(ctx: ProposalRunContext, message: string): Promise<void> {
+export async function failProposalRun(
+    ctx: Pick<ProposalRunContext, "runId" | "companyId">,
+    message: string
+): Promise<void> {
     const run = await getRun(ctx.runId, ctx.companyId);
     if (!run || run.status === "completed" || run.status === "failed") return;
     await updateRun(ctx.companyId, ctx.runId, {
@@ -263,7 +278,7 @@ async function runFunders(
     log: StepLog,
     run: RunRecord
 ): Promise<RunSummary> {
-    const profile = await loadOrgProfile(ctx.companyId);
+    const profile = await loadOrgProfile(ctx.companyId, ctx.scope);
     await log.start("plan");
     const details: Record<string, string> = {};
     const result = await findFunders(ports, {
@@ -322,6 +337,13 @@ async function loadApplication(ctx: ProposalRunContext, run: RunRecord) {
     if (!applicationId) throw new Error("This run names no application");
     const application = await getApplication(applicationId, ctx.companyId);
     if (!application) throw new Error("Application not found");
+    if (application.requestDocumentId !== null) {
+        const readable = await loadReadableDocumentIds(ctx.companyId, ctx.scope, [
+            application.requestDocumentId,
+        ]);
+        if (!readable.has(application.requestDocumentId))
+            throw new Error("The application's request source is no longer readable.");
+    }
     return application;
 }
 
@@ -377,6 +399,21 @@ async function runExtract(
     };
 }
 
+/** A saved answer's wording can carry any of the evidence it was written from. */
+async function loadReadableLibrary(ctx: ProposalRunContext): Promise<LibraryItemRecord[]> {
+    const items = await listLibraryItems(ctx.companyId);
+    const readable = await loadReadableDocumentIds(
+        ctx.companyId,
+        ctx.scope,
+        items.flatMap(item =>
+            item.evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId]))
+        )
+    );
+    return items.filter(item =>
+        item.evidence.every(e => e.documentId !== null && readable.has(e.documentId))
+    );
+}
+
 async function runDraft(
     ctx: ProposalRunContext,
     ports: ProposalPorts,
@@ -385,8 +422,8 @@ async function runDraft(
 ): Promise<{ summary: RunSummary; drafted: number }> {
     const application = await loadApplication(ctx, run);
     const [profile, library, all] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
-        listLibraryItems(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
+        loadReadableLibrary(ctx),
         listSections(ctx.companyId, application.id),
     ]);
     const wanted = run.input.sectionIds?.length ? new Set(run.input.sectionIds) : null;
@@ -398,6 +435,7 @@ async function runDraft(
         await log.start(stepId, section.question.slice(0, 80));
         const result = await draftSection(ports, {
             companyId: Number(ctx.companyId),
+            scope: ctx.scope,
             application,
             section,
             profile,
@@ -431,6 +469,32 @@ async function runDraft(
     };
 }
 
+/**
+ * Existing prose may itself quote old evidence or a saved answer. Refuse reuse
+ * instead of merely removing citations while still sending that prose.
+ */
+async function assertReadableDraftEvidence(
+    ctx: ProposalRunContext,
+    sections: SectionRecord[]
+): Promise<void> {
+    const evidence = sections.flatMap(section => section.draftMeta?.evidence ?? []);
+    const readable = await loadReadableDocumentIds(
+        ctx.companyId,
+        ctx.scope,
+        evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId]))
+    );
+    const libraryIds = sections.flatMap(section => section.draftMeta?.libraryItemIds ?? []);
+    const library = libraryIds.length > 0 ? await loadReadableLibrary(ctx) : [];
+    const readableLibraryIds = new Set(library.map(item => item.id));
+    if (
+        evidence.some(e => e.documentId === null || !readable.has(e.documentId)) ||
+        libraryIds.some(id => !readableLibraryIds.has(id))
+    )
+        throw new Error(
+            "This draft uses evidence you can no longer read. Redraft from readable sources first."
+        );
+}
+
 async function runRewrite(
     ctx: ProposalRunContext,
     ports: ProposalPorts,
@@ -441,12 +505,13 @@ async function runRewrite(
     const sectionId = run.input.sectionIds?.[0];
     if (!sectionId) throw new Error("This run names no section");
     const [profile, all] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
         listSections(ctx.companyId, application.id),
     ]);
     const section = all.find(s => s.id === sectionId);
     if (!section) throw new Error("Section not found");
     await log.start("rewrite", section.question.slice(0, 80));
+    await assertReadableDraftEvidence(ctx, [section]);
     const result = await rewriteSection(ports, {
         application,
         section,
@@ -483,7 +548,7 @@ async function runReview(
 ): Promise<RunSummary> {
     const application = await loadApplication(ctx, run);
     const [profile, sections] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
         listSections(ctx.companyId, application.id),
     ]);
     await log.start("check");
@@ -493,6 +558,10 @@ async function runReview(
         `${requirements.filter(r => r.done).length} of ${requirements.length} done`
     );
     await log.start("review");
+    await assertReadableDraftEvidence(
+        ctx,
+        sections.filter(section => section.draft?.trim())
+    );
     const review = await reviewApplication(ports, {
         application: { ...application, requirements },
         sections,

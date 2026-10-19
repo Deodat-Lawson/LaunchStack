@@ -8,8 +8,10 @@ import { randomUUID } from "node:crypto";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
+import { document } from "@launchstack/store/schema";
+import { documentScopeSql, type DocumentScope } from "@launchstack/retrieval";
 
-import { getProfileRow, profileView } from "../company-metadata";
+import { flattenFacts, getProfileRow, profileView } from "../company-metadata";
 import { orgProfileFromView } from "./profile";
 
 import {
@@ -161,15 +163,54 @@ const newId = () => randomUUID();
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
+/** Existing, same-workspace source documents the run's writer may read. */
+export async function loadReadableDocumentIds(
+    companyId: bigint,
+    scope: DocumentScope,
+    documentIds: readonly number[]
+): Promise<Set<number>> {
+    const ids = [...new Set(documentIds.filter(id => Number.isSafeInteger(id) && id > 0))];
+    if (ids.length === 0) return new Set();
+    const rows = await getDb()
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                inArray(document.id, ids),
+                documentScopeSql(scope)
+            )
+        );
+    return new Set(rows.map(row => row.id));
+}
+
 /**
  * The organisation profile the stages write from: the company profile
  * (Settings › Company), read through the same view the profile page uses so
- * excerpt numbers match. Null until it has been built.
+ * excerpt numbers match. Only readable sources contribute facts and derived
+ * profile text. Null until it has been built.
  */
-export async function loadOrgProfile(companyId: bigint): Promise<OrgProfile | null> {
+export async function loadOrgProfile(
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<OrgProfile | null> {
     const row = await getProfileRow(companyId);
     if (!row?.builtAt || !row.metadata) return null;
-    return orgProfileFromView(profileView(row.metadata), row.builtAt);
+    const facts = [
+        ...flattenFacts(row.metadata).map(entry => entry.fact),
+        row.metadata.profile?.summary,
+        row.metadata.profile?.applicant_type,
+        ...(row.metadata.profile?.focus_areas ?? []),
+    ];
+    const readable = await loadReadableDocumentIds(
+        companyId,
+        scope,
+        facts.flatMap(fact => fact?.sources.map(source => source.doc_id) ?? [])
+    );
+    return orgProfileFromView(
+        profileView(row.metadata, { canSee: documentId => readable.has(documentId) }),
+        row.builtAt
+    );
 }
 
 // ─── Opportunities ───────────────────────────────────────────────────────────

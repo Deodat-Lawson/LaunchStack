@@ -41,7 +41,6 @@ import {
     listOpportunities,
     listRuns,
     listSections,
-    loadOrgProfile,
     setOpportunityStatus,
     updateApplication,
     updateLibraryItem,
@@ -186,8 +185,8 @@ export async function findFundersRun(
         includeWeb?: boolean;
     }
 ): Promise<RunDto> {
-    const profile = await loadOrgProfile(ctx.companyId);
-    if (!profile && !(input.keywords && input.keywords.length > 0))
+    const profile = await getProfileRow(ctx.companyId);
+    if ((!profile?.builtAt || !profile.metadata) && !(input.keywords && input.keywords.length > 0))
         throw new ProposalsError(
             "Build your organisation profile first, or give keywords to search for",
             409,

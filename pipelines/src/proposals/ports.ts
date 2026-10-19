@@ -44,7 +44,7 @@ export interface RetrieveArgs {
     companyId: number;
     query: string;
     policy: SnippetPolicy;
-    scope?: DocumentScope;
+    scope: DocumentScope;
 }
 
 export interface ProposalPorts {

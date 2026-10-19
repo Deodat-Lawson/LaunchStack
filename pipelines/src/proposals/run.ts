@@ -7,9 +7,13 @@
 import type { DocumentScope } from "@launchstack/retrieval";
 
 import {
+    claimRun,
+    completeRun,
     createRun,
+    failRun,
     getApplication,
     getRun,
+    isRunActive,
     listLibraryItems,
     listSections,
     noteLibraryUses,
@@ -17,11 +21,11 @@ import {
     loadReadableDocumentIds,
     replaceSections,
     updateApplication,
-    updateRun,
+    updateRunSteps,
     updateSection,
     upsertOpportunity,
 } from "./db";
-import { PROPOSAL_CREDITS, type ProposalPorts } from "./ports";
+import { PROPOSAL_CREDITS, type ProposalDebitExecutor, type ProposalPorts } from "./ports";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
 import {
@@ -116,7 +120,9 @@ class StepLog {
     ) {}
 
     private async flush(): Promise<void> {
-        await updateRun(this.ctx.companyId, this.ctx.runId, { steps: this.steps });
+        if (!(await updateRunSteps(this.ctx.companyId, this.ctx.runId, this.steps))) {
+            throw new Error("The run is no longer active");
+        }
     }
 
     async start(id: string, detail: string | null = null): Promise<void> {
@@ -142,19 +148,20 @@ class StepLog {
         await this.flush();
     }
 
-    async fail(id: string, detail: string): Promise<void> {
-        this.steps = this.steps.map(s =>
-            s.id === id
+    failedSteps(detail: string): RunStep[] {
+        return this.steps.map(s =>
+            s.status === "running"
                 ? { ...s, status: "failed", detail, completedAt: new Date().toISOString() }
                 : s.status === "waiting"
                   ? { ...s, status: "skipped" }
                   : s
         );
-        await this.flush();
     }
 
-    current(): string | null {
-        return this.steps.find(s => s.status === "running")?.id ?? null;
+    async assertActive(): Promise<void> {
+        if (!(await isRunActive(this.ctx.companyId, this.ctx.runId))) {
+            throw new Error("The run is no longer active");
+        }
     }
 }
 
@@ -168,106 +175,83 @@ async function debit(
     ports: ProposalPorts,
     ctx: ProposalRunContext,
     amount: number,
-    description: string
+    description: string,
+    executor: ProposalDebitExecutor
 ) {
     if (!ports.debitCredits) return 0;
-    await ports.debitCredits({ amount, description, referenceId: ctx.runId });
+    await ports.debitCredits({ amount, description, referenceId: ctx.runId }, executor);
     return amount;
 }
 
 /**
- * Execute a queued run to completion, or mark it failed. Idempotent on a
- * finished run (a second call does nothing), so a retried worker job or a
- * duplicated `after()` cannot run the same work twice.
+ * Execute only the delivery that atomically claims a queued run. A running
+ * run is never reclaimed: redelivery observes its current state or expiry.
  */
 export async function executeProposalRun(
     ctx: ProposalRunContext,
     ports: ProposalPorts
 ): Promise<RunRecord> {
-    const run = await getRun(ctx.runId, ctx.companyId);
-    if (!run) throw new Error("Run not found");
-    if (run.status === "completed" || run.status === "failed") return run;
-    if (run.status === "running") return run;
+    const run = await claimRun(ctx.companyId, ctx.runId);
+    if (!run) {
+        const existing = await getRun(ctx.runId, ctx.companyId);
+        if (!existing) throw new Error("Run not found");
+        return existing;
+    }
 
-    const startedAt = new Date();
-    await updateRun(ctx.companyId, ctx.runId, { status: "running", startedAt });
     const log = new StepLog(ctx, run.steps);
-    let credits = 0;
     try {
         let summary: RunSummary;
+        let amount: number;
+        let description: string;
         switch (run.kind) {
             case "funders":
                 summary = await runFunders(ctx, ports, log, run);
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.funders,
-                    "Proposals: funder search"
-                );
+                amount = PROPOSAL_CREDITS.funders;
+                description = "Proposals: funder search";
                 break;
             case "extract":
                 summary = await runExtract(ctx, ports, log, run);
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.extract,
-                    "Proposals: requirements"
-                );
+                amount = PROPOSAL_CREDITS.extract;
+                description = "Proposals: requirements";
                 break;
             case "draft": {
                 const result = await runDraft(ctx, ports, log, run);
                 summary = result.summary;
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.draft * result.drafted,
-                    `Proposals: ${result.drafted} section draft${result.drafted === 1 ? "" : "s"}`
-                );
+                amount = PROPOSAL_CREDITS.draft * result.drafted;
+                description = `Proposals: ${result.drafted} section draft${result.drafted === 1 ? "" : "s"}`;
                 break;
             }
             case "rewrite":
                 summary = await runRewrite(ctx, ports, log, run);
-                credits += await debit(ports, ctx, PROPOSAL_CREDITS.rewrite, "Proposals: rewrite");
+                amount = PROPOSAL_CREDITS.rewrite;
+                description = "Proposals: rewrite";
                 break;
             case "review":
                 summary = await runReview(ctx, ports, log, run);
-                credits += await debit(ports, ctx, PROPOSAL_CREDITS.review, "Proposals: review");
+                amount = PROPOSAL_CREDITS.review;
+                description = "Proposals: review";
                 break;
         }
-        summary.durationMs = Date.now() - startedAt.getTime();
-        const finished = await updateRun(ctx.companyId, ctx.runId, {
-            status: "completed",
-            summary,
-            creditsUsed: credits,
-            completedAt: new Date(),
-        });
-        return finished ?? run;
+        summary.durationMs = Date.now() - run.startedAt!.getTime();
+        const finished = await completeRun(ctx.companyId, ctx.runId, summary, executor =>
+            debit(ports, ctx, amount, description, executor)
+        );
+        if (!finished) throw new Error("Run not found");
+        return finished;
     } catch (error) {
         const message = errorMessage(error);
-        const current = log.current();
-        if (current) await log.fail(current, message);
-        const failed = await updateRun(ctx.companyId, ctx.runId, {
-            status: "failed",
-            error: message,
-            creditsUsed: credits,
-            completedAt: new Date(),
-        });
-        return failed ?? run;
+        const failed = await failRun(ctx.companyId, ctx.runId, message, log.failedSteps(message));
+        if (!failed) throw new Error("Run not found");
+        return failed;
     }
 }
 
-/** Mark a run failed from outside the executor (a worker's onFailure hook). */
+/** Mark a run failed from outside the executor without overwriting a terminal result. */
 export async function failProposalRun(
     ctx: Pick<ProposalRunContext, "runId" | "companyId">,
     message: string
 ): Promise<void> {
-    const run = await getRun(ctx.runId, ctx.companyId);
-    if (!run || run.status === "completed" || run.status === "failed") return;
-    await updateRun(ctx.companyId, ctx.runId, {
-        status: "failed",
-        error: message,
-        completedAt: new Date(),
-    });
+    await failRun(ctx.companyId, ctx.runId, message);
 }
 
 // ─── Per kind ────────────────────────────────────────────────────────────────
@@ -304,6 +288,7 @@ async function runFunders(
     await log.start("save");
     let saved = 0;
     for (const { opportunity, fit } of result.scored) {
+        await log.assertActive();
         await upsertOpportunity({
             companyId: ctx.companyId,
             source: opportunity.source,
@@ -363,6 +348,7 @@ async function runExtract(
         const page = await ports.fetchPage(application.requestUrl);
         text = page.text;
         label = page.title ? `${page.title} (${application.requestUrl})` : application.requestUrl;
+        await log.assertActive();
         await updateApplication(ctx.companyId, application.id, {
             requestText: text.slice(0, MAX_REQUEST_CHARS),
         });
@@ -441,6 +427,7 @@ async function runDraft(
             profile,
             library,
         });
+        await log.assertActive();
         await updateSection(ctx.companyId, section.id, {
             draft: result.draft,
             draftMeta: result.meta,
@@ -455,6 +442,7 @@ async function runDraft(
     }
     const sections = await listSections(ctx.companyId, application.id);
     const requirements = syncSectionRequirements(application.requirements, sections);
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         readiness: computeReadiness({ sections, requirements }),
@@ -519,6 +507,7 @@ async function runRewrite(
         preset: run.input.rewrite?.preset ?? "custom",
         instruction: run.input.rewrite?.instruction,
     });
+    await log.assertActive();
     await updateSection(ctx.companyId, section.id, {
         draft: result.draft,
         draftMeta: result.meta,
@@ -527,6 +516,7 @@ async function runRewrite(
     });
     const sections = await listSections(ctx.companyId, application.id);
     const requirements = syncSectionRequirements(application.requirements, sections);
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         readiness: computeReadiness({ sections, requirements }),
@@ -567,6 +557,7 @@ async function runReview(
         sections,
         profile,
     });
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         review,

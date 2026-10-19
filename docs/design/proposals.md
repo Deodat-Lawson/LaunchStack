@@ -97,8 +97,7 @@ Every model-backed action is a run: `funders`, `extract`, `draft`
 (one or many sections), `rewrite` (one section under an instruction),
 `review`. The route creates the row and returns it with 202; the UI polls
 `/api/proposals/runs/[id]` at 1.5 s while it is live and reloads its screen
-when it settles. The executor is `executeProposalRun` in the vertical,
-idempotent on a finished row.
+when it settles. Both execution modes use `executeProposalRun` in the vertical.
 
 - **inline (default)** — the web process runs it in `after()`, the way
   keyless Prospects runs do.
@@ -106,8 +105,42 @@ idempotent on a finished row.
   the worker's `proposalsRunJob` executes the same function under Inngest
   retries and marks the run failed on final failure.
 
-Credits: a pre-check when metering is enforced, a debit per completed run
-(`proposal_writing`, 1k–3k per stage) through the host's ledger port.
+A tenant-scoped conditional `UPDATE … RETURNING` claims `queued → running`.
+Only the winning delivery executes stages or becomes eligible to debit;
+concurrent deliveries and retries return the persisted running or terminal
+state. A running row is never reclaimed for another execution.
+
+The running deadline is **15 minutes from `startedAt`**, not from the last
+step or `updatedAt`. Expiry is lazy: detail, list, and live-run reads
+(including the home screen), progress writes, and execution delivery mark
+overdue running rows failed with an error and completion time. There is no
+queued-run expiry policy. The failed row stays terminal, and the person can
+start a fresh run with a new id. An executor resuming after expiry cannot
+revive that row or initiate its debit; post-model checks also stop it from
+persisting a late result once it observes expiry.
+
+Credits use a pre-check when metering is enforced and the host's
+`proposal_writing` ledger port at the rates in `PROPOSAL_CREDITS`; drafts
+charge per generated section. Finalization takes a row lock, rechecks running
+status and the deadline after acquiring it, then supplies that transaction
+as the required second argument to `ProposalPorts.debitCredits`.
+
+The app adapter forwards this executor to `debitTokens`. Balance reads,
+missing-account creation, any signup grant, account debits, ledger entries,
+and daily usage all use the **same connection and transaction as run
+completion**. They commit or roll back together, including when metering
+throws. No second pool connection is needed while holding the run lock, so
+finalization works even with a one-connection pool. Guarded failure writes
+cannot replace an existing terminal result, and rolled-back metering is not
+reported as credits used.
+
+A custom host's genuinely external meter cannot participate in the
+Postgres transaction. Its acknowledged charge can still survive a process
+crash or database rollback before completion commits. The run is never
+reexecuted or automatically charged again, but this is not a cross-system
+exactly-once guarantee. Eligibility is checked immediately before
+dispatching the debit; an already-dispatched external operation cannot be
+recalled if its response crosses the deadline.
 
 ### Generation scope
 

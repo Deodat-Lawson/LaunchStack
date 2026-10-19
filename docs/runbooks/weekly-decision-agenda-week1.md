@@ -115,13 +115,104 @@ deletion or repair was introduced.
       of generated topics, retaining the prior report.
 - [x] Synthetic carry-forward inputs retain original action IDs and dates.
 
+## Frontend implementation and fixture verification, 2026-10-19
+
+Member A's local implementation starts from `a9d3e64240551a648c36ba04bce6078e0408168e`
+on `feat/weekly-agenda-contract-v1`, in a separate checkout on
+`feat/weekly-agenda-frontend-v1`. These checks verify the frontend checkout;
+publication, merge, deployment and TL acceptance are separate steps. The original
+checkout and business database were not modified.
+
+### Frontend conformance review
+
+- Adopted the existing Studio tab, tool navigation, shared UI components, source
+  capture and metric import surfaces. Replaced automatic agenda generation and
+  the old overview entry point with explicit Contract v1 generation controls.
+- The UI reads shared `AgendaV1Dto` / `TopicV1Dto` responses and calls
+  `/api/vantage/*`. Navigation only reads; generation is an explicit synchronous
+  request. Saved period/cutoff, AI/rules/fallback/empty and legacy states are shown.
+- Preserved human topic text and source references when unchanged. Rewritten
+  facts are marked unsupported. Sources open their actual accessible records;
+  suggested additions require explicit review and stay separate when accepted.
+- Decision submissions retain their key on an uncertain response. Retries keep
+  the same payload; existing actions use PATCH and decision-only changes keep
+  their action link. Owner, due date and success test are required for demo
+  actions, and resolving an action requires an outcome. Resolved linked actions
+  remain reachable from the report.
+- Sharing/triage/export UI is deferred. Topic/action writes use `shared=false`;
+  evidence is private. The preview uses examples in memory and is visibly
+  labelled synthetic; it never establishes persistence or model success.
+- Review follow-ups corrected the inherited metric import's eight-error display
+  limit, suppressed trend comparisons across differently sized/aligned periods,
+  and made prior-Monday date defaults independent of the browser timezone.
+  Controlled review dialogs return keyboard focus to their opener.
+
+### Observed evidence
+
+| Check                               | Result and limit                                                                                                                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Selected web suites                 | 288 tests passed in 18 suites; unit/component/fixture and mocked route/service tests only                                                                                                                     |
+| New v1 frontend tests               | 26 cases in the two `weekly-agenda-v1` test files, included in the 288 total                                                                                                                                  |
+| Web TypeScript                      | `pnpm --filter @launchstack/web typecheck` passed                                                                                                                                                             |
+| Changed TypeScript source/test lint | ESLint passed for every changed/new `.ts` and `.tsx` file                                                                                                                                                     |
+| Fixture browser, desktop            | Source viewing, topic editing/regeneration, separate accepted additions, stale additions disabled, decision/action creation, action editing, required outcome check-in, and 503 retaining the report verified |
+| Lost response fixture               | First submission deliberately loses its response; unchanged retry succeeds with one linked action. The transport test verifies the same key and retained resolved outcome                                     |
+| Keyboard                            | Enter opens topic editing, focus starts in Title, Tab reaches the next field, Escape closes and returns focus to Edit topic; also covered by a component regression test                                      |
+| Narrow layout                       | 390×844 viewport inspected; document width equals viewport width and checked report sections have no horizontal overflow; viewport restored afterwards                                                        |
+| Browser console                     | No errors/warnings observed in the final default agenda fixture state                                                                                                                                         |
+| Real DB / actual session / provider | Not exercised by these frontend checks; earlier TL evidence is separate                                                                                                                                       |
+
+The preview runs at `/dev/vantage` using the existing development-route gate.
+Run it from this checkout with `SKIP_ENV_VALIDATION=1 pnpm --filter @launchstack/web
+exec next dev --turbo --hostname 127.0.0.1 --port 3001`. It needs no application
+`.env` for fixtures. Changes reset on reload. The existing app on port 3000 was
+not replaced.
+
+Reproduce the selected tests from the repository root:
+
+```sh
+pnpm --filter @launchstack/web test --runInBand --testPathPatterns='(__tests__/vantage/|__tests__/components/(vantage-|weekly-agenda-v1)|__tests__/server/vantage-(service-v1|access-v1|prepare)\.test|__tests__/api/vantage/(contract-v1\.route|decide\.route))'
+pnpm --filter @launchstack/web typecheck
+```
+
+A's implementation is available for integration review. This record does not
+claim teammate signoff or complete authenticated browser acceptance. Once TL
+connects B and configures the isolated test workspace, A still needs to verify
+actual session/cookie access, save/reload persistence, revoked access, source
+permissions and the following-week outcome workflow in that integrated app.
+
+## Preview new-tab correction, 2026-10-19
+
+The user encountered a sign-in screen after opening the preview in another tab.
+The development server on port 3001 has no authentication database configured;
+its sign-in requests failed with a database connection refusal, rather than a
+credential rejection. The cause was the preview reusing production workspace
+URLs for real anchors and the tool menu's new-tab/copy-link actions.
+
+The preview host now supplies preview-only URLs for its own tool paths, preserving
+screen parameters and the selected scenario. Normal workspace links retain their
+existing destinations. The banner explicitly says no sign-in is needed. No
+authentication gate was weakened and no business database was connected.
+
+Verified the actual menu's new-tab action in the browser: the new tab loaded
+`http://localhost:3001/dev/vantage` with the report and no sign-in redirect. The
+user's affected tab was also returned to that preview. Existing port 3000 login
+and the integrated acceptance boundary above remain unchanged.
+
+The expanded regression selection (the previous selection plus
+`__tests__/studio/tool-(app|frame)`) passed 306 tests in 20 suites, including two
+new link-routing cases. Web TypeScript and lint on the changed navigation,
+preview and test files passed. This is preview navigation verification, not a
+successful real login test.
+
 ## Remaining integrated acceptance
 
 - [ ] TL connects B's supplied conforming generation function.
 - [ ] B supplies observed real-provider success, forced fallback, empty/conflicting/
       unsupported evidence and timeout/retry/harness evidence.
-- [ ] A supplies the real frontend workflow, including v1 fields, stable decision
-      keys and explicit enhancement review.
+- [x] A supplies the frontend workflow, including v1 fields, stable decision keys
+      and explicit enhancement review. Verified against fixtures as recorded above;
+      live integration acceptance remains pending.
 - [ ] Run authenticated HTTP/browser checks with actual session issuance/cookies,
       including source/history access, revoked access and reload behavior.
 - [ ] Demonstrate the following-week report and outcome check-in through A/B's
@@ -129,7 +220,8 @@ deletion or repair was introduced.
 - [ ] Confirm hosting supports the configured synchronous generation timeout.
 
 TL foundation checks are recorded; the integrated founder feature is not yet
-accepted. A/B implementation files, earlier drafts, Google Doc and business data
-were not changed. The user authorized committing and pushing this TL change set
+accepted. In the earlier TL-only publication, A/B implementation files, earlier
+drafts, Google Doc and business data were not changed. The separate frontend
+follow-up above changes A's local implementation only. The user authorized committing and pushing this TL change set
 to `feat/weekly-agenda-contract-v1`. No deployment, merge or teammate message is
 part of that publication, and integrated acceptance remains pending.

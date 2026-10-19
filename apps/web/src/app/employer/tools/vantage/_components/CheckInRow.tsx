@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -8,7 +8,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
-import { vantageApi, type CommitmentDto, type VantageCommitmentStatus } from "../api";
+import {
+    vantageApi,
+    vantageErrorMessage,
+    type CommitmentDto,
+    type VantageCommitmentStatus,
+} from "../api";
 import { dueWords, fmtDate, todayIso } from "../_lib/format";
 import { SharedMark, StatusWord, type Tone } from "./Primitives";
 
@@ -44,17 +49,22 @@ export function CheckInRow({
     commitment,
     onChange,
     showTopic = true,
+    onEdit,
 }: {
     commitment: CommitmentDto;
     onChange: () => void;
     showTopic?: boolean;
+    onEdit?: () => void;
 }) {
     const [open, setOpen] = useState(false);
     const [pending, setPending] = useState<VantageCommitmentStatus | null>(null);
     const [outcome, setOutcome] = useState(commitment.outcome ?? "");
     const [busy, setBusy] = useState(false);
+    const saving = useRef(false);
 
     const resolve = async (status: VantageCommitmentStatus) => {
+        if (saving.current || (status !== "open" && !outcome.trim())) return;
+        saving.current = true;
         setBusy(true);
         try {
             await vantageApi.patchCommitment(commitment.id, {
@@ -65,7 +75,7 @@ export function CheckInRow({
                 status === "done"
                     ? "Marked done"
                     : status === "missed"
-                      ? "Marked missed — it will be on the next agenda"
+                      ? "Marked missed"
                       : status === "dropped"
                         ? "Dropped"
                         : "Reopened"
@@ -74,16 +84,17 @@ export function CheckInRow({
             setPending(null);
             onChange();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not save");
+            toast.error(vantageErrorMessage(e));
         } finally {
+            saving.current = false;
             setBusy(false);
         }
     };
 
     const isOpen = commitment.status === "open";
     return (
-        <div className="border-line-2 flex min-h-11 items-center gap-3 border-t px-4 py-2 first:border-t-0">
-            <div className="min-w-0 flex-1">
+        <div className="border-line-2 flex min-h-11 flex-wrap items-center gap-3 border-t px-4 py-2 first:border-t-0">
+            <div className="min-w-40 flex-1">
                 <div className="text-ink truncate text-[13px] font-medium">{commitment.title}</div>
                 <div className="text-ink-3 flex flex-wrap items-center gap-x-2 text-[11.5px]">
                     <span>{commitment.owner}</span>
@@ -111,9 +122,15 @@ export function CheckInRow({
                 )}
             </div>
             <CommitmentStatus commitment={commitment} />
+            {onEdit && (
+                <Button variant="ghost" size="sm" onClick={onEdit}>
+                    Edit action
+                </Button>
+            )}
             <Popover
                 open={open}
                 onOpenChange={o => {
+                    if (busy) return;
                     setOpen(o);
                     if (!o) setPending(null);
                 }}
@@ -123,7 +140,7 @@ export function CheckInRow({
                         {isOpen ? "Check in" : "Change"}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent align="end" className="w-[340px] p-3">
+                <PopoverContent align="end" className="w-[340px] max-w-[calc(100vw-2rem)] p-3">
                     <div className="text-ink text-[13px] font-medium">{commitment.title}</div>
                     {commitment.test && (
                         <p className="text-ink-3 mt-1 text-[12px]">
@@ -165,6 +182,8 @@ export function CheckInRow({
                             </label>
                             <Textarea
                                 id={`outcome-${commitment.id}`}
+                                disabled={busy}
+                                maxLength={2000}
                                 value={outcome}
                                 onChange={e => setOutcome(e.target.value)}
                                 rows={3}
@@ -180,7 +199,7 @@ export function CheckInRow({
                                 <Button
                                     size="sm"
                                     onClick={() => void resolve(pending)}
-                                    disabled={busy}
+                                    disabled={busy || !outcome.trim()}
                                 >
                                     Save check-in
                                 </Button>

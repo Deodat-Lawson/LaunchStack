@@ -45,7 +45,7 @@ export interface RetrieveArgs {
     companyId: number;
     query: string;
     policy: SnippetPolicy;
-    scope?: DocumentScope;
+    scope: DocumentScope;
 }
 
 /** The locked finalization transaction; metering SQL must not acquire another connection. */

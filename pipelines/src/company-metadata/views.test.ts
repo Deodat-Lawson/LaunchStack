@@ -108,6 +108,22 @@ describe("profileView", () => {
         expect(view.evidence.some(e => e.documentId === 2)).toBe(false);
     });
 
+    it("keeps readable source dependencies even when there is no numbered quote", () => {
+        const metadata = sample();
+        metadata.profile = {
+            facts: {
+                annual_budget: { ...fact("A confidential budget", 9, ""), label: "Annual budget" },
+            },
+        };
+        const visible = profileView(metadata);
+        expect(visible.facts.some(f => f.value === "A confidential budget")).toBe(true);
+        expect(visible.sourceDocumentIds).toContain(9);
+        expect(visible.evidence.some(e => e.documentId === 9)).toBe(false);
+        const hidden = profileView(metadata, { canSee: id => id !== 9 });
+        expect(hidden.sourceDocumentIds).not.toContain(9);
+        expect(hidden.facts.some(f => f.value === "A confidential budget")).toBe(false);
+    });
+
     it("hides a summary resting on any source the viewer cannot open", () => {
         const m = sample();
         m.profile!.summary!.sources.push({

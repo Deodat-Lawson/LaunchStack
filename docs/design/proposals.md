@@ -61,10 +61,13 @@ difference from a "write my application" button.
   builder in `pipelines/src/company-metadata` reads only sources about the
   company, drops reference lists, tables and other noise, and keeps a fact
   only with a quote found verbatim in its source. The stages read it through
-  `loadOrgProfile` → `orgProfileFromView`, so excerpt numbers match the page.
-- **Sources** — every draft retrieves from the workspace's indexed sources; a citation opens the source in the Studio; a request can
-  be read straight from a Source; a finished proposal is exported into
-  Sources under "Proposals" and becomes citable.
+  `loadOrgProfile` → `profileView` → `orgProfileFromView`, filtered to the run
+  writer's readable source documents while retaining the shared view's
+  fact and derived-summary rules.
+- **Sources** — every draft retrieves from the writer's readable indexed
+  sources; a citation opens the source in the Studio; a request can be read
+  straight from a Source; a finished proposal is exported into Sources under
+  "Proposals" and becomes citable.
 - **Chat** — "Ask in chat" on any section opens the Studio with a question
   about that section in the composer (`/employer/documents?ask=…`, a new
   parameter the workspace shell honours like `?feature=`).
@@ -150,6 +153,48 @@ exactly-once guarantee. Eligibility is checked immediately before
 dispatching the debit; an already-dispatched external operation cannot be
 recalled if its response crosses the deadline.
 
+### Generation scope
+
+Both executors resolve the stored run writer's current active workspace
+membership and document scope inside their deferred body: `after()` for
+inline execution, `step.run("execute", …)` for the worker. The event's
+`userId` is not authority to substitute another writer. Missing or inactive
+membership, or failed scope resolution, fails the run without falling back
+to workspace-wide access. Workspace model selection remains scoped inside
+the same callback or step.
+
+Execution and draft retrieval require an explicit document scope. Retrieval
+uses the real document-scope SQL; profile facts are filtered by readable
+source provenance. A library answer is excluded from generation if any of
+its stored evidence is unreadable, missing, or belongs to another workspace.
+An application's stored request source must also remain readable before its
+content or extracted requirements can be used.
+
+New drafts record complete `sourceDocumentIds` for their document inputs:
+retrieved excerpts whether cited or not, profile dependencies even without
+quotes, the request source, and reused library snapshots. Rewrite carries
+these dependencies forward. Rewrite and review do not retrieve new sources;
+before sending existing prose, all its dependencies, saved evidence, and
+referenced library answers must remain readable. Otherwise the run fails and
+asks for a redraft. Dropping citations alone would leave private prose in
+the prompt. Legacy generated prose without complete proof requires a redraft
+under a constrained scope; a broad-scope rewrite does not manufacture proof.
+
+Clearing a draft keeps its source dependencies and generation history, but
+clears citation and gap annotations. Later prose cannot inherit those old
+annotations; undoing the text alone does not restore citations.
+
+New library answers store explicit manual provenance or an immutable source
+snapshot in a version-1 envelope inside the existing `evidence` JSONB. The
+API still returns an evidence array. Saved source dependencies survive edits
+and deletion of the originating application. Legacy evidence arrays have
+unknown provenance: they remain readable and editable but are not reused
+automatically. Replace them with a proven snapshot or an explicitly new
+manual answer. No SQL migration is needed.
+
+These are generation checks, not a change to read-side access policy for
+shared application and library screens.
+
 ## Stages, briefly
 
 - **Profile** — not a Proposals stage: the company profile, built per
@@ -183,3 +228,8 @@ recalled if its response crosses the deadline.
 - `apps/web` — the adapter's words and to-do order, the preview simulator's
   contract (runs that finish and change the world, rewrite, section status
   rules, checklist ticking, apply-from-funder), back targets.
+  `run-scope.integration.test.ts` also runs the actual inline callback and
+  worker handler against migrated Postgres and production retrieval, with
+  stand-in model/embedding outputs: granted-writer controls, restricted
+  sources/profile/library exclusions, nonretrieving rewrite/review provenance,
+  event-actor substitution, and membership removal before execution.

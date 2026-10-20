@@ -13,6 +13,7 @@ import {
     blankToNull,
     makeApplicationFilename,
     renderApplicationMarkdown,
+    sectionSourceProvenance,
     slugKey,
     syncSectionRequirements,
     toggleRequirement,
@@ -41,7 +42,6 @@ import {
     listOpportunities,
     listRuns,
     listSections,
-    loadOrgProfile,
     setOpportunityStatus,
     updateApplication,
     updateLibraryItem,
@@ -185,8 +185,8 @@ export async function findFundersRun(
         includeWeb?: boolean;
     }
 ): Promise<RunDto> {
-    const profile = await loadOrgProfile(ctx.companyId);
-    if (!profile && !(input.keywords && input.keywords.length > 0))
+    const profile = await getProfileRow(ctx.companyId);
+    if ((!profile?.builtAt || !profile.metadata) && !(input.keywords && input.keywords.length > 0))
         throw new ProposalsError(
             "Build your organisation profile first, or give keywords to search for",
             409,
@@ -612,11 +612,14 @@ export async function patchSection(
         throw new ProposalsError("Write the answer before approving it", 409);
     const updated = await updateSection(ctx.companyId, sectionId, {
         draft: input.draft,
+        draftMeta:
+            input.draft !== undefined && !input.draft?.trim() && current.draftMeta
+                ? { ...current.draftMeta, cites: [], gaps: [] }
+                : undefined,
         status,
         question: blankToNull(input.question) ?? undefined,
         guidance: input.guidance,
         wordLimit: input.wordLimit,
-        draftMeta: input.draft !== undefined && !input.draft?.trim() ? null : undefined,
     });
     if (!updated) throw new ProposalsError("Section not found", 404);
     await refreshReadiness(ctx, applicationId);
@@ -666,6 +669,14 @@ export async function saveSectionToLibrary(
     if (!section || section.applicationId !== applicationId)
         throw new ProposalsError("Section not found", 404);
     if (!section.draft?.trim()) throw new ProposalsError("Write the answer before saving it", 409);
+    const application = await getApplication(applicationId, ctx.companyId);
+    if (!application) throw new ProposalsError("Application not found", 404);
+    let provenance = sectionSourceProvenance(section);
+    if (provenance.kind !== "unknown" && application.requestDocumentId !== null) {
+        const ids = new Set(provenance.kind === "sources" ? provenance.sourceDocumentIds : []);
+        ids.add(application.requestDocumentId);
+        provenance = { kind: "sources", sourceDocumentIds: [...ids] };
+    }
     const cited = new Set(section.draftMeta?.cites ?? []);
     const item = await createLibraryItem({
         companyId: ctx.companyId,
@@ -677,6 +688,7 @@ export async function saveSectionToLibrary(
             .filter(Boolean)
             .slice(0, 10),
         evidence: (section.draftMeta?.evidence ?? []).filter(e => cited.has(e.n)),
+        provenance,
         sourceApplicationId: applicationId,
         sourceSectionKey: section.key,
     });
@@ -697,6 +709,7 @@ export async function newLibraryItem(
             .filter(Boolean)
             .slice(0, 10),
         evidence: [],
+        provenance: { kind: "manual" },
         sourceApplicationId: null,
         sourceSectionKey: null,
     });

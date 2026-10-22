@@ -1,7 +1,7 @@
 # Vantage Week 2 重建验收报告
 
 日期：2026-10-22。基线：`0432b4b440456ee50f1e715bb13d6ae4d72b2ce7`。
-分支：`codex/vantage-week2-rebuild`。本报告记录本次实际执行，未复用旧会话的测试数量。
+分支：`Junkun/vantage-week2-rebuild`。本报告记录本次实际执行，未复用旧会话的测试数量。
 
 ## 交付结论
 

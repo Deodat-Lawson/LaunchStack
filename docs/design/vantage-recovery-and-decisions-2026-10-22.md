@@ -11,7 +11,7 @@ PR 和已提供的会话记录中，没有找到可恢复的三次 Week 2 完整
 
 已保留并沿用的实际代码包括：Contract v1 基础、真实数据库测试基础、Joseph
 的界面、Sophia 的生成适配器，以及集成分支的登录/数据库/浏览器测试工具。
-新实现位于独立 clone 的 `codex/vantage-week2-rebuild` 分支，没有修改原 checkout。
+新实现位于独立 clone 的 `Junkun/vantage-week2-rebuild` 分支，没有修改原 checkout。
 新测试资源也独立于原演示环境。
 
 本机编辑器历史另做了限定检查：VS Code 中有 6 个 LaunchStack 资源的历史索引，

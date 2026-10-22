@@ -62,27 +62,28 @@ export function SourceDialog({
             const kind = sourceRef.ref.slice(0, colon);
             const id = sourceRef.ref.slice(colon + 1);
             if (kind === "ev") {
-                const { evidence } = await vantageApi.evidence();
-                const item = evidence.find(e => e.id === id);
-                if (item)
+                // Read the cited record by its opaque id. The list endpoint can
+                // be filtered by visibility and is not a safe source resolver.
+                const { evidence: item } = await vantageApi.evidenceById(id);
+                if (item) {
                     return {
                         title: item.title,
                         body: item.body,
                         date: `Observed ${item.observedAt} · ${item.source ?? "Source not named"}`,
                         url: item.sourceUrl,
                     };
+                }
             } else if (kind === "obs") {
-                const { observations } = await vantageApi.metrics();
-                const item = observations.find(o => o.id === id);
-                if (item)
+                const { observation: item } = await vantageApi.observationById(id);
+                if (item) {
                     return {
                         title: item.metricName,
                         body: `Value: ${item.value}\nSource: ${item.source ?? "Not named"}\n${item.note ?? ""}`,
                         date: `${item.periodStart} – ${item.periodEnd}`,
                     };
+                }
             } else if (kind === "cm") {
-                const { commitments } = await vantageApi.commitments();
-                const item = commitments.find(c => c.id === id);
+                const { commitment: item } = await vantageApi.commitmentById(id);
                 if (item)
                     return {
                         title: item.title,

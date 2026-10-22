@@ -199,7 +199,8 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
 
     test.beforeAll(() => {
         const target = new URL(required("E2E_BASE_URL"));
-        expect(["localhost", "127.0.0.1", "::1", "[::1]"]).toContain(target.hostname);
+        expect(target.hostname).toBe("localhost");
+        expect(target.port).toBe("3103");
         expect(target.protocol).toBe("http:");
         required("VANTAGE_E2E_EMAIL");
         required("VANTAGE_E2E_PASSWORD");
@@ -412,7 +413,7 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
         await dialog
             .getByLabel("The test", { exact: true })
             .fill("Three synthetic tasks have completion and assistance recorded.");
-        await dialog.getByRole("button", { name: "Record", exact: true }).click();
+        await dialog.getByRole("button", { name: "Save Decision", exact: true }).click();
         await expect(article.getByText(decision, { exact: true })).toBeVisible();
         await page.reload();
         article = page.getByRole("article", { name: reviewedTitle, exact: true });
@@ -427,7 +428,9 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
         ).toBe(commitmentId);
 
         await article.getByRole("button", { name: "View linked action", exact: true }).click();
-        await expect(page.getByRole("heading", { name: "Commitments", exact: true })).toBeVisible();
+        await expect(
+            page.getByRole("heading", { name: "Weekly Actions", exact: true })
+        ).toBeVisible();
         await expect(page.getByText(actionTitle, { exact: true })).toBeVisible();
         await page.getByRole("button", { name: "Check in", exact: true }).click();
         await page.getByRole("button", { name: "Done", exact: true }).click();
@@ -515,7 +518,7 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
                 await route.continue();
             }
         });
-        await dialog.getByRole("button", { name: "Record", exact: true }).click();
+        await dialog.getByRole("button", { name: "Save Decision", exact: true }).click();
         await expect(
             dialog.getByRole("button", { name: "Retry unchanged submission", exact: true })
         ).toBeVisible();
@@ -575,7 +578,7 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
             await committed.body();
             await route.abort("connectionfailed");
         });
-        await dialog.getByRole("button", { name: "Record", exact: true }).click();
+        await dialog.getByRole("button", { name: "Save Decision", exact: true }).click();
         await expect(
             dialog.getByRole("button", { name: "Retry unchanged submission", exact: true })
         ).toBeVisible();
@@ -637,6 +640,35 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
         });
     });
 
+    test("@p1 a decision without an action persists without inventing a commitment", async ({
+        page,
+    }) => {
+        const topic = await seededTopic(page, `E2E no-action ${randomUUID().slice(0, 8)}`);
+        await openWeek(page, fixture.weekStart);
+        const article = page.getByRole("article", { name: topic.title, exact: true });
+        await article.getByRole("button", { name: "Record decision", exact: true }).click();
+        const dialog = page.getByRole("dialog");
+        const decision = "Keep this synthetic topic as discussion only for now.";
+        await dialog.getByRole("switch", { name: "Create action", exact: true }).click();
+        await dialog.getByLabel("What was decided", { exact: true }).fill(decision);
+        await dialog.getByRole("button", { name: "Save Decision", exact: true }).click();
+        await expect(article.getByText(decision, { exact: true })).toBeVisible();
+        await expect(
+            article.getByRole("button", { name: "View linked action", exact: true })
+        ).toHaveCount(0);
+        const saved = (await readAgenda(page, fixture.weekStart))!.topics.find(
+            item => item.id === topic.id
+        );
+        expect(saved?.decision).toBe(decision);
+        expect(await commitmentsFor(page, topic.id)).toHaveLength(0);
+        await attachEvidence("decision-without-action", {
+            topicId: topic.id,
+            decision,
+            persistedTopic: saved,
+            commitments: await commitmentsFor(page, topic.id),
+        });
+    });
+
     test("@readback saved following-week rules report still cites the persisted completed outcome", async ({
         page,
     }) => {
@@ -652,6 +684,19 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
             "Run the successful happy path once before this read-only follow-up"
         ).not.toBeNull();
         if (!following) throw new Error("No saved following-week report exists for readback.");
+        await openWeek(page, fixture.followingWeekStart);
+        const previousContext = page.getByRole("region", {
+            name: "Previous week context",
+            exact: true,
+        });
+        await expect(previousContext).toBeVisible();
+        await expect(previousContext.getByText("Saved decisions", { exact: true })).toBeVisible();
+        await expect(
+            previousContext.getByText("Carried open actions", { exact: true })
+        ).toBeVisible();
+        await expect(
+            previousContext.getByText("Comparable metrics", { exact: true })
+        ).toBeVisible();
         expect(following.execution).toMatchObject({
             mode: "rules",
             attempts: 0,
@@ -686,7 +731,6 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
             throw new Error(
                 "The saved following-week report no longer cites the completed outcome."
             );
-        await openWeek(page, fixture.followingWeekStart);
         await page.reload();
         await expect(page.getByRole("article", { name: cited.title, exact: true })).toContainText(
             completed.outcome
@@ -842,7 +886,7 @@ test.describe("Vantage Contract v1 authenticated isolated acceptance", () => {
                 new URL(response.url()).pathname === `/api/vantage/topics/${topic.id}/decide` &&
                 response.request().method() === "POST"
         );
-        await dialog.getByRole("button", { name: "Record", exact: true }).click();
+        await dialog.getByRole("button", { name: "Save Decision", exact: true }).click();
         const response = await pending;
         expect(response.status()).toBe(200);
         const savedResponse = (await response.json()) as { topic: Topic };

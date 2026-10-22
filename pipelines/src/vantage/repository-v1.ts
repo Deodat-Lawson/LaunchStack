@@ -78,10 +78,10 @@ async function putState(tx: Tx, companyId: bigint, agendaId: string, version: nu
         .values({ agendaId, companyId, version, payload })
         .onConflictDoUpdate({ target: states.agendaId, set: { version, payload } });
 }
-/** Short test-pilot write lock also serializes legacy writers, never model calls. */
+/** Short test-pilot write lock covers agenda and generation-source writers, never model calls. */
 async function lock(tx: Tx) {
     await tx.execute(
-        sql`LOCK TABLE ${agendas}, ${topics}, ${commitments}, ${states} IN SHARE ROW EXCLUSIVE MODE`
+        sql`LOCK TABLE ${agendas}, ${topics}, ${commitments}, ${states}, ${evidence}, ${definitions}, ${observations} IN SHARE ROW EXCLUSIVE MODE`
     );
 }
 async function read(
@@ -166,13 +166,13 @@ async function read(
 export function getAgendaV1(companyId: bigint, selector: { id: string } | { weekStart: string }) {
     return read(getDb(), companyId, selector);
 }
-export async function generationSnapshot(
+async function generationSnapshotFromDb(
     companyId: bigint,
     period: ReportPeriod,
-    mode: GenerationInput["generationMode"]
+    mode: GenerationInput["generationMode"],
+    db: ReadDb
 ) {
-    const db = getDb(),
-        endDate = reportingDate(new Date(period.endExclusive));
+    const endDate = reportingDate(new Date(period.endExclusive));
     const last = period.kind === "completed-week" ? calendarAdd(endDate, -1) : endDate;
     const [agenda, defs, ev, obs, cm] = await Promise.all([
         read(db, companyId, { weekStart: period.weekStart }),
@@ -281,6 +281,13 @@ export async function generationSnapshot(
     });
     return { input, expectedReportFingerprint: fingerprint(agenda) };
 }
+export async function generationSnapshot(
+    companyId: bigint,
+    period: ReportPeriod,
+    mode: GenerationInput["generationMode"]
+) {
+    return generationSnapshotFromDb(companyId, period, mode, getDb());
+}
 export async function saveGeneration(
     companyId: bigint,
     userId: string,
@@ -289,6 +296,27 @@ export async function saveGeneration(
 ) {
     return getDb().transaction(async tx => {
         await lock(tx);
+        // Re-read every source collection after taking the short write lock.
+        // The model call happens before this transaction; only the final
+        // context check and persistence are serialized with other writers.
+        const currentSnapshot = await generationSnapshotFromDb(
+            companyId,
+            snapshot.input.reportPeriod,
+            snapshot.input.generationMode,
+            tx
+        );
+        if (currentSnapshot.expectedReportFingerprint !== snapshot.expectedReportFingerprint)
+            throw new VantageError(
+                "Report changed during generation. Reload and generate again.",
+                409,
+                "stale_agenda"
+            );
+        if (currentSnapshot.input.inputVersion !== snapshot.input.inputVersion)
+            throw new VantageError(
+                "Source data changed during generation. Reload and generate again.",
+                409,
+                "stale_context"
+            );
         let current = await read(tx, companyId, {
             weekStart: snapshot.input.reportPeriod.weekStart,
         });
@@ -298,9 +326,8 @@ export async function saveGeneration(
                 409,
                 "stale_agenda"
             );
-        let agendaId = current?.id;
-        if (!agendaId) {
-            agendaId = randomUUID();
+        const agendaId = current?.id ?? randomUUID();
+        if (!current?.id) {
             await tx.insert(agendas).values({
                 id: agendaId,
                 companyId,
@@ -374,24 +401,48 @@ async function ownedTopic(tx: Tx, companyId: bigint, id: string) {
 export async function patchTopicV1(
     companyId: bigint,
     id: string,
-    patch: Partial<TopicInput> & { status?: "suggested" | "kept" | "dismissed" }
+    patch: Partial<TopicInput> & {
+        status?: "suggested" | "kept" | "dismissed";
+        expectedContentVersion?: number;
+    }
 ): Promise<TopicV1Dto> {
     return getDb().transaction(async tx => {
         await lock(tx);
         const row = await ownedTopic(tx, companyId, id),
             s = await state(tx, companyId, row.agendaId);
+        const expectedContentVersion = patch.expectedContentVersion;
+        if (
+            typeof expectedContentVersion !== "number" ||
+            !Number.isInteger(expectedContentVersion) ||
+            expectedContentVersion <= 0
+        )
+            throw new VantageError(
+                "expectedContentVersion must be a positive integer.",
+                400,
+                "validation_error"
+            );
+        if (expectedContentVersion !== (s.data.topicVersions[id] ?? 1))
+            throw new VantageError(
+                "Topic changed. Reload before saving your edit.",
+                409,
+                "stale_topic"
+            );
         if (patch.shared) throw new VantageError("Sharing is disabled.", 400, "validation_error");
-        const normalized = { ...patch };
+        const { expectedContentVersion: _expectedContentVersion, ...contentPatch } = patch;
+        const normalized = { ...contentPatch };
         for (const key of ["proposedOwner", "proposedDue", "helpRequested", "rationale"] as const)
             if (normalized[key] !== undefined) normalized[key] = orNull(normalized[key]);
-        const edited = Object.keys(patch).some(k => k !== "status");
-        if (Object.keys(patch).length === 0)
+        const edited = Object.keys(contentPatch).some(k => k !== "status");
+        if (Object.keys(contentPatch).length === 0)
             return (await read(tx, companyId, { id: row.agendaId }))!.topics.find(
                 t => t.id === id
             )!;
         await tx
             .update(topics)
-            .set({ ...normalized, status: patch.status ?? (edited ? "kept" : row.status) })
+            .set({
+                ...normalized,
+                status: contentPatch.status ?? (edited ? "kept" : row.status),
+            })
             .where(and(eq(topics.companyId, companyId), eq(topics.id, id)));
         s.data.topicVersions[id] = (s.data.topicVersions[id] ?? 1) + 1;
         await putState(tx, companyId, row.agendaId, s.version + 1, s.data);

@@ -7,8 +7,11 @@ import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
-    ACCOUNTS,
+    accountsFor,
     APP_URL,
+    APP_HOST,
+    DATABASE_HOST,
+    DATABASE_PORT,
     DATABASE,
     DATABASE_USER,
     PROJECT,
@@ -18,14 +21,14 @@ import {
     assertNoDotenv,
     readRuntime,
     systemEnvironment,
+    workspaceSlugsFor,
 } from "./vantage-integration-runtime.mjs";
 
 const DESCRIPTORS = [
     ["manual_period_roundtrip", "TL API/date persistence; Joseph metrics form"],
     ["impossible_date_rejected", "TL API calendar validation; Joseph calendar controls"],
     ["reversed_period_rejected", "TL API period validation; Joseph calendar controls"],
-    ["negative_signup_count_rejected", "TL/product metric domain contract; Joseph form validation"],
-    ["signed_custom_metric_negative_allowed", "TL/product metric domain contract"],
+    ["finite_signed_metric_contract", "TL/product metric domain contract; Joseph form validation"],
     ["private_sharing_rejected", "TL API private-only contract; Joseph sharing menu"],
     ["foreign_metric_observation_rejected", "TL workspace and metric ownership"],
     ["foreign_metric_evidence_edits_rejected", "TL workspace ownership"],
@@ -58,6 +61,7 @@ async function runIsolatedChild() {
 async function probes() {
     assertNoDotenv();
     const config = readRuntime();
+    const accounts = accountsFor(config);
     assertDatabaseUrl(config.databaseUrl);
     if (
         !/^[1-9][0-9]*$/.test(config.companyId ?? "") ||
@@ -103,7 +107,7 @@ async function probes() {
     async function api(path, { method = "GET", data, authenticated = true } = {}) {
         if (!path.startsWith("/api/")) throw new Error("Probe URLs must be local API paths.");
         const target = new URL(path, APP_URL);
-        if (target.origin !== APP_URL || target.hostname !== "127.0.0.1")
+        if (target.origin !== APP_URL || target.hostname !== APP_HOST)
             throw new Error("Refusing a non-loopback probe URL.");
         const response = await fetch(target, {
             method,
@@ -148,15 +152,14 @@ async function probes() {
             await sql`SELECT id::text, slug FROM pdr_ai_v2_company WHERE id IN (${config.companyId}, ${config.outsideCompanyId})`;
         ensure(
             companies.some(
-                c => c.id === config.companyId && c.slug === "vantage-integration-e2e-20261019"
+                c => c.id === config.companyId && c.slug === workspaceSlugsFor(config).primary
             ),
             "Primary synthetic workspace mismatch."
         );
         ensure(
             companies.some(
                 c =>
-                    c.id === config.outsideCompanyId &&
-                    c.slug === "vantage-integration-outside-20261019"
+                    c.id === config.outsideCompanyId && c.slug === workspaceSlugsFor(config).outside
             ),
             "Outside synthetic workspace mismatch."
         );
@@ -209,7 +212,7 @@ async function probes() {
             method: "POST",
             authenticated: false,
             data: {
-                email: ACCOUNTS[0].email,
+                email: accounts[0].email,
                 password: config.loginPassword,
             },
         });
@@ -219,7 +222,7 @@ async function probes() {
         );
         const session = await api("/api/auth/get-session");
         ensure(
-            session.status === 200 && session.body?.user?.id === ACCOUNTS[0].id,
+            session.status === 200 && session.body?.user?.id === accounts[0].id,
             "Real auth session did not match the configured synthetic subject."
         );
         const admission = await api("/api/vantage/metrics");
@@ -231,7 +234,7 @@ async function probes() {
         created.countMetric = await createDefinition(
             "Signups",
             "count",
-            "Probe-only count of newly created synthetic accounts. A count cannot be negative.",
+            "Probe-only finite numeric metric for date persistence; signed interpretation is a separate metric contract.",
             "count"
         );
         created.signedMetric = await createDefinition(
@@ -244,7 +247,7 @@ async function probes() {
         created.foreignEvidenceId = `probe-foreign-evidence-${runTag}`;
         await sql.begin(async tx => {
             await tx`INSERT INTO pdr_ai_v2_vantage_metric_definitions (id, company_id, key, name, definition, unit) VALUES (${created.foreignMetricId}, ${config.outsideCompanyId}, ${`${runId}-foreign`}, 'Probe outside metric', 'Synthetic foreign workspace probe only.', 'count')`;
-            await tx`INSERT INTO pdr_ai_v2_vantage_evidence (id, company_id, created_by_user_id, kind, title, body, source, observed_at, visibility) VALUES (${created.foreignEvidenceId}, ${config.outsideCompanyId}, ${ACCOUNTS[2].id}, 'note', 'Probe outside evidence', 'Synthetic outside workspace data only.', ${runId}, '2026-10-19', 'private')`;
+            await tx`INSERT INTO pdr_ai_v2_vantage_evidence (id, company_id, created_by_user_id, kind, title, body, source, observed_at, visibility) VALUES (${created.foreignEvidenceId}, ${config.outsideCompanyId}, ${accounts[2].id}, 'note', 'Probe outside evidence', 'Synthetic outside workspace data only.', ${runId}, '2026-10-19', 'private')`;
         });
 
         await probe("manual_period_roundtrip", async () => {
@@ -315,56 +318,51 @@ async function probes() {
                 };
             });
 
-        await probe("negative_signup_count_rejected", async () => {
-            const source = `${runId}-negative-count`;
-            const request = {
-                metricId: created.countMetric.id,
-                value: -1,
-                periodStart: "2026-10-12",
-                periodEnd: "2026-10-18",
-                source,
-            };
-            const response = await api("/api/vantage/metrics/observations", {
-                method: "POST",
-                data: request,
-            });
-            const rows = await observationRows(source);
+        await probe("finite_signed_metric_contract", async () => {
+            const accepted = [-3.5, 2.25];
+            const rejected = ["NaN", "Infinity", "-Infinity"];
+            const requests = [
+                ...accepted.map((value, index) => ({
+                    metricId: created.signedMetric.id,
+                    value,
+                    periodStart: "2026-10-12",
+                    periodEnd: "2026-10-18",
+                    source: `${runId}-signed-${index}`,
+                })),
+                ...rejected.map((value, index) => ({
+                    metricId: created.signedMetric.id,
+                    value,
+                    periodStart: "2026-10-12",
+                    periodEnd: "2026-10-18",
+                    source: `${runId}-nonfinite-${index}`,
+                })),
+            ];
+            const responses = [];
+            for (const request of requests) {
+                const response = await api("/api/vantage/metrics/observations", {
+                    method: "POST",
+                    data: request,
+                });
+                responses.push({
+                    request,
+                    status: response.status,
+                    rows: await observationRows(request.source),
+                });
+            }
+            const acceptedResults = responses.slice(0, accepted.length);
+            const rejectedResults = responses.slice(accepted.length);
             return {
-                pass: response.status === 400 && rows.length === 0,
-                metric: {
-                    name: created.countMetric.name,
-                    unit: created.countMetric.unit,
-                    definition: created.countMetric.definition,
-                },
-                expected: "HTTP 400 and zero persisted rows for a negative count",
-                actualStatus: response.status,
-                request,
-                sqlRows: rows,
-                interpretation:
-                    "A signed metric needs a separate domain rule; a blanket prohibition on all negative values would be wrong.",
-            };
-        });
-
-        await probe("signed_custom_metric_negative_allowed", async () => {
-            const source = `${runId}-signed-negative`;
-            const request = {
-                metricId: created.signedMetric.id,
-                value: -3.5,
-                periodStart: "2026-10-12",
-                periodEnd: "2026-10-18",
-                source,
-            };
-            const response = await api("/api/vantage/metrics/observations", {
-                method: "POST",
-                data: request,
-            });
-            const rows = await observationRows(source);
-            return {
-                pass: response.status === 201 && rows.length === 1 && rows[0].value === -3.5,
-                expectedStatus: 201,
-                actualStatus: response.status,
+                pass:
+                    acceptedResults.every(
+                        result => result.status === 201 && result.rows.length === 1
+                    ) &&
+                    rejectedResults.every(
+                        result => result.status === 400 && result.rows.length === 0
+                    ),
+                expected:
+                    "Finite signed numbers, including negative/fractional values, persist; NaN and Infinity spellings are rejected without rows.",
                 metric: { name: created.signedMetric.name, unit: created.signedMetric.unit },
-                sqlRows: rows,
+                responses,
             };
         });
 
@@ -456,7 +454,7 @@ async function probes() {
                 method: "POST",
                 data: {
                     companyId: config.outsideCompanyId,
-                    userId: ACCOUNTS[2].id,
+                    userId: accounts[2].id,
                     metricId: created.countMetric.id,
                     value: 2,
                     periodStart: "2026-10-12",
@@ -470,7 +468,7 @@ async function probes() {
                     response.status === 201 &&
                     rows.length === 1 &&
                     rows[0].companyId === config.companyId &&
-                    rows[0].createdByUserId === ACCOUNTS[0].id,
+                    rows[0].createdByUserId === accounts[0].id,
                 actualStatus: response.status,
                 attemptedCompanyId: config.outsideCompanyId,
                 expectedCompanyId: config.companyId,
@@ -502,7 +500,7 @@ async function probes() {
 
         await probe("permission_revocation_blocks_and_restores", async () => {
             const [membership] =
-                await sql`SELECT m.id, m.role, m.status FROM pdr_ai_v2_user_company_memberships m JOIN pdr_ai_v2_users u ON u.id=m.user_id WHERE u."userId"=${ACCOUNTS[0].id} AND m.company_id=${config.companyId}`;
+                await sql`SELECT m.id, m.role, m.status FROM pdr_ai_v2_user_company_memberships m JOIN pdr_ai_v2_users u ON u.id=m.user_id WHERE u."userId"=${accounts[0].id} AND m.company_id=${config.companyId}`;
             ensure(
                 membership?.role === "owner" && membership.status === "active",
                 "Expected the synthetic owner's original active membership before permission probe."
@@ -576,7 +574,12 @@ async function probes() {
             completedAt: new Date().toISOString(),
             boundary:
                 "Real loopback Better Auth HTTP, verified isolated PostgreSQL, additive probe-only rows; no .env, provider, original checkout, or real credentials.",
-            database: { host: "127.0.0.1", port: 55435, name: DATABASE, user: DATABASE_USER },
+            database: {
+                host: DATABASE_HOST,
+                port: DATABASE_PORT,
+                name: DATABASE,
+                user: DATABASE_USER,
+            },
             created,
             membershipRestored,
             summary: {

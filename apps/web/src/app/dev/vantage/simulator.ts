@@ -75,7 +75,8 @@ function makeEvidence(input: EvidenceInput, createdAt = new Date().toISOString()
         source: input.source ?? null,
         sourceUrl: input.sourceUrl ?? null,
         observedAt: input.observedAt,
-        visibility: input.visibility ?? "private",
+        // Contract v1 is private-only; the real API rejects shared writes.
+        visibility: "private",
         tags: input.tags ?? [],
         createdAt,
     };
@@ -938,6 +939,10 @@ export async function simulateVantage(
                 .sort(byDesc(e => `${e.observedAt}${e.createdAt}`));
             return json({ evidence });
         }
+        case "GET evidence/:id": {
+            const evidence = find(W.evidence, key);
+            return evidence ? json({ evidence }) : missing();
+        }
         case "POST evidence": {
             if (!str("title").trim()) return json({ error: "Give it a title." }, 400);
             const evidence = makeEvidence(body as unknown as EvidenceInput);
@@ -946,7 +951,13 @@ export async function simulateVantage(
         }
         case "PATCH evidence/:id": {
             const evidence = find(W.evidence, key);
-            return evidence ? json({ evidence: Object.assign(evidence, body) }) : missing();
+            if (!evidence) return missing();
+            if (body.visibility === "shared")
+                return json(
+                    { error: "Shared evidence is unavailable in private contract v1." },
+                    400
+                );
+            return json({ evidence: Object.assign(evidence, body, { visibility: "private" }) });
         }
         case "DELETE evidence/:id":
             W.evidence = W.evidence.filter(e => e.id !== key);
@@ -954,6 +965,10 @@ export async function simulateVantage(
 
         case "GET metrics":
             return json({ definitions: W.definitions, observations: observationsNewestFirst() });
+        case "GET metrics/observations/:id": {
+            const observation = find(W.observations, key);
+            return observation ? json({ observation }) : missing();
+        }
         case "POST metrics": {
             const name = str("name").trim();
             if (!name) return json({ error: "Name the metric." }, 400);
@@ -1091,6 +1106,10 @@ export async function simulateVantage(
         case "GET commitments": {
             const status = url.searchParams.get("status");
             return json({ commitments: W.commitments.filter(c => !status || c.status === status) });
+        }
+        case "GET commitments/:id": {
+            const commitment = find(W.commitments, key);
+            return commitment ? json({ commitment }) : missing();
         }
         case "POST commitments": {
             if (!str("title").trim() || !str("owner").trim()) {

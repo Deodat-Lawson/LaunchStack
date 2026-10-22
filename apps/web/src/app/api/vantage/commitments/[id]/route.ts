@@ -1,13 +1,31 @@
+// GET    /api/vantage/commitments/:id — direct commitment read
 // PATCH  /api/vantage/commitments/:id — check in: done / missed / dropped, with what was learned
 // DELETE /api/vantage/commitments/:id
 import type { NextRequest } from "next/server";
 
-import { deleteCommitmentV1, updateCommitmentV1 } from "@launchstack/pipelines/vantage";
+import {
+    deleteCommitmentV1,
+    getCommitment,
+    updateCommitmentV1,
+} from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { CommitmentPatchSchema } from "../../_schemas";
 
 type Params = { params: Promise<{ id: string }> };
+
+export async function GET(_request: NextRequest, { params }: Params) {
+    const auth = await vantageContext();
+    if (!auth.ok) return auth.response;
+    try {
+        const { id } = await params;
+        const commitment = await getCommitment({ companyId: auth.ctx.companyId, id });
+        if (!commitment) return error("That action is not here.", 404, { code: "not_found" });
+        return json({ commitment });
+    } catch (err) {
+        return handleVantageError("GET commitment", err);
+    }
+}
 
 export async function PATCH(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();

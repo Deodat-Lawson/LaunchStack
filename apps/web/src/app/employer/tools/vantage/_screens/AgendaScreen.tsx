@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Loader2, RefreshCw, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useToolNav } from "~/components/tool-app/nav";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
@@ -19,6 +20,8 @@ import {
     vantageErrorMessage,
     VantageApiError,
     type AgendaV1Dto,
+    type CommitmentDto,
+    type MetricObservationDto,
     type TopicDto,
     type TopicV1Dto,
     type VantageEvidenceRef,
@@ -60,6 +63,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
     const [deciding, setDeciding] = useState<TopicDto | null>(null);
     const [source, setSource] = useState<VantageEvidenceRef | null>(null);
     const [filter, setFilter] = useState("all");
+    const [stale, setStale] = useState(false);
     const running = useRef(false);
     const controller = useRef<AbortController | null>(null);
     const alive = useRef(true);
@@ -74,6 +78,65 @@ function WeeklyAgenda({ week }: { week?: string }) {
     const selected = res.data?.week ?? week;
     const future = Boolean(selected && selected > mondayOf(reportingDate()));
     const go = (date: string) => navigate(vantagePath(`/agenda?week=${date}`));
+    const previous = useResource(
+        selected && validReportingDate(selected) ? `vantage:previous:${selected}` : null,
+        async () => {
+            const previousWeek = calendarAdd(mondayOf(selected!), -7);
+            const [period, actions, metricData] = await Promise.all([
+                vantageApi.agendas(previousWeek),
+                vantageApi.commitments(),
+                vantageApi.metrics(),
+            ]);
+            return {
+                period,
+                actions: actions?.commitments ?? [],
+                metricData: metricData ?? { definitions: [], observations: [] },
+            };
+        }
+    );
+
+    const reloadSaved = async () => {
+        const refreshed = await vantageApi.agendas(selected);
+        res.mutate(() => refreshed);
+        setStale(false);
+        setError(null);
+        setNotice("Reloaded the saved report. Review the current version before editing.");
+    };
+
+    const reconcileTopic = (saved: TopicDto) => {
+        res.mutate(current =>
+            current.agenda
+                ? {
+                      ...current,
+                      agenda: {
+                          ...current.agenda,
+                          topics: current.agenda.topics.map(topic =>
+                              topic.id === saved.id ? { ...topic, ...saved } : topic
+                          ),
+                      },
+                  }
+                : current
+        );
+    };
+
+    const refreshAfterWrite = async (savedTopic?: TopicDto) => {
+        setStale(true);
+        if (savedTopic) reconcileTopic(savedTopic);
+        try {
+            // useResource.reload intentionally keeps errors in hook state and
+            // resolves; a write needs an explicit read so saved and refreshed
+            // states cannot be conflated.
+            const refreshed = await vantageApi.agendas(selected);
+            res.mutate(() => refreshed);
+            setStale(false);
+            return true;
+        } catch {
+            setStale(true);
+            setNotice("Saved, but refresh failed. Reload before making another change.");
+            setError("Your change was saved, but the refreshed report could not be loaded.");
+            return false;
+        }
+    };
 
     const run = async (label: string, work: () => Promise<unknown>) => {
         if (running.current) return;
@@ -84,7 +147,16 @@ function WeeklyAgenda({ week }: { week?: string }) {
         try {
             await work();
         } catch (e) {
-            if (alive.current) setError(vantageErrorMessage(e));
+            if (alive.current) {
+                const knownValidation =
+                    e instanceof VantageApiError &&
+                    e.status >= 400 &&
+                    e.status < 500 &&
+                    e.status !== 408 &&
+                    e.status !== 409;
+                if (!knownValidation) setStale(true);
+                setError(vantageErrorMessage(e));
+            }
         } finally {
             running.current = false;
             if (alive.current) setBusy(null);
@@ -100,7 +172,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                 if (!alive.current || abort.signal.aborted) return;
                 res.mutate(current => ({ ...current, week: saved.weekStart, agenda: saved }));
                 setNotice("Report generated and saved.");
-                await res.reload();
+                await refreshAfterWrite();
             } catch (e) {
                 if (abort.signal.aborted && alive.current)
                     throw new VantageApiError(
@@ -115,9 +187,9 @@ function WeeklyAgenda({ week }: { week?: string }) {
         });
     const patch = (topic: TopicV1Dto, status: "kept" | "dismissed") =>
         run("Saving topic", async () => {
-            await vantageApi.patchTopic(topic.id, { status });
-            await res.reload();
-            if (alive.current)
+            await vantageApi.patchTopic(topic.id, { status }, topic.contentVersion);
+            const refreshed = await refreshAfterWrite();
+            if (alive.current && refreshed)
                 setNotice(
                     status === "kept"
                         ? "Topic kept on the agenda."
@@ -216,7 +288,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                     </Select>
                     <Button
                         onClick={() => void generate()}
-                        disabled={!!busy || res.loading || !res.data || future || invalid}
+                        disabled={!!busy || stale || res.loading || !res.data || future || invalid}
                     >
                         {busy === "Generating" ? (
                             <Loader2 className="size-4 animate-spin motion-reduce:animate-none" />
@@ -242,6 +314,16 @@ function WeeklyAgenda({ week }: { week?: string }) {
                     </p>
                 )}
             </section>
+            {selected && validReportingDate(selected) && (
+                <PreviousWeekContext
+                    selectedWeek={selected}
+                    currentAgenda={agenda ?? undefined}
+                    data={previous.data ?? undefined}
+                    loading={previous.loading}
+                    error={previous.error}
+                    onOpenObservation={setSource}
+                />
+            )}
             {(invalid || Boolean(res.error) || Boolean(error)) && (
                 <div className="border-danger/30 bg-panel rounded-lg border p-4">
                     <FormError
@@ -255,7 +337,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                             disabled={!!busy}
                             onClick={() =>
                                 void run("Reloading", async () => {
-                                    await res.reload();
+                                    await reloadSaved();
                                 })
                             }
                         >
@@ -324,7 +406,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                         <Button
                             variant="outline"
                             size="sm"
-                            disabled={!!busy}
+                            disabled={!!busy || stale}
                             onClick={() => setEditing("new")}
                         >
                             Write a topic
@@ -485,7 +567,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                disabled={!!busy}
+                                                disabled={!!busy || stale}
                                                 onClick={() => void patch(topic, "kept")}
                                             >
                                                 {topic.status === "dismissed"
@@ -496,7 +578,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            disabled={!!busy}
+                                            disabled={!!busy || stale}
                                             onClick={() => setEditing(topic)}
                                         >
                                             Edit topic
@@ -504,7 +586,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                         {topic.status !== "dismissed" && (
                                             <Button
                                                 size="sm"
-                                                disabled={!!busy}
+                                                disabled={!!busy || stale}
                                                 onClick={() => setDeciding(topic)}
                                             >
                                                 {topic.decision
@@ -516,7 +598,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                disabled={!!busy}
+                                                disabled={!!busy || stale}
                                                 onClick={() => void patch(topic, "dismissed")}
                                             >
                                                 Dismiss topic
@@ -527,7 +609,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                 {agenda.enhancements
                                     .filter(e => e.topicId === topic.id)
                                     .map(enhancement => {
-                                        const stale =
+                                        const enhancementStale =
                                             enhancement.baseTopicVersion !== topic.contentVersion;
                                         return (
                                             <section
@@ -559,7 +641,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                                 />
                                                 {enhancement.status === "suggested" && (
                                                     <>
-                                                        {stale && (
+                                                        {enhancementStale && (
                                                             <p className="text-warn mt-3 text-xs">
                                                                 The original topic has changed. This
                                                                 addition needs regeneration before
@@ -578,7 +660,11 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                                                             ? "default"
                                                                             : "outline"
                                                                     }
-                                                                    disabled={!!busy || stale}
+                                                                    disabled={
+                                                                        !!busy ||
+                                                                        stale ||
+                                                                        enhancementStale
+                                                                    }
                                                                     onClick={() =>
                                                                         void run(
                                                                             "Reviewing addition",
@@ -589,8 +675,12 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                                                                     status,
                                                                                     enhancement.baseTopicVersion
                                                                                 );
-                                                                                await res.reload();
-                                                                                if (alive.current)
+                                                                                const refreshed =
+                                                                                    await refreshAfterWrite();
+                                                                                if (
+                                                                                    alive.current &&
+                                                                                    refreshed
+                                                                                )
                                                                                     setNotice(
                                                                                         status ===
                                                                                             "accepted"
@@ -627,11 +717,13 @@ function WeeklyAgenda({ week }: { week?: string }) {
                         onOpenChange={open => !open && setEditing(null)}
                         agendaId={agenda.id}
                         initial={editing === "new" ? null : editing}
-                        onSaved={() => {
-                            void res.reload();
-                            setNotice(
-                                "Topic saved. Human edits are protected during regeneration."
-                            );
+                        onSaved={saved => {
+                            void refreshAfterWrite(saved).then(refreshed => {
+                                if (refreshed)
+                                    setNotice(
+                                        "Topic saved. Human edits are protected during regeneration."
+                                    );
+                            });
                         }}
                     />
                 </>
@@ -670,13 +762,199 @@ function WeeklyAgenda({ week }: { week?: string }) {
                 open={deciding !== null}
                 onOpenChange={open => !open && setDeciding(null)}
                 topic={deciding}
-                onSaved={() => {
-                    void res.reload();
-                    setNotice("Decision saved.");
+                onSaved={saved => {
+                    void refreshAfterWrite(saved);
+                    setNotice(
+                        saved.commitmentId
+                            ? "Decision saved. The linked action is available in Weekly Actions."
+                            : "Decision saved."
+                    );
                 }}
             />
             <SourceDialog sourceRef={source} onClose={() => setSource(null)} />
         </div>
+    );
+}
+
+type PreviousContextData = {
+    period: { week: string; agenda: AgendaV1Dto | null };
+    actions: CommitmentDto[];
+    metricData: { definitions: unknown[]; observations: MetricObservationDto[] };
+};
+
+function PreviousWeekContext({
+    selectedWeek,
+    currentAgenda,
+    data,
+    loading,
+    error,
+    onOpenObservation,
+}: {
+    selectedWeek: string;
+    currentAgenda: AgendaV1Dto | undefined;
+    data: PreviousContextData | undefined;
+    loading: boolean;
+    error: string | null;
+    onOpenObservation: (ref: VantageEvidenceRef) => void;
+}) {
+    const previousWeek = calendarAdd(mondayOf(selectedWeek), -7);
+    const previousAgenda = data?.period.agenda;
+    const openActions =
+        data?.actions.filter(
+            action =>
+                action.status === "open" &&
+                action.topicId !== null &&
+                (action.agendaId === previousAgenda?.id ||
+                    action.createdAt < `${selectedWeek}T00:00:00.000Z`)
+        ) ?? [];
+    const currentWeekEnd = calendarAdd(selectedWeek, 6);
+    const previousWeekEnd = calendarAdd(previousWeek, 6);
+    const observations = data?.metricData.observations ?? [];
+    const comparisons =
+        previousAgenda?.reportPeriod?.kind === "completed-week" &&
+        currentAgenda?.reportPeriod?.kind === "completed-week"
+            ? observations
+                  .filter(
+                      o =>
+                          o.periodStart === previousWeek &&
+                          o.periodEnd === previousWeekEnd &&
+                          Boolean(o.source) &&
+                          Number.isFinite(o.value) &&
+                          o.createdAt <= previousAgenda.reportPeriod!.asOf
+                  )
+                  .map(prior => {
+                      const priorCandidates = observations.filter(
+                          o =>
+                              o.metricId === prior.metricId &&
+                              o.periodStart === previousWeek &&
+                              o.periodEnd === previousWeekEnd &&
+                              o.source === prior.source &&
+                              Number.isFinite(o.value) &&
+                              o.createdAt <= previousAgenda.reportPeriod!.asOf
+                      );
+                      const candidates = observations.filter(
+                          o =>
+                              o.metricId === prior.metricId &&
+                              o.periodStart === selectedWeek &&
+                              o.periodEnd === currentWeekEnd &&
+                              o.source === prior.source &&
+                              Number.isFinite(o.value) &&
+                              o.createdAt <= currentAgenda.reportPeriod!.asOf
+                      );
+                      return priorCandidates.length === 1 && candidates.length === 1
+                          ? { prior: priorCandidates[0]!, current: candidates[0]! }
+                          : null;
+                  })
+                  .filter(
+                      (x): x is { prior: MetricObservationDto; current: MetricObservationDto } =>
+                          !!x
+                  )
+            : [];
+
+    return (
+        <section
+            aria-label="Previous week context"
+            className="border-line bg-panel-2 rounded-xl border px-4 py-3"
+        >
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="text-ink text-sm font-semibold">Previous week context</h2>
+                <ToolLink
+                    className="text-brand-ink text-xs underline-offset-2 hover:underline"
+                    href={`/agenda?week=${previousWeek}`}
+                >
+                    Open {weekRange(previousWeek, previousWeekEnd)}
+                </ToolLink>
+            </div>
+            {loading ? (
+                <p className="text-ink-3 mt-2 text-xs">Loading saved context…</p>
+            ) : error ? (
+                <p className="text-ink-3 mt-2 text-xs">Previous context is unavailable.</p>
+            ) : !previousAgenda ? (
+                <p className="text-ink-3 mt-2 text-xs">No saved report for the prior week.</p>
+            ) : (
+                <div className="mt-3 grid gap-3 text-xs md:grid-cols-3">
+                    <div>
+                        <p className="text-ink-3 font-medium">Saved decisions</p>
+                        {previousAgenda.topics.some(topic => topic.decision) ? (
+                            <ul className="text-ink-2 mt-1 space-y-1">
+                                {previousAgenda.topics
+                                    .filter(topic => topic.decision)
+                                    .map(topic => (
+                                        <li key={topic.id}>
+                                            <ToolLink
+                                                className="underline-offset-2 hover:underline"
+                                                href={`/agenda?week=${previousWeek}`}
+                                            >
+                                                {topic.title}: {topic.decision}
+                                            </ToolLink>
+                                        </li>
+                                    ))}
+                            </ul>
+                        ) : (
+                            <p className="text-ink-3 mt-1">None recorded.</p>
+                        )}
+                    </div>
+                    <div>
+                        <p className="text-ink-3 font-medium">Carried open actions</p>
+                        {openActions.length ? (
+                            <ul className="text-ink-2 mt-1 space-y-1">
+                                {openActions.map(action => (
+                                    <li key={action.id}>
+                                        <ToolLink
+                                            className="underline-offset-2 hover:underline"
+                                            href={`/commitments?action=${encodeURIComponent(action.id)}`}
+                                        >
+                                            {action.title} · {action.owner}
+                                        </ToolLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-ink-3 mt-1">None carried forward.</p>
+                        )}
+                    </div>
+                    <div>
+                        <p className="text-ink-3 font-medium">Comparable metrics</p>
+                        {comparisons.length ? (
+                            <ul className="text-ink-2 mt-1 space-y-1">
+                                {comparisons.map(({ prior, current }) => (
+                                    <li key={`${prior.id}-${current.id}`}>
+                                        <button
+                                            type="button"
+                                            className="underline-offset-2 hover:underline"
+                                            onClick={() =>
+                                                onOpenObservation({
+                                                    ref: `obs:${current.id}`,
+                                                    label: `${current.metricName} · current week`,
+                                                    date: `${current.periodStart} – ${current.periodEnd}`,
+                                                })
+                                            }
+                                        >
+                                            {current.metricName}: {prior.value} → {current.value}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="text-ink-3 ml-2 underline-offset-2 hover:underline"
+                                            onClick={() =>
+                                                onOpenObservation({
+                                                    ref: `obs:${prior.id}`,
+                                                    label: `${prior.metricName} · previous week`,
+                                                    date: `${prior.periodStart} – ${prior.periodEnd}`,
+                                                })
+                                            }
+                                        >
+                                            (open prior)
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-ink-3 mt-1">No directly comparable pair.</p>
+                        )}
+                    </div>
+                </div>
+            )}
+        </section>
     );
 }
 

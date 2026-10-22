@@ -106,20 +106,20 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
 }
 
 export async function keepTopic(topic: TopicDto): Promise<Outcome> {
-    await vantageApi.patchTopic(topic.id, { status: "kept" });
+    await vantageApi.patchTopic(topic.id, { status: "kept" }, 1);
     return {
         message: "Added to the agenda",
         description: topic.title,
-        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
+        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }, 1),
     };
 }
 
 export async function ignoreTopic(topic: TopicDto): Promise<Outcome> {
-    await vantageApi.patchTopic(topic.id, { status: "dismissed" });
+    await vantageApi.patchTopic(topic.id, { status: "dismissed" }, 1);
     return {
         message: "Ignored",
         description: topic.title,
-        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
+        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }, 1),
     };
 }
 

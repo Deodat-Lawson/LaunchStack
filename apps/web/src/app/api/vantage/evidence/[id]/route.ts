@@ -1,13 +1,27 @@
+// GET    /api/vantage/evidence/:id — direct item read
 // PATCH  /api/vantage/evidence/:id — edit
 // DELETE /api/vantage/evidence/:id
 import type { NextRequest } from "next/server";
 
-import { deleteEvidence, updateEvidence } from "@launchstack/pipelines/vantage";
+import { deleteEvidence, getEvidence, updateEvidence } from "@launchstack/pipelines/vantage";
 
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { EvidenceSchema } from "../../_schemas";
 
 type Params = { params: Promise<{ id: string }> };
+
+export async function GET(_request: NextRequest, { params }: Params) {
+    const auth = await vantageContext();
+    if (!auth.ok) return auth.response;
+    try {
+        const { id } = await params;
+        const item = await getEvidence({ companyId: auth.ctx.companyId, id });
+        if (!item) return error("That evidence is not here.", 404, { code: "not_found" });
+        return json({ evidence: item });
+    } catch (err) {
+        return handleVantageError("GET evidence", err);
+    }
+}
 
 export async function PATCH(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();

@@ -332,7 +332,11 @@ export function MetricsScreen() {
                                     const unit =
                                         definitions.find(d => d.id === o.metricId)?.unit ?? "count";
                                     return (
-                                        <tr key={o.id} className="border-line-2 h-10 border-t">
+                                        <tr
+                                            key={o.id}
+                                            id={`observation-${o.id}`}
+                                            className="border-line-2 h-10 border-t"
+                                        >
                                             <td className="text-ink px-4 font-medium">
                                                 {o.metricName}
                                             </td>

@@ -48,6 +48,23 @@ describe("v1 frontend reporting dates", () => {
 });
 
 describe("v1 API transport", () => {
+    it("includes a positive expected content version on every topic patch", async () => {
+        const fetchMock = jest.fn().mockResolvedValue(
+            new Response(JSON.stringify({ topic: {} }), {
+                status: 200,
+                headers: { "Content-Type": "application/json" },
+            })
+        );
+        globalThis.fetch = fetchMock as typeof fetch;
+
+        await vantageApi.patchTopic("topic-demo-1", { title: "A founder's wording" }, 4);
+
+        const init = fetchMock.mock.calls[0]![1] as RequestInit;
+        expect(typeof init.body).toBe("string");
+        if (typeof init.body !== "string") throw new Error("Expected a JSON request body");
+        expect(JSON.parse(init.body)).toMatchObject({ expectedContentVersion: 4 });
+    });
+
     it("reads a missing week without generating anything", async () => {
         const result = await vantageApi.agendas("2026-10-05");
         expect(result.agenda).toBeNull();

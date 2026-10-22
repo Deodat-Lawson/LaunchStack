@@ -43,24 +43,24 @@ export function CommitmentsScreen({ actionId }: { actionId?: string | null }) {
         <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-5">
             <header className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                    <h1 className="display text-ink text-2xl">Commitments</h1>
+                    <h1 className="display text-ink text-2xl">Weekly Actions</h1>
                     <p className="text-ink-2 mt-1 text-sm">
                         An action, an owner, a date, and a result to learn from.
                     </p>
                 </div>
                 <Button size="sm" onClick={() => setEditing("new")}>
-                    Add a commitment
+                    Add an action
                 </Button>
             </header>
             {actionId && (
                 <div className="flex items-center justify-between gap-3">
                     <p className="text-ink-2 text-sm">Linked action</p>
                     <Button variant="outline" size="sm" onClick={() => navigate("/commitments")}>
-                        Show all commitments
+                        Show all actions
                     </Button>
                 </div>
             )}
-            <div role="group" aria-label="Filter commitments" className="flex gap-2">
+            <div role="group" aria-label="Filter actions" className="flex gap-2">
                 {["open", "resolved", "all"].map(value => (
                     <Button
                         key={value}
@@ -76,7 +76,7 @@ export function CommitmentsScreen({ actionId }: { actionId?: string | null }) {
             <FormError message={res.error} />
             {res.error && (
                 <Button variant="outline" onClick={() => void res.reload()}>
-                    Reload commitments
+                    Reload actions
                 </Button>
             )}
             {res.loading ? (
@@ -97,7 +97,7 @@ export function CommitmentsScreen({ actionId }: { actionId?: string | null }) {
                     <p className="text-ink-3 border-line rounded-xl border border-dashed p-8 text-center text-sm">
                         {actionId && !all.some(c => c.id === actionId)
                             ? "This linked action is unavailable or you no longer have access to it."
-                            : "No commitments in this view."}
+                            : "No actions in this view."}
                     </p>
                 )
             )}
@@ -154,7 +154,7 @@ function CommitmentDialog({
             const { commitment } = initial
                 ? await vantageApi.patchCommitment(initial.id, input)
                 : await vantageApi.addCommitment(input);
-            toast(initial ? "Action updated" : "Commitment added");
+            toast(initial ? "Action updated" : "Action added");
             onSaved(commitment);
             onOpenChange(false);
         } catch (e) {
@@ -168,7 +168,7 @@ function CommitmentDialog({
         <Dialog open={open} onOpenChange={value => !busy && onOpenChange(value)}>
             <DialogContent {...dialogFocus} className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>{initial ? "Edit action" : "Add a commitment"}</DialogTitle>
+                    <DialogTitle>{initial ? "Edit action" : "Add an action"}</DialogTitle>
                     <DialogDescription>
                         Keep the owner, due date and success test clear. Existing action links and
                         outcomes are preserved.

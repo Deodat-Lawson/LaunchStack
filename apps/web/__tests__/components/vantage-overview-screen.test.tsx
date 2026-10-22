@@ -153,7 +153,7 @@ describe("OverviewScreen", () => {
         expect(screen.queryByRole("article", { name: pricing.title })).toBeNull();
         await act(async () => {});
 
-        expect(mockPatchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" });
+        expect(mockPatchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" }, 1);
         await waitFor(() => expect(mockOverview.mock.calls.length).toBeGreaterThan(loads));
         expect(screen.queryByRole("article", { name: pricing.title })).toBeNull();
         expect(mockPrepare).not.toHaveBeenCalled();

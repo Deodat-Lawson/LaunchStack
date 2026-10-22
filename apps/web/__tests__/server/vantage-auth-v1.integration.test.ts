@@ -37,8 +37,8 @@ if (url) {
     if (
         !(
             ["localhost", "127.0.0.1"].includes(target.hostname) &&
-            target.port === "55434" &&
-            target.pathname === "/vantage_tl_contract_v1" &&
+            target.port === "55437" &&
+            target.pathname === "/vantage_week2_tl_contract_v1" &&
             ["postgres:", "postgresql:"].includes(target.protocol)
         )
     ) {
@@ -78,10 +78,12 @@ databaseSuite(
         function signIn(actor: Actor) {
             mockSession.mockResolvedValue({ user: { id: ids[actor].auth } });
         }
-        beforeAll(() => {
+        beforeAll(async () => {
             database = createDb({ url: url!, maxConnections: 3 });
             mockRealDb = database.db;
             configureDatabase(database.db);
+            const [identity] = await database.client`SELECT current_database() AS name`;
+            expect(identity!.name).toBe("vantage_week2_tl_contract_v1");
         });
         beforeEach(async () => {
             jest.clearAllMocks();

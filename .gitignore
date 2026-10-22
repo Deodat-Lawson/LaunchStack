@@ -44,6 +44,7 @@ yarn-error.log*
 .env.backup*
 .env*.lo
 /scripts/dev/vantage-tl.env.local
+/scripts/dev/vantage-integration-tl.env.local
 
 # vercel
 .vercel

@@ -32,6 +32,7 @@ import {
     setAgendaStatusV1,
     updateCommitmentV1,
 } from "./repository-v1";
+import { getCommitment, getEvidence, getObservation } from "./db";
 import { reportPeriod } from "./period-v1";
 import type { GenerationResult } from "./contract-v1";
 
@@ -51,8 +52,8 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         const url = new URL(target!);
         if (
             url.hostname !== "127.0.0.1" ||
-            url.port !== "55434" ||
-            url.pathname !== "/vantage_tl_contract_v1"
+            url.port !== "55437" ||
+            url.pathname !== "/vantage_week2_tl_contract_v1"
         )
             throw new Error(
                 "Refusing integration tests outside the dedicated local TL verification database."
@@ -60,7 +61,7 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         connection = createDb({ url: target!, maxConnections: 10 });
         configureDatabase(connection.db);
         const [identity] = await connection.client`SELECT current_database() AS name`;
-        expect(identity!.name).toBe("vantage_tl_contract_v1");
+        expect(identity!.name).toBe("vantage_week2_tl_contract_v1");
     });
     beforeEach(async () => {
         const rows = await connection.db
@@ -404,7 +405,9 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         const agenda = await generated(),
             id = agenda.topics[0]!.id;
         expect(await getAgendaV1(other, { id: agenda.id })).toBeNull();
-        await expect(patchTopicV1(other, id, { title: "Stolen" })).rejects.toMatchObject({
+        await expect(
+            patchTopicV1(other, id, { title: "Stolen", expectedContentVersion: 1 })
+        ).rejects.toMatchObject({
             status: 404,
         });
         await expect(
@@ -448,6 +451,7 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         const edited = await patchTopicV1(ours, agenda.topics[0]!.id, {
             title: "Founder wording",
             proposedDue: "",
+            expectedContentVersion: agenda.topics[0]!.contentVersion,
         });
         await expect(saveGeneration(ours, userId, s, result(s))).rejects.toMatchObject({
             code: "stale_agenda",
@@ -466,9 +470,116 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
             proposedDue: null,
         });
     });
+    it("requires the topic content version and rejects stale compare-and-set edits", async () => {
+        const agenda = await generated();
+        const topic = agenda.topics[0]!;
+        await expect(
+            patchTopicV1(ours, topic.id, { title: "Missing version" })
+        ).rejects.toMatchObject({ status: 400, code: "validation_error" });
+        const first = await patchTopicV1(ours, topic.id, {
+            title: "First human wording",
+            expectedContentVersion: topic.contentVersion,
+        });
+        await expect(
+            patchTopicV1(ours, topic.id, {
+                title: "Lost update",
+                expectedContentVersion: topic.contentVersion,
+            })
+        ).rejects.toMatchObject({ status: 409, code: "stale_topic" });
+        expect((await getAgendaV1(ours, { id: agenda.id }))!.topics[0]!.title).toBe(first.title);
+    });
+    it("rejects a generation when an input source changes after snapshot", async () => {
+        const agenda = await generated();
+        const before = await getAgendaV1(ours, { id: agenda.id });
+        const s = await snapshot();
+        await connection.db.insert(evidence).values({
+            id: `${ours}-source-edit`,
+            companyId: ours,
+            createdByUserId: userId,
+            kind: "note",
+            title: "Source edit",
+            body: "Added while the model was running",
+            observedAt: period.weekStart,
+            createdAt: new Date("2026-10-16T17:00Z"),
+        });
+        await expect(
+            saveGeneration(ours, userId, s, result(s, "Must not replace"))
+        ).rejects.toMatchObject({
+            status: 409,
+            code: "stale_context",
+        });
+        expect(await getAgendaV1(ours, { id: agenda.id })).toEqual(before);
+    });
+    it("loads evidence, observations, and commitments by id with company scope", async () => {
+        await connection.db.insert(evidence).values([
+            {
+                id: `${ours}-direct-evidence`,
+                companyId: ours,
+                createdByUserId: userId,
+                kind: "note",
+                title: "Direct evidence",
+                body: "Read by id",
+                observedAt: period.weekStart,
+            },
+            {
+                id: `${other}-direct-evidence`,
+                companyId: other,
+                createdByUserId: userId,
+                kind: "note",
+                title: "Foreign evidence",
+                body: "Must stay private",
+                observedAt: period.weekStart,
+            },
+        ]);
+        expect(await getEvidence({ companyId: ours, id: `${ours}-direct-evidence` })).toMatchObject(
+            {
+                id: `${ours}-direct-evidence`,
+                title: "Direct evidence",
+            }
+        );
+        expect(await getEvidence({ companyId: ours, id: `${other}-direct-evidence` })).toBeNull();
+
+        const metricId = randomUUID();
+        await connection.db.insert(definitions).values({
+            id: metricId,
+            companyId: ours,
+            key: "direct_metric",
+            name: "Direct metric",
+            definition: "A metric read by id",
+            unit: "percent",
+        });
+        const observationId = `${ours}-direct-observation`;
+        await connection.db.insert(observations).values({
+            id: observationId,
+            companyId: ours,
+            metricId,
+            createdByUserId: userId,
+            value: -2.5,
+            periodStart: period.weekStart,
+            periodEnd: period.weekStart,
+        });
+        expect(await getObservation({ companyId: ours, id: observationId })).toMatchObject({
+            id: observationId,
+            metricKey: "direct_metric",
+            value: -2.5,
+        });
+        expect(await getObservation({ companyId: other, id: observationId })).toBeNull();
+
+        const agenda = await generated();
+        const topic = agenda.topics[0]!;
+        const created = await decision(topic.id);
+        expect(await getCommitment({ companyId: ours, id: created.commitmentId! })).toMatchObject({
+            id: created.commitmentId,
+            topicId: topic.id,
+        });
+        expect(await getCommitment({ companyId: other, id: created.commitmentId! })).toBeNull();
+    });
     it("separate enhancement review is repeatable and never rewrites human content", async () => {
         const agenda = await generated(),
-            topic = await patchTopicV1(ours, agenda.topics[0]!.id, { title: "Human text" });
+            topic = await patchTopicV1(ours, agenda.topics[0]!.id, {
+                title: "Human text",
+                expectedContentVersion: agenda.topics[0]!.contentVersion,
+            });
         const s = await snapshot(),
             r = result(s);
         r.draft.topics = [];
@@ -507,7 +618,10 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
     });
     it("rejects an enhancement after the original human topic changes", async () => {
         const agenda = await generated(),
-            topic = await patchTopicV1(ours, agenda.topics[0]!.id, { title: "Human text" });
+            topic = await patchTopicV1(ours, agenda.topics[0]!.id, {
+                title: "Human text",
+                expectedContentVersion: agenda.topics[0]!.contentVersion,
+            });
         const s = await snapshot(),
             r = result(s);
         r.draft.topics = [];
@@ -522,7 +636,10 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
             },
         ];
         const saved = await saveGeneration(ours, userId, s, r);
-        await patchTopicV1(ours, topic.id, { title: "Newer human text" });
+        await patchTopicV1(ours, topic.id, {
+            title: "Newer human text",
+            expectedContentVersion: topic.contentVersion,
+        });
         await expect(
             reviewEnhancement(
                 ours,

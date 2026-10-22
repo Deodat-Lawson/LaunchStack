@@ -88,18 +88,6 @@ export function EvidenceScreen() {
         }
     };
 
-    const toggleShared = async (e: EvidenceDto) => {
-        try {
-            const next = e.visibility === "shared" ? "private" : "shared";
-            const { evidence } = await vantageApi.patchEvidence(e.id, { visibility: next });
-            list.mutate(current => ({
-                evidence: current.evidence.map(x => (x.id === e.id ? evidence : x)),
-            }));
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not change visibility");
-        }
-    };
-
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
@@ -223,11 +211,6 @@ export function EvidenceScreen() {
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem onSelect={() => setEditing(e)}>
                                                 Edit
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onSelect={() => void toggleShared(e)}>
-                                                {e.visibility === "shared"
-                                                    ? "Make private"
-                                                    : "Share with the program"}
                                             </DropdownMenuItem>
                                             {e.sourceUrl && (
                                                 <DropdownMenuItem asChild>

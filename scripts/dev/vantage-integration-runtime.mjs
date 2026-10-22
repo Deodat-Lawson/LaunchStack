@@ -16,16 +16,24 @@ import { basename, dirname, extname, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-export const PROJECT = "vantage-integration-e2e-20261019";
+export const PROJECT = "vantage-week2-rebuild-20261022";
 export const CONTAINER = `${PROJECT}-db`;
 export const VOLUME = `${PROJECT}-data`;
-export const DATABASE = "vantage_integration_e2e_20261019";
-export const DATABASE_USER = "vantage_integration_e2e";
-export const APP_URL = "http://127.0.0.1:3102";
+export const DATABASE = "vantage_week2_rebuild_20261022";
+export const DATABASE_USER = "vantage_week2_rebuild";
+export const DATABASE_HOST = "127.0.0.1";
+export const DATABASE_PORT = 55436;
+export const APP_HOST = "localhost";
+export const APP_PORT = 3103;
+export const APP_URL = `http://${APP_HOST}:${APP_PORT}`;
 export const MARKER = "io.launchstack.integration-e2e";
 export const RUNTIME_DIR = resolve(ROOT, "test-output", PROJECT);
 export const RUNTIME_FILE = resolve(RUNTIME_DIR, "runtime.json");
+export const RUNTIME_ARCHIVE_DIR = resolve(RUNTIME_DIR, "archive");
 export const DOCKER_ENDPOINT = "npipe:////./pipe/dockerDesktopLinuxEngine";
+export const FIXTURE_WEEK_START = "2026-10-12";
+export const FIXTURE_FOLLOWING_WEEK_START = "2026-10-19";
+export const FIXTURE_MAIN_EVIDENCE_DATE = "2026-10-18";
 const DOCKER_CONFIG = resolve(RUNTIME_DIR, "docker-config");
 const COMPOSE = resolve(ROOT, "scripts/dev/vantage-integration.compose.yml");
 const COMPOSE_ENV = resolve(RUNTIME_DIR, "compose.env");
@@ -51,24 +59,105 @@ const SYSTEM_KEYS = new Set([
 ]);
 export const ACCOUNTS = [
     {
-        id: "vantage-integration-owner-20261019",
-        email: "owner@vantage-integration.test",
+        id: "vantage-week2-owner-20261022",
+        email: "owner@vantage-week2.test",
         name: "Synthetic Vantage Owner",
         workspace: "primary",
     },
     {
-        id: "vantage-integration-denied-20261019",
-        email: "denied@vantage-integration.test",
+        id: "vantage-week2-denied-20261022",
+        email: "denied@vantage-week2.test",
         name: "Synthetic Denied Operator",
         workspace: "primary",
     },
     {
-        id: "vantage-integration-outsider-20261019",
-        email: "outsider@vantage-integration.test",
+        id: "vantage-week2-outsider-20261022",
+        email: "outsider@vantage-week2.test",
         name: "Synthetic Outside Owner",
         workspace: "outside",
     },
 ];
+
+const LEGACY_WORKSPACE_SLUGS = {
+    primary: "vantage-week2-rebuild-20261022",
+    outside: "vantage-week2-outside-20261022",
+};
+
+const LEGACY_FIXTURE_IDS = {
+    evidence: "integration-interview-main-20261022",
+    oldEvidence: "integration-interview-old-20261001",
+    evidenceFiller: "integration-filler-evidence",
+    definition: "integration-signups-definition",
+    observation: "integration-signups-main-20261018",
+    oldObservation: "integration-signups-old-20260920",
+    previousObservation: "integration-signups-previous-20261011",
+    observationFiller: "integration-filler-observation",
+};
+
+export function isSafeRunNamespace(value) {
+    return typeof value === "string" && /^r[a-f0-9]{16}$/.test(value);
+}
+
+export function createRunNamespace() {
+    return `r${randomBytes(8).toString("hex")}`;
+}
+
+export function accountsFor(config = {}) {
+    if (!config.runNamespace) return ACCOUNTS.map(account => ({ ...account }));
+    const prefix = `vantage-${config.runNamespace}`;
+    return [
+        {
+            id: `${prefix}-owner`,
+            email: `owner+${config.runNamespace}@vantage-week2.test`,
+            name: "Synthetic Vantage Owner",
+            workspace: "primary",
+        },
+        {
+            id: `${prefix}-denied`,
+            email: `denied+${config.runNamespace}@vantage-week2.test`,
+            name: "Synthetic Denied Operator",
+            workspace: "primary",
+        },
+        {
+            id: `${prefix}-outsider`,
+            email: `outsider+${config.runNamespace}@vantage-week2.test`,
+            name: "Synthetic Outside Owner",
+            workspace: "outside",
+        },
+    ];
+}
+
+export function workspaceSlugsFor(config = {}) {
+    if (!config.runNamespace) return { ...LEGACY_WORKSPACE_SLUGS };
+    return {
+        primary: `${PROJECT}-${config.runNamespace}-primary`,
+        outside: `${PROJECT}-${config.runNamespace}-outside`,
+    };
+}
+
+export function fixtureIdsFor(config = {}) {
+    if (!config.runNamespace) return { ...LEGACY_FIXTURE_IDS };
+    // Fixture IDs land in varchar(64) columns. Keep the per-run entropy while
+    // avoiding the long project slug plus namespace combination.
+    const prefix = `vantage-${config.runNamespace.slice(1)}`;
+    return {
+        evidence: `${prefix}-interview-main`,
+        oldEvidence: `${prefix}-interview-old`,
+        evidenceFiller: `${prefix}-filler-evidence`,
+        definition: `${prefix}-signups-definition`,
+        observation: `${prefix}-signups-main`,
+        oldObservation: `${prefix}-signups-old`,
+        previousObservation: `${prefix}-signups-previous`,
+        observationFiller: `${prefix}-filler-observation`,
+    };
+}
+
+export function isFixtureWeekDate(value) {
+    const date = Date.parse(`${value}T00:00:00.000Z`);
+    const start = Date.parse(`${FIXTURE_WEEK_START}T00:00:00.000Z`);
+    const following = Date.parse(`${FIXTURE_FOLLOWING_WEEK_START}T00:00:00.000Z`);
+    return Number.isFinite(date) && date >= start && date < following;
+}
 
 export function systemEnvironment(inherited = process.env) {
     return Object.fromEntries(
@@ -88,8 +177,8 @@ export function assertDatabaseUrl(raw) {
     }
     if (
         url.protocol !== "postgres:" ||
-        url.hostname !== "127.0.0.1" ||
-        url.port !== "55435" ||
+        url.hostname !== DATABASE_HOST ||
+        url.port !== String(DATABASE_PORT) ||
         url.pathname !== `/${DATABASE}` ||
         url.username !== DATABASE_USER ||
         !/^[a-f0-9]{48}$/.test(url.password) ||
@@ -98,6 +187,32 @@ export function assertDatabaseUrl(raw) {
     )
         throw new Error("Refusing a database other than the fixed synthetic loopback database.");
     return url;
+}
+
+/** The app and Better Auth must use one stable public origin for every child. */
+export function assertAppUrl(raw) {
+    let url;
+    try {
+        url = new URL(raw);
+    } catch {
+        throw new Error("Invalid isolated app URL.");
+    }
+    if (
+        url.protocol !== "http:" ||
+        url.hostname !== APP_HOST ||
+        url.port !== String(APP_PORT) ||
+        url.pathname !== "/" ||
+        url.search ||
+        url.hash
+    )
+        throw new Error("Refusing an app origin other than the fixed localhost integration app.");
+    return url;
+}
+
+export function runtimeAppUrl(config = {}) {
+    const value = config.appUrl ?? APP_URL;
+    assertAppUrl(value);
+    return value;
 }
 
 export function assertNoDotenv(root = ROOT) {
@@ -114,6 +229,8 @@ export function assertNoDotenv(root = ROOT) {
 
 export function childEnvironment(config, inherited = process.env) {
     assertDatabaseUrl(config.databaseUrl);
+    runtimeAppUrl(config);
+    const accounts = accountsFor(config);
     return {
         ...systemEnvironment(inherited),
         NODE_ENV: "development",
@@ -124,9 +241,9 @@ export function childEnvironment(config, inherited = process.env) {
         VANTAGE_TEST_DATABASE_URL: config.databaseUrl,
         VANTAGE_TEST_MODE: "true",
         VANTAGE_TEST_COMPANY_ID: config.companyId ?? "0",
-        VANTAGE_TEST_USER_IDS: ACCOUNTS[0].id,
-        BETTER_AUTH_URL: APP_URL,
-        APP_PUBLIC_URL: APP_URL,
+        VANTAGE_TEST_USER_IDS: accounts[0].id,
+        BETTER_AUTH_URL: runtimeAppUrl(config),
+        APP_PUBLIC_URL: runtimeAppUrl(config),
         BETTER_AUTH_SECRET: config.authSecret,
         // Rules-only work can initialise the engine, but any accidental model call fails locally.
         CHAT_BASE_URL: "http://127.0.0.1:9/v1",
@@ -141,6 +258,7 @@ export function childEnvironment(config, inherited = process.env) {
         GOOGLE_DOCS_EDITING_ENABLED: "false",
         LANGCHAIN_TRACING_V2: "false",
         COMPOSE_REMOVE_ORPHANS: "false",
+        PROPOSALS_EXECUTOR: "inline",
         VANTAGE_INTEGRATION_PASSWORD: config.databasePassword,
         DOCKER_CONFIG,
         DOCKER_HOST: DOCKER_ENDPOINT,
@@ -174,7 +292,7 @@ export function assertOwnedContainer(container) {
         container.Config.Labels["com.docker.compose.service"] !== "db" ||
         bindings.length !== 1 ||
         bindings[0].HostIp !== "127.0.0.1" ||
-        bindings[0].HostPort !== "55435" ||
+        bindings[0].HostPort !== String(DATABASE_PORT) ||
         !env.has(`POSTGRES_DB=${DATABASE}`) ||
         !env.has(`POSTGRES_USER=${DATABASE_USER}`) ||
         container.Mounts.length !== 1 ||
@@ -262,6 +380,38 @@ async function run(
     });
 }
 
+export function composePluginCandidates(inherited = process.env) {
+    const candidates = [];
+    if (inherited.DOCKER_COMPOSE_PLUGIN_DIR) candidates.push(inherited.DOCKER_COMPOSE_PLUGIN_DIR);
+    for (const root of [
+        inherited.LOCALAPPDATA ?? inherited.LocalAppData,
+        inherited.PROGRAMFILES ?? inherited.ProgramFiles,
+        inherited["PROGRAMFILES(X86)"] ?? inherited["ProgramFiles(x86)"],
+    ]) {
+        if (!root) continue;
+        candidates.push(
+            resolve(root, "Docker", "Docker", "resources", "cli-plugins"),
+            resolve(root, "DockerDesktop", "resources", "cli-plugins")
+        );
+    }
+    const userProfile = inherited.USERPROFILE ?? inherited.UserProfile;
+    if (userProfile) candidates.push(resolve(userProfile, ".docker", "cli-plugins"));
+    return [...new Set(candidates)];
+}
+
+export function discoverComposePlugin(inherited = process.env, fileExists = existsSync) {
+    return (
+        composePluginCandidates(inherited).find(directory =>
+            fileExists(
+                resolve(
+                    directory,
+                    process.platform === "win32" ? "docker-compose.exe" : "docker-compose"
+                )
+            )
+        ) ?? null
+    );
+}
+
 async function docker(args, options) {
     assertLocalDockerEndpoint(DOCKER_ENDPOINT);
     mkdirSync(DOCKER_CONFIG, { recursive: true });
@@ -279,23 +429,14 @@ async function docker(args, options) {
                 "Task-owned Docker settings unexpectedly contain other settings; no config was overwritten."
             );
     }
-    const pluginDirectory = resolve(
-        process.env.LOCALAPPDATA ?? "C:/Users/junku/AppData/Local",
-        "Programs/DockerDesktop/resources/cli-plugins"
-    );
-    if (!existsSync(resolve(pluginDirectory, "docker-compose.exe")))
-        throw new Error(
-            "The local Docker Desktop Compose plugin was not found; no user Docker settings are used."
-        );
-    writeFileSync(
-        emptyConfig,
-        JSON.stringify({
-            auths: {},
-            credHelpers: {},
-            cliPluginsExtraDirs: [pluginDirectory],
-        }) + "\n",
-        { mode: 0o600 }
-    );
+    const pluginDirectory = discoverComposePlugin(process.env);
+    // Docker Desktop installations differ between per-user and machine-wide
+    // layouts. When the CLI already has a built-in Compose plugin, leave its
+    // discovery alone; otherwise add only the task-owned, empty plugin config.
+    const configValue = pluginDirectory
+        ? { auths: {}, credHelpers: {}, cliPluginsExtraDirs: [pluginDirectory] }
+        : { auths: {}, credHelpers: {} };
+    writeFileSync(emptyConfig, JSON.stringify(configValue) + "\n", { mode: 0o600 });
     const dockerEnv = {
         ...(options?.env ?? systemEnvironment()),
         DOCKER_CONFIG,
@@ -317,13 +458,15 @@ async function checkDocker() {
     await docker(["compose", "version"]);
 }
 
-async function checkFreePort(port) {
+async function checkFreePort(port, host = DATABASE_HOST) {
     await new Promise((resolvePort, reject) => {
         const server = createServer();
         server.once("error", () =>
-            reject(new Error(`Loopback port ${port} is occupied; no listener was stopped.`))
+            reject(
+                new Error(`Loopback port ${port} on ${host} is occupied; no listener was stopped.`)
+            )
         );
-        server.listen(port, "127.0.0.1", () => server.close(resolvePort));
+        server.listen(port, host, () => server.close(resolvePort));
     });
 }
 
@@ -337,7 +480,10 @@ export function readRuntime() {
         !/^[a-f0-9]{48}$/.test(config.loginPassword)
     )
         throw new Error("Saved integration runtime has an unexpected identity or secret format.");
+    if (config.runNamespace !== undefined && !isSafeRunNamespace(config.runNamespace))
+        throw new Error("Saved integration runtime has an unsafe run namespace.");
     assertDatabaseUrl(config.databaseUrl);
+    assertAppUrl(config.appUrl);
     if (new URL(config.databaseUrl).password !== config.databasePassword)
         throw new Error("Saved integration credential mismatch.");
     return config;
@@ -351,19 +497,30 @@ function writeRuntime(config) {
     });
 }
 
-function ensureRuntime() {
-    if (existsSync(RUNTIME_FILE)) return readRuntime();
-    const databasePassword = randomBytes(24).toString("hex");
+export function createRuntime(previous) {
+    const databasePassword = previous?.databasePassword ?? randomBytes(24).toString("hex");
+    const runNamespace = createRunNamespace();
     const config = {
         schemaVersion: 1,
         marker: PROJECT,
+        runNamespace,
         databasePassword,
-        databaseUrl: `postgres://${DATABASE_USER}:${databasePassword}@127.0.0.1:55435/${DATABASE}`,
+        databaseUrl:
+            previous?.databaseUrl ??
+            `postgres://${DATABASE_USER}:${databasePassword}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE}`,
         authSecret: randomBytes(32).toString("hex"),
         loginPassword: randomBytes(24).toString("hex"),
         appUrl: APP_URL,
         createdAt: new Date().toISOString(),
     };
+    config.companySlugs = workspaceSlugsFor(config);
+    config.fixtureIds = fixtureIdsFor(config);
+    return config;
+}
+
+function ensureRuntime() {
+    if (existsSync(RUNTIME_FILE)) return readRuntime();
+    const config = createRuntime();
     writeRuntime(config);
     return config;
 }
@@ -405,6 +562,11 @@ async function verifyDatabase(config, initialise = false) {
 
 async function seed(config) {
     await verifyDatabase(config);
+    const accounts = accountsFor(config);
+    const slugs = workspaceSlugsFor(config);
+    const fixtureIds = fixtureIdsFor(config);
+    config.companySlugs = slugs;
+    config.fixtureIds = fixtureIds;
     const requireWeb = createRequire(resolve(WEB, "package.json"));
     const { hashPassword } = await import(
         pathToFileURL(requireWeb.resolve("better-auth/crypto")).href
@@ -415,16 +577,8 @@ async function seed(config) {
         await sql.begin(async tx => {
             const companies = {};
             for (const [key, slug, name] of [
-                [
-                    "primary",
-                    "vantage-integration-e2e-20261019",
-                    "Synthetic Vantage Integration 2026-10-19",
-                ],
-                [
-                    "outside",
-                    "vantage-integration-outside-20261019",
-                    "Synthetic Vantage Outside Workspace",
-                ],
+                ["primary", slugs.primary, "Synthetic Vantage Week 2 Rebuild 2026-10-22"],
+                ["outside", slugs.outside, "Synthetic Vantage Week 2 Outside Workspace"],
             ]) {
                 let [row] = await tx`SELECT id FROM pdr_ai_v2_company WHERE slug=${slug}`;
                 if (!row)
@@ -433,7 +587,7 @@ async function seed(config) {
                 companies[key] = String(row.id);
             }
             config.accounts = [];
-            for (const account of ACCOUNTS) {
+            for (const account of accounts) {
                 const companyId = companies[account.workspace];
                 const [existing] =
                     await tx`SELECT email FROM pdr_ai_v2_auth_user WHERE id=${account.id}`;
@@ -454,14 +608,14 @@ async function seed(config) {
             config.companyId = companies.primary;
             config.outsideCompanyId = companies.outside;
             const evidence = {
-                id: "integration-interview-main-20261014",
+                id: fixtureIds.evidence,
                 title: "Synthetic export-button interview",
                 body: "One synthetic tester could not find the export button.",
-                source: "Synthetic interview 2026-10-14",
-                observedAt: "2026-10-14",
+                source: `Synthetic interview ${FIXTURE_MAIN_EVIDENCE_DATE}`,
+                observedAt: FIXTURE_MAIN_EVIDENCE_DATE,
             };
             const oldEvidence = {
-                id: "integration-interview-old-20261001",
+                id: fixtureIds.oldEvidence,
                 title: "Synthetic historical interview",
                 body: "One synthetic tester requested a clearer onboarding checklist.",
                 source: "Synthetic interview 2026-10-01",
@@ -471,7 +625,7 @@ async function seed(config) {
                 oldEvidence,
                 evidence,
                 ...Array.from({ length: 201 }, (_, index) => ({
-                    id: `integration-filler-evidence-${String(index).padStart(3, "0")}`,
+                    id: `${fixtureIds.evidenceFiller}-${String(index).padStart(3, "0")}`,
                     title: `Synthetic historical filler ${index}`,
                     body: "Synthetic historical reference outside the main agenda week.",
                     source: "Synthetic fixture",
@@ -481,16 +635,16 @@ async function seed(config) {
             for (const item of fixtures) {
                 await tx`INSERT INTO pdr_ai_v2_vantage_evidence
                     (id, company_id, created_by_user_id, kind, title, body, source, observed_at, visibility, tags, created_at)
-                    VALUES (${item.id}, ${companies.primary}, ${ACCOUNTS[0].id}, 'interview', ${item.title}, ${item.body}, ${item.source}, ${item.observedAt}, 'private', '[]'::jsonb, ${`${item.observedAt}T12:00:00.000Z`})
+                    VALUES (${item.id}, ${companies.primary}, ${accounts[0].id}, 'interview', ${item.title}, ${item.body}, ${item.source}, ${item.observedAt}, 'private', '[]'::jsonb, ${`${item.observedAt}T12:00:00.000Z`})
                     ON CONFLICT (id) DO NOTHING`;
             }
-            const definitionId = "integration-signups-definition";
+            const definitionId = fixtureIds.definition;
             await tx`INSERT INTO pdr_ai_v2_vantage_metric_definitions
                 (id, company_id, key, name, definition, unit, created_at)
-                VALUES (${definitionId}, ${companies.primary}, 'signups', 'Signups', 'Synthetic new accounts created during the complete Monday-Sunday period; count cannot be negative.', 'count', '2026-09-01T12:00:00.000Z')
+                VALUES (${definitionId}, ${companies.primary}, 'signups', 'Signups', 'Synthetic finite signed metric recorded for the complete Monday-Sunday period; negative values represent a decrease.', 'count', '2026-09-01T12:00:00.000Z')
                 ON CONFLICT (id) DO NOTHING`;
             const observation = {
-                id: "integration-signups-main-20261018",
+                id: fixtureIds.observation,
                 metricId: definitionId,
                 value: 20,
                 periodStart: "2026-10-12",
@@ -498,7 +652,7 @@ async function seed(config) {
                 createdAt: "2026-10-18T12:00:00.000Z",
             };
             const oldObservation = {
-                id: "integration-signups-old-20260920",
+                id: fixtureIds.oldObservation,
                 metricId: definitionId,
                 value: 3,
                 periodStart: "2026-09-14",
@@ -509,7 +663,7 @@ async function seed(config) {
                 oldObservation,
                 observation,
                 {
-                    id: "integration-signups-previous-20261011",
+                    id: fixtureIds.previousObservation,
                     metricId: definitionId,
                     value: 10,
                     periodStart: "2026-10-05",
@@ -517,7 +671,7 @@ async function seed(config) {
                     createdAt: "2026-10-11T12:00:00.000Z",
                 },
                 ...Array.from({ length: 501 }, (_, index) => ({
-                    id: `integration-filler-observation-${String(index).padStart(3, "0")}`,
+                    id: `${fixtureIds.observationFiller}-${String(index).padStart(3, "0")}`,
                     metricId: definitionId,
                     value: index,
                     periodStart: "2026-09-21",
@@ -528,12 +682,12 @@ async function seed(config) {
             for (const item of observations) {
                 await tx`INSERT INTO pdr_ai_v2_vantage_metric_observations
                     (id, company_id, metric_id, created_by_user_id, value, period_start, period_end, source, created_at)
-                    VALUES (${item.id}, ${companies.primary}, ${item.metricId}, ${ACCOUNTS[0].id}, ${item.value}, ${item.periodStart}, ${item.periodEnd}, 'Synthetic fixture', ${item.createdAt})
+                    VALUES (${item.id}, ${companies.primary}, ${item.metricId}, ${accounts[0].id}, ${item.value}, ${item.periodStart}, ${item.periodEnd}, 'Synthetic fixture', ${item.createdAt})
                     ON CONFLICT (id) DO NOTHING`;
             }
             config.fixture = {
-                weekStart: "2026-10-12",
-                followingWeekStart: "2026-10-19",
+                weekStart: FIXTURE_WEEK_START,
+                followingWeekStart: FIXTURE_FOLLOWING_WEEK_START,
                 evidence,
                 oldEvidence,
                 observation,
@@ -559,11 +713,16 @@ async function seed(config) {
             {
                 marker: PROJECT,
                 appUrl: APP_URL,
-                database: { host: "127.0.0.1", port: 55435, name: DATABASE, user: DATABASE_USER },
+                database: {
+                    host: DATABASE_HOST,
+                    port: DATABASE_PORT,
+                    name: DATABASE,
+                    user: DATABASE_USER,
+                },
                 gate: {
                     mode: "true",
                     companyId: config.companyId,
-                    allowedSubjects: [ACCOUNTS[0].id],
+                    allowedSubjects: [accounts[0].id],
                 },
                 accounts: config.accounts,
                 provider: "rules-only; model endpoint closed loopback port 9",
@@ -579,15 +738,28 @@ async function seed(config) {
     );
 }
 
-async function prepare() {
-    assertNoDotenv();
-    await checkDocker();
+function archiveRuntime() {
+    if (!existsSync(RUNTIME_FILE)) return null;
+    mkdirSync(RUNTIME_ARCHIVE_DIR, { recursive: true });
+    const stamp = new Date().toISOString().replace(/[^0-9]/g, "");
+    const archiveBase = `${stamp}-${randomBytes(4).toString("hex")}`;
+    const archived = [];
+    for (const name of ["runtime.json", "fixture.json", "sanitized-runtime.json"]) {
+        const source = resolve(RUNTIME_DIR, name);
+        if (!existsSync(source)) continue;
+        const destination = resolve(RUNTIME_ARCHIVE_DIR, `${archiveBase}-${name}`);
+        copyFileSync(source, destination);
+        archived.push(destination);
+    }
+    return archived;
+}
+
+async function prepareDatabase(config) {
     const container = await inspect("container", CONTAINER);
     const volume = await inspect("volume", VOLUME);
     if (container) assertOwnedContainer(container);
     if (volume) assertOwnedVolume(volume);
-    if (!container?.State.Running) await checkFreePort(55435);
-    const config = ensureRuntime();
+    if (!container?.State.Running) await checkFreePort(DATABASE_PORT);
     if (container && !container.Config.Env.includes(`POSTGRES_PASSWORD=${config.databasePassword}`))
         throw new Error(
             "Existing integration DB credentials do not match the task runtime; no reset performed."
@@ -629,8 +801,32 @@ async function prepare() {
         }
     }
     await seed(config);
+}
+
+async function prepare() {
+    assertNoDotenv();
+    await checkDocker();
+    const config = ensureRuntime();
+    await prepareDatabase(config);
     console.log(
-        `[integration] Prepared synthetic DB on 127.0.0.1:55435 and ${ACCOUNTS.length} accounts. Runtime secrets remain in ignored test-output; sanitized-runtime.json contains reviewable settings.`
+        `[integration] Prepared synthetic DB on ${DATABASE_HOST}:${DATABASE_PORT} and ${accountsFor(config).length} accounts. Runtime secrets remain in ignored test-output; sanitized-runtime.json contains reviewable settings.`
+    );
+}
+
+async function prepareFresh() {
+    assertNoDotenv();
+    // A running app may still hold the previous auth/runtime namespace. Refuse
+    // before Docker inspection or archive writes so a retry is safe and clear.
+    await checkFreePort(APP_PORT, APP_HOST);
+    await checkDocker();
+    const previous = ensureRuntime();
+    await prepareDatabase(previous);
+    archiveRuntime();
+    const config = createRuntime(previous);
+    writeRuntime(config);
+    await seed(config);
+    console.log(
+        `[integration] Prepared fresh synthetic namespace ${config.runNamespace} on ${DATABASE_HOST}:${DATABASE_PORT}; previous runtime state was archived without changing existing rows.`
     );
 }
 
@@ -644,7 +840,7 @@ async function serve() {
     assertOwnedContainer(container);
     if (!container.State.Running) throw new Error("Dedicated integration DB is not running.");
     await verifyDatabase(config);
-    await checkFreePort(3102);
+    await checkFreePort(APP_PORT, APP_HOST);
     const requireWeb = createRequire(resolve(WEB, "package.json"));
     const next = requireWeb.resolve("next/dist/bin/next");
     console.log(
@@ -652,7 +848,7 @@ async function serve() {
     );
     const child = spawn(
         process.execPath,
-        [next, "dev", "--hostname", "127.0.0.1", "--port", "3102"],
+        [next, "dev", "--turbo", "--hostname", APP_HOST, "--port", String(APP_PORT)],
         {
             cwd: WEB,
             env: childEnvironment(config),
@@ -676,6 +872,7 @@ async function serve() {
 async function e2e(grep) {
     assertNoDotenv();
     const config = readRuntime();
+    const accounts = accountsFor(config);
     if (!config.preparedAt || !config.companyId) throw new Error("Run --prepare first.");
     await verifyDatabase(config);
     const requireWeb = createRequire(resolve(WEB, "package.json"));
@@ -702,13 +899,13 @@ async function e2e(grep) {
             allowFailure: true,
             env: {
                 ...childEnvironment(config),
-                E2E_BASE_URL: APP_URL,
+                E2E_BASE_URL: runtimeAppUrl(config),
                 VANTAGE_E2E_ISOLATED: "1",
-                VANTAGE_E2E_EMAIL: ACCOUNTS[0].email,
+                VANTAGE_E2E_EMAIL: accounts[0].email,
                 VANTAGE_E2E_PASSWORD: config.loginPassword,
                 VANTAGE_E2E_FIXTURE_PATH: resolve(RUNTIME_DIR, "fixture.json"),
-                VANTAGE_E2E_DENIED_EMAIL: ACCOUNTS[1].email,
-                VANTAGE_E2E_OUTSIDER_EMAIL: ACCOUNTS[2].email,
+                VANTAGE_E2E_DENIED_EMAIL: accounts[1].email,
+                VANTAGE_E2E_OUTSIDER_EMAIL: accounts[2].email,
                 PLAYWRIGHT_JSON_OUTPUT_NAME: reportFile,
             },
         }
@@ -760,15 +957,18 @@ export async function main(args = process.argv.slice(2)) {
         return e2e(args[2]);
     if (
         args.length !== 1 ||
-        !["--prepare", "--serve", "--e2e", "--status", "--stop"].includes(args[0])
+        !["--prepare", "--prepare-fresh", "--serve", "--e2e", "--status", "--stop"].includes(
+            args[0]
+        )
     ) {
         console.log(
-            "node scripts/dev/vantage-integration-runtime.mjs --prepare | --serve | --e2e | --status | --stop"
+            "node scripts/dev/vantage-integration-runtime.mjs --prepare | --prepare-fresh | --serve | --e2e | --status | --stop"
         );
         if (args[0] !== "--help") process.exitCode = 1;
         return;
     }
     if (args[0] === "--prepare") return prepare();
+    if (args[0] === "--prepare-fresh") return prepareFresh();
     if (args[0] === "--serve") return serve();
     if (args[0] === "--e2e") return e2e();
     await checkDocker();

@@ -39,9 +39,11 @@ import { PATCH as editTopic } from "~/app/api/vantage/topics/[id]/route";
 import { POST as decide } from "~/app/api/vantage/topics/[id]/decide/route";
 import { POST as createAction, GET as listActions } from "~/app/api/vantage/commitments/route";
 import { PATCH as updateAction } from "~/app/api/vantage/commitments/[id]/route";
+import { GET as getEvidenceById } from "~/app/api/vantage/evidence/[id]/route";
 import { POST as addEvidence, GET as listEvidence } from "~/app/api/vantage/evidence/route";
 import { POST as importMetrics } from "~/app/api/vantage/metrics/import/route";
 import { POST as addObservation } from "~/app/api/vantage/metrics/observations/route";
+import { GET as getObservationById } from "~/app/api/vantage/metrics/observations/[id]/route";
 
 const url = process.env.VANTAGE_TL_TEST_DATABASE_URL;
 if (url) {
@@ -49,8 +51,8 @@ if (url) {
     if (
         !(
             ["localhost", "127.0.0.1"].includes(target.hostname) &&
-            target.port === "55434" &&
-            target.pathname === "/vantage_tl_contract_v1" &&
+            target.port === "55437" &&
+            target.pathname === "/vantage_week2_tl_contract_v1" &&
             ["postgres:", "postgresql:"].includes(target.protocol)
         )
     ) {
@@ -140,9 +142,11 @@ databaseSuite("Contract v1 actual routes + isolated PostgreSQL (session/generato
             data: makeWorkspaceContext({ companyId, authUserId, permissions }),
         });
     }
-    beforeAll(() => {
+    beforeAll(async () => {
         database = createDb({ url: url!, maxConnections: 3 });
         configureDatabase(database.db);
+        const [identity] = await database.client`SELECT current_database() AS name`;
+        expect(identity!.name).toBe("vantage_week2_tl_contract_v1");
         installVantageGenerationPort(fakeGeneration);
     });
     beforeEach(async () => {
@@ -262,6 +266,20 @@ databaseSuite("Contract v1 actual routes + isolated PostgreSQL (session/generato
         expect(rows[0]!.createdByUserId).toBe("tl-route-operator");
         const listed = await listEvidence(new NextRequest("http://localhost/api/vantage/evidence"));
         expect((await listed.json()).evidence).toHaveLength(1);
+        const direct = await getEvidenceById(
+            new NextRequest("http://localhost/api/vantage/evidence/direct"),
+            params(rows[0]!.id)
+        );
+        expect(direct.status).toBe(200);
+        expect((await direct.json()).evidence.id).toBe(rows[0]!.id);
+        expect(
+            (
+                await getEvidenceById(
+                    new NextRequest("http://localhost/api/vantage/evidence/missing"),
+                    params("missing-evidence")
+                )
+            ).status
+        ).toBe(404);
         expect(
             (
                 await getReport(
@@ -271,7 +289,12 @@ databaseSuite("Contract v1 actual routes + isolated PostgreSQL (session/generato
             ).status
         ).toBe(404);
         expect(
-            (await editTopic(request({ title: "Wrong company" }), params(foreignTopicId))).status
+            (
+                await editTopic(
+                    request({ title: "Wrong company", expectedContentVersion: 1 }),
+                    params(foreignTopicId)
+                )
+            ).status
         ).toBe(404);
         const [foreign] = await database.db
             .select()
@@ -363,6 +386,24 @@ databaseSuite("Contract v1 actual routes + isolated PostgreSQL (session/generato
             createdByUserId: "tl-route-operator",
             value: 11,
         });
+        const direct = await getObservationById(
+            new NextRequest("http://localhost/api/vantage/metrics/observations/direct"),
+            params(rows[0]!.id)
+        );
+        expect(direct.status).toBe(200);
+        expect((await direct.json()).observation).toMatchObject({
+            id: rows[0]!.id,
+            metricKey: "synthetic-local",
+            value: 11,
+        });
+        expect(
+            (
+                await getObservationById(
+                    new NextRequest("http://localhost/api/vantage/metrics/observations/missing"),
+                    params("missing-observation")
+                )
+            ).status
+        ).toBe(404);
     });
 
     it("adds and edits human topics with stable IDs and advancing versions", async () => {
@@ -374,7 +415,7 @@ databaseSuite("Contract v1 actual routes + isolated PostgreSQL (session/generato
         const original = (await response.json()).topic;
         expect(original.contentVersion).toBe(1);
         const edited = await editTopic(
-            request({ title: "Edited synthetic human topic" }),
+            request({ title: "Edited synthetic human topic", expectedContentVersion: 1 }),
             params(original.id)
         );
         expect(edited.status).toBe(200);

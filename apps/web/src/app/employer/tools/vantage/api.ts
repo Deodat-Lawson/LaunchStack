@@ -212,6 +212,8 @@ export const vantageApi = {
 
     evidence: (params: { kind?: string; since?: string } = {}) =>
         call<{ evidence: EvidenceDto[] }>(`/api/vantage/evidence${q(params)}`),
+    evidenceById: (id: string) =>
+        call<{ evidence: EvidenceDto }>(`/api/vantage/evidence/${encodeURIComponent(id)}`),
     addEvidence: (input: EvidenceInput) =>
         post<{ evidence: EvidenceDto }>("/api/vantage/evidence", input),
     patchEvidence: (id: string, patch: Partial<EvidenceInput>) =>
@@ -243,6 +245,10 @@ export const vantageApi = {
         call<{ ok: true }>(`/api/vantage/metrics/observations/${encodeURIComponent(id)}`, {
             method: "DELETE",
         }),
+    observationById: (id: string) =>
+        call<{ observation: MetricObservationDto }>(
+            `/api/vantage/metrics/observations/${encodeURIComponent(id)}`
+        ),
     importMetrics: (csv: string, source?: string | null) =>
         post<ImportResult>("/api/vantage/metrics/import", { csv, source: source ?? null }),
 
@@ -282,10 +288,16 @@ export const vantageApi = {
         call<{ markdown: string }>(
             `/api/vantage/agendas/${encodeURIComponent(agendaId)}/update${includePrivate ? "?private=1" : ""}`
         ),
-    patchTopic: (id: string, patch: TopicPatch) =>
+    patchTopic: (id: string, patch: TopicPatch, expectedContentVersion = 1) =>
         post<{ topic: TopicV1Dto }>(
             `/api/vantage/topics/${encodeURIComponent(id)}`,
-            patch,
+            {
+                ...patch,
+                expectedContentVersion:
+                    Number.isInteger(expectedContentVersion) && expectedContentVersion > 0
+                        ? expectedContentVersion
+                        : 1,
+            },
             "PATCH"
         ),
     deleteTopic: (id: string) =>
@@ -324,6 +336,8 @@ export const vantageApi = {
 
     commitments: (status?: string) =>
         call<{ commitments: CommitmentDto[] }>(`/api/vantage/commitments${q({ status })}`),
+    commitmentById: (id: string) =>
+        call<{ commitment: CommitmentDto }>(`/api/vantage/commitments/${encodeURIComponent(id)}`),
     addCommitment: (input: CommitmentInput) =>
         post<{ commitment: CommitmentDto }>("/api/vantage/commitments", input),
     patchCommitment: (id: string, patch: CommitmentPatch) =>
@@ -356,13 +370,19 @@ export function vantageErrorMessage(error: unknown): string {
             stale_agenda:
                 "The report changed during generation. Your saved edits are safe. Reload the report before generating again.",
             stale_topic:
-                "This topic changed after the addition was suggested. Reload to review its current version.",
+                "This topic changed since you opened it. Reload to compare the saved version, then reapply your edit.",
+            stale_content:
+                "This topic changed since you opened it. Reload to compare the saved version, then reapply your edit.",
+            stale_content_version:
+                "This topic changed since you opened it. Reload to compare the saved version, then reapply your edit.",
+            topic_version_conflict:
+                "This topic changed since you opened it. Reload to compare the saved version, then reapply your edit.",
             enhancement_finalized:
                 "This addition has already been reviewed. Reload to see its saved status.",
             idempotency_conflict:
                 "This submission key was already used with different content. Reload and verify the saved decision before submitting a new change.",
             commitment_exists:
-                "This topic already has a primary action. Edit the existing action from Commitments.",
+                "This topic already has a primary action. Edit the existing action from Weekly Actions.",
             commitment_ambiguous:
                 "This topic has conflicting action links. Ask the test workspace administrator to resolve them.",
             future_week: "Choose the current week or an earlier week to generate a report.",
@@ -376,6 +396,8 @@ export function vantageErrorMessage(error: unknown): string {
             return "You do not have access to this operation in the test workspace.";
         if (error.status === 404)
             return "This record is unavailable or you no longer have access to it.";
+        if (error.status === 409)
+            return "This record changed while you were editing. Reload to compare the saved version, then reapply your change.";
         return error.message;
     }
     return "The request could not be confirmed. Check your connection and retry.";

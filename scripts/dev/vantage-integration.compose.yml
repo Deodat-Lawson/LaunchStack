@@ -1,28 +1,27 @@
-name: vantage-integration-e2e-20261019
+name: vantage-week2-rebuild-20261022
 
 services:
   db:
     image: pgvector/pgvector:pg16
-    container_name: vantage-integration-e2e-20261019-db
+    container_name: vantage-week2-rebuild-20261022-db
     labels:
-      io.launchstack.integration-e2e: vantage-integration-e2e-20261019
+      io.launchstack.integration-e2e: vantage-week2-rebuild-20261022
     environment:
-      POSTGRES_DB: vantage_integration_e2e_20261019
-      POSTGRES_USER: vantage_integration_e2e
+      POSTGRES_DB: vantage_week2_rebuild_20261022
+      POSTGRES_USER: vantage_week2_rebuild
       POSTGRES_PASSWORD: ${VANTAGE_INTEGRATION_PASSWORD:?Use the integration runtime controller}
     ports:
-      - "127.0.0.1:55435:5432"
+      - "127.0.0.1:55436:5432"
     volumes:
       - integration-data:/var/lib/postgresql/data
     healthcheck:
-      test:
-        ["CMD-SHELL", "pg_isready -U vantage_integration_e2e -d vantage_integration_e2e_20261019"]
+      test: ["CMD-SHELL", "pg_isready -U vantage_week2_rebuild -d vantage_week2_rebuild_20261022"]
       interval: 2s
       timeout: 3s
       retries: 30
 
 volumes:
   integration-data:
-    name: vantage-integration-e2e-20261019-data
+    name: vantage-week2-rebuild-20261022-data
     labels:
-      io.launchstack.integration-e2e: vantage-integration-e2e-20261019
+      io.launchstack.integration-e2e: vantage-week2-rebuild-20261022

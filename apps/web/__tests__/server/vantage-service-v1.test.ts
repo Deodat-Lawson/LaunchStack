@@ -5,6 +5,12 @@ const mockLoad = jest.fn(),
 jest.mock("@launchstack/pipelines/vantage", () => ({
     generationSnapshot: (...args: unknown[]) => mockLoad(...args),
     saveGeneration: (...args: unknown[]) => mockSave(...args),
+    validateGenerationResult: (...args: unknown[]) =>
+        (
+            jest.requireActual("@launchstack/pipelines/vantage").validateGenerationResult as (
+                ...args: unknown[]
+            ) => unknown
+        )(...args),
     reportPeriod: () => ({ weekStart: "2026-10-12" }),
     VantageError: class extends Error {
         readonly status: number;

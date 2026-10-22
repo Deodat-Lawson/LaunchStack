@@ -1,27 +1,27 @@
-name: launchstack-vantage-integration-tl-20261019
+name: launchstack-vantage-week2-tl-20261022
 
 services:
   db:
     image: pgvector/pgvector:pg16
-    container_name: launchstack-vantage-integration-tl-20261019-db
+    container_name: launchstack-vantage-week2-tl-20261022-db
     labels:
       io.launchstack.tl-test: contract-v1
     environment:
-      POSTGRES_DB: vantage_tl_contract_v1
-      POSTGRES_USER: vantage_tl
+      POSTGRES_DB: vantage_week2_tl_contract_v1
+      POSTGRES_USER: vantage_week2_tl
       POSTGRES_PASSWORD: ${VANTAGE_TL_TEST_PASSWORD:?Use the vantage-integration-tl-test.mjs launcher to initialize synthetic local credentials}
     ports:
-      - "127.0.0.1:55434:5432"
+      - "127.0.0.1:55437:5432"
     volumes:
       - tl-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vantage_tl -d vantage_tl_contract_v1"]
+      test: ["CMD-SHELL", "pg_isready -U vantage_week2_tl -d vantage_week2_tl_contract_v1"]
       interval: 2s
       timeout: 3s
       retries: 30
 
 volumes:
   tl-data:
-    name: launchstack-vantage-integration-tl-20261019-data
+    name: launchstack-vantage-week2-tl-20261022-data
     labels:
       io.launchstack.tl-test: contract-v1

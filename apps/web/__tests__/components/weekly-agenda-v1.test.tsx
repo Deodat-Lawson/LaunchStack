@@ -11,12 +11,19 @@ const mockAgendas = jest.fn();
 const mockPrepare = jest.fn();
 const mockReview = jest.fn();
 const mockDecide = jest.fn();
+const mockPatchTopic = jest.fn();
+const mockAgendaById = jest.fn();
 const mockEvidence = jest.fn();
+const mockEvidenceById = jest.fn();
+const mockObservationById = jest.fn();
+const mockCommitmentById = jest.fn();
 const mockPatchCommitment = jest.fn();
 const mockCommitments = jest.fn();
 const mockMetrics = jest.fn();
 const mockImportMetrics = jest.fn();
-jest.mock("~/components/tool-app/nav", () => ({ useToolNav: () => ({ navigate: mockNavigate }) }));
+jest.mock("~/components/tool-app/nav", () => ({
+    useToolNav: () => ({ navigate: mockNavigate, linkFor: (href: string) => href }),
+}));
 jest.mock("sonner", () => ({ toast: Object.assign(jest.fn(), { error: jest.fn() }) }));
 jest.mock("~/app/employer/tools/vantage/api", () => ({
     ...jest.requireActual<typeof ApiModule>("~/app/employer/tools/vantage/api"),
@@ -25,7 +32,12 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
         prepare: (...args: unknown[]) => mockPrepare(...args),
         reviewEnhancement: (...args: unknown[]) => mockReview(...args),
         decide: (...args: unknown[]) => mockDecide(...args),
+        patchTopic: (...args: unknown[]) => mockPatchTopic(...args),
+        agenda: (...args: unknown[]) => mockAgendaById(...args),
         evidence: (...args: unknown[]) => mockEvidence(...args),
+        evidenceById: (...args: unknown[]) => mockEvidenceById(...args),
+        observationById: (...args: unknown[]) => mockObservationById(...args),
+        commitmentById: (...args: unknown[]) => mockCommitmentById(...args),
         patchCommitment: (...args: unknown[]) => mockPatchCommitment(...args),
         commitments: (...args: unknown[]) => mockCommitments(...args),
         metrics: (...args: unknown[]) => mockMetrics(...args),
@@ -37,7 +49,7 @@ import { AgendaScreen } from "~/app/employer/tools/vantage/_screens/AgendaScreen
 import { MetricsScreen } from "~/app/employer/tools/vantage/_screens/MetricsScreen";
 import { CommitmentsScreen } from "~/app/employer/tools/vantage/_screens/CommitmentsScreen";
 import { CheckInRow } from "~/app/employer/tools/vantage/_components/CheckInRow";
-import { DecisionDialog } from "~/app/employer/tools/vantage/_components/TopicDialogs";
+import { DecisionDialog, TopicDialog } from "~/app/employer/tools/vantage/_components/TopicDialogs";
 import { VantageApiError } from "~/app/employer/tools/vantage/api";
 let agenda: AgendaV1Dto;
 beforeEach(() => {
@@ -67,6 +79,9 @@ beforeEach(() => {
     );
     mockPrepare.mockResolvedValue({ agenda });
     mockEvidence.mockResolvedValue({ evidence: fixtures.internal.input.data.currentEvidence });
+    mockEvidenceById.mockResolvedValue({
+        evidence: fixtures.internal.input.data.currentEvidence[0],
+    });
 });
 
 it("renders persisted period and execution metadata without automatic generation", async () => {
@@ -96,6 +111,7 @@ it("opens the actual cited evidence in a source dialog", async () => {
     const links = await screen.findAllByRole("button", { name: /Synthetic onboarding interview/ });
     fireEvent.click(links[0]!);
     const dialog = await screen.findByRole("dialog");
+    expect(mockEvidenceById).toHaveBeenCalledWith("ev-demo-1");
     expect(
         await within(dialog).findByText("The tester could not find the create-project action.")
     ).toBeInTheDocument();
@@ -133,6 +149,8 @@ it("keeps the report visible after a 503 and explains the disconnected adapter",
     render(<AgendaScreen />);
     fireEvent.click(await screen.findByRole("button", { name: "Regenerate report" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("adapter has not been connected");
+    expect(screen.getByRole("button", { name: "Regenerate report" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Reload saved report" })).toBeEnabled();
     expect(
         screen.getByRole("heading", { name: "Clarify the onboarding next step" })
     ).toBeInTheDocument();
@@ -145,6 +163,75 @@ it("does not invent metadata for legacy reports", async () => {
     expect(screen.getByText("Generation details unavailable")).toBeInTheDocument();
     expect(screen.queryByText("AI generated")).not.toBeInTheDocument();
 });
+
+it("holds a topic conflict for comparison and only reapplies after an explicit choice", async () => {
+    const initial = agenda.topics[0]!;
+    const latest = {
+        ...initial,
+        title: "Latest saved title",
+        facts: initial.facts.map(fact => ({ ...fact, unsupported: !fact.unsupported })),
+        contentVersion: 3,
+    };
+    mockPatchTopic
+        .mockRejectedValueOnce(new VantageApiError("stale", 409, { code: "topic_stale" }))
+        .mockResolvedValueOnce({ topic: latest });
+    mockAgendaById.mockResolvedValue({ agenda: { ...agenda, topics: [latest] } });
+    const onOpenChange = jest.fn();
+    render(
+        <TopicDialog
+            open
+            onOpenChange={onOpenChange}
+            agendaId={initial.agendaId}
+            initial={initial}
+            onSaved={jest.fn()}
+        />
+    );
+    fireEvent.change(screen.getByLabelText("Title"), { target: { value: "My local edit" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(
+        await screen.findByRole("region", { name: "Topic conflict comparison" })
+    ).toBeInTheDocument();
+    expect(screen.getByText("Latest saved title")).toBeInTheDocument();
+    expect(mockPatchTopic).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Reapply my edits" }));
+    await waitFor(() =>
+        expect(mockPatchTopic).toHaveBeenLastCalledWith(
+            initial.id,
+            expect.objectContaining({ title: "My local edit", facts: latest.facts }),
+            3
+        )
+    );
+});
+
+it("loads the compared version as a new base before saving a deliberate edit", async () => {
+    const initial = agenda.topics[0]!;
+    const latest = { ...initial, title: "Latest saved title", contentVersion: 4 };
+    mockPatchTopic
+        .mockRejectedValueOnce(new VantageApiError("stale", 409, { code: "topic_stale" }))
+        .mockResolvedValueOnce({ topic: { ...latest, title: "Edited latest" } });
+    mockAgendaById.mockResolvedValue({ agenda: { ...agenda, topics: [latest] } });
+    render(
+        <TopicDialog
+            open
+            onOpenChange={jest.fn()}
+            agendaId={initial.agendaId}
+            initial={initial}
+            onSaved={jest.fn()}
+        />
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Load latest version" }));
+    fireEvent.change(screen.getByLabelText("Title"), { target: { value: "Edited latest" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    await waitFor(() =>
+        expect(mockPatchTopic).toHaveBeenLastCalledWith(
+            initial.id,
+            expect.objectContaining({ title: "Edited latest" }),
+            4
+        )
+    );
+});
+
 it("requires an action test, freezes an uncertain payload and retries it unchanged", async () => {
     mockDecide
         .mockRejectedValueOnce(new TypeError("Network error"))
@@ -161,11 +248,11 @@ it("requires an action test, freezes an uncertain payload and retries it unchang
         target: { value: "Test navigation" },
     });
     fireEvent.change(screen.getByLabelText("Owner"), { target: { value: "Founder" } });
-    expect(screen.getByRole("button", { name: "Record" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Save Decision" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("The test"), {
         target: { value: "Four of five succeed" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Record" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save Decision" }));
     const retry = await screen.findByRole("button", { name: "Retry unchanged submission" });
     expect(screen.getByLabelText("What was decided")).toBeDisabled();
     fireEvent.click(retry);
@@ -182,7 +269,7 @@ it("keeps an existing primary action on a decision-only update", () => {
             onSaved={jest.fn()}
         />
     );
-    expect(screen.getByRole("switch", { name: "Open a commitment" })).toBeDisabled();
+    expect(screen.getByRole("switch", { name: "Create action" })).toBeDisabled();
     expect(screen.queryByLabelText("The test")).not.toBeInTheDocument();
 });
 
@@ -242,7 +329,7 @@ it("shows a resolved linked action without hiding it under the open-action filte
     render(<CommitmentsScreen actionId="resolved-action" />);
     expect(await screen.findByText("Completed navigation test")).toBeInTheDocument();
     expect(screen.getByText("Learned: Four completed it")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Show all commitments" }));
+    fireEvent.click(screen.getByRole("button", { name: "Show all actions" }));
     expect(mockNavigate).toHaveBeenCalledWith("/commitments");
 });
 

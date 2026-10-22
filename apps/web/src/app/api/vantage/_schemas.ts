@@ -101,6 +101,7 @@ export const TopicSchema = z.object({
 
 export const TopicPatchSchema = TopicSchema.partial().extend({
     status: z.enum(["kept", "dismissed", "suggested"]).optional(),
+    expectedContentVersion: z.number().int().positive(),
 });
 
 export const DecisionSchema = z.object({

@@ -148,6 +148,18 @@ export async function listEvidence(args: {
     return rows.map(toEvidenceDto);
 }
 
+/** Load one evidence item without relying on the inbox page size. */
+export async function getEvidence(args: {
+    companyId: bigint;
+    id: string;
+}): Promise<EvidenceDto | null> {
+    const [row] = await getDb()
+        .select()
+        .from(vantageEvidence)
+        .where(and(eq(vantageEvidence.companyId, args.companyId), eq(vantageEvidence.id, args.id)));
+    return row ? toEvidenceDto(row) : null;
+}
+
 export async function listEvidenceRows(args: {
     companyId: bigint;
     since?: string;
@@ -416,6 +428,44 @@ export async function listObservations(args: {
     }));
 }
 
+/** Load one observation and its metric identity without relying on the recent list. */
+export async function getObservation(args: {
+    companyId: bigint;
+    id: string;
+}): Promise<MetricObservationDto | null> {
+    const [item] = await getDb()
+        .select({
+            row: vantageMetricObservations,
+            key: vantageMetricDefinitions.key,
+            name: vantageMetricDefinitions.name,
+        })
+        .from(vantageMetricObservations)
+        .innerJoin(
+            vantageMetricDefinitions,
+            eq(vantageMetricDefinitions.id, vantageMetricObservations.metricId)
+        )
+        .where(
+            and(
+                eq(vantageMetricObservations.companyId, args.companyId),
+                eq(vantageMetricObservations.id, args.id),
+                eq(vantageMetricDefinitions.companyId, args.companyId)
+            )
+        );
+    if (!item) return null;
+    return {
+        id: item.row.id,
+        metricId: item.row.metricId,
+        metricKey: item.key,
+        metricName: item.name,
+        value: item.row.value,
+        periodStart: item.row.periodStart,
+        periodEnd: item.row.periodEnd,
+        source: item.row.source ?? null,
+        note: item.row.note ?? null,
+        createdAt: item.row.createdAt.toISOString(),
+    };
+}
+
 export interface ObservationInput {
     metricId: string;
     value: number;
@@ -516,6 +566,30 @@ export async function listCommitments(args: {
         .where(and(...conditions))
         .orderBy(asc(vantageCommitments.dueOn), desc(vantageCommitments.createdAt));
     return rows.map(({ row, topicTitle }) => toCommitmentDto(row, topicTitle ?? null));
+}
+
+/** Load one commitment without relying on the list endpoint. */
+export async function getCommitment(args: {
+    companyId: bigint;
+    id: string;
+}): Promise<CommitmentDto | null> {
+    const [item] = await getDb()
+        .select({ row: vantageCommitments, topicTitle: vantageAgendaTopics.title })
+        .from(vantageCommitments)
+        .leftJoin(
+            vantageAgendaTopics,
+            and(
+                eq(vantageAgendaTopics.id, vantageCommitments.topicId),
+                eq(vantageAgendaTopics.companyId, args.companyId)
+            )
+        )
+        .where(
+            and(
+                eq(vantageCommitments.companyId, args.companyId),
+                eq(vantageCommitments.id, args.id)
+            )
+        );
+    return item ? toCommitmentDto(item.row, item.topicTitle ?? null) : null;
 }
 
 export interface CommitmentInput {

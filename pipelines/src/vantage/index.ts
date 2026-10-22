@@ -22,3 +22,4 @@ export {
     GENERATION_BUDGETS,
     GENERATION_PROMPT_VERSION,
 } from "./generation-v1";
+export { validateGenerationResult } from "./validate-generation-v1";

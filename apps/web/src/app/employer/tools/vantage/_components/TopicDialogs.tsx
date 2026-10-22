@@ -24,6 +24,7 @@ import {
     VantageApiError,
     type DecisionInput,
     type TopicDto,
+    type TopicV1Dto,
     type TopicInput,
     type VantageFact,
 } from "../api";
@@ -45,7 +46,7 @@ export function TopicDialog({
     open: boolean;
     onOpenChange: (o: boolean) => void;
     agendaId: string;
-    initial: TopicDto | null;
+    initial: (TopicDto | TopicV1Dto) | null;
     onSaved: (topic: TopicDto) => void;
 }) {
     const dialogFocus = useDialogFocus();
@@ -60,6 +61,9 @@ export function TopicDialog({
     const [unknowns, setUnknowns] = useState("");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [conflict, setConflict] = useState<TopicV1Dto | null>(null);
+    const [baseContentVersion, setBaseContentVersion] = useState(1);
+    const [baseFacts, setBaseFacts] = useState<VantageFact[]>([]);
 
     useEffect(() => {
         if (!open) return;
@@ -72,8 +76,24 @@ export function TopicDialog({
         setDue(initial?.proposedDue ?? "");
         setHelp(initial?.helpRequested ?? "");
         setUnknowns(initial?.unknowns.join("\n") ?? "");
+        setBaseFacts(initial?.facts ?? []);
         setError(null);
+        setConflict(null);
+        setBaseContentVersion(initial && "contentVersion" in initial ? initial.contentVersion : 1);
     }, [open, initial]);
+
+    const loadTopicIntoForm = (topic: TopicDto) => {
+        setTitle(topic.title);
+        setFactsText(topic.facts.map(f => f.text).join("\n"));
+        setBaseFacts(topic.facts);
+        setWhy(topic.whyItMatters ?? "");
+        setDecision(topic.decisionQuestion ?? "");
+        setNext(topic.proposedNextStep ?? "");
+        setOwner(topic.proposedOwner ?? "");
+        setDue(topic.proposedDue ?? "");
+        setHelp(topic.helpRequested ?? "");
+        setUnknowns(topic.unknowns.join("\n"));
+    };
 
     const saving = useRef(false);
     const save = async () => {
@@ -84,7 +104,7 @@ export function TopicDialog({
         try {
             // Keep the sources of facts whose text is unchanged; a rewritten
             // or new line has none until the next draft cites it.
-            const previous = new Map((initial?.facts ?? []).map(f => [f.text, f]));
+            const previous = new Map((conflict?.facts ?? baseFacts).map(f => [f.text, f]));
             const facts: VantageFact[] = factsText
                 .split("\n")
                 .map(l => l.trim())
@@ -105,13 +125,32 @@ export function TopicDialog({
                     .filter(Boolean),
                 shared: false,
             };
+            const expectedContentVersion = conflict?.contentVersion ?? baseContentVersion;
             const { topic } = initial
-                ? await vantageApi.patchTopic(initial.id, input)
+                ? await vantageApi.patchTopic(initial.id, input, expectedContentVersion)
                 : await vantageApi.addTopic(agendaId, input);
+            setConflict(null);
+            setBaseFacts(facts);
+            if ("contentVersion" in topic) setBaseContentVersion(topic.contentVersion);
             toast(initial ? "Topic saved" : "Topic added");
             onSaved(topic);
             onOpenChange(false);
         } catch (e) {
+            if (initial && e instanceof VantageApiError && e.status === 409) {
+                try {
+                    const { agenda } = await vantageApi.agenda(agendaId);
+                    const latest = agenda.topics.find(topic => topic.id === initial.id);
+                    if (latest) {
+                        setConflict(latest);
+                        setError(
+                            `This topic changed in another tab. Compare the saved version below, then load it or deliberately reapply your edits.`
+                        );
+                        return;
+                    }
+                } catch {
+                    // Keep the original conflict message when the comparison read is unavailable.
+                }
+            }
             setError(vantageErrorMessage(e));
         } finally {
             saving.current = false;
@@ -239,11 +278,86 @@ export function TopicDialog({
                     </p>
                     <FormError message={error} />
                 </fieldset>
+                {conflict && (
+                    <section
+                        aria-label="Topic conflict comparison"
+                        className="border-danger/30 bg-danger/5 text-ink-2 grid gap-2 rounded-lg border p-3 text-sm"
+                    >
+                        <p className="text-danger font-medium">
+                            Saved version {conflict.contentVersion} is newer than the version you
+                            edited.
+                        </p>
+                        <p>
+                            Latest saved title: <strong>{conflict.title}</strong>
+                        </p>
+                        <dl className="grid gap-1 text-xs">
+                            <div>
+                                <dt className="inline font-medium">Facts: </dt>
+                                <dd className="inline">
+                                    {conflict.facts.map(fact => fact.text).join("; ") || "None"}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Decision: </dt>
+                                <dd className="inline">{conflict.decisionQuestion || "None"}</dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Why it matters: </dt>
+                                <dd className="inline">{conflict.whyItMatters || "None"}</dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Next step: </dt>
+                                <dd className="inline">{conflict.proposedNextStep || "None"}</dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Owner / due: </dt>
+                                <dd className="inline">
+                                    {conflict.proposedOwner ?? "Unassigned"} /{" "}
+                                    {conflict.proposedDue ?? "No due date"}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Help requested: </dt>
+                                <dd className="inline">{conflict.helpRequested ?? "None"}</dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">Unknowns: </dt>
+                                <dd className="inline">{conflict.unknowns.join("; ") || "None"}</dd>
+                            </div>
+                        </dl>
+                        <div className="flex flex-wrap gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => {
+                                    loadTopicIntoForm(conflict);
+                                    setBaseContentVersion(conflict.contentVersion);
+                                    setConflict(null);
+                                    setError(null);
+                                }}
+                            >
+                                Load latest version
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    setError(null);
+                                    void save();
+                                }}
+                            >
+                                Reapply my edits
+                            </Button>
+                        </div>
+                    </section>
+                )}
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
                         Cancel
                     </Button>
-                    <Button onClick={() => void save()} disabled={busy || !title.trim()}>
+                    <Button
+                        onClick={() => void save()}
+                        disabled={busy || !title.trim() || Boolean(conflict)}
+                    >
                         {initial ? "Save" : "Add topic"}
                     </Button>
                 </DialogFooter>
@@ -345,7 +459,7 @@ export function DecisionDialog({
         <Dialog open={open} onOpenChange={value => !busy && onOpenChange(value)}>
             <DialogContent {...dialogFocus} className="sm:max-w-[560px]">
                 <DialogHeader>
-                    <DialogTitle>Record the decision</DialogTitle>
+                    <DialogTitle>Save Decision</DialogTitle>
                     <DialogDescription>
                         {topic?.decisionQuestion === "" ? topic?.title : topic?.decisionQuestion}
                     </DialogDescription>
@@ -363,12 +477,10 @@ export function DecisionDialog({
                     </Field>
                     <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
                         <div>
-                            <div className="text-ink text-[13px] font-medium">
-                                Open a commitment
-                            </div>
+                            <div className="text-ink text-[13px] font-medium">Create action</div>
                             <div className="text-ink-3 text-[11.5px]">
                                 {topic?.commitmentId
-                                    ? "An action is already linked. This submission keeps it; edit it from Commitments."
+                                    ? "An action is already linked. This submission keeps it; edit it from Weekly Actions."
                                     : "One primary action per topic, with an owner, due date and success test."}
                             </div>
                         </div>
@@ -376,7 +488,7 @@ export function DecisionDialog({
                             disabled={Boolean(topic?.commitmentId)}
                             checked={withCommitment}
                             onCheckedChange={setWithCommitment}
-                            aria-label="Open a commitment"
+                            aria-label="Create action"
                         />
                     </div>
                     {withCommitment && (
@@ -438,7 +550,11 @@ export function DecisionDialog({
                                 (!title.trim() || !owner.trim() || !due || !test.trim()))
                         }
                     >
-                        {busy ? "Saving…" : retrying ? "Retry unchanged submission" : "Record"}
+                        {busy
+                            ? "Saving…"
+                            : retrying
+                              ? "Retry unchanged submission"
+                              : "Save Decision"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

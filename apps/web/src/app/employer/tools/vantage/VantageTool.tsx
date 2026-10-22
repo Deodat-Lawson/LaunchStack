@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarCheck, ChartLine, Handshake, Inbox, ListChecks } from "lucide-react";
+import { CalendarCheck, ChartLine, Handshake, Inbox } from "lucide-react";
 import { useMemo } from "react";
 
 import { VantageMark } from "~/components/icons/vantage";
@@ -31,24 +31,17 @@ export function VantageTool({ host }: { host?: ToolHost }) {
 }
 
 /**
- * The bar runs in the order the week does: the founder's screens first,
- * then capture. Contract v1 is private; sharing and program triage are deferred.
+ * The v1 navigation names the product loop. The older paths remain valid for
+ * saved links and week queries, but the primary bar stays deliberately small.
  */
 function screenGroups(): ToolNavGroup[] {
     const groups: ToolNavGroup[] = [
         {
-            id: "week",
-            label: "The week",
+            id: "vantage-loop",
+            label: "Vantage",
             items: [
-                { to: vantagePath(""), label: "This week", icon: CalendarCheck, exact: true },
-                { to: vantagePath("/agenda"), label: "Agenda", icon: ListChecks },
-                { to: vantagePath("/commitments"), label: "Commitments", icon: Handshake },
-            ],
-        },
-        {
-            id: "capture",
-            label: "Capture",
-            items: [
+                { to: vantagePath(""), label: "Weekly Review", icon: CalendarCheck, exact: true },
+                { to: vantagePath("/commitments"), label: "Weekly Actions", icon: Handshake },
                 { to: vantagePath("/evidence"), label: "Evidence", icon: Inbox },
                 { to: vantagePath("/metrics"), label: "Metrics", icon: ChartLine },
             ],

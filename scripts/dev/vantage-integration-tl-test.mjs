@@ -8,11 +8,12 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const PROJECT = "launchstack-vantage-integration-tl-20261019";
-const CONTAINER = "launchstack-vantage-integration-tl-20261019-db";
-const VOLUME = "launchstack-vantage-integration-tl-20261019-data";
-const DATABASE = "vantage_tl_contract_v1";
-const USER = "vantage_tl";
+export const PROJECT = "launchstack-vantage-week2-tl-20261022";
+export const CONTAINER = `${PROJECT}-db`;
+export const VOLUME = `${PROJECT}-data`;
+export const DATABASE = "vantage_week2_tl_contract_v1";
+export const USER = "vantage_week2_tl";
+export const DATABASE_PORT = 55437;
 const MARKER = "io.launchstack.tl-test";
 const DATA_DIR = "/var/lib/postgresql/data";
 const COMPOSE = resolve(ROOT, "scripts/dev/vantage-integration-tl.compose.yml");
@@ -43,9 +44,31 @@ const WEB_TESTS = [
 ];
 
 export function childEnvironment(password, inherited = process.env) {
-    const url = `postgres://${USER}:${encodeURIComponent(password)}@127.0.0.1:55434/${DATABASE}`;
+    const url = `postgres://${USER}:${encodeURIComponent(password)}@127.0.0.1:${DATABASE_PORT}/${DATABASE}`;
     return {
-        ...inherited,
+        ...Object.fromEntries(
+            Object.entries(inherited).filter(([key]) =>
+                [
+                    "PATH",
+                    "SYSTEMROOT",
+                    "WINDIR",
+                    "COMSPEC",
+                    "PATHEXT",
+                    "TEMP",
+                    "TMP",
+                    "USERPROFILE",
+                    "HOMEDRIVE",
+                    "HOMEPATH",
+                    "APPDATA",
+                    "LOCALAPPDATA",
+                    "SYSTEMDRIVE",
+                    "PROGRAMFILES",
+                    "PROGRAMFILES(X86)",
+                    "PROGRAMDATA",
+                    "NUMBER_OF_PROCESSORS",
+                ].includes(key.toUpperCase())
+            )
+        ),
         DATABASE_URL: url,
         MIGRATE_DATABASE_URL: url,
         VANTAGE_TL_TEST_DATABASE_URL: url,
@@ -54,6 +77,15 @@ export function childEnvironment(password, inherited = process.env) {
         PGPASSWORD: password,
         NODE_ENV: "test",
         COMPOSE_REMOVE_ORPHANS: "false",
+        PROPOSALS_EXECUTOR: "inline",
+        VANTAGE_TL_TEST_MODE: "true",
+        EMAIL_SENDING_ENABLED: "false",
+        GMAIL_CONNECTOR_ENABLED: "false",
+        AGENT_KNOWLEDGE_CONNECTOR_ENABLED: "false",
+        AGENT_SESSIONS_CONNECTOR_ENABLED: "false",
+        GOOGLE_DOCS_EDITING_ENABLED: "false",
+        CHAT_BASE_URL: "http://127.0.0.1:9/v1",
+        CHAT_API_KEY: "synthetic-disabled-no-provider",
     };
 }
 
@@ -106,7 +138,7 @@ export function assertOwnedContainer(container) {
         container.Config.Labels["com.docker.compose.service"] !== "db" ||
         bindings.length !== 1 ||
         bindings[0].HostIp !== "127.0.0.1" ||
-        bindings[0].HostPort !== "55434" ||
+        bindings[0].HostPort !== String(DATABASE_PORT) ||
         !environment.has(`POSTGRES_DB=${DATABASE}`) ||
         !environment.has(`POSTGRES_USER=${USER}`) ||
         container.Mounts.length !== 1 ||
@@ -185,11 +217,11 @@ async function checkFreePort() {
         server.once("error", () =>
             reject(
                 new Error(
-                    "Local port 55434 is occupied. Stop the conflicting listener yourself; no existing service was changed."
+                    `Local port ${DATABASE_PORT} is occupied. Stop the conflicting listener yourself; no existing service was changed.`
                 )
             )
         );
-        server.listen(55434, "127.0.0.1", () => server.close(resolvePort));
+        server.listen(DATABASE_PORT, "127.0.0.1", () => server.close(resolvePort));
     });
 }
 
@@ -280,7 +312,7 @@ export async function main(args = process.argv.slice(2)) {
         );
     const env = childEnvironment(password);
     await ensureDependencies(env);
-    console.log("[TL] Starting the isolated database on 127.0.0.1:55434.");
+    console.log(`[TL] Starting the isolated database on 127.0.0.1:${DATABASE_PORT}.`);
     await run(
         "docker",
         [

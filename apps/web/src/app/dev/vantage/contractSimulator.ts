@@ -311,16 +311,21 @@ export class ContractSimulator {
                 return json({ topic });
             }
             if (method === "PATCH" && !parts[2]) {
-                Object.assign(topic, body, {
+                const { expectedContentVersion: _expectedContentVersion, ...changes } = body;
+                Object.assign(topic, changes, {
                     contentVersion: topic.contentVersion + 1,
                     shared: false,
-                    status: body.status ?? "kept",
+                    status: changes.status ?? "kept",
                 });
                 agenda.version++;
                 return json({ topic });
             }
         }
         if (parts[0] === "commitments") {
+            if (method === "GET" && parts[1]) {
+                const item = this.commitments.find(c => c.id === parts[1]);
+                return item ? json({ commitment: item }) : failure("not_found", 404);
+            }
             if (method === "GET") return json({ commitments: this.commitments });
             if (method === "POST") {
                 const commitment = {
@@ -350,6 +355,10 @@ export class ContractSimulator {
             }
         }
         if (parts[0] === "evidence") {
+            if (method === "GET" && parts[1]) {
+                const item = this.evidence.find(e => e.id === parts[1]);
+                return item ? json({ evidence: item }) : failure("not_found", 404);
+            }
             if (method === "GET") return json({ evidence: this.evidence });
             if (method === "POST") {
                 const item = {
@@ -364,7 +373,9 @@ export class ContractSimulator {
             const index = this.evidence.findIndex(e => e.id === parts[1]);
             if (index < 0) return failure("not_found", 404);
             if (method === "PATCH") {
+                if (body.visibility === "shared") return failure("private_only", 400);
                 Object.assign(this.evidence[index]!, body);
+                this.evidence[index]!.visibility = "private";
                 return json({ evidence: this.evidence[index] });
             }
             if (method === "DELETE") {
@@ -373,6 +384,11 @@ export class ContractSimulator {
             }
         }
         if (parts[0] === "metrics") {
+            if (method === "GET")
+                if (parts[1] === "observations" && parts[2]) {
+                    const observation = this.observations.find(o => o.id === parts[2]);
+                    return observation ? json({ observation }) : failure("not_found", 404);
+                }
             if (method === "GET")
                 return json({ definitions: this.definitions, observations: this.observations });
             if (parts[1] === "import")

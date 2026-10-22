@@ -1,0 +1,119 @@
+[
+  {
+    "name": "cross-company",
+    "mutate": "requiredBundle.actor.companyId",
+    "value": "company-other",
+    "expectedCode": "cross_company"
+  },
+  {
+    "name": "role-escalation",
+    "mutate": "retrievalBundle.roleMatches[0].roleIds",
+    "value": ["admin"],
+    "expectedCode": "role_escalation"
+  },
+  {
+    "name": "missing-star",
+    "mutate": "requiredBundle.coverage.checked",
+    "value": [
+      { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+      { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" }
+    ],
+    "expectedCode": "required_source_unchecked"
+  },
+  {
+    "name": "unknown-company",
+    "mutate": "manifest.actor.companyId",
+    "value": "company-unknown",
+    "expectedCode": "unknown_company"
+  },
+  {
+    "name": "new-version",
+    "mutate": "manifest.sourceVersions.ev:evidence-risk-1@ev-v2",
+    "value": "ev-v3",
+    "expectedCode": "source_version_mismatch"
+  },
+  {
+    "name": "old-open",
+    "mutate": "retrievalBundle.reportWindow.asOf",
+    "value": "2026-10-17T00:00:00Z",
+    "expectedCode": "invalid_window"
+  },
+  {
+    "name": "dedup",
+    "mutate": "retrievalBundle.recentChanges[0].source",
+    "value": { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+    "expectedCode": "duplicate_retrieval_source"
+  },
+  {
+    "name": "outside-as-of",
+    "mutate": "retrievalBundle.roleMatches[0].sourceDate",
+    "value": "2026-10-20T00:00:00Z",
+    "expectedCode": "outside_as_of"
+  },
+  {
+    "name": "public-query",
+    "mutate": "researchPlan.publicSafeQueryProjection[0].approvalToken",
+    "value": "raw-private-text",
+    "expectedCode": "untrusted_public_projection"
+  },
+  {
+    "name": "nonfinite-budget",
+    "mutate": "retrievalInput.budgets.timeoutMs",
+    "value": "Infinity",
+    "expectedCode": "invalid_budget"
+  },
+  {
+    "name": "principal-mismatch",
+    "mutate": "requiredBundle.personalVantageStars[0].audience.principalRef",
+    "value": "user-other",
+    "expectedCode": "principal_mismatch"
+  },
+  {
+    "name": "acl-mismatch",
+    "mutate": "requiredBundle.actor.aclDigest",
+    "value": "acl-forged",
+    "expectedCode": "acl_digest_mismatch"
+  },
+  {
+    "name": "private-public-audience",
+    "mutate": "retrievalInput.sourceCatalog[3].audience",
+    "value": { "kind": "public" },
+    "expectedCode": "private_public_audience"
+  },
+  {
+    "name": "revoked-retrieval",
+    "mutate": "retrievalBundle.roleMatches[0].access",
+    "value": "revoked",
+    "expectedCode": "revoked_selected_source"
+  },
+  {
+    "name": "citation-unregistered",
+    "mutate": "manifest.research.citationRefs[0]",
+    "value": { "kind": "public", "id": "public-new", "version": "public-v2" },
+    "expectedCode": "citation_source_unregistered"
+  },
+  {
+    "name": "retrieval-source-budget",
+    "mutate": "retrievalInput.budgets.maxSources",
+    "value": 1,
+    "expectedCode": "source_budget_exceeded"
+  },
+  {
+    "name": "retrieval-excerpt-budget",
+    "mutate": "retrievalInput.budgets.maxExcerptChars",
+    "value": 1,
+    "expectedCode": "excerpt_budget_exceeded"
+  },
+  {
+    "name": "retrieval-acl-mismatch",
+    "mutate": "retrievalBundle.roleMatches[0].aclDigest",
+    "value": "acl-forged",
+    "expectedCode": "source_metadata_mismatch"
+  },
+  {
+    "name": "research-query-budget",
+    "mutate": "researchPlan.budgets.maxQueries",
+    "value": 0,
+    "expectedCode": "query_budget_exceeded"
+  }
+]

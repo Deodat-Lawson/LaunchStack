@@ -1,0 +1,429 @@
+{
+  "roleContext": {
+    "contractVersion": "v0-proposed",
+    "authenticatedPrincipalRef": "user-joseph",
+    "roleIds": ["founder"],
+    "primaryRoleId": "founder",
+    "mappingVersion": "roles-2026-10-20.1",
+    "roles": [
+      {
+        "roleId": "founder",
+        "description": "Company founder",
+        "responsibilities": ["Set company direction"],
+        "priorities": ["Resolve weekly risks"]
+      }
+    ],
+    "provenance": { "kind": "user-confirmed", "source": "role-map:user-joseph" },
+    "userConfirmed": true,
+    "fallback": false
+  },
+  "requiredBundle": {
+    "contractVersion": "v0-proposed",
+    "asOf": "2026-10-19T12:00:00Z",
+    "actor": {
+      "principalRef": "user-joseph",
+      "companyId": "company-tilde",
+      "audience": { "kind": "actor", "principalRef": "user-joseph" },
+      "aclDigest": "acl-tilde-user-joseph-1"
+    },
+    "companyArchitecture": {
+      "source": {
+        "kind": "company",
+        "id": "architecture-tilde",
+        "version": "company-v3",
+        "reviewState": "unknowns-marked"
+      },
+      "companyId": "company-tilde",
+      "canonical": true,
+      "access": "allowed",
+      "aclDigest": "acl-tilde-company-1",
+      "audience": { "kind": "company", "companyId": "company-tilde" },
+      "sourceDate": "2026-10-18T08:00:00Z",
+      "checkedAt": "2026-10-19T11:00:00Z",
+      "excerpt": "Reviewed architecture with unknowns marked.",
+      "required": true
+    },
+    "workspaceMandatoryDocuments": [
+      {
+        "source": { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-17T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Mandatory weekly planning constraints.",
+        "required": true
+      }
+    ],
+    "personalVantageStars": [
+      {
+        "source": { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-user-joseph-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-16T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Personal Vantage star with current roadmap context.",
+        "required": true,
+        "module": "vantage"
+      }
+    ],
+    "coverage": {
+      "checked": [
+        { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" }
+      ],
+      "used": [
+        { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" }
+      ],
+      "missing": [],
+      "revoked": [],
+      "omitted": []
+    },
+    "status": "complete",
+    "constraints": ["Use only checked authorized excerpts."]
+  },
+  "retrievalInput": {
+    "contractVersion": "v0-proposed",
+    "actor": {
+      "principalRef": "user-joseph",
+      "companyId": "company-tilde",
+      "audience": { "kind": "actor", "principalRef": "user-joseph" },
+      "aclDigest": "acl-tilde-user-joseph-1"
+    },
+    "verifiedRoleContext": {
+      "contractVersion": "v0-proposed",
+      "authenticatedPrincipalRef": "user-joseph",
+      "roleIds": ["founder"],
+      "primaryRoleId": "founder",
+      "mappingVersion": "roles-2026-10-20.1",
+      "roles": [
+        {
+          "roleId": "founder",
+          "description": "Company founder",
+          "responsibilities": ["Set company direction"],
+          "priorities": ["Resolve weekly risks"]
+        }
+      ],
+      "provenance": { "kind": "user-confirmed", "source": "role-map:user-joseph" },
+      "userConfirmed": true,
+      "fallback": false
+    },
+    "reportWindow": {
+      "startInclusive": "2026-10-12T00:00:00Z",
+      "endExclusive": "2026-10-19T00:00:00Z",
+      "asOf": "2026-10-19T12:00:00Z"
+    },
+    "sourceCatalog": [
+      {
+        "source": { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-18T08:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Reviewed architecture with unknowns marked."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-17T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Mandatory weekly planning constraints."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-user-joseph-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-16T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Personal Vantage star with current roadmap context."
+      },
+      {
+        "source": { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-18T13:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Evidence of an unresolved weekly risk."
+      }
+    ],
+    "budgets": {
+      "maxSources": 20,
+      "maxExcerptChars": 8000,
+      "timeoutMs": 5000,
+      "maxQueries": 2,
+      "maxTokens": 1200
+    }
+  },
+  "retrievalBundle": {
+    "contractVersion": "v0-proposed",
+    "actor": {
+      "principalRef": "user-joseph",
+      "companyId": "company-tilde",
+      "audience": { "kind": "actor", "principalRef": "user-joseph" },
+      "aclDigest": "acl-tilde-user-joseph-1"
+    },
+    "reportWindow": {
+      "startInclusive": "2026-10-12T00:00:00Z",
+      "endExclusive": "2026-10-19T00:00:00Z",
+      "asOf": "2026-10-19T12:00:00Z"
+    },
+    "roleMatches": [
+      {
+        "source": { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-18T13:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Evidence of an unresolved weekly risk.",
+        "roleIds": ["founder"],
+        "rank": 1,
+        "selectionReason": "Matches founder risk priority.",
+        "dedupKey": "evidence-risk-1"
+      }
+    ],
+    "recentChanges": [
+      {
+        "source": { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-17T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Mandatory weekly planning constraints.",
+        "roleIds": ["founder"],
+        "rank": 2,
+        "selectionReason": "Recent mandatory workspace change.",
+        "dedupKey": "doc-weekly-plan-v7"
+      }
+    ],
+    "unresolvedOlderItems": [
+      {
+        "source": { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-user-joseph-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-16T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Personal Vantage star with current roadmap context.",
+        "roleIds": ["founder"],
+        "rank": 3,
+        "selectionReason": "Older unresolved roadmap context.",
+        "dedupKey": "doc-starred-roadmap-v4"
+      }
+    ],
+    "sourceRegistry": [
+      {
+        "source": { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-18T13:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Evidence of an unresolved weekly risk."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-17T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Mandatory weekly planning constraints."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-user-joseph-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-16T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Personal Vantage star with current roadmap context."
+      }
+    ],
+    "deduped": [],
+    "omissions": [],
+    "failures": [],
+    "status": "complete"
+  },
+  "researchPlan": {
+    "contractVersion": "v0-proposed",
+    "mode": "public",
+    "gapPurpose": "Check a public market signal for the unresolved risk.",
+    "internalSourceRefs": [],
+    "publicSafeQueryProjection": [
+      {
+        "projectionId": "projection-market-risk-1",
+        "query": "public market risk indicators for early-stage software",
+        "purpose": "Public market context only",
+        "approvalToken": "psqv0_public-market-risk-1",
+        "validatedAt": "2026-10-19T11:30:00Z"
+      }
+    ],
+    "budgets": {
+      "maxSources": 5,
+      "maxExcerptChars": 4000,
+      "timeoutMs": 4000,
+      "maxQueries": 1,
+      "maxTokens": 600
+    }
+  },
+  "researchResult": {
+    "contractVersion": "v0-proposed",
+    "mode": "public",
+    "gapPurpose": "Check a public market signal for the unresolved risk.",
+    "publicSafeQueryProjection": [
+      {
+        "projectionId": "projection-market-risk-1",
+        "query": "public market risk indicators for early-stage software",
+        "purpose": "Public market context only",
+        "approvalToken": "psqv0_public-market-risk-1",
+        "validatedAt": "2026-10-19T11:30:00Z"
+      }
+    ],
+    "internalSourceRefs": [],
+    "citations": [
+      {
+        "source": { "kind": "public", "id": "public-market-report", "version": "public-v1" },
+        "title": "Public market report",
+        "url": "https://example.test/public-market-report",
+        "sourceDate": "2026-10-18T00:00:00Z",
+        "accessedAt": "2026-10-19T11:45:00Z",
+        "provenance": "approved-public-provider"
+      }
+    ],
+    "failures": [],
+    "status": "complete",
+    "asOf": "2026-10-19T12:00:00Z"
+  },
+  "manifest": {
+    "contractVersion": "v0-proposed",
+    "runId": "run-context-v0-1",
+    "inputVersion": "input-v0-1",
+    "contextFingerprint": "sha256-context-v0-1",
+    "actor": {
+      "principalRef": "user-joseph",
+      "companyId": "company-tilde",
+      "audience": { "kind": "actor", "principalRef": "user-joseph" },
+      "aclDigest": "acl-tilde-user-joseph-1"
+    },
+    "reportWindow": {
+      "startInclusive": "2026-10-12T00:00:00Z",
+      "endExclusive": "2026-10-19T00:00:00Z",
+      "asOf": "2026-10-19T12:00:00Z"
+    },
+    "roleMapVersion": "roles-2026-10-20.1",
+    "roleIds": ["founder"],
+    "roleProfileVersions": { "founder": "profile-founder-v1" },
+    "companyArchitectureVersion": "company-v3",
+    "personalStarVersions": { "doc-starred-roadmap": "doc-v4" },
+    "sourceVersions": {
+      "company:architecture-tilde@company-v3": "company-v3",
+      "doc:doc-weekly-plan@doc-v7": "doc-v7",
+      "doc:doc-starred-roadmap@doc-v4": "doc-v4",
+      "ev:evidence-risk-1@ev-v2": "ev-v2",
+      "public:public-market-report@public-v1": "public-v1"
+    },
+    "sourceRegistry": [
+      {
+        "source": { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-18T08:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Reviewed architecture with unknowns marked."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-17T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Mandatory weekly planning constraints."
+      },
+      {
+        "source": { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-user-joseph-1",
+        "audience": { "kind": "actor", "principalRef": "user-joseph" },
+        "sourceDate": "2026-10-16T09:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Personal Vantage star with current roadmap context."
+      },
+      {
+        "source": { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": { "kind": "company", "companyId": "company-tilde" },
+        "sourceDate": "2026-10-18T13:00:00Z",
+        "checkedAt": "2026-10-19T11:00:00Z",
+        "excerpt": "Evidence of an unresolved weekly risk."
+      },
+      {
+        "source": { "kind": "public", "id": "public-market-report", "version": "public-v1" },
+        "companyId": "company-tilde",
+        "access": "allowed",
+        "aclDigest": "acl-public-approved-1",
+        "audience": { "kind": "public" },
+        "sourceDate": "2026-10-18T00:00:00Z",
+        "checkedAt": "2026-10-19T11:45:00Z",
+        "excerpt": "Public report excerpt."
+      }
+    ],
+    "coverage": {
+      "checked": [
+        { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        { "kind": "public", "id": "public-market-report", "version": "public-v1" }
+      ],
+      "used": [
+        { "kind": "company", "id": "architecture-tilde", "version": "company-v3" },
+        { "kind": "doc", "id": "doc-weekly-plan", "version": "doc-v7" },
+        { "kind": "doc", "id": "doc-starred-roadmap", "version": "doc-v4" },
+        { "kind": "ev", "id": "evidence-risk-1", "version": "ev-v2" },
+        { "kind": "public", "id": "public-market-report", "version": "public-v1" }
+      ],
+      "missing": [],
+      "revoked": [],
+      "omitted": [],
+      "researchOmitted": []
+    },
+    "omissions": [],
+    "research": {
+      "mode": "public",
+      "status": "complete",
+      "citationRefs": [{ "kind": "public", "id": "public-market-report", "version": "public-v1" }],
+      "failures": []
+    },
+    "status": "complete"
+  }
+}

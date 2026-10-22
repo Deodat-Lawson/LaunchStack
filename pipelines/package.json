@@ -58,7 +58,8 @@
         "./proposals/types": "./src/proposals/types.ts",
         "./vantage": "./src/vantage/index.ts",
         "./vantage/schema": "./src/vantage/schema.ts",
-        "./vantage/generation-v1": "./src/vantage/generation-v1.ts"
+        "./vantage/generation-v1": "./src/vantage/generation-v1.ts",
+        "./vantage/context-v0": "./src/vantage/context-v0/index.ts"
     },
     "files": [
         "dist",
@@ -258,6 +259,10 @@
             "./vantage/generation-v1": {
                 "types": "./dist/vantage/generation-v1.d.ts",
                 "default": "./dist/vantage/generation-v1.js"
+            },
+            "./vantage/context-v0": {
+                "types": "./dist/vantage/context-v0/index.d.ts",
+                "default": "./dist/vantage/context-v0/index.js"
             }
         }
     },

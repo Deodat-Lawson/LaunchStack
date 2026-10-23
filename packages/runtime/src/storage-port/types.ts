@@ -30,6 +30,12 @@ export interface UploadInput {
     contentType?: string;
     /** Optional — the userId the object is being uploaded on behalf of. */
     userId?: string;
+    /**
+     * Optional — the workspace the object belongs to. Backends that gate reads
+     * by workspace (the database fallback's /api/files/[id]) stamp it on the
+     * object; without it no member session can read the object back.
+     */
+    companyId?: bigint;
 }
 
 export interface UploadResult {

@@ -2,6 +2,7 @@ import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import type { ComponentType } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
+import type { SourceProcessingView } from "~/lib/source-progress";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -171,8 +172,14 @@ export interface WorkspaceSource {
     citability?: SourceCitability;
     /** Unset for local sources and mindmaps without a published document. */
     indexStatus?: SourceIndexStatus;
-    /** The processing failure reported by the worker, for the status tooltip. */
+    /**
+     * The worker's raw processing failure. Never shown as is:
+     * `describeSourceFailure` turns it into words, and the raw text sits
+     * behind the failure card's Details.
+     */
     errorMessage?: string;
+    /** Where processing stands, for sources not ready yet: the progress bar, retries, the job id. */
+    processing?: SourceProcessingView | null;
     title: string;
     type: SourceTypeId;
     size: string;

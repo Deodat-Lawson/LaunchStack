@@ -232,6 +232,7 @@ import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[vers
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
 import { POST as createVersion } from "~/app/api/documents/[id]/versions/route";
+import { POST as retryProcessing } from "~/app/api/documents/[id]/retry/route";
 import { POST as uploadDocument } from "~/app/api/uploadDocument/route";
 import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
@@ -476,6 +477,14 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () =>
             createVersion(json("/api/documents/1/versions", "POST", {}), params({ id: "1" })),
+    },
+    // Retrying re-runs processing for the file, like a new version does.
+    {
+        route: "POST /api/documents/[id]/retry",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            retryProcessing(json("/api/documents/1/retry", "POST", {}), params({ id: "1" })),
     },
     {
         route: "POST /api/uploadDocument",

@@ -3,9 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Bug, Mail, MessageSquare, Phone, Send } from "lucide-react";
+import { Bug, CircleAlert, Copy, Mail, MessageSquare, Phone, Send } from "lucide-react";
 
 import type { SupportChannels } from "~/server/support";
+import {
+    SOURCE_FAILURE_CATEGORY_NAMES,
+    sourceFailureReportText,
+    type SourceFailureReport,
+} from "~/lib/source-failure";
 
 import LoadingPage from "~/app/_components/loading";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
@@ -13,15 +18,23 @@ import { Button } from "~/components/ui/button";
 import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
 import { Field, TextArea, TextInput } from "~/components/field";
 
-export function ContactClient({ support }: { support: SupportChannels }) {
+export function ContactClient({
+    support,
+    report = null,
+}: {
+    support: SupportChannels;
+    /** A failed source's details, when its "Contact us about this error" link opened the page. */
+    report?: SourceFailureReport | null;
+}) {
     const router = useRouter();
     const { isLoaded, userId } = useAuth();
     const [loading, setLoading] = useState(true);
+    const reportText = report ? sourceFailureReportText(report) : null;
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        subject: "",
-        message: "",
+        subject: reportText?.subject ?? "",
+        message: reportText ? `What I was doing:\n\n\n—\n${reportText.details}` : "",
     });
 
     useEffect(() => {
@@ -71,13 +84,21 @@ export function ContactClient({ support }: { support: SupportChannels }) {
             <PageShell>
                 <PageHeader
                     eyebrow="Support"
-                    title="Get in touch"
+                    title={report ? "Report a processing error" : "Get in touch"}
                     description={
                         support.email
                             ? "Questions, feedback, or bug reports. Your message opens in your mail client."
                             : "Questions, feedback, or bug reports."
                     }
                 />
+
+                {report && reportText && (
+                    <FailureReportCard
+                        report={report}
+                        details={reportText.details}
+                        inMessage={Boolean(support.email)}
+                    />
+                )}
 
                 <div
                     style={{
@@ -227,6 +248,61 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                 </div>
             </PageShell>
         </>
+    );
+}
+
+/**
+ * What the failed source's link carried, shown above the form so the person
+ * can see what will be sent — and copy it, when this instance has no
+ * support address and the issue tracker is the way to reach anyone.
+ */
+function FailureReportCard({
+    report,
+    details,
+    inMessage,
+}: {
+    report: SourceFailureReport;
+    details: string;
+    /** The form below already carries them (a support address is configured). */
+    inMessage: boolean;
+}) {
+    const [copied, setCopied] = useState(false);
+    const copy = async () => {
+        try {
+            await navigator.clipboard.writeText(details);
+            setCopied(true);
+        } catch {
+            // Clipboard refused — the details are on screen to select by hand.
+        }
+    };
+    return (
+        <div className="border-line bg-panel mb-5 flex items-start gap-3 rounded-[10px] border px-4 py-3.5">
+            <CircleAlert className="text-danger mt-0.5 size-4 shrink-0" aria-hidden />
+            <div className="min-w-0 flex-1">
+                <div className="text-ink text-[13.5px] font-semibold">
+                    {SOURCE_FAILURE_CATEGORY_NAMES[report.category]}
+                </div>
+                <dl className="text-ink-2 mt-1.5 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-0.5 text-[12.5px]">
+                    <dt className="text-ink-3">Document</dt>
+                    <dd className="truncate">{report.document}</dd>
+                    {report.jobId && (
+                        <>
+                            <dt className="text-ink-3">Job / trace ID</dt>
+                            <dd className="mono select-all truncate text-[12px]">{report.jobId}</dd>
+                        </>
+                    )}
+                </dl>
+                <p className="text-ink-3 mt-2 text-[12px]">
+                    {inMessage
+                        ? "These details are already in your message, so whoever runs this instance can find the error in its logs."
+                        : "Include these details in your report, so whoever runs this instance can find the error in its logs."}
+                </p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => void copy()}>
+                <Copy aria-hidden />
+                {copied ? "Copied" : "Copy details"}
+            </Button>
+        </div>
     );
 }
 

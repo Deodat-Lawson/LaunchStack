@@ -19,7 +19,8 @@ import {
     transcriptMarkerOf,
 } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
-import { nextSourcePollDelay } from "./sourcePolling";
+import type { SourceProcessingView } from "~/lib/source-progress";
+import { nextSourcePollDelay, processingActivity } from "./sourcePolling";
 import type {
     ItemAccessView,
     SourceAddedBy,
@@ -94,6 +95,8 @@ type IndexedDocument = DocumentType & {
     currentVersionId?: number | null;
     currentVersionOcrProcessed?: boolean | null;
     currentVersionOcrMetadata?: DocumentType["ocrMetadata"];
+    /** Where processing stands, while the current version is not ready. */
+    processing?: SourceProcessingView | null;
 };
 
 /** A row of the documents list: the document, plus what ADR-014 says about it for the caller. */
@@ -153,6 +156,7 @@ export function mapDocument(doc: DocumentRow): WorkspaceSource {
         citability: mediaOriginal ? "none" : undefined,
         indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
         errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
+        processing: mediaOriginal ? undefined : (doc.processing ?? null),
     };
 }
 
@@ -206,6 +210,7 @@ export function mapMindmap(
         addedBy: publishedDocument?.addedBy ?? null,
         indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
         errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
+        processing: publishedDocument?.processing ?? undefined,
     };
 }
 
@@ -252,6 +257,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const refreshInFlight = useRef<Promise<void> | null>(null);
+    // What the last response said about processing, read by the poll loop
+    // to tell a long job that is moving from one that is stuck.
+    const activity = useRef({ signature: "", retryDueAt: 0 });
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
     const {
@@ -280,6 +288,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
             ]);
             if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
             const docs = (await docsRes.json()) as DocumentRow[];
+            activity.current = processingActivity(docs);
             setDocuments(docs);
 
             // Folders that exist while empty only come from here; the rest are
@@ -363,6 +372,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         let timer: number | undefined;
         let tick = 0;
         let cancelled = false;
+        // The poll that last saw the worker move something, and what it saw.
+        let movedAtTick = 0;
+        let lastSignature = activity.current.signature;
 
         const stopPolling = () => {
             window.clearTimeout(timer);
@@ -374,7 +386,14 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         const schedule = () => {
             stopPolling();
             if (cancelled || document.visibilityState !== "visible") return;
-            const delay = nextSourcePollDelay(tick);
+            // Progress, or a retry the outbox has scheduled, is not stuck:
+            // it refills the give-up budget (but never speeds the pace up).
+            const { signature, retryDueAt } = activity.current;
+            if (signature !== lastSignature || Date.now() < retryDueAt) {
+                movedAtTick = tick;
+                lastSignature = signature;
+            }
+            const delay = nextSourcePollDelay(tick, tick - movedAtTick);
             if (delay === null) return;
             timer = window.setTimeout(() => {
                 timer = undefined;

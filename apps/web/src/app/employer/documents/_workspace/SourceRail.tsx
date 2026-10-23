@@ -13,7 +13,6 @@ import React, {
     useState,
 } from "react";
 import {
-    CircleAlert,
     Folder,
     FolderOpen,
     Lock,
@@ -41,7 +40,6 @@ import {
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { Checkbox as UiCheckbox } from "~/components/ui/checkbox";
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
@@ -49,6 +47,7 @@ import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { InboxBell } from "./team/InboxBell";
 import type { InboxRailProps, TeamTarget } from "./team/types";
 import { SOURCE_DRAG_MIME } from "./dragData";
+import { SourceFailureStatus, SourceProgressStatus } from "./SourceStatus";
 import {
     buildBlankRailMenuItems,
     buildSelectionMenuItems,
@@ -200,6 +199,8 @@ interface SourceRowProps {
     glyph?: Glyph | null;
     /** "Added by Ada · 2h ago", shown on hover. */
     addedLine?: string | null;
+    /** Run a failed source's processing again; absent where the caller may not. */
+    onRetry?: (source: WorkspaceSource) => Promise<void>;
 }
 
 function SourceRow({
@@ -211,6 +212,7 @@ function SourceRow({
     menuItems,
     glyph,
     addedLine,
+    onRetry,
 }: SourceRowProps) {
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
@@ -291,34 +293,9 @@ function SourceRow({
                         </span>
                         {glyph && <AudienceGlyph glyph={glyph} />}
                     </div>
-                    {(visibleTags.length > 0 ||
-                        processing ||
-                        failed ||
-                        (source.gaps?.length ?? 0) > 0) && (
+                    {(visibleTags.length > 0 || failed || (source.gaps?.length ?? 0) > 0) && (
                         <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">
-                            {failed ? (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span
-                                            tabIndex={0}
-                                            className="text-danger inline-flex items-center gap-1"
-                                        >
-                                            <CircleAlert className="size-2.5" aria-hidden />
-                                            failed
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="max-w-xs">
-                                        {source.errorMessage ?? "This source could not be indexed."}
-                                    </TooltipContent>
-                                </Tooltip>
-                            ) : processing ? (
-                                <span
-                                    className="text-brand"
-                                    style={{ animation: "lsw-shimmer 1.6s ease-in-out infinite" }}
-                                >
-                                    syncing…
-                                </span>
-                            ) : null}
+                            {failed && <SourceFailureStatus source={source} onRetry={onRetry} />}
                             {visibleTags.map((t, i) => (
                                 <Fragment key={t}>
                                     {i > 0 && <span style={{ opacity: 0.4 }}>·</span>}
@@ -339,6 +316,7 @@ function SourceRow({
                             )}
                         </div>
                     )}
+                    {processing && !failed && <SourceProgressStatus source={source} />}
                 </div>
             </div>
             {menuItems && (
@@ -604,6 +582,11 @@ export interface SourceRailProps {
     /** "Share…" — the Share dialog for one file. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
+    /**
+     * Run a failed source's processing again. Offered on the failed row where
+     * the caller can edit the file — the same gate as uploading a new version.
+     */
+    onRetrySource?: (source: WorkspaceSource) => Promise<void>;
     /** Delete several at once — the multi-selection menu's Delete. */
     onDeleteSources?: (sources: WorkspaceSource[]) => void;
     /** Open the Add dialog with this folder pre-selected. */
@@ -694,6 +677,8 @@ interface BranchContext {
     sourceGlyph: (source: WorkspaceSource, topLevel: boolean) => Glyph | null;
     /** "Added by Ada · 2h ago". */
     addedLine: (source: WorkspaceSource) => string | null;
+    /** Retry for this failed source, when the caller may run it again. */
+    retryFor: (source: WorkspaceSource) => ((source: WorkspaceSource) => Promise<void>) | undefined;
     /** May the caller rename, move or delete this folder (ADR-014 manage)? */
     canManageFolder: (path: string) => boolean;
     /** May the caller add to this folder — a file dropped on it, a subfolder (edit)? */
@@ -749,6 +734,7 @@ function SourceRows({
                         menuItems={ctx.sourceMenuItems}
                         glyph={ctx.sourceGlyph(s, topLevel)}
                         addedLine={ctx.addedLine(s)}
+                        onRetry={ctx.retryFor(s)}
                     />
                 </div>
             ))}
@@ -922,6 +908,7 @@ export function SourceRail({
     onRenameSource,
     onRestrictAccess,
     onDeleteSource,
+    onRetrySource,
     onDeleteSources,
     onAddToFolder,
     activeFolder,
@@ -1389,6 +1376,13 @@ export function SourceRail({
         setDragOverFolder(null);
     };
 
+    // Retrying re-runs processing for the file, so it takes what a new
+    // version would: edit access. The server checks again.
+    const retryFor = (source: WorkspaceSource) =>
+        onRetrySource && source.indexStatus === "failed" && canChangeSource(source)
+            ? onRetrySource
+            : undefined;
+
     const branchCtx: BranchContext = {
         selected,
         collapsed,
@@ -1396,6 +1390,7 @@ export function SourceRail({
         folderGlyph,
         sourceGlyph,
         addedLine,
+        retryFor,
         canManageFolder,
         canEditFolder,
         canDropSource,

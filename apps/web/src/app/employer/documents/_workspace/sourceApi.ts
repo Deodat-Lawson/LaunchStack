@@ -140,3 +140,15 @@ export async function deleteSource(source: WorkspaceSource): Promise<DeleteOutco
     }
     throw new Error("This source is still being added");
 }
+
+/**
+ * Run a failed source's processing again. Only document rows process; a
+ * mindmap retries through the document it published.
+ */
+export async function retrySourceProcessing(source: WorkspaceSource): Promise<void> {
+    if (typeof source.documentId !== "number" || source.documentId <= 0) {
+        throw new Error("This source has nothing to retry");
+    }
+    const res = await fetch(`/api/documents/${source.documentId}/retry`, { method: "POST" });
+    if (!res.ok) throw await readError(res, "Couldn't retry processing");
+}

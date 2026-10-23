@@ -1311,6 +1311,19 @@ export function WorkspaceShell() {
         }
     }, [openAdd]);
 
+    const handleRetrySource = useCallback(
+        async (source: WorkspaceSource) => {
+            try {
+                await sourceApi.retrySourceProcessing(source);
+                toast.success("Retrying", { description: source.title });
+            } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Couldn't retry processing");
+            }
+            await refresh();
+        },
+        [refresh]
+    );
+
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
             const src = sources.find(s => s.id === sourceId);
@@ -1437,6 +1450,8 @@ export function WorkspaceShell() {
     // on the folder; the rail checks both per row.
     const canAddFolders = can("documents.upload");
     const canFileSources = can("documents.edit");
+    // Retrying re-runs processing, which takes what uploading a version does.
+    const canRetrySources = can("documents.upload");
     const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
     /** Where an upload may land: folders the caller can add to (and Unfiled). */
     const uploadFolderPaths = useMemo(
@@ -2383,6 +2398,7 @@ export function WorkspaceShell() {
                             onRenameSource={source => setRenameSource(source)}
                             onDeleteSource={source => requestDelete([source])}
                             onDeleteSources={requestDelete}
+                            onRetrySource={canRetrySources ? handleRetrySource : undefined}
                             onAddToFolder={path => {
                                 setAddFolder(path);
                                 openAdd();
@@ -2458,6 +2474,7 @@ export function WorkspaceShell() {
                         onRenameSource={source => setRenameSource(source)}
                         onDeleteSource={source => requestDelete([source])}
                         onDeleteSources={requestDelete}
+                        onRetrySource={canRetrySources ? handleRetrySource : undefined}
                         onAddToFolder={path => {
                             setAddFolder(path);
                             openAdd();

@@ -327,6 +327,10 @@ export const ocrJobs = pgTable(
             onDelete: "set null",
         }),
         dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
+        // Where the pipeline is, for the UI's progress bar. Small and kept
+        // apart from `ocr_result` (which holds every page and chunk) so the
+        // documents list can read it on every poll.
+        progress: jsonb("progress").$type<OcrJobProgress>(),
     },
     table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
@@ -608,6 +612,20 @@ export type PdfChunk = InferSelectModel<typeof pdfChunks>;
 export type FileUpload = InferSelectModel<typeof fileUploads>;
 
 export type OcrJob = InferSelectModel<typeof ocrJobs>;
+
+/**
+ * The step an OCR job is on, written by the ingestion stages as they go.
+ * `done`/`total` count units of the current step when it has them (texts
+ * embedded); `pages` is known once the file has been read.
+ */
+export interface OcrJobProgress {
+    stage: "reading" | "chunking" | "embedding" | "finishing";
+    done?: number;
+    total?: number;
+    pages?: number;
+    /** ISO time of this write. */
+    updatedAt: string;
+}
 
 export type OcrProcessingStep = InferSelectModel<typeof ocrProcessingSteps>;
 

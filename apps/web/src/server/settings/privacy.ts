@@ -181,6 +181,17 @@ export function privacyOverview(): PrivacyOverview {
             note: "Only files someone links or creates in Drive; synced back as versions.",
         },
         {
+            id: "notion",
+            label: "Notion",
+            host:
+                server.NOTION_OAUTH_CLIENT_ID && server.NOTION_OAUTH_CLIENT_SECRET
+                    ? "api.notion.com"
+                    : null,
+            sends: "metadata",
+            enabled: Boolean(server.NOTION_OAUTH_CLIENT_ID && server.NOTION_OAUTH_CLIENT_SECRET),
+            note: "Reads only the pages picked on Notion's consent screen. Nothing is written to Notion.",
+        },
+        {
             id: "sec-edgar",
             label: "Investor search",
             host: "efts.sec.gov",

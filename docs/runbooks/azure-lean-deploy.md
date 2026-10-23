@@ -322,6 +322,80 @@ Key Vault secret names allow `[0-9a-zA-Z-]` only, so `FOO_BAR` is stored as
 `FOO-BAR` and mapped back on read. Environment variable names cannot contain
 dashes, so the reverse mapping is unambiguous.
 
+---
+
+## Connecting Notion
+
+Members connect Notion from **Add source › Notion**: one click, Notion's own
+consent screen (with Notion's page picker), and the picked pages sync into
+`Notion/<workspace>` every 15 minutes. For that button to work, the
+deployment needs one **public** Notion connection. This is a one-time setup.
+Design notes: [`docs/design/notion-connector.md`](../design/notion-connector.md).
+
+1. **Create the connection.** At
+   [notion.so/profile/integrations](https://www.notion.so/profile/integrations),
+   create a new connection of type **Public**.
+   - **Redirect URI:** `<BETTER_AUTH_URL>/api/connectors/notion/oauth/callback`,
+     for example `https://app.example.com/api/connectors/notion/oauth/callback`.
+     It must match the public origin exactly, scheme and host included.
+   - **Capabilities:** *Read content* only. Leave insert and update content
+     off; the connector never writes to Notion. User information is not
+     needed.
+   - **Installation scope:** *Any workspace* for customers' workspaces;
+     *Selected workspaces* if only your own will connect. Notion does not let
+     you change this later.
+   - **Company details:** name, website, and the privacy policy and terms
+     URLs (the landing site's `/privacy` and `/terms`).
+   - Notion shows the **authorization URL only after a public connection is
+     submitted for review.** If it is not shown yet, submit it and wait for
+     approval before going further; nobody can connect until then.
+
+2. **Store the pair in Key Vault**, from your own `az login` (the VM's
+   identity is read-only):
+
+   ```bash
+   az keyvault secret set --vault-name <VAULT_NAME> --name NOTION-OAUTH-CLIENT-ID --value '<client id>'
+   az keyvault secret set --vault-name <VAULT_NAME> --name NOTION-OAUTH-CLIENT-SECRET --value '<client secret>'
+   ```
+
+3. **Deploy and load it on the VM.** The code ships in the images, and the
+   `notion_connector` migration applies through the one-shot `migrate`
+   service as usual:
+
+   ```bash
+   cd LaunchStack && git pull
+   python3 ~/sync-env-from-keyvault.py <VAULT_NAME>
+   grep -c -E '^NOTION_OAUTH_CLIENT_(ID|SECRET)=.+' .env      # 2
+   C="docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env"
+   $C pull app worker && $C up -d --build --force-recreate app worker
+   ```
+
+   Both containers need the pair: the app runs the OAuth handshake, and the
+   worker refreshes tokens during a sync. `docker-compose.yml` passes them
+   through its `x-shared-env` allowlist.
+
+4. **Check it.**
+   - Add source › Notion shows **Connect Notion**. If it says "not configured
+     on this server", the container did not get the pair; re-check step 3.
+   - Connect, pick a page, and approve. You land back on the Notion tab with
+     "Notion connected", and the workspace card moves from "Starting sync…"
+     to a page count within a minute.
+   - `$C logs worker | grep notion-sync` shows the run, and the page appears
+     under `Notion/<workspace>` in Sources.
+   - Disconnecting the card removes it and revokes the token at Notion.
+
+**If it goes wrong:**
+
+| Symptom | Fix |
+| --- | --- |
+| Notion says the redirect URI is invalid | The registered URI and `BETTER_AUTH_URL` differ (scheme, host, trailing path). |
+| "The sync was requested … still hasn't started" | The worker or Inngest is down; see [Background jobs](#background-jobs-self-hosted-inngest). |
+| Card says access was revoked | The member removed LaunchStack in Notion, or the grant expired. **Reconnect** on the card. |
+| Some pages are missing | Only pages shared with the connection sync. **Choose pages** on the card reopens Notion's picker. |
+
+Obsidian needs no setup: **Add source › Obsidian** imports a vault in the
+browser, and nothing leaves the deployment.
+
 ## Backups and restore
 
 `/home/<ADMIN_USER>/backup-db.sh` runs nightly at **03:10 UTC** via cron: it

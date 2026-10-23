@@ -110,8 +110,43 @@ import { syncAgentSessions } from "@launchstack/pipelines/connectors/agent-sessi
 const report = await syncAgentSessions({ sink: myKnowledgeSink });
 ```
 
+## Remote sources — Google Drive, Gmail, Notion
+
+`google-drive/`, `gmail/` and `notion/` sync a third-party account into the
+knowledge base. Each is a thin typed `fetch` client plus a sync that compares
+the provider's own change markers with what the sink stored, and only reads
+what changed. OAuth, token storage and scheduling belong to the host
+(`apps/web/src/server/services/connectors/*`, run from the worker); the
+connector receives an access token and a `KnowledgeSink`.
+
+- **notion** lists what the connection can read with `/v1/search` and reads a
+  page with Notion's Markdown endpoint (`GET /v1/pages/{id}/markdown`). An
+  unchanged `last_edited_time` skips the read. Every run is a full listing,
+  so pages that were deleted or un-shared come back in `missingSourceIds`.
+  See `docs/design/notion-connector.md`.
+
+```ts
+import { createNotionClient, syncNotion } from "@launchstack/pipelines/connectors/notion";
+
+const report = await syncNotion({
+    client: createNotionClient({ accessToken }),
+    sink: myKnowledgeSink,
+    knownSourceIds,
+});
+```
+
+## obsidian — vault import
+
+`obsidian/` turns notes from an Obsidian vault into Markdown documents.
+There is no remote: the browser reads the vault and posts notes in batches.
+`paths.ts` (browser-safe, exported as `connectors/obsidian/paths`) decides
+which files are notes, so the browser and the server agree. `vault.ts`
+renders Obsidian's dialect (frontmatter, wikilinks, embeds, comments). A
+note's sha256 makes a re-import of an untouched vault a no-op. See
+`docs/design/obsidian-import.md`.
+
 ## Future connectors
 
-Third-party sources (Google Drive, SharePoint, Notion, Slack) will authenticate
-through Nango and implement the same `KnowledgeSink` contract, so the ingestion
-path stays unified.
+New remote sources follow the Notion shape: a provider module in the host's
+generic OAuth layer, a framework-free client and sync here, and the same
+`KnowledgeSink` contract, so the ingestion path stays unified.

@@ -1,4 +1,4 @@
-export type ResponseStyleId = "concise" | "detailed" | "academic" | "organized";
+export type ResponseStyleId = "balanced" | "concise" | "detailed" | "academic" | "organized";
 
 export interface ResponseStyleConfig {
     id: ResponseStyleId;
@@ -8,6 +8,24 @@ export interface ResponseStyleConfig {
 }
 
 export const RESPONSE_STYLES: Record<ResponseStyleId, ResponseStyleConfig> = {
+    balanced: {
+        id: "balanced",
+        label: "Balanced",
+        description: "Length matches the question",
+        systemPrompt: `You are a knowledgeable document analysis assistant. You help people understand their documents and answer their questions accurately and completely.
+
+How long to answer:
+- Match the length to the question. A factual lookup ("When does the contract renew?") gets the answer in a sentence or two. A question that asks how, why, to compare, to explain, to plan or to draft gets a full answer that covers every part of it, however long that takes.
+- Never shorten an answer by leaving out something the question needs, and never pad one with a preamble, a restatement of the question or a closing recap of what you just said.
+- When asked for a document, plan, list or draft, deliver the whole thing, not an outline of it.
+
+How to write:
+- Lead with the answer, then the detail that supports it.
+- Use headings, lists or tables when the answer has parts to scan or items to compare; plain paragraphs otherwise.
+- Address the user directly as "you".
+- If the provided content doesn't contain the answer, say what you looked at and what was missing.
+- Include page references when citing a document.`,
+    },
     concise: {
         id: "concise",
         label: "Concise",
@@ -22,7 +40,8 @@ Your personality:
 - Use natural language, not robotic responses
 
 Guidelines:
-- Keep responses under 150 words but maintain a natural flow
+- Keep it short: lead with the answer and cut preamble and filler. A lookup gets a sentence or two; a bigger question gets its key points rather than every detail
+- Never leave out something the question needs to stay short, and when asked for a document, plan or draft, deliver it complete
 - Focus on the most relevant information
 - Use bullet points when listing multiple items
 - Address the user directly (e.g., "Based on what I found...", "You'll see that...")
@@ -94,4 +113,4 @@ Guidelines:
     },
 };
 
-export const DEFAULT_STYLE: ResponseStyleId = "concise";
+export const DEFAULT_STYLE: ResponseStyleId = "balanced";

@@ -66,6 +66,7 @@ import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { isAgentStyle, mentionedAgentKeys, type AgentStyleId } from "~/lib/agents/definition";
+import { DEFAULT_STYLE } from "~/lib/ai/styles";
 import { readSettingValue } from "~/server/settings/store";
 import {
     locatePassageContext,
@@ -91,9 +92,9 @@ async function defaultAssistantStyle(
 ): Promise<AgentStyleId> {
     try {
         const value = await readSettingValue<string>(ctx, "chat.responseStyle");
-        return isAgentStyle(value) ? value : "concise";
+        return isAgentStyle(value) ? value : DEFAULT_STYLE;
     } catch {
-        return "concise";
+        return DEFAULT_STYLE;
     }
 }
 
@@ -596,9 +597,7 @@ export async function POST(request: Request) {
             // setting for the default assistant (member over workspace over the
             // product default), unless the request named one explicitly.
             const style =
-                agent?.turn.style ??
-                (requestedStyle !== "concise" ? requestedStyle : null) ??
-                (await defaultAssistantStyle(ctx.data));
+                agent?.turn.style ?? requestedStyle ?? (await defaultAssistantStyle(ctx.data));
 
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for
@@ -1141,7 +1140,7 @@ export async function POST(request: Request) {
                 resolved.behavior.image?.mimeTypes
             );
 
-            const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
+            const selectedStyle = style satisfies keyof typeof SYSTEM_PROMPTS;
 
             // Build conversation context
             let conversationContext = "";
@@ -1177,7 +1176,7 @@ export async function POST(request: Request) {
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nAnswer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.

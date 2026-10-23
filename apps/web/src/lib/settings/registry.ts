@@ -154,6 +154,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
             "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
         aliases: [
             "response style",
+            "balanced",
             "concise",
             "detailed",
             "academic",
@@ -169,14 +170,20 @@ export const SETTINGS: readonly SettingDefinition[] = [
         scopes: ["workspace", "member"],
         permission: "settings.manage",
         schema: z.enum(AGENT_STYLE_IDS),
-        default: "concise",
+        default: "balanced",
         control: {
             kind: "select",
             options: [
                 {
+                    value: "balanced",
+                    label: "Balanced",
+                    description:
+                        "Length matches the question: a line for a lookup, a full answer for a how or why.",
+                },
+                {
                     value: "concise",
                     label: "Concise",
-                    description: "Direct and short. Under 150 words when it can be.",
+                    description: "Short and direct: the answer first, no filler.",
                 },
                 {
                     value: "detailed",

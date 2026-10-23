@@ -65,6 +65,7 @@ const ROUTES = [
 ];
 
 const STYLE_LABELS: Record<(typeof AGENT_STYLE_IDS)[number], string> = {
+    balanced: "Balanced — length matches the question",
     concise: "Concise — direct and short",
     detailed: "Detailed — comprehensive with context",
     academic: "Academic — analytical and precise",

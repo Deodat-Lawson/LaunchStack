@@ -208,6 +208,12 @@ export async function routeDocument(
             pageCount,
             selectedProvider: preferred,
             reason: "preferred-provider",
+            // A pinned provider keeps provider-first's text-layer fallback. The
+            // versions route pins OCR_DEFAULT_PROVIDER on every new version, so
+            // without this a version would fail where its first upload falls back.
+            ...(preferred !== "NATIVE_PDF" && getOcrConfig().pdfStrategy === "provider-first"
+                ? { nativeFallback: true }
+                : {}),
         };
     }
 
@@ -1218,9 +1224,36 @@ export async function markJobFailed(jobId: string, error: Error): Promise<void> 
  * Uses pdfjs-serverless for Node.js/serverless (no DOMMatrix) - compatible with Inngest, Vercel, etc.
  */
 export async function processNativePDF(documentUrl: string): Promise<NormalizedDocument> {
+    const { document } = await readTextLayer(documentUrl, { findImageOnlyPages: false });
+    return document;
+}
+
+/** pdf.js operators that paint an image onto the page. */
+const IMAGE_PAINT_OPS = [
+    "paintImageXObject",
+    "paintImageXObjectRepeat",
+    "paintInlineImageXObject",
+    "paintInlineImageXObjectGroup",
+    "paintImageMaskXObject",
+    "paintImageMaskXObjectGroup",
+    "paintImageMaskXObjectRepeat",
+] as const;
+
+/**
+ * Reads a PDF's own text layer, page by page. With `findImageOnlyPages`, it
+ * also reports the pages that have no text but paint an image — most likely
+ * scanned, so the text layer reads them as empty. A blank page paints
+ * nothing and is not reported.
+ */
+async function readTextLayer(
+    documentUrl: string,
+    { findImageOnlyPages }: { findImageOnlyPages: boolean }
+): Promise<{ document: NormalizedDocument; imageOnlyPages: number[] }> {
     const startTime = Date.now();
 
-    const { getDocument } = await import("pdfjs-serverless");
+    const { getDocument, OPS } = await import("pdfjs-serverless");
+    const imagePaintOps = new Set<number>(IMAGE_PAINT_OPS.map(name => OPS[name]));
+    const imageOnlyPages: number[] = [];
 
     // 1. Fetch PDF data
     const response = await getStoragePort().download(documentUrl);
@@ -1251,19 +1284,27 @@ export async function processNativePDF(documentUrl: string): Promise<NormalizedD
             textBlocks: text.length > 0 ? [text] : [],
             tables: [],
         });
+
+        if (findImageOnlyPages && text.length === 0) {
+            const { fnArray } = await page.getOperatorList();
+            if (fnArray.some(op => imagePaintOps.has(op))) imageOnlyPages.push(i);
+        }
     }
 
     await pdfDoc.destroy();
 
     return {
-        pages,
-        metadata: {
-            totalPages: numPages,
-            provider: "NATIVE_PDF",
-            processingTimeMs: Date.now() - startTime,
-            // No confidenceScore: native text extraction reports none, and
-            // fabricated constants are gone (ADR-004).
+        document: {
+            pages,
+            metadata: {
+                totalPages: numPages,
+                provider: "NATIVE_PDF",
+                processingTimeMs: Date.now() - startTime,
+                // No confidenceScore: native text extraction reports none, and
+                // fabricated constants are gone (ADR-004).
+            },
         },
+        imageOnlyPages,
     };
 }
 
@@ -1324,10 +1365,25 @@ async function processWithProvider(
 }
 
 /**
+ * True when the provider refused the file itself (bad, unsupported, or
+ * oversized content), so retrying it would be refused the same way. Adapters
+ * mark such errors with `fileRejected: true`.
+ */
+function providerRejectedFile(error: unknown): boolean {
+    return (
+        typeof error === "object" &&
+        error !== null &&
+        (error as { fileRejected?: unknown }).fileRejected === true
+    );
+}
+
+/**
  * OCR_PDF_STRATEGY=provider-first: the provider failed, so read the PDF's own
- * text layer instead. A scan has none — indexing it empty would mark it ready
- * with nothing to search — so then the provider's error stands and the outbox
- * retries the provider.
+ * text layer instead — but never index a document with holes the provider
+ * could still fill. A scan has no text layer at all, so its provider error
+ * stands and the outbox retries the provider. A mixed PDF with some scanned
+ * pages (no text, an image) is retried too, unless the provider refused the
+ * file outright; then the text layer is all there will ever be.
  */
 async function fallBackToTextLayer(
     documentUrl: string,
@@ -1337,18 +1393,32 @@ async function fallBackToTextLayer(
     const reason = providerError instanceof Error ? providerError.message : "unknown error";
     console.warn(`[Normalize] ${provider} failed, reading the PDF's text layer instead: ${reason}`);
 
-    let nativeDoc: NormalizedDocument;
+    let textLayer: { document: NormalizedDocument; imageOnlyPages: number[] };
     try {
-        nativeDoc = await processNativePDF(documentUrl);
+        textLayer = await readTextLayer(documentUrl, { findImageOnlyPages: true });
     } catch (nativeError) {
         const nativeReason = nativeError instanceof Error ? nativeError.message : "unknown error";
         console.warn(`[Normalize] Text-layer fallback failed too: ${nativeReason}`);
         throw providerError;
     }
+    const { document, imageOnlyPages } = textLayer;
 
-    if (!nativeDoc.pages.some(page => page.textBlocks.length > 0)) {
+    if (!document.pages.some(page => page.textBlocks.length > 0)) {
         console.warn("[Normalize] PDF has no text layer; keeping the provider error");
         throw providerError;
     }
-    return nativeDoc;
+
+    if (imageOnlyPages.length > 0) {
+        const pageList = imageOnlyPages.join(", ");
+        if (!providerRejectedFile(providerError)) {
+            console.warn(
+                `[Normalize] Text layer cannot read page(s) ${pageList} (image, no text); keeping the provider error so ${provider} is retried`
+            );
+            throw providerError;
+        }
+        console.warn(
+            `[Normalize] ${provider} refused this file; indexing the text layer without page(s) ${pageList} (image, no text)`
+        );
+    }
+    return document;
 }

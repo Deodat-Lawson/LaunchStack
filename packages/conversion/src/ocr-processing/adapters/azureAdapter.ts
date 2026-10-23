@@ -98,6 +98,26 @@ interface AzureOperationResponse {
     };
 }
 
+/**
+ * Submit statuses that mean Azure refused the file itself (bad or unsupported
+ * content, too large): resubmitting it cannot succeed. 401/403 are left out
+ * — a wrong key is fixed by the operator, and then the file goes through.
+ */
+const FILE_REJECTED_STATUSES = new Set([400, 413, 415]);
+
+/**
+ * Azure refused the file itself. `fileRejected` tells the provider-first
+ * fallback (processor.ts) that the text layer is all there will ever be.
+ */
+export class AzureFileRejectedError extends Error {
+    readonly fileRejected = true;
+
+    constructor(message: string) {
+        super(message);
+        this.name = "AzureFileRejectedError";
+    }
+}
+
 const AZURE_SUPPORTED_FORMATS =
     "PDF, JPEG, PNG, BMP, TIFF, HEIF, DOCX, PPTX, XLSX, and other common formats.";
 
@@ -392,7 +412,10 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
                     await sleep(waitMs);
                     continue;
                 }
-                throw new Error(parseAzureErrorMessage(response.status, errorText));
+                const message = parseAzureErrorMessage(response.status, errorText);
+                throw FILE_REJECTED_STATUSES.has(response.status)
+                    ? new AzureFileRejectedError(message)
+                    : new Error(message);
             }
 
             const operationLocation = response.headers.get("Operation-Location");

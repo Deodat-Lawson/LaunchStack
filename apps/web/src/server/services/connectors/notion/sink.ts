@@ -141,6 +141,8 @@ export async function createNotionSink(context: NotionSinkContext): Promise<Know
                 data: body,
                 contentType: item.mimeType,
                 userId: context.userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 

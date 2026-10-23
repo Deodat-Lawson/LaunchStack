@@ -22,6 +22,7 @@ import { DriveConnectPanel } from "./DriveConnectPanel";
 import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 import { NotionConnectPanel } from "./NotionConnectPanel";
+import { ObsidianImportPanel } from "./ObsidianImportPanel";
 import { registerDocument, uploadFileToStorage } from "./sourceUpload";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { detectSourceType } from "@launchstack/conversion/types";
@@ -85,6 +86,9 @@ import type { IconProps } from "~/components/icons/types";
  *     (GmailConnectPanel): the connection is the member's own, started at
  *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
  *     in a folder only they can see. Dropbox remains a coming-soon CTA.
+ *   - Obsidian: ObsidianImportPanel reads a vault (folder or .zip) in the
+ *     browser and posts its notes to `/api/connectors/obsidian/import`; they
+ *     land in `Obsidian/<vault>`, private to the importer.
  */
 
 export interface AddSourceModalProps {
@@ -236,8 +240,6 @@ const FIXED_DESTINATIONS: Record<string, string> = {
     drive: "Google Drive",
     // The connector files every session here (AGENT_SESSIONS_CATEGORY).
     "agent-sessions": "Agent Sessions",
-    // Each connected Notion workspace gets `Notion/<workspace>` (notion/config.ts).
-    notion: "Notion",
 };
 
 /**
@@ -248,14 +250,24 @@ const FIXED_DESTINATIONS: Record<string, string> = {
 const DRIVE_FOLDER_NOTE =
     "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.";
 
-const NOTION_FOLDER_NOTE =
-    "Each Notion workspace you connect gets a folder of its own in here, visible only to you until you share it.";
-
 /** Gmail's folder is per mailbox and its owner's alone (ADR-014). */
 const GMAIL_AUDIENCE: AudienceSummary = {
     tone: "private",
     headline: "Only you",
     detail: "Mail lands in your own Gmail folder. Nobody else in the workspace can open it.",
+};
+
+/** The sync files each connected workspace in `Notion/<workspace>`, created private to whoever connected it. */
+const NOTION_AUDIENCE: AudienceSummary = {
+    tone: "private",
+    headline: "Only you, until you share it",
+    detail: "Each Notion workspace you connect gets its own folder under Notion, private to you. Share it when the team should see those pages.",
+};
+
+const OBSIDIAN_AUDIENCE: AudienceSummary = {
+    tone: "private",
+    headline: "Only you",
+    detail: "Each vault lands in its own folder under Obsidian. Nobody else can open it until you share it.",
 };
 
 export function AddSourceModal({
@@ -402,6 +414,8 @@ export function AddSourceModal({
         panel = <GmailConnectPanel tab={active} />;
     } else if (tab === "notion") {
         panel = <NotionConnectPanel tab={active} />;
+    } else if (tab === "obsidian") {
+        panel = <ObsidianImportPanel onImported={handleUploaded} />;
     } else if (tab === "artifact") {
         panel = (
             <ArtifactImportPanel userId={userId} category={folder} onUploaded={handleUploaded} />
@@ -471,9 +485,7 @@ export function AddSourceModal({
                 audienceNote={
                     active.id === "drive" && driveFolderAccess === "ready"
                         ? DRIVE_FOLDER_NOTE
-                        : active.id === "notion"
-                          ? NOTION_FOLDER_NOTE
-                          : undefined
+                        : undefined
                 }
                 {...barProps}
             />
@@ -484,6 +496,24 @@ export function AddSourceModal({
                 mode="fixed"
                 value="Gmail/your mailbox"
                 fixedAudience={GMAIL_AUDIENCE}
+                {...barProps}
+            />
+        );
+    } else if (active.id === "notion") {
+        destination = (
+            <AddDestinationBar
+                mode="fixed"
+                value="Notion/your workspace"
+                fixedAudience={NOTION_AUDIENCE}
+                {...barProps}
+            />
+        );
+    } else if (active.id === "obsidian") {
+        destination = (
+            <AddDestinationBar
+                mode="fixed"
+                value="Obsidian/your vault"
+                fixedAudience={OBSIDIAN_AUDIENCE}
                 {...barProps}
             />
         );

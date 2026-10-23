@@ -52,6 +52,14 @@ export const IconNotion = (p: BrandIconProps) => (
     </Ic>
 );
 
+/** Obsidian: the faceted crystal, outline and one fold. */
+export const IconObsidian = (p: BrandIconProps) => (
+    <Ic {...p}>
+        <path d="M11 2.5 15.5 7 14 15l-5 2.5-3.5-4L7 5.5Z" />
+        <path d="M11 2.5 9.5 9.5 9 17.5M9.5 9.5 14 15" />
+    </Ic>
+);
+
 export const IconDrive = (p: BrandIconProps) => (
     <Ic {...p}>
         <path d="m7 3 6 0 5 9-3 5-6 0L4 8Z" />

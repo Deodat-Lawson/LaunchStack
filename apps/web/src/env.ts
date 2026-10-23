@@ -130,6 +130,12 @@ const serverSchema = z.object({
     // Azure Document Intelligence (for OCR pipeline)
     AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
     AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
+    // prebuilt-layout (default): text, reading order, tables. prebuilt-read:
+    // text only, roughly a seventh of the per-page price.
+    AZURE_DOC_INTELLIGENCE_MODEL: z.preprocess(
+        normalize,
+        z.enum(["prebuilt-layout", "prebuilt-read"]).optional()
+    ),
     // Landing.AI (fallback OCR for complex documents)
     LANDING_AI_API_KEY: optionalString(),
     // LangSmith configuration (optional, for tracing and monitoring)
@@ -275,6 +281,13 @@ const serverSchema = z.object({
             }),
         })
         .optional(),
+    // How PDFs are read. text-layer-first (the default) uses a PDF's own text
+    // when it has one and sends only scans to OCR. provider-first sends every
+    // PDF to OCR_DEFAULT_PROVIDER and reads the text layer only if that fails.
+    OCR_PDF_STRATEGY: z.preprocess(
+        normalize,
+        z.enum(["text-layer-first", "provider-first"]).optional()
+    ),
     // Where this app's other services (document converter, Word editor,
     // worker) reach it to fetch /api/files URLs; it must be in their
     // ALLOWED_FETCH_ORIGINS. Unset, the converter and file reads use the
@@ -553,6 +566,7 @@ function parseServerEnv() {
         BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
         AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
         AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
+        AZURE_DOC_INTELLIGENCE_MODEL: process.env.AZURE_DOC_INTELLIGENCE_MODEL,
         LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,
         LANGCHAIN_TRACING_V2: process.env.LANGCHAIN_TRACING_V2,
         LANGCHAIN_API_KEY: process.env.LANGCHAIN_API_KEY,
@@ -599,6 +613,7 @@ function parseServerEnv() {
             | "LANDING_AI"
             | "DATALAB"
             | undefined,
+        OCR_PDF_STRATEGY: process.env.OCR_PDF_STRATEGY,
         APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
         FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
         MCP_SERVER_ENABLED: process.env.MCP_SERVER_ENABLED,

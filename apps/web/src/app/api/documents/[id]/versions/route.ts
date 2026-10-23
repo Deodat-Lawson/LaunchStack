@@ -188,8 +188,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             // before defaultProvider / authorizeInternalFileRef.
             getEngine();
 
-            const effectiveProvider =
-                parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+            // The default only decides how the file is authorized below. The
+            // version persists the caller's own choice, as a first upload does,
+            // so with none it is routed like one (text layer or OCR_PDF_STRATEGY)
+            // instead of being pinned to the default provider.
+            const explicitProvider = parseProvider(preferredProvider);
+            const effectiveProvider = explicitProvider ?? getOcrConfig().defaultProvider;
 
             // A new version can point at an internal file row, which the OCR worker
             // will later fetch with a signed token. Prove the workspace owns it
@@ -258,7 +262,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 mimeType,
                 fileSize,
                 changelog,
-                preferredProvider: effectiveProvider,
+                preferredProvider: explicitProvider,
                 originalFilename,
             });
 

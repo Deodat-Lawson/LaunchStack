@@ -219,6 +219,18 @@
                 "types": "./dist/connectors/agent-sessions/index.d.ts",
                 "default": "./dist/connectors/agent-sessions/index.js"
             },
+            "./connectors/notion": {
+                "types": "./dist/connectors/notion/index.d.ts",
+                "default": "./dist/connectors/notion/index.js"
+            },
+            "./connectors/obsidian": {
+                "types": "./dist/connectors/obsidian/index.d.ts",
+                "default": "./dist/connectors/obsidian/index.js"
+            },
+            "./connectors/obsidian/paths": {
+                "types": "./dist/connectors/obsidian/paths.d.ts",
+                "default": "./dist/connectors/obsidian/paths.js"
+            },
             "./package.json": "./package.json",
             "./distribution": {
                 "types": "./dist/distribution/index.d.ts",

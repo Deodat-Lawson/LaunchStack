@@ -22,7 +22,7 @@ import type {
     SkippedKnowledgeItem,
     StoredKnowledgeItem,
 } from "../types";
-import { NotionNotFoundError, type NotionClient, type NotionPage } from "./client";
+import { NotionAuthError, NotionNotFoundError, type NotionClient, type NotionPage } from "./client";
 import {
     isDatabaseRow,
     mergeUnknownSubtrees,
@@ -71,14 +71,17 @@ export function describeError(error: unknown): string {
     return typeof error === "string" ? error : "Unknown error";
 }
 
+/** Runs tasks `limit` at a time; once `stop()` is true no new task starts. */
 async function runWithConcurrency<T>(
     tasks: readonly (() => Promise<T>)[],
-    limit: number
-): Promise<T[]> {
-    const results = new Array<T>(tasks.length);
+    limit: number,
+    stop: () => boolean
+): Promise<(T | undefined)[]> {
+    // A task that never started (the run stopped first) leaves its slot undefined.
+    const results: (T | undefined)[] = [];
     let cursor = 0;
     const workers = Array.from({ length: Math.max(1, Math.min(limit, tasks.length)) }, async () => {
-        while (true) {
+        while (!stop()) {
             const index = cursor++;
             const task = tasks[index];
             if (!task) return;
@@ -187,6 +190,8 @@ interface ProcessContext {
     readonly workspaceName: string | null;
     readonly maxItemBytes: number;
     readonly maxSubtreeFetches: number;
+    /** The first 401 of the run. A dead token fails every page, so the run stops. */
+    authError: NotionAuthError | null;
 }
 
 async function processPage(context: ProcessContext, page: NotionPage): Promise<PageOutcome> {
@@ -228,6 +233,12 @@ async function processPage(context: ProcessContext, page: NotionPage): Promise<P
         });
         return { stored };
     } catch (error) {
+        // Not this page's fault: the token died. The caller refreshes it and
+        // reruns, so the run stops rather than recording every page as failed.
+        if (error instanceof NotionAuthError) {
+            context.authError ??= error;
+            return {};
+        }
         return { failed: { sourceId: page.id, error: describeError(error) } };
     }
 }
@@ -245,17 +256,23 @@ export async function syncNotion(options: NotionSyncOptions): Promise<NotionSync
         workspaceName: options.workspaceName ?? null,
         maxItemBytes: options.maxItemBytes ?? DEFAULT_MAX_ITEM_BYTES,
         maxSubtreeFetches: options.maxSubtreeFetches ?? DEFAULT_MAX_SUBTREE_FETCHES,
+        authError: null,
     };
     const outcomes = await runWithConcurrency(
         listing.pages.map(page => () => processPage(context, page)),
-        options.concurrency ?? DEFAULT_SYNC_CONCURRENCY
+        options.concurrency ?? DEFAULT_SYNC_CONCURRENCY,
+        () => context.authError !== null
     );
+    // Thrown only once the pages already in flight have finished, so a rerun
+    // never races this one's stores.
+    if (context.authError) throw context.authError;
 
     const stored: StoredKnowledgeItem[] = [];
     const skipped: SkippedKnowledgeItem[] = [];
     const failed: FailedKnowledgeItem[] = [];
     const notFound: string[] = [];
     for (const outcome of outcomes) {
+        if (!outcome) continue;
         if (outcome.stored) stored.push(outcome.stored);
         if (outcome.skipped) skipped.push(outcome.skipped);
         if (outcome.failed) failed.push(outcome.failed);

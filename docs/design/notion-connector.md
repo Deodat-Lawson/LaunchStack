@@ -25,9 +25,12 @@ which Notion reviews before anyone can authorize it.
 
 The connection belongs to the **workspace**, as Drive's does: holders of
 `connectors.manage` connect it, and what it syncs is company knowledge. Each
-connected Notion workspace lands in `Notion/<workspace>`, created the way a
-person creating a folder would (ADR-014): private to whoever connected it,
-with a manage grant so they decide who else sees it.
+connection lands in a `Notion/<workspace>` folder of its own (a second
+workspace with the same name gets `(2)`), restricted to whoever connected it
+with a manage grant, so they decide who else sees it: the Gmail model,
+through `connectors/private-folder.ts`, shared with the Obsidian import. An
+admin who re-authorizes an existing connection is the same Notion account,
+so the folder is kept and they are granted access to it.
 
 ## Shape
 

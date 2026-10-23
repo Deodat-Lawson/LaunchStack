@@ -440,3 +440,26 @@ describe("createNotionClient", () => {
         await expect(missing.getPageMarkdown("p")).rejects.toBeInstanceOf(NotionNotFoundError);
     });
 });
+
+describe("syncNotion when the token dies mid-run", () => {
+    it("stops and rethrows the 401 instead of recording every page as failed", async () => {
+        const pages = Array.from({ length: 6 }, (_, i) => page({ id: `p-${i}`, title: `P${i}` }));
+        const reads: string[] = [];
+        const client: NotionClient = {
+            async searchPages() {
+                return { results: pages, has_more: false, next_cursor: null };
+            },
+            async getPageMarkdown(id) {
+                reads.push(id);
+                if (id === "p-1") throw new NotionAuthError("API token is invalid.");
+                return body(id, id);
+            },
+        };
+
+        await expect(
+            syncNotion({ client, sink: memorySink(), concurrency: 1 })
+        ).rejects.toBeInstanceOf(NotionAuthError);
+        // One worker: p-0 succeeded, p-1 hit the 401, nothing after it started.
+        expect(reads).toEqual(["p-0", "p-1"]);
+    });
+});

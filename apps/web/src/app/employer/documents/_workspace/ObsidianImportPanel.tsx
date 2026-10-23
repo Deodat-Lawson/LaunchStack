@@ -258,10 +258,18 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                 vault: name,
                 paths: picked.notes.map(note => note.path),
             });
-            if (finish.ok) {
-                const payload = (await finish.json()) as { data?: { missing?: number } };
-                sum.missing = payload.data?.missing ?? 0;
+            if (!finish.ok) {
+                // The notes are in, but notes deleted from the vault were not
+                // flagged: say so, so the user imports again rather than trusting it.
+                throw new Error(
+                    await errorMessage(
+                        finish,
+                        "The notes were imported, but checking for notes deleted from the vault failed. Import the vault again to finish."
+                    )
+                );
             }
+            const payload = (await finish.json()) as { data?: { missing?: number } };
+            sum.missing = payload.data?.missing ?? 0;
 
             setTotals(sum);
             toast.success(

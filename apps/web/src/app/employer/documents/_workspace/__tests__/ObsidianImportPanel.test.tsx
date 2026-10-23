@@ -116,6 +116,28 @@ describe("ObsidianImportPanel", () => {
         expect(screen.getByRole("button", { name: /import notes/i })).toBeDisabled();
     });
 
+    it("does not claim success when checking for deleted notes fails", async () => {
+        const { toast } = jest.requireMock<{ toast: { success: jest.Mock } }>("sonner");
+        toast.success.mockClear();
+        fetchMock.mockImplementation((url: string, init?: RequestInit) => {
+            if (!init?.method || init.method === "GET") return respond({ data: { vaults: [] } });
+            if (url.endsWith("/finish")) return respond({ message: "Too many requests" }, 429);
+            return respond({
+                data: { folder: "Obsidian/Work", stored: 1, unchanged: 0, skipped: [], failed: [] },
+            });
+        });
+        const onImported = jest.fn();
+        const { container } = render(<ObsidianImportPanel onImported={onImported} />);
+
+        pickFolder(container, [vaultFile("Work/Inbox.md", "First thought")]);
+        await userEvent.click(await screen.findByRole("button", { name: /import notes/i }));
+
+        expect(await screen.findByText("Too many requests")).toBeInTheDocument();
+        expect(screen.getByText(/1 imported/)).toBeInTheDocument();
+        expect(toast.success).not.toHaveBeenCalled();
+        expect(onImported).not.toHaveBeenCalled();
+    });
+
     it("shows the server's reason when a batch is refused", async () => {
         fetchMock.mockImplementation((url: string, init?: RequestInit) => {
             if (!init?.method || init.method === "GET") return respond({ data: { vaults: [] } });

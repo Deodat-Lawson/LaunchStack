@@ -322,6 +322,35 @@ export const gmailSyncScope = pgTable(
     })
 );
 
+/**
+ * Notion sync bookkeeping — the sync lease and last-run summary, plus the
+ * folder the connection's pages land in. One row per Notion connection.
+ * There is no cursor: every run lists what the connection can read (search
+ * returns metadata only, so this is cheap) and compares edit times, which is
+ * also how pages that were deleted or un-shared are noticed. What syncs is
+ * whatever was picked on Notion's own consent screen, so there is no
+ * picked-items table either.
+ */
+export const notionSyncState = pgTable("notion_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    /**
+     * The LaunchStack folder (category id) this connection's pages land in.
+     * An id, not a path, so a rename or move in LaunchStack is followed.
+     * No FK: the category table belongs to the engine schema.
+     */
+    folderCategoryId: bigint("folder_category_id", { mode: "number" }),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, unchanged, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -355,3 +384,4 @@ export type GoogleDriveSyncState = InferSelectModel<typeof googleDriveSyncState>
 export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedItem>;
 export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
 export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;
+export type NotionSyncState = InferSelectModel<typeof notionSyncState>;

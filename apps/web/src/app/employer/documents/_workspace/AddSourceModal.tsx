@@ -21,6 +21,7 @@ import { ADD_TABS, SOURCE_META, type AddSourceTab, type ItemAccessView } from ".
 import { DriveConnectPanel } from "./DriveConnectPanel";
 import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
+import { NotionConnectPanel } from "./NotionConnectPanel";
 import { registerDocument, uploadFileToStorage } from "./sourceUpload";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { detectSourceType } from "@launchstack/conversion/types";
@@ -78,7 +79,9 @@ import type { IconProps } from "~/components/icons/types";
  *     the Drive reconciler folds later edits back in. The tab is hidden unless
  *     `/api/connectors/google` reports the feature enabled.
  *   - Connectors: Drive/Slack/GitHub/Notion start the workspace OAuth flow at
- *     `/api/connectors/<provider>/oauth/start`. Gmail has its own panel
+ *     `/api/connectors/<provider>/oauth/start`. Notion has its own panel
+ *     (NotionConnectPanel): the pages picked on Notion's consent screen sync
+ *     into `Notion/<workspace>`. Gmail has its own panel
  *     (GmailConnectPanel): the connection is the member's own, started at
  *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
  *     in a folder only they can see. Dropbox remains a coming-soon CTA.
@@ -233,6 +236,8 @@ const FIXED_DESTINATIONS: Record<string, string> = {
     drive: "Google Drive",
     // The connector files every session here (AGENT_SESSIONS_CATEGORY).
     "agent-sessions": "Agent Sessions",
+    // Each connected Notion workspace gets `Notion/<workspace>` (notion/config.ts).
+    notion: "Notion",
 };
 
 /**
@@ -242,6 +247,9 @@ const FIXED_DESTINATIONS: Record<string, string> = {
  */
 const DRIVE_FOLDER_NOTE =
     "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.";
+
+const NOTION_FOLDER_NOTE =
+    "Each Notion workspace you connect gets a folder of its own in here, visible only to you until you share it.";
 
 /** Gmail's folder is per mailbox and its owner's alone (ADR-014). */
 const GMAIL_AUDIENCE: AudienceSummary = {
@@ -392,6 +400,8 @@ export function AddSourceModal({
         panel = <DriveConnectPanel tab={active} onFolderAccess={setDriveFolderAccess} />;
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} />;
+    } else if (tab === "notion") {
+        panel = <NotionConnectPanel tab={active} />;
     } else if (tab === "artifact") {
         panel = (
             <ArtifactImportPanel userId={userId} category={folder} onUploaded={handleUploaded} />
@@ -426,7 +436,7 @@ export function AddSourceModal({
     }
 
     // Where it goes and who will see it, before anything is added. Slack,
-    // GitHub, Notion and Dropbox add nothing to a folder here, so no bar.
+    // GitHub and Dropbox add nothing to a folder here, so no bar.
     const barProps = {
         folders,
         knownFolders: known,
@@ -461,7 +471,9 @@ export function AddSourceModal({
                 audienceNote={
                     active.id === "drive" && driveFolderAccess === "ready"
                         ? DRIVE_FOLDER_NOTE
-                        : undefined
+                        : active.id === "notion"
+                          ? NOTION_FOLDER_NOTE
+                          : undefined
                 }
                 {...barProps}
             />
@@ -1790,9 +1802,9 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
 }
 
 // ---------------------------------------------------------------------------
-// Connect panel. Google Drive / Slack / GitHub / Notion connect via workspace OAuth
-// (management role required, tokens live server-side only); the rest are
-// coming-soon CTAs.
+// Connect panel. Slack / GitHub connect via workspace OAuth (management role
+// required, tokens live server-side only); the rest are coming-soon CTAs.
+// Drive, Gmail and Notion have panels of their own.
 // ---------------------------------------------------------------------------
 
 interface ConnectPanelProps {
@@ -1801,13 +1813,12 @@ interface ConnectPanelProps {
 
 /**
  * Tab id → connector provider for the providers this generic panel serves.
- * Drive has its own panel (DriveConnectPanel) with the Picker and sync
- * controls, so it is deliberately absent here.
+ * Drive and Notion have their own panels (DriveConnectPanel,
+ * NotionConnectPanel) with sync controls, so they are deliberately absent.
  */
 const CONNECTABLE_PROVIDERS: Record<string, string> = {
     slack: "slack",
     github: "github",
-    notion: "notion",
 };
 
 interface ConnectorsOverview {
@@ -1855,11 +1866,6 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "Private to you — lands in your own folder",
         "Re-syncs every 15 minutes, read-only",
         "PDF and Office attachments included",
-    ],
-    notion: [
-        "Pick pages and databases on Notion's own consent screen",
-        "Read-only — LaunchStack never edits your Notion",
-        "Disconnect anytime — access is revoked at Notion too",
     ],
     slack: [
         "Mirrors agent meetings into a Slack channel",

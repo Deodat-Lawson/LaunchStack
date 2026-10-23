@@ -77,11 +77,11 @@ import type { IconProps } from "~/components/icons/types";
  *     Drive and opens it in a new tab; the source exists here immediately and
  *     the Drive reconciler folds later edits back in. The tab is hidden unless
  *     `/api/connectors/google` reports the feature enabled.
- *   - Connectors: Drive/Slack/GitHub start the workspace OAuth flow at
+ *   - Connectors: Drive/Slack/GitHub/Notion start the workspace OAuth flow at
  *     `/api/connectors/<provider>/oauth/start`. Gmail has its own panel
  *     (GmailConnectPanel): the connection is the member's own, started at
  *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
- *     in a folder only they can see. Notion/Dropbox remain coming-soon CTAs.
+ *     in a folder only they can see. Dropbox remains a coming-soon CTA.
  */
 
 export interface AddSourceModalProps {
@@ -1790,7 +1790,7 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
 }
 
 // ---------------------------------------------------------------------------
-// Connect panel. Google Drive / Slack / GitHub connect via workspace OAuth
+// Connect panel. Google Drive / Slack / GitHub / Notion connect via workspace OAuth
 // (management role required, tokens live server-side only); the rest are
 // coming-soon CTAs.
 // ---------------------------------------------------------------------------
@@ -1807,6 +1807,7 @@ interface ConnectPanelProps {
 const CONNECTABLE_PROVIDERS: Record<string, string> = {
     slack: "slack",
     github: "github",
+    notion: "notion",
 };
 
 interface ConnectorsOverview {
@@ -1856,9 +1857,9 @@ const PROVIDER_PERKS: Record<string, string[]> = {
         "PDF and Office attachments included",
     ],
     notion: [
-        "Pick workspaces, pages or databases",
-        "Updates stream in real-time",
-        "Preserves block structure",
+        "Pick pages and databases on Notion's own consent screen",
+        "Read-only — LaunchStack never edits your Notion",
+        "Disconnect anytime — access is revoked at Notion too",
     ],
     slack: [
         "Mirrors agent meetings into a Slack channel",

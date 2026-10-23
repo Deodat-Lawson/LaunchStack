@@ -1842,6 +1842,7 @@ export function WorkspaceShell() {
                 slack: "slack",
                 github: "github",
                 gmail: "gmail",
+                notion: "notion",
             };
             // LinkedIn returns into Growth › Brand › Accounts (`feature=growth`
             // above), so it has no Add-source tab to reopen.
@@ -1850,6 +1851,7 @@ export function WorkspaceShell() {
                 slack: "Slack",
                 github: "GitHub",
                 gmail: "Gmail",
+                notion: "Notion",
                 linkedin: "LinkedIn",
                 bluesky: "Bluesky",
             };

@@ -7,7 +7,7 @@
  * every consumer of the synced data is company-owned, and the reconciler and
  * sync jobs run in the worker with no user session. One table serves every
  * OAuth provider — `provider` discriminates — Google Drive, Slack, GitHub,
- * and Gmail today.
+ * Gmail, and Notion today.
  *
  * Gmail is the one per-user provider: a mailbox is personal, so its row is
  * owned by a member (`ownerUserId`, one connection per member per
@@ -50,6 +50,7 @@ export const CONNECTOR_PROVIDERS = [
     "slack",
     "github",
     "gmail",
+    "notion",
     // Brand's social accounts (Growth › Brand › Accounts): LinkedIn is an
     // OAuth grant; Bluesky stores an app password where a token would go.
     "linkedin",

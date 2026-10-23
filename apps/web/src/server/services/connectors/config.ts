@@ -4,7 +4,8 @@
  * Google Drive connects through its own flow (`/api/connectors/google/oauth/*`
  * and `~/server/services/google-drive/*` — the OAuth client pair is
  * GOOGLE_OAUTH_CLIENT_ID/SECRET); this module owns the generic layer that
- * serves Slack and GitHub, plus the cross-provider status map the UI reads.
+ * serves Slack, GitHub, LinkedIn and Notion, plus the cross-provider status
+ * map the UI reads.
  *
  * "Configured" requires the provider's OAuth client pair AND the secret-box
  * key — without EMBEDDING_SECRETS_KEY there is nowhere safe to put a token,
@@ -18,11 +19,12 @@ import { googleStandInUrl } from "../google-drive/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
 import * as linkedin from "./providers/linkedin";
+import * as notion from "./providers/notion";
 import * as slack from "./providers/slack";
 import type { ProviderGrant, ProviderOAuthConfig, RefreshedProviderToken } from "./providers/types";
 
 /** The providers whose OAuth handshake this generic layer performs. */
-export const OAUTH_PROVIDERS = ["slack", "github", "linkedin"] as const;
+export const OAUTH_PROVIDERS = ["slack", "github", "linkedin", "notion"] as const;
 export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
 export function isOAuthProvider(value: string): value is OAuthProvider {
@@ -47,6 +49,7 @@ export const PROVIDER_MODULES: Record<OAuthProvider, ProviderModule> = {
     slack: slack,
     github: github,
     linkedin: linkedin,
+    notion: notion,
 };
 
 function clientPair(provider: OAuthProvider): { clientId: string; clientSecret: string } | null {
@@ -54,6 +57,7 @@ function clientPair(provider: OAuthProvider): { clientId: string; clientSecret: 
         slack: [env.server.SLACK_CLIENT_ID, env.server.SLACK_CLIENT_SECRET],
         github: [env.server.GITHUB_OAUTH_CLIENT_ID, env.server.GITHUB_OAUTH_CLIENT_SECRET],
         linkedin: [env.server.LINKEDIN_CLIENT_ID, env.server.LINKEDIN_CLIENT_SECRET],
+        notion: [env.server.NOTION_OAUTH_CLIENT_ID, env.server.NOTION_OAUTH_CLIENT_SECRET],
     };
     const [clientId, clientSecret] = pairs[provider];
     return clientId && clientSecret ? { clientId, clientSecret } : null;
@@ -158,6 +162,7 @@ export function getConnectorProvidersStatus(): ConnectorProvidersStatus {
         slack: { configured: isConnectorConfigured("slack") },
         github: { configured: isConnectorConfigured("github") },
         gmail: { configured: isConnectorConfigured("gmail") },
+        notion: { configured: isConnectorConfigured("notion") },
         linkedin: { configured: isConnectorConfigured("linkedin") },
         bluesky: { configured: isConnectorConfigured("bluesky") },
     };

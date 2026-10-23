@@ -16,6 +16,13 @@ export const GOOGLE_DRIVE_PROVIDER = "google-drive";
 /** CSRF nonce cookie for the Google OAuth round trip (set by /oauth/start). */
 export const GOOGLE_OAUTH_STATE_COOKIE = "gdrive_oauth_state";
 
+/**
+ * Marks the OAuth state of an "Allow folder access" round trip, so the
+ * callback knows which scopes were asked for when Google's token response
+ * leaves `scope` out.
+ */
+export const DRIVE_FOLDERS_STATE_PREFIX = "folders.";
+
 /** Files this app created or the user picked for it — nothing else. */
 export const DRIVE_FILE_SCOPE = "https://www.googleapis.com/auth/drive.file";
 

@@ -409,8 +409,9 @@ const serverSchema = z.object({
     // app is Internal), so it stays dark until the operator flips this on.
     GMAIL_CONNECTOR_ENABLED: optionalString(),
     // Google Drive folder import. drive.file (the default) only reaches files
-    // picked one by one, so a picked folder arrives empty; this flag adds
-    // drive.readonly, a restricted scope the consent screen must carry (and
+    // picked one by one, so a picked folder arrives empty; this flag lets the
+    // panel's "Allow folder access" ask for drive.readonly (a plain connect
+    // never does), a restricted scope the consent screen must carry (and
     // Google must verify unless the app is Internal), so it ships off.
     GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: optionalString(),
     // Development only: answer for Google (OAuth, Drive, Picker) from the

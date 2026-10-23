@@ -4,8 +4,11 @@
  * Two Google products share this door, told apart by `?provider=`:
  *
  * - (default) `google-drive` — workspace-scoped. A `connectors.manage`
- *   holder grants drive.file for the whole workspace, plus drive.readonly
- *   when folder import is on (GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED).
+ *   holder grants drive.file for the whole workspace. `?access=folders`
+ *   (the panel's "Allow folder access") also asks for drive.readonly, when
+ *   the operator allows folder import (GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED);
+ *   a plain connect never does, so it stays clear of the warning Google
+ *   shows for a restricted scope until the app is verified.
  * - `gmail` — per-user. Any `documents.upload` holder grants gmail.readonly
  *   for their own mailbox; the connection belongs to them, and the mail
  *   lands in a folder only they can see.
@@ -62,7 +65,8 @@ function redirectToConsent(
 }
 
 export async function GET(request: Request) {
-    const provider = new URL(request.url).searchParams.get("provider");
+    const search = new URL(request.url).searchParams;
+    const provider = search.get("provider");
 
     if (provider === "gmail") {
         if (!isGmailConnectorConfigured()) {
@@ -84,7 +88,7 @@ export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return ctx.response;
     return redirectToConsent(request, {
-        scopes: googleDriveScopes(),
+        scopes: googleDriveScopes({ folderAccess: search.get("access") === "folders" }),
         cookieName: GOOGLE_OAUTH_STATE_COOKIE,
         statePrefix: "",
     });

@@ -41,17 +41,15 @@ export function isDriveFolderAccessEnabled(): boolean {
 }
 
 /**
- * drive.file always (Drive-linked files write through it); drive.readonly
- * when folder import is on. openid+email identify which Google account
- * holds the files.
+ * drive.file always (Drive-linked files write through it); openid+email
+ * identify which Google account holds the files. drive.readonly only when
+ * someone asks for folder access and the operator allows it — never on a
+ * plain connect, so connecting stays clear of Google's "unverified app"
+ * warning that a restricted scope brings until the app is verified.
  */
-export function googleDriveScopes(): string[] {
-    return [
-        DRIVE_FILE_SCOPE,
-        ...(isDriveFolderAccessEnabled() ? [DRIVE_READONLY_SCOPE] : []),
-        "openid",
-        "email",
-    ];
+export function googleDriveScopes(options: { folderAccess?: boolean } = {}): string[] {
+    const folders = Boolean(options.folderAccess) && isDriveFolderAccessEnabled();
+    return [DRIVE_FILE_SCOPE, ...(folders ? [DRIVE_READONLY_SCOPE] : []), "openid", "email"];
 }
 
 /** Whether a stored grant (space-separated, as Google returns it) can read folders. */

@@ -9,7 +9,7 @@
  *
  * `folderAccess` says whether a picked folder can be imported at all: the
  * operator must have turned it on, and this connection must hold the grant
- * (a connection made before it was turned on needs one reconnect).
+ * (connecting asks only for drive.file; "Allow folder access" adds it).
  */
 
 import { and, eq, inArray } from "drizzle-orm";

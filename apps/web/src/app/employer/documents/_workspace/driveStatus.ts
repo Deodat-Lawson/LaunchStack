@@ -41,7 +41,8 @@ export interface DriveStatus {
 
 /**
  * - `ready`: folders import whole.
- * - `allow`: the server can, this connection was made before — one reconnect.
+ * - `allow`: the server can, but this connection only holds drive.file — the
+ *   user opts in with "Allow folder access" (a second consent).
  * - `files-only`: the server can't (operator flag off): only picked files come in.
  */
 export type FolderAccessState = "ready" | "allow" | "files-only";

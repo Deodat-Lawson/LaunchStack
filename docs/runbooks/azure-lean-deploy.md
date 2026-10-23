@@ -655,8 +655,13 @@ alive, or rewrite `document_versions.url` if you migrate before real traffic.
 
 - **Whisper back on-box:** `--profile whisper` plus
   `TRANSCRIPTION_PROVIDER=sidecar`. Budget ~1.5 GB.
-- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`.
-  Budget ~1.2 GB.
+- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`
+  and `DOCLING_SERVE_URL=http://docling-serve:5001`. Budget ~1.2 GB. Without
+  Docling (the lean default, `DOCLING_SERVE_URL` empty), complex PDFs go to the
+  OCR provider and the worker converts Word, PowerPoint, and Excel files itself
+  with mammoth/SheetJS. Before this was the default, the converter pointed at a
+  `docling-serve` that was not running, and every Office upload failed with
+  `docling-serve request failed: fetch failed`.
 - Either one needs a bigger VM first: stop it, `az vm resize -g <RESOURCE_GROUP>
   -n <VM_NAME> --size Standard_D4as_v7` (16 GB), start it.
 - **Document Intelligence** F0 caps at 500 pages/month. Upgrade in place:

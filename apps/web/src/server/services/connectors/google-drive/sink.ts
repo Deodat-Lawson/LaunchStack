@@ -164,6 +164,8 @@ export async function createGoogleDriveSink(
                 data: body,
                 contentType: item.mimeType,
                 userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 

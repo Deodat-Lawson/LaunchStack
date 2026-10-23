@@ -25,6 +25,7 @@ import { findWorkspacePassages } from "~/server/mcp/workspace-search";
 import { parseDocumentId } from "~/server/mcp/tools/shared";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
+import { getSyncState as getNotionSyncState } from "~/server/services/connectors/notion/store";
 import {
     SOURCE_ORIGIN_FILTERS,
     decodeListCursor,
@@ -389,7 +390,14 @@ export function citedPassages(passages: readonly SearchResult[], answer: string)
 // --- what the model is told about the workspace ------------------------------
 
 /** Apps whose imports become sources, as connector providers. */
-const SOURCE_PROVIDERS = new Set(["google-drive", "gmail"]);
+const SOURCE_PROVIDERS = new Set(["google-drive", "gmail", "notion"]);
+
+/** When a source-importing connection last synced; Gmail keeps no run time here. */
+async function lastSyncAtFor(provider: string, connectionId: number): Promise<Date | null> {
+    if (provider === "google-drive") return (await getSyncState(connectionId))?.lastSyncAt ?? null;
+    if (provider === "notion") return (await getNotionSyncState(connectionId))?.lastSyncAt ?? null;
+    return null;
+}
 
 export interface ConnectedApp {
     provider: string;
@@ -422,10 +430,7 @@ export async function loadSourcesOverview(ctx: WorkspaceContext): Promise<Source
         visible.map(async row => ({
             provider: row.provider,
             status: row.status,
-            lastSyncAt:
-                row.provider === "google-drive"
-                    ? ((await getSyncState(row.id))?.lastSyncAt ?? null)
-                    : null,
+            lastSyncAt: await lastSyncAtFor(row.provider, row.id),
         }))
     );
     return { inventory, connected };
@@ -457,10 +462,18 @@ function connectionLines(overview: SourcesOverview): string[] {
         const scope =
             app.provider === "google-drive"
                 ? " LaunchStack imports the files and folders someone chose to add from Google Drive, not the whole Drive, so what you can list is what was imported."
-                : "";
+                : app.provider === "notion"
+                  ? " LaunchStack imports the Notion pages someone shared with it on Notion's consent screen, not the whole Notion workspace, so what you can list is what was imported."
+                  : "";
+        const where =
+            app.provider === "google-drive"
+                ? " — nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → Google Drive"
+                : app.provider === "notion"
+                  ? " — nothing has been imported yet, or the pages are in a folder they cannot open; pages are chosen from Add a source → Notion"
+                  : "";
         const none = imported
             ? ""
-            : ` None of its files are among the sources this person can open${app.provider === "google-drive" ? " — nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → Google Drive" : ""}.`;
+            : ` None of its files are among the sources this person can open${where}.`;
         return `${name} is connected to this workspace${synced}.${scope}${none}`;
     });
 }

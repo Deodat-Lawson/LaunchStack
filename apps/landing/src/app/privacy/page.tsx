@@ -81,10 +81,25 @@ export default function PrivacyPage() {
             </ul>
             <h3>Accounts you connect</h3>
             <p>
-                If you connect Google Drive, Gmail, LinkedIn or Bluesky, we store the access token
-                that service gives us and the data described under{" "}
-                <a href="#google-user-data">Google user data</a> and{" "}
+                If you connect Google Drive, Gmail, Notion, LinkedIn or Bluesky, we store the access
+                token that service gives us and the data described under{" "}
+                <a href="#google-user-data">Google user data</a>, below and under{" "}
                 <a href="#sharing">who we share data with</a>. You can disconnect at any time.
+            </p>
+            <p>
+                If you connect Notion, Launchstack can read only the pages and databases you choose
+                on Notion&rsquo;s own consent screen: their titles, contents, properties and edit
+                dates. It copies them into a folder in your workspace that is private to whoever
+                connected Notion until they share it, and checks them for changes every 15 minutes.
+                It never creates, changes or deletes anything in Notion. Disconnecting in
+                Launchstack deletes our stored token and revokes our access; you can also remove
+                Launchstack from your Notion workspace&rsquo;s connection settings. Copies already
+                in your workspace stay until you delete them.
+            </p>
+            <p>
+                Obsidian vaults you import are handled like any file you upload: your browser reads
+                the notes in the vault you pick and sends them to your workspace, into a folder only
+                you can see until you share it.
             </p>
             <h3>Technical information</h3>
             <p>
@@ -331,6 +346,14 @@ export default function PrivacyPage() {
                                 and transcription through the Gemini API
                             </td>
                             <td>What each feature needs, as described above</td>
+                        </tr>
+                        <tr>
+                            <td>Notion</td>
+                            <td>Reading the pages you choose, only if you connect it</td>
+                            <td>
+                                Requests for those pages and their content. Nothing from your
+                                workspace is sent to Notion
+                            </td>
                         </tr>
                         <tr>
                             <td>LinkedIn and Bluesky</td>

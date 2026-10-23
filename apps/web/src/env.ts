@@ -175,7 +175,7 @@ const serverSchema = z.object({
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
     // that provider; the redirect URI to register is
-    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github, notion).
     // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
     // is nowhere safe to put a token, so the connector declines to exist.
     // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
@@ -188,6 +188,12 @@ const serverSchema = z.object({
     // the deployment-global PAT fallback used by the repo explainer.
     GITHUB_OAUTH_CLIENT_ID: optionalString(),
     GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
+    // Notion public connection pair, from Notion's developer portal. Its
+    // capabilities should be read content only; Notion's own consent screen
+    // picks the pages. Redirect URI to register:
+    // <BETTER_AUTH_URL>/api/connectors/notion/oauth/callback.
+    NOTION_OAUTH_CLIENT_ID: optionalString(),
+    NOTION_OAUTH_CLIENT_SECRET: optionalString(),
     // LinkedIn app client pair for Growth › Brand: a workspace signs in and
     // posts as its members and the Pages they administer. Redirect URI to
     // register: <BETTER_AUTH_URL>/api/connectors/linkedin/oauth/callback.
@@ -565,6 +571,8 @@ function parseServerEnv() {
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
         GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+        NOTION_OAUTH_CLIENT_ID: process.env.NOTION_OAUTH_CLIENT_ID,
+        NOTION_OAUTH_CLIENT_SECRET: process.env.NOTION_OAUTH_CLIENT_SECRET,
         LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
         LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
         LINKEDIN_OAUTH_SCOPES: process.env.LINKEDIN_OAUTH_SCOPES,

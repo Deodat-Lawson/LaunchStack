@@ -27,6 +27,9 @@ import { descendantPattern } from "~/server/folders";
 export const SOURCE_ORIGINS = {
     "google-drive": "Google Drive",
     gmail: "Gmail",
+    notion: "Notion",
+    // Imported Obsidian vaults (a browser upload, not a connection).
+    obsidian: "Obsidian",
     // Imported Claude Code / Codex sessions (the Add a source tab's name).
     "agent-sessions": "Coding sessions",
     // Claude Code / Codex knowledge files (CLAUDE.md, memory).

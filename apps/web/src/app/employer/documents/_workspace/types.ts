@@ -37,6 +37,7 @@ import {
     IconGithub,
     IconGmail,
     IconNotion,
+    IconObsidian,
     IconSlack,
     IconYoutube,
 } from "~/components/icons/brand";
@@ -835,6 +836,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
+            {
+                id: "obsidian",
+                label: "Obsidian",
+                Icon: IconObsidian,
+                desc: "Import a vault — re-import to update",
+            },
             {
                 id: "drive",
                 label: "Google Drive",

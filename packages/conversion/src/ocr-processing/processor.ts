@@ -6,6 +6,7 @@
 
 import type { RoutingDecision } from "./complexity";
 import { renderPagesToImages } from "./complexity";
+import { getOcrConfig } from "./config";
 import { enrichPageWithVlm, isVlmEnrichmentConfigured } from "./enrichment";
 import { createAzureAdapter } from "./adapters/azureAdapter";
 import { createLandingAIAdapter } from "./adapters/landingAdapter";
@@ -111,6 +112,11 @@ export interface RouterDecisionResult {
     reason: string;
     visionLabel?: string;
     visionScore?: number;
+    /**
+     * When the selected provider fails, read the PDF's own text layer instead
+     * of failing the stage. Set by OCR_PDF_STRATEGY=provider-first.
+     */
+    nativeFallback?: boolean;
 }
 
 /**
@@ -145,6 +151,46 @@ function isValidOCRProvider(p: string): p is (typeof OCR_ONLY_PROVIDERS)[number]
     return OCR_ONLY_PROVIDERS.includes(p as (typeof OCR_ONLY_PROVIDERS)[number]);
 }
 
+/** True when the provider's credentials (or, for Docling, the converter) are configured. */
+function isOcrProviderConfigured(provider: (typeof OCR_ONLY_PROVIDERS)[number]): boolean {
+    const cfg = getOcrConfig();
+    switch (provider) {
+        case "AZURE":
+            return Boolean(cfg.azure?.endpoint && cfg.azure.key);
+        case "LANDING_AI":
+            return Boolean(cfg.landingAi?.apiKey);
+        case "DATALAB":
+            return Boolean(cfg.datalabApiKey);
+        case "DOCLING":
+            return Boolean(cfg.converter?.url);
+    }
+}
+
+/**
+ * The provider every PDF goes to under OCR_PDF_STRATEGY=provider-first, or
+ * undefined when the strategy is text-layer-first or the default provider
+ * cannot run (then the converter's text-layer-first routing applies).
+ */
+function getProviderFirstOcrProvider(): OCRProvider | undefined {
+    const cfg = getOcrConfig();
+    if (cfg.pdfStrategy !== "provider-first") return undefined;
+
+    const provider = cfg.defaultProvider;
+    if (!provider || !isValidOCRProvider(provider)) {
+        console.warn(
+            `[Router] OCR_PDF_STRATEGY=provider-first needs OCR_DEFAULT_PROVIDER set to an OCR provider (got ${provider ?? "nothing"}); reading the text layer first`
+        );
+        return undefined;
+    }
+    if (!isOcrProviderConfigured(provider)) {
+        console.warn(
+            `[Router] OCR_PDF_STRATEGY=provider-first but ${provider} is not configured; reading the text layer first`
+        );
+        return undefined;
+    }
+    return provider;
+}
+
 /**
  * Determine how to route the document for processing
  */
@@ -162,6 +208,19 @@ export async function routeDocument(
             pageCount,
             selectedProvider: preferred,
             reason: "preferred-provider",
+        };
+    }
+
+    // No converter round trip: the text-layer check it runs is exactly what
+    // this strategy skips. The text layer is read only if the provider fails.
+    const providerFirst = getProviderFirstOcrProvider();
+    if (providerFirst) {
+        return {
+            isNativePDF: false,
+            pageCount: await getPageCount(documentUrl),
+            selectedProvider: providerFirst,
+            reason: "provider-first",
+            nativeFallback: true,
         };
     }
 
@@ -230,27 +289,15 @@ export async function normalizeDocument(
     if (routerDecision.isNativePDF) {
         normalizedDoc = await processNativePDF(documentUrl);
     } else {
-        switch (routerDecision.selectedProvider) {
-            case "AZURE":
-                normalizedDoc = await processWithAzure(documentUrl);
-                break;
-            case "LANDING_AI":
-                normalizedDoc = await processWithLandingAI(documentUrl);
-                break;
-            case "DATALAB":
-                normalizedDoc = await processWithDatalab(documentUrl);
-                break;
-            case "DOCLING":
-                normalizedDoc = await processWithDocling(documentUrl);
-                break;
-            case "NATIVE_PDF":
-                normalizedDoc = await processNativePDF(documentUrl);
-                break;
-            default:
-                console.warn(
-                    `[Normalize] Unknown provider "${routerDecision.selectedProvider}", falling back to native PDF extraction`
-                );
-                normalizedDoc = await processNativePDF(documentUrl);
+        try {
+            normalizedDoc = await processWithProvider(documentUrl, routerDecision.selectedProvider);
+        } catch (error) {
+            if (!routerDecision.nativeFallback) throw error;
+            normalizedDoc = await fallBackToTextLayer(
+                documentUrl,
+                routerDecision.selectedProvider,
+                error
+            );
         }
     }
 
@@ -1251,4 +1298,57 @@ export async function processWithDatalab(documentUrl: string): Promise<Normalize
 export async function processWithDocling(documentUrl: string): Promise<NormalizedDocument> {
     const adapter = createDoclingAdapter();
     return adapter.uploadDocument(documentUrl);
+}
+
+async function processWithProvider(
+    documentUrl: string,
+    provider: OCRProvider
+): Promise<NormalizedDocument> {
+    switch (provider) {
+        case "AZURE":
+            return processWithAzure(documentUrl);
+        case "LANDING_AI":
+            return processWithLandingAI(documentUrl);
+        case "DATALAB":
+            return processWithDatalab(documentUrl);
+        case "DOCLING":
+            return processWithDocling(documentUrl);
+        case "NATIVE_PDF":
+            return processNativePDF(documentUrl);
+        default:
+            console.warn(
+                `[Normalize] Unknown provider "${provider}", falling back to native PDF extraction`
+            );
+            return processNativePDF(documentUrl);
+    }
+}
+
+/**
+ * OCR_PDF_STRATEGY=provider-first: the provider failed, so read the PDF's own
+ * text layer instead. A scan has none — indexing it empty would mark it ready
+ * with nothing to search — so then the provider's error stands and the outbox
+ * retries the provider.
+ */
+async function fallBackToTextLayer(
+    documentUrl: string,
+    provider: OCRProvider,
+    providerError: unknown
+): Promise<NormalizedDocument> {
+    const reason = providerError instanceof Error ? providerError.message : "unknown error";
+    console.warn(`[Normalize] ${provider} failed, reading the PDF's text layer instead: ${reason}`);
+
+    let nativeDoc: NormalizedDocument;
+    try {
+        nativeDoc = await processNativePDF(documentUrl);
+    } catch (nativeError) {
+        const nativeReason = nativeError instanceof Error ? nativeError.message : "unknown error";
+        console.warn(`[Normalize] Text-layer fallback failed too: ${nativeReason}`);
+        throw providerError;
+    }
+
+    if (!nativeDoc.pages.some(page => page.textBlocks.length > 0)) {
+        console.warn("[Normalize] PDF has no text layer; keeping the provider error");
+        throw providerError;
+    }
+    return nativeDoc;
 }

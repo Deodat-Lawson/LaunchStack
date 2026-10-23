@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { z } from "zod";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray, like, or } from "drizzle-orm";
@@ -45,8 +46,13 @@ import {
 import { getChatModelsSource } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
-import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
-import { answerWithTools } from "~/server/chat-tool-loop";
+import {
+    createChatStream,
+    throwIfChatAborted,
+    type ChatStep,
+    type ChatStreamEvent,
+} from "~/lib/chat-stream";
+import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
 import {
     citedPassages,
     createSourceTools,
@@ -79,6 +85,7 @@ import {
     agentResponseInfo,
     agentSystemPromptBlock,
     resolveChatAgent,
+    type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -114,6 +121,81 @@ async function knownAgentKeys(companyId: bigint, question: string): Promise<stri
 }
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
+
+type QuestionInput = z.output<typeof QuestionSchema>;
+
+/** What `respond` needs from the validated request. */
+interface RespondInput
+    extends Pick<QuestionInput, "question">,
+        Partial<
+            Pick<
+                QuestionInput,
+                | "searchScope"
+                | "archiveName"
+                | "selectedDocumentIds"
+                | "documentId"
+                | "embeddingIndexKey"
+                | "conversationHistory"
+                | "aiPersona"
+                | "chatMode"
+            >
+        > {
+    ctx: { data: WorkspaceContext };
+    userCompanyId: bigint;
+    numericCompanyId: number;
+    scope: DocumentScope;
+    passages: NonNullable<QuestionInput["passages"]>;
+    retrievalQuery: string;
+    authorizedDocument: { id: number; title: string } | null;
+    agent: ChatAgentResolution | null;
+    enableWebSearch: boolean;
+    style: AgentStyleId | QuestionInput["style"];
+    textAttachments: AttachmentPayload[];
+    imageAttachments: AttachmentPayload[];
+    resolved: ReturnType<typeof resolveConfiguredChatModel>;
+    route: string;
+    debitChatTokens: boolean;
+}
+
+/** A refusal's JSON body and status; a stream sends the body as its result. */
+function refusal(message: string, status = 200) {
+    return { body: { success: false as const, message }, status };
+}
+
+/** "1 passage", "3 passages". */
+function count(n: number, noun: string): string {
+    return `${n} ${noun}${n === 1 ? "" : "s"}`;
+}
+
+/** Keeps a step's text inside the stream protocol's limit. */
+function clip(text: string, limit = 120): string {
+    const chars = Array.from(text);
+    return chars.length > limit ? `${chars.slice(0, limit - 1).join("")}…` : text;
+}
+
+/**
+ * Up to three distinct names in order, then "and N more" — counting `total`
+ * when some of the things counted have no name to show.
+ */
+function nameList(names: readonly string[], total = 0): string | undefined {
+    const distinct = Array.from(new Set(names.filter(Boolean)));
+    if (distinct.length === 0) return undefined;
+    const shown = distinct.slice(0, 3).map(name => clip(name, 60));
+    const more = Math.max(distinct.length, total) - shown.length;
+    return `${shown.join(", ")}${more > 0 ? ` and ${more} more` : ""}`;
+}
+
+function stepEvent(
+    id: string,
+    state: ChatStep["state"],
+    label: string,
+    detail?: string
+): ChatStreamEvent<never> {
+    return {
+        type: "step",
+        step: { id, state, label: clip(label), ...(detail ? { detail: clip(detail, 240) } : {}) },
+    };
+}
 
 const qaAnnOptimizer = new ANNOptimizer({
     strategy: "hnsw",
@@ -673,7 +755,7 @@ export async function POST(request: Request) {
                     { status: compatibility.status }
                 );
             }
-            const { modelId: selectedAiModel, chat } = resolved;
+            const { modelId: selectedAiModel } = resolved;
             // Read where the model was resolved: tokens a workspace's own
             // endpoint serves are on its provider's bill, not its credits.
             const debitChatTokens = shouldDebitChatTokens(getChatModelsSource());
@@ -802,6 +884,108 @@ export async function POST(request: Request) {
                     );
                 }
             }
+            // Everything past validation runs inside the stream when there is
+            // one, so the reader sees each step as it happens.
+            const input: RespondInput = {
+                ctx,
+                question,
+                searchScope,
+                archiveName,
+                selectedDocumentIds,
+                documentId,
+                embeddingIndexKey,
+                conversationHistory,
+                aiPersona,
+                chatMode,
+                userCompanyId,
+                numericCompanyId,
+                scope,
+                passages,
+                retrievalQuery,
+                authorizedDocument,
+                agent,
+                enableWebSearch,
+                style,
+                textAttachments,
+                imageAttachments,
+                resolved,
+                route,
+                debitChatTokens,
+            };
+            if (streamsModel) {
+                const streamingResponse = createChatStream(
+                    request.signal,
+                    async (emit, signal) => (await respond(input, emit, signal)).body,
+                    error => {
+                        recordResult("error");
+                        if (error instanceof AttachmentReadError) return error.message;
+                        const friendly = describeChatError(error, selectedAiModel);
+                        if (friendly) return friendly.message;
+                        // A stop is the reader's choice, not a failure worth a stack trace.
+                        if (
+                            request.signal.aborted ||
+                            (error as { name?: unknown })?.name === "AbortError"
+                        )
+                            return "Response stopped";
+                        // The provider's own text can name the vendor or its
+                        // billing page; it goes to the log, not the screen.
+                        console.error("[AIChat] Streamed response failed:", error);
+                        return "The chat response failed. Please retry.";
+                    }
+                );
+                return new NextResponse(streamingResponse.body, {
+                    headers: streamingResponse.headers,
+                });
+            }
+            const reply = await respond(input);
+            return NextResponse.json(reply.body, { status: reply.status });
+        }
+
+        /**
+         * The answer after validation: passages, retrieval, web search,
+         * attachments, then the model. A refusal comes back as a body and a
+         * status, which `answer` sends as JSON or as the stream's result.
+         */
+        async function respond(
+            input: RespondInput,
+            emit?: (event: ChatStreamEvent<unknown>) => void,
+            signal: AbortSignal = request.signal
+        ) {
+            const {
+                ctx,
+                question,
+                searchScope,
+                archiveName,
+                selectedDocumentIds,
+                documentId,
+                embeddingIndexKey,
+                conversationHistory,
+                aiPersona,
+                chatMode,
+                userCompanyId,
+                numericCompanyId,
+                scope,
+                passages,
+                retrievalQuery,
+                authorizedDocument,
+                agent,
+                enableWebSearch,
+                style,
+                textAttachments,
+                imageAttachments,
+                resolved,
+                route,
+                debitChatTokens,
+            } = input;
+            const { modelId: selectedAiModel, chat } = resolved;
+            const step = (...args: Parameters<typeof stepEvent>) => emit?.(stepEvent(...args));
+
+            if (conversationHistory) step("history", "done", "Reviewed the conversation so far");
+            const passageLabel =
+                passages.length === 1
+                    ? "your selected passage"
+                    : `${passages.length} selected passages`;
+            if (passages.length > 0) step("passages", "active", `Reading ${passageLabel}`);
             const passageAnchors: PassageAnchor[][] = [];
             for (const passage of passages) {
                 passageAnchors.push(
@@ -809,6 +993,7 @@ export async function POST(request: Request) {
                 );
             }
             if (passages.length > 0) {
+                step("passages", "done", `Read ${passageLabel}`);
                 console.info("[AIChat] passages", {
                     count: passages.length,
                     anchored: passageAnchors.filter(found => found.length > 0).length,
@@ -836,10 +1021,7 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("empty");
-                        return NextResponse.json({
-                            success: false,
-                            message: "No relevant content found for the given question.",
-                        });
+                        return refusal("No relevant content found for the given question.");
                     }
                 } else if (searchScope === "archive" && archiveName) {
                     const rows = await db
@@ -854,13 +1036,7 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("empty");
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: `No documents found in archive "${archiveName}".`,
-                            },
-                            { status: 404 }
-                        );
+                        return refusal(`No documents found in archive "${archiveName}".`, 404);
                     }
                 } else if (searchScope === "selected" && selectedDocumentIds?.length) {
                     const uniqueIds = Array.from(new Set(selectedDocumentIds));
@@ -876,15 +1052,20 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("error");
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: "None of the selected documents were found.",
-                            },
-                            { status: 404 }
-                        );
+                        return refusal("None of the selected documents were found.", 404);
                     }
                 }
+                step(
+                    "search",
+                    "active",
+                    searchScope === "company"
+                        ? "Searching your workspace"
+                        : searchScope === "archive"
+                          ? `Searching ${archiveName}`
+                          : searchScope === "selected"
+                            ? `Searching ${count(searchDocumentIds?.length ?? 0, "source")}`
+                            : `Searching ${authorizedDocument?.title ?? "the document"}`
+                );
 
                 // Perform comprehensive search
                 const resolvedEmbeddingIndex = resolveEmbeddingIndex(
@@ -1040,16 +1221,42 @@ export async function POST(request: Request) {
                     searchScope: searchScope ?? "document",
                 });
 
+                if (documents.length > 0) {
+                    // Every document-scope result is that document's, unless
+                    // it names its own (a company fact).
+                    const fallbackTitle =
+                        searchScope === "document" ? authorizedDocument?.title : undefined;
+                    const sources = documents.map(doc => {
+                        const title = doc.metadata?.documentTitle ?? doc.title ?? fallbackTitle;
+                        return { key: doc.metadata?.documentId ?? doc.documentId ?? title, title };
+                    });
+                    const sourceCount = new Set(sources.flatMap(source => source.key ?? [])).size;
+                    step(
+                        "search",
+                        "done",
+                        `Found ${count(documents.length, "passage")} in ${count(Math.max(sourceCount, 1), "source")}`,
+                        nameList(
+                            sources.flatMap(source => source.title ?? []),
+                            sourceCount
+                        )
+                    );
+                } else {
+                    step(
+                        "search",
+                        "done",
+                        passages.length > 0
+                            ? "Nothing else relevant in your sources"
+                            : "Nothing relevant in your sources"
+                    );
+                }
+
                 // A selected passage is content enough to answer about.
                 if (documents.length === 0 && passages.length === 0) {
                     recordResult("empty");
-                    return NextResponse.json({
-                        success: false,
-                        message: "No relevant content found for the given question.",
-                    });
+                    return refusal("No relevant content found for the given question.");
                 }
             }
-            throwIfChatAborted(request.signal);
+            throwIfChatAborted(signal);
 
             // The passage section shows each passage's own chunk; a retrieved
             // copy of it is dropped here and the section shows it whole.
@@ -1129,7 +1336,14 @@ export async function POST(request: Request) {
                     ? createSourceTools(ctx.data)
                     : null;
             const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
+            // Nothing attached and no way to look through the sources: say so,
+            // rather than leave the reader to guess what the answer drew on.
+            if (searchScope === "none" && passages.length === 0 && !sourceTools)
+                step("search", "done", "No sources selected", "Answering from general knowledge");
 
+            const attachmentCount = textAttachments.length + imageAttachments.length;
+            if (attachmentCount > 0)
+                step("attachments", "active", `Reading ${count(attachmentCount, "attachment")}`);
             const attachmentContext = { request, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
                 textAttachments,
@@ -1140,6 +1354,13 @@ export async function POST(request: Request) {
                 attachmentContext,
                 resolved.behavior.image?.mimeTypes
             );
+            if (attachmentCount > 0)
+                step(
+                    "attachments",
+                    "done",
+                    `Read ${count(attachmentCount, "attachment")}`,
+                    nameList([...textAttachments, ...imageAttachments].map(att => att.name))
+                );
 
             const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
 
@@ -1218,13 +1439,9 @@ export async function POST(request: Request) {
             }, 0);
             if (promptCharacters > 120_000) {
                 recordResult("error");
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message:
-                            "The expanded chat input exceeds 120000 characters. Shorten your prompt, remove source or attachment context, or start a new conversation.",
-                    },
-                    { status: 400 }
+                return refusal(
+                    "The expanded chat input exceeds 120000 characters. Shorten your prompt, remove source or attachment context, or start a new conversation.",
+                    400
                 );
             }
             const complete = async (
@@ -1233,17 +1450,73 @@ export async function POST(request: Request) {
             ) => {
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "generating" });
+                // The trace: thinking, each tool call as its own step (its id
+                // says which kind, so a shared reader can be shown a generic
+                // label), thinking again after the tools, then writing.
+                let calling = "";
+                const tracked: ChatTool[] = tools.map(tool => ({
+                    ...tool,
+                    describe: args => {
+                        calling = tool.name;
+                        return tool.describe(args);
+                    },
+                }));
+                const webToolNames = new Set((webTools?.tools ?? []).map(tool => tool.name));
+                let round = 1;
+                let thinking: string | null = null;
+                let toolCall: { id: string; label: string } | null = null;
+                let toolCount = 0;
+                let wrote = false;
+                const startThinking = () => {
+                    thinking = round === 1 ? "think" : `think-${round}`;
+                    step(thinking, "active", "Thinking");
+                };
+                const endThinking = () => {
+                    if (thinking) step(thinking, "done", "Thought it through");
+                    thinking = null;
+                };
+                const endToolCall = () => {
+                    if (toolCall) step(toolCall.id, "done", toolCall.label);
+                    toolCall = null;
+                };
+                if (emit) startThinking();
                 const reply = await answerWithTools({
                     chat,
                     messages,
-                    tools,
+                    tools: tracked,
                     signal,
                     stream: emit && {
-                        onText: delta => emit({ type: "text", delta }),
+                        onText: delta => {
+                            if (!wrote) {
+                                endToolCall();
+                                endThinking();
+                                step("write", "active", "Writing the answer");
+                                wrote = true;
+                            }
+                            emit({ type: "text", delta });
+                        },
                         onReasoning: delta => emit({ type: "reasoning", delta }),
                     },
-                    onStatus: status => emit?.({ type: "status", status }),
+                    onStatus: status => {
+                        emit?.({ type: "status", status });
+                        if (!emit) return;
+                        endToolCall();
+                        if (status === "generating") {
+                            round += 1;
+                            startThinking();
+                            return;
+                        }
+                        endThinking();
+                        const kind = webToolNames.has(calling) ? "web" : "source";
+                        toolCall = { id: `${kind}-${++toolCount}`, label: status };
+                        step(toolCall.id, "active", status);
+                    },
                 });
+                if (emit) {
+                    endToolCall();
+                    if (wrote) step("write", "done", "Wrote the answer");
+                    else endThinking();
+                }
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
 
@@ -1381,35 +1654,15 @@ export async function POST(request: Request) {
                         : undefined,
                 };
             };
-            if (streamsModel) {
-                const streamingResponse = createChatStream(
-                    request.signal,
-                    (emit, signal) => complete(signal, emit),
-                    error => {
-                        recordResult("error");
-                        const friendly = describeChatError(error, selectedAiModel);
-                        if (friendly) return friendly.message;
-                        // The provider's own text can name the vendor or its
-                        // billing page; it goes to the log, not the screen.
-                        console.error("[AIChat] Streamed response failed:", error);
-                        return "The chat response failed. Please retry.";
-                    }
-                );
-                return new NextResponse(streamingResponse.body, {
-                    headers: streamingResponse.headers,
-                });
-            }
+            if (emit) return { body: await complete(signal, emit), status: 200 };
             try {
-                return NextResponse.json(await complete(request.signal));
+                return { body: await complete(signal), status: 200 };
             } catch (modelError) {
-                throwIfChatAborted(request.signal);
+                throwIfChatAborted(signal);
                 const friendly = describeChatError(modelError, selectedAiModel);
                 if (friendly) {
                     recordResult("error");
-                    return NextResponse.json(
-                        { success: false, message: friendly.message },
-                        { status: friendly.status }
-                    );
+                    return refusal(friendly.message, friendly.status);
                 }
                 throw modelError;
             }

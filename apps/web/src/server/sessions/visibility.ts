@@ -17,6 +17,10 @@
  *   *published document*, so when it has one that document must be in scope
  *   too.
  * - Anything else (a staged local `s…`, a malformed id) is dropped: fail closed.
+ *
+ * An answer's thinking trace is free text that can name documents and the
+ * owner's other chats, so a reader gets its steps and timings without the
+ * names (see `readerSteps`).
  */
 
 import { and, inArray } from "drizzle-orm";
@@ -27,6 +31,7 @@ import { mindmaps } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { draftVisibilityWhere } from "~/server/mindmap/access";
+import type { ChatTurnStep } from "~/lib/chat-turns";
 
 import type { SessionMessage } from "./repository";
 
@@ -128,6 +133,24 @@ function citationSourceId(citation: unknown): string | null {
     return typeof id === "string" ? id : null;
 }
 
+/**
+ * A reader's copy of an answer's steps. A step's detail lists what it read
+ * (document titles, file names, the owner's other chats) and isn't tied to
+ * source ids the scope check could test, so it never leaves for a reader; a
+ * search caught mid-way, and each tool call, says what it did without saying
+ * what it searched for or which file it read.
+ */
+function readerSteps(steps: readonly ChatTurnStep[]): ChatTurnStep[] {
+    return steps.map(({ detail: _detail, ...step }) => {
+        if (step.id === "search" && step.state === "active")
+            return { ...step, label: "Searching your sources" };
+        // A tool call's label is its query or the file it read.
+        if (step.id.startsWith("web-")) return { ...step, label: "Searched the web" };
+        if (step.id.startsWith("source-")) return { ...step, label: "Looked through the sources" };
+        return step;
+    });
+}
+
 export interface ReaderMessage extends SessionMessage {
     /** Citations removed because the reader cannot open their source. */
     hiddenCitations?: number;
@@ -166,6 +189,8 @@ export function filterMessagesForReader(
             if (send.refs) readerSend.refs = send.refs.filter(ref => visible.has(ref));
             next.metadata = { ...message.metadata, send: readerSend };
         }
+        const steps = message.metadata?.steps;
+        if (steps) next.metadata = { ...next.metadata, steps: readerSteps(steps) };
         return next;
     });
     return { messages: out, hiddenCitations };

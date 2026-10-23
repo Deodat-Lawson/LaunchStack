@@ -1,4 +1,17 @@
 import { passagesAsText, type ChatPassage } from "~/lib/chat-passages";
+import type { ChatStep } from "~/lib/chat-stream";
+
+/**
+ * A step of an answer's work as the transcript keeps it: the server's step
+ * plus when the client saw it start and finish, in ms from the send.
+ */
+export interface ChatTurnStep extends ChatStep {
+    startMs?: number;
+    endMs?: number;
+}
+
+/** A turn keeps at most this many steps; a runaway stream can't grow it further. */
+export const MAX_TURN_STEPS = 24;
 
 /** Persisted chat controls contain no provider credentials or executable instructions. */
 export interface ChatSendPayload {
@@ -43,6 +56,10 @@ export interface ChatTurnMetadata {
     status?: "complete" | "stopped" | "error";
     reasoning?: string;
     elapsedMs?: number;
+    /** What the answer did before and while writing, in order. */
+    steps?: ChatTurnStep[];
+    /** Time from the send to the answer's first word. */
+    thoughtMs?: number;
     send?: ChatSendPayload;
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     chunksAnalyzed?: number;

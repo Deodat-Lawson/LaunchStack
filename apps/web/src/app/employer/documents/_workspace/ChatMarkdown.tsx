@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { copyText } from "~/lib/context-menu";
+import { cn } from "~/lib/utils";
 import { escapeCurrencyDollars } from "~/lib/markdown-math";
 import { ChatMediaGallery, type ChatMediaItem } from "./ChatMediaGallery";
 import "katex/dist/katex.min.css";
@@ -419,7 +420,17 @@ function removeAlertMarker(children: React.ReactNode): React.ReactNode {
     });
 }
 
-export function ChatMarkdown({ text }: { text: string }) {
+export function ChatMarkdown({
+    text,
+    className,
+    streaming = false,
+}: {
+    text: string;
+    /** Overrides the default reading size, e.g. for the smaller reasoning text. */
+    className?: string;
+    /** Draws the typing caret after the last block while an answer is still arriving. */
+    streaming?: boolean;
+}) {
     const root = useRef<HTMLDivElement>(null);
     const [gallery, setGallery] = useState<{ items: ChatMediaItem[]; index: number } | null>(null);
     const markdown = useMemo(() => escapeCurrencyDollars(text), [text]);
@@ -429,7 +440,11 @@ export function ChatMarkdown({ text }: { text: string }) {
     return (
         <div
             ref={root}
-            className="chat-markdown min-w-0 break-words text-sm leading-[1.65] [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-[var(--accent)] [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ink-3)] [&_h1]:my-4 [&_h1]:text-xl [&_h1]:font-semibold [&_h2]:my-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:my-3 [&_h3]:font-semibold [&_img]:max-h-96 [&_img]:max-w-full [&_img]:rounded-lg [&_li]:my-1 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_table[data-expanded=false]_td]:max-w-[240px] [&_table[data-expanded=false]_td]:overflow-hidden [&_table[data-expanded=false]_td]:text-ellipsis [&_table[data-expanded=false]_td]:whitespace-nowrap [&_td]:border [&_td]:border-[var(--line)] [&_td]:p-2 [&_th]:border [&_th]:border-[var(--line)] [&_th]:bg-[var(--panel-2)] [&_th]:p-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
+            data-streaming={streaming ? "true" : undefined}
+            className={cn(
+                "chat-markdown min-w-0 break-words text-sm leading-[1.65] [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-[var(--accent)] [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ink-3)] [&_h1]:my-4 [&_h1]:text-xl [&_h1]:font-semibold [&_h2]:my-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:my-3 [&_h3]:font-semibold [&_img]:max-h-96 [&_img]:max-w-full [&_img]:rounded-lg [&_li]:my-1 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_table[data-expanded=false]_td]:max-w-[240px] [&_table[data-expanded=false]_td]:overflow-hidden [&_table[data-expanded=false]_td]:text-ellipsis [&_table[data-expanded=false]_td]:whitespace-nowrap [&_td]:border [&_td]:border-[var(--line)] [&_td]:p-2 [&_th]:border [&_th]:border-[var(--line)] [&_th]:bg-[var(--panel-2)] [&_th]:p-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5",
+                className
+            )}
         >
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}

@@ -112,6 +112,95 @@ describe("filterMessagesForReader", () => {
         expect(JSON.stringify(messages)).not.toContain("owner-private-chat");
     });
 
+    it("keeps an answer's steps and timings but never the names in them", () => {
+        const { messages } = filterMessagesForReader(
+            [
+                message({
+                    metadata: {
+                        steps: [
+                            {
+                                id: "thread-refs",
+                                label: "Read a referenced chat",
+                                state: "done",
+                                detail: "Owner's private chat: layoffs plan",
+                                startMs: 10,
+                                endMs: 90,
+                            },
+                            {
+                                id: "search",
+                                label: "Found 2 passages in 1 source",
+                                state: "done",
+                                detail: "Acquisition LOI - CONFIDENTIAL.pdf",
+                                startMs: 100,
+                                endMs: 700,
+                            },
+                            {
+                                id: "attachments",
+                                label: "Read 1 attachment",
+                                state: "done",
+                                detail: "salaries.xlsx",
+                            },
+                            {
+                                id: "source-1",
+                                label: "Reading “Acquisition LOI - CONFIDENTIAL.pdf”",
+                                state: "done",
+                            },
+                            {
+                                id: "web-2",
+                                label: "Searching the web for “layoffs at our biggest client”",
+                                state: "done",
+                            },
+                        ],
+                    },
+                }),
+                message({
+                    metadata: {
+                        status: "stopped",
+                        steps: [
+                            {
+                                id: "search",
+                                label: "Searching Acquisition LOI - CONFIDENTIAL.pdf",
+                                state: "active",
+                                startMs: 40,
+                                endMs: 300,
+                            },
+                        ],
+                    },
+                }),
+            ],
+            new Set()
+        );
+        expect(messages[0]!.metadata?.steps).toEqual([
+            {
+                id: "thread-refs",
+                label: "Read a referenced chat",
+                state: "done",
+                startMs: 10,
+                endMs: 90,
+            },
+            {
+                id: "search",
+                label: "Found 2 passages in 1 source",
+                state: "done",
+                startMs: 100,
+                endMs: 700,
+            },
+            { id: "attachments", label: "Read 1 attachment", state: "done" },
+            { id: "source-1", label: "Looked through the sources", state: "done" },
+            { id: "web-2", label: "Searched the web", state: "done" },
+        ]);
+        expect(messages[1]!.metadata?.steps).toEqual([
+            {
+                id: "search",
+                label: "Searching your sources",
+                state: "active",
+                startMs: 40,
+                endMs: 300,
+            },
+        ]);
+        expect(JSON.stringify(messages)).not.toMatch(/CONFIDENTIAL|layoffs|salaries/);
+    });
+
     it("collects every source id a transcript mentions", () => {
         const ids = sourceIdsIn(
             [

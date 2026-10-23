@@ -89,15 +89,26 @@ it("uses genuine metadata for timestamps and streaming/stopped/reasoning state",
             THREAD[0]!,
             {
                 ...THREAD[1]!,
+                text: "",
                 status: "streaming",
-                stage: "Retrieving evidence",
+                stage: "generating",
+                steps: [
+                    { id: "search", label: "Found 3 passages in 1 source", state: "done" },
+                    { id: "think", label: "Thinking", state: "active" },
+                ],
                 reasoning: "Compare the sources",
             },
         ],
         isSending: true,
     });
-    expect(screen.getByText("Retrieving evidence")).toBeInTheDocument();
-    expect(screen.getByText("Reasoning")).toBeInTheDocument();
+    // While it works, the trace is open on the step in progress, never the raw stage.
+    expect(screen.getByRole("button", { name: /Thinking/ })).toHaveAttribute(
+        "aria-expanded",
+        "true"
+    );
+    expect(screen.getByText("Found 3 passages in 1 source")).toBeInTheDocument();
+    expect(screen.getByText("Compare the sources")).toBeInTheDocument();
+    expect(screen.queryByText("generating")).not.toBeInTheDocument();
     expect(
         container.querySelector('time[datetime="2026-10-04T12:00:00.000Z"]')
     ).toBeInTheDocument();
@@ -108,7 +119,7 @@ it("uses genuine metadata for timestamps and streaming/stopped/reasoning state",
             thread={[THREAD[0]!, { ...THREAD[1]!, status: "stopped" }]}
         />
     );
-    expect(screen.getByText("Stopped")).toBeInTheDocument();
+    expect(screen.getByText("Stopped after 1s")).toBeInTheDocument();
 });
 it("keeps queued composition enabled while a response is active and wires stop", () => {
     const onStop = jest.fn();

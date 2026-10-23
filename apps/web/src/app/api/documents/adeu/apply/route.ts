@@ -133,6 +133,8 @@ export async function POST(request: Request) {
             data: modified,
             contentType: DOCX_MIME,
             userId: loaded.userId,
+            // Stamps the workspace, so a member opening the source can read the file.
+            companyId: loaded.data.companyId,
         });
 
         await db

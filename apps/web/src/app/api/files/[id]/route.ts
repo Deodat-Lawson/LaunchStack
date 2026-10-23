@@ -9,7 +9,8 @@
  * read scope. Rows with no company stamp belong to no known tenant and are
  * denied. Legacy rows get `company_id` from the
  * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
- * attribute authoritatively.
+ * attribute authoritatively; `2026-10-file-uploads-restamp` does the same for
+ * rows connector syncs wrote unstamped after it ran.
  *
  * The stored type is the uploader's claim, so responses go out through
  * `storedFileHeaders`: anything a browser could execute is sandboxed.

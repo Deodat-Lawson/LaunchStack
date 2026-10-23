@@ -27,6 +27,7 @@ const PROVIDER_LABELS: Record<string, string> = {
     slack: "Slack",
     github: "GitHub",
     gmail: "Gmail",
+    notion: "Notion",
     linkedin: "LinkedIn",
     bluesky: "Bluesky",
 };
@@ -239,6 +240,7 @@ const RECONNECT_TAB: Record<string, string> = {
     "google-drive": "drive",
     slack: "slack",
     github: "github",
+    notion: "notion",
 };
 
 /** Social accounts are connected from Growth › Brand › Accounts, not Add source. */

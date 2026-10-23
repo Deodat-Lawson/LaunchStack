@@ -1,7 +1,9 @@
 /**
- * Start a Slack/GitHub OAuth flow: build the consent URL with an HMAC-signed
- * state, double the nonce into an httpOnly cookie, and redirect. Google Drive
- * connects through its own flow at /api/connectors/google/oauth/start.
+ * Start a generic-provider OAuth flow (Slack, GitHub, LinkedIn, Notion):
+ * build the consent URL with an HMAC-signed state, double the nonce into an
+ * httpOnly cookie, and redirect. Google Drive and Gmail connect through their
+ * own flow at /api/connectors/google/oauth/start. For Notion, running this
+ * again reopens Notion's page picker, which is how more pages are added.
  */
 
 import { NextResponse } from "next/server";

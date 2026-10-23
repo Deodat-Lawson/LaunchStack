@@ -1,10 +1,12 @@
 /**
  * Disconnect a workspace connection.
  *
- * DELETE — management-gated. Removes the row; for Slack/GitHub and Gmail it
- * then best-effort revokes the grant at the provider so a copied token dies
- * with the connection (Drive rows are simply deleted — the Drive services
- * own no revocation endpoint, matching DELETE /api/connectors/google).
+ * DELETE — management-gated. Removes the row; for the generic OAuth providers
+ * (Slack, GitHub, LinkedIn, Notion) and Gmail it then best-effort revokes the
+ * grant at the provider so a copied token dies with the connection (Drive
+ * rows are simply deleted — the Drive services own no revocation endpoint,
+ * matching DELETE /api/connectors/google). Documents a connection imported
+ * are kept.
  * Cross-tenant deletes are impossible: the row must belong to the caller's
  * active workspace. A member disconnects their own Gmail through
  * DELETE /api/connectors/gmail; this route is the admin's offboarding path.

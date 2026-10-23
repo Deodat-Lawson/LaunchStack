@@ -1,15 +1,17 @@
 /**
- * Google Drive connector status — the Drive panel's single source of truth:
- * configured / connected / account / picked items / last sync, plus the
- * public Picker config. Other providers have no per-provider detail yet and
- * are served by GET /api/connectors; this route is Drive-only.
+ * Connector status for the providers with their own panel — the panel's
+ * single source of truth. Google Drive: configured / connected / account /
+ * picked items / last sync, plus the public Picker config. Notion: every
+ * connected Notion workspace with its folder and last sync
+ * (`loadNotionStatus`). Other providers have no per-provider detail and are
+ * served by GET /api/connectors.
  *
  * With several Drive accounts connected, the panel manages the primary
  * (oldest) connection; the rest appear in the generic connections list.
  *
  * `folderAccess` says whether a picked folder can be imported at all: the
  * operator must have turned it on, and this connection must hold the grant
- * (a connection made before it was turned on needs one reconnect).
+ * (connecting asks only for drive.file; "Allow folder access" adds it).
  */
 
 import { and, eq, inArray } from "drizzle-orm";
@@ -22,6 +24,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/connectors/config";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState, listPickedItems } from "~/server/services/connectors/google-drive/store";
+import { loadNotionStatus } from "~/server/services/connectors/notion/status";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import { db } from "~/server/db";
 import {
@@ -48,12 +51,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
     return withRateLimit(request, RateLimitPresets.permissive, async () => {
         try {
             const { provider } = await params;
-            if (provider !== "google-drive") {
-                return createValidationError("Status detail exists only for google-drive.");
+            if (provider !== "google-drive" && provider !== "notion") {
+                return createValidationError(
+                    "Status detail exists only for google-drive and notion."
+                );
             }
 
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
+
+            if (provider === "notion") {
+                return createSuccessResponse(await loadNotionStatus(guard.ctx));
+            }
 
             const configured = isConnectorConfigured("google-drive");
             const picker = getPickerPublicConfig();

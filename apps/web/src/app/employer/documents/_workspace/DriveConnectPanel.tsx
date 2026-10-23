@@ -14,9 +14,11 @@
  * are listed under Settings → Integrations.
  *
  * Whether a picked folder brings its contents depends on the grant
- * (`folderAccess`, see driveStatus.ts): with drive.readonly it imports whole;
- * a connection made before folder import was turned on needs one reconnect;
- * and where the operator hasn't turned it on, only files picked one by one
+ * (`folderAccess`, see driveStatus.ts): with drive.readonly it imports whole.
+ * Connecting asks only for drive.file, so where the operator has turned
+ * folder import on, the panel offers "Allow folder access" — a second consent
+ * that adds drive.readonly, the restricted scope Google warns about until the
+ * app is verified. Where the operator hasn't, only files picked one by one
  * come in — the panel says so rather than letting a folder import nothing.
  */
 
@@ -44,6 +46,7 @@ import { useGooglePicker, type PickedDoc } from "./useGooglePicker";
 
 const BASE = "/api/connectors/google-drive";
 const CONNECT_URL = "/api/connectors/google/oauth/start";
+const FOLDER_ACCESS_URL = `${CONNECT_URL}?access=folders`;
 
 async function fetchStatus(): Promise<DriveStatus | null> {
     const res = await fetch(`${BASE}/status`);
@@ -295,6 +298,9 @@ export function DriveConnectPanel({
     if (!status.connected || status.status !== "active") {
         const reconnect = status.connected && status.status !== "active";
         const folderImport = status.folderAccess?.enabled ?? false;
+        // A reconnect keeps the folder access it had, or its folders come back empty.
+        const connectUrl =
+            reconnect && status.folderAccess?.granted ? FOLDER_ACCESS_URL : CONNECT_URL;
         return (
             <div>
                 <div className="bg-panel-2 mb-4 flex items-center gap-3.5 rounded-xl px-4 py-4">
@@ -309,19 +315,15 @@ export function DriveConnectPanel({
                             {reconnect
                                 ? "Google access was revoked or expired — connect again to resume syncing."
                                 : folderImport
-                                  ? "LaunchStack can read what this Google account can open, and imports only the files and folders you pick or paste."
+                                  ? "Pick files in Google's picker; only what you pick is shared. To import whole folders, allow folder access once connected."
                                   : "Pick files in Google's picker; only what you pick is shared."}
                         </div>
                     </div>
                 </div>
-                <Button
-                    className="w-full"
-                    size="lg"
-                    onClick={() => {
-                        window.location.href = CONNECT_URL;
-                    }}
-                >
-                    {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
+                <Button asChild className="w-full" size="lg">
+                    <a href={connectUrl}>
+                        {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
+                    </a>
                 </Button>
             </div>
         );
@@ -352,21 +354,16 @@ export function DriveConnectPanel({
             {phase === "stalled" ? <SyncStalledNotice /> : null}
 
             {access === "allow" ? (
-                <Notice tone="warn">
+                <Notice tone="info">
                     <div className="text-ink font-semibold">
                         Allow folder access to import folders
                     </div>
-                    This connection can only open files picked one by one, so a folder brings
-                    nothing from inside it. Reconnect once and allow LaunchStack to read your Drive;
+                    For now LaunchStack opens only the files you pick, so a picked folder brings
+                    nothing from inside it. Allow folder access to let LaunchStack read your Drive;
                     then folders come in whole, subfolders and later additions included.
                     <div className="mt-2">
-                        <Button
-                            size="sm"
-                            onClick={() => {
-                                window.location.href = CONNECT_URL;
-                            }}
-                        >
-                            Allow folder access
+                        <Button asChild size="sm">
+                            <a href={FOLDER_ACCESS_URL}>Allow folder access</a>
                         </Button>
                     </div>
                 </Notice>

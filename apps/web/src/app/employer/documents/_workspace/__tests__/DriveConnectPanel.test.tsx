@@ -75,15 +75,54 @@ beforeEach(() => {
     });
 });
 
+describe("DriveConnectPanel connect", () => {
+    const notConnected = (overrides: Partial<DriveStatus> = {}): DriveStatus => ({
+        ...connected(),
+        connected: false,
+        connectionId: undefined,
+        status: undefined,
+        folderAccess: { enabled: true, granted: false },
+        ...overrides,
+    });
+
+    it("connects with drive.file alone, even where folder import is on", async () => {
+        status = notConnected();
+        render(<DriveConnectPanel tab={driveTab} />);
+
+        expect(await screen.findByRole("link", { name: "Connect Google Drive" })).toHaveAttribute(
+            "href",
+            "/api/connectors/google/oauth/start"
+        );
+        expect(screen.getByText(/allow folder access once connected/)).toBeInTheDocument();
+    });
+
+    it("reconnects with the folder access the connection had", async () => {
+        status = notConnected({
+            connected: true,
+            status: "revoked",
+            folderAccess: { enabled: true, granted: true },
+        });
+        render(<DriveConnectPanel tab={driveTab} />);
+
+        expect(await screen.findByRole("link", { name: "Reconnect Google Drive" })).toHaveAttribute(
+            "href",
+            "/api/connectors/google/oauth/start?access=folders"
+        );
+    });
+});
+
 describe("DriveConnectPanel folder access", () => {
-    it("asks for one reconnect when the server can import folders but this grant can't", async () => {
+    it("offers folder access when the server can import folders but this grant can't", async () => {
         status = connected({ folderAccess: { enabled: true, granted: false } });
         render(<DriveConnectPanel tab={driveTab} />);
 
         expect(
             await screen.findByText("Allow folder access to import folders")
         ).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Allow folder access" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Allow folder access" })).toHaveAttribute(
+            "href",
+            "/api/connectors/google/oauth/start?access=folders"
+        );
         expect(screen.queryByLabelText("Paste a folder link")).not.toBeInTheDocument();
     });
 
@@ -95,9 +134,7 @@ describe("DriveConnectPanel folder access", () => {
             await screen.findByText(/Only files you pick one by one come in/)
         ).toBeInTheDocument();
         expect(screen.getByText("GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED")).toBeInTheDocument();
-        expect(
-            screen.queryByRole("button", { name: "Allow folder access" })
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: "Allow folder access" })).not.toBeInTheDocument();
         expect(screen.queryByLabelText("Paste a folder link")).not.toBeInTheDocument();
     });
 

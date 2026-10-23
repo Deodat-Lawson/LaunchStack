@@ -28,6 +28,7 @@ import {
 import { ensurePrivateGmailFolder } from "~/server/services/connectors/gmail/folder";
 import { ensureSyncState as ensureGmailSyncState } from "~/server/services/connectors/gmail/store";
 import {
+    DRIVE_FOLDERS_STATE_PREFIX,
     googleDriveScopes,
     GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
@@ -117,8 +118,12 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
 
     const code = url.searchParams.get("code");
     const nonce = readCookie(request.headers.get("cookie") ?? "", GOOGLE_OAUTH_STATE_COOKIE);
+    // "Allow folder access" prefixes its state; it picks the scopes to record
+    // should Google's token response leave `scope` out.
+    const folderAccess = state?.startsWith(DRIVE_FOLDERS_STATE_PREFIX) ?? false;
+    const expectedState = `${folderAccess ? DRIVE_FOLDERS_STATE_PREFIX : ""}${nonce}`;
 
-    if (!code || !state || !nonce || state !== nonce) {
+    if (!code || !state || !nonce || state !== expectedState) {
         console.warn("[google-oauth] state mismatch or missing code — rejecting callback");
         return redirectToWorkspace(request, "google-drive", "error");
     }
@@ -150,7 +155,7 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             providerAccountId: accountId,
             providerAccountEmail: claims.email ?? null,
             refreshToken: token.refresh_token,
-            scopes: token.scope ?? googleDriveScopes().join(" "),
+            scopes: token.scope ?? googleDriveScopes({ folderAccess }).join(" "),
         });
 
         await recordAuditEvent(db, {

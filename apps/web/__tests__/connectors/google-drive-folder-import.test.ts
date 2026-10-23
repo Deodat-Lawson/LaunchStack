@@ -90,10 +90,15 @@ describe("driveIdFromLink", () => {
 });
 
 describe("folder access configuration", () => {
-    it("asks for drive.file only until the operator turns folder import on", () => {
-        expect(googleDriveScopes()).toEqual([DRIVE_FILE_SCOPE, "openid", "email"]);
+    it("asks for drive.readonly only when folder access is asked for and the operator allows it", () => {
+        const base = [DRIVE_FILE_SCOPE, "openid", "email"];
+        expect(googleDriveScopes()).toEqual(base);
+        expect(googleDriveScopes({ folderAccess: true })).toEqual(base);
+
         mockEnv.server.GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED = "true";
-        expect(googleDriveScopes()).toEqual([
+        // A plain connect stays clear of the restricted scope.
+        expect(googleDriveScopes()).toEqual(base);
+        expect(googleDriveScopes({ folderAccess: true })).toEqual([
             DRIVE_FILE_SCOPE,
             DRIVE_READONLY_SCOPE,
             "openid",

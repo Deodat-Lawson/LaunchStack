@@ -5,9 +5,9 @@
  *
  * What the token can read depends on the grant. Under drive.file alone it
  * reaches only files this app was handed or created (though the Picker itself
- * lets its holder browse and pick anything in the connected account). With
- * folder import on (drive.readonly) it can read the connected account's whole
- * Drive directly. Google documents no way to mint a narrower token from the
+ * lets its holder browse and pick anything in the connected account). Once
+ * someone has allowed folder access (drive.readonly) it can read the connected
+ * account's whole Drive directly. Google documents no way to mint a narrower token from the
  * same refresh token, so every admin of the workspace — and anything running
  * in an admin's page — can read that account's Drive for the token's life.
  * That is the trade the operator accepts with GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED.

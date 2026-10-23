@@ -208,9 +208,9 @@ export async function routeDocument(
             pageCount,
             selectedProvider: preferred,
             reason: "preferred-provider",
-            // A pinned provider keeps provider-first's text-layer fallback. The
-            // versions route pins OCR_DEFAULT_PROVIDER on every new version, so
-            // without this a version would fail where its first upload falls back.
+            // A pinned provider keeps provider-first's text-layer fallback, so
+            // an upload that names its provider fails no more often than one
+            // that leaves it to OCR_DEFAULT_PROVIDER.
             ...(preferred !== "NATIVE_PDF" && getOcrConfig().pdfStrategy === "provider-first"
                 ? { nativeFallback: true }
                 : {}),

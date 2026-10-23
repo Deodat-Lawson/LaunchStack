@@ -136,7 +136,7 @@ describe("routeDocument", () => {
         expect(decision.nativeFallback).toBeUndefined();
     });
 
-    it("keeps the text-layer fallback for a pinned provider, as every new version has", async () => {
+    it("keeps the text-layer fallback for an upload that names its provider", async () => {
         configureOcr({ defaultProvider: "AZURE", pdfStrategy: "provider-first", azure: AZURE });
         serve(await makePdf(["Chapter one"]));
 

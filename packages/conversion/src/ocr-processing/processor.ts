@@ -811,6 +811,9 @@ function toStoredConfidencePercent(confidence: number | undefined): number | und
  * record, and mark the OCR job as completed.  Needs only counts and metadata,
  * not vectors or chunk content.
  */
+/** The keys apps/worker's dead-event handler stamps on a failed source. */
+const FAILURE_STAMP_KEYS = new Set(["error", "errorMessage", "failedAt"]);
+
 export async function finalizeStorage(
     documentId: number,
     jobId: string,
@@ -874,12 +877,18 @@ export async function finalizeStorage(
             .from(documentTable)
             .where(eq(documentTable.id, documentId))
             .limit(1);
-        const preserved =
-            existing?.ocrMetadata &&
-            typeof existing.ocrMetadata === "object" &&
-            !Array.isArray(existing.ocrMetadata)
-                ? (existing.ocrMetadata as Record<string, unknown>)
-                : {};
+        // ...except the dead-event handler's failure stamp: a run that
+        // succeeds after it (an operator replay, a re-upload, Retry) must not
+        // carry a stale "processing_failed" and its error message forward.
+        const preserved = Object.fromEntries(
+            Object.entries(
+                existing?.ocrMetadata &&
+                    typeof existing.ocrMetadata === "object" &&
+                    !Array.isArray(existing.ocrMetadata)
+                    ? (existing.ocrMetadata as Record<string, unknown>)
+                    : {}
+            ).filter(([key]) => !FAILURE_STAMP_KEYS.has(key))
+        );
         const ocrMetadataPayload = {
             ...preserved,
             totalPages: meta.totalPages,
@@ -928,6 +937,8 @@ export async function finalizeStorage(
             .set({
                 status: "completed",
                 completedAt: new Date(),
+                // A replayed job that failed before still holds that error.
+                errorMessage: null,
                 processingDurationMs: Date.now() - pipelineStartTime,
                 pageCount: meta.totalPages,
                 actualProvider: meta.provider,

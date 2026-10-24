@@ -209,7 +209,7 @@ export function RunScreen({ screen }: RunScreenProps) {
                     />
                 </TabsContent>
                 <TabsContent value="sources">
-                    <SourcesTab run={run} focusSource={screen.source} />
+                    <SourcesTab run={run} focusSource={screen.source} onPerson={openPerson} />
                 </TabsContent>
             </Tabs>
 

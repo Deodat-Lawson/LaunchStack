@@ -261,6 +261,7 @@ describe("relevance gates the score", () => {
             evidenceCount: 12,
             newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
             knownEntity: false,
+            sellerName: "Kōhī Roasters",
             now,
         });
         expect(fit.categoryOverlap).toBe(0);
@@ -285,6 +286,7 @@ describe("relevance gates the score", () => {
             evidenceCount: 12,
             newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
             knownEntity: false,
+            sellerName: "Kōhī Roasters",
             now,
         });
         expect(fit.total).toBeGreaterThan(IRRELEVANT_CEILING);

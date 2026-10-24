@@ -164,19 +164,11 @@
     "routes": {
       "default": {
         "label": "Standard",
-        "blurb": "Balanced answers for most questions"
+        "blurb": "Reads images; reasoning effort sets how long it thinks"
       },
       "fast": {
         "label": "Fast",
         "blurb": "Quicker, lighter answers"
-      },
-      "reasoning": {
-        "label": "Reasoning",
-        "blurb": "Thinks longer before answering"
-      },
-      "vision": {
-        "label": "Vision",
-        "blurb": "Reads images you attach"
       }
     },
     "commands": {

@@ -164,19 +164,11 @@
     "routes": {
       "default": {
         "label": "标准",
-        "blurb": "适合大多数问题的均衡回答"
+        "blurb": "可读取图片；推理强度决定思考多久"
       },
       "fast": {
         "label": "快速",
         "blurb": "更快、更轻量的回答"
-      },
-      "reasoning": {
-        "label": "推理",
-        "blurb": "回答前思考更久"
-      },
-      "vision": {
-        "label": "视觉",
-        "blurb": "可读取你附加的图片"
       }
     },
     "commands": {

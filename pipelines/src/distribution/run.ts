@@ -378,7 +378,7 @@ export async function prepareRun(
             const perOrg = new Map<string, (typeof relationships)[number]>();
             for (const r of relationships) {
                 if (!wantedKind.has(r.orgId)) continue;
-                if (r.stage !== "candidate" && r.stage !== "researched") continue;
+                if (r.stage !== "lead") continue;
                 const current = perOrg.get(r.orgId);
                 if (!current || (r.kind === wantedKind.get(r.orgId) && current.kind !== r.kind))
                     perOrg.set(r.orgId, r);
@@ -560,7 +560,6 @@ export async function enrichCandidate(
         }
     }
 
-    const nextStage = agentResult.outcome.status === "gate_failed" ? "candidate" : "researched";
     await db.setResearchResult(relationship.id, ctx.companyId, {
         dossier,
         fitScore: breakdown.total,
@@ -568,7 +567,6 @@ export async function enrichCandidate(
         fitBreakdown: breakdown,
         riskFlags,
         screening,
-        stage: nextStage,
     });
     await db.updateOrg(org.id, ctx.companyId, {
         lastEnrichedAt: new Date(),

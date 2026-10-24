@@ -694,7 +694,9 @@
       "searchingSourcesFor": "正在你的来源中搜索“{query}”",
       "searchingSources": "正在你的来源中搜索",
       "readingSource": "正在阅读“{title}”",
-      "readingASource": "正在阅读一个来源"
+      "readingASource": "正在阅读一个来源",
+      "writingDocumentTitled": "正在撰写“{title}”",
+      "writingDocument": "正在撰写文档"
     },
     "aiChat": {
       "chatNotFound": "未找到该对话",

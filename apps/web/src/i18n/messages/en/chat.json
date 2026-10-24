@@ -694,7 +694,9 @@
       "searchingSourcesFor": "Searching your sources for “{query}”",
       "searchingSources": "Searching your sources for that",
       "readingSource": "Reading “{title}”",
-      "readingASource": "Reading a source"
+      "readingASource": "Reading a source",
+      "writingDocumentTitled": "Writing “{title}”",
+      "writingDocument": "Writing a document"
     },
     "aiChat": {
       "chatNotFound": "Chat not found",

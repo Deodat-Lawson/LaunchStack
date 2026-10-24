@@ -1168,7 +1168,7 @@ export async function POST(request: Request) {
             const mayUpload = ctx.data.can("documents.upload");
             const documentTools =
                 writeAllowed && mayUpload
-                    ? createDocumentTools(ctx.data, { requestUrl: request.url })
+                    ? createDocumentTools(ctx.data, { requestUrl: request.url, locale })
                     : null;
             const tools = [
                 ...(sourceTools?.tools ?? []),

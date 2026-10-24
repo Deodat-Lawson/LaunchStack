@@ -2363,7 +2363,7 @@ describe("documents the model writes into the workspace", () => {
         expect(toolNames()).toEqual(["create_document"]);
         expect(mockCreateDocumentTools).toHaveBeenCalledWith(
             expect.objectContaining({ companyId: BigInt(5) }),
-            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query" }
+            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query", locale: "en" }
         );
         expect(systemPrompt()).toContain("## Writing documents");
         expect(mockWriteDocument).toHaveBeenCalledWith({

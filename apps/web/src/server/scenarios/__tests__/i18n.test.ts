@@ -70,6 +70,7 @@ const mockDb = jest.requireMock<{ getCompanyRun: jest.Mock; listVisibleRuns: jes
 
 import { GET as getRun } from "~/app/api/scenarios/[id]/route";
 import { GET as listRoute, POST as createRoute } from "~/app/api/scenarios/route";
+import { SCENARIO_LIMITS } from "~/lib/scenarios/types";
 import { leftWorkspaceName, runErrorText, sourceLabel } from "~/server/scenarios/views";
 
 const ZH = { cookie: "ls-locale=zh-CN.1" };
@@ -196,13 +197,13 @@ describe("refusals", () => {
         const res = await createRoute(
             new Request("http://x/api/scenarios", {
                 method: "POST",
-                body: JSON.stringify({ subject: "x".repeat(700) }),
+                body: JSON.stringify({ subject: "x".repeat(SCENARIO_LIMITS.subjectMax + 1) }),
                 headers: ZH,
             }) as never
         );
         expect(res.status).toBe(400);
         expect(await res.json()).toEqual({
-            error: "情况描述请控制在 600 个字符以内。",
+            error: `情况描述请控制在 ${SCENARIO_LIMITS.subjectMax} 个字符以内。`,
             code: "invalid",
         });
     });

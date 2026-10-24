@@ -24,6 +24,8 @@ import { createHash, randomUUID } from "node:crypto";
 
 import { z } from "zod";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
 import type { ChatCreatedSource } from "~/lib/chat-turns";
 import {
     UNFILED_FOLDER,
@@ -160,12 +162,17 @@ function where(source: ChatCreatedSource): string {
         : `in the folder "${source.folder}", with that folder's sharing (a new top-level folder starts private to the person)`;
 }
 
+/**
+ * `options.locale` words the status line the call shows in the chat
+ * ("Writing …"); what the model reads stays English.
+ */
 export function createDocumentTools(
     ctx: WorkspaceContext,
-    options: { requestUrl: string },
+    options: { requestUrl: string; locale?: Locale },
     ports: DocumentToolPorts = {}
 ): DocumentToolSession {
     const write = ports.write ?? writeWorkspaceDocument;
+    const status = translatorFor(options.locale ?? "en", "chat.server.toolStatus");
     const created: ChatCreatedSource[] = [];
     /** A repeated call with the same document gets the first one back. */
     const byContent = new Map<string, ChatCreatedSource>();
@@ -201,8 +208,8 @@ export function createDocumentTools(
         describe: args => {
             const title = (args as { title?: unknown } | null)?.title;
             return typeof title === "string" && title.trim()
-                ? `Writing “${title.trim().slice(0, 80)}”`
-                : "Writing a document";
+                ? status("writingDocumentTitled", { title: title.trim().slice(0, 80) })
+                : status("writingDocument");
         },
         run: async args => {
             const parsed = CreateArgs.safeParse(withoutNulls(args));

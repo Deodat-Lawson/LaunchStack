@@ -85,12 +85,34 @@ export interface ScenarioEstimate {
     enough: boolean;
 }
 
+/**
+ * Whether a file's passages can be read yet: a file still being processed
+ * gives a run nothing, so the form waits for it.
+ */
+export type ScenarioFileStatus = "ready" | "processing" | "failed";
+
+/** One file the new-scenario form can offer. */
+export interface ScenarioFileOption {
+    id: number;
+    title: string;
+    folder: string | null;
+    /** As stored, for the file's icon; null when the upload did not say. */
+    mimeType: string | null;
+    addedAt: string;
+    status: ScenarioFileStatus;
+    /** The company profile counts it as written by or about the company. */
+    aboutCompany: boolean;
+}
+
 /** What the new-scenario form can offer. */
 export interface ScenarioSourceOptions {
-    documents: Array<{ id: number; title: string; folder: string | null }>;
+    /** Newest first. */
+    documents: ScenarioFileOption[];
     prospects: number;
     brandComments: number;
     companyProfile: boolean;
+    /** The viewer may add files to the workspace from the form. */
+    canUpload: boolean;
 }
 
 export interface ScenarioSummary {

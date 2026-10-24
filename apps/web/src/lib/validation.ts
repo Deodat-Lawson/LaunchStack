@@ -915,6 +915,7 @@ export const SessionMessageSchema = z.object({
             id: z.string().max(128).optional(),
             status: z.enum(["complete", "stopped", "error"]).optional(),
             reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
+            thoughtMs: z.number().nonnegative().optional(),
             elapsedMs: z.number().nonnegative().optional(),
             send: ChatSendPayloadSchema.optional(),
             tokenBreakdown: z

@@ -42,6 +42,7 @@ export interface ChatTurnMetadata {
     id?: string;
     status?: "complete" | "stopped" | "error";
     reasoning?: string;
+    thoughtMs?: number;
     elapsedMs?: number;
     send?: ChatSendPayload;
     tokenBreakdown?: { inputTokens: number; outputTokens: number };

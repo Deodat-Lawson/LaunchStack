@@ -89,7 +89,8 @@
     "failed": "失败",
     "completed": "已完成",
     "seconds": "{seconds} 秒",
-    "reasoning": "推理过程"
+    "thoughts": "思考过程",
+    "thoughtFor": "思考了 {seconds} 秒"
   },
   "emptyState": {
     "title": "想从你的资料里<em>问</em>点什么？",
@@ -570,7 +571,8 @@
       "saving": "正在保存对话",
       "preparing": "正在准备回答",
       "readingReferenced": "正在读取引用的对话",
-      "generating": "正在生成…",
+      "generating": "正在思考…",
+      "writing": "正在撰写…",
       "finalizing": "即将完成…",
       "stopped": "已停止",
       "failed": "失败",

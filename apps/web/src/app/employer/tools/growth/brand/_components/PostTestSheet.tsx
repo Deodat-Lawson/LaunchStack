@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { InlineError } from "~/components/tools/EmptyState";
@@ -15,16 +16,16 @@ import {
     SheetHeader,
     SheetTitle,
 } from "~/components/ui/sheet";
-import { SCENARIO_CAVEAT, SCENARIO_LIMITS, type PostTestResult } from "~/lib/scenarios/types";
+import { SCENARIO_LIMITS, type PostTestResult } from "~/lib/scenarios/types";
 import {
     STANCE_BG,
-    STANCE_LABEL,
+    formatPercent,
+    formatSigned,
     isLive,
-    moodWords,
-    percent,
+    moodLabel,
+    progressLabel,
     progressValue,
-    progressWords,
-    signed,
+    stanceLabel,
 } from "~/lib/scenarios/words";
 import { toolTabHref } from "~/lib/tool-app/locations";
 import { cn } from "~/lib/utils";
@@ -56,17 +57,20 @@ export function PostTestSheet({
     onTestAgain: () => void;
     testing: boolean;
 }) {
+    const t = useTranslations("growth.brand.postTest");
+    const tw = useTranslations("scenarios.words");
+    const locale = useLocale();
     const live = test ? isLive(test.status) : true;
     const reception = test?.reception ?? null;
     const title = !test
-        ? "Testing your post"
+        ? t("titles.testing")
         : test.status === "done"
-          ? "How simulated readers took it"
+          ? t("titles.done")
           : test.status === "failed"
-            ? "The test failed"
+            ? t("titles.failed")
             : test.status === "cancelled"
-              ? "The test was cancelled"
-              : "Testing your post";
+              ? t("titles.cancelled")
+              : t("titles.testing");
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -76,16 +80,13 @@ export function PostTestSheet({
                         {title}
                     </SheetTitle>
                     <SheetDescription className="text-ink-2 text-[13px]">
-                        {READERS} simulated readers built from your records see the draft in their
-                        feed over {ROUNDS} rounds.
+                        {t("description", { readers: READERS, rounds: ROUNDS })}
                     </SheetDescription>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 px-6 pb-8 pt-2">
                     {stale && (
                         <div className="border-warn/40 bg-warn-soft flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2">
-                            <span className="text-warn text-xs">
-                                Draft changed since the test — test again
-                            </span>
+                            <span className="text-warn text-xs">{t("stale")}</span>
                             <Button
                                 size="sm"
                                 variant="outline"
@@ -93,7 +94,7 @@ export function PostTestSheet({
                                 disabled={testing}
                                 onClick={onTestAgain}
                             >
-                                {testing ? "Starting…" : "Test again"}
+                                {testing ? t("starting") : t("testAgain")}
                             </Button>
                         </div>
                     )}
@@ -105,12 +106,12 @@ export function PostTestSheet({
                             <div className="text-ink-2 flex items-baseline justify-between text-[13px]">
                                 <span>
                                     {test
-                                        ? progressWords({ ...test, agents: READERS })
-                                        : "Starting"}
+                                        ? progressLabel(tw, { ...test, agents: READERS })
+                                        : tw("progress.queued")}
                                 </span>
                                 {test && (
                                     <span className="text-ink-3 text-xs tabular-nums">
-                                        {test.round} of {test.rounds} rounds
+                                        {t("rounds", { round: test.round, rounds: test.rounds })}
                                     </span>
                                 )}
                             </div>
@@ -121,7 +122,7 @@ export function PostTestSheet({
 
                     {test?.status === "failed" && (
                         <p role="alert" className="text-danger text-[13px]">
-                            {test.error ?? "The test stopped before it finished."}
+                            {test.error ?? t("stoppedEarly")}
                         </p>
                     )}
 
@@ -129,16 +130,19 @@ export function PostTestSheet({
                         <>
                             <div>
                                 <div className="display text-ink text-[22px] tabular-nums leading-tight">
-                                    {reception.engaged} of {reception.exposed} simulated readers
-                                    engaged ({percent(reception.engagementRate)})
+                                    {t("engaged", {
+                                        engaged: reception.engaged,
+                                        exposed: reception.exposed,
+                                        rate: formatPercent(reception.engagementRate, locale),
+                                    })}
                                 </div>
                                 <dl className="border-line bg-panel mt-3 grid grid-cols-4 overflow-hidden rounded-lg border">
                                     {(
                                         [
-                                            ["Likes", reception.likes],
-                                            ["Comments", reception.comments],
-                                            ["Shares", reception.shares],
-                                            ["Dislikes", reception.dislikes],
+                                            [t("likes"), reception.likes],
+                                            [t("comments"), reception.comments],
+                                            [t("shares"), reception.shares],
+                                            [t("dislikes"), reception.dislikes],
                                         ] as const
                                     ).map(([label, n]) => (
                                         <div
@@ -153,15 +157,15 @@ export function PostTestSheet({
                                     ))}
                                 </dl>
                                 <p className="text-ink-2 mt-3 text-[13px]">
-                                    Mood among readers who saw it:{" "}
-                                    <span className="tabular-nums">
-                                        {signed(reception.startingSentiment)}
-                                    </span>{" "}
-                                    ({moodWords(reception.startingSentiment)}) →{" "}
-                                    <span className="tabular-nums">
-                                        {signed(reception.sentiment)}
-                                    </span>{" "}
-                                    ({moodWords(reception.sentiment)}), on a scale from −2 to +2.
+                                    {t.rich("mood", {
+                                        start: formatSigned(reception.startingSentiment, locale),
+                                        startWords: moodLabel(tw, reception.startingSentiment),
+                                        end: formatSigned(reception.sentiment, locale),
+                                        endWords: moodLabel(tw, reception.sentiment),
+                                        num: chunks => (
+                                            <span className="tabular-nums">{chunks}</span>
+                                        ),
+                                    })}
                                 </p>
                             </div>
 
@@ -173,7 +177,7 @@ export function PostTestSheet({
 
                             {test.sampleComments.length > 0 && (
                                 <div>
-                                    <SectionHeading title="What some of them said" />
+                                    <SectionHeading title={t("whatTheySaid")} />
                                     <ul className="border-line bg-panel overflow-hidden rounded-lg border">
                                         {test.sampleComments.slice(0, 5).map((c, i) => (
                                             <li
@@ -196,7 +200,7 @@ export function PostTestSheet({
                                                                 STANCE_BG[c.stance]
                                                             )}
                                                         />
-                                                        {STANCE_LABEL[c.stance]}
+                                                        {stanceLabel(tw, c.stance)}
                                                     </span>
                                                 </div>
                                                 <p className="text-ink-2 mt-0.5 text-[13px] leading-snug">
@@ -210,14 +214,14 @@ export function PostTestSheet({
                         </>
                     )}
 
-                    <p className="text-ink-3 text-xs leading-relaxed">{SCENARIO_CAVEAT}</p>
+                    <p className="text-ink-3 text-xs leading-relaxed">{tw("caveat")}</p>
 
                     {test && (
                         <ToolLink
                             href={toolTabHref("scenarios", `/runs/${test.runId}`)}
                             className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 inline-flex w-fit items-center gap-1 rounded-sm text-[13px] underline underline-offset-2 outline-none focus-visible:ring-2"
                         >
-                            Open the full run
+                            {t("openRun")}
                             <ArrowUpRight className="size-3.5" aria-hidden />
                         </ToolLink>
                     )}

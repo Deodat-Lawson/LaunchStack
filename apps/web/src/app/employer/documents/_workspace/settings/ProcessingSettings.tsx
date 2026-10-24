@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, Section } from "~/components/layout/page-shell";
@@ -37,25 +38,16 @@ interface Company {
     updatedAt: string;
 }
 
-const INDEX_OPTIONS: { value: string; label: string; desc: string }[] = [
-    {
-        value: "legacy-openai-1536",
-        label: "OpenAI · 1536 dims",
-        desc: "text-embedding-3-small. Default. Highest accuracy.",
-    },
-    {
-        value: "huggingface-minilm-384",
-        label: "HuggingFace MiniLM · 384 dims",
-        desc: "Free inference API. Good balance of cost and quality.",
-    },
-    {
-        value: "ollama-768",
-        label: "Ollama (self-hosted)",
-        desc: "Run your own embedding model locally via Ollama.",
-    },
-];
+/** The index keys the server accepts; words in `settings.processing.indexOptions.<key>`. */
+const INDEX_OPTIONS = [
+    { value: "legacy-openai-1536", key: "legacyOpenai1536" },
+    { value: "huggingface-minilm-384", key: "huggingfaceMinilm384" },
+    { value: "ollama-768", key: "ollama768" },
+] as const;
 
 export function ProcessingSettings({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.processing");
+    const tc = useTranslations("common");
     const [loading, setLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [dirty, setDirty] = useState(false);
@@ -95,10 +87,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
             } catch (error) {
                 console.error(error);
                 if (!cancelled) {
-                    setStatus({
-                        message: "Something went wrong loading settings.",
-                        tone: "danger",
-                    });
+                    setStatus({ message: t("loadFailed"), tone: "danger" });
                 }
             } finally {
                 if (!cancelled) setLoading(false);
@@ -109,7 +98,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [t]);
 
     const handleSave = useCallback(async () => {
         setIsSaving(true);
@@ -147,12 +136,10 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
             } | null;
 
             if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
-                throw new Error(
-                    result.message ?? "A reindex is already running. Please wait for it to finish."
-                );
+                throw new Error(result.message ?? t("reindexRunning"));
             }
             if (!response.ok || result?.success !== true) {
-                throw new Error(result?.message ?? "Error updating settings");
+                throw new Error(result?.message ?? t("updateError"));
             }
 
             setDirty(false);
@@ -168,20 +155,17 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                     tone: "warn",
                     message:
                         result.message ??
-                        `Reindex scheduled for ${result.documentCount ?? 0} document chunks. Existing searches keep using the previous index until the rewrite completes.`,
+                        t("reindexScheduled", { count: result.documentCount ?? 0 }),
                 });
                 return;
             }
-            setStatus({ tone: "ok", message: result?.message ?? "Company settings saved." });
+            setStatus({ tone: "ok", message: result?.message ?? t("saved") });
             setEmbeddingOpenAIApiKey("");
             setEmbeddingHuggingFaceApiKey("");
         } catch (error) {
             setStatus({
                 tone: "danger",
-                message:
-                    error instanceof Error
-                        ? error.message
-                        : "Failed to update settings. Please try again.",
+                message: error instanceof Error ? error.message : t("saveFailed"),
             });
         } finally {
             setIsSaving(false);
@@ -194,20 +178,21 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
         embeddingOpenAIBaseUrl,
         openAIBaseUrlStored,
         embeddingHuggingFaceApiKey,
+        t,
     ]);
 
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Save changes",
-            primaryBusyLabel: "Saving…",
+            primaryLabel: tc("actions.saveChanges"),
+            primaryBusyLabel: tc("status.saving"),
             onPrimary: handleSave,
             busy: isSaving,
             // Nothing to save until something is edited — a permanently-enabled Save
             // button teaches people to ignore it.
             disabled: loading || !dirty,
         },
-        [handleSave, isSaving, loading, dirty]
+        [handleSave, isSaving, loading, dirty, tc]
     );
 
     /** Every edit marks the form dirty; the chrome reads that to enable Save. */
@@ -219,50 +204,45 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
         };
 
     const storedLabel = (k: RedactedKey | null) =>
-        k?.hasKey ? `Stored · ending ${k.last4 ?? "****"}` : "Not set";
+        k?.hasKey ? t("stored", { last4: k.last4 ?? "****" }) : t("notSet");
 
     if (loading) {
-        return <StatusNote tone="muted">Loading settings…</StatusNote>;
+        return <StatusNote tone="muted">{t("loading")}</StatusNote>;
     }
+
+    const selectedIndex = INDEX_OPTIONS.find(o => o.value === embeddingIndexKey);
 
     return (
         <>
             {status && <StatusNote tone={status.tone}>{status.message}</StatusNote>}
 
-            <Section
-                title="Embedding index"
-                description="The vector index behind semantic search. Changing it schedules a reindex of the whole corpus; existing searches keep using the previous index until that finishes."
-            >
+            <Section title={t("index.title")} description={t("index.description")}>
                 <Card>
-                    <Field label="Index">
+                    <Field label={t("index.field")}>
                         <SelectInput
                             value={embeddingIndexKey}
                             onChange={e => edit(setEmbeddingIndexKey)(e.target.value)}
                         >
                             {INDEX_OPTIONS.map(opt => (
                                 <option key={opt.value} value={opt.value}>
-                                    {opt.label}
+                                    {t(`indexOptions.${opt.key}.label`)}
                                 </option>
                             ))}
                         </SelectInput>
                         <div className="text-ink-3 mt-1 text-[11px] leading-normal">
-                            {INDEX_OPTIONS.find(o => o.value === embeddingIndexKey)?.desc}
+                            {selectedIndex && t(`indexOptions.${selectedIndex.key}.description`)}
                         </div>
                     </Field>
 
                     {embeddingIndexKey === "legacy-openai-1536" && (
                         <>
                             {openAIKeyStored?.hasKey && !openAIBaseUrlStored && (
-                                <StatusNote tone="warn">
-                                    The saved embeddings key has no endpoint URL, so embedding with
-                                    it will fail until one is set. Enter the endpoint URL and the
-                                    key together, then save.
-                                </StatusNote>
+                                <StatusNote tone="warn">{t("noEndpoint")}</StatusNote>
                             )}
                             <Field
-                                label="OpenAI-compatible API key"
+                                label={t("openaiKey")}
                                 htmlFor="embedding-openai-key"
-                                hint={`Leave blank to keep the existing key. ${storedLabel(openAIKeyStored)}.`}
+                                hint={t("keepHint", { stored: storedLabel(openAIKeyStored) })}
                             >
                                 <TextInput
                                     id="embedding-openai-key"
@@ -274,9 +254,9 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                                 />
                             </Field>
                             <Field
-                                label="Embeddings endpoint URL"
+                                label={t("endpointUrl")}
                                 htmlFor="embedding-openai-base-url"
-                                hint="The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again."
+                                hint={t("endpointHint")}
                             >
                                 <TextInput
                                     id="embedding-openai-base-url"
@@ -294,8 +274,8 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
 
                     {embeddingIndexKey === "huggingface-minilm-384" && (
                         <Field
-                            label="HuggingFace API key"
-                            hint={`Leave blank to keep the existing key. ${storedLabel(huggingFaceKeyStored)}.`}
+                            label={t("hfKey")}
+                            hint={t("keepHint", { stored: storedLabel(huggingFaceKeyStored) })}
                         >
                             <TextInput
                                 type="password"
@@ -309,14 +289,20 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
 
                     {embeddingIndexKey === "ollama-768" && (
                         <>
-                            <Field label="Ollama base URL" hint="e.g. http://localhost:11434">
+                            <Field
+                                label={t("ollamaUrl")}
+                                hint={t("example", { value: "http://localhost:11434" })}
+                            >
                                 <TextInput
                                     value={embeddingOllamaBaseUrl}
                                     onChange={e => edit(setEmbeddingOllamaBaseUrl)(e.target.value)}
                                     placeholder="http://localhost:11434"
                                 />
                             </Field>
-                            <Field label="Ollama model" hint="e.g. nomic-embed-text">
+                            <Field
+                                label={t("ollamaModel")}
+                                hint={t("example", { value: "nomic-embed-text" })}
+                            >
                                 <TextInput
                                     value={embeddingOllamaModel}
                                     onChange={e => edit(setEmbeddingOllamaModel)(e.target.value)}
@@ -328,18 +314,18 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section
-                title="Bring your own keys"
-                description="What this workspace has stored. Update the fields above to change them."
-            >
+            <Section title={t("byok.title")} description={t("byok.description")}>
                 <Card>
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5">
                         <KeyStatus
-                            label="OpenAI-compatible"
+                            label={t("byok.openaiCompatible")}
                             stored={openAIKeyStored}
                             detail={
                                 openAIKeyStored?.hasKey
-                                    ? `ending ${openAIKeyStored.last4 ?? "****"} · ${openAIBaseUrlStored ?? "no endpoint URL"}`
+                                    ? t("byok.endingWithEndpoint", {
+                                          last4: openAIKeyStored.last4 ?? "****",
+                                          endpoint: openAIBaseUrlStored ?? t("byok.noEndpointUrl"),
+                                      })
                                     : undefined
                             }
                         />
@@ -347,7 +333,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                         <KeyStatus
                             label="Ollama"
                             stored={embeddingOllamaBaseUrl ? { hasKey: true, last4: null } : null}
-                            detail={embeddingOllamaBaseUrl || "Not configured"}
+                            detail={embeddingOllamaBaseUrl || t("byok.notConfigured")}
                         />
                     </div>
                 </Card>
@@ -365,17 +351,18 @@ function KeyStatus({
     stored: RedactedKey | null;
     detail?: string;
 }) {
+    const t = useTranslations("settings.processing");
     const has = Boolean(stored?.hasKey);
     return (
         <div className="border-line bg-panel-2 rounded-[10px] border px-3.5 py-3">
             <div className="mb-1.5 flex items-center justify-between">
                 <span className="text-ink text-xs font-semibold">{label}</span>
                 <Badge variant={has ? "success" : "secondary"}>
-                    {has ? "Configured" : "Not set"}
+                    {has ? t("byok.configured") : t("notSet")}
                 </Badge>
             </div>
             <div className="mono text-ink-3 break-all text-[11px]">
-                {detail ?? (stored?.last4 ? `ending ${stored.last4}` : "—")}
+                {detail ?? (stored?.last4 ? t("byok.ending", { last4: stored.last4 }) : "—")}
             </div>
         </div>
     );

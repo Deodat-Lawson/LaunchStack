@@ -1,1 +1,137 @@
-{}
+{
+  "registry": {
+    "growth": {
+      "name": "Growth",
+      "description": "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals"
+    },
+    "proposals": {
+      "name": "Proposals",
+      "description": "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit"
+    },
+    "vantage": {
+      "name": "Vantage",
+      "description": "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program"
+    },
+    "scenarios": {
+      "name": "Scenarios",
+      "description": "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast"
+    },
+    "knowledgeGraph": {
+      "name": "Knowledge graph",
+      "description": "Index health — entities extracted at upload, joined by co-occurrence. Chat answers entity questions from company facts, not from this graph."
+    },
+    "repoExplainer": {
+      "name": "Repo explainer",
+      "description": "Paste any GitHub repository URL and get a summary plus Mermaid diagram."
+    }
+  },
+  "frame": {
+    "screensLabel": "{title} screens",
+    "optionsLabel": "{title} options",
+    "area": "Area",
+    "back": "Back",
+    "forward": "Forward",
+    "linkCopied": "Link copied",
+    "linkCopyFailed": "Could not copy the link",
+    "copyLink": "Copy link to this screen",
+    "openInBrowserTab": "Open in a new browser tab",
+    "notFoundTitle": "This screen does not exist",
+    "notFoundBody": "The link may be from an older version of the app, or the thing it pointed at was removed.",
+    "goTo": "Go to {label}"
+  },
+  "cite": {
+    "sourceWithTitle": "Source {n}: {title}",
+    "source": "Source {n}",
+    "page": "Page {page}",
+    "pageShort": "p. {page}",
+    "sources": "Sources"
+  },
+  "fitMeter": {
+    "notScored": "Not scored yet",
+    "title": "Fit {value} of 100",
+    "titleBelowThreshold": "Fit {value} of 100 (threshold {threshold})",
+    "label": "Fit {value} of 100"
+  },
+  "resource": {
+    "error": "Something went wrong"
+  },
+  "format": {
+    "never": "never",
+    "justNow": "just now",
+    "minutesAgo": "{minutes} min ago",
+    "todayAt": "today {time}",
+    "hoursAgo": "{hours, plural, one {# hour ago} other {# hours ago}}",
+    "yesterday": "yesterday",
+    "daysAgo": "{days} days ago",
+    "milliseconds": "{ms} ms",
+    "seconds": "{s} s",
+    "minutes": "{m} min",
+    "minutesSeconds": "{m} min {s} s",
+    "listSeparator": ", ",
+    "listJoin": "{rest} and {last}"
+  },
+  "knowledgeGraph": {
+    "searchPlaceholder": "Find an entity…",
+    "servedFrom": {
+      "neo4j": "Served from Neo4j",
+      "postgres": "Served from Postgres fallback",
+      "none": "No graph data yet"
+    },
+    "loading": "Loading knowledge graph…",
+    "loadFailed": "Failed to load graph",
+    "requestFailed": "Failed ({status})",
+    "empty": "No entities extracted. Entity extraction is off by default; set ENABLE_ENTITY_EXTRACTION=true, upload a document, then come back to this view.",
+    "mentions": "{label} · {count, plural, one {# mention} other {# mentions}}",
+    "relationships": "{count, plural, one {# relationship} other {# relationships}}",
+    "entityTypes": "Entity types",
+    "stats": "{entities} nodes · {relationships} edges",
+    "statsTruncated": "{entities} nodes · {relationships} edges · truncated",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "resetView": "Reset view",
+    "hint": "click to select · scroll to zoom · drag to pan"
+  },
+  "repoExplainer": {
+    "title": "GitHub Repo Explainer",
+    "urlLabel": "GitHub repository URL",
+    "urlPlaceholder": "https://github.com/owner/repo or owner/repo",
+    "generating": "Generating…",
+    "generate": "Generate diagram",
+    "tokenLabel": "GitHub token (optional, required for private repos)",
+    "tokenPlaceholder": "'<'your-github-token> or fine-grained token",
+    "diagramType": "Diagram type",
+    "diagramTypes": {
+      "architecture": "Architecture",
+      "component": "Component",
+      "sequence": "Sequence",
+      "class": "Class",
+      "er": "ER Diagram"
+    },
+    "instructionsLabel": "Additional instructions (optional)",
+    "instructionsPlaceholder": "E.g. \"Focus on API design and generate a UML component diagram.\"",
+    "tip": "Tip: try <url>https://github.com/facebook/react</url> with instructions like <example>\"Generate a high-level UML diagram…\"</example>.",
+    "tipInstruction": "Generate a high-level UML diagram of the main components and how they interact.",
+    "summary": "Summary",
+    "architectureDiagram": "Architecture Diagram",
+    "noDiagram": "No diagram generated.",
+    "umlJson": "UML JSON response",
+    "errors": {
+      "missingUrl": "Please enter a GitHub repository URL.",
+      "failed": "We could not generate an explanation for this repository. Please try again.",
+      "network": "Something went wrong while talking to the repo explainer. Please try again."
+    },
+    "diagram": {
+      "menuLabel": "Diagram actions",
+      "copySource": "Copy the Mermaid source",
+      "copySvg": "Copy as SVG",
+      "notRendered": "The diagram has not rendered yet.",
+      "emptyResult": "Mermaid returned empty result",
+      "renderFailed": "Failed to render diagram",
+      "renderError": "Diagram render error",
+      "rawCode": "Raw Mermaid code",
+      "downloadSvg": "Download as SVG",
+      "downloadPng": "Download as PNG",
+      "rendering": "Rendering diagram..."
+    }
+  }
+}

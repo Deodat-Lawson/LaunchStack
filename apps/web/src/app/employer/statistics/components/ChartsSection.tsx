@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Card } from "~/components/ui/card";
 import {
     ChartContainer,
@@ -16,26 +17,23 @@ interface ChartsSectionProps {
     data: DashboardData;
 }
 
-const employeeChartConfig: ChartConfig = {
-    count: {
-        label: "Employees",
-        color: "hsl(262, 83%, 58%)",
-    },
-};
-
-const viewsChartConfig: ChartConfig = {
-    count: {
-        label: "Views",
-        color: "hsl(221, 83%, 53%)",
-    },
-};
-
-function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
 export function ChartsSection({ data }: ChartsSectionProps) {
+    const t = useTranslations("statistics.charts");
+    const format = useFormatter();
+
+    const employeeChartConfig: ChartConfig = useMemo(
+        () => ({ count: { label: t("employeesSeries"), color: "hsl(262, 83%, 58%)" } }),
+        [t]
+    );
+    const viewsChartConfig: ChartConfig = useMemo(
+        () => ({ count: { label: t("viewsSeries"), color: "hsl(221, 83%, 53%)" } }),
+        [t]
+    );
+
+    const formatDate = (dateString: string): string =>
+        format.dateTime(new Date(dateString), { month: "short", day: "numeric" });
+    const formatCount = (value: number): string => format.number(value);
+
     return (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Employee Trend Chart */}
@@ -45,7 +43,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                         <Users className="h-4 w-4" />
                     </div>
                     <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                        Employee Growth
+                        {t("employeeGrowth")}
                     </h2>
                 </div>
                 <ChartContainer config={employeeChartConfig} className="h-[250px] w-full">
@@ -75,6 +73,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                             tickLine={false}
                             axisLine={false}
                             tick={{ fontSize: 10 }}
+                            tickFormatter={formatCount}
                             width={30}
                             allowDecimals={false}
                         />
@@ -103,7 +102,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                         <MousePointerClick className="h-4 w-4" />
                     </div>
                     <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                        Document Views
+                        {t("documentViews")}
                     </h2>
                 </div>
                 <ChartContainer config={viewsChartConfig} className="h-[250px] w-full">
@@ -133,6 +132,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                             tickLine={false}
                             axisLine={false}
                             tick={{ fontSize: 10 }}
+                            tickFormatter={formatCount}
                             width={30}
                         />
                         <ChartTooltip

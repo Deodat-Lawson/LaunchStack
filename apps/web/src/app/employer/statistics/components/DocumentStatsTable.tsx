@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Card } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
@@ -21,8 +22,15 @@ interface DocumentStatsTableProps {
     documents: DocumentStat[];
 }
 
-function formatRelativeTime(dateString: string | null): string {
-    if (!dateString) return "Never";
+type TimeT = ReturnType<typeof useTranslations<"statistics.time">>;
+
+/** "Just now", "5 min ago", "3 hr ago", "2 days ago"; a date after a week. */
+function formatRelativeTime(
+    dateString: string | null,
+    t: TimeT,
+    format: ReturnType<typeof useFormatter>
+): string {
+    if (!dateString) return t("never");
 
     const date = new Date(dateString);
     const now = new Date();
@@ -31,14 +39,17 @@ function formatRelativeTime(dateString: string | null): string {
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min ago`;
-    if (diffHours < 24) return `${diffHours} hr ago`;
-    if (diffDays < 7) return `${diffDays} days ago`;
-    return date.toLocaleDateString();
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return t("minutesAgo", { count: diffMins });
+    if (diffHours < 24) return t("hoursAgo", { count: diffHours });
+    if (diffDays < 7) return t("daysAgo", { count: diffDays });
+    return format.dateTime(date, { year: "numeric", month: "numeric", day: "numeric" });
 }
 
 export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
+    const t = useTranslations("statistics.documents");
+    const tTime = useTranslations("statistics.time");
+    const format = useFormatter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedDoc, setSelectedDoc] = useState<DocumentStat | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -65,16 +76,16 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                         </div>
                         <div>
                             <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                                Document Statistics
+                                {t("title")}
                             </h2>
-                            <p className="text-ink-3 mt-0.5 text-xs">Click a row to view details</p>
+                            <p className="text-ink-3 mt-0.5 text-xs">{t("hint")}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <Search className="text-ink-3 absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
                             <Input
-                                placeholder="Search documents..."
+                                placeholder={t("searchPlaceholder")}
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                                 className="h-9 w-[220px] pl-9 text-sm"
@@ -84,7 +95,10 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                             variant="outline"
                             className="rounded-full border-blue-200 px-3 py-1.5 font-bold text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
                         >
-                            {filteredDocuments.length} / {documents.length}
+                            {t("shown", {
+                                shown: format.number(filteredDocuments.length),
+                                total: format.number(documents.length),
+                            })}
                         </Badge>
                     </div>
                 </div>
@@ -96,16 +110,16 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                             <TableHeader className="sticky top-0 z-20">
                                 <TableRow className="bg-panel-2/80 border-b backdrop-blur-sm">
                                     <TableHead className="w-[45%] py-3 text-[11px] font-bold uppercase tracking-wider">
-                                        Document
+                                        {t("columns.document")}
                                     </TableHead>
                                     <TableHead className="py-3 text-[11px] font-bold uppercase tracking-wider">
-                                        Category
+                                        {t("columns.category")}
                                     </TableHead>
                                     <TableHead className="py-3 text-right text-[11px] font-bold uppercase tracking-wider">
-                                        Views
+                                        {t("columns.views")}
                                     </TableHead>
                                     <TableHead className="py-3 text-right text-[11px] font-bold uppercase tracking-wider">
-                                        Last Viewed
+                                        {t("columns.lastViewed")}
                                     </TableHead>
                                     <TableHead className="w-[40px] py-3"></TableHead>
                                 </TableRow>
@@ -147,12 +161,16 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                                                 <div className="flex items-center justify-end gap-1.5">
                                                     <Eye className="text-ink-3 h-3.5 w-3.5" />
                                                     <span className="font-mono text-sm font-medium">
-                                                        {doc.views}
+                                                        {format.number(doc.views)}
                                                     </span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-ink-3 py-3 text-right text-sm">
-                                                {formatRelativeTime(doc.lastViewedAt)}
+                                                {formatRelativeTime(
+                                                    doc.lastViewedAt,
+                                                    tTime,
+                                                    format
+                                                )}
                                             </TableCell>
                                             <TableCell className="py-3">
                                                 <ChevronRight className="text-ink-3/50 h-4 w-4 transition-all group-hover:translate-x-0.5 group-hover:text-blue-500" />
@@ -164,13 +182,9 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                                         <TableCell colSpan={5} className="h-32">
                                             <div className="text-ink-3 flex flex-col items-center justify-center gap-2">
                                                 <FileText className="text-ink-3/30 h-10 w-10" />
-                                                <p className="text-sm font-medium">
-                                                    No documents found
-                                                </p>
+                                                <p className="text-sm font-medium">{t("empty")}</p>
                                                 {searchTerm && (
-                                                    <p className="text-xs">
-                                                        Try adjusting your search
-                                                    </p>
+                                                    <p className="text-xs">{t("emptyHint")}</p>
                                                 )}
                                             </div>
                                         </TableCell>

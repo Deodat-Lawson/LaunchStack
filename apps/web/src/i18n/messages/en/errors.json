@@ -1,1 +1,26 @@
-{}
+{
+  "global": {
+    "title": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again or contact support if the problem persists.",
+    "errorId": "Error ID: {id}",
+    "tryAgain": "Try again"
+  },
+  "notFound": {
+    "metaTitle": "Page Not Found",
+    "metaDescription": "The page you are looking for does not exist.",
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist or may have been moved. Here are some places you might want to go instead.",
+    "signIn": "Go to sign in",
+    "deploymentGuide": "Deployment guide"
+  },
+  "unavailable": {
+    "title": "Feature Currently Unavailable",
+    "body": "We are working hard to bring this feature to you. Please check back soon!",
+    "expected": "Expected availability: Q4 2025 ~ Q1 2026",
+    "meanwhile": "In the meantime, you can:",
+    "explore": "Explore our available features",
+    "docs": "Check our documentation for updates",
+    "contact": "Contact support for more information",
+    "backHome": "Back to Home"
+  }
+}

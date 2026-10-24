@@ -143,6 +143,7 @@ export async function buildWorkspaceBrief(
         title: row.title,
         folder: row.category || "Unfiled",
         ageLabel: relativeAge(row.createdAt, now),
+        createdAt: row.createdAt,
     }));
 
     const activeConnections = [

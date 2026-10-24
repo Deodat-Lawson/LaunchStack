@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FolderPlus, PencilLine } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -15,11 +16,12 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
+    describeFolderIssue,
     displayFolderPath,
     folderLeafName,
+    folderNameIssue,
     folderParentPath,
     joinFolderPath,
-    validateFolderName,
 } from "~/lib/folders/path";
 
 /**
@@ -43,6 +45,9 @@ export interface FolderDialogProps {
 }
 
 export function FolderDialog({ request, existingPaths, onSubmit, onClose }: FolderDialogProps) {
+    const t = useTranslations("sources.folderDialog");
+    const tc = useTranslations("common");
+    const tIssue = useTranslations("sources.folderIssues");
     const [name, setName] = useState("");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -64,13 +69,13 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
     const trimmed = name.replace(/\s+/g, " ").trim();
     const target = joinFolderPath(parent, trimmed);
     const unchanged = request?.mode === "rename" && target === request.path;
-    const nameProblem = trimmed ? validateFolderName(trimmed) : null;
+    const nameIssue = trimmed ? folderNameIssue(trimmed) : null;
+    const nameProblem = nameIssue ? describeFolderIssue(nameIssue, tIssue) : null;
     const taken =
         !unchanged &&
         trimmed.length > 0 &&
         existingPaths.some(path => path.toLowerCase() === target.toLowerCase());
-    const problem =
-        nameProblem ?? (taken ? `A folder named "${trimmed}" already exists there.` : null);
+    const problem = nameProblem ?? (taken ? t("alreadyExists", { name: trimmed }) : null);
     const canSubmit = trimmed.length > 0 && !problem && !unchanged && !busy;
 
     const submit = async () => {
@@ -105,12 +110,12 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
                                 <FolderPlus className="size-4" aria-hidden />
                             )}
                         </span>
-                        {isRename ? "Rename folder" : parent ? "New subfolder" : "New folder"}
+                        {isRename ? t("renameTitle") : parent ? t("newSubfolder") : t("newFolder")}
                     </DialogTitle>
                     <DialogDescription>
                         {parent
-                            ? `Inside ${displayFolderPath(parent)}. Everything in this folder moves with it.`
-                            : "A folder is where a source lives. Folders can hold other folders."}
+                            ? t("insideParent", { parent: displayFolderPath(parent) })
+                            : t("topLevelHint")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -121,7 +126,7 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
                         void submit();
                     }}
                 >
-                    <Label htmlFor="folder-dialog-name">Name</Label>
+                    <Label htmlFor="folder-dialog-name">{tc("fields.name")}</Label>
                     <Input
                         id="folder-dialog-name"
                         data-testid="folder-dialog-input"
@@ -130,7 +135,7 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
                         autoFocus
                         disabled={busy}
                         aria-invalid={Boolean(problem) || undefined}
-                        placeholder={parent ? "e.g. 2026" : "e.g. Contracts, Fundraising Q1"}
+                        placeholder={parent ? t("subPlaceholder") : t("topPlaceholder")}
                     />
                     {(problem ?? error) && (
                         <p className="text-danger text-xs" role="alert">
@@ -141,7 +146,7 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
 
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         type="button"
@@ -151,11 +156,11 @@ export function FolderDialog({ request, existingPaths, onSubmit, onClose }: Fold
                     >
                         {busy
                             ? isRename
-                                ? "Saving…"
-                                : "Creating…"
+                                ? tc("status.saving")
+                                : t("creating")
                             : isRename
-                              ? "Save"
-                              : "Create folder"}
+                              ? tc("actions.save")
+                              : t("createFolder")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

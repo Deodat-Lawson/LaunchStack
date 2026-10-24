@@ -1,1 +1,76 @@
-{}
+{
+  "backlinks": {
+    "loading": "正在加载反向链接…",
+    "error": "反向链接：{error}",
+    "heading": "反向链接 · {count}",
+    "untitledNote": "无标题笔记",
+    "linkedAs": "链接为 [[{name}]]",
+    "requestFailed": "请求失败（{status}）",
+    "failed": "失败"
+  },
+  "panel": {
+    "title": "笔记",
+    "subtitle": "贴在这个来源上的便签批注。",
+    "newNote": "新建笔记",
+    "loading": "正在加载笔记…",
+    "empty": "这个来源还没有笔记。",
+    "emptyHint": "点击“新建笔记”开始。",
+    "deleteTitle": "删除这条笔记？",
+    "deleteDescriptionNamed": "“{title}”将被删除，且无法撤销。",
+    "deleteDescription": "这条笔记将被删除，且无法撤销。",
+    "emptyDraft": "请先填写标题或正文。",
+    "requestFailed": "请求失败（{status}）",
+    "fetchFailed": "笔记加载失败",
+    "saveFailed": "保存失败",
+    "deleteFailed": "删除失败"
+  },
+  "card": {
+    "menuLabelNamed": "“{title}”的操作",
+    "menuLabel": "笔记操作",
+    "goTo": "跳转到这条笔记",
+    "copyText": "复制笔记文本",
+    "deleteEllipsis": "删除…",
+    "age": {
+      "now": "刚刚",
+      "minutes": "{count} 分钟",
+      "hours": "{count} 小时",
+      "days": "{count} 天"
+    },
+    "status": {
+      "drifted": "锚点已移动",
+      "orphaned": "未锚定"
+    }
+  },
+  "draft": {
+    "titlePlaceholder": "标题",
+    "bodyPlaceholder": "写一条富文本笔记…",
+    "anchorSummary": "将笔记锚定到原文（可选）",
+    "anchorQuotePlaceholder": "粘贴这条笔记要附着的原文。即使你重新上传新版本，锚点依然有效。",
+    "anchorPagePlaceholder": "页码（可选，仅限 PDF）",
+    "tags": "标签",
+    "addTagPlaceholder": "添加标签",
+    "saveNote": "保存笔记"
+  },
+  "editor": {
+    "placeholder": "写一条笔记…",
+    "loading": "正在加载编辑器…",
+    "bold": "加粗",
+    "italic": "斜体",
+    "bulletList": "无序列表",
+    "orderedList": "有序列表",
+    "quote": "引用块",
+    "code": "代码",
+    "link": "链接",
+    "linkPrompt": "链接地址"
+  },
+  "pdf": {
+    "loadError": "无法加载 PDF：{error}",
+    "loadFailedFallback": "PDF 加载失败",
+    "failedToLoad": "加载失败",
+    "loading": "正在加载 PDF…",
+    "addNote": "+ 笔记",
+    "askAi": "✦ 问 AI",
+    "askAiTitle": "在对话中就这段内容提问",
+    "pinTitle": "笔记 {ordinal}"
+  }
+}

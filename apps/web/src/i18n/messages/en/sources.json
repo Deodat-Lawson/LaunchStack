@@ -1,1 +1,860 @@
-{}
+{
+  "sourceRail": {
+    "actionsFor": "Actions for {title}",
+    "actions": "Actions",
+    "unavailableAsContext": "Unavailable as context: indexing failed",
+    "removeFromContext": "Remove from context",
+    "addToContext": "Add to context",
+    "openBesideHint": "⌘-click to open beside",
+    "actionsForFolder": "Actions for folder {path}",
+    "deselectFolder": "Deselect folder",
+    "selectAllInFolder": "Select all in folder",
+    "folderActions": "Folder actions",
+    "unfiled": "Unfiled",
+    "sections": {
+      "workspace": "Workspace",
+      "shared": "Shared",
+      "private": "Private"
+    },
+    "privateEmptyHint": "Files you add start here. Share them when you're ready.",
+    "onlyPeopleWithAccess": "Only people with access",
+    "you": "you",
+    "addedBy": "Added by {name}",
+    "addedByWhen": "Added by {name} · {added}",
+    "sidebarActions": "Sidebar actions",
+    "sidebarTabs": "Sidebar tabs",
+    "tabSources": "Sources",
+    "tabHistory": "History",
+    "sidebarSection": "Sidebar section",
+    "filterHistory": "Filter history",
+    "filterSources": "Filter sources",
+    "backToAll": "Back to all folders",
+    "empty": "Nothing here. <add>Add a source</add>.",
+    "selectedAsContext": "<b>{count}</b> <dim>selected as context</dim>",
+    "clear": "clear"
+  },
+  "railCommands": {
+    "workspaceNav": "Workspace",
+    "showSidebar": "Show sidebar",
+    "hideSidebar": "Hide sidebar",
+    "jumpToAnything": "Jump to anything",
+    "addKnowledge": "Add knowledge",
+    "resizeAria": "Resize the sidebar",
+    "resizeTitle": "Drag to resize · double-click to reset"
+  },
+  "knowledgePane": {
+    "eyebrow": "Knowledge",
+    "heading": "Everything this workspace can reason over",
+    "statSources": "<b>{count}</b> {count, plural, one {source} other {sources}}",
+    "statCollections": "<b>{count}</b> {count, plural, one {collection} other {collections}}",
+    "indexingCount": "{count} indexing…",
+    "searchPlaceholder": "Search titles, tags, collections",
+    "clearSearch": "Clear search",
+    "filterCollection": "Collection",
+    "allCollections": "All collections",
+    "filterType": "Type",
+    "allTypes": "All types",
+    "clearFilters": "Clear filters",
+    "selectedCount": "{count} selected",
+    "askAboutThese": "Ask about these",
+    "loading": "Loading your knowledge…",
+    "gridView": "grid view",
+    "listView": "list view",
+    "actionsFor": "Actions for {title}",
+    "deselectSource": "Deselect source",
+    "selectSource": "Select source",
+    "unfiled": "Unfiled",
+    "restrictedTitle": "Only people with access can see this document",
+    "restricted": "Restricted",
+    "indexingTag": "indexing…",
+    "staleCitable": "changes not yet citable",
+    "notCitable": "not citable yet",
+    "colSource": "Source",
+    "colType": "Type",
+    "colCollection": "Collection",
+    "colDomain": "Domain",
+    "colAdded": "Added",
+    "emptyFilteredTitle": "Nothing matches those filters",
+    "emptyTitle": "No knowledge yet",
+    "emptyFilteredBody": "Widen the search, or clear the filters to see the whole corpus.",
+    "emptyBody": "Upload documents, paste notes, or connect a tool. Everything you add here is what the agents can cite in a meeting.",
+    "addFirst": "Add your first source"
+  },
+  "addSourceModal": {
+    "title": "Add a source",
+    "waysToAdd": "Ways to add",
+    "groups": {
+      "create": "Create",
+      "upload": "Upload",
+      "connect": "Connect"
+    },
+    "tabs": {
+      "mindmap": {
+        "label": "Mindmap",
+        "desc": "Diagram it, then cite it"
+      },
+      "googleDoc": {
+        "label": "Google Doc",
+        "desc": "Write it in Google Docs"
+      },
+      "paste": {
+        "label": "Paste text",
+        "desc": "Drop in notes or excerpts"
+      },
+      "files": {
+        "label": "Files",
+        "desc": "PDF, DOCX, XLSX, images"
+      },
+      "folder": {
+        "label": "Folder",
+        "desc": "Bulk — keeps structure"
+      },
+      "audio": {
+        "label": "Audio",
+        "desc": "MP3, M4A, WAV and more — transcribed"
+      },
+      "video": {
+        "label": "Video",
+        "desc": "MP4 — transcribed"
+      },
+      "url": {
+        "label": "URL",
+        "desc": "Crawls the page"
+      },
+      "youtube": {
+        "label": "YouTube",
+        "desc": "Pulls the transcript"
+      },
+      "artifact": {
+        "label": "Claude artifact",
+        "desc": "A page, diagram or component built in Claude"
+      },
+      "gmail": {
+        "label": "Gmail",
+        "desc": "Your mailbox, private to you"
+      },
+      "notion": {
+        "label": "Notion",
+        "desc": "Pick pages or databases"
+      },
+      "obsidian": {
+        "label": "Obsidian",
+        "desc": "Import a vault — re-import to update"
+      },
+      "drive": {
+        "label": "Google Drive",
+        "desc": "Docs, Sheets, PDFs — kept in sync"
+      },
+      "slack": {
+        "label": "Slack",
+        "desc": "Mirror agent meetings to a channel"
+      },
+      "github": {
+        "label": "GitHub",
+        "desc": "Private repos for the Repo Explainer"
+      },
+      "agentSessions": {
+        "label": "Coding sessions",
+        "desc": "Claude Code & Codex transcripts"
+      },
+      "dropbox": {
+        "label": "Dropbox",
+        "desc": "Folders stay in sync"
+      }
+    },
+    "mindmapAudienceNote": "This applies to the published copy, the one the workspace can cite.",
+    "driveFolderNote": "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.",
+    "fixedDestination": {
+      "gmail": "Gmail/your mailbox",
+      "notion": "Notion/your workspace",
+      "obsidian": "Obsidian/your vault"
+    },
+    "fixedAudience": {
+      "gmail": {
+        "headline": "Only you",
+        "detail": "Mail lands in your own Gmail folder. Nobody else in the workspace can open it."
+      },
+      "notion": {
+        "headline": "Only you, until you share it",
+        "detail": "Each Notion workspace you connect gets its own folder under Notion, private to you. Share it when the team should see those pages."
+      },
+      "obsidian": {
+        "headline": "Only you",
+        "detail": "Each vault lands in its own folder under Obsidian. Nobody else can open it until you share it."
+      }
+    },
+    "size": {
+      "bytes": "{size} B",
+      "kb": "{size} KB",
+      "mb": "{size} MB",
+      "gb": "{size} GB"
+    },
+    "uploadedTo": "{count, plural, one {Uploaded # file to {folder}} other {Uploaded # files to {folder}}}",
+    "uploadedNoFolder": "{count, plural, one {Uploaded # file (no folder)} other {Uploaded # files (no folder)}}",
+    "uploadFailed": "Failed to upload {name}",
+    "filesFailed": "{count, plural, one {# file failed} other {# files failed}}",
+    "signInUpload": "Sign in to upload files",
+    "chars": "{count} chars",
+    "fileBadge": "FILE",
+    "mindmap": {
+      "createFailed": "Couldn't create that mindmap",
+      "intro": "Draw it here, then make it citable when it is ready.",
+      "untitled": "Untitled mindmap",
+      "openingEditor": "Opening the editor…"
+    },
+    "googleDoc": {
+      "connectIntro": "Connect a Google account for this workspace and new documents will be created in its Drive, in a <b>LaunchStack</b> folder.",
+      "connectGoogle": "Connect Google",
+      "created": "Created in Google Docs",
+      "createFailed": "Couldn't create that document",
+      "intro": "Write it in Google Docs. It shows up here right away, and edits sync back as new versions your workspace can cite.",
+      "introAs": "Write it in Google Docs as {email}. It shows up here right away, and edits sync back as new versions your workspace can cite.",
+      "untitled": "Untitled document",
+      "blank": "Blank document",
+      "creating": "Creating in Google Docs…",
+      "opensInNewTab": "Opens in a new tab"
+    },
+    "files": {
+      "files": {
+        "title": "Drop files here",
+        "hint": "PDF, DOCX, XLSX, PPTX, images, code files — up to {max} MB each",
+        "browse": "Browse files"
+      },
+      "audio": {
+        "title": "Drop audio files",
+        "hint": "MP3, M4A, WAV, AAC, FLAC, OGG up to {max} MB — transcribed in the language spoken, playable in the viewer",
+        "browse": "Browse audio"
+      },
+      "video": {
+        "title": "Drop video files",
+        "hint": "MP4 up to {max} MB — transcribed in the language spoken, playable in the viewer",
+        "browse": "Browse video"
+      }
+    },
+    "tooBigOne": "{name} is over the {max} MB limit",
+    "tooBigMany": "{count} files are over the {max} MB limit",
+    "tooBigOneDetail": "It's {size}. Split it or export it at a lower quality.",
+    "tooBigItem": "{name} ({size})",
+    "ocrNote": "OCR runs automatically on scanned PDFs and images.",
+    "transcribing": "Transcribing {name}… a long recording takes a few minutes; keep this open.",
+    "uploadingProgress": "Uploading {current} / {total}…",
+    "readyToUpload": "{count, plural, one {# file ready to upload} other {# files ready to upload}}",
+    "uploadButton": "{count, plural, one {Upload # file} other {Upload # files}}",
+    "uploadButtonTo": "{count, plural, one {Upload # file to {folder}} other {Upload # files to {folder}}}",
+    "folder": {
+      "pickTitle": "Pick a folder",
+      "pickIntro": "Each file becomes its own source. The folder is added inside the one above, with its subfolders kept as they are.",
+      "choose": "Choose folder",
+      "filesIntoFolders": "{files, plural, one {# file} other {# files}} into {folders, plural, one {# folder} other {# folders}}",
+      "name": "Folder name",
+      "hiddenExcluded": "Hidden & system files excluded",
+      "addFiles": "{count, plural, one {Add # file} other {Add # files}}",
+      "addFilesTo": "{count, plural, one {Add # file to {folder}} other {Add # files to {folder}}}"
+    },
+    "paste": {
+      "signIn": "Sign in to save notes",
+      "defaultTitle": "Pasted note",
+      "addedTo": "Added \"{title}\" to {folder}",
+      "addedNoFolder": "Added \"{title}\" (no folder)",
+      "saveFailed": "Failed to save note",
+      "titlePlaceholder": "Title (optional)",
+      "textPlaceholder": "Paste notes, an email, a transcript, anything…",
+      "add": "Add as note"
+    },
+    "url": {
+      "signIn": "Sign in to fetch pages",
+      "indexFailed": "Failed to index website",
+      "queued": "Website queued for indexing",
+      "fetchFailed": "Failed to fetch URL",
+      "intro": "Paste any URL. We'll crawl the main content and strip the chrome.",
+      "fetching": "Fetching…",
+      "fetch": "Fetch",
+      "tip": "Tip: add <code>/**</code> to a URL to recursively crawl a subtree."
+    },
+    "youtube": {
+      "signIn": "Sign in to transcribe videos",
+      "processFailed": "Failed to process video",
+      "transcribed": "Video transcribed: \"{title}\"",
+      "videoFallback": "Video",
+      "intro": "Paste a YouTube URL. We'll pull the transcript and timestamps.",
+      "titlePlaceholder": "Custom title (optional)",
+      "transcribing": "Transcribing…",
+      "transcribe": "Transcribe"
+    },
+    "connect": {
+      "title": "Connect {name}",
+      "oneClick": "One-click OAuth, revoke anytime.",
+      "disconnected": "{name} disconnected",
+      "disconnectFailed": "Could not disconnect {name}",
+      "statusReconnect": "{status} — reconnect",
+      "connectedBy": "connected by {name}",
+      "removing": "Removing…",
+      "another": "Connect another {name} account",
+      "askAdmin": "Ask your administrator to add this provider's OAuth keys — steps in .env.example",
+      "comingSoon": "Coming soon",
+      "checking": "Checking…",
+      "notConfigured": "Connect {name} — not configured on this server",
+      "comingSoonButton": "Connect {name} — coming soon",
+      "perks": {
+        "gmailLabels": "Pick labels or Gmail searches",
+        "gmailPrivate": "Private to you — lands in your own folder",
+        "gmailResync": "Re-syncs every 15 minutes, read-only",
+        "gmailAttachments": "PDF and Office attachments included",
+        "slackMirror": "Mirrors agent meetings into a Slack channel",
+        "slackNotAdded": "Messages and files aren't added to your sources",
+        "slackExport": "To search Slack, upload an export's JSON files",
+        "githubRepoExplainer": "Lets the Repo Explainer read your private repos",
+        "githubNotSynced": "Code, issues and PRs aren't synced to your sources",
+        "githubZip": "To search a repo, upload it as a ZIP",
+        "dropboxFolders": "Pick folders — kept in sync",
+        "dropboxAllTypes": "All file types indexed",
+        "dropboxShared": "Shared folders supported"
+      }
+    }
+  },
+  "addDestinationBar": {
+    "sectionAria": "Where this goes and who can see it",
+    "goesTo": "Goes to",
+    "addTo": "Add to",
+    "newFolder": "New folder",
+    "whoCanSee": "Who can see it",
+    "changeAccessTitle": "Change who can open {folder}",
+    "changeAccess": "Change access",
+    "loadFailed": "Couldn't load who can see this folder right now.",
+    "checking": "Checking who can see it…",
+    "peopleWithAccess": "People with access",
+    "you": "You",
+    "group": "group",
+    "role": "role",
+    "more": "+{count} more",
+    "createdInside": "Inside {parent} · follows its sharing",
+    "createdPrivate": "Private to you",
+    "pickerAria": "Add to: {folder}. Change folder",
+    "findPlaceholder": "Find or create a folder…",
+    "findAria": "Find or create a folder",
+    "foldersAria": "Folders",
+    "unfiled": "Unfiled",
+    "noMatch": "No folder by that name.",
+    "create": "Create “{name}”",
+    "tagTitle": "Who can see it: {label}"
+  },
+  "driveConnect": {
+    "pickerTitle": "Pick files and folders to sync",
+    "destination": {
+      "inDrive": "In Google Drive",
+      "inFolder": "In {path}",
+      "inPrivateFolder": "In a private folder of whoever picked it",
+      "becomesFolder": "Becomes its own folder on the next sync",
+      "needsAccess": "Its contents need folder access"
+    },
+    "names": {
+      "one": "“{name}”",
+      "two": "“{first}” and “{second}”",
+      "more": "“{first}”, “{second}” and {count} more"
+    },
+    "syncFailedAfterAdd": "Added, but the sync didn't start — try Sync now",
+    "pickedOne": "“{name}” added — syncing",
+    "pickedMany": "{count} items added — syncing",
+    "saveSelectionFailed": "Could not save the selection",
+    "notDriveLink": "That isn't a Google Drive link. In Drive, use Share › Copy link.",
+    "addLinkFailed": "Could not add that link",
+    "linkAddedWithMessage": "{message} Syncing now.",
+    "linkAdded": "Added. Syncing now.",
+    "pickerNotConfigured": "Picker is not configured — set NEXT_PUBLIC_GOOGLE_API_KEY and NEXT_PUBLIC_GOOGLE_APP_ID",
+    "noDriveAccess": "Could not get Drive access — try reconnecting",
+    "pickerFailed": "Google's picker didn't load — check your connection and try again",
+    "syncRequested": "Sync requested",
+    "syncStartFailed": "Could not start the sync",
+    "disconnected": "Google Drive disconnected — documents were kept",
+    "disconnectFailed": "Disconnect failed",
+    "checking": "Checking Google Drive…",
+    "checkFailed": "Couldn’t check Google Drive just now.",
+    "notConfiguredTitle": "Google Drive is not configured on this server",
+    "notConfiguredBody": "Ask your operator to set <code>GOOGLE_OAUTH_CLIENT_ID</code>, <code>GOOGLE_OAUTH_CLIENT_SECRET</code> and the Picker keys — the steps are in <code>.env.example</code> under “Workspace connections”.",
+    "reconnectTitle": "Reconnect Google Drive",
+    "connectTitle": "Connect Google Drive",
+    "reconnectBody": "Google access was revoked or expired — connect again to resume syncing.",
+    "connectBodyFolders": "Pick files in Google's picker; only what you pick is shared. To import whole folders, allow folder access once connected.",
+    "connectBody": "Pick files in Google's picker; only what you pick is shared.",
+    "allowTitle": "Allow folder access to import folders",
+    "allowBody": "For now LaunchStack opens only the files you pick, so a picked folder brings nothing from inside it. Allow folder access to let LaunchStack read your Drive; then folders come in whole, subfolders and later additions included.",
+    "allowButton": "Allow folder access",
+    "filesOnly": "Only files you pick one by one come in. Picking a folder brings nothing from inside it, because this server hasn’t turned on folder import — open the folder in the picker and select its files instead. Operators: see <code>GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED</code> in <code>.env.example</code>.",
+    "lastSyncFailed": "Last sync failed: {error}",
+    "lastRun": "Last run: {stored} imported, {unchanged} unchanged, {failed} failed.",
+    "emptyReady": "Nothing came in from {names} — Drive lists {count, plural, one {it} other {them}} as empty.",
+    "emptyNoAccess": "Nothing came in from {names}: this connection can't see inside folders.",
+    "accessLost": "{count} file(s) can no longer be opened — deleted, unshared, or (for files picked one by one) the grant is gone. Pick them again to refresh access.",
+    "pasteLinkLabel": "Paste a folder link",
+    "adding": "Adding…",
+    "addFolder": "Add folder",
+    "linkHintAccount": "Works for any folder {account} can open, including ones shared with it and shared drives.",
+    "linkHintThis": "Works for any folder this account can open, including ones shared with it and shared drives.",
+    "syncedFromDrive": "SYNCED FROM DRIVE ({count})",
+    "nothingYet": "Nothing yet — choose files or folders to start syncing.",
+    "stopSyncingTitle": "Stop syncing (keeps imported documents)",
+    "stopSyncingAria": "Stop syncing {name}",
+    "openingPicker": "Opening picker…",
+    "chooseInDrive": "Choose in Google Drive",
+    "syncing": "Syncing…",
+    "starting": "Starting…",
+    "syncNow": "Sync now",
+    "disconnectConfirm": "Disconnect? Imported documents are kept."
+  },
+  "gmailConnect": {
+    "labelsLoadFailed": "Could not load your labels — try reconnecting Gmail.",
+    "saveSelectionFailed": "Could not save the selection",
+    "labelsAdded": "{count} label(s) added — syncing",
+    "labelsAddedNoSync": "{count} label(s) added, but the sync could not start",
+    "saveSearchFailed": "Could not save the search",
+    "searchAdded": "Search added — syncing",
+    "searchAddedNoSync": "Search added, but the sync could not start",
+    "syncRequested": "Sync requested",
+    "syncStartFailed": "Could not start the sync",
+    "disconnected": "Gmail disconnected — synced emails were kept",
+    "disconnectFailed": "Disconnect failed",
+    "checking": "Checking Gmail…",
+    "notEnabledTitle": "Gmail is not enabled on this server",
+    "notEnabledBody": "Ask your operator to set <code>GMAIL_CONNECTOR_ENABLED=true</code> alongside the Google OAuth client — the steps, including the Gmail scope on the consent screen, are in <code>.env.example</code> under “Gmail”.",
+    "reconnectTitle": "Reconnect your Gmail",
+    "connectTitle": "Connect your Gmail",
+    "reconnectBody": "Google access was revoked or expired — connect again to resume syncing.",
+    "reconnectBodyDetail": "Google access was revoked or expired ({detail}) — connect again to resume syncing.",
+    "connectBody": "Read-only. Pick labels or searches afterwards; threads land in a folder only you can see.",
+    "reconnectButton": "Reconnect Gmail",
+    "connectButton": "Connect Gmail",
+    "noPermission": "Your role can’t add sources to this workspace, so it can’t connect a mailbox. Ask an admin for upload access.",
+    "syncedTo": "Synced threads go to <b>{folder}</b>, a folder only you and folder admins can see. Every 15 minutes, read-only.",
+    "lastSyncFailed": "Last sync failed: {error}",
+    "lastRun": "Last run: {threads} thread(s) and {attachments} attachment(s) imported, {unchanged} unchanged, {failed} failed.",
+    "lastRunHistoryExpired": "Last run: {threads} thread(s) and {attachments} attachment(s) imported, {unchanged} unchanged, {failed} failed. Gmail's change history had expired, so everything was re-checked.",
+    "syncedFromGmail": "SYNCED FROM GMAIL ({count})",
+    "nothingSelected": "Nothing selected yet — choose labels or add a search to start syncing.",
+    "kindLabel": "Label",
+    "kindSearch": "Search",
+    "stopSyncingTitle": "Stop syncing (keeps imported emails)",
+    "chooseLabelsTitle": "Choose labels to sync",
+    "loadingLabels": "Loading labels…",
+    "noLabels": "No labels found in this mailbox.",
+    "system": "system",
+    "syncingTag": "syncing",
+    "addLabels": "{count, plural, =0 {Add labels} one {Add # label} other {Add # labels}}",
+    "searchPlaceholder": "Gmail search, e.g. from:investor@fund.com newer_than:1y",
+    "searchAria": "Gmail search to sync",
+    "addSearch": "Add search",
+    "chooseLabels": "Choose labels",
+    "syncing": "Syncing…",
+    "starting": "Starting…",
+    "syncNow": "Sync now",
+    "disconnectConfirm": "Disconnect? Imported emails are kept."
+  },
+  "notionConnect": {
+    "perks": {
+      "pick": "Pick pages and databases on Notion's own consent screen",
+      "sources": "Synced pages become sources Ask can search and cite",
+      "resync": "Re-syncs every 15 minutes, read-only — LaunchStack never edits your Notion"
+    },
+    "summary": {
+      "pages": "{count, plural, one {# page} other {# pages}}",
+      "updated": "{count} updated",
+      "failed": "{count} failed",
+      "tooLarge": "{count} too large",
+      "pageLimit": "page limit reached"
+    },
+    "workspaceFallback": "Notion workspace",
+    "syncRequested": "Sync requested",
+    "syncStartFailed": "Could not start the sync",
+    "disconnected": "{name} disconnected. Pages already synced were kept.",
+    "disconnectFailed": "Could not disconnect {name}",
+    "revoked": "Access was revoked — reconnect to keep syncing",
+    "connectedBy": "connected by {name}",
+    "reconnect": "Reconnect",
+    "syncNow": "Sync now",
+    "choosePages": "Choose pages",
+    "disconnectName": "Disconnect {name}",
+    "connectTitle": "Connect Notion",
+    "oneClick": "One-click OAuth, revoke anytime.",
+    "checking": "Checking Notion…",
+    "forbidden": "Connecting Notion is for workspace admins. Ask one to connect it; the pages they pick will show up in Sources.",
+    "loadError": "Could not load the Notion connection. Try again in a moment.",
+    "notConfigured": "Notion is not configured on this server. Whoever runs LaunchStack needs to add NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in .env.example.",
+    "connectAnother": "Connect another Notion workspace"
+  },
+  "obsidianImport": {
+    "noNotes": "No Markdown notes found in that pick. Choose the vault's own folder.",
+    "zipFailed": "Could not read that .zip file.",
+    "stoppedAfter": "The import stopped after {count} notes.",
+    "finishFailed": "The notes were imported, but checking for notes deleted from the vault failed. Import the vault again to finish.",
+    "imported": "{count, plural, one {# note imported from {name}} other {# notes imported from {name}}}",
+    "upToDate": "{name} is up to date",
+    "importFailed": "The import failed.",
+    "title": "Import an Obsidian vault",
+    "intro": "Pick your vault’s folder, or a .zip of it. Notes keep their folders; links and tags stay readable. Import it again any time to bring changes in — only notes that changed are re-read.",
+    "chooseFolder": "Choose vault folder",
+    "reading": "Reading…",
+    "chooseZip": "Choose .zip",
+    "notesFound": "{count, plural, one {# note found} other {# notes found}}",
+    "looksLikeVault": "Obsidian vault",
+    "noSettingsFolder": "No .obsidian folder — importing the Markdown files anyway",
+    "otherFilesLeftOut": "{count} other files left out",
+    "vaultName": "Vault name",
+    "reimportHint": "Re-import under the same name to update it instead of adding a copy.",
+    "progress": "{done} of {total} notes",
+    "importing": "Importing…",
+    "importNotes": "Import notes",
+    "chooseAnother": "Choose another",
+    "totals": {
+      "imported": "{count} imported",
+      "unchanged": "{count} unchanged",
+      "skipped": "{count} left out",
+      "failed": "{count} failed",
+      "missing": "{count} no longer in the vault",
+      "inFolder": "{summary} — in {folder}"
+    },
+    "importedVaults": "Imported vaults",
+    "vaultNotes": "{count, plural, one {# note} other {# notes}}",
+    "updateHint": "To update one, choose its folder again and keep the same vault name."
+  },
+  "artifactImport": {
+    "defaultTitle": "Claude artifact",
+    "linkError": "Use an http(s) link.",
+    "tooBigToast": "That file is over 10 MB — an artifact is a single self-contained file.",
+    "signIn": "Sign in to add sources",
+    "added": "\"{name}\" added to \"{folder}\"",
+    "addFailed": "Couldn't add the artifact",
+    "readFailed": "Couldn't read \"{title}\" (HTTP {status})",
+    "archiveFailed": "Added \"{title}\", but couldn't archive the old copy",
+    "itemFailed": "\"{title}\" failed",
+    "movedToast": "{count, plural, one {# artifact added to \"{folder}\". The old copies are in Settings → Archive.} other {# artifacts added to \"{folder}\". The old copies are in Settings → Archive.}}",
+    "modeAria": "How to bring the artifact in",
+    "pasteCode": "Paste code",
+    "uploadFile": "Upload a file",
+    "codeAria": "Artifact code",
+    "codePlaceholder": "Paste the artifact's code — an HTML page, a React component, SVG, Markdown or a Mermaid diagram.",
+    "chooseFile": "Choose a file",
+    "fileHint": "HTML, SVG, Markdown, Mermaid, JSX or TSX — up to 10 MB",
+    "fileAria": "Artifact file",
+    "type": "Type",
+    "typeDetected": "Type (detected)",
+    "linkLabel": "Link to the original (optional)",
+    "linkHint": "Kept as the way back to it. A claude.ai link can't be read from here, so bring the code itself above.",
+    "tooBig": "Over 10 MB — too large for one artifact",
+    "chars": "{count} chars",
+    "addAsSource": "Add as source",
+    "legacy": "<b>{count, plural, one {# artifact from before} other {# artifacts from before}}</b> they were sources. Add them to “{folder}” to search and cite them; the old copies move to Settings → Archive.",
+    "movingProgress": "{done} of {total}",
+    "addIt": "Add it as a source",
+    "addAll": "Add all {count} as sources"
+  },
+  "googleDriveBanner": {
+    "openFailed": "Could not open the document in Google Drive.",
+    "unreachable": "Could not reach the server.",
+    "synced": "Synced v{version} from Google Drive. Reopen the document to see it.",
+    "upToDate": "Already up to date.",
+    "syncResult": "Sync result: {kind}.",
+    "syncFailed": "Sync failed.",
+    "unlinkFailed": "Unlink failed — the link was kept.",
+    "unlinked": "Unlinked. The Drive copy was moved to the Drive trash.",
+    "editPrompt": "Edit this document with real tools — it opens in Google Drive and syncs back here.",
+    "connectPrompt": "Connect a Google account to edit this document in Google Drive.",
+    "linking": "Linking…",
+    "openInDrive": "Open in Google Drive",
+    "connectDrive": "Connect Google Drive",
+    "never": "never",
+    "orphaned": "The Google Drive copy was deleted or trashed.",
+    "livesIn": "Lives in Google Drive · last synced {synced}",
+    "livesInLinkedBy": "Lives in Google Drive — linked by {name} · last synced {synced}",
+    "syncing": "Syncing…",
+    "syncNow": "Sync now",
+    "relinking": "Re-linking…",
+    "relink": "Re-link from current version",
+    "unlink": "Unlink",
+    "fidelity": "This file was converted to a native Google Doc — formatting may drift on sync.",
+    "confirmTitle": "Unlink from Google Drive",
+    "confirmBody": "A final sync pulls any remaining Drive edits into version history, then the Drive copy is moved to the Drive trash and editing returns in-app.",
+    "unlinking": "Unlinking…"
+  },
+  "folderDialog": {
+    "alreadyExists": "A folder named \"{name}\" already exists there.",
+    "renameTitle": "Rename folder",
+    "newSubfolder": "New subfolder",
+    "newFolder": "New folder",
+    "insideParent": "Inside {parent}. Everything in this folder moves with it.",
+    "topLevelHint": "A folder is where a source lives. Folders can hold other folders.",
+    "subPlaceholder": "e.g. 2026",
+    "topPlaceholder": "e.g. Contracts, Fundraising Q1",
+    "creating": "Creating…",
+    "createFolder": "Create folder"
+  },
+  "deleteFolderDialog": {
+    "unfiled": "Unfiled",
+    "sourcesMove": "{count, plural, one {# source inside will move to {destination}.} other {# sources inside will move to {destination}.}}",
+    "subfoldersRemoved": "{count, plural, one {# subfolder will be removed too.} other {# subfolders will be removed too.}}",
+    "empty": "The folder is empty.",
+    "title": "Delete \"{name}\"?",
+    "titleFallback": "Delete folder?",
+    "description": "No source is deleted. {consequences}",
+    "deleting": "Deleting…",
+    "deleteFolder": "Delete folder"
+  },
+  "renameSource": {
+    "failed": "Couldn't rename this source. Try again.",
+    "failedFallback": "Failed to rename",
+    "title": "Rename source",
+    "inputAria": "Source title",
+    "empty": "Title cannot be empty."
+  },
+  "webSources": {
+    "aria": "Web sources",
+    "count": "{count, plural, one {# web source} other {# web sources}}"
+  },
+  "failure": {
+    "categories": {
+      "embedding_quota": {
+        "label": "Usage limit hit",
+        "message": "The embedding service is over its usage limit. Try again in a few minutes.",
+        "name": "Embedding usage limit"
+      },
+      "embedding_unavailable": {
+        "label": "Embedding offline",
+        "message": "The embedding service is unavailable. Try again in a few minutes.",
+        "name": "Embedding service unavailable"
+      },
+      "ocr_unavailable": {
+        "label": "OCR unavailable",
+        "message": "The OCR service is unavailable. Try again in a few minutes.",
+        "name": "OCR service unavailable"
+      },
+      "transcription_unavailable": {
+        "label": "Transcriber offline",
+        "message": "The transcription service is unavailable. Try again in a few minutes.",
+        "name": "Transcription service unavailable"
+      },
+      "misconfigured": {
+        "label": "Not set up",
+        "message": "This server isn't set up to process this file. Retrying won't help yet.",
+        "name": "Server configuration"
+      },
+      "file_unreadable": {
+        "label": "Couldn't read file",
+        "message": "Couldn't read this file. It may be damaged, password-protected, or in a format we can't open.",
+        "name": "Unreadable file"
+      },
+      "file_missing": {
+        "label": "File missing",
+        "message": "Couldn't load the uploaded file. Try uploading it again.",
+        "name": "Missing file"
+      },
+      "timeout": {
+        "label": "Took too long",
+        "message": "Processing took too long and was stopped. Try again.",
+        "name": "Timed out"
+      },
+      "interrupted": {
+        "label": "Interrupted",
+        "message": "Processing kept stopping before it could finish. Try again.",
+        "name": "Interrupted"
+      },
+      "internal": {
+        "label": "Processing error",
+        "message": "Something went wrong on our side while processing this file.",
+        "name": "Internal error"
+      },
+      "unknown": {
+        "label": "Couldn't process",
+        "message": "Something went wrong while processing this file.",
+        "name": "Unknown error"
+      }
+    },
+    "report": {
+      "subject": "Problem processing \"{document}\"",
+      "document": "Document: {document}",
+      "documentId": "Document ID: {id}",
+      "error": "Error: {name} ({category})",
+      "jobId": "Job / trace ID: {jobId}"
+    }
+  },
+  "progress": {
+    "syncing": "Syncing…",
+    "readingPages": "Reading pages",
+    "preparingPages": "Preparing {pages} pages",
+    "preparingText": "Preparing text",
+    "embeddingCount": "Embedding {done}/{total}",
+    "embedding": "Embedding",
+    "finishing": "Finishing",
+    "retrying": "Retrying",
+    "retryingNow": "Retrying now",
+    "retryingInSeconds": "Retrying in {seconds} s",
+    "retryingInMinutes": "Retrying in {minutes} min",
+    "queued": "Queued",
+    "processing": "Processing"
+  },
+  "sourceStatus": {
+    "progressLabel": "{label}, {percent}%",
+    "waitingReason": "{message} Attempt {attempt} of {maxAttempts}.",
+    "failureTrigger": "{label}: show what went wrong with {title}",
+    "cardTitle": "Couldn’t process this source",
+    "failedAgain": "{count, plural, one {It failed again after a retry.} other {It failed again after # retries.}}",
+    "contactUs": "Contact us about this error",
+    "details": "Details",
+    "jobId": "Job ID",
+    "retryAria": "Retry processing {title}"
+  },
+  "folderIssues": {
+    "required": "Folder name is required.",
+    "separator": "Folder names can't contain \"{separator}\".",
+    "nameTooLong": "Folder name is too long (max {max} characters).",
+    "unfiledReserved": "\"{unfiled}\" is where sources without a folder live; it can't be created.",
+    "underUnfiled": "Folders can't be nested under \"{unfiled}\".",
+    "tooDeep": "Folders can be nested at most {max} deep.",
+    "pathTooLong": "The full folder path is too long (max {max} characters)."
+  },
+  "audience": {
+    "onlyYou": "Only you",
+    "sharedWith": "Shared with {count}",
+    "sharedWithSpecific": "Shared with specific people",
+    "everyoneAt": "Everyone at {workspace}",
+    "everyoneInWorkspace": "Everyone in the workspace",
+    "moveInherits": "Now visible to everyone who can open {folder}",
+    "moveMadePrivate": "Now private to you",
+    "moveKeptAudience": "Still visible only to the people who could see it before"
+  },
+  "addDestination": {
+    "specificPeople": "Specific people",
+    "sharedWithPeople": "Shared with {count, plural, one {# person} other {# people}}",
+    "unfiledPrivate": "Files with no folder stay private until you share them.",
+    "newTopPrivate": "{folder} is a new folder. New folders start private to you.",
+    "newSubPrivate": "{folder} is a new folder inside {parent}, which is private to you.",
+    "newSubFollows": "{folder} is a new folder inside {parent}, so it follows {parent}'s sharing.",
+    "followsPrivate": "{folder} follows {governing}, which is private to you.",
+    "privateToYou": "{folder} is private to you.",
+    "workspaceCanOpen": "Anyone in the workspace can open {folder}.",
+    "followsSharing": "{folder} follows {governing}'s sharing.",
+    "sharedOnly": "Only the people {folder} is shared with can open it.",
+    "tagOnlyYou": "Only you",
+    "tagShared": "Shared",
+    "tagEveryone": "Everyone",
+    "peopleCount": "{count, plural, one {# person} other {# people}}",
+    "noFolder": "No folder",
+    "noName": "Give the new folder a name.",
+    "noSlash": "A folder name can't contain “/”.",
+    "pathProblem": "{path}: {problem}"
+  },
+  "contextMenu": {
+    "indexing": "This source is still being indexed.",
+    "viewOnly": "You can view this file but not change it.",
+    "folderLocked": "You can't add files to this folder.",
+    "deleteReserved": "Only the person who added this file, or someone who manages it, can delete it.",
+    "unfiled": "Unfiled",
+    "open": "Open",
+    "openBeside": "Open to the side",
+    "removeFromContext": "Remove from context",
+    "addToContext": "Add to context",
+    "openInNewTab": "Open in a new tab",
+    "showInKnowledge": "Show in Knowledge",
+    "rename": "Rename…",
+    "moveToFolder": "Move to folder",
+    "cut": "Cut",
+    "copyTitle": "Copy title",
+    "copyLink": "Copy link",
+    "share": "Share…",
+    "delete": "Delete…",
+    "openFolder": "Open folder",
+    "newSourceInFolder": "New source in this folder…",
+    "newSubfolder": "New subfolder…",
+    "pasteHere": "{count, plural, one {Paste # source here} other {Paste # sources here}}",
+    "collapseAll": "Collapse all",
+    "expandAll": "Expand all",
+    "moveTo": "Move to…",
+    "topLevel": "Top level",
+    "deselectAllInFolder": "Deselect all in folder",
+    "selectAllInFolder": "Select all in folder",
+    "pasteTopLevel": "{count, plural, one {Paste # source at the top level} other {Paste # sources at the top level}}",
+    "addKnowledge": "Add knowledge",
+    "newFolder": "New folder",
+    "selectionViewOnlyAll": "You can view these but not change them.",
+    "selectionViewOnlySome": "{count, plural, one {You can view # of these but not change it; it will be skipped.} other {You can view # of these but not change them; they will be skipped.}}",
+    "selectionIndexingAll": "These sources are still being indexed.",
+    "selectionIndexingSome": "{count, plural, one {# of these is still being indexed and will be skipped.} other {# of these are still being indexed and will be skipped.}}",
+    "selectedCount": "{count, plural, one {# source selected} other {# sources selected}}",
+    "removeAllFromContext": "Remove all from context",
+    "moveSelection": "Move {count} to folder",
+    "moveSelectionSome": "Move {movable} of {count} to folder",
+    "deleteSelection": "{count, plural, one {Delete # source…} other {Delete # sources…}}",
+    "deleteSelectionSome": "{count, plural, one {Delete {movable} of # source…} other {Delete {movable} of # sources…}}"
+  },
+  "connectorSync": {
+    "syncing": "Syncing…",
+    "starting": "Starting sync…",
+    "lastSync": "Last sync {at}",
+    "notSynced": "Not synced yet",
+    "stalled": "The sync was requested {seconds} seconds ago and still hasn’t started. This server’s background job runner may be down. Ask whoever runs LaunchStack to check it, then press Sync now again."
+  },
+  "sourceApi": {
+    "renameMindmap": "Failed to rename mindmap",
+    "renameDocument": "Failed to rename document",
+    "moveMindmap": "Failed to move mindmap",
+    "moveDocument": "Failed to move document",
+    "deleteMindmap": "Failed to delete mindmap",
+    "restoreMindmap": "Failed to restore mindmap",
+    "deleteDocument": "Failed to delete document",
+    "stillAdding": "This source is still being added",
+    "nothingToRetry": "This source has nothing to retry",
+    "retry": "Couldn't retry processing"
+  },
+  "sourceUpload": {
+    "withReason": "{name}: {reason}",
+    "uploadFailed": "{name}: upload failed (HTTP {status})",
+    "registerFailed": "{name}: couldn't be added (HTTP {status})"
+  },
+  "sourceTypes": {
+    "doc": "File",
+    "audio": "Audio",
+    "video": "Video",
+    "github": "GitHub",
+    "notion": "Notion",
+    "gmail": "Gmail",
+    "drive": "Drive",
+    "slack": "Slack",
+    "dropbox": "Dropbox",
+    "web": "Website",
+    "youtube": "YouTube",
+    "paste": "Note",
+    "mindmap": "Mindmap",
+    "artifact": "Claude artifact"
+  },
+  "domains": {
+    "contract": {
+      "label": "Contract",
+      "desc": "Exhibits, schedules, addendums"
+    },
+    "financial": {
+      "label": "Financial",
+      "desc": "Balance sheets, audit reports"
+    },
+    "technical": {
+      "label": "Technical",
+      "desc": "Specs, manuals, diagrams"
+    },
+    "compliance": {
+      "label": "Compliance",
+      "desc": "Regulatory filings, certifications"
+    },
+    "educational": {
+      "label": "Educational",
+      "desc": "Syllabi, handouts, readings"
+    },
+    "hr": {
+      "label": "HR",
+      "desc": "Policies, forms, handbooks"
+    },
+    "research": {
+      "label": "Research",
+      "desc": "Papers, datasets, sources"
+    },
+    "general": {
+      "label": "General",
+      "desc": "Cross-references and attachments"
+    }
+  }
+}

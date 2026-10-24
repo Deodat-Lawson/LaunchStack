@@ -1,1 +1,26 @@
-{}
+{
+  "global": {
+    "title": "出了点问题",
+    "body": "发生了意外错误。请重试；如果问题仍然存在，请联系支持人员。",
+    "errorId": "错误 ID：{id}",
+    "tryAgain": "重试"
+  },
+  "notFound": {
+    "metaTitle": "页面未找到",
+    "metaDescription": "你要找的页面不存在。",
+    "title": "页面未找到",
+    "body": "你要找的页面不存在或已被移动。你可以去以下这些地方看看。",
+    "signIn": "前往登录",
+    "deploymentGuide": "部署指南"
+  },
+  "unavailable": {
+    "title": "该功能暂不可用",
+    "body": "我们正在全力开发此功能，敬请期待！",
+    "expected": "预计上线时间：2025 年第四季度 ~ 2026 年第一季度",
+    "meanwhile": "在此期间，你可以：",
+    "explore": "探索我们现有的功能",
+    "docs": "查看文档了解最新动态",
+    "contact": "联系支持人员了解更多信息",
+    "backHome": "返回首页"
+  }
+}

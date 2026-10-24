@@ -27,6 +27,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
     Archive,
     Bot,
@@ -111,189 +112,37 @@ const CompanyProfileView = dynamic(
 
 type GroupId = "you" | "workspace" | "data";
 
-const GROUPS: { id: GroupId; label: string; blurb: string }[] = [
-    { id: "you", label: "You", blurb: "Yours alone; changes affect nobody else." },
-    { id: "workspace", label: "Workspace", blurb: "Policy for everyone in the workspace." },
-    { id: "data", label: "Workspace data", blurb: "The expensive and the irreversible." },
-];
+/** Labels and blurbs: `settings.groups.<id>`. */
+const GROUPS: { id: GroupId }[] = [{ id: "you" }, { id: "workspace" }, { id: "data" }];
 
+/**
+ * A rail entry. Its words are `settings.sections.<id>`: `label` (rail, short),
+ * `blurb` (rail sub-label, one clause), `eyebrow`, `title` (header, sentence
+ * case) and `description` (what the section is *for*, not what it contains).
+ */
 interface SectionDef {
     id: SettingsSectionId;
     group: GroupId;
-    /** Rail label. Short. */
-    label: string;
-    /** Rail sub-label. One clause. */
-    blurb: string;
-    /** Header eyebrow. */
-    eyebrow: string;
-    /** Header title. Full sentence case. */
-    title: string;
-    /** Header description. Says what the section is *for*, not what it contains. */
-    description: string;
     Icon: React.ComponentType<{ size?: number; className?: string }>;
     /** Wide sections get the full column; forms stay readable at 840px. */
     wide?: boolean;
 }
 
 export const SECTIONS: SectionDef[] = [
-    {
-        id: "account",
-        group: "you",
-        label: "Account",
-        blurb: "Profile, photo, password, sessions",
-        eyebrow: "Account",
-        title: "Who you are, and where you are signed in",
-        description:
-            "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session.",
-        Icon: User,
-    },
-    {
-        id: "appearance",
-        group: "you",
-        label: "Appearance",
-        blurb: "Theme, density, motion, answers",
-        eyebrow: "Appearance",
-        title: "How the app looks, and how it answers you",
-        description:
-            "Four controls, not eleven: three for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme.",
-        Icon: Palette,
-    },
-    {
-        id: "shortcuts",
-        group: "you",
-        label: "Shortcuts",
-        blurb: "Every command and its keys",
-        eyebrow: "Shortcuts",
-        title: "What the keyboard does",
-        description:
-            "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open.",
-        Icon: Keyboard,
-    },
-    {
-        id: "people",
-        group: "workspace",
-        label: "People and access",
-        blurb: "Members, roles, folders",
-        eyebrow: "People",
-        title: "Who is in the workspace, and what they can see",
-        description:
-            "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else.",
-        Icon: Users,
-        wide: true,
-    },
-    {
-        id: "company",
-        group: "workspace",
-        label: "Company profile",
-        blurb: "What your sources prove",
-        eyebrow: "Company",
-        title: "What your sources can prove",
-        description:
-            "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that.",
-        Icon: Building2,
-        wide: true,
-    },
-    {
-        id: "processing",
-        group: "workspace",
-        label: "Processing",
-        blurb: "Embedding index and keys",
-        eyebrow: "Processing",
-        title: "How documents get indexed",
-        description:
-            "The embedding index behind semantic search, the credentials it uses, and any self-hosted endpoints. Changing the index schedules a reindex of the whole corpus.",
-        Icon: Cpu,
-    },
-    {
-        id: "models",
-        group: "workspace",
-        label: "Models and routes",
-        blurb: "Which model answers what",
-        eyebrow: "Models",
-        title: "Which model serves each kind of request",
-        description:
-            "Run this workspace on your own provider account, or on the server's default models. The default's routes and models are set in the server's configuration file and shown here read-only.",
-        Icon: Sparkles,
-    },
-    {
-        id: "agents",
-        group: "workspace",
-        label: "Agents and autonomy",
-        blurb: "The roster, and what it may do",
-        eyebrow: "Agents",
-        title: "Who shows up to a meeting, and how much they may do alone",
-        description:
-            "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect.",
-        Icon: Bot,
-    },
-    {
-        id: "documents",
-        group: "workspace",
-        label: "Document defaults",
-        blurb: "Storage, processing, destination",
-        eyebrow: "Documents",
-        title: "What a new document gets unless someone says otherwise",
-        description:
-            "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc. Folders can override the processing default.",
-        Icon: FileText,
-    },
-    {
-        id: "integrations",
-        group: "workspace",
-        label: "Integrations",
-        blurb: "Connections, Slack, remote nodes",
-        eyebrow: "Integrations",
-        title: "What this workspace connects to",
-        description:
-            "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent.",
-        Icon: Plug,
-    },
-    {
-        id: "usage",
-        group: "data",
-        label: "Usage and costs",
-        blurb: "Balance, burn, estimate",
-        eyebrow: "Usage",
-        title: "What the workspace is spending",
-        description:
-            "The token balance, what has been drawing on it and when, and an estimate of cost from a price you set. The numbers exist to inform the two settings on this page.",
-        Icon: Coins,
-        wide: true,
-    },
-    {
-        id: "archive",
-        group: "data",
-        label: "Archive and retention",
-        blurb: "Trash, retired agents, purge",
-        eyebrow: "Archive",
-        title: "What has been put away, and when it goes for good",
-        description:
-            "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own.",
-        Icon: Archive,
-        wide: true,
-    },
-    {
-        id: "privacy",
-        group: "data",
-        label: "Data and privacy",
-        blurb: "What leaves the deployment",
-        eyebrow: "Privacy",
-        title: "What leaves this deployment, and what stays",
-        description:
-            "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive.",
-        Icon: ShieldCheck,
-    },
-    {
-        id: "labs",
-        group: "data",
-        label: "Labs",
-        blurb: "Unfinished, opt-in",
-        eyebrow: "Labs",
-        title: "Features that are not finished",
-        description:
-            "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace.",
-        Icon: FlaskConical,
-    },
+    { id: "account", group: "you", Icon: User },
+    { id: "appearance", group: "you", Icon: Palette },
+    { id: "shortcuts", group: "you", Icon: Keyboard },
+    { id: "people", group: "workspace", Icon: Users, wide: true },
+    { id: "company", group: "workspace", Icon: Building2, wide: true },
+    { id: "processing", group: "workspace", Icon: Cpu },
+    { id: "models", group: "workspace", Icon: Sparkles },
+    { id: "agents", group: "workspace", Icon: Bot },
+    { id: "documents", group: "workspace", Icon: FileText },
+    { id: "integrations", group: "workspace", Icon: Plug },
+    { id: "usage", group: "data", Icon: Coins, wide: true },
+    { id: "archive", group: "data", Icon: Archive, wide: true },
+    { id: "privacy", group: "data", Icon: ShieldCheck },
+    { id: "labs", group: "data", Icon: FlaskConical },
 ];
 
 /** Hashes that used to be settings sections and now live in the Studio. */
@@ -310,6 +159,7 @@ export interface SettingsHubProps {
 }
 
 export function SettingsHub({ embedded = false, initialSection }: SettingsHubProps) {
+    const t = useTranslations("settings");
     const router = useRouter();
     const [section, setSection] = useState<SettingsSectionId>(initialSection ?? "account");
     const [actions, setActions] = useState<SettingsSectionActions | null>(null);
@@ -396,7 +246,7 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             )}
         >
             <nav
-                aria-label="Settings sections"
+                aria-label={t("hub.navLabel")}
                 className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4 [@container(max-width:639px)]:hidden"
             >
                 {/* Standalone, the way back leads the rail as it does in
@@ -407,15 +257,15 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                     to switch to another — not a back arrow in the Studio. */}
                 <WorkspaceSwitchCard className="mb-4" />
                 <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
-                    Settings
+                    {t("hub.railTitle")}
                 </div>
                 {groups.map(group => (
                     <div key={group.id} className="mb-3">
                         <div
                             className="text-ink-3 px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em]"
-                            title={group.blurb}
+                            title={t(`groups.${group.id}.blurb`)}
                         >
-                            {group.label}
+                            {t(`groups.${group.id}.label`)}
                         </div>
                         {group.sections.map(item => {
                             const isActive = item.id === section;
@@ -440,10 +290,10 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                                                 isActive ? "font-semibold" : "font-medium"
                                             )}
                                         >
-                                            {item.label}
+                                            {t(`sections.${item.id}.label`)}
                                         </span>
                                         <span className="text-ink-3 mt-px block text-[11px] leading-[1.4]">
-                                            {item.blurb}
+                                            {t(`sections.${item.id}.blurb`)}
                                         </span>
                                     </span>
                                 </button>
@@ -463,16 +313,16 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                             if (isSettingsSectionId(next)) selectSection(next);
                         }}
                     >
-                        <SelectTrigger aria-label="Settings section" className="w-full">
-                            <SelectValue placeholder={active.label} />
+                        <SelectTrigger aria-label={t("hub.pickerLabel")} className="w-full">
+                            <SelectValue placeholder={t(`sections.${active.id}.label`)} />
                         </SelectTrigger>
                         <SelectContent>
                             {groups.map(group => (
                                 <SelectGroup key={group.id}>
-                                    <SelectLabel>{group.label}</SelectLabel>
+                                    <SelectLabel>{t(`groups.${group.id}.label`)}</SelectLabel>
                                     {group.sections.map(item => (
                                         <SelectItem key={item.id} value={item.id}>
-                                            {item.label}
+                                            {t(`sections.${item.id}.label`)}
                                         </SelectItem>
                                     ))}
                                 </SelectGroup>
@@ -493,7 +343,7 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                             <SectionBody id={active.id} onActions={registerActions} />
                         ) : (
                             <SectionWithheld
-                                label={active.label}
+                                label={t(`sections.${active.id}.label`)}
                                 loaded={permissionsLoaded}
                                 error={permissionsError}
                                 roleName={roleName}
@@ -521,6 +371,7 @@ function SectionHeader({
     actions: SettingsSectionActions | null;
     readOnly: boolean;
 }) {
+    const t = useTranslations("settings");
     const busyLabel = actions?.primaryBusyLabel ?? `${actions?.primaryLabel ?? ""}…`;
 
     return (
@@ -533,21 +384,18 @@ function SectionHeader({
             >
                 <div className="min-w-0 flex-1">
                     <div className="mono text-ink-3 mb-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {definition.eyebrow}
+                        {t(`sections.${definition.id}.eyebrow`)}
                         {readOnly && (
-                            <Badge
-                                variant="secondary"
-                                title="You can see this; changing it isn't part of your role."
-                            >
-                                Read-only
+                            <Badge variant="secondary" title={t("hub.readOnlyTitle")}>
+                                {t("hub.readOnly")}
                             </Badge>
                         )}
                     </div>
                     <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
-                        {definition.title}
+                        {t(`sections.${definition.id}.title`)}
                     </h1>
                     <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">
-                        {definition.description}
+                        {t(`sections.${definition.id}.description`)}
                     </p>
                 </div>
 
@@ -628,16 +476,17 @@ function SectionWithheld({
     error: string | null;
     roleName: string | null;
 }) {
+    const t = useTranslations("settings.hub");
     if (!loaded) return <SectionLoading />;
     if (error) return <StatusNote tone="danger">{error}</StatusNote>;
     return (
         <StatusNote tone="muted">
-            {label} isn&apos;t part of your role{roleName ? ` (${roleName})` : ""}. Ask an admin if
-            you need it.
+            {roleName ? t("withheldWithRole", { label, role: roleName }) : t("withheld", { label })}
         </StatusNote>
     );
 }
 
 function SectionLoading() {
-    return <StatusNote tone="muted">Loading…</StatusNote>;
+    const tc = useTranslations("common");
+    return <StatusNote tone="muted">{tc("status.loading")}</StatusNote>;
 }

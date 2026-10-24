@@ -1,1 +1,858 @@
-{}
+{
+  "shapes": {
+    "rectangle": "Rectangle",
+    "rounded-rectangle": "Rounded rectangle",
+    "ellipse": "Ellipse",
+    "circle": "Circle",
+    "diamond": "Diamond",
+    "triangle": "Triangle",
+    "right-triangle": "Right triangle",
+    "pentagon": "Pentagon",
+    "hexagon": "Hexagon",
+    "octagon": "Octagon",
+    "trapezoid": "Trapezoid",
+    "parallelogram": "Parallelogram",
+    "star": "Star",
+    "cross": "Cross",
+    "cylinder": "Cylinder",
+    "cloud": "Cloud",
+    "callout": "Callout",
+    "chevron": "Chevron",
+    "bracket-pair": "Brackets",
+    "arrow-right": "Arrow right",
+    "arrow-left": "Arrow left",
+    "arrow-up": "Arrow up",
+    "arrow-down": "Arrow down",
+    "arrow-double": "Double arrow",
+    "process": "Process",
+    "decision": "Decision",
+    "terminator": "Terminator",
+    "data": "Data",
+    "document": "Document",
+    "multi-document": "Multi-document",
+    "predefined-process": "Predefined process",
+    "internal-storage": "Internal storage",
+    "manual-input": "Manual input",
+    "manual-operation": "Manual operation",
+    "preparation": "Preparation",
+    "off-page-connector": "Off-page connector",
+    "connector-dot": "Connector",
+    "database": "Database",
+    "direct-data": "Direct data",
+    "stored-data": "Stored data",
+    "display": "Display",
+    "delay": "Delay",
+    "merge": "Merge",
+    "extract": "Extract",
+    "or-junction": "Or",
+    "summing-junction": "Summing junction",
+    "sort": "Sort",
+    "collate": "Collate",
+    "loop-limit": "Loop limit",
+    "mind-root": "Central topic",
+    "mind-branch": "Topic",
+    "mind-leaf": "Subtopic",
+    "sticky": "Sticky note",
+    "text": "Text",
+    "image": "Image",
+    "ink": "Ink",
+    "line": "Line",
+    "uml-class": "Class",
+    "uml-actor": "Actor",
+    "uml-note": "Note",
+    "uml-package": "Package",
+    "uml-component": "Component",
+    "uml-interface": "Interface",
+    "erd-entity": "Entity",
+    "group": "Group",
+    "frame": "Frame",
+    "swimlane-h": "Swimlane (rows)",
+    "swimlane-v": "Swimlane (columns)"
+  },
+  "shapeCategories": {
+    "nodes": "Nodes",
+    "annotate": "Annotate",
+    "standard": "Standard",
+    "umlErd": "UML & ERD",
+    "containers": "Containers",
+    "arrows": "Arrows"
+  },
+  "colors": {
+    "slate": "Slate",
+    "graphite": "Graphite",
+    "violet": "Violet",
+    "indigo": "Indigo",
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "teal": "Teal",
+    "green": "Green",
+    "lime": "Lime",
+    "amber": "Amber",
+    "orange": "Orange",
+    "red": "Red",
+    "pink": "Pink",
+    "magenta": "Magenta"
+  },
+  "themes": {
+    "default": "Launchstack",
+    "mono": "Monochrome",
+    "ocean": "Ocean",
+    "sunset": "Sunset",
+    "forest": "Forest",
+    "midnight": "Midnight",
+    "carbon": "Carbon",
+    "abyss": "Abyss",
+    "ember": "Ember",
+    "pine": "Pine"
+  },
+  "arrows": {
+    "none": "None",
+    "arrow": "Filled arrow",
+    "arrow-open": "Open arrow",
+    "triangle-hollow": "Hollow triangle",
+    "diamond": "Filled diamond",
+    "diamond-hollow": "Hollow diamond",
+    "circle": "Filled circle",
+    "circle-hollow": "Hollow circle",
+    "bar": "Bar",
+    "crowfoot-one": "ERD — one",
+    "crowfoot-many": "ERD — many",
+    "crowfoot-one-many": "ERD — one or many",
+    "crowfoot-zero-one": "ERD — zero or one",
+    "crowfoot-zero-many": "ERD — zero or many"
+  },
+  "templates": {
+    "blank": {
+      "name": "Blank canvas",
+      "description": "Start from nothing"
+    },
+    "mindmap": {
+      "name": "Mindmap",
+      "description": "Central idea with radiating branches"
+    },
+    "brainstorm": {
+      "name": "Brainstorm board",
+      "description": "Sticky notes in four columns"
+    },
+    "concept-map": {
+      "name": "Concept map",
+      "description": "Labelled relationships between ideas"
+    },
+    "flowchart": {
+      "name": "Flowchart",
+      "description": "Start, steps, a decision and two outcomes"
+    },
+    "user-flow": {
+      "name": "User flow",
+      "description": "Screens and the paths between them"
+    },
+    "swimlane": {
+      "name": "Swimlane process",
+      "description": "Who does what, in lanes"
+    },
+    "fishbone": {
+      "name": "Cause and effect",
+      "description": "Ishikawa diagram for root-cause work"
+    },
+    "org-chart": {
+      "name": "Org chart",
+      "description": "Reporting lines, tidy-laid-out"
+    },
+    "kanban": {
+      "name": "Kanban board",
+      "description": "Four columns of cards"
+    },
+    "timeline": {
+      "name": "Timeline",
+      "description": "Milestones along a spine"
+    },
+    "swot": {
+      "name": "SWOT analysis",
+      "description": "Four framed quadrants"
+    },
+    "customer-journey": {
+      "name": "Customer journey",
+      "description": "Stages across actions, touchpoints, feelings"
+    },
+    "architecture": {
+      "name": "System architecture",
+      "description": "Services, stores and the calls between them"
+    },
+    "erd": {
+      "name": "Entity relationship",
+      "description": "Tables with crow's-foot cardinality"
+    }
+  },
+  "templateCategories": {
+    "mindmap": "Mindmap",
+    "flowchart": "Flowchart",
+    "planning": "Planning",
+    "technical": "Technical"
+  },
+  "starter": {
+    "page": "Page 1",
+    "yes": "Yes",
+    "no": "No",
+    "mindmap": {
+      "centre": "Central idea",
+      "first": "First branch",
+      "second": "Second branch",
+      "third": "Third branch",
+      "fourth": "Fourth branch",
+      "detail": "Detail {branch}.{index}"
+    },
+    "brainstorm": {
+      "prompt": "What are we solving?",
+      "ideas": "Ideas",
+      "questions": "Questions",
+      "risks": "Risks",
+      "nextSteps": "Next steps"
+    },
+    "flowchart": {
+      "start": "Start",
+      "step": "Do the thing",
+      "decision": "Looks right?",
+      "ship": "Ship it",
+      "fix": "Fix and retry",
+      "end": "End",
+      "retry": "retry"
+    },
+    "orgChart": {
+      "name": "Name",
+      "ceo": "Chief Executive",
+      "engineering": "Engineering",
+      "product": "Product",
+      "goToMarket": "Go-to-market",
+      "team": "Team {team}"
+    },
+    "swimlane": {
+      "customer": "Customer",
+      "support": "Support",
+      "engineering": "Engineering",
+      "reports": "Reports issue",
+      "triages": "Triages ticket",
+      "reproduces": "Reproduces bug",
+      "ships": "Ships fix",
+      "confirms": "Confirms fixed"
+    },
+    "erd": {
+      "places": "places",
+      "contains": "contains"
+    },
+    "architecture": {
+      "client": "Web client",
+      "api": "API",
+      "worker": "Worker",
+      "queue": "Queue",
+      "storage": "Object storage",
+      "enqueue": "enqueue",
+      "consume": "consume",
+      "artifacts": "artifacts"
+    },
+    "userFlow": {
+      "landing": "Landing",
+      "signUp": "Sign up",
+      "onboarding": "Onboarding",
+      "workspace": "Workspace",
+      "hasAccount": "Has account?",
+      "signIn": "Sign in"
+    },
+    "swot": {
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "opportunities": "Opportunities",
+      "threats": "Threats"
+    },
+    "kanban": {
+      "backlog": "Backlog",
+      "inProgress": "In progress",
+      "review": "Review",
+      "done": "Done"
+    },
+    "timeline": {
+      "kickoff": "Kickoff",
+      "alpha": "Alpha",
+      "beta": "Beta",
+      "launch": "Launch",
+      "review": "Review"
+    },
+    "journey": {
+      "awareness": "Awareness",
+      "consideration": "Consideration",
+      "decision": "Decision",
+      "onboarding": "Onboarding",
+      "advocacy": "Advocacy",
+      "actions": "Actions",
+      "touchpoints": "Touchpoints",
+      "feelings": "Feelings",
+      "opportunities": "Opportunities"
+    },
+    "fishbone": {
+      "problem": "Problem",
+      "people": "People",
+      "process": "Process",
+      "tools": "Tools",
+      "data": "Data",
+      "environment": "Environment",
+      "measurement": "Measurement"
+    },
+    "conceptMap": {
+      "core": "Core concept",
+      "a": "Concept A",
+      "b": "Concept B",
+      "c": "Concept C",
+      "leadsTo": "leads to",
+      "requires": "requires",
+      "supports": "supports",
+      "constrains": "constrains"
+    }
+  },
+  "toolbar": {
+    "tools": {
+      "select": "Select",
+      "hand": "Pan",
+      "topic": "Topic",
+      "connector": "Connector",
+      "text": "Text",
+      "sticky": "Sticky note",
+      "frame": "Frame",
+      "ink": "Pen",
+      "eraser": "Eraser",
+      "rectangle": "Rectangle",
+      "ellipse": "Ellipse",
+      "diamond": "Diamond"
+    },
+    "hints": {
+      "hand": "H · hold Space",
+      "topic": "Box you type in"
+    },
+    "allShapes": "All shapes"
+  },
+  "shapePalette": {
+    "search": "Search shapes…",
+    "noMatch": "No shapes match “{query}”.",
+    "blurbs": {
+      "nodes": "Type in them, connect them, let auto-layout arrange them.",
+      "annotate": "Marks on the canvas. Not part of the diagram's structure."
+    }
+  },
+  "topBar": {
+    "backToLibrary": "Back to library",
+    "untitled": "Untitled mindmap",
+    "titleLabel": "Mindmap title",
+    "saveOptions": "Save options",
+    "saveVersion": "Save a version",
+    "versionHistory": "Version history",
+    "undoTip": "Undo ⌘Z",
+    "redo": "Redo",
+    "redoTip": "Redo ⇧⌘Z",
+    "layout": "Layout",
+    "arrangeNow": "Arrange now",
+    "autoArrange": "Auto-arrange as I type",
+    "arrangeAs": "Arrange as",
+    "layouts": {
+      "mindmap": "Mindmap — both sides",
+      "treeRight": "Tree — left to right",
+      "treeDown": "Tree — top down",
+      "org": "Org chart",
+      "radial": "Radial",
+      "grid": "Pack into a grid"
+    },
+    "commandPalette": "Command palette",
+    "commandsTip": "Commands ⌘K",
+    "shortcuts": "Keyboard shortcuts",
+    "shortcutsTip": "Shortcuts ?",
+    "toggleLeft": "Toggle left panel",
+    "leftTip": "Shapes & outline",
+    "toggleRight": "Toggle right panel",
+    "rightTip": "Properties",
+    "appearance": "Appearance",
+    "appearanceTip": "Appearance — theme, canvas, snapping",
+    "chromeDepth": "Chrome depth",
+    "simple": "Simple",
+    "everything": "Everything",
+    "present": "Present",
+    "export": "Export…",
+    "import": "Import…",
+    "copyPresentLink": "Copy presentation link",
+    "addToSources": "Add to sources",
+    "unsaved": "Unsaved changes",
+    "upToDate": "Up to date"
+  },
+  "bottomBar": {
+    "pageOptions": "{name} options",
+    "duplicatePage": "Duplicate page",
+    "deletePage": "Delete page",
+    "addPage": "Add page",
+    "showMinimap": "Show minimap",
+    "hideMinimap": "Hide minimap",
+    "minimap": "Minimap"
+  },
+  "pages": {
+    "numbered": "Page {number}",
+    "copy": "{name} copy"
+  },
+  "zoom": {
+    "in": "Zoom in",
+    "inTip": "Zoom in (+ or ⌘=)",
+    "out": "Zoom out",
+    "outTip": "Zoom out (− or ⌘-)",
+    "fit": "Fit to screen",
+    "fitTip": "Fit to screen (⌘1)",
+    "actual": "Zoom to 100%",
+    "selection": "Zoom to selection"
+  },
+  "controls": {
+    "mixed": "Mixed",
+    "value": "Value",
+    "presets": "{name} presets",
+    "none": "None",
+    "custom": "Custom",
+    "customColour": "Custom colour",
+    "paper": "{theme} paper"
+  },
+  "inspector": {
+    "arrange": "Arrange",
+    "alignLeft": "Align left",
+    "alignCentre": "Align centre",
+    "alignRight": "Align right",
+    "alignTop": "Align top",
+    "alignMiddle": "Align middle",
+    "alignBottom": "Align bottom",
+    "distributeH": "Distribute horizontally",
+    "distributeV": "Distribute vertically",
+    "matchSize": "Match size",
+    "flipH": "Flip horizontally",
+    "flipV": "Flip vertically",
+    "front": "Bring to front",
+    "back": "Send to back",
+    "group": "Group (⌘G)",
+    "ungroup": "Ungroup (⇧⌘G)",
+    "lock": "Lock / unlock (⌘L)",
+    "shape": "Shape",
+    "shapesCount": "{count, plural, one {# shape} other {# shapes}}",
+    "mixedShapes": "Mixed shapes",
+    "colour": "Colour",
+    "fillColour": "Fill colour",
+    "fill": "Fill",
+    "strokeColour": "Stroke colour",
+    "stroke": "Stroke",
+    "textColour": "Text colour",
+    "text": "Text",
+    "shapeStyle": "Shape style",
+    "weight": "Weight",
+    "strokeWidth": "Stroke width",
+    "weights": {
+      "hairline": "Hairline",
+      "thin": "Thin",
+      "regular": "Regular",
+      "medium": "Medium",
+      "bold": "Bold",
+      "heavy": "Heavy"
+    },
+    "strokeStyles": {
+      "solid": "Solid",
+      "dashed": "Dashed",
+      "dotted": "Dotted"
+    },
+    "corner": "Corner",
+    "cornerRadius": "Corner radius",
+    "shadow": "Shadow",
+    "dropShadow": "Drop shadow",
+    "opacity": "Opacity",
+    "size": "Size",
+    "fontSize": "Font size",
+    "fontSizes": {
+      "small": "Small",
+      "body": "Body",
+      "emphasis": "Emphasis",
+      "subheading": "Subheading",
+      "heading": "Heading",
+      "display": "Display"
+    },
+    "families": {
+      "sans": "Sans",
+      "serif": "Serif",
+      "mono": "Mono"
+    },
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "strikethrough": "Strikethrough",
+    "textAlign": {
+      "left": "Left",
+      "center": "Centre",
+      "right": "Right",
+      "top": "Top",
+      "middle": "Middle",
+      "bottom": "Bottom"
+    },
+    "fitToText": "Fit shape to text",
+    "positionSize": "Position & size",
+    "widthHeight": "W / H",
+    "width": "Width",
+    "height": "Height",
+    "rotate": "Rotate",
+    "rotation": "Rotation",
+    "connector": "Connector",
+    "connectorsCount": "{count, plural, one {# connector} other {# connectors}}",
+    "route": "Route",
+    "routes": {
+      "straight": "Straight",
+      "elbow": "Elbow",
+      "curved": "Curved"
+    },
+    "connectorColour": "Connector colour",
+    "connectorWidth": "Connector width",
+    "start": "Start",
+    "end": "End",
+    "startArrow": "Start arrowhead",
+    "endArrow": "End arrowhead",
+    "reverse": "Reverse direction",
+    "resetRoute": "Reset route",
+    "labelHint": "Double-click a connector to label it",
+    "theme": "Theme",
+    "canvas": "Canvas",
+    "background": "Background",
+    "backgroundColour": "Background colour",
+    "pattern": "Pattern",
+    "patterns": {
+      "plain": "None",
+      "dots": "Dots",
+      "grid": "Grid",
+      "lines": "Lines"
+    },
+    "spacing": "Spacing",
+    "gridSpacing": "Grid spacing",
+    "snapping": "Snapping",
+    "showGrid": "Show grid",
+    "showRulers": "Show rulers",
+    "snapToGrid": "Snap to grid",
+    "snapToObjects": "Snap to objects",
+    "gridSize": "Grid size",
+    "newConnectors": "New connectors"
+  },
+  "themePicker": {
+    "light": "Light",
+    "dark": "Dark",
+    "lightBoard": "{theme} — light board",
+    "darkBoard": "{theme} — dark board",
+    "boardIsLight": "This board is light. Switch it to <theme>{name}</theme> to match the app.",
+    "boardIsDark": "This board is dark. Switch it to <theme>{name}</theme> to match the app."
+  },
+  "selectionToolbar": {
+    "label": "Selection",
+    "addChild": "Add child",
+    "addChildTopic": "Add child topic",
+    "colour": "Colour",
+    "smaller": "Smaller text",
+    "larger": "Larger text",
+    "everythingElse": "Everything else",
+    "moreOptions": "More options"
+  },
+  "contextMenu": {
+    "label": "Canvas actions",
+    "addSibling": "Add sibling topic",
+    "addConnected": "Add connected shape",
+    "more": "More",
+    "paste": "Paste",
+    "autoLayout": "Auto-layout",
+    "layouts": {
+      "mindmap": "Mindmap",
+      "tree": "Tree — left to right",
+      "org": "Org chart — top down",
+      "radial": "Radial",
+      "grid": "Grid"
+    },
+    "cut": "Cut",
+    "copy": "Copy",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "ask": "Ask about this in chat",
+    "addChild": "Add child topic",
+    "expandBranch": "Expand branch",
+    "collapseBranch": "Collapse branch",
+    "deleteReconnect": "Delete and reconnect",
+    "deleteBranch": "Delete whole branch",
+    "colour": "Colour",
+    "changeShape": "Change shape",
+    "fitText": "Fit shape to text",
+    "connectorRoute": "Connector route",
+    "reverse": "Reverse direction",
+    "resetRoute": "Reset route",
+    "order": "Order",
+    "orders": {
+      "front": "Bring to front",
+      "forward": "Bring forward",
+      "backward": "Send backward",
+      "back": "Send to back"
+    },
+    "group": "Group",
+    "ungroup": "Ungroup",
+    "lock": "Lock / unlock",
+    "selectShape": "Select all of this shape",
+    "selectConnected": "Select connected"
+  },
+  "commands": {
+    "groups": {
+      "file": "File",
+      "edit": "Edit",
+      "arrange": "Arrange",
+      "connectors": "Connectors",
+      "layout": "Layout",
+      "theme": "Theme",
+      "view": "View"
+    },
+    "layoutMindmap": "Auto-layout: mindmap",
+    "layoutTree": "Auto-layout: tree (left to right)",
+    "layoutTreeDown": "Auto-layout: tree (top down)",
+    "layoutOrg": "Auto-layout: org chart",
+    "layoutRadial": "Auto-layout: radial",
+    "layoutGrid": "Auto-layout: grid",
+    "theme": "Theme: {name}",
+    "save": "Save now",
+    "export": "Export…",
+    "import": "Import…",
+    "publish": "Add to sources",
+    "present": "Present",
+    "newPage": "New page",
+    "undo": "Undo",
+    "redo": "Redo",
+    "selectAll": "Select all",
+    "duplicate": "Duplicate selection",
+    "group": "Group",
+    "ungroup": "Ungroup",
+    "lock": "Lock / unlock",
+    "expandAll": "Expand all branches",
+    "edgeStraight": "Connector style: straight",
+    "edgeElbow": "Connector style: elbow",
+    "edgeCurved": "Connector style: curved",
+    "description": "Search for an action by name",
+    "placeholder": "Type a command…",
+    "noMatch": "No commands match “{query}”."
+  },
+  "help": {
+    "title": "Keyboard shortcuts",
+    "description": "⌘ is Ctrl on Windows and Linux.",
+    "groups": {
+      "tools": "Tools",
+      "topics": "Topics",
+      "editing": "Editing",
+      "arrange": "Arrange",
+      "view": "View"
+    },
+    "keys": {
+      "arrows": "Arrows",
+      "doubleClick": "Double-click",
+      "type": "Type",
+      "altArrow": "⌥ + arrow",
+      "shiftCmdArrow": "⇧⌘ + arrow",
+      "cmdScroll": "⌘-scroll",
+      "scroll": "Scroll",
+      "find": "⌘F or /"
+    },
+    "rows": {
+      "select": "Select",
+      "toolPan": "Pan",
+      "connector": "Connector",
+      "text": "Text",
+      "sticky": "Sticky note",
+      "frame": "Frame",
+      "pen": "Pen",
+      "eraser": "Eraser",
+      "quickShapes": "Rectangle / ellipse / diamond / rounded",
+      "finishNext": "Finish typing · again for the next topic",
+      "topicBefore": "New topic before this one",
+      "addChild": "Add child topic",
+      "outdent": "Outdent topic",
+      "nearest": "Go to the nearest topic that way",
+      "moveTopic": "Move topic up / down",
+      "collapse": "Collapse / expand branch",
+      "deleteBranch": "Delete topic and its branch",
+      "deleteKeep": "Delete topic, keep its children",
+      "editText": "Edit text · new topic on empty canvas",
+      "replaceText": "Replace the selected shape's text",
+      "editSelected": "Edit the selected shape's text",
+      "newLine": "New line while typing",
+      "finishTyping": "Finish typing",
+      "clipboard": "Copy / cut / paste",
+      "duplicate": "Duplicate",
+      "deleteSelection": "Delete selection",
+      "undoRedo": "Undo / redo",
+      "textStyle": "Bold / italic / underline",
+      "groupUngroup": "Group / ungroup",
+      "forwardBackward": "Bring forward / send backward",
+      "frontBack": "Bring to front / send to back",
+      "lock": "Lock / unlock",
+      "tidy": "Tidy up (auto-layout)",
+      "nudge": "Nudge · ⇧ for a larger step",
+      "nudgeTopic": "Nudge a topic",
+      "align": "Align selection",
+      "zoomActual": "Zoom to 100%",
+      "fit": "Fit to screen",
+      "zoomSelection": "Zoom to selection",
+      "zoomInOut": "Zoom in / out",
+      "zoomCursor": "Zoom at the cursor",
+      "scrollPan": "Pan · ⇧ for sideways",
+      "find": "Find on canvas",
+      "palette": "Command palette",
+      "save": "Save now",
+      "export": "Export",
+      "thisDialog": "This dialog"
+    }
+  },
+  "editor": {
+    "autoArrangePaused": "Auto-arrange paused",
+    "autoArrangePausedBody": "You placed something by hand, so the map stays as you left it.",
+    "presentLinkCopied": "Presentation link copied",
+    "presentLinkBody": "Opens the map straight into Present for anyone in the workspace.",
+    "copyLinkFailed": "Couldn't copy the link",
+    "tabs": {
+      "shapes": "Shapes",
+      "outline": "Outline",
+      "comments": "Comments",
+      "history": "History"
+    },
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "exitPresent": "Exit · Esc"
+  },
+  "clipboard": {
+    "readFailed": "Couldn't read {name}",
+    "imported": "Imported {name}",
+    "notMindmap": "{name} is not a readable mindmap file"
+  },
+  "errors": {
+    "notImage": "That file is not a readable image",
+    "noCanvas": "Canvas 2D is unavailable in this browser",
+    "encodePng": "Failed to encode PNG",
+    "rasterise": "Failed to rasterise the diagram",
+    "notReady": "The canvas is not ready yet",
+    "noImageClipboard": "This browser cannot copy images to the clipboard",
+    "requestFailed": "Request failed (HTTP {status})"
+  },
+  "export": {
+    "title": "Export “{title}”",
+    "description": "Images capture the current page; text formats cover the whole document.",
+    "hints": {
+      "png": "Raster image for slides and chat",
+      "svg": "Vector — scales and stays editable",
+      "pdf": "One page, sized to the diagram",
+      "json": "Lossless — re-imports into Mindmap",
+      "markdown": "Indented outline of every topic",
+      "mermaid": "Flowchart code for READMEs"
+    },
+    "exported": "Exported as {format}",
+    "failed": "Export failed",
+    "copied": "Copied to clipboard",
+    "clipboardDenied": "Clipboard access was denied",
+    "copiedImage": "Copied image to clipboard",
+    "copyFailed": "Copy failed",
+    "resolution": "Resolution",
+    "transparent": "Transparent",
+    "transparentLabel": "Transparent background",
+    "selectionOnly": "Selection only",
+    "selectionOnlyLabel": "Export selection only",
+    "nothingSelected": "Nothing selected",
+    "copyImage": "Copy image",
+    "copyText": "Copy text"
+  },
+  "import": {
+    "description": "Replaces the current document. Undo (⌘Z) brings it back.",
+    "outline": "Outline",
+    "imported": "Imported",
+    "parseFailed": "Couldn't parse that — check the format and try again",
+    "placeholders": {
+      "outline": "# Product plan\n- Discovery\n  - Interviews\n  - Survey\n- Build\n  - MVP",
+      "mermaid": "flowchart LR\n  A[\"Start\"] --> B'{'\"Ready?\"'}'\n  B -->|Yes| C[\"Ship\"]",
+      "csv": "parent,child\nCEO,Engineering\nCEO,Product\nEngineering,Platform"
+    }
+  },
+  "publish": {
+    "title": "Add to sources",
+    "description": "Publishes “{title}” as a citable source, so answers in the workspace can quote it. {count, plural, one {# topic} other {# topics}} will be indexed.",
+    "folder": "Save to folder",
+    "unfiled": "Unfiled",
+    "alreadyPublished": "Already in your sources — publishing again updates that copy in place.",
+    "published": "Added to your sources — it will finish indexing shortly",
+    "failed": "Couldn't publish this mindmap"
+  },
+  "find": {
+    "placeholder": "Find on canvas…",
+    "label": "Find on canvas",
+    "previous": "Previous match",
+    "next": "Next match",
+    "close": "Close find"
+  },
+  "comments": {
+    "noComments": "No comments yet.",
+    "thisShape": "this shape",
+    "onShape": "On “{name}”",
+    "emptyShape": "Nothing here yet — the box above posts to this shape.",
+    "elsewhere": "Elsewhere on this page",
+    "placeholderShape": "Comment on “{name}”…",
+    "placeholderPage": "Comment on this page…",
+    "postHint": "⌘↵ to post",
+    "comment": "Comment",
+    "threads": "{count, plural, one {# thread} other {# threads}}",
+    "hideResolved": "Hide resolved",
+    "showResolved": "Show resolved",
+    "reopen": "Reopen",
+    "resolve": "Resolve",
+    "deleteThread": "Delete thread",
+    "jumpToShape": "Jump to shape",
+    "replyPlaceholder": "Reply…",
+    "reply": "Reply",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago"
+  },
+  "outline": {
+    "lock": "Lock",
+    "unlock": "Unlock",
+    "empty": "Nothing on this page yet. Double-click the canvas to start.",
+    "unlinked": "Unlinked"
+  },
+  "history": {
+    "versions": "Versions",
+    "loadFailed": "Couldn't load version history",
+    "restored": "Restored version {revision}",
+    "restoreFailed": "Couldn't restore that version",
+    "empty": "No snapshots yet. Saving with ⌘S records one.",
+    "version": "Version {revision}",
+    "createdFromTemplate": "Created from template",
+    "restoredFrom": "Restored from v{revision}",
+    "meta": "{when} · {count, plural, one {# shape} other {# shapes}}",
+    "restore": "Restore version {revision}"
+  },
+  "emptyCanvas": {
+    "start": "Type your idea",
+    "enter": "<key>Enter</key> finish / next",
+    "tab": "<key>Tab</key> child",
+    "palette": "<key>⌘K</key> everything else",
+    "paste": "Paste an outline instead"
+  },
+  "presenter": {
+    "overview": "Overview",
+    "wholeMap": "Whole map",
+    "branch": "Branch {step} of {total}",
+    "exit": "Exit presentation"
+  },
+  "presence": {
+    "someone": "Someone",
+    "people": "People in this mindmap",
+    "separator": ", ",
+    "staleConflict": "Someone else saved a newer version — your changes will conflict.",
+    "stale": "A newer version is available."
+  },
+  "autosave": {
+    "conflict": "This mindmap changed in another tab",
+    "conflictBody": "Reload to pick up the newer version before editing further.",
+    "failed": "Couldn't save — retrying shortly"
+  },
+  "canvas": {
+    "dropImage": "Drop an image"
+  },
+  "viewer": {
+    "opening": "Opening…"
+  }
+}

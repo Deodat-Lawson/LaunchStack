@@ -3,13 +3,19 @@
 import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import LoadingPage from "~/app/_components/loading";
 import type { ToolHost } from "~/components/tool-app/nav";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { SettingsSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
 import type { TeamToolProps } from "./team/TeamTool";
-import type { StudioFeature } from "./types";
+import {
+    studioFeatureDescription,
+    studioFeatureLabel,
+    useStudioText,
+    type StudioFeature,
+} from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
 /**
@@ -312,8 +318,9 @@ function InlineFeatureShell({
 }
 
 export function ChatPane(_: PaneProps) {
+    const t = useTranslations("workspace.studioPanes.chat");
     return (
-        <InlineFeatureShell eyebrow="Workspace" title="Chat">
+        <InlineFeatureShell eyebrow={t("eyebrow")} title={t("title")}>
             <div
                 style={{
                     padding: "20px 24px",
@@ -322,13 +329,9 @@ export function ChatPane(_: PaneProps) {
                     color: "var(--ink-2)",
                 }}
             >
-                <p style={{ margin: 0 }}>
-                    Ask grounded questions over your indexed sources. Pick sources on the left to
-                    scope your questions, or ask globally across the workspace.
-                </p>
+                <p style={{ margin: 0 }}>{t("body")}</p>
                 <p style={{ marginTop: 12, color: "var(--ink-3)", fontSize: 12 }}>
-                    Select <strong>Chat</strong> in the sidebar to return to your conversation, or
-                    close Studio.
+                    {t.rich("hint", { strong: chunks => <strong>{chunks}</strong> })}
                 </p>
             </div>
         </InlineFeatureShell>
@@ -353,14 +356,16 @@ interface ComingSoonPaneProps extends PaneProps {
 
 /** Reusable "coming soon" pane for Tools features that aren't shipped yet. */
 export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: ComingSoonPaneProps) {
+    const t = useTranslations("workspace.studioPanes");
+    const tc = useTranslations("common");
     return (
         <PaneShell
             eyebrow={eyebrow}
-            title={`${title} (coming soon)`}
+            title={t("comingSoonTitle", { title })}
             body={body}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Close</SecondaryLink>
+                    <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
                     <div style={{ flex: 1 }} />
                     <button
                         disabled
@@ -374,7 +379,7 @@ export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: Comin
                             cursor: "not-allowed",
                         }}
                     >
-                        Coming soon
+                        {t("comingSoon")}
                     </button>
                 </>
             }
@@ -477,9 +482,10 @@ export function KnowledgeStudioPane({
     context,
     onClose,
 }: PaneProps & { context?: StudioPaneContext }) {
+    const t = useTranslations("workspace.studioPanes.knowledge");
     if (!context?.knowledge) {
         return (
-            <InlineFeatureShell eyebrow="Knowledge" title="Your corpus">
+            <InlineFeatureShell eyebrow={t("eyebrow")} title={t("title")}>
                 <div
                     style={{
                         padding: "20px 24px",
@@ -488,10 +494,7 @@ export function KnowledgeStudioPane({
                         color: "var(--ink-2)",
                     }}
                 >
-                    <p style={{ margin: 0 }}>
-                        Everything the workspace can cite — uploads, pasted notes, and connected
-                        tools — with filters, collections, and indexing status.
-                    </p>
+                    <p style={{ margin: 0 }}>{t("body")}</p>
                     <button
                         onClick={onClose}
                         style={{
@@ -504,7 +507,7 @@ export function KnowledgeStudioPane({
                             fontWeight: 600,
                         }}
                     >
-                        Open Knowledge
+                        {t("open")}
                     </button>
                 </div>
             </InlineFeatureShell>
@@ -519,8 +522,9 @@ export function KnowledgeStudioPane({
 
 export function PredictiveGapsPane({ onClose }: PaneProps) {
     const router = useRouter();
+    const t = useTranslations("workspace.studioPanes.predictive");
     return (
-        <InlineFeatureShell eyebrow="Predictive gaps" title="What's missing from this document">
+        <InlineFeatureShell eyebrow={t("eyebrow")} title={t("title")}>
             <div
                 style={{
                     padding: "20px 24px",
@@ -536,9 +540,7 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
                         lineHeight: 1.55,
                     }}
                 >
-                    Runs across a document and flags cross-references pointing to missing
-                    attachments, numeric inconsistencies, and missing schedules. Pick a document
-                    from the source rail, then run the analyzer.
+                    {t("body")}
                 </div>
                 <ul
                     style={{
@@ -550,11 +552,7 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
                         gap: 10,
                     }}
                 >
-                    {[
-                        "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
-                        "Domain-aware: Contract / Financial / Compliance / Research / HR / Educational",
-                        "Findings link back to the source span that triggered them",
-                    ].map(b => (
+                    {[t("crossReferences"), t("domainAware"), t("findingsLink")].map(b => (
                         <li
                             key={b}
                             style={{
@@ -599,7 +597,7 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
                         boxShadow: "0 2px 10px var(--accent-glow)",
                     }}
                 >
-                    Back to workspace <IconChevronRight size={12} />
+                    {t("back")} <IconChevronRight size={12} />
                 </button>
             </div>
         </InlineFeatureShell>
@@ -607,14 +605,16 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
 }
 
 export function WorkflowsPane({ onClose }: PaneProps) {
+    const t = useTranslations("workspace.studioPanes");
+    const tc = useTranslations("common");
     return (
         <PaneShell
-            eyebrow="Automate"
-            title="Workflows (coming soon)"
-            body="Chain source-aware steps: 'Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.' Currently in design."
+            eyebrow={t("workflows.eyebrow")}
+            title={t("workflows.title")}
+            body={t("workflows.body")}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Close</SecondaryLink>
+                    <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
                     <div style={{ flex: 1 }} />
                     <button
                         disabled
@@ -628,7 +628,7 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                             cursor: "not-allowed",
                         }}
                     >
-                        Coming soon
+                        {t("comingSoon")}
                     </button>
                 </>
             }
@@ -643,35 +643,33 @@ export function WorkflowsPane({ onClose }: PaneProps) {
                     gap: 10,
                 }}
             >
-                {[
-                    "Scheduled or event-triggered",
-                    "Composable actions: query, draft, rewrite, export, notify",
-                    "Dry-run preview before first run",
-                ].map(b => (
-                    <li
-                        key={b}
-                        style={{
-                            display: "flex",
-                            gap: 10,
-                            alignItems: "flex-start",
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            lineHeight: 1.55,
-                        }}
-                    >
-                        <span
+                {[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")].map(
+                    b => (
+                        <li
+                            key={b}
                             style={{
-                                marginTop: 7,
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                background: "var(--accent)",
-                                flexShrink: 0,
+                                display: "flex",
+                                gap: 10,
+                                alignItems: "flex-start",
+                                fontSize: 13,
+                                color: "var(--ink-2)",
+                                lineHeight: 1.55,
                             }}
-                        />
-                        {b}
-                    </li>
-                ))}
+                        >
+                            <span
+                                style={{
+                                    marginTop: 7,
+                                    width: 5,
+                                    height: 5,
+                                    borderRadius: "50%",
+                                    background: "var(--accent)",
+                                    flexShrink: 0,
+                                }}
+                            />
+                            {b}
+                        </li>
+                    )
+                )}
             </ul>
         </PaneShell>
     );
@@ -694,6 +692,7 @@ export function DefaultLinkPane({
     ctaLabel: string;
 }) {
     const router = useRouter();
+    const tc = useTranslations("common");
     return (
         <PaneShell
             eyebrow={eyebrow}
@@ -701,7 +700,7 @@ export function DefaultLinkPane({
             body={body}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
+                    <SecondaryLink onClick={onClose}>{tc("actions.cancel")}</SecondaryLink>
                     <div style={{ flex: 1 }} />
                     <PrimaryCTA
                         onClick={() => {
@@ -761,22 +760,26 @@ export function DefaultLinkPane({
  * something useful — start a new one.
  */
 function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioPaneContext }) {
+    const t = useTranslations("workspace");
     if (!context?.mindmap) {
         return (
             <DefaultLinkPane
                 onClose={onClose}
-                eyebrow="Studio"
-                title="Mindmap"
-                body="Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create."
+                eyebrow={t("studioPanes.studioEyebrow")}
+                title={t("studioPanes.mindmap.linkTitle")}
+                body={t("studioPanes.mindmap.linkBody")}
                 bullets={[]}
                 href="/employer/documents?add=1&tab=mindmap"
-                ctaLabel="New mindmap"
+                ctaLabel={t("common.newMindmap")}
             />
         );
     }
     const { onCreate } = context.mindmap;
     return (
-        <InlineFeatureShell eyebrow="Mindmap" title="Sources you draw">
+        <InlineFeatureShell
+            eyebrow={t("studioPanes.mindmap.eyebrow")}
+            title={t("studioPanes.mindmap.title")}
+        >
             <div
                 style={{
                     padding: "20px 24px",
@@ -785,11 +788,7 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
                     color: "var(--ink-2)",
                 }}
             >
-                <p style={{ margin: 0 }}>
-                    Diagrams, mindmaps and flowcharts live in your library beside every other
-                    source. Open one from the rail to preview it, edit it in place, and make it
-                    citable when it is ready.
-                </p>
+                <p style={{ margin: 0 }}>{t("studioPanes.mindmap.body")}</p>
                 <button
                     onClick={onCreate}
                     style={{
@@ -802,7 +801,7 @@ function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioP
                         fontWeight: 600,
                     }}
                 >
-                    New mindmap
+                    {t("common.newMindmap")}
                 </button>
             </div>
         </InlineFeatureShell>
@@ -823,19 +822,9 @@ export function renderStudioPane(
     onClose: () => void,
     context?: StudioPaneContext
 ): React.ReactNode {
-    if (feature.comingSoon) {
-        return (
-            <ComingSoonPane
-                onClose={onClose}
-                eyebrow="Studio"
-                title={feature.label}
-                body={feature.desc}
-                bullets={[]}
-            />
-        );
-    }
+    if (feature.comingSoon) return <FeatureComingSoonPane feature={feature} onClose={onClose} />;
     const id = feature.id;
-    if (!isStudioPaneId(id)) return <UnknownPane label={feature.label} />;
+    if (!isStudioPaneId(id)) return <UnknownPane feature={feature} />;
     switch (id) {
         case "chat":
             return <ChatPane onClose={onClose} />;
@@ -887,16 +876,39 @@ export function renderStudioPane(
             return <CompanySettingsPane onClose={onClose} />;
         default: {
             const unhandled: never = id;
-            return <UnknownPane label={String(unhandled)} />;
+            return <UnknownPane feature={{ id: String(unhandled), label: String(unhandled) }} />;
         }
     }
 }
 
+/** An app that is listed but not shipped yet, named in the reader's language. */
+function FeatureComingSoonPane({
+    feature,
+    onClose,
+}: {
+    feature: StudioFeature;
+    onClose: () => void;
+}) {
+    const t = useTranslations("workspace");
+    const studio = useStudioText();
+    return (
+        <ComingSoonPane
+            onClose={onClose}
+            eyebrow={t("studioPanes.studioEyebrow")}
+            title={studioFeatureLabel(studio, feature)}
+            body={studioFeatureDescription(studio, feature)}
+            bullets={[]}
+        />
+    );
+}
+
 /** A tab whose app this build does not have — a layout saved by a newer version, say. */
-function UnknownPane({ label }: { label: string }) {
+function UnknownPane({ feature }: { feature: Pick<StudioFeature, "id" | "label"> }) {
+    const t = useTranslations("workspace");
+    const studio = useStudioText();
     return (
         <div className="text-ink-3 flex h-full items-center justify-center px-6 text-center text-[13px]">
-            {label} is not available in this version of the app.
+            {t("studioPanes.unknown", { label: studioFeatureLabel(studio, feature) })}
         </div>
     );
 }

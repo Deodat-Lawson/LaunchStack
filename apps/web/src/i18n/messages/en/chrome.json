@@ -2,5 +2,47 @@
   "userMenu": {
     "label": "Account menu",
     "signOut": "Sign out"
+  },
+  "back": {
+    "label": "Back to {place}",
+    "breadcrumb": "Breadcrumb",
+    "places": {
+      "studio": "Studio"
+    }
+  },
+  "switchCard": {
+    "title": "Switch to another workspace",
+    "label": "Switch workspace",
+    "labelOthers": "Switch workspace · {count, plural, one {# other} other {# others}}"
+  },
+  "joinWelcome": {
+    "title": "Welcome to {workspace}",
+    "invitedBy": "{inviter} invited you. You've joined as {role}.",
+    "joined": "You've joined as {role}.",
+    "steps": {
+      "ask": {
+        "title": "Ask anything",
+        "body": "Questions get answered from the documents shared with you, with citations."
+      },
+      "documents": {
+        "title": "Look around Documents",
+        "body": "Everything the workspace shares is in the Sources rail on the left."
+      },
+      "profile": {
+        "title": "Tell people who you are",
+        "body": "Add a photo and a title so teammates recognise you."
+      }
+    },
+    "setUpProfile": "Set up your profile",
+    "getStarted": "Get started"
+  },
+  "tokens": {
+    "remaining": "{count} tokens remaining"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "body": "An error occurred while loading this page. Please try again or return to the dashboard.",
+    "errorId": "Error ID: {id}",
+    "backToDashboard": "Back to Dashboard"
   }
 }

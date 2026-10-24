@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FileSearch, MessagesSquare, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 /**
  * Launchstack auth-side brand panel.
@@ -20,6 +21,7 @@ export function AuthBrandPanel({
     headline: string;
     description: string;
 }) {
+    const t = useTranslations("auth.brandPanel");
     return (
         <div
             style={{
@@ -94,18 +96,18 @@ export function AuthBrandPanel({
                 >
                     <BrandFeature
                         Icon={FileSearch}
-                        title="Grounded answers"
-                        text="Every response cites the exact passage — no more guessing where a fact came from."
+                        title={t("features.grounded.title")}
+                        text={t("features.grounded.text")}
                     />
                     <BrandFeature
                         Icon={Sparkles}
-                        title="One place to think"
-                        text="Files, notes, transcripts, emails, repos — drop anything in, then ask anything about it."
+                        title={t("features.onePlace.title")}
+                        text={t("features.onePlace.text")}
                     />
                     <BrandFeature
                         Icon={MessagesSquare}
-                        title="Built for solo builders"
-                        text="Designed around indie hackers, researchers, and students. No enterprise bloat."
+                        title={t("features.solo.title")}
+                        text={t("features.solo.text")}
                     />
                 </div>
 
@@ -120,8 +122,7 @@ export function AuthBrandPanel({
                         lineHeight: 1.6,
                     }}
                 >
-                    &ldquo;It&apos;s the only workspace that keeps up with how fast my notes
-                    move.&rdquo;
+                    {t("quote")}
                     <div
                         className="mono"
                         style={{
@@ -132,7 +133,7 @@ export function AuthBrandPanel({
                             letterSpacing: "0.04em",
                         }}
                     >
-                        — an early user
+                        {t("quoteAttribution")}
                     </div>
                 </div>
             </div>

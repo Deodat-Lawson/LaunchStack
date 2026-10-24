@@ -12,6 +12,7 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import {
     Folder,
     FolderOpen,
@@ -56,8 +57,6 @@ import {
     canChangeSource,
 } from "./sourceContextMenu";
 import {
-    PRIVATE_EMPTY_HINT,
-    RAIL_SECTION_LABELS,
     RAIL_SECTION_ORDER,
     audienceLabel,
     showsAudienceGlyph,
@@ -214,12 +213,13 @@ function SourceRow({
     addedLine,
     onRetry,
 }: SourceRowProps) {
+    const t = useTranslations("sources.sourceRail");
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
     const menu = useActionMenu();
-    const menuLabel = `Actions for ${source.title}`;
+    const menuLabel = t("actionsFor", { title: source.title });
     const ctxTarget = useContextTarget(
         menuItems
             ? {
@@ -264,10 +264,10 @@ function SourceRow({
                 onClick={() => toggleSelected(source.id)}
                 title={
                     failed
-                        ? "Unavailable as context: indexing failed"
+                        ? t("unavailableAsContext")
                         : selected
-                          ? "Remove from context"
-                          : "Add to context"
+                          ? t("removeFromContext")
+                          : t("addToContext")
                 }
             />
             <div
@@ -275,7 +275,7 @@ function SourceRow({
                     if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
                     else onOpen?.(source);
                 }}
-                title={[addedLine, onOpenBeside ? "⌘-click to open beside" : null]
+                title={[addedLine, onOpenBeside ? t("openBesideHint") : null]
                     .filter(Boolean)
                     .join("\n")}
                 className="flex min-w-0 flex-1 cursor-pointer items-center gap-2"
@@ -296,10 +296,10 @@ function SourceRow({
                     {(visibleTags.length > 0 || failed || (source.gaps?.length ?? 0) > 0) && (
                         <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">
                             {failed && <SourceFailureStatus source={source} onRetry={onRetry} />}
-                            {visibleTags.map((t, i) => (
-                                <Fragment key={t}>
+                            {visibleTags.map((tag, i) => (
+                                <Fragment key={tag}>
                                     {i > 0 && <span style={{ opacity: 0.4 }}>·</span>}
-                                    <TagChip tag={t} />
+                                    <TagChip tag={tag} />
                                 </Fragment>
                             ))}
                             {extra > 0 && (
@@ -325,7 +325,7 @@ function SourceRow({
                     data-testid={`source-row-menu-${source.id}`}
                     aria-label={menuLabel}
                     aria-haspopup="menu"
-                    title="Actions"
+                    title={t("actions")}
                     onClick={e => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -408,10 +408,13 @@ function FolderHeader({
     onDragStart,
     onDragEnd,
 }: FolderHeaderProps) {
+    const t = useTranslations("sources.sourceRail");
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
     const menu = useActionMenu();
-    const menuLabel = `Actions for folder ${displayFolderPath(node.path)}`;
+    const isUnfiled = node.path === UNFILED_FOLDER;
+    const folderName = isUnfiled ? t("unfiled") : displayFolderPath(node.path);
+    const menuLabel = t("actionsForFolder", { path: folderName });
     const ctxTarget = useContextTarget(
         menuItems
             ? { kind: "folder", id: node.path, label: menuLabel, data: node, items: menuItems }
@@ -461,7 +464,7 @@ function FolderHeader({
                 state={state}
                 disabled={selectableIds.length === 0}
                 onClick={() => onSelectAll(selectableIds, state !== "all")}
-                title={state === "all" ? "Deselect folder" : "Select all in folder"}
+                title={state === "all" ? t("deselectFolder") : t("selectAllInFolder")}
             />
             <div
                 onClick={onToggle}
@@ -496,9 +499,9 @@ function FolderHeader({
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                     }}
-                    title={displayFolderPath(node.path)}
+                    title={folderName}
                 >
-                    {node.name}
+                    {isUnfiled ? folderName : node.name}
                 </span>
                 {glyph && <AudienceGlyph glyph={glyph} />}
                 {menuItems && (
@@ -507,7 +510,7 @@ function FolderHeader({
                         data-testid={`folder-menu-${node.path}`}
                         aria-label={menuLabel}
                         aria-haspopup="menu"
-                        title="Folder actions"
+                        title={t("folderActions")}
                         onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -836,7 +839,8 @@ function RailSectionBlock({
     /** Browsing (no filter): an empty Private section explains itself. */
     showEmptyHint: boolean;
 }) {
-    const label = RAIL_SECTION_LABELS[section.id];
+    const t = useTranslations("sources.sourceRail");
+    const label = t(`sections.${section.id}`);
     const empty = section.folders.length === 0 && section.items.length === 0;
     const takesDrop =
         section.id === "private" &&
@@ -876,7 +880,7 @@ function RailSectionBlock({
             {empty ? (
                 showEmptyHint && (
                     <p className="text-ink-3 px-2.5 py-1 text-xs leading-snug">
-                        {PRIVATE_EMPTY_HINT}
+                        {t("privateEmptyHint")}
                     </p>
                 )
             ) : (
@@ -930,6 +934,10 @@ export function SourceRail({
     selfAuthId,
     loading = false,
 }: SourceRailProps) {
+    const t = useTranslations("sources.sourceRail");
+    const tr = useTranslations("sources.railCommands");
+    const tm = useTranslations("sources.contextMenu");
+    const ta = useTranslations("sources.audience");
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
     const [search, setSearch] = useState("");
@@ -1022,15 +1030,15 @@ export function SourceRail({
             if (!access) {
                 // From a server without per-caller access: the old lock.
                 return folder.restricted && topLevel
-                    ? { kind: "shared", label: "Only people with access" }
+                    ? { kind: "shared", label: t("onlyPeopleWithAccess") }
                     : null;
             }
             if (!showsAudienceGlyph(access, topLevel) || access.audience === "workspace") {
                 return null;
             }
-            return { kind: access.audience, label: audienceLabel(access, workspaceName) };
+            return { kind: access.audience, label: audienceLabel(access, workspaceName, ta) };
         },
-        [folderFor, workspaceName]
+        [folderFor, workspaceName, t, ta]
     );
 
     const sourceGlyph = useCallback(
@@ -1044,9 +1052,9 @@ export function SourceRail({
                 principalCount: 0,
             };
             if (!showsAudienceGlyph(access, topLevel)) return null;
-            return { kind: audience, label: audienceLabel(access, workspaceName) };
+            return { kind: audience, label: audienceLabel(access, workspaceName, ta) };
         },
-        [workspaceName]
+        [workspaceName, ta]
     );
 
     // Names as people appear in this workspace now, not as they were when
@@ -1067,11 +1075,13 @@ export function SourceRail({
             if (!by) return null;
             const name =
                 by.authUserId === selfAuthId
-                    ? "you"
+                    ? t("you")
                     : (people[by.authUserId]?.displayName ?? by.name);
-            return source.added ? `Added by ${name} · ${source.added}` : `Added by ${name}`;
+            return source.added
+                ? t("addedByWhen", { name, added: source.added })
+                : t("addedBy", { name });
         },
-        [people, selfAuthId]
+        [people, selfAuthId, t]
     );
 
     const canDropSource = useCallback(
@@ -1092,7 +1102,7 @@ export function SourceRail({
         (source: WorkspaceSource): ActionMenuItem[] => {
             if (selected.length > 1 && selected.includes(source.id)) {
                 const chosen = sources.filter(s => selected.includes(s.id));
-                return buildSelectionMenuItems(chosen, folders, {
+                return buildSelectionMenuItems(tm, chosen, folders, {
                     onRemoveFromContext: ids =>
                         setSelected(prev => prev.filter(id => !ids.includes(id))),
                     onMoveToFolder: onMoveToFolder
@@ -1101,7 +1111,7 @@ export function SourceRail({
                     onDelete: onDeleteSources,
                 });
             }
-            return buildSourceMenuItems(source, folders, selected, {
+            return buildSourceMenuItems(tm, source, folders, selected, {
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext:
@@ -1140,6 +1150,7 @@ export function SourceRail({
             });
         },
         [
+            tm,
             sources,
             folders,
             selected,
@@ -1182,7 +1193,7 @@ export function SourceRail({
             const subtree = collectFolderPaths(node);
             const manages = !isUnfiled && canManageFolder(path);
             const edits = canEditFolder(path);
-            return buildFolderMenuItems(path, {
+            return buildFolderMenuItems(tm, path, {
                 onOpen:
                     activeFolder === path
                         ? undefined
@@ -1230,6 +1241,7 @@ export function SourceRail({
             });
         },
         [
+            tm,
             selected,
             setSelected,
             activeFolder,
@@ -1255,9 +1267,9 @@ export function SourceRail({
     /** Empty rail space: the verbs that make something new. */
     const railTarget = useContextTarget({
         kind: "rail",
-        label: "Sidebar actions",
+        label: t("sidebarActions"),
         items: () =>
-            buildBlankRailMenuItems({
+            buildBlankRailMenuItems(tm, {
                 onAddKnowledge: onOpenAdd,
                 onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
                 cutCount: cut.length,
@@ -1270,12 +1282,12 @@ export function SourceRail({
         history
             ? {
                   kind: "rail-tabs",
-                  label: "Sidebar tabs",
+                  label: t("sidebarTabs"),
                   items: (): ActionMenuItem[] => [
                       {
                           type: "item",
                           id: "tab-sources",
-                          label: "Sources",
+                          label: t("tabSources"),
                           icon: activeTab === "sources" ? "check" : "folder",
                           checked: activeTab === "sources",
                           onSelect: () => setTab("sources"),
@@ -1283,7 +1295,7 @@ export function SourceRail({
                       {
                           type: "item",
                           id: "tab-history",
-                          label: "History",
+                          label: t("tabHistory"),
                           icon: activeTab === "history" ? "check" : "history",
                           checked: activeTab === "history",
                           onSelect: () => setTab("history"),
@@ -1294,7 +1306,7 @@ export function SourceRail({
                                 {
                                     type: "item" as const,
                                     id: "hide",
-                                    label: "Hide sidebar",
+                                    label: tr("hideSidebar"),
                                     icon: "sidebar" as const,
                                     shortcut: "⌘\\",
                                     onSelect: onClose,
@@ -1430,8 +1442,8 @@ export function SourceRail({
                 {onClose && (
                     <button
                         onClick={onClose}
-                        title={withShortcut("Hide sidebar", shortcuts?.rail)}
-                        aria-label="Hide sidebar"
+                        title={withShortcut(tr("hideSidebar"), shortcuts?.rail)}
+                        aria-label={tr("hideSidebar")}
                         style={{
                             width: 26,
                             height: 26,
@@ -1466,7 +1478,7 @@ export function SourceRail({
                 {onOpenPalette && (
                     <RailCommand
                         icon={<IconSearch className="size-3.5" />}
-                        label="Jump to anything"
+                        label={tr("jumpToAnything")}
                         keys={shortcuts?.palette}
                         onClick={onOpenPalette}
                         testId="rail-palette"
@@ -1474,7 +1486,7 @@ export function SourceRail({
                 )}
                 <RailCommand
                     icon={<Plus className="text-brand size-3.5" />}
-                    label="Add knowledge"
+                    label={tr("addKnowledge")}
                     keys={shortcuts?.add}
                     onClick={onOpenAdd}
                     testId="rail-add"
@@ -1484,7 +1496,7 @@ export function SourceRail({
             {history && (
                 <div
                     role="tablist"
-                    aria-label="Sidebar section"
+                    aria-label={t("sidebarSection")}
                     {...tabsTarget}
                     style={{
                         margin: "0 14px 10px",
@@ -1497,8 +1509,8 @@ export function SourceRail({
                 >
                     {(
                         [
-                            { id: "sources", label: "Sources" },
-                            { id: "history", label: "History" },
+                            { id: "sources", label: t("tabSources") },
+                            { id: "history", label: t("tabHistory") },
                         ] as const
                     ).map(item => {
                         const selected = activeTab === item.id;
@@ -1556,7 +1568,9 @@ export function SourceRail({
                         // as context, move them, reopen a chat. ⌘K is the search
                         // that jumps; calling this one search too made it read
                         // as a smaller copy of that.
-                        placeholder={activeTab === "history" ? "Filter history" : "Filter sources"}
+                        placeholder={
+                            activeTab === "history" ? t("filterHistory") : t("filterSources")
+                        }
                         style={{
                             flex: 1,
                             background: "transparent",
@@ -1578,7 +1592,7 @@ export function SourceRail({
                             setActiveFolder(null);
                             setActiveTag(null);
                         }}
-                        title="Back to all folders"
+                        title={t("backToAll")}
                         style={{
                             width: "100%",
                             display: "flex",
@@ -1602,7 +1616,11 @@ export function SourceRail({
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {activeFolder ? displayFolderPath(activeFolder) : `#${activeTag}`}
+                            {activeFolder
+                                ? activeFolder === UNFILED_FOLDER
+                                    ? t("unfiled")
+                                    : displayFolderPath(activeFolder)
+                                : `#${activeTag}`}
                         </span>
                         <IconX size={11} style={{ opacity: 0.5 }} />
                     </button>
@@ -1668,18 +1686,20 @@ export function SourceRail({
                                 fontSize: 13,
                             }}
                         >
-                            Nothing here.{" "}
-                            <button
-                                onClick={onOpenAdd}
-                                style={{
-                                    color: "var(--accent)",
-                                    fontWeight: 600,
-                                    textDecoration: "underline",
-                                }}
-                            >
-                                Add a source
-                            </button>
-                            .
+                            {t.rich("empty", {
+                                add: chunks => (
+                                    <button
+                                        onClick={onOpenAdd}
+                                        style={{
+                                            color: "var(--accent)",
+                                            fontWeight: 600,
+                                            textDecoration: "underline",
+                                        }}
+                                    >
+                                        {chunks}
+                                    </button>
+                                ),
+                            })}
                         </div>
                     )}
                 </div>
@@ -1698,8 +1718,11 @@ export function SourceRail({
                         color: "var(--accent-ink)",
                     }}
                 >
-                    <span style={{ fontWeight: 600 }}>{selected.length}</span>
-                    <span style={{ opacity: 0.7 }}>selected as context</span>
+                    {t.rich("selectedAsContext", {
+                        count: selected.length,
+                        b: chunks => <span style={{ fontWeight: 600 }}>{chunks}</span>,
+                        dim: chunks => <span style={{ opacity: 0.7 }}>{chunks}</span>,
+                    })}
                     <div style={{ flex: 1 }} />
                     <button
                         onClick={() => setSelected([])}
@@ -1716,7 +1739,7 @@ export function SourceRail({
                             e.currentTarget.style.opacity = "0.7";
                         }}
                     >
-                        clear
+                        {t("clear")}
                     </button>
                 </div>
             )}

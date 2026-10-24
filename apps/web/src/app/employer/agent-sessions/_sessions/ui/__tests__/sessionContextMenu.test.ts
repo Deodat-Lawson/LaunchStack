@@ -1,5 +1,15 @@
-import { buildSessionMenuItems } from "../sessionContextMenu";
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
+import { buildSessionMenuItems, type SessionMenuTranslator } from "../sessionContextMenu";
 import type { AgentSessionItem } from "../../lib/api";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "agents.sessions.menu",
+}) as unknown as SessionMenuTranslator;
 
 const base: AgentSessionItem = {
     sourceId: "claude-code:abc",
@@ -29,7 +39,7 @@ const handlers = () => ({
 
 describe("session menu builder", () => {
     it("lets a new session be imported and its ids copied, nothing more", () => {
-        const items = buildSessionMenuItems(base, handlers());
+        const items = buildSessionMenuItems(base, handlers(), t);
         expect(items.map(i => i.id)).toEqual([
             "title",
             "import",
@@ -44,7 +54,8 @@ describe("session menu builder", () => {
         const h = handlers();
         const items = buildSessionMenuItems(
             { ...base, imported: { documentId: 9, syncedAt: null, stale: true } },
-            h
+            h,
+            t
         );
         expect(items.map(i => i.id)).toEqual([
             "title",
@@ -60,7 +71,8 @@ describe("session menu builder", () => {
         expect(items.find(i => i.id === "import")).toMatchObject({ label: "Update the import" });
         const fresh = buildSessionMenuItems(
             { ...base, imported: { documentId: 9, syncedAt: null, stale: false } },
-            h
+            h,
+            t
         );
         expect(fresh.find(i => i.id === "import")).toMatchObject({ label: "Re-import" });
     });
@@ -68,7 +80,8 @@ describe("session menu builder", () => {
     it("holds the import while one is running, and skips the path when there is none", () => {
         const items = buildSessionMenuItems(
             { ...base, projectPath: null },
-            { ...handlers(), busy: true }
+            { ...handlers(), busy: true },
+            t
         );
         expect(items.find(i => i.id === "import")).toMatchObject({
             disabled: true,

@@ -9,6 +9,7 @@ import {
     type ReactNode,
 } from "react";
 import { Minimize2, MoreHorizontal, Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ContextTarget, useOptionalActionMenu } from "~/components/context-menu";
 import { Button } from "~/components/ui/button";
@@ -17,6 +18,7 @@ import { cn } from "~/lib/utils";
 import type { IconProps } from "~/components/icons/types";
 import { STUDIO_TAB_DRAG_MIME, droppedTabId, isPaneDrag } from "./dragData";
 import type { SplitSide } from "./paneLayout";
+import { withShortcut } from "./ShortcutHint";
 
 /** What a tab needs to draw itself. Studio features and sources both satisfy it. */
 
@@ -132,6 +134,8 @@ export function StudioTabs({
     registerSlot,
     emptyState,
 }: StudioTabsProps) {
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
     const stripRef = useRef<HTMLDivElement>(null);
     const [dropTarget, setDropTarget] = useState<{ id: string; after: boolean } | null>(null);
     const [dropAtEnd, setDropAtEnd] = useState(false);
@@ -173,12 +177,16 @@ export function StudioTabs({
         const beforeId =
             delta === -1 ? (tabs[index - 1]?.id ?? null) : (tabs[index + 2]?.id ?? null);
         onMove(tab.id, groupId, beforeId);
-        setAnnouncement(`${tab.label} moved to position ${to + 1} of ${tabs.length}`);
+        setAnnouncement(
+            t("studioTabs.moved", { label: tab.label, position: to + 1, total: tabs.length })
+        );
     };
 
     /** "Split right" reads the same in every pane; the pane has to say which. */
     const inColumn = (label: string) =>
-        groupCount > 1 ? `${label}, pane ${groupIndex + 1} of ${groupCount}` : label;
+        groupCount > 1
+            ? t("studioTabs.inPane", { label, index: groupIndex + 1, count: groupCount })
+            : label;
 
     const iconButton =
         "text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 dark:hover:text-ink size-7 shrink-0 rounded-md";
@@ -198,7 +206,7 @@ export function StudioTabs({
         (splittable && Boolean(onSplitPane)) || canZoom || (Boolean(onClosePane) && groupCount > 1);
     /** Why a side is refused: the pane count first, then the pane's own size. */
     const refusal = (side: "right" | "down") =>
-        !canSplit ? "Every pane is taken." : (splitRefusal?.[side] ?? null);
+        !canSplit ? t("common.everyPaneTaken") : (splitRefusal?.[side] ?? null);
 
     /**
      * The pane's own verbs, behind one button rather than a row of them. Most
@@ -209,11 +217,11 @@ export function StudioTabs({
         if (!menu) return;
         const rect = anchor.getBoundingClientRect();
         const splitItem = (side: "right" | "down") => {
-            const refused = tabs.length === 0 ? "Open something here first." : refusal(side);
+            const refused = tabs.length === 0 ? t("studioTabs.openSomethingFirst") : refusal(side);
             return {
                 type: "item" as const,
                 id: `split-${side}`,
-                label: side === "right" ? "Split right" : "Split down",
+                label: side === "right" ? t("common.splitRight") : t("common.splitDown"),
                 icon: side === "right" ? ("split" as const) : ("splitDown" as const),
                 shortcut:
                     (side === "right" ? paneKeys?.splitRight : paneKeys?.splitDown) ?? undefined,
@@ -225,7 +233,7 @@ export function StudioTabs({
         menu.open({
             x: rect.right,
             y: rect.bottom,
-            ariaLabel: inColumn("Pane actions"),
+            ariaLabel: inColumn(t("studioTabs.paneActions")),
             kind: "studio-pane",
             items: [
                 ...(splittable && onSplitPane ? [splitItem("right"), splitItem("down")] : []),
@@ -233,11 +241,11 @@ export function StudioTabs({
                 {
                     type: "item",
                     id: "zoom",
-                    label: zoomed ? "Restore the other panes" : "Maximize this pane",
+                    label: zoomed ? t("common.restorePanes") : t("common.maximizePane"),
                     icon: "expand",
                     shortcut: paneKeys?.zoom ?? undefined,
                     disabled: !canZoom,
-                    disabledReason: "The workspace is not split.",
+                    disabledReason: t("common.notSplit"),
                     onSelect: () => onToggleZoom?.(),
                 },
                 ...(onClosePane && groupCount > 1
@@ -247,8 +255,8 @@ export function StudioTabs({
                               id: "close-pane",
                               label:
                                   tabs.length > 1
-                                      ? `Close this pane and its ${tabs.length} tabs`
-                                      : "Close this pane",
+                                      ? t("studioTabs.closePaneAndTabs", { count: tabs.length })
+                                      : t("common.closePane"),
                               icon: "close" as const,
                               onSelect: onClosePane,
                           },
@@ -283,7 +291,7 @@ export function StudioTabs({
                     still scrolls, and the active tab scrolls itself in. */}
                 <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain px-1 [mask-image:linear-gradient(to_right,black_calc(100%-20px),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     <TabsList
-                        aria-label={inColumn("Open apps")}
+                        aria-label={inColumn(t("studioTabs.openApps"))}
                         className="h-10 w-max min-w-full items-center justify-start gap-1 rounded-none bg-transparent p-0"
                     >
                         {tabs.map((tab, index) => {
@@ -295,22 +303,25 @@ export function StudioTabs({
                                     target={{
                                         kind: "studio-tab",
                                         id: tab.id,
-                                        label: `Actions for ${tab.label}`,
+                                        label: t("common.actionsFor", { name: tab.label }),
                                         data: tab,
                                         items: () => [
                                             ...(splittable
                                                 ? (["right", "down"] as const).map(side => ({
                                                       type: "item" as const,
                                                       id: `split-${side}`,
-                                                      label: `Split ${side}`,
+                                                      label:
+                                                          side === "right"
+                                                              ? t("common.splitRight")
+                                                              : t("common.splitDown"),
                                                       icon:
                                                           side === "right"
                                                               ? ("split" as const)
                                                               : ("splitDown" as const),
                                                       disabled: !canSplit || tabs.length < 2,
                                                       disabledReason: !canSplit
-                                                          ? "Every pane is taken."
-                                                          : "It is already the only tab here.",
+                                                          ? t("common.everyPaneTaken")
+                                                          : t("studioTabs.alreadyOnlyTab"),
                                                       onSelect: () => onSplit(tab.id, side),
                                                   }))
                                                 : []),
@@ -320,26 +331,26 @@ export function StudioTabs({
                                             {
                                                 type: "item",
                                                 id: "close",
-                                                label: "Close",
+                                                label: tc("actions.close"),
                                                 icon: "close",
                                                 onSelect: () => closeTab(tab.id),
                                             },
                                             {
                                                 type: "item",
                                                 id: "close-others",
-                                                label: "Close the others",
+                                                label: t("studioTabs.closeOthers"),
                                                 icon: "close",
                                                 disabled: tabs.length < 2,
-                                                disabledReason: "Nothing else is open here.",
+                                                disabledReason: t("studioTabs.nothingElseOpen"),
                                                 onSelect: () => onCloseOthers(tab.id),
                                             },
                                             {
                                                 type: "item",
                                                 id: "close-right",
-                                                label: "Close everything to the right",
+                                                label: t("studioTabs.closeToRight"),
                                                 icon: "close",
                                                 disabled: index >= tabs.length - 1,
-                                                disabledReason: "Nothing is to the right.",
+                                                disabledReason: t("studioTabs.nothingToRight"),
                                                 onSelect: () => onCloseToRight(tab.id),
                                             },
                                         ],
@@ -426,7 +437,14 @@ export function StudioTabs({
                                             value={tab.id}
                                             aria-setsize={tabs.length}
                                             aria-posinset={index + 1}
-                                            title={`${tab.label}${tab.desc ? ` — ${tab.desc}` : ""}`}
+                                            title={
+                                                tab.desc
+                                                    ? t("studioTabs.tabTitle", {
+                                                          label: tab.label,
+                                                          description: tab.desc,
+                                                      })
+                                                    : tab.label
+                                            }
                                             className={cn(
                                                 "h-7 max-w-56 flex-none justify-start gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-xs shadow-none",
                                                 "data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
@@ -490,7 +508,7 @@ export function StudioTabs({
                                             )}
                                             tabIndex={-1}
                                             aria-hidden
-                                            title={`Close ${tab.label}`}
+                                            title={t("studioTabs.closeTab", { label: tab.label })}
                                             onPointerDown={event => event.stopPropagation()}
                                             onClick={() => closeTab(tab.id)}
                                         >
@@ -529,13 +547,9 @@ export function StudioTabs({
                         variant="ghost"
                         size="icon"
                         className={cn(iconButton, "text-brand-ink")}
-                        aria-label={inColumn("Restore the other panes")}
+                        aria-label={inColumn(t("common.restorePanes"))}
                         aria-pressed
-                        title={
-                            paneKeys?.zoom
-                                ? `Restore the other panes  ${paneKeys.zoom}`
-                                : "Restore the other panes"
-                        }
+                        title={withShortcut(t("common.restorePanes"), paneKeys?.zoom)}
                         onClick={onToggleZoom}
                     >
                         <Minimize2 className="size-4" />
@@ -546,8 +560,8 @@ export function StudioTabs({
                         variant="ghost"
                         size="icon"
                         className={iconButton}
-                        aria-label={inColumn("Close this pane")}
-                        title="Close this pane"
+                        aria-label={inColumn(t("common.closePane"))}
+                        title={t("common.closePane")}
                         onClick={onClosePane}
                     >
                         <X className="size-4" />
@@ -558,8 +572,8 @@ export function StudioTabs({
                     size="icon"
                     data-studio-add
                     className={iconButton}
-                    aria-label={inColumn("Open a Studio app")}
-                    title={studioKeys ? `Open a Studio app  ${studioKeys}` : "Open a Studio app"}
+                    aria-label={inColumn(t("studioTabs.openStudioApp"))}
+                    title={withShortcut(t("studioTabs.openStudioApp"), studioKeys)}
                     onClick={onOpenStudio}
                 >
                     <Plus className="size-4" />
@@ -569,9 +583,9 @@ export function StudioTabs({
                         variant="ghost"
                         size="icon"
                         className={iconButton}
-                        aria-label={inColumn("Pane actions")}
+                        aria-label={inColumn(t("studioTabs.paneActions"))}
                         aria-haspopup="menu"
-                        title="Split, maximize or close this pane"
+                        title={t("studioTabs.paneMenuTitle")}
                         onClick={event => openPaneMenu(event.currentTarget)}
                     >
                         <MoreHorizontal className="size-4" />

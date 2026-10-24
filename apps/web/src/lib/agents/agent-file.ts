@@ -43,10 +43,32 @@ export interface ParsedAgentFile {
     unknownKeys: string[];
 }
 
+/**
+ * Why a file could not be read, as a code the UI translates
+ * (`agents.fileErrors.<code>`); the English `message` stays for the API and logs.
+ */
+export type AgentFileErrorCode =
+    | "missingFrontMatter"
+    | "unexpectedListItem"
+    | "unreadableLine"
+    | "unexpectedIndent"
+    | "missingName"
+    | "emptyBody";
+
 export class AgentFileError extends Error {
-    constructor(message: string) {
+    readonly code: AgentFileErrorCode | null;
+    /** The offending line, for the codes that quote one. */
+    readonly line: string | null;
+
+    constructor(
+        message: string,
+        code: AgentFileErrorCode | null = null,
+        line: string | null = null
+    ) {
         super(message);
         this.name = "AgentFileError";
+        this.code = code;
+        this.line = line;
     }
 }
 
@@ -69,7 +91,11 @@ function parseScalar(raw: string): Scalar {
 function splitFrontMatter(text: string): { matter: FrontMatter; body: string } {
     const normalized = text.replace(/\r\n?/g, "\n").replace(/^﻿/, "");
     const match = /^---[ \t]*\n([\s\S]*?)\n---[ \t]*(?:\n|$)([\s\S]*)$/.exec(normalized);
-    if (!match) throw new AgentFileError("Missing front matter: the file must start with ---");
+    if (!match)
+        throw new AgentFileError(
+            "Missing front matter: the file must start with ---",
+            "missingFrontMatter"
+        );
 
     const matter: FrontMatter = {};
     let nested: { key: string; map: Record<string, Scalar>; list: Scalar[] } | null = null;
@@ -80,19 +106,37 @@ function splitFrontMatter(text: string): { matter: FrontMatter; body: string } {
 
         // A list item under the open key: `  - retrieval`.
         if (indented && line.startsWith("- ")) {
-            if (!nested) throw new AgentFileError(`Unexpected list item: "${line}"`);
+            if (!nested) {
+                throw new AgentFileError(
+                    `Unexpected list item: "${line}"`,
+                    "unexpectedListItem",
+                    line
+                );
+            }
             nested.list.push(parseScalar(line.slice(2)));
             matter[nested.key] = nested.list;
             continue;
         }
 
         const colon = line.indexOf(":");
-        if (colon <= 0) throw new AgentFileError(`Cannot read front matter line: "${line}"`);
+        if (colon <= 0) {
+            throw new AgentFileError(
+                `Cannot read front matter line: "${line}"`,
+                "unreadableLine",
+                line
+            );
+        }
         const key = line.slice(0, colon).trim();
         const rest = line.slice(colon + 1);
 
         if (indented) {
-            if (!nested) throw new AgentFileError(`Unexpected indented line: "${line}"`);
+            if (!nested) {
+                throw new AgentFileError(
+                    `Unexpected indented line: "${line}"`,
+                    "unexpectedIndent",
+                    line
+                );
+            }
             nested.map[key] = parseScalar(rest);
             matter[nested.key] = nested.map;
             continue;
@@ -147,11 +191,15 @@ export function parseAgentFile(text: string): ParsedAgentFile {
 
     const key = scalar("name") ?? scalar("key");
     if (typeof key !== "string" || !key.trim()) {
-        throw new AgentFileError("Front matter needs a `name:` — the agent's handle");
+        throw new AgentFileError(
+            "Front matter needs a `name:` — the agent's handle",
+            "missingName"
+        );
     }
     if (!body)
         throw new AgentFileError(
-            "The body under the front matter is the system prompt; it is empty"
+            "The body under the front matter is the system prompt; it is empty",
+            "emptyBody"
         );
 
     // `tools` arrives as a list, an inline list, or the OpenCode map; the

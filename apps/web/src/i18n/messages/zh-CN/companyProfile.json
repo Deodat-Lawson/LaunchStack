@@ -1,1 +1,128 @@
-{}
+{
+  "applicant": {
+    "nonprofit": "非营利组织",
+    "smallBusiness": "小型企业",
+    "forProfit": "公司",
+    "individual": "个人"
+  },
+  "empty": {
+    "nothingTitle": "还没有可读取的内容",
+    "nothingBody": "档案根据你的来源中关于 {name} 的内容生成：以往的提案、年度报告、融资演示文稿、你的网站。先在“来源”中添加一些，然后在这里生成。",
+    "noProfileTitle": "还没有档案",
+    "noProfileBody": "读取你的 {count, plural, other {# 个来源}}（以往的提案、报告、你的网站），保留撰写时需要的关于 {name} 的事实，每条都附有证明它的片段。"
+  },
+  "facts": {
+    "title": "事实",
+    "nothingProven": "尚无可证明的内容",
+    "count": "{count, plural, other {# 条事实}}",
+    "countCited": "{count, plural, other {# 条事实}} · 将鼠标悬停在数字上可查看来源",
+    "clearFact": "清空文本即可删除该事实。",
+    "clearEntry": "清空文本即可删除。",
+    "addOpen": "添加文档中没有提到的事实",
+    "addLabel": "添加事实",
+    "label": "标签",
+    "labelPlaceholder": "年度预算",
+    "value": "内容",
+    "valuePlaceholder": "2025 财年 120 万美元，其中 60% 来自基金会",
+    "add": "添加事实"
+  },
+  "header": {
+    "title": "你的来源",
+    "accent": "能证明什么"
+  },
+  "nothingProven": {
+    "label": "尚无可证明的内容",
+    "oneAside": "你唯一的来源已读取并被搁置；下方说明了原因。",
+    "allAside": "你的全部 {count} 个来源都已读取并被搁置；下方分别说明了原因。",
+    "someAside": "{count, plural, other {# 个来源}}被搁置；下方分别说明了原因。",
+    "countedNothing": "{count, plural, other {# 个来源已计入，但其中还没有可以证明的内容。}}",
+    "stillReading": "{count, plural, other {# 个来源}}仍在读取中。",
+    "titleCounted": "关于 {name} 还没有可以证明的内容",
+    "titleNone": "你的来源中还没有关于 {name} 的内容",
+    "keepsOnly": "档案只保留由 {name} 撰写或关于 {name} 的来源中的内容，每条事实都附有证明它的片段。",
+    "addSomething": "添加一些关于 {name} 的内容（融资演示文稿、以往的提案、年度报告、你的网站），然后重新生成。",
+    "countIt": "如果下方某个来源其实是关于你的，请将其计入。"
+  },
+  "requestFailed": "请求失败（{status}）",
+  "row": {
+    "addedByHand": "· 手动添加",
+    "edit": "编辑{label}",
+    "remove": "移除{label}",
+    "useSources": "使用来源中的内容"
+  },
+  "sections": {
+    "people": "人员",
+    "services": "产品与服务",
+    "projects": "项目",
+    "agreements": "协议",
+    "evidence": "证据",
+    "evidenceAside": "档案引用的 {count, plural, other {# 个片段}}"
+  },
+  "sources": {
+    "title": "来源",
+    "summary": {
+      "counted": "{count} 个已读取用于档案",
+      "aside": "{count} 个已搁置",
+      "stillReading": "{count} 个仍在读取",
+      "notReadYet": "{count} 个尚未读取"
+    },
+    "groups": {
+      "counted": "已读取用于档案",
+      "countedSome": "由你撰写或关于你的来源，其中的事实会被计入。",
+      "countedNone": "还没有。由你撰写或关于你的来源会被计入。",
+      "reading": "正在读取",
+      "readingNote": "每个来源读取完成后立即做出判断。",
+      "aside": "已搁置",
+      "asideNote": "未计入，并分别说明了原因。"
+    },
+    "roles": {
+      "aboutUs": "关于你",
+      "thirdParty": "关于他人",
+      "noContent": "没有可读内容",
+      "notReadYet": "尚未读取"
+    },
+    "row": {
+      "failed": "无法读取：{error}。请重新生成以重试。",
+      "readingFailed": "读取失败",
+      "yourCall": "· 你的决定",
+      "yourCallTitle": "这是工作区中某人做出的决定，而不是自动读取的结果。",
+      "reading": "正在读取…",
+      "nextBuild": "将在下次生成时读取。",
+      "setAsideLabel": "搁置：{title}",
+      "setAside": "搁置",
+      "countLabel": "计入此来源：{title}",
+      "count": "计入此来源",
+      "undoLabel": "撤销你对 {title} 的决定"
+    }
+  },
+  "stale": {
+    "body": "已过期：自生成以来，某个来源或关于来源的决定发生了变化，重新生成的结果会有所不同。",
+    "rebuild": "重新生成"
+  },
+  "sub": {
+    "reading": "正在读取你的来源",
+    "ready": "来自 {sources, plural, other {# 个来源}}的 {facts, plural, other {# 条事实}} · 生成于 {when}",
+    "failed": "上次生成失败",
+    "toRead": "工作区中有 {count, plural, other {# 个来源}}可供读取",
+    "none": "还没有来源"
+  },
+  "view": {
+    "couldNotStart": "无法开始读取你的来源",
+    "couldNotSave": "无法保存",
+    "couldNotChangeSource": "无法更改该来源",
+    "backToSources": "已恢复为来源中的内容",
+    "saved": "已保存",
+    "removed": "已移除",
+    "reading": "正在读取来源…",
+    "rebuild": "重新生成档案",
+    "build": "生成档案",
+    "setupAgain": "重新进行设置",
+    "readOnly": "你可以查看并重新生成此档案。管理员可以编辑其中的事实，并决定哪些来源计入。",
+    "lastBuildFailed": "上次生成失败。",
+    "loading": "正在加载档案",
+    "tellUs": "介绍一下 {name}",
+    "buildingNote": "正在读取你的来源。每个来源读取完成后，事实会立即显示；此页面会自动更新。",
+    "summary": "摘要",
+    "atAGlance": "概览"
+  }
+}

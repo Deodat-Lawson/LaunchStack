@@ -1,19 +1,21 @@
 import Link from "next/link";
 import { LogIn, BookOpen } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { IconGithub } from "~/components/icons/brand";
 import type { Metadata } from "next";
 import { LaunchstackMark } from "./_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { LANDING_DEPLOYMENT_HREF } from "~/config/landing";
 
-export const metadata: Metadata = {
-    title: "Page Not Found",
-    description: "The page you are looking for does not exist.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("errors.notFound");
+    return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 const GITHUB_REPO = "https://github.com/Deodat-Lawson/LaunchStack";
 
-export default function NotFound() {
+export default async function NotFound() {
+    const t = await getTranslations("errors.notFound");
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col items-center justify-center px-4 transition-colors duration-200">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,var(--accent-soft),transparent)]" />
@@ -27,11 +29,8 @@ export default function NotFound() {
                 </div>
 
                 <h1 className="text-brand-ink mb-4 text-7xl font-bold md:text-8xl">404</h1>
-                <h2 className="mb-3 text-2xl font-bold md:text-3xl">Page not found</h2>
-                <p className="text-ink-2 mb-10 leading-relaxed">
-                    The page you are looking for does not exist or may have been moved. Here are
-                    some places you might want to go instead.
-                </p>
+                <h2 className="mb-3 text-2xl font-bold md:text-3xl">{t("title")}</h2>
+                <p className="text-ink-2 mb-10 leading-relaxed">{t("body")}</p>
 
                 {/*
                   /pricing, /about, /contact and /deployment used to be siblings
@@ -43,7 +42,7 @@ export default function NotFound() {
                     <Link href="/signin">
                         <button className="bg-brand text-brand-fg hover:bg-brand-hi flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors sm:w-auto">
                             <LogIn className="h-4 w-4" />
-                            Go to sign in
+                            {t("signIn")}
                         </button>
                     </Link>
                 </div>
@@ -54,7 +53,7 @@ export default function NotFound() {
                         rel="noopener"
                         className="hover:text-brand-ink flex items-center gap-1.5 transition-colors"
                     >
-                        <BookOpen className="h-3.5 w-3.5" /> Deployment guide
+                        <BookOpen className="h-3.5 w-3.5" /> {t("deploymentGuide")}
                     </a>
                     <a
                         href={GITHUB_REPO}

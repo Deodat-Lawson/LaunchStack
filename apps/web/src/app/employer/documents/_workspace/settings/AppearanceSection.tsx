@@ -16,6 +16,7 @@
  */
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { Card, Section } from "~/components/layout/page-shell";
 
@@ -25,21 +26,16 @@ import { LanguageRow } from "./LanguageRow";
 import { SectionRows } from "./SettingRow";
 
 export function AppearanceSection(_: SettingsSectionProps) {
+    const t = useTranslations("settings.appearance");
     return (
         <>
-            <Section
-                title="Display"
-                description="Applied to this browser as soon as you change it, and remembered for you everywhere you sign in."
-            >
+            <Section title={t("display.title")} description={t("display.description")}>
                 <Card>
                     <LanguageRow />
                     <SectionRows section="appearance" />
                 </Card>
             </Section>
-            <Section
-                title="Answers"
-                description="How Launchstack answers you in chat when no agent is picked. Yours alone: nobody else's answers change."
-            >
+            <Section title={t("answers.title")} description={t("answers.description")}>
                 <Card>
                     <PersonalAnswerStyleRow />
                 </Card>

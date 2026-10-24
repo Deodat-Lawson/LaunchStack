@@ -1,1 +1,238 @@
-{}
+{
+  "view": {
+    "categoryCreated": "已创建分类“{name}”",
+    "invalidCategory": "分类数据格式无效",
+    "createCategoryFailed": "创建分类时出错，详情请查看控制台。",
+    "categoryRemoved": "已移除分类“{name}”",
+    "removeCategoryFailed": "移除分类时出错，详情请查看控制台。",
+    "eyebrow": "上传",
+    "title": "添加来源",
+    "subtitle": "拖入文件、连接代码库、粘贴文本或提供一个 URL。你添加的所有内容都会被索引到知识库中，切分以便检索，随时可在工作区使用。"
+  },
+  "categories": {
+    "title": "管理分类",
+    "namePlaceholder": "新分类名称",
+    "add": "添加分类",
+    "emptyTitle": "还没有分类",
+    "emptyBody": "在上方添加一个，或在上传时创建。",
+    "deleteLabel": "删除分类“{name}”",
+    "deleteTitle": "删除分类",
+    "deleteBody": "确定要删除“{name}”吗？此操作无法撤销。"
+  },
+  "queue": {
+    "title": "队列 · {count, plural, other {# 个文件}}",
+    "clearAll": "全部清除",
+    "removeFile": "移除文件",
+    "titleLabel": "文档标题",
+    "titlePlaceholder": "输入文档标题",
+    "categoryLabel": "分类",
+    "categoryPlaceholder": "选择分类（可选）",
+    "removeFromQueue": "从队列中移除"
+  },
+  "github": {
+    "invalidUrlToast": "请输入有效的 GitHub 代码库 URL",
+    "indexFailed": "代码库索引失败",
+    "indexStarted": "已开始索引代码库！",
+    "unknownError": "未知错误",
+    "urlLabel": "代码库 URL",
+    "invalidUrl": "请输入有效的 GitHub URL（例如 https://github.com/owner/repo）",
+    "branchLabel": "分支（可选）",
+    "branchPlaceholder": "main（默认）",
+    "tokenToggle": "私有代码库？添加访问令牌",
+    "tokenPlaceholder": "你的 GitHub 访问令牌",
+    "tokenHint": "需具有 <code>repo</code> 权限范围的个人访问令牌，不会被永久保存。",
+    "submitted": "代码库已提交索引！正在跳转…",
+    "submitting": "正在下载并处理…",
+    "submit": "索引代码库",
+    "indexedTitle": "会被索引的内容",
+    "indexedMore": "README、Dockerfile 等",
+    "skipped": "二进制文件、node_modules、.git 以及其他非文本文件会被自动跳过。",
+    "advancedTitle": "高级：导入 issue 和 pull request",
+    "advancedBody": "使用 GitHub CLI 将 issue/PR 导出为 JSON，然后通过“文件”上传",
+    "requiresCli": "需要 <code>gh</code> CLI。请在终端中运行以下命令：",
+    "issues": "Issue",
+    "pullRequests": "Pull request",
+    "thenUpload": "然后通过<strong>文件和文件夹</strong>标签页上传生成的 JSON 文件。"
+  },
+  "paste": {
+    "untitled": "未命名文档",
+    "contentRequired": "请输入内容",
+    "added": "已将“{title}”添加到上传队列",
+    "titleLabel": "文档标题",
+    "titlePlaceholder": "例如：会议记录、研究摘要…",
+    "contentLabel": "内容",
+    "wordCount": "{count, plural, other {# 个词}}",
+    "contentPlaceholder": "在此粘贴文本或 Markdown 内容…",
+    "submit": "添加到上传队列"
+  },
+  "sourceDialog": {
+    "github": {
+      "title": "索引 GitHub 代码库",
+      "description": "输入代码库 URL，克隆并索引到你的知识库中。"
+    },
+    "paste": {
+      "title": "粘贴文本",
+      "description": "粘贴 Markdown 或纯文本，作为文档添加。"
+    },
+    "website": {
+      "title": "从网站导入",
+      "description": "抓取单个网页，并将其内容添加到你的知识库。"
+    },
+    "youtube": {
+      "title": "从 YouTube 或视频平台导入",
+      "description": "粘贴视频 URL——音频将被提取并转录为可搜索的文档。"
+    }
+  },
+  "sourceGrid": {
+    "files": {
+      "title": "文件和文件夹",
+      "subtitle": "PDF、DOCX、图片、ZIP",
+      "folder": "或选择文件夹"
+    },
+    "github": {
+      "title": "GitHub 代码库",
+      "subtitle": "克隆并索引代码库"
+    },
+    "paste": {
+      "title": "粘贴文本",
+      "subtitle": "Markdown 或纯文本"
+    },
+    "website": {
+      "title": "网站",
+      "subtitle": "抓取单个网页"
+    },
+    "youtube": {
+      "title": "YouTube 和视频",
+      "subtitle": "转录视频 URL"
+    }
+  },
+  "youtube": {
+    "processFailed": "视频处理失败",
+    "transcribed": "视频已成功转录：“{title}”",
+    "fallbackTitle": "视频",
+    "processUrlFailed": "视频 URL 处理失败",
+    "urlLabel": "视频 URL",
+    "titleLabel": "文档标题",
+    "titleHint": "（可选，默认使用视频标题）",
+    "titlePlaceholder": "例如：第一季度全员大会录像",
+    "categoryLabel": "分类",
+    "categoryPlaceholder": "选择分类",
+    "submitting": "正在转录…",
+    "submit": "转录并上传",
+    "wait": "根据视频长度，这可能需要几分钟。请不要关闭此页面。",
+    "supported": "支持 YouTube、Vimeo、TikTok、Twitter/X、Twitch、Dailymotion 等平台"
+  },
+  "website": {
+    "invalidUrlToast": "请输入有效的 http(s) URL",
+    "indexFailed": "网站索引失败",
+    "indexStarted": "已开始索引网站！",
+    "unknownError": "未知错误",
+    "urlLabel": "页面 URL",
+    "invalidUrl": "请输入有效的 http(s) URL",
+    "titleLabel": "文档标题（可选）",
+    "titlePlaceholder": "留空则取自页面的 {tag}",
+    "crawl": "抓取链接页面",
+    "crawlHint": "跟随同域名链接",
+    "maxDepth": "最大深度：{depth}",
+    "shallow": "1（浅）",
+    "deep": "3（深）",
+    "maxPages": "最大页数",
+    "maxPagesHint": "每次抓取最多 50 页",
+    "jsRender": "启用 JS 渲染",
+    "jsRenderHint": "适用于需要 JavaScript 的单页应用",
+    "crawlSubmitted": "抓取已提交！正在索引页面，即将跳转…",
+    "submitted": "网站已提交索引！正在跳转…",
+    "crawling": "正在抓取并处理…",
+    "fetching": "正在获取并处理…",
+    "submitCrawl": "抓取并索引网站",
+    "submit": "索引页面",
+    "howTitle": "工作原理",
+    "how": {
+      "fetch": "页面在服务器端获取，并用 Readability 清理（去除模板内容、广告和导航）",
+      "markdown": "内容会转换为 Markdown，保留标题、列表和表格",
+      "chunks": "按标题边界切分内容块，以便更好地检索",
+      "follow": "跟随同域名链接，最大深度 {depth}（最多 {pages} 页）",
+      "separate": "每个抓取到的页面都会成为一个单独的文档",
+      "enableCrawl": "启用“抓取链接页面”即可索引多个页面"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "category": "分类",
+    "categoryPlaceholder": "选择分类（可选）",
+    "addCategoryOption": "+ 新建分类…",
+    "categoryNamePlaceholder": "输入分类名称",
+    "restricted": "受限文件夹——仅有权限的成员可见",
+    "visibleToAll": "工作区内所有人可见",
+    "processingMethod": "处理方式",
+    "uploadDate": "上传日期",
+    "uploadDateHint": "可选：覆盖所有文档的上传日期",
+    "storageNote": "上传内容存储于{where, select, s3 { S3} cloud { UploadThing} other {内置存储}}。可在“设置 → 文档默认值”中更改。",
+    "applyAll": "全部应用"
+  },
+  "form": {
+    "storage": {
+      "invalidResponse": "存储上传返回了无效的响应",
+      "auth": "需要身份验证——请登录后重试",
+      "serverError": "存储服务出错——请稍后重试",
+      "failed": "上传到存储失败（HTTP {status}）",
+      "timeout": "上传超时——请检查网络连接后重试",
+      "unavailable": "存储服务不可用"
+    },
+    "methods": {
+      "auto": "自动",
+      "autoDescription": "根据文档分析自动选择最佳方式。",
+      "standard": "标准",
+      "standardDescription": "不使用 OCR，适用于文本型 PDF。",
+      "azureDescription": "Azure 文档智能 OCR",
+      "landingAiDescription": "多模态 AI 处理",
+      "datalabDescription": "高级数据提取",
+      "doclingDescription": "通过 docling-serve 进行开源文档理解"
+    },
+    "tooLarge": "{name} 超过了 {limit}MB 的大小限制",
+    "rejected": "{count, plural, other {# 个文件}}被拒绝",
+    "rejectedDetail": "请上传不超过 {limit}MB 的 PDF、DOCX、图片（PNG、JPG 等）或音频（MP3、MP4）",
+    "zipQueued": "ZIP 压缩包已加入队列",
+    "zipQueuedDetail": "上传后会自动解压，并逐个处理其中的文件。",
+    "zipRejected": "ZIP 压缩包被拒绝",
+    "zipRejectedDetail": "{count, plural, other {# 个 ZIP 文件}}超过了 {limit}MB 的大小限制。",
+    "added": "已将 {count, plural, other {# 个文件}}添加到上传队列",
+    "noFilesInFolder": "拖入的文件夹中没有文件",
+    "removed": "已从队列中移除文件",
+    "applied": "设置已应用到所有文档",
+    "size": {
+      "bytes": "{size} 字节",
+      "kb": "{size} KB",
+      "mb": "{size} MB"
+    },
+    "cloudNoUrl": "UploadThing：云端上传失败——未返回 URL",
+    "localFailed": "上传失败：{error}",
+    "unknownError": "未知错误",
+    "registrationFailed": "文档 {title} 登记失败（HTTP {status}）{body}",
+    "titleRequired": "标题为必填项",
+    "requiredFields": "请填写所有必填字段",
+    "requiredFieldsDetail": "请确认每个文档都有标题",
+    "uploadFailed": "上传失败",
+    "allUploaded": "所有文档均已上传成功！",
+    "allUploadedDetail": "你的文档现在已可在文档库中查看。",
+    "partial": "{succeeded} 个成功，{failed} 个失败",
+    "partialDetail": "你可以重试失败的上传，或将其移除。",
+    "retryDone": "所有上传均已完成！",
+    "notConfigured": "UploadThing 未配置，上传将使用 Vercel Blob。",
+    "setUp": "设置 UploadThing",
+    "heroTitle": "添加来源",
+    "heroSubtitle": "上传文件、连接代码库、粘贴文本或添加 URL",
+    "dropOrClick": "拖入文件或点击上传",
+    "accepted": "PDF、DOCX、图片、音频、视频或 ZIP——每个文件不超过 {limit}MB。",
+    "chooseFiles": "选择文件",
+    "chooseFolder": "选择文件夹",
+    "dragHint": "将文件拖放到此卡片任意位置——每个文件不超过 {limit}MB",
+    "dropHere": "将文件拖放到这里",
+    "queueCleared": "队列已清空",
+    "progressTitle": "上传进度",
+    "progressSummary": "{succeeded} 个已完成，{failed} 个失败，{pending} 个待上传",
+    "retryFailed": "重试失败项",
+    "uploading": "正在上传…",
+    "submit": "上传 {count, plural, other {# 个文档}}"
+  }
+}

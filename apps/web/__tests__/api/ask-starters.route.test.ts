@@ -92,6 +92,7 @@ describe("GET /api/ask/starters", () => {
             companyId: BigInt(42),
             scope: { kind: "everything" },
             refresh: false,
+            locale: "en",
         });
         expect(limiterCalls).toEqual([RateLimitPresets.standard]);
         expect(scopes).toEqual([BigInt(42)]);
@@ -101,12 +102,18 @@ describe("GET /api/ask/starters", () => {
         jest.mocked(requireWorkspaceContext).mockResolvedValue({ success: true, data: CTX });
         jest.mocked(getAskStarters).mockResolvedValue(PAYLOAD);
 
-        await GET(new Request("http://localhost/api/ask/starters?refresh=1"));
+        await GET(
+            new Request("http://localhost/api/ask/starters?refresh=1", {
+                headers: { cookie: "ls-locale=zh-CN.1" },
+            })
+        );
 
+        // The reader's language rides along, so the questions come back in it.
         expect(getAskStarters).toHaveBeenCalledWith({
             companyId: BigInt(42),
             scope: { kind: "everything" },
             refresh: true,
+            locale: "zh-CN",
         });
         expect(limiterCalls).toEqual([RateLimitPresets.burst]);
     });

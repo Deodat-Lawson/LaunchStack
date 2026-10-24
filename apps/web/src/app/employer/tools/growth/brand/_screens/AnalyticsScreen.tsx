@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -18,17 +19,16 @@ import {
     TableRow,
 } from "~/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { plural, shortDate } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar, ChannelLabel } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL } from "../_components/NetworkMark";
 import { StatStrip } from "../_components/StatStrip";
 import { SyncButton, SyncProblems, SyncedAt, useBrandSync } from "../_components/Sync";
-import { KIND_WORD } from "../_lib/channels";
-import { compact, count, engagementOf, percent, sortRows, type SortDir } from "../_lib/numbers";
+import { engagementOf, percent, sortRows, type SortDir } from "../_lib/numbers";
 import { brandApi, type BrandPost, type InsightsChannel } from "../api";
 
 const RANGES = [7, 30, 90] as const;
@@ -105,7 +105,8 @@ function channelValue(
     channel: InsightsChannel,
     posts: BrandPost[],
     key: "impressions" | "clicks",
-    value: number
+    value: number,
+    count: (n: number) => string
 ): string {
     const mine = posts.filter(p => p.channelId === channel.channelId);
     if (mine.length > 0 && mine.every(p => p.metrics?.[key] === null || !p.metrics)) return "—";
@@ -118,6 +119,10 @@ function channelValue(
  * A number a network does not report is "—", never 0.
  */
 export function AnalyticsScreen() {
+    const t = useTranslations("growth.brand");
+    const tc = useTranslations("growth.common.counts");
+    const tAction = useTranslations("common.actions");
+    const { compact, count, shortDate } = useGrowthFormat();
     const paths = useGrowthPaths();
     const router = useToolRouter();
     const pathname = useToolPathname();
@@ -164,18 +169,21 @@ export function AnalyticsScreen() {
     const reporting = (accounts.data?.channels ?? []).filter(c => c.capabilities.analytics);
     const noAnalytics = accounts.data !== null && reporting.length === 0;
     const neverSynced = data !== null && data.syncedAt === null;
-    const t = data?.totals;
+    const totals = data?.totals;
 
     return (
         <div className="mx-auto flex max-w-[1200px] flex-col gap-7">
             <PageHeader
                 size="md"
-                title="Analytics"
+                title={t("analytics.title")}
                 sub={
                     data ? (
                         <>
-                            <SyncedAt at={data.syncedAt} /> · {shortDate(data.from)} to{" "}
-                            {shortDate(data.to)}
+                            <SyncedAt at={data.syncedAt} /> ·{" "}
+                            {t("analytics.range", {
+                                from: shortDate(data.from),
+                                to: shortDate(data.to),
+                            })}
                         </>
                     ) : undefined
                 }
@@ -190,7 +198,7 @@ export function AnalyticsScreen() {
                             }}
                             size="sm"
                             className="border-line bg-panel gap-0.5 rounded-md border p-0.5"
-                            aria-label="Range"
+                            aria-label={t("analytics.rangeAria")}
                         >
                             {RANGES.map(r => (
                                 <ToggleGroupItem
@@ -198,7 +206,7 @@ export function AnalyticsScreen() {
                                     value={String(r)}
                                     className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2.5 text-xs"
                                 >
-                                    {r} days
+                                    {t("analytics.days", { count: r })}
                                 </ToggleGroupItem>
                             ))}
                         </ToggleGroup>
@@ -215,18 +223,20 @@ export function AnalyticsScreen() {
 
             {noAnalytics ? (
                 <EmptyState
-                    title="No channel reports numbers"
-                    body="LinkedIn Pages you administer report impressions, reactions and clicks; profiles and Pages you only post to do not. Connect a Page or a Bluesky account to see how posts do."
+                    title={t("analytics.noAnalytics")}
+                    body={t("analytics.noAnalyticsBody")}
                     action={
                         <Button asChild size="sm">
-                            <ToolLink href={paths.brand("/accounts")}>Open Accounts</ToolLink>
+                            <ToolLink href={paths.brand("/accounts")}>
+                                {t("common.openAccounts")}
+                            </ToolLink>
                         </Button>
                     }
                 />
             ) : neverSynced ? (
                 <EmptyState
-                    title="Numbers have not been read yet"
-                    body="A sync reads impressions, reactions, comments and followers from each channel's network."
+                    title={t("analytics.neverSynced")}
+                    body={t("analytics.neverSyncedBody")}
                     action={
                         <SyncButton
                             onClick={() => void sync.run()}
@@ -238,23 +248,23 @@ export function AnalyticsScreen() {
             ) : (
                 <>
                     <StatStrip
-                        label={`Last ${days} days`}
+                        label={t("analytics.lastDays", { count: days })}
                         loading={res.loading}
                         stats={[
-                            { label: "Posts", value: count(t?.posts) },
-                            { label: "Impressions", value: compact(t?.impressions) },
-                            { label: "Reactions", value: compact(t?.reactions) },
-                            { label: "Comments", value: compact(t?.comments) },
-                            { label: "Shares", value: compact(t?.shares) },
-                            { label: "Clicks", value: compact(t?.clicks) },
-                            { label: "Engagement", value: percent(t?.engagement) },
+                            { label: t("stats.posts"), value: count(totals?.posts) },
+                            { label: t("stats.impressions"), value: compact(totals?.impressions) },
+                            { label: t("stats.reactions"), value: compact(totals?.reactions) },
+                            { label: t("stats.comments"), value: compact(totals?.comments) },
+                            { label: t("stats.shares"), value: compact(totals?.shares) },
+                            { label: t("stats.clicks"), value: compact(totals?.clicks) },
+                            { label: t("stats.engagement"), value: percent(totals?.engagement) },
                         ]}
                     />
 
                     <section>
                         <SectionHeading
-                            title="Channels"
-                            aside={data ? plural(channels.length, "channel") : undefined}
+                            title={t("common.channels")}
+                            aside={data ? tc("channels", { count: channels.length }) : undefined}
                         />
                         {res.loading ? (
                             <SkeletonRows rows={3} height={48} />
@@ -264,16 +274,16 @@ export function AnalyticsScreen() {
                                     <TableHeader>
                                         <TableRow className="hover:bg-transparent">
                                             <TableHead className="text-ink-3 pl-4 text-xs font-medium">
-                                                Channel
+                                                {t("common.channel")}
                                             </TableHead>
                                             {[
-                                                "Followers",
-                                                "Posts",
-                                                "Impressions",
-                                                "Reactions",
-                                                "Comments",
-                                                "Shares",
-                                                "Clicks",
+                                                t("stats.followers"),
+                                                t("stats.posts"),
+                                                t("stats.impressions"),
+                                                t("stats.reactions"),
+                                                t("stats.comments"),
+                                                t("stats.shares"),
+                                                t("stats.clicks"),
                                             ].map(h => (
                                                 <TableHead
                                                     key={h}
@@ -297,7 +307,7 @@ export function AnalyticsScreen() {
                                                         />
                                                         <span className="text-ink">{c.name}</span>
                                                         <span className="text-ink-3 text-xs">
-                                                            {KIND_WORD[c.kind]} ·{" "}
+                                                            {t(`kinds.${c.kind}`)} ·{" "}
                                                             {NETWORK_LABEL[c.platform]}
                                                         </span>
                                                     </span>
@@ -313,7 +323,8 @@ export function AnalyticsScreen() {
                                                         c,
                                                         data?.posts ?? [],
                                                         "impressions",
-                                                        c.impressions
+                                                        c.impressions,
+                                                        count
                                                     )}
                                                 </TableCell>
                                                 <TableCell className="text-right tabular-nums">
@@ -330,7 +341,8 @@ export function AnalyticsScreen() {
                                                         c,
                                                         data?.posts ?? [],
                                                         "clicks",
-                                                        c.clicks
+                                                        c.clicks,
+                                                        count
                                                     )}
                                                 </TableCell>
                                             </TableRow>
@@ -343,10 +355,10 @@ export function AnalyticsScreen() {
 
                     <section>
                         <SectionHeading
-                            title="Posts"
+                            title={t("stats.posts")}
                             aside={
                                 data
-                                    ? `${plural(data.posts.length, "post")} published in the last ${days} days`
+                                    ? t("analytics.postsAside", { count: data.posts.length, days })
                                     : undefined
                             }
                         />
@@ -354,12 +366,12 @@ export function AnalyticsScreen() {
                             <SkeletonRows rows={5} height={48} />
                         ) : posts.length === 0 ? (
                             <EmptyState
-                                title={`Nothing published in the last ${days} days`}
-                                body="Numbers show up here once a post has gone out and the next sync has read it."
+                                title={t("analytics.nothingPublished", { days })}
+                                body={t("analytics.nothingPublishedBody")}
                                 action={
                                     <Button asChild size="sm" variant="outline">
                                         <ToolLink href={paths.brand("/compose")}>
-                                            Compose a post
+                                            {t("common.composeAPost")}
                                         </ToolLink>
                                     </Button>
                                 }
@@ -370,7 +382,7 @@ export function AnalyticsScreen() {
                                     <TableHeader>
                                         <TableRow className="hover:bg-transparent">
                                             <SortHead
-                                                label="Post"
+                                                label={t("common.post")}
                                                 column="excerpt"
                                                 sort={sort}
                                                 onSort={onSort}
@@ -378,57 +390,57 @@ export function AnalyticsScreen() {
                                                 className="pl-4"
                                             />
                                             <SortHead
-                                                label="Channel"
+                                                label={t("common.channel")}
                                                 column="channel"
                                                 sort={sort}
                                                 onSort={onSort}
                                                 numeric={false}
                                             />
                                             <SortHead
-                                                label="Published"
+                                                label={t("common.published")}
                                                 column="published"
                                                 sort={sort}
                                                 onSort={onSort}
                                                 numeric={false}
                                             />
                                             <SortHead
-                                                label="Impressions"
+                                                label={t("stats.impressions")}
                                                 column="impressions"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <SortHead
-                                                label="Reactions"
+                                                label={t("stats.reactions")}
                                                 column="reactions"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <SortHead
-                                                label="Comments"
+                                                label={t("stats.comments")}
                                                 column="comments"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <SortHead
-                                                label="Shares"
+                                                label={t("stats.shares")}
                                                 column="shares"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <SortHead
-                                                label="Clicks"
+                                                label={t("stats.clicks")}
                                                 column="clicks"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <SortHead
-                                                label="Engagement"
+                                                label={t("stats.engagement")}
                                                 column="engagement"
                                                 sort={sort}
                                                 onSort={onSort}
                                             />
                                             <TableHead className="w-10 pr-4">
-                                                <span className="sr-only">Open</span>
+                                                <span className="sr-only">{tAction("open")}</span>
                                             </TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -476,8 +488,12 @@ export function AnalyticsScreen() {
                                                             href={p.postUrl}
                                                             target="_blank"
                                                             rel="noreferrer"
-                                                            aria-label={`Open on ${NETWORK_LABEL[p.platform]}`}
-                                                            title={`Open on ${NETWORK_LABEL[p.platform]}`}
+                                                            aria-label={t("common.openOn", {
+                                                                network: NETWORK_LABEL[p.platform],
+                                                            })}
+                                                            title={t("common.openOn", {
+                                                                network: NETWORK_LABEL[p.platform],
+                                                            })}
                                                             className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 inline-flex rounded-sm outline-none focus-visible:ring-2"
                                                         >
                                                             <ExternalLink

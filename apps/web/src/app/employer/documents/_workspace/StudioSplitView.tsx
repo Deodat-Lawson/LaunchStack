@@ -13,6 +13,7 @@ import {
     type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 import { StudioTabs, type PaneTab } from "./StudioTabs";
@@ -158,6 +159,7 @@ export function StudioSplitView({
     studioKeys,
     paneKeys,
 }: StudioSplitViewProps) {
+    const t = useTranslations("workspace.splitView");
     /** Where each pane wants its current tab's content put. */
     const [slots, setSlots] = useState<Record<string, HTMLElement | null>>({});
     /** One stable host node per open tab, created once and reparented after. */
@@ -438,14 +440,8 @@ export function StudioSplitView({
         const frame = frames.get(group.id);
         if (!size || !frame) return { right: null, down: null };
         return {
-            right:
-                (size.width * frame.width) / 2 < MIN_PANE_PX.row
-                    ? "Too narrow to split side by side."
-                    : null,
-            down:
-                (size.height * frame.height) / 2 < MIN_PANE_PX.column
-                    ? "Too short to split top and bottom."
-                    : null,
+            right: (size.width * frame.width) / 2 < MIN_PANE_PX.row ? t("tooNarrow") : null,
+            down: (size.height * frame.height) / 2 < MIN_PANE_PX.column ? t("tooShort") : null,
         };
     };
 
@@ -577,15 +573,11 @@ export function StudioSplitView({
                             tabIndex={0}
                             data-studio-divider={divider.axis}
                             aria-orientation={divider.axis === "row" ? "vertical" : "horizontal"}
-                            aria-label={
-                                divider.axis === "row"
-                                    ? "Resize the panes either side"
-                                    : "Resize the panes above and below"
-                            }
+                            aria-label={divider.axis === "row" ? t("resizeRow") : t("resizeColumn")}
                             aria-valuemin={0}
                             aria-valuemax={100}
                             aria-valuenow={Math.round((first / (first + second || 1)) * 100)}
-                            title="Drag to resize · double-click to even out"
+                            title={t("dividerTitle")}
                             className={cn(
                                 "group absolute flex touch-none items-center justify-center outline-none",
                                 divider.axis === "row"
@@ -689,14 +681,6 @@ const ZONE_FRAME: Record<DropZone, string> = {
     down: "inset-x-2 bottom-2 top-1/2",
 };
 
-const ZONE_LABEL: Record<DropZone, string> = {
-    center: "Open here",
-    left: "Split left",
-    right: "Split right",
-    up: "Split up",
-    down: "Split down",
-};
-
 /** The drop highlight: where the thing being dragged would go, and what it would do. */
 function DropPreview({ frame, label }: { frame: string; label: string }) {
     return (
@@ -736,6 +720,7 @@ function PaneDropZones({
     zones: ZoneSet;
     onDropTab: (id: string, zone: DropZone) => void;
 }) {
+    const t = useTranslations("workspace.splitView");
     const [zone, setZone] = useState<DropZone | null>(null);
 
     const zoneAt = (event: React.DragEvent<HTMLElement>): DropZone => {
@@ -782,7 +767,7 @@ function PaneDropZones({
                 if (id) onDropTab(id, landed);
             }}
         >
-            {zone && <DropPreview frame={ZONE_FRAME[zone]} label={ZONE_LABEL[zone]} />}
+            {zone && <DropPreview frame={ZONE_FRAME[zone]} label={t(`zones.${zone}`)} />}
         </div>
     );
 }
@@ -805,13 +790,6 @@ const ROOT_PREVIEW: Record<SplitSide, string> = {
     down: "inset-x-2 bottom-2 h-1/3",
 };
 
-const ROOT_LABEL: Record<SplitSide, string> = {
-    left: "Full height, on the left",
-    right: "Full height, on the right",
-    up: "Full width, along the top",
-    down: "Full width, along the bottom",
-};
-
 /**
  * Bands along the workspace's own edges. Dropping on one makes a pane that
  * spans that whole side — beside every column rather than inside one — the
@@ -819,11 +797,15 @@ const ROOT_LABEL: Record<SplitSide, string> = {
  * zones, and are narrow, so the pane's edge is still where most drops land.
  */
 function RootDropZones({ onDrop }: { onDrop: (id: string, side: SplitSide) => void }) {
+    const t = useTranslations("workspace.splitView");
     const [side, setSide] = useState<SplitSide | null>(null);
     return (
         <>
             {side && (
-                <DropPreview frame={cn("z-40", ROOT_PREVIEW[side])} label={ROOT_LABEL[side]} />
+                <DropPreview
+                    frame={cn("z-40", ROOT_PREVIEW[side])}
+                    label={t(`rootZones.${side}`)}
+                />
             )}
             {(["left", "right", "up", "down"] as const).map(edge => (
                 <div

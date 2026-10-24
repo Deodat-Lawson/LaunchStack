@@ -1,1 +1,1074 @@
-{}
+{
+  "tool": {
+    "title": "Growth",
+    "groups": {
+      "brand": "Brand",
+      "prospects": "Prospects"
+    },
+    "nav": {
+      "overview": "Overview",
+      "compose": "Compose",
+      "calendar": "Calendar",
+      "analytics": "Analytics",
+      "engagement": "Engagement",
+      "campaigns": "Campaigns",
+      "accounts": "Accounts",
+      "home": "Home",
+      "companies": "Companies",
+      "people": "People",
+      "deals": "Deals",
+      "runs": "Runs",
+      "segment": "Segment",
+      "sources": "Sources"
+    },
+    "notFoundHome": "Brand overview"
+  },
+  "common": {
+    "listSeparator": ", ",
+    "counts": {
+      "posts": "{count, plural, one {# post} other {# posts}}",
+      "channels": "{count, plural, one {# channel} other {# channels}}",
+      "comments": "{count, plural, one {# comment} other {# comments}}",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "drafts": "{count, plural, one {# draft} other {# drafts}}"
+    }
+  },
+  "runIndicator": {
+    "verbs": {
+      "sources": "searching sources",
+      "shortlist": "shortlisting",
+      "profiles": "profiling",
+      "people": "finding people"
+    },
+    "doingDetail": "{verb} {detail}",
+    "label": "Finding companies",
+    "labelDoing": "Finding companies · {doing}",
+    "open": "{label}. Open the run"
+  },
+  "segmentSwitcher": {
+    "compactAria": "Segment: {name}. Switch segment",
+    "noneLower": "none",
+    "none": "None",
+    "label": "Segment",
+    "switch": "Switch segment",
+    "noSegment": "No segment",
+    "createToStart": "Create one to start",
+    "heading": "Segments",
+    "draftConfirm": "Draft · confirm to search",
+    "newSegment": "New segment"
+  },
+  "prospects": {
+    "wordmark": "Prospects",
+    "common": {
+      "findCompanies": "Find companies",
+      "startFailed": "Could not start the run",
+      "outreachFailed": "Could not draft outreach",
+      "addToOutreach": "Add to outreach",
+      "updateFailed": "Could not update",
+      "exclude": "Exclude",
+      "includeAgain": "Include again",
+      "select": "Select {name}",
+      "signals": "{count} signals",
+      "companies": "Companies",
+      "people": "People",
+      "company": "Company",
+      "source": "Source",
+      "fit": "Fit",
+      "stage": "Stage",
+      "deals": "Deals",
+      "sources": "Sources",
+      "segment": "Segment"
+    },
+    "stages": {
+      "lead": "Lead",
+      "qualified": "Qualified",
+      "contacted": "Contacted",
+      "meeting": "Meeting",
+      "proposal": "Proposal",
+      "negotiating": "Negotiating",
+      "won": "Won",
+      "lost": "Not a fit",
+      "nurture": "Nurture"
+    },
+    "emailStatus": {
+      "label": {
+        "verified": "Verified",
+        "found": "Found",
+        "generic": "Generic",
+        "guess": "Guess"
+      },
+      "help": {
+        "verified": "Mailbox confirmed by the provider.",
+        "found": "Published on a page we fetched; not verified.",
+        "generic": "A shared inbox such as info@ or sales@.",
+        "guess": "Built from the company's address pattern. Confirm before using."
+      }
+    },
+    "sourceKind": {
+      "api": "Directory or API",
+      "recipe": "Search-index listing",
+      "signal": "Signal"
+    },
+    "sourceChip": {
+      "seen": "Seen {when}"
+    },
+    "bulkBar": {
+      "selected": "{count} selected"
+    },
+    "citation": {
+      "withTitle": "Evidence {n}: {title}",
+      "plain": "Evidence {n}"
+    },
+    "funnel": {
+      "segment": "{stage} {count}",
+      "title": "{stage}: {count}"
+    },
+    "stagePill": {
+      "staleDays": "· {count} days",
+      "menuAria": "Stage: {stage}. Change stage",
+      "moveTo": "Move to",
+      "current": "current"
+    },
+    "newSegment": {
+      "created": "Segment “{name}” created. Run Find companies when you are ready.",
+      "createFailed": "Could not create the segment",
+      "title": "New segment",
+      "description": "Who you want to sell to, and where. You can refine every field afterwards.",
+      "namePlaceholder": "Fulfilment operators · EU",
+      "offering": "What you sell",
+      "offeringPlaceholder": "Picking robots for e-commerce warehouses, leased per robot per month",
+      "industries": "Industries <hint>(comma separated)</hint>",
+      "industriesPlaceholder": "E-commerce fulfilment, 3PL, contract logistics",
+      "countries": "Countries <hint>(two-letter codes)</hint>",
+      "countriesPlaceholder": "NL, DE, GB",
+      "create": "Create segment"
+    },
+    "runSheet": {
+      "stopped": "Run stopped. Companies found so far are kept.",
+      "stopFailed": "Could not stop the run",
+      "titleCompleted": "Companies found",
+      "titleStopped": "Run stopped",
+      "titleFailed": "Run failed",
+      "titleRunning": "Finding companies",
+      "description": "{segment}. Searching the sources this segment has on, then profiling the best matches and finding people for the top ten.",
+      "segmentFallback": "Segment",
+      "starting": "Starting…",
+      "spend": "{spent} of {cap} spent · {credits} credits",
+      "background": "Run in background",
+      "running": "Running"
+    },
+    "home": {
+      "off": "off",
+      "title": "{headline},",
+      "loadingTitle": "Loading your segment",
+      "accent": "this week",
+      "subWithRun": "{companies, plural, one {# company} other {# companies}} · {deals, plural, one {# deal} other {# deals}} · last run {when} across {sources, plural, one {# source} other {# sources}}",
+      "subNoRun": "{companies, plural, one {# company} other {# companies}} · {deals, plural, one {# deal} other {# deals}} · no run yet",
+      "todo": "To do",
+      "nothingWaiting": "Nothing waiting on you",
+      "nothingWaitingBody": "New high-fit companies, replies due and stale deals show up here.",
+      "firstTitle": "Find your first companies",
+      "firstBody": "Searches the {count, plural, one {# source} other {# sources}} this segment has on, profiles the best matches with cited evidence, and finds people to contact.",
+      "median": "median {days} days from {from} to {to}",
+      "whereFrom": "Where companies come from",
+      "whereFromAside": "found · in a deal",
+      "noSources": "No sources have run yet",
+      "noSourcesBody": "Each platform's yield shows here after the first run.",
+      "fresh": "New and worth a look",
+      "fromLastRun": "from the last run",
+      "nothingNew": "Nothing new yet",
+      "nothingNewBody": "Companies above the fit threshold from the latest run appear here.",
+      "todoItems": {
+        "review": {
+          "title": "{highFit, select, true {{count, plural, one {Review # new high-fit company from the last run} other {Review # new high-fit companies from the last run}}} other {{count, plural, one {Review # new company from the last run} other {Review # new companies from the last run}}}}",
+          "action": "Review"
+        },
+        "due": {
+          "title": "{count, plural, one {# next step is due} other {# next steps are due}}",
+          "step": "{name}: {action}",
+          "followUp": "follow up",
+          "action": "Open deals"
+        },
+        "stale": {
+          "title": "{count, plural, one {# deal has gone quiet} other {# deals have gone quiet}}",
+          "deal": "{name} for {days} days",
+          "action": "Follow up"
+        }
+      }
+    },
+    "sources": {
+      "updateFailed": "Could not update the source",
+      "sub": "{on} of {total} will be searched on the next run. Platforms are picked for this segment's buyer type, geographies and size.",
+      "needs": "Needs <code>{key}</code> in the environment.",
+      "lastYield": "<num>{found} found</num>, {fresh} new · {cost}",
+      "lastYieldSignals": "<num>{found} found</num> · {cost}",
+      "notRun": "Not run yet",
+      "locked": "Per-segment settings arrive with the source registry; keys in the environment decide for now",
+      "switchOn": "{label} on",
+      "switchOff": "{label} off"
+    },
+    "deals": {
+      "moveFailed": "Could not move the deal",
+      "inMotion": "{count} in motion",
+      "leadsNotQualified": "{count} leads not yet qualified",
+      "exits": {
+        "lost": "{count} not a fit",
+        "nurture": "{count} nurture"
+      },
+      "empty": "No deals in motion",
+      "emptyBody": "Qualify a company from the Companies list, or move one here from its page. Leads stay in Companies until you do.",
+      "noActivity": "No activity for {count} days",
+      "lastActivity": "Last activity {when}",
+      "emptyColumn": "Empty"
+    },
+    "runs": {
+      "status": {
+        "running": "Running",
+        "completed": "Completed",
+        "failed": "Failed",
+        "stopped": "Stopped"
+      },
+      "found": "Found",
+      "new": "New",
+      "inDeal": "In a deal",
+      "ok": "ok",
+      "title": "Runs",
+      "subKeyless": "{count} so far · no API keys are configured, so runs read public directories and each company's own website",
+      "subLive": "{count} so far · each run searches the sources this segment has on",
+      "sampleAria": "Use sample data",
+      "sample": "Sample data",
+      "noRuns": "No runs yet",
+      "noRunsBody": "A run searches every source this segment has on, profiles the best matches and finds people. It takes a few minutes and shows its progress as it goes.",
+      "started": "Started",
+      "profiled": "Profiled",
+      "spend": "Spend",
+      "took": "Took",
+      "openProgress": "open progress",
+      "spendCell": "{money} · {credits} cr"
+    },
+    "segment": {
+      "separateItems": "Separate items with commas.",
+      "editAria": "Edit {label}",
+      "confirmed": "Segment confirmed. Runs will use this version.",
+      "confirmFailed": "Could not confirm",
+      "rederived": "Re-derived from your company profile and {count, plural, one {# document} other {# documents}}.",
+      "rederiveFailed": "Could not re-derive",
+      "saved": "Saved. Confirm the segment again before the next run.",
+      "saveFailed": "Could not save",
+      "title": "Who you sell to,",
+      "accent": "as far as we can tell",
+      "subConfirmed": "Confirmed {confirmed} · drafted from your company profile and {count, plural, one {# document} other {# documents}} on {derived}",
+      "subDraft": "Drafted from your company profile and {count, plural, one {# document} other {# documents}} on {derived}. Confirm it, or fix anything first.",
+      "rederive": "Re-derive",
+      "confirmedButton": "Confirmed",
+      "confirm": "Confirm segment",
+      "noProfile": "There is no company profile yet, so this draft leans on documents alone. Add one under Settings to sharpen it."
+    },
+    "people": {
+      "drafted": "Campaign drafted in Email with {count, plural, one {# person} other {# people}}.",
+      "draftedSkipped": "Campaign drafted in Email with {count, plural, one {# person} other {# people}}. {skipped} skipped.",
+      "sub": "{count} across the segment's companies · {eligible} ready for outreach",
+      "statusAria": "Email status",
+      "searchPlaceholder": "Search people or companies",
+      "searchAria": "Search people",
+      "empty": "No people yet",
+      "emptyBody": "People are looked up for the top companies after each run. Run Find companies, or open a company to see who was found.",
+      "openCompanies": "Open companies",
+      "selectAllEligible": "Select all eligible",
+      "person": "Person"
+    },
+    "companies": {
+      "views": {
+        "all": "All",
+        "new": "New",
+        "highfit": "High fit",
+        "uncontacted": "Not contacted",
+        "excluded": "Excluded"
+      },
+      "drafted": "Campaign drafted in Email for {count, plural, one {# company} other {# companies}}. Approve it there; nothing is sent from here.",
+      "excludedToast": "{count} excluded from future runs",
+      "includedToast": "{count} back in the segment",
+      "moved": "{count} moved to Qualified",
+      "notMoved": "Not moved: {names}",
+      "sub": "{count} in this segment",
+      "subNew": "{count} in this segment · {fresh} new since the last run",
+      "viewAria": "View",
+      "search": "Search companies",
+      "sort": "Sort",
+      "sortAria": "Sort by",
+      "sortActivity": "Last activity",
+      "sortName": "Name",
+      "emptyQuery": "No companies match “{query}”",
+      "emptyAll": "No companies in this segment yet",
+      "emptyView": "Nothing in {view}",
+      "emptyAllBody": "Run Find companies to search the sources this segment has on.",
+      "emptyFilterBody": "Clear the filter, or find more companies.",
+      "clearFilter": "Clear filter",
+      "why": "Why them",
+      "activity": "Activity",
+      "shortcuts": "<k>j</k> <k>k</k> move · <k>x</k> select · <k>Enter</k> open · <k>o</k> add to outreach · <k>/</k> search",
+      "moveToQualified": "Move to Qualified",
+      "newBadge": "new",
+      "foundInLastRun": "found in the last run"
+    },
+    "company": {
+      "updateDealFailed": "Could not update the deal",
+      "backInSegment": "Back in the segment",
+      "excludedToast": "Excluded from future runs",
+      "goneTitle": "This company is no longer here",
+      "goneBody": "It may have been removed from the segment, or the link is from another workspace.",
+      "previous": "Previous company",
+      "next": "Next company",
+      "staff": "{size} staff",
+      "noPeopleYet": "No people found yet",
+      "addPeople": "Add people to outreach",
+      "excludedNote": "Excluded. It will not appear in future runs and cannot be added to outreach.",
+      "excludedNoteReason": "Excluded: {reason}. It will not appear in future runs and cannot be added to outreach.",
+      "notProfiled": "Not profiled yet",
+      "notProfiledBody": "This company was found but the profile step has not run for it. It will be profiled in the next run if it stays above the fit threshold.",
+      "about": "About",
+      "whyFit": "Why they fit",
+      "openQuestion": "Open question: {question}",
+      "signals": "Signals",
+      "evidence": "Evidence",
+      "evidenceAside": "{count} sources",
+      "evidenceAsideFetched": "{count} sources, fetched {when}",
+      "deal": "Deal",
+      "since": "since {date}",
+      "owner": "Owner",
+      "unassigned": "Unassigned",
+      "takeIt": "Take it",
+      "youOwn": "You own this deal",
+      "nextStep": "Next step",
+      "nextStepPlaceholder": "Call after the intro email",
+      "dueDate": "Due date",
+      "nextStepSaved": "Next step saved",
+      "noneYet": "None yet · set one",
+      "findMore": "Find more",
+      "findMoreTitle": "People search runs after the profile step",
+      "noPeople": "No people found yet. They are looked up for the top companies after each run.",
+      "outreachRule": "Verified and Found emails can go to outreach. A guess needs confirming first.",
+      "foundVia": "Found via",
+      "profileSaved": "Profile saved to Sources as “{title}”.",
+      "fitTitle": "Fit {fit}",
+      "buyerType": "Buyer type",
+      "size": "Size",
+      "geography": "Geography",
+      "notAFit": "Not a fit",
+      "none": "none",
+      "dialogTitle": "Add people to outreach",
+      "dialogDescription": "Drafts a campaign in Email for {company}. You approve it there.",
+      "guessed": "Guessed address, confirm it first",
+      "sharedInbox": "Shared inbox, not for a personal note",
+      "draftFor": "Draft campaign for {count}",
+      "draftInbox": "Draft to the public inbox",
+      "drafted": "Campaign drafted in Email with {count, plural, one {# person} other {# people}}. Approve it there; nothing is sent from here."
+    }
+  },
+  "brand": {
+    "common": {
+      "compose": "Compose",
+      "composeAPost": "Compose a post",
+      "openAccounts": "Open Accounts",
+      "connectAccount": "Connect an account",
+      "openOn": "Open on {network}",
+      "accounts": "Accounts",
+      "channels": "Channels",
+      "channel": "Channel",
+      "post": "Post",
+      "published": "Published"
+    },
+    "kinds": {
+      "organization": "Page",
+      "person": "Profile",
+      "account": "Account",
+      "deployment": "Deployment account"
+    },
+    "kindCounts": {
+      "organization": "{count, plural, one {# Page} other {# Pages}}",
+      "person": "{count, plural, one {# Profile} other {# Profiles}}",
+      "account": "{count, plural, one {# Account} other {# Accounts}}",
+      "deployment": "{count, plural, one {# Deployment account} other {# Deployment accounts}}"
+    },
+    "channels": {
+      "capabilities": {
+        "cannotPublish": "Cannot publish",
+        "images": "Images",
+        "analytics": "Analytics",
+        "comments": "Comments"
+      },
+      "reconnectReason": "The network refused the sign-in; reconnect it in Accounts.",
+      "cannotPublish": "This channel cannot publish.",
+      "expiry": {
+        "renews": "Renews itself",
+        "noExpiry": "Does not expire",
+        "expiredToday": "Expired today",
+        "expiredAgo": "Expired {count, plural, one {# day} other {# days}} ago",
+        "inHours": "Expires in {count, plural, one {# hour} other {# hours}}",
+        "inDays": "Expires in {count, plural, one {# day} other {# days}}"
+      }
+    },
+    "composeRules": {
+      "wrongType": "attach a JPEG, PNG, GIF or WebP image.",
+      "wrongTypeNamed": "{name}: attach a JPEG, PNG, GIF or WebP image.",
+      "tooBig": "images can be 5 MB at most.",
+      "tooBigNamed": "{name}: images can be 5 MB at most.",
+      "textOnly": "{name} will post the text only.",
+      "linkedinWebp": "LinkedIn does not take WebP images. Use JPEG, PNG or GIF.",
+      "blueskySize": "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out."
+    },
+    "status": {
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "publishing": "Publishing",
+      "published": "Published",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "due": "Due"
+    },
+    "metrics": {
+      "impressions": "{count, plural, one {# impression} other {# impressions}}",
+      "reactions": "{count, plural, one {# reaction} other {# reactions}}",
+      "comments": "{count, plural, one {# comment} other {# comments}}",
+      "images": "{count, plural, one {# image} other {# images}}"
+    },
+    "stats": {
+      "posts": "Posts",
+      "impressions": "Impressions",
+      "reactions": "Reactions",
+      "comments": "Comments",
+      "shares": "Shares",
+      "clicks": "Clicks",
+      "engagement": "Engagement",
+      "followers": "Followers"
+    },
+    "channelLabel": {
+      "disconnected": "Disconnected channel"
+    },
+    "sync": {
+      "partial": "{posts, plural, one {# post} other {# posts}} and {comments, plural, one {# comment} other {# comments}} read; {channels, plural, one {# channel} other {# channels}} could not be read",
+      "done": "Synced: {posts, plural, one {# post} other {# posts}} and {comments, plural, one {# comment} other {# comments}} read",
+      "unreachable": "Could not reach the networks",
+      "readOnly": "Your role can read Brand but not sync it",
+      "syncing": "Syncing…",
+      "syncNow": "Sync now",
+      "never": "Never synced",
+      "updated": "Updated {ago}",
+      "failed": "Sync failed: {error}. Try again in a minute."
+    },
+    "postActions": {
+      "failed": "That did not work",
+      "wentOut": "Went out {date} at {time}",
+      "due": "Due {date} at {time}",
+      "noTime": "No time set",
+      "fromCampaign": "from a campaign",
+      "newTime": "New time",
+      "rescheduled": "Rescheduled",
+      "move": "Move",
+      "schedule": "Schedule",
+      "notAccepted": "The network did not accept it",
+      "published": "Published",
+      "publishNow": "Publish now",
+      "cancelled": "Cancelled. It stays on the calendar.",
+      "deleted": "Deleted"
+    },
+    "trackRecord": {
+      "title": "Post tests",
+      "aside": "Simulated against real engagement",
+      "notEnough": "Not enough tested posts with results yet ({count} of {minimum})",
+      "notEnoughBody": "Test a draft in Compose, then publish that same text. Once {minimum} tested posts have real numbers from their network, this shows whether the posts the simulation liked also did better for real.",
+      "soFar": "{count, plural, one {# tested post} other {# tested posts}} so far.",
+      "soFarWaiting": "{count, plural, one {# tested post} other {# tested posts}} so far, {waiting} waiting for impressions.",
+      "agrees": "Posts the simulation ranked higher also did better for real.",
+      "disagrees": "Posts the simulation ranked higher did not do better for real.",
+      "agreement": "Rank agreement <mono>{value}</mono> across {count, plural, one {# post} other {# posts}}: 1 would mean the same order, 0 no relation, below 0 the opposite order. The simulation put {hits} of {total} on the right side of the median — above it for real when it expected above, below when it expected below.",
+      "smallSample": "{count, plural, one {# post} other {# posts}} is a small sample: read this as a hint, not proof.",
+      "network": "Network",
+      "simulated": "Simulated",
+      "real": "Real",
+      "notYet": "not yet",
+      "waiting": "waiting for impressions"
+    },
+    "postTest": {
+      "titles": {
+        "testing": "Testing your post",
+        "done": "How simulated readers took it",
+        "failed": "The test failed",
+        "cancelled": "The test was cancelled"
+      },
+      "description": "{readers} simulated readers built from your records see the draft in their feed over {rounds} rounds.",
+      "stale": "Draft changed since the test — test again",
+      "starting": "Starting…",
+      "testAgain": "Test again",
+      "rounds": "{round} of {rounds} rounds",
+      "stoppedEarly": "The test stopped before it finished.",
+      "engaged": "{engaged} of {exposed} simulated readers engaged ({rate})",
+      "likes": "Likes",
+      "comments": "Comments",
+      "shares": "Shares",
+      "dislikes": "Dislikes",
+      "mood": "Mood among readers who saw it: <num>{start}</num> ({startWords}) → <num>{end}</num> ({endWords}), on a scale from −2 to +2.",
+      "whatTheySaid": "What some of them said",
+      "openRun": "Open the full run"
+    },
+    "overview": {
+      "connectDetail": "Nothing can go out until a LinkedIn Page, profile or Bluesky account is connected.",
+      "reconnectTitle": "Reconnect {name}",
+      "reconnectDetail": "{network} refused the sign-in; nothing posts here until it is reconnected.",
+      "expiryTitle": "{account}'s {network} sign-in: {status}",
+      "expiryDetail": "Reconnect before it runs out, or scheduled posts on its channels will fail.",
+      "failedTitle": "{count, plural, one {# post} other {# posts}} failed",
+      "notAccepted": "The network did not accept it.",
+      "openCalendar": "Open calendar",
+      "commentsTitle": "{count, plural, one {# comment} other {# comments}} waiting for a reply",
+      "commentsDetail": "On {count, plural, one {# post} other {# posts}}. Reply as the channel, or mark them done.",
+      "openEngagement": "Open Engagement",
+      "comingUpCount": "{count, plural, one {# post} other {# posts}} coming up",
+      "outLastWeek": "{count, plural, one {# post} other {# posts}} out in the last 7 days",
+      "title": "Your brand,",
+      "accent": "this week",
+      "generateCampaign": "Generate a campaign",
+      "needsAttention": "Needs attention",
+      "last30": "Last 30 days",
+      "analytics": "Analytics",
+      "acrossChannels": "across {count, plural, one {# channel} other {# channels}}",
+      "comingUp": "Coming up",
+      "nothingScheduled": "Nothing scheduled",
+      "nothingScheduledBody": "Write a post and pick a time; it goes out on its own. Or generate a campaign from your documents and schedule the drafts.",
+      "moreOnCalendar": "{count} more on the calendar",
+      "drafts": "Drafts",
+      "wentOut": "Went out",
+      "last7": "last 7 days",
+      "nothingPublished": "Nothing published in the last week."
+    },
+    "calendar": {
+      "draft": "draft",
+      "disconnected": "{network} · disconnected",
+      "publishedOverdue": "Published {count, plural, one {# overdue post} other {# overdue posts}}",
+      "failedSee": "{count, plural, one {# post} other {# posts}} failed; see the calendar",
+      "nothingOverdue": "Nothing was overdue",
+      "publishFailed": "Could not publish",
+      "title": "Calendar",
+      "sub": "{scheduled, plural, one {# post} other {# posts}} scheduled and {published} out this week",
+      "subOverdue": "{scheduled, plural, one {# post} other {# posts}} scheduled and {published} out this week · {overdue, plural, one {# post} other {# posts}} overdue",
+      "publishOverdue": "Publish overdue now",
+      "previousWeek": "Previous week",
+      "nextWeek": "Next week",
+      "thisWeek": "This week",
+      "weekOf": "week of {start}–{end}",
+      "nothing": "Nothing on this week. <link>Compose a post</link> or generate a campaign and schedule its drafts."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "range": "{from} to {to}",
+      "rangeAria": "Range",
+      "days": "{count} days",
+      "noAnalytics": "No channel reports numbers",
+      "noAnalyticsBody": "LinkedIn Pages you administer report impressions, reactions and clicks; profiles and Pages you only post to do not. Connect a Page or a Bluesky account to see how posts do.",
+      "neverSynced": "Numbers have not been read yet",
+      "neverSyncedBody": "A sync reads impressions, reactions, comments and followers from each channel's network.",
+      "lastDays": "Last {count} days",
+      "postsAside": "{count, plural, one {# post} other {# posts}} published in the last {days} days",
+      "nothingPublished": "Nothing published in the last {days} days",
+      "nothingPublishedBody": "Numbers show up here once a post has gone out and the next sync has read it."
+    },
+    "engagement": {
+      "noChannel": "This channel is no longer connected.",
+      "cannotReply": "{name} cannot reply from here.",
+      "needsReconnect": "{name} needs reconnecting first.",
+      "yourReply": "Your reply",
+      "sending": "Sending…",
+      "handled": "Done",
+      "reply": "Reply",
+      "reopen": "Reopen",
+      "markDone": "Mark done",
+      "replyTo": "Reply to {name}",
+      "replyAs": "Reply as {name}",
+      "markedDone": "Marked {name}'s comment done",
+      "changeFailed": "Could not change the comment",
+      "replied": "Replied as {name}",
+      "replyFailed": "The reply did not go through",
+      "title": "Engagement",
+      "subOpen": "{count, plural, one {# comment} other {# comments}} waiting",
+      "subAll": "{count, plural, one {# comment} other {# comments}}, {open} open",
+      "showAria": "Show",
+      "open": "Open",
+      "noRead": "No channel can read comments",
+      "noReadBody": "LinkedIn Pages you administer and Bluesky accounts bring their comments here; LinkedIn profiles do not. Connect a Page or a Bluesky account.",
+      "allDone": "All done",
+      "allDoneBody": "Every comment has a reply or is marked done. New ones show up after the next sync.",
+      "showAll": "Show all comments",
+      "noComments": "No comments yet",
+      "noCommentsBody": "Comments on posts published from here show up after a sync.",
+      "commentsOn": "Comments on {excerpt}",
+      "groupOpen": "{count} open",
+      "groupDone": "all done"
+    },
+    "campaigns": {
+      "title": "Campaigns",
+      "sub": "Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
+    },
+    "accounts": {
+      "title": "Accounts",
+      "openOnNetwork": "Open {name} on {network}",
+      "offerInCompose": "Offer in Compose",
+      "offered": "Offered in Compose",
+      "hidden": "Hidden from Compose",
+      "reconnectStatus": "Reconnect",
+      "reconnectStatusReason": "Reconnect — {reason}",
+      "active": "Active",
+      "followers": "{count, plural, one {# follower} other {# followers}}",
+      "connectedBy": "connected by {name} on {date}",
+      "connectedOn": "connected {date}",
+      "signedOutBy": "Signed out by {network}",
+      "checking": "Checking…",
+      "refreshPages": "Refresh Pages",
+      "refreshProfile": "Refresh profile",
+      "reconnect": "Reconnect",
+      "permissionsGranted": "{count, plural, one {# permission} other {# permissions}} granted",
+      "appPasswordSignIn": "Signed in with an app password",
+      "noPermissions": "No permissions listed",
+      "notAppPassword": "That is not an app password: they look like xxxx-xxxx-xxxx-xxxx. Your account password does not work here.",
+      "blueskyRefused": "Bluesky did not accept that sign-in",
+      "handle": "Handle",
+      "appPassword": "App password",
+      "patternTitle": "Four groups of four letters or digits: xxxx-xxxx-xxxx-xxxx",
+      "passwordHelp": "Not your account password. <link>Create an app password in Bluesky › Settings › Privacy and security</link>.",
+      "signingIn": "Signing in…",
+      "connectBluesky": "Connect Bluesky",
+      "setUp": "Set up",
+      "available": "Available",
+      "notSetUp": "Not set up",
+      "noLimit": "no hard limit",
+      "characters": "{count} characters",
+      "connectProblems": {
+        "denied": "The LinkedIn sign-in was cancelled, so nothing was connected.",
+        "error": "LinkedIn did not complete the sign-in. Try again; if it keeps failing, check the app's redirect URL and LINKEDIN_OAUTH_SCOPES against its Auth tab.",
+        "partial": "LinkedIn is connected, but its Pages could not be read. Use Refresh Pages below.",
+        "noChannels": "LinkedIn is connected, but the sign-in gave no permission to post. Check LINKEDIN_OAUTH_SCOPES against the app's Auth tab."
+      },
+      "offeredToast": "{name} is offered in Compose",
+      "hiddenToast": "{name} is hidden from Compose",
+      "changeFailed": "Could not change {name}",
+      "foundPages": "Found {count, plural, one {# new Page} other {# new Pages}}: {names}",
+      "foundAccounts": "Found {count, plural, one {# new account} other {# new accounts}}: {names}",
+      "upToDate": "{name} is up to date",
+      "unreachable": "Could not reach the network",
+      "disconnected": "Disconnected {name}",
+      "disconnectFailed": "Could not disconnect",
+      "subChannels": "Posts go out as these {count, plural, one {# channel} other {# channels}}. Switch off the ones nobody posts to and Compose stops offering them.",
+      "subConnect": "Connect the accounts this workspace posts as.",
+      "subAskAdmin": "Ask a workspace admin to connect accounts.",
+      "empty": "No accounts connected yet",
+      "emptyBodyManage": "Brand posts go out as a LinkedIn Page or profile, or a Bluesky account. Connect one and Compose, the calendar and analytics start working.",
+      "emptyBodyAsk": "Brand posts go out as a LinkedIn Page or profile, or a Bluesky account. Ask a workspace admin to connect accounts.",
+      "connectLinkedIn": "Connect LinkedIn",
+      "connectAnotherLinkedIn": "Connect another LinkedIn member",
+      "connections": "Connections",
+      "connectionsAside": "Who signed in, and how long it lasts",
+      "connect": "Connect",
+      "connectAside": "Networks on this deployment",
+      "linkedinPages": "Signs in as a LinkedIn member and brings their profile and every Page they administer. LinkedIn asks the member to approve; the sign-in renews itself for up to a year.",
+      "linkedinProfilesOnly": "This deployment's LinkedIn app covers profiles only; Pages need the Community Management API.",
+      "blueskyIntro": "Signs in with the account's handle and an app password, which can be revoked in Bluesky at any time.",
+      "connectedBluesky": "Connected Bluesky as {handle}",
+      "operatorAvailable": "Set by the operator for the whole deployment: every workspace can post as it.",
+      "operator": "Set by the operator for the whole deployment.",
+      "confirmTitle": "Disconnect {name}?",
+      "confirmLeaves": "{names} {count, plural, =1 {leaves} other {leave}} Compose.",
+      "confirmRest": "Posts scheduled on {count, plural, =1 {it} other {them}} will fail until someone reconnects. Published posts stay on the calendar."
+    },
+    "compose": {
+      "previewFor": "Preview for {name}",
+      "yourPost": "Your post appears here.",
+      "seeMore": "…see more",
+      "overLimit": "{count} characters over {name}'s limit.",
+      "readOnly": "Your role can read Brand but not post as the company. Ask an admin for Member access.",
+      "tooLong": "Too long for {names}",
+      "uploading": "Waiting for images to finish uploading",
+      "uploadFailedBlock": "An image did not upload; retry or remove it",
+      "whenNow": "Now",
+      "whenDraft": "Draft",
+      "whenAt": "{date}, {time}",
+      "pickTime": "Pick a time",
+      "uploadFailed": "The upload failed",
+      "tooMany": "A post takes {max} images at most; {count, plural, one {# image} other {# images}} left out.",
+      "testStartFailed": "Could not start the test",
+      "testForbidden": "Your role can read Brand but not test or post as the company. Ask an admin for Member access.",
+      "noCredits": "Not enough credits to test this post. {message}",
+      "allFailed": "The networks did not accept the post",
+      "partial": "Published to {count, plural, one {# channel} other {# channels}}; {names} failed",
+      "published": "Published to {count, plural, one {# channel} other {# channels}}",
+      "scheduled": "Scheduled on {count, plural, one {# channel} other {# channels}}",
+      "saved": "Saved {count, plural, one {# draft} other {# drafts}}",
+      "staleTest": "The post test was of an earlier draft, so it was not kept with the post.",
+      "saveFailed": "Could not save the post",
+      "allOff": "Every channel is switched off",
+      "nothingToPost": "Nothing to post to yet",
+      "allOffBody": "An admin turned off Offer in Compose for every channel. Switch one back on in Accounts.",
+      "nothingToPostBody": "Posts go out as a LinkedIn Page or profile, or a Bluesky account. Connect one first.",
+      "title": "Say it once,",
+      "accent": "everywhere it belongs",
+      "sub": "Pick the channels, check each preview against its limit, then publish now or put it on the calendar.",
+      "placeholder": "What do you want people to know this week?",
+      "fromCampaign": "From a campaign draft; edit freely.",
+      "linkedinFold": "LinkedIn folds a post after about 210 characters; lead with the point.",
+      "characters": "{count} characters",
+      "redditTitle": "Reddit title",
+      "redditTitlePlaceholder": "Falls back to the first line",
+      "images": "Images",
+      "imagesAside": "JPEG, PNG, GIF or WebP · up to 5 MB · {max} per post",
+      "remove": "Remove {name}",
+      "describe": "Describe it",
+      "altFor": "Alt text for {name}",
+      "attachment": {
+        "uploading": "uploading",
+        "ready": "ready",
+        "error": "not uploaded"
+      },
+      "addImage": "Add image",
+      "reconnectInAccounts": "Reconnect in Accounts",
+      "noLimit": "no limit",
+      "whenAria": "When",
+      "when": {
+        "later": "Schedule for",
+        "now": "Publish now",
+        "draft": "Save as draft"
+      },
+      "whenToPublish": "When to publish",
+      "publishTo": "Publish to {count, plural, one {# channel} other {# channels}}",
+      "schedule": "Schedule",
+      "saveDraft": "Save draft",
+      "startingTest": "Starting test…",
+      "testPost": "Test this post",
+      "pickChannel": "Pick a channel first.",
+      "preview": "Preview",
+      "previewEmpty": "Pick a channel to see the post as it will go out.",
+      "testNote": {
+        "stale": "Draft changed since the test — test again.",
+        "testing": "Testing with simulated readers: {progress}.",
+        "tested": "Tested: {engaged} of {exposed} simulated readers engaged ({rate}). It is saved with the post, to compare with the real result.",
+        "failed": "The test failed.",
+        "cancelled": "The test was cancelled.",
+        "seeResult": "See the result"
+      }
+    }
+  },
+  "marketingPipeline": {
+    "title": "Marketing Pipeline",
+    "subtitle": "Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your company knowledge base",
+    "howItWorks": {
+      "pick": "Pick a platform",
+      "describe": "Describe what to promote",
+      "get": "Get a campaign-ready draft in ~30s"
+    },
+    "steps": {
+      "loadingContext": "Loading company knowledge",
+      "extractingDna": "Extracting company DNA",
+      "analyzingCompetitors": "Analyzing competitors",
+      "researchingTrends": "Researching platform trends",
+      "extractingVoice": "Detecting brand voice",
+      "extractingPersona": "Building target persona",
+      "checkingPerformance": "Checking performance history",
+      "buildingStrategy": "Building messaging strategies",
+      "generatingContent": "Generating content variants",
+      "verifyingClaims": "Verifying claim sources"
+    },
+    "stepper": {
+      "completedIn": "Completed in {seconds}s",
+      "parallelRunning": "{active} steps running · {done}/{total} done",
+      "stepOf": "Step {current} of {total}",
+      "elapsed": "{seconds}s elapsed · {pct}%",
+      "seconds": "{seconds}s",
+      "parallel": "∥ parallel",
+      "items": "{count} items"
+    },
+    "thinking": {
+      "thinking": "Thinking...",
+      "thought": "Thought process",
+      "steps": "{count, plural, one {# step} other {# steps}}"
+    },
+    "strategy": {
+      "used": "Strategy used",
+      "angle": "Positioning angle",
+      "proof": "Key proof points",
+      "hook": "Human hook",
+      "avoid": "What to avoid"
+    },
+    "stages": {
+      "title": "Pipeline thought process",
+      "brandVoice": "Brand voice",
+      "tone": "Tone:",
+      "formality": "Formality:",
+      "style": "Style:",
+      "vocabulary": "Vocabulary:",
+      "persona": "Target persona",
+      "role": "Role:",
+      "painPoints": "Pain points:",
+      "priorities": "Priorities:",
+      "language": "Language:",
+      "competitors": "Competitors ({count})",
+      "weaknesses": "Weaknesses: {list}",
+      "advantages": "Our advantages:",
+      "gaps": "Market gaps:",
+      "strategies": "Strategy variants ({count})",
+      "angle": "Angle:",
+      "keyProof": "Key proof:",
+      "hook": "Hook:",
+      "performance": "Performance insights"
+    },
+    "claims": {
+      "title": "Claim sources ({sourced}/{total} sourced)",
+      "source": "Source: {doc}",
+      "relevance": "({pct}% relevance)",
+      "lookupFailed": "Source lookup failed — review manually",
+      "noMatch": "No matching source found in the knowledge base"
+    },
+    "tones": {
+      "conversational": "Conversational",
+      "formal": "Formal",
+      "technical": "Technical",
+      "bold": "Bold"
+    },
+    "contentTypes": {
+      "post": {
+        "label": "Single post",
+        "hint": "Standard social post"
+      },
+      "thread": {
+        "label": "Thread",
+        "hint": "Multi-part narrative"
+      },
+      "adCopy": {
+        "label": "Ad copy",
+        "hint": "Conversion-focused"
+      },
+      "email": {
+        "label": "Email",
+        "hint": "Marketing email"
+      }
+    },
+    "customize": {
+      "toggle": "Customize generation",
+      "tone": "Tone",
+      "audience": "Target audience (optional)",
+      "audiencePlaceholder": "e.g., CTOs at mid-stage SaaS companies",
+      "contentType": "Content type"
+    },
+    "fields": {
+      "subreddit": "Target subreddit",
+      "hashtags": "Hashtags",
+      "removeTag": "Remove {tag}",
+      "addHashtag": "Add a hashtag..."
+    },
+    "variants": {
+      "header": "Variants ({count})",
+      "active": "Active",
+      "useThis": "Use this",
+      "best": "Best",
+      "numbered": "Variant {n}: {name}",
+      "original": "Original",
+      "rewrite": "Rewrite {n}"
+    },
+    "platforms": {
+      "reddit": {
+        "subtitle": "Community-first threads",
+        "bestFor": "Developer communities, authentic discussion",
+        "charLimit": "~10,000 chars",
+        "placeholder": "What do you want to share or discuss with the Reddit community?",
+        "templates": {
+          "t1": "Share how we solved a common pain point in our industry",
+          "t2": "Ask for feedback on our new open-source tool",
+          "t3": "Tell the story behind why we built this product"
+        }
+      },
+      "x": {
+        "subtitle": "Fast-moving trends",
+        "bestFor": "Viral reach, real-time engagement",
+        "charLimit": "~280 chars",
+        "placeholder": "What quick insight or announcement do you want to share?",
+        "templates": {
+          "t1": "Announce a new feature launch with a bold hook",
+          "t2": "Share a surprising metric or result from our product",
+          "t3": "React to a trending topic in our industry"
+        }
+      },
+      "linkedin": {
+        "subtitle": "B2B + thought leadership",
+        "bestFor": "Professional audience, long-form storytelling",
+        "charLimit": "~1,300 chars",
+        "placeholder": "What insight or story do you want to share with your professional network?",
+        "templates": {
+          "t1": "Promote our new feature to CTOs and engineering leaders",
+          "t2": "Share a customer success story about improving workflows",
+          "t3": "Thought leadership post about AI in our industry"
+        }
+      },
+      "bluesky": {
+        "subtitle": "Decentralized trends",
+        "bestFor": "Early adopters, open-web advocates",
+        "charLimit": "~300 chars",
+        "placeholder": "What do you want to share with the Bluesky community?",
+        "templates": {
+          "t1": "Introduce our product to the open-source community",
+          "t2": "Share a behind-the-scenes look at what we're building",
+          "t3": "Start a conversation about a trend in our space"
+        }
+      }
+    },
+    "workspace": {
+      "choosePlatform": "Choose platform",
+      "sessions": "Sessions",
+      "new": "New",
+      "untitledSession": "Untitled session",
+      "noPlatform": "No platform",
+      "assistant": "AI Assistant",
+      "newCampaign": "New campaign",
+      "confirmNew": "Start a new campaign? Your current draft is saved in sessions.",
+      "yesStartNew": "Yes, start new",
+      "promptTitle": "Describe what you want to promote",
+      "promptHint": "1-3 sentences is perfect.",
+      "promptPlaceholder": "Example: Promote our AI-powered document workflow for startup operations teams this month.",
+      "generating": "Generating campaign...",
+      "generate": "Generate campaign draft",
+      "draft": "Campaign draft",
+      "preview": "{platform} preview",
+      "messagePlaceholder": "Your campaign message...",
+      "saveAsDocTitle": "Save this draft to your documents workspace for further editing",
+      "saveAsDoc": "Save as document",
+      "hideRewrite": "Hide Rewrite",
+      "refine": "Refine with AI",
+      "copied": "Copied!",
+      "copyTo": "Copy to {platform}",
+      "platform": "platform",
+      "thePlatform": "the platform",
+      "evaluateTitle": "Score this post's quality with the evaluation pipeline",
+      "scoring": "Scoring…",
+      "evaluate": "Evaluate quality",
+      "scheduleTitle": "Put this post on the Brand calendar",
+      "schedule": "Schedule…",
+      "publishTitle": "Publish this post directly to {platform}",
+      "publishing": "Publishing…",
+      "publishTo": "Publish to {platform}",
+      "qualityScore": "Quality score",
+      "judge": "judge {model} · rubric {version}",
+      "publishedTo": "Published to {platform}.",
+      "publishedToAs": "Published to {platform} as {channel}.",
+      "viewPost": "View post",
+      "refineTitle": "Refine your campaign",
+      "refineBody": "Use tone, length, and audience options to refine the message — grounded in your company context and brand voice. Preview and accept when you're happy.",
+      "debugDna": "Debug: DNA Source",
+      "rawContext": "Raw context sent to LLM",
+      "trendRefs": "Trend references",
+      "noTrends": "No trend references available for this campaign."
+    },
+    "errors": {
+      "choosePlatform": "Choose a platform to continue.",
+      "addDescription": "Add a short description of what you want to promote.",
+      "generateFailed": "We couldn't generate a campaign right now. Please try again.",
+      "pipelineFailed": "Pipeline failed",
+      "incomplete": "Server returned an incomplete response. Please try again.",
+      "engine": "Something went wrong talking to the marketing engine. Try again.",
+      "publishFailed": "Publish failed.",
+      "publishNetwork": "Network error while publishing.",
+      "evaluationFailed": "Evaluation failed",
+      "refinementFailed": "Refinement failed"
+    },
+    "draftDocTitle": "Campaign Draft ({platform})",
+    "draftDocFallback": "Marketing"
+  },
+  "emailPipeline": {
+    "title": "Email outreach",
+    "subtitle": "Every run is a dry run until you explicitly confirm a send.",
+    "severity": {
+      "error": "error",
+      "warning": "warning"
+    },
+    "recipients": {
+      "title": "Recipients",
+      "paste": "Paste addresses",
+      "csv": "Or paste a CSV (needs an <code>email</code> column)",
+      "ready": "<strong>{count}</strong> ready",
+      "rejected": "· {count} rejected",
+      "unparsed": "· {count} unparsed",
+      "rowReason": "Row {row}: {reason}"
+    },
+    "template": {
+      "title": "Template",
+      "defaultName": "Outreach",
+      "campaignName": "Campaign name",
+      "goalPlaceholder": "What is this outreach for?",
+      "goalAria": "Campaign goal",
+      "senderExample": "Your Company, 1 Example St, City",
+      "senderPlaceholder": "Sender identity — {example}",
+      "senderAria": "Sender identity",
+      "generating": "Generating…",
+      "generate": "Generate template",
+      "useSeed": "Use “{name}”",
+      "seeds": {
+        "intro": {
+          "name": "Cold intro",
+          "description": "First touch. Leads with why you are writing to this specific recipient, then one concrete proof point."
+        },
+        "followUp": {
+          "name": "Single follow-up",
+          "description": "One polite follow-up. Restates the offer in a sentence and makes it easy to decline."
+        }
+      },
+      "subject": "Subject:",
+      "verdictLabel": "Review verdict:",
+      "verdicts": {
+        "pass": "pass",
+        "revise": "revise"
+      },
+      "criteria": {
+        "grounding": "grounding",
+        "clarity": "clarity",
+        "tone": "tone",
+        "spamRisk": "spam_risk",
+        "ctaStrength": "cta_strength",
+        "compliance": "compliance"
+      },
+      "advisory": "Scores are advisory. Nothing is blocked or rewritten on their basis — you decide."
+    },
+    "preview": {
+      "title": "Preview",
+      "empty": "Add at least one valid recipient and a template to see the exact email.",
+      "showing": "Showing"
+    },
+    "send": {
+      "title": "Dry run and send",
+      "running": "Running…",
+      "dryRun": "Dry run ({count})",
+      "confirmCheckbox": "I have read the preview and want to send for real",
+      "preparing": "Preparing…",
+      "sendTo": "Send to {count}",
+      "blocked": "Sending is disabled until there is a valid template, at least one valid recipient, and a preview with no errors.",
+      "confirmTitle": "Confirm send — this is the template the server generated and will deliver (it may differ from the local preview above)",
+      "override": " — confirming records an override",
+      "sending": "Sending…",
+      "confirmSendTo": "Confirm send to {count}",
+      "resultsSent": "Sent — {count, plural, one {# recipient} other {# recipients}}",
+      "resultsDry": "Dry run — {count, plural, one {# recipient} other {# recipients}}",
+      "statuses": {
+        "queued": "queued",
+        "dryRun": "dry_run",
+        "sent": "sent",
+        "failed": "failed",
+        "suppressed": "suppressed",
+        "skipped": "skipped"
+      },
+      "nothingDelivered": "Nothing was delivered. Rows were recorded for audit only."
+    },
+    "errors": {
+      "requestFailed": "Request failed ({status})",
+      "generateFailed": "Could not generate a template.",
+      "dryRunFailed": "The dry run failed.",
+      "createFailed": "Creating the campaign failed: {error}",
+      "unknown": "unknown error",
+      "approveFailed": "Approving the template failed: {error}",
+      "sendFailed": "Sending failed: {error}. Retrying will not double-send.",
+      "sendFailedGeneric": "The send failed."
+    }
+  }
+}

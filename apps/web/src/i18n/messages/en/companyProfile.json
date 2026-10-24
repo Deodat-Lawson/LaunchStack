@@ -1,1 +1,128 @@
-{}
+{
+  "applicant": {
+    "nonprofit": "Nonprofit",
+    "smallBusiness": "Small business",
+    "forProfit": "Company",
+    "individual": "Individual"
+  },
+  "empty": {
+    "nothingTitle": "Nothing to read yet",
+    "nothingBody": "The profile is built from what your sources say about {name}: past proposals, annual reports, a pitch deck, your website. Add a few to Sources, then build it here.",
+    "noProfileTitle": "No profile yet",
+    "noProfileBody": "Reads your {count, plural, one {# source} other {# sources}} — past proposals, reports, your website — and keeps the facts about {name} a writer needs at hand, each with the excerpt that proves it."
+  },
+  "facts": {
+    "title": "Facts",
+    "nothingProven": "Nothing proven yet",
+    "count": "{count, plural, one {# fact} other {# facts}}",
+    "countCited": "{count, plural, one {# fact} other {# facts}} · hover a number to see the source",
+    "clearFact": "Clear the text to remove the fact.",
+    "clearEntry": "Clear the text to remove it.",
+    "addOpen": "Add a fact the documents do not say",
+    "addLabel": "Add a fact",
+    "label": "Label",
+    "labelPlaceholder": "Annual budget",
+    "value": "Value",
+    "valuePlaceholder": "$1.2m in FY2025, 60% from foundations",
+    "add": "Add fact"
+  },
+  "header": {
+    "title": "What your sources",
+    "accent": "can prove"
+  },
+  "nothingProven": {
+    "label": "Nothing proven yet",
+    "oneAside": "Your one source was read and set aside; it says why below.",
+    "allAside": "All {count} of your sources were read and set aside; each says why below.",
+    "someAside": "{count, plural, one {# source} other {# sources}} set aside; each says why below.",
+    "countedNothing": "{count, plural, one {# source counted, but nothing in it could be proven yet.} other {# sources counted, but nothing in them could be proven yet.}}",
+    "stillReading": "{count, plural, one {# source} other {# sources}} still being read.",
+    "titleCounted": "Nothing about {name} could be proven yet",
+    "titleNone": "None of your sources is about {name} yet",
+    "keepsOnly": "The profile keeps only what a source written by or about {name} says, each fact with the excerpt that proves it.",
+    "addSomething": "Add something about {name} — a pitch deck, a past proposal, an annual report, your website — and rebuild.",
+    "countIt": "If a source below is about you after all, count it."
+  },
+  "requestFailed": "Request failed ({status})",
+  "row": {
+    "addedByHand": "· added by hand",
+    "edit": "Edit {label}",
+    "remove": "Remove {label}",
+    "useSources": "Use what the sources say"
+  },
+  "sections": {
+    "people": "People",
+    "services": "Products & services",
+    "projects": "Projects",
+    "agreements": "Agreements",
+    "evidence": "Evidence",
+    "evidenceAside": "{count, plural, one {# excerpt} other {# excerpts}} the profile cites"
+  },
+  "sources": {
+    "title": "Sources",
+    "summary": {
+      "counted": "{count} read for the profile",
+      "aside": "{count} set aside",
+      "stillReading": "{count} still reading",
+      "notReadYet": "{count} not read yet"
+    },
+    "groups": {
+      "counted": "Read for the profile",
+      "countedSome": "Written by you or about you. Their facts count.",
+      "countedNone": "None yet. A source written by you or about you counts.",
+      "reading": "Reading now",
+      "readingNote": "Each is decided as soon as it has been read.",
+      "aside": "Set aside",
+      "asideNote": "Not counted. Each says why."
+    },
+    "roles": {
+      "aboutUs": "About you",
+      "thirdParty": "Someone else's",
+      "noContent": "Nothing to read",
+      "notReadYet": "Not read yet"
+    },
+    "row": {
+      "failed": "Could not be read: {error}. Rebuild to try again.",
+      "readingFailed": "reading it failed",
+      "yourCall": "· your call",
+      "yourCallTitle": "Someone in the workspace decided this, not the reader.",
+      "reading": "Reading…",
+      "nextBuild": "Read on the next build.",
+      "setAsideLabel": "Set aside: {title}",
+      "setAside": "Set aside",
+      "countLabel": "Count this source: {title}",
+      "count": "Count this source",
+      "undoLabel": "Undo your call on {title}"
+    }
+  },
+  "stale": {
+    "body": "Out of date: a source or a decision about one changed since this was built, so a rebuild would read differently.",
+    "rebuild": "Rebuild"
+  },
+  "sub": {
+    "reading": "Reading your sources now",
+    "ready": "{facts, plural, one {# fact} other {# facts}} from {sources, plural, one {# source} other {# sources}} · built {when}",
+    "failed": "The last build failed",
+    "toRead": "{count, plural, one {# source} other {# sources}} in the workspace to read from",
+    "none": "No sources yet"
+  },
+  "view": {
+    "couldNotStart": "Could not start reading your sources",
+    "couldNotSave": "Could not save that",
+    "couldNotChangeSource": "Could not change that source",
+    "backToSources": "Back to what the sources say",
+    "saved": "Saved",
+    "removed": "Removed",
+    "reading": "Reading sources…",
+    "rebuild": "Rebuild profile",
+    "build": "Build profile",
+    "setupAgain": "Go through setup again",
+    "readOnly": "You can read this profile and rebuild it. An admin can edit its facts and decide which sources count.",
+    "lastBuildFailed": "The last build failed.",
+    "loading": "Loading the profile",
+    "tellUs": "Tell us about {name}",
+    "buildingNote": "Reading your sources now. Facts appear as soon as each source has been read; this page updates itself.",
+    "summary": "Summary",
+    "atAGlance": "At a glance"
+  }
+}

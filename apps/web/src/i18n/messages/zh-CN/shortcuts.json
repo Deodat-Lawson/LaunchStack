@@ -1,1 +1,68 @@
-{}
+{
+  "commands": {
+    "paletteToggle": {
+      "label": "跳转到任何内容",
+      "description": "打开命令面板：来源、功能、设置。"
+    },
+    "sourceAdd": {
+      "label": "添加来源",
+      "description": "打开“添加来源”对话框。"
+    },
+    "studioToggle": {
+      "label": "打开或关闭工作台",
+      "description": "右侧的功能抽屉。"
+    },
+    "railToggle": {
+      "label": "显示或隐藏侧边栏",
+      "description": "来源和历史记录侧栏。"
+    },
+    "searchFocus": {
+      "label": "筛选侧边栏",
+      "description": "将光标放到侧边栏的筛选框中（来源或历史记录）。"
+    },
+    "featureDraft": {
+      "label": "打开起草",
+      "description": "用 AI 生成新文档。"
+    },
+    "featureRewrite": {
+      "label": "打开改写",
+      "description": "优化现有内容。"
+    },
+    "featureWorkflows": {
+      "label": "打开工作流",
+      "description": "在你的来源之间自动执行重复任务。"
+    },
+    "featureMeetings": {
+      "label": "打开会议",
+      "description": "智能体在你可加入的频道中推进一个目标。"
+    },
+    "settingsOpen": {
+      "label": "打开设置",
+      "description": "配置面板。"
+    },
+    "paneSplit": {
+      "label": "向右拆分",
+      "description": "在当前窗格右侧打开一个新窗格。"
+    },
+    "paneSplitDown": {
+      "label": "向下拆分",
+      "description": "在当前窗格下方打开一个新窗格。"
+    },
+    "paneZoom": {
+      "label": "最大化当前窗格",
+      "description": "让它占满工作区；再按一次恢复其他窗格。"
+    },
+    "paneFocusNext": {
+      "label": "聚焦下一个窗格",
+      "description": "在拆分后的工作区窗格之间切换。"
+    },
+    "paneFocusPrevious": {
+      "label": "聚焦上一个窗格",
+      "description": "在拆分后的工作区窗格之间切换。"
+    },
+    "paneClose": {
+      "label": "关闭此应用",
+      "description": "关闭当前窗格中显示的标签页。"
+    }
+  }
+}

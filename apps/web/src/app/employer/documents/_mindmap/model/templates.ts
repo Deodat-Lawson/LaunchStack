@@ -11,6 +11,8 @@
  * source" panel) import the metadata and never pull the shape library in.
  */
 
+import type { useTranslations } from "next-intl";
+
 import { createDoc, createEdge, createNode, createPage } from "./factory";
 import { runAutoLayout } from "./template-helpers";
 import {
@@ -38,7 +40,33 @@ export {
 } from "./template-meta";
 
 export interface TemplateDef extends TemplateMeta {
-    build: (title?: string) => MindmapDoc;
+    build: (title?: string, say?: Say) => MindmapDoc;
+}
+
+// ---------------------------------------------------------------------------
+// Starter text
+// ---------------------------------------------------------------------------
+
+/**
+ * The words a starter document is written in. Templates are authored in
+ * English — the literals below — and a translator from
+ * `useTranslations("mindmap.starter")` swaps them for the creator's language
+ * when the document is made. After that it is the document's own text:
+ * nothing re-translates a saved map for a reader in another language.
+ * `__tests__/templates.test.ts` holds the English catalogue to these literals.
+ */
+export type StarterText = ReturnType<typeof useTranslations<"mindmap.starter">>;
+type StarterKey = Parameters<StarterText>[0];
+export type Say = (
+    key: StarterKey,
+    english: string,
+    values?: Record<string, string | number>
+) => string;
+
+const ENGLISH: Say = (_key, english) => english;
+
+function sayWith(text: StarterText | undefined): Say {
+    return text ? (key, _english, values) => text(key, values) : ENGLISH;
 }
 
 // ---------------------------------------------------------------------------
@@ -99,8 +127,8 @@ function branchNode(depth: number, x: number, y: number, text: string): DiagramN
     });
 }
 
-function finish(title: string, built: Built, pageName = "Page 1"): MindmapDoc {
-    const page = createPage(pageName);
+function finish(title: string, built: Built, say: Say): MindmapDoc {
+    const page = createPage(say("page", "Page 1"));
     return createDoc(title, [{ ...page, nodes: built.nodes, edges: built.edges }]);
 }
 
@@ -108,17 +136,27 @@ function finish(title: string, built: Built, pageName = "Page 1"): MindmapDoc {
 // Templates
 // ---------------------------------------------------------------------------
 
-function blank(title = "Untitled mindmap"): MindmapDoc {
-    return createDoc(title);
+function blank(title = "Untitled mindmap", say: Say = ENGLISH): MindmapDoc {
+    return createDoc(title, [createPage(say("page", "Page 1"))]);
 }
 
-function mindmap(title = "New mindmap"): MindmapDoc {
-    const root = branchNode(0, 0, 0, "Central idea");
-    const branches = ["First branch", "Second branch", "Third branch", "Fourth branch"].map(text =>
-        branchNode(1, 0, 0, text)
-    );
+function mindmap(title = "New mindmap", say: Say = ENGLISH): MindmapDoc {
+    const root = branchNode(0, 0, 0, say("mindmap.centre", "Central idea"));
+    const branches = [
+        say("mindmap.first", "First branch"),
+        say("mindmap.second", "Second branch"),
+        say("mindmap.third", "Third branch"),
+        say("mindmap.fourth", "Fourth branch"),
+    ].map(text => branchNode(1, 0, 0, text));
     const leaves = branches.flatMap((b, i) =>
-        [1, 2].map(k => branchNode(2, 0, 0, `Detail ${i + 1}.${k}`))
+        [1, 2].map(k =>
+            branchNode(
+                2,
+                0,
+                0,
+                say("mindmap.detail", `Detail ${i + 1}.${k}`, { branch: i + 1, index: k })
+            )
+        )
     );
 
     const nodes = [root, ...branches, ...leaves];
@@ -145,10 +183,10 @@ function mindmap(title = "New mindmap"): MindmapDoc {
         }
     });
 
-    return runAutoLayout(finish(title, { nodes, edges }), "mindmap");
+    return runAutoLayout(finish(title, { nodes, edges }, say), "mindmap");
 }
 
-function brainstorm(title = "Brainstorm"): MindmapDoc {
+function brainstorm(title = "Brainstorm", say: Say = ENGLISH): MindmapDoc {
     const nodes: DiagramNode[] = [];
     const prompt = createNode({
         shape: "mind-root",
@@ -156,13 +194,18 @@ function brainstorm(title = "Brainstorm"): MindmapDoc {
         y: -140,
         w: 320,
         h: 80,
-        text: "What are we solving?",
+        text: say("brainstorm.prompt", "What are we solving?"),
         style: { fill: SWATCH_BY_ID.violet!.stroke, stroke: "none", strokeWidth: 0, shadow: true },
         textStyle: { color: "oklch(0.99 0.002 285)", size: 19, bold: true },
     });
     nodes.push(prompt);
 
-    const columns = ["Ideas", "Questions", "Risks", "Next steps"];
+    const columns = [
+        say("brainstorm.ideas", "Ideas"),
+        say("brainstorm.questions", "Questions"),
+        say("brainstorm.risks", "Risks"),
+        say("brainstorm.nextSteps", "Next steps"),
+    ];
     columns.forEach((label, col) => {
         nodes.push(
             createNode({
@@ -190,30 +233,60 @@ function brainstorm(title = "Brainstorm"): MindmapDoc {
         }
     });
 
-    return finish(title, { nodes, edges: [] });
+    return finish(title, { nodes, edges: [] }, say);
 }
 
-function flowchart(title = "Flowchart"): MindmapDoc {
-    const start = createNode({ shape: "terminator", x: 0, y: 0, text: "Start" });
-    const step1 = createNode({ shape: "process", x: -10, y: 130, text: "Do the thing" });
-    const decision = createNode({ shape: "decision", x: -10, y: 270, text: "Looks right?" });
-    const yes = createNode({ shape: "process", x: -220, y: 430, text: "Ship it" });
-    const no = createNode({ shape: "process", x: 210, y: 430, text: "Fix and retry" });
-    const end = createNode({ shape: "terminator", x: -10, y: 570, text: "End" });
+function flowchart(title = "Flowchart", say: Say = ENGLISH): MindmapDoc {
+    const start = createNode({
+        shape: "terminator",
+        x: 0,
+        y: 0,
+        text: say("flowchart.start", "Start"),
+    });
+    const step1 = createNode({
+        shape: "process",
+        x: -10,
+        y: 130,
+        text: say("flowchart.step", "Do the thing"),
+    });
+    const decision = createNode({
+        shape: "decision",
+        x: -10,
+        y: 270,
+        text: say("flowchart.decision", "Looks right?"),
+    });
+    const yes = createNode({
+        shape: "process",
+        x: -220,
+        y: 430,
+        text: say("flowchart.ship", "Ship it"),
+    });
+    const no = createNode({
+        shape: "process",
+        x: 210,
+        y: 430,
+        text: say("flowchart.fix", "Fix and retry"),
+    });
+    const end = createNode({
+        shape: "terminator",
+        x: -10,
+        y: 570,
+        text: say("flowchart.end", "End"),
+    });
 
     const nodes = [start, step1, decision, yes, no, end];
     const edges = [
         connect(start, step1),
         connect(step1, decision),
-        connect(decision, yes, { label: "Yes" }),
-        connect(decision, no, { label: "No" }),
+        connect(decision, yes, { label: say("yes", "Yes") }),
+        connect(decision, no, { label: say("no", "No") }),
         connect(yes, end),
-        connect(no, step1, { kind: "elbow", label: "retry" }),
+        connect(no, step1, { kind: "elbow", label: say("flowchart.retry", "retry") }),
     ];
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function orgChart(title = "Org chart"): MindmapDoc {
+function orgChart(title = "Org chart", say: Say = ENGLISH): MindmapDoc {
     const person = (x: number, y: number, name: string, role: string, swatch: string) =>
         createNode({
             shape: "rounded-rectangle",
@@ -230,15 +303,17 @@ function orgChart(title = "Org chart"): MindmapDoc {
             textStyle: { color: SWATCH_BY_ID[swatch]!.ink, size: 13.5 },
         });
 
-    const ceo = person(0, 0, "Name", "Chief Executive", "violet");
+    const name = say("orgChart.name", "Name");
+    const team = (id: string) => say("orgChart.team", `Team ${id}`, { team: id });
+    const ceo = person(0, 0, name, say("orgChart.ceo", "Chief Executive"), "violet");
     const reports = [
-        person(0, 0, "Name", "Engineering", "blue"),
-        person(0, 0, "Name", "Product", "teal"),
-        person(0, 0, "Name", "Go-to-market", "amber"),
+        person(0, 0, name, say("orgChart.engineering", "Engineering"), "blue"),
+        person(0, 0, name, say("orgChart.product", "Product"), "teal"),
+        person(0, 0, name, say("orgChart.goToMarket", "Go-to-market"), "amber"),
     ];
     const ics = reports.flatMap((r, i) => [
-        person(0, 0, "Name", `Team ${i + 1}A`, "slate"),
-        person(0, 0, "Name", `Team ${i + 1}B`, "slate"),
+        person(0, 0, name, team(`${i + 1}A`), "slate"),
+        person(0, 0, name, team(`${i + 1}B`), "slate"),
     ]);
 
     const nodes = [ceo, ...reports, ...ics];
@@ -249,11 +324,15 @@ function orgChart(title = "Org chart"): MindmapDoc {
         edges.push(connect(r, ics[i * 2 + 1]!, { arrow: "none", kind: "elbow" }));
     });
 
-    return runAutoLayout(finish(title, { nodes, edges }), "org");
+    return runAutoLayout(finish(title, { nodes, edges }, say), "org");
 }
 
-function swimlane(title = "Swimlane process"): MindmapDoc {
-    const lanes = ["Customer", "Support", "Engineering"];
+function swimlane(title = "Swimlane process", say: Say = ENGLISH): MindmapDoc {
+    const lanes = [
+        say("swimlane.customer", "Customer"),
+        say("swimlane.support", "Support"),
+        say("swimlane.engineering", "Engineering"),
+    ];
     const nodes: DiagramNode[] = [];
     const laneH = 190;
 
@@ -272,11 +351,11 @@ function swimlane(title = "Swimlane process"): MindmapDoc {
     });
 
     const steps: [number, number, string, ShapeId][] = [
-        [0, 0, "Reports issue", "terminator"],
-        [1, 1, "Triages ticket", "process"],
-        [2, 2, "Reproduces bug", "process"],
-        [2, 3, "Ships fix", "process"],
-        [0, 4, "Confirms fixed", "terminator"],
+        [0, 0, say("swimlane.reports", "Reports issue"), "terminator"],
+        [1, 1, say("swimlane.triages", "Triages ticket"), "process"],
+        [2, 2, say("swimlane.reproduces", "Reproduces bug"), "process"],
+        [2, 3, say("swimlane.ships", "Ships fix"), "process"],
+        [0, 4, say("swimlane.confirms", "Confirms fixed"), "terminator"],
     ];
     const stepNodes = steps.map(([lane, col, text, shape]) =>
         createNode({
@@ -291,10 +370,10 @@ function swimlane(title = "Swimlane process"): MindmapDoc {
     nodes.push(...stepNodes);
 
     const edges = stepNodes.slice(0, -1).map((s, i) => connect(s, stepNodes[i + 1]!));
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function erd(title = "Entity relationship"): MindmapDoc {
+function erd(title = "Entity relationship", say: Say = ENGLISH): MindmapDoc {
     const entity = (x: number, y: number, name: string, fields: string[]) =>
         createNode({
             shape: "erd-entity",
@@ -318,7 +397,7 @@ function erd(title = "Entity relationship"): MindmapDoc {
             kind: "elbow",
             startArrow: "crowfoot-one",
             endArrow: "crowfoot-many",
-            label: "places",
+            label: say("erd.places", "places"),
         }),
         createEdge({
             from: { nodeId: orders.id, port: "s" },
@@ -326,13 +405,13 @@ function erd(title = "Entity relationship"): MindmapDoc {
             kind: "elbow",
             startArrow: "crowfoot-one",
             endArrow: "crowfoot-many",
-            label: "contains",
+            label: say("erd.contains", "contains"),
         }),
     ];
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function architecture(title = "System architecture"): MindmapDoc {
+function architecture(title = "System architecture", say: Say = ENGLISH): MindmapDoc {
     const box = (x: number, y: number, text: string, shape: ShapeId, swatch: string) =>
         createNode({
             shape,
@@ -348,26 +427,26 @@ function architecture(title = "System architecture"): MindmapDoc {
             textStyle: { color: SWATCH_BY_ID[swatch]!.ink, size: 13.5 },
         });
 
-    const client = box(0, 0, "Web client", "rounded-rectangle", "blue");
-    const api = box(260, 0, "API", "uml-component", "violet");
-    const worker = box(260, 160, "Worker", "uml-component", "indigo");
+    const client = box(0, 0, say("architecture.client", "Web client"), "rounded-rectangle", "blue");
+    const api = box(260, 0, say("architecture.api", "API"), "uml-component", "violet");
+    const worker = box(260, 160, say("architecture.worker", "Worker"), "uml-component", "indigo");
     const db = box(540, 0, "Postgres", "database", "teal");
-    const queue = box(540, 160, "Queue", "cylinder", "amber");
-    const store = box(540, 320, "Object storage", "cylinder", "green");
+    const queue = box(540, 160, say("architecture.queue", "Queue"), "cylinder", "amber");
+    const store = box(540, 320, say("architecture.storage", "Object storage"), "cylinder", "green");
 
     const nodes = [client, api, worker, db, queue, store];
     const edges = [
         connect(client, api, { label: "HTTPS" }),
         connect(api, db, { label: "SQL" }),
-        connect(api, queue, { label: "enqueue" }),
-        connect(queue, worker, { label: "consume" }),
+        connect(api, queue, { label: say("architecture.enqueue", "enqueue") }),
+        connect(queue, worker, { label: say("architecture.consume", "consume") }),
         connect(worker, db, { label: "SQL" }),
-        connect(worker, store, { label: "artifacts" }),
+        connect(worker, store, { label: say("architecture.artifacts", "artifacts") }),
     ];
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function userFlow(title = "User flow"): MindmapDoc {
+function userFlow(title = "User flow", say: Say = ENGLISH): MindmapDoc {
     const screen = (x: number, y: number, text: string) =>
         createNode({
             shape: "rounded-rectangle",
@@ -380,38 +459,38 @@ function userFlow(title = "User flow"): MindmapDoc {
             textStyle: { valign: "middle", size: 13.5 },
         });
 
-    const landing = screen(0, 0, "Landing");
-    const signup = screen(240, 0, "Sign up");
-    const onboarding = screen(480, 0, "Onboarding");
-    const workspace = screen(720, 0, "Workspace");
+    const landing = screen(0, 0, say("userFlow.landing", "Landing"));
+    const signup = screen(240, 0, say("userFlow.signUp", "Sign up"));
+    const onboarding = screen(480, 0, say("userFlow.onboarding", "Onboarding"));
+    const workspace = screen(720, 0, say("userFlow.workspace", "Workspace"));
     const decision = createNode({
         shape: "decision",
         x: 236,
         y: 190,
         w: 180,
         h: 110,
-        text: "Has account?",
+        text: say("userFlow.hasAccount", "Has account?"),
     });
-    const signin = screen(480, 190, "Sign in");
+    const signin = screen(480, 190, say("userFlow.signIn", "Sign in"));
 
     const nodes = [landing, signup, onboarding, workspace, decision, signin];
     const edges = [
         connect(landing, decision),
-        connect(decision, signup, { label: "No" }),
-        connect(decision, signin, { label: "Yes" }),
+        connect(decision, signup, { label: say("no", "No") }),
+        connect(decision, signin, { label: say("yes", "Yes") }),
         connect(signup, onboarding),
         connect(onboarding, workspace),
         connect(signin, workspace),
     ];
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function swot(title = "SWOT analysis"): MindmapDoc {
+function swot(title = "SWOT analysis", say: Say = ENGLISH): MindmapDoc {
     const quadrants: [string, string, number, number][] = [
-        ["Strengths", "green", 0, 0],
-        ["Weaknesses", "red", 420, 0],
-        ["Opportunities", "blue", 0, 320],
-        ["Threats", "amber", 420, 320],
+        [say("swot.strengths", "Strengths"), "green", 0, 0],
+        [say("swot.weaknesses", "Weaknesses"), "red", 420, 0],
+        [say("swot.opportunities", "Opportunities"), "blue", 0, 320],
+        [say("swot.threats", "Threats"), "amber", 420, 320],
     ];
     const nodes = quadrants.flatMap(([label, swatch, x, y]) => {
         const sw = SWATCH_BY_ID[swatch]!;
@@ -437,11 +516,16 @@ function swot(title = "SWOT analysis"): MindmapDoc {
             }),
         ];
     });
-    return finish(title, { nodes, edges: [] });
+    return finish(title, { nodes, edges: [] }, say);
 }
 
-function kanban(title = "Kanban board"): MindmapDoc {
-    const columns = ["Backlog", "In progress", "Review", "Done"];
+function kanban(title = "Kanban board", say: Say = ENGLISH): MindmapDoc {
+    const columns = [
+        say("kanban.backlog", "Backlog"),
+        say("kanban.inProgress", "In progress"),
+        say("kanban.review", "Review"),
+        say("kanban.done", "Done"),
+    ];
     const nodes: DiagramNode[] = [];
     columns.forEach((label, i) => {
         nodes.push(
@@ -470,10 +554,10 @@ function kanban(title = "Kanban board"): MindmapDoc {
             );
         }
     });
-    return finish(title, { nodes, edges: [] });
+    return finish(title, { nodes, edges: [] }, say);
 }
 
-function timeline(title = "Timeline"): MindmapDoc {
+function timeline(title = "Timeline", say: Say = ENGLISH): MindmapDoc {
     const nodes: DiagramNode[] = [];
     const spine = createNode({
         shape: "line",
@@ -484,7 +568,13 @@ function timeline(title = "Timeline"): MindmapDoc {
         style: { stroke: "oklch(0.72 0.012 280)", strokeWidth: 2 },
     });
     nodes.push(spine);
-    const stops = ["Kickoff", "Alpha", "Beta", "Launch", "Review"];
+    const stops = [
+        say("timeline.kickoff", "Kickoff"),
+        say("timeline.alpha", "Alpha"),
+        say("timeline.beta", "Beta"),
+        say("timeline.launch", "Launch"),
+        say("timeline.review", "Review"),
+    ];
     stops.forEach((label, i) => {
         const x = 60 + i * 220;
         const above = i % 2 === 0;
@@ -515,12 +605,23 @@ function timeline(title = "Timeline"): MindmapDoc {
             })
         );
     });
-    return finish(title, { nodes, edges: [] });
+    return finish(title, { nodes, edges: [] }, say);
 }
 
-function customerJourney(title = "Customer journey"): MindmapDoc {
-    const stages = ["Awareness", "Consideration", "Decision", "Onboarding", "Advocacy"];
-    const rows = ["Actions", "Touchpoints", "Feelings", "Opportunities"];
+function customerJourney(title = "Customer journey", say: Say = ENGLISH): MindmapDoc {
+    const stages = [
+        say("journey.awareness", "Awareness"),
+        say("journey.consideration", "Consideration"),
+        say("journey.decision", "Decision"),
+        say("journey.onboarding", "Onboarding"),
+        say("journey.advocacy", "Advocacy"),
+    ];
+    const rows = [
+        say("journey.actions", "Actions"),
+        say("journey.touchpoints", "Touchpoints"),
+        say("journey.feelings", "Feelings"),
+        say("journey.opportunities", "Opportunities"),
+    ];
     const nodes: DiagramNode[] = [];
 
     stages.forEach((stage, i) => {
@@ -573,17 +674,17 @@ function customerJourney(title = "Customer journey"): MindmapDoc {
         });
     });
 
-    return finish(title, { nodes, edges: [] });
+    return finish(title, { nodes, edges: [] }, say);
 }
 
-function fishbone(title = "Cause and effect"): MindmapDoc {
+function fishbone(title = "Cause and effect", say: Say = ENGLISH): MindmapDoc {
     const problem = createNode({
         shape: "rounded-rectangle",
         x: 900,
         y: 210,
         w: 200,
         h: 80,
-        text: "Problem",
+        text: say("fishbone.problem", "Problem"),
         style: { fill: SWATCH_BY_ID.red!.fill, stroke: SWATCH_BY_ID.red!.stroke, radius: 10 },
         textStyle: { color: SWATCH_BY_ID.red!.ink, size: 15, bold: true },
     });
@@ -596,7 +697,14 @@ function fishbone(title = "Cause and effect"): MindmapDoc {
         style: { stroke: "oklch(0.55 0.02 280)", strokeWidth: 2.5 },
     });
 
-    const causes = ["People", "Process", "Tools", "Data", "Environment", "Measurement"];
+    const causes = [
+        say("fishbone.people", "People"),
+        say("fishbone.process", "Process"),
+        say("fishbone.tools", "Tools"),
+        say("fishbone.data", "Data"),
+        say("fishbone.environment", "Environment"),
+        say("fishbone.measurement", "Measurement"),
+    ];
     const nodes: DiagramNode[] = [problem, spine];
     const edges: DiagramEdge[] = [];
     causes.forEach((label, i) => {
@@ -626,10 +734,10 @@ function fishbone(title = "Cause and effect"): MindmapDoc {
             })
         );
     });
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
-function conceptMap(title = "Concept map"): MindmapDoc {
+function conceptMap(title = "Concept map", say: Say = ENGLISH): MindmapDoc {
     const concept = (x: number, y: number, text: string, depth: number) =>
         createNode({
             shape: "ellipse",
@@ -645,19 +753,19 @@ function conceptMap(title = "Concept map"): MindmapDoc {
             textStyle: { color: branchSwatch(depth).ink, size: 14 },
         });
 
-    const core = concept(400, 0, "Core concept", 0);
-    const a = concept(120, 200, "Concept A", 1);
-    const b = concept(680, 200, "Concept B", 2);
-    const c = concept(400, 400, "Concept C", 3);
+    const core = concept(400, 0, say("conceptMap.core", "Core concept"), 0);
+    const a = concept(120, 200, say("conceptMap.a", "Concept A"), 1);
+    const b = concept(680, 200, say("conceptMap.b", "Concept B"), 2);
+    const c = concept(400, 400, say("conceptMap.c", "Concept C"), 3);
 
     const nodes = [core, a, b, c];
     const edges = [
-        connect(core, a, { label: "leads to", kind: "curved" }),
-        connect(core, b, { label: "requires", kind: "curved" }),
-        connect(a, c, { label: "supports", kind: "curved" }),
-        connect(b, c, { label: "constrains", kind: "curved" }),
+        connect(core, a, { label: say("conceptMap.leadsTo", "leads to"), kind: "curved" }),
+        connect(core, b, { label: say("conceptMap.requires", "requires"), kind: "curved" }),
+        connect(a, c, { label: say("conceptMap.supports", "supports"), kind: "curved" }),
+        connect(b, c, { label: say("conceptMap.constrains", "constrains"), kind: "curved" }),
     ];
-    return finish(title, { nodes, edges });
+    return finish(title, { nodes, edges }, say);
 }
 
 // ---------------------------------------------------------------------------
@@ -669,7 +777,7 @@ function conceptMap(title = "Concept map"): MindmapDoc {
  * new template is a one-line addition in each place, and the test below fails
  * loudly if one list gains an entry the other lacks.
  */
-const BUILDERS: Record<string, (title?: string) => MindmapDoc> = {
+const BUILDERS: Record<string, (title?: string, say?: Say) => MindmapDoc> = {
     blank,
     mindmap,
     brainstorm,
@@ -703,7 +811,7 @@ export function templatesMissingBuilders(): string[] {
 
 /** Builder ids with no metadata entry, which would be unreachable from the UI. */
 export function buildersMissingMetadata(): string[] {
-    const known = new Set(TEMPLATE_META.map(meta => meta.id));
+    const known = new Set<string>(TEMPLATE_META.map(meta => meta.id));
     return Object.keys(BUILDERS).filter(id => !known.has(id));
 }
 
@@ -717,9 +825,15 @@ export function buildersMissingMetadata(): string[] {
  * choice made once and then stored, not a per-viewer render, so the board
  * looks the same to whoever it is shared with afterwards.
  */
-export function buildTemplate(id: string, title?: string, mode: ThemeMode = "light"): MindmapDoc {
+export function buildTemplate(
+    id: string,
+    title?: string,
+    mode: ThemeMode = "light",
+    /** The creator's language for the starter text; English without one. */
+    text?: StarterText
+): MindmapDoc {
     const t = TEMPLATE_BY_ID[id] ?? TEMPLATE_BY_ID.blank!;
-    const doc = t.build(title);
+    const doc = t.build(title, sayWith(text));
     const settings = {
         ...doc.settings,
         kind: kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category),

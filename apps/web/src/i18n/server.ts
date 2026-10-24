@@ -44,6 +44,16 @@ export async function getRequestTimeZone(): Promise<string | undefined> {
 }
 
 /**
+ * For a model writing text the person will read as interface copy (starter
+ * questions, suggestions): write it in their language. Null for English.
+ */
+export function outputLanguageInstruction(locale: Locale): string | null {
+    if (locale === "en") return null;
+    const { englishName, nativeName } = localeDefinition(locale);
+    return `Write every question and hint in ${englishName} (${nativeName}). Keep document titles, folder names, product names and proper nouns exactly as they appear in the evidence.`;
+}
+
+/**
  * The line a system prompt carries so the model answers in the interface
  * language. Null for English, which needs no instruction. A person who writes
  * in another language, or asks for one, is still answered in it.

@@ -125,5 +125,5 @@ function format(t: unknown, key: string, message: string): string {
     const values: Record<string, unknown> = {};
     for (const name of shape.arguments) values[name] = 1;
     for (const tag of shape.tags) values[tag] = (chunks: string) => chunks;
-    return (t as unknown as { markup: (k: string, v: object) => string }).markup(key, values);
+    return (t as { markup: (k: string, v: object) => string }).markup(key, values);
 }

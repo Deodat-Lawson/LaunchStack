@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Lock,
     Check as IconCheck,
@@ -21,17 +22,40 @@ import {
     Search as IconSearch,
     X as IconX,
 } from "lucide-react";
-import { compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
+import { UNFILED_FOLDER, compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
-import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+import type { DocDomain, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
+
+type KnowledgeTranslator = ReturnType<typeof useTranslations<"sources.knowledgePane">>;
 
 /** A blank category reads as "Unfiled" everywhere in this surface. */
 function collectionOf(source: WorkspaceSource): string {
-    return source.folder.trim().length > 0 ? source.folder : "Unfiled";
+    return source.folder.trim().length > 0 ? source.folder : UNFILED_FOLDER;
+}
+
+/** A collection as this surface names it: its path, or Unfiled in the reader's words. */
+function collectionLabel(t: KnowledgeTranslator, path: string): string {
+    return path === UNFILED_FOLDER ? t("unfiled") : displayFolderPath(path);
+}
+
+/** Each domain's key in `sources.domains`. */
+const DOMAIN_KEY = {
+    Contract: "contract",
+    Financial: "financial",
+    Technical: "technical",
+    Compliance: "compliance",
+    Educational: "educational",
+    HR: "hr",
+    Research: "research",
+    General: "general",
+} as const satisfies Record<DocDomain, string>;
+
+function domainKey(domain: DocDomain): (typeof DOMAIN_KEY)[DocDomain] {
+    return DOMAIN_KEY[domain] ?? "general";
 }
 
 export interface KnowledgePaneProps {
@@ -72,6 +96,11 @@ export function KnowledgePane({
     onRestrictAccess,
     onMoveToFolder,
 }: KnowledgePaneProps) {
+    const t = useTranslations("sources.knowledgePane");
+    const tm = useTranslations("sources.contextMenu");
+    const tr = useTranslations("sources.railCommands");
+    const tTypes = useTranslations("sources.sourceTypes");
+    const tc = useTranslations("common");
     const [query, setQuery] = useState("");
     const [folder, setFolder] = useState<string | null>(null);
     const [type, setType] = useState<SourceTypeId | null>(null);
@@ -84,7 +113,7 @@ export function KnowledgePane({
         (source: WorkspaceSource): ActionMenuItem[] => {
             if (selected.length > 1 && selected.includes(source.id)) {
                 const chosen = sources.filter(s => selected.includes(s.id));
-                return buildSelectionMenuItems(chosen, folders, {
+                return buildSelectionMenuItems(tm, chosen, folders, {
                     onRemoveFromContext: ids =>
                         setSelected(prev => prev.filter(id => !ids.includes(id))),
                     onMoveToFolder: onMoveToFolder
@@ -93,7 +122,7 @@ export function KnowledgePane({
                     onDelete: onDeleteSources,
                 });
             }
-            return buildSourceMenuItems(source, folders, selected, {
+            return buildSourceMenuItems(tm, source, folders, selected, {
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
@@ -129,6 +158,7 @@ export function KnowledgePane({
             });
         },
         [
+            tm,
             sources,
             folders,
             selected,
@@ -207,7 +237,7 @@ export function KnowledgePane({
                                 color: "var(--ink-3)",
                             }}
                         >
-                            Knowledge
+                            {t("eyebrow")}
                         </div>
                         <h2
                             className="display"
@@ -218,7 +248,7 @@ export function KnowledgePane({
                                 letterSpacing: "-0.02em",
                             }}
                         >
-                            Everything this workspace can reason over
+                            {t("heading")}
                         </h2>
                         <div
                             style={{
@@ -229,20 +259,21 @@ export function KnowledgePane({
                                 flexWrap: "wrap",
                             }}
                         >
-                            <Stat
-                                value={sources.length}
-                                label={sources.length === 1 ? "source" : "sources"}
-                            />
+                            <Stat>
+                                {t.rich("statSources", { count: sources.length, b: statValue })}
+                            </Stat>
                             <Divider />
-                            <Stat
-                                value={folders.length}
-                                label={folders.length === 1 ? "collection" : "collections"}
-                            />
+                            <Stat>
+                                {t.rich("statCollections", {
+                                    count: folders.length,
+                                    b: statValue,
+                                })}
+                            </Stat>
                             {indexing > 0 && (
                                 <>
                                     <Divider />
                                     <span style={{ fontSize: 11.5, color: "oklch(0.5 0.13 55)" }}>
-                                        {indexing} indexing…
+                                        {t("indexingCount", { count: indexing })}
                                     </span>
                                 </>
                             )}
@@ -267,7 +298,7 @@ export function KnowledgePane({
                                 whiteSpace: "nowrap",
                             }}
                         >
-                            <IconPlus size={13} /> Add knowledge
+                            <IconPlus size={13} /> {tr("addKnowledge")}
                         </button>
                     </div>
                 </div>
@@ -299,7 +330,7 @@ export function KnowledgePane({
                         <input
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder="Search titles, tags, collections"
+                            placeholder={t("searchPlaceholder")}
                             style={{
                                 flex: 1,
                                 border: "none",
@@ -313,7 +344,7 @@ export function KnowledgePane({
                         {query && (
                             <button
                                 onClick={() => setQuery("")}
-                                aria-label="Clear search"
+                                aria-label={t("clearSearch")}
                                 style={{ color: "var(--ink-3)", display: "flex" }}
                             >
                                 <IconX size={11} />
@@ -322,23 +353,25 @@ export function KnowledgePane({
                     </div>
 
                     <FilterMenu
-                        label="Collection"
+                        label={t("filterCollection")}
+                        allLabel={t("allCollections")}
                         value={folder}
                         options={[...counts.byFolder.entries()]
                             .sort(([a], [b]) => compareFolderPaths(a, b))
                             .map(([name, count]) => ({
                                 value: name,
-                                label: displayFolderPath(name),
+                                label: collectionLabel(t, name),
                                 count,
                             }))}
                         onChange={setFolder}
                     />
                     <FilterMenu
-                        label="Type"
+                        label={t("filterType")}
+                        allLabel={t("allTypes")}
                         value={type}
                         options={[...counts.byType.entries()].map(([id, count]) => ({
                             value: id,
-                            label: SOURCE_META[id].label,
+                            label: tTypes(id),
                             count,
                         }))}
                         onChange={value => setType(value as SourceTypeId | null)}
@@ -353,7 +386,7 @@ export function KnowledgePane({
                             }}
                             style={{ fontSize: 11.5, color: "var(--ink-3)", padding: "5px 4px" }}
                         >
-                            Clear filters
+                            {t("clearFilters")}
                         </button>
                     )}
 
@@ -362,7 +395,7 @@ export function KnowledgePane({
                     {selected.length > 0 && (
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                                {selected.length} selected
+                                {t("selectedCount", { count: selected.length })}
                             </span>
                             <button
                                 onClick={() => onAskAbout(selected)}
@@ -376,13 +409,13 @@ export function KnowledgePane({
                                     fontWeight: 600,
                                 }}
                             >
-                                Ask about these
+                                {t("askAboutThese")}
                             </button>
                             <button
                                 onClick={() => setSelected([])}
                                 style={{ fontSize: 11.5, color: "var(--ink-3)" }}
                             >
-                                Clear
+                                {tc("actions.clear")}
                             </button>
                         </div>
                     )}
@@ -391,9 +424,7 @@ export function KnowledgePane({
 
             <div style={{ flex: 1, overflowY: "auto", minHeight: 0, padding: "18px 24px 40px" }}>
                 {loading && sources.length === 0 ? (
-                    <div style={{ fontSize: 13, color: "var(--ink-3)" }}>
-                        Loading your knowledge…
-                    </div>
+                    <div style={{ fontSize: 13, color: "var(--ink-3)" }}>{t("loading")}</div>
                 ) : filtered.length === 0 ? (
                     <EmptyState
                         filtersActive={filtersActive}
@@ -441,12 +472,13 @@ export function KnowledgePane({
 // Header bits
 // ---------------------------------------------------------------------------
 
-function Stat({ value, label }: { value: number; label: string }) {
-    return (
-        <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-            <strong style={{ color: "var(--ink-2)", fontWeight: 600 }}>{value}</strong> {label}
-        </span>
-    );
+function Stat({ children }: { children: React.ReactNode }) {
+    return <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>{children}</span>;
+}
+
+/** The number in a header stat. */
+function statValue(chunks: React.ReactNode) {
+    return <strong style={{ color: "var(--ink-2)", fontWeight: 600 }}>{chunks}</strong>;
 }
 
 function Divider() {
@@ -454,6 +486,7 @@ function Divider() {
 }
 
 function LayoutToggle({ layout, onChange }: { layout: Layout; onChange: (next: Layout) => void }) {
+    const t = useTranslations("sources.knowledgePane");
     return (
         <div
             style={{
@@ -471,7 +504,7 @@ function LayoutToggle({ layout, onChange }: { layout: Layout; onChange: (next: L
                     <button
                         key={option}
                         onClick={() => onChange(option)}
-                        aria-label={`${option} view`}
+                        aria-label={option === "grid" ? t("gridView") : t("listView")}
                         aria-pressed={active}
                         style={{
                             padding: "6px 9px",
@@ -490,11 +523,14 @@ function LayoutToggle({ layout, onChange }: { layout: Layout; onChange: (next: L
 
 function FilterMenu({
     label,
+    allLabel,
     value,
     options,
     onChange,
 }: {
     label: string;
+    /** The option that clears this filter: "All collections". */
+    allLabel: string;
     value: string | null;
     options: Array<{ value: string; label: string; count: number }>;
     onChange: (next: string | null) => void;
@@ -547,7 +583,7 @@ function FilterMenu({
                         }}
                     >
                         <MenuItem
-                            label={`All ${label.toLowerCase()}s`}
+                            label={allLabel}
                             selected={value === null}
                             onClick={() => {
                                 onChange(null);
@@ -645,14 +681,18 @@ function SourceCard({
     onOpen: () => void;
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
+    const t = useTranslations("sources.knowledgePane");
+    const tTypes = useTranslations("sources.sourceTypes");
+    const tDomains = useTranslations("sources.domains");
     const meta = SOURCE_META[source.type];
     const domain = DOC_DOMAINS[source.domain] ?? DOC_DOMAINS.General;
+    const domainId = domainKey(source.domain);
     const ctxTarget = useContextTarget(
         menuItems
             ? {
                   kind: "source",
                   id: source.id,
-                  label: `Actions for ${source.title}`,
+                  label: t("actionsFor", { title: source.title }),
                   data: source,
                   items: () => menuItems(source),
               }
@@ -747,7 +787,7 @@ function SourceCard({
                         {source.title}
                     </div>
                     <div style={{ fontSize: 10.5, color: "var(--ink-3)", marginTop: 3 }}>
-                        {meta.label}
+                        {tTypes(source.type)}
                         {source.added ? ` · ${source.added}` : ""}
                     </div>
                 </div>
@@ -756,7 +796,7 @@ function SourceCard({
                         e.stopPropagation();
                         onToggle();
                     }}
-                    aria-label={selected ? "Deselect source" : "Select source"}
+                    aria-label={selected ? t("deselectSource") : t("selectSource")}
                     style={{
                         width: 17,
                         height: 17,
@@ -775,7 +815,7 @@ function SourceCard({
 
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 <span
-                    title={domain.desc}
+                    title={tDomains(`${domainId}.desc`)}
                     style={{
                         fontSize: 10,
                         fontWeight: 600,
@@ -786,7 +826,7 @@ function SourceCard({
                         opacity: 0.9,
                     }}
                 >
-                    {source.domain}
+                    {tDomains(`${domainId}.label`)}
                 </span>
                 <span
                     style={{
@@ -797,11 +837,11 @@ function SourceCard({
                         color: "var(--ink-3)",
                     }}
                 >
-                    {collectionOf(source)}
+                    {collectionLabel(t, collectionOf(source))}
                 </span>
                 {source.restricted && (
                     <span
-                        title="Only people with access can see this document"
+                        title={t("restrictedTitle")}
                         style={{
                             fontSize: 10,
                             padding: "1px 7px",
@@ -814,19 +854,19 @@ function SourceCard({
                         }}
                     >
                         <Lock size={9} />
-                        Restricted
+                        {t("restricted")}
                     </span>
                 )}
                 {(source.pending ?? source.syncing ?? false) && (
-                    <span style={{ fontSize: 10, color: "oklch(0.5 0.13 55)" }}>indexing…</span>
-                )}
-                {source.citability === "stale" && (
-                    <span style={{ fontSize: 10, color: "var(--warn)" }}>
-                        changes not yet citable
+                    <span style={{ fontSize: 10, color: "oklch(0.5 0.13 55)" }}>
+                        {t("indexingTag")}
                     </span>
                 )}
+                {source.citability === "stale" && (
+                    <span style={{ fontSize: 10, color: "var(--warn)" }}>{t("staleCitable")}</span>
+                )}
                 {source.citability === "none" && (
-                    <span style={{ fontSize: 10, color: "var(--ink-3)" }}>not citable yet</span>
+                    <span style={{ fontSize: 10, color: "var(--ink-3)" }}>{t("notCitable")}</span>
                 )}
             </div>
 
@@ -860,12 +900,13 @@ function SourceTableRow({
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
     children: React.ReactNode;
 }) {
+    const t = useTranslations("sources.knowledgePane");
     const ctxTarget = useContextTarget(
         menuItems
             ? {
                   kind: "source",
                   id: source.id,
-                  label: `Actions for ${source.title}`,
+                  label: t("actionsFor", { title: source.title }),
                   data: source,
                   items: () => menuItems(source),
               }
@@ -900,6 +941,9 @@ function SourceTable({
     onOpen: (source: WorkspaceSource) => void;
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
+    const t = useTranslations("sources.knowledgePane");
+    const tTypes = useTranslations("sources.sourceTypes");
+    const tDomains = useTranslations("sources.domains");
     return (
         <div
             style={{
@@ -914,11 +958,11 @@ function SourceTable({
                     <thead>
                         <tr style={{ background: "var(--line-2)" }}>
                             <Th style={{ width: 34 }} />
-                            <Th>Source</Th>
-                            <Th style={{ width: 120 }}>Type</Th>
-                            <Th style={{ width: 150 }}>Collection</Th>
-                            <Th style={{ width: 120 }}>Domain</Th>
-                            <Th style={{ width: 110 }}>Added</Th>
+                            <Th>{t("colSource")}</Th>
+                            <Th style={{ width: 120 }}>{t("colType")}</Th>
+                            <Th style={{ width: 150 }}>{t("colCollection")}</Th>
+                            <Th style={{ width: 120 }}>{t("colDomain")}</Th>
+                            <Th style={{ width: 110 }}>{t("colAdded")}</Th>
                         </tr>
                     </thead>
                     <tbody>
@@ -941,7 +985,7 @@ function SourceTable({
                                                 onToggle(source.id);
                                             }}
                                             aria-label={
-                                                isSelected ? "Deselect source" : "Select source"
+                                                isSelected ? t("deselectSource") : t("selectSource")
                                             }
                                             style={{
                                                 width: 15,
@@ -988,7 +1032,7 @@ function SourceTable({
                                             {source.restricted && (
                                                 <Lock
                                                     size={11}
-                                                    aria-label="Restricted"
+                                                    aria-label={t("restricted")}
                                                     style={{
                                                         color: "var(--ink-3)",
                                                         flexShrink: 0,
@@ -997,8 +1041,8 @@ function SourceTable({
                                             )}
                                         </span>
                                     </Td>
-                                    <Td muted>{meta.label}</Td>
-                                    <Td muted>{collectionOf(source)}</Td>
+                                    <Td muted>{tTypes(source.type)}</Td>
+                                    <Td muted>{collectionLabel(t, collectionOf(source))}</Td>
                                     <Td>
                                         <span
                                             style={{
@@ -1007,7 +1051,7 @@ function SourceTable({
                                                 fontWeight: 600,
                                             }}
                                         >
-                                            {source.domain}
+                                            {tDomains(`${domainKey(source.domain)}.label`)}
                                         </span>
                                     </Td>
                                     <Td muted>{source.added || "—"}</Td>
@@ -1069,6 +1113,7 @@ function EmptyState({
     onClear: () => void;
     onOpenAdd: (tabId?: string) => void;
 }) {
+    const t = useTranslations("sources.knowledgePane");
     return (
         <div
             style={{
@@ -1081,7 +1126,7 @@ function EmptyState({
             }}
         >
             <h3 className="display" style={{ fontSize: 19, margin: 0, color: "var(--ink)" }}>
-                {filtersActive ? "Nothing matches those filters" : "No knowledge yet"}
+                {filtersActive ? t("emptyFilteredTitle") : t("emptyTitle")}
             </h3>
             <p
                 style={{
@@ -1092,9 +1137,7 @@ function EmptyState({
                     maxWidth: 420,
                 }}
             >
-                {filtersActive
-                    ? "Widen the search, or clear the filters to see the whole corpus."
-                    : "Upload documents, paste notes, or connect a tool. Everything you add here is what the agents can cite in a meeting."}
+                {filtersActive ? t("emptyFilteredBody") : t("emptyBody")}
             </p>
             {filtersActive ? (
                 <button
@@ -1109,7 +1152,7 @@ function EmptyState({
                         fontWeight: 600,
                     }}
                 >
-                    Clear filters
+                    {t("clearFilters")}
                 </button>
             ) : (
                 <button
@@ -1127,7 +1170,7 @@ function EmptyState({
                         boxShadow: "0 2px 10px var(--accent-glow)",
                     }}
                 >
-                    <IconPlus size={13} /> Add your first source
+                    <IconPlus size={13} /> {t("addFirst")}
                 </button>
             )}
         </div>

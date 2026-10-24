@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { ClipboardPaste } from "lucide-react";
 
 import { cn } from "~/lib/utils";
@@ -43,6 +44,7 @@ export function EmptyCanvasHint({
     canvasSize: { w: number; h: number };
     onPasteOutline: () => void;
 }) {
+    const t = useTranslations("mindmap.emptyCanvas");
     const store = useStore();
     const doc = useCommittedDoc();
     const depth = useEditor(selectDepth);
@@ -74,21 +76,15 @@ export function EmptyCanvasHint({
                 onClick={start}
                 className="border-brand/50 text-brand hover:border-brand hover:bg-brand/10 pointer-events-auto rounded-xl border-2 border-dashed px-8 py-4 text-lg font-semibold transition-colors"
             >
-                Type your idea
+                {t("start")}
             </button>
 
             <p className="text-ink-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[12.5px]">
-                <span>
-                    <Key>Enter</Key> finish / next
-                </span>
+                <span>{t.rich("enter", { key })}</span>
                 <span className="text-line">·</span>
-                <span>
-                    <Key>Tab</Key> child
-                </span>
+                <span>{t.rich("tab", { key })}</span>
                 <span className="text-line">·</span>
-                <span>
-                    <Key>⌘K</Key> everything else
-                </span>
+                <span>{t.rich("palette", { key })}</span>
             </p>
 
             <button
@@ -97,11 +93,13 @@ export function EmptyCanvasHint({
                 className="text-ink-2 hover:text-brand pointer-events-auto flex items-center gap-1.5 text-[12.5px] underline-offset-4 hover:underline"
             >
                 <ClipboardPaste className="size-3.5" />
-                Paste an outline instead
+                {t("paste")}
             </button>
         </div>
     );
 }
+
+const key = (chunks: React.ReactNode) => <Key>{chunks}</Key>;
 
 function Key({ children }: { children: React.ReactNode }) {
     return (

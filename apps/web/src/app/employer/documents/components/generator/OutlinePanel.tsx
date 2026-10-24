@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ListTree, Sparkles, Plus, Loader2, FileText, RefreshCw } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
@@ -35,6 +36,8 @@ export function OutlinePanel({
     onInsertSection,
     onClose,
 }: OutlinePanelProps) {
+    const t = useTranslations("generator.outline");
+    const tc = useTranslations("common");
     const [isGenerating, setIsGenerating] = useState(false);
     const [topic, setTopic] = useState(documentTitle || "");
     const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -107,7 +110,7 @@ export function OutlinePanel({
         const parentLevel = parent?.level ?? 1;
         const newItem: OutlineItem = {
             id: `${parentId}.${Date.now()}`,
-            title: "New Section",
+            title: t("newSection"),
             level: parentLevel + 1,
         };
         onOutlineChange(addChildUtil(outline, parentId, newItem));
@@ -117,7 +120,7 @@ export function OutlinePanel({
     const addTopLevel = () => {
         const newItem: OutlineItem = {
             id: Date.now().toString(),
-            title: "New Section",
+            title: t("newSection"),
             level: 1,
         };
         onOutlineChange([...outline, newItem]);
@@ -130,17 +133,17 @@ export function OutlinePanel({
                 <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <ListTree className="h-4 w-4" />
-                        Outline
+                        {t("title")}
                     </h3>
                     <Button variant="ghost" size="sm" onClick={onClose}>
-                        Close
+                        {tc("actions.close")}
                     </Button>
                 </div>
 
                 {/* Generate Controls */}
                 <div className="space-y-2">
                     <Textarea
-                        placeholder="Document topic or description..."
+                        placeholder={t("topicPlaceholder")}
                         value={topic}
                         onChange={e => setTopic(e.target.value)}
                         className="min-h-[60px] text-sm"
@@ -154,12 +157,12 @@ export function OutlinePanel({
                             {isGenerating ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Generating...
+                                    {t("generating")}
                                 </>
                             ) : (
                                 <>
                                     <Sparkles className="mr-2 h-4 w-4" />
-                                    Generate Outline
+                                    {t("generate")}
                                 </>
                             )}
                         </Button>
@@ -182,8 +185,8 @@ export function OutlinePanel({
                     {outline.length === 0 ? (
                         <div className="text-ink-3 flex flex-col items-center justify-center py-12">
                             <FileText className="mb-4 h-12 w-12 opacity-20" />
-                            <p className="text-sm">No outline yet</p>
-                            <p className="mt-1 text-xs">Generate one or add sections manually</p>
+                            <p className="text-sm">{t("empty")}</p>
+                            <p className="mt-1 text-xs">{t("emptyHint")}</p>
                         </div>
                     ) : (
                         <OutlineTree
@@ -207,11 +210,9 @@ export function OutlinePanel({
             <div className="border-line border-t p-4">
                 <Button variant="outline" size="sm" className="w-full" onClick={addTopLevel}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Section
+                    {t("addSection")}
                 </Button>
-                <p className="text-ink-3 mt-2 text-center text-[10px]">
-                    Click a section title to insert it into your document
-                </p>
+                <p className="text-ink-3 mt-2 text-center text-[10px]">{t("insertHint")}</p>
             </div>
         </div>
     );

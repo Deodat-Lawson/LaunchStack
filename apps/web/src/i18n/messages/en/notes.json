@@ -1,1 +1,76 @@
-{}
+{
+  "backlinks": {
+    "loading": "Loading backlinks…",
+    "error": "Backlinks: {error}",
+    "heading": "Backlinks · {count}",
+    "untitledNote": "Untitled note",
+    "linkedAs": "linked as [[{name}]]",
+    "requestFailed": "Failed ({status})",
+    "failed": "Failed"
+  },
+  "panel": {
+    "title": "Notes",
+    "subtitle": "Sticky annotations on this source.",
+    "newNote": "New note",
+    "loading": "Loading notes…",
+    "empty": "No notes on this source yet.",
+    "emptyHint": "Click “New note” to start.",
+    "deleteTitle": "Delete this note?",
+    "deleteDescriptionNamed": "“{title}” will be removed. This cannot be undone.",
+    "deleteDescription": "This note will be removed. This cannot be undone.",
+    "emptyDraft": "Add a title or body first.",
+    "requestFailed": "Failed ({status})",
+    "fetchFailed": "Failed to fetch notes",
+    "saveFailed": "Save failed",
+    "deleteFailed": "Delete failed"
+  },
+  "card": {
+    "menuLabelNamed": "Actions for “{title}”",
+    "menuLabel": "Note actions",
+    "goTo": "Go to this note",
+    "copyText": "Copy note text",
+    "deleteEllipsis": "Delete…",
+    "age": {
+      "now": "now",
+      "minutes": "{count}m",
+      "hours": "{count}h",
+      "days": "{count}d"
+    },
+    "status": {
+      "drifted": "Anchor moved",
+      "orphaned": "Unanchored"
+    }
+  },
+  "draft": {
+    "titlePlaceholder": "Title",
+    "bodyPlaceholder": "Write a rich note…",
+    "anchorSummary": "Anchor this note (optional)",
+    "anchorQuotePlaceholder": "Paste the exact text you want this note to stick to. Keeps working even after you re-upload a new version.",
+    "anchorPagePlaceholder": "Page number (optional, PDFs only)",
+    "tags": "Tags",
+    "addTagPlaceholder": "Add tag",
+    "saveNote": "Save note"
+  },
+  "editor": {
+    "placeholder": "Write a note…",
+    "loading": "Loading editor…",
+    "bold": "Bold",
+    "italic": "Italic",
+    "bulletList": "Bullet list",
+    "orderedList": "Ordered list",
+    "quote": "Quote",
+    "code": "Code",
+    "link": "Link",
+    "linkPrompt": "Link URL"
+  },
+  "pdf": {
+    "loadError": "Couldn’t load PDF: {error}",
+    "loadFailedFallback": "Failed to load PDF",
+    "failedToLoad": "Failed to load",
+    "loading": "Loading PDF…",
+    "addNote": "+ Note",
+    "askAi": "✦ Ask AI",
+    "askAiTitle": "Ask about this passage in the chat",
+    "pinTitle": "Note {ordinal}"
+  }
+}

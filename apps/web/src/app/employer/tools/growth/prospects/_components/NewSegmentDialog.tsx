@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -31,6 +32,8 @@ export function NewSegmentDialog({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) {
+    const t = useTranslations("growth.prospects.newSegment");
+    const tc = useTranslations("common");
     const { reloadSegments, setSegmentId } = useProspects();
     const [name, setName] = useState("");
     const [offering, setOffering] = useState("");
@@ -51,24 +54,23 @@ export function NewSegmentDialog({
             const { segment } = await prospectsApi.createSegment({
                 name: name.trim(),
                 offering: offering.trim(),
+                // Either comma: people typing Chinese reach for the full-width one.
                 industries: industries
-                    .split(",")
+                    .split(/[,，、]/)
                     .map(s => s.trim())
                     .filter(Boolean),
                 countries: countries
-                    .split(/[,\s]+/)
+                    .split(/[,，、\s]+/)
                     .map(s => s.trim().toUpperCase())
                     .filter(s => s.length === 2),
             });
             await reloadSegments();
             setSegmentId(segment.id);
-            toast.success(
-                `Segment “${segment.name}” created. Run Find companies when you are ready.`
-            );
+            toast.success(t("created", { name: segment.name }));
             reset();
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not create the segment");
+            toast.error(e instanceof Error ? e.message : t("createFailed"));
         } finally {
             setBusy(false);
         }
@@ -77,16 +79,14 @@ export function NewSegmentDialog({
     const valid =
         name.trim().length > 0 &&
         offering.trim().length > 0 &&
-        countries.split(/[,\s]+/).some(s => s.trim().length === 2);
+        countries.split(/[,，、\s]+/).some(s => s.trim().length === 2);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>New segment</DialogTitle>
-                    <DialogDescription>
-                        Who you want to sell to, and where. You can refine every field afterwards.
-                    </DialogDescription>
+                    <DialogTitle>{t("title")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -97,56 +97,60 @@ export function NewSegmentDialog({
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="seg-name" className="text-xs">
-                            Name
+                            {tc("fields.name")}
                         </Label>
                         <Input
                             id="seg-name"
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            placeholder="Fulfilment operators · EU"
+                            placeholder={t("namePlaceholder")}
                             autoFocus
                         />
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="seg-offering" className="text-xs">
-                            What you sell
+                            {t("offering")}
                         </Label>
                         <Textarea
                             id="seg-offering"
                             rows={2}
                             value={offering}
                             onChange={e => setOffering(e.target.value)}
-                            placeholder="Picking robots for e-commerce warehouses, leased per robot per month"
+                            placeholder={t("offeringPlaceholder")}
                         />
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="seg-industries" className="text-xs">
-                            Industries <span className="text-ink-3">(comma separated)</span>
+                            {t.rich("industries", {
+                                hint: chunks => <span className="text-ink-3">{chunks}</span>,
+                            })}
                         </Label>
                         <Input
                             id="seg-industries"
                             value={industries}
                             onChange={e => setIndustries(e.target.value)}
-                            placeholder="E-commerce fulfilment, 3PL, contract logistics"
+                            placeholder={t("industriesPlaceholder")}
                         />
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="seg-countries" className="text-xs">
-                            Countries <span className="text-ink-3">(two-letter codes)</span>
+                            {t.rich("countries", {
+                                hint: chunks => <span className="text-ink-3">{chunks}</span>,
+                            })}
                         </Label>
                         <Input
                             id="seg-countries"
                             value={countries}
                             onChange={e => setCountries(e.target.value)}
-                            placeholder="NL, DE, GB"
+                            placeholder={t("countriesPlaceholder")}
                         />
                     </div>
                     <DialogFooter className="mt-2">
                         <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={!valid || busy}>
-                            Create segment
+                            {t("create")}
                         </Button>
                     </DialogFooter>
                 </form>

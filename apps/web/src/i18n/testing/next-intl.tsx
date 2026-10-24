@@ -33,6 +33,12 @@ export { IntlError, IntlErrorCode, createFormatter, createTranslator, hasLocale 
 
 const InProvider = createContext(false);
 
+/**
+ * The machine's zone, as `toLocaleString()` used before these components were
+ * translated, so a test's expected dates did not move.
+ */
+export const TEST_TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 function throwOnError(error: IntlError): void {
     throw error;
 }
@@ -44,11 +50,18 @@ export function NextIntlClientProvider({
     locale = "en",
     messages = englishMessages,
     onError = throwOnError,
+    timeZone = TEST_TIME_ZONE,
     ...rest
 }: ProviderProps) {
     return (
         <InProvider.Provider value>
-            <IntlProvider locale={locale} messages={messages} onError={onError} {...rest}>
+            <IntlProvider
+                locale={locale}
+                messages={messages}
+                onError={onError}
+                timeZone={timeZone}
+                {...rest}
+            >
                 {children}
             </IntlProvider>
         </InProvider.Provider>
@@ -72,11 +85,10 @@ function englishTranslator(namespace?: string) {
     return translator;
 }
 
-const englishFormatter = createFormatter({ locale: "en" });
+const englishFormatter = createFormatter({ locale: "en", timeZone: TEST_TIME_ZONE });
 
 // Whether a provider is mounted never changes for a mounted component, so
 // the hook order is stable even though only one branch calls the real hook.
-/* eslint-disable react-hooks/rules-of-hooks */
 export const useTranslations = ((namespace?: string) =>
     useContext(InProvider)
         ? useIntlTranslations(namespace as never)
@@ -96,4 +108,3 @@ export const useNow = ((options?: Parameters<typeof useIntlNow>[0]) =>
 
 export const useTimeZone = (() =>
     useContext(InProvider) ? useIntlTimeZone() : undefined) as typeof useIntlTimeZone;
-/* eslint-enable react-hooks/rules-of-hooks */

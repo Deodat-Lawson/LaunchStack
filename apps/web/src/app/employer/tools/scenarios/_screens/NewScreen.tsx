@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 import { useToolRouter } from "~/components/tool-app/nav";
@@ -15,8 +16,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
-import { SCENARIO_CAVEAT, SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
-import { plural } from "~/lib/tools/format";
+import { SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
@@ -27,7 +27,7 @@ import { runPath } from "../_lib/screens";
 const L = SCENARIO_LIMITS;
 
 /** The estimate for a size, asked for once the sliders settle. */
-function useEstimate(agents: number, rounds: number) {
+function useEstimate(agents: number, rounds: number, fallbackError: string) {
     const [state, setState] = useState<{
         data: ScenarioEstimate | null;
         loading: boolean;
@@ -47,7 +47,7 @@ function useEstimate(agents: number, rounds: number) {
                         setState(s => ({
                             data: s.data,
                             loading: false,
-                            error: e instanceof Error ? e.message : "Could not estimate the cost",
+                            error: e instanceof Error ? e.message : fallbackError,
                         }));
                 });
         }, 350);
@@ -55,11 +55,12 @@ function useEstimate(agents: number, rounds: number) {
             cancelled = true;
             window.clearTimeout(timer);
         };
-    }, [agents, rounds]);
+    }, [agents, rounds, fallbackError]);
     return state;
 }
 
 function Counter({ value, max }: { value: number; max: number }) {
+    const format = useFormatter();
     return (
         <span
             className={cn(
@@ -67,7 +68,7 @@ function Counter({ value, max }: { value: number; max: number }) {
                 value > max ? "text-danger" : "text-ink-3"
             )}
         >
-            {value.toLocaleString()}/{max.toLocaleString()}
+            {format.number(value)}/{format.number(max)}
         </span>
     );
 }
@@ -78,6 +79,8 @@ function Counter({ value, max }: { value: number; max: number }) {
  * the run and opens it.
  */
 export function NewScreen() {
+    const t = useTranslations("scenarios.new");
+    const tw = useTranslations("scenarios.words");
     const router = useToolRouter();
     const { expectLive } = useScenarios();
     const options = useResource("scenarios:sources", () => scenariosApi.sources());
@@ -95,7 +98,7 @@ export function NewScreen() {
     const [rounds, setRounds] = useState<number>(L.rounds.default);
     const [submitting, setSubmitting] = useState(false);
     const [problem, setProblem] = useState<{ message: string; credits: boolean } | null>(null);
-    const estimate = useEstimate(agents, rounds);
+    const estimate = useEstimate(agents, rounds, t("estimateError"));
 
     const offered = options.data;
     // The profile switch means nothing when there is no profile to read.
@@ -156,7 +159,7 @@ export function NewScreen() {
                 e instanceof ScenariosApiError &&
                 (e.status === 402 || e.code === "insufficient_credits");
             setProblem({
-                message: e instanceof Error ? e.message : "Could not start the scenario",
+                message: e instanceof Error ? e.message : t("startError"),
                 credits,
             });
             setSubmitting(false);
@@ -173,42 +176,42 @@ export function NewScreen() {
     }> = [
         {
             id: "search",
-            label: "Search my files for related material",
-            hint: "Finds passages about the situation in the files you can see.",
+            label: t("switches.search"),
+            hint: t("switches.searchHint"),
             checked: searchFiles,
             set: setSearchFiles,
         },
         {
             id: "prospects",
-            label: "Prospects",
+            label: t("switches.prospects"),
             hint: offered
                 ? offered.prospects > 0
-                    ? `${plural(offered.prospects, "company", "companies")} from Growth › Prospects become buyers in the network.`
-                    : "No prospects yet. Growth › Prospects finds them."
-                : "Companies from Growth › Prospects.",
+                    ? t("switches.prospectsHint", { count: offered.prospects })
+                    : t("switches.prospectsNone")
+                : t("switches.prospectsLoading"),
             checked: prospects && (offered?.prospects ?? 0) > 0,
             set: setProspects,
             disabled: offered ? offered.prospects === 0 : true,
         },
         {
             id: "comments",
-            label: "Comments on your posts",
+            label: t("switches.comments"),
             hint: offered
                 ? offered.brandComments > 0
-                    ? `${plural(offered.brandComments, "comment")} people left on the workspace's social posts.`
-                    : "No comments on your posts yet."
-                : "What people said under the workspace's social posts.",
+                    ? t("switches.commentsHint", { count: offered.brandComments })
+                    : t("switches.commentsNone")
+                : t("switches.commentsLoading"),
             checked: brandComments && (offered?.brandComments ?? 0) > 0,
             set: setBrandComments,
             disabled: offered ? offered.brandComments === 0 : true,
         },
         {
             id: "profile",
-            label: "Company profile",
+            label: t("switches.profile"),
             hint:
                 offered && !offered.companyProfile
-                    ? "This workspace has no company profile yet."
-                    : "What you sell, to whom, and at what price.",
+                    ? t("switches.profileNone")
+                    : t("switches.profileHint"),
             checked: profileOn,
             set: setCompanyProfile,
             disabled: offered ? !offered.companyProfile : true,
@@ -217,33 +220,25 @@ export function NewScreen() {
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-            <PageHeader
-                size="md"
-                title="New"
-                accent="scenario"
-                sub="Describe a situation. People built from your records react to it over several rounds."
-            />
+            <PageHeader size="md" title={t("title")} accent={t("accent")} sub={t("sub")} />
             <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_320px] items-start gap-8">
                 <div className="flex min-w-0 flex-col gap-7">
                     <section className="flex flex-col gap-4">
                         <div>
                             <Label htmlFor="scenario-subject" className="text-ink text-sm">
-                                What happens if…
+                                {t("subjectLabel")}
                             </Label>
                             <Textarea
                                 id="scenario-subject"
                                 value={subject}
                                 onChange={e => setSubject(e.target.value)}
                                 rows={3}
-                                placeholder="We raise prices 20% for new customers in January."
+                                placeholder={t("subjectPlaceholder")}
                                 className="mt-1.5 text-[14px] leading-[1.5]"
                                 aria-invalid={subject.length > L.subjectMax || undefined}
                             />
                             <div className="text-ink-3 mt-1 flex justify-between gap-3 text-xs">
-                                <span>
-                                    One situation, in plain words. It is the opening post everyone
-                                    sees.
-                                </span>
+                                <span>{t("subjectHint")}</span>
                                 <Counter value={subject.length} max={L.subjectMax} />
                             </div>
                         </div>
@@ -252,29 +247,26 @@ export function NewScreen() {
                                 htmlFor="scenario-title"
                                 className="text-ink-3 text-xs font-normal"
                             >
-                                Title (optional)
+                                {t("titleLabel")}
                             </Label>
                             <Input
                                 id="scenario-title"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                                 maxLength={120}
-                                placeholder="Taken from the situation when left empty"
+                                placeholder={t("titlePlaceholder")}
                                 className="mt-1.5"
                             />
                         </div>
                     </section>
 
                     <section className="flex flex-col gap-4">
-                        <SectionHeading
-                            title="What the people are built from"
-                            aside="Only material you can see is used"
-                        />
+                        <SectionHeading title={t("builtFromTitle")} aside={t("builtFromAside")} />
                         <div>
                             <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                                <span className="text-ink-2 text-[13px]">Files</span>
+                                <span className="text-ink-2 text-[13px]">{t("files")}</span>
                                 <span className="text-ink-3 text-xs tabular-nums">
-                                    {docs.length} of {L.documentsMax} picked
+                                    {t("picked", { count: docs.length, max: L.documentsMax })}
                                 </span>
                             </div>
                             <div className="border-line bg-panel overflow-hidden rounded-lg border">
@@ -283,8 +275,8 @@ export function NewScreen() {
                                     <Input
                                         value={query}
                                         onChange={e => setQuery(e.target.value)}
-                                        placeholder="Find a file"
-                                        aria-label="Find a file"
+                                        placeholder={t("findFile")}
+                                        aria-label={t("findFile")}
                                         className="h-9 border-0 bg-transparent px-0 text-[13px] shadow-none focus-visible:ring-0 dark:bg-transparent"
                                     />
                                 </div>
@@ -302,14 +294,12 @@ export function NewScreen() {
                                     />
                                 ) : shown.length === 0 ? (
                                     <p className="text-ink-3 px-3 py-3 text-[13px]">
-                                        {documents.length === 0
-                                            ? "No files in this workspace yet."
-                                            : "No file matches."}
+                                        {documents.length === 0 ? t("noFiles") : t("noMatch")}
                                     </p>
                                 ) : (
                                     <ul
                                         className="max-h-[232px] overflow-y-auto"
-                                        aria-label="Files"
+                                        aria-label={t("files")}
                                     >
                                         {shown.map(doc => {
                                             const id = `scenario-doc-${doc.id}`;
@@ -386,14 +376,14 @@ export function NewScreen() {
                                 htmlFor="scenario-notes"
                                 className="text-ink-2 text-[13px] font-normal"
                             >
-                                Paste material
+                                {t("notesLabel")}
                             </Label>
                             <Textarea
                                 id="scenario-notes"
                                 value={notes}
                                 onChange={e => setNotes(e.target.value)}
                                 rows={4}
-                                placeholder="A news story, a policy draft, an announcement, a competitor's pricing page…"
+                                placeholder={t("notesPlaceholder")}
                                 className="mt-1.5 text-[13px]"
                                 aria-invalid={notes.length > L.notesMax || undefined}
                             />
@@ -404,24 +394,24 @@ export function NewScreen() {
                     </section>
 
                     <section className="flex flex-col gap-5">
-                        <SectionHeading title="Size" />
+                        <SectionHeading title={t("size")} />
                         <SizeSlider
                             id="people"
-                            label="People"
+                            label={t("people")}
                             value={agents}
                             min={L.agents.min}
                             max={L.agents.max}
                             onChange={setAgents}
-                            hint="More people bring more points of view, and cost more."
+                            hint={t("peopleHint")}
                         />
                         <SizeSlider
                             id="rounds"
-                            label="Rounds"
+                            label={t("rounds")}
                             value={rounds}
                             min={L.rounds.min}
                             max={L.rounds.max}
                             onChange={setRounds}
-                            hint="Each round, people read their feed and post, reply, share or change their minds."
+                            hint={t("roundsHint")}
                         />
                     </section>
                 </div>
@@ -435,22 +425,20 @@ export function NewScreen() {
                     />
                     {!anySource && (
                         <p className="border-warn/40 bg-warn-soft text-warn rounded-lg border px-3 py-2 text-xs leading-relaxed">
-                            No sources are on, so every person will be invented. Pick a file, switch
-                            on a source or paste some material to build people from your records.
+                            {t("noSources")}
                         </p>
                     )}
-                    <p className="text-ink-3 text-xs leading-relaxed">{SCENARIO_CAVEAT}</p>
+                    <p className="text-ink-3 text-xs leading-relaxed">{tw("caveat")}</p>
                     <Button disabled={!canRun} onClick={() => void submit()} className="w-full">
-                        {submitting ? "Starting…" : "Run scenario"}
+                        {submitting ? t("starting") : t("run")}
                     </Button>
                     {!subject.trim() && !problem && (
-                        <p className="text-ink-3 text-xs">Describe the situation first.</p>
+                        <p className="text-ink-3 text-xs">{t("describeFirst")}</p>
                     )}
                     {problem && (
                         <p role="alert" className="text-danger text-xs leading-relaxed">
                             {problem.message}
-                            {problem.credits &&
-                                " Use fewer people or rounds, or ask an admin to add credits."}
+                            {problem.credits && ` ${t("creditsHint")}`}
                         </p>
                     )}
                 </aside>
@@ -514,6 +502,7 @@ function EstimateBox({
     error: string | null;
     blocked: boolean;
 }) {
+    const t = useTranslations("scenarios.new");
     return (
         <div
             className={cn(
@@ -522,7 +511,7 @@ function EstimateBox({
             )}
             aria-live="polite"
         >
-            <span className="text-ink-3 text-xs">Estimate</span>
+            <span className="text-ink-3 text-xs">{t("estimate")}</span>
             {estimate ? (
                 <div
                     className={cn(
@@ -530,8 +519,7 @@ function EstimateBox({
                         settling && "opacity-60"
                     )}
                 >
-                    About {estimate.calls.toLocaleString()} model calls · about{" "}
-                    {estimate.credits.toLocaleString()} credits
+                    {t("estimateValue", { calls: estimate.calls, credits: estimate.credits })}
                 </div>
             ) : error ? null : (
                 <Skeleton className="h-4 w-4/5" />
@@ -539,16 +527,17 @@ function EstimateBox({
             {estimate && (
                 <span className="text-ink-3 text-xs tabular-nums">
                     {estimate.balance === null
-                        ? "Usage is not metered on this workspace."
-                        : `Balance: ${estimate.balance.toLocaleString()} credits`}
+                        ? t("unmetered")
+                        : t("balance", { balance: estimate.balance })}
                 </span>
             )}
             {error && <span className="text-danger text-xs">{error}</span>}
             {blocked && estimate && (
                 <p className="text-danger mt-1 text-xs leading-relaxed">
-                    Not enough credits for this size: it needs about{" "}
-                    {estimate.credits.toLocaleString()} and the workspace has{" "}
-                    {(estimate.balance ?? 0).toLocaleString()}. Use fewer people or rounds.
+                    {t("notEnough", {
+                        credits: estimate.credits,
+                        balance: estimate.balance ?? 0,
+                    })}
                 </p>
             )}
         </div>

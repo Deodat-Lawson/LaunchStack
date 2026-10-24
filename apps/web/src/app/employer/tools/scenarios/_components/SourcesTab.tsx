@@ -1,28 +1,30 @@
 "use client";
 
 import { ExternalLink, Lock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useState } from "react";
 
 import { SourceLink } from "~/components/tools/Cite";
 import { SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import type { ScenarioDetail, ScenarioSources } from "~/lib/scenarios/types";
-import { joinNatural, plural } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
 
-import { SOURCE_KIND_LABEL, isLive } from "~/lib/scenarios/words";
+import { isLive, joinLabels, sourceKindLabel, type ScenarioWordsT } from "~/lib/scenarios/words";
+
+type SourcesT = ReturnType<typeof useTranslations<"scenarios.sources">>;
 
 /** "2 files, a search of your files and the company profile". */
-function usedWords(used: ScenarioSources): string {
+function usedWords(t: SourcesT, tw: ScenarioWordsT, used: ScenarioSources): string {
     const parts = [
-        used.documentIds.length > 0 && plural(used.documentIds.length, "picked file"),
-        used.searchFiles && "a search of your files",
-        used.prospects && "prospects",
-        used.brandComments && "comments on your posts",
-        used.companyProfile && "the company profile",
-        used.notes.trim() && "pasted material",
+        used.documentIds.length > 0 && t("used.files", { count: used.documentIds.length }),
+        used.searchFiles && t("used.search"),
+        used.prospects && t("used.prospects"),
+        used.brandComments && t("used.comments"),
+        used.companyProfile && t("used.profile"),
+        used.notes.trim() && t("used.notes"),
     ].filter((x): x is string => Boolean(x));
-    return parts.length ? joinNatural(parts) : "nothing: every person was invented";
+    return parts.length ? joinLabels(tw, parts) : t("used.nothing");
 }
 
 /**
@@ -37,6 +39,8 @@ export function SourcesTab({
     run: ScenarioDetail;
     focusSource: string | null;
 }) {
+    const t = useTranslations("scenarios.sources");
+    const tw = useTranslations("scenarios.words");
     const [highlight, setHighlight] = useState<string | null>(focusSource);
     useEffect(() => {
         if (!focusSource) return;
@@ -57,13 +61,12 @@ export function SourcesTab({
     if (run.sources.length === 0) {
         return isLive(run.status) && run.stage === "gathering" ? (
             <div className="flex flex-col gap-3">
-                <p className="text-ink-3 text-[13px]">Gathering sources…</p>
+                <p className="text-ink-3 text-[13px]">{t("gathering")}</p>
                 <SkeletonRows rows={3} height={56} />
             </div>
         ) : (
             <p className="text-ink-3 text-[13px]">
-                No sources: every person in this scenario was invented. Built from{" "}
-                {usedWords(run.sourcesUsed)}.
+                {t("none", { used: usedWords(t, tw, run.sourcesUsed) })}
             </p>
         );
     }
@@ -72,7 +75,7 @@ export function SourcesTab({
         <div className="flex flex-col gap-6">
             {run.brief && (
                 <section className="max-w-[80ch]">
-                    <SectionHeading title="What everyone knew" />
+                    <SectionHeading title={t("brief")} />
                     <p className="text-ink-2 text-[13.5px] leading-relaxed">
                         {run.brief.split(/(\[E\d+\])/g).map((part, i) => {
                             const m = /^\[(E\d+)\]$/.exec(part);
@@ -83,7 +86,7 @@ export function SourcesTab({
                                     type="button"
                                     onClick={() => jump(m[1]!)}
                                     className="text-brand-ink focus-visible:ring-brand/50 rounded-sm align-super font-mono text-[10px] leading-none outline-none focus-visible:ring-2"
-                                    aria-label={`Source ${m[1]}`}
+                                    aria-label={t("sourceAria", { id: m[1]! })}
                                 >
                                     {m[1]}
                                 </button>
@@ -94,8 +97,8 @@ export function SourcesTab({
             )}
             <section>
                 <SectionHeading
-                    title="Sources"
-                    aside={`Built from ${usedWords(run.sourcesUsed)}`}
+                    title={t("title")}
+                    aside={t("builtFrom", { used: usedWords(t, tw, run.sourcesUsed) })}
                 />
                 <ol className="border-line bg-panel overflow-hidden rounded-lg border">
                     {run.sources.map(source => {
@@ -114,14 +117,17 @@ export function SourcesTab({
                                 </span>
                                 <div className="min-w-0">
                                     <div className="text-ink-3 text-xs">
-                                        {SOURCE_KIND_LABEL[source.kind]}
-                                        {n > 0 &&
-                                            ` · ${plural(n, "person", "people")} built from it`}
+                                        {n > 0
+                                            ? t("kindCited", {
+                                                  kind: sourceKindLabel(tw, source.kind),
+                                                  count: n,
+                                              })
+                                            : sourceKindLabel(tw, source.kind)}
                                     </div>
                                     {source.redacted ? (
                                         <div className="text-ink-2 mt-0.5 inline-flex items-center gap-1.5 text-[13px]">
-                                            <Lock className="size-3.5" aria-hidden />A file you
-                                            don&apos;t have access to
+                                            <Lock className="size-3.5" aria-hidden />
+                                            {t("redacted")}
                                         </div>
                                     ) : (
                                         <>

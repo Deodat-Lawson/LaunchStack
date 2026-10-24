@@ -7,6 +7,8 @@ import { createFormatter, createTranslator } from "use-intl";
 
 import { englishMessages } from "~/i18n/messages";
 
+const TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 export async function getLocale() {
     return "en" as const;
 }
@@ -22,7 +24,7 @@ export async function getTranslations(namespaceOrOptions?: string | { namespace?
 }
 
 export async function getFormatter() {
-    return createFormatter({ locale: "en" });
+    return createFormatter({ locale: "en", timeZone: TIME_ZONE });
 }
 
 export async function getMessages() {
@@ -30,14 +32,16 @@ export async function getMessages() {
 }
 
 export async function getTimeZone() {
-    return undefined;
+    return TIME_ZONE;
 }
 
 export async function getNow() {
     return new Date();
 }
 
-export function setRequestLocale(): void {}
+export function setRequestLocale(): void {
+    // Nothing to set: every test reads English.
+}
 
 export function getRequestConfig<T>(create: T): T {
     return create;

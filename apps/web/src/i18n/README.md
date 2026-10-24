@@ -150,6 +150,32 @@ recorded it, so server- and client-formatted dates agree.
   and analytics event names.
 - Server error strings shown verbatim from an API response.
 
+### Text the server writes
+
+A route handler knows the reader's language from the request:
+`localeOfRequest(request)` (`server.ts`). Three patterns, in order of
+preference:
+
+- **Send data, word it on the screen.** An item the server composes for a
+  screen (the Proposals and Prospects to-do lists) carries a `copy` field —
+  a message key and its values — beside the English `title`/`detail`, which
+  other API readers keep. The screen renders `copy` through its namespace.
+- **Translate on the server** when the text is built there and cached per
+  reader: the starter questions take the locale, key their cache on it, and
+  build their fixed set from `chat.starters.generated` (`createTranslator`
+  over `loadMessages(locale)`).
+- **Tell the model.** `replyLanguageInstruction(locale)` for an assistant's
+  answer, `outputLanguageInstruction(locale)` for interface copy a model
+  writes (starter questions). Prompts themselves stay English.
+
+## Payload
+
+The whole catalogue (about 8,300 keys, ~400 KB minified, ~140 KB gzipped)
+travels with the root layout once per full page load; client navigation
+does not resend it. If that grows into a problem, give the root provider
+only the namespaces the signed-out screens use and nest a second
+`NextIntlClientProvider` with the rest in `app/employer/layout.tsx`.
+
 ## Tests
 
 Component tests need nothing: under jest `next-intl` resolves to

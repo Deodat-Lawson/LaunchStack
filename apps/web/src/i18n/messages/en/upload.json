@@ -1,1 +1,238 @@
-{}
+{
+  "view": {
+    "categoryCreated": "Category \"{name}\" created",
+    "invalidCategory": "Invalid category data format",
+    "createCategoryFailed": "Error creating category. Check console for details.",
+    "categoryRemoved": "Category \"{name}\" removed",
+    "removeCategoryFailed": "Error removing category. Check console for details.",
+    "eyebrow": "Upload",
+    "title": "Add sources",
+    "subtitle": "Drop files, connect a repo, paste text, or point us at a URL. Everything you bring in is indexed into your knowledge base, chunked for retrieval, and ready for the workspace."
+  },
+  "categories": {
+    "title": "Manage categories",
+    "namePlaceholder": "New category name",
+    "add": "Add category",
+    "emptyTitle": "No categories yet",
+    "emptyBody": "Add one above, or create one while uploading.",
+    "deleteLabel": "Delete {name} category",
+    "deleteTitle": "Delete category",
+    "deleteBody": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
+  },
+  "queue": {
+    "title": "Queue · {count, plural, one {# file} other {# files}}",
+    "clearAll": "Clear all",
+    "removeFile": "Remove file",
+    "titleLabel": "Document title",
+    "titlePlaceholder": "Enter document title",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category (optional)",
+    "removeFromQueue": "Remove from queue"
+  },
+  "github": {
+    "invalidUrlToast": "Please enter a valid GitHub repository URL",
+    "indexFailed": "Failed to index repository",
+    "indexStarted": "Repository indexing started!",
+    "unknownError": "Unknown error",
+    "urlLabel": "Repository URL",
+    "invalidUrl": "Enter a valid GitHub URL (e.g., https://github.com/owner/repo)",
+    "branchLabel": "Branch (optional)",
+    "branchPlaceholder": "main (default)",
+    "tokenToggle": "Private repository? Add access token",
+    "tokenPlaceholder": "your-github-access-token",
+    "tokenHint": "A personal access token with <code>repo</code> scope. Not stored permanently.",
+    "submitted": "Repository submitted for indexing! Redirecting…",
+    "submitting": "Downloading & processing…",
+    "submit": "Index repository",
+    "indexedTitle": "What gets indexed",
+    "indexedMore": "README, Dockerfile, etc.",
+    "skipped": "Binary files, node_modules, .git, and other non-text files are automatically skipped.",
+    "advancedTitle": "Advanced: Import issues & pull requests",
+    "advancedBody": "Use the GitHub CLI to export issues/PRs as JSON, then upload via Files",
+    "requiresCli": "Requires the <code>gh</code> CLI. Run these in your terminal:",
+    "issues": "Issues",
+    "pullRequests": "Pull requests",
+    "thenUpload": "Then upload the resulting JSON files via the <strong>Files & folders</strong> tab."
+  },
+  "paste": {
+    "untitled": "Untitled Document",
+    "contentRequired": "Please enter some content",
+    "added": "\"{title}\" added to upload queue",
+    "titleLabel": "Document title",
+    "titlePlaceholder": "e.g. Meeting notes, research summary…",
+    "contentLabel": "Content",
+    "wordCount": "{count, plural, one {# word} other {# words}}",
+    "contentPlaceholder": "Paste your text or markdown content here…",
+    "submit": "Add to upload queue"
+  },
+  "sourceDialog": {
+    "github": {
+      "title": "Index a GitHub repository",
+      "description": "Enter a repository URL to clone and index it into your knowledge base."
+    },
+    "paste": {
+      "title": "Paste text",
+      "description": "Paste markdown or plain text to add as a document."
+    },
+    "website": {
+      "title": "Import from website",
+      "description": "Fetch a single web page and add its content to your knowledge base."
+    },
+    "youtube": {
+      "title": "Import from YouTube or video platforms",
+      "description": "Paste a video URL — audio will be extracted and transcribed into a searchable document."
+    }
+  },
+  "sourceGrid": {
+    "files": {
+      "title": "Files & folders",
+      "subtitle": "PDF, DOCX, images, ZIP",
+      "folder": "or select folder"
+    },
+    "github": {
+      "title": "GitHub repo",
+      "subtitle": "Clone & index a repository"
+    },
+    "paste": {
+      "title": "Paste text",
+      "subtitle": "Markdown or plain text"
+    },
+    "website": {
+      "title": "Website",
+      "subtitle": "Fetch a single web page"
+    },
+    "youtube": {
+      "title": "YouTube & video",
+      "subtitle": "Transcribe a video URL"
+    }
+  },
+  "youtube": {
+    "processFailed": "Failed to process video",
+    "transcribed": "Video transcribed successfully: \"{title}\"",
+    "fallbackTitle": "Video",
+    "processUrlFailed": "Failed to process video URL",
+    "urlLabel": "Video URL",
+    "titleLabel": "Document title",
+    "titleHint": "(optional — defaults to video title)",
+    "titlePlaceholder": "e.g. Q1 All-Hands recording",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category",
+    "submitting": "Transcribing…",
+    "submit": "Transcribe & upload",
+    "wait": "This may take a few minutes depending on video length. Please don't close this page.",
+    "supported": "Supported: YouTube, Vimeo, TikTok, Twitter/X, Twitch, Dailymotion, and more"
+  },
+  "website": {
+    "invalidUrlToast": "Please enter a valid http(s) URL",
+    "indexFailed": "Failed to index website",
+    "indexStarted": "Website indexing started!",
+    "unknownError": "Unknown error",
+    "urlLabel": "Page URL",
+    "invalidUrl": "Enter a valid http(s) URL",
+    "titleLabel": "Document title (optional)",
+    "titlePlaceholder": "Derived from {tag} if left blank",
+    "crawl": "Crawl linked pages",
+    "crawlHint": "Follow same-domain links",
+    "maxDepth": "Max depth: {depth}",
+    "shallow": "1 (shallow)",
+    "deep": "3 (deep)",
+    "maxPages": "Max pages",
+    "maxPagesHint": "Up to 50 pages per crawl",
+    "jsRender": "Enable JS rendering",
+    "jsRenderHint": "For SPAs that require JavaScript",
+    "crawlSubmitted": "Crawl submitted! Pages are being indexed. Redirecting…",
+    "submitted": "Website submitted for indexing! Redirecting…",
+    "crawling": "Crawling & processing…",
+    "fetching": "Fetching & processing…",
+    "submitCrawl": "Crawl & index site",
+    "submit": "Index page",
+    "howTitle": "How this works",
+    "how": {
+      "fetch": "Pages are fetched server-side and cleaned with Readability (boilerplate, ads, and nav are stripped)",
+      "markdown": "Content is converted to Markdown preserving headings, lists, and tables",
+      "chunks": "Chunks are split along heading boundaries for better retrieval",
+      "follow": "Same-domain links are followed up to depth {depth} (max {pages} pages)",
+      "separate": "Each crawled page becomes a separate document",
+      "enableCrawl": "Enable \"Crawl linked pages\" to index multiple pages"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category (optional)",
+    "addCategoryOption": "+ Add new category…",
+    "categoryNamePlaceholder": "Enter category name",
+    "restricted": "Restricted folder — visible only to people with access",
+    "visibleToAll": "Visible to everyone in the workspace",
+    "processingMethod": "Processing method",
+    "uploadDate": "Upload date",
+    "uploadDateHint": "Optional: override the upload date for all documents",
+    "storageNote": "Uploads are stored {where, select, s3 {in S3} cloud {with UploadThing} other {in the built-in storage}}. Change that under Settings → Document defaults.",
+    "applyAll": "Apply to all"
+  },
+  "form": {
+    "storage": {
+      "invalidResponse": "Invalid response from storage upload",
+      "auth": "Authentication required — please sign in and try again",
+      "serverError": "Storage service error — please try again later",
+      "failed": "Upload to storage failed (HTTP {status})",
+      "timeout": "Upload timed out — check your connection and try again",
+      "unavailable": "Storage service unavailable"
+    },
+    "methods": {
+      "auto": "Auto",
+      "autoDescription": "Automatically select the best method based on document analysis.",
+      "standard": "Standard",
+      "standardDescription": "No OCR. Use for text-based PDFs.",
+      "azureDescription": "Azure Document Intelligence OCR",
+      "landingAiDescription": "Multimodal AI processing",
+      "datalabDescription": "Advanced data extraction",
+      "doclingDescription": "Open-source document understanding via docling-serve"
+    },
+    "tooLarge": "{name} exceeds {limit}MB limit",
+    "rejected": "{count, plural, one {# file was} other {# files were}} rejected",
+    "rejectedDetail": "Please upload PDF, DOCX, images (PNG, JPG, etc.), or audio (MP3, MP4) under {limit}MB",
+    "zipQueued": "ZIP archive queued",
+    "zipQueuedDetail": "Files will be auto-extracted and processed individually after upload.",
+    "zipRejected": "ZIP archive rejected",
+    "zipRejectedDetail": "{count, plural, one {# ZIP file} other {# ZIP files}} exceeded the {limit}MB limit.",
+    "added": "{count, plural, one {# file} other {# files}} added to upload queue",
+    "noFilesInFolder": "No files found in dropped folder",
+    "removed": "File removed from queue",
+    "applied": "Settings applied to all documents",
+    "size": {
+      "bytes": "{size} Bytes",
+      "kb": "{size} KB",
+      "mb": "{size} MB"
+    },
+    "cloudNoUrl": "UploadThing: Cloud upload failed — no URL returned",
+    "localFailed": "Upload failed: {error}",
+    "unknownError": "unknown error",
+    "registrationFailed": "Document registration failed for {title} (HTTP {status}) {body}",
+    "titleRequired": "Title is required",
+    "requiredFields": "Please fill in all required fields",
+    "requiredFieldsDetail": "Check that each document has a title",
+    "uploadFailed": "Upload failed",
+    "allUploaded": "All documents uploaded successfully!",
+    "allUploadedDetail": "Your documents are now available in the library.",
+    "partial": "{succeeded} succeeded, {failed} failed",
+    "partialDetail": "You can retry failed uploads or remove them.",
+    "retryDone": "All uploads completed successfully!",
+    "notConfigured": "UploadThing is not configured. Uploads will use Vercel Blob.",
+    "setUp": "Set up UploadThing",
+    "heroTitle": "Add sources",
+    "heroSubtitle": "Upload files, connect a repo, paste text, or add a URL",
+    "dropOrClick": "Drop files or click to upload",
+    "accepted": "PDF, DOCX, images, audio, video, or ZIP — up to {limit}MB per file.",
+    "chooseFiles": "Choose files",
+    "chooseFolder": "Choose folder",
+    "dragHint": "Drag and drop files anywhere on this card — max {limit}MB per file",
+    "dropHere": "Drop files here",
+    "queueCleared": "Queue cleared",
+    "progressTitle": "Upload progress",
+    "progressSummary": "{succeeded} completed, {failed} failed, {pending} pending",
+    "retryFailed": "Retry failed",
+    "uploading": "Uploading…",
+    "submit": "Upload {count, plural, one {# document} other {# documents}}"
+  }
+}

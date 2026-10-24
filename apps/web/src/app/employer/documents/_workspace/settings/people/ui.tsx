@@ -6,7 +6,8 @@
  * Everything else comes from the kit.
  */
 
-import React, { useState, type ReactNode } from "react";
+import React, { useCallback, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { AlertCircle, Check, Copy } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
@@ -19,7 +20,63 @@ import {
     DialogHeader,
     DialogTitle,
 } from "~/components/ui/dialog";
+import {
+    translatePermission,
+    translateRoleDescription,
+    translateRoleLabel,
+} from "~/lib/authz/i18n";
+import type { BuiltinRole, Permission } from "~/lib/authz/permissions";
 import { cn } from "~/lib/utils";
+
+import { ApiError } from "./api";
+
+/**
+ * The sentence to show for a failure, in the reader's language: the
+ * server's own `{ error }` as it came, else what `request` would have said.
+ */
+export function useErrorText(): (err: unknown, fallback?: string) => string {
+    const t = useTranslations("settings.people.errors");
+    const tc = useTranslations("common");
+    return useCallback(
+        (err: unknown, fallback?: string) => {
+            if (err instanceof ApiError && err.generated) {
+                if (err.generated === "signedOut") return tc("errors.signedOut");
+                if (err.generated === "forbidden") return tc("errors.permission");
+                return t("requestFailed", { status: err.status });
+            }
+            if (err instanceof Error && err.message) return err.message;
+            return fallback ?? tc("errors.generic");
+        },
+        [t, tc]
+    );
+}
+
+/**
+ * What a permission allows, and what a built-in role is for, in the reader's
+ * language (`team.permissions`, `team.roles` via lib/authz/i18n). Memoised
+ * on the translator, so they are safe in dependency lists.
+ */
+export function usePermissionText(): (permission: Permission) => string {
+    const t = useTranslations("team");
+    return useCallback((permission: Permission) => translatePermission(t, permission), [t]);
+}
+
+export function useRoleDescription(): (role: BuiltinRole) => string {
+    const t = useTranslations("team");
+    return useCallback((role: BuiltinRole) => translateRoleDescription(t, role), [t]);
+}
+
+/**
+ * A role's name for the screen: a built-in role labelled from its slug (the
+ * server sends built-in names in English), a custom role's own name.
+ */
+export function useRoleLabel(): (slug: string, customName?: string | null) => string {
+    const t = useTranslations("team");
+    return useCallback(
+        (slug: string, customName?: string | null) => translateRoleLabel(t, slug, customName),
+        [t]
+    );
+}
 
 export function TabIntro({
     title,
@@ -74,6 +131,7 @@ export function EmptyState({
 }
 
 export function ErrorNote({ message, onRetry }: { message: string; onRetry?: () => void }) {
+    const tc = useTranslations("common");
     return (
         <div
             role="alert"
@@ -83,38 +141,40 @@ export function ErrorNote({ message, onRetry }: { message: string; onRetry?: () 
             <div className="min-w-0 flex-1">{message}</div>
             {onRetry && (
                 <Button variant="ghost" size="sm" className="text-danger h-7" onClick={onRetry}>
-                    Try again
+                    {tc("actions.tryAgain")}
                 </Button>
             )}
         </div>
     );
 }
 
-export function LoadingNote({ label = "Loading…" }: { label?: string }) {
+export function LoadingNote({ label }: { label?: string }) {
+    const tc = useTranslations("common");
     return (
         <div role="status" aria-live="polite" className="text-ink-3 px-4 py-6 text-[13px]">
-            {label}
+            {label ?? tc("status.loading")}
         </div>
     );
 }
 
 export function StatusPill({ status }: { status: string }) {
+    const t = useTranslations("settings.people.ui");
     const variant = status === "active" ? "success" : status === "pending" ? "warn" : "secondary";
     const label =
         status === "active"
-            ? "Active"
+            ? t("statusActive")
             : status === "pending"
-              ? "Pending approval"
+              ? t("statusPending")
               : status === "suspended"
-                ? "Suspended"
+                ? t("statusSuspended")
                 : status;
     return <Badge variant={variant}>{label}</Badge>;
 }
 
 export function CopyButton({
     value,
-    label = "Copy",
-    copiedLabel = "Copied",
+    label: labelProp,
+    copiedLabel: copiedLabelProp,
     variant = "outline",
     size = "sm",
     className,
@@ -126,6 +186,9 @@ export function CopyButton({
     size?: "sm" | "default" | "icon";
     className?: string;
 }) {
+    const tc = useTranslations("common");
+    const label = labelProp ?? tc("actions.copy");
+    const copiedLabel = copiedLabelProp ?? tc("actions.copied");
     const [copied, setCopied] = useState(false);
     return (
         <Button
@@ -187,6 +250,7 @@ export function ConfirmDialog({
     onConfirm,
     onClose,
 }: ConfirmDialogProps) {
+    const tc = useTranslations("common");
     return (
         <Dialog
             open={open}
@@ -203,7 +267,7 @@ export function ConfirmDialog({
                 {error && <ErrorNote message={error} />}
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         variant={danger ? "destructive" : "default"}

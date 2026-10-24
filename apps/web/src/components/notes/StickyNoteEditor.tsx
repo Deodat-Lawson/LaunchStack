@@ -5,6 +5,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import type { JSONContent } from "@tiptap/react";
 import { Bold, Code, Italic, Link as LinkIcon, List, ListOrdered, Quote } from "lucide-react";
 
@@ -30,18 +31,20 @@ interface StickyNoteEditorProps {
 
 export function StickyNoteEditor({
     initialContent,
-    placeholder = "Write a note…",
+    placeholder,
     onChange,
     onReady,
     autofocus = false,
     minHeight = 120,
 }: StickyNoteEditorProps) {
+    const t = useTranslations("notes.editor");
+    const placeholderText = placeholder ?? t("placeholder");
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
                 heading: { levels: [2, 3] },
             }),
-            Placeholder.configure({ placeholder }),
+            Placeholder.configure({ placeholder: placeholderText }),
             Link.configure({
                 openOnClick: false,
                 autolink: true,
@@ -87,7 +90,7 @@ export function StickyNoteEditor({
                     fontSize: 13,
                 }}
             >
-                Loading editor…
+                {t("loading")}
             </div>
         );
     }
@@ -188,6 +191,7 @@ export function StickyNoteEditor({
 }
 
 function EditorToolbar({ editor }: { editor: Editor }) {
+    const t = useTranslations("notes.editor");
     const buttons: Array<{
         label: string;
         icon: React.ReactNode;
@@ -195,48 +199,48 @@ function EditorToolbar({ editor }: { editor: Editor }) {
         onClick: () => void;
     }> = [
         {
-            label: "Bold",
+            label: t("bold"),
             icon: <Bold size={13} />,
             isActive: editor.isActive("bold"),
             onClick: () => editor.chain().focus().toggleBold().run(),
         },
         {
-            label: "Italic",
+            label: t("italic"),
             icon: <Italic size={13} />,
             isActive: editor.isActive("italic"),
             onClick: () => editor.chain().focus().toggleItalic().run(),
         },
         {
-            label: "Bullet list",
+            label: t("bulletList"),
             icon: <List size={13} />,
             isActive: editor.isActive("bulletList"),
             onClick: () => editor.chain().focus().toggleBulletList().run(),
         },
         {
-            label: "Ordered list",
+            label: t("orderedList"),
             icon: <ListOrdered size={13} />,
             isActive: editor.isActive("orderedList"),
             onClick: () => editor.chain().focus().toggleOrderedList().run(),
         },
         {
-            label: "Quote",
+            label: t("quote"),
             icon: <Quote size={13} />,
             isActive: editor.isActive("blockquote"),
             onClick: () => editor.chain().focus().toggleBlockquote().run(),
         },
         {
-            label: "Code",
+            label: t("code"),
             icon: <Code size={13} />,
             isActive: editor.isActive("code"),
             onClick: () => editor.chain().focus().toggleCode().run(),
         },
         {
-            label: "Link",
+            label: t("link"),
             icon: <LinkIcon size={13} />,
             isActive: editor.isActive("link"),
             onClick: () => {
                 const prev = (editor.getAttributes("link").href as string | undefined) ?? "";
-                const url = window.prompt("Link URL", prev);
+                const url = window.prompt(t("linkPrompt"), prev);
                 if (url === null) return;
                 if (url === "") {
                     editor.chain().focus().extendMarkRange("link").unsetLink().run();

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Sheet,
     SheetContent,
@@ -47,29 +48,11 @@ interface DocumentDetailsSheetProps {
     onClose: () => void;
 }
 
-const viewsChartConfig: ChartConfig = {
-    count: {
-        label: "Views",
-        color: "hsl(221, 83%, 53%)",
-    },
-};
+type DetailsT = ReturnType<typeof useTranslations<"statistics.details">>;
+type Format = ReturnType<typeof useFormatter>;
 
-function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
-function formatDateTime(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    });
-}
-
-function formatRelativeTime(dateString: string): string {
+/** "Just now", "5m ago", "3h ago", "2d ago"; date and time after a week. */
+function formatRelativeTime(dateString: string, t: DetailsT, format: Format): string {
     const date = new Date(dateString);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -77,11 +60,16 @@ function formatRelativeTime(dateString: string): string {
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return formatDateTime(dateString);
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return t("minutesAgo", { count: diffMins });
+    if (diffHours < 24) return t("hoursAgo", { count: diffHours });
+    if (diffDays < 7) return t("daysAgo", { count: diffDays });
+    return format.dateTime(date, {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+    });
 }
 
 interface DocumentDetailsResponse {
@@ -91,8 +79,17 @@ interface DocumentDetailsResponse {
 }
 
 export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDetailsSheetProps) {
+    const t = useTranslations("statistics.details");
+    const format = useFormatter();
+    const viewsChartConfig: ChartConfig = useMemo(
+        () => ({ count: { label: t("viewsSeries"), color: "hsl(221, 83%, 53%)" } }),
+        [t]
+    );
+    const formatDate = (dateString: string): string =>
+        format.dateTime(new Date(dateString), { month: "short", day: "numeric" });
     const [details, setDetails] = useState<DocumentDetails | null>(null);
     const [loading, setLoading] = useState(false);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -113,12 +110,12 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
             const result = (await response.json()) as DocumentDetailsResponse;
 
             if (!result.success || !result.data) {
-                throw new Error(result.error ?? "Failed to fetch document details");
+                throw new Error(result.error ?? "");
             }
 
             setDetails(result.data);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
+            setError(err instanceof Error ? err.message : "");
         } finally {
             setLoading(false);
         }
@@ -154,8 +151,16 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                             {document.category}
                                         </Badge>
                                         <SheetDescription className="text-xs text-white/70">
-                                            Created{" "}
-                                            {new Date(document.createdAt).toLocaleDateString()}
+                                            {t("created", {
+                                                date: format.dateTime(
+                                                    new Date(document.createdAt),
+                                                    {
+                                                        year: "numeric",
+                                                        month: "numeric",
+                                                        day: "numeric",
+                                                    }
+                                                ),
+                                            })}
                                         </SheetDescription>
                                     </div>
                                 </div>
@@ -166,7 +171,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                 className="h-9 shrink-0 gap-2 border-0 bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
                             >
                                 <ExternalLink className="h-4 w-4" />
-                                <span className="hidden sm:inline">View Doc</span>
+                                <span className="hidden sm:inline">{t("viewDoc")}</span>
                             </Button>
                         </div>
                     </SheetHeader>
@@ -174,10 +179,10 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
 
                 {/* Scrollable Content */}
                 <div className="flex-1 space-y-6 overflow-y-auto p-6">
-                    {error ? (
+                    {error !== null ? (
                         <Card className="border-danger/20 bg-danger/5 p-4">
                             <p className="text-danger text-sm font-medium">
-                                Failed to load details: {error}
+                                {t("loadFailed", { error: error || t("loadFailedFallback") })}
                             </p>
                         </Card>
                     ) : loading ? (
@@ -186,7 +191,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                 <div className="border-3 h-12 w-12 animate-spin rounded-full border-blue-100 border-t-blue-600 dark:border-blue-900/30" />
                                 <Loader2 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse text-blue-600" />
                             </div>
-                            <p className="text-ink-3 text-sm font-medium">Loading statistics...</p>
+                            <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
                         </div>
                     ) : details ? (
                         <>
@@ -196,14 +201,14 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                     <div className="mb-2 flex items-center gap-2">
                                         <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600/70 dark:text-blue-400/70">
-                                            Views
+                                            {t("tiles.views")}
                                         </span>
                                     </div>
                                     <div className="text-2xl font-black text-blue-700 dark:text-blue-300">
-                                        {details.totalViews}
+                                        {format.number(details.totalViews)}
                                     </div>
                                     <p className="mt-1 text-[10px] text-blue-600/60 dark:text-blue-400/60">
-                                        All time
+                                        {t("tiles.allTime")}
                                     </p>
                                 </Card>
 
@@ -211,27 +216,29 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                     <div className="mb-2 flex items-center gap-2">
                                         <Users className="text-brand-ink h-4 w-4" />
                                         <span className="text-brand-ink/70 text-[10px] font-bold uppercase tracking-wider">
-                                            Unique
+                                            {t("tiles.unique")}
                                         </span>
                                     </div>
                                     <div className="text-brand-ink text-2xl font-black">
-                                        {details.uniqueViewers}
+                                        {format.number(details.uniqueViewers)}
                                     </div>
-                                    <p className="text-brand-ink/60 mt-1 text-[10px]">Viewers</p>
+                                    <p className="text-brand-ink/60 mt-1 text-[10px]">
+                                        {t("tiles.viewers")}
+                                    </p>
                                 </Card>
 
                                 <Card className="border-green-200/50 bg-gradient-to-br from-green-50 to-green-100/50 p-4 dark:border-green-800/30 dark:from-green-950/30 dark:to-green-900/20">
                                     <div className="mb-2 flex items-center gap-2">
                                         <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-green-600/70 dark:text-green-400/70">
-                                            30 Days
+                                            {t("tiles.thirtyDays")}
                                         </span>
                                     </div>
                                     <div className="text-2xl font-black text-green-700 dark:text-green-300">
-                                        {totalViewsIn30Days}
+                                        {format.number(totalViewsIn30Days)}
                                     </div>
                                     <p className="mt-1 text-[10px] text-green-600/60 dark:text-green-400/60">
-                                        Recent
+                                        {t("tiles.recent")}
                                     </p>
                                 </Card>
                             </div>
@@ -241,7 +248,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                 <div className="flex items-center gap-2">
                                     <Calendar className="text-ink-3 h-4 w-4" />
                                     <h3 className="text-ink-3 text-xs font-bold uppercase tracking-widest">
-                                        30 Day Activity
+                                        {t("activity")}
                                     </h3>
                                 </div>
                                 <Card className="bg-panel-2/30 border-none p-4 shadow-sm">
@@ -290,6 +297,9 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                 tickLine={false}
                                                 axisLine={false}
                                                 tick={{ fontSize: 9 }}
+                                                tickFormatter={(value: number) =>
+                                                    format.number(value)
+                                                }
                                                 width={25}
                                             />
                                             <ChartTooltip
@@ -319,11 +329,11 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                     <div className="flex items-center gap-2">
                                         <Clock className="text-ink-3 h-4 w-4" />
                                         <h3 className="text-ink-3 text-xs font-bold uppercase tracking-widest">
-                                            Recent Viewers
+                                            {t("recentViewers")}
                                         </h3>
                                     </div>
                                     <Badge variant="outline" className="text-[10px] font-bold">
-                                        {details.recentViewers.length} shown
+                                        {t("shown", { count: details.recentViewers.length })}
                                     </Badge>
                                 </div>
 
@@ -333,10 +343,10 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                             <TableHeader className="bg-panel-2/80 sticky top-0 z-10 backdrop-blur-sm">
                                                 <TableRow>
                                                     <TableHead className="py-2 text-[10px] font-bold uppercase tracking-wider">
-                                                        User
+                                                        {t("columns.user")}
                                                     </TableHead>
                                                     <TableHead className="py-2 text-right text-[10px] font-bold uppercase tracking-wider">
-                                                        When
+                                                        {t("columns.when")}
                                                     </TableHead>
                                                 </TableRow>
                                             </TableHeader>
@@ -376,7 +386,9 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                             <TableCell className="py-2.5 text-right">
                                                                 <span className="text-ink-3 text-xs font-medium">
                                                                     {formatRelativeTime(
-                                                                        viewer.viewedAt
+                                                                        viewer.viewedAt,
+                                                                        t,
+                                                                        format
                                                                     )}
                                                                 </span>
                                                             </TableCell>
@@ -391,7 +403,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                             <div className="flex flex-col items-center gap-2">
                                                                 <Eye className="text-ink-3/30 h-8 w-8" />
                                                                 <p className="text-sm">
-                                                                    No views yet
+                                                                    {t("noViews")}
                                                                 </p>
                                                             </div>
                                                         </TableCell>

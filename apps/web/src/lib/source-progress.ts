@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import type { OcrJobProgress } from "@launchstack/store/schema";
 
 /**
@@ -54,35 +55,48 @@ function stagePercent(progress: OcrJobProgress): number {
     return Math.floor(start + (end - start) * fraction);
 }
 
-function stageLabel(progress: OcrJobProgress): string {
+/** `useTranslations("sources.progress")`. */
+export type SourceProgressTranslator = ReturnType<typeof useTranslations<"sources.progress">>;
+
+function stageLabel(progress: OcrJobProgress, t: SourceProgressTranslator): string {
     switch (progress.stage) {
         case "reading":
-            return "Reading pages";
+            return t("readingPages");
         case "chunking":
-            return progress.pages ? `Preparing ${progress.pages} pages` : "Preparing text";
+            return progress.pages
+                ? t("preparingPages", { pages: progress.pages })
+                : t("preparingText");
         case "embedding":
             return progress.total
-                ? `Embedding ${progress.done ?? 0}/${progress.total}`
-                : "Embedding";
+                ? t("embeddingCount", { done: progress.done ?? 0, total: progress.total })
+                : t("embedding");
         case "finishing":
-            return "Finishing";
+            return t("finishing");
     }
 }
 
-/** "in 4 min", "in 30 s", "now" — from a time the outbox wrote, not an estimate. */
-export function retryCountdown(at: Date, now: Date = new Date()): string {
+/**
+ * "Retrying in 4 min", "Retrying in 30 s", "Retrying now" — from a time the
+ * outbox wrote, not an estimate.
+ */
+export function retryCountdown(
+    at: Date,
+    t: SourceProgressTranslator,
+    now: Date = new Date()
+): string {
     const seconds = Math.round((at.getTime() - now.getTime()) / 1000);
-    if (seconds <= 5) return "now";
-    if (seconds < 60) return `in ${seconds} s`;
-    return `in ${Math.round(seconds / 60)} min`;
+    if (seconds <= 5) return t("retryingNow");
+    if (seconds < 60) return t("retryingInSeconds", { seconds });
+    return t("retryingInMinutes", { minutes: Math.round(seconds / 60) });
 }
 
 /** Turn the reported state into the bar's percent and words. */
 export function describeSourceProgress(
     view: SourceProcessingView | null | undefined,
+    t: SourceProgressTranslator,
     now: Date = new Date()
 ): SourceProgressDisplay {
-    if (!view) return { percent: null, label: "Syncing…", waiting: null };
+    if (!view) return { percent: null, label: t("syncing"), waiting: null };
 
     const progress = view.progress;
     const percent = progress ? stagePercent(progress) : view.status === "queued" ? 0 : null;
@@ -95,12 +109,11 @@ export function describeSourceProgress(
             at,
             lastError: view.retry.lastError,
         };
-        const label =
-            at.getTime() > now.getTime() ? `Retrying ${retryCountdown(at, now)}` : "Retrying";
+        const label = at.getTime() > now.getTime() ? retryCountdown(at, t, now) : t("retrying");
         return { percent, label, waiting };
     }
 
-    if (progress) return { percent, label: stageLabel(progress), waiting: null };
-    if (view.status === "queued") return { percent, label: "Queued", waiting: null };
-    return { percent, label: "Processing", waiting: null };
+    if (progress) return { percent, label: stageLabel(progress, t), waiting: null };
+    if (view.status === "queued") return { percent, label: t("queued"), waiting: null };
+    return { percent, label: t("processing"), waiting: null };
 }

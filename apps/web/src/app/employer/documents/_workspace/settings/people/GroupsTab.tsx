@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,15 +29,24 @@ import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
 
 import { mayCreateGroups } from "../../team/rules";
-import { errorMessage, peopleApi, type Group, type Member } from "./api";
-import { plural } from "./format";
-import { ConfirmDialog, EmptyState, ErrorNote, LoadingNote, Panel, TabIntro } from "./ui";
+import { peopleApi, type Group, type Member } from "./api";
+import {
+    ConfirmDialog,
+    EmptyState,
+    ErrorNote,
+    LoadingNote,
+    Panel,
+    TabIntro,
+    useErrorText,
+} from "./ui";
 
 interface GroupsTabProps {
     can: (permission: Permission | undefined) => boolean;
 }
 
 export function GroupsTab({ can }: GroupsTabProps) {
+    const t = useTranslations("settings.people.groups");
+    const errorText = useErrorText();
     // Members create groups and manage the ones they made; `groups.manage`
     // manages all of them (ADR-014). The server says per group (`canManage`).
     const canManageAll = can("groups.manage");
@@ -63,11 +73,11 @@ export function GroupsTab({ can }: GroupsTabProps) {
             setGroups(gr.groups);
             setMembers(mem.members.filter(m => m.status === "active"));
         } catch (err) {
-            setError(errorMessage(err, "Could not load groups."));
+            setError(errorText(err, t("loadFailed")));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [errorText, t]);
 
     useEffect(() => {
         void load();
@@ -84,13 +94,13 @@ export function GroupsTab({ can }: GroupsTabProps) {
             const res = await peopleApi.groups.remove(deleting.id);
             toast.success(
                 res.removedGrants > 0
-                    ? `${deleting.name} deleted. ${plural(res.removedGrants, "access grant")} removed.`
-                    : `${deleting.name} deleted.`
+                    ? t("deletedWithGrants", { name: deleting.name, count: res.removedGrants })
+                    : t("deleted", { name: deleting.name })
             );
             setDeleting(null);
             await load();
         } catch (err) {
-            setDeleteError(errorMessage(err, "The group wasn't deleted."));
+            setDeleteError(errorText(err, t("deleteFailed")));
         } finally {
             setDeleteBusy(false);
         }
@@ -107,12 +117,12 @@ export function GroupsTab({ can }: GroupsTabProps) {
     return (
         <div>
             <TabIntro
-                title="Groups"
-                description="A group is a named set of people you can share a folder with in one step. Membership here changes what those folders show; it never changes anyone's role."
+                title={t("intro.title")}
+                description={t("intro.description")}
                 actions={
                     canCreate ? (
                         <Button size="sm" onClick={() => setEditing("new")}>
-                            <Plus /> New group
+                            <Plus /> {t("newGroup")}
                         </Button>
                     ) : undefined
                 }
@@ -126,15 +136,11 @@ export function GroupsTab({ can }: GroupsTabProps) {
 
             <Panel>
                 {loading ? (
-                    <LoadingNote label="Loading groups…" />
+                    <LoadingNote label={t("loading")} />
                 ) : groups.length === 0 ? (
                     <EmptyState
-                        title="No groups yet"
-                        body={
-                            canCreate
-                                ? "Create one when several people need access to the same restricted folders."
-                                : "An admin can create groups to share folders with several people at once."
-                        }
+                        title={t("empty.title")}
+                        body={canCreate ? t("empty.bodyCreate") : t("empty.bodyView")}
                         action={
                             canCreate ? (
                                 <Button
@@ -142,7 +148,7 @@ export function GroupsTab({ can }: GroupsTabProps) {
                                     variant="outline"
                                     onClick={() => setEditing("new")}
                                 >
-                                    <Plus /> New group
+                                    <Plus /> {t("newGroup")}
                                 </Button>
                             ) : undefined
                         }
@@ -181,13 +187,9 @@ export function GroupsTab({ can }: GroupsTabProps) {
 
             <ConfirmDialog
                 open={deleting !== null}
-                title={`Delete ${deleting?.name ?? "this group"}?`}
-                body={`Deleting this group removes access it grants. ${plural(
-                    deleting?.memberCount ?? 0,
-                    "person",
-                    "people"
-                )} may lose access to folders shared with it. Their membership in the workspace is not affected.`}
-                confirmLabel="Delete group"
+                title={t("confirm.title", { name: deleting?.name ?? t("confirm.thisGroup") })}
+                body={t("confirm.body", { count: deleting?.memberCount ?? 0 })}
+                confirmLabel={t("confirm.confirm")}
                 danger
                 busy={deleteBusy}
                 error={deleteError}
@@ -217,6 +219,9 @@ function GroupRow({
     onDelete: () => void;
     onChanged: (group: Group) => void;
 }) {
+    const t = useTranslations("settings.people.groups");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
     const [adding, setAdding] = useState<string>("");
     const [busy, setBusy] = useState(false);
 
@@ -234,9 +239,11 @@ function GroupRow({
             onChanged(res.group);
             setAdding("");
             const person = members.find(m => m.id === id);
-            toast.success(`${person?.name ?? "Member"} added to ${group.name}`);
+            toast.success(
+                t("row.added", { name: person?.name ?? t("row.memberFallback"), group: group.name })
+            );
         } catch (err) {
-            toast.error(errorMessage(err, "Couldn't add them to the group."));
+            toast.error(errorText(err, t("row.addFailed")));
         } finally {
             setBusy(false);
         }
@@ -247,9 +254,9 @@ function GroupRow({
         try {
             const res = await peopleApi.groups.removeMembers(group.id, [memberId]);
             onChanged(res.group);
-            toast.success(`${name} removed from ${group.name}`);
+            toast.success(t("row.removed", { name, group: group.name }));
         } catch (err) {
-            toast.error(errorMessage(err, "Couldn't remove them from the group."));
+            toast.error(errorText(err, t("row.removeFailed")));
         } finally {
             setBusy(false);
         }
@@ -269,7 +276,9 @@ function GroupRow({
                 >
                     <Chevron className="text-ink-3 h-4 w-4 shrink-0" />
                     <span className="truncate text-sm font-semibold">{group.name}</span>
-                    <Badge variant="secondary">{plural(group.memberCount, "member")}</Badge>
+                    <Badge variant="secondary">
+                        {t("row.members", { count: group.memberCount })}
+                    </Badge>
                     {group.description && (
                         <span className="text-ink-3 hidden truncate text-[12.5px] sm:inline">
                             {group.description}
@@ -279,7 +288,7 @@ function GroupRow({
                 {canManage && (
                     <div className="flex shrink-0 gap-1">
                         <Button variant="ghost" size="sm" onClick={onRename}>
-                            Rename
+                            {tc("actions.rename")}
                         </Button>
                         <Button
                             variant="ghost"
@@ -287,7 +296,7 @@ function GroupRow({
                             className="text-danger hover:text-danger"
                             onClick={onDelete}
                         >
-                            Delete
+                            {tc("actions.delete")}
                         </Button>
                     </div>
                 )}
@@ -296,9 +305,7 @@ function GroupRow({
             {expanded && (
                 <div id={`group-${group.id}-members`} className="bg-panel-2/40 px-4 pb-4 pt-1">
                     {group.members.length === 0 ? (
-                        <p className="text-ink-3 m-0 py-2 text-[13px]">
-                            Nobody is in this group yet.
-                        </p>
+                        <p className="text-ink-3 m-0 py-2 text-[13px]">{t("row.empty")}</p>
                     ) : (
                         <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0 py-2">
                             {group.members.map(m => (
@@ -310,7 +317,10 @@ function GroupRow({
                                     {canManage && (
                                         <button
                                             type="button"
-                                            aria-label={`Remove ${m.name || m.email} from ${group.name}`}
+                                            aria-label={t("row.removeFrom", {
+                                                name: m.name || m.email,
+                                                group: group.name,
+                                            })}
                                             disabled={busy}
                                             onClick={() =>
                                                 void removeMember(m.id, m.name || m.email)
@@ -331,13 +341,13 @@ function GroupRow({
                                 <SelectTrigger
                                     size="sm"
                                     className="w-[260px]"
-                                    aria-label={`Add a member to ${group.name}`}
+                                    aria-label={t("row.addTo", { group: group.name })}
                                 >
                                     <SelectValue
                                         placeholder={
                                             candidates.length === 0
-                                                ? "Everyone is already in this group"
-                                                : "Add a member…"
+                                                ? t("row.everyoneIn")
+                                                : t("row.addPlaceholder")
                                         }
                                     />
                                 </SelectTrigger>
@@ -356,7 +366,7 @@ function GroupRow({
                                 disabled={!adding || busy}
                                 onClick={() => void add()}
                             >
-                                Add to group
+                                {t("row.addButton")}
                             </Button>
                         </div>
                     )}
@@ -376,6 +386,9 @@ export function GroupDialog({
     onClose: () => void;
     onSaved: (group: Group) => void;
 }) {
+    const t = useTranslations("settings.people.groups.dialog");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
     const open = group !== null;
     const isNew = group === "new";
     const [name, setName] = useState("");
@@ -394,7 +407,7 @@ export function GroupDialog({
         e.preventDefault();
         const trimmed = name.trim();
         if (!trimmed) {
-            setError("Give the group a name people will recognise.");
+            setError(t("nameRequired"));
             return;
         }
         if (group === null) return;
@@ -406,10 +419,12 @@ export function GroupDialog({
                 group === "new"
                     ? await peopleApi.groups.create(body)
                     : await peopleApi.groups.update(group.id, body);
-            toast.success(isNew ? `Group ${trimmed} created` : `Group renamed to ${trimmed}`);
+            toast.success(
+                isNew ? t("createdToast", { name: trimmed }) : t("renamedToast", { name: trimmed })
+            );
             onSaved(res.group);
         } catch (err) {
-            setError(errorMessage(err, "The group wasn't saved."));
+            setError(errorText(err, t("saveFailed")));
         } finally {
             setBusy(false);
         }
@@ -425,44 +440,46 @@ export function GroupDialog({
             <DialogContent>
                 <form onSubmit={e => void save(e)} className="flex flex-col gap-4">
                     <DialogHeader>
-                        <DialogTitle>{isNew ? "New group" : "Rename group"}</DialogTitle>
+                        <DialogTitle>{isNew ? t("newTitle") : t("renameTitle")}</DialogTitle>
                         <DialogDescription>
-                            {isNew
-                                ? "A name, and optionally a line on who belongs in it. Add people after creating it."
-                                : "Folders shared with this group keep their access under the new name."}
+                            {isNew ? t("newDescription") : t("renameDescription")}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="group-name">Name</Label>
+                        <Label htmlFor="group-name">{tc("fields.name")}</Label>
                         <Input
                             id="group-name"
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            placeholder="Finance"
+                            placeholder={t("namePlaceholder")}
                             autoFocus
                             disabled={busy}
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
                         <Label htmlFor="group-description">
-                            Description <span className="text-ink-3 font-normal">(optional)</span>
+                            {t.rich("description", {
+                                optional: chunks => (
+                                    <span className="text-ink-3 font-normal">{chunks}</span>
+                                ),
+                            })}
                         </Label>
                         <Textarea
                             id="group-description"
                             rows={2}
                             value={description}
                             onChange={e => setDescription(e.target.value)}
-                            placeholder="Everyone who reviews board papers"
+                            placeholder={t("descriptionPlaceholder")}
                             disabled={busy}
                         />
                     </div>
                     {error && <ErrorNote message={error} />}
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={busy}>
-                            {busy ? "Saving…" : isNew ? "Create group" : "Save name"}
+                            {busy ? tc("status.saving") : isNew ? t("create") : t("saveName")}
                         </Button>
                     </DialogFooter>
                 </form>

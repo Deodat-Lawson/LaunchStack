@@ -711,6 +711,7 @@ export function WorkspaceShell() {
         agents: chatAgents,
         companyId: companyId ?? null,
         refreshHistory,
+        onSourcesCreated: refresh,
     });
     const {
         busy: isSending,

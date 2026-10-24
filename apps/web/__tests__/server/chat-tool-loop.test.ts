@@ -6,6 +6,7 @@
  */
 
 import { AIMessage, AIMessageChunk, HumanMessage, ToolMessage } from "@langchain/core/messages";
+import { _convertMessagesToOpenAIParams } from "@langchain/openai";
 import type { BaseMessage } from "@langchain/core/messages";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { WebSearchResponse } from "@launchstack/tools/web-research";
@@ -195,6 +196,59 @@ describe("Ask web search as a model-called tool", () => {
         expect(web.queries).toEqual(["tech news this week"]);
         // Usage is the sum of both model calls.
         expect(answer.usage.totalTokens).toBe(105 + 11 + 11);
+    });
+
+    it("sends a signed call back with its signature, as Gemini 3 requires", async () => {
+        const search = jest.fn().mockResolvedValue(HEADLINES);
+        const web = createWebTools({ search });
+        const signed = new AIMessageChunk({
+            content: "",
+            tool_call_chunks: [
+                {
+                    name: "search_web",
+                    args: '{"query":"tech news"}',
+                    id: "call_1",
+                    index: 0,
+                    type: "tool_call_chunk",
+                },
+            ],
+            additional_kwargs: {
+                tool_calls: [
+                    {
+                        id: "call_1",
+                        index: 0,
+                        type: "function",
+                        function: { name: "search_web", arguments: '{"query":"tech news"}' },
+                        extra_content: { google: { thought_signature: "c2lnbmVk" } },
+                    } as never,
+                ],
+            },
+        });
+        const { chat, calls } = scriptedChat([[signed], [text("The news.")]]);
+
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: web.tools,
+            signal: new AbortController().signal,
+        });
+
+        expect(search).toHaveBeenCalledWith("tech news", expect.anything());
+        expect(answer.modelCalls).toBe(2);
+        // What LangChain puts on the wire for the second request.
+        const wire = _convertMessagesToOpenAIParams(calls[1]!.messages) as unknown as {
+            role: string;
+            tool_calls?: unknown[];
+        }[];
+        expect(wire.find(m => m.role === "assistant")?.tool_calls).toEqual([
+            {
+                id: "call_1",
+                type: "function",
+                function: { name: "search_web", arguments: '{"query":"tech news"}' },
+                extra_content: { google: { thought_signature: "c2lnbmVk" } },
+            },
+        ]);
+        expect(wire.find(m => m.role === "tool")).toMatchObject({ tool_call_id: "call_1" });
     });
 
     it("keeps one number per page across searches and page reads", async () => {

@@ -193,6 +193,8 @@ export interface ChatTurnRequest {
 export interface ResolvedChatTurn {
     /** Whether the model may look through the workspace's sources itself (the source tools). */
     sources: boolean;
+    /** Whether the model may create documents in the workspace (`create_document`). */
+    write: boolean;
     webSearch: boolean;
     thinking: boolean;
     /** True when the agent refused an attachment the person sent. */
@@ -217,6 +219,7 @@ export function resolveChatTurn(
     if (!agent) {
         return {
             sources: true,
+            write: true,
             webSearch: request.webSearch,
             thinking: request.thinking,
             attachmentsDropped: false,
@@ -235,6 +238,7 @@ export function resolveChatTurn(
     if (attachmentsDropped) notes.push("this agent does not read attachments");
     return {
         sources: agentAllows(agent.tools, "retrieval"),
+        write: agentAllows(agent.tools, "write"),
         webSearch,
         thinking,
         attachmentsDropped,

@@ -88,6 +88,7 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             tokenBreakdown: message.tokenBreakdown,
             chunksAnalyzed: message.chunksAnalyzed,
             webSources: message.webSources,
+            createdSources: message.createdSources,
         },
     };
 }
@@ -105,6 +106,8 @@ export function useChatRuntime(input: {
     agents: ChatAgentOption[];
     companyId: number | null;
     refreshHistory: () => Promise<unknown> | void;
+    /** An answer created documents: reload the sources so they can be opened. */
+    onSourcesCreated?: () => Promise<unknown> | void;
 }) {
     const currentInput = useRef(input);
     currentInput.current = input;
@@ -423,6 +426,7 @@ export function useChatRuntime(input: {
             if (signal.aborted || response.cancelled)
                 throw new DOMException("Stopped", "AbortError");
             applyResponse(answer, response, sourceList);
+            if (answer.createdSources) void currentInput.current.onSourcesCreated?.();
             if (!response.success) context.held = true;
         } catch (error) {
             const stopped =
@@ -813,6 +817,15 @@ function applyResponse(
         .slice(0, 20)
         .map(({ title, url }) => ({ title: title.slice(0, 500), url }));
     answer.webSources = webSources.length > 0 ? webSources : undefined;
+    const created = (response.createdSources ?? [])
+        .filter(({ documentId }) => Number.isInteger(documentId) && documentId > 0)
+        .slice(0, 5)
+        .map(({ documentId, title, folder }) => ({
+            documentId,
+            title: title.slice(0, 300),
+            folder: folder.slice(0, 300),
+        }));
+    answer.createdSources = created.length > 0 ? created : undefined;
     answer.citations = (response.references ?? []).flatMap(reference => {
         const source = sources.find(s => s.documentId === Number(reference.documentId));
         return source

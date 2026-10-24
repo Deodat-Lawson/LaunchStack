@@ -79,7 +79,6 @@
   },
   "docxPreview": {
     "fetchFailed": "获取文档失败（{status}）",
-    "empty": "文档似乎是空的",
     "renderFailed": "文档渲染失败",
     "loading": "正在加载文档…",
     "header": "Word 文档预览"

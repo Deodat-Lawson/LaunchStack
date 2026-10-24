@@ -567,7 +567,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
                             <span
                                 className={cn(
                                     "shrink-0 text-xs",
-                                    i.round === null ? "text-warn" : "text-ink-3"
+                                    i.round === null ? "text-warn-ink" : "text-ink-3"
                                 )}
                             >
                                 {i.round === null

@@ -173,7 +173,7 @@ export function AskStarters({
             {/* Two columns when the pane has room for them, by the pane's
                 width rather than the window's: a chat in a third of a wide
                 screen is still narrow. */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5">
+            <div className="@max-sm:grid-cols-1 grid grid-cols-2 gap-2.5">
                 {starters === null
                     ? Array.from({ length: ASK_STARTER_COUNT }, (_, i) => (
                           <StarterSkeleton key={i} />

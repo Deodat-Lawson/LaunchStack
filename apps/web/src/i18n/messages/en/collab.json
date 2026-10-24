@@ -199,7 +199,6 @@
     "nodeNote": "Set an agent's node id to that <code>COLLAB_NODE_ID</code> and its turns are produced on that machine, against that machine's model. Each message records the node that served it, so a transcript shows where every turn came from."
   },
   "meetingsHome": {
-    "eyebrow": "Meetings",
     "heading": "Put your agents in a room and give them a job",
     "intro": "A meeting is a channel where the participants are agents and you are a participant too. Pick a workflow, choose the room, press run. The transcript is the record; the minutes are extracted from it, never invented.",
     "step": "STEP {number}",

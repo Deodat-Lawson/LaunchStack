@@ -39,13 +39,30 @@ export class DriveLinkError extends Error {
     }
 }
 
-/** Launch scope: .docx and .pdf — the formats Drive edits and we re-ingest. */
+/**
+ * Launch scope: .docx and .pdf — the formats Drive edits and we re-ingest.
+ * A file the Drive connector syncs is out: it already lives in Drive, and
+ * linking it would upload a second copy beside the one it syncs from.
+ */
 export function isDriveLinkableDocument(
     fileType: string | null,
     mimeType: string | null,
-    title: string
+    title: string,
+    ocrMetadata?: unknown
 ): boolean {
-    return resolveCanonicalMime(fileType, mimeType, title) !== null;
+    return (
+        resolveCanonicalMime(fileType, mimeType, title) !== null &&
+        !isDriveConnectorDocument(ocrMetadata)
+    );
+}
+
+/** Whether the Google Drive connector brought this document in (and keeps it synced). */
+export function isDriveConnectorDocument(ocrMetadata: unknown): boolean {
+    return (
+        typeof ocrMetadata === "object" &&
+        ocrMetadata !== null &&
+        (ocrMetadata as Record<string, unknown>).connector === "google-drive"
+    );
 }
 
 export function resolveCanonicalMime(
@@ -114,12 +131,18 @@ export async function linkDocumentToDrive(params: {
             mimeType: document.mimeType,
             fileType: document.fileType,
             currentVersionId: document.currentVersionId,
+            ocrMetadata: document.ocrMetadata,
         })
         .from(document)
         .where(and(eq(document.id, params.documentId), eq(document.companyId, params.companyId)));
 
     if (!doc) {
         throw new DriveLinkError(404, "not_found", { key: "errors.api.documentNotFound" });
+    }
+    if (isDriveConnectorDocument(doc.ocrMetadata)) {
+        throw new DriveLinkError(409, "already_in_drive", {
+            key: "sources.server.drive.alreadyInDrive",
+        });
     }
 
     const canonicalMime = resolveCanonicalMime(doc.fileType, doc.mimeType, doc.title);

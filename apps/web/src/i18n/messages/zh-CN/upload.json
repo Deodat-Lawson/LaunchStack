@@ -5,7 +5,6 @@
     "createCategoryFailed": "创建分类时出错，详情请查看控制台。",
     "categoryRemoved": "已移除分类“{name}”",
     "removeCategoryFailed": "移除分类时出错，详情请查看控制台。",
-    "eyebrow": "上传",
     "title": "添加来源",
     "subtitle": "拖入文件、连接代码库、粘贴文本或提供一个 URL。你添加的所有内容都会被索引到知识库中，切分以便检索，随时可在工作区使用。"
   },

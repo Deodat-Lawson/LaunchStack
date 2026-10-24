@@ -31,7 +31,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                 post.status === "failed" && "text-danger",
                 post.status === "cancelled" && "text-ink-3",
                 post.status === "draft" && "text-ink-3",
-                post.status === "scheduled" && (due ? "text-warn" : "text-ink-2"),
+                post.status === "scheduled" && (due ? "text-warn-ink" : "text-ink-2"),
                 className
             )}
         >

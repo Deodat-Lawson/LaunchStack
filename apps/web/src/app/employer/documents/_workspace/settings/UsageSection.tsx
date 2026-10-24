@@ -776,7 +776,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                         <TableCell
                                             className={cn(
                                                 "text-right tabular-nums",
-                                                row.amount < 0 ? "text-ink" : "text-success"
+                                                row.amount < 0 ? "text-ink" : "text-success-ink"
                                             )}
                                         >
                                             {row.amount > 0 ? "+" : ""}

@@ -43,7 +43,6 @@
     "resizeTitle": "拖动以调整宽度 · 双击恢复默认"
   },
   "knowledgePane": {
-    "eyebrow": "知识库",
     "heading": "此工作区可用于推理的全部内容",
     "statSources": "<b>{count}</b> {count, plural, other {个来源}}",
     "statCollections": "<b>{count}</b> {count, plural, other {个文件夹}}",
@@ -544,7 +543,7 @@
   "googleDriveBanner": {
     "openFailed": "无法在 Google Drive 中打开该文档。",
     "unreachable": "无法连接服务器。",
-    "synced": "已从 Google Drive 同步 v{version}。重新打开文档即可查看。",
+    "synced": "已从 Google Drive 同步 v{version}，现已显示。",
     "upToDate": "已是最新。",
     "syncResult": "同步结果：{kind}。",
     "syncFailed": "同步失败。",
@@ -929,6 +928,7 @@
       "connectFirst": "请先为此工作区连接一个 Google 账号。",
       "accessRevoked": "Google 已撤销此工作区的访问权限。重新连接 Google 账号即可恢复同步。",
       "unsupportedType": "只有 .docx 和 .pdf 文档可以关联到 Google Drive。",
+      "alreadyInDrive": "此文件已在 Google Drive 中，并从那里同步。请在 Drive 中编辑。",
       "tooLarge": "此文档超过了 {mb} MB 的关联大小上限。",
       "notLinked": "此文档未关联到 Google Drive。",
       "finalSyncFailed": "无法拉取 Google Drive 中的最新编辑，因此关联已保留。请重试，或先解决该错误。",

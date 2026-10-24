@@ -285,7 +285,10 @@ function MoodBar({
     return (
         <span
             aria-hidden
-            className={cn("bg-panel flex h-1.5 w-14 shrink-0 overflow-hidden rounded-full", className)}
+            className={cn(
+                "bg-panel flex h-1.5 w-14 shrink-0 overflow-hidden rounded-full",
+                className
+            )}
         >
             {STANCES.map((s, i) =>
                 counts[i] ? (
@@ -439,7 +442,9 @@ function FeedItem({
     return (
         <article
             id={`scenario-post-${post.id}`}
-            aria-label={eyebrow ? t("postAria", { name: post.authorName, tag: eyebrow }) : post.authorName}
+            aria-label={
+                eyebrow ? t("postAria", { name: post.authorName, tag: eyebrow }) : post.authorName
+            }
             className={cn(
                 "border-line-2 border-t px-4 pb-3 pt-3.5 transition-colors duration-500 first:border-t-0",
                 event && "bg-warn-soft/40",
@@ -450,7 +455,7 @@ function FeedItem({
                 <div
                     className={cn(
                         "mb-1.5 flex items-center gap-1.5 pl-[52px] text-xs",
-                        event ? "text-warn font-medium" : "text-ink-3"
+                        event ? "text-warn-ink font-medium" : "text-ink-3"
                     )}
                 >
                     {seed ? (
@@ -473,7 +478,10 @@ function FeedItem({
                         cast={cast}
                     />
                     {replies.length > 0 && (
-                        <span aria-hidden className="bg-ink-4/35 mt-1.5 w-0.5 flex-1 rounded-full" />
+                        <span
+                            aria-hidden
+                            className="bg-ink-4/35 mt-1.5 w-0.5 flex-1 rounded-full"
+                        />
                     )}
                 </div>
                 <div className="min-w-0">
@@ -514,7 +522,11 @@ function FeedItem({
                     {post.kind === "quote" && post.root && (
                         <QuotedPost root={post.root} cast={cast} />
                     )}
-                    {repost ? original && <Actions post={original} t={t} /> : <Actions post={post} t={t} />}
+                    {repost ? (
+                        original && <Actions post={original} t={t} />
+                    ) : (
+                        <Actions post={post} t={t} />
+                    )}
                 </div>
             </div>
 
@@ -609,8 +621,7 @@ function QuotedPost({ root, cast }: { root: NonNullable<ScenarioPost["root"]>; c
             </span>
         </>
     );
-    const className =
-        "border-line mt-2.5 block w-full rounded-xl border px-3 py-2.5 text-left";
+    const className = "border-line mt-2.5 block w-full rounded-xl border px-3 py-2.5 text-left";
     return original ? (
         <button
             type="button"

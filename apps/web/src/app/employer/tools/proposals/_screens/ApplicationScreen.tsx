@@ -163,7 +163,7 @@ function Outline({
                                 <span
                                     className={cn(
                                         "font-mono text-[10.5px] tabular-nums",
-                                        over ? "text-warn" : "text-ink-3"
+                                        over ? "text-warn-ink" : "text-ink-3"
                                     )}
                                 >
                                     {s.words}
@@ -494,7 +494,7 @@ function SectionEditor({
 
             <div className="text-ink-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 <WordMeter words={words} limit={section.wordLimit} />
-                <span className={cn("tabular-nums", over && "text-warn")}>
+                <span className={cn("tabular-nums", over && "text-warn-ink")}>
                     {section.wordLimit
                         ? t("wordsOfLimit", { words, limit: section.wordLimit })
                         : t("words", { words })}
@@ -651,8 +651,8 @@ function EvidenceRail({
             </section>
             {section.gaps.length > 0 && (
                 <section className="bg-warn-soft rounded-md px-3 py-2.5">
-                    <h3 className="text-warn mb-1 text-xs font-semibold">{t("gaps")}</h3>
-                    <ul className="text-warn list-disc pl-4 text-xs leading-relaxed">
+                    <h3 className="text-warn-ink mb-1 text-xs font-semibold">{t("gaps")}</h3>
+                    <ul className="text-warn-ink list-disc pl-4 text-xs leading-relaxed">
                         {section.gaps.map(g => (
                             <li key={g}>{g}</li>
                         ))}
@@ -1056,7 +1056,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                             <span>{app.funder ?? tp("funderNotSet")}</span>
                             <span
                                 className={cn(
-                                    tone === "warn" && "text-warn",
+                                    tone === "warn" && "text-warn-ink",
                                     tone === "lost" && "text-danger"
                                 )}
                             >

@@ -104,7 +104,7 @@ function FunderItem({
                     className={cn(
                         "@max-lg:hidden text-xs",
                         f.daysLeft !== null && f.daysLeft >= 0 && f.daysLeft <= 14
-                            ? "text-warn"
+                            ? "text-warn-ink"
                             : "text-ink-3"
                     )}
                 >

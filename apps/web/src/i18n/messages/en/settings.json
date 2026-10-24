@@ -29,91 +29,78 @@
     "account": {
       "label": "Account",
       "blurb": "Profile, photo, password, sessions",
-      "eyebrow": "Account",
       "title": "Who you are, and where you are signed in",
       "description": "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session."
     },
     "appearance": {
       "label": "Appearance",
       "blurb": "Language, theme, density, motion, answers",
-      "eyebrow": "Appearance",
       "title": "How the app looks, and how it answers you",
       "description": "Five controls, not eleven: four for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme."
     },
     "shortcuts": {
       "label": "Shortcuts",
       "blurb": "Every command and its keys",
-      "eyebrow": "Shortcuts",
       "title": "What the keyboard does",
       "description": "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open."
     },
     "people": {
       "label": "People and access",
       "blurb": "Members, roles, folders",
-      "eyebrow": "People",
       "title": "Who is in the workspace, and what they can see",
       "description": "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else."
     },
     "company": {
       "label": "Company profile",
       "blurb": "What your sources prove",
-      "eyebrow": "Company",
       "title": "What your sources can prove",
       "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
     },
     "byok": {
       "label": "Bring your own keys",
       "blurb": "Your API and embedding keys",
-      "eyebrow": "Keys",
       "title": "Bring your own keys",
       "description": "Your own provider account for the workspace's AI, and your own key for embeddings. Both are optional: anything left empty runs on the server's keys."
     },
     "models": {
       "label": "Models and routes",
       "blurb": "Which model answers what",
-      "eyebrow": "Models",
       "title": "Which model serves each kind of request",
       "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
     },
     "agents": {
       "label": "Agents and autonomy",
       "blurb": "The roster, and what it may do",
-      "eyebrow": "Agents",
       "title": "Who shows up to a meeting, and how much they may do alone",
       "description": "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect."
     },
     "integrations": {
       "label": "Integrations",
       "blurb": "Connections, Slack, remote nodes",
-      "eyebrow": "Integrations",
       "title": "What this workspace connects to",
       "description": "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent."
     },
     "usage": {
       "label": "Usage and costs",
       "blurb": "Model tokens, cost, balance",
-      "eyebrow": "Usage",
       "title": "What the workspace is spending",
       "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
     },
     "archive": {
       "label": "Archive and retention",
       "blurb": "Trash, retired agents, purge",
-      "eyebrow": "Archive",
       "title": "What has been put away, and when it goes for good",
       "description": "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own."
     },
     "privacy": {
       "label": "Data and privacy",
       "blurb": "What leaves the deployment",
-      "eyebrow": "Privacy",
       "title": "What leaves this deployment, and what stays",
       "description": "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive."
     },
     "labs": {
       "label": "Labs",
       "blurb": "Unfinished, opt-in",
-      "eyebrow": "Labs",
       "title": "Features that are not finished",
       "description": "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace."
     }

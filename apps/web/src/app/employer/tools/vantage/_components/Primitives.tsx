@@ -13,8 +13,8 @@ const TONE_TEXT: Record<Tone, string> = {
     neutral: "text-ink-2",
     quiet: "text-ink-3",
     brand: "text-brand-ink",
-    success: "text-success",
-    warn: "text-warn",
+    success: "text-success-ink",
+    warn: "text-warn-ink",
     danger: "text-danger",
 };
 
@@ -59,7 +59,7 @@ export function BasisTag({ basis, className }: { basis: Basis; className?: strin
         <span
             className={cn(
                 "border-line text-ink-3 inline-flex h-5 items-center rounded-md border px-1.5 text-[11px] font-medium",
-                basis === "conflict" && "border-warn/40 text-warn",
+                basis === "conflict" && "border-warn/40 text-warn-ink",
                 basis === "unknown" && "border-dashed",
                 className
             )}
@@ -113,7 +113,7 @@ export function EvidenceChips({
                 </span>
             ))}
             {unsupported && (
-                <span className="border-warn/50 text-warn inline-flex items-center rounded-md border border-dashed px-1.5 py-0.5 text-[11px]">
+                <span className="border-warn/50 text-warn-ink inline-flex items-center rounded-md border border-dashed px-1.5 py-0.5 text-[11px]">
                     {t("noSource")}
                 </span>
             )}

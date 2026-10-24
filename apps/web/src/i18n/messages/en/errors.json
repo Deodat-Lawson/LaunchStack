@@ -14,9 +14,8 @@
     "deploymentGuide": "Deployment guide"
   },
   "unavailable": {
-    "title": "Feature Currently Unavailable",
+    "title": "Feature currently unavailable",
     "body": "We are working hard to bring this feature to you. Please check back soon!",
-    "expected": "Expected availability: Q4 2025 ~ Q1 2026",
     "meanwhile": "In the meantime, you can:",
     "explore": "Explore our available features",
     "docs": "Check our documentation for updates",

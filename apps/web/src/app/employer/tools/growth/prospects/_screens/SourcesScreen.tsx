@@ -83,7 +83,7 @@ export function SourcesScreen() {
                                         {word(s.descriptionCopy, s.description)}
                                     </div>
                                     {!s.available && s.requires && (
-                                        <div className="text-warn mt-1 text-xs">
+                                        <div className="text-warn-ink mt-1 text-xs">
                                             {t.rich("sources.needs", {
                                                 key: s.requires,
                                                 code: chunks => (

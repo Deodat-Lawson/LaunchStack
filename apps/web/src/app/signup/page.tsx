@@ -247,9 +247,9 @@ const SignupPage: React.FC = () => {
     const renderBrandPanel = () => (
         <div style={{ width: "46%", display: "flex" }} className="auth-brand-col">
             <AuthBrandPanel
-                tagline={t("brandTagline")}
                 headline={t("brandHeadline")}
                 description={t("brandDescription")}
+                note={t("brandTagline")}
             />
         </div>
     );
@@ -263,7 +263,6 @@ const SignupPage: React.FC = () => {
             <Shell>
                 <div style={formPanelStyle}>
                     <div style={{ width: "100%", maxWidth: 440 }}>
-                        <Eyebrow>{t("eyebrow")}</Eyebrow>
                         <Headline>{t("title")}</Headline>
                         <SubHeadline>{t("subtitle")}</SubHeadline>
                         <SignUpForm signInHref={withNext("/signin", next)} />
@@ -300,7 +299,6 @@ const SignupPage: React.FC = () => {
         <Shell>
             <div style={formPanelStyle}>
                 <div style={{ width: "100%", maxWidth: 520 }}>
-                    <Eyebrow>{t("signedInEyebrow")}</Eyebrow>
                     <Headline>
                         {soloName ? t("greeting", { name: soloName }) : t("greetingNoName")}
                     </Headline>
@@ -415,24 +413,6 @@ function Shell({ children }: { children: React.ReactNode }) {
                     .auth-brand-col { display: none !important; }
                 }
             `}</style>
-        </div>
-    );
-}
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-    return (
-        <div
-            className="mono"
-            style={{
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                color: "var(--ink-3)",
-                textTransform: "uppercase",
-                marginBottom: 10,
-            }}
-        >
-            {children}
         </div>
     );
 }

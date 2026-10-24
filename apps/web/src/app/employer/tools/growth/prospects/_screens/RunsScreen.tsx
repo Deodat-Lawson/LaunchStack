@@ -97,7 +97,7 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
                             className={cn(
                                 "py-1.5 text-xs",
                                 s.status === "ok" && "text-ink-2",
-                                s.status === "degraded" && "text-warn",
+                                s.status === "degraded" && "text-warn-ink",
                                 s.status === "failed" && "text-danger",
                                 (s.status === "skipped" || s.status === "off") && "text-ink-3"
                             )}

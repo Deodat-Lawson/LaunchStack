@@ -308,7 +308,7 @@ function SourceRow({
                             {(source.gaps?.length ?? 0) > 0 && (
                                 <span
                                     title={source.gaps?.join(" · ")}
-                                    className="text-warn ml-auto inline-flex items-center gap-0.5 text-[10px] font-semibold"
+                                    className="text-warn-ink ml-auto inline-flex items-center gap-0.5 text-[10px] font-semibold"
                                 >
                                     <IconShield size={9} />
                                     {source.gaps?.length}

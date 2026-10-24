@@ -5,6 +5,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
+import { renderWithLocale } from "~/i18n/testing/render";
+
 import { CreatedSources, createdSourcePlace } from "../CreatedSources";
 import type { WorkspaceSource } from "../types";
 
@@ -58,20 +60,39 @@ describe("CreatedSources", () => {
     });
 
     it("says where a filed document went and who can open it", () => {
-        expect(
-            createdSourcePlace(
-                source({
-                    folder: "Company/Plans",
-                    access: {
-                        audience: "workspace",
-                        ownAudience: false,
-                        principalCount: 0,
-                        canEdit: true,
-                        canManage: true,
-                    },
-                })
-            )
-        ).toBe("Company / Plans · Everyone in the workspace");
-        expect(createdSourcePlace(source({ folder: "Board" }))).toBe("Board");
+        const filed = source({
+            folder: "Company/Plans",
+            access: {
+                audience: "workspace",
+                ownAudience: false,
+                principalCount: 0,
+                canEdit: true,
+                canManage: true,
+            },
+        });
+        expect(createdSourcePlace(filed)).toEqual({
+            folder: "Company / Plans",
+            audience: "workspace",
+        });
+        expect(createdSourcePlace(source({ folder: "Board" }))).toEqual({
+            folder: "Board",
+            audience: null,
+        });
+        render(<CreatedSources created={CREATED} sources={[filed]} />);
+        expect(screen.getByText("Company / Plans · Everyone in the workspace")).toBeInTheDocument();
+        // Without a way to open it, no Open button.
+        expect(screen.queryByRole("button", { name: "Open" })).not.toBeInTheDocument();
+    });
+
+    it("reads in Chinese", () => {
+        renderWithLocale(
+            <CreatedSources created={CREATED} sources={[source()]} onOpen={jest.fn()} />,
+            "zh-CN"
+        );
+        expect(screen.getByRole("region", { name: "已创建的文档" })).toHaveTextContent(
+            "已创建 1 个文档"
+        );
+        expect(screen.getByText("私有 · 仅你可见")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "打开" })).toBeInTheDocument();
     });
 });

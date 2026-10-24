@@ -3,7 +3,8 @@
 //   (with `postTestId`, a finished post test of the same text is linked to the
 //   new posts for Brand's track record; the answer then carries `postTest`)
 //   (a deployment account is a channel too: `deployment:<network>`, offered
-//   only while the workspace has no account of its own on that network)
+//   only to the workspace that owns the deployment keys, and only while it
+//   has no account of its own on that network — see deployment-accounts.ts)
 //
 // A dev environment has no worker to run the scheduler, so after answering a
 // list request that shows something due, the web process runs the same

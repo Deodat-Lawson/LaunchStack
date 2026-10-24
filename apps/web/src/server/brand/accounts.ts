@@ -30,6 +30,7 @@ import {
     toChannelView,
     type BrandChannelView,
 } from "./channels";
+import { mayUseDeploymentAccounts } from "./deployment-accounts";
 
 export const BRAND_CONNECTION_PROVIDERS = ["linkedin", "bluesky"] as const;
 export type BrandConnectionProvider = (typeof BRAND_CONNECTION_PROVIDERS)[number];
@@ -74,8 +75,17 @@ function redirectUrl(): string {
     return `${base.replace(/\/+$/, "")}${connectorCallbackPath("linkedin")}`;
 }
 
-export function listBrandNetworks(): BrandNetworkView[] {
+/**
+ * `ownsDeploymentAccounts`: whether this workspace may post through the
+ * operator's keys (see deployment-accounts.ts). On a shared server it is
+ * false for everyone but the assigned workspace, and X and Reddit read as
+ * unavailable rather than as somebody else's account.
+ */
+export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkView[] {
     const config = describePublishConfig();
+    const sharedOnly = !ownsDeploymentAccounts;
+    const notYours =
+        "This server hosts several workspaces and the operator's account is assigned to another one (BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID).";
     const secretsKey = Boolean(env.server.EMBEDDING_SECRETS_KEY);
     const pages = linkedInGrantFeatures(linkedInRequestedScopes()).pages;
     const networks: Record<MarketingPlatform, BrandNetworkView> = {
@@ -115,30 +125,34 @@ export function listBrandNetworks(): BrandNetworkView[] {
             platform: "x",
             label: "X",
             connect: "deployment",
-            available: config.x.configured,
+            available: config.x.configured && !sharedOnly,
             pages: false,
             setup: config.x.configured
-                ? []
+                ? sharedOnly
+                    ? [notYours]
+                    : []
                 : [
                       "An X developer account on pay-per-use",
-                      "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
+                      "A token in TWITTER_BEARER_TOKEN, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
                   ],
-            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator for the whole deployment.",
+            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator, for one workspace.",
             limit: platformLimit("x"),
         },
         reddit: {
             platform: "reddit",
             label: "Reddit",
             connect: "deployment",
-            available: config.reddit.configured,
+            available: config.reddit.configured && !sharedOnly,
             pages: false,
             setup: config.reddit.configured
-                ? []
+                ? sharedOnly
+                    ? [notYours]
+                    : []
                 : [
                       "A Reddit script app (client id and secret)",
-                      "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
+                      "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
                   ],
-            note: "Free for this volume. Posts go to the account's own profile. Set by the operator for the whole deployment.",
+            note: "Free for this volume. Posts go to the account's own profile. Set by the operator, for one workspace.",
             limit: platformLimit("reddit"),
         },
     };
@@ -161,7 +175,10 @@ export async function listBrandConnections(companyId: bigint): Promise<Connector
         .orderBy(asc(connectorConnections.createdAt));
 }
 
-/** Every channel a workspace can post to, its own first, then the deployment's. */
+/**
+ * Every channel a workspace can post to, its own first, then the
+ * deployment's — and the deployment's only for the workspace that owns them.
+ */
 export async function listBrandChannels(
     companyId: bigint,
     connections?: ConnectorConnection[]
@@ -176,6 +193,7 @@ export async function listBrandChannels(
             platformLimit(row.platform as MarketingPlatform)
         )
     );
+    if (!(await mayUseDeploymentAccounts(companyId))) return own;
     const ownPlatforms = new Set(rows.map(r => r.platform));
     return [...own, ...deploymentChannels(ownPlatforms, platformLimit)];
 }
@@ -232,7 +250,7 @@ export async function listBrandAccounts(
         for (const row of rows) names.set(String(row.id), row.name);
     }
     return {
-        networks: listBrandNetworks(),
+        networks: listBrandNetworks(await mayUseDeploymentAccounts(companyId)),
         connections: connections.map(c => ({
             id: c.id,
             platform: c.provider as BrandConnectionProvider,

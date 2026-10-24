@@ -322,21 +322,17 @@
   "studioPanes": {
     "comingSoonTitle": "{title} (coming soon)",
     "comingSoon": "Coming soon",
-    "studioEyebrow": "Studio",
     "chat": {
-      "eyebrow": "Workspace",
       "title": "Chat",
       "body": "Ask grounded questions over your indexed sources. Pick sources on the left to scope your questions, or ask globally across the workspace.",
       "hint": "Select <strong>Chat</strong> in the sidebar to return to your conversation, or close Studio."
     },
     "knowledge": {
-      "eyebrow": "Knowledge",
       "title": "Your corpus",
       "body": "Everything the workspace can cite — uploads, pasted notes, and connected tools — with filters, collections, and indexing status.",
       "open": "Open Knowledge"
     },
     "predictive": {
-      "eyebrow": "Predictive gaps",
       "title": "What's missing from this document",
       "body": "Runs across a document and flags cross-references pointing to missing attachments, numeric inconsistencies, and missing schedules. Pick a document from the source rail, then run the analyzer.",
       "crossReferences": "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
@@ -345,7 +341,6 @@
       "back": "Back to workspace"
     },
     "workflows": {
-      "eyebrow": "Automate",
       "title": "Workflows (coming soon)",
       "body": "Chain source-aware steps: ''Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.'' Currently in design.",
       "scheduled": "Scheduled or event-triggered",
@@ -355,7 +350,6 @@
     "mindmap": {
       "linkTitle": "Mindmap",
       "linkBody": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create.",
-      "eyebrow": "Mindmap",
       "title": "Sources you draw",
       "body": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Open one from the rail to preview it, edit it in place, and make it citable when it is ready."
     },

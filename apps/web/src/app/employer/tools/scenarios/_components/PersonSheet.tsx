@@ -96,11 +96,7 @@ function Profile({
                 style={personaStyle(person.handle)}
             />
             <SheetHeader className="px-6 pb-0 pt-0">
-                <Portrait
-                    handle={person.handle}
-                    size={88}
-                    className="ring-panel -mt-11 ring-4"
-                />
+                <Portrait handle={person.handle} size={88} className="ring-panel -mt-11 ring-4" />
                 <SheetTitle className="text-ink mt-3 text-[20px] font-semibold tracking-[-0.02em]">
                     {person.name}
                 </SheetTitle>
@@ -161,7 +157,7 @@ function Profile({
                 <section>
                     <SectionHeading title={t("builtFrom")} />
                     {invented ? (
-                        <p className="text-warn inline-flex items-start gap-1.5 text-[13px] leading-snug">
+                        <p className="text-warn-ink inline-flex items-start gap-1.5 text-[13px] leading-snug">
                             <Sparkles className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                             {t("invented")}
                         </p>
@@ -263,11 +259,7 @@ function Profile({
                         answererName={() => person.name}
                         answerer={() => <Portrait handle={person.handle} size={24} />}
                     />
-                    <AskBox
-                        agentId={person.id}
-                        blocked={askBlockedReason(ti, run)}
-                        onAsk={onAsk}
-                    />
+                    <AskBox agentId={person.id} blocked={askBlockedReason(ti, run)} onAsk={onAsk} />
                 </section>
             </div>
         </>

@@ -163,7 +163,7 @@ export function CommitmentsScreen() {
                     }
                     aside={
                         view === "open" && late > 0 ? (
-                            <span className="text-warn">{t("lateCount", { count: late })}</span>
+                            <span className="text-warn-ink">{t("lateCount", { count: late })}</span>
                         ) : undefined
                     }
                 />

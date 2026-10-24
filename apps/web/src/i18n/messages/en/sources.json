@@ -43,7 +43,6 @@
     "resizeTitle": "Drag to resize · double-click to reset"
   },
   "knowledgePane": {
-    "eyebrow": "Knowledge",
     "heading": "Everything this workspace can reason over",
     "statSources": "<b>{count}</b> {count, plural, one {source} other {sources}}",
     "statCollections": "<b>{count}</b> {count, plural, one {collection} other {collections}}",

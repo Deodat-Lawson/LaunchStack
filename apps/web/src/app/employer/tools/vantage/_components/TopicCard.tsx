@@ -398,7 +398,7 @@ export function AgendaTopicRow({
                         </div>
                     </div>
                     {decided ? (
-                        <div className="border-success/40 bg-panel-2 rounded-md border-l-2 px-3 py-2">
+                        <div className="border-line bg-panel-2 rounded-md border px-3 py-2">
                             <div className="text-ink-3 text-[11.5px]">
                                 {t(topic.commitmentId ? "decidedOnOpened" : "decidedOn", {
                                     date: topic.decidedAt ? fmt.date(topic.decidedAt) : "",

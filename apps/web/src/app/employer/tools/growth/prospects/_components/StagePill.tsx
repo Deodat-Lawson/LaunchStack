@@ -44,7 +44,7 @@ export function StagePill({
             <span className={cn("size-[7px] shrink-0 rounded-full", DOT[stageTone(stage)])} />
             <span className="whitespace-nowrap">{t(`stages.${stage}`)}</span>
             {staleDays !== null && staleDays !== undefined && staleDays > 0 && (
-                <span className="text-warn whitespace-nowrap">
+                <span className="text-warn-ink whitespace-nowrap">
                     {t("stagePill.staleDays", { count: staleDays })}
                 </span>
             )}

@@ -491,7 +491,7 @@ function SaveState({
     if (savedAt) {
         return (
             <span className="text-ink-3 flex items-center gap-1.5 text-[12px]">
-                <Check className="text-success size-3.5" />
+                <Check className="text-success-ink size-3.5" />
                 {tc("status.saved")}
             </span>
         );

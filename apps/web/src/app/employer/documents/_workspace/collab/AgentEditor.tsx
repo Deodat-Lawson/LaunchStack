@@ -663,7 +663,7 @@ export function AgentEditor({
                         </div>
 
                         {fileError && (
-                            <div className="bg-warn-soft text-warn mb-3 rounded-lg px-3 py-2 text-[12.5px]">
+                            <div className="bg-warn-soft text-warn-ink mb-3 rounded-lg px-3 py-2 text-[12.5px]">
                                 {fileError}
                             </div>
                         )}

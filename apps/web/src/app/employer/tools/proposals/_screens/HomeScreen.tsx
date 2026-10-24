@@ -56,7 +56,7 @@ function ApplicationLine({
                             {" · "}
                             <span
                                 className={cn(
-                                    tone === "warn" && "text-warn",
+                                    tone === "warn" && "text-warn-ink",
                                     tone === "lost" && "text-danger"
                                 )}
                             >
@@ -70,7 +70,7 @@ function ApplicationLine({
                 <span
                     className={cn(
                         "@max-md:hidden text-xs",
-                        tone === "warn" && "text-warn",
+                        tone === "warn" && "text-warn-ink",
                         tone === "lost" && "text-danger",
                         tone === "quiet" && "text-ink-3"
                     )}

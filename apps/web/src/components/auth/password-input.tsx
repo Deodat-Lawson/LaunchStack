@@ -95,7 +95,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
                 {capsLock && (
                     <p
                         id={capsId}
-                        className="text-warn m-0 flex items-center gap-1 text-[11.5px] font-medium"
+                        className="text-warn-ink m-0 flex items-center gap-1 text-[11.5px] font-medium"
                     >
                         <ArrowBigUp className="size-3.5" aria-hidden />
                         {t("capsLock")}

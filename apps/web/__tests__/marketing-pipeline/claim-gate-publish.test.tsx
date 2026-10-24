@@ -83,8 +83,8 @@ async function mounted() {
     return hook;
 }
 
-const bodyOf = (call: unknown[]) =>
-    JSON.parse((call[1] as RequestInit).body as string) as Record<string, unknown>;
+const bodyOf = (call: unknown[] | undefined) =>
+    JSON.parse((call?.[1] as RequestInit).body as string) as Record<string, unknown>;
 
 it("asks before publishing a post with an unbacked claim, and sends nothing until confirmed", async () => {
     seed([SUPPORTED, UNBACKED]);
@@ -99,7 +99,7 @@ it("asks before publishing a post with an unbacked claim, and sends nothing unti
         await result.current.confirmClaimGate();
     });
     expect(publishCalls()).toHaveLength(1);
-    expect(bodyOf(publishCalls()[0]!)).toMatchObject({ acknowledgeUnsupportedClaims: true });
+    expect(bodyOf(publishCalls()[0])).toMatchObject({ acknowledgeUnsupportedClaims: true });
     expect(result.current.claimGate).toBeNull();
     expect(result.current.publishResult).toMatchObject({ success: true });
 });
@@ -137,7 +137,7 @@ it("a fully supported post publishes straight away; the server's 409 becomes the
         await result.current.publishPost();
     });
     expect(publishCalls()).toHaveLength(1);
-    expect(bodyOf(publishCalls()[0]!).acknowledgeUnsupportedClaims).toBeUndefined();
+    expect(bodyOf(publishCalls()[0]).acknowledgeUnsupportedClaims).toBeUndefined();
     expect(result.current.claimGate?.claims[0]?.claim).toBe("Added in the editor");
     expect(result.current.publishResult).toBeNull();
 });

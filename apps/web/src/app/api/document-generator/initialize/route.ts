@@ -12,6 +12,8 @@ import {
     resolveConfiguredChatModel,
     normalizeModelContent,
 } from "~/app/api/agents/documentQ&A/services";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -270,6 +272,9 @@ function getTemplateStructure(templateId: string): string {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -280,7 +285,11 @@ export async function POST(request: Request) {
 
             if (!validation.success) {
                 return NextResponse.json(
-                    { success: false, message: "Invalid request", errors: validation.error.errors },
+                    {
+                        success: false,
+                        message: tApi("invalidRequest"),
+                        errors: validation.error.errors,
+                    },
                     { status: 400 }
                 );
             }
@@ -404,8 +413,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to initialize document",
-                error: "Failed to initialize document",
+                message: t("initializeFailed"),
+                error: t("initializeFailed"),
             },
             { status: 500 }
         );

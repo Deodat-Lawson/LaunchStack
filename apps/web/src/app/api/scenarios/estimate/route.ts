@@ -12,6 +12,6 @@ export async function POST(request: NextRequest) {
         const body = await readBody(request);
         return json(await estimateScenario(auth.ctx, body.agents, body.rounds));
     } catch (err) {
-        return handleScenarioError("POST estimate", err);
+        return handleScenarioError("POST estimate", err, request);
     }
 }

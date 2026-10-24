@@ -634,5 +634,135 @@
     "playFailed": "Failed to play audio",
     "generateFailed": "Failed to generate speech",
     "generateFailedStatus": "Failed to generate speech: {status}"
+  },
+  "server": {
+    "documentNotFound": "Document not found.",
+    "query": {
+      "stopped": "Response stopped",
+      "failed": "An error occurred while processing your question.",
+      "tooManyImages": "The configured vision model accepts at most {max} image(s) per request.",
+      "documentIdRequired": "documentId is required for document search",
+      "archiveNameRequired": "archiveName is required for archive search",
+      "selectedIdsRequired": "selectedDocumentIds is required for selected-documents search",
+      "passageDocumentNotFound": "The document a selected passage came from was not found.",
+      "noRelevantContent": "No relevant content found for the given question.",
+      "archiveEmpty": "No documents found in archive \"{archive}\".",
+      "selectedNotFound": "None of the selected documents were found.",
+      "inputTooLong": "The expanded chat input exceeds 120000 characters. Shorten your prompt, remove source or attachment context, or start a new conversation."
+    },
+    "attachments": {
+      "notFound": "Attachment not found.",
+      "outOfScope": "Attachment not found or unavailable in your document scope.",
+      "contentUnavailable": "Attachment content is unavailable.",
+      "tooLarge": "Attachment \"{name}\" exceeds the size limit.",
+      "storageUnavailable": "Attachment storage is unavailable.",
+      "unavailable": "Attachment \"{name}\" is unavailable (HTTP {status}). Attach it again or remove it before sending.",
+      "downloadLimit": "Attachment \"{name}\" exceeds the remaining download size limit.",
+      "notAnImage": "Attachment \"{name}\" is not a supported image or its content type does not match its bytes.",
+      "visionMimeRejected": "The configured vision model does not accept {mime}.",
+      "imageAsText": "Attachment \"{name}\" contains an image; attach it as an image to use vision.",
+      "unreadable": "Attachment \"{name}\" could not be read. Attach a valid file again or remove it before sending. For a scanned document, add it as a Source to run OCR."
+    },
+    "compat": {
+      "provider": "Per-request provider selection is no longer supported; the deployment serves one chat endpoint configured by the operator",
+      "model": "Per-request model overrides are disabled; the model serving each route is operator-configured"
+    },
+    "endpoint": {
+      "workspaceQuota": "Your workspace's AI provider account has run out of credit or quota. A workspace admin can fix it in Settings › Bring your own keys.",
+      "serviceQuota": "The AI service has reached its usage limit and can't answer right now. An administrator needs to restore it.",
+      "workspaceRateLimited": "Your workspace's AI provider is rate-limiting requests. Try again in a moment.",
+      "serviceBusy": "The AI service is busy right now. Try again in a moment.",
+      "workspaceKeyRejected": "Your workspace's AI provider rejected its API key. A workspace admin can fix it in Settings › Bring your own keys.",
+      "workspaceKeyMissing": "Your workspace's AI provider needs an API key. A workspace admin can fix it in Settings › Bring your own keys.",
+      "keyRejected": "The chat endpoint rejected CHAT_API_KEY. Check the credential configured for CHAT_BASE_URL.",
+      "keyMissing": "The chat endpoint requires a credential. Set CHAT_API_KEY for CHAT_BASE_URL.",
+      "workspaceUnreachable": "Couldn't reach your workspace's AI provider. A workspace admin can fix it in Settings › Bring your own keys.",
+      "unreachable": "Unable to reach the chat endpoint. Confirm the server is running and CHAT_BASE_URL is correct.",
+      "workspaceModelMissing": "Your workspace's AI provider doesn't serve the chosen model. A workspace admin can fix it in Settings › Bring your own keys.",
+      "modelMissing": "The chat endpoint does not serve the configured model. Update the model id in the chat model configuration."
+    },
+    "toolStatus": {
+      "webSearchFor": "Searching the web for “{query}”",
+      "webSearch": "Searching the web",
+      "readingPage": "Reading {host}",
+      "readingWebPage": "Reading a web page",
+      "lookingApp": "Looking through your {app} files",
+      "lookingFolder": "Looking through “{folder}”",
+      "lookingSources": "Looking through your sources",
+      "searchingSourcesFor": "Searching your sources for “{query}”",
+      "searchingSources": "Searching your sources for that",
+      "readingSource": "Reading “{title}”",
+      "readingASource": "Reading a source"
+    },
+    "aiChat": {
+      "chatNotFound": "Chat not found",
+      "taskNotFound": "Task not found",
+      "messageNotFound": "Message not found",
+      "toolCallNotFound": "Tool call not found",
+      "stepNotFound": "Execution step not found",
+      "fetchChats": "Failed to fetch chats",
+      "createChat": "Failed to create chat",
+      "fetchChat": "Failed to fetch chat",
+      "updateChat": "Failed to update chat",
+      "deleteChat": "Failed to delete chat",
+      "chatDeleted": "Chat deleted successfully",
+      "createStep": "Failed to create execution step",
+      "fetchSteps": "Failed to fetch execution steps",
+      "updateStep": "Failed to update execution step",
+      "storeMemory": "Failed to store memory",
+      "fetchMemories": "Failed to fetch memories",
+      "createMessage": "Failed to create message",
+      "fetchMessages": "Failed to fetch messages",
+      "createTask": "Failed to create task",
+      "fetchTasks": "Failed to fetch tasks",
+      "fetchTask": "Failed to fetch task",
+      "updateTask": "Failed to update task",
+      "createToolCall": "Failed to create tool call",
+      "fetchToolCalls": "Failed to fetch tool calls",
+      "updateToolCall": "Failed to update tool call",
+      "messageOrTaskRequired": "messageId or taskId is required",
+      "vote": "Failed to vote",
+      "fetchVote": "Failed to fetch vote",
+      "voteIdsRequired": "messageId and chatId are required"
+    },
+    "askMyNotes": {
+      "notConfigured": "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
+      "noNotes": "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
+      "failed": "Ask My Notes failed"
+    },
+    "history": {
+      "saveFailed": "Failed to save question",
+      "fetchFailed": "Failed to fetch questions"
+    },
+    "voice": {
+      "audioRequired": "Audio file is required",
+      "audioTooShort": "Audio too short. Please record at least 0.1 seconds before sending.",
+      "transcribeFailed": "Failed to transcribe audio",
+      "textTooLong": "Text too long for speech generation ({bytes} bytes, limit {limit}). Split it into shorter turns.",
+      "speechFailedStatus": "Speech generation failed ({status})",
+      "noAudio": "Speech generation returned no audio",
+      "notConfigured": "Speech generation is not configured. Set GOOGLE_AI_API_KEY.",
+      "speechFailed": "Failed to generate speech",
+      "transcription": {
+        "allowanceUsed": "This server's transcription allowance is used up for today (the Gemini API key is on a limited plan). Try again tomorrow, or ask an admin to enable billing on the Gemini API project.",
+        "busy": "The transcription service is busy (rate limit). Try again in a minute.",
+        "overloaded": "Gemini is overloaded right now and didn't recover within two minutes. Try again in a few minutes.",
+        "keyRejected": "The transcription service rejected this workspace's API key. Ask an admin to check the transcription key.",
+        "serviceProblem": "The transcription service had a problem. Try again in a few minutes.",
+        "unreadable": "The transcription service couldn't read this recording: {detail}",
+        "formatUnsupported": "{ext} recordings can't be transcribed. Use MP3, M4A, MP4, WAV, AAC, FLAC or OGG.",
+        "undecodable": "This recording couldn't be decoded. Check that it plays, or export it again as MP3 or M4A.",
+        "tooLong": "This recording is {hours} hours long; the limit is 9.5 hours. Split it and upload the parts.",
+        "needsFfmpeg": "This server can transcribe recordings up to {minutes} minutes; longer ones need ffmpeg installed on the server. Ask an admin, or split the recording.",
+        "nothingUsable": "The transcription service returned nothing usable for most of this recording. Try again later.",
+        "couldNotDecode": "The transcription service couldn't decode this recording. Check that it plays, or convert it to MP3.",
+        "slowAccept": "The transcription service took too long to accept this recording. Try again.",
+        "storageUnreadable": "The recording was uploaded but couldn't be read back from storage. Try again."
+      }
+    },
+    "sessions": {
+      "notFound": "Session not found",
+      "ownerOnlyShare": "Only the person who started this chat can share it."
+    }
   }
 }

@@ -37,7 +37,8 @@ the person writes in another language.
    its own language, its English name, and the `Accept-Language` tags it
    answers.
 3. Add its loader to `LOADERS` in `messages.ts`, and its catalogue to
-   `CATALOGUES` in `__tests__/catalogues.test.ts` and `testing/render.tsx`.
+   `CATALOGUES` in `translate.ts` (the server's translators),
+   `__tests__/catalogues.test.ts` and `testing/render.tsx`.
 
 `npx jest src/i18n` then checks it says everything English says, with the same
 placeholders, and parses. Nothing else changes: the switchers, the settings
@@ -148,13 +149,15 @@ recorded it, so server- and client-formatted dates agree.
 - Brand and product names (Launchstack, Google Drive, Notion, Slack…),
   keyboard keys, code, URLs, API identifiers, log and `console` messages,
   and analytics event names.
-- Server error strings shown verbatim from an API response.
+- A server's `{ error }` shown as it came: the route already wrote it in
+  the reader's language (below).
 
 ### Text the server writes
 
 A route handler knows the reader's language from the request:
-`localeOfRequest(request)` (`server.ts`). Three patterns, in order of
-preference:
+`localeOfRequest(request)` (`server.ts`). API, MCP and audit readers send
+neither the cookie nor a Chinese `Accept-Language`, so they keep reading
+English. Three patterns, in order of preference:
 
 - **Send data, word it on the screen.** An item the server composes for a
   screen (the Proposals and Prospects to-do lists) carries a `copy` field —
@@ -167,6 +170,41 @@ preference:
 - **Tell the model.** `replyLanguageInstruction(locale)` for an assistant's
   answer, `outputLanguageInstruction(locale)` for interface copy a model
   writes (starter questions). Prompts themselves stay English.
+
+The server's own keys live under a `server` subtree of the feature's
+namespace (`growth.server.runSteps.*`), and the sentences every route
+shares under `errors.api` (`"Internal server error"`, `"Invalid id"`, …).
+
+**Errors a route answers with.** `requestTranslator(request, namespace)` is
+next-intl's translator in the reader's language — synchronous, since the
+server holds every catalogue (`translate.ts`):
+
+```ts
+const t = requestTranslator(request, "errors.api");
+return NextResponse.json({ error: t("documentNotFound") }, { status: 404 });
+```
+
+An error thrown below the route carries a `Copy` — a message key and its
+values (`copy.ts`) — instead of words: `notFound(copy("…"))` makes a
+`WorkspaceError` whose `message` is the English and whose `copy` the
+response helpers word for the reader. The shared helpers take the request
+for this: `workspaceErrorResponse(error, label, request)`,
+`invalidIdResponse(request)`, `parseValue(value, schema, request)`,
+`handleRouteError(tag, error, request)`, `handleApiError(error, request)`;
+`parseJsonBody` and `validateRequestBody` already have it, and the
+workspace guard (`requireWorkspaceContext`) reads the request scope.
+
+**zod messages.** A schema takes its English from `errors.validation`
+(`.min(1, V.nameRequired)`, `v("keepItUnder", { max })` — `validation.ts`),
+and `zodIssueText` / `zodErrorText` (`zod.ts`) find that sentence again for
+the reader, or re-word zod's own default from the issue (`errors.zod`).
+The same reverse lookup (`wordEnglish`) words a library's fixed English,
+such as the chat-model errors in `errors.chatModels`.
+
+**"Request failed (status)".** A tool API client marks the sentence it made
+up when the server sent none (`generated`); screens show failures through
+`useErrorText()` (`~/lib/tools/errorText`), which words that one and passes
+the server's sentence through.
 
 ## Payload
 
@@ -182,4 +220,5 @@ Component tests need nothing: under jest `next-intl` resolves to
 `testing/next-intl.tsx`, which renders English without a provider, so
 `getByText("Delete")` keeps working. A missing key throws there. To test a
 translated screen, render it with `renderWithLocale(ui, "zh-CN")` from
-`testing/render.tsx`.
+`testing/render.tsx`. A route answers in Chinese to a request carrying the
+cookie: `new Request(url, { headers: { cookie: "ls-locale=zh-CN.1" } })`.

@@ -1,4 +1,41 @@
-import type { ApplicantType, SourceRole } from "~/lib/company-profile/dto";
+import type { useTranslations } from "next-intl";
+
+import type {
+    ApplicantType,
+    CompanyProfileDto,
+    ProfileFactDto,
+    ProfileSourceDto,
+    SourceRole,
+} from "~/lib/company-profile/dto";
+
+/** `t` for the `companyProfile.server` words the DTO carries as keys. */
+export type ProfileServerT = ReturnType<typeof useTranslations<"companyProfile.server">>;
+
+/** A fact's label in the reader's language; a label a person typed is shown as typed. */
+export function factLabelText(t: ProfileServerT, fact: Pick<ProfileFactDto, "label" | "labelKey">) {
+    return fact.labelKey ? t(`factLabels.${fact.labelKey}`) : fact.label;
+}
+
+/** Why a source counts or not; the model's own sentence is shown as it wrote it. */
+export function sourceReasonText(
+    t: ProfileServerT,
+    source: Pick<ProfileSourceDto, "reason" | "reasonCopy">
+): string | null {
+    const reason = source.reasonCopy;
+    if (!reason) return source.reason;
+    if (reason.key !== "onlyNoise") return t(`reasons.${reason.key}`);
+    const [first, second] = reason.drops.map(drop => t(`dropWords.${drop}`));
+    const noise = second ? t("reasons.and", { first: first!, second }) : first!;
+    return t("reasons.onlyNoise", { noise });
+}
+
+/** A failure sentence in the reader's language when it is one of the fixed ones. */
+export function failureText(
+    t: ProfileServerT,
+    item: Pick<ProfileSourceDto | CompanyProfileDto, "error" | "errorKey">
+): string | null {
+    return item.errorKey ? t(`failures.${item.errorKey}`) : item.error;
+}
 
 /**
  * The applicant type in the person's words: `companyProfile.applicant.<key>`.

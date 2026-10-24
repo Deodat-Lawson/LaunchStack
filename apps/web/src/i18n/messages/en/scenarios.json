@@ -401,5 +401,63 @@
     "addEvent": "Add event",
     "injectionPending": "appears in the next round",
     "injectionRound": "round {round, number}"
+  },
+  "server": {
+    "errors": {
+      "notFound": "Scenario not found",
+      "notCreator": "Only the person who started this run can do that.",
+      "roleCantRun": "Your role can't run scenarios in this workspace.",
+      "notEnoughCredits": "Not enough credits to start this run.",
+      "describeSituation": "Describe the situation to simulate.",
+      "situationTooLong": "Keep the situation under {max} characters.",
+      "tooManyFiles": "Pick at most {max} files.",
+      "notesTooLong": "Keep pasted material under {max} characters.",
+      "titleEmpty": "A title can't be empty.",
+      "eventsClosed": "Events can only be added while the run is going.",
+      "lastRoundFinished": "The last round has finished; this event would never appear.",
+      "describeEvent": "Describe the event.",
+      "eventTooLong": "Keep events under {max} characters.",
+      "lastRoundStarted": "The last round has started; this event would never appear.",
+      "interviewsNotOpen": "Interviews open once the first round has finished.",
+      "noSuchPerson": "No such person in this run.",
+      "askQuestion": "Ask a question.",
+      "questionTooLong": "Keep questions under {max} characters.",
+      "noAnswer": "No answer came back; try again.",
+      "roleCantTestPosts": "Your role can read Brand but not test posts.",
+      "writePostFirst": "Write the post first.",
+      "postTooLong": "Posts over 3,000 characters can't be tested."
+    },
+    "leftWorkspace": "Someone who has left",
+    "sourceLabels": {
+      "document": {
+        "aFilePage": "A file, page {page}",
+        "aFile": "A file",
+        "page": "{title}, page {page}"
+      },
+      "search": {
+        "aFile": "A file"
+      },
+      "prospect": {
+        "prospect": "Prospect: {name}"
+      },
+      "brandComment": {
+        "comment": "Comment on your {platform} post"
+      },
+      "companyProfile": {
+        "fact": "Company profile: {subject}"
+      },
+      "notes": {
+        "part": "Pasted material, part {n}",
+        "whole": "Pasted material"
+      }
+    },
+    "runErrors": {
+      "outOfCredits": "The workspace ran out of credits during this run.",
+      "tooFewPeople": "Only {count} people could be built from the sources",
+      "noWorld": "Run has no world",
+      "reportUnreadable": "The report could not be read",
+      "runFailed": "The run failed",
+      "creatorGone": "The person who started this run is no longer an active member of the workspace."
+    }
   }
 }

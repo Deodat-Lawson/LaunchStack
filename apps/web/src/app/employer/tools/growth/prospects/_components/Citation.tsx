@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 
+import { useCopyText } from "~/lib/tools/copyText";
 import type { Claim, EvidenceItem } from "../api";
 
 export function evidenceAnchorId(n: number): string {
@@ -57,9 +58,10 @@ export function Citation({ n, evidence }: { n: number; evidence: EvidenceItem[] 
 
 /** A sentence with its citations rendered inline. */
 export function ClaimText({ claim, evidence }: { claim: Claim; evidence: EvidenceItem[] }) {
+    const word = useCopyText();
     return (
         <>
-            {claim.text}
+            {word(claim.copy, claim.text)}
             {claim.cites.map(n => (
                 <Citation key={n} n={n} evidence={evidence} />
             ))}

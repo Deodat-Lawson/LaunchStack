@@ -124,5 +124,84 @@
     "buildingNote": "正在读取你的来源。每个来源读取完成后，事实会立即显示；此页面会自动更新。",
     "summary": "摘要",
     "atAGlance": "概览"
+  },
+  "server": {
+    "errors": {
+      "adminsEditOnly": "只有工作区管理员可以编辑公司资料",
+      "adminsSourcesOnly": "只有工作区管理员可以决定哪些来源计入资料",
+      "sourceNotFound": "找不到该来源",
+      "editNeedsPathValue": "修改事实需要提供路径和值",
+      "overrideValues": "override 必须是 about_us、set_aside 或 null",
+      "noProfileYet": "还没有公司资料。请在“设置 › 公司”中生成。"
+    },
+    "editErrors": {
+      "nothingToUndo": "那里没有可以撤销的修改",
+      "unsupportedPath": "不支持的路径：{path}",
+      "notAYear": "这不是一个年份",
+      "nothingToRemove": "没有可以移除的内容",
+      "factKeyFormat": "事实的键只能包含小写字母、数字和 _",
+      "newFactNeedsLabel": "新事实需要一个标签",
+      "invalidIndex": "无效的 {section} 索引",
+      "nameFromSources": "名称来自资料来源；请改为移除这一条目"
+    },
+    "factLabels": {
+      "company": {
+        "name": "名称",
+        "description": "业务简介",
+        "industry": "行业",
+        "foundedYear": "成立时间",
+        "headquarters": "总部",
+        "website": "网站",
+        "size": "团队规模"
+      },
+      "profile": {
+        "mission": "使命",
+        "programs": "项目",
+        "beneficiaries": "服务对象",
+        "outcomes": "成果",
+        "need": "解决的需求",
+        "legalStatus": "法律地位",
+        "annualBudget": "年度预算",
+        "fundingSources": "资金来源",
+        "fundingRaised": "已筹资金",
+        "customers": "客户",
+        "traction": "业务进展",
+        "businessModel": "商业模式",
+        "pricing": "定价",
+        "leadership": "管理团队",
+        "board": "董事会",
+        "partners": "合作伙伴",
+        "awards": "奖项",
+        "theoryOfChange": "变革理论",
+        "evaluation": "评估",
+        "plans": "计划",
+        "idea": "创意"
+      }
+    },
+    "reasons": {
+      "noReadableText": "这个文件中没有可读的文本。",
+      "sparseMindmap": "这是一张只有寥寥几个词的思维导图。",
+      "onlyNoise": "只有{noise}，没有关于该组织的可读内容。",
+      "tooLittleText": "文本太少，无法说明该组织的任何情况。",
+      "aboutUs": "由该组织撰写或关于该组织的内容。",
+      "thirdParty": "他人的资料，保留以供参考。",
+      "nothingToRead": "没有可读的内容。",
+      "stillProcessing": "仍在处理中，处理完成后会立即读取。",
+      "and": "{first}和{second}"
+    },
+    "dropWords": {
+      "references": "参考文献列表",
+      "table": "数字表格",
+      "figure": "图表残留",
+      "boilerplate": "模板化文字",
+      "placeholder": "空占位符",
+      "tooShort": "零碎片段",
+      "duplicate": "重复文本"
+    },
+    "failures": {
+      "readingFailed": "读取失败",
+      "readingFactsFailed": "从这个来源读取事实失败",
+      "buildFailed": "上次生成失败"
+    }
   }
 }

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 
+import { useCopyText } from "~/lib/tools/copyText";
 import { runIsLive } from "../prospects/_components/RunSheet";
 import { useProspects } from "../prospects/_lib/context";
 
@@ -25,16 +26,17 @@ function isRunningVerb(id: string): id is RunningVerb {
 export function RunIndicator() {
     const t = useTranslations("growth.runIndicator");
     const { activeRun, openRunSheet } = useProspects();
+    const word = useCopyText();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
     // A step the bar has no verb for says the server's own label.
     const verb = current
         ? isRunningVerb(current.id)
             ? t(`verbs.${current.id}`)
-            : current.label.toLowerCase()
+            : word(current.labelCopy, current.label).toLowerCase()
         : null;
-    const doing =
-        verb && current?.detail ? t("doingDetail", { verb, detail: current.detail }) : verb;
+    const detail = current?.detail ? word(current.detailCopy, current.detail) : null;
+    const doing = verb && detail ? t("doingDetail", { verb, detail }) : verb;
     const label = doing ? t("labelDoing", { doing }) : t("label");
     return (
         <Button

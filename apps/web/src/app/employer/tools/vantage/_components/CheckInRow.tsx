@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type CommitmentDto, type VantageCommitmentStatus } from "../api";
 import { todayIso, useVantageFormat } from "../_lib/format";
@@ -44,6 +45,7 @@ export function CheckInRow({
     onChange: () => void;
     showTopic?: boolean;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.checkIn");
     const fmt = useVantageFormat();
     const [open, setOpen] = useState(false);
@@ -63,7 +65,7 @@ export function CheckInRow({
             setPending(null);
             onChange();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveError"));
+            toast.error(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }

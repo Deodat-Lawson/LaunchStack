@@ -576,5 +576,45 @@
   "chatRoutes": {
     "noImages": "The model serving the vision route does not accept images.",
     "alwaysReasons": "The model serving the reasoning route always reasons; there is nothing to toggle."
+  },
+  "server": {
+    "history": {
+      "trendSearch": "Trend search",
+      "prospectSearch": "Prospect search",
+      "clientProspector": "Client prospector",
+      "repository": "Repository",
+      "repoExplainer": "Repo explainer",
+      "distributionRun": "Distribution run",
+      "partnerDiscovery": "Partner discovery",
+      "emailCampaign": "Email campaign",
+      "weekOf": "Week of {date}",
+      "agendaWeekOf": "Agenda for the week of {date}",
+      "vantage": "Vantage",
+      "proposals": "Proposals",
+      "funderSearch": "Funder search",
+      "requirements": "Requirements",
+      "drafts": "Drafts",
+      "rewrite": "Rewrite",
+      "review": "Review"
+    },
+    "errors": {
+      "loadHistoryFailed": "Failed to load history",
+      "unknownHistoryKind": "Unknown history kind",
+      "deleteChatViaSessions": "Delete a chat through the sessions API",
+      "missingId": "Missing id",
+      "deleteItemFailed": "Failed to delete this item",
+      "loadSessionsFailed": "Failed to load sessions",
+      "saveChatFailed": "Failed to save this chat",
+      "loadChatFailed": "Failed to load this chat",
+      "updateChatFailed": "Failed to update this chat",
+      "deleteChatFailed": "Failed to delete this chat",
+      "reorderPinsFailed": "Failed to reorder pinned chats",
+      "forkFailed": "Failed to continue this chat",
+      "saveMessageFailed": "Failed to save this message",
+      "chatChangedElsewhere": "This chat changed in another tab. Reopen it before editing.",
+      "rewindFailed": "Failed to rewind this chat",
+      "loadQueueFailed": "Failed to load queued messages",
+      "updateQueueFailed": "Failed to update queued messages"
+    }
   }
 }

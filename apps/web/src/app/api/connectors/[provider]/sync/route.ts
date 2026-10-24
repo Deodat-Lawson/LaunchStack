@@ -16,6 +16,8 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
@@ -43,22 +45,24 @@ export async function POST(
     request: Request,
     { params }: { params: Promise<{ provider: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { provider } = await params;
             if (!isSyncProvider(provider)) {
-                return createValidationError("Sync exists only for google-drive and notion.");
+                return createValidationError(t("syncDriveNotionOnly"));
             }
 
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
             if (!isConnectorConfigured(provider)) {
-                return notConfiguredResponse(provider);
+                return notConfiguredResponse(provider, locale);
             }
 
             const raw = await request.text();
             const parsed = SyncRequestSchema.safeParse(raw.trim() ? JSON.parse(raw) : {});
-            if (!parsed.success) return createValidationError("Invalid request body.");
+            if (!parsed.success) return createValidationError(t("invalidBody"));
 
             const companyId = guard.ctx.companyId.toString();
             const connections = await listConnectionsForCompany(guard.ctx.companyId, provider);
@@ -70,8 +74,8 @@ export async function POST(
                 );
                 if (targets.length === 0) {
                     return wanted && connections.some(row => String(row.id) === wanted)
-                        ? createValidationError("Notion access was revoked — reconnect first.")
-                        : createNotFoundError("Connect Notion first.");
+                        ? createValidationError(t("notionRevoked"))
+                        : createNotFoundError(t("connectNotionFirst"));
                 }
                 await inngest.send(
                     targets.map(row => ({
@@ -79,13 +83,13 @@ export async function POST(
                         data: { connectionId: String(row.id), companyId, force: parsed.data.force },
                     }))
                 );
-                return createSuccessResponse({ queued: targets.length }, "Sync started.", 202);
+                return createSuccessResponse({ queued: targets.length }, t("syncStarted"), 202);
             }
 
             const [connection] = connections;
-            if (!connection) return createNotFoundError("Connect Google Drive first.");
+            if (!connection) return createNotFoundError(t("connectDriveFirst"));
             if (connection.status !== "active") {
-                return createValidationError("Google access was revoked — reconnect first.");
+                return createValidationError(t("googleRevoked"));
             }
 
             await inngest.send({
@@ -97,9 +101,9 @@ export async function POST(
                 },
             });
 
-            return createSuccessResponse({ queued: true }, "Sync started.", 202);
+            return createSuccessResponse({ queued: true }, t("syncStarted"), 202);
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

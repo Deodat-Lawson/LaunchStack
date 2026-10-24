@@ -12,8 +12,13 @@ import {
 } from "~/server/workspace-models/endpoint-url";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { wordModels } from "~/server/workspace-models/words";
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "auth.server.errors");
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -44,17 +49,13 @@ export async function POST(request: Request) {
             .where(eq(company.name, companyName));
 
         if (existingCompany) {
-            return createValidationError(
-                "Company already exists. Please use a different company name."
-            );
+            return createValidationError(t("companyExists"));
         }
 
         // A key is only ever sent to the address it was entered with, so one
         // without an address could never be used.
         if (embeddingOpenAIApiKey?.trim() && !embeddingOpenAIBaseUrl?.trim()) {
-            return createValidationError(
-                "Add the embeddings endpoint URL that goes with the API key."
-            );
+            return createValidationError(t("embeddingEndpointForKey"));
         }
 
         // Same address policy as Settings › Bring your own keys, checked before the
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
                 openAIBaseUrl = await assertEndpointUrlAllowed(embeddingOpenAIBaseUrl);
             } catch (urlErr) {
                 if (urlErr instanceof WorkspaceEndpointUrlError) {
-                    return createValidationError(urlErr.message);
+                    return createValidationError(wordModels(urlErr.message, locale));
                 }
                 throw urlErr;
             }
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
 
         if (!newCompany) {
             console.error("Company creation returned no data. Database insert failed.");
-            return createValidationError("Could not create company. Please try again later.");
+            return createValidationError(t("createCompanyFailed"));
         }
 
         const companyId = BigInt(newCompany.id);
@@ -118,7 +119,7 @@ export async function POST(request: Request) {
                 console.error("Failed to persist embedding credentials during signup:", credErr);
                 // Fatal — the company row is already created; bubble up so
                 // the caller sees the failure and can retry with valid input.
-                return handleApiError(credErr);
+                return handleApiError(credErr, request);
             }
         }
 
@@ -148,16 +149,13 @@ export async function POST(request: Request) {
         // nobody reads.
         await ensureTokenAccount(companyId);
 
-        return createSuccessResponse(
-            { userId, role: "owner" },
-            "Company and owner account created successfully."
-        );
+        return createSuccessResponse({ userId, role: "owner" }, t("companyCreated"));
     } catch (error: unknown) {
         console.error("Error during employer company signup:", error);
         if (error instanceof Error) {
             console.error("Error message:", error.message);
             console.error("Error stack:", error.stack);
         }
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

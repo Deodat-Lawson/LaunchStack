@@ -1,9 +1,12 @@
 /**
  * Request schemas for `/api/vantage/*`, in one place because Next allows a
  * route file to export only its handlers. Messages are the words the form
- * shows next to the control.
+ * shows next to the control: English from `vantage.server.validation`, which
+ * `firstIssue` (./_http) finds again to say them in the reader's language.
  */
 import { z } from "zod";
+
+import vantage from "~/i18n/messages/en/vantage.json";
 
 import {
     VANTAGE_COMMITMENT_STATUSES,
@@ -12,14 +15,16 @@ import {
     isIsoDate,
 } from "@launchstack/pipelines/vantage";
 
-export const isoDate = z.string().refine(isIsoDate, "must be a date (YYYY-MM-DD)");
+const V = vantage.server.validation;
+
+export const isoDate = z.string().refine(isIsoDate, V.isoDate);
 
 const optionalText = (max: number) => z.string().trim().max(max).optional().nullable();
 
 export const EvidenceSchema = z.object({
     kind: z.enum(VANTAGE_EVIDENCE_KINDS),
-    title: z.string().trim().min(1, "give it a title").max(300),
-    body: z.string().trim().min(1, "write what happened").max(40_000),
+    title: z.string().trim().min(1, V.giveTitle).max(300),
+    body: z.string().trim().min(1, V.writeWhatHappened).max(40_000),
     source: optionalText(300),
     sourceUrl: z
         .union([z.string().trim().url().max(1000), z.literal("")])
@@ -32,8 +37,8 @@ export const EvidenceSchema = z.object({
 
 export const MetricDefinitionSchema = z.object({
     key: z.string().trim().max(64).optional(),
-    name: z.string().trim().min(1, "name the metric").max(120),
-    definition: z.string().trim().min(1, "say what counts").max(2000),
+    name: z.string().trim().min(1, V.nameMetric).max(120),
+    definition: z.string().trim().min(1, V.sayWhatCounts).max(2000),
     unit: z.string().trim().max(32).optional(),
 });
 
@@ -47,12 +52,12 @@ export const ObservationSchema = z
         note: optionalText(2000),
     })
     .refine(o => o.periodEnd >= o.periodStart, {
-        message: "the period ends before it starts",
+        message: V.periodOrder,
         path: ["periodEnd"],
     });
 
 export const ImportSchema = z.object({
-    csv: z.string().min(1, "paste or choose a CSV").max(2_000_000),
+    csv: z.string().min(1, V.pasteCsv).max(2_000_000),
     source: optionalText(300),
 });
 
@@ -69,7 +74,7 @@ export const FactSchema = z.object({
 });
 
 export const TopicSchema = z.object({
-    title: z.string().trim().min(1, "give the topic a title").max(300),
+    title: z.string().trim().min(1, V.topicTitle).max(300),
     facts: z.array(FactSchema).max(8).optional(),
     whyItMatters: z.string().trim().max(2000).optional(),
     decisionQuestion: z.string().trim().max(1000).optional(),
@@ -95,11 +100,11 @@ export const TopicPatchSchema = TopicSchema.partial().extend({
 });
 
 export const DecisionSchema = z.object({
-    decision: z.string().trim().min(1, "write the decision").max(2000),
+    decision: z.string().trim().min(1, V.writeDecision).max(2000),
     commitment: z
         .object({
-            title: z.string().trim().min(1, "name the action").max(300),
-            owner: z.string().trim().min(1, "name an owner").max(200),
+            title: z.string().trim().min(1, V.nameAction).max(300),
+            owner: z.string().trim().min(1, V.nameOwner).max(200),
             dueOn: isoDate,
             test: optionalText(1000),
             shared: z.boolean().optional(),
@@ -108,8 +113,8 @@ export const DecisionSchema = z.object({
 });
 
 export const CommitmentSchema = z.object({
-    title: z.string().trim().min(1, "name the action").max(300),
-    owner: z.string().trim().min(1, "name an owner").max(200),
+    title: z.string().trim().min(1, V.nameAction).max(300),
+    owner: z.string().trim().min(1, V.nameOwner).max(200),
     dueOn: isoDate,
     test: optionalText(1000),
     shared: z.boolean().optional(),
@@ -125,7 +130,7 @@ export const CommitmentPatchSchema = CommitmentSchema.omit({ agendaId: true, top
     });
 
 export const DeadlineSchema = z.object({
-    title: z.string().trim().min(1, "name the deadline").max(300),
+    title: z.string().trim().min(1, V.nameDeadline).max(300),
     dueOn: isoDate,
     note: optionalText(1000),
 });

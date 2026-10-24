@@ -9,18 +9,24 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 import { db } from "~/server/db/index";
 import { category } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FolderError } from "~/server/folders";
+import { folderErrorText } from "~/server/folders/words";
 import { deleteFolderAs } from "~/server/workspace/folder-actions";
 
 const DeleteCategorySchema = z.object({
-    id: z.number().int().positive("Category ID must be a positive integer"),
+    id: z.number().int().positive(V.categoryIdPositive),
 });
 
 export async function DELETE(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     try {
         const validation = await validateRequestBody(request, DeleteCategorySchema);
         if (!validation.success) {
@@ -40,18 +46,23 @@ export async function DELETE(request: Request) {
                 )
             )
             .limit(1);
-        if (!row) return NextResponse.json({ error: "Category not found." }, { status: 404 });
+        if (!row) return NextResponse.json({ error: t("categoryNotFoundPeriod") }, { status: 404 });
 
         await deleteFolderAs(ctx.data, row.name);
         return NextResponse.json({ success: true }, { status: 200 });
     } catch (error: unknown) {
         if (error instanceof FolderError) {
             return NextResponse.json(
-                { error: error.status === 404 ? "Category not found." : error.message },
+                {
+                    error:
+                        error.status === 404
+                            ? t("categoryNotFoundPeriod")
+                            : folderErrorText(error, locale),
+                },
                 { status: error.status }
             );
         }
         console.error("[Categories DELETE] failed:", error);
-        return NextResponse.json({ error: "Failed to delete category" }, { status: 500 });
+        return NextResponse.json({ error: t("deleteCategoryFailed") }, { status: 500 });
     }
 }

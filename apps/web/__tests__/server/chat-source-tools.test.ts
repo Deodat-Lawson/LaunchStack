@@ -118,6 +118,18 @@ describe("list_sources", () => {
         expect(tool.describe({})).toBe("Looking through your sources");
     });
 
+    it("names what it is doing in the reader's language; the model's text stays English", () => {
+        const session = createSourceTools(ctx, {}, "zh-CN");
+        const [list, search, read] = session.tools;
+        expect(list!.describe({ from: "google-drive" })).toBe("正在查看你的 Google Drive 文件");
+        expect(list!.describe({ folder: " Resumes " })).toBe("正在查看“Resumes”");
+        expect(list!.describe({})).toBe("正在查看你的来源");
+        expect(search!.describe({ query: "Python" })).toBe("正在你的来源中搜索“Python”");
+        expect(search!.describe({})).toBe("正在你的来源中搜索");
+        expect(read!.describe({ id: "d81" })).toBe("正在阅读一个来源");
+        expect(list!.description).toMatch(/^List the sources/);
+    });
+
     it("says plainly when nothing matches", async () => {
         const list = jest.fn(async (): Promise<SourceListing> => ({ folders: [], documents: [] }));
         const { list: tool } = toolsWith({ list });

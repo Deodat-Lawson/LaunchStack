@@ -12,6 +12,7 @@ import {
     type ScenarioInterview,
 } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { ANALYST_ID } from "../api";
 
@@ -72,6 +73,7 @@ export function AskBox({
     onAsk: (agentId: string, question: string) => Promise<void>;
     placeholder?: string;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("scenarios.interviews");
     const [question, setQuestion] = useState("");
     const [asking, setAsking] = useState(false);
@@ -84,7 +86,7 @@ export function AskBox({
             await onAsk(agentId, question.trim());
             setQuestion("");
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("askError"));
+            setError(errorText(e, t("askError")));
         } finally {
             setAsking(false);
         }

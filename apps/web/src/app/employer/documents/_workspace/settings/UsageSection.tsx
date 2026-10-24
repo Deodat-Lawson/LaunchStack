@@ -63,12 +63,30 @@ interface UsageOverview {
         balanceAfter: number;
         service: string | null;
         description: string | null;
+        /** The description as message data (`settings.server.ledger`), when the app wrote it. */
+        descriptionCopy?: { key: LedgerKey; values?: Record<string, string> } | null;
         createdAt: string;
     }[];
     pricePerMillionTokens: number;
     lowBalanceThreshold: number;
     estimatedCost: number | null;
 }
+
+/** `LedgerKey` in ~/server/settings/usage — the ledger descriptions the page can word. */
+type LedgerKey =
+    | "grant"
+    | "serviceUsage"
+    | "chatQuery"
+    | "transcribe"
+    | "ner"
+    | "embed"
+    | "ocr"
+    | "distribution"
+    | "proposalsRewrite"
+    | "proposalsReview"
+    | "scenarioInterview"
+    | "scenarioUnit"
+    | "scenarioRound";
 
 const RANGES = [7, 30, 90] as const;
 
@@ -141,6 +159,7 @@ function money(value: number, locale: string): string {
 
 export function UsageSection({ onActions }: SettingsSectionProps) {
     const t = useTranslations("settings.usage");
+    const tLedger = useTranslations("settings.server.ledger");
     const tc = useTranslations("common");
     const locale = useLocale();
     const time = useTimeFormat();
@@ -464,7 +483,12 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                         </TableCell>
                                         <TableCell>
                                             <span className="text-ink">
-                                                {row.description ??
+                                                {(row.descriptionCopy
+                                                    ? tLedger(
+                                                          row.descriptionCopy.key,
+                                                          row.descriptionCopy.values
+                                                      )
+                                                    : row.description) ??
                                                     serviceLabel(t, row.service) ??
                                                     typeLabel(t, row.type)}
                                             </span>

@@ -576,5 +576,45 @@
   "chatRoutes": {
     "noImages": "提供视觉路由的模型不接受图片。",
     "alwaysReasons": "提供推理路由的模型始终会进行推理，无需切换。"
+  },
+  "server": {
+    "history": {
+      "trendSearch": "趋势搜索",
+      "prospectSearch": "潜客搜索",
+      "clientProspector": "潜客挖掘",
+      "repository": "代码库",
+      "repoExplainer": "代码库解读",
+      "distributionRun": "分发任务",
+      "partnerDiscovery": "合作伙伴发现",
+      "emailCampaign": "邮件营销活动",
+      "weekOf": "{date} 当周",
+      "agendaWeekOf": "{date} 当周的议程",
+      "vantage": "Vantage 议程",
+      "proposals": "提案",
+      "funderSearch": "资助方搜索",
+      "requirements": "申请要求",
+      "drafts": "草稿",
+      "rewrite": "改写",
+      "review": "审阅"
+    },
+    "errors": {
+      "loadHistoryFailed": "无法加载历史记录",
+      "unknownHistoryKind": "未知的历史记录类型",
+      "deleteChatViaSessions": "请通过会话 API 删除对话",
+      "missingId": "缺少 ID",
+      "deleteItemFailed": "无法删除这一项",
+      "loadSessionsFailed": "无法加载对话",
+      "saveChatFailed": "无法保存这个对话",
+      "loadChatFailed": "无法加载这个对话",
+      "updateChatFailed": "无法更新这个对话",
+      "deleteChatFailed": "无法删除这个对话",
+      "reorderPinsFailed": "无法重新排列置顶对话",
+      "forkFailed": "无法继续这个对话",
+      "saveMessageFailed": "无法保存这条消息",
+      "chatChangedElsewhere": "这个对话已在另一个标签页中更改。请重新打开后再编辑。",
+      "rewindFailed": "无法回退这个对话",
+      "loadQueueFailed": "无法加载排队中的消息",
+      "updateQueueFailed": "无法更新排队中的消息"
+    }
   }
 }

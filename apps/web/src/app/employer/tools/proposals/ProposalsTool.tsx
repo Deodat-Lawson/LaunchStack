@@ -11,6 +11,7 @@ import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/to
 import { ProposalRunSheet } from "./_components/ProposalRunSheet";
 import { ProposalsMark } from "./_components/ProposalsMark";
 import { ProposalsProvider, runIsLive, useProposals } from "./_lib/context";
+import { useCopyText } from "~/lib/tools/copyText";
 import { PROPOSALS_ROOTS, proposalsScreenFor, type ProposalsScreen } from "./_lib/screens";
 import { ApplicationScreen } from "./_screens/ApplicationScreen";
 import { ApplicationsScreen } from "./_screens/ApplicationsScreen";
@@ -44,12 +45,15 @@ export function ProposalsTool({ host }: { host?: ToolHost }) {
 function RunIndicator() {
     const t = useTranslations("proposals.tool");
     const tKind = useTranslations("proposals.runKind");
+    const say = useCopyText();
     const { activeRun, openRunSheet } = useProposals();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
     const kind = tKind(activeRun.kind);
-    // The step's label is the server's words.
-    const label = current ? t("runLabel", { kind, step: current.label.toLowerCase() }) : kind;
+    // The step's label is the server's words, in the reader's language when it sent a copy.
+    const label = current
+        ? t("runLabel", { kind, step: say(current.labelCopy, current.label).toLowerCase() })
+        : kind;
     return (
         <Button
             type="button"

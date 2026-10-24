@@ -350,5 +350,42 @@
     "suggestedTag": "推荐",
     "phaseTurns": "{count, plural, other {# 轮}}",
     "everyone": "所有人"
+  },
+  "server": {
+    "errors": {
+      "agentNotFound": "未找到该智能体",
+      "meetingNotFound": "未找到该会议",
+      "handleTaken": "标识名为“{handle}”的智能体已存在",
+      "createAgentFailed": "无法创建智能体",
+      "saveAgentFailed": "无法保存该智能体",
+      "personaCreateFailed": "创建智能体失败",
+      "notStarter": "@{handle} 不是预置智能体，没有可恢复的内置版本",
+      "policyLocked": "只有可以管理工作区设置的成员才能更改智能体的{fields}。",
+      "fileOutOfRange": "文件已解析，但有字段超出范围",
+      "unknownParticipant": "未知的参与者“{key}”",
+      "unknownModerator": "未知的主持人“{key}”",
+      "unknownWorkflow": "未知的工作流“{key}”",
+      "controlFailed": "会议控制操作失败",
+      "postFailed": "无法发送消息",
+      "roomReadOnly": "这个会议中有智能体设为“只读”，因此只有有人点击“进行一轮”时才会发言。请在“设置 → 智能体”中提高它的自主程度，让会议自行运行。"
+    },
+    "policyFields": {
+      "key": "标识名",
+      "autonomy": "自主程度",
+      "tools": "工具",
+      "route": "模型路由",
+      "nodeId": "运行节点"
+    },
+    "phaseProblems": {
+      "needsTitle": "第 {index} 阶段需要标题。",
+      "needsTurnUntitled": "第 {index} 阶段至少需要一轮发言。",
+      "needsTurn": "“{title}”至少需要一轮发言。",
+      "speakersAbsentUntitled": "第 {index} 阶段指定的发言者不在会议中。",
+      "speakersAbsent": "“{title}”指定的发言者不在会议中。"
+    },
+    "engine": {
+      "meetingEnded": "会议已结束",
+      "unknownPersona": "未知的智能体“{id}”"
+    }
   }
 }

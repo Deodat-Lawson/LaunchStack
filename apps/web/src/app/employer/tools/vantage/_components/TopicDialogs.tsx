@@ -16,6 +16,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type TopicDto, type TopicInput, type VantageFact } from "../api";
 import { addDaysIso, todayIso } from "../_lib/format";
@@ -39,6 +40,7 @@ export function TopicDialog({
     initial: TopicDto | null;
     onSaved: (topic: TopicDto) => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.topicDialog");
     const tc = useTranslations("common");
     const [title, setTitle] = useState("");
@@ -103,7 +105,7 @@ export function TopicDialog({
             onSaved(topic);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("saveError"));
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -236,6 +238,7 @@ export function DecisionDialog({
     topic: TopicDto | null;
     onSaved: (topic: TopicDto) => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.decisionDialog");
     const tt = useTranslations("vantage.topicDialog");
     const tc = useTranslations("common");
@@ -276,7 +279,7 @@ export function DecisionDialog({
             onSaved(saved);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : tt("saveError"));
+            setError(errorText(e, tt("saveError")));
         } finally {
             setBusy(false);
         }

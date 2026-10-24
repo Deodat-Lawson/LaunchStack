@@ -16,7 +16,9 @@ import {
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type RunStep } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 
 function StepIcon({ status }: { status: RunStep["status"] }) {
@@ -60,6 +62,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
 }
 
 function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
+    const word = useCopyText();
     return (
         <>
             <div
@@ -72,10 +75,14 @@ function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
             >
                 <StepIcon status={step.status} />
                 <span className="min-w-0 truncate">
-                    {step.label}
-                    {step.detail && <span className="text-ink-3"> · {step.detail}</span>}
+                    {word(step.labelCopy, step.label)}
+                    {step.detail && (
+                        <span className="text-ink-3"> · {word(step.detailCopy, step.detail)}</span>
+                    )}
                 </span>
-                <span className="text-ink-3 text-right text-xs tabular-nums">{step.right}</span>
+                <span className="text-ink-3 text-right text-xs tabular-nums">
+                    {step.right && word(step.rightCopy, step.right)}
+                </span>
             </div>
             {step.children?.map(c => (
                 <StepRow key={c.id} step={c} child />
@@ -97,6 +104,8 @@ export function RunSheet() {
     const t = useTranslations("growth.prospects.runSheet");
     const tc = useTranslations("common.actions");
     const { money } = useGrowthFormat();
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { activeRun, runSheetOpen, closeRunSheet, noteRunFinished, segment } = useProspects();
     const [stopping, setStopping] = useState(false);
     const run = activeRun;
@@ -109,7 +118,7 @@ export function RunSheet() {
             await prospectsApi.stopRun(run.id);
             toast(t("stopped"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("stopFailed"));
+            toast.error(errorText(e, t("stopFailed")));
         } finally {
             setStopping(false);
         }
@@ -153,7 +162,7 @@ export function RunSheet() {
                                         credits: run.spend.credits,
                                     })}
                                 </span>
-                                <span>{run.caps}</span>
+                                <span>{word(run.capsCopy, run.caps)}</span>
                             </div>
                             <div className="mt-5 flex justify-end gap-2">
                                 {live ? (

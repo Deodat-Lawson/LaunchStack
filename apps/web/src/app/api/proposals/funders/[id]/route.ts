@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { removeFunder, setFunderStatus } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../../_http";
 
 const PatchSchema = z.object({ status: z.enum(["candidate", "saved", "dismissed", "applied"]) });
 
@@ -15,15 +15,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     try {
         const { id } = await params;
         const parsed = PatchSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Unknown status", 400);
+        if (!parsed.success) return error(say(request, "unknownStatus"), 400);
         return json({ funder: await setFunderStatus(auth.ctx, id, parsed.data.status) });
     } catch (err) {
-        return handleProposalsError("PATCH funder", err);
+        return handleProposalsError("PATCH funder", err, request);
     }
 }
 
 export async function DELETE(
-    _request: NextRequest,
+    request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const auth = await proposalsContext();
@@ -33,6 +33,6 @@ export async function DELETE(
         await removeFunder(auth.ctx, id);
         return json({ ok: true });
     } catch (err) {
-        return handleProposalsError("DELETE funder", err);
+        return handleProposalsError("DELETE funder", err, request);
     }
 }

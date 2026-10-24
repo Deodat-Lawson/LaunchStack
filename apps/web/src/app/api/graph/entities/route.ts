@@ -23,6 +23,7 @@
 import { NextResponse } from "next/server";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { kgEntities, kgEntityMentions, kgRelationships } from "@launchstack/store/schema";
 import { getNeo4jSession, isNeo4jConfigured } from "@launchstack/indexing/knowledge-graph";
@@ -103,7 +104,7 @@ export async function GET(request: Request) {
         console.error("[GraphEntities] failed:", error);
         return NextResponse.json(
             {
-                error: "Failed to load graph",
+                error: requestTranslator(request, "sources.server.errors")("graphLoadFailed"),
                 details: error instanceof Error ? error.message : String(error),
             },
             { status: 500 }

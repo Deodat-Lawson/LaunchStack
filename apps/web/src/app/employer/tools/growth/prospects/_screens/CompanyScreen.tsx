@@ -31,8 +31,10 @@ import {
     type PersonRow,
     type SalesStage,
 } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
+import { useErrorText } from "~/lib/tools/errorText";
 import { neighbours } from "../_lib/listOrder";
 import { useResource } from "~/lib/tools/useResource";
 import { ClaimText, evidenceAnchorId } from "../_components/Citation";
@@ -87,6 +89,9 @@ export function CompanyScreen({ id }: { id: string }) {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common.actions");
     const { relativeTime, shortDate, joinList } = useGrowthFormat();
+    const ts = useTranslations("growth.server");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { href } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
@@ -139,9 +144,7 @@ export function CompanyScreen({ id }: { id: string }) {
                     typeof e.body === "object" &&
                     "reason" in e.body
                     ? String((e.body as { reason: unknown }).reason)
-                    : e instanceof Error
-                      ? e.message
-                      : t("company.updateDealFailed")
+                    : errorText(e, t("company.updateDealFailed"))
             );
         }
     };
@@ -155,7 +158,7 @@ export function CompanyScreen({ id }: { id: string }) {
             await res.reload();
             toast.success(c.excluded ? t("company.backInSegment") : t("company.excludedToast"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("common.updateFailed"));
+            toast.error(errorText(e, t("common.updateFailed")));
         }
     };
 
@@ -271,7 +274,9 @@ export function CompanyScreen({ id }: { id: string }) {
             {c?.excluded && (
                 <p className="border-line bg-panel-2 text-ink-2 mb-6 rounded-md border px-3 py-2 text-[13px]">
                     {c.excludedReason
-                        ? t("company.excludedNoteReason", { reason: c.excludedReason })
+                        ? t("company.excludedNoteReason", {
+                              reason: word(c.excludedReasonCopy, c.excludedReason),
+                          })
                         : t("company.excludedNote")}
                 </p>
             )}
@@ -323,11 +328,15 @@ export function CompanyScreen({ id }: { id: string }) {
                                                 className="grid grid-cols-[84px_1fr] gap-3 py-1.5 text-sm"
                                             >
                                                 <span className="text-ink-3 pt-px text-xs">
-                                                    {s.when}
+                                                    {s.at ? shortDate(s.at) : s.when}
                                                 </span>
                                                 <span className="text-ink">
                                                     <ClaimText
-                                                        claim={{ text: s.text, cites: s.cites }}
+                                                        claim={{
+                                                            text: s.text,
+                                                            cites: s.cites,
+                                                            copy: s.copy,
+                                                        }}
                                                         evidence={c.evidence}
                                                     />
                                                 </span>
@@ -413,7 +422,11 @@ export function CompanyScreen({ id }: { id: string }) {
                                                         {c.deal.ownerInitials}
                                                     </AvatarFallback>
                                                 </Avatar>
-                                                <span className="text-ink">{c.deal.ownerName}</span>
+                                                <span className="text-ink">
+                                                    {c.deal.ownerIsViewer
+                                                        ? ts("you")
+                                                        : c.deal.ownerName}
+                                                </span>
                                             </>
                                         ) : (
                                             <>
@@ -546,7 +559,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                     {c.foundVia.map(f => (
                                         <SourceChip
                                             key={f.sourceId}
-                                            label={f.label}
+                                            label={word(f.labelCopy, f.label)}
                                             kind={f.kind}
                                             url={f.url}
                                             at={f.at}
@@ -608,14 +621,19 @@ export function CompanyScreen({ id }: { id: string }) {
 }
 
 function PersonLine({ p }: { p: PersonRow }) {
+    const word = useCopyText();
     return (
         <li className="border-line-2 grid grid-cols-[28px_1fr_auto] items-center gap-2.5 border-t py-2 text-[13px] first:border-t-0">
             <Avatar className="size-7">
                 <AvatarFallback>{p.initials}</AvatarFallback>
             </Avatar>
             <span className="min-w-0">
-                <span className="text-ink block truncate font-medium">{p.name}</span>
-                <span className="text-ink-3 block truncate text-xs">{p.title}</span>
+                <span className="text-ink block truncate font-medium">
+                    {word(p.nameCopy, p.name)}
+                </span>
+                <span className="text-ink-3 block truncate text-xs">
+                    {word(p.titleCopy, p.title)}
+                </span>
             </span>
             <EmailStatus status={p.emailStatus} />
         </li>
@@ -633,6 +651,8 @@ function OutreachDialog({
 }) {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common.actions");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const eligible = company.people.filter(p => canOutreach(p.emailStatus) && !p.blockedReason);
     const hasInbox = company.people.some(p => p.emailStatus === "generic" && !p.blockedReason);
     const [chosen, setChosen] = useState<Set<string>>(() => new Set(eligible.map(p => p.id)));
@@ -652,7 +672,7 @@ function OutreachDialog({
             toast.success(t("company.drafted", { count: result.people }));
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("common.outreachFailed"));
+            toast.error(errorText(e, t("common.outreachFailed")));
         } finally {
             setBusy(false);
         }
@@ -693,10 +713,10 @@ function OutreachDialog({
                                     className="min-w-0 flex-1 cursor-pointer"
                                 >
                                     <span className="text-ink block truncate font-medium">
-                                        {p.name}
+                                        {word(p.nameCopy, p.name)}
                                     </span>
                                     <span className="text-ink-3 block truncate text-xs">
-                                        {p.title}
+                                        {word(p.titleCopy, p.title)}
                                         {p.email && (
                                             <>
                                                 {" "}
@@ -706,7 +726,8 @@ function OutreachDialog({
                                     </span>
                                     {!ok && (
                                         <span className="text-ink-3 block text-xs">
-                                            {p.blockedReason ??
+                                            {(p.blockedReason &&
+                                                word(p.blockedReasonCopy, p.blockedReason)) ??
                                                 (p.emailStatus === "guess"
                                                     ? t("company.guessed")
                                                     : t("company.sharedInbox"))}

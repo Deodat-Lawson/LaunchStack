@@ -41,6 +41,9 @@ import {
     type SourceText,
 } from "~/server/workspace-sources";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
+
 import type { ChatTool } from "./chat-tool-loop";
 
 /** Sources listed per page. */
@@ -119,14 +122,21 @@ function describeSource(source: {
     return `"${source.title}" (d${source.id}) — in ${source.folder || "Unfiled"}${from ? `, from ${from}` : ""}`;
 }
 
-function quoted(value: unknown, fallback: string): string {
-    return typeof value === "string" && value.trim() ? `“${value.trim().slice(0, 80)}”` : fallback;
+/** A value a status line quotes (trimmed, at most 80 characters); null when there is none. */
+function quotable(value: unknown): string | null {
+    return typeof value === "string" && value.trim() ? value.trim().slice(0, 80) : null;
 }
 
+/**
+ * `locale` words the status line each tool call shows in the chat ("Searching
+ * your sources for …"); what the model reads stays English.
+ */
 export function createSourceTools(
     ctx: WorkspaceContext,
-    ports: SourceToolPorts = {}
+    ports: SourceToolPorts = {},
+    locale: Locale = "en"
 ): SourceToolSession {
+    const status = translatorFor(locale, "chat.server.toolStatus");
     const list = ports.list ?? listReadableSources;
     const search = ports.search ?? findWorkspacePassages;
     const findTitles = ports.findTitles ?? findSourcesByTitle;
@@ -177,10 +187,9 @@ export function createSourceTools(
         describe: args => {
             const { from, folder } = (args ?? {}) as { from?: unknown; folder?: unknown };
             const app = typeof from === "string" ? originLabel(from) : null;
-            if (app && from !== "added-here") return `Looking through your ${app} files`;
-            return typeof folder === "string" && folder.trim()
-                ? `Looking through ${quoted(folder, "a folder")}`
-                : "Looking through your sources";
+            if (app && from !== "added-here") return status("lookingApp", { app });
+            const name = quotable(folder);
+            return name ? status("lookingFolder", { folder: name }) : status("lookingSources");
         },
         run: async args => {
             const { folder, from, cursor: rawCursor } = parse(ListArgs, args);
@@ -250,8 +259,10 @@ export function createSourceTools(
             required: ["query"],
             additionalProperties: false,
         },
-        describe: args =>
-            `Searching your sources for ${quoted((args as { query?: unknown } | null)?.query, "that")}`,
+        describe: args => {
+            const query = quotable((args as { query?: unknown } | null)?.query);
+            return query ? status("searchingSourcesFor", { query }) : status("searchingSources");
+        },
         run: async (args, signal) => {
             const { query, folder } = parse(SearchArgs, args);
             spend("search", MAX_SEARCHES);
@@ -335,7 +346,8 @@ export function createSourceTools(
                     ? parseDocumentId(String(raw))
                     : null;
             const title = id === null ? undefined : titles.get(id);
-            return title ? `Reading ${quoted(title, "a source")}` : "Reading a source";
+            const name = quotable(title);
+            return name ? status("readingSource", { title: name }) : status("readingASource");
         },
         run: async args => {
             const { id } = parse(ReadArgs, args);

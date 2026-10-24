@@ -401,5 +401,63 @@
     "addEvent": "添加事件",
     "injectionPending": "将出现在下一轮",
     "injectionRound": "第 {round, number} 轮"
+  },
+  "server": {
+    "errors": {
+      "notFound": "找不到这个情景",
+      "notCreator": "只有发起这次运行的人才能这样做。",
+      "roleCantRun": "你的角色无法在这个工作区中运行情景。",
+      "notEnoughCredits": "额度不足，无法开始这次运行。",
+      "describeSituation": "请描述要模拟的情况。",
+      "situationTooLong": "情况描述请控制在 {max} 个字符以内。",
+      "tooManyFiles": "最多选择 {max} 个文件。",
+      "notesTooLong": "粘贴的材料请控制在 {max} 个字符以内。",
+      "titleEmpty": "标题不能为空。",
+      "eventsClosed": "只能在运行进行中添加事件。",
+      "lastRoundFinished": "最后一轮已经结束，这个事件不会再出现。",
+      "describeEvent": "请描述这个事件。",
+      "eventTooLong": "事件请控制在 {max} 个字符以内。",
+      "lastRoundStarted": "最后一轮已经开始，这个事件不会再出现。",
+      "interviewsNotOpen": "第一轮结束后才能开始提问。",
+      "noSuchPerson": "这次运行中没有这个人。",
+      "askQuestion": "请提一个问题。",
+      "questionTooLong": "问题请控制在 {max} 个字符以内。",
+      "noAnswer": "没有收到回答，请重试。",
+      "roleCantTestPosts": "你的角色可以查看品牌，但不能测试帖子。",
+      "writePostFirst": "请先写好帖子。",
+      "postTooLong": "超过 3,000 个字符的帖子无法测试。"
+    },
+    "leftWorkspace": "已离开的成员",
+    "sourceLabels": {
+      "document": {
+        "aFilePage": "一个文件，第 {page} 页",
+        "aFile": "一个文件",
+        "page": "{title}，第 {page} 页"
+      },
+      "search": {
+        "aFile": "一个文件"
+      },
+      "prospect": {
+        "prospect": "潜在客户：{name}"
+      },
+      "brandComment": {
+        "comment": "你在 {platform} 上的帖子下的评论"
+      },
+      "companyProfile": {
+        "fact": "公司资料：{subject}"
+      },
+      "notes": {
+        "part": "粘贴的材料（第 {n} 部分）",
+        "whole": "粘贴的材料"
+      }
+    },
+    "runErrors": {
+      "outOfCredits": "这次运行期间，工作区的额度用完了。",
+      "tooFewPeople": "根据这些来源只能构建 {count} 个人物",
+      "noWorld": "这次运行没有模拟世界",
+      "reportUnreadable": "无法读取报告",
+      "runFailed": "运行失败",
+      "creatorGone": "发起这次运行的人已不再是工作区的活跃成员。"
+    }
   }
 }

@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Skeleton } from "~/components/ui/skeleton";
 
+import { useSegmentText } from "../_lib/copy";
 import { NewSegmentDialog } from "../prospects/_components/NewSegmentDialog";
 import { useProspects } from "../prospects/_lib/context";
 
@@ -20,6 +21,8 @@ export function SegmentSwitcher({ compact = false }: { compact?: boolean }) {
     const t = useTranslations("growth.segmentSwitcher");
     const { segments, segment, segmentId, setSegmentId, segmentsLoading } = useProspects();
     const [creating, setCreating] = useState(false);
+    const segmentText = useSegmentText();
+    const subtitle = segment ? segmentText(segment).subtitle : undefined;
     if (segmentsLoading && !segment) {
         if (compact) return <Skeleton className="h-7 w-40 rounded-md" />;
         return (
@@ -36,7 +39,7 @@ export function SegmentSwitcher({ compact = false }: { compact?: boolean }) {
                     <Button
                         type="button"
                         variant="outline"
-                        title={segment?.subtitle}
+                        title={subtitle}
                         // Narrower under 900px of tab width, so it (and a
                         // run's pill) stay on the bar's first row beside
                         // Brand | Prospects at every width; under 600px the
@@ -64,7 +67,7 @@ export function SegmentSwitcher({ compact = false }: { compact?: boolean }) {
                                 {segment?.name ?? t("noSegment")}
                             </span>
                             <span className="text-ink-3 block truncate text-[11.5px]">
-                                {segment?.subtitle ?? t("createToStart")}
+                                {subtitle ?? t("createToStart")}
                             </span>
                         </span>
                         <ChevronsUpDown className="text-ink-3 size-3.5 shrink-0" />
@@ -86,7 +89,7 @@ export function SegmentSwitcher({ compact = false }: { compact?: boolean }) {
                                 {s.name}
                             </span>
                             <span className="text-ink-3 block truncate text-[11.5px]">
-                                {s.status === "draft" ? t("draftConfirm") : s.subtitle}
+                                {s.status === "draft" ? t("draftConfirm") : segmentText(s).subtitle}
                             </span>
                         </span>
                         {s.id === segmentId && <Check className="text-brand size-3.5" />}

@@ -67,7 +67,7 @@ export async function GET(request: Request) {
                 })),
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

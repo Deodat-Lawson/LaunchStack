@@ -45,7 +45,30 @@ export interface RecentTransaction {
     balanceAfter: number;
     service: string | null;
     description: string | null;
+    /** `description` as message data (`settings.server.ledger`), when it is one the app writes. */
+    descriptionCopy: LedgerCopy | null;
     createdAt: string;
+}
+
+export type LedgerKey =
+    | "grant"
+    | "serviceUsage"
+    | "chatQuery"
+    | "transcribe"
+    | "ner"
+    | "embed"
+    | "ocr"
+    | "distribution"
+    | "proposalsRewrite"
+    | "proposalsReview"
+    | "scenarioInterview"
+    | "scenarioUnit"
+    | "scenarioRound";
+
+export interface LedgerCopy {
+    key: LedgerKey;
+    /** Strings, numbers included, so they print exactly as the English did. */
+    values?: Record<string, string>;
 }
 
 export interface UsageOverview {
@@ -77,6 +100,57 @@ function isoDate(value: Date | string): string {
 export function ledgerDescription(description: string | null): string | null {
     if (!description) return description;
     return description.replace(/\s+via\s+\S+$/, "");
+}
+
+/**
+ * The descriptions the app writes into the ledger (grants in ~/lib/credits,
+ * debits across the verticals), read back into message data so the page can
+ * word them. The stored row keeps its English for operators and the API.
+ * Order matters: the specific shapes come before the general ones.
+ */
+const LEDGER_SHAPES: { pattern: RegExp; key: LedgerKey; names: string[] }[] = [
+    {
+        pattern: /^(signup_bonus|monthly_refresh|promotional|manual): \+([\d,]+) tokens$/,
+        key: "grant",
+        names: ["grantType", "amount"],
+    },
+    { pattern: /^Chat query \((\S+) route\)$/, key: "chatQuery", names: ["route"] },
+    { pattern: /^NER extraction for (\d+) chunks$/, key: "ner", names: ["count"] },
+    {
+        pattern: /^Embed (\d+) chunks for document (\d+)$/,
+        key: "embed",
+        names: ["count", "document"],
+    },
+    { pattern: /^OCR (\d+) pages$/, key: "ocr", names: ["count"] },
+    { pattern: /^Transcribe (.+)$/, key: "transcribe", names: ["file"] },
+    { pattern: /^Distribution research: (.+)$/, key: "distribution", names: ["name"] },
+    { pattern: /^Proposals: rewrite$/, key: "proposalsRewrite", names: [] },
+    { pattern: /^Proposals: review$/, key: "proposalsReview", names: [] },
+    { pattern: /^Scenario "(.+)": interview$/, key: "scenarioInterview", names: ["title"] },
+    {
+        pattern: /^Scenario "(.+)" \(round (\d+)\)$/,
+        key: "scenarioRound",
+        names: ["title", "round"],
+    },
+    {
+        pattern: /^Scenario "(.+)" \((brief|cast|report)\)$/,
+        key: "scenarioUnit",
+        names: ["title", "unit"],
+    },
+    { pattern: /^(\S+) usage$/, key: "serviceUsage", names: ["service"] },
+];
+
+/** A shown description (after `ledgerDescription`) as message data, or null when it is free text. */
+export function ledgerDescriptionCopy(description: string | null): LedgerCopy | null {
+    if (!description) return null;
+    for (const { pattern, key, names } of LEDGER_SHAPES) {
+        const match = pattern.exec(description);
+        if (!match) continue;
+        return names.length === 0
+            ? { key }
+            : { key, values: Object.fromEntries(names.map((name, i) => [name, match[i + 1]!])) };
+    }
+    return null;
 }
 
 /** OCR providers are one line item on this page; the ledger keeps them apart. */
@@ -185,6 +259,7 @@ export async function usageOverview(companyId: bigint, days = 30): Promise<Usage
             balanceAfter: row.balanceAfter,
             service: row.service ? foldService(row.service) : null,
             description: ledgerDescription(row.description),
+            descriptionCopy: ledgerDescriptionCopy(ledgerDescription(row.description)),
             createdAt: row.createdAt.toISOString(),
         })),
         pricePerMillionTokens,

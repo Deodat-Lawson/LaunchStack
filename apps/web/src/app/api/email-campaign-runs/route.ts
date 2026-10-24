@@ -13,6 +13,7 @@ import {
     resolveSendingActor,
     unsubscribeBaseUrl,
 } from "../email-campaigns/_lib/context";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -48,13 +49,15 @@ export async function POST(request: Request) {
         return await withWorkspaceChatModels(actor.actor.companyId, async () => {
             const parsed = AutomatedRunSchema.safeParse(await readJson(request));
             if (!parsed.success) {
-                return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: parsed.error.flatten(),
+                });
             }
 
             const idempotencyKey = idempotencyKeyFrom(request, parsed.data.idempotencyKey);
             if (!idempotencyKey) {
                 return fail(
-                    "An Idempotency-Key header is required to start an automated run.",
+                    requestTranslator(request, "growth.server.email")("idempotencyRun"),
                     400,
                     {
                         code: "idempotency_key_required",
@@ -100,6 +103,6 @@ export async function POST(request: Request) {
             );
         });
     } catch (error) {
-        return handleRouteError("email-campaign-runs", error);
+        return handleRouteError("email-campaign-runs", error, request);
     }
 }

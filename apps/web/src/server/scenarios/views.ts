@@ -5,6 +5,12 @@
  * they can't open as "a file you don't have access to" (ADR-014). What the
  * simulated people wrote stays — the creator chose to share the run, as with
  * a shared chat whose citations are filtered on read.
+ *
+ * With the reader's locale, the few sentences the server composes for these
+ * screens — an evidence item's label, "Someone who has left", the run's own
+ * failure sentences — are in their language. The stored records stay
+ * English (the labels also reach the model's prompts), and so does every
+ * response made without a locale.
  */
 import {
     roundsDone,
@@ -15,6 +21,8 @@ import {
 import type { RunListRow } from "@launchstack/pipelines/scenarios/db";
 import { author, findAgent, followeesOf, followersOf, type World } from "@launchstack/simulation";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 import type {
     PostTestResult,
     ScenarioDetail,
@@ -27,6 +35,43 @@ import type {
 } from "~/lib/scenarios/types";
 
 export const LEFT_WORKSPACE = "Someone who has left";
+
+/** `LEFT_WORKSPACE` in `locale`. */
+export function leftWorkspaceName(locale: Locale = "en"): string {
+    return locale === "en"
+        ? LEFT_WORKSPACE
+        : translatorFor(locale, "scenarios.server")("leftWorkspace");
+}
+
+/** Where each evidence kind's composed labels live in `scenarios.server.sourceLabels`. */
+const LABEL_TREE: Record<ScenarioSource["kind"], string> = {
+    document: "document",
+    search: "search",
+    prospect: "prospect",
+    brand_comment: "brandComment",
+    company_profile: "companyProfile",
+    notes: "notes",
+};
+
+/**
+ * An evidence label in `locale`: the parts the server composed ("Pasted
+ * material", "Prospect: …", "…, page 3"), with the names inside them as
+ * they are. A document's own title stays as it is.
+ */
+export function sourceLabel(
+    kind: ScenarioSource["kind"],
+    label: string,
+    locale: Locale = "en"
+): string {
+    if (locale === "en") return label;
+    return wordEnglish(label, `scenarios.server.sourceLabels.${LABEL_TREE[kind]}`, locale);
+}
+
+/** A run's failure in `locale` when it is one of the run's own sentences; a provider's stays as it came. */
+export function runErrorText(error: string | null, locale: Locale = "en"): string | null {
+    if (!error || locale === "en") return error;
+    return wordEnglish(error, "scenarios.server.runErrors", locale);
+}
 
 type SummaryInput = Pick<
     RunListRow,
@@ -91,14 +136,18 @@ export function evidenceVisible(
 export function toSources(
     evidence: StoredEvidence[],
     isCreator: boolean,
-    visibleDocIds: ReadonlySet<number>
+    visibleDocIds: ReadonlySet<number>,
+    locale: Locale = "en"
 ): ScenarioSource[] {
     return evidence.map(item => {
         const visible = evidenceVisible(item, isCreator, visibleDocIds);
         return {
             id: item.id,
             kind: item.kind,
-            label: visible ? item.label : "A file you don't have access to",
+            // A redacted label is the client's to word (`redacted` says which).
+            label: visible
+                ? sourceLabel(item.kind, item.label, locale)
+                : "A file you don't have access to",
             excerpt: visible ? item.text : null,
             href: visible ? item.href : null,
             redacted: !visible,
@@ -185,6 +234,8 @@ export interface DetailContext {
     /** Files the viewer may read among those the evidence cites. */
     visibleDocIds: ReadonlySet<number>;
     injections: ScenarioInjection[];
+    /** The reader's language, for the labels and errors the server composed. English when absent. */
+    locale?: Locale;
 }
 
 export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDetail {
@@ -194,7 +245,7 @@ export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDe
         ...recordSummary(run, ctx.viewerUserId, ctx.names),
         brief: run.brief && run.brief.brief.length > 0 ? run.brief.brief : null,
         sourcesUsed: run.sources,
-        sources: toSources(run.evidence ?? [], isCreator, ctx.visibleDocIds),
+        sources: toSources(run.evidence ?? [], isCreator, ctx.visibleDocIds, ctx.locale),
         people: world ? toPeople(world) : [],
         posts: world ? toPosts(world) : [],
         roundStats: (world?.rounds ?? []).map(r => ({
@@ -229,7 +280,7 @@ export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDe
             (run.status === "queued" || run.status === "running") &&
             !run.eventsClosedAt &&
             run.step < 2 + run.roundCount,
-        error: run.error,
+        error: runErrorText(run.error, ctx.locale),
         estimate: { calls: run.estimate.calls, credits: run.estimate.credits },
         usage: { calls: run.usage.calls, credits: run.usage.credits },
         canManage: isCreator,
@@ -237,7 +288,7 @@ export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDe
     };
 }
 
-export function toPostTest(run: ScenarioRunRecord): PostTestResult {
+export function toPostTest(run: ScenarioRunRecord, locale: Locale = "en"): PostTestResult {
     const world = run.world;
     const sampleComments =
         world && run.reception
@@ -278,6 +329,6 @@ export function toPostTest(run: ScenarioRunRecord): PostTestResult {
             : null,
         headline: run.report?.headline ?? null,
         sampleComments,
-        error: run.error,
+        error: runErrorText(run.error, locale),
     };
 }

@@ -35,6 +35,7 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type MetricDefinitionDto, type MetricObservationDto } from "../api";
 import { MetricSuggestions } from "../_components/MetricSuggestions";
@@ -62,6 +63,7 @@ function lastMonday(today = todayIso()): string {
  * one, one click) and metrics with no number this week.
  */
 export function MetricsScreen() {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.metrics");
     const tc = useTranslations("common");
     const fmt = useVantageFormat();
@@ -110,7 +112,7 @@ export function MetricsScreen() {
             toast(t("removed"));
             void refresh();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("removeError"));
+            toast.error(errorText(e, t("removeError")));
         }
     };
 
@@ -123,7 +125,7 @@ export function MetricsScreen() {
             }));
             void reloadOverview();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("removeError"));
+            toast.error(errorText(e, t("removeError")));
         }
     };
 
@@ -415,6 +417,7 @@ function DefineMetricDialog({
     initial: MetricDefinitionDto | null;
     onSaved: () => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.metrics");
     const tc = useTranslations("common");
     const [name, setName] = useState("");
@@ -439,7 +442,7 @@ function DefineMetricDialog({
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("saveError"));
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -517,6 +520,7 @@ function RecordDialog({
     initialMetricId: string | null;
     onSaved: () => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.metrics");
     const tc = useTranslations("common");
     const [metricId, setMetricId] = useState("");
@@ -555,7 +559,7 @@ function RecordDialog({
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("saveError"));
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -673,6 +677,7 @@ function ImportDialog({
     onOpenChange: (o: boolean) => void;
     onDone: () => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.metrics");
     const tc = useTranslations("common");
     const [csv, setCsv] = useState("");
@@ -702,7 +707,7 @@ function ImportDialog({
                 onDone();
             }
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("importFailed"));
+            setError(errorText(e, t("importFailed")));
         } finally {
             setBusy(false);
         }

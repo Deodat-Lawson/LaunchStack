@@ -27,6 +27,8 @@ import {
     type SourceOverride,
 } from "@launchstack/pipelines/company-metadata";
 import { getCompanyIdentity } from "@launchstack/tools/company-context";
+import { copy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 
 import { scopeAllows } from "~/lib/authz/scope";
 import type { CompanyProfileDto } from "~/lib/company-profile/dto";
@@ -36,14 +38,21 @@ import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { isBuilding, toCompanyProfileDto } from "./adapter";
 
+/**
+ * An expected refusal with its status. A `Copy` is worded for the reader by
+ * the route; a plain string is the company-metadata edit's own English,
+ * which the facts route words from `companyProfile.server.editErrors`.
+ */
 export class CompanyProfileError extends Error {
     readonly code = "company_profile";
+    readonly copy: Copy | null;
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number
     ) {
-        super(message);
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "CompanyProfileError";
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -102,7 +111,7 @@ export async function startRebuild(ctx: Ctx): Promise<CompanyProfileDto> {
 
 export async function editFact(ctx: Ctx, edit: FactEdit): Promise<CompanyProfileDto> {
     if (!ctx.can("settings.manage"))
-        throw new CompanyProfileError("Only workspace admins can edit the company profile", 403);
+        throw new CompanyProfileError(copy("companyProfile.server.errors.adminsEditOnly"), 403);
     let failure = null as string | null;
     await saveProfileLocked(
         ctx.companyId,
@@ -169,12 +178,12 @@ export async function setSourceOverride(
     override: SourceOverride | null
 ): Promise<CompanyProfileDto> {
     if (!ctx.can("settings.manage"))
-        throw new CompanyProfileError("Only workspace admins can decide which sources count", 403);
+        throw new CompanyProfileError(copy("companyProfile.server.errors.adminsSourcesOnly"), 403);
     const scope = await ctx.documentScope();
     const documents = await listWorkspaceDocuments(ctx.companyId);
     const doc = documents.find(d => d.id === documentId);
     if (!doc || !scopeAllows(scope, { id: doc.id, category: doc.folder }))
-        throw new CompanyProfileError("Source not found", 404);
+        throw new CompanyProfileError(copy("companyProfile.server.errors.sourceNotFound"), 404);
     await recordOverride(ctx.companyId, documentId, override, ctx.authUserId);
     const companyId = ctx.companyId;
     await buildAfterResponse(companyId, "source refresh", () =>

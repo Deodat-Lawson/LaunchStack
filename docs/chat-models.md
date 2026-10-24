@@ -149,6 +149,12 @@ you decide which model does it.
 `fast` is a cost and latency preference, not a capability — pointing it at the
 same model as `default` is a perfectly good configuration.
 
+The chat composer's picker offers two of these: **Standard** (`default`) and
+**Fast**. `reasoning` and `vision` are not picked by hand. A message with an
+image goes to `vision` when the picked route can't read it, and how hard
+Standard thinks is its reasoning-effort setting. `reasoning` remains for
+agents and server-side callers that ask for it.
+
 Specialized routes **fail closed**. If `vision` is unassigned and the default
 model is text-only, the route reports itself unavailable: the image attach
 control disables itself, and a request that sends one anyway gets a typed HTTP

@@ -78,10 +78,10 @@ const arxivCategories = [
     { value: "cs.CL", label: "NLP" },
     { value: "cs.CV", label: "Computer Vision" },
     { value: "stat.ML", label: "Statistics ML" },
-    { value: "physics", label: "Physics" },
-    { value: "math", label: "Mathematics" },
-    { value: "q-bio", label: "Biology" },
-    { value: "econ", label: "Economics" },
+    { value: "physics.*", label: "Physics" },
+    { value: "math.*", label: "Mathematics" },
+    { value: "q-bio.*", label: "Biology" },
+    { value: "econ.*", label: "Economics" },
 ];
 
 export function ResearchPanel({

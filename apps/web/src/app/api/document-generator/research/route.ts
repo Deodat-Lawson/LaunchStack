@@ -18,6 +18,7 @@ import { gateChunksByScope } from "~/server/rag/gate";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { arxivSearchQuery } from "~/lib/arxiv-query";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -87,16 +88,7 @@ async function searchArxiv(
     options?: { category?: string; sortBy?: string }
 ): Promise<ArxivResult[]> {
     try {
-        // Build the arXiv API query
-        // Encode the query properly for URL
-        let searchQuery = encodeURIComponent(query);
-
-        // If a category is specified, add it to the query
-        if (options?.category) {
-            searchQuery = `all:${searchQuery}+AND+cat:${options.category}`;
-        } else {
-            searchQuery = `all:${searchQuery}`;
-        }
+        const searchQuery = arxivSearchQuery(query, options?.category);
 
         // Determine sort order
         const sortBy = options?.sortBy ?? "relevance";

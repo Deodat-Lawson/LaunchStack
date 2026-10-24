@@ -1587,7 +1587,7 @@ export function Composer({
             {dragging && <p className="text-brand mb-2 text-sm">{t("dropHint")}</p>}
             {selected.length > 0 && (
                 <div className="border-line mb-2.5 flex flex-wrap items-center gap-1.5 border-b border-dashed pb-2.5">
-                    <span className="mono text-ink-3 text-[10px] uppercase">
+                    <span className="mono text-ink-3 text-[11px] uppercase">
                         {t("contextLabel")}
                     </span>
                     {selSources.map(source => (
@@ -2294,7 +2294,7 @@ export function Composer({
                                     </label>
                                 )
                             )}
-                            <p className="text-ink-3 px-2 py-1 text-[10px]">{t("compareHint")}</p>
+                            <p className="text-ink-3 px-2 py-1 text-[11px]">{t("compareHint")}</p>
                         </fieldset>
                         {chatRoutes.loading && (
                             <p className="text-ink-3 px-2 text-xs">{t("loadingModels")}</p>
@@ -2338,7 +2338,7 @@ export function Composer({
                 >
                     <Paperclip className="size-4" />
                     {attachments.length + uploads.length > 0 && (
-                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[10px]">
+                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[11px] tabular-nums leading-4">
                             {attachments.length + uploads.length}
                         </span>
                     )}
@@ -2471,7 +2471,7 @@ export function Composer({
                         >
                             <Save className="size-3.5" />
                             {hasContent ? t("options.savePrompt") : t("options.restorePrompts")}
-                            <span className="text-ink-3 ml-auto text-[10px]">⌘/Ctrl+S</span>
+                            <span className="text-ink-3 ml-auto text-[11px]">⌘/Ctrl+S</span>
                         </Button>
                         <p className="text-ink mb-2 text-sm font-medium">{t("options.editor")}</p>
                         <div className="mb-3 flex gap-1">
@@ -2531,7 +2531,7 @@ export function Composer({
                     </PopoverContent>
                 </Popover>
                 <div className="ml-auto flex shrink-0 items-center gap-2">
-                    <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
+                    <span className="mono text-ink-3 @max-sm:hidden text-[11px]">
                         {t("sendHint", {
                             key: sendKey === "enter" ? "↵" : "⌘/Ctrl+↵",
                             action: editingQueued ? "save" : active ? followUp : "send",
@@ -2617,7 +2617,7 @@ export function Composer({
                     <span className="text-ink-3">{t("earlierDraftSaved")}</span>
                 </div>
             )}
-            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[10px]">
+            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[11px]">
                 {overLimit ? (
                     <span role="alert" className="text-danger">
                         {t("overLimit", { length: text.length, max: COMPOSER_MAX_CHARACTERS })}
@@ -2777,7 +2777,7 @@ function AgentPicker({
                             <AgentAvatar agent={shown} size={18} />
                             <span className="truncate">{shown.displayName}</span>
                             {mentioned && (
-                                <span className="text-ink-3 text-[10px]">{t("thisTurn")}</span>
+                                <span className="text-ink-3 text-[11px]">{t("thisTurn")}</span>
                             )}
                         </>
                     ) : (
@@ -2821,7 +2821,7 @@ function AgentPicker({
                             <span className="min-w-0 flex-1 text-left">
                                 <span className="block font-medium">
                                     {option.displayName}{" "}
-                                    <span className="mono text-ink-3 text-[10px]">
+                                    <span className="mono text-ink-3 text-[11px]">
                                         @{option.id}
                                     </span>
                                 </span>

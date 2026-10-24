@@ -203,7 +203,7 @@ export function FilePickerDialog({
                         <span
                             className={cn(
                                 "text-xs tabular-nums",
-                                full ? "text-warn" : "text-ink-3"
+                                full ? "text-warn-ink" : "text-ink-3"
                             )}
                             aria-live="polite"
                         >

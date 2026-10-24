@@ -46,7 +46,7 @@ function StepIcon({ status }: { status: RunStepDto["status"] }) {
                 <span
                     className={cn(
                         base,
-                        "bg-danger flex items-center justify-center rounded-full text-white"
+                        "bg-danger text-danger-fg flex items-center justify-center rounded-full"
                     )}
                 >
                     <X className="size-2.5" strokeWidth={3} />

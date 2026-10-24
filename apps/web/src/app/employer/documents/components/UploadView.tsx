@@ -188,19 +188,6 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
                 }}
             >
                 <div style={{ marginBottom: 32 }}>
-                    <div
-                        className="mono"
-                        style={{
-                            fontSize: 10,
-                            fontWeight: 700,
-                            letterSpacing: "0.12em",
-                            color: "var(--ink-3)",
-                            textTransform: "uppercase",
-                            marginBottom: 10,
-                        }}
-                    >
-                        {t("eyebrow")}
-                    </div>
                     <h1
                         className="display"
                         style={{

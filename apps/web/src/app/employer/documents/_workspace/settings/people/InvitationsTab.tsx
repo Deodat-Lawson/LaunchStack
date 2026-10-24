@@ -457,7 +457,7 @@ function SentNotice({
             <div
                 className={cn(
                     "text-[13px] font-semibold",
-                    emailSent ? "text-success" : "text-warn"
+                    emailSent ? "text-success-ink" : "text-warn-ink"
                 )}
             >
                 {emailSent ? t("sent.emailed", { email: invitation.email }) : t("sent.notSent")}

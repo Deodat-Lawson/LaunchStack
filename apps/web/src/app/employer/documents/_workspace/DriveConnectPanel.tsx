@@ -83,7 +83,7 @@ function Notice({
             className={`mb-3 flex items-start gap-2.5 rounded-lg border px-3.5 py-2.5 text-[12.5px] leading-relaxed ${tones[tone]}`}
         >
             <Icon
-                className={`mt-0.5 size-4 shrink-0 ${tone === "info" ? "text-ink-3" : tone === "warn" ? "text-warn" : "text-danger"}`}
+                className={`mt-0.5 size-4 shrink-0 ${tone === "info" ? "text-ink-3" : tone === "warn" ? "text-warn-ink" : "text-danger"}`}
             />
             <div className="min-w-0 flex-1">{children}</div>
         </div>

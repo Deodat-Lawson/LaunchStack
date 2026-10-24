@@ -215,7 +215,7 @@ export function MetricsScreen() {
                                         <div
                                             className={cn(
                                                 "max-w-[70ch] text-[12px]",
-                                                d.definition ? "text-ink-2" : "text-warn"
+                                                d.definition ? "text-ink-2" : "text-warn-ink"
                                             )}
                                         >
                                             {d.definition || t("noDefinition")}
@@ -343,7 +343,7 @@ export function MetricsScreen() {
                                             </td>
                                             <td className="text-ink-2 max-w-[200px] truncate px-4">
                                                 {o.source ?? (
-                                                    <span className="text-warn">
+                                                    <span className="text-warn-ink">
                                                         {t("noSource")}
                                                     </span>
                                                 )}
@@ -778,7 +778,7 @@ function ImportDialog({
                                 {t("importedSentence", { count: result.imported })}
                             </div>
                             {result.createdMetrics.length > 0 && (
-                                <div className="text-warn mt-1">
+                                <div className="text-warn-ink mt-1">
                                     {t("createdMetrics", {
                                         names: result.createdMetrics.join(t("listSeparator")),
                                     })}

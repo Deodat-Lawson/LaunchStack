@@ -441,8 +441,7 @@
     outline-offset: -2px;
 }
 .wsActive {
-    background: oklch(from var(--accent) l c h / 0.06);
-    box-shadow: inset 3px 0 0 var(--accent);
+    background: oklch(from var(--accent) l c h / 0.08);
 }
 .ws:disabled {
     cursor: wait;
@@ -582,7 +581,7 @@
 }
 .roleAdmin {
     background: oklch(from var(--success) l c h / 0.1);
-    color: var(--success);
+    color: var(--success-ink);
     border-color: oklch(from var(--success) l c h / 0.25);
 }
 .roleEditor {
@@ -848,7 +847,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: var(--success);
+    color: var(--success-ink);
 }
 .urlStatusTaken {
     color: var(--danger);

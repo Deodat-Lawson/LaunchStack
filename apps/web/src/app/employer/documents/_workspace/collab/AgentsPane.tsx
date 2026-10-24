@@ -684,7 +684,7 @@ function AgentDetail({
                                 className={cn(
                                     "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px]",
                                     on
-                                        ? "bg-success-soft text-success"
+                                        ? "bg-success-soft text-success-ink"
                                         : "bg-line-2 text-ink-3 line-through"
                                 )}
                             >

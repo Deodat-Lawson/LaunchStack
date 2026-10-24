@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
-import { Card } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { Input } from "~/components/ui/input";
 import {
@@ -13,7 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "~/components/ui/table";
-import { FileText, Search, Eye, ChevronRight } from "lucide-react";
+import { FileText, Search, ChevronRight } from "lucide-react";
 import type { DocumentStat } from "../types";
 import { DocumentDetailsSheet } from "./DocumentDetailsSheet";
 import { cn } from "~/lib/utils";
@@ -46,6 +45,9 @@ function formatRelativeTime(
     return format.dateTime(date, { year: "numeric", month: "numeric", day: "numeric" });
 }
 
+const HEAD = "text-ink-3 h-9 text-xs font-medium";
+
+/** The table sits flush in its section's card; the section heading names it. */
 export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
     const t = useTranslations("statistics.documents");
     const tTime = useTranslations("statistics.time");
@@ -67,139 +69,116 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
 
     return (
         <>
-            <Card className="flex flex-col border-none p-6 shadow-sm">
-                {/* Header */}
-                <div className="mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                            <FileText className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                                {t("title")}
-                            </h2>
-                            <p className="text-ink-3 mt-0.5 text-xs">{t("hint")}</p>
-                        </div>
+            {/* Toolbar */}
+            <div className="border-line flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b px-4 py-3">
+                <p className="text-ink-3 m-0 text-[13px]">{t("hint")}</p>
+                <div className="@max-sm:w-full flex items-center gap-2">
+                    <div className="@max-sm:flex-1 relative">
+                        <Search
+                            aria-hidden
+                            className="text-ink-3 pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2"
+                        />
+                        <Input
+                            aria-label={t("searchPlaceholder")}
+                            placeholder={t("searchPlaceholder")}
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            className="bg-panel @max-sm:w-full h-9 w-[220px] pl-9 text-sm"
+                        />
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Search className="text-ink-3 absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
-                            <Input
-                                placeholder={t("searchPlaceholder")}
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                                className="h-9 w-[220px] pl-9 text-sm"
-                            />
-                        </div>
-                        <Badge
-                            variant="outline"
-                            className="rounded-full border-blue-200 px-3 py-1.5 font-bold text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
-                        >
-                            {t("shown", {
-                                shown: format.number(filteredDocuments.length),
-                                total: format.number(documents.length),
-                            })}
-                        </Badge>
-                    </div>
+                    <Badge variant="secondary" className="tabular-nums">
+                        {t("shown", {
+                            shown: format.number(filteredDocuments.length),
+                            total: format.number(documents.length),
+                        })}
+                    </Badge>
                 </div>
+            </div>
 
-                {/* Scrollable Table Container */}
-                <div className="border-line bg-panel relative overflow-hidden rounded-xl border">
-                    <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent max-h-[450px] overflow-auto">
-                        <Table>
-                            <TableHeader className="sticky top-0 z-20">
-                                <TableRow className="bg-panel-2/80 border-b backdrop-blur-sm">
-                                    <TableHead className="w-[45%] py-3 text-[11px] font-bold uppercase tracking-wider">
-                                        {t("columns.document")}
-                                    </TableHead>
-                                    <TableHead className="py-3 text-[11px] font-bold uppercase tracking-wider">
-                                        {t("columns.category")}
-                                    </TableHead>
-                                    <TableHead className="py-3 text-right text-[11px] font-bold uppercase tracking-wider">
-                                        {t("columns.views")}
-                                    </TableHead>
-                                    <TableHead className="py-3 text-right text-[11px] font-bold uppercase tracking-wider">
-                                        {t("columns.lastViewed")}
-                                    </TableHead>
-                                    <TableHead className="w-[40px] py-3"></TableHead>
+            <div className="max-h-[450px] overflow-auto">
+                <Table aria-label={t("title")}>
+                    <TableHeader className="bg-panel-2 sticky top-0 z-10">
+                        <TableRow className="border-line hover:bg-transparent">
+                            <TableHead className={cn(HEAD, "pl-4")}>
+                                {t("columns.document")}
+                            </TableHead>
+                            <TableHead className={cn(HEAD, "@max-sm:hidden")}>
+                                {t("columns.category")}
+                            </TableHead>
+                            <TableHead className={cn(HEAD, "text-right")}>
+                                {t("columns.views")}
+                            </TableHead>
+                            <TableHead className={cn(HEAD, "text-right")}>
+                                {t("columns.lastViewed")}
+                            </TableHead>
+                            <TableHead className="@max-sm:hidden w-10 pr-4" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredDocuments.length > 0 ? (
+                            filteredDocuments.map(doc => (
+                                <TableRow
+                                    key={doc.id}
+                                    tabIndex={0}
+                                    className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 focus-visible:ring-brand/50 group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset"
+                                    onClick={() => handleRowClick(doc)}
+                                    onKeyDown={e => {
+                                        if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            handleRowClick(doc);
+                                        }
+                                    }}
+                                >
+                                    {/* Takes whatever width is left and truncates into it. */}
+                                    <TableCell className="w-full max-w-0 py-2.5 pl-4">
+                                        <div className="flex min-w-0 items-center gap-2.5">
+                                            <FileText
+                                                aria-hidden
+                                                className="text-ink-3 size-4 shrink-0"
+                                            />
+                                            <span
+                                                className="text-ink min-w-0 truncate text-sm font-medium"
+                                                title={doc.title}
+                                            >
+                                                {doc.title}
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="@max-sm:hidden py-2.5">
+                                        <Badge variant="secondary">{doc.category}</Badge>
+                                    </TableCell>
+                                    <TableCell className="text-ink py-2.5 text-right text-sm tabular-nums">
+                                        {format.number(doc.views)}
+                                    </TableCell>
+                                    <TableCell className="text-ink-3 py-2.5 text-right text-sm">
+                                        {formatRelativeTime(doc.lastViewedAt, tTime, format)}
+                                    </TableCell>
+                                    <TableCell className="@max-sm:hidden py-2.5 pr-4">
+                                        <ChevronRight
+                                            aria-hidden
+                                            className="text-ink-4 group-hover:text-ink-2 size-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                                        />
+                                    </TableCell>
                                 </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {filteredDocuments.length > 0 ? (
-                                    filteredDocuments.map((doc, index) => (
-                                        <TableRow
-                                            key={doc.id}
-                                            className={cn(
-                                                "group cursor-pointer transition-all duration-150",
-                                                "hover:bg-blue-50/50 dark:hover:bg-blue-950/20",
-                                                index % 2 === 0 ? "bg-surface" : "bg-panel-2/20"
-                                            )}
-                                            onClick={() => handleRowClick(doc)}
-                                        >
-                                            <TableCell className="py-3">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="bg-panel-2 rounded-lg p-1.5 transition-colors group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30">
-                                                        <FileText className="text-ink-3 h-4 w-4 transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400" />
-                                                    </div>
-                                                    <span
-                                                        className="max-w-[280px] truncate text-sm font-medium transition-colors group-hover:text-blue-700 dark:group-hover:text-blue-300"
-                                                        title={doc.title}
-                                                    >
-                                                        {doc.title}
-                                                    </span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="py-3">
-                                                <Badge
-                                                    variant="secondary"
-                                                    className="px-2 py-0.5 text-[10px] font-bold"
-                                                >
-                                                    {doc.category}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="py-3 text-right">
-                                                <div className="flex items-center justify-end gap-1.5">
-                                                    <Eye className="text-ink-3 h-3.5 w-3.5" />
-                                                    <span className="font-mono text-sm font-medium">
-                                                        {format.number(doc.views)}
-                                                    </span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-ink-3 py-3 text-right text-sm">
-                                                {formatRelativeTime(
-                                                    doc.lastViewedAt,
-                                                    tTime,
-                                                    format
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="py-3">
-                                                <ChevronRight className="text-ink-3/50 h-4 w-4 transition-all group-hover:translate-x-0.5 group-hover:text-blue-500" />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="h-32">
-                                            <div className="text-ink-3 flex flex-col items-center justify-center gap-2">
-                                                <FileText className="text-ink-3/30 h-10 w-10" />
-                                                <p className="text-sm font-medium">{t("empty")}</p>
-                                                {searchTerm && (
-                                                    <p className="text-xs">{t("emptyHint")}</p>
-                                                )}
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
-
-                    {/* Scroll fade indicator */}
-                    {filteredDocuments.length > 8 && (
-                        <div className="from-card pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t to-transparent" />
-                    )}
-                </div>
-            </Card>
+                            ))
+                        ) : (
+                            <TableRow className="hover:bg-transparent">
+                                <TableCell colSpan={5} className="h-32 whitespace-normal">
+                                    <div className="text-ink-3 flex flex-col items-center justify-center gap-2 text-center">
+                                        <FileText aria-hidden className="text-ink-4 size-8" />
+                                        <p className="text-ink-2 m-0 text-sm font-medium">
+                                            {t("empty")}
+                                        </p>
+                                        {searchTerm && (
+                                            <p className="m-0 text-xs">{t("emptyHint")}</p>
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
 
             <DocumentDetailsSheet
                 document={selectedDoc}

@@ -53,7 +53,7 @@ export function Provenance({
         <span
             className={cn(
                 "inline-flex min-w-0 items-center gap-1.5 text-xs",
-                grounded ? "text-ink-3" : "text-warn",
+                grounded ? "text-ink-3" : "text-warn-ink",
                 className
             )}
         >

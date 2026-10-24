@@ -43,7 +43,6 @@
     "resizeTitle": "拖动以调整宽度 · 双击恢复默认"
   },
   "knowledgePane": {
-    "eyebrow": "知识库",
     "heading": "此工作区可用于推理的全部内容",
     "statSources": "<b>{count}</b> {count, plural, other {个来源}}",
     "statCollections": "<b>{count}</b> {count, plural, other {个文件夹}}",

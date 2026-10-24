@@ -600,7 +600,8 @@ export function CompanyScreen({ id }: { id: string }) {
                                         <dt className="text-ink-3">{t("company.notAFit")}</dt>
                                         <dd
                                             className={cn(
-                                                c.fitBreakdown.disqualifiers.length && "text-warn"
+                                                c.fitBreakdown.disqualifiers.length &&
+                                                    "text-warn-ink"
                                             )}
                                         >
                                             {c.fitBreakdown.disqualifiers.length

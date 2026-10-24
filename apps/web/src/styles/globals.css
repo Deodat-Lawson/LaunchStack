@@ -15,6 +15,18 @@
         color: var(--ink);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
+        caret-color: var(--accent);
+    }
+    /* Preflight paints placeholders gray-400, 2.2:1 on the rail's sunk
+       fields. ink-3 is the smallest tier that still reads. A caller's
+       placeholder: utility still wins. */
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--ink-3);
+        opacity: 1;
+    }
+    ::selection {
+        background: oklch(from var(--accent) l c h / 0.22);
     }
 }
 

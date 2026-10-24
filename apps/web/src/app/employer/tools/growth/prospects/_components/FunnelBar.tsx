@@ -48,7 +48,7 @@ export function FunnelBar({
                             className={cn(
                                 "flex h-full items-center justify-center text-xs font-medium tabular-nums transition-colors",
                                 tone === "active" && "bg-brand-soft text-brand-ink",
-                                tone === "won" && "bg-success-soft text-success",
+                                tone === "won" && "bg-success-soft text-success-ink",
                                 (tone === "quiet" || tone === "info") && "bg-panel-2 text-ink",
                                 hrefFor && "hover:brightness-95"
                             )}

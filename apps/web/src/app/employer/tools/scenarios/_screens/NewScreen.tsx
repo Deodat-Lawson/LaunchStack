@@ -511,7 +511,7 @@ export function NewScreen() {
                         />
                         <div className="border-line-2 flex flex-col gap-2 border-t p-4">
                             {!anySource && (
-                                <p className="border-warn/40 bg-warn-soft text-warn rounded-md border px-3 py-2 text-xs leading-relaxed">
+                                <p className="border-warn/40 bg-warn-soft text-warn-ink rounded-md border px-3 py-2 text-xs leading-relaxed">
                                     {t("noSources")}
                                 </p>
                             )}

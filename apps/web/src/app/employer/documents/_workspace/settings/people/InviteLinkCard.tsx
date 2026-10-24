@@ -276,7 +276,10 @@ export function InviteLinkCard({
             <p className="text-ink-2 m-0 text-[13px] leading-relaxed">
                 {requiresApproval ? t("approvalNote") : t("openNote", { role: roleName })}
                 {state !== "live" && (
-                    <span className="text-warn"> {t("noLongerWorks", { terms: terms(link) })}</span>
+                    <span className="text-warn-ink">
+                        {" "}
+                        {t("noLongerWorks", { terms: terms(link) })}
+                    </span>
                 )}
                 {state === "live" && limited && (
                     <span className="text-ink-3">
@@ -284,7 +287,7 @@ export function InviteLinkCard({
                         {t("termsSentence", { terms: terms(link) })}
                     </span>
                 )}
-                {link.legacy && <span className="text-warn"> {t("legacyNote")}</span>}
+                {link.legacy && <span className="text-warn-ink"> {t("legacyNote")}</span>}
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">

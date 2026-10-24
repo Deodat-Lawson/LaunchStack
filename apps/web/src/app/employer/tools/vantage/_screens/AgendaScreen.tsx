@@ -385,7 +385,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 </p>
                             )}
                             {unsupported > 0 && (
-                                <p className="text-warn mt-2 text-[12px]">
+                                <p className="text-warn-ink mt-2 text-[12px]">
                                     {t("unsupported", { count: unsupported })}
                                 </p>
                             )}

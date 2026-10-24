@@ -79,7 +79,9 @@ export function CheckInRow({
                 <div className="text-ink-3 flex flex-wrap items-center gap-x-2 text-[11.5px]">
                     <span>{commitment.owner}</span>
                     <span>·</span>
-                    <span className={cn(isOpen && commitment.dueOn < todayIso() && "text-warn")}>
+                    <span
+                        className={cn(isOpen && commitment.dueOn < todayIso() && "text-warn-ink")}
+                    >
                         {isOpen
                             ? fmt.due(commitment.dueOn)
                             : t("wasDue", { date: fmt.date(commitment.dueOn) })}

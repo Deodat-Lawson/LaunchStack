@@ -158,7 +158,7 @@ export function Shift({ from, to, className }: { from: Stance; to: Stance; class
             )}
         >
             <Icon
-                className={cn("size-3.5 shrink-0", warmer ? "text-info" : "text-danger")}
+                className={cn("size-3.5 shrink-0", warmer ? "text-info-ink" : "text-danger")}
                 aria-hidden
             />
             {t(key, { stance: stanceLabel(t, to).toLowerCase() })}

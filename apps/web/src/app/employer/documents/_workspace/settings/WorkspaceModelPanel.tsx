@@ -240,7 +240,7 @@ function TestOutcome({ state }: { state: TestState }) {
             <div
                 className={cn(
                     "text-[12.5px] font-semibold",
-                    state.ok ? "text-success" : "text-danger"
+                    state.ok ? "text-success-ink" : "text-danger"
                 )}
             >
                 {state.ok ? t("allAnswered") : t("notAllAnswered")}
@@ -251,7 +251,7 @@ function TestOutcome({ state }: { state: TestState }) {
                         {result.ok ? (
                             <CheckCircle2
                                 aria-hidden
-                                className="text-success mt-0.5 size-4 shrink-0"
+                                className="text-success-ink mt-0.5 size-4 shrink-0"
                             />
                         ) : (
                             <XCircle aria-hidden className="text-danger mt-0.5 size-4 shrink-0" />

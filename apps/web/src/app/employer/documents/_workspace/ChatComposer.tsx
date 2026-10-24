@@ -141,11 +141,19 @@ interface UploadRow {
     progress: number;
     error?: string;
 }
-const ROUTES: ChatRouteName[] = ["default", "fast", "reasoning", "vision"];
+const ROUTES = ["default", "fast"] as const satisfies readonly ChatRouteName[];
+type PickerRoute = (typeof ROUTES)[number];
+const isPickerRoute = (route: unknown): route is PickerRoute =>
+    ROUTES.some(option => option === route);
+/** Old drafts and preferences may name a route the picker no longer offers. */
+const pickerRoute = (route: unknown): PickerRoute => (isPickerRoute(route) ? route : "default");
 /*
  * What each route is called on screen is `chat.composer.routes.<route>`. The
  * picker chooses a route, never a model: which model serves it is the
- * operator's configuration and the screen does not name it.
+ * operator's configuration and the screen does not name it. It offers two
+ * tiers only. Images go to a route that reads them on their own, and how hard
+ * the model thinks is the reasoning effort, not a separate tier — so the
+ * `reasoning` and `vision` routes stay server-side and are never picked here.
  */
 function defaultSendKey(): ComposerPreferences["sendKey"] {
     return typeof window !== "undefined" &&
@@ -195,8 +203,8 @@ export function Composer({
     const tMenu = useTranslations("chat.contextMenu");
     const tAgents = useTranslations("agents");
     const format = useFormatter();
-    const routeLabel = (route: ChatRouteName) => t(`routes.${route}.label`);
-    const routeBlurb = (route: ChatRouteName) => t(`routes.${route}.blurb`);
+    const routeLabel = (route: PickerRoute) => t(`routes.${route}.label`);
+    const routeBlurb = (route: PickerRoute) => t(`routes.${route}.blurb`);
     // Capabilities are automatic; legacy draft flags no longer change them.
     const webSearch = true;
     const thinking = true;
@@ -214,8 +222,8 @@ export function Composer({
     const [attachError, setAttachError] = useState<string | null>(null);
     const [storageError, setStorageError] = useState(false);
     const [failedPromptAvailable, setFailedPromptAvailable] = useState(false);
-    const [modelRoute, setModelRoute] = useState<ChatRouteName>("default");
-    const [modelRoutes, setModelRoutes] = useState<ChatRouteName[]>([]);
+    const [modelRoute, setModelRoute] = useState<PickerRoute>("default");
+    const [modelRoutes, setModelRoutes] = useState<PickerRoute[]>([]);
     const [threadRefs, setThreadRefs] = useState<string[]>([]);
     const [passages, setPassages] = useState<ChatPassage[]>([]);
     const [inspectedThread, setInspectedThread] = useState<string | null>(null);
@@ -358,10 +366,10 @@ export function Composer({
         { webSearch, thinking, hasAttachments: attachments.length > 0 }
     );
     const routeInfo = chatRoutes.config.routes[modelRoute];
-    const effectiveRoute =
-        modelRoute === "default" &&
-        attachments.some(item => item.kind === "image") &&
-        !routeInfo?.vision?.supported
+    // Images are always on: a picked tier that can't read them hands the turn
+    // to the vision route rather than asking the reader to switch.
+    const effectiveRoute: ChatRouteName =
+        attachments.some(item => item.kind === "image") && !routeInfo?.vision?.supported
             ? "vision"
             : modelRoute;
     const effortInfo = chatRoutes.config.routes[effectiveRoute]?.reasoning;
@@ -537,8 +545,8 @@ export function Composer({
                     : null
             );
             updateAttachments(draft.attachments);
-            setModelRoute(ROUTES.includes(draft.modelRoute!) ? draft.modelRoute! : "default");
-            setModelRoutes((draft.modelRoutes ?? []).filter(route => ROUTES.includes(route)));
+            setModelRoute(pickerRoute(draft.modelRoute));
+            setModelRoutes((draft.modelRoutes ?? []).filter(isPickerRoute));
             setThreadRefs((draft.threadRefs ?? []).filter(id => typeof id === "string"));
             setPassages((draft.passages ?? []).filter(isChatPassage));
             setMissingFiles(draft.pendingFiles ?? []);
@@ -608,14 +616,12 @@ export function Composer({
                 : defaultSendKey()
         );
         setFavorites(
-            Array.isArray(preferences?.favorites)
-                ? preferences.favorites.filter(value => ROUTES.includes(value as ChatRouteName))
-                : []
+            Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isPickerRoute) : []
         );
         setFollowUp(preferences?.followUp === "interrupt" ? "interrupt" : "queue");
         setEditorMode(preferences?.editorMode === "rich" ? "rich" : "plain");
         if (!isComposerDraft(stored)) {
-            if (ROUTES.includes(preferences.modelRoute!)) setModelRoute(preferences.modelRoute!);
+            if (isPickerRoute(preferences.modelRoute)) setModelRoute(preferences.modelRoute);
             if (typeof preferences?.reasoningEffort === "string")
                 setReasoningEffort(preferences.reasoningEffort);
         }
@@ -798,8 +804,8 @@ export function Composer({
             updateAttachments(seed.attachments);
         }
         if (seed.refs) callbacks.current.setSelected(seed.refs);
-        if (seed.modelRoute) setModelRoute(seed.modelRoute);
-        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes);
+        if (seed.modelRoute) setModelRoute(pickerRoute(seed.modelRoute));
+        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes.filter(isPickerRoute));
         if (seed.threadRefs) setThreadRefs(seed.threadRefs);
         if (seed.reasoningEffort) setReasoningEffort(seed.reasoningEffort);
         if (seed.chatMode) setChatMode(seed.chatMode);
@@ -2168,7 +2174,7 @@ export function Composer({
                             const number = Number(
                                 event.code?.startsWith("Digit") ? event.code.slice(5) : event.key
                             );
-                            if (event.altKey && number >= 1 && number <= 4) {
+                            if (event.altKey && number >= 1 && number <= ROUTES.length) {
                                 const route = ROUTES[number - 1]!;
                                 if (chatRoutes.config.routes[route]?.available) {
                                     event.preventDefault();

@@ -5,7 +5,6 @@
     "createCategoryFailed": "Error creating category. Check console for details.",
     "categoryRemoved": "Category \"{name}\" removed",
     "removeCategoryFailed": "Error removing category. Check console for details.",
-    "eyebrow": "Upload",
     "title": "Add sources",
     "subtitle": "Drop files, connect a repo, paste text, or point us at a URL. Everything you bring in is indexed into your knowledge base, chunked for retrieval, and ready for the workspace."
   },

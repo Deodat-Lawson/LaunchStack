@@ -40,7 +40,13 @@ export interface DriveRouteContext {
     companyId: bigint;
     authUserId: string;
     userPk: bigint | null;
-    doc: { id: number; title: string; fileType: string | null; mimeType: string | null };
+    doc: {
+        id: number;
+        title: string;
+        fileType: string | null;
+        mimeType: string | null;
+        ocrMetadata: unknown;
+    };
 }
 
 /**
@@ -91,6 +97,7 @@ export async function authorizeDriveRoute(
             title: document.title,
             fileType: document.fileType,
             mimeType: document.mimeType,
+            ocrMetadata: document.ocrMetadata,
         })
         .from(document)
         .where(

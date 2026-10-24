@@ -6,6 +6,7 @@ import { resolveFontStack } from "~/lib/fonts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Image as ImageIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "~/components/ui/button";
 
 export interface MermaidDiagramProps {
     code: string;
@@ -16,8 +17,9 @@ function useDarkMode(): boolean {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        // next-themes stamps data-theme on <html>; mermaid renders to canvas
-        // so it needs the theme name in JS rather than CSS tokens.
+        // next-themes stamps data-theme on <html>. Mermaid bakes colours into
+        // the SVG it returns, so the diagram has to re-render when the theme
+        // flips; the colours themselves come from the tokens (see tokenHex).
         const html = document.documentElement;
         const read = () => setIsDark(html.getAttribute("data-theme") === "dark");
         read();
@@ -28,6 +30,35 @@ function useDarkMode(): boolean {
     }, []);
 
     return isDark;
+}
+
+/** A design token's current value, e.g. `oklch(0.54 0.24 285)`. */
+function tokenValue(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
+}
+
+/**
+ * Design tokens as hex, for mermaid's themeVariables: mermaid derives shades
+ * from them with khroma, which parses neither `var()` nor `oklch()`. A 1x1
+ * canvas does the conversion (and the gamut mapping) for us.
+ */
+function tokenHexes<K extends string>(names: Record<K, string>): Record<K, string> {
+    const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+    const out = {} as Record<K, string>;
+    for (const key of Object.keys(names) as K[]) {
+        const value = tokenValue(names[key]);
+        let hex = value;
+        if (ctx) {
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = "transparent";
+            ctx.fillStyle = value;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r = 0, g = 0, b = 0] = ctx.getImageData(0, 0, 1, 1).data;
+            hex = `#${[r, g, b].map(c => c.toString(16).padStart(2, "0")).join("")}`;
+        }
+        out[key] = hex;
+    }
+    return out;
 }
 
 function sanitizeFilename(name: string): string {
@@ -88,27 +119,30 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                 const mermaid = (await import("mermaid")).default;
                 mermaid.initialize({
                     startOnLoad: false,
-                    theme: isDark ? "dark" : "neutral",
+                    // "base" is the one mermaid theme that derives every
+                    // colour from these variables ("dark" and "neutral" hard-
+                    // code their node fills), so the same token names give
+                    // the right diagram in either app theme.
+                    theme: "base",
                     securityLevel: "strict",
-                    themeVariables: isDark
-                        ? {
-                              primaryColor: "#7c3aed",
-                              primaryTextColor: "#f5f3ff",
-                              primaryBorderColor: "#6d28d9",
-                              lineColor: "#8b5cf6",
-                              secondaryColor: "#4c1d95",
-                              tertiaryColor: "#1e1b4b",
-                              fontFamily: resolveFontStack("sans"),
-                          }
-                        : {
-                              primaryColor: "#ede9fe",
-                              primaryTextColor: "#1e1b4b",
-                              primaryBorderColor: "#7c3aed",
-                              lineColor: "#6d28d9",
-                              secondaryColor: "#f5f3ff",
-                              tertiaryColor: "#faf5ff",
-                              fontFamily: resolveFontStack("sans"),
-                          },
+                    themeVariables: {
+                        darkMode: isDark,
+                        ...tokenHexes({
+                            background: "panel",
+                            primaryColor: "accent-soft",
+                            primaryTextColor: "ink",
+                            primaryBorderColor: "accent",
+                            lineColor: "accent-2",
+                            secondaryColor: "panel-2",
+                            tertiaryColor: "panel-2",
+                            tertiaryBorderColor: "line",
+                            edgeLabelBackground: "panel",
+                            noteBkgColor: "warn-soft",
+                            noteTextColor: "ink",
+                            noteBorderColor: "warn",
+                        }),
+                        fontFamily: resolveFontStack("sans"),
+                    },
                 });
 
                 const normalized = code
@@ -182,8 +216,8 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
             const ctx = canvas.getContext("2d");
             if (!ctx) return;
 
-            // White background for PNG
-            ctx.fillStyle = isDark ? "#0f172a" : "#ffffff";
+            // The PNG has no page behind it: paint the panel the diagram sat on.
+            ctx.fillStyle = tokenValue("panel");
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.scale(scale, scale);
             ctx.drawImage(img, 0, 0);
@@ -203,18 +237,16 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
             URL.revokeObjectURL(svgUrl);
         };
         img.src = svgUrl;
-    }, [filePrefix, isDark]);
+    }, [filePrefix]);
 
     if (error) {
         return (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
+            <div className="border-danger/40 bg-danger-soft text-danger-ink rounded-xl border p-4 text-xs">
                 <p className="font-semibold">{t("renderError")}</p>
                 <p className="mt-1">{error}</p>
                 <details className="mt-2">
-                    <summary className="cursor-pointer text-slate-600 dark:text-slate-400">
-                        {t("rawCode")}
-                    </summary>
-                    <pre className="bg-panel-2 mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg p-3 text-[10px]">
+                    <summary className="text-ink-2 cursor-pointer">{t("rawCode")}</summary>
+                    <pre className="bg-panel text-ink-2 mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg p-3 text-xs">
                         {code}
                     </pre>
                 </details>
@@ -223,26 +255,34 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
     }
 
     return (
-        <div className="border-line from-background to-muted/20 overflow-hidden rounded-xl border bg-gradient-to-b shadow-sm">
+        <div className="border-line bg-panel shadow-1 overflow-hidden rounded-xl border">
             {/* Download toolbar */}
             {!loading && (
                 <div className="border-line bg-panel-2/30 flex items-center justify-end gap-1.5 border-b px-4 py-2">
-                    <button
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={handleDownloadSvg}
-                        className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
+                        className="h-7 text-xs"
                         title={t("downloadSvg")}
+                        aria-label={t("downloadSvg")}
                     >
-                        <Download className="h-3 w-3" />
+                        <Download className="size-3.5" />
                         SVG
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={handleDownloadPng}
-                        className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
+                        className="h-7 text-xs"
                         title={t("downloadPng")}
+                        aria-label={t("downloadPng")}
                     >
-                        <ImageIcon className="h-3 w-3" />
+                        <ImageIcon className="size-3.5" />
                         PNG
-                    </button>
+                    </Button>
                 </div>
             )}
 

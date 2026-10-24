@@ -26,8 +26,8 @@ export function EmailStatus({
             title={t(`help.${status}`)}
             className={cn(
                 "inline-flex h-[18px] items-center whitespace-nowrap rounded px-1.5 text-[11px] leading-none",
-                status === "verified" && "bg-success-soft text-success",
-                status === "guess" && "bg-warn-soft text-warn",
+                status === "verified" && "bg-success-soft text-success-ink",
+                status === "guess" && "bg-warn-soft text-warn-ink",
                 (status === "found" || status === "generic") && "border-line text-ink-2 border",
                 className
             )}

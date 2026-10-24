@@ -166,7 +166,7 @@ function Profile({
                 <section>
                     <SectionHeading title={t("builtFrom")} />
                     {invented ? (
-                        <p className="text-warn inline-flex items-start gap-1.5 text-[13px] leading-snug">
+                        <p className="text-warn-ink inline-flex items-start gap-1.5 text-[13px] leading-snug">
                             <Sparkles className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                             {t("invented")}
                         </p>

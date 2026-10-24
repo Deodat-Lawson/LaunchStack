@@ -49,7 +49,7 @@ function ToneWord({ tone, children }: { tone: Tone; children: React.ReactNode })
             className={cn(
                 "inline-flex items-center gap-1.5 text-xs",
                 tone === "ok" && "text-ink-2",
-                tone === "warn" && "text-warn",
+                tone === "warn" && "text-warn-ink",
                 tone === "danger" && "text-danger"
             )}
         >

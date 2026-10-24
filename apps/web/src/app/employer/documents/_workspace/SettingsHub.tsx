@@ -111,8 +111,8 @@ const GROUPS: { id: GroupId }[] = [{ id: "you" }, { id: "workspace" }, { id: "da
 
 /**
  * A rail entry. Its words are `settings.sections.<id>`: `label` (rail, short),
- * `blurb` (rail sub-label, one clause), `eyebrow`, `title` (header, sentence
- * case) and `description` (what the section is *for*, not what it contains).
+ * `blurb` (rail sub-label, one clause), `title` (header, sentence case) and
+ * `description` (what the section is *for*, not what it contains).
  */
 interface SectionDef {
     id: SettingsSectionId;
@@ -249,13 +249,13 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 {/* The workspace these settings belong to, and the one place
                     to switch to another — not a back arrow in the Studio. */}
                 <WorkspaceSwitchCard className="mb-4" />
-                <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
+                <div className="mono text-ink-3 px-2.5 pb-3 text-[11px] font-bold uppercase tracking-[0.1em]">
                     {t("hub.railTitle")}
                 </div>
                 {groups.map(group => (
                     <div key={group.id} className="mb-3">
                         <div
-                            className="text-ink-3 px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em]"
+                            className="text-ink-3 px-2.5 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]"
                             title={t(`groups.${group.id}.blurb`)}
                         >
                             {t(`groups.${group.id}.label`)}
@@ -285,7 +285,12 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                                         >
                                             {t(`sections.${item.id}.label`)}
                                         </span>
-                                        <span className="text-ink-3 mt-px block text-[11px] leading-[1.4]">
+                                        <span
+                                            className={cn(
+                                                "mt-px block text-[11px] leading-[1.4]",
+                                                isActive ? "text-ink-2" : "text-ink-3"
+                                            )}
+                                        >
                                             {t(`sections.${item.id}.blurb`)}
                                         </span>
                                     </span>
@@ -376,18 +381,17 @@ function SectionHeader({
                 )}
             >
                 <div className="min-w-0 flex-1">
-                    <div className="mono text-ink-3 mb-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {t(`sections.${definition.id}.eyebrow`)}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
+                            {t(`sections.${definition.id}.title`)}
+                        </h1>
                         {readOnly && (
                             <Badge variant="secondary" title={t("hub.readOnlyTitle")}>
                                 {t("hub.readOnly")}
                             </Badge>
                         )}
                     </div>
-                    <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
-                        {t(`sections.${definition.id}.title`)}
-                    </h1>
-                    <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">
+                    <p className="text-ink-3 m-0 mt-[7px] max-w-[68ch] text-[13px] leading-[1.55]">
                         {t(`sections.${definition.id}.description`)}
                     </p>
                 </div>

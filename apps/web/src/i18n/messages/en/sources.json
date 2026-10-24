@@ -43,7 +43,6 @@
     "resizeTitle": "Drag to resize · double-click to reset"
   },
   "knowledgePane": {
-    "eyebrow": "Knowledge",
     "heading": "Everything this workspace can reason over",
     "statSources": "<b>{count}</b> {count, plural, one {source} other {sources}}",
     "statCollections": "<b>{count}</b> {count, plural, one {collection} other {collections}}",
@@ -549,7 +548,7 @@
   "googleDriveBanner": {
     "openFailed": "Could not open the document in Google Drive.",
     "unreachable": "Could not reach the server.",
-    "synced": "Synced v{version} from Google Drive. Reopen the document to see it.",
+    "synced": "Synced v{version} from Google Drive — showing it now.",
     "upToDate": "Already up to date.",
     "syncResult": "Sync result: {kind}.",
     "syncFailed": "Sync failed.",
@@ -934,6 +933,7 @@
       "connectFirst": "Connect a Google account for this workspace first.",
       "accessRevoked": "Google revoked this workspace's access. Reconnect the Google account to resume syncing.",
       "unsupportedType": "Only .docx and .pdf documents can be linked to Google Drive.",
+      "alreadyInDrive": "This file already lives in Google Drive and syncs from there. Edit it in Drive.",
       "tooLarge": "The document is larger than the {mb} MB linking cap.",
       "notLinked": "This document is not linked to Google Drive.",
       "finalSyncFailed": "Could not pull the latest Google Drive edits, so the link was kept. Try again, or resolve the error first.",

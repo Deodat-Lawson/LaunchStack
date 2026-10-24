@@ -954,7 +954,7 @@ function PostTestNote({
     if (!test) return null;
     if (stale) {
         return (
-            <p className="text-warn text-xs">
+            <p className="text-warn-ink text-xs">
                 {t("compose.testNote.stale")}{" "}
                 <button type="button" className={link} disabled={starting} onClick={onTestAgain}>
                     {starting ? t("postTest.starting") : t("postTest.testAgain")}

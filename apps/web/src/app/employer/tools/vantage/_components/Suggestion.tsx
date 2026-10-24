@@ -200,7 +200,7 @@ export function AllCaughtUp({ body, className }: { body?: string; className?: st
                 className
             )}
         >
-            <span className="bg-success-soft text-success mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full">
+            <span className="bg-success-soft text-success-ink mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full">
                 <Check className="size-3.5" aria-hidden="true" />
             </span>
             <div>

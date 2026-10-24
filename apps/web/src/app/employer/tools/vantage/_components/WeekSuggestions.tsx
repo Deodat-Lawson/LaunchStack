@@ -267,7 +267,7 @@ export function CheckInSuggestion({
         <SuggestionCard
             label={t("checkInLabel", { title: commitment.title })}
             kicker={t("checkIn")}
-            meta={<span className={cn(late && "text-warn")}>{fmt.due(commitment.dueOn)}</span>}
+            meta={<span className={cn(late && "text-warn-ink")}>{fmt.due(commitment.dueOn)}</span>}
             title={t("didItHappen", { title: commitment.title })}
             reason={
                 <>

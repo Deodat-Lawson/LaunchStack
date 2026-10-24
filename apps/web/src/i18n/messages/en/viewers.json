@@ -79,7 +79,6 @@
   },
   "docxPreview": {
     "fetchFailed": "Failed to fetch document ({status})",
-    "empty": "Document appears to be empty",
     "renderFailed": "Failed to render document",
     "loading": "Loading document...",
     "header": "Word Document Preview"

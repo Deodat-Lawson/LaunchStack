@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
+import { ViewerNotice } from "./ViewerNotice";
 
 export type ImageFitMode = "fit-view" | "fit-width" | "fit-height" | "actual";
 
@@ -186,21 +187,16 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
 
     if (error) {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
-                    <Button
-                        onClick={handleRetry}
-                        className="bg-brand hover:bg-brand-hi mt-3 inline-flex gap-2 text-white"
-                    >
-                        <RotateCw className="h-4 w-4" />
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("loadFailed")}
+                action={
+                    <Button onClick={handleRetry}>
+                        <RotateCw />
                         {tc("actions.retry")}
                     </Button>
-                </div>
-            </div>
+                }
+            />
         );
     }
 
@@ -357,7 +353,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                                 className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg"
                                 aria-label={t("loading")}
                             >
-                                <div className="bg-panel-2-foreground/10 h-32 w-48 animate-pulse rounded-xl" />
+                                <div className="bg-panel-2 h-32 w-48 animate-pulse rounded-xl" />
                                 <Loader2 className="text-brand-ink h-6 w-6 animate-spin" />
                             </div>
                         )}

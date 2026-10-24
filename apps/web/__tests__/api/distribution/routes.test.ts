@@ -288,18 +288,18 @@ describe("relationship transitions", () => {
     it("maps an illegal stage move to 409 with the code", async () => {
         mockDb.getRelationship.mockResolvedValue({
             id: "rel-1",
-            stage: "candidate",
+            stage: "lead",
             ownerUserId: null,
             nextAction: null,
             nextActionAt: null,
         });
-        const err = Object.assign(new Error('Cannot move from "candidate" to "qualified".'), {
+        const err = Object.assign(new Error('Cannot move from "lead" to "meeting".'), {
             code: "transition_not_allowed",
             status: 409,
         });
         mockDb.transitionStage.mockRejectedValue(err);
         const res = await PATCH_RELATIONSHIP(
-            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "meeting" }),
             { params: Promise.resolve({ id: "rel-1" }) }
         );
         expect(res.status).toBe(409);
@@ -316,7 +316,7 @@ describe("relationship transitions", () => {
 });
 
 describe("outreach — the worst-failure check", () => {
-    const relationship = (id: string, orgId: string, stage = "researched") => ({
+    const relationship = (id: string, orgId: string, stage = "lead") => ({
         id,
         programId: "prog-1",
         orgId,
@@ -340,7 +340,7 @@ describe("outreach — the worst-failure check", () => {
         mockDb.getRelationship.mockImplementation(async (id: string) => {
             if (id === "rel-existing") return relationship(id, "existing-importer.de");
             if (id === "rel-engaged") return relationship(id, "engaged.example");
-            if (id === "rel-active") return relationship(id, "active.example", "active");
+            if (id === "rel-active") return relationship(id, "active.example", "won");
             if (id === "rel-fresh") return relationship(id, "fresh.example");
             return null;
         });

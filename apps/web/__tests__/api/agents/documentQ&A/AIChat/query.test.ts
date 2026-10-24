@@ -153,7 +153,7 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 
 jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     normalizeModelContent: (content: unknown) => String(content),
-    getSystemPrompt: () => "system",
+    getSystemPrompt: (...args: unknown[]) => mockGetSystemPrompt(...args),
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
     buildReferences: (...args: unknown[]) => mockBuildReferences(...args),
@@ -161,6 +161,13 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
 }));
 
 const mockBuildReferences = jest.fn((..._args: unknown[]) => [] as unknown[]);
+const mockGetSystemPrompt = jest.fn((..._args: unknown[]) => "system");
+
+// The person's `chat.responseStyle`; unset unless a test stores one.
+const mockReadSettingValue = jest.fn(async (..._args: unknown[]): Promise<unknown> => undefined);
+jest.mock("~/server/settings/store", () => ({
+    readSettingValue: (...args: unknown[]) => mockReadSettingValue(...args),
+}));
 
 // The workspace's sources as tools. What the person can open is scripted per
 // test (nothing, by default, so a turn offers no source tools); the tools'
@@ -439,6 +446,56 @@ describe("POST /api/agents/documentQ&A/AIChat/query", () => {
             // stray id is never read, and nothing is attached to it.
             expect(mockSelectCount.value).toBe(1);
             expect(mockInsertValues).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("answer style", () => {
+        const styleUsed = () => mockGetSystemPrompt.mock.calls[0]?.[0];
+        const userPrompt = () =>
+            String((mockInvoke.mock.calls[0] as [{ content: unknown }[]])[0][1]?.content);
+
+        beforeEach(() => {
+            mockReadSettingValue.mockReset().mockResolvedValue(undefined);
+        });
+
+        it("answers in the person's own style when the request names none", async () => {
+            mockReadSettingValue.mockResolvedValue("detailed");
+
+            const response = await POST(
+                queryRequest({ question: "what is this?", searchScope: "none" })
+            );
+
+            expect(response.status).toBe(200);
+            expect(styleUsed()).toBe("detailed");
+        });
+
+        it("keeps an explicitly requested concise over a different setting", async () => {
+            mockReadSettingValue.mockResolvedValue("detailed");
+
+            const response = await POST(
+                queryRequest({ question: "what is this?", searchScope: "none", style: "concise" })
+            );
+
+            expect(response.status).toBe(200);
+            expect(styleUsed()).toBe("concise");
+        });
+
+        it("falls back to balanced when the setting is unset or unreadable", async () => {
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+            mockReadSettingValue.mockRejectedValueOnce(new Error("settings down"));
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+
+            expect(mockGetSystemPrompt.mock.calls.map(([style]) => style)).toEqual([
+                "balanced",
+                "balanced",
+            ]);
+        });
+
+        it("leaves the answer's length to the style, not the question wrapper", async () => {
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+
+            expect(userPrompt()).toContain(`User's question: "what is this?"`);
+            expect(userPrompt()).not.toMatch(/conversational/i);
         });
     });
 

@@ -46,7 +46,7 @@ describe("defaultWriteScope", () => {
 describe("settingAtScope", () => {
     it("shows the default before the server answers", () => {
         expect(settingAtScope(style, null, "workspace")).toEqual({
-            value: "concise",
+            value: "balanced",
             source: "default",
         });
     });
@@ -75,7 +75,7 @@ describe("settingAtScope", () => {
             stored: { member: "academic" },
         });
         expect(settingAtScope(style, own, "workspace")).toEqual({
-            value: "concise",
+            value: "balanced",
             source: "default",
         });
     });

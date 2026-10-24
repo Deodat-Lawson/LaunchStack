@@ -17,6 +17,7 @@ import React, { useCallback, useEffect, useState, useSyncExternalStore } from "r
 import dayjs from "dayjs";
 import { X } from "lucide-react";
 
+import { GoogleDriveLogo } from "~/components/icons/brand";
 import { Button } from "~/components/ui/button";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 
@@ -248,6 +249,7 @@ export function GoogleDriveBanner({
     if (!link) {
         return (
             <div style={rowStyle}>
+                <GoogleDriveLogo className="shrink-0" />
                 <span>
                     {status.connected
                         ? "Edit this document with real tools — it opens in Google Drive and syncs back here."
@@ -282,6 +284,7 @@ export function GoogleDriveBanner({
     return (
         <>
             <div style={rowStyle}>
+                <GoogleDriveLogo className="shrink-0" />
                 <span style={{ color: "var(--ink)" }}>{driveLinkSummary(link)}</span>
                 <span style={{ flex: 1 }} />
                 {link.status === "linked" && link.url && (

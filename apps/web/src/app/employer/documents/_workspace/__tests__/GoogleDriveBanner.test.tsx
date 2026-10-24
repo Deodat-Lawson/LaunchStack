@@ -82,6 +82,16 @@ describe("GoogleDriveBanner", () => {
         expect(onHide).toHaveBeenCalledTimes(1);
     });
 
+    it.each([
+        ["linked", linked],
+        ["unlinked", { connected: true, linkable: true, link: null }],
+    ])("leads the %s line with the Google Drive logo", (_, status) => {
+        renderBanner(status);
+        const logo = document.querySelector("img");
+        expect(logo).toHaveAttribute("src", "/images/google-drive.svg");
+        expect(logo).toHaveAttribute("alt", "");
+    });
+
     it("draws nothing for a document Drive cannot hold", () => {
         renderBanner({ connected: true, linkable: false, link: null });
         expect(screen.queryByRole("button", { name: "Hide Google Drive bar" })).toBeNull();

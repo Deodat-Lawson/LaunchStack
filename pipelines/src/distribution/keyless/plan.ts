@@ -53,7 +53,12 @@ export function keywordsFor(program: Pick<ProgramRecord, "categories" | "offerin
 export function buildKeylessPlan(input: PlanInput): DiscoveryPlan {
     const keywords = keywordsFor(input.program);
     const kind = input.partnerKinds[0] ?? "distributor";
-    const selectors = tagSelectorsFor([...keywords, ...input.partnerKinds]);
+    // OpenStreetMap tags for what the segment is about; partner-kind tags
+    // ("wholesale", "trade") only when the topic words map to none — they used
+    // to crowd the segment's own tags out of the four-selector budget.
+    const topical = tagSelectorsFor(keywords);
+    const selectors =
+        topical.length > 0 ? topical : tagSelectorsFor([...keywords, ...input.partnerKinds]);
     const queries: PlannedSourceQuery[] = [];
     for (const territory of input.territories) {
         const where = territory.region
@@ -75,7 +80,9 @@ export function buildKeylessPlan(input: PlanInput): DiscoveryPlan {
                 kind: "web",
                 territory,
                 partnerKind: kind,
-                query: `${keywords.join(" ")} ${where} country:${territory.country}`,
+                // The keyless directory port reads the country and region from
+                // these tags; the place words are for a search engine's benefit.
+                query: `${keywords.join(" ")} ${where} country:${territory.country}${territory.region ? ` region:{${territory.region}}` : ""}`,
                 label: "directories",
                 rationale: `Public directories (Y Combinator) filtered to ${where} and the segment's words.`,
             });

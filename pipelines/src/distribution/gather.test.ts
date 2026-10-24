@@ -48,6 +48,48 @@ describe("mentionFromWebResult", () => {
     });
 });
 
+describe("mentionFromWebResult location and roles", () => {
+    const baltimore: PlannedSourceQuery = {
+        kind: "web",
+        territory: { country: "US", region: "Baltimore" },
+        partnerKind: "distributor",
+        query: "specialty coffee Baltimore, United States",
+        label: "directories",
+        rationale: "r",
+    };
+
+    it("records where the result says it is, never where we searched", () => {
+        const m = mentionFromWebResult(
+            {
+                url: "https://trymango.example",
+                title: "Mango | B2B, Productivity",
+                content: "AI meeting notes. Located in San Francisco, CA, USA.",
+                score: 0.8,
+            },
+            baltimore
+        );
+        expect(m.country).toBe("US");
+        expect(m.region).toBeNull();
+    });
+
+    it("leaves the location unknown when the result does not state one", () => {
+        const m = mentionFromWebResult(
+            { url: "https://beanly.com", title: "Beanly", content: "Coffee for offices", score: 1 },
+            baltimore
+        );
+        expect(m.country).toBeNull();
+        expect(m.region).toBeNull();
+    });
+
+    it("does not invent a role from the query's partner kind", () => {
+        const m = mentionFromWebResult(
+            { url: "https://beanly.com", title: "Beanly", content: "Coffee for offices", score: 1 },
+            baltimore
+        );
+        expect(m.roles).toEqual([]);
+    });
+});
+
 describe("gather", () => {
     it("degrades per source and never throws when one source fails", async () => {
         const result = await gather([webQuery, placeQuery, tradeQuery], {

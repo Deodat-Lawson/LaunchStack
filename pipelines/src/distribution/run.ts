@@ -35,7 +35,14 @@ import {
 import { gather, type GatherPorts } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
-import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
+import { bestTerritoryFit } from "./locate";
+import {
+    buildRationaleInput,
+    computeFit,
+    deriveRiskFlags,
+    templateRationale,
+    topicRelevance,
+} from "./score";
 import type {
     DiscoveryPlan,
     PartnerKind,
@@ -328,9 +335,38 @@ export async function prepareRun(
             orgs = orgs.filter(org => normalizeOrgName(org.name) !== sellerKey);
             const excluded = before - orgs.length;
 
-            // Shortlist: more mentions and a real domain first; wanted roles first.
+            // Two gates before anyone spends a research turn on a company:
+            // - where it is: out only on evidence (a known country or city
+            //   elsewhere); unknown stays, and is ranked below confirmed;
+            // - what it is: its own words must share something with what the
+            //   segment is about. A company that only matched on the place
+            //   name, or on nothing, is not a prospect.
+            const fitOf = new Map(orgs.map(o => [o.resolveKey, bestTerritoryFit(o, territories)]));
+            const relevanceOf = new Map(
+                orgs.map(o => [
+                    o.resolveKey,
+                    topicRelevance(program, [o.name, ...o.categories, o.description ?? ""]),
+                ])
+            );
+            const outOfArea = orgs.filter(o => fitOf.get(o.resolveKey) === "out").length;
+            orgs = orgs.filter(o => fitOf.get(o.resolveKey) !== "out");
+            const offTopic = orgs.filter(o => (relevanceOf.get(o.resolveKey) ?? 0) === 0).length;
+            orgs = orgs.filter(o => (relevanceOf.get(o.resolveKey) ?? 0) > 0);
+            if (outOfArea + offTopic > 0)
+                warnings.push(
+                    `Left out ${outOfArea} compan${outOfArea === 1 ? "y" : "ies"} outside the segment's area and ${offTopic} with nothing in common with what you sell.`
+                );
+
+            // Shortlist: most relevant first; then confirmed inside the area,
+            // a wanted role the text states, a real domain, and mentions.
             const wanted = new Set<string>(partnerKinds);
             const ranked = [...orgs].sort((a, b) => {
+                const relA = relevanceOf.get(a.resolveKey) ?? 0;
+                const relB = relevanceOf.get(b.resolveKey) ?? 0;
+                if (relA !== relB) return relB - relA;
+                const inA = fitOf.get(a.resolveKey) === "in" ? 1 : 0;
+                const inB = fitOf.get(b.resolveKey) === "in" ? 1 : 0;
+                if (inA !== inB) return inB - inA;
                 const roleA = a.roles.some(r => wanted.has(r)) ? 1 : 0;
                 const roleB = b.roles.some(r => wanted.has(r)) ? 1 : 0;
                 if (roleA !== roleB) return roleB - roleA;

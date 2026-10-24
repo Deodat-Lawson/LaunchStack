@@ -24,7 +24,7 @@ import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
 import { createKeylessPorts } from "./ports";
 import { extractFacts, firstDescription, profileFromPages } from "./profile";
-import { filterYc, resetYcCache, type YcCompany } from "./yc";
+import { filterYc, resetYcCache, ycInTerritory, type YcCompany } from "./yc";
 
 const urlOf = (input: RequestInfo | URL): string =>
     typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
@@ -68,10 +68,20 @@ describe("keyless plan", () => {
         const place = plan.queries.filter(q => q.kind === "place");
         expect(place.map(q => q.territory.country)).toEqual(["NL", "DE"]);
         expect(place[0]!.categoryIds).toContain('["shop"="coffee"]');
-        expect(place[0]!.categoryIds).toContain('["shop"="wholesale"]');
+        // The segment's own tags fill the budget; partner-kind tags don't crowd them out.
+        expect(place[0]!.categoryIds).not.toContain('["shop"="wholesale"]');
         const web = plan.queries.filter(q => q.kind === "web");
-        expect(web[1]!.query).toContain("Hamburg, Germany country:DE");
+        expect(web[1]!.query).toContain("Hamburg, Germany country:DE region:{Hamburg}");
         expect(plan.strategy).toMatch(/No model/);
+    });
+
+    it("falls back to partner-kind tags only when the topic maps to none", () => {
+        const plan = buildKeylessPlan({
+            ...planInput,
+            program: { ...planInput.program, categories: ["quantum widgets"] },
+        });
+        const place = plan.queries.find(q => q.kind === "place")!;
+        expect(place.categoryIds).toContain('["shop"="wholesale"]');
     });
 });
 
@@ -508,8 +518,74 @@ describe("YC directory", () => {
         resetYcCache();
         const hits = filterYc(companies, { country: "NL", keywords: ["specialty coffee"] });
         expect(hits.map(h => h.name)).toEqual(["Beanly"]);
-        const anyNl = filterYc(companies, { country: "NL", keywords: [] });
-        expect(anyNl.map(h => h.name)).toEqual(["Beanly", "Fintechly"]);
+        // No topic words means nothing relevant, not "every company in the country".
+        expect(filterYc(companies, { country: "NL", keywords: [] })).toEqual([]);
+    });
+
+    const us: YcCompany[] = [
+        {
+            id: 10,
+            name: "Mango",
+            slug: "mango",
+            website: "https://trymango.example",
+            all_locations: "San Francisco, CA, USA",
+            one_liner: "AI meeting notes for teams across the United States",
+            industries: ["B2B", "Productivity"],
+            status: "Active",
+        },
+        {
+            id: 11,
+            name: "Charm City Roasters",
+            slug: "charm",
+            website: "https://charmroast.example",
+            all_locations: "Baltimore, MD, USA",
+            one_liner: "Specialty coffee roaster supplying cafés",
+            industries: ["Food and Beverage"],
+            status: "Active",
+        },
+        {
+            id: 12,
+            name: "Brusselsco",
+            slug: "brusselsco",
+            website: "https://brussels.example",
+            all_locations: "Brussels, Belgium",
+            one_liner: "Coffee logistics",
+            industries: ["Logistics"],
+            status: "Active",
+        },
+    ];
+
+    it("does not match companies on the place words in the query", () => {
+        // The planner's web query embeds "Baltimore, United States": those words
+        // used to match any blurb that said "United States".
+        const hits = filterYc(us, {
+            country: "US",
+            keywords: ["specialty coffee", "Baltimore,", "United", "States"],
+        });
+        expect(hits.map(h => h.name)).toEqual(["Charm City Roasters"]);
+    });
+
+    it("keeps the region when one is asked for", () => {
+        const sf = {
+            ...us[1]!,
+            id: 13,
+            name: "Bay Beans",
+            all_locations: "San Francisco, CA, USA",
+        };
+        const hits = filterYc([...us, sf], {
+            country: "US",
+            region: "Baltimore",
+            keywords: ["coffee"],
+        });
+        expect(hits.map(h => h.name)).toEqual(["Charm City Roasters"]);
+    });
+
+    it("matches the country as a whole word ('us' is not in Brussels)", () => {
+        expect(ycInTerritory("Brussels, Belgium", "US")).toBe(false);
+        expect(ycInTerritory("Houston, TX", "US")).toBe(false);
+        expect(ycInTerritory("Austin, TX, USA; Remote", "US")).toBe(true);
+        expect(ycInTerritory("Austin, TX, USA", "US", "Austin")).toBe(true);
+        expect(ycInTerritory("Austin, TX, USA", "US", "Baltimore")).toBe(false);
     });
 });
 
@@ -780,7 +856,9 @@ describe("keyless ports", () => {
             },
         ]);
         expect(web.map(r => r.title)).toEqual(["Beanly | Food"]);
-        expect(web[0]!.content).toContain("country:NL");
+        // The entry's own location travels with it; the query's country is not stamped on.
+        expect(web[0]!.content).toContain("Located in Amsterdam, Netherlands");
+        expect(web[0]!.content).not.toContain("country:");
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
     });

@@ -150,6 +150,17 @@ export function categoryCoverage(
     return sum / phrases.length;
 }
 
+/**
+ * How much an organisation's own words (name, categories, description)
+ * cover what the segment is about, in [0, 1] — the shortlist's relevance.
+ */
+export function topicRelevance(
+    program: Pick<ProgramRecord, "categories" | "offering">,
+    texts: readonly string[]
+): number {
+    return categoryCoverage(program, tokens(texts));
+}
+
 export function computeFit(input: ScoreInput): FitBreakdown {
     const now = input.now ?? new Date();
     const orgName = input.org.name.toLowerCase();
@@ -232,10 +243,15 @@ export function computeFit(input: ScoreInput): FitBreakdown {
 
     const knownSignal = input.knownEntity ? WEIGHTS.knownSignal : 0;
 
+    // Relevance gates the rest: territory, freshness, size and evidence depth
+    // reward any company with a readable website, so one that shares nothing
+    // with what the segment is about used to reach 40-45 on those alone and
+    // sit among the real prospects. Without topic overlap it stays low.
+    const ceiling = categoryOverlap === 0 ? IRRELEVANT_CEILING : 100;
     const total = Math.max(
         0,
         Math.min(
-            100,
+            ceiling,
             categoryOverlap +
                 territoryMatch +
                 roleMatch +
@@ -257,6 +273,9 @@ export function computeFit(input: ScoreInput): FitBreakdown {
     };
 }
 
+/** The most a company with no topic overlap can score (well under FIT_THRESHOLD). */
+export const IRRELEVANT_CEILING = 20;
+
 /** Risk flags derived from the dossier and the rubric — deterministic strings the UI can render. */
 export function deriveRiskFlags(input: {
     dossier: Dossier | null;
@@ -271,6 +290,8 @@ export function deriveRiskFlags(input: {
     if (input.budgetExhausted) flags.push("research budget exhausted");
     for (const risk of input.dossier?.risks ?? []) flags.push(risk.risk);
     if (input.breakdown.roleMatch === 0) flags.push("role not confirmed");
+    if (input.breakdown.categoryOverlap === 0) flags.push("nothing in common with what you sell");
+    if (input.breakdown.territoryMatch === 0) flags.push("outside the segment's area");
     return [...new Set(flags)].slice(0, 12);
 }
 

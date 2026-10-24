@@ -57,7 +57,15 @@ export {
     CAST_SCHEMA,
     type CastRequestInput,
 } from "./cast";
-export { buildBriefRequest, parseBrief, stripCitations, BRIEF_SCHEMA, type Brief } from "./brief";
+export {
+    buildBriefRequest,
+    parseBrief,
+    stripCitations,
+    turnSituation,
+    BRIEF_SCHEMA,
+    TURN_SUBJECT_CHARS,
+    type Brief,
+} from "./brief";
 export {
     buildReportRequest,
     parseReport,

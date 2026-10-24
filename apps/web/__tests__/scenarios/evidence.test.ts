@@ -123,6 +123,34 @@ it("reads only picked files the creator can open", async () => {
     ]);
 });
 
+it("reads a business plan in depth and spreads passages across several files", async () => {
+    const chunks = (documentId: bigint, title: string, n: number) =>
+        Array.from({ length: n }, (_, i) => ({
+            documentId,
+            documentTitle: title,
+            page: i + 1,
+            content: i % 2 === 0 ? `Pricing and churn, part ${i}.` : `Hiring plan, part ${i}.`,
+        }));
+
+    queue(document, [{ id: 7 }]);
+    getMultiDocChunks.mockResolvedValue(chunks(7n, "Business plan.pdf", 30));
+    const one = await gatherScenarioEvidence(run({ documentIds: [7] }));
+    // Twelve passages, not three, and the ones about the subject ("pricing churn").
+    expect(one.map(e => e.label)).toEqual(
+        Array.from({ length: 12 }, (_, i) => `Business plan.pdf, page ${2 * i + 1}`)
+    );
+
+    queue(document, [{ id: 7 }, { id: 8 }, { id: 9 }]);
+    getMultiDocChunks.mockResolvedValue([
+        ...chunks(7n, "Plan.pdf", 20),
+        ...chunks(8n, "Actions.docx", 20),
+        ...chunks(9n, "Cases.pdf", 20),
+    ]);
+    const three = await gatherScenarioEvidence(run({ documentIds: [7, 8, 9] }));
+    expect(three).toHaveLength(24);
+    expect(three.slice(0, 3).map(e => e.documentIds[0])).toEqual([7, 8, 9]);
+});
+
 it("drops search hits outside the creator's scope even if retrieval returned them", async () => {
     retrieveCompanySnippets.mockResolvedValue({
         snippets: [],

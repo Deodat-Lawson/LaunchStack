@@ -19,6 +19,8 @@ export const MAX_COMMENT_CHARS = 300;
 
 export interface CreateWorldInput {
     subject: string;
+    /** A long subject's restatement for turns. */
+    situation?: string;
     brief: string;
     personas: Persona[];
     accounts?: Account[];
@@ -47,6 +49,7 @@ export function createWorld(input: CreateWorldInput): World {
         version: 1,
         round: 0,
         subject: input.subject,
+        ...(input.situation ? { situation: input.situation } : {}),
         brief: input.brief,
         config,
         accounts: input.accounts ?? [],

@@ -138,6 +138,15 @@ function clampInt(value: unknown, min: number, max: number, fallback: number): n
     return Math.max(min, Math.min(max, n));
 }
 
+/** A situation's first line, cut at a word: a plan pasted in still gets a readable title. */
+export function titleFromSubject(subject: string): string {
+    const line = subject.split(/\n/, 1)[0]!.trim();
+    if (line.length <= 120) return line;
+    const cut = line.slice(0, 119);
+    const space = cut.lastIndexOf(" ");
+    return `${(space > 60 ? cut.slice(0, space) : cut).replace(/[\s,;:.–—-]+$/, "")}…`;
+}
+
 export function creditsForEstimate(
     agents: number,
     rounds: number
@@ -262,7 +271,7 @@ export async function createScenario(
     await requireCredits(ctx, credits);
 
     const titleRaw = typeof input.title === "string" ? input.title.trim() : "";
-    const title = (titleRaw || subject).slice(0, 120);
+    const title = titleRaw ? titleRaw.slice(0, 120) : titleFromSubject(subject);
     const run = await createScenarioRun({
         companyId: ctx.companyId,
         createdByUserId: ctx.authUserId,

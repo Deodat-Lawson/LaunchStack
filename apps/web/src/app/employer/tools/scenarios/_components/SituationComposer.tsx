@@ -111,8 +111,8 @@ export function SituationComposer({
                         value={value}
                         onChange={e => onChange(e.target.value)}
                         rows={3}
-                        placeholder="One thing that could happen: a price change, a launch, a new policy, a competitor’s move…"
-                        className="mt-1 min-h-[84px] rounded-none border-0 bg-transparent px-0 py-0 leading-[1.55] shadow-none focus-visible:ring-0 md:text-[15px] dark:bg-transparent"
+                        placeholder="What could happen — a launch, a price change, a new policy — and, if it helps, the plan behind it, the actions you would take and where things stand now…"
+                        className="mt-1 max-h-[45vh] min-h-[84px] overflow-y-auto rounded-none border-0 bg-transparent px-0 py-0 leading-[1.55] shadow-none [field-sizing:content] focus-visible:ring-0 md:text-[15px] dark:bg-transparent"
                         aria-invalid={tooLong || undefined}
                         aria-describedby="scenario-subject-help"
                     />
@@ -226,8 +226,9 @@ export function SituationComposer({
                 )}
             </div>
             <p id="scenario-subject-help" className="text-ink-3 text-xs leading-relaxed">
-                One situation, in plain words: it is the opening post everyone sees. Attach what it
-                is about — a pricing page, a policy draft, a pitch deck
+                One situation, in plain words — a line, or a few paragraphs on the plan, the actions
+                and the current cases. Attach what it is about: a business plan, an action plan,
+                case notes, a pricing page
                 {canUpload ? "; drop files on the box to upload them." : "."}
             </p>
         </div>

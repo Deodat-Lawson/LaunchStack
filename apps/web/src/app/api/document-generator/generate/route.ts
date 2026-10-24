@@ -185,7 +185,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
             let body: unknown;
             try {
                 body = (await request.json()) as unknown;

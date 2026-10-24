@@ -150,7 +150,9 @@ export async function POST(request: Request) {
     }
 
     // The analysis resolves its models against the workspace's own, if it brought them.
-    return withWorkspaceChatModels(ctx.data.companyId, () => analyze(request, ctx));
+    return withWorkspaceChatModels(ctx.data.companyId, "predictiveAnalysis", () =>
+        analyze(request, ctx)
+    );
 }
 
 function analyze(request: Request, ctx: { data: WorkspaceContext }) {

@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
         // No workspace: the operator's benchmark runs on the deployment's
         // models, and says so (image descriptions read the scope).
-        return await withWorkspaceChatModels(null, async () => {
+        return await withWorkspaceChatModels(null, "ingestion", async () => {
             if (isPdf) {
                 const decision = await routeDocument(fileUrl);
                 const result = await normalizeDocument(fileUrl, decision);

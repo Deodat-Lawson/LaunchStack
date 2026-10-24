@@ -125,7 +125,7 @@ export async function POST(request: Request) {
                 const body = await request.text();
                 // Tool calls (and the follow-up a saved conversation queues after
                 // the response) use the caller's workspace models.
-                const answer = await withWorkspaceChatModels(principal.ctx.companyId, () =>
+                const answer = await withWorkspaceChatModels(principal.ctx.companyId, "mcp", () =>
                     handleMcpPost(
                         {
                             body,

@@ -72,7 +72,7 @@ export const repoExplainerJob = inngest.createFunction(
         // A step body runs outside the handler's async context, so the
         // workspace's models are entered inside the step.
         return step.run("explain", () =>
-            withWorkspaceChatModels(companyId, async () => {
+            withWorkspaceChatModels(companyId, "repoExplainer", async () => {
                 const workspace = await getRepoWorkspace(workspaceId, BigInt(companyId));
                 if (!workspace) {
                     await failExplainerJob(jobId, null, "Workspace not found");

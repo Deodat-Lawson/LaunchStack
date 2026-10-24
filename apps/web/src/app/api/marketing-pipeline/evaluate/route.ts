@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
             const parsed = EvaluateBodySchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

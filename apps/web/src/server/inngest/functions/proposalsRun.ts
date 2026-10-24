@@ -54,7 +54,7 @@ export const proposalsRunJob = inngest.createFunction(
         const result = await step.run("execute", async () => {
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
-            const run = await withWorkspaceChatModels(companyId, () =>
+            const run = await withWorkspaceChatModels(companyId, "proposals", () =>
                 executeProposalRun(
                     { runId: data.runId, companyId, userId: data.userId },
                     createProposalPorts(companyId)

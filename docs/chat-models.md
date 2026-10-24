@@ -253,6 +253,37 @@ models:
 An unknown model is never silently classified as text-only: leaving `behavior`
 off entirely is a startup error telling you to declare it.
 
+### Pricing
+
+Every chat completion the app makes for a workspace is counted from the
+provider's own usage report (input, output, reasoning and cached tokens) as it
+passes the shared transport, whichever feature made it, and lands in
+`ai_usage_daily`. Settings › Usage shows it by feature and by route. To turn
+those counts into dollars, declare what each model costs, in US dollars per
+million tokens:
+
+```yaml
+models:
+  primary:
+    id: google/gemini-3.8-flash
+    preset: google/gemini-3.8-flash
+    pricing: # illustrative: copy the numbers from your provider's price list
+      input: 1.25
+      output: 4.25 # reasoning tokens bill as output
+      cachedInput: 0.15 # optional; defaults to `input`
+```
+
+`pricing` is optional and never sent to the endpoint. A model without it is
+still counted, just not priced; the usage page then falls back to the
+workspace's own "price per 1M tokens" setting for those calls, or shows no
+cost. The price is applied when the call is recorded, so changing it (or
+switching models) does not reprice past days. A workspace's own model
+(Settings › Bring your own keys) carries no price: its provider bills the
+workspace directly, and the page says how many calls went there.
+
+Like the rest of the file, a price change takes effect on restart of the app
+and the worker.
+
 ## Behavior reference
 
 ### `input`

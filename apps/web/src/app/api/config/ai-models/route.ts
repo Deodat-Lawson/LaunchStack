@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         const companyId = ctx.success ? ctx.data.companyId : null;
-        return await withWorkspaceChatModels(companyId, () =>
+        return await withWorkspaceChatModels(companyId, "ask", () =>
             NextResponse.json(getConfiguredPublicChatConfig())
         );
     } catch (error) {

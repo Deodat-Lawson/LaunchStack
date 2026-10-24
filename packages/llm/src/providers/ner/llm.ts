@@ -9,6 +9,7 @@ import {
 } from "../../auxiliary-model";
 import { getChatModelsSource } from "../../chat-scope";
 import { extractJson } from "../../structured-output";
+import { createUsageMeteringFetch } from "../../usage-meter";
 import OpenAI from "openai";
 
 /**
@@ -60,7 +61,11 @@ export class LLMNERProvider implements NERProvider {
         this.model = resolveModel(ner.model, GEMINI_FAST_MODEL);
         this.deploymentName = `ner:${this.model}`;
 
-        this.client = new OpenAI({ apiKey, baseURL });
+        this.client = new OpenAI({
+            apiKey,
+            baseURL,
+            fetch: createUsageMeteringFetch({ route: "auxiliary", modelId: this.model }),
+        });
     }
 
     /** The deployment's NER model, or the workspace's fast model when its scope is in force. */

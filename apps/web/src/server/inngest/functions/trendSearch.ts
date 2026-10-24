@@ -106,7 +106,7 @@ export const trendSearchJob = inngest.createFunction(
 
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
-            return withWorkspaceChatModels(companyId, () =>
+            return withWorkspaceChatModels(companyId, "trends", () =>
                 runTrendSearch(toPipelineInput(eventData), {
                     onStageChange,
                 })

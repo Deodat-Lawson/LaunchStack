@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(auth.ctx.companyId, () =>
+    return withWorkspaceChatModels(auth.ctx.companyId, "prospects", () =>
         withRateLimit(
             request,
             {

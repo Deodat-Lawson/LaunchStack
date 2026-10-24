@@ -85,7 +85,7 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     after(async () => {
         try {
             // After the response, under the workspace's own models if it brought them.
-            await withWorkspaceChatModels(args.companyId, () =>
+            await withWorkspaceChatModels(args.companyId, "proposals", () =>
                 executeProposalRun(ctx, createProposalPorts(args.companyId))
             );
         } catch (error) {

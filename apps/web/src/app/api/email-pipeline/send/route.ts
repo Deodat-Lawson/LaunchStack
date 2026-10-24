@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
         // The preview generates and reviews a template: the workspace's own
         // models when it brought them.
-        return await withWorkspaceChatModels(actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.companyId, "emailCampaigns", async () => {
             let json: unknown;
             try {
                 json = await request.json();

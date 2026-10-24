@@ -49,7 +49,7 @@ export async function POST(request: Request) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            return await withWorkspaceChatModels(ctx.data.companyId, "notes", async () => {
                 const body = (await request.json().catch(() => ({}))) as Body;
                 const selection = (body.selection ?? "").trim();
                 const intent = body.intent ?? "summary";

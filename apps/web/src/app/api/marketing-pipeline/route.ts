@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
             const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
             if (!validation.success) {
                 return fail(translatorFor(locale, "errors.api")("invalidInput"), 400, {

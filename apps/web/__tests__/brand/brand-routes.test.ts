@@ -112,6 +112,11 @@ jest.mock("~/server/brand/post-views", () => ({
     toPostViews: (_companyId: bigint, posts: unknown[]) => Promise.resolve(posts),
 }));
 jest.mock("~/server/brand/publish", () => ({ publishForWorkspace: jest.fn() }));
+const mockClaimGate = jest.fn().mockResolvedValue(null);
+jest.mock("~/server/brand/claim-gate", () => ({
+    CLAIM_GATE_MESSAGE: "Some claims in this post aren't backed by your documents.",
+    claimGate: (...a: unknown[]) => mockClaimGate(...a),
+}));
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("@launchstack/tools/social-publish/bluesky", () => ({ getBlueskyProfile: jest.fn() }));
 
@@ -530,5 +535,103 @@ describe("the campaign generator's Publish goes through the workspace's own chan
         );
         expect(response.status).toBe(400);
         expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+});
+
+describe("the claim gate: unbacked claims don't go out as the company unacknowledged", () => {
+    const BLOCK = {
+        code: "unsupported_claims",
+        unavailable: false,
+        claims: [
+            {
+                claim: "We are SOC 2 certified",
+                support: "unsupported",
+                reason: "The documents only mention plans for an audit.",
+                sourceDoc: "Security overview",
+            },
+        ],
+    };
+
+    beforeEach(() => {
+        mockDefaultChannelFor.mockResolvedValue(PAGE);
+        mockPublishBrandPost.mockResolvedValue({
+            status: "published",
+            postId: "urn:li:share:1",
+            postUrl: "https://li/1",
+            error: null,
+        });
+    });
+
+    it("the generator's Publish answers 409 with the claims, and posts nothing", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce(BLOCK);
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", {
+                platform: "linkedin",
+                message: "We are SOC 2 certified.",
+            })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({
+            code: "unsupported_claims",
+            claims: [{ claim: "We are SOC 2 certified", support: "unsupported" }],
+        });
+        expect(mockClaimGate).toHaveBeenCalledWith(BigInt(5), "We are SOC 2 certified.");
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+        expect(mockPublishBrandPost).not.toHaveBeenCalled();
+    });
+
+    it("a check that could not run blocks the same way (unknown is not clean)", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce({ ...BLOCK, unavailable: true, claims: [] });
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "linkedin", message: "Hi" })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({ unavailable: true });
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+
+    it("posts once the member acknowledges, without checking again", async () => {
+        as("member");
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", {
+                platform: "linkedin",
+                message: "We are SOC 2 certified.",
+                acknowledgeUnsupportedClaims: true,
+            })
+        );
+        expect(response.status).toBe(200);
+        expect(mockClaimGate).not.toHaveBeenCalled();
+        expect(mockPublishBrandPost).toHaveBeenCalled();
+    });
+
+    it("scheduling a campaign post through Compose is gated too", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce(BLOCK);
+        const response = await compose(
+            req("/api/brand/posts", "POST", {
+                channels: ["ch-page"],
+                body: "We are SOC 2 certified.",
+                scheduledAt: new Date(Date.now() + 86_400_000).toISOString(),
+                source: { kind: "campaign" },
+            })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({ code: "unsupported_claims" });
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+
+    it("a member's own Compose post is theirs: no claim check", async () => {
+        as("member");
+        const response = await compose(
+            req("/api/brand/posts", "POST", {
+                channels: ["ch-page"],
+                body: "We are SOC 2 certified.",
+                source: { kind: "compose" },
+            })
+        );
+        expect(response.status).toBe(201);
+        expect(mockClaimGate).not.toHaveBeenCalled();
     });
 });

@@ -69,6 +69,18 @@ function formatTrendsSummary(research: MarketingResearchResult[]): string {
         .join("\n");
 }
 
+/**
+ * Where a run keeps the stages it has finished, so a retry (the worker's, or
+ * a stalled inline run picked up again) skips them instead of redoing ten
+ * model calls. Only a stage's real success is saved — never a degradable
+ * stage's fallback, which deserves another try. Values must survive a JSON
+ * round trip (they are stored in a jsonb column).
+ */
+export interface StageCheckpoint {
+    get(step: PipelineStepId): unknown;
+    put(step: PipelineStepId, value: unknown): Promise<void>;
+}
+
 function stepLabel(step: PipelineStepId): string {
     return PIPELINE_STEPS.find(s => s.id === step)?.label ?? step;
 }
@@ -88,8 +100,9 @@ export async function runMarketingPipeline(args: {
     debug?: boolean;
     onProgress?: OnPipelineProgress;
     signal?: AbortSignal;
+    checkpoint?: StageCheckpoint;
 }): Promise<MarketingPipelineResult> {
-    const { onProgress, signal } = args;
+    const { onProgress, signal, checkpoint } = args;
     const pipelineStart = Date.now();
 
     /** Shared runner options; every stage adds its own definition on top. */
@@ -99,8 +112,19 @@ export async function runMarketingPipeline(args: {
             "label" | "onProgress" | "signal" | "logPrefix"
         >
     ): Promise<S | F> {
+        const saved = checkpoint?.get(options.id);
+        const run: typeof options.run =
+            saved !== undefined
+                ? // Finished on an earlier attempt: report it again from the saved value.
+                  async () => saved as S
+                : async tools => {
+                      const value = await options.run(tools);
+                      await checkpoint?.put(options.id, value);
+                      return value;
+                  };
         return runStage<S, F, PipelineStepId>({
             ...options,
+            run,
             label: stepLabel(options.id),
             onProgress,
             signal,

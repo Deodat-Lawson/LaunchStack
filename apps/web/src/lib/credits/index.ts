@@ -8,7 +8,7 @@ export {
     getUsageHistory,
     getTransactionHistory,
 } from "./service";
-export type { DebitOptions, GrantOptions, UsageHistoryOptions } from "./service";
+export type { CreditsExecutor, DebitOptions, GrantOptions, UsageHistoryOptions } from "./service";
 
 export {
     TOKEN_COSTS,

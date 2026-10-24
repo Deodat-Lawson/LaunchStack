@@ -13,6 +13,7 @@
 import { toolTabHref } from "~/lib/tool-app/locations";
 import type {
     ScenarioComment,
+    ScenarioFileOption,
     ScenarioKind,
     ScenarioPerson,
     ScenarioPost,
@@ -139,34 +140,67 @@ function factionsOf(people: ScenarioPerson[]): ScenarioReport["factions"] {
 
 // ── The sources the form can offer ────────────────────────────────────────
 
+const DAY_MS = 86_400_000;
+
+/** A file the form offers, added `days` ago; ready and not the company's unless said. */
+function file(
+    id: number,
+    title: string,
+    folder: string | null,
+    days: number,
+    more: Partial<ScenarioFileOption> = {}
+): ScenarioFileOption {
+    return {
+        id,
+        title,
+        folder,
+        mimeType: null,
+        addedAt: new Date(Date.now() - days * DAY_MS).toISOString(),
+        status: "ready",
+        aboutCompany: false,
+        ...more,
+    };
+}
+
 export const SOURCE_OPTIONS: ScenarioSourceOptions = {
     documents: [
-        { id: 212, title: "Customer interviews — September.pdf", folder: "Research" },
-        { id: 198, title: "Churn notes Q3.docx", folder: "Research" },
-        { id: 240, title: "Pricing page copy v4.md", folder: "Marketing" },
-        { id: 251, title: "Board update — October.pdf", folder: "Company" },
-        { id: 263, title: "Support tickets export (Sept).csv", folder: "Support" },
-        { id: 271, title: "Onboarding survey results.xlsx", folder: "Research" },
-        { id: 288, title: "Competitor teardown — Tallybook.md", folder: "Marketing" },
-        { id: 290, title: "Partner programme terms.pdf", folder: "Partners" },
-        { id: 301, title: "Roadmap spring 2027.md", folder: "Product" },
-        { id: 305, title: "Sales call notes — accounting firms.docx", folder: "Sales" },
-        { id: 312, title: "Press kit.pdf", folder: "Marketing" },
-        { id: 318, title: "Customer advisory board minutes.docx", folder: "Research" },
-        { id: 322, title: "Website analytics summary.pdf", folder: null },
-        { id: 330, title: "Brand voice guide.md", folder: "Marketing" },
+        file(340, "Q4 plan — draft.docx", "Company", 0.02, {
+            status: "processing",
+            aboutCompany: false,
+        }),
+        file(336, "Pricing & plans 2026.pdf", "Company", 1, { aboutCompany: true }),
+        file(334, "Pitch deck — seed extension.pptx", "Company", 3, { aboutCompany: true }),
+        file(330, "Brand voice guide.md", "Marketing", 4),
+        file(322, "Website analytics summary.pdf", null, 6),
+        file(318, "Customer advisory board minutes.docx", "Research", 8),
+        file(312, "Press kit.pdf", "Marketing", 9, { aboutCompany: true }),
+        file(305, "Sales call notes — accounting firms.docx", "Sales", 11),
+        file(301, "Roadmap spring 2027.md", "Product", 12, { aboutCompany: true }),
+        file(299, "Scanned lease agreement.pdf", "Legal", 13, { status: "failed" }),
+        file(290, "Partner programme terms.pdf", "Partners", 15),
+        file(288, "Competitor teardown — Tallybook.md", "Marketing", 18),
+        file(271, "Onboarding survey results.xlsx", "Research", 21),
+        file(263, "Support tickets export (Sept).csv", "Support", 25),
+        file(251, "Board update — October.pdf", "Company", 27, { aboutCompany: true }),
+        file(240, "Pricing page copy v4.md", "Marketing", 30),
+        file(212, "Customer interviews — September.pdf", "Research", 34),
+        file(198, "Churn notes Q3.docx", "Research", 40),
     ],
     prospects: 42,
     brandComments: 18,
     companyProfile: true,
+    canUpload: true,
 };
 
 /** The evidence rows a new run is built from, as the server would list them. */
-export function sourcesFor(input: ScenarioSources): ScenarioSource[] {
+export function sourcesFor(
+    input: ScenarioSources,
+    documents: readonly ScenarioFileOption[] = SOURCE_OPTIONS.documents
+): ScenarioSource[] {
     const out: ScenarioSource[] = [];
     const next = () => `E${out.length + 1}`;
     for (const id of input.documentIds) {
-        const doc = SOURCE_OPTIONS.documents.find(d => d.id === id);
+        const doc = documents.find(d => d.id === id);
         if (!doc) continue;
         out.push({
             id: next(),

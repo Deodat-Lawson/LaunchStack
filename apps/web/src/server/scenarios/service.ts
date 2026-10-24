@@ -13,7 +13,7 @@
  */
 import { randomInt } from "node:crypto";
 
-import { and, asc, count, eq, isNotNull } from "drizzle-orm";
+import { and, count, desc, eq, isNotNull, not } from "drizzle-orm";
 
 import {
     buildTrackRecord,
@@ -38,6 +38,7 @@ import {
     requestCancel,
     updateRunMeta,
 } from "@launchstack/pipelines/scenarios/db";
+import { isCounted } from "@launchstack/pipelines/company-metadata";
 import { partnerRelationships } from "@launchstack/pipelines/schema";
 import {
     buildAnalystRequest,
@@ -48,7 +49,7 @@ import {
     MAX_AGENTS,
     MAX_ROUNDS,
 } from "@launchstack/simulation";
-import { document } from "@launchstack/store/schema";
+import { document, documentVersions } from "@launchstack/store/schema";
 import { llmChatTokens } from "@launchstack/store/credits";
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
@@ -62,6 +63,7 @@ import {
     type PostTestResult,
     type ScenarioDetail,
     type ScenarioEstimate,
+    type ScenarioFileStatus,
     type ScenarioInjection,
     type ScenarioInterview,
     type ScenarioSourceOptions,
@@ -69,10 +71,11 @@ import {
     type TrackRecord,
 } from "~/lib/scenarios/types";
 import { db } from "~/server/db";
-import { brandComments, companyMetadata } from "~/server/db/schema";
+import { brandComments, companyMetadata, companyProfileSources } from "~/server/db/schema";
 import { isMeteringEnforced } from "~/server/deployment";
 import { workspaceLooks } from "~/server/profile/store";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { originalMediaDocument } from "~/server/workspace-sources";
 
 import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
@@ -296,14 +299,64 @@ export async function listScenarios(ctx: Ctx): Promise<ScenarioSummary[]> {
     return rows.map(r => toSummary(r, ctx.authUserId, names));
 }
 
+/**
+ * Readiness follows the current version, as the Sources rail's does: a
+ * missing or queued current version must not inherit an older success.
+ */
+function fileStatus(row: {
+    currentVersionId: bigint | null;
+    ocrProcessed: boolean | null;
+    ocrMetadata: unknown;
+    versionProcessed: boolean | null;
+    versionMetadata: unknown;
+}): ScenarioFileStatus {
+    const versioned = row.currentVersionId !== null;
+    const processed = versioned ? row.versionProcessed : row.ocrProcessed;
+    if (processed === true) return "ready";
+    const metadata = versioned ? row.versionMetadata : row.ocrMetadata;
+    const failed =
+        typeof metadata === "object" &&
+        metadata !== null &&
+        (metadata as { error?: unknown }).error === "processing_failed";
+    return failed ? "failed" : "processing";
+}
+
 export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOptions> {
     const scope = await ctx.documentScope();
     const [docs, [prospects], [comments], [profile]] = await Promise.all([
         db
-            .select({ id: document.id, title: document.title, folder: document.category })
+            .select({
+                id: document.id,
+                title: document.title,
+                folder: document.category,
+                mimeType: document.mimeType,
+                createdAt: document.createdAt,
+                currentVersionId: document.currentVersionId,
+                ocrProcessed: document.ocrProcessed,
+                ocrMetadata: document.ocrMetadata,
+                versionProcessed: documentVersions.ocrProcessed,
+                versionMetadata: documentVersions.ocrMetadata,
+                role: companyProfileSources.role,
+                override: companyProfileSources.override,
+            })
             .from(document)
-            .where(scopedDocumentWhere(ctx.companyId, scope))
-            .orderBy(asc(document.title))
+            .leftJoin(
+                documentVersions,
+                and(
+                    eq(documentVersions.id, document.currentVersionId),
+                    eq(documentVersions.documentId, document.id)
+                )
+            )
+            .leftJoin(
+                companyProfileSources,
+                and(
+                    eq(companyProfileSources.companyId, document.companyId),
+                    eq(companyProfileSources.documentId, document.id)
+                )
+            )
+            // A recording gives a run nothing; its transcript is the file to pick.
+            .where(and(scopedDocumentWhere(ctx.companyId, scope), not(originalMediaDocument())))
+            .orderBy(desc(document.createdAt), desc(document.id))
             .limit(500),
         db
             .select({ n: count() })
@@ -324,10 +377,19 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
             ),
     ]);
     return {
-        documents: docs.map(d => ({ id: Number(d.id), title: d.title, folder: d.folder || null })),
+        documents: docs.map(d => ({
+            id: Number(d.id),
+            title: d.title,
+            folder: d.folder || null,
+            mimeType: d.mimeType,
+            addedAt: d.createdAt.toISOString(),
+            status: fileStatus(d),
+            aboutCompany: isCounted(d),
+        })),
         prospects: prospects?.n ?? 0,
         brandComments: comments?.n ?? 0,
         companyProfile: (profile?.n ?? 0) > 0,
+        canUpload: ctx.can("documents.upload"),
     };
 }
 

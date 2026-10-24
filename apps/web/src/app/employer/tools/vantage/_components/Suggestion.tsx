@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, ChevronDown, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 
 import { cn } from "~/lib/utils";
@@ -17,12 +18,13 @@ import { EvidenceChips } from "./Primitives";
 
 /** "✦ Suggested by Vantage" — the mark every suggestion carries. */
 export function SuggestionMark({
-    children = "Suggested by Vantage",
+    children,
     className,
 }: {
     children?: React.ReactNode;
     className?: string;
 }) {
+    const t = useTranslations("vantage.suggestion");
     return (
         <span
             className={cn(
@@ -31,7 +33,7 @@ export function SuggestionMark({
             )}
         >
             <Sparkles className="size-3.5 shrink-0" aria-hidden="true" />
-            {children}
+            {children ?? t("mark")}
         </span>
     );
 }
@@ -48,7 +50,7 @@ export function SuggestionCard({
     unsupported,
     actions,
     details,
-    detailsLabel = "Details",
+    detailsLabel,
     menu,
     className,
 }: {
@@ -71,6 +73,7 @@ export function SuggestionCard({
     menu?: React.ReactNode;
     className?: string;
 }) {
+    const t = useTranslations("vantage.suggestion");
     const [open, setOpen] = useState(false);
     const detailsId = useId();
     const titleId = useId();
@@ -104,7 +107,11 @@ export function SuggestionCard({
                 {(shown.length > 0 || unsupported) && (
                     <div className="flex flex-wrap items-center gap-1">
                         <EvidenceChips refs={shown} unsupported={unsupported} />
-                        {more > 0 && <span className="text-ink-3 text-[11px]">+{more} more</span>}
+                        {more > 0 && (
+                            <span className="text-ink-3 text-[11px]">
+                                {t("more", { count: more })}
+                            </span>
+                        )}
                     </div>
                 )}
                 {/* Labelled by the title, so "Add to agenda" is heard with what it adds. */}
@@ -122,7 +129,7 @@ export function SuggestionCard({
                             aria-controls={detailsId}
                             className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 ml-auto inline-flex h-8 items-center gap-1 rounded-md px-1.5 text-[12.5px] outline-none focus-visible:ring-2"
                         >
-                            {detailsLabel}
+                            {detailsLabel ?? t("details")}
                             <ChevronDown
                                 className={cn(
                                     "size-3.5 transition-transform motion-reduce:transition-none",
@@ -146,7 +153,7 @@ export function SuggestionCard({
 /** A small suggestion that fits on one line: a nudge with its two answers. */
 export function SuggestionNudge({
     label,
-    kicker = "Suggested by Vantage",
+    kicker,
     title,
     actions,
     className,
@@ -185,6 +192,7 @@ export function SuggestionNudge({
 
 /** Every suggestion answered: say so, and what brings the next ones. */
 export function AllCaughtUp({ body, className }: { body?: string; className?: string }) {
+    const t = useTranslations("vantage.suggestion");
     return (
         <div
             className={cn(
@@ -196,10 +204,9 @@ export function AllCaughtUp({ body, className }: { body?: string; className?: st
                 <Check className="size-3.5" aria-hidden="true" />
             </span>
             <div>
-                <div className="text-ink text-sm font-medium">You&apos;re all caught up</div>
+                <div className="text-ink text-sm font-medium">{t("caughtUp")}</div>
                 <p className="text-ink-2 mt-0.5 max-w-[60ch] text-[13px]">
-                    {body ??
-                        "Vantage suggests more as conversations, numbers and promises come in."}
+                    {body ?? t("caughtUpBody")}
                 </p>
             </div>
         </div>
@@ -208,6 +215,7 @@ export function AllCaughtUp({ body, className }: { body?: string; className?: st
 
 /** While Vantage drafts: what it is reading, and where the suggestions will land. */
 export function DraftingCard({ reading, className }: { reading?: string; className?: string }) {
+    const t = useTranslations("vantage.suggestion");
     return (
         <div
             role="status"
@@ -217,7 +225,7 @@ export function DraftingCard({ reading, className }: { reading?: string; classNa
             <div className="from-brand-soft flex flex-col gap-1 bg-gradient-to-b to-transparent px-4 pb-3 pt-3.5">
                 <SuggestionMark>
                     <span className="animate-pulse motion-reduce:animate-none">
-                        Vantage is drafting your week…
+                        {t("drafting")}
                     </span>
                 </SuggestionMark>
                 {reading && <p className="text-ink-2 text-[13px]">{reading}</p>}

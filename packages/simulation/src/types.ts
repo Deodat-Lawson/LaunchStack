@@ -193,6 +193,8 @@ export interface World {
     round: number;
     /** The question or subject every stance is measured against. */
     subject: string;
+    /** The subject as people read it on their turns, when it is too long to repeat (see `turnSituation`). */
+    situation?: string;
     /** Shared context every agent reads. */
     brief: string;
     config: SimulationConfig;

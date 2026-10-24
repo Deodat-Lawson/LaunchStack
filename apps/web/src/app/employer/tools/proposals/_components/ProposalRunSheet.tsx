@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, CircleDashed, Loader2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -13,11 +14,12 @@ import {
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
-import { duration } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { runIsLive, useProposals } from "../_lib/context";
-import { RUN_KIND_LABEL, type RunStepDto } from "../api";
+import type { RunStepDto } from "../api";
 
 function StepIcon({ status }: { status: RunStepDto["status"] }) {
+    const t = useTranslations("proposals.runSheet");
     const base = "size-3.5 shrink-0";
     switch (status) {
         case "done":
@@ -35,7 +37,7 @@ function StepIcon({ status }: { status: RunStepDto["status"] }) {
             return (
                 <Loader2
                     className={cn(base, "text-brand animate-spin motion-reduce:animate-none")}
-                    aria-label="Running"
+                    aria-label={t("stepRunning")}
                 />
             );
         case "failed":
@@ -56,24 +58,20 @@ function StepIcon({ status }: { status: RunStepDto["status"] }) {
     }
 }
 
-const DONE_TITLE: Record<string, string> = {
-    profile: "Profile built",
-    funders: "Funders found",
-    extract: "Requirements read",
-    draft: "Drafts written",
-    review: "Review done",
-};
-
 /**
  * A run is visible work: one row per step as it finishes. Closing the sheet
  * leaves the run going; the bar keeps its indicator until it is done.
  */
 export function ProposalRunSheet() {
+    const t = useTranslations("proposals.runSheet");
+    const tKind = useTranslations("proposals.runKind");
+    const tc = useTranslations("common");
+    const format = useToolFormat();
     const { activeRun, runSheetOpen, closeRunSheet, href } = useProposals();
     const run = activeRun;
     const live = runIsLive(run);
     const elapsed = run?.completedAt
-        ? duration(new Date(run.completedAt).getTime() - new Date(run.startedAt).getTime())
+        ? format.duration(new Date(run.completedAt).getTime() - new Date(run.startedAt).getTime())
         : null;
     return (
         <Sheet open={runSheetOpen} onOpenChange={open => !open && closeRunSheet()}>
@@ -85,18 +83,18 @@ export function ProposalRunSheet() {
                 <SheetHeader className="px-6 pb-2 pt-6">
                     <SheetTitle className="text-ink text-lg font-semibold tracking-[-0.02em]">
                         {!run
-                            ? "No run"
+                            ? t("noRun")
                             : run.status === "completed"
-                              ? (DONE_TITLE[run.kind] ?? "Done")
+                              ? // A rewrite has no title of its own once done.
+                                run.kind === "rewrite"
+                                  ? tc("status.done")
+                                  : t(`doneTitle.${run.kind}`)
                               : run.status === "failed"
-                                ? "The run failed"
-                                : RUN_KIND_LABEL[run.kind]}
+                                ? t("failed")
+                                : tKind(run.kind)}
                     </SheetTitle>
                     <SheetDescription className="text-ink-3 text-[13px]">
-                        {run?.headline ??
-                            (live
-                                ? "Steps tick as they finish; you can close this and keep working."
-                                : (run?.error ?? ""))}
+                        {run?.headline ?? (live ? t("liveHint") : (run?.error ?? ""))}
                     </SheetDescription>
                 </SheetHeader>
                 {run && (
@@ -128,21 +126,21 @@ export function ProposalRunSheet() {
                         )}
                         <div className="text-ink-3 mt-3 flex items-center justify-between text-xs tabular-nums">
                             <span>
-                                {elapsed ? `${elapsed}` : live ? "running" : ""}
+                                {elapsed ? `${elapsed}` : live ? t("running") : ""}
                                 {run.credits > 0
-                                    ? ` · ${run.credits.toLocaleString()} credits`
+                                    ? ` · ${t("credits", { credits: run.credits })}`
                                     : ""}
                             </span>
                             {!live && run.applicationId && (
                                 <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
                                     <ToolLink href={href(`/write/${run.applicationId}`)}>
-                                        Open the application
+                                        {t("openApplication")}
                                     </ToolLink>
                                 </Button>
                             )}
                             {!live && !run.applicationId && run.kind === "funders" && (
                                 <Button asChild size="sm" variant="outline" onClick={closeRunSheet}>
-                                    <ToolLink href={href("/funders")}>See funders</ToolLink>
+                                    <ToolLink href={href("/funders")}>{t("seeFunders")}</ToolLink>
                                 </Button>
                             )}
                         </div>

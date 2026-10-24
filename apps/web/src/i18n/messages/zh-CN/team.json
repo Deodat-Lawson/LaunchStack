@@ -1,0 +1,415 @@
+{
+  "roles": {
+    "owner": {
+      "label": "所有者",
+      "description": "拥有全部权限，包括账单和所有权。"
+    },
+    "admin": {
+      "label": "管理员",
+      "description": "管理工作区：成员、文件夹、设置和连接器。"
+    },
+    "member": {
+      "label": "成员",
+      "description": "处理文档（上传、编辑、搜索、提问），并以工作区的社交账号发帖。"
+    },
+    "viewer": {
+      "label": "查看者",
+      "description": "只能阅读和搜索，不能做任何修改。"
+    },
+    "guest": {
+      "label": "访客",
+      "description": "只能看到自己被添加进的文件夹。"
+    }
+  },
+  "permissions": {
+    "documents": {
+      "read": "在可见的文件夹中打开、搜索、提问和下载文档",
+      "upload": "向可编辑的文件夹添加文档和新版本",
+      "edit": "在可编辑的文件夹中重命名、移动、编辑和还原文档；修改智能体的设定内容",
+      "delete": "删除文档和版本"
+    },
+    "folders": {
+      "manage": "新建、重命名和删除文件夹；更改任意文件夹的可见范围"
+    },
+    "members": {
+      "view": "查看工作区中有哪些成员",
+      "invite": "发送邀请并创建加入链接",
+      "manage": "批准成员、更改角色、停用和移除成员"
+    },
+    "groups": {
+      "manage": "创建群组并调整群组成员"
+    },
+    "roles": {
+      "manage": "创建和编辑自定义角色"
+    },
+    "settings": {
+      "manage": "工作区设置、处理流程、公司资料和智能体名册（添加、停用、自主程度、工具、节点）"
+    },
+    "connectors": {
+      "manage": "连接和断开 Google Drive、Slack、GitHub 以及智能体连接器"
+    },
+    "analytics": {
+      "view": "统计看板和单个文档的统计数据"
+    },
+    "audit": {
+      "view": "查看审计日志"
+    },
+    "campaigns": {
+      "send": "批准并发送邮件营销活动"
+    },
+    "social": {
+      "publish": "以工作区已连接的社交账号（LinkedIn Pages、Bluesky）发布、定时发布和回复"
+    },
+    "billing": {
+      "manage": "额度、套餐以及会产生费用的密钥"
+    },
+    "workspace": {
+      "transfer": "转让所有权或删除工作区"
+    }
+  },
+  "levels": {
+    "view": "可查看",
+    "edit": "可编辑",
+    "manage": "可管理"
+  },
+  "you": "（你）",
+  "nameYou": "{name}（你）",
+  "someone": "某人",
+  "format": {
+    "ago": {
+      "now": "刚刚",
+      "minutes": "{count} 分钟前",
+      "hours": "{count} 小时前",
+      "days": "{count} 天前"
+    },
+    "today": "今天",
+    "yesterday": "昨天",
+    "names": {
+      "separator": "、",
+      "pair": "{first}、{last}",
+      "others": "{names} 和另外 {count, plural, other {# 人}}"
+    },
+    "activity": {
+      "added": "<person>{actor}</person> 添加了 <target>{name}</target>",
+      "createdFolder": "<person>{actor}</person> 新建了文件夹 <target>{name}</target>",
+      "createdGroup": "<person>{actor}</person> 创建了群组 <target>{name}</target>",
+      "renamed": "<person>{actor}</person> 重命名了 <target>{name}</target>",
+      "renamedFrom": "<person>{actor}</person> 将 {from} 重命名为 <target>{name}</target>",
+      "movedTo": "<person>{actor}</person> 将 <target>{name}</target> 移动到 {folder}",
+      "movedToTop": "<person>{actor}</person> 将 <target>{name}</target> 移动到顶层",
+      "deleted": "<person>{actor}</person> 删除了 <target>{name}</target>",
+      "shared": "<person>{actor}</person> 共享了 <target>{name}</target>",
+      "sharedWith": "<person>{actor}</person> 将 <target>{name}</target> 共享给 {names}",
+      "sharedWithEveryone": "<person>{actor}</person> 将 <target>{name}</target> 共享给所有人",
+      "limited": "<person>{actor}</person> 限制了 <target>{name}</target> 的可见范围",
+      "removedFrom": "<person>{actor}</person> 将 {names} 从 <target>{name}</target> 中移除",
+      "changedAudience": "<person>{actor}</person> 更改了 <target>{name}</target> 的可见范围",
+      "forked": "<person>{actor}</person> 在新对话中继续了 <target>{name}</target>",
+      "other": "<person>{actor}</person> {verb} <target>{name}</target>"
+    },
+    "inbox": {
+      "sharedWithYou": "{actor} 将“{name}”共享给了你",
+      "sharedWithGroup": "{actor} 将“{name}”共享给了 {group}"
+    }
+  },
+  "activityList": {
+    "loadError": "无法加载动态。",
+    "loadMoreError": "无法加载更多动态。",
+    "noMatch": "已加载的内容中没有与“{query}”匹配的项。",
+    "showOlder": "显示更早的动态"
+  },
+  "inboxBell": {
+    "title": "收件箱",
+    "labelUnread": "收件箱，{count} 条未读",
+    "loadError": "无法加载你的收件箱。",
+    "markAllRead": "全部标为已读",
+    "empty": "暂无新内容。有人与你共享文件夹、文件或对话时，会显示在这里。",
+    "unread": "未读"
+  },
+  "groupsView": {
+    "title": "群组",
+    "sub": "一步将文件夹、文件或对话共享给多个人。",
+    "subFiltered": "{shown} / {count, plural, other {# 个群组}}",
+    "filterPlaceholder": "筛选群组",
+    "newGroup": "新建群组",
+    "empty": "还没有群组。有了群组，就能一步共享给多个人。",
+    "noMatch": "没有与“{query}”匹配的群组。",
+    "members": "{count, plural, other {# 名成员}}",
+    "madeByYou": "由你创建"
+  },
+  "peopleView": {
+    "title": "成员",
+    "sub": "工作区中有 {count, plural, other {# 名成员}}。打开某人，即可查看你们互相共享的内容。",
+    "subFiltered": "{shown} / {count, plural, other {# 名成员}}",
+    "filterPlaceholder": "筛选成员",
+    "invite": "邀请成员",
+    "noMatch": "没有与“{query}”匹配的成员。",
+    "empty": "这里还没有其他人。"
+  },
+  "groupPage": {
+    "back": "群组",
+    "members": "{count, plural, other {# 名成员}}",
+    "madeBy": "由 {name} 创建",
+    "madeByYou": "由你创建",
+    "actionsFor": "{name} 的操作",
+    "deleteGroup": "删除群组",
+    "emptyManage": "这个群组还没有成员。先添加成员，之后就能一步共享给整个群组。",
+    "empty": "这个群组还没有成员。",
+    "removeLabel": "将 {name} 移出 {group}",
+    "removed": "已将 {name} 移出 {group}",
+    "removeError": "无法将其移出群组。",
+    "added": "已将 {name} 添加到 {group}",
+    "addError": "无法将其添加到群组。",
+    "deleted": "已删除 {name}",
+    "deleteError": "群组未能删除。",
+    "confirmTitle": "删除 {name}？",
+    "confirmBody": "共享给这个群组的文件夹、文件和对话将不再对其 {count, plural, other {# 名成员}}可见。没有人会因此离开工作区。",
+    "addPeople": "添加成员",
+    "findPlaceholder": "查找成员",
+    "findLabel": "查找要添加的成员",
+    "noMatch": "没有其他与“{query}”匹配的成员。",
+    "allIn": "所有人都已在这个群组中。"
+  },
+  "personPage": {
+    "back": "成员",
+    "loadError": "无法加载你们共享的内容。",
+    "yourActivity": "你的动态",
+    "activity": "动态",
+    "emptySelf": "暂无动态。你添加、共享和移动的内容会显示在这里。",
+    "emptyOther": "还没有你能看到的 {name} 的动态。",
+    "sharedWithYou": "{name} 共享给你的",
+    "youShared": "你共享给 {name} 的",
+    "nothingShared": "{name} 共享的内容还没有你能看到的。",
+    "nothingYouShared": "你还没有与 {name} 共享任何内容。",
+    "via": "通过 {group}"
+  },
+  "sharePicker": {
+    "sections": {
+      "folder": "文件夹",
+      "document": "文件",
+      "chat": "对话"
+    },
+    "loadError": "无法加载可共享的内容。",
+    "label": "与 {name} 共享内容",
+    "button": "共享内容…",
+    "findPlaceholder": "查找文件夹、文件或对话",
+    "findLabel": "查找要共享的内容",
+    "emptyNone": "你还没有可以共享的内容。你添加的文件夹和文件由你管理，可以共享。",
+    "noMatch": "没有与“{query}”匹配的内容。"
+  },
+  "inviteDialog": {
+    "invalidEmail": "请输入完整的邮箱地址，例如 ada@example.com。",
+    "sentToast": "已向 {email} 发送邀请",
+    "sendError": "邀请未能发送。",
+    "sentTitle": "邀请已发送",
+    "sentBody": "已向 {email} 发送了一封含链接的邮件。如果这里未配置邮件服务，请自行把这个链接发给对方。",
+    "linkLabel": "邀请链接",
+    "copyLink": "复制链接",
+    "inviteAnother": "再邀请一位",
+    "title": "邀请成员",
+    "description": "对方会收到一封邮件，通过其中的链接以你选择的角色加入。",
+    "chooseRole": "选择角色",
+    "sending": "正在发送…",
+    "send": "发送邀请"
+  },
+  "tool": {
+    "title": "团队",
+    "about": "工作区里有谁、你用来共享的群组，以及大家最近的动态。角色、邀请、加入链接和审计日志在“设置 › 成员与访问权限”中。",
+    "nav": {
+      "people": "成员",
+      "groups": "群组",
+      "activity": "动态"
+    },
+    "loadError": "无法加载团队。",
+    "manageAccess": "管理访问权限",
+    "manageAccessTitle": "角色、邀请、加入链接和审计日志",
+    "noAccessTitle": "你的角色无法查看团队列表",
+    "noAccessBody": "你只能看到共享给你的内容。新的共享会出现在侧边栏顶部的收件箱铃铛中。",
+    "personGoneTitle": "此人已不在这里",
+    "personGoneBody": "对方可能已离开工作区，或者这个链接来自别处。",
+    "groupGoneTitle": "这个群组已不存在",
+    "groupGoneBody": "它可能已被删除，或者这个链接来自别处。"
+  },
+  "activityScreen": {
+    "title": "动态",
+    "sub": "谁添加、共享、移动、重命名或删除了什么。这里只显示你能打开的内容。",
+    "filterPlaceholder": "筛选动态",
+    "whose": "谁的动态",
+    "everyone": "所有人",
+    "kindLabel": "动态类型",
+    "allKinds": "全部动态",
+    "kinds": {
+      "added": "添加",
+      "shared": "共享",
+      "moved": "移动和重命名",
+      "deleted": "删除"
+    },
+    "emptyFiltered": "还没有符合这些筛选条件的动态。",
+    "empty": "暂无动态。添加、共享和移动文件都会显示在这里。"
+  },
+  "access": {
+    "counts": {
+      "people": "{count, plural, other {# 人}}",
+      "groups": "{count, plural, other {# 个群组}}",
+      "roles": "{count, plural, other {# 个角色}}"
+    },
+    "list": {
+      "separator": "、",
+      "pair": "{first}和 {last}",
+      "series": "{rest}和 {last}"
+    },
+    "audience": {
+      "namedRole": "“{name}”角色",
+      "noOne": "暂无任何人",
+      "everyone": "工作区中的所有人可见",
+      "everyoneCounted": "工作区中的所有人可见（{count, plural, other {# 人}}）",
+      "pending": "将对 {who} 以及工作区管理员可见——保存后生效",
+      "adminsOnly": "仅工作区所有者和管理员可见",
+      "counted": "{count, plural, other {# 人}}可见"
+    },
+    "share": {
+      "open": {
+        "everyoneAt": "{workspace} 的所有人",
+        "sameAs": "与 {folder} 相同",
+        "hintOpen": "{workspace} 中的任何人都能打开。",
+        "hintRead": "{workspace} 中的任何人都能阅读。",
+        "hintInherit": "能打开 {folder} 的人都能打开它。",
+        "hintFolderOpen": "{workspace} 的所有人都能打开 {folder}。"
+      },
+      "summary": {
+        "withCount": "{text}（{count, plural, other {# 人}}）",
+        "plus": "能打开 {folder} 的人，以及 {who}，都能打开它。",
+        "onlyYou": "只有你能打开。",
+        "youAnd": "你和 {who} 能打开。",
+        "listed": "{who} 能打开。"
+      },
+      "types": {
+        "user": "成员",
+        "group": "群组",
+        "role": "角色"
+      },
+      "loadError": "无法加载访问权限信息。",
+      "groupCreatedWith": "已创建“{name}”，包含 {count, plural, other {# 人}}",
+      "groupCreatedEmpty": "已创建“{name}”，可在“团队 › 群组”中添加成员",
+      "groupError": "群组未能创建。",
+      "savedOpen": "“{name}”——{access}",
+      "saved": "已更新“{name}”的共享设置",
+      "saveError": "更改未能保存。",
+      "title": "共享“{name}”",
+      "descriptionFolder": "文件夹内的所有内容都沿用文件夹的共享设置，除非单独设置了共享。",
+      "descriptionChat": "你添加的人可以阅读这个对话，并以自己的身份继续对话。",
+      "descriptionDocument": "谁可以打开这个文件。",
+      "loading": "正在加载访问权限…",
+      "readOnly": "你可以查看谁有访问权限，但不能修改。请联系有管理权限的人。",
+      "makeGroup": "将这 {count} 人建为群组…",
+      "newGroup": "新建群组…",
+      "groupPlaceholder": "群组名称，例如 销售团队",
+      "groupLabel": "新群组名称",
+      "creating": "正在创建…",
+      "peopleWithAccess": "有访问权限的人",
+      "owner": "所有者",
+      "levelFor": "{name} 的访问级别",
+      "remove": "移除 {name}",
+      "noOne": "还没有添加任何人。",
+      "general": "常规访问权限",
+      "restrictedOption": "仅限有访问权限的人",
+      "addedBy": "由 {name} 添加"
+    },
+    "picker": {
+      "searchError": "搜索失败。",
+      "people": "成员",
+      "groups": "群组",
+      "roles": "角色",
+      "placeholder": "添加成员、群组或角色…",
+      "label": "添加成员、群组或角色",
+      "matches": "匹配结果",
+      "searching": "正在搜索…",
+      "noMatch": "没有匹配的结果。",
+      "hint": "输入姓名、群组或角色。"
+    }
+  },
+  "investors": {
+    "title": "投资人关系",
+    "within": {
+      "d30": "最近 30 天",
+      "d90": "最近 90 天",
+      "d180": "最近 6 个月",
+      "d365": "最近 12 个月"
+    },
+    "raise": {
+      "raisingNothing": "计划募集 {target} · 尚未完成募集",
+      "raisingClosed": "计划募集 {target} · 已募集 {sold}",
+      "unstatedNothing": "规模未披露 · 尚未完成募集",
+      "unstatedClosed": "规模未披露 · 已募集 {sold}"
+    },
+    "summary": {
+      "funds": "{count, plural, other {# 只基金}}",
+      "filings": "该时间段内共 {count, number} 份申报",
+      "filingsMany": "该时间段内共 {count, number}+ 份申报",
+      "hidden": "已隐藏 {count, plural, other {# 个单笔交易工具}}"
+    },
+    "starters": {
+      "onePager": {
+        "title": "投资人一页纸",
+        "desc": "问题、方案、市场、增长势头、商业模式、团队与融资"
+      },
+      "deck": {
+        "title": "路演 PPT 大纲",
+        "desc": "十到十二页，每页都有标题和支撑依据"
+      },
+      "hardQuestions": {
+        "title": "尖锐问题",
+        "desc": "持怀疑态度的合伙人会问什么，以及我们的最佳回答"
+      },
+      "metrics": {
+        "title": "增长数据摘要",
+        "desc": "关键数据，以及每个数据的出处"
+      },
+      "update": {
+        "title": "投资人月报",
+        "desc": "写给现有投资人的月度更新"
+      },
+      "dataRoom": {
+        "title": "资料室清单",
+        "desc": "尽调会要哪些资料，以及我们已经有哪些"
+      }
+    },
+    "searchFailedStatus": "搜索失败（{status}）",
+    "searchFailed": "搜索失败",
+    "copiedIntro": "已复制给 {fund} 的介绍信提示词，粘贴到对话中即可",
+    "copiedStarter": "已复制“{title}”提示词，粘贴到对话中即可",
+    "copyFailed": "无法复制",
+    "find": {
+      "title": "寻找投资人",
+      "sub": "正在募集新基金的风投机构——刚完成募资的基金即将开始投资。",
+      "focusPlaceholder": "关注领域——气候、医疗、金融科技…",
+      "focusLabel": "关注领域：基金名称中的关键词",
+      "stateLabel": "基金所在州",
+      "anywhere": "不限地区",
+      "withinLabel": "申报时间",
+      "spvs": "包括单笔交易 SPV 和联合投资",
+      "sourceNote": "数据来自 SEC Form D 申报——公开信息，无需账号。"
+    },
+    "draftIntro": "起草介绍信",
+    "copyIntro": "复制介绍信提示词",
+    "pitch": {
+      "title": "融资材料起稿",
+      "sub": "每一项都会在对话中根据你的来源起草，附上引用，并列出缺失的内容。先把路演材料、财务数据和指标添加为来源，草稿会更具体。",
+      "draftInChat": "在对话中起草",
+      "copyPrompt": "复制提示词"
+    },
+    "searching": "正在搜索 SEC 申报",
+    "empty": "在这个时间段内，没有名称包含这些关键词的风投基金提交申报。试试减少关键词、换一个州，或延长时间段。",
+    "sortLabel": "基金排序",
+    "newest": "最新",
+    "largest": "规模最大",
+    "saveAsSource": "将列表保存为来源",
+    "amended": "已修订",
+    "detailsUnavailable": "暂无详情——请打开申报文件",
+    "filed": "申报于 {date}",
+    "more": "另有 {count} 人",
+    "via": "通过 {name}",
+    "filing": "申报文件",
+    "website": "网站"
+  }
+}

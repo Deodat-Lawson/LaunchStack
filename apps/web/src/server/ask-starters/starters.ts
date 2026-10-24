@@ -22,6 +22,8 @@ export interface BriefDocument {
     folder: string;
     /** "2 days ago", "just now" — for the prompt and for hints. */
     ageLabel: string;
+    /** When it was added; lets a hint say the age in the reader's language. */
+    createdAt?: Date;
 }
 
 export interface BriefFolder {
@@ -49,6 +51,58 @@ export interface WorkspaceBrief {
     /** Changes whenever the evidence changes; the cache key. */
     fingerprint: string;
 }
+
+/**
+ * The words of the deterministic set and of default hints. English is the
+ * default; `./words.ts` builds the reader's language from the `chat.starters`
+ * catalogue.
+ */
+export interface StarterWords {
+    thisCompany: string;
+    /** "across 3 sources"; `count` 0 means there is nothing to ground in yet. */
+    acrossSources(count: number): string;
+    acrossYourSources: string;
+    from(title: string): string;
+    added(doc: BriefDocument): string;
+    folderAge(doc: BriefDocument): string;
+    sourcesIn(count: number, folder: string): string;
+    summarize(title: string): string;
+    keyDates(folder: string): string;
+    whatDoes(name: string): string;
+    mainPoints(title: string): string;
+    themes: { question: string; hint: string };
+    people: { question: string; hint: string };
+    recent: { question: string; hint: string };
+}
+
+export const ENGLISH_STARTER_WORDS: StarterWords = {
+    thisCompany: "this company",
+    acrossSources: count =>
+        count > 0
+            ? `across ${count} source${count === 1 ? "" : "s"}`
+            : "add a source to ground the answer",
+    acrossYourSources: "across your sources",
+    from: title => `from ${title}`,
+    added: doc => `added ${doc.ageLabel}`,
+    folderAge: doc => `${doc.folder} · ${doc.ageLabel}`,
+    sourcesIn: (count, folder) => `${count} sources in ${folder}`,
+    summarize: title => `Summarize "${title}"`,
+    keyDates: folder => `What are the key dates and deadlines in ${folder}?`,
+    whatDoes: name => `What does ${name} do, according to these sources?`,
+    mainPoints: title => `What are the main points of "${title}"?`,
+    themes: {
+        question: "Which decisions, risks, or open questions come up most often?",
+        hint: "themes across every source",
+    },
+    people: {
+        question: "Who are the people and organizations mentioned most?",
+        hint: "names across every source",
+    },
+    recent: {
+        question: "What changed in the documents added this week?",
+        hint: "recent additions",
+    },
+};
 
 export const STARTERS_SYSTEM_PROMPT = [
     "You write the four starter questions on the home screen of a company's knowledge workspace.",
@@ -160,7 +214,11 @@ function cleanHint(raw: string): string {
  * ids dropped, duplicates removed, lengths capped, and at most four kept. May
  * return fewer than four — `completeStarters` pads.
  */
-export function sanitizeStarters(raw: GeneratedStarters, brief: WorkspaceBrief): AskStarter[] {
+export function sanitizeStarters(
+    raw: GeneratedStarters,
+    brief: WorkspaceBrief,
+    words: StarterWords = ENGLISH_STARTER_WORDS
+): AskStarter[] {
     const knownIds = new Set(brief.recentDocuments.map(d => d.id));
     const seen = new Set<string>();
     const out: AskStarter[] = [];
@@ -180,7 +238,7 @@ export function sanitizeStarters(raw: GeneratedStarters, brief: WorkspaceBrief):
         out.push({
             id: `g${out.length + 1}`,
             question,
-            hint: cleanHint(candidate.hint) || defaultHint(documentIds, brief),
+            hint: cleanHint(candidate.hint) || defaultHint(documentIds, brief, words),
             documentIds,
         });
         if (out.length === ASK_STARTER_COUNT) break;
@@ -199,14 +257,12 @@ function readTitlesPlainly(question: string, brief: WorkspaceBrief): string {
     return out;
 }
 
-function defaultHint(documentIds: number[], brief: WorkspaceBrief): string {
+function defaultHint(documentIds: number[], brief: WorkspaceBrief, words: StarterWords): string {
     if (documentIds.length > 0) {
         const doc = brief.recentDocuments.find(d => d.id === documentIds[0]);
-        if (doc) return `from ${displayTitle(doc.title, 40)}`;
+        if (doc) return words.from(displayTitle(doc.title, 40));
     }
-    return brief.sourceCount > 0
-        ? `across ${brief.sourceCount} source${brief.sourceCount === 1 ? "" : "s"}`
-        : "across your sources";
+    return brief.sourceCount > 0 ? words.acrossSources(brief.sourceCount) : words.acrossYourSources;
 }
 
 const FILE_EXTENSION = /\.(pdf|docx?|pptx?|xlsx?|csv|md|markdown|txt|rtf|html?|json|ya?ml)$/i;
@@ -225,71 +281,59 @@ export function displayTitle(title: string, max = 48): string {
  * for a model to work from. Still grounded in the workspace — names, titles,
  * folders — so the cards never read as generic filler when the data exists.
  */
-export function fallbackStarters(brief: WorkspaceBrief): AskStarter[] {
-    const name = brief.company.name ?? "this company";
+export function fallbackStarters(
+    brief: WorkspaceBrief,
+    words: StarterWords = ENGLISH_STARTER_WORDS
+): AskStarter[] {
+    const name = brief.company.name ?? words.thisCompany;
     const [newest, second] = brief.recentDocuments;
     const topFolder = brief.folders[0];
-    const sourceCount = brief.sourceCount;
-    const across =
-        sourceCount > 0
-            ? `across ${sourceCount} source${sourceCount === 1 ? "" : "s"}`
-            : "add a source to ground the answer";
 
     const candidates: Omit<AskStarter, "id">[] = [];
 
     if (newest) {
         candidates.push({
-            question: `Summarize "${displayTitle(newest.title)}"`,
-            hint: `added ${newest.ageLabel}`,
+            question: words.summarize(displayTitle(newest.title)),
+            hint: words.added(newest),
             documentIds: [newest.id],
         });
     }
     if (topFolder && topFolder.count > 1) {
         candidates.push({
-            question: `What are the key dates and deadlines in ${topFolder.name}?`,
-            hint: `${topFolder.count} sources in ${topFolder.name}`,
+            question: words.keyDates(topFolder.name),
+            hint: words.sourcesIn(topFolder.count, topFolder.name),
             documentIds: [],
         });
     }
     candidates.push({
-        question: `What does ${name} do, according to these sources?`,
-        hint: across,
+        question: words.whatDoes(name),
+        hint: words.acrossSources(brief.sourceCount),
         documentIds: [],
     });
     if (second) {
         candidates.push({
-            question: `What are the main points of "${displayTitle(second.title)}"?`,
-            hint: `${second.folder} · ${second.ageLabel}`,
+            question: words.mainPoints(displayTitle(second.title)),
+            hint: words.folderAge(second),
             documentIds: [second.id],
         });
     }
-    candidates.push(
-        {
-            question: "Which decisions, risks, or open questions come up most often?",
-            hint: "themes across every source",
-            documentIds: [],
-        },
-        {
-            question: "Who are the people and organizations mentioned most?",
-            hint: "names across every source",
-            documentIds: [],
-        },
-        {
-            question: "What changed in the documents added this week?",
-            hint: "recent additions",
-            documentIds: [],
-        }
-    );
+    for (const fixed of [words.themes, words.people, words.recent]) {
+        candidates.push({ ...fixed, documentIds: [] });
+    }
 
     return candidates.slice(0, ASK_STARTER_COUNT).map((c, i) => ({ ...c, id: `f${i + 1}` }));
 }
 
 /** Pad a short generated set up to four with fallbacks that do not repeat it. */
-export function completeStarters(starters: AskStarter[], brief: WorkspaceBrief): AskStarter[] {
+export function completeStarters(
+    starters: AskStarter[],
+    brief: WorkspaceBrief,
+    words: StarterWords = ENGLISH_STARTER_WORDS
+): AskStarter[] {
     if (starters.length >= ASK_STARTER_COUNT) return starters.slice(0, ASK_STARTER_COUNT);
     const seen = new Set(starters.map(s => normalizeQuestion(s.question)));
     const out = [...starters];
-    for (const fallback of fallbackStarters(brief)) {
+    for (const fallback of fallbackStarters(brief, words)) {
         if (out.length === ASK_STARTER_COUNT) break;
         const key = normalizeQuestion(fallback.question);
         if (seen.has(key)) continue;

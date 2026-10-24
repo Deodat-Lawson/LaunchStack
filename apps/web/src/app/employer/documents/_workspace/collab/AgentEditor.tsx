@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Download, FileText, RotateCcw, Upload } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
@@ -31,10 +32,10 @@ import {
 } from "~/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Field, SelectInput, TextArea, TextInput } from "~/components/field";
-import { AGENT_AUTONOMY_LEVELS, AGENT_AUTONOMY_META, isAgentAutonomy } from "~/lib/agents/autonomy";
+import { AGENT_AUTONOMY_LEVELS, isAgentAutonomy } from "~/lib/agents/autonomy";
 import {
     AGENT_MODES,
-    AGENT_MODE_META,
+    AGENT_ROUTE_IDS,
     AGENT_STYLE_IDS,
     AGENT_TOOLS,
     coerceAgentDefinition,
@@ -45,32 +46,13 @@ import {
     toAgentKey,
     type AgentDefinition,
 } from "~/lib/agents/definition";
-import {
-    AgentFileError,
-    agentFileName,
-    parseAgentFile,
-    serializeAgentFile,
-} from "~/lib/agents/agent-file";
+import { agentFileName, parseAgentFile, serializeAgentFile } from "~/lib/agents/agent-file";
+import { fileErrorMessage, useAgentCopy } from "~/lib/agents/i18n";
 import { contentFieldsOf } from "~/lib/agents/roster-access";
 import { cn } from "~/lib/utils";
 
 import { AgentAvatar, DEFAULT_AVATARS } from "./AgentAvatar";
 import { personaColor, type AgentPersonaRecord } from "./types";
-
-const ROUTES = [
-    { value: "", label: "Default route" },
-    { value: "fast", label: "Fast" },
-    { value: "reasoning", label: "Reasoning" },
-    { value: "vision", label: "Vision" },
-];
-
-const STYLE_LABELS: Record<(typeof AGENT_STYLE_IDS)[number], string> = {
-    balanced: "Balanced — length matches the question",
-    concise: "Concise — direct and short",
-    detailed: "Detailed — comprehensive with context",
-    academic: "Academic — analytical and precise",
-    organized: "Organized — structured with headings",
-};
 
 /** Eight accents that read on both themes. Stored as literal OKLCH, like the mindmap. */
 const ACCENTS = [
@@ -103,9 +85,6 @@ export interface AgentEditorProps {
      */
     contentOnly?: boolean;
 }
-
-/** Why a locked field is locked, in the field's hint. */
-const LOCKED_HINT = "Set by people who can manage workspace settings.";
 
 interface FormState {
     key: string;
@@ -223,6 +202,13 @@ export function AgentEditor({
     seed,
     contentOnly = false,
 }: AgentEditorProps) {
+    const t = useTranslations("collab.agentEditor");
+    const tc = useTranslations("common");
+    const tAvatars = useTranslations("collab.avatars");
+    const copy = useAgentCopy();
+    const tAgents = copy.t;
+    /** Why a locked field is locked, in the field's hint. */
+    const lockedHint = t("lockedHint");
     const [form, setForm] = useState<FormState>(() => fromPersona(persona, seed));
     const [tab, setTab] = useState<"form" | "file">("form");
     const [fileText, setFileText] = useState("");
@@ -258,20 +244,23 @@ export function AgentEditor({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tab]);
 
-    const applyFile = useCallback((text: string) => {
-        try {
-            const parsed = parseAgentFile(text);
-            setForm(fromPersona(null, parsed.definition));
-            setFileError(
-                parsed.unknownKeys.length > 0
-                    ? `Ignored keys this format does not know: ${parsed.unknownKeys.join(", ")}`
-                    : null
-            );
-            setTab("form");
-        } catch (err) {
-            setFileError(err instanceof AgentFileError ? err.message : "Could not read that file");
-        }
-    }, []);
+    const applyFile = useCallback(
+        (text: string) => {
+            try {
+                const parsed = parseAgentFile(text);
+                setForm(fromPersona(null, parsed.definition));
+                setFileError(
+                    parsed.unknownKeys.length > 0
+                        ? t("ignoredKeys", { keys: parsed.unknownKeys.join(", ") })
+                        : null
+                );
+                setTab("form");
+            } catch (err) {
+                setFileError(fileErrorMessage(tAgents, err));
+            }
+        },
+        [t, tAgents]
+    );
 
     const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
         setForm(prev => ({ ...prev, [key]: value }));
@@ -295,11 +284,10 @@ export function AgentEditor({
                 persona?: AgentPersonaRecord;
                 error?: string;
             };
-            if (!response.ok || !body.persona)
-                throw new Error(body.error ?? "Could not save the agent");
+            if (!response.ok || !body.persona) throw new Error(body.error ?? t("saveFailed"));
             await onSaved(body.persona);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not save the agent");
+            setError(err instanceof Error ? err.message : t("saveFailed"));
         } finally {
             setSaving(false);
         }
@@ -332,12 +320,14 @@ export function AgentEditor({
                     />
                     <div className="min-w-0 flex-1">
                         <DialogTitle className="display text-ink text-[20px]">
-                            {isNew ? "New agent" : `Edit ${persona.displayName}`}
+                            {isNew ? t("titleNew") : t("titleEdit", { name: persona.displayName })}
                         </DialogTitle>
                         <DialogDescription className="mt-0.5">
                             {isNew
-                                ? "A name, a role, standing instructions — and what it may use."
-                                : `@${persona.id}${persona.builtin ? " · starter agent" : ""}`}
+                                ? t("descriptionNew")
+                                : persona.builtin
+                                  ? t("starterHandle", { handle: persona.id })
+                                  : `@${persona.id}`}
                         </DialogDescription>
                     </div>
                 </DialogHeader>
@@ -349,9 +339,9 @@ export function AgentEditor({
                 >
                     <div className="border-line flex items-center gap-2 border-b px-5 py-2">
                         <TabsList>
-                            <TabsTrigger value="form">Definition</TabsTrigger>
+                            <TabsTrigger value="form">{t("tabDefinition")}</TabsTrigger>
                             <TabsTrigger value="file">
-                                <FileText className="size-3.5" /> File
+                                <FileText className="size-3.5" /> {t("tabFile")}
                             </TabsTrigger>
                         </TabsList>
                         <div className="flex-1" />
@@ -372,11 +362,11 @@ export function AgentEditor({
                                 size="sm"
                                 onClick={() => fileInput.current?.click()}
                             >
-                                <Upload className="size-3.5" /> Import file
+                                <Upload className="size-3.5" /> {t("importFile")}
                             </Button>
                         )}
                         <Button variant="ghost" size="sm" onClick={download} disabled={!canSave}>
-                            <Download className="size-3.5" /> Export
+                            <Download className="size-3.5" /> {tc("actions.export")}
                         </Button>
                     </div>
 
@@ -385,7 +375,7 @@ export function AgentEditor({
                         className="min-h-0 flex-1 overflow-y-auto px-5 pb-2 pt-4"
                     >
                         <div className="grid grid-cols-2 gap-x-4">
-                            <Field label="Display name">
+                            <Field label={t("displayName")}>
                                 <TextInput
                                     value={form.displayName}
                                     onChange={e => {
@@ -397,14 +387,7 @@ export function AgentEditor({
                                     autoFocus
                                 />
                             </Field>
-                            <Field
-                                label="Handle"
-                                hint={
-                                    locked
-                                        ? LOCKED_HINT
-                                        : "Written as @handle in transcripts and chat."
-                                }
-                            >
+                            <Field label={t("handle")} hint={locked ? lockedHint : t("handleHint")}>
                                 <TextInput
                                     value={form.key}
                                     onChange={e => update("key", toAgentKey(e.target.value))}
@@ -414,33 +397,24 @@ export function AgentEditor({
                             </Field>
                         </div>
 
-                        <Field
-                            label="Role"
-                            hint="One line. Shown next to the name and injected into the prompt."
-                        >
+                        <Field label={tc("fields.role")} hint={t("roleHint")}>
                             <TextInput
                                 value={form.role}
                                 onChange={e => update("role", e.target.value)}
-                                placeholder="Finance partner"
+                                placeholder={t("rolePlaceholder")}
                             />
                         </Field>
 
-                        <Field
-                            label="When to use it"
-                            hint="One sentence. Shown in the @-menu and on the card, so a person can pick the right agent without reading the prompt."
-                        >
+                        <Field label={t("whenToUse")} hint={t("whenToUseHint")}>
                             <TextInput
                                 value={form.description}
                                 onChange={e => update("description", e.target.value)}
-                                placeholder="Guards margin and cash; asks what a decision costs."
+                                placeholder={t("whenToUsePlaceholder")}
                                 maxLength={240}
                             />
                         </Field>
 
-                        <Field
-                            label="Standing instructions"
-                            hint="How this agent behaves everywhere it appears. Be specific about what it owns and what it should refuse to answer."
-                        >
+                        <Field label={t("instructions")} hint={t("instructionsHint")}>
                             <TextArea
                                 value={form.systemPrompt}
                                 onChange={e => update("systemPrompt", e.target.value)}
@@ -451,12 +425,8 @@ export function AgentEditor({
 
                         <div className="grid grid-cols-2 gap-x-4">
                             <Field
-                                label="Mode"
-                                hint={
-                                    isAgentMode(form.mode)
-                                        ? AGENT_MODE_META[form.mode].description
-                                        : ""
-                                }
+                                label={t("mode")}
+                                hint={isAgentMode(form.mode) ? copy.modeDescription(form.mode) : ""}
                             >
                                 <SelectInput
                                     value={form.mode}
@@ -464,55 +434,51 @@ export function AgentEditor({
                                 >
                                     {AGENT_MODES.map(mode => (
                                         <option key={mode} value={mode}>
-                                            {AGENT_MODE_META[mode].label}
+                                            {copy.modeLabel(mode)}
                                         </option>
                                     ))}
                                 </SelectInput>
                             </Field>
-                            <Field
-                                label="Answer style"
-                                hint="Applied under the instructions in chat."
-                            >
+                            <Field label={t("answerStyle")} hint={t("answerStyleHint")}>
                                 <SelectInput
                                     value={form.style}
                                     onChange={e => update("style", e.target.value)}
                                 >
-                                    <option value="">Chat default</option>
+                                    <option value="">{t("chatDefault")}</option>
                                     {AGENT_STYLE_IDS.map(style => (
                                         <option key={style} value={style}>
-                                            {STYLE_LABELS[style]}
+                                            {copy.styleSummary(style)}
                                         </option>
                                     ))}
                                 </SelectInput>
                             </Field>
                             <Field
-                                label="Model route"
-                                hint={
-                                    locked
-                                        ? LOCKED_HINT
-                                        : "Which configured route serves this agent's turns."
-                                }
+                                label={t("modelRoute")}
+                                hint={locked ? lockedHint : t("modelRouteHint")}
                             >
                                 <SelectInput
                                     value={form.route}
                                     onChange={e => update("route", e.target.value)}
                                     disabled={locked}
                                 >
-                                    {ROUTES.map(option => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
+                                    {AGENT_ROUTE_IDS.map(route => (
+                                        <option
+                                            key={route}
+                                            value={route === "default" ? "" : route}
+                                        >
+                                            {copy.routeLabel(route)}
                                         </option>
                                     ))}
                                 </SelectInput>
                             </Field>
                             <Field
-                                label="Autonomy"
+                                label={t("autonomy")}
                                 hint={
                                     locked
-                                        ? LOCKED_HINT
+                                        ? lockedHint
                                         : isAgentAutonomy(form.autonomy)
-                                          ? AGENT_AUTONOMY_META[form.autonomy].description
-                                          : "Inherits the workspace default (Settings → Agents)."
+                                          ? copy.autonomyDescription(form.autonomy)
+                                          : t("autonomyInherits")
                                 }
                             >
                                 <SelectInput
@@ -520,18 +486,15 @@ export function AgentEditor({
                                     onChange={e => update("autonomy", e.target.value)}
                                     disabled={locked}
                                 >
-                                    <option value="">Workspace default</option>
+                                    <option value="">{t("workspaceDefault")}</option>
                                     {AGENT_AUTONOMY_LEVELS.map(level => (
                                         <option key={level} value={level}>
-                                            {AGENT_AUTONOMY_META[level].label}
+                                            {copy.autonomyLabel(level)}
                                         </option>
                                     ))}
                                 </SelectInput>
                             </Field>
-                            <Field
-                                label="Temperature"
-                                hint="0 is deterministic, 2 is wild. Blank uses the model's default."
-                            >
+                            <Field label={t("temperature")} hint={t("temperatureHint")}>
                                 <TextInput
                                     type="number"
                                     min={0}
@@ -542,10 +505,7 @@ export function AgentEditor({
                                     placeholder="0.4"
                                 />
                             </Field>
-                            <Field
-                                label="Turn length cap"
-                                hint="Characters per turn in meetings. Blank means no cap."
-                            >
+                            <Field label={t("turnCap")} hint={t("turnCapHint")}>
                                 <TextInput
                                     type="number"
                                     min={120}
@@ -559,13 +519,16 @@ export function AgentEditor({
                         </div>
 
                         <Field
-                            label="Tools"
+                            label={t("tools")}
                             hint={
                                 locked
-                                    ? LOCKED_HINT
+                                    ? lockedHint
                                     : form.tools === null
-                                      ? "Every tool, including ones added later. Untick one to restrict this agent."
-                                      : `${form.tools.length} of ${AGENT_TOOLS.length} tools. New tools stay off until you add them.`
+                                      ? t("toolsAll")
+                                      : t("toolsSome", {
+                                            count: form.tools.length,
+                                            total: AGENT_TOOLS.length,
+                                        })
                             }
                         >
                             <div className="border-line bg-panel-2 divide-line divide-y rounded-lg border">
@@ -587,27 +550,27 @@ export function AgentEditor({
                                                     const next = checked
                                                         ? [...current, tool.id]
                                                         : current.filter(id => id !== tool.id);
-                                                    const every = AGENT_TOOLS.every(t =>
-                                                        next.includes(t.id)
+                                                    const every = AGENT_TOOLS.every(spec =>
+                                                        next.includes(spec.id)
                                                     );
                                                     update("tools", every ? null : next);
                                                 }}
-                                                aria-label={tool.label}
+                                                aria-label={copy.toolLabel(tool.id)}
                                             />
                                             <div className="min-w-0 flex-1">
                                                 <div className="text-ink flex items-center gap-2 text-[13px] font-medium">
-                                                    {tool.label}
+                                                    {copy.toolLabel(tool.id)}
                                                     <span className="mono text-ink-4 text-[10.5px]">
                                                         {tool.id}
                                                     </span>
                                                     {tool.perTurnToggle && (
                                                         <span className="text-ink-3 text-[10.5px]">
-                                                            · needs the message toggle
+                                                            {t("needsToggle")}
                                                         </span>
                                                     )}
                                                 </div>
                                                 <div className="text-ink-3 text-[11.5px]">
-                                                    {tool.description}
+                                                    {copy.toolDescription(tool.id)}
                                                 </div>
                                             </div>
                                         </label>
@@ -616,16 +579,13 @@ export function AgentEditor({
                             </div>
                         </Field>
 
-                        <Field
-                            label="Picture"
-                            hint="Shown instead of initials in chat, meetings and the roster. Pick one of the shipped works, paste an https link, or leave it blank for initials."
-                        >
+                        <Field label={t("picture")} hint={t("pictureHint")}>
                             <div className="flex flex-wrap items-center gap-1.5">
                                 <button
                                     type="button"
                                     onClick={() => update("avatarUrl", "")}
                                     aria-pressed={form.avatarUrl === ""}
-                                    title="Initials on the accent colour"
+                                    title={t("initialsTitle")}
                                     className={cn(
                                         "inline-flex size-9 items-center justify-center rounded-lg border-2 text-[11px] font-bold text-white",
                                         form.avatarUrl === "" ? "border-ink" : "border-transparent"
@@ -640,7 +600,7 @@ export function AgentEditor({
                                         type="button"
                                         onClick={() => update("avatarUrl", option.url)}
                                         aria-pressed={form.avatarUrl === option.url}
-                                        title={option.label}
+                                        title={tAvatars(option.key)}
                                         className={cn(
                                             "size-9 overflow-hidden rounded-lg border-2 transition-transform",
                                             form.avatarUrl === option.url
@@ -651,7 +611,7 @@ export function AgentEditor({
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={option.url}
-                                            alt={option.label}
+                                            alt={tAvatars(option.key)}
                                             className="size-full object-cover"
                                         />
                                     </button>
@@ -660,19 +620,19 @@ export function AgentEditor({
                             <TextInput
                                 value={form.avatarUrl}
                                 onChange={e => update("avatarUrl", e.target.value)}
-                                placeholder="https://… or /agents/analyst.jpg"
+                                placeholder={t("pictureUrlPlaceholder")}
                                 className="mt-2"
                             />
                         </Field>
 
                         <div className="grid grid-cols-2 gap-x-4">
-                            <Field label="Colour" hint="Used for the avatar and the transcript.">
+                            <Field label={t("colour")} hint={t("colourHint")}>
                                 <div className="flex flex-wrap gap-1.5">
                                     {ACCENTS.map(accent => (
                                         <button
                                             key={accent}
                                             type="button"
-                                            aria-label={`Colour ${accent}`}
+                                            aria-label={t("colourSwatch", { value: accent })}
                                             aria-pressed={form.accent === accent}
                                             onClick={() => update("accent", accent)}
                                             className={cn(
@@ -686,12 +646,7 @@ export function AgentEditor({
                                     ))}
                                 </div>
                             </Field>
-                            <Field
-                                label="Runs on node"
-                                hint={
-                                    locked ? LOCKED_HINT : "Leave blank to run in this app process."
-                                }
-                            >
+                            <Field label={t("node")} hint={locked ? lockedHint : t("nodeHint")}>
                                 <TextInput
                                     value={form.nodeId}
                                     onChange={e => update("nodeId", e.target.value)}
@@ -719,21 +674,11 @@ export function AgentEditor({
                         className="flex min-h-0 flex-1 flex-col gap-2 px-5 pb-3 pt-4"
                     >
                         <div className="text-ink-3 text-[12px] leading-relaxed">
-                            {locked ? (
-                                <>
-                                    The same agent as a file: front matter for the settings, the
-                                    body is the instructions. Read-only for you, because a file
-                                    rewrites the handle, autonomy and tools too; change the
-                                    instructions on the Definition tab, or export this one.
-                                </>
-                            ) : (
-                                <>
-                                    The same agent as a file: front matter for the settings, the
-                                    body is the instructions. Paste an agent written for OpenCode or
-                                    Claude Code here and press <strong>Apply</strong>; export to
-                                    carry this one elsewhere.
-                                </>
-                            )}
+                            {locked
+                                ? t("fileLocked")
+                                : t.rich("fileEditable", {
+                                      b: chunks => <strong>{chunks}</strong>,
+                                  })}
                         </div>
                         <TextArea
                             value={fileText}
@@ -757,10 +702,10 @@ export function AgentEditor({
                                         size="sm"
                                         onClick={() => setFileText(serializeAgentFile(definition))}
                                     >
-                                        <RotateCcw className="size-3.5" /> Regenerate from form
+                                        <RotateCcw className="size-3.5" /> {t("regenerate")}
                                     </Button>
                                     <Button size="sm" onClick={() => applyFile(fileText)}>
-                                        Apply to form
+                                        {t("apply")}
                                     </Button>
                                 </>
                             )}
@@ -780,22 +725,25 @@ export function AgentEditor({
                 <DialogFooter className="border-line bg-line-2 flex-row items-center border-t px-5 py-3">
                     {locked ? (
                         <span className="text-ink-3 mr-auto text-[11.5px]">
-                            Handle, autonomy, tools, route and node are set by people who can manage
-                            workspace settings.
+                            {t("footerLocked")}
                         </span>
                     ) : (
                         !isNew &&
                         persona.builtin && (
                             <span className="text-ink-3 mr-auto text-[11.5px]">
-                                Starter agent — you can always restore the shipped version.
+                                {t("footerStarter")}
                             </span>
                         )
                     )}
                     <Button variant="ghost" onClick={onClose}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void save()} disabled={!canSave || saving}>
-                        {saving ? "Saving…" : isNew ? "Create agent" : "Save changes"}
+                        {saving
+                            ? tc("status.saving")
+                            : isNew
+                              ? t("create")
+                              : tc("actions.saveChanges")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

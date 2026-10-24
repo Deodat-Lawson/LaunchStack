@@ -53,6 +53,11 @@ const esmDeps = [
     "rou3",
     "uncrypto",
     "jose",
+    "use-intl",
+    "next-intl",
+    "intl-messageformat",
+    "icu-minify",
+    "@formatjs[\\w+.-]*",
 ];
 
 /** @type {import('jest').Config} */
@@ -75,6 +80,9 @@ export const config = {
     moduleNameMapper: {
         "^~/(.*)$": "<rootDir>/src/$1",
         "^@schema$": "<rootDir>/src/lib/agents/evals/campaign/contract.ts",
+        // English without a provider, the real thing inside one (src/i18n/testing).
+        "^next-intl$": "<rootDir>/src/i18n/testing/next-intl.tsx",
+        "^next-intl/server$": "<rootDir>/src/i18n/testing/next-intl-server.ts",
         "^@launchstack/engine$": "<rootDir>/../../packages/engine/src/index.ts",
         "^@launchstack/engine/config$": "<rootDir>/../../packages/engine/src/config/index.ts",
         "^@launchstack/engine/(.*)$": "<rootDir>/../../packages/engine/src/$1",

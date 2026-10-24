@@ -1,5 +1,11 @@
-/** Words for the Proposals screens: statuses, deadlines, money. Pure. */
-import type { ApplicationStatus, FindingSeverity, FunderStatus, SectionStatus } from "../api";
+/**
+ * Words for the Proposals screens: tones, deadlines, money. Pure: the words
+ * come from `proposals.words` through the `t` the caller passes, and status
+ * labels are `proposals.<map>.<status>` messages read where they render.
+ */
+import type { useTranslations } from "next-intl";
+
+import type { ApplicationStatus, SectionStatus } from "../api";
 
 export type Tone = "quiet" | "info" | "active" | "won" | "lost" | "warn";
 
@@ -21,34 +27,23 @@ export const SECTION_TONE: Record<SectionStatus, Tone> = {
     approved: "won",
 };
 
-export const FUNDER_STATUS_LABEL: Record<FunderStatus, string> = {
-    candidate: "Found",
-    saved: "Saved",
-    dismissed: "Dismissed",
-    applied: "Applying",
-};
-
-export const SEVERITY_LABEL: Record<FindingSeverity, string> = {
-    blocker: "Blocker",
-    warning: "Warning",
-    note: "Note",
-};
+export type WordsT = ReturnType<typeof useTranslations<"proposals.words">>;
 
 /** "due in 12 days", "due today", "3 days overdue", "no deadline". */
-export function deadlineWords(deadline: string | null, daysLeft: number | null): string {
-    if (!deadline || daysLeft === null) return "no deadline";
-    if (daysLeft < 0) return `${-daysLeft} day${daysLeft === -1 ? "" : "s"} overdue`;
-    if (daysLeft === 0) return "due today";
-    if (daysLeft === 1) return "due tomorrow";
-    return `due in ${daysLeft} days`;
+export function deadlineWords(t: WordsT, deadline: string | null, daysLeft: number | null): string {
+    if (!deadline || daysLeft === null) return t("noDeadline");
+    if (daysLeft < 0) return t("overdue", { days: -daysLeft });
+    if (daysLeft === 0) return t("dueToday");
+    if (daysLeft === 1) return t("dueTomorrow");
+    return t("dueIn", { days: daysLeft });
 }
 
 /** "closes in 12 days", "closed", "open". */
-export function closeWords(closesOn: string | null, daysLeft: number | null): string {
-    if (!closesOn || daysLeft === null) return "no close date";
-    if (daysLeft < 0) return "closed";
-    if (daysLeft === 0) return "closes today";
-    return `closes in ${daysLeft} day${daysLeft === 1 ? "" : "s"}`;
+export function closeWords(t: WordsT, closesOn: string | null, daysLeft: number | null): string {
+    if (!closesOn || daysLeft === null) return t("noCloseDate");
+    if (daysLeft < 0) return t("closed");
+    if (daysLeft === 0) return t("closesToday");
+    return t("closesIn", { days: daysLeft });
 }
 
 export function usd(amount: number | null): string | null {
@@ -59,12 +54,12 @@ export function usd(amount: number | null): string | null {
 }
 
 /** "$25k–$150k", "up to $150k", "from $25k". */
-export function amountWords(min: number | null, max: number | null): string | null {
+export function amountWords(t: WordsT, min: number | null, max: number | null): string | null {
     const lo = usd(min);
     const hi = usd(max);
     if (lo && hi) return lo === hi ? lo : `${lo}–${hi}`;
-    if (hi) return `up to ${hi}`;
-    if (lo) return `from ${lo}`;
+    if (hi) return t("upTo", { amount: hi });
+    if (lo) return t("from", { amount: lo });
     return null;
 }
 

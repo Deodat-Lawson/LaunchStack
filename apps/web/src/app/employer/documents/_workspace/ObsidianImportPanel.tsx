@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { FileArchive, Folder as IconFolder, RefreshCw } from "lucide-react";
 
@@ -146,6 +147,22 @@ async function postJson(url: string, body: unknown): Promise<Response> {
     });
 }
 
+/** "12 imported · 3 unchanged · 1 failed — in Obsidian/Notes". */
+function totalsLine(
+    t: ReturnType<typeof useTranslations<"sources.obsidianImport">>,
+    totals: ImportTotals
+): string {
+    const parts = [
+        t("totals.imported", { count: totals.stored }),
+        t("totals.unchanged", { count: totals.unchanged }),
+    ];
+    if (totals.skipped > 0) parts.push(t("totals.skipped", { count: totals.skipped }));
+    if (totals.failed > 0) parts.push(t("totals.failed", { count: totals.failed }));
+    if (totals.missing > 0) parts.push(t("totals.missing", { count: totals.missing }));
+    const summary = parts.join(" · ");
+    return totals.folder ? t("totals.inFolder", { summary, folder: totals.folder }) : summary;
+}
+
 async function errorMessage(res: Response, fallback: string): Promise<string> {
     try {
         const payload = (await res.json()) as { message?: string; error?: string };
@@ -156,6 +173,8 @@ async function errorMessage(res: Response, fallback: string): Promise<string> {
 }
 
 export function ObsidianImportPanel({ onImported }: { readonly onImported: () => void }) {
+    const t = useTranslations("sources.obsidianImport");
+    const format = useFormatter();
     const folderInput = useRef<HTMLInputElement>(null);
     const zipInput = useRef<HTMLInputElement>(null);
     const [picked, setPicked] = useState<PickedVault | null>(null);
@@ -188,7 +207,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
         setTotals(null);
         setError(null);
         if (vault && vault.notes.length === 0) {
-            setError("No Markdown notes found in that pick. Choose the vault's own folder.");
+            setError(t("noNotes"));
         }
     };
 
@@ -199,7 +218,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
             choose(await fromZip(file));
         } catch {
             choose(null);
-            setError("Could not read that .zip file.");
+            setError(t("zipFailed"));
         } finally {
             setReading(false);
         }
@@ -236,10 +255,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                 const res = await postJson(IMPORT_URL, { vault: name, notes: batch });
                 if (!res.ok) {
                     throw new Error(
-                        await errorMessage(
-                            res,
-                            `The import stopped after ${index - batch.length} notes.`
-                        )
+                        await errorMessage(res, t("stoppedAfter", { count: index - batch.length }))
                     );
                 }
                 const payload = (await res.json()) as { data?: BatchResponse };
@@ -261,12 +277,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
             if (!finish.ok) {
                 // The notes are in, but notes deleted from the vault were not
                 // flagged: say so, so the user imports again rather than trusting it.
-                throw new Error(
-                    await errorMessage(
-                        finish,
-                        "The notes were imported, but checking for notes deleted from the vault failed. Import the vault again to finish."
-                    )
-                );
+                throw new Error(await errorMessage(finish, t("finishFailed")));
             }
             const payload = (await finish.json()) as { data?: { missing?: number } };
             sum.missing = payload.data?.missing ?? 0;
@@ -274,14 +285,14 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
             setTotals(sum);
             toast.success(
                 sum.stored > 0
-                    ? `${sum.stored} note${sum.stored === 1 ? "" : "s"} imported from ${name}`
-                    : `${name} is up to date`
+                    ? t("imported", { count: sum.stored, name })
+                    : t("upToDate", { name })
             );
             onImported();
             void loadVaults();
         } catch (failure) {
             setTotals(sum);
-            setError(failure instanceof Error ? failure.message : "The import failed.");
+            setError(failure instanceof Error ? failure.message : t("importFailed"));
         } finally {
             setImporting(false);
             setProgress(null);
@@ -316,18 +327,14 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
 
             {!picked ? (
                 <div className="border-line bg-line-2 rounded-xl border-[1.5px] border-dashed px-6 py-8 text-center">
-                    <div className="text-ink mb-1 text-[15px] font-semibold">
-                        Import an Obsidian vault
-                    </div>
+                    <div className="text-ink mb-1 text-[15px] font-semibold">{t("title")}</div>
                     <p className="text-ink-3 mx-auto mb-4 max-w-[400px] text-[13px]">
-                        Pick your vault&rsquo;s folder, or a .zip of it. Notes keep their folders;
-                        links and tags stay readable. Import it again any time to bring changes in —
-                        only notes that changed are re-read.
+                        {t("intro")}
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
                         <Button type="button" onClick={() => folderInput.current?.click()}>
                             <IconFolder aria-hidden />
-                            Choose vault folder
+                            {t("chooseFolder")}
                         </Button>
                         <Button
                             type="button"
@@ -336,26 +343,26 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                             onClick={() => zipInput.current?.click()}
                         >
                             <FileArchive aria-hidden />
-                            {reading ? "Reading…" : "Choose .zip"}
+                            {reading ? t("reading") : t("chooseZip")}
                         </Button>
                     </div>
                 </div>
             ) : (
                 <div className="border-line bg-panel rounded-xl border p-4">
                     <div className="text-ink text-[13.5px] font-semibold">
-                        {picked.notes.length} note{picked.notes.length === 1 ? "" : "s"} found
+                        {t("notesFound", { count: picked.notes.length })}
                     </div>
                     <div className="text-ink-3 mb-3 text-[12px]">
-                        {picked.looksLikeVault
-                            ? "Obsidian vault"
-                            : "No .obsidian folder — importing the Markdown files anyway"}
-                        {picked.ignored > 0 ? ` · ${picked.ignored} other files left out` : ""}
+                        {picked.looksLikeVault ? t("looksLikeVault") : t("noSettingsFolder")}
+                        {picked.ignored > 0
+                            ? ` · ${t("otherFilesLeftOut", { count: picked.ignored })}`
+                            : ""}
                     </div>
                     <label
                         className="text-ink-2 mb-1 block text-[12px] font-medium"
                         htmlFor="obsidian-vault-name"
                     >
-                        Vault name
+                        {t("vaultName")}
                     </label>
                     <Input
                         id="obsidian-vault-name"
@@ -364,14 +371,12 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                         disabled={importing}
                         onChange={event => setVaultName(event.target.value)}
                     />
-                    <p className="text-ink-3 mb-3 mt-1 text-[12px]">
-                        Re-import under the same name to update it instead of adding a copy.
-                    </p>
+                    <p className="text-ink-3 mb-3 mt-1 text-[12px]">{t("reimportHint")}</p>
                     {progress && (
                         <div className="mb-3">
                             <Progress value={(progress.done / Math.max(progress.total, 1)) * 100} />
                             <div className="text-ink-3 mt-1 text-[12px]">
-                                {progress.done} of {progress.total} notes
+                                {t("progress", { done: progress.done, total: progress.total })}
                             </div>
                         </div>
                     )}
@@ -381,7 +386,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                             disabled={importing || picked.notes.length === 0}
                             onClick={() => void runImport()}
                         >
-                            {importing ? "Importing…" : "Import notes"}
+                            {importing ? t("importing") : t("importNotes")}
                         </Button>
                         <Button
                             type="button"
@@ -389,7 +394,7 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                             disabled={importing}
                             onClick={() => choose(null)}
                         >
-                            Choose another
+                            {t("chooseAnother")}
                         </Button>
                     </div>
                 </div>
@@ -402,18 +407,14 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                     role="status"
                     className="border-line bg-line-2 text-ink-2 mt-3 rounded-lg border px-3 py-2.5 text-[12.5px]"
                 >
-                    {totals.stored} imported · {totals.unchanged} unchanged
-                    {totals.skipped > 0 ? ` · ${totals.skipped} left out` : ""}
-                    {totals.failed > 0 ? ` · ${totals.failed} failed` : ""}
-                    {totals.missing > 0 ? ` · ${totals.missing} no longer in the vault` : ""}
-                    {totals.folder ? ` — in ${totals.folder}` : ""}
+                    {totalsLine(t, totals)}
                 </div>
             )}
 
             {vaults.length > 0 && (
                 <div className="mt-4">
                     <div className="text-ink-3 mb-1.5 text-[11.5px] font-semibold uppercase tracking-wide">
-                        Imported vaults
+                        {t("importedVaults")}
                     </div>
                     <ul className="flex flex-col gap-1.5">
                         {vaults.map(vault => (
@@ -426,17 +427,17 @@ export function ObsidianImportPanel({ onImported }: { readonly onImported: () =>
                                     {vault.vaultName}
                                 </span>
                                 <span>
-                                    {vault.notes} note{vault.notes === 1 ? "" : "s"}
+                                    {t("vaultNotes", { count: vault.notes })}
                                     {vault.lastImportedAt
-                                        ? ` · ${new Date(vault.lastImportedAt).toLocaleDateString()}`
+                                        ? ` · ${format.dateTime(new Date(vault.lastImportedAt), {
+                                              dateStyle: "medium",
+                                          })}`
                                         : ""}
                                 </span>
                             </li>
                         ))}
                     </ul>
-                    <p className="text-ink-3 mt-1.5 text-[12px]">
-                        To update one, choose its folder again and keep the same vault name.
-                    </p>
+                    <p className="text-ink-3 mt-1.5 text-[12px]">{t("updateHint")}</p>
                 </div>
             )}
         </div>

@@ -7,13 +7,13 @@
 
 import React, { useMemo, useState } from "react";
 import { Plus, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
 
 import type { Group, Member } from "../settings/people/api";
-import { plural } from "../settings/people/format";
 import { teamPaths } from "./screens";
 import { AvatarStack, EmptyLine, FilterInput } from "./ui";
 
@@ -34,6 +34,7 @@ export function GroupsView({
     /** "Manage access" into Settings, for those who may open it. */
     manageLink?: React.ReactNode;
 }) {
+    const t = useTranslations("team.groupsView");
     const [query, setQuery] = useState("");
     const needle = query.trim().toLowerCase();
     const shown = useMemo(
@@ -53,11 +54,11 @@ export function GroupsView({
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
             <PageHeader
-                title="Groups"
+                title={t("title")}
                 sub={
                     needle
-                        ? `${shown.length} of ${plural(groups.length, "group")}`
-                        : "Share a folder, file or chat with several people in one step."
+                        ? t("subFiltered", { shown: shown.length, count: groups.length })
+                        : t("sub")
                 }
                 actions={
                     <>
@@ -65,13 +66,13 @@ export function GroupsView({
                             <FilterInput
                                 value={query}
                                 onChange={setQuery}
-                                placeholder="Filter groups"
+                                placeholder={t("filterPlaceholder")}
                             />
                         )}
                         {canCreate && (
                             <Button size="sm" onClick={onCreate} data-testid="team-new-group">
                                 <Plus className="size-3.5" />
-                                New group
+                                {t("newGroup")}
                             </Button>
                         )}
                         {manageLink}
@@ -80,11 +81,9 @@ export function GroupsView({
             />
 
             {groups.length === 0 ? (
-                <EmptyLine flush>
-                    No groups yet. A group lets you share with several people in one step.
-                </EmptyLine>
+                <EmptyLine flush>{t("empty")}</EmptyLine>
             ) : shown.length === 0 ? (
-                <EmptyLine flush>No group matches “{query.trim()}”.</EmptyLine>
+                <EmptyLine flush>{t("noMatch", { query: query.trim() })}</EmptyLine>
             ) : (
                 <ul
                     className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 p-0"
@@ -110,10 +109,10 @@ export function GroupsView({
                                                 {group.name}
                                             </span>
                                             <span className="text-ink-3 block truncate text-[11.5px]">
-                                                {plural(group.memberCount, "member")}
+                                                {t("members", { count: group.memberCount })}
                                                 {selfAuthUserId &&
                                                 group.createdBy === selfAuthUserId
-                                                    ? " · Made by you"
+                                                    ? ` · ${t("madeByYou")}`
                                                     : ""}
                                             </span>
                                         </span>

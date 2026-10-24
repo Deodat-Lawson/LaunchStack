@@ -4,6 +4,9 @@ import { SCENARIO_LIMITS, type ScenarioFileOption } from "~/lib/scenarios/types"
  * The new-scenario form's files, as plain functions: what kind a file is
  * (for its icon and label), which files are the company's own, which
  * uploads the form takes, and the size presets. Pinned by a unit test.
+ * Words are message keys (`scenarios.files.kind.<kind>`,
+ * `scenarios.new.presets.<id>`, `scenarios.new.starters.<id>`), worded
+ * where they render.
  */
 
 /**
@@ -38,18 +41,6 @@ export type FileKind =
     | "transcript"
     | "image"
     | "file";
-
-export const FILE_KIND_LABEL: Record<FileKind, string> = {
-    pdf: "PDF",
-    doc: "Document",
-    slides: "Slides",
-    sheet: "Spreadsheet",
-    web: "Web page",
-    text: "Text",
-    transcript: "Transcript",
-    image: "Image",
-    file: "File",
-};
 
 const KIND_BY_EXTENSION: Record<string, FileKind> = {
     ".pdf": "pdf",
@@ -114,10 +105,13 @@ export function isCompanyFile(file: Pick<ScenarioFileOption, "aboutCompany" | "f
     return folder === UPLOAD_FOLDER || folder.startsWith(`${UPLOAD_FOLDER}/`);
 }
 
-export function formatSize(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+export type SizeUnit = "bytes" | "kb" | "mb";
+
+/** A file's size in the unit it reads best in, for `scenarios.files.size.<unit>`. */
+export function sizeParts(bytes: number): { unit: SizeUnit; value: number; digits: number } {
+    if (bytes < 1024) return { unit: "bytes", value: bytes, digits: 0 };
+    if (bytes < 1024 * 1024) return { unit: "kb", value: Math.round(bytes / 1024), digits: 0 };
+    return { unit: "mb", value: bytes / (1024 * 1024), digits: 1 };
 }
 
 /** Find a file by its title or folder, company files first, then newest. */
@@ -132,8 +126,7 @@ export function filterFiles<T extends ScenarioFileOption>(files: readonly T[], q
 }
 
 export interface SizePreset {
-    id: string;
-    label: string;
+    id: "quick" | "standard" | "deep";
     agents: number;
     rounds: number;
 }
@@ -141,19 +134,19 @@ export interface SizePreset {
 const L = SCENARIO_LIMITS;
 
 export const SIZE_PRESETS: readonly SizePreset[] = [
-    { id: "quick", label: "Quick read", agents: 15, rounds: 4 },
-    { id: "standard", label: "Standard", agents: L.agents.default, rounds: L.rounds.default },
-    { id: "deep", label: "Deep dive", agents: 80, rounds: 15 },
+    { id: "quick", agents: 15, rounds: 4 },
+    { id: "standard", agents: L.agents.default, rounds: L.rounds.default },
+    { id: "deep", agents: 80, rounds: 15 },
 ];
 
 export function presetFor(agents: number, rounds: number): SizePreset | null {
     return SIZE_PRESETS.find(p => p.agents === agents && p.rounds === rounds) ?? null;
 }
 
-/** Situations to start from when the box is empty. */
-export const SITUATION_STARTERS: readonly string[] = [
-    "We raise prices 20% for new customers in January.",
-    "A competitor launches a free version of our product.",
-    "We move support from phone to chat only.",
-    "We announce we are shutting down our oldest plan.",
-];
+/** Situations to start from when the box is empty, as `scenarios.new.starters` keys. */
+export const SITUATION_STARTERS = [
+    "raisePrices",
+    "freeCompetitor",
+    "chatOnly",
+    "oldestPlan",
+] as const;

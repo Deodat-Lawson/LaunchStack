@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 
-import { KIND_WORD, initials } from "../_lib/channels";
+import { initials } from "../_lib/channels";
 import type { BrandChannelKind, BrandPlatform } from "../api";
 import { NETWORK_LABEL, NetworkMark } from "./NetworkMark";
 
@@ -65,6 +67,7 @@ export function ChannelLabel({
     muted?: boolean;
     className?: string;
 }) {
+    const t = useTranslations("growth.brand");
     if (!channel) {
         // The server names the deployment account (and posts from before
         // channels) as a channel of kind "deployment"; no channel at all means
@@ -74,7 +77,9 @@ export function ChannelLabel({
                 <NetworkMark platform={platform} size={size} muted />
                 <span className="text-ink-3 truncate text-[13px]">{NETWORK_LABEL[platform]}</span>
                 {showKind && (
-                    <span className="text-ink-3 shrink-0 text-xs">Disconnected channel</span>
+                    <span className="text-ink-3 shrink-0 text-xs">
+                        {t("channelLabel.disconnected")}
+                    </span>
                 )}
             </span>
         );
@@ -92,7 +97,7 @@ export function ChannelLabel({
                 {channel.name}
             </span>
             {showKind && (
-                <span className="text-ink-3 shrink-0 text-xs">{KIND_WORD[channel.kind]}</span>
+                <span className="text-ink-3 shrink-0 text-xs">{t(`kinds.${channel.kind}`)}</span>
             )}
             {network && <NetworkMark platform={platform} size={14} muted className="shrink-0" />}
         </span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { ChevronRight, ChevronDown, FileText, ListTree, Edit2, Plus, Trash2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -40,6 +41,8 @@ export function OutlineTreeItem({
     onInsertSection,
     childCount,
 }: OutlineTreeItemProps) {
+    const t = useTranslations("generator.outline");
+    const tc = useTranslations("common");
     const hasChildren = childCount > 0;
     const styles = getItemStyles(item.level);
 
@@ -63,7 +66,13 @@ export function OutlineTreeItem({
                 className="h-7 w-7 flex-shrink-0 p-0"
                 onClick={() => onToggleExpand(item.id)}
                 tabIndex={-1}
-                aria-label={hasChildren ? (isExpanded ? "Collapse" : "Expand") : undefined}
+                aria-label={
+                    hasChildren
+                        ? isExpanded
+                            ? tc("actions.collapse")
+                            : tc("actions.expand")
+                        : undefined
+                }
             >
                 {hasChildren ? (
                     isExpanded ? (
@@ -129,7 +138,7 @@ export function OutlineTreeItem({
                     className="h-6 w-6 p-0"
                     onClick={() => onStartEdit(item)}
                     tabIndex={-1}
-                    aria-label="Edit"
+                    aria-label={tc("actions.edit")}
                 >
                     <Edit2 className="h-3.5 w-3.5" />
                 </Button>
@@ -139,7 +148,7 @@ export function OutlineTreeItem({
                     className="h-6 w-6 p-0"
                     onClick={() => onAddChild(item.id)}
                     tabIndex={-1}
-                    aria-label="Add child"
+                    aria-label={t("addChild")}
                 >
                     <Plus className="h-3.5 w-3.5" />
                 </Button>
@@ -149,7 +158,7 @@ export function OutlineTreeItem({
                     className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
                     onClick={() => onDelete(item.id)}
                     tabIndex={-1}
-                    aria-label="Delete"
+                    aria-label={tc("actions.delete")}
                 >
                     <Trash2 className="h-3.5 w-3.5" />
                 </Button>

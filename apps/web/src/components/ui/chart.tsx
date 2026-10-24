@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
+import { useLocale } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
@@ -123,6 +124,7 @@ function ChartTooltipContent({
         labelKey?: string;
     }) {
     const { config } = useChart();
+    const locale = useLocale();
 
     const tooltipLabel = React.useMemo(() => {
         if (hideLabel || !payload?.length) {
@@ -224,7 +226,7 @@ function ChartTooltipContent({
                                         </div>
                                         {item.value && (
                                             <span className="text-ink font-mono font-medium tabular-nums">
-                                                {item.value.toLocaleString()}
+                                                {item.value.toLocaleString(locale)}
                                             </span>
                                         )}
                                     </div>

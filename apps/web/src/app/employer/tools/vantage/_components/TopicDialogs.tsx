@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -38,6 +39,8 @@ export function TopicDialog({
     initial: TopicDto | null;
     onSaved: (topic: TopicDto) => void;
 }) {
+    const t = useTranslations("vantage.topicDialog");
+    const tc = useTranslations("common");
     const [title, setTitle] = useState("");
     const [factsText, setFactsText] = useState("");
     const [why, setWhy] = useState("");
@@ -96,11 +99,11 @@ export function TopicDialog({
             const { topic } = initial
                 ? await vantageApi.patchTopic(initial.id, input)
                 : await vantageApi.addTopic(agendaId, input);
-            toast(initial ? "Topic saved" : "Topic added");
+            toast(initial ? t("saved") : t("added"));
             onSaved(topic);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(e instanceof Error ? e.message : t("saveError"));
         } finally {
             setBusy(false);
         }
@@ -110,40 +113,29 @@ export function TopicDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-[640px]">
                 <DialogHeader>
-                    <DialogTitle>{initial ? "Edit topic" : "Add a topic"}</DialogTitle>
-                    <DialogDescription>
-                        A topic is a decision with its evidence. If there is no decision to make, it
-                        is an update, not a topic.
-                    </DialogDescription>
+                    <DialogTitle>{initial ? t("editTitle") : t("addTitle")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
-                    <Field label="Title" htmlFor="t-title">
+                    <Field label={tc("fields.title")} htmlFor="t-title">
                         <Input
                             id="t-title"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             autoFocus
-                            placeholder="Onboarding drop-off"
+                            placeholder={t("titlePlaceholder")}
                         />
                     </Field>
-                    <Field
-                        label="What happened"
-                        htmlFor="t-facts"
-                        hint="One fact per line. A line you write here has no source on file until evidence is added and the draft cites it."
-                    >
+                    <Field label={t("facts")} htmlFor="t-facts" hint={t("factsHint")}>
                         <Textarea
                             id="t-facts"
                             value={factsText}
                             onChange={e => setFactsText(e.target.value)}
                             rows={3}
-                            placeholder="40 people signed up; 6 finished onboarding."
+                            placeholder={t("factsPlaceholder")}
                         />
                     </Field>
-                    <Field
-                        label="Why it merits discussion"
-                        htmlFor="t-why"
-                        hint="A change, a contradiction, a missed target, or an important unknown"
-                    >
+                    <Field label={t("why")} htmlFor="t-why" hint={t("whyHint")}>
                         <Textarea
                             id="t-why"
                             value={why}
@@ -151,36 +143,32 @@ export function TopicDialog({
                             rows={2}
                         />
                     </Field>
-                    <Field
-                        label="The decision"
-                        htmlFor="t-decision"
-                        hint="Phrase it as the choice: this, or that?"
-                    >
+                    <Field label={t("decision")} htmlFor="t-decision" hint={t("decisionHint")}>
                         <Input
                             id="t-decision"
                             value={decision}
                             onChange={e => setDecision(e.target.value)}
-                            placeholder="Improve onboarding, or spend next week on another acquisition channel?"
+                            placeholder={t("decisionPlaceholder")}
                         />
                     </Field>
-                    <Field label="Proposed next step" htmlFor="t-next">
+                    <Field label={t("next")} htmlFor="t-next">
                         <Input
                             id="t-next"
                             value={next}
                             onChange={e => setNext(e.target.value)}
-                            placeholder="Cut onboarding to three screens and re-measure for one week"
+                            placeholder={t("nextPlaceholder")}
                         />
                     </Field>
                     <div className="grid gap-3.5 sm:grid-cols-2">
-                        <Field label="Owner" htmlFor="t-owner">
+                        <Field label={t("owner")} htmlFor="t-owner">
                             <Input
                                 id="t-owner"
                                 value={owner}
                                 onChange={e => setOwner(e.target.value)}
-                                placeholder="Dana"
+                                placeholder={t("ownerPlaceholder")}
                             />
                         </Field>
-                        <Field label="Due" htmlFor="t-due">
+                        <Field label={t("due")} htmlFor="t-due">
                             <Input
                                 id="t-due"
                                 type="date"
@@ -189,23 +177,15 @@ export function TopicDialog({
                             />
                         </Field>
                     </div>
-                    <Field
-                        label="Help requested"
-                        htmlFor="t-help"
-                        hint="What a mentor or administrator could unblock; visible to them only if the topic is shared"
-                    >
+                    <Field label={t("help")} htmlFor="t-help" hint={t("helpHint")}>
                         <Input
                             id="t-help"
                             value={help}
                             onChange={e => setHelp(e.target.value)}
-                            placeholder="Optional"
+                            placeholder={tc("status.optional")}
                         />
                     </Field>
-                    <Field
-                        label="Unknowns"
-                        htmlFor="t-unknowns"
-                        hint="One per line: what the data does not say"
-                    >
+                    <Field label={t("unknowns")} htmlFor="t-unknowns" hint={t("unknownsHint")}>
                         <Textarea
                             id="t-unknowns"
                             value={unknowns}
@@ -215,24 +195,23 @@ export function TopicDialog({
                     </Field>
                     <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
                         <div>
-                            <div className="text-ink text-[13px] font-medium">
-                                Share with a mentor or administrator
-                            </div>
-                            <div className="text-ink-3 text-[11.5px]">
-                                Shared topics appear in the program triage view and the weekly
-                                update.
-                            </div>
+                            <div className="text-ink text-[13px] font-medium">{t("share")}</div>
+                            <div className="text-ink-3 text-[11.5px]">{t("shareHint")}</div>
                         </div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
+                        <Switch
+                            checked={shared}
+                            onCheckedChange={setShared}
+                            aria-label={t("sharedAria")}
+                        />
                     </div>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void save()} disabled={busy || !title.trim()}>
-                        {initial ? "Save" : "Add topic"}
+                        {initial ? tc("actions.save") : t("submit")}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -257,6 +236,9 @@ export function DecisionDialog({
     topic: TopicDto | null;
     onSaved: (topic: TopicDto) => void;
 }) {
+    const t = useTranslations("vantage.decisionDialog");
+    const tt = useTranslations("vantage.topicDialog");
+    const tc = useTranslations("common");
     const [decision, setDecision] = useState("");
     const [withCommitment, setWithCommitment] = useState(true);
     const [title, setTitle] = useState("");
@@ -290,11 +272,11 @@ export function DecisionDialog({
                     ? { title, owner, dueOn: due, test: test || null, shared }
                     : null,
             });
-            toast(withCommitment ? "Decision recorded and commitment opened" : "Decision recorded");
+            toast(withCommitment ? t("recordedWithCommitment") : t("recorded"));
             onSaved(saved);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(e instanceof Error ? e.message : tt("saveError"));
         } finally {
             setBusy(false);
         }
@@ -304,40 +286,40 @@ export function DecisionDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[560px]">
                 <DialogHeader>
-                    <DialogTitle>Record the decision</DialogTitle>
+                    <DialogTitle>{t("title")}</DialogTitle>
                     <DialogDescription>
                         {topic?.decisionQuestion === "" ? topic?.title : topic?.decisionQuestion}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
-                    <Field label="What was decided" htmlFor="d-decision">
+                    <Field label={t("decision")} htmlFor="d-decision">
                         <Textarea
                             id="d-decision"
                             value={decision}
                             onChange={e => setDecision(e.target.value)}
                             rows={3}
                             autoFocus
-                            placeholder="We fix onboarding first; the channel test waits a week."
+                            placeholder={t("decisionPlaceholder")}
                         />
                     </Field>
                     <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
                         <div>
                             <div className="text-ink text-[13px] font-medium">
-                                Open a commitment
+                                {t("openCommitment")}
                             </div>
                             <div className="text-ink-3 text-[11.5px]">
-                                Next week&apos;s agenda checks whether it happened.
+                                {t("openCommitmentHint")}
                             </div>
                         </div>
                         <Switch
                             checked={withCommitment}
                             onCheckedChange={setWithCommitment}
-                            aria-label="Open a commitment"
+                            aria-label={t("openCommitment")}
                         />
                     </div>
                     {withCommitment && (
                         <>
-                            <Field label="Action" htmlFor="d-title">
+                            <Field label={t("action")} htmlFor="d-title">
                                 <Input
                                     id="d-title"
                                     value={title}
@@ -345,15 +327,15 @@ export function DecisionDialog({
                                 />
                             </Field>
                             <div className="grid gap-3.5 sm:grid-cols-2">
-                                <Field label="Owner" htmlFor="d-owner">
+                                <Field label={tt("owner")} htmlFor="d-owner">
                                     <Input
                                         id="d-owner"
                                         value={owner}
                                         onChange={e => setOwner(e.target.value)}
-                                        placeholder="Who"
+                                        placeholder={t("ownerPlaceholder")}
                                     />
                                 </Field>
-                                <Field label="Due" htmlFor="d-due">
+                                <Field label={tt("due")} htmlFor="d-due">
                                     <Input
                                         id="d-due"
                                         type="date"
@@ -362,26 +344,20 @@ export function DecisionDialog({
                                     />
                                 </Field>
                             </div>
-                            <Field
-                                label="The test"
-                                htmlFor="d-test"
-                                hint="What result would settle the uncertainty"
-                            >
+                            <Field label={t("test")} htmlFor="d-test" hint={t("testHint")}>
                                 <Input
                                     id="d-test"
                                     value={test}
                                     onChange={e => setTest(e.target.value)}
-                                    placeholder="Activation above 30% for the week"
+                                    placeholder={t("testPlaceholder")}
                                 />
                             </Field>
                             <div className="flex items-center justify-between gap-3">
-                                <div className="text-ink-2 text-[12.5px]">
-                                    Visible to the program
-                                </div>
+                                <div className="text-ink-2 text-[12.5px]">{t("visible")}</div>
                                 <Switch
                                     checked={shared}
                                     onCheckedChange={setShared}
-                                    aria-label="Share the commitment"
+                                    aria-label={t("shareAria")}
                                 />
                             </div>
                         </>
@@ -390,7 +366,7 @@ export function DecisionDialog({
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={() => void save()}
@@ -400,7 +376,7 @@ export function DecisionDialog({
                             (withCommitment && (!title.trim() || !owner.trim() || !due))
                         }
                     >
-                        Record
+                        {t("submit")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

@@ -2,10 +2,13 @@ import "@launchstack/design-tokens/tokens.css";
 import "~/styles/globals.css";
 import { THEME_BOOT_SCRIPT } from "@launchstack/design-tokens/theme";
 import { ThemeProvider } from "next-themes";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 import { ContextMenuProvider } from "~/components/context-menu";
 import { ThemeChoiceSync } from "~/components/theme/ThemeChoiceSync";
 import { configuredPublicOrigin } from "~/server/public-origin";
+import { TimeZoneSync } from "~/i18n/TimeZoneSync";
 
 import { type Metadata } from "next";
 import { inter, jetbrainsMono } from "./fonts";
@@ -21,31 +24,36 @@ import { inter, jetbrainsMono } from "./fonts";
 // without it.
 const APP_URL = configuredPublicOrigin() ?? process.env.NEXT_PUBLIC_SITE_URL;
 
-export const metadata: Metadata = {
-    title: {
-        default: "Launchstack",
-        template: "%s | Launchstack",
-    },
-    description: "Cited answers from your company documents.",
-    ...(APP_URL ? { metadataBase: new URL(APP_URL) } : {}),
-    // Every route on this origin is behind auth, and / redirects to /signin.
-    robots: {
-        index: false,
-        follow: false,
-    },
-    // Both files are the Launchstack mark. The SVG is listed first so browsers
-    // that support it render the logo crisply at any density; favicon.ico is the
-    // multi-resolution raster fallback (see public/icon.svg for how it's built).
-    icons: [
-        { rel: "icon", url: "/icon.svg", type: "image/svg+xml" },
-        { rel: "icon", url: "/favicon.ico", sizes: "any" },
-    ],
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("common.meta");
+    return {
+        title: {
+            default: "Launchstack",
+            template: "%s | Launchstack",
+        },
+        description: t("description"),
+        ...(APP_URL ? { metadataBase: new URL(APP_URL) } : {}),
+        // Every route on this origin is behind auth, and / redirects to /signin.
+        robots: {
+            index: false,
+            follow: false,
+        },
+        // Both files are the Launchstack mark. The SVG is listed first so browsers
+        // that support it render the logo crisply at any density; favicon.ico is the
+        // multi-resolution raster fallback (see public/icon.svg for how it's built).
+        icons: [
+            { rel: "icon", url: "/icon.svg", type: "image/svg+xml" },
+            { rel: "icon", url: "/favicon.ico", sizes: "any" },
+        ],
+    };
+}
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+    // The interface language: the browser's choice, else its languages (src/i18n).
+    const locale = await getLocale();
     return (
         <html
-            lang="en"
+            lang={locale}
             className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
@@ -54,11 +62,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
             </head>
             <body suppressHydrationWarning>
-                <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-                    <ThemeChoiceSync />
-                    <ContextMenuProvider>{children}</ContextMenuProvider>
-                    <CloudAnalytics />
-                </ThemeProvider>
+                <NextIntlClientProvider>
+                    <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+                        <ThemeChoiceSync />
+                        <TimeZoneSync />
+                        <ContextMenuProvider>{children}</ContextMenuProvider>
+                        <CloudAnalytics />
+                    </ThemeProvider>
+                </NextIntlClientProvider>
             </body>
         </html>
     );

@@ -4,6 +4,9 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
 
 import { NOTION_CONNECT_URL, NotionConnectPanel, syncSummary } from "../NotionConnectPanel";
 import { ADD_TABS } from "../types";
@@ -149,10 +152,16 @@ describe("NotionConnectPanel", () => {
 });
 
 describe("syncSummary", () => {
+    const t = createTranslator({
+        locale: "en",
+        messages: englishMessages,
+        namespace: "sources.notionConnect",
+    });
+
     it("names what the last run did", () => {
-        expect(syncSummary({ discovered: 1, stored: 0, failed: 2, truncated: true })).toBe(
+        expect(syncSummary(t, { discovered: 1, stored: 0, failed: 2, truncated: true })).toBe(
             "1 page · 2 failed · page limit reached"
         );
-        expect(syncSummary(null)).toBeNull();
+        expect(syncSummary(t, null)).toBeNull();
     });
 });

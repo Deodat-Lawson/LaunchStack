@@ -84,6 +84,12 @@ function notesDrafts(notes: string): EvidenceDraft[] {
     }));
 }
 
+/**
+ * Passages read from picked files, shared between them: one business plan
+ * gives up to 12, many files at least 3 each (the run keeps 40 in all).
+ */
+export const PICKED_PASSAGES = { total: 24, perFileMin: 3, perFileMax: 12 } as const;
+
 async function pickedDocumentDrafts(
     companyId: bigint,
     scope: DocumentScope,
@@ -99,13 +105,26 @@ async function pickedDocumentDrafts(
         if (!visible.has(id)) continue;
         byDoc.set(id, [...(byDoc.get(id) ?? []), c]);
     }
-    const drafts: EvidenceDraft[] = [];
-    for (const [id, list] of byDoc) {
-        const best = list
+    const { total, perFileMin, perFileMax } = PICKED_PASSAGES;
+    const perFile = Math.max(
+        perFileMin,
+        Math.min(perFileMax, Math.floor(total / Math.max(1, byDoc.size)))
+    );
+    const ranked = [...byDoc].map(([id, list]) => ({
+        id,
+        best: list
             .map(c => ({ c, score: overlap(subject, c.content) }))
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 3);
-        for (const { c } of best) {
+            .sort((a, b) => b.score - a.score || a.c.page - b.c.page)
+            .slice(0, perFile)
+            .map(({ c }) => c),
+    }));
+    // Every file's best passage first, then every file's second, … so a cap
+    // further on trims the weakest passages rather than whole files.
+    const drafts: EvidenceDraft[] = [];
+    for (let rank = 0; rank < perFile; rank++) {
+        for (const { id, best } of ranked) {
+            const c = best[rank];
+            if (!c) continue;
             drafts.push({
                 kind: "document",
                 label: c.page

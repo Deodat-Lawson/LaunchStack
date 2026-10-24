@@ -63,11 +63,24 @@ jest.mock("~/server/workspace/source-access", () => ({
 }));
 
 import { POST } from "~/app/api/fetchDocument/route";
-import { mapDocument } from "~/app/employer/documents/_workspace/useWorkspaceData";
+import {
+    mapDocument as mapDocumentWith,
+    type SourceRowLabels,
+} from "~/app/employer/documents/_workspace/useWorkspaceData";
+import { englishMessages } from "~/i18n/messages";
+import { createFormatter, createTranslator } from "use-intl";
 import { db } from "~/server/db";
 import { documentVersions } from "@launchstack/store/schema";
 
 const SCOPE_MARKER = { marker: "scoped-where" } as unknown as SQL;
+
+/** The rail's mapping, with the English words a source row is made of. */
+const ENGLISH_ROW_LABELS: SourceRowLabels = {
+    t: createTranslator({ locale: "en", messages: englishMessages, namespace: "workspace" }),
+    format: createFormatter({ locale: "en" }),
+};
+const mapDocument = (doc: Parameters<typeof mapDocumentWith>[0]) =>
+    mapDocumentWith(doc, ENGLISH_ROW_LABELS);
 
 function mockAuthenticated(companyId = BigInt(1), scope?: DocumentScope) {
     mockRequireWorkspaceContext.mockResolvedValue({

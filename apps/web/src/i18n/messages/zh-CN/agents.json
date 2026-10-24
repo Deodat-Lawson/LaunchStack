@@ -1,0 +1,498 @@
+{
+  "autonomy": {
+    "observe": {
+      "label": "只读",
+      "description": "被提问时才回答。在会议中，每一轮都由人来触发，它不会自行运行。"
+    },
+    "propose": {
+      "label": "提议",
+      "description": "可以自行发言，但内容不会离开工作区：它参加的会议不能同步到 Slack。"
+    },
+    "write": {
+      "label": "写入",
+      "description": "可以自行发言，发言可以通过工作区机器人同步到 Slack。"
+    },
+    "full": {
+      "label": "完全",
+      "description": "拥有全部权限，包括以自己的名义在 Slack 中发言。"
+    }
+  },
+  "violations": {
+    "mirrorNeedsWrite": "同步到 Slack 要求会议中的每个智能体都至少为“{required}”；其中有一个设为了“{current}”。",
+    "agentIdentityNeedsFull": "要以智能体自己的名义在 Slack 发帖，每个智能体都需要设为“{required}”。"
+  },
+  "modes": {
+    "primary": {
+      "label": "主智能体",
+      "description": "可以被选为对话所用的智能体，不能用 @ 召唤。"
+    },
+    "subagent": {
+      "label": "子智能体",
+      "description": "用 @标识名 召唤进单轮回答，或在会议中入座。"
+    },
+    "all": {
+      "label": "主智能体 + 子智能体",
+      "description": "可在输入框中选择，也可以用 @标识名 召唤。"
+    }
+  },
+  "styles": {
+    "balanced": {
+      "label": "均衡",
+      "description": "篇幅与问题相称：查询事实一两句话，问“怎么做”“为什么”则给出完整回答。",
+      "summary": "均衡——篇幅与问题相称"
+    },
+    "concise": {
+      "label": "简洁",
+      "description": "简短直接：先给答案，不说废话。",
+      "summary": "简洁——直接、简短"
+    },
+    "detailed": {
+      "label": "详细",
+      "description": "全面完整，附带上下文和背景。",
+      "summary": "详细——全面并附带上下文"
+    },
+    "academic": {
+      "label": "学术",
+      "description": "分析严谨、表述精确，结构正式。",
+      "summary": "学术——严谨、精确"
+    },
+    "organized": {
+      "label": "条理",
+      "description": "分节加要点，便于快速浏览。",
+      "summary": "条理——用标题组织结构"
+    }
+  },
+  "routes": {
+    "default": "默认路由",
+    "fast": "快速",
+    "reasoning": "推理",
+    "vision": "视觉"
+  },
+  "tools": {
+    "retrieval": {
+      "label": "工作区检索",
+      "description": "搜索工作区的来源，并引用其中的片段。"
+    },
+    "web": {
+      "label": "网页搜索",
+      "description": "当用户为某条消息开启网页搜索时，搜索网络。"
+    },
+    "reasoning": {
+      "label": "深度推理",
+      "description": "开启“思考”时，使用推理路由，先思考再回答。"
+    },
+    "attachments": {
+      "label": "附件和图片",
+      "description": "读取消息中附带的文件和图片。"
+    }
+  },
+  "turnNotes": {
+    "webOff": "此智能体已关闭网页搜索",
+    "reasoningOff": "此智能体已关闭深度推理",
+    "noAttachments": "此智能体不读取附件"
+  },
+  "fileErrors": {
+    "missingFrontMatter": "缺少 front matter：文件必须以 --- 开头",
+    "unexpectedListItem": "无法识别的列表项：“{line}”",
+    "unreadableLine": "无法读取 front matter 中的这一行：“{line}”",
+    "unexpectedIndent": "无法识别的缩进行：“{line}”",
+    "missingName": "front matter 中需要 `name:`，即智能体的标识名",
+    "emptyBody": "front matter 下方的正文是系统提示词，目前为空",
+    "unreadable": "无法读取该文件"
+  },
+  "workflowCategories": {
+    "decide": "做出决策",
+    "review": "评审方案",
+    "explore": "探索问题",
+    "run": "例行会议"
+  },
+  "workflows": {
+    "daciDecision": {
+      "title": "DACI 决策",
+      "tagline": "一位推动者、明确的贡献者，以及一份由你批准的建议。",
+      "description": "适用于需要多方视角、又必须有明确负责人的决策。由主持人推动：梳理决策和备选方案，收集每位贡献者的意见，让唱反调的人检验领先方案，最后给出建议。你是批准者——会议产出建议，由你拍板。",
+      "basis": {
+        "name": "DACI",
+        "origin": "Atlassian 团队手册（Team Playbook）——推动者（Driver）、批准者（Approver）、贡献者（Contributors）、知情者（Informed）；推动者汇集意见，并在约定日期前促成决策。",
+        "usedBy": "Atlassian、Confluence 的决策模板，以及大多数产品团队的决策日志。"
+      },
+      "phases": {
+        "frame": {
+          "title": "梳理",
+          "goal": "说明要做的决策、可选方案、截止日期，以及什么样的结果算好。指明由谁批准。"
+        },
+        "contribute": {
+          "title": "贡献意见",
+          "goal": "每位贡献者从自己的席位出发，对各方案给出意见：数据、可行性、成本。只谈事实和估算，暂不下结论。"
+        },
+        "challenge": {
+          "title": "质疑",
+          "goal": "检验领先方案：它依赖的假设、它会怎样失败、哪些前提必须成立。"
+        },
+        "recommend": {
+          "title": "建议",
+          "goal": "回应质疑，然后为批准者写出建议：选哪个方案、理由、负责人、日期，以及哪些事项暂缓。"
+        }
+      }
+    },
+    "sixThinkingHats": {
+      "title": "六顶思考帽",
+      "tagline": "事实、感受、收益、风险、替代方案——一次只谈一个。",
+      "description": "适用于大家反复争论、一直绕圈子的问题。所有人在同一时间朝同一方向思考：先看事实，再谈直觉反应，然后是收益、风险、替代方案，最后做出决定。用平行思考取代对抗式辩论。",
+      "basis": {
+        "name": "六顶思考帽",
+        "origin": "爱德华·德博诺（Edward de Bono）的平行思考法：团队一次只戴一顶帽子，而不是各执立场争论。",
+        "usedBy": "全球的引导实践；Miro、Mural 和 SessionLab 中的标准模板。"
+      },
+      "phases": {
+        "blueOpen": {
+          "title": "蓝帽：开场",
+          "goal": "说明要讨论的问题，以及各顶帽子如何进行。暂不涉及内容。"
+        },
+        "white": {
+          "title": "白帽：事实",
+          "goal": "只陈述来源中的内容：数字、日期、带引用的原话。不做解读。"
+        },
+        "red": {
+          "title": "红帽：直觉",
+          "goal": "从客户和市场的角度说出第一反应，以感受来表达，无需理由。"
+        },
+        "yellow": {
+          "title": "黄帽：收益",
+          "goal": "好处，以及它可能成功的理由。具体说明价值所在。"
+        },
+        "black": {
+          "title": "黑帽：风险",
+          "goal": "可能出什么问题、缺什么、会在哪里失败。每条提醒都附上依据的条款或数字。"
+        },
+        "green": {
+          "title": "绿帽：替代方案",
+          "goal": "提出新的选项和改进，回应黑帽提出的问题。"
+        },
+        "blueClose": {
+          "title": "蓝帽：决定",
+          "goal": "总结每顶帽子的产出，说明决定、负责人和下一步。"
+        }
+      }
+    },
+    "lightningDecisionJam": {
+      "title": "闪电决策会",
+      "tagline": "先问题，再优先级，再方案——不做开放讨论。",
+      "description": "适用于讨论多、决定少的团队。每个人说出哪些做得好、哪些不好，主持人排出优先级，把最大的问题改写成“我们可以如何……”，大家各自提出方案，其中一个成为有负责人的实验。书面式的发言让它不至于变成辩论。",
+      "basis": {
+        "name": "闪电决策会（LDJ）",
+        "origin": "AJ&Smart 的 Jonathan Courtney 从 Google Ventures 设计冲刺的决策技巧中提炼而来。",
+        "usedBy": "AJ&Smart 的工作坊；Miro、Mural 和 Open Practice Library 中的模板。"
+      },
+      "phases": {
+        "working": {
+          "title": "哪些做得好",
+          "goal": "每人一句话，说说进展顺利的地方。不做讨论。"
+        },
+        "problems": {
+          "title": "哪些不好",
+          "goal": "每人一句话，说出最大的问题或阻碍。仍然不做讨论。"
+        },
+        "prioritise": {
+          "title": "排序并改写",
+          "goal": "选出当前最值得解决的一个问题，改写为“我们可以如何……”。"
+        },
+        "solutions": {
+          "title": "解决方案",
+          "goal": "每人针对“我们可以如何”提出一个具体方案，具体到一周内就能尝试。"
+        },
+        "decide": {
+          "title": "确定实验",
+          "goal": "选出投入产出比最好的方案，定义最小的验证方式，指定负责人和日期。"
+        }
+      }
+    },
+    "premortem": {
+      "title": "事前验尸",
+      "tagline": "假设一年后计划失败了。为什么？",
+      "description": "在确定计划之前进行。所有人假设计划已经失败，并写下原因——这种“前瞻性后见之明”能挖出人们平时不会作为反对意见提出的风险。随后大家对原因排序，并为每个重要原因指定缓解措施。",
+      "basis": {
+        "name": "事前验尸",
+        "origin": "加里·克莱因（Gary Klein）的事前验尸法：在确定计划之前，先假设它已经失败，并写下原因。",
+        "usedBy": "Atlassian 团队手册、Miro 和 Mural 模板，以及产品和工程团队在发布前的实践。"
+      },
+      "phases": {
+        "brief": {
+          "title": "介绍计划",
+          "goal": "说明计划的现状以及它要达成的结果。然后宣布：“现在是十二个月后，计划失败了。”"
+        },
+        "imagine": {
+          "title": "设想失败",
+          "goal": "从你的席位出发，说说它是怎么失败的——两三个具体原因，越具体越好。暂不讨论解决办法。"
+        },
+        "rank": {
+          "title": "原因排序",
+          "goal": "归并各项原因，商定最可能发生、代价最大的三个。"
+        },
+        "mitigate": {
+          "title": "制定缓解措施",
+          "goal": "为每个主要原因制定一项缓解措施，指定负责人，并设定一个提示问题正在发生的信号。"
+        }
+      }
+    },
+    "prfaqReview": {
+      "title": "逆向工作法 PR/FAQ 评审",
+      "tagline": "从客户读到的新闻稿出发，倒推哪些前提必须成立。",
+      "description": "适用于新产品、新功能或新举措。亚马逊的逆向工作法：把想法写成客户会读到的新闻稿，回答五个客户问题，再过一遍尖锐的内部 FAQ——哪些前提必须成立、成本多少、什么会让它夭折——最后给出结论。",
+      "basis": {
+        "name": "逆向工作法 PR/FAQ",
+        "origin": "亚马逊的产品开发流程：先写新闻稿和 FAQ，反复修改，直到客户体验清晰为止。",
+        "usedBy": "亚马逊和 AWS 用于新产品；作为 PR/FAQ 文档被产品团队广泛采用。"
+      },
+      "phases": {
+        "pr": {
+          "title": "新闻稿",
+          "goal": "把想法当作一篇新闻稿来读：标题、面向谁、问题、收益、一段客户引言。如果还没有，就先起草一篇。"
+        },
+        "customer": {
+          "title": "客户问题",
+          "goal": "客户是谁、问题是什么、最重要的收益是什么、我们怎么知道他们需要、体验是什么样的——依据来源和客户的声音来回答。"
+        },
+        "hardFaq": {
+          "title": "尖锐 FAQ",
+          "goal": "内部问题：哪些前提必须成立、开发和运营要花多少钱、经济账怎么算、什么会让它夭折。"
+        },
+        "verdict": {
+          "title": "结论",
+          "goal": "继续、完善还是停止——给出理由，以及对应的下一步。"
+        }
+      }
+    },
+    "pitchReview": {
+      "title": "路演评审",
+      "tagline": "使命、问题、方案、为何是现在、市场、模式、团队——投资人的提纲。",
+      "description": "适用于路演材料、备忘录或申请。大家像投资人一样，按红杉的提纲逐节阅读路演内容，最后列出创始人会被问到的三个问题，以及该如何回答。",
+      "basis": {
+        "name": "红杉的商业计划书提纲",
+        "origin": "红杉资本《撰写商业计划书》（Writing a Business Plan）：公司使命、问题、解决方案、为何是现在、市场规模、竞争、产品、商业模式、团队、财务——用尽可能少的文字写清楚。",
+        "usedBy": "风投领域默认的路演材料结构；大多数路演模板背后的提纲。"
+      },
+      "phases": {
+        "purpose": {
+          "title": "使命与问题",
+          "goal": "能否用一句明确的话定义这家公司？客户的痛点是否具体——他们现在是怎么解决的？"
+        },
+        "solution": {
+          "title": "方案与时机",
+          "goal": "这个方案能否以客户愿意反复使用的方式改善他们的生活？最近发生了什么变化，让它成为可能？"
+        },
+        "market": {
+          "title": "市场与竞争",
+          "goal": "市场规模及其测算过程，以及客户还有哪些选择——用来源中的数字，而不是路演材料里的形容词。"
+        },
+        "model": {
+          "title": "商业模式与财务",
+          "goal": "钱怎么赚：定价、毛利、关键假设，以及这些数字对资金跑道和融资金额意味着什么。"
+        },
+        "questions": {
+          "title": "尖锐问题",
+          "goal": "投资人会问的三个问题，按目前回答起来有多吃力排序，并说明每个问题该怎么回答。"
+        }
+      }
+    },
+    "retrospective4ls": {
+      "title": "复盘（4L）",
+      "tagline": "喜欢、厌恶、渴望、学到——然后是行动。",
+      "description": "适用于一次发布、一个迭代或糟糕的一周之后。每个席位说出自己喜欢、厌恶、渴望和学到的东西；主持人把“厌恶”和“渴望”转化成一份简短的行动清单，并指定负责人。",
+      "basis": {
+        "name": "4L 复盘",
+        "origin": "Atlassian 团队手册中记录的一种复盘形式。",
+        "usedBy": "敏捷团队的迭代复盘；Jira、Miro 和 Retrium 中的内置模板。"
+      },
+      "phases": {
+        "loved": {
+          "title": "喜欢",
+          "goal": "哪些做得好、应该保持。每人一两件，以事实为据。"
+        },
+        "loathed": {
+          "title": "厌恶",
+          "goal": "哪些让事情变糟或有所欠缺。要具体，不针对个人。"
+        },
+        "longed": {
+          "title": "渴望",
+          "goal": "你希望当时就有的东西：工具、信息、时间、决定。"
+        },
+        "learned": {
+          "title": "学到",
+          "goal": "这段时间让我们学到了什么，会改变下次的工作方式。"
+        },
+        "actions": {
+          "title": "行动",
+          "goal": "把“厌恶”和“渴望”转化为最多五项行动，指定负责人和日期。"
+        }
+      }
+    },
+    "customerDiscovery": {
+      "title": "客户探索总结",
+      "tagline": "从他们说了什么到我们做什么——不自欺欺人。",
+      "description": "把它用在访谈、工单、评价或通话记录上。客户之声汇报大家说了什么并附上次数，产品点出促使用户转换的各种力量，销售区分客套话和真正的承诺，最后大家商定接下来的访谈或实验。",
+      "basis": {
+        "name": "《妈妈测试》+ JTBD 转换四力",
+        "origin": "《妈妈测试》（The Mom Test）的客户对话原则（谈论他们的生活、问过去的具体细节、多听），以及 JTBD（Jobs to Be Done）访谈中促成转换的四种力量（推力、拉力、焦虑、习惯）。",
+        "usedBy": "加速器和产品团队的客户探索实践；YC 和精益创业课程所教授的访谈标准。"
+      },
+      "phases": {
+        "said": {
+          "title": "他们说了什么",
+          "goal": "用客户自己的话列出反复出现的问题和需求，并注明每项出现的频率和场合。"
+        },
+        "forces": {
+          "title": "四种力量",
+          "goal": "针对主要主题：是什么把人们推离现有做法，是什么吸引他们转向新做法，是什么让他们焦虑，又是什么习惯让他们留在原地。"
+        },
+        "signal": {
+          "title": "承诺与客套",
+          "goal": "哪些是真正的信号——投入了时间、金钱或声誉——哪些只是客气话。"
+        },
+        "next": {
+          "title": "后续访谈与实验",
+          "goal": "接下来要问五位客户什么、要验证什么，以及由谁来做。"
+        }
+      }
+    },
+    "openDiscussion": {
+      "title": "开放讨论",
+      "tagline": "没有阶段——只有目标和与会者。",
+      "description": "选好智能体，说明目标，然后让发言规则自行运转。当问题不适合任何模板时，这是合适的选择。"
+    },
+    "weeklyBusinessReview": {
+      "title": "每周业务回顾",
+      "tagline": "输入、输出、异常、下一步——按这个顺序。",
+      "description": "每周固定的会议，围绕本周的数据和记录展开。先看可控的输入指标，再看它们要推动的输出指标及偏差，然后只讨论异常，最后确定下一步并指定负责人。对于正常达标的数字，不必多做解释。",
+      "basis": {
+        "name": "亚马逊每周业务回顾（WBR）",
+        "origin": "亚马逊的每周指标会议：一份包含输入和输出指标的材料，逐项检查偏差和异常，以行动项收尾。",
+        "usedBy": "亚马逊；被许多运营者以 WBR 的形式采用，Working Backwards LLC 和 Commoncog 提供了模板。"
+      },
+      "phases": {
+        "inputs": {
+          "title": "输入指标",
+          "goal": "团队可控的指标——活动量、新增商机、交付量、已关闭工单——本周数字与趋势对比，数据取自来源。"
+        },
+        "outputs": {
+          "title": "输出与偏差",
+          "goal": "收入、毛利、留存：哪些变了、哪些没变，以及需要解释原因的偏差。"
+        },
+        "exceptions": {
+          "title": "异常",
+          "goal": "只看偏离计划的数字。逐一说明：原因、是否已解决、由谁负责。"
+        },
+        "next": {
+          "title": "下一步",
+          "goal": "行动项，附负责人和日期。结束会议。"
+        }
+      }
+    },
+    "okrSetting": {
+      "title": "制定 OKR",
+      "tagline": "一个目标，三个可衡量的关键结果，并经过压力测试。",
+      "description": "适用于一个季度或一次发布。起草目标，让各职能提出关键结果，然后检验它们：可衡量、有挑战性、是结果而非任务、数量少到记得住。对通过检验的内容做出承诺。",
+      "basis": {
+        "name": "OKR",
+        "origin": "英特尔和谷歌所实践的目标与关键结果：一个定性目标，加上几个可衡量的关键结果。",
+        "usedBy": "谷歌以及大部分创业生态；Lattice、Asana Goals 和 Notion 模板中默认的目标框架。"
+      },
+      "phases": {
+        "objective": {
+          "title": "目标",
+          "goal": "为这一周期定一个定性、好记的目标。说明它为什么现在很重要。"
+        },
+        "keyResults": {
+          "title": "关键结果",
+          "goal": "每个职能提出一个关键结果：一个数字、一个基线、一个目标值、一个日期。"
+        },
+        "stress": {
+          "title": "压力测试",
+          "goal": "每个关键结果是否可衡量、有挑战性、是结果而非任务？数量是否少到记得住？删掉或改写。"
+        },
+        "commit": {
+          "title": "承诺",
+          "goal": "目标和通过检验的关键结果，每项指定一位负责人。结束会议。"
+        }
+      }
+    }
+  },
+  "sessions": {
+    "title": "编程会话",
+    "intro": "这台机器上的 Claude Code 和 Codex 会话。导入后即可成为可搜索的工作区知识，还能在对话中接着进行。",
+    "rescan": "重新扫描",
+    "importAllNew": "导入全部新会话",
+    "scanning": "正在扫描本地会话…",
+    "status": {
+      "live": "进行中",
+      "updateAvailable": "有更新",
+      "imported": "已导入",
+      "new": "新"
+    },
+    "archived": "已归档",
+    "actionsFor": "“{title}”的操作",
+    "pathCopied": "路径已复制",
+    "idCopied": "会话 ID 已复制",
+    "update": "更新",
+    "openHint": "查看已导入的转录文本",
+    "continue": "继续",
+    "continueHint": "在对话中继续这段会话",
+    "ago": {
+      "minutes": "{count} 分钟前",
+      "hours": "{count} 小时前",
+      "days": "{count} 天前"
+    },
+    "toasts": {
+      "someFailed": "{count, plural, other {# 个会话导入失败}}",
+      "imported": "已导入“{title}”——正在建立索引，稍后即可搜索",
+      "unchanged": "已导入过，且没有变化",
+      "importFailed": "无法导入该会话",
+      "removed": "已移除导入",
+      "removeFailed": "无法移除该导入",
+      "importedAll": "已导入 {stored}/{discovered} 个会话",
+      "bulkFailed": "批量导入失败"
+    },
+    "errors": {
+      "disabledTitle": "会话连接器已关闭",
+      "title": "无法浏览会话",
+      "disabledBody": "此浏览器会读取托管 LaunchStack 的机器上的 Claude Code 和 Codex 文件夹，因此默认关闭。在该服务器上设置 <code>{flag}</code> 即可开启。",
+      "loadFailed": "加载会话失败。",
+      "requestFailed": "请求失败（HTTP {status}）"
+    },
+    "roots": {
+      "notFound": "未找到"
+    },
+    "counts": {
+      "imported": "已导入 {imported}/{total}",
+      "withUpdates": "{count} 个有更新",
+      "truncated": "列表已截断"
+    },
+    "filters": {
+      "search": "搜索标题、提示词、项目…",
+      "allTools": "全部工具",
+      "allStatuses": "全部状态",
+      "notImported": "未导入",
+      "allProjects": "全部项目"
+    },
+    "empty": {
+      "none": "这台机器上没有找到 Claude Code 或 Codex 会话。",
+      "noMatch": "没有符合筛选条件的会话。"
+    },
+    "remove": {
+      "title": "移除已导入的转录文本？",
+      "description": "“{title}”将从工作区及其搜索中移除。这台机器上的会话会保留，你可以再次导入。",
+      "confirm": "移除导入"
+    },
+    "menu": {
+      "openTranscript": "打开转录文本",
+      "continueInChat": "在对话中继续",
+      "updateImport": "更新导入",
+      "reimport": "重新导入",
+      "import": "导入",
+      "copyPath": "复制项目路径",
+      "copyId": "复制会话 ID",
+      "removeImport": "移除导入…",
+      "busy": "已有导入正在进行。"
+    }
+  }
+}

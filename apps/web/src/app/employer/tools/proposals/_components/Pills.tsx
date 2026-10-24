@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
     DropdownMenu,
@@ -11,14 +12,8 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 
-import {
-    APPLICATION_STATUS_LABEL,
-    SECTION_STATUS_LABEL,
-    type ApplicationStatus,
-    type FindingSeverity,
-    type SectionStatus,
-} from "../api";
-import { APPLICATION_TONE, SECTION_TONE, SEVERITY_LABEL, type Tone } from "../_lib/words";
+import type { ApplicationStatus, FindingSeverity, SectionStatus } from "../api";
+import { APPLICATION_TONE, SECTION_TONE, type Tone } from "../_lib/words";
 
 const DOT: Record<Tone, string> = {
     quiet: "bg-ink-4",
@@ -54,9 +49,10 @@ export function ApplicationStatusPill({
     status: ApplicationStatus;
     className?: string;
 }) {
+    const t = useTranslations("proposals.applicationStatus");
     return (
         <StatusWord tone={APPLICATION_TONE[status]} className={className}>
-            {APPLICATION_STATUS_LABEL[status]}
+            {t(status)}
         </StatusWord>
     );
 }
@@ -68,9 +64,10 @@ export function SectionStatusPill({
     status: SectionStatus;
     className?: string;
 }) {
+    const t = useTranslations("proposals.sectionStatus");
     return (
         <StatusWord tone={SECTION_TONE[status]} className={className}>
-            {SECTION_STATUS_LABEL[status]}
+            {t(status)}
         </StatusWord>
     );
 }
@@ -82,7 +79,8 @@ const SEVERITY_TONE: Record<FindingSeverity, Tone> = {
 };
 
 export function SeverityWord({ severity }: { severity: FindingSeverity }) {
-    return <StatusWord tone={SEVERITY_TONE[severity]}>{SEVERITY_LABEL[severity]}</StatusWord>;
+    const t = useTranslations("proposals.severity");
+    return <StatusWord tone={SEVERITY_TONE[severity]}>{t(severity)}</StatusWord>;
 }
 
 const STATUS_ORDER: ApplicationStatus[] = [
@@ -106,13 +104,15 @@ export function ApplicationStatusMenu({
     onChange: (status: ApplicationStatus) => void;
     disabled?: boolean;
 }) {
+    const t = useTranslations("proposals.pills");
+    const tStatus = useTranslations("proposals.applicationStatus");
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild disabled={disabled}>
                 <button
                     type="button"
                     className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 inline-flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs font-medium outline-none transition-colors focus-visible:ring-[3px] disabled:opacity-60"
-                    aria-label={`Status: ${APPLICATION_STATUS_LABEL[status]}. Change status`}
+                    aria-label={t("statusAria", { status: tStatus(status) })}
                 >
                     <ApplicationStatusPill status={status} className="text-ink" />
                     <ChevronDown className="text-ink-3 size-3.5" />
@@ -120,7 +120,7 @@ export function ApplicationStatusMenu({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="text-ink-3 text-xs font-normal">
-                    Move to
+                    {t("moveTo")}
                 </DropdownMenuLabel>
                 {STATUS_ORDER.map(s => (
                     <DropdownMenuItem
@@ -130,7 +130,9 @@ export function ApplicationStatusMenu({
                         className="flex items-center justify-between"
                     >
                         <ApplicationStatusPill status={s} className="text-ink" />
-                        {s === status && <span className="text-ink-3 text-[11px]">current</span>}
+                        {s === status && (
+                            <span className="text-ink-3 text-[11px]">{t("current")}</span>
+                        )}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
@@ -152,13 +154,14 @@ export function ReadinessMeter({
     label?: string;
     className?: string;
 }) {
+    const t = useTranslations("proposals.pills");
     const clamped = Math.max(0, Math.min(100, value));
     const ready = clamped >= 90;
     return (
         <span
             className={cn("inline-grid grid-cols-[44px_auto] items-center gap-2", className)}
-            title={`${clamped}% ready`}
-            aria-label={`${clamped} percent ready`}
+            title={t("readyTitle", { value: clamped })}
+            aria-label={t("readyAria", { value: clamped })}
         >
             <span className="bg-line relative block h-1.5 overflow-hidden rounded-full">
                 <span
@@ -170,8 +173,9 @@ export function ReadinessMeter({
                 />
             </span>
             <span className="text-ink text-xs font-medium tabular-nums">
-                {label ? `${label} ` : ""}
-                {clamped}%
+                {label
+                    ? t("labelledValue", { label, value: clamped })
+                    : t("readyValue", { value: clamped })}
             </span>
         </span>
     );

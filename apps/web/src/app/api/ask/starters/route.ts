@@ -16,6 +16,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { handleRouteError, ok } from "~/server/api/responses";
 import { getAskStarters } from "~/server/ask-starters";
+import { localeOfRequest } from "~/i18n/server";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
@@ -33,7 +34,12 @@ export async function GET(request: Request) {
 
             const scope = await ctx.data.documentScope();
             const payload = await withWorkspaceChatModels(ctx.data.companyId, () =>
-                getAskStarters({ companyId: ctx.data.companyId, scope, refresh })
+                getAskStarters({
+                    companyId: ctx.data.companyId,
+                    scope,
+                    refresh,
+                    locale: localeOfRequest(request),
+                })
             );
             return ok(payload);
         } catch (error) {

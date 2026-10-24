@@ -1,12 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Badge } from "~/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { ScenarioDetail, ScenarioPerson } from "~/lib/scenarios/types";
-import { plural } from "~/lib/tools/format";
 
 import { atHandle, isLive } from "~/lib/scenarios/words";
 import { Monogram, StanceTrail, stanceMove } from "./Bits";
@@ -15,13 +15,14 @@ type Filter = "all" | "grounded" | "invented";
 
 /** "Grounded" when built from records, else said plainly. */
 export function GroundingBadge({ person }: { person: ScenarioPerson }) {
+    const t = useTranslations("scenarios.people");
     return person.grounding === "grounded" ? (
         <Badge variant="secondary" className="shrink-0">
-            Grounded
+            {t("grounded")}
         </Badge>
     ) : (
         <Badge variant="warn" className="shrink-0">
-            Invented to fill a gap
+            {t("inventedBadge")}
         </Badge>
     );
 }
@@ -38,6 +39,9 @@ export function PeopleTab({
     run: ScenarioDetail;
     onPerson: (personId: string) => void;
 }) {
+    const t = useTranslations("scenarios.people");
+    const tw = useTranslations("scenarios.words");
+    const tc = useTranslations("common");
     const [filter, setFilter] = useState<Filter>("all");
     const grounded = run.people.filter(p => p.grounding === "grounded").length;
     const shown = useMemo(
@@ -50,13 +54,13 @@ export function PeopleTab({
             <div className="flex flex-col gap-3">
                 <p className="text-ink-3 text-[13px]">
                     {run.stage === "casting"
-                        ? `Building ${run.agents} people from the sources…`
-                        : "People are built once the sources are gathered."}
+                        ? t("building", { count: run.agents })
+                        : t("waitingForSources")}
                 </p>
                 <SkeletonRows rows={3} height={56} />
             </div>
         ) : (
-            <p className="text-ink-3 text-[13px]">Nobody was built for this scenario.</p>
+            <p className="text-ink-3 text-[13px]">{t("nobody")}</p>
         );
     }
 
@@ -64,8 +68,11 @@ export function PeopleTab({
         <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="text-ink-3 text-xs">
-                    {plural(run.people.length, "person", "people")} · {grounded} built from your
-                    records · {run.people.length - grounded} invented to fill gaps
+                    {t("summary", {
+                        count: run.people.length,
+                        grounded,
+                        invented: run.people.length - grounded,
+                    })}
                 </span>
                 <ToggleGroup
                     type="single"
@@ -73,16 +80,16 @@ export function PeopleTab({
                     onValueChange={v => v && setFilter(v as Filter)}
                     variant="outline"
                     size="sm"
-                    aria-label="Show"
+                    aria-label={t("filterLabel")}
                 >
                     <ToggleGroupItem value="all" className="px-2.5 text-xs">
-                        All
+                        {tc("status.all")}
                     </ToggleGroupItem>
                     <ToggleGroupItem value="grounded" className="px-2.5 text-xs">
-                        Grounded
+                        {t("grounded")}
                     </ToggleGroupItem>
                     <ToggleGroupItem value="invented" className="px-2.5 text-xs">
-                        Invented
+                        {t("invented")}
                     </ToggleGroupItem>
                 </ToggleGroup>
             </div>
@@ -111,13 +118,15 @@ export function PeopleTab({
                             <GroundingBadge person={person} />
                             <span className="mt-auto flex items-center justify-between gap-3">
                                 <span className="text-ink-2 min-w-0 truncate text-xs">
-                                    {stanceMove(person.startStance, person.stance)}
+                                    {stanceMove(tw, person.startStance, person.stance)}
                                 </span>
                                 <StanceTrail history={person.stanceHistory} />
                             </span>
                             <span className="text-ink-3 text-xs tabular-nums">
-                                {plural(person.posts, "post")} ·{" "}
-                                {plural(person.comments, "comment")}
+                                {t("activity", {
+                                    posts: person.posts,
+                                    comments: person.comments,
+                                })}
                             </span>
                         </button>
                     </li>

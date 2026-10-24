@@ -10,6 +10,7 @@ import {
     Users,
     type LucideIcon,
 } from "lucide-react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -24,8 +25,8 @@ import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { SCENARIO_CAVEAT, SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
-import { joinNatural, plural } from "~/lib/tools/format";
+import { SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
@@ -42,8 +43,10 @@ const L = SCENARIO_LIMITS;
 /** How often the file list is asked again while a picked file is being read. */
 const READING_POLL_MS = 3000;
 
+type NewTranslator = ReturnType<typeof useTranslations<"scenarios.new">>;
+
 /** The estimate for a size, asked for once the sliders settle. */
-function useEstimate(agents: number, rounds: number) {
+function useEstimate(agents: number, rounds: number, fallbackError: string) {
     const [state, setState] = useState<{
         data: ScenarioEstimate | null;
         loading: boolean;
@@ -63,7 +66,7 @@ function useEstimate(agents: number, rounds: number) {
                         setState(s => ({
                             data: s.data,
                             loading: false,
-                            error: e instanceof Error ? e.message : "Could not estimate the cost",
+                            error: e instanceof Error ? e.message : fallbackError,
                         }));
                 });
         }, 350);
@@ -71,11 +74,12 @@ function useEstimate(agents: number, rounds: number) {
             cancelled = true;
             window.clearTimeout(timer);
         };
-    }, [agents, rounds]);
+    }, [agents, rounds, fallbackError]);
     return state;
 }
 
 function Counter({ value, max }: { value: number; max: number }) {
+    const format = useFormatter();
     return (
         <span
             className={cn(
@@ -83,7 +87,7 @@ function Counter({ value, max }: { value: number; max: number }) {
                 value > max ? "text-danger" : "text-ink-3"
             )}
         >
-            {value.toLocaleString()}/{max.toLocaleString()}
+            {format.number(value)}/{format.number(max)}
         </span>
     );
 }
@@ -108,6 +112,10 @@ interface SourceSwitch {
  * action starts the run and opens it.
  */
 export function NewScreen() {
+    const t = useTranslations("scenarios.new");
+    const tw = useTranslations("scenarios.words");
+    const locale = useLocale();
+    const fmt = useToolFormat();
     const router = useToolRouter();
     const { expectLive } = useScenarios();
     const [pollMs, setPollMs] = useState<number | null>(null);
@@ -129,7 +137,7 @@ export function NewScreen() {
     const [rounds, setRounds] = useState<number>(L.rounds.default);
     const [submitting, setSubmitting] = useState(false);
     const [problem, setProblem] = useState<{ message: string; credits: boolean } | null>(null);
-    const estimate = useEstimate(agents, rounds);
+    const estimate = useEstimate(agents, rounds, t("estimateError"));
     const fileInput = useRef<HTMLInputElement>(null);
 
     const offered = options.data;
@@ -159,7 +167,7 @@ export function NewScreen() {
         onAdded: (id, name) => {
             void reloadOptions();
             if (id === null) {
-                toast.success(`${name} was added to your files. Choose it from your files.`);
+                toast.success(t("addedToast", { name }));
                 return;
             }
             setArriving(a => ({ ...a, [id]: name }));
@@ -177,12 +185,12 @@ export function NewScreen() {
         {
             id: "profile",
             icon: Building2,
-            label: "Company profile",
-            short: "company profile",
+            label: t("switches.profile"),
+            short: t("switches.profileShort"),
             hint:
                 offered && !offered.companyProfile
-                    ? "This workspace has no company profile yet."
-                    : "What you sell, to whom, and at what price.",
+                    ? t("switches.profileNone")
+                    : t("switches.profileHint"),
             checked: profileOn,
             set: setCompanyProfile,
             disabled: offered ? !offered.companyProfile : true,
@@ -190,22 +198,22 @@ export function NewScreen() {
         {
             id: "search",
             icon: Search,
-            label: "Search my files",
-            short: "file search",
-            hint: "Finds passages about the situation in every file you can see.",
+            label: t("switches.search"),
+            short: t("switches.searchShort"),
+            hint: t("switches.searchHint"),
             checked: searchFiles,
             set: setSearchFiles,
         },
         {
             id: "prospects",
             icon: Users,
-            label: "Prospects",
-            short: "prospects",
+            label: t("switches.prospects"),
+            short: t("switches.prospectsShort"),
             hint: offered
                 ? offered.prospects > 0
-                    ? `${plural(offered.prospects, "company", "companies")} from Growth › Prospects become buyers in the network.`
-                    : "No prospects yet. Growth › Prospects finds them."
-                : "Companies from Growth › Prospects.",
+                    ? t("switches.prospectsHint", { count: offered.prospects })
+                    : t("switches.prospectsNone")
+                : t("switches.prospectsLoading"),
             checked: prospects && (offered?.prospects ?? 0) > 0,
             set: setProspects,
             disabled: offered ? offered.prospects === 0 : true,
@@ -213,13 +221,13 @@ export function NewScreen() {
         {
             id: "comments",
             icon: MessagesSquare,
-            label: "Comments on your posts",
-            short: "post comments",
+            label: t("switches.comments"),
+            short: t("switches.commentsShort"),
             hint: offered
                 ? offered.brandComments > 0
-                    ? `${plural(offered.brandComments, "comment")} people left on the workspace's social posts.`
-                    : "No comments on your posts yet."
-                : "What people said under the workspace's social posts.",
+                    ? t("switches.commentsHint", { count: offered.brandComments })
+                    : t("switches.commentsNone")
+                : t("switches.commentsLoading"),
             checked: brandComments && (offered?.brandComments ?? 0) > 0,
             set: setBrandComments,
             disabled: offered ? offered.brandComments === 0 : true,
@@ -229,7 +237,7 @@ export function NewScreen() {
     const hasNotes = notes.trim().length > 0;
     const builtFrom = [
         ...switches.filter(s => s.checked).map(s => s.short),
-        ...(hasNotes ? ["pasted material"] : []),
+        ...(hasNotes ? [t("notesShort")] : []),
     ];
     const anySource = picked.length > 0 || builtFrom.length > 0;
 
@@ -240,15 +248,15 @@ export function NewScreen() {
     const blocked = current !== null && !current.enough;
     const tooLong = subject.length > L.subjectMax || notes.length > L.notesMax;
     const holdReason = !subject.trim()
-        ? "Describe the situation first."
+        ? t("describeFirst")
         : uploader.busy
-          ? "Waiting for uploads to finish."
+          ? t("hold.uploading")
           : reading > 0
-            ? `Waiting for ${reading === 1 ? "a file" : `${reading} files`} to be read, so the people can use ${reading === 1 ? "it" : "them"}. Remove ${reading === 1 ? "it" : "them"} to run without.`
+            ? t("hold.reading", { count: reading })
             : unreadable > 0
-              ? `Remove the ${unreadable === 1 ? "file" : "files"} that could not be read.`
+              ? t("hold.unreadable", { count: unreadable })
               : tooLong
-                ? "The situation or the pasted material is too long."
+                ? t("hold.tooLong")
                 : null;
     const canRun = holdReason === null && !blocked && !submitting;
 
@@ -277,7 +285,7 @@ export function NewScreen() {
                 e instanceof ScenariosApiError &&
                 (e.status === 402 || e.code === "insufficient_credits");
             setProblem({
-                message: e instanceof Error ? e.message : "Could not start the scenario",
+                message: e instanceof Error ? e.message : t("startError"),
                 credits,
             });
             setSubmitting(false);
@@ -285,22 +293,18 @@ export function NewScreen() {
     };
 
     const preset = presetFor(agents, rounds);
+    const size = tw("size", { agents, rounds });
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-            <PageHeader
-                size="md"
-                title="New"
-                accent="scenario"
-                sub="Describe a situation and attach what it is about. People built from your records react to it over several rounds."
-            />
+            <PageHeader size="md" title={t("title")} accent={t("accent")} sub={t("sub")} />
             <input
                 ref={fileInput}
                 type="file"
                 multiple
                 className="sr-only"
                 tabIndex={-1}
-                aria-label="Upload files about the situation"
+                aria-label={t("uploadLabel")}
                 accept={UPLOAD_ACCEPT}
                 onChange={e => {
                     uploader.add(Array.from(e.target.files ?? []));
@@ -309,7 +313,7 @@ export function NewScreen() {
             />
             <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_320px] items-start gap-8">
                 <div className="flex min-w-0 flex-col gap-8">
-                    <section className="flex flex-col gap-4" aria-label="The situation">
+                    <section className="flex flex-col gap-4" aria-label={t("situationLabel")}>
                         <SituationComposer
                             value={subject}
                             onChange={setSubject}
@@ -329,14 +333,14 @@ export function NewScreen() {
                                 htmlFor="scenario-title"
                                 className="text-ink-3 w-[110px] shrink-0 text-xs font-normal"
                             >
-                                Title (optional)
+                                {t("titleLabel")}
                             </Label>
                             <Input
                                 id="scenario-title"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                                 maxLength={120}
-                                placeholder="Taken from the situation when left empty"
+                                placeholder={t("titlePlaceholder")}
                                 className="h-8 md:text-[13px]"
                             />
                         </div>
@@ -344,8 +348,8 @@ export function NewScreen() {
 
                     <section className="flex flex-col gap-3">
                         <SectionHeading
-                            title="What else the people are built from"
-                            aside="Only material you can see is used"
+                            title={t("builtFromTitle")}
+                            aside={t("builtFromAside")}
                             className="mb-0"
                         />
                         <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-2">
@@ -365,11 +369,10 @@ export function NewScreen() {
                                 <SourceIcon icon={ClipboardPaste} on={hasNotes} />
                                 <span className="min-w-0 flex-1">
                                     <span className="text-ink block text-[13px] font-medium">
-                                        Paste material
+                                        {t("notesLabel")}
                                     </span>
                                     <span className="text-ink-3 block text-xs">
-                                        A news story, a policy draft, an announcement, a
-                                        competitor&rsquo;s pricing page…
+                                        {t("notesHint")}
                                     </span>
                                 </span>
                                 {!hasNotes && (
@@ -385,11 +388,11 @@ export function NewScreen() {
                             <CollapsibleContent className="px-3 pb-3">
                                 <Textarea
                                     id="scenario-notes"
-                                    aria-label="Pasted material"
+                                    aria-label={t("notesAria")}
                                     value={notes}
                                     onChange={e => setNotes(e.target.value)}
                                     rows={5}
-                                    placeholder="Paste the text here."
+                                    placeholder={t("notesPlaceholder")}
                                     className="bg-surface md:text-[13px]"
                                     aria-invalid={notes.length > L.notesMax || undefined}
                                 />
@@ -401,11 +404,7 @@ export function NewScreen() {
                     </section>
 
                     <section className="flex flex-col gap-4">
-                        <SectionHeading
-                            title="Size"
-                            aside={`${plural(agents, "person", "people")} · ${plural(rounds, "round")}`}
-                            className="mb-0"
-                        />
+                        <SectionHeading title={t("size")} aside={size} className="mb-0" />
                         <ToggleGroup
                             type="single"
                             variant="outline"
@@ -416,7 +415,7 @@ export function NewScreen() {
                                 setAgents(p.agents);
                                 setRounds(p.rounds);
                             }}
-                            aria-label="Size presets"
+                            aria-label={t("presetsLabel")}
                             className="@max-sm:grid-cols-1 grid grid-cols-3 gap-2"
                         >
                             {SIZE_PRESETS.map(p => (
@@ -426,10 +425,10 @@ export function NewScreen() {
                                     className="data-[state=on]:border-brand data-[state=on]:bg-brand-soft h-auto flex-col items-start gap-0.5 px-3 py-2 text-left"
                                 >
                                     <span className="text-ink text-[13px] font-medium">
-                                        {p.label}
+                                        {t(`presets.${p.id}`)}
                                     </span>
                                     <span className="text-ink-3 text-xs font-normal tabular-nums">
-                                        {p.agents} people · {p.rounds} rounds
+                                        {tw("size", { agents: p.agents, rounds: p.rounds })}
                                     </span>
                                 </ToggleGroupItem>
                             ))}
@@ -437,21 +436,21 @@ export function NewScreen() {
                         <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-x-8 gap-y-5">
                             <SizeSlider
                                 id="people"
-                                label="People"
+                                label={t("people")}
                                 value={agents}
                                 min={L.agents.min}
                                 max={L.agents.max}
                                 onChange={setAgents}
-                                hint="More people bring more points of view, and cost more."
+                                hint={t("peopleHint")}
                             />
                             <SizeSlider
                                 id="rounds"
-                                label="Rounds"
+                                label={t("rounds")}
                                 value={rounds}
                                 min={L.rounds.min}
                                 max={L.rounds.max}
                                 onChange={setRounds}
-                                hint="Each round, people read their feed and post, reply, share or change their minds."
+                                hint={t("roundsHint")}
                             />
                         </div>
                     </section>
@@ -460,7 +459,7 @@ export function NewScreen() {
                 <aside className="@max-lg:static sticky top-0 flex flex-col gap-3">
                     <div className="border-line bg-panel overflow-hidden rounded-xl border">
                         <div className="px-4 pb-3 pt-4">
-                            <span className="text-ink-3 text-xs">Your scenario</span>
+                            <span className="text-ink-3 text-xs">{t("summary.title")}</span>
                             <p
                                 className={cn(
                                     "mt-1 line-clamp-4 text-[13px] leading-relaxed",
@@ -468,20 +467,22 @@ export function NewScreen() {
                                 )}
                             >
                                 {subject.trim()
-                                    ? asQuestion(subject.trim())
-                                    : "What happens if… Describe the situation to start."}
+                                    ? asQuestion(subject.trim(), t, locale)
+                                    : t("summary.empty")}
                             </p>
                         </div>
                         <dl className="border-line-2 grid gap-2 border-t px-4 py-3 text-xs">
                             <SummaryRow
-                                term="Files"
+                                term={t("files")}
                                 value={
                                     picked.length === 0 && !uploader.busy
-                                        ? "None attached"
+                                        ? t("summary.noFiles")
                                         : [
-                                              plural(picked.length, "file"),
-                                              uploader.busy ? "uploading more" : null,
-                                              reading > 0 ? `${reading} being read` : null,
+                                              t("summary.fileCount", { count: picked.length }),
+                                              uploader.busy ? t("summary.uploadingMore") : null,
+                                              reading > 0
+                                                  ? t("summary.beingRead", { count: reading })
+                                                  : null,
                                           ]
                                               .filter(Boolean)
                                               .join(" · ")
@@ -489,18 +490,15 @@ export function NewScreen() {
                                 muted={picked.length === 0 && !uploader.busy}
                             />
                             <SummaryRow
-                                term="Also from"
+                                term={t("summary.alsoFrom")}
                                 value={
                                     builtFrom.length > 0
-                                        ? capitalize(joinNatural(builtFrom))
-                                        : "Nothing else"
+                                        ? capitalize(fmt.joinNatural(builtFrom))
+                                        : t("summary.nothingElse")
                                 }
                                 muted={builtFrom.length === 0}
                             />
-                            <SummaryRow
-                                term="Size"
-                                value={`${plural(agents, "person", "people")} · ${plural(rounds, "round")}`}
-                            />
+                            <SummaryRow term={t("size")} value={size} />
                         </dl>
                         <EstimateBox
                             estimate={current ?? estimate.data}
@@ -511,8 +509,7 @@ export function NewScreen() {
                         <div className="border-line-2 flex flex-col gap-2 border-t p-4">
                             {!anySource && (
                                 <p className="border-warn/40 bg-warn-soft text-warn rounded-md border px-3 py-2 text-xs leading-relaxed">
-                                    Nothing to build people from, so every person will be invented.
-                                    Attach a file, switch on a source or paste some material.
+                                    {t("noSources")}
                                 </p>
                             )}
                             <Button
@@ -522,7 +519,7 @@ export function NewScreen() {
                                 className="w-full"
                             >
                                 <Play />
-                                {submitting ? "Starting…" : "Run scenario"}
+                                {submitting ? t("starting") : t("run")}
                             </Button>
                             {holdReason && !problem && (
                                 <p
@@ -535,13 +532,12 @@ export function NewScreen() {
                             {problem && (
                                 <p role="alert" className="text-danger text-xs leading-relaxed">
                                     {problem.message}
-                                    {problem.credits &&
-                                        " Use fewer people or rounds, or ask an admin to add credits."}
+                                    {problem.credits && ` ${t("creditsHint")}`}
                                 </p>
                             )}
                         </div>
                     </div>
-                    <p className="text-ink-3 px-1 text-xs leading-relaxed">{SCENARIO_CAVEAT}</p>
+                    <p className="text-ink-3 px-1 text-xs leading-relaxed">{tw("caveat")}</p>
                 </aside>
             </div>
 
@@ -568,14 +564,21 @@ export function NewScreen() {
     );
 }
 
-/** The situation read on from "What happens if", unless it already asks. */
-function asQuestion(text: string): string {
-    if (/^what\b/i.test(text)) return text;
+/**
+ * The situation read on from "What happens if", unless it already asks. The
+ * lower-casing is English grammar; other languages get the text as typed,
+ * without the end punctuation their question form supplies.
+ */
+function asQuestion(text: string, t: NewTranslator, locale: string): string {
+    if (/^what\b/i.test(text) || /^(如果|假如|要是|万一|倘若)/.test(text)) return text;
+    if (!locale.startsWith("en")) {
+        return t("summary.question", { situation: text.replace(/[.。!！?？]+$/u, "") });
+    }
     // "We raise prices…" reads on lower-case; a name ("Acme raises…") keeps its case.
     const rest = /^(We|Our|The|A|An|All|Every|Some|They|Their)\b/.test(text)
         ? text[0]!.toLowerCase() + text.slice(1)
         : text;
-    return `What happens if ${rest}`;
+    return t("summary.question", { situation: rest });
 }
 
 function capitalize(text: string): string {
@@ -691,6 +694,7 @@ function EstimateBox({
     error: string | null;
     blocked: boolean;
 }) {
+    const t = useTranslations("scenarios.new");
     return (
         <div
             className={cn(
@@ -699,15 +703,19 @@ function EstimateBox({
             )}
             aria-live="polite"
         >
-            <span className="text-ink-3 text-xs">Estimate</span>
+            <span className="text-ink-3 text-xs">{t("estimate")}</span>
             {estimate ? (
                 <div className={cn("transition-opacity", settling && "opacity-60")}>
                     <div className="text-ink text-lg font-semibold tabular-nums leading-tight">
-                        ≈ {estimate.credits.toLocaleString()}{" "}
-                        <span className="text-ink-2 text-xs font-normal">credits</span>
+                        {t.rich("estimateCredits", {
+                            credits: estimate.credits,
+                            unit: chunks => (
+                                <span className="text-ink-2 text-xs font-normal">{chunks}</span>
+                            ),
+                        })}
                     </div>
                     <div className="text-ink-3 mt-0.5 text-xs tabular-nums">
-                        About {estimate.calls.toLocaleString()} model calls
+                        {t("estimateCalls", { calls: estimate.calls })}
                     </div>
                 </div>
             ) : error ? null : (
@@ -716,16 +724,17 @@ function EstimateBox({
             {estimate && (
                 <span className="text-ink-3 text-xs tabular-nums">
                     {estimate.balance === null
-                        ? "Usage is not metered on this workspace."
-                        : `Balance: ${estimate.balance.toLocaleString()} credits`}
+                        ? t("unmetered")
+                        : t("balance", { balance: estimate.balance })}
                 </span>
             )}
             {error && <span className="text-danger text-xs">{error}</span>}
             {blocked && estimate && (
                 <p className="text-danger mt-1 text-xs leading-relaxed">
-                    Not enough credits for this size: it needs about{" "}
-                    {estimate.credits.toLocaleString()} and the workspace has{" "}
-                    {(estimate.balance ?? 0).toLocaleString()}. Use fewer people or rounds.
+                    {t("notEnough", {
+                        credits: estimate.credits,
+                        balance: estimate.balance ?? 0,
+                    })}
                 </p>
             )}
         </div>

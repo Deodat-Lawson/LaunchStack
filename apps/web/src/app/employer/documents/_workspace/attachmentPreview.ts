@@ -1,5 +1,23 @@
+/** The two sentences a CSV preview adds, in the reader's language (`chat.attachmentChip`). */
+export interface DelimitedPreviewLabels {
+    /** The file has no rows. */
+    empty: string;
+    /** The preview stopped at `maxRows`. */
+    limited: (maxRows: number) => string;
+}
+
+const ENGLISH_LABELS: DelimitedPreviewLabels = {
+    empty: "No rows in this file.",
+    limited: maxRows => `Preview limited to ${maxRows} rows. Save the file to read it in full.`,
+};
+
 /** Parse quoted CSV/TSV cells, including escaped quotes and multiline values. */
-export function delimitedPreview(text: string, delimiter: "," | "\t", maxRows = 100): string {
+export function delimitedPreview(
+    text: string,
+    delimiter: "," | "\t",
+    maxRows = 100,
+    labels: DelimitedPreviewLabels = ENGLISH_LABELS
+): string {
     const rows: string[][] = [];
     let row: string[] = [];
     let value = "";
@@ -27,7 +45,7 @@ export function delimitedPreview(text: string, delimiter: "," | "\t", maxRows = 
         row.push(value);
         rows.push(row);
     }
-    if (!rows.length) return "No rows in this file.";
+    if (!rows.length) return labels.empty;
     const columns = Math.min(50, Math.max(...rows.map(item => item.length)));
     const escaped = rows.map(item =>
         Array.from({ length: columns }, (_, column) =>
@@ -46,10 +64,7 @@ export function delimitedPreview(text: string, delimiter: "," | "\t", maxRows = 
                 `| ${item.join(" | ")} |`,
                 ...(index === 0 ? [`| ${item.map(() => "---").join(" | ")} |`] : []),
             ])
-            .join("\n") +
-        (rows.length === maxRows
-            ? `\n\nPreview limited to ${maxRows} rows. Save the file to read it in full.`
-            : "")
+            .join("\n") + (rows.length === maxRows ? `\n\n${labels.limited(maxRows)}` : "")
     );
 }
 

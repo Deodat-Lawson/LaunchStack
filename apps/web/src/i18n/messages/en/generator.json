@@ -1,0 +1,694 @@
+{
+  "drafts": {
+    "loadingDocuments": "Loading documents…",
+    "openingDocument": "Opening document…",
+    "newDocument": "New document",
+    "myDocuments": "My documents",
+    "errors": {
+      "fetch": "Failed to fetch documents",
+      "load": "Failed to load documents",
+      "unknownTemplate": "Unknown template: {id}",
+      "create": "Failed to create draft",
+      "open": "Failed to open templated draft"
+    },
+    "notFound": {
+      "title": "This draft is not in My documents",
+      "body": "It may have been deleted, or it is someone else's: drafts are private to whoever made them, in the workspace they made them in.",
+      "action": "Go to My documents"
+    }
+  },
+  "home": {
+    "title": "Generate a <em>legal</em> document",
+    "subtitle": "Pick a template — Drift fills it from your company knowledge and the counterparty. Or describe what you need and the assistant will recommend the right one.",
+    "searchTemplates": "Search legal templates…",
+    "searchDocuments": "Search your documents…",
+    "stages": {
+      "confidentiality": "Confidentiality",
+      "formation": "Formation",
+      "commercial": "Commercial",
+      "fundraising": "Fundraising",
+      "employment": "Employment",
+      "product": "Product",
+      "offboarding": "Offboarding",
+      "legal": "Legal"
+    },
+    "banner": {
+      "title": "Not sure which template you need?",
+      "body": "Describe your situation — the assistant recommends a template and pre-fills fields from chat as you answer.",
+      "placeholder": "e.g. NDA for new employees…",
+      "askAi": "Ask AI"
+    },
+    "recentTitle": "Recent in your workspace",
+    "shownOfTotal": "{shown} of {total}",
+    "templateCount": "{count, plural, one {# template} other {# templates}}",
+    "myDocuments": "My documents",
+    "tile": {
+      "fields": "{count, plural, one {# field} other {# fields}}",
+      "required": "{count} required",
+      "draft": "DRAFT",
+      "open": "Open →",
+      "edited": "{template} · edited {when}",
+      "customTemplate": "Custom"
+    },
+    "edited": {
+      "justNow": "Just now",
+      "minutes": "{count, plural, one {# min} other {# mins}} ago",
+      "hours": "{count, plural, one {# hour} other {# hours}} ago",
+      "days": "{count, plural, one {# day} other {# days}} ago"
+    },
+    "emptyTemplates": {
+      "title": "No templates match",
+      "query": "Nothing matched \"{query}\". Try a different keyword or clear the filter.",
+      "filter": "Try a different filter."
+    },
+    "emptyDocuments": {
+      "title": "No documents yet",
+      "body": "Generate your first legal document from a template to see it here.",
+      "action": "Create new document"
+    }
+  },
+  "editor": {
+    "titlePlaceholderRewrite": "Add a title (optional)",
+    "titlePlaceholder": "Untitled Document",
+    "savedAt": "Saved {time}",
+    "downloadDocx": "Download DOCX",
+    "saveToDocuments": "Save to Documents",
+    "ai": "AI",
+    "tools": "Tools",
+    "fileFallback": "document",
+    "format": {
+      "bold": "Bold (Ctrl+B)",
+      "italic": "Italic (Ctrl+I)",
+      "underline": "Underline",
+      "bulletList": "Bullet List",
+      "numberedList": "Numbered List",
+      "alignLeft": "Align Left",
+      "alignCenter": "Align Center",
+      "alignRight": "Align Right"
+    },
+    "wordCount": "{count, plural, one {# word} other {# words}}",
+    "placeholderRewrite": "Paste or type text here, then select and use the AI panel to rewrite...",
+    "placeholder": "Start writing or use the AI tools...",
+    "assistant": {
+      "title": "AI Assistant",
+      "hintRewriteSelected": "Selected text - Ask AI to rewrite it",
+      "hintRewrite": "Paste or type text, then select and ask AI to rewrite",
+      "hintSelected": "Selected text - Ask AI to edit it",
+      "hint": "Ask AI to add content",
+      "howTo": "How to use AI",
+      "howToSelect": "• Select text to ask AI to edit it",
+      "howToType": "• Type requests to add new content",
+      "howToQuick": "• Use quick actions below",
+      "howToShortcut": "• Press ⌘K for quick access",
+      "editSelected": "EDIT SELECTED TEXT",
+      "quickActions": "QUICK ACTIONS",
+      "you": "You",
+      "processing": "AI is processing...",
+      "selectedText": "Selected Text",
+      "promptSelected": "Ask AI to edit selection...",
+      "prompt": "Ask AI to add content...",
+      "sending": "Processing...",
+      "send": "Send to AI"
+    },
+    "actions": {
+      "generateSection": "Generate Section",
+      "continue": "Continue Writing",
+      "expand": "Expand",
+      "rewrite": "Rewrite",
+      "summarize": "Summarize",
+      "changeTone": "Make Professional"
+    },
+    "chat": {
+      "rewriteReady": "When you're ready—check the preview above your document and click Accept to apply or Reject to discard. No rush!",
+      "applied": {
+        "generateSection": "I've generated a new section. The changes have been applied to your document.",
+        "continue": "I've continued writing. The changes have been applied to your document.",
+        "expand": "I've expanded the text. The changes have been applied to your document.",
+        "rewrite": "I've rewritten the text. The changes have been applied to your document.",
+        "summarize": "I've summarized the text. The changes have been applied to your document.",
+        "changeTone": "I've made the text more professional. The changes have been applied to your document."
+      },
+      "error": "Sorry, there was an error generating content. Please try again.",
+      "rewriteApplied": "Rewrite applied. Use Cmd+Z to undo.",
+      "invalidResponse": "Server returned an invalid response. Please try again."
+    }
+  },
+  "toolPalette": {
+    "title": "Tools",
+    "subtitle": "Enhance your document",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "quickActions": "Quick Actions",
+    "selectText": "(select text)",
+    "shortcuts": "Shortcuts",
+    "shortcutAi": "AI",
+    "tools": {
+      "aiGenerate": {
+        "name": "AI Content",
+        "description": "Generate, expand, or rewrite content"
+      },
+      "docResearch": {
+        "name": "Document Research",
+        "description": "Search your uploaded documents"
+      },
+      "webResearch": {
+        "name": "Web Research",
+        "description": "Find information from the web"
+      },
+      "arxivResearch": {
+        "name": "arXiv Papers",
+        "description": "Search academic papers from arXiv"
+      },
+      "grammar": {
+        "name": "Grammar & Style",
+        "description": "Check grammar and improve writing"
+      },
+      "outline": {
+        "name": "Outline",
+        "description": "Generate or view document structure"
+      },
+      "citation": {
+        "name": "Citations",
+        "description": "Manage references and bibliography"
+      },
+      "export": {
+        "name": "Export",
+        "description": "Download as PDF, DOCX, or Markdown"
+      }
+    },
+    "quick": {
+      "generateSection": {
+        "label": "Generate Section",
+        "short": "Generate"
+      },
+      "continue": {
+        "label": "Continue Writing",
+        "short": "Continue"
+      },
+      "expand": {
+        "label": "Expand",
+        "short": "Expand"
+      },
+      "rewrite": {
+        "label": "Rewrite",
+        "short": "Rewrite"
+      }
+    }
+  },
+  "research": {
+    "title": "Research",
+    "placeholderArxiv": "Search arXiv papers...",
+    "placeholder": "Search documents and web...",
+    "searchType": {
+      "general": "General",
+      "academic": "Academic",
+      "news": "News"
+    },
+    "categories": {
+      "all": "All Categories",
+      "ai": "AI",
+      "machineLearning": "Machine Learning",
+      "nlp": "NLP",
+      "computerVision": "Computer Vision",
+      "statisticsMl": "Statistics ML",
+      "physics": "Physics",
+      "mathematics": "Mathematics",
+      "biology": "Biology",
+      "economics": "Economics"
+    },
+    "tabs": {
+      "all": "All ({count})",
+      "documents": "Docs ({count})",
+      "web": "Web ({count})",
+      "arxiv": "arXiv ({count})"
+    },
+    "errors": {
+      "failed": "Failed to search",
+      "generic": "An error occurred while searching"
+    },
+    "emptyArxiv": "Search for academic papers from <br></br><link>arXiv.org</link>",
+    "empty": "Search for information to include in your document",
+    "searching": "Searching...",
+    "insertCite": "Insert & Cite",
+    "documentFallback": "Document",
+    "page": "Page {page}",
+    "insert": "Insert",
+    "etAl": "{authors} et al."
+  },
+  "citations": {
+    "title": "Citations",
+    "formats": {
+      "apa": "APA 7th",
+      "mla": "MLA 9th",
+      "chicago": "Chicago",
+      "ieee": "IEEE",
+      "harvard": "Harvard"
+    },
+    "sourceTypes": {
+      "website": "Website",
+      "book": "Book",
+      "journal": "Journal",
+      "article": "Article",
+      "document": "Document"
+    },
+    "formatAll": "Format All",
+    "add": "Add Citation",
+    "edit": "Edit Citation",
+    "sourceType": "Source Type",
+    "titleLabel": "Title *",
+    "titlePlaceholder": "Enter title",
+    "authors": "Authors (one per line, Last, First)",
+    "authorsPlaceholder": "Smith, John\nDoe, Jane",
+    "publisher": "Publisher",
+    "publisherPlaceholder": "Publisher name",
+    "publishedDate": "Published Date",
+    "volume": "Volume",
+    "issue": "Issue",
+    "pages": "Pages",
+    "empty": "No citations added yet",
+    "emptyHint": "Add sources from research or manually",
+    "inText": "In-text: {citation}",
+    "insert": "Insert",
+    "bibliographyPreview": "Bibliography Preview"
+  },
+  "export": {
+    "title": "Export Document",
+    "description": "Choose a format and options to download your document.",
+    "format": "Format",
+    "formats": {
+      "pdf": {
+        "name": "PDF",
+        "description": "Portable Document Format"
+      },
+      "markdown": {
+        "name": "Markdown",
+        "description": "Plain text with formatting"
+      },
+      "html": {
+        "name": "HTML",
+        "description": "Web page format"
+      },
+      "text": {
+        "name": "Plain Text",
+        "description": "Unformatted text"
+      }
+    },
+    "pageSize": "Page Size",
+    "letter": "Letter",
+    "fontSize": "Font Size",
+    "includeBibliography": "Include Bibliography",
+    "includeBibliographyHint": "Add references section at the end",
+    "estimate": "~{count} page(s) • {description}",
+    "exporting": "Exporting...",
+    "done": "Done!"
+  },
+  "grammar": {
+    "title": "Grammar & Style",
+    "severity": {
+      "error": "Error",
+      "warning": "Warning",
+      "suggestion": "Suggestion"
+    },
+    "actions": {
+      "check": "Full Grammar Check",
+      "improveClarity": "Improve Clarity",
+      "adjustFormality": "Adjust Formality",
+      "consistency": "Check Consistency"
+    },
+    "formality": {
+      "veryFormal": "Very Formal",
+      "formal": "Formal",
+      "neutral": "Neutral",
+      "casual": "Casual",
+      "veryCasual": "Very Casual"
+    },
+    "qualityScore": "Quality Score",
+    "errorCount": "{count, plural, one {# error} other {# errors}}",
+    "warningCount": "{count, plural, one {# warning} other {# warnings}}",
+    "suggestionCount": "{count, plural, one {# suggestion} other {# suggestions}}",
+    "applyAll": "Apply All ({count})",
+    "empty": "No issues found",
+    "emptyHint": "Run a check to analyze your content",
+    "analyzing": "Analyzing your content...",
+    "types": {
+      "grammar": "Grammar",
+      "spelling": "Spelling",
+      "punctuation": "Punctuation",
+      "style": "Style",
+      "clarity": "Clarity",
+      "formality": "Formality",
+      "consistency": "Consistency"
+    },
+    "applied": "Applied",
+    "recheck": "Re-check"
+  },
+  "outline": {
+    "title": "Outline",
+    "topicPlaceholder": "Document topic or description...",
+    "generating": "Generating...",
+    "generate": "Generate Outline",
+    "empty": "No outline yet",
+    "emptyHint": "Generate one or add sections manually",
+    "addSection": "Add Section",
+    "insertHint": "Click a section title to insert it into your document",
+    "newSection": "New Section",
+    "addChild": "Add child"
+  },
+  "inlineDiff": {
+    "title": "Rewrite preview",
+    "edits": "{count, plural, one {# edit} other {# edits}}",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "rewritePreview": {
+    "title": "Rewrite <em>preview</em>",
+    "noEdits": "no edits · matches source",
+    "pending": "{count, plural, one {# change} other {# changes}} · pending review",
+    "rejectSection": "Reject section",
+    "acceptSection": "Accept section",
+    "original": "Original",
+    "proposed": "Proposed",
+    "emptyOriginal": "No source text to compare.",
+    "emptyProposed": "The rewrite is empty.",
+    "why": "Why this change",
+    "summary": {
+      "none": "No edits proposed — the rewrite matches the source word-for-word.",
+      "expanded": "Expanded by {words, plural, one {# word} other {# words}} across {edits, plural, one {# edit} other {# edits}}. Review the highlighted spans before accepting.",
+      "tightened": "Tightened by {words, plural, one {# word} other {# words}} across {edits, plural, one {# edit} other {# edits}}. Review the highlighted spans before accepting.",
+      "same": "{edits, plural, one {# edit} other {# edits}} proposed without changing the overall length. Review the highlighted spans before accepting."
+    }
+  },
+  "rewriteWorkflow": {
+    "errors": {
+      "network": "Network error occurred",
+      "invalidResponse": "Server returned an invalid response. Please try again.",
+      "failed": "Failed to rewrite text"
+    },
+    "presets": {
+      "tighten": "Tighten language",
+      "casual": "More casual",
+      "formal": "More formal",
+      "plain": "Plain English",
+      "detail": "Add detail",
+      "active": "Active voice"
+    },
+    "guardrails": {
+      "structure": {
+        "label": "Preserve structure",
+        "sub": "Keep paragraph breaks intact"
+      },
+      "voice": {
+        "label": "Match my voice",
+        "sub": "Don't drift from existing tone"
+      },
+      "conflict": {
+        "label": "Stop on conflict",
+        "sub": "Flag rather than guess"
+      }
+    },
+    "untitledSource": "Untitled source",
+    "sectionFallback": "{index}. Section",
+    "sectionFallbackShort": "Section",
+    "noEdits": "no edits",
+    "summary": {
+      "none": "No edits proposed for this section — the rewrite matches the source.",
+      "expanded": "Expanded by {words, plural, one {# word} other {# words}} across {edits, plural, one {# edit} other {# edits}}.",
+      "tightened": "Tightened by {words, plural, one {# word} other {# words}} across {edits, plural, one {# edit} other {# edits}}.",
+      "same": "{edits, plural, one {# edit} other {# edits}} without changing the overall length."
+    },
+    "breadcrumbReview": "Review v2",
+    "breadcrumbNew": "New rewrite",
+    "exit": "Exit",
+    "crumbDocuments": "Documents",
+    "crumbRewrite": "Rewrite",
+    "versionWords": "v1 · {count, plural, one {# word} other {# words}}",
+    "scope": {
+      "title": "Rewrite scope",
+      "sub": "Drift will rewrite only the sections you choose, keeping defined terms and citations intact.",
+      "source": "Source",
+      "sourcePlaceholder": "Paste or type the source text here…",
+      "instruction": "Instruction",
+      "instructionPlaceholder": "Describe how you want it rewritten…",
+      "sections": "Sections to rewrite",
+      "guardrails": "Guardrails",
+      "toggleOn": "{label}: on",
+      "toggleOff": "{label}: off",
+      "rewriting": "Rewriting…",
+      "run": "Run rewrite · {count, plural, one {# section} other {# sections}}",
+      "ctaMeta": "~10s · {count, plural, one {# word} other {# words}}"
+    },
+    "pipeline": {
+      "status": {
+        "accepted": "accepted",
+        "rejected": "rejected",
+        "unchanged": "unchanged"
+      },
+      "pending": "{count, plural, one {# change} other {# changes}} · pending review",
+      "sectionTitle": "Section {index} · <em>{name}</em>",
+      "prev": "Prev",
+      "next": "Next",
+      "rejectSection": "Reject section",
+      "acceptSection": "Accept section",
+      "original": "Original · v1",
+      "proposed": "Proposed · v2",
+      "why": "Why this change",
+      "emptyOriginal": "No source text in this section.",
+      "emptyProposed": "The rewrite is empty."
+    },
+    "empty": {
+      "ready": "Ready to <em>rewrite</em>",
+      "drafting": "Drafting the <em>rewrite</em>",
+      "paste": "Paste a <em>source</em>",
+      "pick": "Pick a <em>section</em>",
+      "readySub": "Adjust the instruction and presets, then click Run rewrite. Drift will lay the proposal out side-by-side with the source.",
+      "draftingSub": "Drift is reading every selected section and proposing changes. This usually takes about 10 seconds.",
+      "pasteSub": "Drop the text you want to rewrite into the source field, then run the rewrite.",
+      "pickSub": "Select at least one section. Drift only rewrites the parts you ask for."
+    },
+    "review": {
+      "title": "Review · {count, plural, one {# section} other {# sections}}",
+      "counts": "{accepted} accepted · {rejected} rejected · {pending} pending",
+      "ready": "{count, plural, one {# section} other {# sections}} ready · run to start review",
+      "applyCta": "Apply {count} accepted → v2",
+      "sections": "Sections",
+      "empty": "No sections yet — paste source text to get started.",
+      "metaUnchanged": "unchanged",
+      "metaAccepted": "accepted · {delta}",
+      "metaRejected": "rejected · {delta}",
+      "metaPending": "pending · {delta}",
+      "finalTitle": "Final review",
+      "finalReady": "ready",
+      "finalInProgress": "in progress",
+      "finalAllReviewed": "All sections reviewed. Apply the accepted proposals to produce v2.",
+      "finalPending": "{count, plural, one {# section} other {# sections}} still pending. Accept or reject before applying.",
+      "rejectAll": "Reject all"
+    }
+  },
+  "chatbot": {
+    "confirm": {
+      "fields": "{count, plural, one {# field} other {# fields}}",
+      "required": "{count} required",
+      "useTemplate": "Use this template",
+      "pickAnother": "Pick another"
+    },
+    "noMatch": {
+      "title": "No exact match",
+      "body": "None of our templates are a perfect fit. Try describing differently, or browse the library.",
+      "startOver": "Start over"
+    },
+    "ready": {
+      "title": "Ready for the field form",
+      "body": "<strong>{template}</strong> · {count, plural, one {# field} other {# fields}} collected. Review on the next screen, then your document opens for editing.",
+      "cta": "Continue to template fields"
+    },
+    "tileMatch": "{required} required · {percent}% match",
+    "errors": {
+      "server": "Server error ({status}). Please try again.",
+      "connect": "Failed to connect to the server. Please try again."
+    },
+    "intro": {
+      "nameAndAddress": "I see your company is **{name}**, based in **{address}**. I'll pre-fill those details automatically.",
+      "name": "I see your company is **{name}**. I'll pre-fill those details automatically.",
+      "address": "I see your company is based in **{address}**. I'll pre-fill those details automatically."
+    },
+    "confirmMessage": "I want to proceed with the \"{name}\" template.",
+    "pickDifferentMessage": "Can you suggest other options?",
+    "topBarMeta": "Drift Assist · Legal",
+    "assistantName": "Drift Assist",
+    "subFilling": "filling · {template}",
+    "subReady": "ready · pick a template to begin",
+    "showAllFields": "Show all fields",
+    "settings": "Settings",
+    "progress": {
+      "filled": "{filled} / {total} filled",
+      "next": "next: {label}",
+      "allFilled": "all filled"
+    },
+    "composer": {
+      "placeholderAnswer": "Answer — or describe a change…",
+      "placeholder": "Describe what you need…",
+      "send": "Send message",
+      "hint": "⌘↵ to send · drift learns your defaults over time"
+    },
+    "preview": {
+      "liveDocument": "Live document",
+      "live": "· live preview",
+      "draftPill": "DRAFT · {filled}/{total}",
+      "awaiting": "AWAITING",
+      "full": "Full",
+      "emptyTitle": "Pick a template to begin",
+      "emptySub": "Tell the assistant what you need. As you answer questions, the document fills in here in real time.",
+      "collecting": "Continued field collection — {count} total fields, asked one at a time."
+    },
+    "fieldSummary": {
+      "head": "Field summary · {total}",
+      "filled": "{filled} of {total} filled",
+      "askingNow": "asking now…",
+      "awaiting": "awaiting"
+    },
+    "source": {
+      "asking": "Asking",
+      "awaiting": "Awaiting",
+      "company": "Company",
+      "ai": "AI Assist",
+      "you": "You"
+    },
+    "welcome": {
+      "title": "What <em>legal</em> document do you need?",
+      "sub": "Describe your situation — I'll recommend the right template and help you fill it out, with the document filling in live as you answer.",
+      "suggestions": {
+        "nda": "I need an NDA for new employees",
+        "contractor": "Setting up a contractor agreement",
+        "seed": "We're raising a seed round",
+        "privacy": "Need a privacy policy for our app"
+      }
+    }
+  },
+  "legalEditor": {
+    "hints": {
+      "date": "date",
+      "percent": "0–100%",
+      "number": "number",
+      "freeText": "free text"
+    },
+    "required": "required",
+    "groups": {
+      "parties": "Parties",
+      "signatures": "Signatures",
+      "governingLaw": "Governing law",
+      "termsDates": "Terms & dates",
+      "details": "Details"
+    },
+    "validation": {
+      "required": "{label} is required",
+      "number": "{label} must be a valid number",
+      "negative": "{label} cannot be negative",
+      "percent": "{label} must be between 0% and 100%",
+      "positive": "{label} must be greater than 0",
+      "invalid": "Invalid value for {label}"
+    },
+    "toast": {
+      "templateMissing": "Template not configured",
+      "exportUnavailable": "Unable to export document.",
+      "generateUnavailable": "Unable to generate document. Please contact support.",
+      "generatingDocx": "Generating DOCX...",
+      "downloaded": "Document downloaded!",
+      "exportFailed": "Export failed",
+      "exportFailedFallback": "Could not generate DOCX file",
+      "validationErrors": "Document has validation errors",
+      "validationErrorsBody": "Please fix {count, plural, one {# field error} other {# field errors}} before applying track changes.",
+      "generatingTracked": "Generating document with track changes...",
+      "noEdits": "No edits to apply",
+      "noEditsBody": "All fields are using default placeholders",
+      "trackedReady": "Document ready with track changes!",
+      "trackedReadyBody": "{applied, plural, one {# edit} other {# edits}} applied. Download started.",
+      "trackedReadySkippedBody": "{applied, plural, one {# edit} other {# edits}} applied, {skipped} skipped. Download started.",
+      "trackFailed": "Failed to apply track changes",
+      "unknownError": "Unknown error occurred",
+      "trackNotConfigured": "Track Changes not configured",
+      "trackNotConfiguredBody": "The redlining service (Adeu) is not set up. Ask your admin to configure ADEU_SERVICE_URL.",
+      "trackUnreachable": "Redlining service unreachable",
+      "trackUnreachableBody": "The Adeu service is not running. Start it with Docker Compose or check ADEU_SERVICE_URL in your .env.",
+      "trackBatchFailed": "Track Changes failed",
+      "trackBatchFailedBody": "Some field edits could not be applied. The document may have duplicate field references."
+    },
+    "errors": {
+      "exportHttp": "Export failed: HTTP {status}",
+      "generateDocx": "Failed to generate DOCX",
+      "templateNotFound": "Template not found",
+      "generationHttp": "Document generation failed: HTTP {status}",
+      "applyEdits": "Failed to apply edits"
+    },
+    "chat": {
+      "noFields": "This document does not have editable highlighted fields.",
+      "parseFailed": "I couldn't parse a field change from that. Try naming the exact field, e.g. \"set Effective Date to March 4, 2026\".",
+      "noMatch": "No matching fields were updated. Try naming the exact field, like \"Effective Date\".",
+      "updated": "Updated: {fields}.",
+      "noChange": "No visible changes. Try naming the exact field and new value.",
+      "error": "Sorry, there was an error. Please try again."
+    },
+    "documentFallback": "Document",
+    "status": {
+      "saved": "SAVED",
+      "unsaved": "DRAFT · UNSAVED",
+      "autosaved": "DRAFT · AUTOSAVED"
+    },
+    "backToDocuments": "Back to My documents",
+    "myDocuments": "My documents",
+    "crumbLegal": "Legal",
+    "savedAt": "Saved {time}",
+    "titlePlaceholder": "Document title",
+    "editCount": "{count, plural, one {# edit} other {# edits}}",
+    "fieldsProgress": "{filled} of {total} fields",
+    "hideHighlights": "Hide field highlights",
+    "showHighlights": "Show field highlights",
+    "hideFields": "Hide fields",
+    "showFields": "Show fields",
+    "exportDocx": "Export DOCX",
+    "sendForReview": "Send for review",
+    "toolbar": {
+      "redo": "Redo",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "alignLeft": "Align left",
+      "alignCenter": "Align center",
+      "list": "List",
+      "highlight": "Highlight"
+    },
+    "req": "REQ",
+    "clickField": "Click a highlighted field to edit",
+    "blocking": "<strong>{count}</strong> {count, plural, one {issue} other {issues}} blocking save — <link>view in validate tab</link>",
+    "tabs": {
+      "fields": "Fields",
+      "ai": "AI Assist",
+      "validate": "Validate"
+    },
+    "groupProgress": "{filled} of {total}",
+    "placeholderRequired": "e.g. {label}",
+    "placeholderOptional": "Optional · {label}",
+    "selectPlaceholder": "Select…",
+    "askDrift": "Ask Drift",
+    "promptSection": "Ask AI to update highlighted fields…",
+    "prompt": "Click a section in the document, or describe a field change…",
+    "presets": {
+      "today": "Set effective date to today",
+      "delaware": "Use Delaware as governing law",
+      "term": "Tighten the term to 18 months",
+      "placeholders": "Fill remaining required fields with placeholders"
+    },
+    "sending": "Sending…",
+    "recent": "Recent",
+    "tip": "Tip",
+    "tipBody": "Drift only edits highlighted fields — it won't rewrite contract clauses. Reference fields by their exact label (e.g. \"Effective Date\") for the cleanest results.",
+    "openIssues": "Open issues · {count}",
+    "allComplete": "All required fields complete",
+    "allCompleteBody": "You can save or send this document for review.",
+    "passedChecks": "Passed checks · {count}",
+    "checks": {
+      "filled": "{filled} of {total} fields filled",
+      "allRequired": "All required values present",
+      "placeholders": "Field placeholders preserved in source HTML"
+    }
+  }
+}

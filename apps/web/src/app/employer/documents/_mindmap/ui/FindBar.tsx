@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronUp, Search, X } from "lucide-react";
 
 import { focusNode, searchDoc, setActivePage } from "../model/commands";
@@ -23,6 +24,7 @@ export function FindBar({
     onClose: () => void;
     canvasSize: { w: number; h: number };
 }) {
+    const t = useTranslations("mindmap.find");
     const store = useStore();
     const doc = useCommittedDoc();
     const [query, setQuery] = useState("");
@@ -77,9 +79,9 @@ export function FindBar({
                     if (e.key === "Enter") go(e.shiftKey ? -1 : 1);
                     if (e.key === "Escape") onClose();
                 }}
-                placeholder="Find on canvas…"
+                placeholder={t("placeholder")}
                 className="text-ink placeholder:text-ink-4 h-6 w-48 bg-transparent text-[13px] outline-none"
-                aria-label="Find on canvas"
+                aria-label={t("label")}
             />
             <span className="text-ink-3 min-w-[52px] text-center font-mono text-[11px] tabular-nums">
                 {hits.length === 0 ? (query ? "0" : "") : `${index + 1}/${hits.length}`}
@@ -87,7 +89,7 @@ export function FindBar({
             <button
                 type="button"
                 onClick={() => go(-1)}
-                aria-label="Previous match"
+                aria-label={t("previous")}
                 className="text-ink-3 hover:bg-panel-2 hover:text-ink rounded p-1"
             >
                 <ChevronUp className="size-3.5" />
@@ -95,7 +97,7 @@ export function FindBar({
             <button
                 type="button"
                 onClick={() => go(1)}
-                aria-label="Next match"
+                aria-label={t("next")}
                 className="text-ink-3 hover:bg-panel-2 hover:text-ink rounded p-1"
             >
                 <ChevronDown className="size-3.5" />
@@ -103,7 +105,7 @@ export function FindBar({
             <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close find"
+                aria-label={t("close")}
                 className="text-ink-3 hover:bg-panel-2 hover:text-ink rounded p-1"
             >
                 <X className="size-3.5" />

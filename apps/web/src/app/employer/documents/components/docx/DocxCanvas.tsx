@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
@@ -36,6 +37,10 @@ export function DocxCanvas({
     showComments,
     onRenderError,
 }: DocxCanvasProps) {
+    const t = useTranslations("viewers.docx");
+    // The render effect reads the words through this rather than re-running on them.
+    const tRef = useRef(t);
+    tRef.current = t;
     const bodyRef = useRef<HTMLDivElement | null>(null);
     const styleRef = useRef<HTMLDivElement | null>(null);
     const [rendering, setRendering] = useState(false);
@@ -78,7 +83,7 @@ export function DocxCanvas({
             } catch (err) {
                 if (cancelled) return;
                 const message =
-                    err instanceof Error ? err.message : "This document could not be rendered.";
+                    err instanceof Error ? err.message : tRef.current("renderFailedFallback");
                 console.error("[DocxCanvas] render failed", err);
                 onRenderError?.(message);
             } finally {
@@ -97,7 +102,7 @@ export function DocxCanvas({
                 <div
                     className="bg-surface-sunk/70 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-sm"
                     role="status"
-                    aria-label="Rendering document"
+                    aria-label={t("rendering")}
                 >
                     <Loader2 className="text-brand h-6 w-6 animate-spin" aria-hidden="true" />
                 </div>

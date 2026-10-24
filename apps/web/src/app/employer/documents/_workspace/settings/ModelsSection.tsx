@@ -13,6 +13,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, Section } from "~/components/layout/page-shell";
@@ -55,14 +56,12 @@ interface ModelsOverview {
     models: ModelInfo[];
 }
 
-const ROUTE_BLURB: Record<string, string> = {
-    default: "Everything not routed elsewhere: Ask, meetings, drafts.",
-    fast: "Small structured calls: metadata extraction, starters, classification.",
-    reasoning: "Requests that ask for a reasoning effort.",
-    vision: "Requests that carry an image.",
-};
+/** Routes with a blurb in `settings.models.routeBlurb`. */
+const ROUTE_BLURBS = ["default", "fast", "reasoning", "vision"] as const;
 
 export function ModelsSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.models");
+    const locale = useLocale();
     const [overview, setOverview] = useState<ModelsOverview | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -75,13 +74,13 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                 error?: string;
             };
             if (!res.ok)
-                throw new Error(body.error ?? `Could not read the configuration (${res.status}).`);
+                throw new Error(body.error ?? t("readFailedStatus", { status: res.status }));
             setOverview(body);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not read the configuration.");
+            setError(err instanceof Error ? err.message : t("readFailed"));
         }
-    }, []);
+    }, [t]);
 
     // Only to say whether the default below is in use; a failure here just
     // leaves that note out.
@@ -111,63 +110,57 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Re-read",
-            primaryBusyLabel: "Reading…",
+            primaryLabel: t("reread"),
+            primaryBusyLabel: t("reading"),
             onPrimary: refresh,
             busy: loading,
         },
-        [refresh, loading]
+        [refresh, loading, t]
     );
 
     return (
         <>
-            <Section
-                title="Server default"
-                description="The models this server runs any workspace on that hasn't brought its own. One AI endpoint serves every route; its address and credential stay on the server."
-            >
+            <Section title={t("server.title")} description={t("server.description")}>
                 {endpoint?.active ? (
-                    <StatusNote tone="muted">
-                        This workspace runs on its own model, set up in Bring your own keys, so the
-                        server default below isn&rsquo;t used.
-                    </StatusNote>
+                    <StatusNote tone="muted">{t("server.usesOwn")}</StatusNote>
                 ) : endpoint ? (
-                    <StatusNote tone="muted">
-                        This workspace&rsquo;s own API key has no model chosen yet, so it still runs
-                        on the server default. Choose one in Bring your own keys.
-                    </StatusNote>
+                    <StatusNote tone="muted">{t("server.ownNoModel")}</StatusNote>
                 ) : null}
 
                 {error && (
                     <StatusNote tone="danger">
-                        {error} Fix the file named by <Code>CHAT_MODELS_CONFIG</Code> and re-read.
+                        {t.rich("server.fixFile", {
+                            error,
+                            code: chunks => <Code>{chunks}</Code>,
+                        })}
                     </StatusNote>
                 )}
 
                 {!overview && loading && (
-                    <StatusNote tone="muted">Reading the configuration…</StatusNote>
+                    <StatusNote tone="muted">{t("server.readingConfig")}</StatusNote>
                 )}
 
                 {overview && (
                     <>
                         <Card>
                             <div className="text-ink-2 text-[13px]">
-                                Models are set in the server&rsquo;s chat model file, named by{" "}
-                                <Code>CHAT_MODELS_CONFIG</Code>. Edit that file and restart to
-                                change a model; nothing here writes to it.
+                                {t.rich("server.fileNote", {
+                                    code: chunks => <Code>{chunks}</Code>,
+                                })}
                             </div>
                         </Card>
 
                         <SubHeading
-                            title="Routes"
-                            description="A route is a capability the app asks for. A route with no explicit model inherits default when default can serve it."
+                            title={t("routes.title")}
+                            description={t("routes.description")}
                         />
                         <Card padding={0}>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Route</TableHead>
-                                        <TableHead>Model</TableHead>
-                                        <TableHead>Assignment</TableHead>
+                                        <TableHead>{t("routes.route")}</TableHead>
+                                        <TableHead>{t("routes.model")}</TableHead>
+                                        <TableHead>{t("routes.assignment")}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -178,7 +171,13 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                                     {route.route}
                                                 </div>
                                                 <div className="text-ink-3 text-[12px]">
-                                                    {ROUTE_BLURB[route.route]}
+                                                    {(ROUTE_BLURBS as readonly string[]).includes(
+                                                        route.route
+                                                    )
+                                                        ? t(
+                                                              `routeBlurb.${route.route as (typeof ROUTE_BLURBS)[number]}`
+                                                          )
+                                                        : null}
                                                 </div>
                                             </TableCell>
                                             <TableCell>
@@ -191,14 +190,18 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                             <TableCell>
                                                 {!route.available ? (
                                                     <span title={route.unavailableReason}>
-                                                        <Badge variant="warn">Unavailable</Badge>
+                                                        <Badge variant="warn">
+                                                            {t("routes.unavailable")}
+                                                        </Badge>
                                                     </span>
                                                 ) : route.inheritsDefault ? (
                                                     <Badge variant="secondary">
-                                                        Inherits default
+                                                        {t("routes.inherits")}
                                                     </Badge>
                                                 ) : (
-                                                    <Badge variant="success">Explicit</Badge>
+                                                    <Badge variant="success">
+                                                        {t("routes.explicit")}
+                                                    </Badge>
                                                 )}
                                             </TableCell>
                                         </TableRow>
@@ -208,8 +211,8 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                         </Card>
 
                         <SubHeading
-                            title="Declared models"
-                            description="What each configured model is declared to do. A preset is a verified catalog entry; an override is the operator's own word, taken as given."
+                            title={t("declared.title")}
+                            description={t("declared.description")}
                         />
                         <div className="grid gap-3.5 md:grid-cols-2">
                             {overview.models.map(model => (
@@ -231,37 +234,51 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
                                         )}
                                     </div>
                                     <dl className="text-ink-2 mt-3 grid grid-cols-[110px_1fr] gap-y-1 text-[12.5px]">
-                                        <dt className="text-ink-3">Behaviour from</dt>
+                                        <dt className="text-ink-3">
+                                            {t("declared.behaviourFrom")}
+                                        </dt>
                                         <dd className="m-0">
                                             {model.fromPreset
-                                                ? "a verified preset"
-                                                : "the configuration file (operator override)"}
+                                                ? t("declared.preset")
+                                                : t("declared.override")}
                                         </dd>
-                                        <dt className="text-ink-3">Input</dt>
+                                        <dt className="text-ink-3">{t("declared.input")}</dt>
                                         <dd className="m-0">{model.input.join(", ")}</dd>
-                                        <dt className="text-ink-3">Reasoning</dt>
+                                        <dt className="text-ink-3">{t("declared.reasoning")}</dt>
                                         <dd className="m-0">
-                                            {model.reasoning ? model.reasoningMode : "none"}
+                                            {model.reasoning
+                                                ? model.reasoningMode
+                                                : t("declared.none")}
                                         </dd>
-                                        <dt className="text-ink-3">Structured output</dt>
+                                        <dt className="text-ink-3">{t("declared.structured")}</dt>
                                         <dd className="m-0">
                                             {model.structuredOutput.length > 0
                                                 ? model.structuredOutput.join(", ")
-                                                : "prompted JSON"}
+                                                : t("declared.promptedJson")}
                                         </dd>
                                         {(model.contextTokens ?? model.maxOutputTokens) !==
                                             null && (
                                             <>
-                                                <dt className="text-ink-3">Limits</dt>
+                                                <dt className="text-ink-3">
+                                                    {t("declared.limits")}
+                                                </dt>
                                                 <dd className="m-0">
                                                     {model.contextTokens
-                                                        ? `${model.contextTokens.toLocaleString()} context`
+                                                        ? t("declared.context", {
+                                                              count: model.contextTokens.toLocaleString(
+                                                                  locale
+                                                              ),
+                                                          })
                                                         : ""}
                                                     {model.contextTokens && model.maxOutputTokens
                                                         ? " · "
                                                         : ""}
                                                     {model.maxOutputTokens
-                                                        ? `${model.maxOutputTokens.toLocaleString()} output`
+                                                        ? t("declared.output", {
+                                                              count: model.maxOutputTokens.toLocaleString(
+                                                                  locale
+                                                              ),
+                                                          })
                                                         : ""}
                                                 </dd>
                                             </>

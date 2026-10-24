@@ -14,12 +14,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle2, Clock, Loader2, ShieldCheck } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { SignInForm, SignUpForm } from "~/app/_components/CredentialsForm";
 import { Button } from "~/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useAuth, useUser } from "~/lib/auth-client";
+import { isBuiltinRole, normalizeRoleSlug } from "~/lib/authz/permissions";
 import {
     clearJoinIntent,
     enterWorkspace,
@@ -35,6 +37,9 @@ export type JoinSource = { kind: "link"; code: string } | { kind: "invite"; toke
 
 interface JoinDetails {
     workspaceName: string;
+    /** The role's slug, when the server sent one: a built-in role is named in the reader's language. */
+    role: string | null;
+    /** The server's name for the role (a custom role's own name). */
     roleName: string;
     invitedBy: string | null;
     requiresApproval: boolean;
@@ -44,11 +49,32 @@ interface JoinDetails {
     expiresAt: string | null;
 }
 
+/**
+ * Something to tell the person: one of this page's own sentences
+ * (`auth.join.problems`), or a sentence the server wrote, shown as it came.
+ * Kept as a key rather than a string so it follows a change of language.
+ */
+type Problem =
+    | {
+          key:
+              | "network"
+              | "linkUnknown"
+              | "linkExpired"
+              | "linkExhausted"
+              | "linkInactive"
+              | "inviteGone"
+              | "inviteUsed"
+              | "sessionEnded"
+              | "joinFailed";
+      }
+    | { key: "linkLoadFailed" | "inviteLoadFailed"; status: number }
+    | { text: string };
+
 type LoadState =
     | { phase: "loading" }
     | { phase: "ready"; details: JoinDetails }
-    | { phase: "dead"; message: string }
-    | { phase: "error"; message: string };
+    | { phase: "dead"; problem: Problem }
+    | { phase: "error"; problem: Problem };
 
 type JoinState =
     | { phase: "idle" }
@@ -56,22 +82,40 @@ type JoinState =
     | { phase: "entering"; alreadyMember: boolean }
     | { phase: "pending" }
     | { phase: "mismatch"; invitedEmail: string }
-    | { phase: "dead"; message: string }
-    | { phase: "error"; message: string };
+    | { phase: "dead"; problem: Problem }
+    | { phase: "error"; problem: Problem };
 
-const NETWORK_MESSAGE = "We couldn't reach the server. Check your connection and try again.";
+const NETWORK: Problem = { key: "network" };
 
 /** Why a join link can't be used, in words the person holding it can act on. */
-export const LINK_PROBLEMS: Record<string, string> = {
-    unknown:
-        "This invite link doesn't work. Check that you copied all of it, or ask whoever sent it for a new one.",
-    expired: "This invite link has expired. Ask whoever sent it for a new one.",
-    exhausted: "This invite link has been used as many times as it allows. Ask for a new one.",
-    inactive: "This invite link was turned off. Ask whoever sent it for a new one.",
+const LINK_PROBLEMS: Record<string, Problem> = {
+    unknown: { key: "linkUnknown" },
+    expired: { key: "linkExpired" },
+    exhausted: { key: "linkExhausted" },
+    inactive: { key: "linkInactive" },
 };
 
-const INVITE_GONE =
-    "This invitation has expired or was withdrawn. Ask whoever invited you to send a new one.";
+const INVITE_GONE: Problem = { key: "inviteGone" };
+
+function useProblemText(): (problem: Problem) => string {
+    const t = useTranslations("auth.join.problems");
+    return problem => {
+        if ("text" in problem) return problem.text;
+        if (problem.key === "linkLoadFailed" || problem.key === "inviteLoadFailed") {
+            return t(problem.key, { status: problem.status });
+        }
+        return t(problem.key);
+    };
+}
+
+/** A built-in role in the reader's language; a custom role by its own name. */
+function useRoleName(): (details: Pick<JoinDetails, "role" | "roleName">) => string {
+    const t = useTranslations("auth.roles");
+    return ({ role, roleName }) => {
+        const slug = role ? normalizeRoleSlug(role) : null;
+        return slug && isBuiltinRole(slug) ? t(slug) : roleName;
+    };
+}
 
 function sourceKey(source: JoinSource): string {
     return source.kind === "link" ? source.code : source.token;
@@ -83,9 +127,9 @@ function selfPath(source: JoinSource): string {
         : `/invite/${encodeURIComponent(source.token)}`;
 }
 
-async function readError(res: Response, fallback: string): Promise<string> {
+async function readError(res: Response, fallback: Problem): Promise<Problem> {
     const body = (await res.json().catch(() => ({}))) as { error?: unknown };
-    return typeof body.error === "string" ? body.error : fallback;
+    return typeof body.error === "string" ? { text: body.error } : fallback;
 }
 
 async function loadDetails(source: JoinSource): Promise<LoadState> {
@@ -94,15 +138,13 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
             `/api/workspace/join-links/preview?code=${encodeURIComponent(source.code)}`
         );
         if (!res.ok) {
-            return {
-                phase: "error",
-                message: `We couldn't load this invite link (${res.status}). Try again in a moment.`,
-            };
+            return { phase: "error", problem: { key: "linkLoadFailed", status: res.status } };
         }
         const body = (await res.json()) as {
             valid: boolean;
             reason?: string;
             workspaceName?: string;
+            role?: string;
             roleName?: string;
             requiresApproval?: boolean;
             invitedBy?: string | null;
@@ -110,13 +152,15 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
         if (!body.valid || !body.workspaceName) {
             return {
                 phase: "dead",
-                message: LINK_PROBLEMS[body.reason ?? "unknown"] ?? LINK_PROBLEMS.unknown!,
+                problem: LINK_PROBLEMS[body.reason ?? "unknown"] ?? LINK_PROBLEMS.unknown!,
             };
         }
         return {
             phase: "ready",
             details: {
                 workspaceName: body.workspaceName,
+                // No role at all reads as an ordinary member.
+                role: body.role ?? (body.roleName ? null : "member"),
                 roleName: body.roleName ?? "Member",
                 invitedBy: body.invitedBy ?? null,
                 requiresApproval: body.requiresApproval === true,
@@ -130,19 +174,17 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
         `/api/workspace/invitations/preview?token=${encodeURIComponent(source.token)}`
     );
     if (res.status === 404 || res.status === 410) {
-        return { phase: "dead", message: await readError(res, INVITE_GONE) };
+        return { phase: "dead", problem: await readError(res, INVITE_GONE) };
     }
     if (!res.ok) {
         return {
             phase: "error",
-            message: await readError(
-                res,
-                `We couldn't load this invitation (${res.status}). Try again in a moment.`
-            ),
+            problem: await readError(res, { key: "inviteLoadFailed", status: res.status }),
         };
     }
     const body = (await res.json()) as {
         workspaceName: string;
+        role?: string;
         roleName: string;
         email: string;
         expiresAt: string;
@@ -152,16 +194,14 @@ async function loadDetails(source: JoinSource): Promise<LoadState> {
     if (body.status !== "pending") {
         return {
             phase: "dead",
-            message:
-                body.status === "accepted"
-                    ? "This invitation has already been used. Sign in to open the workspace."
-                    : INVITE_GONE,
+            problem: body.status === "accepted" ? { key: "inviteUsed" } : INVITE_GONE,
         };
     }
     return {
         phase: "ready",
         details: {
             workspaceName: body.workspaceName,
+            role: body.role ?? null,
             roleName: body.roleName,
             invitedBy: body.invitedBy ?? null,
             requiresApproval: false,
@@ -178,6 +218,10 @@ export function JoinLanding({
     source: JoinSource;
     socialProviders: SocialProvider[];
 }) {
+    const t = useTranslations("auth.join");
+    const tc = useTranslations("common.actions");
+    const problemText = useProblemText();
+    const roleNameOf = useRoleName();
     const { isLoaded, isSignedIn, signOut } = useAuth();
     const { user } = useUser();
     const key = sourceKey(source);
@@ -200,7 +244,7 @@ export function JoinLanding({
                 const next = await loadDetails(source);
                 if (!cancelled) setLoad(next);
             } catch {
-                if (!cancelled) setLoad({ phase: "error", message: NETWORK_MESSAGE });
+                if (!cancelled) setLoad({ phase: "error", problem: NETWORK });
             }
         })();
         return () => {
@@ -243,21 +287,18 @@ export function JoinLanding({
                     const now = await loadDetails(source).catch(() => null);
                     setJoin({
                         phase: "dead",
-                        message: now?.phase === "dead" ? now.message : fallback,
+                        problem: now?.phase === "dead" ? now.problem : fallback,
                     });
                     return;
                 }
                 if (res.status === 401) {
-                    setJoin({
-                        phase: "error",
-                        message: "Your session ended. Sign in again to join.",
-                    });
+                    setJoin({ phase: "error", problem: { key: "sessionEnded" } });
                     return;
                 }
                 if (!res.ok) {
                     setJoin({
                         phase: "error",
-                        message: await readError(res, "We couldn't add you to the workspace."),
+                        problem: await readError(res, { key: "joinFailed" }),
                     });
                     return;
                 }
@@ -275,7 +316,7 @@ export function JoinLanding({
                 if (!alreadyMember) {
                     leaveJoinWelcome({
                         workspaceName: details.workspaceName,
-                        roleName: details.roleName,
+                        roleName: roleNameOf(details),
                         invitedBy: details.invitedBy,
                     });
                 }
@@ -285,9 +326,11 @@ export function JoinLanding({
             } catch {
                 // No answer — possibly cut off by a navigation. The intent stays,
                 // so the next load of this page tries again.
-                setJoin({ phase: "error", message: NETWORK_MESSAGE });
+                setJoin({ phase: "error", problem: NETWORK });
             }
         },
+        // `roleNameOf` follows the language; the welcome takes whichever is current.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [source]
     );
 
@@ -328,22 +371,22 @@ export function JoinLanding({
                         <Card>
                             <p className="text-ink-3 m-0 flex items-center gap-2 text-sm">
                                 <Loader2 className="size-4 animate-spin" aria-hidden />
-                                Loading your invitation…
+                                {t("loading")}
                             </p>
                         </Card>
                     )}
 
                     {(load.phase === "dead" || load.phase === "error") && (
                         <>
-                            <Eyebrow>Invitation</Eyebrow>
+                            <Eyebrow>{t("eyebrowInvitation")}</Eyebrow>
                             <Card>
                                 <Notice tone={load.phase === "dead" ? "muted" : "danger"}>
-                                    {load.message}
+                                    {problemText(load.problem)}
                                 </Notice>
                                 <div className="mt-4 flex flex-wrap gap-2">
                                     <Button asChild variant="outline" size="sm">
                                         <Link href={isSignedIn ? "/" : "/signin"}>
-                                            {isSignedIn ? "Go to your workspace" : "Sign in"}
+                                            {isSignedIn ? t("goToWorkspace") : tc("signIn")}
                                         </Link>
                                     </Button>
                                     {load.phase === "error" && (
@@ -352,7 +395,7 @@ export function JoinLanding({
                                             variant="ghost"
                                             onClick={() => window.location.reload()}
                                         >
-                                            Try again
+                                            {tc("tryAgain")}
                                         </Button>
                                     )}
                                 </div>
@@ -415,66 +458,71 @@ function Ready({
     onJoin: () => void;
     onUseDifferentAccount: () => void;
 }) {
-    const { workspaceName, roleName, invitedBy } = details;
+    const t = useTranslations("auth.join");
+    const tc = useTranslations("common.actions");
+    const format = useFormatter();
+    const problemText = useProblemText();
+    const roleName = useRoleName()(details);
+    const { workspaceName: workspace, invitedBy } = details;
     const joinLabel = details.requiresApproval
-        ? `Ask to join ${workspaceName}`
-        : `Join ${workspaceName}`;
+        ? t("askToJoin", { workspace })
+        : t("join", { workspace });
     const busy = join.phase === "joining" || join.phase === "entering";
+    const bold = (chunks: React.ReactNode) => <b className="font-semibold">{chunks}</b>;
 
     return (
         <>
             <div className="bg-brand-soft text-brand mb-4 flex size-11 items-center justify-center rounded-xl text-lg font-bold">
-                {workspaceName.trim().charAt(0).toUpperCase() || "W"}
+                {workspace.trim().charAt(0).toUpperCase() || "W"}
             </div>
-            <Eyebrow>You&apos;re invited</Eyebrow>
+            <Eyebrow>{t("eyebrowInvited")}</Eyebrow>
             <h1 className="display text-ink m-0 mb-2 break-words text-[28px] leading-[1.1] tracking-tight sm:text-[32px]">
-                Join {workspaceName}.
+                {t("title", { workspace })}
             </h1>
             <p className="text-ink-3 m-0 text-sm leading-relaxed">
-                {invitedBy ? (
-                    <>
-                        <span className="text-ink-2 font-medium">{invitedBy}</span> invited you to
-                        join as {roleName}.
-                    </>
-                ) : (
-                    <>You&apos;ve been invited to join as {roleName}.</>
-                )}
+                {invitedBy
+                    ? t.rich("invitedBy", {
+                          inviter: invitedBy,
+                          role: roleName,
+                          name: chunks => <span className="text-ink-2 font-medium">{chunks}</span>,
+                      })
+                    : t("invited", { role: roleName })}
             </p>
 
             <ul className="m-0 mb-6 mt-4 flex list-none flex-col gap-2 p-0">
                 {details.email && (
                     <Fact Icon={ShieldCheck}>
-                        For <span className="text-ink-2 font-medium">{details.email}</span>
+                        {t.rich("forEmail", {
+                            email: details.email,
+                            b: chunks => <span className="text-ink-2 font-medium">{chunks}</span>,
+                        })}
                     </Fact>
                 )}
                 {details.expiresAt && (
                     <Fact Icon={Clock}>
-                        Expires{" "}
-                        {new Date(details.expiresAt).toLocaleString(undefined, {
-                            dateStyle: "medium",
-                            timeStyle: "short",
+                        {t("expires", {
+                            date: format.dateTime(new Date(details.expiresAt), {
+                                dateStyle: "medium",
+                                timeStyle: "short",
+                            }),
                         })}
                     </Fact>
                 )}
-                {details.requiresApproval && (
-                    <Fact Icon={ShieldCheck}>
-                        An admin approves new members before they can get in.
-                    </Fact>
-                )}
+                {details.requiresApproval && <Fact Icon={ShieldCheck}>{t("approval")}</Fact>}
             </ul>
 
             {!isLoaded ? (
                 <Card>
                     <p className="text-ink-3 m-0 flex items-center gap-2 text-sm">
                         <Loader2 className="size-4 animate-spin" aria-hidden />
-                        Checking whether you&apos;re signed in…
+                        {t("checking")}
                     </p>
                 </Card>
             ) : !isSignedIn ? (
                 <Tabs value={tab} onValueChange={v => setTab(v as "signup" | "signin")}>
                     <TabsList className="mb-4 grid w-full grid-cols-2">
-                        <TabsTrigger value="signup">Create account</TabsTrigger>
-                        <TabsTrigger value="signin">I have an account</TabsTrigger>
+                        <TabsTrigger value="signup">{t("tabs.signUp")}</TabsTrigger>
+                        <TabsTrigger value="signin">{t("tabs.signIn")}</TabsTrigger>
                     </TabsList>
                     <TabsContent value="signup">
                         <SignUpForm
@@ -500,54 +548,54 @@ function Ready({
                 <Card>
                     {join.phase === "mismatch" ? (
                         <Notice tone="warn">
-                            This invitation is for{" "}
-                            <b className="font-semibold">{join.invitedEmail}</b>
-                            {signedInEmail ? (
-                                <>
-                                    , but you&apos;re signed in as{" "}
-                                    <b className="font-semibold">{signedInEmail}</b>.
-                                </>
-                            ) : (
-                                "."
-                            )}{" "}
-                            Use that address, or ask for an invitation to this one.
+                            {signedInEmail
+                                ? t.rich("mismatch", {
+                                      invited: join.invitedEmail,
+                                      current: signedInEmail,
+                                      b: bold,
+                                  })
+                                : t.rich("mismatchNoCurrent", {
+                                      invited: join.invitedEmail,
+                                      b: bold,
+                                  })}
                         </Notice>
                     ) : join.phase === "pending" ? (
                         <Notice tone="ok">
                             <CheckCircle2 className="mr-1.5 inline size-4 align-[-3px]" />
-                            Request sent. An admin of {workspaceName} needs to approve you —
-                            you&apos;ll get in as soon as they do.
+                            {t("requestSent", { workspace })}
                         </Notice>
                     ) : join.phase === "dead" ? (
-                        <Notice tone="muted">{join.message}</Notice>
+                        <Notice tone="muted">{problemText(join.problem)}</Notice>
                     ) : join.phase === "error" ? (
-                        <Notice tone="danger">{join.message}</Notice>
+                        <Notice tone="danger">{problemText(join.problem)}</Notice>
                     ) : join.phase === "entering" ? (
                         <Notice tone="ok">
                             <CheckCircle2 className="mr-1.5 inline size-4 align-[-3px]" />
                             {join.alreadyMember
-                                ? `You're already in ${workspaceName}. Opening it…`
-                                : `You're in. Opening ${workspaceName}…`}
+                                ? t("alreadyIn", { workspace })
+                                : t("youreIn", { workspace })}
                         </Notice>
                     ) : join.phase === "joining" ? (
                         <p className="text-ink-2 m-0 flex items-center gap-2 text-sm">
                             <Loader2 className="size-4 animate-spin" aria-hidden />
-                            Joining {workspaceName}…
+                            {t("joining", { workspace })}
                         </p>
                     ) : (
                         <p className="text-ink-2 m-0 text-sm">
-                            Signed in as <b className="font-semibold">{signedInEmail ?? "you"}</b>.
+                            {signedInEmail
+                                ? t.rich("signedInAs", { email: signedInEmail, b: bold })
+                                : t.rich("signedInAsYou", { b: bold })}
                         </p>
                     )}
 
                     <div className="mt-4 flex flex-wrap gap-2">
                         {join.phase === "mismatch" ? (
                             <Button onClick={onUseDifferentAccount}>
-                                Sign out and use {join.invitedEmail}
+                                {t("useAddress", { email: join.invitedEmail })}
                             </Button>
                         ) : join.phase === "pending" ? (
                             <Button asChild>
-                                <Link href="/">Continue</Link>
+                                <Link href="/">{tc("continue")}</Link>
                             </Button>
                         ) : join.phase === "dead" ? null : (
                             <Button onClick={onJoin} disabled={busy} aria-busy={busy}>
@@ -557,7 +605,7 @@ function Ready({
                         )}
                         {join.phase !== "mismatch" && join.phase !== "entering" && (
                             <Button variant="ghost" onClick={onUseDifferentAccount} disabled={busy}>
-                                Use a different account
+                                {t("differentAccount")}
                             </Button>
                         )}
                     </div>

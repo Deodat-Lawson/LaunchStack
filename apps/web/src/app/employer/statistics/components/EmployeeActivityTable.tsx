@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Clock, MessageSquare, Users } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Card } from "~/components/ui/card";
@@ -12,15 +13,22 @@ import {
     TableHeader,
     TableRow,
 } from "~/components/ui/table";
-import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
+import { isBuiltinRole, normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import type { EmployeeInfo } from "../types";
 
 interface EmployeeActivityTableProps {
     employees: EmployeeInfo[];
 }
 
-function formatRelativeTime(dateString: string | null): string {
-    if (!dateString) return "Never";
+type TimeT = ReturnType<typeof useTranslations<"statistics.time">>;
+
+/** "Just now", "5 min ago", "3 hr ago", "2 days ago"; a date after a week. */
+function formatRelativeTime(
+    dateString: string | null,
+    t: TimeT,
+    format: ReturnType<typeof useFormatter>
+): string {
+    if (!dateString) return t("never");
 
     const date = new Date(dateString);
     const now = new Date();
@@ -29,11 +37,11 @@ function formatRelativeTime(dateString: string | null): string {
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min ago`;
-    if (diffHours < 24) return `${diffHours} hr ago`;
-    if (diffDays < 7) return `${diffDays} days ago`;
-    return date.toLocaleDateString();
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return t("minutesAgo", { count: diffMins });
+    if (diffHours < 24) return t("hoursAgo", { count: diffHours });
+    if (diffDays < 7) return t("daysAgo", { count: diffDays });
+    return format.dateTime(date, { year: "numeric", month: "numeric", day: "numeric" });
 }
 
 /** The dashboard reports the membership role slug; built-ins get a tint, custom roles stay neutral. */
@@ -50,14 +58,25 @@ function statusVariant(status: string): "success" | "warn" | "secondary" {
     return "secondary";
 }
 
-function statusLabel(status: string): string {
-    if (status === "active") return "Active";
-    if (status === "pending") return "Pending approval";
-    if (status === "suspended") return "Suspended";
+type MembersT = ReturnType<typeof useTranslations<"statistics.members">>;
+
+function statusLabel(status: string, t: MembersT): string {
+    if (status === "active") return t("statuses.active");
+    if (status === "pending") return t("statuses.pending");
+    if (status === "suspended") return t("statuses.suspended");
     return status;
 }
 
+/** Built-in roles in the interface language; a custom role keeps its own name. */
+function memberRoleLabel(role: string, t: MembersT): string {
+    const slug = normalizeRoleSlug(role);
+    return isBuiltinRole(slug) ? t(`roles.${slug}`) : roleLabel(role);
+}
+
 export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps) {
+    const t = useTranslations("statistics.members");
+    const tTime = useTranslations("statistics.time");
+    const format = useFormatter();
     return (
         <Card className="border-none p-6 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
@@ -66,11 +85,11 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                         <Users className="h-4 w-4" />
                     </div>
                     <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                        Member activity
+                        {t("title")}
                     </h2>
                 </div>
                 <Badge variant="success" className="rounded-full px-3 py-1 font-bold">
-                    {employees.length} total
+                    {t("total", { count: employees.length })}
                 </Badge>
             </div>
 
@@ -79,19 +98,19 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                     <TableHeader>
                         <TableRow className="bg-panel-2/50">
                             <TableHead className="text-[10px] font-bold uppercase tracking-widest">
-                                Name
+                                {t("columns.name")}
                             </TableHead>
                             <TableHead className="text-[10px] font-bold uppercase tracking-widest">
-                                Role
+                                {t("columns.role")}
                             </TableHead>
                             <TableHead className="text-[10px] font-bold uppercase tracking-widest">
-                                Status
+                                {t("columns.status")}
                             </TableHead>
                             <TableHead className="text-[10px] font-bold uppercase tracking-widest">
-                                Queries made
+                                {t("columns.queries")}
                             </TableHead>
                             <TableHead className="text-right text-[10px] font-bold uppercase tracking-widest">
-                                Last online
+                                {t("columns.lastOnline")}
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -99,7 +118,7 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                         {employees.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={5} className="text-ink-3 py-8 text-center">
-                                    No members yet.
+                                    {t("empty")}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -116,7 +135,7 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                         variant={roleVariant(employee.role)}
                                         className="text-[10px] font-bold uppercase"
                                     >
-                                        {roleLabel(employee.role)}
+                                        {memberRoleLabel(employee.role, t)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
@@ -124,19 +143,21 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                         variant={statusVariant(employee.status)}
                                         className="text-[10px] font-bold uppercase"
                                     >
-                                        {statusLabel(employee.status)}
+                                        {statusLabel(employee.status, t)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
                                         <MessageSquare className="text-ink-3 h-3 w-3" />
-                                        <span className="font-mono">{employee.queryCount}</span>
+                                        <span className="font-mono">
+                                            {format.number(employee.queryCount)}
+                                        </span>
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-ink-3 text-right text-sm">
                                     <div className="flex items-center justify-end gap-2">
                                         <Clock className="h-3 w-3" />
-                                        {formatRelativeTime(employee.lastActiveAt)}
+                                        {formatRelativeTime(employee.lastActiveAt, tTime, format)}
                                     </div>
                                 </TableCell>
                             </TableRow>

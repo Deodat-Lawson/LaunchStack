@@ -19,6 +19,29 @@ export interface Swatch {
     ink: string;
 }
 
+/** Every swatch id — also the key of its name in `mindmap.colors`. */
+export const SWATCH_IDS = [
+    "slate",
+    "graphite",
+    "violet",
+    "indigo",
+    "blue",
+    "cyan",
+    "teal",
+    "green",
+    "lime",
+    "amber",
+    "orange",
+    "red",
+    "pink",
+    "magenta",
+] as const;
+export type SwatchId = (typeof SWATCH_IDS)[number];
+
+export function isSwatchId(id: string): id is SwatchId {
+    return (SWATCH_IDS as readonly string[]).includes(id);
+}
+
 /** The primary picker row. Ordered by hue so the strip reads as a spectrum. */
 export const SWATCHES: readonly Swatch[] = [
     {
@@ -453,6 +476,25 @@ export interface DocTheme {
     edgeStroke: string;
     background: string;
     ink: string;
+}
+
+/** Every theme id — also the key of its name in `mindmap.themes`. */
+export const THEME_IDS = [
+    "default",
+    "mono",
+    "ocean",
+    "sunset",
+    "forest",
+    "midnight",
+    "carbon",
+    "abyss",
+    "ember",
+    "pine",
+] as const;
+export type ThemeId = (typeof THEME_IDS)[number];
+
+export function isThemeId(id: string): id is ThemeId {
+    return (THEME_IDS as readonly string[]).includes(id);
 }
 
 export const THEMES: readonly DocTheme[] = [

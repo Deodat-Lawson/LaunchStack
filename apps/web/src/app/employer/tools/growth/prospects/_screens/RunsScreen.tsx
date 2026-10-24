@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,8 +19,8 @@ import {
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type SourceYield } from "../api";
+import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
-import { duration, money, relativeTime } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
@@ -27,6 +28,7 @@ import { runIsLive } from "../_components/RunSheet";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function StatusWord({ run }: { run: RunDto }) {
+    const t = useTranslations("growth.prospects.runs.status");
     const live = runIsLive(run);
     return (
         <span
@@ -48,26 +50,28 @@ function StatusWord({ run }: { run: RunDto }) {
                 )}
             />
             {live
-                ? "Running"
+                ? t("running")
                 : run.status === "completed"
-                  ? "Completed"
+                  ? t("completed")
                   : run.status === "failed"
-                    ? "Failed"
-                    : "Stopped"}
+                    ? t("failed")
+                    : t("stopped")}
         </span>
     );
 }
 
 function YieldTable({ sources }: { sources: SourceYield[] }) {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common.fields");
     return (
         <table className="w-full text-[13px]">
             <thead>
                 <tr className="text-ink-3 text-left text-xs">
-                    <th className="py-1 pr-3 font-medium">Source</th>
-                    <th className="py-1 pr-3 text-right font-medium">Found</th>
-                    <th className="py-1 pr-3 text-right font-medium">New</th>
-                    <th className="py-1 pr-3 text-right font-medium">In a deal</th>
-                    <th className="py-1 font-medium">Status</th>
+                    <th className="py-1 pr-3 font-medium">{t("common.source")}</th>
+                    <th className="py-1 pr-3 text-right font-medium">{t("runs.found")}</th>
+                    <th className="py-1 pr-3 text-right font-medium">{t("runs.new")}</th>
+                    <th className="py-1 pr-3 text-right font-medium">{t("runs.inDeal")}</th>
+                    <th className="py-1 font-medium">{tc("status")}</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +79,9 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
                     <tr key={s.sourceId} className="border-line-2 border-t">
                         <td className="py-1.5 pr-3">{s.label}</td>
                         <td className="py-1.5 pr-3 text-right tabular-nums">
-                            {s.kind === "signal" ? `${s.found} signals` : s.found}
+                            {s.kind === "signal"
+                                ? t("common.signals", { count: s.found })
+                                : s.found}
                         </td>
                         <td className="py-1.5 pr-3 text-right tabular-nums">
                             {s.kind === "signal" ? "" : (s.newCompanies ?? "—")}
@@ -92,7 +98,7 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
                                 (s.status === "skipped" || s.status === "off") && "text-ink-3"
                             )}
                         >
-                            {s.status === "ok" ? "ok" : (s.detail ?? s.status)}
+                            {s.status === "ok" ? t("runs.ok") : (s.detail ?? s.status)}
                         </td>
                     </tr>
                 ))}
@@ -102,6 +108,9 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
 }
 
 export function RunsScreen() {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common.fields");
+    const { relativeTime, money, duration } = useGrowthFormat();
     const { segmentId, startRun, activeRun, openRunSheet, samplePreferred, setSamplePreferred } =
         useProspects();
     const res = useResource(
@@ -124,14 +133,12 @@ export function RunsScreen() {
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
             <PageHeader
                 size="md"
-                title="Runs"
+                title={t("runs.title")}
                 sub={
                     res.data
-                        ? `${runs.length} so far · ${
-                              keyless
-                                  ? "no API keys are configured, so runs read public directories and each company's own website"
-                                  : "each run searches the sources this segment has on"
-                          }`
+                        ? keyless
+                            ? t("runs.subKeyless", { count: runs.length })
+                            : t("runs.subLive", { count: runs.length })
                         : undefined
                 }
                 actions={
@@ -141,13 +148,13 @@ export function RunsScreen() {
                                 id="prospects-sample"
                                 checked={samplePreferred}
                                 onCheckedChange={setSamplePreferred}
-                                aria-label="Use sample data"
+                                aria-label={t("runs.sampleAria")}
                             />
                             <Label
                                 htmlFor="prospects-sample"
                                 className="text-ink-2 text-xs font-normal"
                             >
-                                Sample data
+                                {t("runs.sample")}
                             </Label>
                         </span>
                         <Button
@@ -155,13 +162,13 @@ export function RunsScreen() {
                             onClick={() =>
                                 void startRun({ sample: samplePreferred }).catch((e: unknown) =>
                                     toast.error(
-                                        e instanceof Error ? e.message : "Could not start the run"
+                                        e instanceof Error ? e.message : t("common.startFailed")
                                     )
                                 )
                             }
                             disabled={!segmentId || (activeRun !== null && runIsLive(activeRun))}
                         >
-                            Find companies
+                            {t("common.findCompanies")}
                         </Button>
                     </>
                 }
@@ -172,11 +179,11 @@ export function RunsScreen() {
             ) : runs.length === 0 ? (
                 <EmptyState
                     mark
-                    title="No runs yet"
-                    body="A run searches every source this segment has on, profiles the best matches and finds people. It takes a few minutes and shows its progress as it goes."
+                    title={t("runs.noRuns")}
+                    body={t("runs.noRunsBody")}
                     action={
                         <Button size="sm" onClick={() => void startRun()}>
-                            Find companies
+                            {t("common.findCompanies")}
                         </Button>
                     }
                 />
@@ -187,28 +194,28 @@ export function RunsScreen() {
                             <TableRow className="hover:bg-transparent">
                                 <TableHead className="w-8" />
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Started
+                                    {t("runs.started")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Status
+                                    {tc("status")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    Found
+                                    {t("runs.found")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    New
+                                    {t("runs.new")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    Profiled
+                                    {t("runs.profiled")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    People
+                                    {t("common.people")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    Spend
+                                    {t("runs.spend")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-right text-xs font-medium">
-                                    Took
+                                    {t("runs.took")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -240,7 +247,7 @@ export function RunsScreen() {
                                                 <StatusWord run={run} />
                                                 {live && (
                                                     <span className="text-ink-3 ml-2 text-xs">
-                                                        open progress
+                                                        {t("runs.openProgress")}
                                                     </span>
                                                 )}
                                             </TableCell>
@@ -257,7 +264,10 @@ export function RunsScreen() {
                                                 {run.summary?.people ?? "—"}
                                             </TableCell>
                                             <TableCell className="text-right tabular-nums">
-                                                {money(run.spend.usd)} · {run.spend.credits} cr
+                                                {t("runs.spendCell", {
+                                                    money: money(run.spend.usd),
+                                                    credits: run.spend.credits,
+                                                })}
                                             </TableCell>
                                             <TableCell className="text-ink-2 text-right tabular-nums">
                                                 {run.summary

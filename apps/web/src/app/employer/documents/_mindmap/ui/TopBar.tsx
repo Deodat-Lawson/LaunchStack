@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
     ArrowLeft,
     Check,
@@ -114,6 +115,8 @@ export interface TopBarProps {
 const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
 
 export function TopBar(props: TopBarProps) {
+    const t = useTranslations("mindmap.topBar");
+    const tc = useTranslations("common");
     const store = useStore();
     const autoLayout = useEditor(selectAutoLayout);
     const focus = props.depth === "focus";
@@ -134,7 +137,7 @@ export function TopBar(props: TopBarProps) {
                             type="button"
                             onClick={props.onBack}
                             className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
-                            aria-label="Back"
+                            aria-label={tc("actions.back")}
                         >
                             <ArrowLeft className="size-4" />
                         </button>
@@ -142,21 +145,21 @@ export function TopBar(props: TopBarProps) {
                         <Link
                             href="/employer/documents"
                             className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
-                            aria-label="Back to library"
+                            aria-label={t("backToLibrary")}
                         >
                             <ArrowLeft className="size-4" />
                         </Link>
                     )}
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                    {props.onBack ? "Back" : "Back to library"}
+                    {props.onBack ? tc("actions.back") : t("backToLibrary")}
                 </TooltipContent>
             </Tooltip>
 
             <input
                 value={draft}
                 onChange={e => setDraft(e.target.value)}
-                onBlur={() => setTitle(store, draft.trim() || "Untitled mindmap")}
+                onBlur={() => setTitle(store, draft.trim() || t("untitled"))}
                 onKeyDown={e => {
                     e.stopPropagation();
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -165,7 +168,7 @@ export function TopBar(props: TopBarProps) {
                         e.currentTarget.blur();
                     }
                 }}
-                aria-label="Mindmap title"
+                aria-label={t("titleLabel")}
                 className="text-ink hover:border-line focus:border-brand h-8 min-w-0 max-w-[280px] flex-shrink rounded-md border border-transparent bg-transparent px-2 text-[14px] font-semibold outline-none transition-colors"
             />
 
@@ -176,7 +179,7 @@ export function TopBar(props: TopBarProps) {
                 <DropdownMenuTrigger asChild>
                     <button
                         type="button"
-                        aria-label="Save options"
+                        aria-label={t("saveOptions")}
                         className="hover:bg-panel-2 rounded-md px-1.5 py-1 transition-colors"
                     >
                         <SaveState {...state} />
@@ -185,12 +188,12 @@ export function TopBar(props: TopBarProps) {
                 <DropdownMenuContent align="start">
                     <DropdownMenuItem onSelect={props.onSave} disabled={state.saving}>
                         <Save className="size-3.5" />
-                        Save a version
+                        {t("saveVersion")}
                         <span className="text-ink-3 ml-auto font-mono text-[11px]">⌘S</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={props.onHistory}>
                         <HistoryIcon className="size-3.5" />
-                        Version history
+                        {t("versionHistory")}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -203,13 +206,13 @@ export function TopBar(props: TopBarProps) {
                         type="button"
                         onClick={() => store.undo()}
                         disabled={!state.canUndo}
-                        aria-label="Undo"
+                        aria-label={tc("actions.undo")}
                         className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors disabled:opacity-35"
                     >
                         <Undo2 className="size-4" />
                     </button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Undo ⌘Z</TooltipContent>
+                <TooltipContent side="bottom">{t("undoTip")}</TooltipContent>
             </Tooltip>
             <Tooltip>
                 <TooltipTrigger asChild>
@@ -217,26 +220,26 @@ export function TopBar(props: TopBarProps) {
                         type="button"
                         onClick={() => store.redo()}
                         disabled={!state.canRedo}
-                        aria-label="Redo"
+                        aria-label={t("redo")}
                         className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors disabled:opacity-35"
                     >
                         <Redo2 className="size-4" />
                     </button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Redo ⇧⌘Z</TooltipContent>
+                <TooltipContent side="bottom">{t("redoTip")}</TooltipContent>
             </Tooltip>
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="h-8 gap-1.5 px-2 text-[13px]">
                         <Network className="size-4" />
-                        Layout
+                        {t("layout")}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                     <DropdownMenuItem onSelect={() => arrangeNow(store)}>
                         <Network className="size-3.5" />
-                        Arrange now
+                        {t("arrangeNow")}
                     </DropdownMenuItem>
                     <DropdownMenuCheckboxItem
                         checked={autoLayout !== null}
@@ -247,40 +250,40 @@ export function TopBar(props: TopBarProps) {
                             )
                         }
                     >
-                        Auto-arrange as I type
+                        {t("autoArrange")}
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>Arrange as</DropdownMenuSubTrigger>
+                        <DropdownMenuSubTrigger>{t("arrangeAs")}</DropdownMenuSubTrigger>
                         <DropdownMenuSubContent>
                             <DropdownMenuItem
                                 onSelect={() => runLayout(store, { kind: "mindmap" })}
                             >
-                                Mindmap — both sides
+                                {t("layouts.mindmap")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onSelect={() =>
                                     runLayout(store, { kind: "tree", direction: "right" })
                                 }
                             >
-                                Tree — left to right
+                                {t("layouts.treeRight")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onSelect={() =>
                                     runLayout(store, { kind: "tree", direction: "down" })
                                 }
                             >
-                                Tree — top down
+                                {t("layouts.treeDown")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => runLayout(store, { kind: "org" })}>
-                                Org chart
+                                {t("layouts.org")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => runLayout(store, { kind: "radial" })}>
-                                Radial
+                                {t("layouts.radial")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={() => runLayout(store, { kind: "grid" })}>
-                                Pack into a grid
+                                {t("layouts.grid")}
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
                     </DropdownMenuSub>
@@ -296,13 +299,13 @@ export function TopBar(props: TopBarProps) {
                     <button
                         type="button"
                         onClick={props.onCommandPalette}
-                        aria-label="Command palette"
+                        aria-label={t("commandPalette")}
                         className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
                     >
                         <Command className="size-4" />
                     </button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Commands ⌘K</TooltipContent>
+                <TooltipContent side="bottom">{t("commandsTip")}</TooltipContent>
             </Tooltip>
             {!focus && (
                 <>
@@ -311,13 +314,13 @@ export function TopBar(props: TopBarProps) {
                             <button
                                 type="button"
                                 onClick={props.onShortcuts}
-                                aria-label="Keyboard shortcuts"
+                                aria-label={t("shortcuts")}
                                 className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
                             >
                                 <Keyboard className="size-4" />
                             </button>
                         </TooltipTrigger>
-                        <TooltipContent side="bottom">Shortcuts ?</TooltipContent>
+                        <TooltipContent side="bottom">{t("shortcutsTip")}</TooltipContent>
                     </Tooltip>
 
                     <Tooltip>
@@ -326,7 +329,7 @@ export function TopBar(props: TopBarProps) {
                                 type="button"
                                 onClick={props.onToggleLeft}
                                 aria-pressed={props.leftPanelOpen}
-                                aria-label="Toggle left panel"
+                                aria-label={t("toggleLeft")}
                                 className={cn(
                                     "flex size-8 items-center justify-center rounded-md transition-colors",
                                     props.leftPanelOpen
@@ -337,7 +340,7 @@ export function TopBar(props: TopBarProps) {
                                 <PanelLeft className="size-4" />
                             </button>
                         </TooltipTrigger>
-                        <TooltipContent side="bottom">Shapes & outline</TooltipContent>
+                        <TooltipContent side="bottom">{t("leftTip")}</TooltipContent>
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -345,7 +348,7 @@ export function TopBar(props: TopBarProps) {
                                 type="button"
                                 onClick={props.onToggleRight}
                                 aria-pressed={props.rightPanelOpen}
-                                aria-label="Toggle right panel"
+                                aria-label={t("toggleRight")}
                                 className={cn(
                                     "flex size-8 items-center justify-center rounded-md transition-colors",
                                     props.rightPanelOpen
@@ -356,7 +359,7 @@ export function TopBar(props: TopBarProps) {
                                 <PanelRight className="size-4" />
                             </button>
                         </TooltipTrigger>
-                        <TooltipContent side="bottom">Properties</TooltipContent>
+                        <TooltipContent side="bottom">{t("rightTip")}</TooltipContent>
                     </Tooltip>
                 </>
             )}
@@ -367,16 +370,14 @@ export function TopBar(props: TopBarProps) {
                         <PopoverTrigger asChild>
                             <button
                                 type="button"
-                                aria-label="Appearance"
+                                aria-label={t("appearance")}
                                 className="text-ink-2 hover:bg-panel-2 flex size-8 items-center justify-center rounded-md transition-colors"
                             >
                                 <Palette className="size-4" />
                             </button>
                         </PopoverTrigger>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                        Appearance — theme, canvas, snapping
-                    </TooltipContent>
+                    <TooltipContent side="bottom">{t("appearanceTip")}</TooltipContent>
                 </Tooltip>
                 <PopoverContent align="end" className="w-[312px] p-0">
                     <ScrollArea className="h-[520px]">
@@ -387,7 +388,7 @@ export function TopBar(props: TopBarProps) {
 
             <div
                 role="group"
-                aria-label="Chrome depth"
+                aria-label={t("chromeDepth")}
                 className="border-line bg-panel-2 flex h-8 items-center rounded-md border p-0.5 text-[12px]"
             >
                 <button
@@ -399,7 +400,7 @@ export function TopBar(props: TopBarProps) {
                         focus ? "bg-panel text-ink shadow-sm" : "text-ink-3 hover:text-ink-2"
                     )}
                 >
-                    Simple
+                    {t("simple")}
                 </button>
                 <button
                     type="button"
@@ -410,7 +411,7 @@ export function TopBar(props: TopBarProps) {
                         !focus ? "bg-panel text-ink shadow-sm" : "text-ink-3 hover:text-ink-2"
                     )}
                 >
-                    Everything
+                    {t("everything")}
                 </button>
             </div>
 
@@ -423,36 +424,36 @@ export function TopBar(props: TopBarProps) {
                 onClick={props.onPresent}
             >
                 <Play className="size-4" />
-                Present
+                {t("present")}
             </Button>
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="h-8 gap-1.5">
                         <Download className="size-4" />
-                        Share
+                        {tc("actions.share")}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem onSelect={props.onExport}>
                         <Download className="size-3.5" />
-                        Export…
+                        {t("export")}
                         <span className="text-ink-3 ml-auto font-mono text-[11px]">⌘E</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={props.onImport}>
                         <Upload className="size-3.5" />
-                        Import…
+                        {t("import")}
                     </DropdownMenuItem>
                     {props.onCopyPresentLink && (
                         <DropdownMenuItem onSelect={props.onCopyPresentLink}>
                             <Link2 className="size-3.5" />
-                            Copy presentation link
+                            {t("copyPresentLink")}
                         </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={props.onPublish}>
                         <Sparkles className="size-3.5" />
-                        Add to sources
+                        {t("addToSources")}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -469,11 +470,13 @@ function SaveState({
     saving: boolean;
     savedAt: number | null;
 }) {
+    const t = useTranslations("mindmap.topBar");
+    const tc = useTranslations("common");
     if (saving) {
         return (
             <span className="text-ink-3 flex items-center gap-1.5 text-[12px]">
                 <Loader2 className="size-3.5 animate-spin" />
-                Saving…
+                {tc("status.saving")}
             </span>
         );
     }
@@ -481,7 +484,7 @@ function SaveState({
         return (
             <span className="text-ink-3 flex items-center gap-1.5 text-[12px]">
                 <CloudOff className="size-3.5" />
-                Unsaved changes
+                {t("unsaved")}
             </span>
         );
     }
@@ -489,14 +492,14 @@ function SaveState({
         return (
             <span className="text-ink-3 flex items-center gap-1.5 text-[12px]">
                 <Check className="text-success size-3.5" />
-                Saved
+                {tc("status.saved")}
             </span>
         );
     }
     return (
         <span className="text-ink-3 flex items-center gap-1.5 text-[12px]">
             <Cloud className="size-3.5" />
-            Up to date
+            {t("upToDate")}
         </span>
     );
 }

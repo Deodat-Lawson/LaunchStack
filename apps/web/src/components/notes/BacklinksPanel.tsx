@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Link2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface BacklinkRow {
     sourceNoteId: number;
@@ -25,6 +26,7 @@ interface BacklinksPanelProps {
  * users can see what else in their notebook references this thing.
  */
 export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPanelProps) {
+    const t = useTranslations("notes.backlinks");
     const [rows, setRows] = useState<BacklinkRow[] | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -44,17 +46,17 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
         setError(null);
         void fetch(url)
             .then(async res => {
-                if (!res.ok) throw new Error(`Failed (${res.status})`);
+                if (!res.ok) throw new Error(t("requestFailed", { status: res.status }));
                 const data = (await res.json()) as { incoming: BacklinkRow[] };
                 if (!cancelled) setRows(data.incoming ?? []);
             })
             .catch(err => {
-                if (!cancelled) setError(err instanceof Error ? err.message : "Failed");
+                if (!cancelled) setError(err instanceof Error ? err.message : t("failed"));
             });
         return () => {
             cancelled = true;
         };
-    }, [noteId, documentId]);
+    }, [noteId, documentId, t]);
 
     if (rows === null && !error) {
         return (
@@ -65,7 +67,7 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
                     color: "var(--ink-3)",
                 }}
             >
-                Loading backlinks…
+                {t("loading")}
             </div>
         );
     }
@@ -79,7 +81,7 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
                     color: "oklch(0.45 0.18 30)",
                 }}
             >
-                Backlinks: {error}
+                {t("error", { error })}
             </div>
         );
     }
@@ -112,7 +114,7 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
                     marginBottom: 6,
                 }}
             >
-                <Link2 size={11} /> Backlinks · {rows.length}
+                <Link2 size={11} /> {t("heading", { count: rows.length })}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 {rows.map(r => (
@@ -132,7 +134,9 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
                             lineHeight: 1.4,
                         }}
                     >
-                        <div style={{ fontWeight: 600 }}>{(r.title ?? "") || "Untitled note"}</div>
+                        <div style={{ fontWeight: 600 }}>
+                            {(r.title ?? "") || t("untitledNote")}
+                        </div>
                         {r.snippet && (
                             <div
                                 style={{
@@ -154,7 +158,7 @@ export function BacklinksPanel({ noteId, documentId, onOpenNote }: BacklinksPane
                                 fontStyle: "italic",
                             }}
                         >
-                            linked as [[{r.linkedAs}]]
+                            {t("linkedAs", { name: r.linkedAs })}
                         </div>
                     </button>
                 ))}

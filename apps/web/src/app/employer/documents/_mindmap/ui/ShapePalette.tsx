@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
@@ -12,7 +13,7 @@ import { themeMode, type ThemeMode } from "../model/palette";
 import { SHAPE_CATEGORIES, searchShapes, shapeGeometry, type ShapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { NodeStyle, ShapeCategory, ShapeId } from "../model/types";
-import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { categoryName, shapeName, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The shape library.
@@ -33,12 +34,13 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 const selectPending = (s: EditorState) => (s.tool === "shape" ? s.pendingShape : null);
 
 /** Said once per group, where the grouping is doing real work. */
-const CATEGORY_BLURB: Partial<Record<ShapeCategory, string>> = {
-    Nodes: "Type in them, connect them, let auto-layout arrange them.",
-    Annotate: "Marks on the canvas. Not part of the diagram's structure.",
+const CATEGORY_BLURB: Partial<Record<ShapeCategory, "nodes" | "annotate">> = {
+    Nodes: "nodes",
+    Annotate: "annotate",
 };
 
 export function ShapePalette() {
+    const t = useTranslations("mindmap");
     const store = useStore();
     const pending = useEditor(selectPending);
     const doc = useCommittedDoc();
@@ -49,7 +51,7 @@ export function ShapePalette() {
     const mode = themeMode(doc.settings.paletteId);
 
     const grouped = useMemo(() => {
-        const matches = searchShapes(query);
+        const matches = searchShapes(query, shape => shapeName(t, shape.id));
         const byCategory = new Map<ShapeCategory, ShapeDef[]>();
         for (const shape of matches) {
             const list = byCategory.get(shape.category);
@@ -60,7 +62,7 @@ export function ShapePalette() {
             category,
             shapes: byCategory.get(category) ?? [],
         })).filter(g => g.shapes.length > 0);
-    }, [query]);
+    }, [query, t]);
 
     return (
         <div className="flex h-full flex-col">
@@ -69,7 +71,7 @@ export function ShapePalette() {
                 <Input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Search shapes…"
+                    placeholder={t("shapePalette.search")}
                     className="h-8 pl-7 text-[13px]"
                 />
             </div>
@@ -78,37 +80,36 @@ export function ShapePalette() {
                 <div className="px-3 pb-6 pt-3">
                     {grouped.length === 0 && (
                         <p className="text-ink-3 px-1 py-6 text-center text-[13px]">
-                            No shapes match “{query}”.
+                            {t("shapePalette.noMatch", { query })}
                         </p>
                     )}
-                    {grouped.map(group => (
-                        <section key={group.category} className="mb-5">
-                            <h3 className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                                {group.category}
-                            </h3>
-                            {CATEGORY_BLURB[group.category] && (
-                                <p className="text-ink-3 mb-2 mt-0.5 text-[11px] leading-snug">
-                                    {CATEGORY_BLURB[group.category]}
-                                </p>
-                            )}
-                            <div
-                                className={cn(
-                                    "grid grid-cols-3 gap-1",
-                                    !CATEGORY_BLURB[group.category] && "mt-2"
+                    {grouped.map(group => {
+                        const blurb = CATEGORY_BLURB[group.category];
+                        return (
+                            <section key={group.category} className="mb-5">
+                                <h3 className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
+                                    {categoryName(t, group.category)}
+                                </h3>
+                                {blurb && (
+                                    <p className="text-ink-3 mb-2 mt-0.5 text-[11px] leading-snug">
+                                        {t(`shapePalette.blurbs.${blurb}`)}
+                                    </p>
                                 )}
-                            >
-                                {group.shapes.map(shape => (
-                                    <ShapeTile
-                                        key={shape.id}
-                                        shape={shape}
-                                        mode={mode}
-                                        active={pending === shape.id}
-                                        onSelect={() => store.setTool("shape", shape.id)}
-                                    />
-                                ))}
-                            </div>
-                        </section>
-                    ))}
+                                <div className={cn("grid grid-cols-3 gap-1", !blurb && "mt-2")}>
+                                    {group.shapes.map(shape => (
+                                        <ShapeTile
+                                            key={shape.id}
+                                            shape={shape}
+                                            name={shapeName(t, shape.id)}
+                                            mode={mode}
+                                            active={pending === shape.id}
+                                            onSelect={() => store.setTool("shape", shape.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })}
                 </div>
             </ScrollArea>
         </div>
@@ -120,11 +121,14 @@ const TILE_H = 32;
 
 const ShapeTile = memo(function ShapeTile({
     shape,
+    name,
     mode,
     active,
     onSelect,
 }: {
     shape: ShapeDef;
+    /** The name in the reader's language. */
+    name: string;
     mode: ThemeMode;
     active: boolean;
     onSelect: () => void;
@@ -132,8 +136,8 @@ const ShapeTile = memo(function ShapeTile({
     return (
         <button
             type="button"
-            title={shape.name}
-            aria-label={shape.name}
+            title={name}
+            aria-label={name}
             aria-pressed={active}
             draggable
             onDragStart={e => {
@@ -152,7 +156,7 @@ const ShapeTile = memo(function ShapeTile({
             {/* Two lines rather than an ellipsis: "Rounded rect…" and
                 "Predefined pro…" are the names most in need of reading. */}
             <span className="text-ink-3 line-clamp-2 w-full text-center text-[10px] leading-tight">
-                {shape.name}
+                {name}
             </span>
         </button>
     );

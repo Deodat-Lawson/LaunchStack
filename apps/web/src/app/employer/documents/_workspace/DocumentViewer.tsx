@@ -25,6 +25,7 @@ import {
     useDriveBarHidden,
     useDriveLinkStatus,
 } from "./GoogleDriveBanner";
+import { useDriveFreshness } from "./useDriveFreshness";
 import type { DocumentType } from "../types/document";
 import { getMindmap, MindmapRequestError } from "../_mindmap/lib/api";
 import { openMindmapDocument } from "../_mindmap/lib/open";
@@ -351,6 +352,13 @@ export function DocumentViewer({
     const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
     /** A `failureText`, worded in the reader's language where it is shown. */
     const [fullDocError, setFullDocError] = useState<string | null>(null);
+    /**
+     * Bumped when the document's current version moves under an open viewer
+     * — a Drive sync, an uploaded version, a restore — so the preview loads
+     * the file that is now current instead of keeping the one it opened with.
+     */
+    const [previewNonce, setPreviewNonce] = useState(0);
+    const shownVersionRef = useRef<number | null>(null);
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
@@ -483,7 +491,7 @@ export function DocumentViewer({
         return () => {
             cancelled = true;
         };
-    }, [isMindmap, source.documentId, source.pending, userId]);
+    }, [isMindmap, source.documentId, source.pending, userId, previewNonce]);
 
     // The map itself, plus its snapshot history for the sidebar.
     useEffect(() => {
@@ -588,6 +596,7 @@ export function DocumentViewer({
     // Fetch version history on mount
     useEffect(() => {
         if (isMindmap || !source.documentId) return;
+        shownVersionRef.current = null;
         let cancelled = false;
         setVersionsError(null);
         void (async () => {
@@ -646,6 +655,24 @@ export function DocumentViewer({
         setActiveVersionId(data.currentVersionId);
         setExpectedMime(data.fileType);
     }, [source.documentId]);
+
+    // The first current version is the one the preview opened with; a later
+    // one means the file changed underneath it.
+    useEffect(() => {
+        if (activeVersionId === null) return;
+        const shown = shownVersionRef.current;
+        shownVersionRef.current = activeVersionId;
+        if (shown !== null && shown !== activeVersionId) setPreviewNonce(n => n + 1);
+    }, [activeVersionId]);
+
+    const driveLinked = driveLink?.status === "linked";
+    useDriveFreshness({
+        documentId: driveDocumentId,
+        linked: driveLinked,
+        watch: driveLinked || fullDoc?.ocrMetadata?.connector === "google-drive",
+        onPulled: drive.refresh,
+        onCheck: refreshVersions,
+    });
 
     const uploadNewVersion = useCallback(
         (file: File) => {
@@ -1074,6 +1101,7 @@ export function DocumentViewer({
                             documentId={driveDocumentId}
                             status={drive.status}
                             refresh={drive.refresh}
+                            onSynced={() => void refreshVersions()}
                             onHide={() => {
                                 setDriveBarHidden(true);
                                 toast(tDrive("hidden"), {

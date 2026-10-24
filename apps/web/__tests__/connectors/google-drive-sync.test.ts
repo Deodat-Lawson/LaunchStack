@@ -21,6 +21,7 @@ import type {
 } from "@launchstack/pipelines/connectors";
 
 const FOLDER_MIME = "application/vnd.google-apps.folder";
+const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 interface FakeDriveOptions {
     files: DriveFile[];
@@ -28,7 +29,7 @@ interface FakeDriveOptions {
     changes?: Record<string, DriveChangeList>;
     /** File ids that answer 403/404. */
     inaccessible?: string[];
-    /** File ids whose export exceeds Google's cap. */
+    /** File ids (any format) or `fileId:mime` (that format only) whose export exceeds Google's cap. */
     exportTooLarge?: string[];
     startPageToken?: string;
 }
@@ -83,7 +84,10 @@ function createFakeDrive(options: FakeDriveOptions): FakeDrive {
         },
         async exportFile(fileId, mimeType) {
             requireAccess(fileId);
-            if (options.exportTooLarge?.includes(fileId)) {
+            if (
+                options.exportTooLarge?.includes(fileId) ||
+                options.exportTooLarge?.includes(`${fileId}:${mimeType}`)
+            ) {
                 throw new DriveExportTooLargeError(fileId);
             }
             exports.push(`${fileId}:${mimeType}`);
@@ -248,10 +252,43 @@ describe("syncGoogleDrive", () => {
             pickedItems: [{ fileId: "doc", kind: "file" }],
         });
 
-        expect(client.exports).toEqual(["doc:text/markdown"]);
+        expect(client.exports).toEqual([`doc:${DOCX_MIME}`]);
         expect(report.stored[0]?.sourceId).toBe("doc");
-        expect(sink.stored[0]?.mimeType).toBe("text/markdown");
+        expect(sink.stored[0]?.mimeType).toBe(DOCX_MIME);
+        expect(sink.stored[0]?.metadata.extension).toBe(".docx");
         expect(sink.stored[0]?.contentHash).toBe("rev:rev-1");
+    });
+
+    it("exports a Doc too big for Drive's export cap as Markdown instead", async () => {
+        const client = createFakeDrive({
+            files: [
+                {
+                    id: "doc",
+                    name: "Photo essay",
+                    mimeType: "application/vnd.google-apps.document",
+                    version: "7",
+                },
+            ],
+            exportTooLarge: [`doc:${DOCX_MIME}`],
+        });
+        const sink = createRecordingSink();
+
+        const report = await syncGoogleDrive({
+            client,
+            sink,
+            pickedItems: [{ fileId: "doc", kind: "file" }],
+        });
+
+        expect(client.exports).toEqual(["doc:text/markdown"]);
+        expect(report.stored.map(entry => entry.sourceId)).toEqual(["doc"]);
+        expect(sink.stored[0]?.mimeType).toBe("text/markdown");
+        expect(sink.stored[0]?.metadata).toMatchObject({
+            exportMime: "text/markdown",
+            extension: ".md",
+        });
+        // The fingerprint is the Drive revision either way, so an unchanged
+        // Doc is not exported again on the next run.
+        expect(sink.stored[0]?.contentHash).toBe("ver:7");
     });
 
     it("reports inaccessible files as accessLost, not failures", async () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -14,21 +15,19 @@ import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
-import { joinNatural, plural, shortDate } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useGrowthFormat } from "../../_lib/format";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
 import {
-    KIND_WORD,
     byKindThenName,
     capabilityWords,
     groupByNetwork,
     tokenExpiry,
     type Tone,
 } from "../_lib/channels";
-import { count } from "../_lib/numbers";
 import {
     LINKEDIN_CONNECT_HREF,
     brandApi,
@@ -65,12 +64,15 @@ function ToneWord({ tone, children }: { tone: Tone; children: React.ReactNode })
     );
 }
 
+type BrandT = ReturnType<typeof useTranslations<"growth.brand">>;
+
 /** "2 Pages · 1 Profile" for a network's heading. */
-function kindSummary(channels: BrandChannel[]): string {
-    const counts = new Map<string, number>();
-    for (const c of channels)
-        counts.set(KIND_WORD[c.kind], (counts.get(KIND_WORD[c.kind]) ?? 0) + 1);
-    return [...counts.entries()].map(([word, n]) => plural(n, word)).join(" · ");
+function kindSummary(t: BrandT, channels: BrandChannel[]): string {
+    const counts = new Map<BrandChannel["kind"], number>();
+    for (const c of channels) counts.set(c.kind, (counts.get(c.kind) ?? 0) + 1);
+    return [...counts.entries()]
+        .map(([kind, n]) => t(`kindCounts.${kind}`, { count: n }))
+        .join(" · ");
 }
 
 // ── Channels ──────────────────────────────────────────────────────────────
@@ -84,9 +86,11 @@ function ChannelRow({
     canManage: boolean;
     onToggle: (channel: BrandChannel, enabled: boolean) => Promise<void>;
 }) {
+    const t = useTranslations("growth.brand");
+    const tChannels = useTranslations("growth.brand.channels");
     const [busy, setBusy] = useState(false);
     const switchId = `brand-channel-${channel.id}`;
-    const caps = capabilityWords(channel.capabilities);
+    const caps = capabilityWords(tChannels, channel.capabilities);
     return (
         <div className="border-line-2 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-t px-4 py-3 first:border-t-0">
             <ChannelAvatar
@@ -106,7 +110,7 @@ function ChannelRow({
                 >
                     {channel.name}
                 </span>
-                <span className="text-ink-3 text-xs">{KIND_WORD[channel.kind]}</span>
+                <span className="text-ink-3 text-xs">{t(`kinds.${channel.kind}`)}</span>
                 {channel.handle && channel.handle !== channel.name && (
                     <span className="text-ink-3 truncate font-mono text-[11.5px]">
                         {channel.handle}
@@ -118,7 +122,10 @@ function ChannelRow({
                         target="_blank"
                         rel="noreferrer"
                         className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm outline-none focus-visible:ring-2"
-                        aria-label={`Open ${channel.name} on ${NETWORK_LABEL[channel.platform]}`}
+                        aria-label={t("accounts.openOnNetwork", {
+                            name: channel.name,
+                            network: NETWORK_LABEL[channel.platform],
+                        })}
                     >
                         <ExternalLink className="size-3" aria-hidden />
                     </a>
@@ -131,7 +138,7 @@ function ChannelRow({
                             htmlFor={switchId}
                             className="text-ink-2 @max-sm:sr-only text-xs font-normal"
                         >
-                            Offer in Compose
+                            {t("accounts.offerInCompose")}
                         </Label>
                         <Switch
                             id={switchId}
@@ -145,22 +152,23 @@ function ChannelRow({
                     </>
                 ) : (
                     <span className="text-ink-3 text-xs">
-                        {channel.enabled ? "Offered in Compose" : "Hidden from Compose"}
+                        {channel.enabled ? t("accounts.offered") : t("accounts.hidden")}
                     </span>
                 )}
             </div>
             <div className="text-ink-3 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
                 {channel.status === "reconnect" ? (
                     <ToneWord tone="danger">
-                        Reconnect{channel.statusReason ? ` — ${channel.statusReason}` : ""}
+                        {channel.statusReason
+                            ? t("accounts.reconnectStatusReason", { reason: channel.statusReason })
+                            : t("accounts.reconnectStatus")}
                     </ToneWord>
                 ) : (
-                    <ToneWord tone="ok">Active</ToneWord>
+                    <ToneWord tone="ok">{t("accounts.active")}</ToneWord>
                 )}
                 {channel.followers !== null && (
                     <span className="tabular-nums">
-                        {count(channel.followers)}{" "}
-                        {channel.followers === 1 ? "follower" : "followers"}
+                        {t("accounts.followers", { count: channel.followers })}
                     </span>
                 )}
                 {caps.length > 0 && <span>{caps.join(" · ")}</span>}
@@ -178,6 +186,7 @@ function ChannelsSection({
     canManage: boolean;
     onToggle: (channel: BrandChannel, enabled: boolean) => Promise<void>;
 }) {
+    const t = useTranslations("growth.brand");
     const groups = groupByNetwork(channels, byKindThenName);
     return (
         <section className="flex flex-col gap-5">
@@ -188,7 +197,7 @@ function ChannelsSection({
                         <h2 className="text-ink text-[13px] font-semibold">
                             {NETWORK_LABEL[group.platform]}
                         </h2>
-                        <span className="text-ink-3 text-xs">{kindSummary(group.items)}</span>
+                        <span className="text-ink-3 text-xs">{kindSummary(t, group.items)}</span>
                     </div>
                     <div className="border-line bg-panel rounded-lg border">
                         {group.items.map(channel => (
@@ -223,8 +232,12 @@ function ConnectionRow({
     onDisconnect: (connection: BrandConnection) => void;
     onReconnectBluesky: (connection: BrandConnection) => void;
 }) {
+    const t = useTranslations("growth.brand.accounts");
+    const tChannels = useTranslations("growth.brand.channels");
+    const tc = useTranslations("common.actions");
+    const { shortDate, joinNatural } = useGrowthFormat();
     const [refreshing, setRefreshing] = useState(false);
-    const expiry = tokenExpiry(connection);
+    const expiry = tokenExpiry(tChannels, connection);
     const mine = channels.filter(c => c.connectionId === connection.id);
     const broken = connection.status === "revoked" || mine.some(c => c.status === "reconnect");
     const isLinkedIn = connection.platform === "linkedin";
@@ -239,15 +252,18 @@ function ConnectionRow({
                     <div className="text-ink-3 truncate text-xs">
                         {NETWORK_LABEL[connection.platform]} ·{" "}
                         {connection.connectedBy
-                            ? `connected by ${connection.connectedBy} on ${shortDate(connection.connectedAt)}`
-                            : `connected ${shortDate(connection.connectedAt)}`}
+                            ? t("connectedBy", {
+                                  name: connection.connectedBy,
+                                  date: shortDate(connection.connectedAt),
+                              })
+                            : t("connectedOn", { date: shortDate(connection.connectedAt) })}
                         {mine.length > 0 && ` · ${joinNatural(mine.map(c => c.name))}`}
                     </div>
                 </div>
                 <div className="@max-md:col-start-2">
                     {connection.status === "revoked" ? (
                         <ToneWord tone="danger">
-                            Signed out by {NETWORK_LABEL[connection.platform]}
+                            {t("signedOutBy", { network: NETWORK_LABEL[connection.platform] })}
                         </ToneWord>
                     ) : (
                         <ToneWord tone={expiry.tone}>{expiry.word}</ToneWord>
@@ -265,14 +281,14 @@ function ConnectionRow({
                             }}
                         >
                             {refreshing
-                                ? "Checking…"
+                                ? t("checking")
                                 : isLinkedIn
-                                  ? "Refresh Pages"
-                                  : "Refresh profile"}
+                                  ? t("refreshPages")
+                                  : t("refreshProfile")}
                         </Button>
                         {isLinkedIn ? (
                             <Button asChild size="sm" variant={broken ? "default" : "outline"}>
-                                <a href={LINKEDIN_CONNECT_HREF}>Reconnect</a>
+                                <a href={LINKEDIN_CONNECT_HREF}>{t("reconnect")}</a>
                             </Button>
                         ) : (
                             <Button
@@ -280,7 +296,7 @@ function ConnectionRow({
                                 variant={broken ? "default" : "outline"}
                                 onClick={() => onReconnectBluesky(connection)}
                             >
-                                Reconnect
+                                {t("reconnect")}
                             </Button>
                         )}
                         <Button
@@ -289,7 +305,7 @@ function ConnectionRow({
                             className="text-danger hover:text-danger"
                             onClick={() => onDisconnect(connection)}
                         >
-                            Disconnect
+                            {tc("disconnect")}
                         </Button>
                     </div>
                 )}
@@ -305,7 +321,7 @@ function ConnectionRow({
                                 className="size-3 transition-transform group-data-[state=open]:rotate-90 motion-reduce:transition-none"
                                 aria-hidden
                             />
-                            {plural(connection.scopes.length, "permission")} granted
+                            {t("permissionsGranted", { count: connection.scopes.length })}
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                             <ul className="mt-1.5 flex flex-wrap gap-1">
@@ -323,8 +339,8 @@ function ConnectionRow({
                 ) : (
                     <span className="text-ink-3 text-xs">
                         {connection.platform === "bluesky"
-                            ? "Signed in with an app password"
-                            : "No permissions listed"}
+                            ? t("appPasswordSignIn")
+                            : t("noPermissions")}
                     </span>
                 )}
             </div>
@@ -362,6 +378,7 @@ function BlueskyForm({
     primary: boolean;
     onConnected: (handle: string) => Promise<void>;
 }) {
+    const t = useTranslations("growth.brand.accounts");
     const [password, setPassword] = useState("");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -369,9 +386,7 @@ function BlueskyForm({
         event.preventDefault();
         setError(null);
         if (!new RegExp(`^${APP_PASSWORD_PATTERN}$`).test(password.trim())) {
-            setError(
-                "That is not an app password: they look like xxxx-xxxx-xxxx-xxxx. Your account password does not work here."
-            );
+            setError(t("notAppPassword"));
             return;
         }
         setBusy(true);
@@ -384,7 +399,7 @@ function BlueskyForm({
             setHandle("");
             await onConnected(result.connection.accountName ?? handle.trim());
         } catch (e) {
-            setError(e instanceof Error ? e.message : "Bluesky did not accept that sign-in");
+            setError(e instanceof Error ? e.message : t("blueskyRefused"));
         } finally {
             setBusy(false);
         }
@@ -394,7 +409,7 @@ function BlueskyForm({
             <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-2">
                 <div>
                     <Label htmlFor="bsky-handle" className="text-ink-3 text-xs font-normal">
-                        Handle
+                        {t("handle")}
                     </Label>
                     <Input
                         id="bsky-handle"
@@ -409,7 +424,7 @@ function BlueskyForm({
                 </div>
                 <div>
                     <Label htmlFor="bsky-password" className="text-ink-3 text-xs font-normal">
-                        App password
+                        {t("appPassword")}
                     </Label>
                     <Input
                         id="bsky-password"
@@ -418,7 +433,7 @@ function BlueskyForm({
                         onChange={e => setPassword(e.target.value)}
                         placeholder="xxxx-xxxx-xxxx-xxxx"
                         pattern={APP_PASSWORD_PATTERN}
-                        title="Four groups of four letters or digits: xxxx-xxxx-xxxx-xxxx"
+                        title={t("patternTitle")}
                         autoComplete="off"
                         required
                         aria-invalid={error ? true : undefined}
@@ -428,16 +443,18 @@ function BlueskyForm({
                 </div>
             </div>
             <p id="bsky-help" className="text-ink-3 text-xs">
-                Not your account password.{" "}
-                <a
-                    href={APP_PASSWORDS_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-brand-ink focus-visible:ring-brand/50 rounded-sm underline-offset-2 outline-none hover:underline focus-visible:ring-2"
-                >
-                    Create an app password in Bluesky › Settings › Privacy and security
-                </a>
-                .
+                {t.rich("passwordHelp", {
+                    link: chunks => (
+                        <a
+                            href={APP_PASSWORDS_URL}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-brand-ink focus-visible:ring-brand/50 rounded-sm underline-offset-2 outline-none hover:underline focus-visible:ring-2"
+                        >
+                            {chunks}
+                        </a>
+                    ),
+                })}
             </p>
             <div className="flex flex-wrap items-center gap-3">
                 <Button
@@ -446,7 +463,7 @@ function BlueskyForm({
                     variant={primary ? "default" : "outline"}
                     disabled={busy || !handle.trim() || !password.trim()}
                 >
-                    {busy ? "Signing in…" : "Connect Bluesky"}
+                    {busy ? t("signingIn") : t("connectBluesky")}
                 </Button>
                 {error && (
                     <span role="alert" className="text-danger text-xs">
@@ -459,6 +476,7 @@ function BlueskyForm({
 }
 
 function ConnectRow({ network, children }: { network: BrandNetwork; children: React.ReactNode }) {
+    const t = useTranslations("growth.brand.accounts");
     return (
         <div className="border-line-2 @max-md:grid-cols-1 grid grid-cols-[200px_minmax(0,1fr)] gap-3 border-t px-4 py-4 first:border-t-0">
             <div className="flex items-start gap-3">
@@ -468,19 +486,19 @@ function ConnectRow({ network, children }: { network: BrandNetwork; children: Re
                     <div className="mt-0.5">
                         {network.available ? (
                             <ToneWord tone="ok">
-                                {network.connect === "deployment" ? "Set up" : "Available"}
+                                {network.connect === "deployment" ? t("setUp") : t("available")}
                             </ToneWord>
                         ) : (
                             <span className="text-ink-3 inline-flex items-center gap-1.5 text-xs">
                                 <span className="border-line size-[7px] rounded-full border" />
-                                Not set up
+                                {t("notSetUp")}
                             </span>
                         )}
                     </div>
                     <div className="text-ink-3 mt-1 font-mono text-[11.5px] tabular-nums">
                         {network.limit === null
-                            ? "no hard limit"
-                            : `${count(network.limit)} characters`}
+                            ? t("noLimit")
+                            : t("characters", { count: network.limit })}
                     </div>
                 </div>
             </div>
@@ -498,21 +516,21 @@ function ConnectRow({ network, children }: { network: BrandNetwork; children: Re
  * each lasts; then how to connect more. Members read all of it; admins
  * change it.
  */
-/** What a LinkedIn sign-in that came back without channels to post to means. */
-const CONNECT_PROBLEMS = new Map<string, string>([
-    ["denied", "The LinkedIn sign-in was cancelled, so nothing was connected."],
-    [
-        "error",
-        "LinkedIn did not complete the sign-in. Try again; if it keeps failing, check the app's redirect URL and LINKEDIN_OAUTH_SCOPES against its Auth tab.",
-    ],
-    ["partial", "LinkedIn is connected, but its Pages could not be read. Use Refresh Pages below."],
-    [
-        "no-channels",
-        "LinkedIn is connected, but the sign-in gave no permission to post. Check LINKEDIN_OAUTH_SCOPES against the app's Auth tab.",
-    ],
+/**
+ * What a LinkedIn sign-in that came back without channels to post to means:
+ * the callback's code → `accounts.connectProblems.<key>`.
+ */
+const CONNECT_PROBLEMS = new Map<string, "denied" | "error" | "partial" | "noChannels">([
+    ["denied", "denied"],
+    ["error", "error"],
+    ["partial", "partial"],
+    ["no-channels", "noChannels"],
 ]);
 
 export function AccountsScreen() {
+    const t = useTranslations("growth.brand.accounts");
+    const tc = useTranslations("common.actions");
+    const { joinNatural } = useGrowthFormat();
     const params = useToolSearchParams();
     const res = useResource("brand:accounts", () => brandApi.accounts());
     const data = res.data;
@@ -522,7 +540,8 @@ export function AccountsScreen() {
     // A LinkedIn sign-in that came back without channels says why here (the
     // callback sends a code; the words are ours). The workspace's own toast
     // covers the clean "connected" return.
-    const returnError = CONNECT_PROBLEMS.get(params.get("connect") ?? "") ?? null;
+    const problem = CONNECT_PROBLEMS.get(params.get("connect") ?? "");
+    const returnError = problem ? t(`connectProblems.${problem}`) : null;
 
     const setAccounts = (update: (current: BrandAccounts) => BrandAccounts) => res.mutate(update);
 
@@ -537,12 +556,12 @@ export function AccountsScreen() {
             await brandApi.setChannelEnabled(channel.id, enabled);
             toast(
                 enabled
-                    ? `${channel.name} is offered in Compose`
-                    : `${channel.name} is hidden from Compose`
+                    ? t("offeredToast", { name: channel.name })
+                    : t("hiddenToast", { name: channel.name })
             );
         } catch (e) {
             swap(!enabled);
-            toast.error(e instanceof Error ? e.message : `Could not change ${channel.name}`);
+            toast.error(e instanceof Error ? e.message : t("changeFailed", { name: channel.name }));
         }
     };
 
@@ -553,25 +572,33 @@ export function AccountsScreen() {
         try {
             const result = await brandApi.refreshConnection(connection.id);
             const added = result.channels.filter(c => !before.has(c.id));
-            const what = connection.platform === "linkedin" ? "Page" : "account";
+            const names = joinNatural(added.map(c => c.name));
             toast.success(
                 added.length > 0
-                    ? `Found ${plural(added.length, `new ${what}`)}: ${joinNatural(added.map(c => c.name))}`
-                    : `${connection.accountName ?? NETWORK_LABEL[connection.platform]} is up to date`
+                    ? connection.platform === "linkedin"
+                        ? t("foundPages", { count: added.length, names })
+                        : t("foundAccounts", { count: added.length, names })
+                    : t("upToDate", {
+                          name: connection.accountName ?? NETWORK_LABEL[connection.platform],
+                      })
             );
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not reach the network");
+            toast.error(e instanceof Error ? e.message : t("unreachable"));
         }
     };
 
     const disconnect = async (connection: BrandConnection) => {
         try {
             await brandApi.disconnect(connection.id);
-            toast(`Disconnected ${connection.accountName ?? NETWORK_LABEL[connection.platform]}`);
+            toast(
+                t("disconnected", {
+                    name: connection.accountName ?? NETWORK_LABEL[connection.platform],
+                })
+            );
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not disconnect");
+            toast.error(e instanceof Error ? e.message : t("disconnectFailed"));
         }
     };
 
@@ -605,14 +632,14 @@ export function AccountsScreen() {
         <div className="mx-auto flex max-w-[1000px] flex-col gap-7">
             <PageHeader
                 size="md"
-                title="Accounts"
+                title={t("title")}
                 sub={
                     data
                         ? canManage
                             ? channels.length > 0
-                                ? `Posts go out as these ${plural(channels.length, "channel")}. Switch off the ones nobody posts to and Compose stops offering them.`
-                                : "Connect the accounts this workspace posts as."
-                            : "Ask a workspace admin to connect accounts."
+                                ? t("subChannels", { count: channels.length })
+                                : t("subConnect")
+                            : t("subAskAdmin")
                         : undefined
                 }
             />
@@ -625,17 +652,15 @@ export function AccountsScreen() {
                 <>
                     {channels.length === 0 ? (
                         <EmptyState
-                            title="No accounts connected yet"
-                            body={
-                                canManage
-                                    ? "Brand posts go out as a LinkedIn Page or profile, or a Bluesky account. Connect one and Compose, the calendar and analytics start working."
-                                    : "Brand posts go out as a LinkedIn Page or profile, or a Bluesky account. Ask a workspace admin to connect accounts."
-                            }
+                            title={t("empty")}
+                            body={canManage ? t("emptyBodyManage") : t("emptyBodyAsk")}
                             action={
                                 canManage ? (
                                     linkedin?.available ? (
                                         <Button asChild size="sm">
-                                            <a href={LINKEDIN_CONNECT_HREF}>Connect LinkedIn</a>
+                                            <a href={LINKEDIN_CONNECT_HREF}>
+                                                {t("connectLinkedIn")}
+                                            </a>
                                         </Button>
                                     ) : (
                                         <Button
@@ -643,7 +668,7 @@ export function AccountsScreen() {
                                             variant="outline"
                                             onClick={() => focusBluesky()}
                                         >
-                                            Connect Bluesky
+                                            {t("connectBluesky")}
                                         </Button>
                                     )
                                 ) : undefined
@@ -660,8 +685,8 @@ export function AccountsScreen() {
                     {connections.length > 0 && (
                         <section>
                             <SectionHeading
-                                title="Connections"
-                                aside="Who signed in, and how long it lasts"
+                                title={t("connections")}
+                                aside={t("connectionsAside")}
                             />
                             <div className="border-line bg-panel rounded-lg border">
                                 {connections.map(connection => (
@@ -682,7 +707,7 @@ export function AccountsScreen() {
                     )}
 
                     <section>
-                        <SectionHeading title="Connect" aside="Networks on this deployment" />
+                        <SectionHeading title={t("connect")} aside={t("connectAside")} />
                         <div className="border-line bg-panel rounded-lg border">
                             {networks.map(network => (
                                 <ConnectRow key={network.platform} network={network}>
@@ -691,8 +716,8 @@ export function AccountsScreen() {
                                             <div className="flex flex-col gap-2">
                                                 <p className="text-ink-2 max-w-[70ch]">
                                                     {network.pages
-                                                        ? "Signs in as a LinkedIn member and brings their profile and every Page they administer. LinkedIn asks the member to approve; the sign-in renews itself for up to a year."
-                                                        : "This deployment's LinkedIn app covers profiles only; Pages need the Community Management API."}
+                                                        ? t("linkedinPages")
+                                                        : t("linkedinProfilesOnly")}
                                                 </p>
                                                 {canManage && (
                                                     <div>
@@ -707,8 +732,8 @@ export function AccountsScreen() {
                                                         >
                                                             <a href={LINKEDIN_CONNECT_HREF}>
                                                                 {hasLinkedIn
-                                                                    ? "Connect another LinkedIn member"
-                                                                    : "Connect LinkedIn"}
+                                                                    ? t("connectAnotherLinkedIn")
+                                                                    : t("connectLinkedIn")}
                                                             </a>
                                                         </Button>
                                                     </div>
@@ -722,9 +747,7 @@ export function AccountsScreen() {
                                         canManage ? (
                                             <div className="flex flex-col gap-2">
                                                 <p className="text-ink-2 max-w-[70ch]">
-                                                    Signs in with the account&apos;s handle and an
-                                                    app password, which can be revoked in Bluesky at
-                                                    any time.
+                                                    {t("blueskyIntro")}
                                                 </p>
                                                 <BlueskyForm
                                                     handleRef={blueskyRef}
@@ -733,7 +756,7 @@ export function AccountsScreen() {
                                                     primary={blueskyPrimary}
                                                     onConnected={async handle => {
                                                         toast.success(
-                                                            `Connected Bluesky as ${handle}`
+                                                            t("connectedBluesky", { handle })
                                                         );
                                                         await res.reload();
                                                     }}
@@ -746,10 +769,9 @@ export function AccountsScreen() {
                                     ) : (
                                         <div className="flex flex-col gap-1.5">
                                             <p className="text-ink-2">
-                                                Set by the operator for the whole deployment
                                                 {network.available
-                                                    ? ": every workspace can post as it."
-                                                    : "."}
+                                                    ? t("operatorAvailable")
+                                                    : t("operator")}
                                             </p>
                                             <SetupSteps network={network} />
                                         </div>
@@ -766,13 +788,22 @@ export function AccountsScreen() {
                 onOpenChange={open => {
                     if (!open) setPendingDisconnect(null);
                 }}
-                title={`Disconnect ${pendingDisconnect?.accountName ?? (pendingDisconnect ? NETWORK_LABEL[pendingDisconnect.platform] : "")}?`}
+                title={t("confirmTitle", {
+                    name:
+                        pendingDisconnect?.accountName ??
+                        (pendingDisconnect ? NETWORK_LABEL[pendingDisconnect.platform] : ""),
+                })}
                 description={
                     pendingDisconnect
-                        ? `${pendingChannels.length > 0 ? `${joinNatural(pendingChannels.map(c => c.name))} ${pendingChannels.length === 1 ? "leaves" : "leave"} Compose. ` : ""}Posts scheduled on ${pendingChannels.length === 1 ? "it" : "them"} will fail until someone reconnects. Published posts stay on the calendar.`
+                        ? pendingChannels.length > 0
+                            ? `${t("confirmLeaves", {
+                                  names: joinNatural(pendingChannels.map(c => c.name)),
+                                  count: pendingChannels.length,
+                              })} ${t("confirmRest", { count: pendingChannels.length })}`
+                            : t("confirmRest", { count: pendingChannels.length })
                         : undefined
                 }
-                confirmLabel="Disconnect"
+                confirmLabel={tc("disconnect")}
                 onConfirm={() => {
                     if (pendingDisconnect) void disconnect(pendingDisconnect);
                 }}

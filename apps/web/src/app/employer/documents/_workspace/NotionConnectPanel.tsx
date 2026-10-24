@@ -17,6 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, FolderClosed, RefreshCw } from "lucide-react";
 
@@ -25,7 +26,7 @@ import { Spinner } from "~/components/ui/spinner";
 
 import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
-import { syncStatusLabel, useConnectorSync } from "./useConnectorSync";
+import { useConnectorSync, useSyncStatusLabel } from "./useConnectorSync";
 
 interface NotionConnection {
     readonly connectionId: string;
@@ -54,11 +55,11 @@ type Loaded =
 export const NOTION_CONNECT_URL = "/api/connectors/notion/oauth/start";
 const STATUS_URL = "/api/connectors/notion/status";
 
-const PERKS = [
-    "Pick pages and databases on Notion's own consent screen",
-    "Synced pages become sources Ask can search and cite",
-    "Re-syncs every 15 minutes, read-only — LaunchStack never edits your Notion",
-];
+/** What connecting gives, as keys in `sources.notionConnect.perks`. */
+const PERKS = ["pick", "sources", "resync"] as const;
+
+/** `useTranslations("sources.notionConnect")`. */
+export type NotionTranslator = ReturnType<typeof useTranslations<"sources.notionConnect">>;
 
 function reportCount(report: Record<string, unknown> | null, key: string): number {
     const value = report?.[key];
@@ -66,17 +67,19 @@ function reportCount(report: Record<string, unknown> | null, key: string): numbe
 }
 
 /** "12 pages · 3 updated · 1 failed" from the last run's counts. */
-export function syncSummary(report: Record<string, unknown> | null): string | null {
+export function syncSummary(
+    t: NotionTranslator,
+    report: Record<string, unknown> | null
+): string | null {
     if (!report) return null;
-    const pages = reportCount(report, "discovered");
-    const parts = [`${pages} page${pages === 1 ? "" : "s"}`];
+    const parts = [t("summary.pages", { count: reportCount(report, "discovered") })];
     const stored = reportCount(report, "stored");
-    if (stored > 0) parts.push(`${stored} updated`);
+    if (stored > 0) parts.push(t("summary.updated", { count: stored }));
     const failed = reportCount(report, "failed");
-    if (failed > 0) parts.push(`${failed} failed`);
+    if (failed > 0) parts.push(t("summary.failed", { count: failed }));
     const tooLarge = reportCount(report, "tooLarge");
-    if (tooLarge > 0) parts.push(`${tooLarge} too large`);
-    if (report.truncated === true) parts.push("page limit reached");
+    if (tooLarge > 0) parts.push(t("summary.tooLarge", { count: tooLarge }));
+    if (report.truncated === true) parts.push(t("summary.pageLimit"));
     return parts.join(" · ");
 }
 
@@ -89,6 +92,9 @@ function ConnectionCard({
     readonly refresh: () => Promise<unknown>;
     readonly onDisconnected: () => void;
 }) {
+    const t = useTranslations("sources.notionConnect");
+    const tc = useTranslations("common");
+    const syncStatusLabel = useSyncStatusLabel();
     const [busy, setBusy] = useState(false);
     const [confirming, setConfirming] = useState(false);
     const { phase, requestSync } = useConnectorSync(
@@ -96,15 +102,15 @@ function ConnectionCard({
         refresh,
         `/api/connectors/notion/sync?connectionId=${encodeURIComponent(connection.connectionId)}`
     );
-    const name = connection.workspaceName ?? "Notion workspace";
+    const name = connection.workspaceName ?? t("workspaceFallback");
     const revoked = connection.status !== "active";
-    const summary = syncSummary(connection.lastSyncReport);
+    const summary = syncSummary(t, connection.lastSyncReport);
 
     const syncNow = async () => {
         setBusy(true);
         try {
-            if (await requestSync()) toast.success("Sync requested");
-            else toast.error("Could not start the sync");
+            if (await requestSync()) toast.success(t("syncRequested"));
+            else toast.error(t("syncStartFailed"));
         } finally {
             setBusy(false);
         }
@@ -118,10 +124,10 @@ function ConnectionCard({
                 { method: "DELETE" }
             );
             if (res.ok) {
-                toast.success(`${name} disconnected. Pages already synced were kept.`);
+                toast.success(t("disconnected", { name }));
                 onDisconnected();
             } else {
-                toast.error(`Could not disconnect ${name}`);
+                toast.error(t("disconnectFailed", { name }));
             }
         } finally {
             setBusy(false);
@@ -139,11 +145,11 @@ function ConnectionCard({
                     <div className="text-ink truncate text-[13.5px] font-semibold">{name}</div>
                     <div className="text-ink-3 text-[12px]">
                         {revoked
-                            ? "Access was revoked — reconnect to keep syncing"
+                            ? t("revoked")
                             : [
                                   syncStatusLabel(phase, connection.lastSyncAt),
                                   connection.connectedBy
-                                      ? `connected by ${connection.connectedBy}`
+                                      ? t("connectedBy", { name: connection.connectedBy })
                                       : null,
                               ]
                                   .filter(Boolean)
@@ -173,7 +179,7 @@ function ConnectionCard({
             <div className="mt-3 flex flex-wrap gap-2">
                 {revoked ? (
                     <Button asChild size="sm">
-                        <a href={NOTION_CONNECT_URL}>Reconnect</a>
+                        <a href={NOTION_CONNECT_URL}>{t("reconnect")}</a>
                     </Button>
                 ) : (
                     <>
@@ -184,10 +190,10 @@ function ConnectionCard({
                             onClick={() => void syncNow()}
                         >
                             <RefreshCw aria-hidden />
-                            Sync now
+                            {t("syncNow")}
                         </Button>
                         <Button asChild size="sm" variant="outline">
-                            <a href={NOTION_CONNECT_URL}>Choose pages</a>
+                            <a href={NOTION_CONNECT_URL}>{t("choosePages")}</a>
                         </Button>
                     </>
                 )}
@@ -199,10 +205,10 @@ function ConnectionCard({
                             disabled={busy}
                             onClick={() => void disconnect()}
                         >
-                            Disconnect {name}
+                            {t("disconnectName", { name })}
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => setConfirming(false)}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                     </>
                 ) : (
@@ -212,7 +218,7 @@ function ConnectionCard({
                         disabled={busy}
                         onClick={() => setConfirming(true)}
                     >
-                        Disconnect
+                        {tc("actions.disconnect")}
                     </Button>
                 )}
             </div>
@@ -221,6 +227,7 @@ function ConnectionCard({
 }
 
 export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
+    const t = useTranslations("sources.notionConnect");
     const Icon = tab.Icon;
     const [loaded, setLoaded] = useState<Loaded>({ kind: "loading" });
 
@@ -262,8 +269,8 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
                     <Icon size={22} />
                 </div>
                 <div className="flex-1">
-                    <div className="text-ink text-[15px] font-semibold">Connect Notion</div>
-                    <div className="text-ink-3 text-[13px]">One-click OAuth, revoke anytime.</div>
+                    <div className="text-ink text-[15px] font-semibold">{t("connectTitle")}</div>
+                    <div className="text-ink-3 text-[13px]">{t("oneClick")}</div>
                 </div>
             </div>
 
@@ -272,7 +279,7 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
                     {PERKS.map(perk => (
                         <li key={perk} className="text-ink-2 flex items-center gap-2.5 text-[13px]">
                             <Check className="text-brand size-3.5 shrink-0" aria-hidden />
-                            {perk}
+                            {t(`perks.${perk}`)}
                         </li>
                     ))}
                 </ul>
@@ -280,29 +287,18 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
 
             {loaded.kind === "loading" && (
                 <div className="text-ink-3 flex items-center gap-2 text-[13px]">
-                    <Spinner /> Checking Notion…
+                    <Spinner /> {t("checking")}
                 </div>
             )}
 
             {loaded.kind === "forbidden" && (
-                <p className="text-ink-2 text-[13px]">
-                    Connecting Notion is for workspace admins. Ask one to connect it; the pages they
-                    pick will show up in Sources.
-                </p>
+                <p className="text-ink-2 text-[13px]">{t("forbidden")}</p>
             )}
 
-            {loaded.kind === "error" && (
-                <p className="text-danger text-[13px]">
-                    Could not load the Notion connection. Try again in a moment.
-                </p>
-            )}
+            {loaded.kind === "error" && <p className="text-danger text-[13px]">{t("loadError")}</p>}
 
             {status && !status.configured && (
-                <p className="text-ink-2 text-[13px]">
-                    Notion is not configured on this server. Whoever runs LaunchStack needs to add
-                    NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in
-                    .env.example.
-                </p>
+                <p className="text-ink-2 text-[13px]">{t("notConfigured")}</p>
             )}
 
             {status && connections.length > 0 && (
@@ -326,9 +322,7 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
                 >
                     <a href={NOTION_CONNECT_URL}>
                         <Icon size={16} />
-                        {connections.length > 0
-                            ? "Connect another Notion workspace"
-                            : "Connect Notion"}
+                        {connections.length > 0 ? t("connectAnother") : t("connectTitle")}
                     </a>
                 </Button>
             )}

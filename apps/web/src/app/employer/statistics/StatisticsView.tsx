@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { AlertCircle, Clock, FileText, MousePointerClick, RefreshCw, Users } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
@@ -26,6 +27,7 @@ interface StatTileProps {
 }
 
 function StatTile({ label, value, Icon, accent }: StatTileProps) {
+    const format = useFormatter();
     return (
         <Card style={{ borderLeft: `3px solid ${accent}` }}>
             <div
@@ -59,7 +61,7 @@ function StatTile({ label, value, Icon, accent }: StatTileProps) {
                     lineHeight: 1.1,
                 }}
             >
-                {value}
+                {typeof value === "number" ? format.number(value) : value}
             </div>
         </Card>
     );
@@ -82,8 +84,11 @@ export interface StatisticsViewProps {
 }
 
 export function StatisticsView({ embedded = false, bare = false, onActions }: StatisticsViewProps) {
+    const t = useTranslations("statistics.view");
+    const tc = useTranslations("common");
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
 
     const fetchDashboardData = useCallback(async () => {
@@ -97,11 +102,11 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                 error?: string;
             };
             if (!result.success || !result.data) {
-                throw new Error(result.error ?? "Failed to fetch dashboard data");
+                throw new Error(result.error ?? "");
             }
             setData(result.data);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
+            setError(err instanceof Error ? err.message : "");
         } finally {
             setLoading(false);
         }
@@ -114,21 +119,21 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
     usePublishedActions(
         bare ? onActions : undefined,
         {
-            primaryLabel: "Refresh data",
-            primaryBusyLabel: "Refreshing…",
+            primaryLabel: t("refresh"),
+            primaryBusyLabel: t("refreshing"),
             onPrimary: () => void fetchDashboardData(),
             busy: loading,
         },
-        [fetchDashboardData, loading]
+        [fetchDashboardData, loading, t]
     );
 
     const body = (
         <>
             {!bare && (
                 <PageHeader
-                    eyebrow="Analytics"
-                    title="Analytics dashboard"
-                    description="Company-wide view of documents, employee activity, and query trends. Refresh to pull the latest."
+                    eyebrow={t("eyebrow")}
+                    title={t("title")}
+                    description={t("description")}
                     actions={
                         <Button
                             onClick={() => void fetchDashboardData()}
@@ -144,13 +149,13 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                                         : undefined,
                                 }}
                             />
-                            {loading ? "Refreshing…" : "Refresh data"}
+                            {loading ? t("refreshing") : t("refresh")}
                         </Button>
                     }
                 />
             )}
 
-            {error && (
+            {error !== null && (
                 <Card
                     style={{
                         marginBottom: 20,
@@ -162,7 +167,7 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                         <AlertCircle style={{ width: 18, height: 18, color: "var(--danger)" }} />
                         <div style={{ flex: 1 }}>
                             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--danger)" }}>
-                                Failed to load
+                                {t("loadFailed")}
                             </div>
                             <div
                                 style={{
@@ -171,21 +176,21 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                                     marginTop: 4,
                                 }}
                             >
-                                {error}
+                                {error || t("loadFailedFallback")}
                             </div>
                             <Button
                                 variant="outline"
                                 onClick={() => void fetchDashboardData()}
                                 style={{ marginTop: 10, padding: "5px 10px" }}
                             >
-                                Try again
+                                {tc("actions.tryAgain")}
                             </Button>
                         </div>
                     </div>
                 </Card>
             )}
 
-            {loading && !data && !error && (
+            {loading && !data && error === null && (
                 <Card>
                     <div
                         style={{
@@ -204,9 +209,7 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                                 animation: "lsw-spin 800ms linear infinite",
                             }}
                         />
-                        <div style={{ fontSize: 14 }}>
-                            Fetching company analytics and employee data…
-                        </div>
+                        <div style={{ fontSize: 14 }}>{t("loading")}</div>
                     </div>
                 </Card>
             )}
@@ -222,47 +225,44 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                         }}
                     >
                         <StatTile
-                            label="Total employees"
+                            label={t("tiles.employees")}
                             value={data.totalEmployees}
                             Icon={Users}
                             accent="var(--accent)"
                         />
                         <StatTile
-                            label="Total documents"
+                            label={t("tiles.documents")}
                             value={data.totalDocuments}
                             Icon={FileText}
                             accent="oklch(0.6 0.16 225)"
                         />
                         <StatTile
-                            label="Active members"
+                            label={t("tiles.active")}
                             value={data.employees.filter(e => e.status === "active").length}
                             Icon={Clock}
                             accent="oklch(0.58 0.15 160)"
                         />
                         <StatTile
-                            label="30-day views"
+                            label={t("tiles.views")}
                             value={data.documentViewsTrend.reduce((sum, d) => sum + d.count, 0)}
                             Icon={MousePointerClick}
                             accent="oklch(0.65 0.16 65)"
                         />
                     </div>
 
-                    <Section
-                        title="Trends"
-                        description="Query volume and activity over the last 30 days."
-                    >
+                    <Section title={t("trends.title")} description={t("trends.description")}>
                         <Card padding={18}>
                             <ChartsSection data={data} />
                         </Card>
                     </Section>
 
-                    <Section title="Documents" description="Per-document stats and hit rates.">
+                    <Section title={t("documents.title")} description={t("documents.description")}>
                         <Card padding={0}>
                             <DocumentStatsTable documents={data.documentStats} />
                         </Card>
                     </Section>
 
-                    <Section title="Employees" description="Activity broken down by team member.">
+                    <Section title={t("employees.title")} description={t("employees.description")}>
                         <Card padding={0}>
                             <EmployeeActivityTable employees={data.employees} />
                         </Card>

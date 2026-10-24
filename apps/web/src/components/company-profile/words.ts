@@ -1,19 +1,22 @@
 import type { ApplicantType, SourceRole } from "~/lib/company-profile/dto";
 
-/** The applicant type in the person's words. There is no "Not stated": an unknown type shows nothing. */
-export const APPLICANT_WORD: Record<ApplicantType, string> = {
-    nonprofit: "Nonprofit",
-    small_business: "Small business",
-    for_profit: "Company",
-    individual: "Individual",
-};
+/**
+ * The applicant type in the person's words: `companyProfile.applicant.<key>`.
+ * There is no "Not stated": an unknown type shows nothing.
+ */
+export const APPLICANT_KEY = {
+    nonprofit: "nonprofit",
+    small_business: "smallBusiness",
+    for_profit: "forProfit",
+    individual: "individual",
+} as const satisfies Record<ApplicantType, string>;
 
-/** What reading a source decided, as a quiet label on its row. */
-export const ROLE_WORD: Record<SourceRole, string> = {
-    about_us: "About you",
-    third_party: "Someone else's",
-    no_content: "Nothing to read",
-};
+/** What reading a source decided, as a quiet label on its row: `companyProfile.sources.roles.<key>`. */
+export const ROLE_KEY = {
+    about_us: "aboutUs",
+    third_party: "thirdParty",
+    no_content: "noContent",
+} as const satisfies Record<SourceRole, string>;
 
 const FACT_PREFIX = "profile.facts.";
 const MAX_KEY = 64;

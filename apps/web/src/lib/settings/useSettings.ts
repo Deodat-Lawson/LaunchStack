@@ -14,11 +14,28 @@
  */
 
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 
-import { getSetting, type SettingDefinition } from "./registry";
+import { isAgentAutonomy } from "~/lib/agents/autonomy";
+import { isAgentStyle } from "~/lib/agents/definition";
+import {
+    autonomyDescription,
+    autonomyLabel,
+    styleDescription,
+    styleLabel,
+} from "~/lib/agents/i18n";
+
+import {
+    getSetting,
+    searchSettings,
+    settingOptionKey,
+    type SettingDefinition,
+    type SettingSearchCopy,
+} from "./registry";
 import {
     SETTING_SCOPES,
     type ResolvedSetting,
+    type SettingOption,
     type SettingScope,
     type SettingWriteRequest,
     type SettingsPayload,
@@ -27,13 +44,33 @@ import {
 
 export interface SettingsSnapshot {
     loaded: boolean;
+    /** Why the last load failed, in the reader's language (or the server's own sentence). */
     error: string | null;
     payload: SettingsPayload | null;
 }
 
-const INITIAL: SettingsSnapshot = Object.freeze({ loaded: false, error: null, payload: null });
+/**
+ * Why a load failed, kept as data in the module store so the hook can say
+ * it in the reader's language. `server` and `thrown` carry a sentence that
+ * is shown as it came.
+ */
+type LoadProblem =
+    | { kind: "server"; message: string }
+    | { kind: "thrown"; message: string }
+    | { kind: "signedOut" }
+    | { kind: "status"; status: number }
+    | { kind: "shape" }
+    | { kind: "failed" };
 
-const snapshots = new Map<string, SettingsSnapshot>();
+interface StoredSnapshot {
+    loaded: boolean;
+    problem: LoadProblem | null;
+    payload: SettingsPayload | null;
+}
+
+const INITIAL: StoredSnapshot = Object.freeze({ loaded: false, problem: null, payload: null });
+
+const snapshots = new Map<string, StoredSnapshot>();
 const inflight = new Map<string, Promise<void>>();
 const listeners = new Set<() => void>();
 
@@ -52,11 +89,11 @@ function subscribe(listener: () => void): () => void {
     };
 }
 
-function snapshotFor(folder: string): SettingsSnapshot {
+function snapshotFor(folder: string): StoredSnapshot {
     return snapshots.get(folder) ?? INITIAL;
 }
 
-function setSnapshot(folder: string, next: SettingsSnapshot): void {
+function setSnapshot(folder: string, next: StoredSnapshot): void {
     snapshots.set(folder, next);
     emit();
 }
@@ -76,11 +113,11 @@ async function load(folder: string, force = false): Promise<void> {
                 const body = (await res.json().catch(() => ({}))) as { error?: string };
                 setSnapshot(folder, {
                     loaded: true,
-                    error:
-                        body.error ??
-                        (res.status === 401
-                            ? "You are signed out."
-                            : `Could not load settings (${res.status}).`),
+                    problem: body.error
+                        ? { kind: "server", message: body.error }
+                        : res.status === 401
+                          ? { kind: "signedOut" }
+                          : { kind: "status", status: res.status },
                     payload: current.payload,
                 });
                 return;
@@ -91,16 +128,19 @@ async function load(folder: string, force = false): Promise<void> {
             if (!payload || typeof payload !== "object" || typeof payload.settings !== "object") {
                 setSnapshot(folder, {
                     loaded: true,
-                    error: "The settings answer was not in the expected shape.",
+                    problem: { kind: "shape" },
                     payload: current.payload,
                 });
                 return;
             }
-            setSnapshot(folder, { loaded: true, error: null, payload });
+            setSnapshot(folder, { loaded: true, problem: null, payload });
         } catch (err) {
             setSnapshot(folder, {
                 loaded: true,
-                error: err instanceof Error ? err.message : "Could not load settings.",
+                problem:
+                    err instanceof Error
+                        ? { kind: "thrown", message: err.message }
+                        : { kind: "failed" },
                 payload: current.payload,
             });
         } finally {
@@ -124,6 +164,20 @@ export function resetSettingsForTests(): void {
     listeners.clear();
 }
 
+/**
+ * A failed write. `serverMessage` is the server's own sentence, shown as it
+ * came; without one the row says "could not save" with the status.
+ */
+export class SettingWriteError extends Error {
+    constructor(
+        readonly status: number,
+        readonly serverMessage: string | null
+    ) {
+        super(serverMessage ?? `Could not save the setting (${status}).`);
+        this.name = "SettingWriteError";
+    }
+}
+
 /** Write one setting. Resolves to the server's view of the key, or throws with the server's sentence. */
 export async function writeSettingValue(request: SettingWriteRequest): Promise<ResolvedSetting> {
     const res = await fetch("/api/settings", {
@@ -137,7 +191,7 @@ export async function writeSettingValue(request: SettingWriteRequest): Promise<R
         error?: string;
     };
     if (!res.ok || !body.setting) {
-        throw new Error(body.error ?? `Could not save the setting (${res.status}).`);
+        throw new SettingWriteError(res.status, body.error ?? null);
     }
     const folder = request.scope === "folder" ? keyFor(request.scopeId) : "";
     // The answering folder view gets the fresh value; every other view is now
@@ -161,6 +215,7 @@ export async function writeSettingValue(request: SettingWriteRequest): Promise<R
 }
 
 export function useSettingsPayload(folder?: string | null): SettingsSnapshot {
+    const t = useTranslations("settings.store");
     const cacheKey = keyFor(folder);
     const snap = useSyncExternalStore(
         subscribe,
@@ -170,7 +225,31 @@ export function useSettingsPayload(folder?: string | null): SettingsSnapshot {
     useEffect(() => {
         void load(cacheKey);
     }, [cacheKey, snap.loaded]);
-    return snap;
+    const { loaded, problem, payload } = snap;
+    return useMemo(() => {
+        let error: string | null = null;
+        if (problem) {
+            switch (problem.kind) {
+                case "server":
+                case "thrown":
+                    error = problem.message;
+                    break;
+                case "signedOut":
+                    error = t("signedOut");
+                    break;
+                case "status":
+                    error = t("loadFailedStatus", { status: problem.status });
+                    break;
+                case "shape":
+                    error = t("unexpectedShape");
+                    break;
+                case "failed":
+                    error = t("loadFailed");
+                    break;
+            }
+        }
+        return { loaded, error, payload };
+    }, [loaded, problem, payload, t]);
 }
 
 export interface UseSettingResult<T> {
@@ -233,19 +312,29 @@ export function useSetting<T = unknown>(
     const resolved = (snap.payload?.settings?.[key] as ResolvedSetting<T> | undefined) ?? null;
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
+    const t = useTranslations("settings.store");
 
-    const write = useCallback(async (request: SettingWriteRequest) => {
-        setSaving(true);
-        try {
-            await writeSettingValue(request);
-            setSaveError(null);
-        } catch (err) {
-            setSaveError(err instanceof Error ? err.message : "Could not save the setting.");
-            throw err;
-        } finally {
-            setSaving(false);
-        }
-    }, []);
+    const write = useCallback(
+        async (request: SettingWriteRequest) => {
+            setSaving(true);
+            try {
+                await writeSettingValue(request);
+                setSaveError(null);
+            } catch (err) {
+                setSaveError(
+                    err instanceof SettingWriteError
+                        ? (err.serverMessage ?? t("saveFailedStatus", { status: err.status }))
+                        : err instanceof Error
+                          ? err.message
+                          : t("saveFailed")
+                );
+                throw err;
+            } finally {
+                setSaving(false);
+            }
+        },
+        [t]
+    );
 
     const set = useCallback(
         async (value: T, scope?: StoredScope, scopeId?: string | null) => {
@@ -292,4 +381,120 @@ export function useSetting<T = unknown>(
 /** Read-only convenience for consumers that only need the effective value. */
 export function useSettingValue<T = unknown>(key: string, folder?: string | null): T {
     return useSetting<T>(key, { folder }).value;
+}
+
+// ---------------------------------------------------------------------------
+// The registry's words in the reader's language
+// ---------------------------------------------------------------------------
+
+/** What a row, a rail or a search result shows for one setting. */
+export interface SettingCopy extends SettingSearchCopy {
+    consequence?: string;
+    placeholder?: string;
+    unit?: string;
+    /** An option's label and description; the declared English when there is no message. */
+    option: (option: SettingOption) => { label: string; description?: string };
+}
+
+/** A translator over keys computed from data; each lookup is guarded by `has`. */
+interface LooseTranslator {
+    (key: string): string;
+    has: (key: string) => boolean;
+}
+
+/**
+ * The registry declares its words in English — route handlers and the audit
+ * log read them there. The reader's language comes from
+ * `settings.registry.<setting key>` (`.label`, `.description`,
+ * `.consequence`, `.placeholder`, `.unit`, `.options.<option key>.label`),
+ * falling back to the English for anything without a message. The language
+ * row's words are the `language` namespace's; the answer styles and autonomy
+ * levels are the `agents` namespace's, the same words the Agents screens use.
+ */
+export function useSettingCopier(): (definition: SettingDefinition) => SettingCopy {
+    const registry = useTranslations("settings.registry") as unknown as LooseTranslator;
+    const language = useTranslations("language");
+    const agents = useTranslations("agents");
+    return useCallback(
+        (definition: SettingDefinition): SettingCopy => {
+            const base = definition.key;
+            const pick = (field: string, fallback: string): string =>
+                registry.has(`${base}.${field}`) ? registry(`${base}.${field}`) : fallback;
+            const control = definition.control;
+            const option = (entry: SettingOption) => {
+                if (definition.key === "chat.responseStyle" && isAgentStyle(entry.value)) {
+                    return {
+                        label: styleLabel(agents, entry.value),
+                        description:
+                            entry.description === undefined
+                                ? undefined
+                                : styleDescription(agents, entry.value),
+                    };
+                }
+                if (definition.key === "agents.defaultAutonomy" && isAgentAutonomy(entry.value)) {
+                    return {
+                        label: autonomyLabel(agents, entry.value),
+                        description:
+                            entry.description === undefined
+                                ? undefined
+                                : autonomyDescription(agents, entry.value),
+                    };
+                }
+                const key = settingOptionKey(entry);
+                const at = key ? `options.${key}` : null;
+                return {
+                    label: at ? pick(`${at}.label`, entry.label) : entry.label,
+                    description:
+                        entry.description === undefined
+                            ? undefined
+                            : at
+                              ? pick(`${at}.description`, entry.description)
+                              : entry.description,
+                };
+            };
+            if (definition.key === "appearance.language") {
+                return {
+                    label: language("label"),
+                    description: language("settingDescription"),
+                    option,
+                };
+            }
+            return {
+                label: pick("label", definition.label),
+                description: pick("description", definition.description),
+                consequence:
+                    definition.consequence === undefined
+                        ? undefined
+                        : pick("consequence", definition.consequence),
+                placeholder:
+                    control.kind === "text" && control.placeholder !== undefined
+                        ? pick("placeholder", control.placeholder)
+                        : undefined,
+                unit:
+                    control.kind === "number" && control.unit !== undefined
+                        ? pick("unit", control.unit)
+                        : undefined,
+                option,
+            };
+        },
+        [registry, language, agents]
+    );
+}
+
+/** One setting's words in the reader's language. */
+export function useSettingCopy(definition: SettingDefinition): SettingCopy {
+    const copier = useSettingCopier();
+    return useMemo(() => copier(definition), [copier, definition]);
+}
+
+/**
+ * `searchSettings` that also matches what the reader sees: the translated
+ * label and description, as well as the English and the aliases.
+ */
+export function useSettingsSearch(): (query: string, limit?: number) => SettingDefinition[] {
+    const copier = useSettingCopier();
+    return useCallback(
+        (query: string, limit?: number) => searchSettings(query, limit, copier),
+        [copier]
+    );
 }

@@ -26,8 +26,9 @@ import {
     DEFAULT_AGENT_AUTONOMY,
 } from "~/lib/agents/autonomy";
 import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
+import { DEFAULT_LOCALE, LOCALE_CODES, LOCALES } from "~/i18n/locales";
 
-import type { SettingControl, SettingsSectionId, StoredScope } from "./types";
+import type { SettingControl, SettingOption, SettingsSectionId, StoredScope } from "./types";
 
 export interface SettingDefinition<T = unknown> {
     key: string;
@@ -65,18 +66,18 @@ export interface SettingDefinition<T = unknown> {
 }
 
 const RETENTION_DAYS_OPTIONS = [
-    { value: null, label: "Keep forever" },
-    { value: 30, label: "30 days" },
-    { value: 90, label: "90 days" },
-    { value: 180, label: "180 days" },
-    { value: 365, label: "One year" },
+    { value: null, key: "forever", label: "Keep forever" },
+    { value: 30, key: "days30", label: "30 days" },
+    { value: 90, key: "days90", label: "90 days" },
+    { value: 180, key: "days180", label: "180 days" },
+    { value: 365, key: "days365", label: "One year" },
 ] as const;
 
 const TRASH_DAYS_OPTIONS = [
-    { value: null, label: "Keep until deleted by hand" },
-    { value: 7, label: "7 days" },
-    { value: 30, label: "30 days" },
-    { value: 90, label: "90 days" },
+    { value: null, key: "untilDeleted", label: "Keep until deleted by hand" },
+    { value: 7, key: "days7", label: "7 days" },
+    { value: 30, key: "days30", label: "30 days" },
+    { value: 90, key: "days90", label: "90 days" },
 ] as const;
 
 /** Declared as a plain array so each entry keeps its own value type. */
@@ -84,6 +85,26 @@ export const SETTINGS: readonly SettingDefinition[] = [
     // ------------------------------------------------------------------
     // You
     // ------------------------------------------------------------------
+    {
+        key: "appearance.language",
+        section: "appearance",
+        label: "Language",
+        description:
+            "The language of menus, buttons and messages. Assistants answer in it too, unless you write in another one.",
+        aliases: ["language", "translation", "chinese", "english", "locale", "语言", "中文"],
+        scopes: ["member"],
+        permission: null,
+        schema: z.enum(LOCALE_CODES),
+        // Stored only once the person picks one: until then the browser's
+        // own languages decide (src/i18n/locales.ts).
+        default: DEFAULT_LOCALE,
+        control: {
+            kind: "select",
+            options: LOCALES.map(locale => ({ value: locale.code, label: locale.nativeName })),
+        },
+        // Drawn by LanguageRow, which shows the language the page is in.
+        custom: true,
+    },
     {
         key: "appearance.theme",
         section: "appearance",
@@ -423,25 +444,60 @@ export function settingsForSection(section: SettingsSectionId): SettingDefinitio
     return SETTINGS.filter(definition => definition.section === section);
 }
 
-/** Ranked search over labels, aliases, keys and descriptions. Empty query → nothing. */
-export function searchSettings(query: string, limit = 8): SettingDefinition[] {
+/**
+ * The words a reader sees for a setting, when they differ from the English
+ * declared here (`useSettingCopier` in ./useSettings gives the translated ones).
+ */
+export interface SettingSearchCopy {
+    label: string;
+    description: string;
+}
+
+/**
+ * The stable message key of an option (`settings.registry.<key>.options.<this>`):
+ * its declared `key`, or its value when that is a string, camel-cased
+ * (`landing_ai` → `landingAi`). Null for a value that names nothing.
+ */
+export function settingOptionKey(option: SettingOption): string | null {
+    if (option.key) return option.key;
+    if (typeof option.value !== "string" || !option.value) return null;
+    const key = option.value.replace(/[_-]+([a-z0-9])/gi, (_, c: string) => c.toUpperCase());
+    return /^[A-Za-z][A-Za-z0-9]*$/.test(key) ? key : null;
+}
+
+/**
+ * Ranked search over labels, aliases, keys and descriptions. Empty query → nothing.
+ *
+ * `copy` adds the words the reader sees (their language's label and
+ * description), matched alongside the English ones and the aliases — someone
+ * reading Chinese types Chinese.
+ */
+export function searchSettings(
+    query: string,
+    limit = 8,
+    copy?: (definition: SettingDefinition) => SettingSearchCopy
+): SettingDefinition[] {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const scored: Array<{ definition: SettingDefinition; score: number }> = [];
+    const scored: Array<{ definition: SettingDefinition; score: number; label: string }> = [];
     for (const definition of SETTINGS) {
-        const label = definition.label.toLowerCase();
+        const shown = copy?.(definition);
+        const labels = [definition.label.toLowerCase()];
+        const descriptions = [definition.description.toLowerCase()];
+        if (shown) {
+            labels.push(shown.label.toLowerCase());
+            descriptions.push(shown.description.toLowerCase());
+        }
         const key = definition.key.toLowerCase();
         let score = 0;
-        if (label === q || key === q) score = 100;
-        else if (label.startsWith(q)) score = 80;
+        if (labels.some(label => label === q) || key === q) score = 100;
+        else if (labels.some(label => label.startsWith(q))) score = 80;
         else if (definition.aliases.some(alias => alias.toLowerCase() === q)) score = 75;
-        else if (label.includes(q) || key.includes(q)) score = 60;
+        else if (labels.some(label => label.includes(q)) || key.includes(q)) score = 60;
         else if (definition.aliases.some(alias => alias.toLowerCase().includes(q))) score = 50;
-        else if (definition.description.toLowerCase().includes(q)) score = 30;
-        if (score > 0) scored.push({ definition, score });
+        else if (descriptions.some(description => description.includes(q))) score = 30;
+        if (score > 0) scored.push({ definition, score, label: shown?.label ?? definition.label });
     }
-    scored.sort(
-        (a, b) => b.score - a.score || a.definition.label.localeCompare(b.definition.label)
-    );
+    scored.sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
     return scored.slice(0, limit).map(entry => entry.definition);
 }

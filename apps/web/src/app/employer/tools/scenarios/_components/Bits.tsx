@@ -1,11 +1,19 @@
 "use client";
 
 import { Megaphone, Radio } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { ScenarioSummary, Stance } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { STANCE_BG, STANCE_LABEL, initials, isLive, progressWords } from "~/lib/scenarios/words";
+import {
+    STANCE_BG,
+    initials,
+    isLive,
+    progressLabel,
+    stanceLabel,
+    type ScenarioWordsT,
+} from "~/lib/scenarios/words";
 
 /** A run's state as a dot and a word: "Round 3 of 8", "Done", "Failed". */
 export function StatusPill({
@@ -15,6 +23,7 @@ export function StatusPill({
     run: Pick<ScenarioSummary, "status" | "stage" | "round" | "rounds" | "agents">;
     className?: string;
 }) {
+    const t = useTranslations("scenarios.words");
     const live = isLive(run.status);
     return (
         <span
@@ -35,7 +44,7 @@ export function StatusPill({
                     run.status === "cancelled" && "bg-ink-4"
                 )}
             />
-            {progressWords(run)}
+            {progressLabel(t, run)}
         </span>
     );
 }
@@ -101,6 +110,7 @@ export function StanceTrail({
     width?: number;
     height?: number;
 }) {
+    const t = useTranslations("scenarios.words");
     if (history.length === 0) return null;
     const pad = 3;
     const x = (i: number) =>
@@ -115,7 +125,11 @@ export function StanceTrail({
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             role="img"
-            aria-label={`Stance by round: ${history.map(s => STANCE_LABEL[s].toLowerCase()).join(", ")}`}
+            aria-label={t("stanceByRound", {
+                stances: history
+                    .map(s => stanceLabel(t, s).toLowerCase())
+                    .join(t("list.separator")),
+            })}
             className="shrink-0 overflow-visible"
         >
             <line
@@ -157,6 +171,8 @@ function stanceFill(s: Stance): string {
 }
 
 /** "Neutral → Critical", or one word when it did not move. */
-export function stanceMove(from: Stance, to: Stance): string {
-    return from === to ? STANCE_LABEL[to] : `${STANCE_LABEL[from]} → ${STANCE_LABEL[to]}`;
+export function stanceMove(t: ScenarioWordsT, from: Stance, to: Stance): string {
+    return from === to
+        ? stanceLabel(t, to)
+        : t("stanceMove", { from: stanceLabel(t, from), to: stanceLabel(t, to) });
 }

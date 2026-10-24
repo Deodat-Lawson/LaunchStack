@@ -1,10 +1,11 @@
 "use client";
 
 import { Lock, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
-import { EVIDENCE_KIND_LABEL, type VantageEvidenceKind, type VantageEvidenceRef } from "../api";
+import type { VantageEvidenceKind, VantageEvidenceRef } from "../api";
 
 export type Tone = "neutral" | "quiet" | "brand" | "success" | "warn" | "danger";
 
@@ -52,15 +53,8 @@ export function StatusWord({
  */
 export type Basis = "observed" | "interpretation" | "suggestion" | "unknown" | "conflict";
 
-const BASIS_LABEL: Record<Basis, string> = {
-    observed: "Observed",
-    interpretation: "Interpretation",
-    suggestion: "Suggestion",
-    unknown: "Unknown",
-    conflict: "Conflict",
-};
-
 export function BasisTag({ basis, className }: { basis: Basis; className?: string }) {
+    const t = useTranslations("vantage.primitives");
     return (
         <span
             className={cn(
@@ -70,13 +64,14 @@ export function BasisTag({ basis, className }: { basis: Basis; className?: strin
                 className
             )}
         >
-            {BASIS_LABEL[basis]}
+            {t(`basis.${basis}`)}
         </span>
     );
 }
 
 /** An outline chip naming a kind of evidence; never a colour. */
 export function KindPill({ kind, className }: { kind: VantageEvidenceKind; className?: string }) {
+    const t = useTranslations("vantage.evidenceKind");
     return (
         <span
             className={cn(
@@ -84,7 +79,7 @@ export function KindPill({ kind, className }: { kind: VantageEvidenceKind; class
                 className
             )}
         >
-            {EVIDENCE_KIND_LABEL[kind]}
+            {t(`label.${kind}`)}
         </span>
     );
 }
@@ -99,6 +94,7 @@ export function EvidenceChips({
     unsupported?: boolean;
     className?: string;
 }) {
+    const t = useTranslations("vantage.primitives");
     if (refs.length === 0 && !unsupported) return null;
     return (
         <span className={cn("inline-flex flex-wrap gap-1", className)}>
@@ -118,7 +114,7 @@ export function EvidenceChips({
             ))}
             {unsupported && (
                 <span className="border-warn/50 text-warn inline-flex items-center rounded-md border border-dashed px-1.5 py-0.5 text-[11px]">
-                    no source on file
+                    {t("noSource")}
                 </span>
             )}
         </span>
@@ -126,13 +122,14 @@ export function EvidenceChips({
 }
 
 export function SharedMark({ shared, className }: { shared: boolean; className?: string }) {
+    const t = useTranslations("vantage.primitives");
     return shared ? (
         <span className={cn("text-ink-3 inline-flex items-center gap-1 text-[11.5px]", className)}>
-            <Users className="size-3" aria-hidden="true" /> shared
+            <Users className="size-3" aria-hidden="true" /> {t("shared")}
         </span>
     ) : (
         <span className={cn("text-ink-3 inline-flex items-center gap-1 text-[11.5px]", className)}>
-            <Lock className="size-3" aria-hidden="true" /> private
+            <Lock className="size-3" aria-hidden="true" /> {t("private")}
         </span>
     );
 }

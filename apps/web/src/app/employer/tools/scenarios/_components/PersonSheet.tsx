@@ -1,6 +1,7 @@
 "use client";
 
 import { CornerDownRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { SectionHeading } from "~/components/tools/PageHeader";
 import {
@@ -11,9 +12,8 @@ import {
     SheetTitle,
 } from "~/components/ui/sheet";
 import type { ScenarioDetail, ScenarioInterview } from "~/lib/scenarios/types";
-import { plural } from "~/lib/tools/format";
 
-import { atHandle, SOURCE_KIND_LABEL, STANCE_LABEL } from "~/lib/scenarios/words";
+import { atHandle, sourceKindLabel, stanceLabel } from "~/lib/scenarios/words";
 import { Monogram, StanceTrail } from "./Bits";
 import { AskBox, InterviewThread, askBlockedReason } from "./Interviews";
 import { GroundingBadge } from "./PeopleTab";
@@ -40,6 +40,9 @@ export function PersonSheet({
     onSource: (sourceId: string) => void;
     onAsk: (agentId: string, question: string) => Promise<void>;
 }) {
+    const t = useTranslations("scenarios.personSheet");
+    const tw = useTranslations("scenarios.words");
+    const ti = useTranslations("scenarios.interviews");
     const person = personId ? run.people.find(p => p.id === personId) : undefined;
     const sources = new Map(run.sources.map(s => [s.id, s]));
     const theirPosts = person ? run.posts.filter(p => p.authorId === person.id) : [];
@@ -71,7 +74,7 @@ export function PersonSheet({
 
                             {person.interests.length > 0 && (
                                 <div>
-                                    <SectionHeading title="Cares about" />
+                                    <SectionHeading title={t("caresAbout")} />
                                     <div className="flex flex-wrap gap-1.5">
                                         {person.interests.map(i => (
                                             <span
@@ -86,12 +89,9 @@ export function PersonSheet({
                             )}
 
                             <div>
-                                <SectionHeading title="Built from" />
+                                <SectionHeading title={t("builtFrom")} />
                                 {person.sources.length === 0 ? (
-                                    <p className="text-ink-3 text-[13px]">
-                                        Nothing in your records: this person was invented to fill a
-                                        gap.
-                                    </p>
+                                    <p className="text-ink-3 text-[13px]">{t("invented")}</p>
                                 ) : (
                                     <div className="flex flex-wrap gap-1.5">
                                         {person.sources.map(id => {
@@ -99,8 +99,13 @@ export function PersonSheet({
                                             const label = !source
                                                 ? id
                                                 : source.redacted
-                                                  ? `${id} · A file you don't have access to`
-                                                  : `${id} · ${source.label || SOURCE_KIND_LABEL[source.kind]}`;
+                                                  ? t("sourceRedacted", { id })
+                                                  : t("source", {
+                                                        id,
+                                                        label:
+                                                            source.label ||
+                                                            sourceKindLabel(tw, source.kind),
+                                                    });
                                             return (
                                                 <button
                                                     key={id}
@@ -118,8 +123,11 @@ export function PersonSheet({
 
                             <div>
                                 <SectionHeading
-                                    title="Stance"
-                                    aside={`started ${STANCE_LABEL[person.startStance].toLowerCase()}, now ${STANCE_LABEL[person.stance].toLowerCase()}`}
+                                    title={t("stance")}
+                                    aside={t("stanceAside", {
+                                        from: stanceLabel(tw, person.startStance).toLowerCase(),
+                                        to: stanceLabel(tw, person.stance).toLowerCase(),
+                                    })}
                                 />
                                 <StanceTrail
                                     history={person.stanceHistory}
@@ -130,7 +138,7 @@ export function PersonSheet({
 
                             {person.lastThought && (
                                 <div>
-                                    <SectionHeading title="Last private thought" />
+                                    <SectionHeading title={t("lastThought")} />
                                     <blockquote className="border-line text-ink-2 border-l-2 pl-3 text-[13.5px] leading-relaxed">
                                         {person.lastThought}
                                     </blockquote>
@@ -139,13 +147,14 @@ export function PersonSheet({
 
                             <div>
                                 <SectionHeading
-                                    title="Posts"
-                                    aside={`${plural(person.posts, "post")} · ${plural(person.comments, "comment")}`}
+                                    title={t("posts")}
+                                    aside={t("postsAside", {
+                                        posts: person.posts,
+                                        comments: person.comments,
+                                    })}
                                 />
                                 {theirPosts.length === 0 ? (
-                                    <p className="text-ink-3 text-[13px]">
-                                        Read along without posting.
-                                    </p>
+                                    <p className="text-ink-3 text-[13px]">{t("readAlong")}</p>
                                 ) : (
                                     <ul className="border-line bg-panel overflow-hidden rounded-lg border">
                                         {theirPosts.map(post => (
@@ -155,12 +164,14 @@ export function PersonSheet({
                                             >
                                                 <div className="text-ink-3 flex items-center justify-between gap-2 text-xs">
                                                     <span>
-                                                        Round {post.round}
-                                                        {post.kind === "repost"
-                                                            ? " · reposted"
-                                                            : post.kind === "quote"
-                                                              ? " · quoted"
-                                                              : ""}
+                                                        {t(
+                                                            post.kind === "repost"
+                                                                ? "postRoundReposted"
+                                                                : post.kind === "quote"
+                                                                  ? "postRoundQuoted"
+                                                                  : "postRound",
+                                                            { round: post.round }
+                                                        )}
                                                     </span>
                                                     <button
                                                         type="button"
@@ -171,7 +182,7 @@ export function PersonSheet({
                                                             className="size-3"
                                                             aria-hidden
                                                         />
-                                                        See in Feed
+                                                        {t("seeInFeed")}
                                                     </button>
                                                 </div>
                                                 <p className="text-ink-2 mt-1 line-clamp-3 text-[13px] leading-snug">
@@ -184,14 +195,16 @@ export function PersonSheet({
                             </div>
 
                             <div className="flex flex-col gap-3">
-                                <SectionHeading title={`Ask ${person.name.split(" ")[0]}`} />
+                                <SectionHeading
+                                    title={t("ask", { name: person.name.split(" ")[0] ?? "" })}
+                                />
                                 <InterviewThread
                                     interviews={theirInterviews}
                                     answererName={() => person.name}
                                 />
                                 <AskBox
                                     agentId={person.id}
-                                    blocked={askBlockedReason(run)}
+                                    blocked={askBlockedReason(ti, run)}
                                     onAsk={onAsk}
                                 />
                             </div>

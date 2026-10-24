@@ -1,34 +1,53 @@
+import { createTranslator } from "use-intl";
+
 import {
     actionLabel,
     auditSentence,
     relativeTime,
     untilTime,
 } from "~/app/employer/documents/_workspace/settings/people/format";
+import { englishMessages } from "~/i18n/messages";
+
+const words = {
+    t: createTranslator({
+        locale: "en",
+        messages: englishMessages,
+        namespace: "settings.people.format",
+    }),
+    locale: "en",
+};
+const audit = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "settings.people.audit",
+});
 
 const NOW = Date.parse("2026-09-03T12:00:00Z");
 const ago = (ms: number) => new Date(NOW - ms).toISOString();
 
 describe("relativeTime", () => {
     it("reads naturally at every scale", () => {
-        expect(relativeTime(ago(10_000), NOW)).toBe("just now");
-        expect(relativeTime(ago(5 * 60_000), NOW)).toBe("5 min ago");
-        expect(relativeTime(ago(3 * 3_600_000), NOW)).toBe("3 h ago");
-        expect(relativeTime(ago(26 * 3_600_000), NOW)).toBe("yesterday");
-        expect(relativeTime(ago(4 * 86_400_000), NOW)).toBe("4 days ago");
+        expect(relativeTime(words, ago(10_000), NOW)).toBe("just now");
+        expect(relativeTime(words, ago(5 * 60_000), NOW)).toBe("5 min ago");
+        expect(relativeTime(words, ago(3 * 3_600_000), NOW)).toBe("3 h ago");
+        expect(relativeTime(words, ago(26 * 3_600_000), NOW)).toBe("yesterday");
+        expect(relativeTime(words, ago(4 * 86_400_000), NOW)).toBe("4 days ago");
     });
 
     it("says Never for a missing time rather than inventing one", () => {
-        expect(relativeTime(null, NOW)).toBe("Never");
-        expect(relativeTime("not a date", NOW)).toBe("Unknown");
+        expect(relativeTime(words, null, NOW)).toBe("Never");
+        expect(relativeTime(words, "not a date", NOW)).toBe("Unknown");
     });
 });
 
 describe("untilTime", () => {
     it("counts forward, and says so once past", () => {
-        expect(untilTime(new Date(NOW + 3 * 86_400_000).toISOString(), NOW)).toBe("in 3 days");
-        expect(untilTime(new Date(NOW + 2 * 3_600_000).toISOString(), NOW)).toBe("in 2 h");
-        expect(untilTime(ago(2 * 86_400_000), NOW)).toBe("expired 2 days ago");
-        expect(untilTime(null, NOW)).toBe("Never");
+        expect(untilTime(words, new Date(NOW + 3 * 86_400_000).toISOString(), NOW)).toBe(
+            "in 3 days"
+        );
+        expect(untilTime(words, new Date(NOW + 2 * 3_600_000).toISOString(), NOW)).toBe("in 2 h");
+        expect(untilTime(words, ago(2 * 86_400_000), NOW)).toBe("expired 2 days ago");
+        expect(untilTime(words, null, NOW)).toBe("Never");
     });
 });
 
@@ -37,7 +56,7 @@ describe("auditSentence", () => {
 
     it("writes the role change the brief uses as its example", () => {
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "member.role_changed",
                 actor,
                 targetType: "member",
@@ -49,7 +68,7 @@ describe("auditSentence", () => {
 
     it("uses a custom role's name when the detail carries one", () => {
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "member.role_changed",
                 actor,
                 targetType: "member",
@@ -66,7 +85,7 @@ describe("auditSentence", () => {
 
     it("covers invitations, groups, and folders", () => {
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "invitation.created",
                 actor,
                 targetType: "invitation",
@@ -75,7 +94,7 @@ describe("auditSentence", () => {
             })
         ).toBe("Ada invited ben@example.com as Member");
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "group.deleted",
                 actor,
                 targetType: "group",
@@ -84,7 +103,7 @@ describe("auditSentence", () => {
             })
         ).toBe("Ada deleted the group Finance (3 access grants removed)");
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "folder.access_changed",
                 actor,
                 targetType: "folder",
@@ -96,7 +115,7 @@ describe("auditSentence", () => {
 
     it("falls back to a readable verb for an action it has never seen", () => {
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "connector.disconnected",
                 actor,
                 targetType: "connector",
@@ -108,7 +127,7 @@ describe("auditSentence", () => {
 
     it("names an unknown actor honestly", () => {
         expect(
-            auditSentence({
+            auditSentence(audit, {
                 action: "member.left",
                 actor: null,
                 targetType: "member",
@@ -121,7 +140,7 @@ describe("auditSentence", () => {
 
 describe("actionLabel", () => {
     it("turns a dotted action into a filter label", () => {
-        expect(actionLabel("member.role_changed")).toBe("Member · role changed");
-        expect(actionLabel("workspace")).toBe("Workspace");
+        expect(actionLabel(audit, "member.role_changed")).toBe("Member · role changed");
+        expect(actionLabel(audit, "workspace")).toBe("Workspace");
     });
 });

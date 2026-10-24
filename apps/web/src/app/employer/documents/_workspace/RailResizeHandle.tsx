@@ -8,6 +8,7 @@ import {
     type KeyboardEvent as ReactKeyboardEvent,
     type PointerEvent as ReactPointerEvent,
 } from "react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
@@ -75,6 +76,7 @@ export interface RailResizeHandleProps {
  * End go to the limits, Enter (or a double-click) puts it back.
  */
 export function RailResizeHandle({ width, onPreview, onCommit }: RailResizeHandleProps) {
+    const t = useTranslations("sources.railCommands");
     const drag = useRef<{ startX: number; startWidth: number; latest: number } | null>(null);
     const [dragging, setDragging] = useState(false);
 
@@ -126,11 +128,11 @@ export function RailResizeHandle({ width, onPreview, onCommit }: RailResizeHandl
                 role="separator"
                 tabIndex={0}
                 aria-orientation="vertical"
-                aria-label="Resize the sidebar"
+                aria-label={t("resizeAria")}
                 aria-valuemin={RAIL_WIDTH.min}
                 aria-valuemax={RAIL_WIDTH.max}
                 aria-valuenow={width}
-                title="Drag to resize · double-click to reset"
+                title={t("resizeTitle")}
                 data-rail-resize
                 className="group absolute inset-y-0 -left-1 flex w-2 cursor-col-resize touch-none justify-center outline-none"
                 onPointerDown={start}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -43,6 +44,8 @@ export function ProfileRow({
     /** People and products lead with their name; facts lead with a quiet label. */
     prominent?: boolean;
 }) {
+    const t = useTranslations("companyProfile.row");
+    const tc = useTranslations("common");
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState(value ?? "");
     const [busy, setBusy] = useState(false);
@@ -88,7 +91,7 @@ export function ProfileRow({
                 {/* No value to hang them on: the excerpts prove the name itself. */}
                 {!value && cites.map(n => <Cite key={n} n={n} evidence={evidence} />)}
                 {edited && (
-                    <span className="text-ink-3 ml-1 text-xs font-normal">· added by hand</span>
+                    <span className="text-ink-3 ml-1 text-xs font-normal">{t("addedByHand")}</span>
                 )}
             </div>
             {editing ? (
@@ -114,12 +117,12 @@ export function ProfileRow({
                         }}
                         rows={3}
                         className="text-[13px]"
-                        aria-label={`Edit ${label}`}
+                        aria-label={t("edit", { label })}
                         autoFocus
                     />
                     <div className="flex flex-wrap items-center gap-2">
                         <Button size="sm" type="submit" disabled={busy}>
-                            Save
+                            {tc("actions.save")}
                         </Button>
                         <Button
                             size="sm"
@@ -128,7 +131,7 @@ export function ProfileRow({
                             onClick={cancel}
                             disabled={busy}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         {onRemove && (
                             <Button
@@ -139,7 +142,7 @@ export function ProfileRow({
                                 onClick={() => void run(onRemove)}
                                 disabled={busy}
                             >
-                                Remove {label}
+                                {t("remove", { label })}
                             </Button>
                         )}
                         {edited && onReset && (
@@ -150,7 +153,7 @@ export function ProfileRow({
                                 onClick={() => void run(onReset)}
                                 disabled={busy}
                             >
-                                Use what the sources say
+                                {t("useSources")}
                             </Button>
                         )}
                         <span className="text-ink-3 text-xs">{clearHint}</span>
@@ -168,7 +171,7 @@ export function ProfileRow({
                     size="icon"
                     ref={pencil}
                     className="@max-md:col-start-2 col-start-3 row-start-1 size-7 justify-self-end"
-                    aria-label={`Edit ${label}`}
+                    aria-label={t("edit", { label })}
                     onClick={() => setEditing(true)}
                 >
                     <Pencil className="size-3.5" />

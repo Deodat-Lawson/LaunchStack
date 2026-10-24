@@ -2,10 +2,12 @@
 
 import { type ComponentType, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { searchSettings } from "~/lib/settings/registry";
+import { useLocale, useTranslations } from "next-intl";
+import { useChangeLocale } from "~/i18n/client";
+import { LOCALES } from "~/i18n/locales";
 import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
-import { useSettingValue } from "~/lib/settings/useSettings";
-import { Command as CommandIcon, Settings, Search as IconSearch } from "lucide-react";
+import { useSettingCopier, useSettingsSearch, useSettingValue } from "~/lib/settings/useSettings";
+import { Command as CommandIcon, Languages, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
 import { APP_TARGET_KIND, actionItems, listActions } from "~/lib/context-menu";
 import { usableAsPrimary } from "~/lib/agents/definition";
@@ -15,16 +17,21 @@ import { usePermissions } from "~/lib/use-permissions";
 import {
     DEMOTED_FEATURES,
     SOURCE_META,
+    demotedFeatureDescription,
+    demotedFeatureLabel,
     resolveStudioFeature,
     settingsSectionOf,
+    sourceTypeLabel,
+    useStudioText,
     type WorkspaceSource,
 } from "./types";
 import { HISTORY_KIND_ICONS } from "./HistoryRail";
 import {
     HISTORY_KIND_META,
     type HistoryEntry,
+    historyKindLabel,
+    localizedRelativeTime,
     matchesHistoryQuery,
-    relativeTime,
 } from "~/lib/workspace-history";
 import type { IconProps } from "~/components/icons/types";
 import { usePeople } from "~/lib/profile/use-people";
@@ -42,7 +49,10 @@ function AgentPaletteIcon(agent: ChatAgentOption): ComponentType<IconProps> {
  * submenu (Theme) becomes one row per choice. That is the rule that keeps
  * right-click honest — nothing lives in a context menu alone.
  */
-function registryPaletteItems(onClose: () => void): PaletteItem[] {
+function registryPaletteItems(
+    onClose: () => void,
+    t: ReturnType<typeof useTranslations<"workspace.commandPalette">>
+): PaletteItem[] {
     const ctx = {
         x: 0,
         y: 0,
@@ -63,8 +73,8 @@ function registryPaletteItems(onClose: () => void): PaletteItem[] {
         rows.push({
             kind: "action",
             id: `registry:${item.id}`,
-            label: prefix ? `${prefix}: ${item.label}` : item.label,
-            sub: item.shortcut ? `Action · ${item.shortcut}` : "Action",
+            label: prefix ? t("submenuItem", { menu: prefix, item: item.label }) : item.label,
+            sub: item.shortcut ? t("actionWithShortcut", { shortcut: item.shortcut }) : t("action"),
             Icon: Icon as unknown as ComponentType<IconProps>,
             onRun: () => {
                 onClose();
@@ -130,6 +140,15 @@ export function CommandPalette({
     onPickHistory,
 }: CommandPaletteProps) {
     const router = useRouter();
+    const t = useTranslations("workspace.commandPalette");
+    // Settings rows in the reader's language, found by either language.
+    const searchSettings = useSettingsSearch();
+    const settingCopy = useSettingCopier();
+    const studio = useStudioText();
+    const tSourceTypes = useTranslations("sources.sourceTypes");
+    const th = useTranslations("workspace.history");
+    const locale = useLocale();
+    const { changeLocale } = useChangeLocale();
     const [q, setQ] = useState("");
     // The one lab that only surfaces a palette entry: hidden until it is on.
     const predictiveGaps = useSettingValue<boolean>("labs.predictiveGaps");
@@ -163,7 +182,21 @@ export function CommandPalette({
     const items = useMemo<PaletteItem[]>(() => {
         // The registry is read when the palette opens, so it reflects what is
         // mounted right now; `open` is in the deps for that reason.
-        const base: PaletteItem[] = open ? registryPaletteItems(onClose) : [];
+        const base: PaletteItem[] = open ? registryPaletteItems(onClose, t) : [];
+        // One row per language, named in its own language so someone who
+        // cannot read the current one still finds theirs. Found by "language"
+        // and "语言" whatever the interface is in, and by either name.
+        for (const option of LOCALES) {
+            base.push({
+                kind: "action",
+                id: `language:${option.code}`,
+                label: t("language", { language: option.nativeName }),
+                sub: option.code === locale ? t("languageCurrent") : t("languageSwitch"),
+                keywords: `language 语言 ${option.englishName} ${option.nativeName} ${option.code}`,
+                Icon: Languages as unknown as ComponentType<IconProps>,
+                onRun: () => changeLocale(option.code),
+            });
+        }
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
             // would do nothing when picked. Anyone may open Settings, so a
@@ -181,8 +214,10 @@ export function CommandPalette({
                 base.push({
                     kind: "feature",
                     id: f.id,
-                    label: f.label,
-                    sub: f.desc,
+                    label: demotedFeatureLabel(studio, f),
+                    sub: demotedFeatureDescription(studio, f),
+                    // The English name still finds it in any language.
+                    keywords: `${f.label} ${f.desc}`,
                     Icon: f.Icon,
                     onRun: () => {
                         if (onPickFeature) onPickFeature(f.id);
@@ -198,7 +233,7 @@ export function CommandPalette({
                 base.push({
                     kind: "agent",
                     id: `ask:${agent.id}`,
-                    label: `Ask ${agent.displayName}`,
+                    label: t("askAgent", { name: agent.displayName }),
                     sub: `${agent.role} · ${agent.description || `@${agent.id}`}`,
                     keywords,
                     Icon: AgentPaletteIcon(agent),
@@ -209,8 +244,8 @@ export function CommandPalette({
                 base.push({
                     kind: "agent",
                     id: `open:${agent.id}`,
-                    label: `Open ${agent.displayName} in Agents`,
-                    sub: `Edit, try, export · @${agent.id}`,
+                    label: t("openAgent", { name: agent.displayName }),
+                    sub: t("openAgentSub", { handle: agent.id }),
                     keywords,
                     Icon: AgentPaletteIcon(agent),
                     onRun: () => onOpenAgent(agent.id),
@@ -218,12 +253,13 @@ export function CommandPalette({
             }
         });
         sources.forEach(s => {
-            const meta = SOURCE_META[s.type] ?? SOURCE_META.doc;
+            const type = SOURCE_META[s.type] ? s.type : "doc";
+            const meta = SOURCE_META[type];
             base.push({
                 kind: "source",
                 id: s.id,
                 label: s.title,
-                sub: `${meta.label} · ${s.size || s.added}`,
+                sub: `${sourceTypeLabel(tSourceTypes, type)} · ${s.size || s.added}`,
                 keywords: s.searchText,
                 Icon: meta.Icon,
                 onRun: () => onPickSource(s.id),
@@ -232,13 +268,14 @@ export function CommandPalette({
         const historyItem = (entry: HistoryEntry): PaletteItem => {
             const meta = HISTORY_KIND_META[entry.kind];
             const sharer = entry.sharedBy ? people[entry.sharedBy]?.displayName : undefined;
+            const time = localizedRelativeTime(th, locale, entry.at);
             return {
                 kind: "history",
                 id: entry.id,
                 label: entry.title,
                 sub: entry.sharedBy
-                    ? `Shared by ${sharer ?? "a teammate"} · ${relativeTime(entry.at)}`
-                    : `${meta.label} · ${relativeTime(entry.at)}`,
+                    ? t("sharedBy", { name: sharer ?? t("aTeammate"), time })
+                    : `${historyKindLabel(th, entry.kind)} · ${time}`,
                 Icon: HISTORY_KIND_ICONS[meta.icon],
                 onRun: () => onPickHistory?.(entry),
             };
@@ -259,7 +296,7 @@ export function CommandPalette({
         );
         matched.push(
             ...reachable
-                .filter(entry => matchesHistoryQuery(entry, qq))
+                .filter(entry => matchesHistoryQuery(entry, qq, historyKindLabel(th, entry.kind)))
                 .slice(0, MATCHED_HISTORY)
                 .map(historyItem)
         );
@@ -272,11 +309,12 @@ export function CommandPalette({
             .filter(definition => canSeeSettingsSection(definition.section, can))
             .slice(0, 6);
         for (const definition of visibleSettings) {
+            const copy = settingCopy(definition);
             matched.push({
                 kind: "setting",
                 id: definition.key,
-                label: definition.label,
-                sub: `Settings · ${definition.description}`,
+                label: copy.label,
+                sub: t("settingSub", { description: copy.description }),
                 Icon: Settings,
                 onRun: () => {
                     if (onPickSetting) onPickSetting(definition.key);
@@ -302,6 +340,14 @@ export function CommandPalette({
         predictiveGaps,
         people,
         can,
+        t,
+        studio,
+        tSourceTypes,
+        th,
+        locale,
+        changeLocale,
+        searchSettings,
+        settingCopy,
     ]);
 
     useEffect(() => {
@@ -334,12 +380,12 @@ export function CommandPalette({
     if (!open) return null;
 
     const groups = {
-        action: { label: "Actions", items: items.filter(i => i.kind === "action") },
-        feature: { label: "Features", items: items.filter(i => i.kind === "feature") },
-        agent: { label: "Agents", items: items.filter(i => i.kind === "agent") },
-        source: { label: "Sources", items: items.filter(i => i.kind === "source") },
-        history: { label: "History", items: items.filter(i => i.kind === "history") },
-        setting: { label: "Settings", items: items.filter(i => i.kind === "setting") },
+        action: { label: t("groups.action"), items: items.filter(i => i.kind === "action") },
+        feature: { label: t("groups.feature"), items: items.filter(i => i.kind === "feature") },
+        agent: { label: t("groups.agent"), items: items.filter(i => i.kind === "agent") },
+        source: { label: t("groups.source"), items: items.filter(i => i.kind === "source") },
+        history: { label: t("groups.history"), items: items.filter(i => i.kind === "history") },
+        setting: { label: t("groups.setting"), items: items.filter(i => i.kind === "setting") },
     } as const;
 
     let counter = -1;
@@ -388,7 +434,7 @@ export function CommandPalette({
                             setQ(e.target.value);
                             setIdx(0);
                         }}
-                        placeholder="Jump to anything — sources, features, settings…"
+                        placeholder={t("placeholder")}
                         style={{
                             flex: 1,
                             border: "none",
@@ -526,7 +572,10 @@ export function CommandPalette({
                                 fontSize: 13,
                             }}
                         >
-                            No matches for <span className="mono">&ldquo;{q}&rdquo;</span>
+                            {t.rich("noMatches", {
+                                query: q,
+                                mono: chunks => <span className="mono">{chunks}</span>,
+                            })}
                         </div>
                     )}
                 </div>
@@ -551,7 +600,7 @@ export function CommandPalette({
                         >
                             ↑↓
                         </span>{" "}
-                        navigate
+                        {t("navigate")}
                     </span>
                     <span>
                         <span
@@ -563,9 +612,11 @@ export function CommandPalette({
                         >
                             ↵
                         </span>{" "}
-                        open
+                        {t("open")}
                     </span>
-                    <span style={{ marginLeft: "auto" }}>{items.length} results</span>
+                    <span style={{ marginLeft: "auto" }}>
+                        {t("results", { count: items.length })}
+                    </span>
                 </div>
             </div>
         </div>

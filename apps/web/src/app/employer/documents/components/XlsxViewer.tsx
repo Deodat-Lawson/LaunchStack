@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Loader2, AlertTriangle, RotateCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "~/lib/utils";
 
 interface SheetData {
@@ -19,6 +20,8 @@ interface XlsxViewerProps {
  * Shows a tabbed interface for multi-sheet workbooks.
  */
 export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
+    const t = useTranslations("viewers.xlsx");
+    const tc = useTranslations("common");
     const [sheets, setSheets] = useState<SheetData[]>([]);
     const [activeSheet, setActiveSheet] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -32,7 +35,7 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
 
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch spreadsheet (${response.status})`);
+            if (!response.ok) throw new Error(t("fetchFailed", { status: response.status }));
 
             const arrayBuffer = await response.arrayBuffer();
 
@@ -42,7 +45,11 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
 
             const parsed: SheetData[] = workbook.SheetNames.map(name => {
                 const sheet = workbook.Sheets[name];
-                if (!sheet) return { name, html: "<p>Empty sheet</p>" };
+                if (!sheet) {
+                    const empty = document.createElement("p");
+                    empty.textContent = t("emptySheet");
+                    return { name, html: empty.outerHTML };
+                }
 
                 const html = XLSX.utils.sheet_to_html(sheet, {
                     id: `sheet-${name}`,
@@ -52,13 +59,13 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
             });
 
             if (parsed.length === 0) {
-                throw new Error("No sheets found in the workbook");
+                throw new Error(t("noSheets"));
             }
 
             setSheets(parsed);
         } catch (err) {
             console.error("[XlsxViewer] Error converting spreadsheet:", err);
-            setError(err instanceof Error ? err.message : "Failed to render spreadsheet");
+            setError(err instanceof Error ? err.message : t("renderFailed"));
         } finally {
             setLoading(false);
         }
@@ -73,7 +80,7 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Loading spreadsheet...</p>
+                <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
             </div>
         );
     }
@@ -85,16 +92,14 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-ink mb-1 text-sm font-medium">
-                        Failed to render spreadsheet
-                    </p>
+                    <p className="text-ink mb-1 text-sm font-medium">{t("renderFailed")}</p>
                     <p className="text-ink-3 mb-4 text-xs">{error}</p>
                     <button
                         onClick={() => void loadSpreadsheet()}
                         className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                     >
                         <RotateCw className="h-4 w-4" />
-                        Retry
+                        {tc("actions.retry")}
                     </button>
                 </div>
             </div>

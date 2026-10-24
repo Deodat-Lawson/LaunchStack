@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -12,50 +13,31 @@ import { useResource } from "~/lib/tools/useResource";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-import {
-    EVIDENCE_KIND_LABEL,
-    vantageApi,
-    type OverviewDto,
-    type TopicDto,
-    type VantageEvidenceKind,
-} from "../api";
+import { vantageApi, type OverviewDto, type TopicDto, type VantageEvidenceKind } from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
 import { KindPill, StatusWord } from "../_components/Primitives";
 import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Suggestion";
 import { DecisionDialog } from "../_components/TopicDialogs";
 import { WeekSuggestions } from "../_components/WeekSuggestions";
 import { useOneClick } from "../_lib/actions";
-import {
-    agoWords,
-    fmtChange,
-    fmtDate,
-    fmtNumber,
-    plural,
-    todayIso,
-    weekRange,
-} from "../_lib/format";
+import { todayIso, useVantageFormat, type VantageFormat } from "../_lib/format";
 import { useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
 import { draftedWords, hasMaterial, weekSuggestions } from "../_lib/suggestions";
 import { useAutoDraft } from "../_lib/useAutoDraft";
 
-const AGENDA_WORD: Record<string, string> = {
-    draft: "Draft",
-    ready: "Ready",
-    held: "Held",
-    closed: "Closed",
-};
-
-function readingWords(o: OverviewDto): string {
+function readingWords(fmt: VantageFormat, o: OverviewDto): string {
+    const { t } = fmt;
     const parts = [
         o.counts.evidenceThisWindow > 0 &&
-            plural(o.counts.evidenceThisWindow, "piece") + " of evidence",
-        o.counts.metricsWithData > 0 && plural(o.counts.metricsWithData, "metric"),
-        o.counts.openCommitments > 0 && plural(o.counts.openCommitments, "open commitment"),
+            t("overview.reading.evidence", { count: o.counts.evidenceThisWindow }),
+        o.counts.metricsWithData > 0 &&
+            t("overview.reading.metrics", { count: o.counts.metricsWithData }),
+        o.counts.openCommitments > 0 &&
+            t("overview.reading.commitments", { count: o.counts.openCommitments }),
     ].filter(Boolean) as string[];
-    if (parts.length === 0) return "what is on file";
-    if (parts.length === 1) return parts[0]!;
-    return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+    if (parts.length === 0) return t("overview.reading.nothing");
+    return fmt.list(parts);
 }
 
 /**
@@ -66,6 +48,9 @@ function readingWords(o: OverviewDto): string {
  * the facts it read them from.
  */
 export function OverviewScreen() {
+    const t = useTranslations("vantage.overview");
+    const tk = useTranslations("vantage.evidenceKind");
+    const fmt = useVantageFormat();
     const router = useToolRouter();
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -101,9 +86,11 @@ export function OverviewScreen() {
 
     const sub = data
         ? [
-              `Next meeting ${weekRange(data.agendaWeek, data.agendaWeekEnd)}`,
-              agenda ? draftedWords(agenda) : null,
-              data.lastEntryAt ? `last entry ${agoWords(data.lastEntryAt)}` : "nothing logged yet",
+              t("nextMeeting", { range: fmt.weekRange(data.agendaWeek, data.agendaWeekEnd) }),
+              agenda ? draftedWords(fmt, agenda) : null,
+              data.lastEntryAt
+                  ? t("lastEntry", { ago: fmt.ago(data.lastEntryAt) })
+                  : t("nothingLogged"),
           ]
               .filter(Boolean)
               .join(" · ")
@@ -112,18 +99,18 @@ export function OverviewScreen() {
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="Your week,"
-                accent="prepared by Vantage"
+                title={t("title")}
+                accent={t("accent")}
                 sub={sub}
                 actions={
                     <>
                         <Button variant="outline" size="sm" onClick={() => setAdding("note")}>
-                            Add evidence
+                            {t("addEvidence")}
                         </Button>
                         {agenda && (
                             <Button asChild size="sm">
                                 <ToolLink href={vantagePath(`/agenda?week=${agenda.weekStart}`)}>
-                                    Open the agenda
+                                    {t("openAgenda")}
                                     <ArrowRight aria-hidden="true" />
                                 </ToolLink>
                             </Button>
@@ -142,48 +129,53 @@ export function OverviewScreen() {
                 <div className="flex flex-col gap-6">
                     {agenda?.summary && (
                         <section
-                            aria-label="Vantage's read on your week"
+                            aria-label={t("readOnWeek")}
                             className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-4"
                         >
-                            <SuggestionMark>Vantage&apos;s read on your week</SuggestionMark>
+                            <SuggestionMark>{t("readOnWeek")}</SuggestionMark>
                             <p className="text-ink mt-1.5 max-w-[72ch] text-[15px] leading-[1.55]">
                                 {agenda.summary}
                             </p>
                             <p className="text-ink-3 mt-2 text-[12px]">
-                                From {readingWords(data)}
                                 {waiting > 0
-                                    ? ` · ${plural(waiting, "suggestion")} waiting below — take or ignore each with one click`
-                                    : ""}
+                                    ? t("fromWaiting", {
+                                          reading: readingWords(fmt, data),
+                                          count: waiting,
+                                      })
+                                    : t("from", { reading: readingWords(fmt, data) })}
                             </p>
                         </section>
                     )}
 
                     {auto.drafting ? (
                         <DraftingCard
-                            reading={`Reading ${readingWords(data)} to draft the meeting on ${weekRange(data.agendaWeek, data.agendaWeekEnd)}.`}
+                            reading={t("draftingReading", {
+                                reading: readingWords(fmt, data),
+                                range: fmt.weekRange(data.agendaWeek, data.agendaWeekEnd),
+                            })}
                         />
                     ) : auto.error ? (
                         <EmptyState
-                            title="Vantage could not draft the week"
+                            title={t("draftFailed")}
                             body={auto.error}
                             action={
                                 <Button size="sm" onClick={auto.draft}>
-                                    Try again
+                                    {t("tryAgain")}
                                 </Button>
                             }
                         />
                     ) : !agenda && !material ? (
                         <EmptyState
-                            title="Give Vantage something to read"
-                            body="Log a conversation, a link or this week's numbers. Vantage drafts the meeting from whatever is there — three to five topics, each with its sources, a decision to make and a next step — and brings them here as suggestions."
+                            title={t("emptyTitle")}
+                            body={t("emptyBody")}
                             action={
                                 <>
                                     <Button size="sm" onClick={() => setAdding("interview")}>
-                                        Log a conversation
+                                        {t("logConversation")}
                                     </Button>
                                     <Button size="sm" variant="outline" asChild>
                                         <ToolLink href={vantagePath("/metrics")}>
-                                            Enter numbers
+                                            {t("enterNumbers")}
                                         </ToolLink>
                                     </Button>
                                 </>
@@ -193,11 +185,13 @@ export function OverviewScreen() {
                         // Drafting on arrival already ran for this visit and its result
                         // did not show up here: offer it rather than claim "caught up".
                         <EmptyState
-                            title={`No agenda for ${weekRange(data.agendaWeek, data.agendaWeekEnd)} yet`}
-                            body={`Vantage drafts it from ${readingWords(data)}: three to five topics, each with its sources, a decision to make and a next step.`}
+                            title={t("noAgendaTitle", {
+                                range: fmt.weekRange(data.agendaWeek, data.agendaWeekEnd),
+                            })}
+                            body={t("noAgendaBody", { reading: readingWords(fmt, data) })}
                             action={
                                 <Button size="sm" onClick={auto.draft}>
-                                    Draft it now
+                                    {t("draftNow")}
                                 </Button>
                             }
                         />
@@ -221,7 +215,7 @@ export function OverviewScreen() {
             {agenda && kept.length > 0 && (
                 <section>
                     <SectionHeading
-                        title="On the agenda"
+                        title={t("onAgenda")}
                         aside={
                             <StatusWord
                                 tone={
@@ -232,7 +226,7 @@ export function OverviewScreen() {
                                           : "neutral"
                                 }
                             >
-                                {AGENDA_WORD[agenda.status]}
+                                {t(`status.${agenda.status}`)}
                             </StatusWord>
                         }
                     />
@@ -241,22 +235,22 @@ export function OverviewScreen() {
                         className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 block rounded-lg border px-4 py-3 outline-none transition-colors focus-visible:ring-[3px]"
                     >
                         <ol className="flex flex-col gap-1">
-                            {kept.map((t, i) => (
-                                <li key={t.id} className="text-ink flex gap-2 text-[13px]">
+                            {kept.map((topic, i) => (
+                                <li key={topic.id} className="text-ink flex gap-2 text-[13px]">
                                     <span className="text-ink-3 w-4 shrink-0 font-mono tabular-nums">
                                         {i + 1}
                                     </span>
-                                    <span className="truncate">{t.title}</span>
-                                    {t.decision && (
+                                    <span className="truncate">{topic.title}</span>
+                                    {topic.decision && (
                                         <span className="text-success ml-auto shrink-0 text-[11.5px]">
-                                            decided
+                                            {t("decided")}
                                         </span>
                                     )}
                                 </li>
                             ))}
                         </ol>
                         <span className="text-ink-3 mt-2 inline-flex items-center gap-1 text-xs">
-                            Open the agenda <ArrowRight className="size-3" aria-hidden="true" />
+                            {t("openAgenda")} <ArrowRight className="size-3" aria-hidden="true" />
                         </span>
                     </ToolLink>
                 </section>
@@ -265,8 +259,8 @@ export function OverviewScreen() {
             {data && (changes.length > 0 || (signals?.metricConflicts.length ?? 0) > 0) && (
                 <section>
                     <SectionHeading
-                        title="What Vantage read: the numbers"
-                        aside={signals ? `since ${fmtDate(signals.since)}` : undefined}
+                        title={t("numbersTitle")}
+                        aside={signals ? t("since", { date: fmt.date(signals.since) }) : undefined}
                     />
                     <div className="border-line bg-panel rounded-lg border">
                         {signals?.metricConflicts.map(x => (
@@ -274,17 +268,18 @@ export function OverviewScreen() {
                                 key={`${x.metricId}-${x.a.observationId}-${x.b.observationId}`}
                                 className="border-line-2 flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1 border-t px-4 py-2 first:border-t-0"
                             >
-                                <StatusWord tone="warn">Conflict</StatusWord>
+                                <StatusWord tone="warn">{t("conflict")}</StatusWord>
                                 <span className="text-ink text-[13px]">
-                                    {x.name}:{" "}
-                                    <span className="font-mono tabular-nums">
-                                        {fmtNumber(x.a.value)}
-                                    </span>{" "}
-                                    ({x.a.source ?? "no source"}) vs{" "}
-                                    <span className="font-mono tabular-nums">
-                                        {fmtNumber(x.b.value)}
-                                    </span>{" "}
-                                    ({x.b.source ?? "no source"})
+                                    {t.rich("conflictLine", {
+                                        name: x.name,
+                                        a: fmt.number(x.a.value),
+                                        sourceA: x.a.source ?? t("noSource"),
+                                        b: fmt.number(x.b.value),
+                                        sourceB: x.b.source ?? t("noSource"),
+                                        num: chunks => (
+                                            <span className="font-mono tabular-nums">{chunks}</span>
+                                        ),
+                                    })}
                                 </span>
                             </div>
                         ))}
@@ -297,10 +292,13 @@ export function OverviewScreen() {
                                     {c.name}
                                 </span>
                                 <span className="text-ink font-mono text-[13px] tabular-nums">
-                                    {fmtNumber(c.latest.value, c.unit)}
+                                    {fmt.number(c.latest.value, c.unit)}
                                 </span>
                                 <span className="text-ink-3 @max-sm:hidden text-[11.5px]">
-                                    {fmtDate(c.latest.periodStart)}–{fmtDate(c.latest.periodEnd)}
+                                    {t("period", {
+                                        start: fmt.date(c.latest.periodStart),
+                                        end: fmt.date(c.latest.periodEnd),
+                                    })}
                                 </span>
                                 <span
                                     className={cn(
@@ -311,10 +309,10 @@ export function OverviewScreen() {
                                     )}
                                 >
                                     {c.direction === "new"
-                                        ? "first number"
+                                        ? t("firstNumber")
                                         : c.direction === "flat"
-                                          ? "no change"
-                                          : fmtChange(c.pct, c.delta, c.unit)}
+                                          ? t("noChange")
+                                          : fmt.change(c.pct, c.delta, c.unit)}
                                 </span>
                             </div>
                         ))}
@@ -325,10 +323,10 @@ export function OverviewScreen() {
             {data && data.recentEvidence.length > 0 && (
                 <section>
                     <SectionHeading
-                        title="What Vantage read: the evidence"
+                        title={t("evidenceTitle")}
                         aside={
                             <ToolLink href={vantagePath("/evidence")} className="hover:text-ink">
-                                Evidence inbox
+                                {t("evidenceInbox")}
                             </ToolLink>
                         }
                     />
@@ -350,13 +348,11 @@ export function OverviewScreen() {
                     </div>
                     {signals && signals.newEvidence.length > 0 && (
                         <p className="text-ink-3 mt-2 text-[12px]">
-                            In two weeks:{" "}
-                            {signals.newEvidence
-                                .map(
-                                    n =>
-                                        `${n.count} ${EVIDENCE_KIND_LABEL[n.kind].toLowerCase()}${n.count === 1 ? "" : "s"}`
-                                )
-                                .join(", ")}
+                            {t("inTwoWeeks", {
+                                counts: signals.newEvidence
+                                    .map(n => tk(`count.${n.kind}`, { count: n.count }))
+                                    .join(fmt.t("format.list.separator")),
+                            })}
                         </p>
                     )}
                 </section>

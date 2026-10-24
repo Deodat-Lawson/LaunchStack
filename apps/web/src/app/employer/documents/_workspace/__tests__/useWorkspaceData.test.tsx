@@ -2,8 +2,27 @@
 
 import { act, renderHook, waitFor } from "@testing-library/react";
 
+import { createFormatter, createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import type { MindmapSummary } from "../../_mindmap/lib/api";
-import { mapMindmap, mindmapCitability, useWorkspaceData } from "../useWorkspaceData";
+import {
+    mapMindmap as mapMindmapWith,
+    mindmapCitability,
+    useWorkspaceData,
+    type SourceRowLabels,
+} from "../useWorkspaceData";
+
+/** The mapping with the English words a source row is made of. */
+const ENGLISH_ROW_LABELS: SourceRowLabels = {
+    t: createTranslator({ locale: "en", messages: englishMessages, namespace: "workspace" }),
+    format: createFormatter({ locale: "en" }),
+};
+const mapMindmap = (
+    map: Parameters<typeof mapMindmapWith>[0],
+    published?: Parameters<typeof mapMindmapWith>[1]
+) => mapMindmapWith(map, published, ENGLISH_ROW_LABELS);
 
 /**
  * A mindmap is a source. The list the whole workspace reads comes from this

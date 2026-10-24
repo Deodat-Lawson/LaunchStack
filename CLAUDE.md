@@ -27,6 +27,11 @@ compositions — product verticals; may import bricks, never the reverse),
   class); JetBrains Mono (`var(--font-mono)`) for code. Loaded once per app in
   `src/app/fonts.ts`; never name a family (enforced by
   `apps/web/__tests__/brand/typography.test.ts`).
+- Words on screen come from message catalogues (next-intl, English and
+  Simplified Chinese): `useTranslations`/`getTranslations`, never a
+  user-visible English literal in a component. Add the key to both
+  `src/i18n/messages/en` and `zh-CN`; `npx jest src/i18n` checks they match.
+  See `apps/web/src/i18n/README.md`.
 - Never import across route areas (`app/employer/**` ↔ `app/employee/**`).
   Shared pieces go in `~/components` or `~/lib`.
 - Touch-it-migrate-it: when editing existing UI for feature work, convert the

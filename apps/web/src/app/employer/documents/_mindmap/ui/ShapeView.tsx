@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo, useId, useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 import { shapeGeometry, shapeTextBox } from "../model/shapes";
 import { firstBaseline, fontFamilyCss, layoutText } from "../model/text";
@@ -194,6 +195,7 @@ export const ShapeView = memo(function ShapeView({
 // ---------------------------------------------------------------------------
 
 function ImageBody({ node, idScope }: { node: DiagramNode; idScope: string }) {
+    const t = useTranslations("mindmap.canvas");
     const src = node.data?.src;
     if (!src) {
         return (
@@ -215,7 +217,7 @@ function ImageBody({ node, idScope }: { node: DiagramNode; idScope: string }) {
                     fill="var(--ink-3)"
                     style={{ pointerEvents: "none", userSelect: "none" }}
                 >
-                    Drop an image
+                    {t("dropImage")}
                 </text>
             </>
         );

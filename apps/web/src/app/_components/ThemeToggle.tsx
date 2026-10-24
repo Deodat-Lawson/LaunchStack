@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle() {
+    const t = useTranslations("auth.chrome");
     const { resolvedTheme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -14,7 +16,7 @@ export function ThemeToggle() {
 
     if (!mounted) {
         return (
-            <button className="theme-toggle-btn" aria-label="Toggle theme" disabled>
+            <button className="theme-toggle-btn" aria-label={t("toggleTheme")} disabled>
                 <Sun className="h-5 w-5 opacity-0" />
             </button>
         );
@@ -28,7 +30,7 @@ export function ThemeToggle() {
     };
 
     return (
-        <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle theme">
+        <button onClick={toggleTheme} className="theme-toggle-btn" aria-label={t("toggleTheme")}>
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </button>
     );

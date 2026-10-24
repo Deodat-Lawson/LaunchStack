@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { diffWords } from "diff";
+import { useTranslations } from "next-intl";
 import {
     ArrowLeft,
     Check,
@@ -34,6 +35,19 @@ interface RewriteWorkflowProps {
     rewrite?: (args: { text: string; prompt: string }) => Promise<string>;
 }
 
+type WorkflowT = ReturnType<typeof useTranslations<"generator.rewriteWorkflow">>;
+
+/**
+ * A failure the default backend describes itself; the workspace shows it in
+ * the reader's language (`generator.rewriteWorkflow.errors.<code>`).
+ */
+class RewriteClientError extends Error {
+    constructor(readonly code: "network" | "invalidResponse" | "failed") {
+        super(code);
+        this.name = "RewriteClientError";
+    }
+}
+
 /** The generic rewrite backend (the pre-injection behavior, verbatim). */
 async function defaultRewrite(args: { text: string; prompt: string }): Promise<string> {
     let response: Response;
@@ -53,7 +67,7 @@ async function defaultRewrite(args: { text: string; prompt: string }): Promise<s
             }),
         });
     } catch {
-        throw new Error("Network error occurred");
+        throw new RewriteClientError("network");
     }
 
     const responseText = await response.text();
@@ -67,9 +81,9 @@ async function defaultRewrite(args: { text: string; prompt: string }): Promise<s
         // Known response shape of our AI generation route.
         data = JSON.parse(responseText) as typeof data;
     } catch {
-        throw new Error(
-            responseText.slice(0, 120) || "Server returned an invalid response. Please try again."
-        );
+        const raw = responseText.slice(0, 120);
+        if (raw) throw new Error(raw);
+        throw new RewriteClientError("invalidResponse");
     }
 
     if (
@@ -79,7 +93,9 @@ async function defaultRewrite(args: { text: string; prompt: string }): Promise<s
     ) {
         return data.generatedContent;
     }
-    throw new Error(data.message ?? data.error ?? "Failed to rewrite text");
+    const serverMessage = data.message ?? data.error;
+    if (serverMessage) throw new Error(serverMessage);
+    throw new RewriteClientError("failed");
 }
 
 export type WorkflowStep = "input" | "options" | "preview" | "complete";
@@ -104,7 +120,8 @@ type SectionStatus = "pending" | "accepted" | "rejected" | "unchanged";
 interface Section {
     id: string;
     index: number;
-    title: string;
+    /** The chunk's first line, trimmed for display; "" when it has none (see `sectionTitle`). */
+    heading: string;
     original: string;
     proposed: string;
     status: SectionStatus;
@@ -121,56 +138,40 @@ interface DiffPart {
 // Static config
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PRESETS: { id: string; label: string; instruction: string }[] = [
+// Labels: `generator.rewriteWorkflow.presets.<id>`. Instructions go to the
+// model, so they stay English.
+const PRESETS: {
+    id: "tighten" | "casual" | "formal" | "plain" | "detail" | "active";
+    instruction: string;
+}[] = [
     {
         id: "tighten",
-        label: "Tighten language",
         instruction: "Cut redundant words. Prefer concise phrasing.",
     },
     {
         id: "casual",
-        label: "More casual",
         instruction: "Use a friendlier, more conversational tone.",
     },
     {
         id: "formal",
-        label: "More formal",
         instruction: "Use a professional, formal register.",
     },
     {
         id: "plain",
-        label: "Plain English",
         instruction: "Avoid jargon. Use plain English.",
     },
     {
         id: "detail",
-        label: "Add detail",
         instruction: "Expand with additional context where helpful.",
     },
     {
         id: "active",
-        label: "Active voice",
         instruction: "Prefer active voice over passive.",
     },
 ];
 
-const GUARDRAILS: { id: string; label: string; sub: string }[] = [
-    {
-        id: "structure",
-        label: "Preserve structure",
-        sub: "Keep paragraph breaks intact",
-    },
-    {
-        id: "voice",
-        label: "Match my voice",
-        sub: "Don't drift from existing tone",
-    },
-    {
-        id: "conflict",
-        label: "Stop on conflict",
-        sub: "Flag rather than guess",
-    },
-];
+// Label and sub-line: `generator.rewriteWorkflow.guardrails.<id>`.
+const GUARDRAILS = ["structure", "voice", "conflict"] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Pure helpers
@@ -182,28 +183,35 @@ function wordCountOf(s: string): number {
     return trimmed.split(/\s+/).length;
 }
 
+/** The source's first line, trimmed for display; "" when there is none (the caller says "Untitled source"). */
 function deriveSourceTitle(text: string): string {
     const trimmed = (text ?? "").trim();
-    if (!trimmed) return "Untitled source";
+    if (!trimmed) return "";
     const firstLine = trimmed.split("\n")[0]?.trim() ?? "";
     const stripped = firstLine.replace(/^#{1,6}\s*/, "").trim();
-    if (!stripped) return "Untitled source";
+    if (!stripped) return "";
     return stripped.length > 48 ? `${stripped.slice(0, 48)}…` : stripped;
 }
 
-function sectionTitleOf(chunk: string, index: number): string {
+function sectionHeadingOf(chunk: string): string {
     const firstLine = chunk.split("\n")[0]?.trim() ?? "";
     const stripped = firstLine.replace(/^#{1,6}\s*/, "").trim();
-    const truncated = stripped.length > 56 ? `${stripped.slice(0, 56)}…` : stripped;
-    return truncated.length > 0 ? `${index + 1}. ${truncated}` : `${index + 1}. Section`;
+    return stripped.length > 56 ? `${stripped.slice(0, 56)}…` : stripped;
 }
 
-function sectionShortName(title: string): string {
-    // Strip leading "1. " ordering for display in the diff header
-    return title.replace(/^\d+\.\s*/, "");
+/** "1. Scope of work", or "1. Section" for a chunk without a first line. */
+function sectionTitle(sec: Pick<Section, "index" | "heading">, t: WorkflowT): string {
+    return sec.heading
+        ? `${sec.index + 1}. ${sec.heading}`
+        : t("sectionFallback", { index: sec.index + 1 });
 }
 
-function splitIntoSections(text: string): Pick<Section, "id" | "index" | "title" | "original">[] {
+/** The title without its ordering, for the diff header. */
+function sectionShortName(sec: Pick<Section, "heading">, t: WorkflowT): string {
+    return sec.heading || t("sectionFallbackShort");
+}
+
+function splitIntoSections(text: string): Pick<Section, "id" | "index" | "heading" | "original">[] {
     const safe = (text ?? "").trim();
     if (!safe) return [];
     const parts = safe
@@ -214,7 +222,7 @@ function splitIntoSections(text: string): Pick<Section, "id" | "index" | "title"
     return chunks.map((chunk, i) => ({
         id: `s${i + 1}`,
         index: i,
-        title: sectionTitleOf(chunk, i),
+        heading: sectionHeadingOf(chunk),
         original: chunk,
     }));
 }
@@ -250,7 +258,7 @@ function mapResponseToProposals(baseSections: Section[], response: string): Sect
     });
 }
 
-function deriveDelta(original: string, proposed: string): string {
+function deriveDelta(original: string, proposed: string, t: WorkflowT): string {
     if (!proposed.trim()) return "—";
     const parts = diffWords(original, proposed);
     let added = 0;
@@ -260,7 +268,7 @@ function deriveDelta(original: string, proposed: string): string {
         if (part.added) added += wc;
         else if (part.removed) removed += wc;
     }
-    if (added === 0 && removed === 0) return "no edits";
+    if (added === 0 && removed === 0) return t("noEdits");
     return `+${added} / -${removed}`;
 }
 
@@ -268,11 +276,9 @@ function deriveChangeCount(parts: DiffPart[]): number {
     return parts.filter(p => Boolean(p.added) || Boolean(p.removed)).length;
 }
 
-function summarizeSection(parts: DiffPart[]): string {
+function summarizeSection(parts: DiffPart[], t: WorkflowT): string {
     const editCount = deriveChangeCount(parts);
-    if (editCount === 0) {
-        return "No edits proposed for this section — the rewrite matches the source.";
-    }
+    if (editCount === 0) return t("summary.none");
     let added = 0;
     let removed = 0;
     for (const p of parts) {
@@ -281,13 +287,9 @@ function summarizeSection(parts: DiffPart[]): string {
         else if (p.removed) removed += wc;
     }
     const delta = added - removed;
-    if (delta > 0) {
-        return `Expanded by ${delta} word${delta === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}.`;
-    }
-    if (delta < 0) {
-        return `Tightened by ${Math.abs(delta)} word${Math.abs(delta) === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}.`;
-    }
-    return `${editCount} edit${editCount === 1 ? "" : "s"} without changing the overall length.`;
+    if (delta > 0) return t("summary.expanded", { words: delta, edits: editCount });
+    if (delta < 0) return t("summary.tightened", { words: Math.abs(delta), edits: editCount });
+    return t("summary.same", { edits: editCount });
 }
 
 function assembleFinalText(sections: Section[]): string {
@@ -311,6 +313,7 @@ export function RewriteWorkflow({
     persistedState,
     onStateChange,
 }: RewriteWorkflowProps) {
+    const t = useTranslations("generator.rewriteWorkflow");
     const [text, setText] = useState<string>(persistedState?.text ?? initialText);
     const [customPrompt, setCustomPrompt] = useState<string>(
         persistedState?.options?.customPrompt ?? ""
@@ -534,11 +537,17 @@ export function RewriteWorkflow({
             });
         } catch (err) {
             console.error("Rewrite request failed", err);
-            setError(err instanceof Error && err.message ? err.message : "Network error occurred");
+            setError(
+                err instanceof RewriteClientError
+                    ? t(`errors.${err.code}`)
+                    : err instanceof Error && err.message
+                      ? err.message
+                      : t("errors.network")
+            );
         } finally {
             setIsProcessing(false);
         }
-    }, [composedPrompt, rewrite, sections, selectedCount, text]);
+    }, [composedPrompt, rewrite, sections, selectedCount, text, t]);
 
     const handleApply = useCallback(() => {
         onComplete(assembleFinalText(sections));
@@ -556,7 +565,7 @@ export function RewriteWorkflow({
 
     // ── render ────────────────────────────────────────────────────────────────
     const hasProposal = !!proposedText.trim();
-    const breadcrumbLast = hasProposal ? "Review v2" : "New rewrite";
+    const breadcrumbLast = hasProposal ? t("breadcrumbReview") : t("breadcrumbNew");
 
     return (
         <LegalGeneratorTheme ambient={false}>
@@ -569,20 +578,20 @@ export function RewriteWorkflow({
                         onClick={onCancel}
                     >
                         <ArrowLeft className="h-4 w-4" />
-                        Exit
+                        {t("exit")}
                     </button>
                     <span className={s.rwsNavSep} />
                     <div className={s.rwsCrumbs}>
-                        <span>Documents</span>
+                        <span>{t("crumbDocuments")}</span>
                         <span className={s.rwsCrumbsSep}>›</span>
-                        <span>Rewrite</span>
+                        <span>{t("crumbRewrite")}</span>
                         <span className={s.rwsCrumbsSep}>›</span>
                         <span className={s.rwsCrumbsLast}>{breadcrumbLast}</span>
                     </div>
                     <div className={s.rwsTopSpacer} />
                     <span className={s.rwsTopPill}>
                         <FileText />
-                        v1 · {wordCount.toLocaleString()} words
+                        {t("versionWords", { count: wordCount })}
                     </span>
                 </div>
 
@@ -591,7 +600,7 @@ export function RewriteWorkflow({
                     <ScopeRail
                         text={text}
                         onTextChange={setText}
-                        sourceTitle={deriveSourceTitle(text)}
+                        sourceTitle={deriveSourceTitle(text) || t("untitledSource")}
                         wordCount={wordCount}
                         sections={sections}
                         customPrompt={customPrompt}
@@ -693,19 +702,17 @@ function ScopeRail({
     selectedCount,
     onRunRewrite,
 }: ScopeRailProps) {
+    const t = useTranslations("generator.rewriteWorkflow");
     return (
         <aside className={s.rwsCfg}>
             <div className={s.rwsCfgHead}>
-                <h2 className={s.rwsCfgHeadTitle}>Rewrite scope</h2>
-                <p className={s.rwsCfgHeadSub}>
-                    Drift will rewrite only the sections you choose, keeping defined terms and
-                    citations intact.
-                </p>
+                <h2 className={s.rwsCfgHeadTitle}>{t("scope.title")}</h2>
+                <p className={s.rwsCfgHeadSub}>{t("scope.sub")}</p>
             </div>
 
             {/* Source */}
             <div className={s.rwsCfgSection}>
-                <h3 className={s.rwsCfgSectionH}>Source</h3>
+                <h3 className={s.rwsCfgSectionH}>{t("scope.source")}</h3>
                 <div className={s.rwsSourceItem}>
                     <div className={s.rwsSourceIcon}>
                         <FileText />
@@ -713,7 +720,7 @@ function ScopeRail({
                     <div style={{ minWidth: 0 }}>
                         <div className={s.rwsSourceName}>{sourceTitle}</div>
                         <div className={s.rwsSourceMeta}>
-                            v1 · {wordCount.toLocaleString()} words
+                            {t("versionWords", { count: wordCount })}
                         </div>
                     </div>
                     <div className={s.rwsSourceUsed}>{sections.length} §</div>
@@ -721,7 +728,7 @@ function ScopeRail({
                 <textarea
                     className={s.rwsTextarea}
                     style={{ marginTop: 10, minHeight: 120 }}
-                    placeholder="Paste or type the source text here…"
+                    placeholder={t("scope.sourcePlaceholder")}
                     value={text}
                     onChange={e => onTextChange(e.target.value)}
                 />
@@ -729,10 +736,10 @@ function ScopeRail({
 
             {/* Instruction */}
             <div className={s.rwsCfgSection}>
-                <h3 className={s.rwsCfgSectionH}>Instruction</h3>
+                <h3 className={s.rwsCfgSectionH}>{t("scope.instruction")}</h3>
                 <textarea
                     className={s.rwsTextarea}
-                    placeholder="Describe how you want it rewritten…"
+                    placeholder={t("scope.instructionPlaceholder")}
                     value={customPrompt}
                     onChange={e => onCustomPromptChange(e.target.value)}
                 />
@@ -746,7 +753,7 @@ function ScopeRail({
                                 className={`${s.rwsPreset}${active ? ` ${s.rwsPresetActive}` : ""}`}
                                 onClick={() => onTogglePreset(p.id)}
                             >
-                                {p.label}
+                                {t(`presets.${p.id}`)}
                             </button>
                         );
                     })}
@@ -756,11 +763,11 @@ function ScopeRail({
             {/* Sections to rewrite */}
             {sections.length > 0 && (
                 <div className={s.rwsCfgSection}>
-                    <h3 className={s.rwsCfgSectionH}>Sections to rewrite</h3>
+                    <h3 className={s.rwsCfgSectionH}>{t("scope.sections")}</h3>
                     <div className={s.rwsSectionList}>
                         {sections.map(sec => {
                             const delta = sec.proposed.trim()
-                                ? deriveDelta(sec.original, sec.proposed)
+                                ? deriveDelta(sec.original, sec.proposed, t)
                                 : "—";
                             return (
                                 <label key={sec.id} className={s.rwsSectionCheck}>
@@ -769,7 +776,9 @@ function ScopeRail({
                                         checked={sec.selected}
                                         onChange={() => onToggleSection(sec.id)}
                                     />
-                                    <span className={s.rwsSectionCheckLabel}>{sec.title}</span>
+                                    <span className={s.rwsSectionCheckLabel}>
+                                        {sectionTitle(sec, t)}
+                                    </span>
                                     <span className={s.rwsSectionDelta}>{delta}</span>
                                 </label>
                             );
@@ -780,21 +789,26 @@ function ScopeRail({
 
             {/* Guardrails */}
             <div className={s.rwsCfgSection}>
-                <h3 className={s.rwsCfgSectionH}>Guardrails</h3>
-                {GUARDRAILS.map(g => {
-                    const on = !!guardrailState[g.id];
+                <h3 className={s.rwsCfgSectionH}>{t("scope.guardrails")}</h3>
+                {GUARDRAILS.map(id => {
+                    const on = !!guardrailState[id];
+                    const label = t(`guardrails.${id}.label`);
                     return (
-                        <div key={g.id} className={s.rwsToggleRow}>
+                        <div key={id} className={s.rwsToggleRow}>
                             <div>
-                                <div className={s.rwsToggleLabel}>{g.label}</div>
-                                <div className={s.rwsToggleSub}>{g.sub}</div>
+                                <div className={s.rwsToggleLabel}>{label}</div>
+                                <div className={s.rwsToggleSub}>{t(`guardrails.${id}.sub`)}</div>
                             </div>
                             <button
                                 type="button"
                                 aria-pressed={on}
-                                aria-label={`${g.label}: ${on ? "on" : "off"}`}
+                                aria-label={
+                                    on
+                                        ? t("scope.toggleOn", { label })
+                                        : t("scope.toggleOff", { label })
+                                }
                                 className={`${s.rwsToggle}${on ? ` ${s.rwsToggleOn}` : ""}`}
-                                onClick={() => onToggleGuardrail(g.id)}
+                                onClick={() => onToggleGuardrail(id)}
                             />
                         </div>
                     );
@@ -829,11 +843,9 @@ function ScopeRail({
                     disabled={isProcessing || !text.trim() || selectedCount === 0}
                 >
                     {isProcessing ? <Loader2 className="animate-spin" /> : <Wand2 />}
-                    {isProcessing
-                        ? "Rewriting…"
-                        : `Run rewrite · ${selectedCount} section${selectedCount === 1 ? "" : "s"}`}
+                    {isProcessing ? t("scope.rewriting") : t("scope.run", { count: selectedCount })}
                 </button>
-                <div className={s.rwsCtaMeta}>~10s · {wordCount.toLocaleString()} words</div>
+                <div className={s.rwsCtaMeta}>{t("scope.ctaMeta", { count: wordCount })}</div>
             </div>
         </aside>
     );
@@ -866,6 +878,7 @@ function DiffPipeline({
     onRejectSection,
     disabled = false,
 }: DiffPipelineProps) {
+    const t = useTranslations("generator.rewriteWorkflow");
     const changeCount = deriveChangeCount(parts);
     const dotColor =
         section.status === "accepted"
@@ -876,20 +889,20 @@ function DiffPipeline({
                 ? "var(--ink-4)"
                 : "var(--accent)";
     const statusText =
-        section.status === "accepted"
-            ? "accepted"
-            : section.status === "rejected"
-              ? "rejected"
-              : section.status === "unchanged"
-                ? "unchanged"
-                : `${changeCount} change${changeCount === 1 ? "" : "s"} · pending review`;
+        section.status === "pending"
+            ? t("pipeline.pending", { count: changeCount })
+            : t(`pipeline.status.${section.status}`);
 
     return (
         <>
             <div className={s.rwsPipeHead}>
                 <div style={{ minWidth: 0 }}>
                     <h1 className={s.rwsPipeTitle}>
-                        Section {index + 1} · <em>{sectionShortName(section.title)}</em>
+                        {t.rich("pipeline.sectionTitle", {
+                            index: index + 1,
+                            name: sectionShortName(section, t),
+                            em: chunks => <em>{chunks}</em>,
+                        })}
                     </h1>
                     <p className={s.rwsPipeSub}>
                         <span
@@ -913,7 +926,7 @@ function DiffPipeline({
                         disabled={!onPrev || disabled}
                     >
                         <ChevronLeft className="h-3.5 w-3.5" />
-                        Prev
+                        {t("pipeline.prev")}
                     </button>
                     <span className={s.rwsNavCount}>
                         {index + 1} / {total}
@@ -924,7 +937,7 @@ function DiffPipeline({
                         onClick={onNext}
                         disabled={!onNext || disabled}
                     >
-                        Next
+                        {t("pipeline.next")}
                         <ChevronRight className="h-3.5 w-3.5" />
                     </button>
                     <span className={s.rwsNavSep} />
@@ -935,7 +948,7 @@ function DiffPipeline({
                         disabled={disabled || section.status === "rejected"}
                     >
                         <X className="h-3.5 w-3.5" />
-                        Reject section
+                        {t("pipeline.rejectSection")}
                     </button>
                     <button
                         type="button"
@@ -944,7 +957,7 @@ function DiffPipeline({
                         disabled={disabled || section.status === "accepted"}
                     >
                         <Check className="h-3.5 w-3.5" />
-                        Accept section
+                        {t("pipeline.acceptSection")}
                     </button>
                 </div>
             </div>
@@ -952,14 +965,14 @@ function DiffPipeline({
             <div className={s.rwsPipeBody}>
                 {/* Original pane */}
                 <div className={`${s.rwsPane} ${s.rwsPaneOriginal}`}>
-                    <div className={s.rwsPaneEyebrow}>Original · v1</div>
+                    <div className={s.rwsPaneEyebrow}>{t("pipeline.original")}</div>
                     <DiffProse parts={parts} mode="original" />
                 </div>
 
                 {/* Proposed pane */}
                 <div className={`${s.rwsPane} ${s.rwsPaneProposed}`}>
                     <div className={`${s.rwsPaneEyebrow} ${s.rwsPaneEyebrowProposed}`}>
-                        Proposed · v2
+                        {t("pipeline.proposed")}
                     </div>
                     <DiffProse parts={parts} mode="proposed" />
 
@@ -967,9 +980,9 @@ function DiffPipeline({
                         <div className={s.rwsWhyCard}>
                             <div className={s.rwsWhyHead}>
                                 <Sparkles />
-                                <span>Why this change</span>
+                                <span>{t("pipeline.why")}</span>
                             </div>
-                            {summarizeSection(parts)}
+                            {summarizeSection(parts, t)}
                         </div>
                     )}
                 </div>
@@ -979,6 +992,7 @@ function DiffPipeline({
 }
 
 function DiffProse({ parts, mode }: { parts: DiffPart[]; mode: "original" | "proposed" }) {
+    const t = useTranslations("generator.rewriteWorkflow.pipeline");
     const isOriginal = mode === "original";
     const visibleParts = parts.filter(p => (isOriginal ? !p.added : !p.removed));
 
@@ -993,7 +1007,7 @@ function DiffProse({ parts, mode }: { parts: DiffPart[]; mode: "original" | "pro
                     fontStyle: "italic",
                 }}
             >
-                {isOriginal ? "No source text in this section." : "The rewrite is empty."}
+                {isOriginal ? t("emptyOriginal") : t("emptyProposed")}
             </p>
         );
     }
@@ -1035,27 +1049,14 @@ interface PipelineEmptyProps {
 }
 
 function PipelineEmpty({ hasText, isProcessing, selectedCount }: PipelineEmptyProps) {
-    let title = "Ready to ";
-    let accent = "rewrite";
-    let sub: string;
-
-    if (isProcessing) {
-        title = "Drafting the ";
-        accent = "rewrite";
-        sub =
-            "Drift is reading every selected section and proposing changes. This usually takes about 10 seconds.";
-    } else if (!hasText) {
-        title = "Paste a ";
-        accent = "source";
-        sub = "Drop the text you want to rewrite into the source field, then run the rewrite.";
-    } else if (selectedCount === 0) {
-        title = "Pick a ";
-        accent = "section";
-        sub = "Select at least one section. Drift only rewrites the parts you ask for.";
-    } else {
-        sub =
-            "Adjust the instruction and presets, then click Run rewrite. Drift will lay the proposal out side-by-side with the source.";
-    }
+    const t = useTranslations("generator.rewriteWorkflow.empty");
+    const state = isProcessing
+        ? "drafting"
+        : !hasText
+          ? "paste"
+          : selectedCount === 0
+            ? "pick"
+            : "ready";
 
     return (
         <div className={s.rwsPipeEmpty}>
@@ -1063,10 +1064,9 @@ function PipelineEmpty({ hasText, isProcessing, selectedCount }: PipelineEmptyPr
                 {isProcessing ? <Loader2 className="animate-spin" /> : <Sparkles />}
             </div>
             <h1 className={s.rwsPipeEmptyTitle}>
-                {title}
-                <em>{accent}</em>
+                {t.rich(state, { em: chunks => <em>{chunks}</em> })}
             </h1>
-            <p className={s.rwsPipeEmptySub}>{sub}</p>
+            <p className={s.rwsPipeEmptySub}>{t(`${state}Sub`)}</p>
         </div>
     );
 }
@@ -1102,12 +1102,12 @@ function ReviewRail({
     onApply,
     onRejectAll,
 }: ReviewRailProps) {
-    const sectionLabel = `Review · ${counts.total} section${counts.total === 1 ? "" : "s"}`;
+    const t = useTranslations("generator.rewriteWorkflow");
+    const sectionLabel = t("review.title", { count: counts.total });
     const subLabel = hasProposal
-        ? `${counts.acc} accepted · ${counts.rej} rejected · ${counts.pen} pending`
-        : `${counts.total} section${counts.total === 1 ? "" : "s"} ready · run to start review`;
-    const finalCta =
-        counts.acc === 0 ? "Apply 0 accepted → v2" : `Apply ${counts.acc} accepted → v2`;
+        ? t("review.counts", { accepted: counts.acc, rejected: counts.rej, pending: counts.pen })
+        : t("review.ready", { count: counts.total });
+    const finalCta = t("review.applyCta", { count: counts.acc });
     const finalApplyDisabled = counts.acc === 0;
     const finalRejectDisabled = counts.pen === 0 && counts.acc === 0;
 
@@ -1125,7 +1125,7 @@ function ReviewRail({
             </div>
 
             <div className={s.rwsOutBody}>
-                <span className={s.rwsOutEyebrow}>Sections</span>
+                <span className={s.rwsOutEyebrow}>{t("review.sections")}</span>
 
                 {sections.length === 0 ? (
                     <p
@@ -1136,7 +1136,7 @@ function ReviewRail({
                             lineHeight: 1.5,
                         }}
                     >
-                        No sections yet — paste source text to get started.
+                        {t("review.empty")}
                     </p>
                 ) : (
                     sections.map(sec => {
@@ -1158,13 +1158,14 @@ function ReviewRail({
                               : isUnchanged
                                 ? "var(--ink-4)"
                                 : "var(--ink-3)";
+                        const delta = isUnchanged ? "" : deriveDelta(sec.original, sec.proposed, t);
                         const meta = isUnchanged
-                            ? "unchanged"
+                            ? t("review.metaUnchanged")
                             : isAccepted
-                              ? `accepted · ${deriveDelta(sec.original, sec.proposed)}`
+                              ? t("review.metaAccepted", { delta })
                               : isRejected
-                                ? `rejected · ${deriveDelta(sec.original, sec.proposed)}`
-                                : `pending · ${deriveDelta(sec.original, sec.proposed)}`;
+                                ? t("review.metaRejected", { delta })
+                                : t("review.metaPending", { delta });
                         const isActive = sec.id === currentSectionId;
 
                         return (
@@ -1188,7 +1189,7 @@ function ReviewRail({
                                     }
                                 />
                                 <span style={{ minWidth: 0 }}>
-                                    <span className={s.rwsReviewName}>{sec.title}</span>
+                                    <span className={s.rwsReviewName}>{sectionTitle(sec, t)}</span>
                                     <span
                                         className={s.rwsReviewMeta}
                                         style={{ display: "block", color: metaColor }}
@@ -1201,7 +1202,7 @@ function ReviewRail({
                                         <button
                                             type="button"
                                             className={s.rwsIconBtn}
-                                            title="Reject section"
+                                            title={t("pipeline.rejectSection")}
                                             onClick={e => {
                                                 e.stopPropagation();
                                                 onRejectOne(sec.id);
@@ -1212,7 +1213,7 @@ function ReviewRail({
                                         <button
                                             type="button"
                                             className={`${s.rwsIconBtn} ${s.rwsIconBtnSuccess}`}
-                                            title="Accept section"
+                                            title={t("pipeline.acceptSection")}
                                             onClick={e => {
                                                 e.stopPropagation();
                                                 onAcceptOne(sec.id);
@@ -1231,15 +1232,17 @@ function ReviewRail({
                 {hasProposal && (
                     <div className={s.rwsFinal}>
                         <div className={s.rwsFinalHead}>
-                            <span className={s.rwsFinalTitle}>Final review</span>
+                            <span className={s.rwsFinalTitle}>{t("review.finalTitle")}</span>
                             <span className={s.rwsFinalScore}>
-                                {counts.pen === 0 ? "ready" : "in progress"}
+                                {counts.pen === 0
+                                    ? t("review.finalReady")
+                                    : t("review.finalInProgress")}
                             </span>
                         </div>
                         <div className={s.rwsFinalBody}>
                             {counts.pen === 0
-                                ? "All sections reviewed. Apply the accepted proposals to produce v2."
-                                : `${counts.pen} section${counts.pen === 1 ? "" : "s"} still pending. Accept or reject before applying.`}
+                                ? t("review.finalAllReviewed")
+                                : t("review.finalPending", { count: counts.pen })}
                         </div>
                         <div className={s.rwsFinalActions}>
                             <button
@@ -1248,7 +1251,7 @@ function ReviewRail({
                                 onClick={onRejectAll}
                                 disabled={finalRejectDisabled}
                             >
-                                Reject all
+                                {t("review.rejectAll")}
                             </button>
                             <button
                                 type="button"

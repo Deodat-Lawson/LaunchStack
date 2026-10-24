@@ -21,6 +21,7 @@ import {
     AppWindow,
     Globe,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
 import { getDocumentDisplayType, type DocumentDisplayType } from "../types/document";
@@ -89,25 +90,6 @@ interface DocumentViewerProps {
     onOpenVersionHistory?: () => void;
 }
 
-export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
-    pdf: "PDF",
-    image: "Image",
-    docx: "Word",
-    xlsx: "Spreadsheet",
-    pptx: "Presentation",
-    text: "Text / HTML",
-    markdown: "Markdown",
-    conversation: "Agent Session",
-    mindmap: "Mindmap",
-    artifact: "Claude artifact",
-    website: "Website",
-    code: "Source Code",
-    zip: "Archive",
-    audio: "Audio",
-    video: "Video",
-    unknown: "File",
-};
-
 export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> = {
     pdf: FileText,
     image: FileImage,
@@ -149,6 +131,8 @@ function IframeWithState({
     iframeKey?: string | number;
     sandbox?: string;
 }) {
+    const t = useTranslations("viewers.document");
+    const tc = useTranslations("common");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -163,7 +147,7 @@ function IframeWithState({
             {loading && !error && (
                 <div className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
                     <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                    <p className="text-ink-3 text-sm font-medium">Loading...</p>
+                    <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
                 </div>
             )}
             {error && (
@@ -172,10 +156,8 @@ function IframeWithState({
                         <AlertTriangle className="h-7 w-7 text-red-500" />
                     </div>
                     <div>
-                        <p className="text-ink mb-1 text-sm font-medium">Failed to load document</p>
-                        <p className="text-ink-3 mb-4 text-xs">
-                            The document could not be displayed.
-                        </p>
+                        <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
+                        <p className="text-ink-3 mb-4 text-xs">{t("loadFailedDetail")}</p>
                         <button
                             onClick={() => {
                                 setLoading(true);
@@ -184,7 +166,7 @@ function IframeWithState({
                             className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                         >
                             <RotateCw className="h-4 w-4" />
-                            Retry
+                            {tc("actions.retry")}
                         </button>
                     </div>
                 </div>
@@ -215,6 +197,8 @@ export function DocumentViewer({
     highlight = null,
     onOpenVersionHistory,
 }: DocumentViewerProps) {
+    const t = useTranslations("viewers.document");
+    const tTypes = useTranslations("viewers.displayTypes");
     // Track document view
     useEffect(() => {
         if (document?.id && !isCollapsed) {
@@ -241,7 +225,7 @@ export function DocumentViewer({
                     <FileText className="text-brand-ink h-5 w-5" />
                 </div>
                 <div className="text-ink-3 flex flex-1 items-center justify-center text-[10px] font-bold uppercase tracking-widest opacity-50 [writing-mode:vertical-rl]">
-                    Document Preview
+                    {t("collapsedLabel")}
                 </div>
             </div>
         );
@@ -253,10 +237,8 @@ export function DocumentViewer({
                 <div className="bg-panel-2 mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-sm">
                     <FileText className="text-ink-3/30 h-10 w-10" />
                 </div>
-                <h3 className="text-ink mb-2 text-xl font-semibold">No Document Selected</h3>
-                <p className="text-ink-3 max-w-xs text-sm font-medium">
-                    Select a document from the sidebar to view its content and start your analysis.
-                </p>
+                <h3 className="text-ink mb-2 text-xl font-semibold">{t("emptyTitle")}</h3>
+                <p className="text-ink-3 max-w-xs text-sm font-medium">{t("emptyBody")}</p>
             </div>
         );
     }
@@ -361,7 +343,7 @@ export function DocumentViewer({
                                     {document.category}
                                 </span>
                                 <span className="bg-brand-soft text-brand-ink rounded px-1.5 py-0.5 text-[10px] font-medium">
-                                    {DISPLAY_TYPE_LABELS[displayType]}
+                                    {tTypes(displayType)}
                                 </span>
                             </div>
                         </div>
@@ -372,13 +354,13 @@ export function DocumentViewer({
                                     type="button"
                                     onClick={onOpenVersionHistory}
                                     className="border-line text-brand-ink hover:border-brand hover:bg-brand-soft dark:hover:border-brand dark:hover:bg-brand-soft inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold transition-colors"
-                                    title="View and manage document versions"
+                                    title={t("versionsTooltip")}
                                 >
                                     <History className="h-3.5 w-3.5" />
-                                    Versions
+                                    {t("versions")}
                                 </button>
                             )}
-                            <span>Browser Native Viewer</span>
+                            <span>{t("nativeViewer")}</span>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ChevronRight, CircleAlert, LifeBuoy, Loader2, RotateCw } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -9,7 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/component
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Progress } from "~/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
-import { describeSourceFailure, sourceFailureContactHref } from "~/lib/source-failure";
+import { sourceFailureContactHref, useSourceFailureCopy } from "~/lib/source-failure";
 import { describeSourceProgress } from "~/lib/source-progress";
 import { cn } from "~/lib/utils";
 
@@ -22,7 +23,10 @@ import type { WorkspaceSource } from "./types";
  * says so without a number.
  */
 export function SourceProgressStatus({ source }: { source: WorkspaceSource }) {
-    const { percent, label, waiting } = describeSourceProgress(source.processing);
+    const t = useTranslations("sources.sourceStatus");
+    const tp = useTranslations("sources.progress");
+    const failureCopy = useSourceFailureCopy();
+    const { percent, label, waiting } = describeSourceProgress(source.processing, tp);
     const tone = waiting ? "text-warn" : "text-brand";
 
     const line = (
@@ -54,7 +58,7 @@ export function SourceProgressStatus({ source }: { source: WorkspaceSource }) {
             {percent !== null && (
                 <Progress
                     value={percent}
-                    aria-label={`${label}, ${percent}%`}
+                    aria-label={t("progressLabel", { label, percent })}
                     className={cn(
                         "mt-1 h-[3px]",
                         waiting
@@ -68,12 +72,16 @@ export function SourceProgressStatus({ source }: { source: WorkspaceSource }) {
 
     if (!waiting) return status;
     // Waiting out a backoff: say why on hover or focus.
-    const reason = describeSourceFailure(waiting.lastError);
+    const reason = failureCopy.describe(waiting.lastError);
     return (
         <Tooltip>
             <TooltipTrigger asChild>{status}</TooltipTrigger>
             <TooltipContent className="max-w-xs">
-                {reason.message} Attempt {waiting.attempt} of {waiting.maxAttempts}.
+                {t("waitingReason", {
+                    message: reason.message,
+                    attempt: waiting.attempt,
+                    maxAttempts: waiting.maxAttempts,
+                })}
             </TooltipContent>
         </Tooltip>
     );
@@ -91,7 +99,9 @@ interface SourceFailureStatusProps {
  * sentence, a way to reach support, and the raw error for whoever asks.
  */
 export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProps) {
-    const failure = describeSourceFailure(source.errorMessage);
+    const t = useTranslations("sources.sourceStatus");
+    const tc = useTranslations("common");
+    const failure = useSourceFailureCopy().describe(source.errorMessage);
     const [retrying, setRetrying] = useState(false);
     const [open, setOpen] = useState(false);
     const retryCount = source.processing?.retryCount ?? 0;
@@ -124,7 +134,10 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                     <button
                         type="button"
                         data-testid={`source-failure-${source.id}`}
-                        aria-label={`${failure.label}: show what went wrong with ${source.title}`}
+                        aria-label={t("failureTrigger", {
+                            label: failure.label,
+                            title: source.title,
+                        })}
                         className="text-danger inline-flex min-w-0 cursor-pointer items-center gap-1 hover:underline"
                         onClick={event => event.stopPropagation()}
                     >
@@ -137,14 +150,11 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                     className="w-80 p-3.5"
                     onClick={event => event.stopPropagation()}
                 >
-                    <div className="text-ink text-[13px] font-semibold">
-                        Couldn&rsquo;t process this source
-                    </div>
+                    <div className="text-ink text-[13px] font-semibold">{t("cardTitle")}</div>
                     <p className="text-ink-2 mt-1 text-[12.5px] leading-[1.5]">{failure.message}</p>
                     {retryCount > 0 && (
                         <p className="text-ink-3 mt-1 text-[12px]">
-                            It failed again after{" "}
-                            {retryCount === 1 ? "a retry" : `${retryCount} retries`}.
+                            {t("failedAgain", { count: retryCount })}
                         </p>
                     )}
                     {(canRetry || offerContact) && (
@@ -159,7 +169,7 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                                     ) : (
                                         <RotateCw aria-hidden />
                                     )}
-                                    Retry
+                                    {tc("actions.retry")}
                                 </Button>
                             )}
                             {offerContact && (
@@ -173,7 +183,7 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                                         })}
                                     >
                                         <LifeBuoy aria-hidden />
-                                        Contact us about this error
+                                        {t("contactUs")}
                                     </Link>
                                 </Button>
                             )}
@@ -186,12 +196,12 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                                     className="size-3 transition-transform group-data-[state=open]:rotate-90"
                                     aria-hidden
                                 />
-                                Details
+                                {t("details")}
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                                 {jobId && (
                                     <div className="text-ink-3 mt-1.5 text-[11px]">
-                                        Job ID{" "}
+                                        {t("jobId")}{" "}
                                         <span className="mono text-ink-2 select-all">{jobId}</span>
                                     </div>
                                 )}
@@ -209,7 +219,7 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                 <button
                     type="button"
                     data-testid={`source-retry-${source.id}`}
-                    aria-label={`Retry processing ${source.title}`}
+                    aria-label={t("retryAria", { title: source.title })}
                     disabled={retrying}
                     onClick={event => {
                         event.stopPropagation();
@@ -221,7 +231,7 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                     )}
                 >
                     {retryIcon}
-                    Retry
+                    {tc("actions.retry")}
                 </button>
             )}
         </span>

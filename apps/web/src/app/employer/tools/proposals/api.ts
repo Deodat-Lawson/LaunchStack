@@ -170,11 +170,31 @@ export interface RunDto {
     credits: number;
 }
 
+/**
+ * What a to-do item says, as data, so the screen words it in the reader's
+ * language (`proposals.home.todoItems`). `title`, `detail` and the action
+ * label stay English for every other reader of the API.
+ */
+export type TodoCopy =
+    | { key: "profile"; sources: number }
+    | {
+          key: "deadline";
+          application: string;
+          daysLeft: number;
+          readiness: number;
+          written: number;
+          total: number;
+          blockers: number;
+      }
+    | { key: "funders"; count: number }
+    | { key: "sections"; application: string; count: number; funder: string | null };
+
 export interface TodoItem {
     id: string;
     title: string;
     detail: string;
     action: { label: string; href: string };
+    copy?: TodoCopy;
 }
 
 export interface HomeDto {
@@ -398,36 +418,6 @@ export const proposalsApi = {
 
 export type ProposalsApi = typeof proposalsApi;
 
-export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
-    draft: "Draft",
-    in_progress: "In progress",
-    in_review: "In review",
-    ready: "Ready",
-    submitted: "Submitted",
-    awarded: "Awarded",
-    declined: "Declined",
-    withdrawn: "Withdrawn",
-};
-
-export const SECTION_STATUS_LABEL: Record<SectionStatus, string> = {
-    empty: "Not written",
-    drafted: "Drafted",
-    edited: "Edited",
-    approved: "Approved",
-};
-
-export const RUN_KIND_LABEL: Record<RunKind, string> = {
-    funders: "Finding funders",
-    extract: "Reading the request",
-    draft: "Drafting",
-    rewrite: "Rewriting",
-    review: "Reviewing",
-};
-
-export const REWRITE_PRESET_LABEL: Record<RewritePreset, string> = {
-    tighten: "Tighten to the limit",
-    specific: "Make it more specific",
-    plainer: "Make it plainer",
-    stronger: "Make it stronger",
-    custom: "Rewrite with instructions…",
-};
+// Status, run and preset labels are messages: `proposals.applicationStatus.<status>`,
+// `proposals.sectionStatus.<status>`, `proposals.runKind.<kind>` and
+// `proposals.rewritePreset.<preset>`.

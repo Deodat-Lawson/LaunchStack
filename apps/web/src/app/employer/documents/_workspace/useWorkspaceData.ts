@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
 import {
@@ -29,6 +30,7 @@ import type {
     SourceTypeId,
     WorkspaceFolder,
     WorkspaceSource,
+    WorkspaceTranslator,
 } from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
@@ -65,7 +67,17 @@ function mapDocType(doc: DocumentType): SourceTypeId {
     return "doc";
 }
 
-function humanDate(raw: unknown): string {
+/**
+ * What a source row's words are made with: the `workspace` translator and
+ * the formatter, so "2h ago" and "12 shapes" read in the viewer's language.
+ * `useWorkspaceData` passes its own; a test passes English ones.
+ */
+export interface SourceRowLabels {
+    t: WorkspaceTranslator;
+    format: ReturnType<typeof useFormatter>;
+}
+
+function humanDate(raw: unknown, { t, format }: SourceRowLabels): string {
     if (!raw) return "";
     const d =
         raw instanceof Date
@@ -76,15 +88,15 @@ function humanDate(raw: unknown): string {
     if (!d || Number.isNaN(d.getTime())) return "";
     const diffMs = Date.now() - d.getTime();
     const diffHr = Math.floor(diffMs / 3_600_000);
-    if (diffHr < 1) return "just now";
-    if (diffHr < 24) return `${diffHr}h ago`;
+    if (diffHr < 1) return t("relativeTime.justNow");
+    if (diffHr < 24) return t("relativeTime.hoursAgo", { count: diffHr });
     const diffDay = Math.floor(diffHr / 24);
-    if (diffDay === 1) return "Yesterday";
-    if (diffDay < 7) return `${diffDay} days ago`;
+    if (diffDay === 1) return t("relativeTime.yesterday");
+    if (diffDay < 7) return t("relativeTime.daysAgo", { count: diffDay });
     const diffWk = Math.floor(diffDay / 7);
-    if (diffWk === 1) return "Last week";
-    if (diffWk < 5) return `${diffWk} weeks ago`;
-    return d.toLocaleDateString();
+    if (diffWk === 1) return t("relativeTime.lastWeek");
+    if (diffWk < 5) return t("relativeTime.weeksAgo", { count: diffWk });
+    return format.dateTime(d);
 }
 
 /** Additional fields returned by /api/fetchDocument without changing document previews. */
@@ -128,7 +140,7 @@ function documentIndexError(doc: IndexedDocument): string | undefined {
         : undefined;
 }
 
-export function mapDocument(doc: DocumentRow): WorkspaceSource {
+export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): WorkspaceSource {
     const type = mapDocType(doc);
     // The recording is stored for playback, never embedded. Its separate
     // transcript is the searchable source, with its own current-version status.
@@ -146,7 +158,7 @@ export function mapDocument(doc: DocumentRow): WorkspaceSource {
         title: doc.title,
         type,
         size: doc.aiSummary ? "" : "",
-        added: humanDate(doc.createdAt) || "",
+        added: humanDate(doc.createdAt, labels) || "",
         folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
@@ -185,9 +197,10 @@ export function mapMindmap(
      * own `access` (its folder's audience); the copy's stands in only for a
      * server that did not describe the draft.
      */
-    publishedDocument?: DocumentRow
+    publishedDocument: DocumentRow | undefined,
+    labels: SourceRowLabels
 ): WorkspaceSource {
-    const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
+    const shapes = labels.t("sourceRows.shapes", { count: map.nodeCount });
     return {
         id: `m${map.id}`,
         mindmapId: map.id,
@@ -195,7 +208,7 @@ export function mapMindmap(
         title: map.title,
         type: "mindmap",
         size: shapes,
-        added: humanDate(map.updatedAt) || "",
+        added: humanDate(map.updatedAt, labels) || "",
         // Folders are paths now, and a map is filed like any other source.
         folder: normalizeFolderPath(map.folder),
         tags: [],
@@ -257,6 +270,12 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const refreshInFlight = useRef<Promise<void> | null>(null);
+    const t = useTranslations("workspace");
+    const format = useFormatter();
+    const labels = useMemo<SourceRowLabels>(() => ({ t, format }), [t, format]);
+    /** For the fetch, which must not be rebuilt (and re-run) by a language switch. */
+    const tRef = useRef(t);
+    tRef.current = t;
     // What the last response said about processing, read by the poll loop
     // to tell a long job that is moving from one that is stuck.
     const activity = useRef({ signature: "", retryDueAt: 0 });
@@ -286,7 +305,8 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 // documents down with it — the list degrades to uploads only.
                 fetch("/api/mindmaps?scope=active").catch(() => null),
             ]);
-            if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
+            if (!docsRes.ok)
+                throw new Error(tRef.current("sourceRows.fetchFailed", { status: docsRes.status }));
             const docs = (await docsRes.json()) as DocumentRow[];
             activity.current = processingActivity(docs);
             setDocuments(docs);
@@ -308,7 +328,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
             // Prune optimistic rows that now exist in the server response (by title).
             setOptimistic(prev => prev.filter(o => !docs.some(d => d.title === o.title)));
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to fetch documents");
+            setError(
+                err instanceof Error ? err.message : tRef.current("sourceRows.fetchFailedGeneric")
+            );
         } finally {
             setLoading(false);
         }
@@ -343,17 +365,18 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         }
         return [
             ...optimistic,
-            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...documents.filter(d => !claimed.has(d.id)).map(doc => mapDocument(doc, labels)),
             ...mindmaps.map(map =>
                 mapMindmap(
                     map,
                     map.publishedDocumentId === null
                         ? undefined
-                        : documentsById.get(map.publishedDocumentId)
+                        : documentsById.get(map.publishedDocumentId),
+                    labels
                 )
             ),
         ];
-    }, [documents, mindmaps, optimistic]);
+    }, [documents, mindmaps, optimistic, labels]);
 
     // Which sources are still processing. The poll schedule restarts whenever
     // this changes — something finished or started — and backs off otherwise.

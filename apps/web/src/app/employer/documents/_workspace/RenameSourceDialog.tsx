@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { sourceApiErrorMessage } from "./sourceApi";
 import { isPersistedSource } from "./sourceContextMenu";
 import type { WorkspaceSource } from "./types";
 import { File as IconFile } from "lucide-react";
@@ -13,6 +15,9 @@ export interface RenameSourceDialogProps {
 }
 
 export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSourceDialogProps) {
+    const t = useTranslations("sources.renameSource");
+    const tc = useTranslations("common");
+    const tApi = useTranslations("sources.sourceApi");
     const [name, setName] = useState(source?.title ?? "");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -47,12 +52,12 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
         try {
             const success = await onRename(source, trimmed);
             if (!success) {
-                setError("Couldn't rename this source. Try again.");
+                setError(t("failed"));
                 return;
             }
             onClose();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to rename");
+            setError(sourceApiErrorMessage(err, tApi, t("failedFallback")));
         } finally {
             setSubmitting(false);
         }
@@ -110,7 +115,7 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
                             <IconFile size={14} />
                         </div>
                         <div id="rename-source-title" style={{ fontSize: 15, fontWeight: 700 }}>
-                            Rename source
+                            {t("title")}
                         </div>
                     </div>
                     <input
@@ -119,7 +124,7 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
                         autoFocus
                         disabled={submitting}
                         maxLength={256}
-                        aria-label="Source title"
+                        aria-label={t("inputAria")}
                         data-testid="rename-source-input"
                         onKeyDown={e => {
                             if (e.key === "Enter") void submit();
@@ -137,7 +142,7 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
                     />
                     {trimmed.length === 0 && (
                         <div style={{ fontSize: 11, color: "var(--danger)", marginTop: 6 }}>
-                            Title cannot be empty.
+                            {t("empty")}
                         </div>
                     )}
                     {error && (
@@ -168,7 +173,7 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
                             background: "var(--panel)",
                         }}
                     >
-                        Cancel
+                        {tc("actions.cancel")}
                     </button>
                     <button
                         disabled={!ok || submitting}
@@ -184,7 +189,7 @@ export function RenameSourceDialog({ open, source, onClose, onRename }: RenameSo
                             cursor: ok && !submitting ? "pointer" : "not-allowed",
                         }}
                     >
-                        {submitting ? "Saving…" : "Save"}
+                        {submitting ? tc("status.saving") : tc("actions.save")}
                     </button>
                 </div>
             </div>

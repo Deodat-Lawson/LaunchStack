@@ -5,6 +5,7 @@ import { copyText } from "~/lib/context-menu";
 import { resolveFontStack } from "~/lib/fonts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Image as ImageIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface MermaidDiagramProps {
     code: string;
@@ -34,6 +35,9 @@ function sanitizeFilename(name: string): string {
 }
 
 export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
+    const t = useTranslations("tools.repoExplainer.diagram");
+    const tRef = useRef(t);
+    tRef.current = t;
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -42,12 +46,12 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
     const filePrefix = repoName ? sanitizeFilename(repoName) + "-diagram" : "diagram";
     const ctxTarget = useContextTarget({
         kind: "diagram",
-        label: "Diagram actions",
+        label: t("menuLabel"),
         items: () => [
             {
                 type: "item",
                 id: "copy-source",
-                label: "Copy the Mermaid source",
+                label: t("copySource"),
                 icon: "code",
                 onSelect: () => {
                     void copyText(code);
@@ -56,10 +60,10 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
             {
                 type: "item",
                 id: "copy-svg",
-                label: "Copy as SVG",
+                label: t("copySvg"),
                 icon: "image",
                 disabled: !containerRef.current?.querySelector("svg"),
-                disabledReason: "The diagram has not rendered yet.",
+                disabledReason: t("notRendered"),
                 onSelect: () => {
                     const svg = containerRef.current?.querySelector("svg");
                     if (svg) void copyText(svg.outerHTML);
@@ -127,12 +131,12 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                         svgEl.style.margin = "0 auto";
                     }
                 } else {
-                    throw new Error("Mermaid returned empty result");
+                    throw new Error(tRef.current("emptyResult"));
                 }
             } catch (err) {
                 if (cancelled) return;
                 console.error("[repo-explainer] Mermaid render error:", err);
-                setError(err instanceof Error ? err.message : "Failed to render diagram");
+                setError(err instanceof Error ? err.message : tRef.current("renderFailed"));
             } finally {
                 if (!cancelled) setLoading(false);
             }
@@ -204,11 +208,11 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
     if (error) {
         return (
             <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
-                <p className="font-semibold">Diagram render error</p>
+                <p className="font-semibold">{t("renderError")}</p>
                 <p className="mt-1">{error}</p>
                 <details className="mt-2">
                     <summary className="cursor-pointer text-slate-600 dark:text-slate-400">
-                        Raw Mermaid code
+                        {t("rawCode")}
                     </summary>
                     <pre className="bg-panel-2 mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg p-3 text-[10px]">
                         {code}
@@ -226,7 +230,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                     <button
                         onClick={handleDownloadSvg}
                         className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
-                        title="Download as SVG"
+                        title={t("downloadSvg")}
                     >
                         <Download className="h-3 w-3" />
                         SVG
@@ -234,7 +238,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                     <button
                         onClick={handleDownloadPng}
                         className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
-                        title="Download as PNG"
+                        title={t("downloadPng")}
                     >
                         <ImageIcon className="h-3 w-3" />
                         PNG
@@ -245,7 +249,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
             {/* Diagram container */}
             <div className="overflow-x-auto p-6">
                 {loading && (
-                    <p className="text-ink-3 py-12 text-center text-sm">Rendering diagram...</p>
+                    <p className="text-ink-3 py-12 text-center text-sm">{t("rendering")}</p>
                 )}
                 <div {...ctxTarget} ref={containerRef} />
             </div>

@@ -1,0 +1,6 @@
+{
+  "label": "Language",
+  "choose": "Choose language",
+  "changed": "Language changed",
+  "settingDescription": "The language of menus, buttons and messages. Assistants answer in it too, unless you write in another one."
+}

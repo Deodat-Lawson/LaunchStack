@@ -22,7 +22,10 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import "@testing-library/jest-dom";
 
 import type { ToolHost } from "~/components/tool-app/nav";
+import { createTranslator } from "use-intl";
+
 import { DraftsTool, draftsScreens } from "~/app/employer/documents/components/DraftsTool";
+import { englishMessages } from "~/i18n/messages";
 import {
     DRAFTS_ROOTS,
     draftsDocumentPath,
@@ -123,13 +126,18 @@ describe("draftsScreenFor", () => {
     });
 
     it("the screen tabs count drafts only once the list is known", () => {
-        const [group] = draftsScreens(null);
+        const t = createTranslator({
+            locale: "en",
+            messages: englishMessages,
+            namespace: "viewers.drafts",
+        });
+        const [group] = draftsScreens(null, t);
         expect(group!.items.map(i => [i.to, i.label, i.count])).toEqual([
             ["/", "New document", undefined],
             ["/documents", "My documents", null],
             ["/assistant", "Assistant", undefined],
         ]);
-        expect(draftsScreens(3)[0]!.items[1]!.count).toBe(3);
+        expect(draftsScreens(3, t)[0]!.items[1]!.count).toBe(3);
     });
 });
 

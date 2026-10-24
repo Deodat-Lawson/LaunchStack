@@ -1,6 +1,7 @@
 "use client";
 
 import { FileUp, FolderOpen, Lightbulb, Paperclip } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useRef, useState, type DragEvent } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -9,7 +10,7 @@ import { Textarea } from "~/components/ui/textarea";
 import type { ScenarioFileOption } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { SITUATION_STARTERS } from "../_lib/files";
+import { SITUATION_STARTERS, UPLOAD_FOLDER } from "../_lib/files";
 import type { UploadItem } from "../_lib/useUploads";
 import { ArrivingFile, AttachedFile, UploadingFile } from "./FileBits";
 
@@ -56,6 +57,8 @@ export function SituationComposer({
     onRemove: (id: number) => void;
     onDismissUpload: (key: string) => void;
 }) {
+    const t = useTranslations("scenarios.new");
+    const format = useFormatter();
     const depth = useRef(0);
     const [over, setOver] = useState(false);
     const count = picked.length + uploads.filter(u => u.state === "uploading").length;
@@ -104,14 +107,14 @@ export function SituationComposer({
                         htmlFor="scenario-subject"
                         className="text-brand-ink text-[13px] font-semibold"
                     >
-                        What happens if…
+                        {t("subjectLabel")}
                     </Label>
                     <Textarea
                         id="scenario-subject"
                         value={value}
                         onChange={e => onChange(e.target.value)}
                         rows={3}
-                        placeholder="One thing that could happen: a price change, a launch, a new policy, a competitor’s move…"
+                        placeholder={t("subjectPlaceholder")}
                         className="mt-1 min-h-[84px] rounded-none border-0 bg-transparent px-0 py-0 leading-[1.55] shadow-none focus-visible:ring-0 md:text-[15px] dark:bg-transparent"
                         aria-invalid={tooLong || undefined}
                         aria-describedby="scenario-subject-help"
@@ -122,20 +125,20 @@ export function SituationComposer({
                     <div className="flex flex-wrap items-center gap-1.5 px-4 pb-3 pt-1">
                         <span className="text-ink-3 inline-flex items-center gap-1 text-xs">
                             <Lightbulb className="size-3" aria-hidden />
-                            Try
+                            {t("composer.try")}
                         </span>
-                        {SITUATION_STARTERS.map((s, i) => (
+                        {SITUATION_STARTERS.map((id, i) => (
                             <button
-                                key={s}
+                                key={id}
                                 type="button"
-                                onClick={() => onChange(s)}
+                                onClick={() => onChange(t(`starters.${id}`))}
                                 className={cn(
                                     "border-line text-ink-2 hover:border-brand hover:text-brand-ink focus-visible:ring-brand/50 rounded-full border px-2.5 py-0.5 text-left text-xs outline-none transition-colors focus-visible:ring-2",
                                     // Two are enough on a phone.
                                     i >= 2 && "@max-sm:hidden"
                                 )}
                             >
-                                {s}
+                                {t(`starters.${id}`)}
                             </button>
                         ))}
                     </div>
@@ -144,7 +147,7 @@ export function SituationComposer({
                 {(picked.length > 0 || uploads.length > 0) && (
                     <ul
                         className="@max-md:grid-cols-1 grid grid-cols-2 gap-2 px-3 pb-3"
-                        aria-label="Attached files"
+                        aria-label={t("composer.attached")}
                         aria-live="polite"
                     >
                         {picked.map(p =>
@@ -183,7 +186,7 @@ export function SituationComposer({
                             disabled={count >= filesMax}
                         >
                             <Paperclip />
-                            Upload files
+                            {t("composer.upload")}
                         </Button>
                     )}
                     <Button
@@ -194,11 +197,11 @@ export function SituationComposer({
                         onClick={onChoose}
                     >
                         <FolderOpen />
-                        Choose from your files
+                        {t("composer.choose")}
                     </Button>
                     <span className="flex-1" />
                     <span className="text-ink-3 px-1.5 text-[11px] tabular-nums">
-                        {count}/{filesMax} files
+                        {t("composer.fileCount", { count, max: filesMax })}
                     </span>
                     <span
                         className={cn(
@@ -206,7 +209,7 @@ export function SituationComposer({
                             tooLong ? "text-danger" : "text-ink-3"
                         )}
                     >
-                        {value.length.toLocaleString()}/{max.toLocaleString()}
+                        {format.number(value.length)}/{format.number(max)}
                     </span>
                 </div>
 
@@ -217,18 +220,16 @@ export function SituationComposer({
                     >
                         <FileUp className="text-brand-ink size-6" />
                         <span className="text-ink text-sm font-medium">
-                            Drop to add to the scenario
+                            {t("composer.dropTitle")}
                         </span>
                         <span className="text-ink-3 text-xs">
-                            Saved to your Company folder and read before the run starts
+                            {t("composer.dropHint", { folder: UPLOAD_FOLDER })}
                         </span>
                     </div>
                 )}
             </div>
             <p id="scenario-subject-help" className="text-ink-3 text-xs leading-relaxed">
-                One situation, in plain words: it is the opening post everyone sees. Attach what it
-                is about — a pricing page, a policy draft, a pitch deck
-                {canUpload ? "; drop files on the box to upload them." : "."}
+                {canUpload ? t("subjectHintUpload") : t("subjectHint")}
             </p>
         </div>
     );

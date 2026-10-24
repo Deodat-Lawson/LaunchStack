@@ -1,7 +1,12 @@
+import { createTranslator } from "use-intl";
+
 import {
     audienceSummary,
     describeGrants,
 } from "~/app/employer/documents/_workspace/access/audience";
+import { englishMessages } from "~/i18n/messages";
+
+const t = createTranslator({ locale: "en", messages: englishMessages, namespace: "team.access" });
 
 const user = (id: string) => ({
     principalType: "user" as const,
@@ -22,20 +27,20 @@ const role = (id: string, name?: string) => ({
 
 describe("describeGrants", () => {
     it("lists people, groups, and roles with proper joins", () => {
-        expect(describeGrants([])).toBe("no one yet");
-        expect(describeGrants([user("1")])).toBe("1 person");
-        expect(describeGrants([user("1"), user("2"), group("g")])).toBe("2 people and 1 group");
-        expect(describeGrants([user("1"), group("g"), role("admin", "Admin")])).toBe(
+        expect(describeGrants(t, [])).toBe("no one yet");
+        expect(describeGrants(t, [user("1")])).toBe("1 person");
+        expect(describeGrants(t, [user("1"), user("2"), group("g")])).toBe("2 people and 1 group");
+        expect(describeGrants(t, [user("1"), group("g"), role("admin", "Admin")])).toBe(
             "1 person, 1 group, and the Admin role"
         );
-        expect(describeGrants([role("a"), role("b")])).toBe("2 roles");
+        expect(describeGrants(t, [role("a"), role("b")])).toBe("2 roles");
     });
 });
 
 describe("audienceSummary", () => {
     it("describes an open folder with the server's count when clean", () => {
         expect(
-            audienceSummary({
+            audienceSummary(t, {
                 kind: "folder",
                 restricted: false,
                 grants: [],
@@ -47,7 +52,7 @@ describe("audienceSummary", () => {
 
     it("uses the saved count for a restricted folder that has not been edited", () => {
         expect(
-            audienceSummary({
+            audienceSummary(t, {
                 kind: "folder",
                 restricted: true,
                 grants: [user("1")],
@@ -56,7 +61,7 @@ describe("audienceSummary", () => {
             })
         ).toBe("Visible to 4 people");
         expect(
-            audienceSummary({
+            audienceSummary(t, {
                 kind: "document",
                 restricted: true,
                 grants: [],
@@ -68,7 +73,7 @@ describe("audienceSummary", () => {
 
     it("describes the pending grant list while editing, and says it needs saving", () => {
         expect(
-            audienceSummary({
+            audienceSummary(t, {
                 kind: "folder",
                 restricted: true,
                 grants: [user("1"), group("g")],

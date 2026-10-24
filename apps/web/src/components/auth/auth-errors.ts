@@ -4,7 +4,24 @@
  *
  * None of these may reveal whether an account exists: a wrong password and
  * an unknown email read the same.
+ *
+ * The sentences are `auth.errors` messages. Each function takes the screen's
+ * translator as its last argument; without one it answers in English, which
+ * is what tests and not-yet-translated callers read.
  */
+
+import { createTranslator, type useTranslations } from "next-intl";
+
+import auth from "~/i18n/messages/en/auth.json";
+
+/** `useTranslations("auth.errors")`, passed in by the screen that shows the sentence. */
+export type AuthErrorsTranslator = ReturnType<typeof useTranslations<"auth.errors">>;
+
+const english = createTranslator({
+    locale: "en",
+    messages: { auth },
+    namespace: "auth.errors",
+}) as unknown as AuthErrorsTranslator;
 
 /** A failed better-auth call, reduced to what the forms branch on. */
 export type AuthFailure = {
@@ -15,8 +32,12 @@ export type AuthFailure = {
     retryAfter?: number | null;
 };
 
-export const NETWORK_ERROR =
-    "Can't reach Launchstack right now. Check your connection and try again.";
+export function networkErrorMessage(t: AuthErrorsTranslator = english): string {
+    return t("network");
+}
+
+/** The network sentence in English. Screens use `networkErrorMessage(t)`. */
+export const NETWORK_ERROR = networkErrorMessage();
 
 /** better-auth's rate limiter answers 429 with the wait in X-Retry-After. */
 export function parseRetryAfter(header: string | null): number | null {
@@ -25,19 +46,21 @@ export function parseRetryAfter(header: string | null): number | null {
     return Number.isFinite(seconds) && seconds > 0 ? Math.ceil(seconds) : null;
 }
 
-export function rateLimitMessage(retryAfter: number | null | undefined): string {
-    return retryAfter
-        ? `Too many attempts. Try again in ${retryAfter} second${retryAfter === 1 ? "" : "s"}.`
-        : "Too many attempts. Wait a moment, then try again.";
+export function rateLimitMessage(
+    retryAfter: number | null | undefined,
+    t: AuthErrorsTranslator = english
+): string {
+    return retryAfter ? t("rateLimitWait", { seconds: retryAfter }) : t("rateLimit");
 }
 
-export function signInFailureMessage(failure: AuthFailure): string {
-    if (failure.status === 0) return NETWORK_ERROR;
-    if (failure.status === 429) return rateLimitMessage(failure.retryAfter);
-    if (failure.status === 401 || failure.status === 400) {
-        return "That email and password don't match. Check both and try again.";
-    }
-    return failure.message ?? "Sign-in failed. Try again in a moment.";
+export function signInFailureMessage(
+    failure: AuthFailure,
+    t: AuthErrorsTranslator = english
+): string {
+    if (failure.status === 0) return networkErrorMessage(t);
+    if (failure.status === 429) return rateLimitMessage(failure.retryAfter, t);
+    if (failure.status === 401 || failure.status === 400) return t("wrongCredentials");
+    return failure.message ?? t("signInFailed");
 }
 
 const PROVIDER_NAMES: Record<string, string> = { google: "Google", github: "GitHub" };
@@ -47,31 +70,41 @@ const PROVIDER_NAMES: Record<string, string> = { google: "Google", github: "GitH
  * sentence. `null` for no code. Unknown codes get a generic line rather than
  * the raw code — they are for logs, not people.
  */
-export function oauthErrorMessage(code: string | null, provider?: string | null): string | null {
+export function oauthErrorMessage(
+    code: string | null,
+    provider?: string | null,
+    t: AuthErrorsTranslator = english
+): string | null {
     if (!code) return null;
     const name = provider ? PROVIDER_NAMES[provider] : undefined;
     switch (code) {
         case "access_denied":
-            return "Sign-in was cancelled. Try again, or pick another way to sign in.";
+            return t("oauth.accessDenied");
         // A provider sign-in on an existing address links to it whenever the
         // provider confirms the address (~/server/auth/account-linking), so
         // this is the one that has not.
         case "account_not_linked":
-            return `${name ?? "That provider"} hasn't confirmed you own this email address, so it can't sign you in to the Launchstack account that uses it. Confirm the address with ${name ?? "the provider"}, or sign in another way.`;
+            return name
+                ? t("oauth.accountNotLinked", { provider: name })
+                : t("oauth.accountNotLinkedUnnamed");
         case "unable_to_link_account":
-            return `We couldn't connect ${name ?? "that account"} to your Launchstack account. Try again, or sign in another way.`;
+            return name
+                ? t("oauth.unableToLink", { provider: name })
+                : t("oauth.unableToLinkUnnamed");
         case "email_not_found":
-            return `${name ?? "The provider"} didn't share an email address with us, so we couldn't sign you in.`;
+            return name
+                ? t("oauth.emailNotFound", { provider: name })
+                : t("oauth.emailNotFoundUnnamed");
         case "signup_disabled":
-            return "New accounts can't be created that way. Ask your workspace owner for an invitation.";
+            return t("oauth.signupDisabled");
         case "state_not_found":
         case "state_mismatch":
         case "invalid_code":
         case "invalid_callback_request":
         case "please_restart_the_process":
-            return "That sign-in attempt expired. Please try again.";
+            return t("oauth.expired");
         default:
-            return "We couldn't complete that sign-in. Try again, or use your email and password.";
+            return t("oauth.generic");
     }
 }
 
@@ -79,25 +112,30 @@ export function oauthErrorMessage(code: string | null, provider?: string | null)
  * The `?error=<code>` a failed "Connect Google" in Settings › Account comes
  * back with, as a sentence. `email` is the signed-in account's address.
  */
-export function connectErrorMessage(code: string, provider: string, email?: string | null): string {
-    const name = PROVIDER_NAMES[provider] ?? "That provider";
+export function connectErrorMessage(
+    code: string,
+    provider: string,
+    email?: string | null,
+    t: AuthErrorsTranslator = english
+): string {
+    const name = PROVIDER_NAMES[provider] ?? t("connect.fallbackProvider");
     switch (code) {
         case "access_denied":
-            return `Connecting ${name} was cancelled.`;
+            return t("connect.accessDenied", { provider: name });
         case "email_does_not_match":
             return email
-                ? `That ${name} account uses a different email address. Connect the ${name} account for ${email}.`
-                : `That ${name} account uses a different email address from this one.`;
+                ? t("connect.emailMismatch", { provider: name, email })
+                : t("connect.emailMismatchNoEmail", { provider: name });
         case "account_already_linked_to_different_user":
-            return `That ${name} account already signs in to a different Launchstack account.`;
+            return t("connect.alreadyLinked", { provider: name });
         case "unable_to_link_account":
-            return `${name} hasn't confirmed you own that email address, so it can't be connected.`;
+            return t("connect.unconfirmed", { provider: name });
         case "state_not_found":
         case "state_mismatch":
         case "invalid_code":
         case "please_restart_the_process":
-            return `That attempt to connect ${name} expired. Please try again.`;
+            return t("connect.expired", { provider: name });
         default:
-            return `We couldn't connect ${name}. Try again in a moment.`;
+            return t("connect.generic", { provider: name });
     }
 }

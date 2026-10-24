@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import {
     UNFILED_FOLDER,
     displayFolderPath,
@@ -18,6 +20,14 @@ import type { ActionMenuItem } from "~/components/ui/action-menu";
  */
 export type SourceContextMenuItem = ActionMenuItem;
 
+/** `useTranslations("sources.contextMenu")` — every builder below takes one. */
+export type SourceMenuTranslator = ReturnType<typeof useTranslations<"sources.contextMenu">>;
+
+/** A folder as a menu names it: "Contracts / 2026", or Unfiled in the reader's words. */
+function folderLabel(t: SourceMenuTranslator, path: string): string {
+    return path === UNFILED_FOLDER ? t("unfiled") : displayFolderPath(path);
+}
+
 export interface SourceMenuHandlers {
     onOpen?: (source: WorkspaceSource) => void;
     /** Put it in a column beside whatever is open, rather than over it. */
@@ -37,7 +47,11 @@ export interface SourceMenuHandlers {
     onDelete?: (source: WorkspaceSource) => void;
 }
 
-/** Why a change is refused for a file the caller can open but not edit (ADR-014). */
+/**
+ * Why a change is refused for a file the caller can open but not edit
+ * (ADR-014). English, for callers without a translator: the menus here say
+ * it with `t("viewOnly")`, and the same for the two below.
+ */
 export const VIEW_ONLY_REASON = "You can view this file but not change it.";
 /** Why a folder is not offered as a destination. */
 export const FOLDER_LOCKED_REASON = "You can't add files to this folder.";
@@ -66,17 +80,18 @@ export function isPersistedSource(source: WorkspaceSource): boolean {
 }
 
 export function buildSourceMenuItems(
+    t: SourceMenuTranslator,
     source: WorkspaceSource,
     folders: WorkspaceFolder[],
     selected: string[],
     handlers: SourceMenuHandlers
 ): SourceContextMenuItem[] {
     const persisted = isPersistedSource(source);
-    const indexingReason = "This source is still being indexed.";
+    const indexingReason = t("indexing");
     const editable = canChangeSource(source);
     /** Rename, move, cut and delete: the file must exist and the caller must be able to edit it. */
     const changeBlocked = !persisted || !editable;
-    const changeReason = !persisted ? indexingReason : !editable ? VIEW_ONLY_REASON : undefined;
+    const changeReason = !persisted ? indexingReason : !editable ? t("viewOnly") : undefined;
     const inContext = selected.includes(source.id);
     const currentFolder = source.folder?.trim() || "Unfiled";
     const items: SourceContextMenuItem[] = [{ type: "label", id: "title", label: source.title }];
@@ -85,7 +100,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "open",
-            label: "Open",
+            label: t("open"),
             icon: "open",
             onSelect: () => handlers.onOpen?.(source),
         });
@@ -95,7 +110,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "open-beside",
-            label: "Open to the side",
+            label: t("openBeside"),
             icon: "split",
             onSelect: () => handlers.onOpenBeside?.(source),
         });
@@ -105,7 +120,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "context",
-            label: inContext ? "Remove from context" : "Add to context",
+            label: inContext ? t("removeFromContext") : t("addToContext"),
             icon: "ask",
             onSelect: () => handlers.onToggleContext?.(source),
         });
@@ -115,7 +130,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "open-tab",
-            label: "Open in a new tab",
+            label: t("openInNewTab"),
             icon: "external",
             disabled: !persisted,
             disabledReason: persisted ? undefined : indexingReason,
@@ -127,7 +142,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "knowledge",
-            label: "Show in Knowledge",
+            label: t("showInKnowledge"),
             icon: "search",
             onSelect: () => handlers.onShowInKnowledge?.(source),
         });
@@ -141,7 +156,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "rename",
-            label: "Rename…",
+            label: t("rename"),
             icon: "rename",
             disabled: changeBlocked,
             disabledReason: changeReason,
@@ -155,19 +170,19 @@ export function buildSourceMenuItems(
         items.push({
             type: "submenu",
             id: "move",
-            label: "Move to folder",
+            label: t("moveToFolder"),
             icon: "folder",
             disabled: changeBlocked,
             disabledReason: changeReason,
             items: folderNames.map(name => ({
                 type: "item" as const,
                 id: `move-${name}`,
-                label: displayFolderPath(name),
+                label: folderLabel(t, name),
                 icon: name === currentFolder ? "check" : undefined,
                 checked: name === currentFolder,
                 disabled: name === currentFolder || locked.has(name),
                 disabledReason:
-                    name !== currentFolder && locked.has(name) ? FOLDER_LOCKED_REASON : undefined,
+                    name !== currentFolder && locked.has(name) ? t("folderLocked") : undefined,
                 onSelect: () => handlers.onMoveToFolder?.(source.id, name),
             })),
         });
@@ -177,7 +192,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "cut",
-            label: "Cut",
+            label: t("cut"),
             icon: "cut",
             shortcut: "⌘X",
             disabled: changeBlocked,
@@ -190,7 +205,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "copy",
-            label: "Copy title",
+            label: t("copyTitle"),
             icon: "copy",
             onSelect: () => handlers.onCopyTitle?.(source),
         });
@@ -200,7 +215,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "copy-link",
-            label: "Copy link",
+            label: t("copyLink"),
             icon: "link",
             onSelect: () => handlers.onCopyLink?.(source),
         });
@@ -210,7 +225,7 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "access",
-            label: "Share…",
+            label: t("share"),
             icon: "share",
             disabled: !persisted,
             disabledReason: persisted ? undefined : indexingReason,
@@ -223,12 +238,12 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "delete",
-            label: "Delete…",
+            label: t("delete"),
             icon: "delete",
             danger: true,
             disabled: changeBlocked || !canDeleteSource(source),
             disabledReason:
-                changeReason ?? (canDeleteSource(source) ? undefined : DELETE_RESERVED_REASON),
+                changeReason ?? (canDeleteSource(source) ? undefined : t("deleteReserved")),
             onSelect: () => handlers.onDelete?.(source),
         });
     }
@@ -262,18 +277,19 @@ export interface FolderMenuHandlers {
 }
 
 export function buildFolderMenuItems(
+    t: SourceMenuTranslator,
     folderPath: string,
     handlers: FolderMenuHandlers
 ): SourceContextMenuItem[] {
     const path = normalizeFolderPath(folderPath);
     const items: SourceContextMenuItem[] = [
-        { type: "label", id: "title", label: displayFolderPath(path) },
+        { type: "label", id: "title", label: folderLabel(t, path) },
     ];
     if (handlers.onOpen) {
         items.push({
             type: "item",
             id: "open-folder",
-            label: "Open folder",
+            label: t("openFolder"),
             icon: "open",
             onSelect: () => handlers.onOpen?.(),
         });
@@ -282,7 +298,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "add-source",
-            label: "New source in this folder…",
+            label: t("newSourceInFolder"),
             icon: "plus",
             onSelect: () => handlers.onAddSource?.(),
         });
@@ -291,7 +307,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "new-subfolder",
-            label: "New subfolder…",
+            label: t("newSubfolder"),
             icon: "folder",
             onSelect: () => handlers.onNewSubfolder?.(),
         });
@@ -301,7 +317,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "paste",
-            label: `Paste ${n} ${n === 1 ? "source" : "sources"} here`,
+            label: t("pasteHere", { count: n }),
             icon: "paste",
             shortcut: "⌘V",
             onSelect: () => handlers.onPaste?.(),
@@ -312,7 +328,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "collapse-all",
-            label: collapse ? "Collapse all" : "Expand all",
+            label: collapse ? t("collapseAll") : t("expandAll"),
             icon: collapse ? "hide" : "open",
             onSelect: () => handlers.onCollapseAll?.(collapse),
         });
@@ -321,7 +337,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "rename-folder",
-            label: "Rename…",
+            label: t("rename"),
             icon: "rename",
             onSelect: () => handlers.onRename?.(),
         });
@@ -340,13 +356,13 @@ export function buildFolderMenuItems(
         items.push({
             type: "submenu",
             id: "move-folder",
-            label: "Move to…",
+            label: t("moveTo"),
             icon: "folder",
             items: [
                 {
                     type: "item" as const,
                     id: "move-folder-root",
-                    label: "Top level",
+                    label: t("topLevel"),
                     icon: folderDepth(path) === 0 ? "check" : undefined,
                     checked: folderDepth(path) === 0,
                     disabled: folderDepth(path) === 0,
@@ -355,7 +371,7 @@ export function buildFolderMenuItems(
                 ...targets.map(target => ({
                     type: "item" as const,
                     id: `move-folder-${target}`,
-                    label: displayFolderPath(target),
+                    label: folderLabel(t, target),
                     onSelect: () => handlers.onMove?.(target),
                 })),
             ],
@@ -365,7 +381,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "share-folder",
-            label: "Share…",
+            label: t("share"),
             icon: "share",
             onSelect: () => handlers.onShare?.(),
         });
@@ -375,7 +391,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "select-folder",
-            label: all ? "Deselect all in folder" : "Select all in folder",
+            label: all ? t("deselectAllInFolder") : t("selectAllInFolder"),
             icon: "check",
             onSelect: () => handlers.onSelectAll?.(!all),
         });
@@ -385,7 +401,7 @@ export function buildFolderMenuItems(
         items.push({
             type: "item",
             id: "delete-folder",
-            label: "Delete…",
+            label: t("delete"),
             icon: "delete",
             danger: true,
             onSelect: () => handlers.onDelete?.(),
@@ -402,14 +418,17 @@ export interface BlankRailMenuHandlers {
     onPaste?: () => void;
 }
 
-export function buildBlankRailMenuItems(handlers: BlankRailMenuHandlers): SourceContextMenuItem[] {
+export function buildBlankRailMenuItems(
+    t: SourceMenuTranslator,
+    handlers: BlankRailMenuHandlers
+): SourceContextMenuItem[] {
     const items: SourceContextMenuItem[] = [];
     if (handlers.onPaste && (handlers.cutCount ?? 0) > 0) {
         const n = handlers.cutCount ?? 0;
         items.push({
             type: "item",
             id: "paste",
-            label: `Paste ${n} ${n === 1 ? "source" : "sources"} at the top level`,
+            label: t("pasteTopLevel", { count: n }),
             icon: "paste",
             shortcut: "⌘V",
             onSelect: () => handlers.onPaste?.(),
@@ -419,7 +438,7 @@ export function buildBlankRailMenuItems(handlers: BlankRailMenuHandlers): Source
         items.push({
             type: "item",
             id: "add",
-            label: "Add knowledge",
+            label: t("addKnowledge"),
             icon: "plus",
             onSelect: () => handlers.onAddKnowledge?.(),
         });
@@ -428,7 +447,7 @@ export function buildBlankRailMenuItems(handlers: BlankRailMenuHandlers): Source
         items.push({
             type: "item",
             id: "new-folder",
-            label: "New folder",
+            label: t("newFolder"),
             icon: "folder",
             onSelect: () => handlers.onNewFolder?.(),
         });
@@ -450,12 +469,12 @@ export interface SelectionMenuHandlers {
  * how many that is.
  */
 export function buildSelectionMenuItems(
+    t: SourceMenuTranslator,
     sources: WorkspaceSource[],
     folders: WorkspaceFolder[],
     handlers: SelectionMenuHandlers
 ): SourceContextMenuItem[] {
     const count = sources.length;
-    const noun = count === 1 ? "source" : "sources";
     // What the verbs below act on: rows that exist and that the caller may change.
     const persisted = sources.filter(s => isPersistedSource(s) && canChangeSource(s));
     const pending = count - persisted.length;
@@ -463,25 +482,25 @@ export function buildSelectionMenuItems(
     const pendingReason =
         viewOnly > 0
             ? pending === count
-                ? "You can view these but not change them."
-                : `You can view ${viewOnly} of these but not change ${viewOnly === 1 ? "it" : "them"}; ${viewOnly === 1 ? "it" : "they"} will be skipped.`
+                ? t("selectionViewOnlyAll")
+                : t("selectionViewOnlySome", { count: viewOnly })
             : pending === count
-              ? "These sources are still being indexed."
-              : `${pending} of these ${pending === 1 ? "is" : "are"} still being indexed and will be skipped.`;
+              ? t("selectionIndexingAll")
+              : t("selectionIndexingSome", { count: pending });
     const folderOf = (source: WorkspaceSource) => source.folder?.trim() || "Unfiled";
     const sharedFolder = sources.every(s => folderOf(s) === folderOf(sources[0]!))
         ? folderOf(sources[0]!)
         : null;
 
     const items: SourceContextMenuItem[] = [
-        { type: "label", id: "title", label: `${count} ${noun} selected` },
+        { type: "label", id: "title", label: t("selectedCount", { count }) },
     ];
 
     if (handlers.onRemoveFromContext) {
         items.push({
             type: "item",
             id: "context",
-            label: "Remove all from context",
+            label: t("removeAllFromContext"),
             icon: "ask",
             onSelect: () => handlers.onRemoveFromContext?.(sources.map(s => s.id)),
         });
@@ -493,19 +512,22 @@ export function buildSelectionMenuItems(
         items.push({
             type: "submenu",
             id: "move",
-            label: `Move ${persisted.length === count ? count : `${persisted.length} of ${count}`} to folder`,
+            label:
+                persisted.length === count
+                    ? t("moveSelection", { count })
+                    : t("moveSelectionSome", { movable: persisted.length, count }),
             icon: "folder",
             disabled: persisted.length === 0,
             disabledReason: persisted.length === 0 ? pendingReason : undefined,
             items: folderNames.map(name => ({
                 type: "item" as const,
                 id: `move-${name}`,
-                label: displayFolderPath(name),
+                label: folderLabel(t, name),
                 icon: name === sharedFolder ? "check" : undefined,
                 checked: name === sharedFolder,
                 disabled: name === sharedFolder || locked.has(name),
                 disabledReason:
-                    name !== sharedFolder && locked.has(name) ? FOLDER_LOCKED_REASON : undefined,
+                    name !== sharedFolder && locked.has(name) ? t("folderLocked") : undefined,
                 onSelect: () =>
                     handlers.onMoveToFolder?.(
                         persisted.map(s => s.id),
@@ -520,7 +542,10 @@ export function buildSelectionMenuItems(
         items.push({
             type: "item",
             id: "delete",
-            label: `Delete ${persisted.length === count ? count : `${persisted.length} of ${count}`} ${noun}…`,
+            label:
+                persisted.length === count
+                    ? t("deleteSelection", { count })
+                    : t("deleteSelectionSome", { movable: persisted.length, count }),
             icon: "delete",
             danger: true,
             // The server refuses a batch with one file the caller may not delete.
@@ -530,7 +555,7 @@ export function buildSelectionMenuItems(
                     ? pendingReason
                     : persisted.every(canDeleteSource)
                       ? undefined
-                      : DELETE_RESERVED_REASON,
+                      : t("deleteReserved"),
             onSelect: () => handlers.onDelete?.(persisted),
         });
     }

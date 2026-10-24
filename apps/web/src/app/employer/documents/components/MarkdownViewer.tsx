@@ -9,6 +9,7 @@ import "katex/dist/katex.min.css";
 import "highlight.js/styles/github-dark-dimmed.min.css";
 import type { ElementContent } from "hast";
 import { Loader2, AlertTriangle, RotateCw, Copy, Check, List, Code2, BookOpen } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
@@ -62,6 +63,7 @@ function hastText(node: ElementContent): string {
  * shows plain escaped text.
  */
 function CodeBlock({ code, language }: { code: string; language: string }) {
+    const t = useTranslations("viewers.markdown");
     const [html, setHtml] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
 
@@ -102,7 +104,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
                     type="button"
                     className="md-codeblock-copy"
                     onClick={() => void copy()}
-                    aria-label={copied ? "Copied" : "Copy code"}
+                    aria-label={copied ? t("copiedCode") : t("copyCode")}
                 >
                     {copied ? <Check size={12} /> : <Copy size={12} />}
                 </button>
@@ -126,6 +128,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
  * showing it as a code block rather than an error wall.
  */
 function MermaidBlock({ code }: { code: string }) {
+    const t = useTranslations("viewers.markdown");
     const [svg, setSvg] = useState<string | null>(null);
     const [failed, setFailed] = useState(false);
     const idRef = useRef(`md-mermaid-${Math.random().toString(36).slice(2)}`);
@@ -156,7 +159,7 @@ function MermaidBlock({ code }: { code: string }) {
     if (svg === null) {
         return (
             <div className="md-mermaid md-mermaid-loading">
-                <Loader2 className="h-4 w-4 animate-spin" /> Rendering diagram…
+                <Loader2 className="h-4 w-4 animate-spin" /> {t("renderingDiagram")}
             </div>
         );
     }
@@ -164,8 +167,12 @@ function MermaidBlock({ code }: { code: string }) {
 }
 
 export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownViewerProps) {
+    const t = useTranslations("viewers.markdown");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const [content, setContent] = useState<string>("");
     const [loading, setLoading] = useState(true);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [viewMode, setViewMode] = useState<"rendered" | "source">("rendered");
@@ -189,7 +196,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
             if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
             setContent(await res.text());
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to load file");
+            setError(err instanceof Error ? err.message : "");
         } finally {
             setLoading(false);
         }
@@ -298,31 +305,32 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
         return { words, minutes, kb };
     }, [content]);
     const markdown = useMemo(() => escapeCurrencyDollars(content), [content]);
+    const kbText = format.number(stats.kb, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
     if (loading) {
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Loading document...</p>
+                <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
             </div>
         );
     }
 
-    if (error) {
+    if (error !== null) {
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-ink mb-1 text-sm font-medium">Failed to load document</p>
-                    <p className="text-ink-3 mb-4 text-xs">{error}</p>
+                    <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
+                    <p className="text-ink-3 mb-4 text-xs">{error || t("loadFailedFallback")}</p>
                     <button
                         onClick={() => void fetchContent()}
                         className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                     >
                         <RotateCw className="h-4 w-4" />
-                        Retry
+                        {tc("actions.retry")}
                     </button>
                 </div>
             </div>
@@ -334,7 +342,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
             <div className="flex h-full flex-col overflow-hidden">
                 <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
                     <span className="text-ink-3 font-mono text-[10px]">
-                        Markdown source &middot; {stats.kb.toFixed(1)} KB
+                        {t("sourceStats", { size: kbText })}
                     </span>
                     <Button
                         variant="ghost"
@@ -343,7 +351,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                         onClick={() => setViewMode("rendered")}
                     >
                         <BookOpen className="h-3.5 w-3.5" />
-                        Rendered view
+                        {t("renderedView")}
                     </Button>
                 </div>
                 <div className="min-h-0 flex-1">
@@ -358,8 +366,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
             {/* Toolbar */}
             <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
                 <span className="text-ink-3 font-mono text-[10px]">
-                    {stats.words.toLocaleString()} words &middot; {stats.minutes} min read &middot;{" "}
-                    {stats.kb.toFixed(1)} KB
+                    {t("stats", { words: stats.words, minutes: stats.minutes, size: kbText })}
                 </span>
                 <div className="flex items-center gap-1">
                     <TooltipProvider delayDuration={300}>
@@ -368,7 +375,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label="Toggle outline"
+                                    aria-label={t("toggleOutline")}
                                     className={`h-7 w-7 rounded-md ${tocOpen && toc.length > 0 ? "bg-brand-soft text-brand-ink" : "text-ink-3"} hover:bg-brand-soft hover:text-brand-ink`}
                                     onClick={() => setTocOpen(o => !o)}
                                 >
@@ -376,7 +383,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">Toggle outline</p>
+                                <p className="text-xs">{t("toggleOutline")}</p>
                             </TooltipContent>
                         </Tooltip>
 
@@ -386,7 +393,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        aria-label="View source"
+                                        aria-label={t("viewSource")}
                                         className="text-ink-3 hover:bg-brand-soft hover:text-brand-ink h-7 w-7 rounded-md"
                                         onClick={() => setViewMode("source")}
                                     >
@@ -394,7 +401,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="bottom">
-                                    <p className="text-xs">View source</p>
+                                    <p className="text-xs">{t("viewSource")}</p>
                                 </TooltipContent>
                             </Tooltip>
                         )}
@@ -404,7 +411,7 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label="Copy markdown"
+                                    aria-label={t("copyMarkdown")}
                                     className="text-ink-3 hover:bg-brand-soft hover:text-brand-ink h-7 w-7 rounded-md"
                                     onClick={() => void handleCopy()}
                                 >
@@ -416,7 +423,9 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">{copied ? "Copied!" : "Copy markdown"}</p>
+                                <p className="text-xs">
+                                    {copied ? t("copied") : t("copyMarkdown")}
+                                </p>
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
@@ -511,8 +520,8 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                 </div>
 
                 {tocOpen && toc.length > 0 && (
-                    <nav aria-label="Document outline" className="md-toc">
-                        <div className="md-toc-title">On this page</div>
+                    <nav aria-label={t("outline")} className="md-toc">
+                        <div className="md-toc-title">{t("onThisPage")}</div>
                         {toc.map(item => (
                             <button
                                 key={item.id}

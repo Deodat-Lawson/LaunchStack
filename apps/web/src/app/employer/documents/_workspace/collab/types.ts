@@ -183,16 +183,20 @@ export interface AgentsResponse {
     slack: { canPost: boolean; canReceive: boolean; missing: string[] };
 }
 
+/** The status's words are `collab.meetingStatus.<labelKey>`. */
 export const MEETING_STATUS_META: Record<
     MeetingStatus,
-    { label: string; tone: "live" | "idle" | "human" | "done" | "bad" }
+    {
+        labelKey: "scheduled" | "running" | "paused" | "humanControl" | "completed" | "failed";
+        tone: "live" | "idle" | "human" | "done" | "bad";
+    }
 > = {
-    scheduled: { label: "Scheduled", tone: "idle" },
-    running: { label: "Live", tone: "live" },
-    paused: { label: "Paused", tone: "idle" },
-    human_control: { label: "Human control", tone: "human" },
-    completed: { label: "Ended", tone: "done" },
-    failed: { label: "Failed", tone: "bad" },
+    scheduled: { labelKey: "scheduled", tone: "idle" },
+    running: { labelKey: "running", tone: "live" },
+    paused: { labelKey: "paused", tone: "idle" },
+    human_control: { labelKey: "humanControl", tone: "human" },
+    completed: { labelKey: "completed", tone: "done" },
+    failed: { labelKey: "failed", tone: "bad" },
 };
 
 export function statusColor(tone: "live" | "idle" | "human" | "done" | "bad"): string {

@@ -23,6 +23,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { FileText, Folder, FolderOpen, Info, Link2, TriangleAlert, X } from "lucide-react";
 
@@ -41,7 +42,7 @@ import {
 } from "./driveStatus";
 import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
-import { syncStatusLabel, useConnectorSync } from "./useConnectorSync";
+import { useConnectorSync, useSyncStatusLabel } from "./useConnectorSync";
 import { useGooglePicker, type PickedDoc } from "./useGooglePicker";
 
 const BASE = "/api/connectors/google-drive";
@@ -101,6 +102,9 @@ export function DriveConnectPanel({
      */
     onFolderAccess?: (state: FolderAccessState | null) => void;
 }) {
+    const t = useTranslations("sources.driveConnect");
+    const tc = useTranslations("common");
+    const syncStatusLabel = useSyncStatusLabel();
     const Icon = tab.Icon;
     const [status, setStatus] = useState<DriveStatus | null>(null);
     const [loading, setLoading] = useState(true);
@@ -140,9 +144,9 @@ export function DriveConnectPanel({
 
     /** After something was added: request the sync; the hook follows it. */
     const syncAfterAdd = useCallback(async () => {
-        if (!(await requestSync())) toast.error("Added, but the sync didn't start — try Sync now");
+        if (!(await requestSync())) toast.error(t("syncFailedAfterAdd"));
         void refresh();
-    }, [refresh, requestSync]);
+    }, [refresh, requestSync, t]);
 
     const handlePicked = useCallback(
         async (docs: readonly PickedDoc[]) => {
@@ -154,22 +158,22 @@ export function DriveConnectPanel({
             if (res.ok) {
                 toast.success(
                     docs.length === 1
-                        ? `“${docs[0]!.name}” added — syncing`
-                        : `${docs.length} items added — syncing`
+                        ? t("pickedOne", { name: docs[0]!.name })
+                        : t("pickedMany", { count: docs.length })
                 );
                 await syncAfterAdd();
             } else {
-                toast.error(await errorMessage(res, "Could not save the selection"));
+                toast.error(await errorMessage(res, t("saveSelectionFailed")));
                 void refresh();
             }
         },
-        [refresh, syncAfterAdd]
+        [refresh, syncAfterAdd, t]
     );
 
     const addLink = useCallback(async () => {
         const value = link.trim();
         if (!driveIdFromLink(value)) {
-            setLinkError("That isn't a Google Drive link. In Drive, use Share › Copy link.");
+            setLinkError(t("notDriveLink"));
             return;
         }
         setAddingLink(true);
@@ -181,36 +185,38 @@ export function DriveConnectPanel({
                 body: JSON.stringify({ link: value }),
             });
             if (!res.ok) {
-                setLinkError(await errorMessage(res, "Could not add that link"));
+                setLinkError(await errorMessage(res, t("addLinkFailed")));
                 return;
             }
             const payload = (await res.json()) as { message?: string };
-            toast.success(`${payload.message ?? "Added."} Syncing now.`);
+            toast.success(
+                payload.message
+                    ? t("linkAddedWithMessage", { message: payload.message })
+                    : t("linkAdded")
+            );
             setLink("");
             await syncAfterAdd();
         } finally {
             setAddingLink(false);
         }
-    }, [link, syncAfterAdd]);
+    }, [link, syncAfterAdd, t]);
 
     const choose = useCallback(async () => {
         if (!status?.picker.apiKey || !status.picker.appId) {
-            toast.error(
-                "Picker is not configured — set NEXT_PUBLIC_GOOGLE_API_KEY and NEXT_PUBLIC_GOOGLE_APP_ID"
-            );
+            toast.error(t("pickerNotConfigured"));
             return;
         }
         setBusy(true);
         try {
             const res = await fetch(`${BASE}/picker-token`);
             if (!res.ok) {
-                toast.error("Could not get Drive access — try reconnecting");
+                toast.error(t("noDriveAccess"));
                 return;
             }
             const payload = (await res.json()) as { data?: { accessToken?: string } };
             const accessToken = payload.data?.accessToken;
             if (!accessToken) {
-                toast.error("Could not get Drive access — try reconnecting");
+                toast.error(t("noDriveAccess"));
                 return;
             }
             await openPicker({
@@ -221,21 +227,21 @@ export function DriveConnectPanel({
                 onPicked: docs => void handlePicked(docs),
             });
         } catch {
-            toast.error("Google's picker didn't load — check your connection and try again");
+            toast.error(t("pickerFailed"));
         } finally {
             setBusy(false);
         }
-    }, [status, openPicker, handlePicked]);
+    }, [status, openPicker, handlePicked, t]);
 
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await requestSync()) toast.success("Sync requested");
-            else toast.error("Could not start the sync");
+            if (await requestSync()) toast.success(t("syncRequested"));
+            else toast.error(t("syncStartFailed"));
         } finally {
             setBusy(false);
         }
-    }, [requestSync]);
+    }, [requestSync, t]);
 
     const removeItem = useCallback(
         async (fileId: string) => {
@@ -256,26 +262,26 @@ export function DriveConnectPanel({
             const res = await fetch(`/api/connectors/connections/${status.connectionId}`, {
                 method: "DELETE",
             });
-            if (res.ok) toast.success("Google Drive disconnected — documents were kept");
-            else toast.error("Disconnect failed");
+            if (res.ok) toast.success(t("disconnected"));
+            else toast.error(t("disconnectFailed"));
             setConfirmingDisconnect(false);
             void refresh();
         } finally {
             setBusy(false);
         }
-    }, [refresh, status?.connectionId]);
+    }, [refresh, status?.connectionId, t]);
 
     if (loading) {
-        return <div className="text-ink-3 p-6 text-[13px]">Checking Google Drive…</div>;
+        return <div className="text-ink-3 p-6 text-[13px]">{t("checking")}</div>;
     }
 
     if (!status && loadFailed) {
         return (
             <Notice tone="danger">
-                Couldn&rsquo;t check Google Drive just now.
+                {t("checkFailed")}
                 <div className="mt-2">
                     <Button size="sm" variant="outline" onClick={() => void refresh()}>
-                        Try again
+                        {tc("actions.tryAgain")}
                     </Button>
                 </div>
             </Notice>
@@ -285,12 +291,8 @@ export function DriveConnectPanel({
     if (!status?.configured) {
         return (
             <div className="bg-panel-2 text-ink-2 rounded-xl px-4 py-4 text-[13px] leading-relaxed">
-                <div className="text-ink mb-1.5 font-semibold">
-                    Google Drive is not configured on this server
-                </div>
-                Ask your operator to set <code>GOOGLE_OAUTH_CLIENT_ID</code>,{" "}
-                <code>GOOGLE_OAUTH_CLIENT_SECRET</code> and the Picker keys — the steps are in{" "}
-                <code>.env.example</code> under &ldquo;Workspace connections&rdquo;.
+                <div className="text-ink mb-1.5 font-semibold">{t("notConfiguredTitle")}</div>
+                {t.rich("notConfiguredBody", { code: chunks => <code>{chunks}</code> })}
             </div>
         );
     }
@@ -309,21 +311,19 @@ export function DriveConnectPanel({
                     </div>
                     <div className="min-w-0 flex-1">
                         <div className="text-ink text-[15px] font-semibold">
-                            {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
+                            {reconnect ? t("reconnectTitle") : t("connectTitle")}
                         </div>
                         <div className="text-ink-3 text-[13px]">
                             {reconnect
-                                ? "Google access was revoked or expired — connect again to resume syncing."
+                                ? t("reconnectBody")
                                 : folderImport
-                                  ? "Pick files in Google's picker; only what you pick is shared. To import whole folders, allow folder access once connected."
-                                  : "Pick files in Google's picker; only what you pick is shared."}
+                                  ? t("connectBodyFolders")
+                                  : t("connectBody")}
                         </div>
                     </div>
                 </div>
                 <Button asChild className="w-full" size="lg">
-                    <a href={connectUrl}>
-                        {reconnect ? "Reconnect Google Drive" : "Connect Google Drive"}
-                    </a>
+                    <a href={connectUrl}>{reconnect ? t("reconnectTitle") : t("connectTitle")}</a>
                 </Button>
             </div>
         );
@@ -344,7 +344,7 @@ export function DriveConnectPanel({
                     <Icon size={16} />
                 </span>
                 <span className="text-ink min-w-0 truncate font-semibold">
-                    {status.accountEmail ?? "Connected"}
+                    {status.accountEmail ?? tc("status.connected")}
                 </span>
                 <span className="text-ink-3 ml-auto text-xs">
                     {syncStatusLabel(phase, status.lastSyncAt)}
@@ -355,52 +355,46 @@ export function DriveConnectPanel({
 
             {access === "allow" ? (
                 <Notice tone="info">
-                    <div className="text-ink font-semibold">
-                        Allow folder access to import folders
-                    </div>
-                    For now LaunchStack opens only the files you pick, so a picked folder brings
-                    nothing from inside it. Allow folder access to let LaunchStack read your Drive;
-                    then folders come in whole, subfolders and later additions included.
+                    <div className="text-ink font-semibold">{t("allowTitle")}</div>
+                    {t("allowBody")}
                     <div className="mt-2">
                         <Button asChild size="sm">
-                            <a href={FOLDER_ACCESS_URL}>Allow folder access</a>
+                            <a href={FOLDER_ACCESS_URL}>{t("allowButton")}</a>
                         </Button>
                     </div>
                 </Notice>
             ) : access === "files-only" ? (
                 <Notice tone="info">
-                    Only files you pick one by one come in. Picking a folder brings nothing from
-                    inside it, because this server hasn&rsquo;t turned on folder import — open the
-                    folder in the picker and select its files instead. Operators: see{" "}
-                    <code>GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED</code> in <code>.env.example</code>.
+                    {t.rich("filesOnly", { code: chunks => <code>{chunks}</code> })}
                 </Notice>
             ) : null}
 
             {status.lastSyncStatus === "error" && status.lastSyncError ? (
-                <Notice tone="danger">Last sync failed: {status.lastSyncError}</Notice>
+                <Notice tone="danger">
+                    {t("lastSyncFailed", { error: status.lastSyncError })}
+                </Notice>
             ) : null}
 
             {report && !syncing ? (
                 <div className="text-ink-3 mb-3 text-[12.5px]">
-                    Last run: {reportCount(report, "stored")} imported,{" "}
-                    {reportCount(report, "unchanged")} unchanged, {reportCount(report, "failed")}{" "}
-                    failed.
+                    {t("lastRun", {
+                        stored: reportCount(report, "stored"),
+                        unchanged: reportCount(report, "unchanged"),
+                        failed: reportCount(report, "failed"),
+                    })}
                 </div>
             ) : null}
 
             {empty.length > 0 ? (
                 <Notice tone="warn">
                     {access === "ready"
-                        ? `Nothing came in from ${listNames(empty)} — Drive lists ${empty.length === 1 ? "it" : "them"} as empty.`
-                        : `Nothing came in from ${listNames(empty)}: this connection can't see inside folders.`}
+                        ? t("emptyReady", { names: listNames(t, empty), count: empty.length })
+                        : t("emptyNoAccess", { names: listNames(t, empty) })}
                 </Notice>
             ) : null}
 
             {accessLost > 0 ? (
-                <Notice tone="warn">
-                    {accessLost} file(s) can no longer be opened — deleted, unshared, or (for files
-                    picked one by one) the grant is gone. Pick them again to refresh access.
-                </Notice>
+                <Notice tone="warn">{t("accessLost", { count: accessLost })}</Notice>
             ) : null}
 
             {access === "ready" ? (
@@ -415,7 +409,7 @@ export function DriveConnectPanel({
                         htmlFor="drive-folder-link"
                         className="text-ink-3 mb-1.5 block text-xs font-semibold"
                     >
-                        Paste a folder link
+                        {t("pasteLinkLabel")}
                     </label>
                     <div className="flex gap-2 max-sm:flex-col">
                         <div className="relative min-w-0 flex-1">
@@ -440,7 +434,7 @@ export function DriveConnectPanel({
                             variant="outline"
                             disabled={addingLink || !link.trim()}
                         >
-                            {addingLink ? "Adding…" : "Add folder"}
+                            {addingLink ? t("adding") : t("addFolder")}
                         </Button>
                     </div>
                     {linkError ? (
@@ -449,21 +443,20 @@ export function DriveConnectPanel({
                         </p>
                     ) : (
                         <p className="text-ink-3 mt-1.5 text-xs">
-                            Works for any folder {status.accountEmail ?? "this account"} can open,
-                            including ones shared with it and shared drives.
+                            {status.accountEmail
+                                ? t("linkHintAccount", { account: status.accountEmail })
+                                : t("linkHintThis")}
                         </p>
                     )}
                 </form>
             ) : null}
 
             <div className="text-ink-3 mb-2 text-xs font-semibold">
-                SYNCED FROM DRIVE ({picked.length})
+                {t("syncedFromDrive", { count: picked.length })}
             </div>
             <ul className="mb-4 flex max-h-48 flex-col gap-1.5 overflow-y-auto">
                 {picked.length === 0 ? (
-                    <li className="text-ink-3 text-[13px]">
-                        Nothing yet — choose files or folders to start syncing.
-                    </li>
+                    <li className="text-ink-3 text-[13px]">{t("nothingYet")}</li>
                 ) : (
                     picked.map(item => {
                         const ItemIcon =
@@ -481,7 +474,7 @@ export function DriveConnectPanel({
                                 <span className="min-w-0 flex-1">
                                     <span className="text-ink block truncate">{item.name}</span>
                                     <span className="text-ink-3 block truncate text-[11.5px]">
-                                        {pickedItemDestination(item, access)}
+                                        {pickedItemDestination(t, item, access)}
                                     </span>
                                 </span>
                                 <Button
@@ -489,8 +482,8 @@ export function DriveConnectPanel({
                                     size="icon"
                                     className="size-7"
                                     onClick={() => void removeItem(item.fileId)}
-                                    title="Stop syncing (keeps imported documents)"
-                                    aria-label={`Stop syncing ${item.name}`}
+                                    title={t("stopSyncingTitle")}
+                                    aria-label={t("stopSyncingAria", { name: item.name })}
                                 >
                                     <X className="size-3.5" />
                                 </Button>
@@ -502,29 +495,27 @@ export function DriveConnectPanel({
 
             <div className="flex flex-wrap items-center gap-2">
                 <Button disabled={busy || opening} onClick={() => void choose()}>
-                    {opening ? "Opening picker…" : "Choose in Google Drive"}
+                    {opening ? t("openingPicker") : t("chooseInDrive")}
                 </Button>
                 <Button
                     variant="outline"
                     disabled={busy || syncing || starting || picked.length === 0}
                     onClick={() => void syncNow()}
                 >
-                    {syncing ? "Syncing…" : starting ? "Starting…" : "Sync now"}
+                    {syncing ? t("syncing") : starting ? t("starting") : t("syncNow")}
                 </Button>
                 {confirmingDisconnect ? (
                     <span className="flex flex-wrap items-center gap-2">
-                        <span className="text-ink-2 text-[12.5px]">
-                            Disconnect? Imported documents are kept.
-                        </span>
+                        <span className="text-ink-2 text-[12.5px]">{t("disconnectConfirm")}</span>
                         <Button
                             variant="destructive"
                             disabled={busy}
                             onClick={() => void disconnect()}
                         >
-                            Disconnect
+                            {tc("actions.disconnect")}
                         </Button>
                         <Button variant="outline" onClick={() => setConfirmingDisconnect(false)}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                     </span>
                 ) : (
@@ -533,7 +524,7 @@ export function DriveConnectPanel({
                         className="ml-auto"
                         onClick={() => setConfirmingDisconnect(true)}
                     >
-                        Disconnect
+                        {tc("actions.disconnect")}
                     </Button>
                 )}
             </div>

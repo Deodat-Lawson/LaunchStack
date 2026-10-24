@@ -13,7 +13,7 @@ does to switch LinkedIn on.
 | **Network**            | LinkedIn, X, Bluesky, Reddit.                                                                                                                                                        |
 | **Connection**         | One sign-in a workspace made to a network: a LinkedIn member's OAuth grant, a Bluesky app password. A row in `connector_connections`, encrypted with `EMBEDDING_SECRETS_KEY`.        |
 | **Channel**            | One place a post goes out as: a LinkedIn profile, each LinkedIn Page that member administers, a Bluesky account. A row in `brand_channels`; disconnecting its connection removes it. |
-| **Deployment account** | The operator's env keys for a network (`TWITTER_BEARER_TOKEN`, …). Shown as one channel per network until the workspace connects an account of its own there.                        |
+| **Deployment account** | The operator's env keys for a network (`TWITTER_BEARER_TOKEN`, …). One company's account, so it belongs to one workspace: the only one on the server, or the one `BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID` names. Shown there as one channel per network until that workspace connects its own. |
 
 ## Flow
 
@@ -124,6 +124,20 @@ The stand-in's consent page signs you in as a fictional member who
 administers two Pages; `/dev/stand-ins/linkedin` shows what was posted and can
 add comments or revoke every token (to see "Reconnect"). The Bluesky stand-in
 accepts `launchstack.bsky.social` with any `xxxx-xxxx-xxxx-xxxx` app password.
+
+## Deployment accounts on a shared server
+
+The env keys name one account per network, and before this rule every
+workspace on the server was offered it: company B's post went out as
+company A and nothing failed, because the network accepted it.
+`apps/web/src/server/brand/deployment-accounts.ts` now gives them exactly one
+owner — `BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID` if set, else the only
+workspace, else nobody (fail closed, including for a malformed id). It is
+checked twice: when channels are listed (compose validates against that
+list, so other workspaces are never offered them) and again in
+`publishForWorkspace`, so a post scheduled before a second workspace joined
+fails with a reason instead of going out. Other workspaces see X and Reddit
+as unavailable, with the reason.
 
 ## Not built yet
 

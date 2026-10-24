@@ -11,6 +11,7 @@
  * questions: brands carried, decision makers, and any reasoning beyond what
  * a page literally says.
  */
+import { placeWords } from "../locate";
 import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
@@ -67,12 +68,26 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
             for (const q of queries) {
                 const country = /country:([A-Za-z]{2})/.exec(q.searchQuery)?.[1];
                 if (!country) continue;
+                const region = /region:\{([^}]+)\}/.exec(q.searchQuery)?.[1] ?? null;
+                // Topic words only: the planner appends the place ("Baltimore,
+                // United States") for search engines, and the directory filter
+                // matches place words against the location field instead.
+                const places = placeWords({
+                    country: country.toUpperCase(),
+                    region: region ?? undefined,
+                });
                 const keywords = q.searchQuery
                     .replace(/country:[A-Za-z]{2}/g, "")
-                    .split(/\s+/)
-                    .filter(Boolean);
+                    .replace(/region:\{[^}]+\}/g, "")
+                    .split(/[\s,]+/)
+                    .filter(w => w && !places.has(w.toLowerCase()));
                 const hits = await searchYc(
-                    { country, keywords, limit: options.directoryPerTerritory ?? 20 },
+                    {
+                        country,
+                        region,
+                        keywords,
+                        limit: options.directoryPerTerritory ?? 20,
+                    },
                     { fetchImpl }
                 );
                 for (const hit of hits) {

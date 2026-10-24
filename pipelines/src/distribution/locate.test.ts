@@ -5,6 +5,9 @@ import {
     countryFromHost,
     locateFromEvidence,
     mentionsPlace,
+    parsePlace,
+    parsePlaces,
+    placeLabel,
     territoryFit,
 } from "./locate";
 
@@ -86,5 +89,44 @@ describe("helpers", () => {
         expect(mentionsPlace("Baltimore, MD", "baltimore")).toBe(true);
         expect(mentionsPlace("Baltimoreans love coffee", "Baltimore")).toBe(false);
         expect(mentionsPlace("Brussels", "us")).toBe(false);
+    });
+});
+
+describe("parsePlace", () => {
+    it("reads places the way people write them", () => {
+        expect(parsePlace("Baltimore, MD, USA")).toEqual({ country: "US", region: "Baltimore" });
+        expect(parsePlace("Amsterdam, Netherlands")).toEqual({
+            country: "NL",
+            region: "Amsterdam",
+        });
+        expect(parsePlace("Germany")).toEqual({ country: "DE" });
+        expect(parsePlace("NL")).toEqual({ country: "NL" });
+        expect(parsePlace("London, UK")).toEqual({ country: "GB", region: "London" });
+    });
+
+    it("reads a US state code after a city as the US", () => {
+        expect(parsePlace("Austin, TX")).toEqual({ country: "US", region: "Austin" });
+        expect(parsePlace("San Francisco, CA", "US")).toEqual({
+            country: "US",
+            region: "San Francisco",
+        });
+    });
+
+    it("gives a bare city the company's own country, and nothing without one", () => {
+        expect(parsePlace("Austin", "US")).toEqual({ country: "US", region: "Austin" });
+        expect(parsePlace("Austin")).toBeNull();
+    });
+
+    it("splits several places on ';' or new lines, never on commas", () => {
+        expect(parsePlaces("Baltimore, MD, USA; Netherlands\nBerlin, Germany")).toEqual([
+            { country: "US", region: "Baltimore" },
+            { country: "NL" },
+            { country: "DE", region: "Berlin" },
+        ]);
+    });
+
+    it("labels a territory for people", () => {
+        expect(placeLabel({ country: "US", region: "Baltimore" })).toBe("Baltimore, United States");
+        expect(placeLabel({ country: "NL" })).toBe("Netherlands");
     });
 });

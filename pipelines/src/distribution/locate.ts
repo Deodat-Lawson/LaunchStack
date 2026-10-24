@@ -8,7 +8,7 @@
  * showed that as its HQ. Here a location is only what the result's own text
  * or domain says; otherwise it is unknown, and unknown is not "in".
  */
-import { countriesMentioned, countryAliases } from "./keyless/geo";
+import { countriesMentioned, countryAliases, countryName } from "./keyless/geo";
 import type { Territory } from "./types";
 
 /** Country-code top-level domains we can map with confidence (generic ones say nothing). */
@@ -128,4 +128,73 @@ export function placeWords(territory: Territory): Set<string> {
         .flatMap(s => s.toLowerCase().split(/[^\p{L}\p{N}]+/u))
         .filter(Boolean);
     return new Set(words);
+}
+
+const US_STATES = new Set(
+    "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(
+        " "
+    )
+);
+
+/** A two-letter code we know, upper-cased; null otherwise. */
+function knownCode(token: string): string | null {
+    const code = token.trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(code)) return null;
+    if (code === "UK") return "GB";
+    return countryName(code) !== code ? code : null;
+}
+
+/**
+ * One place as people write it — "Baltimore, MD, USA", "Amsterdam,
+ * Netherlands", "NL", "Germany" — as a territory. The last part that names
+ * a country is the country; the first part, when it isn't the country, is
+ * the city or region. A bare city ("Austin") takes `defaultCountry` (the
+ * company's own, say). Null when no country can be told.
+ */
+export function parsePlace(text: string, defaultCountry?: string | null): Territory | null {
+    const parts = text
+        .split(",")
+        .map(p => p.trim())
+        .filter(Boolean);
+    if (parts.length === 0) return null;
+    let country: string | null = null;
+    let countryAt = -1;
+    const home = defaultCountry?.toUpperCase() ?? null;
+    for (let i = parts.length - 1; i >= 0; i--) {
+        const token = parts[i]!.toUpperCase();
+        // "Austin, TX": a US state code after a city is the US — when the
+        // company is in the US, even for codes that are also countries
+        // (CA, DE, IN), since that is how Americans write addresses.
+        if (i > 0 && US_STATES.has(token) && (home === "US" || !knownCode(token))) {
+            country = "US";
+            countryAt = i;
+            break;
+        }
+        const code = knownCode(parts[i]!) ?? countriesMentioned(parts[i]!)[0] ?? null;
+        if (code) {
+            country = code;
+            countryAt = i;
+            break;
+        }
+    }
+    country ??= home;
+    if (!country) return null;
+    const region = countryAt === 0 ? null : parts[0]!;
+    return region ? { country, region } : { country };
+}
+
+/** Several places, one per line or separated by ";" — commas belong to a place. */
+export function parsePlaces(text: string, defaultCountry?: string | null): Territory[] {
+    const out: Territory[] = [];
+    for (const entry of text.split(/[;\n]+/)) {
+        const t = parsePlace(entry, defaultCountry);
+        if (t && !out.some(o => o.country === t.country && o.region === t.region)) out.push(t);
+    }
+    return out;
+}
+
+/** A territory as people write it: "Baltimore, United States" or "Netherlands". */
+export function placeLabel(territory: Territory): string {
+    const country = countryName(territory.country);
+    return territory.region ? `${territory.region}, ${country}` : country;
 }

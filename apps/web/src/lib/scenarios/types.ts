@@ -158,6 +158,15 @@ export interface ScenarioSource {
 
 export type Stance = -2 | -1 | 0 | 1 | 2;
 
+/** What a person has to spend: nothing set aside, little, or a budget for the right thing. */
+export type ScenarioBudget = "none" | "tight" | "funded";
+/** Their part in a purchase. */
+export type ScenarioBuyingRole = "decides" | "influences" | "uses";
+/** What moving off their current tool would cost them. */
+export type ScenarioSwitchingCost = "low" | "medium" | "high";
+/** Whether they'd spend money on what's on offer, as things stand. */
+export type ScenarioWouldPay = "yes" | "maybe" | "no";
+
 export interface ScenarioPerson {
     id: string;
     name: string;
@@ -181,6 +190,18 @@ export interface ScenarioPerson {
     comments: number;
     /** The person's last private reasoning. */
     lastThought: string | null;
+    // The wallet, from the cast. Null in runs cast before it was asked for.
+    /** What they use for this today, e.g. a named product, "Spreadsheets" or "nothing". */
+    currentSolution: string | null;
+    budget: ScenarioBudget | null;
+    buyingRole: ScenarioBuyingRole | null;
+    switchingCost: ScenarioSwitchingCost | null;
+    /** Their first doubt, in their own words. */
+    firstObjection: string | null;
+    /** Whether they'd pay, as of their last turn; null before their first. */
+    wouldPay: ScenarioWouldPay | null;
+    /** What still held them back on their last turn. */
+    objection: string | null;
 }
 
 export interface ScenarioComment {

@@ -33,7 +33,11 @@ const answer = (text: string) => ({
 function harness(
     initial: ThreadMessage[] = [],
     sources: WorkspaceSource[] = [],
-    options: { continuation?: { title: string; context: string } | null; scopeKey?: string } = {}
+    options: {
+        continuation?: { title: string; context: string } | null;
+        scopeKey?: string;
+        onSourcesCreated?: () => void;
+    } = {}
 ) {
     return renderHook(
         ({ scopeKey }) => {
@@ -53,6 +57,7 @@ function harness(
                 agents: [],
                 companyId: 1,
                 refreshHistory: jest.fn(),
+                onSourcesCreated: options.onSourcesCreated,
             });
             return { runtime, thread, setContinuation };
         },
@@ -1024,4 +1029,44 @@ test("hands out a new answer object for every streamed delta, so the row re-rend
         reasoning: "Count them: ",
         thoughtMs: thinking.thoughtMs,
     });
+});
+
+test("keeps the documents an answer created, saves them, and reloads the sources", async () => {
+    const onSourcesCreated = jest.fn();
+    mockRequest.mockResolvedValueOnce({
+        ...answer("I created Scenario Simulator — Business Plan in your Private section."),
+        createdSources: [
+            { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+            { documentId: -1, title: "Not a document", folder: "Unfiled" },
+        ],
+    });
+    const { result } = harness([], [], { onSourcesCreated });
+
+    await act(async () => {
+        await result.current.runtime.submit(send("Write the plan into my private space"));
+    });
+
+    expect(result.current.thread[1]?.createdSources).toEqual([
+        { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+    ]);
+    expect(onSourcesCreated).toHaveBeenCalledTimes(1);
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata?.createdSources).toEqual([
+        { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+    ]);
+});
+
+test("does not reload the sources for an answer that created nothing", async () => {
+    const onSourcesCreated = jest.fn();
+    const { result } = harness([], [], { onSourcesCreated });
+
+    await act(async () => {
+        await result.current.runtime.submit(send("Hi"));
+    });
+
+    expect(result.current.thread[1]?.createdSources).toBeUndefined();
+    expect(onSourcesCreated).not.toHaveBeenCalled();
 });

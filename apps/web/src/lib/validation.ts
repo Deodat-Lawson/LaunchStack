@@ -929,6 +929,16 @@ export const SessionMessageSchema = z.object({
                 .array(z.object({ title: z.string().max(500), url: z.string().url().max(2000) }))
                 .max(20)
                 .optional(),
+            createdSources: z
+                .array(
+                    z.object({
+                        documentId: z.number().int().positive(),
+                        title: z.string().max(300),
+                        folder: z.string().max(300),
+                    })
+                )
+                .max(5)
+                .optional(),
         })
         .optional(),
 });

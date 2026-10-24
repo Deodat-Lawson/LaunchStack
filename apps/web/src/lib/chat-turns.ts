@@ -49,6 +49,16 @@ export interface ChatTurnMetadata {
     chunksAnalyzed?: number;
     /** Web pages the answer was shown, in its [Source N] order. */
     webSources?: { title: string; url: string }[];
+    /** Documents the answer created in the workspace (`create_document`). */
+    createdSources?: ChatCreatedSource[];
+}
+
+/** A document a chat answer wrote into the workspace. */
+export interface ChatCreatedSource {
+    documentId: number;
+    title: string;
+    /** Its folder path; Unfiled is the person's Private section. */
+    folder: string;
 }
 
 export interface ChatQueueItem {

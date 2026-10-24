@@ -92,6 +92,32 @@ describe("GoogleDriveBanner", () => {
         expect(logo).toHaveAttribute("alt", "");
     });
 
+    it("tells the viewer when Sync now brings a new version, so it can show it", async () => {
+        const onSynced = jest.fn();
+        render(
+            <GoogleDriveBanner
+                documentId={7}
+                status={linked}
+                refresh={() => Promise.resolve()}
+                onSynced={onSynced}
+                onHide={jest.fn()}
+            />
+        );
+
+        fetchMock.mockReturnValueOnce(respond({ outcome: { kind: "noop" } }));
+        await userEvent.click(screen.getByRole("button", { name: "Sync now" }));
+        expect(await screen.findByText("Already up to date.")).toBeInTheDocument();
+        expect(onSynced).not.toHaveBeenCalled();
+
+        fetchMock.mockReturnValueOnce(respond({ outcome: { kind: "synced", versionNumber: 4 } }));
+        await userEvent.click(screen.getByRole("button", { name: "Sync now" }));
+        expect(await screen.findByText(/Synced v4 from Google Drive/)).toBeInTheDocument();
+        expect(onSynced).toHaveBeenCalledTimes(1);
+        expect(fetchMock).toHaveBeenLastCalledWith("/api/documents/7/google-docs/sync", {
+            method: "POST",
+        });
+    });
+
     it("draws nothing for a document Drive cannot hold", () => {
         renderBanner({ connected: true, linkable: false, link: null });
         expect(screen.queryByRole("button", { name: "Hide Google Drive bar" })).toBeNull();

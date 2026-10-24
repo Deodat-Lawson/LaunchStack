@@ -46,7 +46,8 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         linkable: isDriveLinkableDocument(
             auth.data.doc.fileType,
             auth.data.doc.mimeType,
-            auth.data.doc.title
+            auth.data.doc.title,
+            auth.data.doc.ocrMetadata
         ),
         link:
             link && link.status !== "unlinked"

@@ -6,7 +6,12 @@
 
 import type { KnowledgeItem, SkippedKnowledgeItem } from "../types";
 import { DriveAccessError, DriveExportTooLargeError, type DriveClient } from "./client";
-import { describeError, driveFingerprint, type DriveDiscoveredItem } from "./discover";
+import {
+    describeError,
+    driveFingerprint,
+    type DriveContentAction,
+    type DriveDiscoveredItem,
+} from "./discover";
 
 /** Above this we skip rather than pull bytes through the sync. */
 export const DEFAULT_MAX_ITEM_BYTES = 50 * 1024 * 1024;
@@ -35,10 +40,12 @@ export async function collectDriveItem(
     }
 
     try {
-        const content =
-            item.contentAction.action === "export"
-                ? await client.exportFile(item.driveFile.id, item.contentAction.exportMime)
-                : await client.download(item.driveFile.id);
+        const action = item.contentAction;
+        const fetched =
+            action.action === "export"
+                ? await exportWithFallback(client, item, action)
+                : { item, content: await client.download(item.driveFile.id) };
+        const content = fetched.content;
 
         if (content.byteLength === 0) {
             return {
@@ -59,7 +66,7 @@ export async function collectDriveItem(
 
         return {
             kind: "item",
-            value: { ...item, content, contentHash: driveFingerprint(item.driveFile) },
+            value: { ...fetched.item, content, contentHash: driveFingerprint(item.driveFile) },
         };
     } catch (error) {
         if (error instanceof DriveExportTooLargeError) {
@@ -80,4 +87,32 @@ export async function collectDriveItem(
             value: { sourceId: item.sourceId, reason: "unreadable", detail: describeError(error) },
         };
     }
+}
+
+/**
+ * Export in the rule's format; when Drive refuses that as over its export cap
+ * and the rule names a fallback, export that instead, and the item carries
+ * the fallback's MIME and extension so the copy is stored and parsed as what
+ * it is.
+ */
+async function exportWithFallback(
+    client: DriveClient,
+    item: DriveDiscoveredItem,
+    action: Extract<DriveContentAction, { action: "export" }>
+): Promise<{ readonly item: DriveDiscoveredItem; readonly content: Uint8Array }> {
+    try {
+        return { item, content: await client.exportFile(item.driveFile.id, action.exportMime) };
+    } catch (error) {
+        if (!(error instanceof DriveExportTooLargeError) || !action.fallback) throw error;
+    }
+    const { exportMime, extension } = action.fallback;
+    return {
+        item: {
+            ...item,
+            mimeType: exportMime,
+            metadata: { ...item.metadata, exportMime, extension },
+            contentAction: { action: "export", exportMime, extension },
+        },
+        content: await client.exportFile(item.driveFile.id, exportMime),
+    };
 }

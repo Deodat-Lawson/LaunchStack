@@ -572,7 +572,15 @@
     "fidelity": "此文件已转换为原生 Google 文档，同步时格式可能会有偏差。",
     "confirmTitle": "取消与 Google Drive 的关联",
     "confirmBody": "最后一次同步会把 Drive 中剩余的编辑存入版本历史记录，随后 Drive 中的副本会移至 Drive 回收站，并恢复为在应用内编辑。",
-    "unlinking": "正在取消关联…"
+    "unlinking": "正在取消关联…",
+    "hide": "隐藏 Google Drive 栏",
+    "hideHint": "隐藏此栏，顶部的 Drive 按钮可以把它找回来",
+    "show": "显示 Google Drive 栏",
+    "showHint": "显示 Google Drive 栏",
+    "hideToggleHint": "隐藏 Google Drive 栏",
+    "summaryShowHint": "{summary}，点击显示此栏",
+    "hidden": "已隐藏 Google Drive 栏",
+    "hiddenBody": "文档顶部的 Drive 按钮可以把它找回来。"
   },
   "folderDialog": {
     "alreadyExists": "该位置已有名为“{name}”的文件夹。",

@@ -82,6 +82,11 @@ export async function uploadFileToStorage(file: File): Promise<UploadResult> {
     };
 }
 
+/** The document the upload created; null when an older server did not say. */
+export interface RegisteredDocument {
+    documentId: number | null;
+}
+
 export async function registerDocument(params: {
     file: File;
     url: string;
@@ -96,7 +101,7 @@ export async function registerDocument(params: {
     mimeType?: string;
     /** Marks the document as an imported Claude artifact (see ~/lib/artifact-document). */
     artifact?: { artifactType: ArtifactType; sourceUrl?: string | null };
-}): Promise<void> {
+}): Promise<RegisteredDocument> {
     const body: Record<string, unknown> = {
         documentName: params.documentName ?? params.file.name,
         category: params.category,
@@ -123,4 +128,7 @@ export async function registerDocument(params: {
         }
         throw new SourceUploadError(params.file.name, "register", res.status, message || null);
     }
+    const data = (await res.json().catch(() => null)) as { document?: { id?: unknown } } | null;
+    const id = data?.document?.id;
+    return { documentId: typeof id === "number" ? id : null };
 }

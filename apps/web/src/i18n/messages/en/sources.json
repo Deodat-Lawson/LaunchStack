@@ -572,7 +572,15 @@
     "fidelity": "This file was converted to a native Google Doc — formatting may drift on sync.",
     "confirmTitle": "Unlink from Google Drive",
     "confirmBody": "A final sync pulls any remaining Drive edits into version history, then the Drive copy is moved to the Drive trash and editing returns in-app.",
-    "unlinking": "Unlinking…"
+    "unlinking": "Unlinking…",
+    "hide": "Hide Google Drive bar",
+    "hideHint": "Hide this bar — the Drive button at the top brings it back",
+    "show": "Show Google Drive bar",
+    "showHint": "Show the Google Drive bar",
+    "hideToggleHint": "Hide the Google Drive bar",
+    "summaryShowHint": "{summary} — click to show the bar",
+    "hidden": "Google Drive bar hidden",
+    "hiddenBody": "The Drive button at the top of the document brings it back."
   },
   "folderDialog": {
     "alreadyExists": "A folder named \"{name}\" already exists there.",

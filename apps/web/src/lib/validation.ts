@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 
+import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
 import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
@@ -117,7 +118,9 @@ export const QuestionSchema = z
             .string()
             .min(1, "Question is required")
             .max(120_000, "Question must be at most 120000 characters"),
-        style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
+        // Absent means "the person's own setting"; `bullet-points` is the old
+        // name for `organized`.
+        style: z.enum([...AGENT_STYLE_IDS, "bullet-points"]).optional(),
         searchScope: z.enum(["document", "company", "archive", "selected", "none"]).optional(),
         archiveName: z.string().optional(),
         // Document IDs for the "selected" scope — a user-picked subset of docs in
@@ -167,7 +170,7 @@ export const QuestionSchema = z
             documentId: data.documentId,
             companyId: data.companyId,
             question: data.question,
-            style: data.style ?? "concise",
+            style: data.style,
             searchScope: data.searchScope ?? "document",
             archiveName: data.archiveName,
             selectedDocumentIds: data.selectedDocumentIds,
@@ -237,11 +240,13 @@ export const UploadDocumentSchema = z.object({
 
 export const UpdateCompanySchema = z
     .object({
+        // Optional: Bring your own keys saves credentials alone.
         name: z
             .string()
             .min(1, "Company name is required")
             .max(256, "Company name is too long")
-            .trim(),
+            .trim()
+            .optional(),
         description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
         industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
         embeddingIndexKey: z

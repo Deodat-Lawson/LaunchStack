@@ -36,9 +36,14 @@
     }
   },
   "styles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Length matches the question: a line for a lookup, a full answer for a how or why.",
+      "summary": "Balanced — length matches the question"
+    },
     "concise": {
       "label": "Concise",
-      "description": "Direct and short. Under 150 words when it can be.",
+      "description": "Short and direct: the answer first, no filler.",
       "summary": "Concise — direct and short"
     },
     "detailed": {

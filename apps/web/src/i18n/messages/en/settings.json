@@ -61,19 +61,19 @@
       "title": "What your sources can prove",
       "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
     },
-    "processing": {
-      "label": "Processing",
-      "blurb": "Embedding index and keys",
-      "eyebrow": "Processing",
-      "title": "How documents get indexed",
-      "description": "The embedding index behind semantic search, the credentials it uses, and any self-hosted endpoints. Changing the index schedules a reindex of the whole corpus."
+    "byok": {
+      "label": "Bring your own keys",
+      "blurb": "Your API and embedding keys",
+      "eyebrow": "Keys",
+      "title": "Bring your own keys",
+      "description": "Your own provider account for the workspace's AI, and your own key for embeddings. Both are optional: anything left empty runs on the server's keys."
     },
     "models": {
       "label": "Models and routes",
       "blurb": "Which model answers what",
       "eyebrow": "Models",
       "title": "Which model serves each kind of request",
-      "description": "Run this workspace on your own provider account, or on the server's default models. The default's routes and models are set in the server's configuration file and shown here read-only."
+      "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
     },
     "agents": {
       "label": "Agents and autonomy",
@@ -666,6 +666,43 @@
       "off": "Set <code>COLLAB_HUB_SECRET</code> to let worker machines register. Without it, every agent runs in this process."
     }
   },
+  "keys": {
+    "openRouter": {
+      "connectedActive": "OpenRouter is connected, and this workspace uses it.",
+      "connected": "OpenRouter is connected. Choose a model to switch your workspace over.",
+      "denied": "OpenRouter sign-in was cancelled. Nothing changed.",
+      "expired": "That sign-in expired, try again.",
+      "unavailable": "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
+      "error": "Couldn't connect OpenRouter. Try again, or use an API key instead."
+    },
+    "endpointFailedStatus": "Couldn't read your model setup ({status}).",
+    "endpointFailed": "Couldn't read your model setup.",
+    "embedding": {
+      "title": "Embedding key",
+      "description": "Optional. An OpenAI-compatible key for the vectors behind semantic search, sent only to the endpoint it belongs to. Without one, embeddings run on the server's key.",
+      "loadFailed": "Something went wrong loading the embedding key.",
+      "saveFailed": "Couldn't save the embedding key.",
+      "saved": "Embedding key saved.",
+      "removeFailed": "Couldn't remove the embedding key.",
+      "removed": "Removed. Embeddings run on the server's key again.",
+      "loading": "Loading the embedding key…",
+      "keyEnding": "Key ending <mono>{last4}</mono>",
+      "usingServerKey": "Using the server’s key.",
+      "yourKey": "Your key",
+      "notSet": "Not set",
+      "indexOtherProvider": "This workspace’s index embeds with <mono>{model}</mono> on {provider}, which doesn’t use an OpenAI-compatible key.",
+      "indexModel": "This workspace’s index embeds with <mono>{model}</mono> ({dimension} dimensions), so the endpoint has to serve that model.",
+      "noEndpoint": "The saved key has no endpoint URL, so embedding with it will fail until one is set. Enter the endpoint URL and the key together, then save.",
+      "keyLabel": "Embedding API key",
+      "keepHint": "Leave blank to keep the saved key.",
+      "serverHint": "Leave blank to use the server's key.",
+      "keepPlaceholder": "Leave blank to keep the key ending {last4}",
+      "endpointLabel": "Embeddings endpoint URL",
+      "endpointHint": "The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again.",
+      "confirmTitle": "Remove the embedding key?",
+      "confirmDescription": "The saved key and its endpoint are deleted, and embeddings run on the server's key again. Documents already indexed stay searchable."
+    }
+  },
   "labs": {
     "title": "Experiments",
     "description": "Off by default. On for everyone in the workspace once an admin turns one on."
@@ -677,25 +714,15 @@
       "reasoning": "Requests that ask for a reasoning effort.",
       "vision": "Requests that carry an image."
     },
-    "openRouter": {
-      "connectedActive": "OpenRouter is connected, and this workspace uses it.",
-      "connected": "OpenRouter is connected. Choose a model to switch your workspace over.",
-      "denied": "OpenRouter sign-in was cancelled. Nothing changed.",
-      "expired": "That sign-in expired, try again.",
-      "unavailable": "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
-      "error": "Couldn't connect OpenRouter. Try again, or use an API key instead."
-    },
     "readFailedStatus": "Could not read the configuration ({status}).",
     "readFailed": "Could not read the configuration.",
-    "endpointFailedStatus": "Couldn't read your model setup ({status}).",
-    "endpointFailed": "Couldn't read your model setup.",
     "reread": "Re-read",
     "reading": "Reading…",
     "server": {
       "title": "Server default",
       "description": "The models this server runs any workspace on that hasn't brought its own. One AI endpoint serves every route; its address and credential stay on the server.",
-      "usesOwn": "This workspace uses its own model, so the server default below isn’t used.",
-      "ownNoModel": "Your own model is connected but has no model chosen, so this workspace still runs on the server default.",
+      "usesOwn": "This workspace runs on its own model, set up in Bring your own keys, so the server default below isn’t used.",
+      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in Bring your own keys.",
       "fixFile": "{error} Fix the file named by <code>CHAT_MODELS_CONFIG</code> and re-read.",
       "readingConfig": "Reading the configuration…",
       "fileNote": "Models are set in the server’s chat model file, named by <code>CHAT_MODELS_CONFIG</code>. Edit that file and restart to change a model; nothing here writes to it."
@@ -1412,55 +1439,6 @@
       "noEffectBody": "This instance sends no analytics, so the switch changes nothing until it runs on the hosted service."
     }
   },
-  "processing": {
-    "indexOptions": {
-      "legacyOpenai1536": {
-        "label": "OpenAI · 1536 dims",
-        "description": "text-embedding-3-small. Default. Highest accuracy."
-      },
-      "huggingfaceMinilm384": {
-        "label": "HuggingFace MiniLM · 384 dims",
-        "description": "Free inference API. Good balance of cost and quality."
-      },
-      "ollama768": {
-        "label": "Ollama (self-hosted)",
-        "description": "Run your own embedding model locally via Ollama."
-      }
-    },
-    "loadFailed": "Something went wrong loading settings.",
-    "reindexRunning": "A reindex is already running. Please wait for it to finish.",
-    "updateError": "Error updating settings",
-    "reindexScheduled": "Reindex scheduled for {count} document chunks. Existing searches keep using the previous index until the rewrite completes.",
-    "saved": "Company settings saved.",
-    "saveFailed": "Failed to update settings. Please try again.",
-    "stored": "Stored · ending {last4}",
-    "notSet": "Not set",
-    "loading": "Loading settings…",
-    "index": {
-      "title": "Embedding index",
-      "description": "The vector index behind semantic search. Changing it schedules a reindex of the whole corpus; existing searches keep using the previous index until that finishes.",
-      "field": "Index"
-    },
-    "noEndpoint": "The saved embeddings key has no endpoint URL, so embedding with it will fail until one is set. Enter the endpoint URL and the key together, then save.",
-    "openaiKey": "OpenAI-compatible API key",
-    "keepHint": "Leave blank to keep the existing key. {stored}.",
-    "endpointUrl": "Embeddings endpoint URL",
-    "endpointHint": "The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again.",
-    "hfKey": "HuggingFace API key",
-    "ollamaUrl": "Ollama base URL",
-    "ollamaModel": "Ollama model",
-    "example": "e.g. {value}",
-    "byok": {
-      "title": "Bring your own keys",
-      "description": "What this workspace has stored. Update the fields above to change them.",
-      "openaiCompatible": "OpenAI-compatible",
-      "endingWithEndpoint": "ending {last4} · {endpoint}",
-      "noEndpointUrl": "no endpoint URL",
-      "notConfigured": "Not configured",
-      "configured": "Configured",
-      "ending": "ending {last4}"
-    }
-  },
   "profile": {
     "couldNotSaveName": "Could not save your name.",
     "saved": "Profile saved",
@@ -1673,8 +1651,8 @@
     "disconnected": "Disconnected. This workspace is back on the server's default models, and the saved key is deleted.",
     "disconnectFailed": "Couldn't disconnect.",
     "section": {
-      "title": "Your own model",
-      "description": "Run this workspace's AI on your own provider account. Chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits."
+      "title": "API key",
+      "description": "Optional. Run this workspace's AI on your own provider account: chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits. Without one, the workspace runs on the server's default models."
     },
     "checking": "Checking for a model of your own…",
     "connectOpenRouter": "Connect OpenRouter",

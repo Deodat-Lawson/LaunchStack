@@ -3,19 +3,13 @@
 /**
  * Settings › Models.
  *
- * Body only. Two parts:
+ * Body only: the server default — what the server resolved from its chat
+ * configuration file, a table of routes, then a card per configured model
+ * saying what it can do. It never names the vendor, the endpoint, or the model
+ * id — the server doesn't send them (see `~/server/settings/models`).
  *
- * - **Your own model** (`WorkspaceModelPanel`): the workspace's own provider
- *   account, connected through OpenRouter or an address and API key. Once a
- *   main model is chosen, everything the workspace runs goes there.
- * - **Server default**: what the server resolved from its chat configuration
- *   file — a table of routes, then a card per configured model saying what it
- *   can do. It never names the vendor, the endpoint, or the model id — the
- *   server doesn't send them (see `~/server/settings/models`).
- *
- * OpenRouter's connect flow is a top-level navigation that comes back here
- * with `?openrouter=<outcome>`; the section turns that into a note and takes
- * the parameter back out of the address bar.
+ * A workspace that brings its own model sets it up in Settings › Bring your own
+ * keys; this section only reads whether it has, to say the default is unused.
  */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -32,17 +26,9 @@ import {
     TableRow,
 } from "~/components/ui/table";
 
-import {
-    usePublishedActions,
-    type SettingsSectionActions,
-    type SettingsSectionProps,
-} from "./contract";
-import { Code, StatusNote, type StatusTone } from "./ui";
-import {
-    WORKSPACE_ENDPOINT_URL,
-    WorkspaceModelPanel,
-    type WorkspaceEndpointView,
-} from "./WorkspaceModelPanel";
+import { usePublishedActions, type SettingsSectionProps } from "./contract";
+import { Code, StatusNote } from "./ui";
+import { WORKSPACE_ENDPOINT_URL, type WorkspaceEndpointView } from "./WorkspaceModelPanel";
 
 interface ModelRouteInfo {
     route: string;
@@ -73,79 +59,13 @@ interface ModelsOverview {
 /** Routes with a blurb in `settings.models.routeBlurb`. */
 const ROUTE_BLURBS = ["default", "fast", "reasoning", "vision"] as const;
 
-type ModelsT = ReturnType<typeof useTranslations<"settings.models">>;
-
-type OpenRouterOutcome = "connected" | "denied" | "expired" | "unavailable" | "error";
-
-const OPENROUTER_OUTCOMES: readonly OpenRouterOutcome[] = [
-    "connected",
-    "denied",
-    "expired",
-    "unavailable",
-    "error",
-];
-
-function openRouterNote(
-    t: ModelsT,
-    outcome: OpenRouterOutcome,
-    endpoint: WorkspaceEndpointView | null
-): { tone: StatusTone; message: string } {
-    switch (outcome) {
-        case "connected":
-            return endpoint?.active
-                ? { tone: "ok", message: t("openRouter.connectedActive") }
-                : { tone: "ok", message: t("openRouter.connected") };
-        case "denied":
-            return { tone: "muted", message: t("openRouter.denied") };
-        case "expired":
-            return { tone: "warn", message: t("openRouter.expired") };
-        case "unavailable":
-            return { tone: "danger", message: t("openRouter.unavailable") };
-        case "error":
-            return { tone: "danger", message: t("openRouter.error") };
-    }
-}
-
-/**
- * Reads `?openrouter=` once and removes it, keeping the rest of the address
- * (the `#models` hash included) so a reload doesn't repeat the message.
- */
-function takeOpenRouterOutcome(): OpenRouterOutcome | null {
-    if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get("openrouter");
-    if (value === null) return null;
-    params.delete("openrouter");
-    const query = params.toString();
-    window.history.replaceState(
-        window.history.state,
-        "",
-        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`
-    );
-    return (OPENROUTER_OUTCOMES as readonly string[]).includes(value)
-        ? (value as OpenRouterOutcome)
-        : null;
-}
-
 export function ModelsSection({ onActions }: SettingsSectionProps) {
     const t = useTranslations("settings.models");
     const locale = useLocale();
     const [overview, setOverview] = useState<ModelsOverview | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-
     const [endpoint, setEndpoint] = useState<WorkspaceEndpointView | null>(null);
-    const [endpointLoaded, setEndpointLoaded] = useState(false);
-    const [endpointError, setEndpointError] = useState<string | null>(null);
-
-    // The editor's Save, while it is open; otherwise the section offers Re-read.
-    const [editorActions, setEditorActions] = useState<SettingsSectionActions | null>(null);
-    const [openRouter, setOpenRouter] = useState<OpenRouterOutcome | null>(null);
-
-    useEffect(() => {
-        const outcome = takeOpenRouterOutcome();
-        if (outcome) setOpenRouter(outcome);
-    }, []);
 
     const readOverview = useCallback(async () => {
         try {
@@ -162,23 +82,20 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
         }
     }, [t]);
 
+    // Only to say whether the default below is in use; a failure here just
+    // leaves that note out.
     const readEndpoint = useCallback(async () => {
         try {
             const res = await fetch(WORKSPACE_ENDPOINT_URL);
+            if (!res.ok) return;
             const body = (await res.json().catch(() => ({}))) as {
                 endpoint?: WorkspaceEndpointView | null;
-                error?: string;
             };
-            if (!res.ok)
-                throw new Error(body.error ?? t("endpointFailedStatus", { status: res.status }));
             setEndpoint(body.endpoint ?? null);
-            setEndpointError(null);
-        } catch (err) {
-            setEndpointError(err instanceof Error ? err.message : t("endpointFailed"));
-        } finally {
-            setEndpointLoaded(true);
+        } catch {
+            // The note is optional.
         }
-    }, [t]);
+    }, []);
 
     const refresh = useCallback(async () => {
         setLoading(true);
@@ -190,39 +107,19 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
         void refresh();
     }, [refresh]);
 
-    const endpointChanged = useCallback((next: WorkspaceEndpointView | null) => {
-        setEndpoint(next);
-        // The panel says what just happened; an OpenRouter note from before
-        // the change would now be describing the past.
-        setOpenRouter(null);
-    }, []);
-
     usePublishedActions(
         onActions,
-        editorActions ?? {
+        {
             primaryLabel: t("reread"),
             primaryBusyLabel: t("reading"),
             onPrimary: refresh,
             busy: loading,
         },
-        [editorActions, refresh, loading, t]
+        [refresh, loading, t]
     );
-
-    const note = openRouter ? openRouterNote(t, openRouter, endpoint) : null;
 
     return (
         <>
-            {note && <StatusNote tone={note.tone}>{note.message}</StatusNote>}
-
-            <WorkspaceModelPanel
-                endpoint={endpoint}
-                loaded={endpointLoaded}
-                loadError={endpointError}
-                onEndpointChange={endpointChanged}
-                registerActions={setEditorActions}
-                openAtModels={openRouter === "connected" && endpoint !== null && !endpoint.models}
-            />
-
             <Section title={t("server.title")} description={t("server.description")}>
                 {endpoint?.active ? (
                     <StatusNote tone="muted">{t("server.usesOwn")}</StatusNote>

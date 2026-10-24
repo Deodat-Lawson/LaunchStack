@@ -36,9 +36,14 @@
     }
   },
   "styles": {
+    "balanced": {
+      "label": "均衡",
+      "description": "篇幅与问题相称：查询事实一两句话，问“怎么做”“为什么”则给出完整回答。",
+      "summary": "均衡——篇幅与问题相称"
+    },
     "concise": {
       "label": "简洁",
-      "description": "直截了当，尽量不超过 150 个词。",
+      "description": "简短直接：先给答案，不说废话。",
       "summary": "简洁——直接、简短"
     },
     "detailed": {

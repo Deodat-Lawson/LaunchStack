@@ -28,7 +28,7 @@ export const SETTINGS_SECTION_IDS = [
     "shortcuts",
     "people",
     "company",
-    "processing",
+    "byok",
     "models",
     "agents",
     "documents",

@@ -33,9 +33,9 @@ import {
     Bot,
     Building2,
     Coins,
-    Cpu,
     FileText,
     FlaskConical,
+    KeyRound,
     Keyboard,
     Palette,
     Plug,
@@ -90,9 +90,7 @@ const ShortcutsSection = load(() =>
 const PeopleAccessSection = load(() =>
     import("./settings/PeopleAccessSection").then(m => m.PeopleAccessSection)
 );
-const ProcessingSettings = load(() =>
-    import("./settings/ProcessingSettings").then(m => m.ProcessingSettings)
-);
+const KeysSection = load(() => import("./settings/KeysSection").then(m => m.KeysSection));
 const ModelsSection = load(() => import("./settings/ModelsSection").then(m => m.ModelsSection));
 const AgentsPanel = load(() => import("./collab/AgentsPanel").then(m => m.AgentsPanel));
 const DocumentDefaultsSection = load(() =>
@@ -134,7 +132,7 @@ export const SECTIONS: SectionDef[] = [
     { id: "shortcuts", group: "you", Icon: Keyboard },
     { id: "people", group: "workspace", Icon: Users, wide: true },
     { id: "company", group: "workspace", Icon: Building2, wide: true },
-    { id: "processing", group: "workspace", Icon: Cpu },
+    { id: "byok", group: "workspace", Icon: KeyRound },
     { id: "models", group: "workspace", Icon: Sparkles },
     { id: "agents", group: "workspace", Icon: Bot },
     { id: "documents", group: "workspace", Icon: FileText },
@@ -175,12 +173,12 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
         const applyHash = () => {
             const hash = window.location.hash.replace("#", "").toLowerCase();
             if (!hash) {
-                // OpenRouter's return leg (`?feature=settings&openrouter=…#models`)
-                // belongs on Models, whose body reads the outcome. The shell's
+                // OpenRouter's return leg (`?feature=settings&openrouter=…#byok`)
+                // belongs on Bring your own keys, whose body reads the outcome. The shell's
                 // `?feature=` cleanup can drop the hash before this lazy hub
                 // mounts, so the parameter alone is enough.
                 if (new URLSearchParams(window.location.search).has("openrouter")) {
-                    setSection("models");
+                    setSection("byok");
                 }
                 return;
             }
@@ -438,8 +436,8 @@ function SectionBody({
             return <PeopleAccessSection onActions={onActions} />;
         case "company":
             return <CompanyProfileView variant="settings" onActions={onActions} />;
-        case "processing":
-            return <ProcessingSettings onActions={onActions} />;
+        case "byok":
+            return <KeysSection onActions={onActions} />;
         case "models":
             return <ModelsSection onActions={onActions} />;
         case "agents":

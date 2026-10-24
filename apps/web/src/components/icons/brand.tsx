@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 import type { IconProps } from "./types";
 
@@ -65,6 +66,22 @@ export const IconDrive = (p: BrandIconProps) => (
         <path d="m7 3 6 0 5 9-3 5-6 0L4 8Z" />
         <path d="M7 3 4 8l5 9M13 3l5 9h-8" />
     </Ic>
+);
+
+/**
+ * Google Drive's own full-colour mark, where a control stands for Drive
+ * itself rather than sitting in a row of glyphs. A file, not an inline SVG:
+ * the colours are Google's, not tokens, and stay the same in both themes.
+ */
+export const GoogleDriveLogo = ({ size = 16, style, className }: BrandIconProps) => (
+    <Image
+        src="/images/google-drive.svg"
+        alt=""
+        width={size}
+        height={size}
+        style={style}
+        className={className}
+    />
 );
 
 /** Google Docs: the Drive page glyph with ruled lines. */

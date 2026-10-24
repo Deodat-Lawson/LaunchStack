@@ -71,7 +71,13 @@ export {
 // ---------------------------------------------------------------------------
 
 /** Mirrors `~/lib/ai/styles` without importing its prompt bodies. */
-export const AGENT_STYLE_IDS = ["concise", "detailed", "academic", "organized"] as const;
+export const AGENT_STYLE_IDS = [
+    "balanced",
+    "concise",
+    "detailed",
+    "academic",
+    "organized",
+] as const;
 export type AgentStyleId = (typeof AGENT_STYLE_IDS)[number];
 
 export function isAgentStyle(value: unknown): value is AgentStyleId {

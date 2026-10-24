@@ -19,6 +19,7 @@ import { document, documentContextChunks } from "@launchstack/store/schema";
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { normalizeFolderPath } from "~/lib/folders/path";
+import { MEDIA_MIME_BY_EXTENSION } from "~/lib/media-document";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import { descendantPattern } from "~/server/folders";
@@ -69,6 +70,30 @@ export function originLabel(connector: string | null | undefined): string | null
 export function documentInFolder(folder: string): SQL {
     const path = normalizeFolderPath(folder);
     return or(eq(document.category, path), like(document.category, descendantPattern(path)))!;
+}
+
+const MEDIA_FILE_PATTERN = `\\.(${Object.keys(MEDIA_MIME_BY_EXTENSION).join("|")})([?#].*)?$`;
+
+/**
+ * A recording stored for playback: only its separate text transcript is
+ * indexed and cited. The creation key identifies current uploads even when
+ * the filename/MIME was omitted; non-OCR media rows keep that rule for
+ * legacy uploads.
+ */
+export function originalMediaDocument(): SQL {
+    return or(
+        sql`coalesce(${document.creationKey} like '%:audio-source', false)`,
+        and(
+            eq(document.ocrEnabled, false),
+            sql`coalesce(${document.ocrMetadata}->>'source', '') not in ('transcription', 'sidecar-ytdlp')`,
+            sql`${document.title} not ilike '%(transcription)%'`,
+            or(
+                sql`btrim(coalesce(${document.mimeType}, '')) ~* '^(audio|video)/'`,
+                sql`${document.title} ~* ${MEDIA_FILE_PATTERN}`,
+                sql`${document.url} ~* ${MEDIA_FILE_PATTERN}`
+            )
+        )
+    )!;
 }
 
 function documentFrom(from: SourceOriginFilter): SQL {

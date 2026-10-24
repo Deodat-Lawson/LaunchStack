@@ -17,7 +17,14 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
-import { GoogleDriveBanner } from "./GoogleDriveBanner";
+import { IconDrive } from "~/components/icons/brand";
+import {
+    GoogleDriveBanner,
+    setDriveBarHidden,
+    useDriveLinkSummary,
+    useDriveBarHidden,
+    useDriveLinkStatus,
+} from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { getMindmap, MindmapRequestError } from "../_mindmap/lib/api";
 import { openMindmapDocument } from "../_mindmap/lib/open";
@@ -277,6 +284,8 @@ export function DocumentViewer({
     const tAudience = useTranslations("sources.audience");
     const tSourceMenu = useTranslations("sources.contextMenu");
     const tMindmapErrors = useTranslations("mindmap.errors");
+    const tDrive = useTranslations("sources.googleDriveBanner");
+    const driveLinkSummary = useDriveLinkSummary();
     /** A new map's starter text, read by the fetch without making it re-run. */
     const starter = useTranslations("mindmap.starter");
     const starterRef = useRef(starter);
@@ -389,6 +398,19 @@ export function DocumentViewer({
         },
         [narrow]
     );
+
+    /**
+     * The Google Drive line over a linkable document. It can be hidden — a
+     * choice remembered across documents, like the rail — and the header's
+     * Drive button brings it back, so nothing it offers is lost with it.
+     */
+    const driveDocumentId =
+        !isMindmap && typeof source.documentId === "number" && source.documentId > 0
+            ? source.documentId
+            : null;
+    const drive = useDriveLinkStatus(driveDocumentId);
+    const driveBarHidden = useDriveBarHidden();
+    const driveLink = drive.status?.link ?? null;
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
@@ -917,6 +939,26 @@ export function DocumentViewer({
                   },
               ]
             : []),
+        ...(drive.status?.linkable
+            ? [
+                  {
+                      id: "drive",
+                      label: driveBarHidden ? tDrive("show") : tDrive("hide"),
+                      icon: <IconDrive size={14} />,
+                      onSelect: () => setDriveBarHidden(!driveBarHidden),
+                      iconOnly: true,
+                      tone: driveBarHidden ? undefined : ("on" as const),
+                      // Hidden, the line's one essential fact — how fresh this
+                      // copy is — still answers a hover.
+                      hint: driveBarHidden
+                          ? driveLink
+                              ? tDrive("summaryShowHint", { summary: driveLinkSummary(driveLink) })
+                              : tDrive("showHint")
+                          : tDrive("hideToggleHint"),
+                      testId: "viewer-drive-toggle",
+                  },
+              ]
+            : []),
         {
             id: "delete",
             label: t("documentViewer.deleteDocument"),
@@ -1016,11 +1058,19 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
-                    {!isMindmap &&
-                        typeof source.documentId === "number" &&
-                        source.documentId > 0 && (
-                            <GoogleDriveBanner documentId={source.documentId} />
-                        )}
+                    {driveDocumentId !== null && !driveBarHidden && (
+                        <GoogleDriveBanner
+                            documentId={driveDocumentId}
+                            status={drive.status}
+                            refresh={drive.refresh}
+                            onHide={() => {
+                                setDriveBarHidden(true);
+                                toast(tDrive("hidden"), {
+                                    description: tDrive("hiddenBody"),
+                                });
+                            }}
+                        />
+                    )}
                     {viewingOld && (
                         <div
                             style={{

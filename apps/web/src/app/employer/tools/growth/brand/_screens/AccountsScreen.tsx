@@ -138,7 +138,7 @@ function ChannelRow({
                     <>
                         <Label
                             htmlFor={switchId}
-                            className="text-ink-2 @max-sm:sr-only text-xs font-normal"
+                            className="text-ink-2 text-xs font-normal @max-sm:sr-only"
                         >
                             {t("accounts.offerInCompose")}
                         </Label>
@@ -245,7 +245,7 @@ function ConnectionRow({
     const isLinkedIn = connection.platform === "linkedin";
     return (
         <div className="border-line-2 flex flex-col gap-2 border-t px-4 py-3 first:border-t-0">
-            <div className="@max-md:grid-cols-[auto_minmax(0,1fr)] grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-2">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-2 @max-md:grid-cols-[auto_minmax(0,1fr)]">
                 <NetworkMark platform={connection.platform} size={22} />
                 <div className="min-w-0">
                     <div className="text-ink truncate text-[14px] font-medium">
@@ -272,7 +272,7 @@ function ConnectionRow({
                     )}
                 </div>
                 {canManage && (
-                    <div className="@max-md:col-start-2 flex flex-wrap items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5 @max-md:col-start-2">
                         <Button
                             size="sm"
                             variant="outline"
@@ -410,7 +410,7 @@ function BlueskyForm({
     };
     return (
         <form onSubmit={e => void submit(e)} className="flex flex-col gap-2" noValidate>
-            <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 @max-md:grid-cols-1">
                 <div>
                     <Label htmlFor="bsky-handle" className="text-ink-3 text-xs font-normal">
                         {t("handle")}
@@ -482,12 +482,17 @@ function BlueskyForm({
 function ConnectRow({ network, children }: { network: BrandNetwork; children: React.ReactNode }) {
     const t = useTranslations("growth.brand.accounts");
     return (
-        <div className="border-line-2 @max-md:grid-cols-1 grid grid-cols-[200px_minmax(0,1fr)] gap-3 border-t px-4 py-4 first:border-t-0">
-            <div className="flex items-start gap-3">
-                <NetworkMark platform={network.platform} size={28} muted={!network.available} />
-                <div className="min-w-0">
-                    <div className="text-ink text-[14px] font-medium">{network.label}</div>
-                    <div className="mt-0.5">
+        <div className="border-line-2 grid grid-cols-[200px_minmax(0,1fr)] gap-3 border-t px-4 py-4 first:border-t-0 @max-md:grid-cols-1">
+            {/* The mark sits on the name's line, and the status lines hang under the
+                name (indented by the mark's width), so every network's tile, name and
+                status start at the same x and the first line meets the description. */}
+            <div className="min-w-0">
+                <div className="flex h-6 items-center gap-2.5">
+                    <NetworkMark platform={network.platform} size={24} muted={!network.available} />
+                    <div className="text-ink truncate text-[14px] font-medium">{network.label}</div>
+                </div>
+                <div className="pl-[34px]">
+                    <div className="mt-1">
                         {network.available ? (
                             <ToneWord tone="ok">
                                 {network.connect === "deployment" ? t("setUp") : t("available")}
@@ -506,7 +511,7 @@ function ConnectRow({ network, children }: { network: BrandNetwork; children: Re
                     </div>
                 </div>
             </div>
-            <div className="min-w-0 text-[13px]">{children}</div>
+            <div className="min-w-0 pt-0.5 text-[13px]">{children}</div>
         </div>
     );
 }

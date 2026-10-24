@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useFormatter, useTranslations } from "next-intl";
@@ -36,7 +35,6 @@ import {
     PIPELINE_STEP_KEY,
     PLATFORM_OPTIONS,
     PROMPT_TEMPLATE_KEYS,
-    REDDIT_SNOO_URL,
     type ClaimSourceUI,
     type ContentType,
     type FormalityLevel,
@@ -48,6 +46,9 @@ import {
     type PlatformMeta,
     type ThinkingEntry,
 } from "./shared";
+import { NETWORK_MARKS } from "~/components/icons/brand";
+
+import { PlatformLogo } from "./PlatformLogo";
 import { useMarketingPipelineController } from "./useMarketingPipelineController";
 
 export interface MarketingPipelineWorkspaceProps {
@@ -62,16 +63,11 @@ export interface MarketingPipelineWorkspaceProps {
     onSchedule?: (draft: { platform: MarketingPlatform; message: string }) => void;
 }
 
-function usePlatformLogoClassNames() {
-    return useMemo(
-        () => ({
-            reddit: styles.platformLogoReddit,
-            x: styles.platformLogoX,
-            linkedin: styles.platformLogoLinkedin,
-            bluesky: styles.platformLogoBluesky,
-        }),
-        []
-    );
+/** The network's mark inside the preview badge (the same glyphs as everywhere else). */
+function PreviewBadgeMark({ platform }: { platform: MarketingPlatform }) {
+    const { Mark, fill } = NETWORK_MARKS[platform];
+    // The badge is 1.75rem (28px) square.
+    return <Mark size={Math.round(28 * fill)} />;
 }
 
 /* ─── How-it-works explainer (Fix 1) ─── */
@@ -1233,7 +1229,6 @@ export function MarketingPipelineWorkspace({
     const format = useFormatter();
     const [debugOpen, setDebugOpen] = useState(false);
     const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
-    const logoClassNames = usePlatformLogoClassNames();
 
     const {
         platform,
@@ -1342,23 +1337,7 @@ export function MarketingPipelineWorkspace({
                                         setResult(null);
                                     }}
                                 >
-                                    <span
-                                        className={`${styles.platformLogo} ${logoClassNames[option.id]} ${
-                                            option.logoImg ? styles.platformLogoImgContainer : ""
-                                        }`}
-                                    >
-                                        {option.logoImg ? (
-                                            <Image
-                                                src={option.logoImg}
-                                                alt=""
-                                                width={64}
-                                                height={64}
-                                                className={styles.platformLogoImg}
-                                            />
-                                        ) : (
-                                            option.logoText
-                                        )}
-                                    </span>
+                                    <PlatformLogo platform={option.id} />
                                     <span className={styles.platformName}>{option.label}</span>
                                     <span className={styles.platformSubtitle}>
                                         {t(`platforms.${option.id}.subtitle`)}
@@ -1455,25 +1434,13 @@ export function MarketingPipelineWorkspace({
                                 <div className={styles.workspaceLeft}>
                                     <header className={styles.workspaceLeftHeader}>
                                         <div className={styles.selectedPlatformPill}>
-                                            <span
-                                                className={`${styles.selectedPlatformLogo} ${
-                                                    selectedPlatform
-                                                        ? logoClassNames[selectedPlatform.id]
-                                                        : ""
-                                                } ${selectedPlatform?.logoImg ? styles.platformLogoImgContainer : ""}`}
-                                            >
-                                                {selectedPlatform?.logoImg ? (
-                                                    <Image
-                                                        src={selectedPlatform.logoImg}
-                                                        alt=""
-                                                        width={64}
-                                                        height={64}
-                                                        className={styles.platformLogoImg}
-                                                    />
-                                                ) : (
-                                                    selectedPlatform?.logoText
-                                                )}
-                                            </span>
+                                            {selectedPlatform && (
+                                                <PlatformLogo
+                                                    platform={selectedPlatform.id}
+                                                    size={28}
+                                                    className={styles.selectedPlatformLogo}
+                                                />
+                                            )}
                                             <span className={styles.selectedPlatformLabel}>
                                                 {selectedPlatform?.label}
                                             </span>
@@ -1649,23 +1616,9 @@ export function MarketingPipelineWorkspace({
                                                                         : styles.platformPreviewBadgeBluesky
                                                             }`}
                                                         >
-                                                            {result.platform === "reddit" ? (
-                                                                <Image
-                                                                    src={REDDIT_SNOO_URL}
-                                                                    alt=""
-                                                                    width={18}
-                                                                    height={18}
-                                                                    className={
-                                                                        styles.platformPreviewBadgeImg
-                                                                    }
-                                                                />
-                                                            ) : result.platform === "x" ? (
-                                                                "𝕏"
-                                                            ) : result.platform === "linkedin" ? (
-                                                                "in"
-                                                            ) : (
-                                                                "🦋"
-                                                            )}
+                                                            <PreviewBadgeMark
+                                                                platform={result.platform}
+                                                            />
                                                         </span>
                                                         <span
                                                             className={styles.platformPreviewLabel}
@@ -2068,7 +2021,7 @@ export function MarketingPipelineWorkspace({
                                                         side="right"
                                                         className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
                                                     >
-                                                        <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
+                                                        <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
                                                             <SheetTitle className="text-lg font-semibold">
                                                                 {t("workspace.refineTitle")}
                                                             </SheetTitle>

@@ -9,11 +9,15 @@ export type ChatStreamEvent<T> =
 /**
  * What the chat shows for a `status` event. The model-call phases are sent as
  * keywords; a tool call sends its own sentence (`Searching the web for "…"`).
+ * Until its first words arrive the model is thinking, whether or not its
+ * endpoint shows the thoughts; the chat says "Writing…" once they do.
  */
 const STATUS_LABELS: Record<string, string> = {
-    generating: "Generating…",
+    generating: "Thinking…",
     finalizing: "Finishing…",
 };
+
+export const CHAT_WRITING_LABEL = "Writing…";
 
 export function chatStatusLabel(status: string): string {
     return STATUS_LABELS[status] ?? status;

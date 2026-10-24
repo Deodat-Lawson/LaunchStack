@@ -42,6 +42,8 @@ import {
 import { toast } from "sonner";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
+import { cn } from "~/lib/utils";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
 import type { ChatSendResult } from "~/lib/chat-turns";
@@ -1059,10 +1061,7 @@ function MessageActivity({ msg }: { msg: ThreadMessage }) {
     return (
         <>
             {msg.status && (
-                <div
-                    role="status"
-                    className="my-2 flex items-center gap-2 text-xs text-[var(--ink-3)]"
-                >
+                <div role="status" className="text-ink-3 my-2 flex items-center gap-2 text-xs">
                     <span>
                         {msg.status === "streaming"
                             ? msg.stage?.trim()
@@ -1079,13 +1078,53 @@ function MessageActivity({ msg }: { msg: ThreadMessage }) {
                     )}
                 </div>
             )}
-            {msg.reasoning && (
-                <details className="my-2 rounded-lg border border-[var(--line)] p-3 text-xs text-[var(--ink-3)]">
-                    <summary className="cursor-pointer font-semibold">Reasoning</summary>
-                    <ChatMarkdown text={msg.reasoning} />
-                </details>
-            )}
+            {msg.reasoning && <MessageThoughts msg={msg} reasoning={msg.reasoning} />}
         </>
+    );
+}
+
+/**
+ * The model's thinking, shown as it thinks: open and following the newest
+ * line until the answer starts, then folded to one line. A reader who opens
+ * or closes it keeps that choice.
+ */
+function MessageThoughts({ msg, reasoning }: { msg: ThreadMessage; reasoning: string }) {
+    const thinking = msg.status === "streaming" && !msg.text;
+    const [chosen, setChosen] = useState<boolean | null>(null);
+    const open = chosen ?? thinking;
+    const bodyRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const body = bodyRef.current;
+        if (thinking && body) body.scrollTop = body.scrollHeight;
+    }, [reasoning, thinking, open]);
+    const seconds =
+        msg.thoughtMs !== undefined ? Math.max(1, Math.round(msg.thoughtMs / 1000)) : undefined;
+    return (
+        <Collapsible open={open} onOpenChange={setChosen} className="my-2">
+            <CollapsibleTrigger asChild>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-ink-3 hover:text-ink-2 h-auto gap-1 px-1 py-0.5 text-xs font-semibold hover:bg-transparent"
+                >
+                    <IconChevronRight
+                        className={cn("size-3 transition-transform", open && "rotate-90")}
+                        aria-hidden
+                    />
+                    {/* The status line above already says "Thinking…" while it does. */}
+                    {!thinking && seconds !== undefined ? `Thought for ${seconds}s` : "Thoughts"}
+                </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+                <div
+                    ref={bodyRef}
+                    className="border-line text-ink-3 ml-2 mt-1 max-h-64 overflow-y-auto border-l-2 pl-3 text-xs"
+                >
+                    <ChatMarkdown text={reasoning} />
+                </div>
+            </CollapsibleContent>
+        </Collapsible>
     );
 }
 

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
-import { chatStatusLabel } from "~/lib/chat-stream";
+import { CHAT_WRITING_LABEL, chatStatusLabel } from "~/lib/chat-stream";
 import { conversationContext } from "~/lib/chat-turns";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
@@ -83,6 +83,7 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             id: message.id,
             status: message.status === "streaming" ? undefined : message.status,
             reasoning: message.reasoning,
+            thoughtMs: message.thoughtMs,
             elapsedMs: message.elapsedMs,
             send: message.send,
             tokenBreakdown: message.tokenBreakdown,
@@ -145,7 +146,13 @@ export function useChatRuntime(input: {
 
     const emit = useCallback((context: Conversation) => {
         if (keyRef.current !== context.key || contexts.current.get(context.key) !== context) return;
-        currentInput.current.setThread([...context.messages]);
+        // A streaming answer is written in place as deltas arrive. Each emit
+        // hands out a fresh copy of it, or the memoized row never re-renders.
+        currentInput.current.setThread(
+            context.messages.map(message =>
+                message.status === "streaming" ? { ...message } : message
+            )
+        );
         setView({
             key: context.key,
             busy: context.busy,
@@ -307,11 +314,17 @@ export function useChatRuntime(input: {
 
         const onEvent = (event: AIChatStreamEvent) => {
             if (signal.aborted) return;
-            if (event.type === "text") answer.text += event.delta;
-            if (event.type === "reasoning")
+            const now = performance.now() - started;
+            if (event.type === "text") {
+                answer.text += event.delta;
+                answer.stage = CHAT_WRITING_LABEL;
+            }
+            if (event.type === "reasoning") {
                 answer.reasoning = (answer.reasoning ?? "") + event.delta;
+                answer.thoughtMs = now;
+            }
             if (event.type === "status") answer.stage = chatStatusLabel(event.status);
-            answer.elapsedMs = performance.now() - started;
+            answer.elapsedMs = now;
             emit(context);
         };
         let savedUser = Boolean(persistedUser);

@@ -55,10 +55,24 @@ const reply = (status: number, body: unknown) =>
     Promise.resolve({ ok: status < 400, status, json: async () => body } as unknown as Response);
 
 let fetchMock: jest.Mock;
+/** Only the publish requests; the screen may make other calls (e.g. looking for a run in progress). */
+const publishCalls = () =>
+    fetchMock.mock.calls.filter(c => String(c[0]) === "/api/marketing-pipeline/publish");
+let publishReplies: Array<() => Promise<Response>> = [];
 beforeEach(() => {
     sessionStorage.clear();
-    fetchMock = jest.fn(() =>
-        reply(200, { success: true, data: { postUrl: "https://li/1", channel: "Acme" } })
+    publishReplies = [];
+    fetchMock = jest.fn((input: unknown) =>
+        String(input) === "/api/marketing-pipeline/publish"
+            ? (
+                  publishReplies.shift() ??
+                  (() =>
+                      reply(200, {
+                          success: true,
+                          data: { postUrl: "https://li/1", channel: "Acme" },
+                      }))
+              )()
+            : reply(200, { success: true, data: { runs: [] } })
     );
     global.fetch = fetchMock as unknown as typeof fetch;
 });
@@ -78,14 +92,14 @@ it("asks before publishing a post with an unbacked claim, and sends nothing unti
     await act(async () => {
         await result.current.publishPost();
     });
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(publishCalls()).toHaveLength(0);
     expect(result.current.claimGate?.claims.map(c => c.claim)).toEqual(["We are SOC 2 certified"]);
 
     await act(async () => {
         await result.current.confirmClaimGate();
     });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(bodyOf(fetchMock.mock.calls[0])).toMatchObject({ acknowledgeUnsupportedClaims: true });
+    expect(publishCalls()).toHaveLength(1);
+    expect(bodyOf(publishCalls()[0]!)).toMatchObject({ acknowledgeUnsupportedClaims: true });
     expect(result.current.claimGate).toBeNull();
     expect(result.current.publishResult).toMatchObject({ success: true });
 });
@@ -98,12 +112,12 @@ it("going back to edit publishes nothing", async () => {
     });
     act(() => result.current.dismissClaimGate());
     expect(result.current.claimGate).toBeNull();
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(publishCalls()).toHaveLength(0);
 });
 
 it("a fully supported post publishes straight away; the server's 409 becomes the same question", async () => {
     seed([SUPPORTED]);
-    fetchMock.mockImplementationOnce(() =>
+    publishReplies.push(() =>
         reply(409, {
             success: false,
             code: "unsupported_claims",
@@ -122,8 +136,8 @@ it("a fully supported post publishes straight away; the server's 409 becomes the
     await act(async () => {
         await result.current.publishPost();
     });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(bodyOf(fetchMock.mock.calls[0]).acknowledgeUnsupportedClaims).toBeUndefined();
+    expect(publishCalls()).toHaveLength(1);
+    expect(bodyOf(publishCalls()[0]!).acknowledgeUnsupportedClaims).toBeUndefined();
     expect(result.current.claimGate?.claims[0]?.claim).toBe("Added in the editor");
     expect(result.current.publishResult).toBeNull();
 });

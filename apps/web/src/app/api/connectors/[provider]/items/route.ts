@@ -15,6 +15,8 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordCopy } from "~/i18n/translate";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -59,22 +61,22 @@ const RemoveItemsSchema = z.object({
 });
 
 async function driveOnly(
-    params: Promise<{ provider: string }>
+    params: Promise<{ provider: string }>,
+    request: Request
 ): Promise<{ ok: true } | { ok: false; response: ReturnType<typeof createValidationError> }> {
     const { provider } = await params;
     if (provider !== "google-drive") {
-        return {
-            ok: false,
-            response: createValidationError("Picked items exist only for google-drive."),
-        };
+        const t = translatorFor(localeOfRequest(request), "sources.server.connectors");
+        return { ok: false, response: createValidationError(t("pickedDriveOnly")) };
     }
     return { ok: true };
 }
 
 export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
+    const t = translatorFor(localeOfRequest(request), "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.permissive, async () => {
         try {
-            const scope = await driveOnly(params);
+            const scope = await driveOnly(params, request);
             if (!scope.ok) return scope.response;
 
             const guard = await requireConnectorAdmin();
@@ -84,7 +86,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 guard.ctx.companyId,
                 "google-drive"
             );
-            if (!connection) return createNotFoundError("No Google Drive connection.");
+            if (!connection) return createNotFoundError(t("noDrive"));
 
             const items = await listPickedItems(connection.id);
             return createSuccessResponse({
@@ -96,7 +98,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 })),
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
@@ -105,24 +107,26 @@ export async function POST(
     request: Request,
     { params }: { params: Promise<{ provider: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
-            const scope = await driveOnly(params);
+            const scope = await driveOnly(params, request);
             if (!scope.ok) return scope.response;
 
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
             if (!isConnectorConfigured("google-drive")) {
-                return notConfiguredResponse("google-drive");
+                return notConfiguredResponse("google-drive", locale);
             }
 
             const [connection] = await listConnectionsForCompany(
                 guard.ctx.companyId,
                 "google-drive"
             );
-            if (!connection) return createNotFoundError("Connect Google Drive first.");
+            if (!connection) return createNotFoundError(t("connectDriveFirst"));
             if (connection.status !== "active") {
-                return createValidationError("Google access was revoked — reconnect first.");
+                return createValidationError(t("googleRevoked"));
             }
 
             const body = await validateRequestBody(request, AddSchema);
@@ -137,9 +141,10 @@ export async function POST(
             if ("link" in body.data) {
                 const resolved = await resolveDriveLink(connection, body.data.link);
                 if (!resolved.ok) {
+                    const message = wordCopy(resolved.copy, locale);
                     return resolved.reason === "not-found"
-                        ? createNotFoundError(resolved.message)
-                        : createValidationError(resolved.message);
+                        ? createNotFoundError(message)
+                        : createValidationError(message);
                 }
                 added = [resolved.item];
             } else {
@@ -157,10 +162,12 @@ export async function POST(
             const items = await listPickedItems(connection.id);
             return createSuccessResponse(
                 { count: items.length, added },
-                added.length === 1 ? `"${added[0]!.name}" added.` : `${added.length} items added.`
+                added.length === 1
+                    ? t("itemAdded", { name: added[0]!.name })
+                    : t("itemsAdded", { count: added.length })
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
@@ -169,9 +176,11 @@ export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ provider: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
-            const scope = await driveOnly(params);
+            const scope = await driveOnly(params, request);
             if (!scope.ok) return scope.response;
 
             const guard = await requireConnectorAdmin();
@@ -181,7 +190,7 @@ export async function DELETE(
                 guard.ctx.companyId,
                 "google-drive"
             );
-            if (!connection) return createNotFoundError("No Google Drive connection.");
+            if (!connection) return createNotFoundError(t("noDrive"));
 
             const body = await validateRequestBody(request, RemoveItemsSchema);
             if (!body.success) return body.response;
@@ -189,10 +198,10 @@ export async function DELETE(
             await removePickedItems(connection.id, body.data.fileIds);
             return createSuccessResponse(
                 { removed: body.data.fileIds.length },
-                "Selection updated. Already-imported documents were kept."
+                t("selectionUpdatedDocuments")
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

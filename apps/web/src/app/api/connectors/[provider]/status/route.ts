@@ -19,6 +19,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { category } from "@launchstack/store/schema";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
+import { requestTranslator } from "~/i18n/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/connectors/config";
@@ -53,7 +54,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             const { provider } = await params;
             if (provider !== "google-drive" && provider !== "notion") {
                 return createValidationError(
-                    "Status detail exists only for google-drive and notion."
+                    requestTranslator(request, "sources.server.connectors")("statusDriveNotionOnly")
                 );
             }
 
@@ -138,7 +139,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 picker,
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

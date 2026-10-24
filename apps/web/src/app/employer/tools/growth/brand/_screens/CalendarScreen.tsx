@@ -12,6 +12,7 @@ import { cn } from "~/lib/utils";
 import { InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthPaths } from "../../_lib/paths";
 import { useResource } from "~/lib/tools/useResource";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -114,6 +115,7 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
  */
 export function CalendarScreen() {
     const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
     const locale = useLocale();
     const paths = useGrowthPaths();
     const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
@@ -144,7 +146,7 @@ export function CalendarScreen() {
             if (n === 0 && result.failed.length === 0) toast(t("calendar.nothingOverdue"));
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("calendar.publishFailed"));
+            toast.error(errorText(e, t("calendar.publishFailed")));
         }
     };
 

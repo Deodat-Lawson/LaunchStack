@@ -344,13 +344,14 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/metadata (raw export, excerpts from every folder)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadata(),
+        call: () => getCompanyMetadata(new Request("http://localhost/api/company/metadata")),
     },
     {
         route: "GET /api/company/metadata/history",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadataHistory(),
+        call: () =>
+            getCompanyMetadataHistory(new Request("http://localhost/api/company/metadata/history")),
     },
     {
         route: "PATCH /api/company/profile/facts",
@@ -387,7 +388,7 @@ const GATES: readonly Gate[] = [
         route: "GET /api/fetchCompany (key tails, Ollama endpoint)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => fetchCompany(),
+        call: () => fetchCompany(new Request("http://localhost/api/fetchCompany")),
     },
     // The agent roster: adding, retiring and restoring are the managers', and
     // so are an agent's policy fields; what an agent says is any editor's.
@@ -639,7 +640,8 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/analysis-dashboard",
         permission: "analytics.view",
         deniedRole: "member",
-        call: () => analysisDashboard(),
+        call: () =>
+            analysisDashboard(new Request("http://localhost/api/company/analysis-dashboard")),
     },
     {
         route: "GET /api/company/documents/[documentId]/stats",

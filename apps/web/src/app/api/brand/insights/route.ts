@@ -13,6 +13,6 @@ export async function GET(request: NextRequest) {
         const days = Number.isFinite(raw) ? Math.min(365, Math.max(1, Math.round(raw))) : 30;
         return json(await getBrandInsights(auth.ctx.companyId, days));
     } catch (err) {
-        return handleBrandError("GET insights", err);
+        return handleBrandError("GET insights", err, request);
     }
 }

@@ -17,6 +17,8 @@ import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { gateChunksByScope } from "~/server/rag/gate";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -219,11 +221,14 @@ function extractXmlValue(xml: string, tag: string): string | null {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("documents.read")) {
-            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            return NextResponse.json({ error: tApi("forbidden") }, { status: 403 });
         }
 
         const body = (await request.json()) as unknown;
@@ -231,7 +236,11 @@ export async function POST(request: Request) {
 
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: tApi("invalidRequest"),
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
@@ -399,8 +408,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to perform research",
-                error: "Failed to perform research",
+                message: t("researchFailed"),
+                error: t("researchFailed"),
             },
             { status: 500 }
         );

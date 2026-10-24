@@ -1070,5 +1070,361 @@
       "sendFailed": "发送失败：{error}。重试不会重复发送。",
       "sendFailedGeneric": "发送失败。"
     }
+  },
+  "server": {
+    "you": "你",
+    "errors": {
+      "segmentNotFound": "未找到细分市场",
+      "companyNotFound": "未找到公司",
+      "runNotFound": "未找到运行记录",
+      "programNotFound": "未找到计划",
+      "programArchived": "计划已归档",
+      "countryCodes": "请使用两位字母的国家/地区代码，例如 NL、DE、GB",
+      "cannotMoveTo": "无法移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
+      "nothingSelected": "未选择任何内容",
+      "noneContactable": "所选公司目前都还无法联系",
+      "noEligibleRecipients": "没有符合条件的收件人",
+      "idsRequired": "需要提供 ids",
+      "segmentIdRequired": "需要提供 segmentId",
+      "programIdRequired": "需要提供 programId",
+      "invalidView": "视图无效",
+      "invalidSort": "排序方式无效",
+      "invalidStatus": "状态无效",
+      "invalidKind": "类型无效",
+      "invalidLimit": "数量上限无效",
+      "invalidOffset": "偏移量无效",
+      "runsCannotStop": "运行一旦进入队列就无法停止，几分钟内即可完成",
+      "confirmBeforeRun": "运行前请先确认细分市场",
+      "notEnoughCredits": "额度不足，无法启动运行",
+      "insufficientCredits": "额度不足",
+      "deriveLater": "根据你的文档推导细分市场的功能将随流程重构一起推出",
+      "newSegmentRequired": "请填写名称、你卖什么，以及至少一个国家/地区",
+      "sourceSettingsLater": "来源设置将随来源注册表一起推出；目前由环境变量中的密钥决定"
+    },
+    "stageErrors": {
+      "unknownStage": "未知阶段“{to}”。",
+      "sameStage": "关系已处于“{to}”阶段。",
+      "notAllowed": "无法从“{from}”移至“{to}”。允许的阶段：{allowed}。",
+      "ownerRequired": "从“contacted”阶段起需要指定负责人（正在进入“{target}”）。",
+      "nextActionRequired": "从“in_conversation”阶段起需要设置下一步行动（正在进入“{target}”）。",
+      "agreementRequired": "进入“{target}”阶段需要先记录协议。",
+      "pair": "{first}{second}"
+    },
+    "requirements": {
+      "ownerRequired": "需要指定负责人",
+      "nextActionRequired": "需要设置下一步",
+      "agreementRequired": "需要在分销中记录协议"
+    },
+    "moves": {
+      "currentStage": "当前阶段",
+      "notAStage": "此工作区暂未启用该阶段",
+      "wonStaysWon": "已赢单的商机会保持赢单状态",
+      "moveFirst": "请先移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
+      "notAvailableFrom": "无法从“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”移至此阶段",
+      "notAvailableHere": "无法从当前阶段移至此阶段"
+    },
+    "segment": {
+      "subtitle": "{countries} · {kinds}",
+      "headline": "{countries} 的{kinds}",
+      "kind": "{kind, select, importer {进口商} distributor {分销商} wholesaler {批发商} retailer {零售商} agent {代理商} reseller {转售商} supplier {供应商} other {{kind}}}",
+      "fields": {
+        "offering": "你卖什么",
+        "archetype": "买家类型",
+        "industries": "行业",
+        "geographies": "地区",
+        "disqualifiers": "不合适",
+        "exclusions": "已有合作伙伴"
+      },
+      "fieldSources": {
+        "program": "来自计划",
+        "partnerKinds": "来自计划 · 合作伙伴类型",
+        "categories": "来自计划 · 类别",
+        "territories": "来自计划 · 地区",
+        "constraints": "来自计划 · 限制条件",
+        "imports": "来自计划和导入"
+      },
+      "exclusionsCount": "{count} 个域名已从每次运行中排除",
+      "exclusionsNone": "无"
+    },
+    "companies": {
+      "notProfiled": "尚未生成画像",
+      "excludedFromRuns": "已从运行中排除",
+      "blockedExcludedFromRuns": "公司已排除：已从运行中排除",
+      "blockedByYou": "公司已被你排除",
+      "foundVia": {
+        "discovery": "发现运行",
+        "import": "导入",
+        "manual": "由你添加"
+      }
+    },
+    "people": {
+      "inbox": "{local}@ 共享邮箱",
+      "sharedInbox": "共享邮箱",
+      "dossier": "档案"
+    },
+    "claims": {
+      "carries": "经销 {list}。",
+      "activeIn": "活跃于 {list}。",
+      "sellsInto": "销往 {list}。",
+      "certified": "认证：{list}。",
+      "risk": "风险：{flag}",
+      "riskNoEvidence": "风险：未记录证据",
+      "riskThinEvidence": "风险：证据不足",
+      "riskBudget": "风险：研究预算已用尽",
+      "riskRole": "风险：角色未确认",
+      "screeningFlagged": "风险：合规筛查标记了 {names}（仅供参考）。",
+      "screeningFlaggedMatch": "风险：合规筛查发现了一个匹配项（仅供参考）。"
+    },
+    "signals": {
+      "researched": "已研究：匹配度 {fit}，{evidence} 条证据",
+      "meeting": "会议",
+      "meetingSummary": "会议：{summary}",
+      "reply": "已收到回复",
+      "replySummary": "已收到回复：{summary}",
+      "document": "已共享文档",
+      "documentTitle": "已共享文档：{title}",
+      "agreement": "已记录协议",
+      "imported": "以“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”阶段导入",
+      "importedExisting": "以现有阶段导入"
+    },
+    "sources": {
+      "labels": {
+        "live": {
+          "web": "网页搜索",
+          "place": "地点",
+          "trade": "贸易数据"
+        },
+        "keyless": {
+          "web": "公开目录（YC）",
+          "place": "OpenStreetMap",
+          "trade": "贸易数据"
+        },
+        "fixture": {
+          "web": "示例网页搜索",
+          "place": "示例地点",
+          "trade": "示例贸易数据"
+        }
+      },
+      "rows": {
+        "osm": {
+          "label": "OpenStreetMap",
+          "description": "按国家/地区或城市以及组织类型查找有网站的组织。免费，无需密钥；未配置搜索服务时使用。"
+        },
+        "yc": {
+          "label": "Y Combinator 目录",
+          "description": "细分市场所在国家/地区中，简介与其关键词匹配的活跃 YC 公司。免费，无需密钥。"
+        },
+        "web": {
+          "label": "网页搜索",
+          "description": "用 Exa 或 Serper 搜索每个地区的组织；研究智能体需要配置模型。"
+        },
+        "place": {
+          "label": "地点",
+          "description": "在每个城市地区周边进行 Foursquare 地点搜索。"
+        },
+        "trade": {
+          "label": "贸易数据",
+          "description": "按 HS 编码查询进口货运记录（需配置数据服务商）。"
+        },
+        "screening": {
+          "label": "制裁筛查",
+          "description": "对每个入围组织进行 OpenSanctions 匹配，仅供参考。"
+        },
+        "sample": {
+          "label": "示例数据",
+          "description": "为每个服务商提供确定性的替代数据。无需密钥，不消耗额度。可在“运行记录”中切换。"
+        }
+      },
+      "costs": {
+        "free": "免费",
+        "creditsPerRun": "每次运行消耗额度",
+        "included": "已包含",
+        "providerRates": "按服务商费率"
+      },
+      "details": {
+        "noWebQueries": "未规划网页搜索查询",
+        "webNotConfigured": "未配置网页搜索",
+        "zeroResults": "没有结果",
+        "noPlaceQueries": "未规划地点查询",
+        "placeNotConfigured": "未配置地点搜索",
+        "tradeNotConfigured": "未配置贸易数据",
+        "queriesFailed": "{count} 个查询失败",
+        "territoriesFailed": "{count} 个地区查询失败"
+      },
+      "status": {
+        "degraded": "部分可用",
+        "failed": "失败",
+        "skipped": "已跳过",
+        "off": "已关闭"
+      }
+    },
+    "runs": {
+      "steps": {
+        "segment": "细分市场已确认",
+        "sources": "来源",
+        "shortlist": "入围名单",
+        "profiles": "画像",
+        "people": "联系人"
+      },
+      "sourcesDone": "已完成 {ok}/{total}",
+      "shortlistOf": "{resolved} 家公司中的 {shortlisted} 家",
+      "companies": "{count} 家公司",
+      "profilesOf": "{done}/{total}",
+      "peopleLater": "将随联系人查找功能推出",
+      "found": "找到 {count} 个",
+      "excluded": "排除 {count} 个",
+      "failedGrounding": "{count} 个未通过依据核验",
+      "caps": "{count} 个候选",
+      "capsSample": "{count} 个候选 · 示例数据",
+      "capsKeyless": "{count} 个候选 · 公开来源，无需密钥"
+    },
+    "outreach": {
+      "notFound": "未找到",
+      "otherSegment": "属于其他细分市场",
+      "dealIs": "商机处于“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”阶段",
+      "companyMissing": "公司缺失",
+      "excluded": "{name} 已被排除",
+      "noMailbox": "{name}：画像中没有公开邮箱",
+      "notInProgram": "不在此计划中",
+      "stageIs": "阶段为“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”",
+      "orgMissing": "组织缺失",
+      "existingPartner": "现有合作伙伴（已排除）",
+      "noDossierMailbox": "档案中没有公开邮箱"
+    },
+    "brand": {
+      "errors": {
+        "forbiddenManage": "只有工作区管理员可以更改已连接的账号。",
+        "forbiddenPublish": "你的角色可以查看品牌，但不能以公司身份发帖或回复。",
+        "deploymentAccount": "部署账号由运营方配置。",
+        "channelOnOff": "请说明该渠道是开启还是关闭",
+        "channelNotFound": "未找到渠道",
+        "commentDone": "请说明该评论是否已处理",
+        "commentNotFound": "未找到评论",
+        "writeReply": "请先写回复",
+        "connectionNotFound": "未找到连接",
+        "noSecretsKey": "此部署暂时无法存储应用专用密码（未设置 EMBEDDING_SECRETS_KEY）。",
+        "blueskyFields": "请输入账号的用户名和应用专用密码",
+        "imageNotFound": "未找到图片",
+        "sendAsFile": "请以文件上传的方式发送图片",
+        "pickImage": "请选择要上传的图片",
+        "checkChange": "请检查修改内容后重试",
+        "notADate": "该排期时间不是有效日期",
+        "checkPost": "请检查帖子后重试",
+        "channelGone": "其中一个渠道已不再连接。",
+        "switchedOff": "{name} 已在“账号”中关闭。",
+        "needsReconnect": "{name} 需要重新连接。",
+        "cannotPostAs": "此部署的 LinkedIn 应用无法以 {name} 的身份发帖。",
+        "postTestNotFound": "未找到帖子测试",
+        "imageMissing": "其中一张图片缺失，请重新添加。"
+      },
+      "reasons": {
+        "refusedKeepPosting": "{network} 不再接受此登录。请重新连接以继续发帖。",
+        "expiredOn": "{network} 登录已于 {date} 过期。请重新连接以继续发帖。",
+        "signInRemoved": "此登录已被移除。",
+        "noLongerManages": "连接此渠道的账号已不再在该平台上管理它。",
+        "blueskyRefused": "Bluesky 未接受该用户名和应用专用密码。",
+        "blueskyUnreachable": "无法连接到 Bluesky：{error}",
+        "refusedAccounts": "{network} 不再接受此登录。请在“账号”中重新连接。",
+        "linkedinExpired": "LinkedIn 登录已过期。请重新连接以继续发帖。",
+        "channelSignInRemoved": "此渠道的登录已被移除。请在“账号”中重新连接。",
+        "channelNeedsReconnect": "此渠道需要在“账号”中重新连接。",
+        "appPasswordMissing": "缺少 Bluesky 应用专用密码。请在“账号”中重新连接。",
+        "appPasswordUnreadable": "已存储的 Bluesky 应用专用密码无法再读取。请在“账号”中重新连接。",
+        "deploymentKeys": "{platform} 渠道使用部署密钥发帖。",
+        "commentNotFound": "未找到评论",
+        "writeReply": "请先写回复。",
+        "replyLimit": "{network} 上的回复最多 {limit} 个字符。",
+        "channelDisconnected": "此渠道已断开连接。",
+        "postNotOnNetwork": "这条评论所在的帖子不在该平台上。",
+        "syncFirst": "回复这条评论前请再同步一次。",
+        "replyFailed": "回复未能发送：{error}",
+        "replyNotSaved": "回复已发送，但无法保存在这里。",
+        "imageType": "请使用 JPG、PNG、GIF 或 WebP 格式的图片。",
+        "imageEmpty": "该文件为空。",
+        "imageSize": "图片最大为 5 MB。",
+        "linkedinWebp": "LinkedIn 不支持 WebP 图片，请使用 JPEG、PNG 或 GIF。",
+        "blueskySize": "Bluesky 仅支持 1 MB 以内的图片。请换一张更小的图片，或不发布到 Bluesky。",
+        "imageUnreadable": "无法从存储中读取图片 {name}。",
+        "imageDeleted": "这篇帖子中的一张图片已被删除。",
+        "pickChannel": "请至少选择一个渠道。",
+        "writeSomething": "请先写点内容。",
+        "overLimit": "{count} 个字符超出了 {network} 的 {limit} 字符上限。",
+        "fourImages": "一篇帖子最多附带四张图片。",
+        "timeAhead": "请选择一个尚未到来的时间。",
+        "postNotFound": "未找到帖子",
+        "alreadyOutPublishNew": "这篇帖子已经发布。请改为发布一篇新帖子。",
+        "beingPublished": "这篇帖子正在发布中。",
+        "pickScheduleTime": "请为这篇帖子选择排期时间。",
+        "publishedStays": "已发布的帖子会保留在日历上。",
+        "alreadyOut": "这篇帖子已经发布。",
+        "cancelledReschedule": "已取消的帖子需要重新排期才能发布。"
+      },
+      "syncLine": "{channel}：{message}",
+      "networks": {
+        "linkedin": {
+          "createApp": "在 developer.linkedin.com 创建一个应用，并关联公司的 LinkedIn 主页",
+          "products": "如需主页、数据分析和评论：在一个未添加其他产品的应用上申请 Community Management API（需为注册公司，并由主页超级管理员验证该应用）。如只需个人资料：添加 Share on LinkedIn 和 Sign In with LinkedIn using OpenID Connect",
+          "redirect": "在应用的 Auth 标签页中添加重定向 URL {url}",
+          "keys": "设置 LINKEDIN_CLIENT_ID 和 LINKEDIN_CLIENT_SECRET，并将 LINKEDIN_OAUTH_SCOPES 设为 Auth 标签页列出的权限范围",
+          "secretsKey": "设置 EMBEDDING_SECRETS_KEY，以便加密存储登录信息",
+          "notePages": "免费发帖。主页、数据和评论需通过 LinkedIn 的 Community Management API 获取：在通过 LinkedIn 标准层级审核之前，每天限 500 次调用。",
+          "noteProfiles": "免费发帖。此应用支持成员自己的个人资料；主页需要 LinkedIn 的 Community Management API。登录有效期为 60 天。"
+        },
+        "bluesky": {
+          "secretsKey": "设置 EMBEDDING_SECRETS_KEY，以便加密存储应用专用密码",
+          "note": "免费，无需审核。每个工作区使用自己的应用专用密码登录。"
+        },
+        "x": {
+          "account": "一个按用量付费的 X 开发者账号",
+          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，供所有工作区共用",
+          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为整个部署配置。"
+        },
+        "reddit": {
+          "app": "一个 Reddit script 应用（client id 和 secret）",
+          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，供所有工作区共用",
+          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为整个部署配置。"
+        }
+      }
+    },
+    "marketing": {
+      "publishForbidden": "你的角色可以查看品牌，但不能以公司身份发帖。",
+      "nothingCanPost": "目前还没有可以发布到 {network} 的账号。请在“增长 › 品牌 › 账号”中连接。",
+      "operatorOnly": "{network} 由运营方为整个部署配置，而此部署尚未配置 {network} 密钥。",
+      "publishFailed": "发布失败",
+      "runFailed": "营销流程运行失败",
+      "runFailedChat": "营销流程运行失败。请确认已设置 CHAT_BASE_URL（如需要，还有 CHAT_API_KEY），并且聊天模型配置文件有效。",
+      "runFailedCompany": "营销流程运行失败。请确认你的用户拥有有效的公司档案。",
+      "invalidCompanyId": "公司 ID 无效",
+      "messageRequired": "需要提供 message"
+    },
+    "email": {
+      "invalidCampaignId": "营销活动 ID 无效",
+      "campaignNotFound": "未找到营销活动",
+      "idempotencySend": "发送营销活动需要 Idempotency-Key 请求头。",
+      "idempotencyRun": "启动自动运行需要 Idempotency-Key 请求头。",
+      "generateFailed": "生成邮件模板失败",
+      "runFailed": "运行邮件营销活动失败"
+    },
+    "research": {
+      "invalidLimit": "数量上限无效：应为 1 到 500 之间的整数",
+      "invalidOffset": "偏移量无效：应为非负整数",
+      "invalidSearch": "搜索条件无效",
+      "secUnavailable": "SEC EDGAR 没有响应，请稍后再试。"
+    },
+    "emailLifecycle": {
+      "nameRequired": "创建营销活动需要填写名称",
+      "notFound": "未找到营销活动 {campaignId}",
+      "idempotencySend": "发送营销活动需要提供 Idempotency-Key",
+      "idempotencyRun": "启动自动运行需要提供 Idempotency-Key",
+      "notApprovedStatus": "此营销活动的状态为 {status}，请先批准当前模板版本再发送。",
+      "noApprovedVersion": "此营销活动还没有已批准的模板版本，请先批准一个版本再发送。",
+      "approvedVersionMissing": "找不到已批准的模板版本。",
+      "noRecipients": "此营销活动没有收件人。",
+      "sendInProgress": "使用这个 Idempotency-Key 的发送正在进行中。",
+      "versionNotInCampaign": "模板版本 {versionId} 不属于营销活动 {campaignId}",
+      "revisionRequested": "AI 审核要求修改。如仍要批准，需要提供 overrideReason。",
+      "notReviewed": "此版本尚未审核。要批准它，需要提供 overrideReason。",
+      "templateRejected": "模板未通过：{issues}"
+    }
   }
 }

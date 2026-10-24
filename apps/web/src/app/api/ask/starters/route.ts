@@ -43,7 +43,7 @@ export async function GET(request: Request) {
             );
             return ok(payload);
         } catch (error) {
-            return handleRouteError("ask-starters", error);
+            return handleRouteError("ask-starters", error, request);
         }
     });
 }

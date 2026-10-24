@@ -56,8 +56,8 @@ import { GET } from "~/app/api/documents/pdf/route";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
-function request(query = "documentId=7"): Request {
-    return new Request(`http://localhost/api/documents/pdf?${query}`);
+function request(query = "documentId=7", headers: Record<string, string> = {}): Request {
+    return new Request(`http://localhost/api/documents/pdf?${query}`, { headers });
 }
 
 function grantContext() {
@@ -190,5 +190,32 @@ describe("GET /api/documents/pdf", () => {
 
         const outage = await GET(request());
         expect(outage.status).toBe(502);
+    });
+});
+
+describe("GET /api/documents/pdf in the reader's language", () => {
+    const chinese = { cookie: "ls-locale=zh-CN.1" };
+
+    it("words its refusals in Chinese and keeps the codes", async () => {
+        const missing = await GET(request("", chinese));
+        await expect(missing.json()).resolves.toEqual({
+            success: false,
+            error: "invalid_request",
+            message: "缺少 documentId",
+        });
+
+        grantContext();
+        queueDocument({ title: "scan.pdf", fileType: "pdf" });
+        const alreadyPdf = await GET(request("documentId=7", chinese));
+        expect(alreadyPdf.status).toBe(415);
+        await expect(alreadyPdf.json()).resolves.toMatchObject({
+            error: "unsupported_type",
+            message: "此文档已经是 PDF，请直接下载。",
+        });
+    });
+
+    it("keeps the English without a language", async () => {
+        const missing = await GET(request(""));
+        await expect(missing.json()).resolves.toMatchObject({ message: "documentId is required" });
     });
 });

@@ -1,6 +1,6 @@
 // POST /api/prospects/segments/[id]/derive — not available until the pipeline reframe
-import { error } from "../../../_http";
+import { error, prospectsT } from "../../../_http";
 
-export async function POST() {
-    return error("Deriving a segment from your documents arrives with the pipeline reframe", 409);
+export async function POST(request: Request) {
+    return error(prospectsT(request)("deriveLater"), 409);
 }

@@ -16,6 +16,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -193,6 +194,7 @@ function CommentRow({
  */
 export function EngagementScreen() {
     const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
     const tc = useTranslations("common");
     const paths = useGrowthPaths();
     const router = useToolRouter();
@@ -266,7 +268,7 @@ export function EngagementScreen() {
                 });
         } catch (e) {
             patch(comment.id, c => ({ ...c, handledAt: before }));
-            toast.error(e instanceof Error ? e.message : t("engagement.changeFailed"));
+            toast.error(errorText(e, t("engagement.changeFailed")));
         }
     };
 
@@ -302,7 +304,7 @@ export function EngagementScreen() {
             res.mutate(d => ({ ...d, comments: d.comments.filter(c => c.id !== tempId) }));
             setDrafts(d => ({ ...d, [parent.id]: text }));
             setReplyingTo(parent.id);
-            setReplyError(e instanceof Error ? e.message : t("engagement.replyFailed"));
+            setReplyError(errorText(e, t("engagement.replyFailed")));
         } finally {
             setPending(p => {
                 const next = new Set(p);

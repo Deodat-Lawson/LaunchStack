@@ -494,5 +494,64 @@
       "removeImport": "移除导入…",
       "busy": "已有导入正在进行。"
     }
+  },
+  "server": {
+    "chatAgent": {
+      "notFound": "此工作区中没有标识名为“@{handle}”的智能体",
+      "primaryOnly": "@{handle} 只能作为主智能体使用——请在输入框中选择它，不要用 @ 提及",
+      "subagentOnly": "@{handle} 是子智能体——请在消息中用 @{handle} 召唤它"
+    },
+    "connectors": {
+      "invalidJsonBody": "请求内容不是有效的 JSON。"
+    },
+    "sessions": {
+      "disabled": "会话连接器已关闭。请在存放你的 Claude Code / Codex 文件夹的服务器上设置 AGENT_SESSIONS_CONNECTOR_ENABLED=true。",
+      "invalidProjectSlug": "项目目录名无效。",
+      "invalidMaxSessions": "maxSessions 无效。",
+      "imported": "已导入 {stored}/{discovered} 个会话。",
+      "validation": {
+        "notProjectDir": "不是项目目录名。",
+        "notSourceId": "不是会话连接器的来源 ID。"
+      }
+    },
+    "knowledge": {
+      "disabled": "智能体知识连接器已关闭。请在存放你的 Claude Code / Codex 文件夹的服务器上设置 AGENT_KNOWLEDGE_CONNECTOR_ENABLED=true。",
+      "outsideRoots": "以下项目目录不在 AGENT_KNOWLEDGE_PROJECT_ROOTS 范围内：{dirs}",
+      "synced": "已同步 {stored}/{discovered} 个知识文件。"
+    },
+    "repoExplainer": {
+      "invalidUrl": "GitHub URL 格式无效。请使用：https://github.com/owner/repo 或 owner/repo",
+      "notFoundWithToken": "未找到代码库“{repo}”，或令牌没有访问权限。",
+      "notFoundPublic": "未找到代码库“{repo}”，或它是私有代码库。如需访问私有代码库，请添加有权限的 GitHub 令牌。",
+      "forbiddenWithToken": "无权访问“{repo}”。请检查令牌权限和代码库访问设置。",
+      "forbiddenPublic": "代码库“{repo}”是私有的，或禁止访问。请添加 GitHub 令牌。",
+      "invalidToken": "GitHub 令牌无效。",
+      "rateLimited": "对 GitHub 的请求过多。请稍后重试。",
+      "accessError": "访问代码库“{repo}”时出错（HTTP {status}）。",
+      "validateFailed": "无法在 GitHub 上验证该代码库。请重试。",
+      "managersOnlyRun": "只有管理角色才能运行代码库解读",
+      "jobNotFound": "未找到该代码库解读任务",
+      "workspaceNotFound": "未找到该代码库工作区",
+      "notReady": "工作区当前状态为 {status}。请等待首次同步完成。",
+      "neverSynced": "工作区当前状态为 {status}，且从未同步过。请等待首次同步完成。",
+      "onlyCompletedPublish": "只有已完成的解读才能发布",
+      "folderEditDenied": "你没有此文件夹的编辑权限。",
+      "managersOnlyConnect": "只有管理角色才能连接代码库",
+      "managersOnlyDisconnect": "只有管理角色才能断开代码库",
+      "invalidRepoUrl": "GitHub URL 无效——应为“https://github.com/owner/repo”或“owner/repo”"
+    },
+    "analysis": {
+      "invalidDocumentId": "documentId 无效，必须是正数。",
+      "invalidAnalysisType": "analysisType 无效，必须是以下之一：{types}",
+      "invalidTimeout": "timeoutMs 无效，必须介于 {min} 和 {max} 之间",
+      "documentNotFound": "未找到该文档。",
+      "noVersion": "未找到文档的当前版本。",
+      "noChunks": "未找到该 documentId 对应的文本块。",
+      "noChunksStream": "未找到该文档的文本块。",
+      "timedOut": "分析超时。完成后结果会被缓存。",
+      "failed": "无法完成预测性文档分析",
+      "tookTooLong": "AI 分析耗时过长。请重试，或缩小文档。",
+      "externalLimited": "外部服务出错。分析已在功能受限的情况下完成。"
+    }
   }
 }

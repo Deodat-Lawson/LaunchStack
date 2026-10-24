@@ -1070,5 +1070,361 @@
       "sendFailed": "Sending failed: {error}. Retrying will not double-send.",
       "sendFailedGeneric": "The send failed."
     }
+  },
+  "server": {
+    "you": "You",
+    "errors": {
+      "segmentNotFound": "Segment not found",
+      "companyNotFound": "Company not found",
+      "runNotFound": "Run not found",
+      "programNotFound": "Program not found",
+      "programArchived": "Program is archived",
+      "countryCodes": "Use two-letter country codes, for example NL, DE, GB",
+      "cannotMoveTo": "Cannot move to {stage}",
+      "nothingSelected": "Nothing selected",
+      "noneContactable": "None of the selected companies can be contacted yet",
+      "noEligibleRecipients": "No eligible recipients",
+      "idsRequired": "ids are required",
+      "segmentIdRequired": "segmentId is required",
+      "programIdRequired": "programId is required",
+      "invalidView": "Invalid view",
+      "invalidSort": "Invalid sort",
+      "invalidStatus": "Invalid status",
+      "invalidKind": "Invalid kind",
+      "invalidLimit": "Invalid limit",
+      "invalidOffset": "Invalid offset",
+      "runsCannotStop": "Runs cannot be stopped once queued; they finish within a few minutes",
+      "confirmBeforeRun": "Confirm the segment before running",
+      "notEnoughCredits": "Not enough credits to start a run",
+      "insufficientCredits": "Insufficient credits",
+      "deriveLater": "Deriving a segment from your documents arrives with the pipeline reframe",
+      "newSegmentRequired": "Name, what you sell and at least one country are required",
+      "sourceSettingsLater": "Source settings arrive with the source registry; keys in the environment decide for now"
+    },
+    "stageErrors": {
+      "unknownStage": "Unknown stage \"{to}\".",
+      "sameStage": "Relationship is already \"{to}\".",
+      "notAllowed": "Cannot move from \"{from}\" to \"{to}\". Allowed: {allowed}.",
+      "ownerRequired": "An owner is required from \"contacted\" onward (entering \"{target}\").",
+      "nextActionRequired": "A next action is required from \"in_conversation\" onward (entering \"{target}\").",
+      "agreementRequired": "An agreement is required to enter \"{target}\".",
+      "pair": "{first} {second}"
+    },
+    "requirements": {
+      "ownerRequired": "Needs an owner",
+      "nextActionRequired": "Needs a next step",
+      "agreementRequired": "Needs an agreement recorded in Distribution"
+    },
+    "moves": {
+      "currentStage": "Current stage",
+      "notAStage": "Not a stage in this workspace yet",
+      "wonStaysWon": "Won deals stay won",
+      "moveFirst": "Move to {stage, select, lead {Lead} qualified {Qualified} contacted {Contacted} meeting {Meeting} proposal {Proposal} negotiating {Negotiating} won {Won} lost {Not a fit} nurture {Nurture} other {{stage}}} first",
+      "notAvailableFrom": "Not available from {stage, select, lead {Lead} qualified {Qualified} contacted {Contacted} meeting {Meeting} proposal {Proposal} negotiating {Negotiating} won {Won} lost {Not a fit} nurture {Nurture} other {{stage}}}",
+      "notAvailableHere": "Not available from here"
+    },
+    "segment": {
+      "subtitle": "{countries} · {kinds}",
+      "headline": "{kinds} in {countries}",
+      "kind": "{kind, select, importer {Importers} distributor {Distributors} wholesaler {Wholesalers} retailer {Retailers} agent {Agents} reseller {Resellers} supplier {Suppliers} other {{kind}}}",
+      "fields": {
+        "offering": "What you sell",
+        "archetype": "Buyer type",
+        "industries": "Industries",
+        "geographies": "Where",
+        "disqualifiers": "Not a fit",
+        "exclusions": "Already partners"
+      },
+      "fieldSources": {
+        "program": "from the program",
+        "partnerKinds": "from the program · partner kinds",
+        "categories": "from the program · categories",
+        "territories": "from the program · territories",
+        "constraints": "from the program · constraints",
+        "imports": "from the program and imports"
+      },
+      "exclusionsCount": "{count} domains excluded from every run",
+      "exclusionsNone": "None"
+    },
+    "companies": {
+      "notProfiled": "Not profiled yet",
+      "excludedFromRuns": "Excluded from runs",
+      "blockedExcludedFromRuns": "Company excluded: Excluded from runs",
+      "blockedByYou": "Company excluded: by you",
+      "foundVia": {
+        "discovery": "Discovery run",
+        "import": "Imported",
+        "manual": "Added by you"
+      }
+    },
+    "people": {
+      "inbox": "{local}@ inbox",
+      "sharedInbox": "Shared inbox",
+      "dossier": "Dossier"
+    },
+    "claims": {
+      "carries": "Carries {list}.",
+      "activeIn": "Active in {list}.",
+      "sellsInto": "Sells into {list}.",
+      "certified": "Certified: {list}.",
+      "risk": "Risk: {flag}",
+      "riskNoEvidence": "Risk: no evidence recorded",
+      "riskThinEvidence": "Risk: thin evidence",
+      "riskBudget": "Risk: research budget exhausted",
+      "riskRole": "Risk: role not confirmed",
+      "screeningFlagged": "Risk: compliance screening flagged {names} (advisory).",
+      "screeningFlaggedMatch": "Risk: compliance screening flagged a match (advisory)."
+    },
+    "signals": {
+      "researched": "Researched: fit {fit}, {evidence} pieces of evidence",
+      "meeting": "Meeting",
+      "meetingSummary": "Meeting: {summary}",
+      "reply": "Reply received",
+      "replySummary": "Reply received: {summary}",
+      "document": "Document shared",
+      "documentTitle": "Document shared: {title}",
+      "agreement": "Agreement recorded",
+      "imported": "Imported at {stage} stage",
+      "importedExisting": "Imported at an existing stage"
+    },
+    "sources": {
+      "labels": {
+        "live": {
+          "web": "Web search",
+          "place": "Places",
+          "trade": "Trade data"
+        },
+        "keyless": {
+          "web": "Public directories (YC)",
+          "place": "OpenStreetMap",
+          "trade": "Trade data"
+        },
+        "fixture": {
+          "web": "Sample web search",
+          "place": "Sample places",
+          "trade": "Sample trade data"
+        }
+      },
+      "rows": {
+        "osm": {
+          "label": "OpenStreetMap",
+          "description": "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured."
+        },
+        "yc": {
+          "label": "Y Combinator directory",
+          "description": "Active YC companies in the segment's countries whose blurb matches its words. Free, no key."
+        },
+        "web": {
+          "label": "Web search",
+          "description": "Exa or Serper search for organisations in each territory; needs a model for the research agent."
+        },
+        "place": {
+          "label": "Places",
+          "description": "Foursquare place search around each city territory."
+        },
+        "trade": {
+          "label": "Trade data",
+          "description": "Import shipment records by HS code, when a provider is configured."
+        },
+        "screening": {
+          "label": "Sanctions screening",
+          "description": "OpenSanctions match on every shortlisted organisation. Advisory only."
+        },
+        "sample": {
+          "label": "Sample data",
+          "description": "Deterministic stand-ins for every provider. No keys, no credits. Use the switch on Runs."
+        }
+      },
+      "costs": {
+        "free": "free",
+        "creditsPerRun": "credits per run",
+        "included": "included",
+        "providerRates": "provider rates"
+      },
+      "details": {
+        "noWebQueries": "no web queries planned",
+        "webNotConfigured": "web search not configured",
+        "zeroResults": "zero results",
+        "noPlaceQueries": "no place queries planned",
+        "placeNotConfigured": "place search not configured",
+        "tradeNotConfigured": "trade data not configured",
+        "queriesFailed": "{count} queries failed",
+        "territoriesFailed": "{count} territories failed"
+      },
+      "status": {
+        "degraded": "degraded",
+        "failed": "failed",
+        "skipped": "skipped",
+        "off": "off"
+      }
+    },
+    "runs": {
+      "steps": {
+        "segment": "Segment confirmed",
+        "sources": "Sources",
+        "shortlist": "Shortlist",
+        "profiles": "Profiles",
+        "people": "People"
+      },
+      "sourcesDone": "{ok} of {total} done",
+      "shortlistOf": "{shortlisted} of {resolved} companies",
+      "companies": "{count} companies",
+      "profilesOf": "{done} of {total}",
+      "peopleLater": "arrives with people lookup",
+      "found": "{count} found",
+      "excluded": "{count} excluded",
+      "failedGrounding": "{count} failed grounding",
+      "caps": "{count} candidates",
+      "capsSample": "{count} candidates · sample data",
+      "capsKeyless": "{count} candidates · public sources, no keys"
+    },
+    "outreach": {
+      "notFound": "Not found",
+      "otherSegment": "In another segment",
+      "dealIs": "Deal is {stage}",
+      "companyMissing": "Company missing",
+      "excluded": "{name} is excluded",
+      "noMailbox": "{name}: no public mailbox in the profile",
+      "notInProgram": "not found in this program",
+      "stageIs": "stage is {stage}",
+      "orgMissing": "organisation missing",
+      "existingPartner": "existing partner (excluded)",
+      "noDossierMailbox": "no public mailbox in dossier"
+    },
+    "brand": {
+      "errors": {
+        "forbiddenManage": "Only workspace admins can change connected accounts.",
+        "forbiddenPublish": "Your role can read Brand but not post or reply as the company.",
+        "deploymentAccount": "The deployment's account is set by the operator.",
+        "channelOnOff": "Say whether the channel is on or off",
+        "channelNotFound": "Channel not found",
+        "commentDone": "Say whether the comment is done",
+        "commentNotFound": "Comment not found",
+        "writeReply": "Write a reply first",
+        "connectionNotFound": "Connection not found",
+        "noSecretsKey": "This deployment cannot store app passwords yet (EMBEDDING_SECRETS_KEY is not set).",
+        "blueskyFields": "Enter the account's handle and an app password",
+        "imageNotFound": "Image not found",
+        "sendAsFile": "Send the image as a file upload",
+        "pickImage": "Pick an image to upload",
+        "checkChange": "Check the change and try again",
+        "notADate": "That schedule time is not a date",
+        "checkPost": "Check the post and try again",
+        "channelGone": "One of those channels is not connected any more.",
+        "switchedOff": "{name} is switched off under Accounts.",
+        "needsReconnect": "{name} needs to be reconnected.",
+        "cannotPostAs": "This deployment's LinkedIn app cannot post as {name}.",
+        "postTestNotFound": "Post test not found",
+        "imageMissing": "One of the images is missing. Add it again."
+      },
+      "reasons": {
+        "refusedKeepPosting": "{network} no longer accepts this sign-in. Reconnect to keep posting.",
+        "expiredOn": "The {network} sign-in expired on {date}. Reconnect to keep posting.",
+        "signInRemoved": "This sign-in was removed.",
+        "noLongerManages": "The account that connected this no longer manages it on the network.",
+        "blueskyRefused": "Bluesky did not accept that handle and app password.",
+        "blueskyUnreachable": "Could not reach Bluesky: {error}",
+        "refusedAccounts": "{network} no longer accepts this sign-in. Reconnect it under Accounts.",
+        "linkedinExpired": "The LinkedIn sign-in expired. Reconnect to keep posting.",
+        "channelSignInRemoved": "This channel's sign-in was removed. Reconnect it under Accounts.",
+        "channelNeedsReconnect": "This channel needs to be reconnected under Accounts.",
+        "appPasswordMissing": "The Bluesky app password is missing. Reconnect it under Accounts.",
+        "appPasswordUnreadable": "The stored Bluesky app password can no longer be read. Reconnect it under Accounts.",
+        "deploymentKeys": "{platform} channels post with deployment keys.",
+        "commentNotFound": "Comment not found",
+        "writeReply": "Write a reply first.",
+        "replyLimit": "Replies on {network} can be up to {limit} characters.",
+        "channelDisconnected": "This channel was disconnected.",
+        "postNotOnNetwork": "The post this comment is on is not on the network.",
+        "syncFirst": "Sync once more before replying to this comment.",
+        "replyFailed": "The reply did not go through: {error}",
+        "replyNotSaved": "The reply was sent but could not be saved here.",
+        "imageType": "Use a JPG, PNG, GIF or WebP image.",
+        "imageEmpty": "That file is empty.",
+        "imageSize": "Images can be up to 5 MB.",
+        "linkedinWebp": "LinkedIn does not take WebP images. Use JPEG, PNG or GIF.",
+        "blueskySize": "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.",
+        "imageUnreadable": "The image {name} could not be read from storage.",
+        "imageDeleted": "An image on this post was deleted.",
+        "pickChannel": "Pick at least one channel.",
+        "writeSomething": "Write something first.",
+        "overLimit": "{count} characters is over {network}'s limit of {limit}.",
+        "fourImages": "A post carries at most four images.",
+        "timeAhead": "Pick a time that is still ahead.",
+        "postNotFound": "Post not found",
+        "alreadyOutPublishNew": "This post is already out. Publish a new one instead.",
+        "beingPublished": "This post is being published right now.",
+        "pickScheduleTime": "Pick a time to schedule this post.",
+        "publishedStays": "A published post stays on the calendar.",
+        "alreadyOut": "This post is already out.",
+        "cancelledReschedule": "A cancelled post has to be rescheduled before it can go out."
+      },
+      "syncLine": "{channel}: {message}",
+      "networks": {
+        "linkedin": {
+          "createApp": "Create an app at developer.linkedin.com, associated with the company's LinkedIn Page",
+          "products": "For Pages, analytics and comments: request the Community Management API on an app with no other products (registered company; a Page super admin verifies the app). For profiles only: add Share on LinkedIn and Sign In with LinkedIn using OpenID Connect",
+          "redirect": "Add the redirect URL {url} under the app's Auth tab",
+          "keys": "Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET, and LINKEDIN_OAUTH_SCOPES to the scopes the Auth tab lists",
+          "secretsKey": "Set EMBEDDING_SECRETS_KEY so sign-ins are stored encrypted",
+          "notePages": "Free to post. Pages, numbers and comments come with LinkedIn's Community Management API: 500 calls a day until LinkedIn's standard-tier review.",
+          "noteProfiles": "Free to post. This app covers members' own profiles; Pages need LinkedIn's Community Management API. Sign-ins last 60 days."
+        },
+        "bluesky": {
+          "secretsKey": "Set EMBEDDING_SECRETS_KEY so app passwords are stored encrypted",
+          "note": "Free, no review. Each workspace signs in with its own app password."
+        },
+        "x": {
+          "account": "An X developer account on pay-per-use",
+          "token": "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
+          "note": "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator for the whole deployment."
+        },
+        "reddit": {
+          "app": "A Reddit script app (client id and secret)",
+          "keys": "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
+          "note": "Free for this volume. Posts go to the account's own profile. Set by the operator for the whole deployment."
+        }
+      }
+    },
+    "marketing": {
+      "publishForbidden": "Your role can read Brand but not post as the company.",
+      "nothingCanPost": "Nothing can post to {network} yet. Connect it under Growth › Brand › Accounts.",
+      "operatorOnly": "{network} is set up by the operator for the whole deployment, and this deployment has no {network} key yet.",
+      "publishFailed": "Publish failed",
+      "runFailed": "Failed to run marketing pipeline",
+      "runFailedChat": "Failed to run marketing pipeline Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid.",
+      "runFailedCompany": "Failed to run marketing pipeline Ensure your user has a valid company profile.",
+      "invalidCompanyId": "Invalid company ID",
+      "messageRequired": "message is required"
+    },
+    "email": {
+      "invalidCampaignId": "Invalid campaign ID",
+      "campaignNotFound": "Campaign not found",
+      "idempotencySend": "An Idempotency-Key header is required to send a campaign.",
+      "idempotencyRun": "An Idempotency-Key header is required to start an automated run.",
+      "generateFailed": "Failed to generate email template",
+      "runFailed": "Failed to run email campaign"
+    },
+    "research": {
+      "invalidLimit": "Invalid limit: expected an integer between 1 and 500",
+      "invalidOffset": "Invalid offset: expected a non-negative integer",
+      "invalidSearch": "Invalid search",
+      "secUnavailable": "SEC EDGAR did not answer. Try again in a moment."
+    },
+    "emailLifecycle": {
+      "nameRequired": "A campaign name is required to create a campaign",
+      "notFound": "Campaign {campaignId} not found",
+      "idempotencySend": "An idempotency key is required to send a campaign",
+      "idempotencyRun": "An idempotency key is required to start an automated run",
+      "notApprovedStatus": "This campaign is {status}; approve the current template version before sending.",
+      "noApprovedVersion": "This campaign has no approved template version. Approve one before sending.",
+      "approvedVersionMissing": "The approved template version is missing.",
+      "noRecipients": "This campaign has no recipients.",
+      "sendInProgress": "A send with this idempotency key is already in progress.",
+      "versionNotInCampaign": "Template version {versionId} does not belong to campaign {campaignId}",
+      "revisionRequested": "The AI review asked for revisions. Approving anyway requires an overrideReason.",
+      "notReviewed": "This version has not been reviewed. Approving it requires an overrideReason.",
+      "templateRejected": "Template rejected: {issues}"
+    }
   }
 }

@@ -9,6 +9,7 @@ import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/pipelines/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadata";
 import { readFact } from "@launchstack/tools/company-context/facts";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
@@ -142,6 +143,9 @@ export async function POST(request: Request) {
 }
 
 async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
+    const locale = localeOfRequest(request);
+    const tApi = translatorFor(locale, "errors.api");
+    const t = translatorFor(locale, "generator.server.errors");
     // Recorded as soon as the model resolves, so the catch below can describe a
     // transport failure without resolving a second time. Resolving there would
     // re-read the configuration, and on a configuration fault that throws out of
@@ -155,7 +159,7 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
             body = (await request.json()) as unknown;
         } catch {
             return NextResponse.json(
-                { success: false, message: "Invalid JSON body" },
+                { success: false, message: tApi("invalidJsonBody") },
                 { status: 400 }
             );
         }
@@ -165,7 +169,7 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Invalid input",
+                    message: tApi("invalidInput"),
                     errors: parsed.error.flatten(),
                 },
                 { status: 400 }
@@ -190,7 +194,7 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
 
         // Build conversation for the LLM
         const templateSummary = buildTemplateSummary();
-        const replyLanguage = replyLanguageInstruction(localeOfRequest(request));
+        const replyLanguage = replyLanguageInstruction(locale);
         const systemPrompt =
             buildSystemPrompt(templateSummary, companyDefaults) +
             (replyLanguage
@@ -249,7 +253,7 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
             resolved = resolveConfiguredChatModel();
         } catch (modelError) {
             console.error("[legal-chat] chat resolution failed:", modelError);
-            const failure = describeChatResolutionFailure(modelError);
+            const failure = describeChatResolutionFailure(modelError, locale);
             return NextResponse.json(
                 { success: false, message: failure.message },
                 { status: failure.status }
@@ -322,7 +326,9 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
         return NextResponse.json(
             {
                 success: false,
-                message: friendly?.message ?? "Failed to process legal chat",
+                message: friendly
+                    ? wordEnglish(friendly.message, "chat.server.endpoint", locale)
+                    : t("legalChatFailed"),
             },
             { status: friendly?.status ?? 500 }
         );

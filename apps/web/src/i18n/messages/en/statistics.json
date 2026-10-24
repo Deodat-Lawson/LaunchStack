@@ -105,5 +105,16 @@
       "when": "When"
     },
     "noViews": "No views yet"
+  },
+  "server": {
+    "errors": {
+      "analyticsPermission": "Forbidden. The analytics.view permission is required.",
+      "dashboardFailed": "Unable to fetch analysis dashboard data",
+      "internal": "Internal Server Error"
+    },
+    "viewers": {
+      "unknownUser": "Unknown User",
+      "noEmail": "No Email"
+    }
   }
 }

@@ -64,7 +64,7 @@ export async function authorizeInternalFileRef(
         .where(eq(fileUploads.id, fileId));
 
     if (file?.companyId == null || file.companyId !== companyId) {
-        throw new UploadAuthorizationError("File not found in this workspace", 404);
+        throw new UploadAuthorizationError({ key: "upload.server.errors.fileNotInWorkspace" }, 404);
     }
 
     // Re-read after the ownership query: the real `db` proxy may call
@@ -80,7 +80,7 @@ export async function authorizeInternalFileRef(
     // job that can only end in a 401 at fetch time.
     if (!configured.fileAccessTokenSecret) {
         throw new UploadAuthorizationError(
-            "FILE_ACCESS_TOKEN_SECRET is not configured; database-backed documents cannot be read by the ingestion pipeline.",
+            { key: "upload.server.errors.fileAccessSecretMissing" },
             503
         );
     }

@@ -14,6 +14,11 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
+
+type RepoTranslator = ReturnType<typeof translatorFor<"agents.server.repoExplainer">>;
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -21,7 +26,7 @@ export const maxDuration = 120;
 const DIAGRAM_TYPES = ["architecture", "sequence", "class", "er", "component"] as const;
 
 const RepoExplainerRequestSchema = z.object({
-    url: z.string().min(1, "GitHub URL is required"),
+    url: z.string().min(1, V.githubUrlRequired),
     instructions: z.string().optional(),
     diagramType: z.enum(DIAGRAM_TYPES).optional(),
 });
@@ -29,8 +34,10 @@ const RepoExplainerRequestSchema = z.object({
 async function validateRepoAccess(
     owner: string,
     repo: string,
-    githubToken?: string | null
+    githubToken: string | null | undefined,
+    t: RepoTranslator
 ): Promise<string | null> {
+    const name = `${owner}/${repo}`;
     try {
         const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
             method: "GET",
@@ -43,31 +50,32 @@ async function validateRepoAccess(
         });
         if (res.status === 404) {
             return githubToken
-                ? `Repository '${owner}/${repo}' not found or token does not have access.`
-                : `Repository '${owner}/${repo}' not found or is private. Add a GitHub token with access for private repos.`;
+                ? t("notFoundWithToken", { repo: name })
+                : t("notFoundPublic", { repo: name });
         }
         if (res.status === 403) {
             return githubToken
-                ? `Access forbidden for '${owner}/${repo}'. Check token permissions and repo access.`
-                : `Repository '${owner}/${repo}' is private or access is forbidden. Add a GitHub token.`;
+                ? t("forbiddenWithToken", { repo: name })
+                : t("forbiddenPublic", { repo: name });
         }
         if (res.status === 401) {
-            return "Invalid GitHub token.";
+            return t("invalidToken");
         }
         if (res.status === 429) {
-            return "Too many requests to GitHub. Please try again later.";
+            return t("rateLimited");
         }
         if (!res.ok) {
-            return `Error accessing repository '${owner}/${repo}' (HTTP ${res.status}).`;
+            return t("accessError", { repo: name, status: String(res.status) });
         }
         return null;
     } catch (error) {
         console.error("[repo-explainer] validateRepoAccess error:", error);
-        return "Could not validate repository on GitHub. Please try again.";
+        return t("validateFailed");
     }
 }
 
 export async function POST(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "agents.server.repoExplainer");
     try {
         // Reads the workspace's GitHub connection and spends LLM budget on the
         // company's behalf — a settings-tier action.
@@ -84,9 +92,7 @@ export async function POST(request: Request) {
 
             const parsedUrl = parseGitHubUrl(url);
             if (!parsedUrl) {
-                return createValidationError(
-                    "Invalid GitHub URL format. Please use: https://github.com/owner/repo or owner/repo"
-                );
+                return createValidationError(t("invalidUrl"));
             }
 
             const { owner, repo } = parsedUrl;
@@ -100,7 +106,7 @@ export async function POST(request: Request) {
                 (env.server.GITHUB_TOKEN ?? "") ||
                 null;
 
-            const validationError = await validateRepoAccess(owner, repo, githubToken);
+            const validationError = await validateRepoAccess(owner, repo, githubToken, t);
             if (validationError) {
                 return createValidationError(validationError);
             }
@@ -115,8 +121,10 @@ export async function POST(request: Request) {
                 diagramType
             );
             if (!contextResult.success) {
+                // English on purpose: handleApiError picks its sentence by reading this one.
                 return handleApiError(
-                    new Error(contextResult.error ?? "Failed to fetch repository context")
+                    new Error(contextResult.error ?? "Failed to fetch repository context"),
+                    request
                 );
             }
 
@@ -129,7 +137,8 @@ export async function POST(request: Request) {
 
             if (!explanationResult.success) {
                 return handleApiError(
-                    new Error(explanationResult.error ?? "Failed to generate explanation")
+                    new Error(explanationResult.error ?? "Failed to generate explanation"),
+                    request
                 );
             }
 
@@ -155,6 +164,6 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         console.error("[repo-explainer] POST error:", error);
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

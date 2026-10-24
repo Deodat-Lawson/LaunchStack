@@ -27,11 +27,14 @@
 
 import { z } from "zod";
 
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
-import { listVisibleFolders } from "~/server/folders";
+import { FolderError, listVisibleFolders } from "~/server/folders";
+import { folderErrorText } from "~/server/folders/words";
 import { createFolderAs, deleteFolderAs, renameFolderAs } from "~/server/workspace/folder-actions";
 import { accessSubject } from "~/server/workspace/item-access";
 
@@ -43,6 +46,16 @@ const RenameBody = z.object({
     path: z.string().min(1).max(512),
     newPath: z.string().min(1).max(512),
 });
+
+/** A folder rule's refusal in the reader's language; anything else as every route reports it. */
+function folderRouteError(tag: string, error: unknown, request: Request) {
+    if (error instanceof FolderError) {
+        return fail(folderErrorText(error, localeOfRequest(request)), error.status, {
+            code: error.code,
+        });
+    }
+    return handleRouteError(tag, error, request);
+}
 
 async function parseBody<T>(request: Request, schema: z.ZodType<T>): Promise<T | null> {
     const parsed = schema.safeParse(await readJson(request));
@@ -62,7 +75,7 @@ export async function GET(request: Request) {
                 folders: await listVisibleFolders(ctx.data.companyId, scope, subject),
             });
         } catch (error) {
-            return handleRouteError("folders.list", error);
+            return folderRouteError("folders.list", error, request);
         }
     });
 }
@@ -74,11 +87,16 @@ export async function POST(request: Request) {
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, PathBody);
-            if (!body) return fail("A folder path is required.", 400);
+            if (!body) {
+                return fail(
+                    requestTranslator(request, "sources.server.folders")("pathRequired"),
+                    400
+                );
+            }
 
             return ok(await createFolderAs(ctx.data, body.path), 201);
         } catch (error) {
-            return handleRouteError("folders.create", error);
+            return folderRouteError("folders.create", error, request);
         }
     });
 }
@@ -90,11 +108,16 @@ export async function PATCH(request: Request) {
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, RenameBody);
-            if (!body) return fail("Both the current and the new folder path are required.", 400);
+            if (!body) {
+                return fail(
+                    requestTranslator(request, "sources.server.folders")("bothPathsRequired"),
+                    400
+                );
+            }
 
             return ok(await renameFolderAs(ctx.data, body.path, body.newPath));
         } catch (error) {
-            return handleRouteError("folders.rename", error);
+            return folderRouteError("folders.rename", error, request);
         }
     });
 }
@@ -106,11 +129,16 @@ export async function DELETE(request: Request) {
             if (!ctx.success) return ctx.response;
 
             const body = await parseBody(request, PathBody);
-            if (!body) return fail("A folder path is required.", 400);
+            if (!body) {
+                return fail(
+                    requestTranslator(request, "sources.server.folders")("pathRequired"),
+                    400
+                );
+            }
 
             return ok(await deleteFolderAs(ctx.data, body.path));
         } catch (error) {
-            return handleRouteError("folders.delete", error);
+            return folderRouteError("folders.delete", error, request);
         }
     });
 }

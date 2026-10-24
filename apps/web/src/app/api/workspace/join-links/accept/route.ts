@@ -21,6 +21,6 @@ export async function POST(request: Request) {
         }
         return response;
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/join-links/accept POST]");
+        return workspaceErrorResponse(error, "[workspace/join-links/accept POST]", request);
     }
 }

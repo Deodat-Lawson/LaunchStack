@@ -22,6 +22,7 @@ import { formatPercent, isLive, progressLabel } from "~/lib/scenarios/words";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -257,6 +258,7 @@ function ChannelPreview({
  */
 export function ComposeScreen() {
     const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
     const tRules = useTranslations("growth.brand.composeRules");
     const tChannels = useTranslations("growth.brand.channels");
     const tCounts = useTranslations("growth.common.counts");
@@ -398,7 +400,7 @@ export function ComposeScreen() {
                 list.map(a => (a.key === key ? { ...a, status: "ready", media } : a))
             );
         } catch (e) {
-            const error = e instanceof Error ? e.message : t("compose.uploadFailed");
+            const error = errorText(e, t("compose.uploadFailed"));
             setAttachments(list =>
                 list.map(a => (a.key === key ? { ...a, status: "error", error } : a))
             );
@@ -463,7 +465,7 @@ export function ComposeScreen() {
             setTestOpen(true);
         } catch (e) {
             const status = e instanceof BrandApiError ? e.status : null;
-            const message = e instanceof Error ? e.message : t("compose.testStartFailed");
+            const message = errorText(e, t("compose.testStartFailed"));
             setTestProblem(
                 status === 403
                     ? t("compose.testForbidden")
@@ -515,7 +517,7 @@ export function ComposeScreen() {
             if (result.postTest?.stale) toast.warning(t("compose.staleTest"));
             router.push(paths.brand("/calendar"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("compose.saveFailed"));
+            toast.error(errorText(e, t("compose.saveFailed")));
         } finally {
             setSubmitting(false);
         }

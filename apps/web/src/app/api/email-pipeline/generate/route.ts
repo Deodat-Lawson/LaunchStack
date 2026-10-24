@@ -4,6 +4,7 @@ import { z } from "zod";
 import { generateTemplate, reviewTemplate } from "@launchstack/pipelines/email";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Invalid input",
+                        message: requestTranslator(request, "errors.api")("invalidInput"),
                         errors: parsed.error.flatten(),
                     },
                     { status: 400 }
@@ -54,7 +55,10 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error("[email-pipeline/generate] failed:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to generate email template" },
+            {
+                success: false,
+                message: requestTranslator(request, "growth.server.email")("generateFailed"),
+            },
             { status: 500 }
         );
     }

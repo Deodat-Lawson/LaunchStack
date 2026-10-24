@@ -7,7 +7,7 @@ import { handleVantageError, json, vantageContext } from "../../../_http";
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -15,6 +15,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await deleteObservation({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
-        return handleVantageError("DELETE observation", err);
+        return handleVantageError("DELETE observation", err, request);
     }
 }

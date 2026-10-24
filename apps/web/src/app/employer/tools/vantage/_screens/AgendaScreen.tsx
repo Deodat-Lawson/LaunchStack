@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type AgendaDto, type TopicDto, type VantageAgendaStatus } from "../api";
 import { StatusWord } from "../_components/Primitives";
@@ -58,6 +59,7 @@ function isIsoWeek(v: string | null): v is string {
  * rule); the week arrows and past weeks move the tab to another `?week=`.
  */
 export function AgendaScreen({ week: weekParam = null }: { week?: string | null }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.agenda");
     const fmt = useVantageFormat();
     const router = useToolRouter();
@@ -121,7 +123,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             await work();
             if (done) toast(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("failed"));
+            toast.error(errorText(e, t("failed")));
         } finally {
             setBusy(false);
         }

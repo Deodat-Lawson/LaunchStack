@@ -11,6 +11,8 @@ import { and, eq } from "drizzle-orm";
 import { DOCX_MIME, PDF_MIME, createFileMultipart, ensureFolder } from "@launchstack/google-drive";
 import { document } from "@launchstack/store/schema";
 
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { documentDriveLinks, type DocumentDriveLink } from "~/server/db/schema";
 import { fetchFile } from "~/lib/storage";
@@ -22,15 +24,18 @@ import {
     getActiveGoogleConnection,
 } from "./connections";
 
+/** The sentence may be a `Copy`: `message` is its English, `copy` what the route words. */
 export class DriveLinkError extends Error {
     public readonly status: number;
     public readonly code: string;
+    public readonly copy: Copy | null;
 
-    constructor(status: number, code: string, message: string) {
-        super(message);
+    constructor(status: number, code: string, message: string | Copy) {
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "DriveLinkError";
         this.status = status;
         this.code = code;
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -114,16 +119,14 @@ export async function linkDocumentToDrive(params: {
         .where(and(eq(document.id, params.documentId), eq(document.companyId, params.companyId)));
 
     if (!doc) {
-        throw new DriveLinkError(404, "not_found", "Document not found");
+        throw new DriveLinkError(404, "not_found", { key: "errors.api.documentNotFound" });
     }
 
     const canonicalMime = resolveCanonicalMime(doc.fileType, doc.mimeType, doc.title);
     if (!canonicalMime) {
-        throw new DriveLinkError(
-            415,
-            "unsupported_type",
-            "Only .docx and .pdf documents can be linked to Google Drive."
-        );
+        throw new DriveLinkError(415, "unsupported_type", {
+            key: "sources.server.drive.unsupportedType",
+        });
     }
 
     const existing = await getDriveLinkForDocument(params.documentId);
@@ -136,19 +139,17 @@ export async function linkDocumentToDrive(params: {
 
     const res = await fetchFile(doc.url);
     if (!res.ok) {
-        throw new DriveLinkError(
-            502,
-            "fetch_failed",
-            `Could not read the document from storage (HTTP ${res.status}).`
-        );
+        throw new DriveLinkError(502, "fetch_failed", {
+            key: "sources.server.errors.storageReadHttp",
+            values: { status: String(res.status) },
+        });
     }
     const bytes = Buffer.from(await res.arrayBuffer());
     if (bytes.length > MAX_LINKED_FILE_BYTES) {
-        throw new DriveLinkError(
-            413,
-            "too_large",
-            `The document is larger than the ${Math.floor(MAX_LINKED_FILE_BYTES / (1024 * 1024))} MB linking cap.`
-        );
+        throw new DriveLinkError(413, "too_large", {
+            key: "sources.server.drive.tooLarge",
+            values: { mb: String(Math.floor(MAX_LINKED_FILE_BYTES / (1024 * 1024))) },
+        });
     }
 
     const accessToken = await getAccessTokenForConnection(connection);

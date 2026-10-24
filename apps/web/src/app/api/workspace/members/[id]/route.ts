@@ -16,24 +16,24 @@ export async function PATCH(request: Request, { params }: Params) {
     const ctx = await requireWorkspacePermission("members.manage");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     const body = await parseJsonBody(request, UpdateMemberSchema);
     if (!body.success) return body.response;
     try {
         return NextResponse.json(await updateMember(ctx.data, BigInt(id), body.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/members PATCH]");
+        return workspaceErrorResponse(error, "[workspace/members PATCH]", request);
     }
 }
 
-export async function DELETE(_request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
     const ctx = await requireWorkspacePermission("members.manage");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     try {
         return NextResponse.json(await removeMember(ctx.data, BigInt(id)));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/members DELETE]");
+        return workspaceErrorResponse(error, "[workspace/members DELETE]", request);
     }
 }

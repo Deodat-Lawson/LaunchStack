@@ -26,6 +26,7 @@ import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProposals } from "../_lib/context";
 import { proposalsApi, type LibraryItemDto } from "../api";
 
@@ -41,6 +42,7 @@ function ItemDialog({
     onSaved: () => void;
 }) {
     const t = useTranslations("proposals.library");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tc = useTranslations("common");
     const [question, setQuestion] = useState("");
@@ -71,7 +73,7 @@ function ItemDialog({
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveFailed"));
+            toast.error(errorText(e, t("saveFailed")));
         } finally {
             setBusy(false);
         }
@@ -222,6 +224,7 @@ function ItemRow({
 /** Answers worth reusing: what was approved before, findable by the question it answered. */
 export function LibraryScreen() {
     const t = useTranslations("proposals.library");
+    const errorText = useErrorText();
     const tc = useTranslations("common");
     const { href, finishedTick } = useProposals();
     const res = useResource("proposals:library", () => proposalsApi.library());
@@ -253,7 +256,7 @@ export function LibraryScreen() {
             res.mutate(current => ({ items: current.items.filter(i => i.id !== deleting.id) }));
             toast(t("deleted"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("deleteFailed"));
+            toast.error(errorText(e, t("deleteFailed")));
         } finally {
             setDeleting(null);
         }

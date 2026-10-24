@@ -854,5 +854,28 @@
   },
   "viewer": {
     "opening": "Opening…"
+  },
+  "server": {
+    "errors": {
+      "notFound": "Mindmap not found",
+      "listFailed": "Failed to load mindmaps",
+      "createFailed": "Failed to create mindmap",
+      "loadFailed": "Failed to load mindmap",
+      "saveFailed": "Failed to save mindmap",
+      "deleteFailed": "Failed to delete mindmap",
+      "changedElsewhere": "This mindmap was changed elsewhere. Reload to get the latest version.",
+      "duplicateFailed": "Failed to duplicate mindmap",
+      "historyLoadFailed": "Failed to load history",
+      "revisionIdRequired": "revisionId is required",
+      "revisionNotFound": "Revision not found",
+      "restoreFailed": "Failed to restore revision",
+      "presenceFailed": "Failed to update presence",
+      "leaveFailed": "Failed to leave",
+      "publishFailed": "Failed to publish mindmap",
+      "editDenied": "You can view this mindmap but not change it.",
+      "deleteDenied": "Only the person who made this mindmap, or someone who manages its folder, can delete it.",
+      "unfiledDenied": "Only the person who made this mindmap can move it to Unfiled: drafts there are private to whoever made them.",
+      "moveWidens": "Moving this mindmap there would show it to people who can't see it now. A draft takes its folder's access, so publish it to share it, or change who can see the folder."
+    }
   }
 }

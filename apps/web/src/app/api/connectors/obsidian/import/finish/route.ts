@@ -6,6 +6,7 @@
 
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
 import { createForbiddenError, createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -27,7 +28,9 @@ export async function POST(request: Request) {
             if (!context.success) return context.response;
             const ctx = context.data;
             if (!ctx.can("documents.upload")) {
-                return createForbiddenError("Importing notes needs permission to add documents.");
+                return createForbiddenError(
+                    requestTranslator(request, "sources.server.connectors")("obsidianNeedsUpload")
+                );
             }
 
             const body = await validateRequestBody(request, FinishSchema);
@@ -40,7 +43,7 @@ export async function POST(request: Request) {
             });
             return createSuccessResponse({ missing });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

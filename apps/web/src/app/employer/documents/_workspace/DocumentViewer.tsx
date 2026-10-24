@@ -134,6 +134,18 @@ const NARROW_BELOW_PX = 760;
 /** Remembers a reader's choice to hide the docked rail. Per browser, on purpose. */
 const DETAILS_HIDDEN_KEY = "documentViewer.detailsHidden.v1";
 
+/**
+ * The server's sentence for a failed version write. A Drive-linked document
+ * answers with a code in `error` (`linked_to_google_drive`) and the sentence,
+ * in the reader's language, in `details`; elsewhere `details` is diagnostic.
+ */
+async function failureSentence(res: Response): Promise<string | undefined> {
+    const body = (await res.json().catch(() => ({}))) as { error?: unknown; details?: unknown };
+    if (typeof body.error !== "string") return undefined;
+    const isCode = /^[a-z_]+$/.test(body.error);
+    return isCode && typeof body.details === "string" ? body.details : body.error;
+}
+
 /** Gives one version row its own right-click target without touching its markup. */
 function VersionTarget({
     version,
@@ -713,9 +725,8 @@ export function DocumentViewer({
                             }),
                         });
                         if (!res.ok) {
-                            const body = (await res.json().catch(() => ({}))) as { error?: string };
                             throw new Error(
-                                body.error ??
+                                (await failureSentence(res)) ??
                                     t("documentViewer.failedStatus", { status: res.status })
                             );
                         }
@@ -762,9 +773,9 @@ export function DocumentViewer({
                 { method: "POST" }
             );
             if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
                 throw new Error(
-                    body.error ?? t("documentViewer.failedStatus", { status: res.status })
+                    (await failureSentence(res)) ??
+                        t("documentViewer.failedStatus", { status: res.status })
                 );
             }
             await refreshVersions();

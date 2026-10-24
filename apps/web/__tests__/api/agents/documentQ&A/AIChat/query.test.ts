@@ -425,6 +425,15 @@ function queryRequest(body: unknown) {
     });
 }
 
+/** The same request from someone reading the app in Simplified Chinese. */
+function chineseQueryRequest(body: unknown) {
+    return new Request("http://localhost/api/agents/documentQ&A/AIChat/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+        body: JSON.stringify(body),
+    });
+}
+
 describe("POST /api/agents/documentQ&A/AIChat/query", () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -1344,6 +1353,39 @@ describe("chat attachment limits and ownership", () => {
         expect(mockInvoke).not.toHaveBeenCalled();
     });
 
+    it("words its refusals in the reader's language and keeps the English for others", async () => {
+        mockBehavior = { image: { maxImages: 1 } };
+        const twoImages = {
+            question: "Review",
+            searchScope: "none",
+            attachments: [attachment, attachment],
+        };
+        const english = await POST(queryRequest(twoImages));
+        expect(await english.json()).toMatchObject({
+            message: "The configured vision model accepts at most 1 image(s) per request.",
+        });
+        const chinese = await POST(chineseQueryRequest(twoImages));
+        expect(await chinese.json()).toMatchObject({
+            message: "所配置的视觉模型每次请求最多接受 1 张图片。",
+        });
+
+        mockBehavior = { image: { mimeTypes: ["image/png"] } };
+        fetchSpy.mockImplementation(
+            async () => new Response(pngBytes, { headers: { "content-type": "image/jpeg" } })
+        );
+        const oneImage = { question: "Review", searchScope: "none", attachments: [attachment] };
+        const mismatched = await POST(queryRequest(oneImage));
+        expect(await mismatched.json()).toMatchObject({
+            message:
+                'Attachment "image.png" is not a supported image or its content type does not match its bytes.',
+        });
+        const worded = await POST(chineseQueryRequest(oneImage));
+        expect(worded.status).toBe(400);
+        expect(await worded.json()).toMatchObject({
+            message: "附件“image.png”不是受支持的图片，或其内容类型与实际内容不符。",
+        });
+    });
+
     it("rejects mismatched image headers and actual model MIME limits", async () => {
         fetchSpy.mockResolvedValueOnce(
             new Response(pngBytes, { headers: { "content-type": "image/jpeg" } })
@@ -1892,6 +1934,46 @@ describe("web search as a tool the model calls", () => {
         });
     });
 
+    it("names the tool call in the reader's language", async () => {
+        const chunk = (content: string, toolCalls?: unknown[]): Record<string, unknown> => ({
+            content,
+            tool_calls: toolCalls ?? [],
+            additional_kwargs: {},
+            response_metadata: {},
+            concat(other: { content: string; tool_calls: unknown[] }) {
+                return chunk(content + other.content, [...(toolCalls ?? []), ...other.tool_calls]);
+            },
+        });
+        mockStream
+            .mockImplementationOnce(async function* () {
+                yield chunk("", [{ id: "call_1", name: "search_web", args: { query: "news" } }]);
+            })
+            .mockImplementationOnce(async function* () {
+                yield chunk("The news [Source 1].");
+            });
+
+        const response = await POST(
+            chineseQueryRequest({
+                question: "What is in the news?",
+                searchScope: "none",
+                enableWebSearch: true,
+                stream: true,
+            })
+        );
+
+        const events = (await response.text())
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line) as Record<string, unknown>);
+        // The keywords stay keywords: the chat screen names those itself.
+        expect(events.filter(event => event.type === "status").map(event => event.status)).toEqual([
+            "generating",
+            "正在网上搜索“news”",
+            "generating",
+            "finalizing",
+        ]);
+    });
+
     it("streams a Searching… status while the tool runs", async () => {
         const chunk = (content: string, toolCalls?: unknown[]): Record<string, unknown> => ({
             content,
@@ -2050,7 +2132,9 @@ describe("the workspace's sources as tools the model calls", () => {
         expect(response.status).toBe(200);
         expect(toolNames()).toEqual(["list_sources", "search_sources", "read_source"]);
         expect(mockCreateSourceTools).toHaveBeenCalledWith(
-            expect.objectContaining({ companyId: BigInt(5) })
+            expect.objectContaining({ companyId: BigInt(5) }),
+            {},
+            "en"
         );
         expect(systemPrompt()).toContain("## The workspace's sources (attached: false)");
         expect(systemPrompt()).not.toContain("claim access to workspace sources");
@@ -2279,7 +2363,7 @@ describe("documents the model writes into the workspace", () => {
         expect(toolNames()).toEqual(["create_document"]);
         expect(mockCreateDocumentTools).toHaveBeenCalledWith(
             expect.objectContaining({ companyId: BigInt(5) }),
-            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query" }
+            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query", locale: "en" }
         );
         expect(systemPrompt()).toContain("## Writing documents");
         expect(mockWriteDocument).toHaveBeenCalledWith({

@@ -18,6 +18,7 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 
 import { prospectsApi } from "../api";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 
 /**
@@ -34,6 +35,7 @@ export function NewSegmentDialog({
 }) {
     const t = useTranslations("growth.prospects.newSegment");
     const tc = useTranslations("common");
+    const errorText = useErrorText();
     const { reloadSegments, setSegmentId } = useProspects();
     const [name, setName] = useState("");
     const [offering, setOffering] = useState("");
@@ -70,7 +72,7 @@ export function NewSegmentDialog({
             reset();
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("createFailed"));
+            toast.error(errorText(e, t("createFailed")));
         } finally {
             setBusy(false);
         }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray, or } from "drizzle-orm";
@@ -11,6 +12,7 @@ import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { filterNotesByDocumentScope, isNoteDocumentVisible } from "~/server/notes/document-scope";
 
 export async function GET(request: Request) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -28,7 +30,10 @@ export async function GET(request: Request) {
         // A document outside the caller's scope has no notes to list — it reads
         // as missing, the same as a document that does not exist.
         if (documentId && !(await isNoteDocumentVisible(documentId, ctx.data.companyId, scope))) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
         // Scope to the active workspace. Legacy rows with null companyId still
         // surface for the owning user so old notes are not silently dropped.
@@ -100,11 +105,12 @@ export async function GET(request: Request) {
         return NextResponse.json({ notes: notes.map(serializeNote) }, { status: 200 });
     } catch (error) {
         console.error("Error fetching notes:", error);
-        return NextResponse.json({ error: "Failed to fetch notes" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchNotesFailed") }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -119,6 +125,7 @@ export async function POST(request: Request) {
             versionId: body.versionId,
             companyId: ctx.data.companyId,
             scope,
+            request,
         });
         if (!target.ok) return target.response;
 
@@ -144,6 +151,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ note: note ? serializeNote(note) : note }, { status: 201 });
     } catch (error) {
         console.error("Error creating note:", error);
-        return NextResponse.json({ error: "Failed to create note" }, { status: 500 });
+        return NextResponse.json({ error: t("createFailed") }, { status: 500 });
     }
 }

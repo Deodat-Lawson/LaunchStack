@@ -227,7 +227,10 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
 
             {p?.status === "failed" && !building && (
                 <InlineError
-                    message={p.error ?? t("view.lastBuildFailed")}
+                    message={
+                        (p.errorKey ? t(`server.failures.${p.errorKey}`) : p.error) ??
+                        t("view.lastBuildFailed")
+                    }
                     onRetry={hasSources ? () => void rebuild() : undefined}
                 />
             )}

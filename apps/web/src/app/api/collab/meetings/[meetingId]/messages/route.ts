@@ -10,6 +10,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 
@@ -28,18 +30,23 @@ export async function POST(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "collab.server.errors");
 
     const parsed = PostMessageSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
-            { error: "Invalid request", details: parsed.error.flatten() },
+            {
+                error: translatorFor(locale, "errors.api")("invalidRequest"),
+                details: parsed.error.flatten(),
+            },
             { status: 400 }
         );
     }
 
     const { meetingId } = await params;
     const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
-    if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
+    if (!runtime) return NextResponse.json({ error: t("meetingNotFound") }, { status: 404 });
 
     const session = await getServerSession();
     const trimmedName = session?.user.name.trim();
@@ -59,7 +66,12 @@ export async function POST(
         );
     } catch (err) {
         return NextResponse.json(
-            { error: err instanceof Error ? err.message : "Could not post message" },
+            {
+                error:
+                    err instanceof Error
+                        ? wordEnglish(err.message, "collab.server.engine", locale)
+                        : t("postFailed"),
+            },
             { status: 400 }
         );
     }

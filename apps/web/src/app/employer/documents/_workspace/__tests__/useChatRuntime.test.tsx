@@ -976,9 +976,52 @@ test("labels the model-call phases instead of showing their keywords", async () 
     act(() => {
         running = result.current.runtime.submit(send("Hi"));
     });
-    await waitFor(() => expect(result.current.thread[1]?.stage).toBe("Generating…"));
+    await waitFor(() => expect(result.current.thread[1]?.stage).toBe("Thinking…"));
     await act(async () => {
         release();
         await running;
+    });
+});
+
+test("hands out a new answer object for every streamed delta, so the row re-renders", async () => {
+    let release!: () => void;
+    const streaming = new Promise<void>(resolve => (release = resolve));
+    let emitEvent!: (event: unknown) => void;
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        emitEvent = options.onEvent;
+        await streaming;
+        return answer("Ten primes.");
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("How many primes below 30?"));
+    });
+    await waitFor(() => expect(emitEvent).toBeDefined());
+
+    act(() => emitEvent({ type: "reasoning", delta: "Count them: " }));
+    const thinking = result.current.thread[1]!;
+    expect(thinking).toMatchObject({ reasoning: "Count them: ", text: "", status: "streaming" });
+    expect(thinking.thoughtMs).toEqual(expect.any(Number));
+
+    act(() => emitEvent({ type: "text", delta: "Ten" }));
+    const writing = result.current.thread[1]!;
+    expect(writing).not.toBe(thinking);
+    expect(writing).toMatchObject({ text: "Ten", stage: "Writing…" });
+    act(() => emitEvent({ type: "text", delta: " primes." }));
+    expect(result.current.thread[1]).not.toBe(writing);
+    expect(result.current.thread[1]!.text).toBe("Ten primes.");
+
+    await act(async () => {
+        release();
+        await running;
+    });
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata).toMatchObject({
+        reasoning: "Count them: ",
+        thoughtMs: thinking.thoughtMs,
     });
 });

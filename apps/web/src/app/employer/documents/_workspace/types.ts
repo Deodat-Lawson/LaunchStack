@@ -260,6 +260,8 @@ export interface ThreadMessage {
     status?: "streaming" | "complete" | "stopped" | "error";
     stage?: string;
     reasoning?: string;
+    /** When the last reasoning arrived, from the start of the turn: how long it thought. */
+    thoughtMs?: number;
     elapsedMs?: number;
     send?: ComposerSend;
     role: "user" | "assistant";

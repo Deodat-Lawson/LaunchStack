@@ -89,7 +89,8 @@
     "failed": "Failed",
     "completed": "Completed",
     "seconds": "{seconds}s",
-    "reasoning": "Reasoning"
+    "thoughts": "Thoughts",
+    "thoughtFor": "Thought for {seconds}s"
   },
   "emptyState": {
     "title": "What do you want to <em>ask</em> yourself?",
@@ -570,7 +571,8 @@
       "saving": "Saving conversation",
       "preparing": "Preparing response",
       "readingReferenced": "Reading referenced conversation",
-      "generating": "Generating…",
+      "generating": "Thinking…",
+      "writing": "Writing…",
       "finalizing": "Finishing…",
       "stopped": "Stopped",
       "failed": "Failed",

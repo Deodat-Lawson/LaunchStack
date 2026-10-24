@@ -45,9 +45,11 @@ function Workspace() {
 export function CampaignsScreen() {
     const t = useTranslations("growth.brand.campaigns");
     return (
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
+        // Wider than Brand's other screens: the generator is two panes (controls
+        // and output) and the output keeps its own tabs.
+        <div className="mx-auto flex max-w-[1320px] flex-col gap-5">
             <PageHeader size="md" title={t("title")} sub={t("sub")} />
-            <div className="border-line bg-panel @max-md:p-2 rounded-lg border p-4">
+            <div className="border-line bg-panel rounded-lg border p-4 @max-md:p-2">
                 <Workspace />
             </div>
         </div>

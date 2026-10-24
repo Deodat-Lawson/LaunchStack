@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useRef, useState } from "react";
 
 import {
     registerDocument,
+    sourceUploadErrorMessage,
     uploadFileToStorage,
 } from "~/app/employer/documents/_workspace/sourceUpload";
 
@@ -17,14 +19,6 @@ export interface UploadItem {
     state: "uploading" | "failed";
     message?: string;
 }
-
-function errorText(e: unknown, fallback: string): string {
-    return e instanceof Error && e.message ? e.message : fallback;
-}
-
-const NOT_A_DOCUMENT =
-    "Not a document this form reads. Add a PDF, Word, PowerPoint, Excel, Markdown or text file.";
-const NO_ROOM = "The scenario already has as many files as it can use.";
 
 /**
  * Uploads from the new-scenario form: each file is stored, registered as a
@@ -40,6 +34,8 @@ export function useUploads({
     room: number;
     onAdded: (documentId: number | null, name: string) => void;
 }) {
+    const t = useTranslations("scenarios.files");
+    const tUpload = useTranslations("sources.sourceUpload");
     const [uploads, setUploads] = useState<UploadItem[]>([]);
     /** Every key on screen, and whether it is still uploading. */
     const states = useRef(new Map<string, UploadItem["state"]>());
@@ -72,11 +68,11 @@ export function useUploads({
                     state: "uploading",
                 };
                 if (!acceptsUpload(file.name)) {
-                    settle(key, { ...item, state: "failed", message: NOT_A_DOCUMENT });
+                    settle(key, { ...item, state: "failed", message: t("notDocument") });
                     continue;
                 }
                 if (left <= 0) {
-                    settle(key, { ...item, state: "failed", message: NO_ROOM });
+                    settle(key, { ...item, state: "failed", message: t("noRoom") });
                     continue;
                 }
                 left--;
@@ -95,13 +91,15 @@ export function useUploads({
                         settle(key, {
                             ...item,
                             state: "failed",
-                            message: errorText(e, "Upload failed"),
+                            message:
+                                sourceUploadErrorMessage(e, tUpload, t("uploadFailed")) ||
+                                t("uploadFailed"),
                         });
                     }
                 })();
             }
         },
-        [room, settle]
+        [room, settle, t, tUpload]
     );
 
     const dismiss = useCallback((key: string) => settle(key, null), [settle]);

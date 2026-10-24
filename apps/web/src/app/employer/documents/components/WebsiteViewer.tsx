@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { ExternalLink, Globe, Loader2, RotateCw } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -28,12 +29,10 @@ export function withoutDecorativeImages(markdown: string): string {
     return markdown.replace(/!\[\s*\]\([^)]*\)/g, "").replace(/\n{3,}/g, "\n\n");
 }
 
-function savedOn(raw: string | null | undefined): string | null {
+function savedOn(raw: string | null | undefined): Date | null {
     if (!raw) return null;
     const date = new Date(raw);
-    return Number.isNaN(date.getTime())
-        ? null
-        : date.toLocaleDateString(undefined, { dateStyle: "medium" });
+    return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function Notice({
@@ -70,10 +69,13 @@ export function WebsiteViewer({
     document: DocumentType;
     highlight?: ViewerHighlight | null;
 }) {
+    const t = useTranslations("viewers.website");
+    const format = useFormatter();
     const marker = websiteMarkerOf(document.ocrMetadata);
     const url = marker?.url ?? null;
     const host = url ? websiteHost(url) : document.title;
-    const saved = savedOn(marker?.capturedAt ?? document.createdAt);
+    const savedAt = savedOn(marker?.capturedAt ?? document.createdAt);
+    const saved = savedAt ? format.dateTime(savedAt, { dateStyle: "medium" }) : null;
     const [text, setText] = useState<PageText>({ status: "loading" });
 
     const load = useCallback(async () => {
@@ -90,7 +92,7 @@ export function WebsiteViewer({
         } catch (cause) {
             setText({
                 status: "failed",
-                message: cause instanceof Error ? cause.message : "Couldn't load the page's text",
+                message: cause instanceof Error ? cause.message : "",
             });
         }
     }, [document.id]);
@@ -103,7 +105,7 @@ export function WebsiteViewer({
     const checkAgain = (
         <Button variant="outline" size="sm" onClick={() => void load()}>
             <RotateCw aria-hidden />
-            Check again
+            {t("checkAgain")}
         </Button>
     );
 
@@ -113,36 +115,29 @@ export function WebsiteViewer({
         body = (
             <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-sm">
                 <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden />
-                Loading the page&apos;s text…
+                {t("loading")}
             </div>
         );
     } else if (text.status === "failed") {
         body = (
-            <Notice title="Couldn't load the page's text" action={checkAgain}>
-                {text.message}
+            <Notice title={t("loadFailed")} action={checkAgain}>
+                {text.message || t("loadFailed")}
             </Notice>
         );
     } else if (text.chunkCount === 0 && indexError) {
         body = (
-            <Notice title="This page couldn't be read">
-                {indexError}. Open the site to see it, or add it again from Add a source.
+            <Notice title={t("unreadableTitle")}>
+                {t("unreadableBody", { error: indexError })}
             </Notice>
         );
     } else if (text.chunkCount === 0 && !document.ocrProcessed) {
         body = (
-            <Notice title="Still reading this page" action={checkAgain}>
-                The page is saved and being read. Its text shows here when that is done, usually
-                within a minute.
+            <Notice title={t("readingTitle")} action={checkAgain}>
+                {t("readingBody")}
             </Notice>
         );
     } else if (wordCount(text.markdown) < MIN_READABLE_WORDS) {
-        body = (
-            <Notice title="There's almost no text on this page we could read">
-                Sites that build their pages with JavaScript look empty to us, so Ask and the
-                company profile have nothing to quote here. Open the site to see it, or add a
-                document about the company instead.
-            </Notice>
-        );
+        body = <Notice title={t("thinTitle")}>{t("thinBody")}</Notice>;
     } else {
         showsText = true;
         body = (
@@ -163,24 +158,19 @@ export function WebsiteViewer({
                 <div className="min-w-0 flex-1">
                     <p className="text-ink truncate text-sm font-semibold">{host}</p>
                     <p className="text-ink-3 truncate text-xs">
-                        {url ?? "Website"}
-                        {saved && <> · Saved {saved}</>}
+                        {url ?? t("website")}
+                        {saved && <> {t("savedOn", { date: saved })}</>}
                     </p>
                 </div>
                 {url && (
                     <Button asChild variant="outline" size="sm">
                         <a href={url} target="_blank" rel="noopener noreferrer">
-                            Open site
+                            {t("openSite")}
                             <ExternalLink aria-hidden />
                         </a>
                     </Button>
                 )}
-                {showsText && (
-                    <p className="text-ink-3 basis-full text-xs">
-                        Below is the text LaunchStack read from this page. Ask and the company
-                        profile quote it.
-                    </p>
-                )}
+                {showsText && <p className="text-ink-3 basis-full text-xs">{t("textNote")}</p>}
             </div>
             {/* A site's hero shots run thousands of pixels tall; keep them to a glance. */}
             <div className="min-h-0 flex-1 [&_.md-doc_img]:max-h-64 [&_.md-doc_img]:w-auto [&_.md-doc_img]:object-contain">

@@ -19,6 +19,7 @@
  */
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 import { useToolNav, useToolRouter } from "~/components/tool-app/nav";
@@ -44,7 +45,8 @@ export interface GeneratedDocument {
     id: string;
     title: string;
     template: string;
-    lastEdited: string;
+    /** When the draft was last saved (ISO). The home screen says how long ago. */
+    editedAt: string;
     content: string;
     citations?: Citation[];
     docxBase64?: string;
@@ -118,21 +120,6 @@ async function regenerateLegalDocxBase64(
     }
 }
 
-function formatRelativeTime(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-    return date.toLocaleDateString();
-}
-
 /**
  * What the editor needs that the list does not carry: a legal draft's
  * sections, and a fresh DOCX built from its current content.
@@ -186,6 +173,7 @@ export interface DraftDocuments {
 
 /** The drafts list and the calls that change it. One per Templated Drafts tab. */
 export function useDraftDocuments(): DraftDocuments {
+    const t = useTranslations("generator.drafts.errors");
     const [documents, setDocuments] = useState<GeneratedDocument[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [loaded, setLoaded] = useState(false);
@@ -210,7 +198,7 @@ export function useDraftDocuments(): DraftDocuments {
                         id: doc.id.toString(),
                         title: doc.title,
                         template: doc.templateId ?? "Custom",
-                        lastEdited: formatRelativeTime(doc.updatedAt ?? doc.createdAt),
+                        editedAt: doc.updatedAt ?? doc.createdAt,
                         content: doc.content,
                         citations: doc.citations,
                         metadata: doc.metadata,
@@ -218,15 +206,15 @@ export function useDraftDocuments(): DraftDocuments {
                 setDocuments(docs);
                 setLoaded(true);
             } else {
-                setError(data.message ?? "Failed to fetch documents");
+                setError(data.message ?? t("fetch"));
             }
         } catch (err) {
             console.error("Error fetching documents:", err);
-            setError("Failed to load documents");
+            setError(t("load"));
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void reload();
@@ -244,7 +232,7 @@ export function useDraftDocuments(): DraftDocuments {
         ): Promise<GeneratedDocument | null> => {
             const registryTemplate = TEMPLATE_REGISTRY[template.id];
             if (!registryTemplate) {
-                setError(`Unknown template: ${template.id}`);
+                setError(t("unknownTemplate", { id: template.id }));
                 return null;
             }
 
@@ -282,7 +270,7 @@ export function useDraftDocuments(): DraftDocuments {
                 };
 
                 if (!json.success || !json.document) {
-                    setError(json.message ?? "Failed to create draft");
+                    setError(json.message ?? t("create"));
                     return null;
                 }
 
@@ -290,7 +278,7 @@ export function useDraftDocuments(): DraftDocuments {
                     id: json.document.id.toString(),
                     title: template.name,
                     template: template.id,
-                    lastEdited: "Just now",
+                    editedAt: new Date().toISOString(),
                     content: htmlContent,
                     sections,
                     metadata: {
@@ -304,11 +292,11 @@ export function useDraftDocuments(): DraftDocuments {
                 return newDoc;
             } catch (err) {
                 console.error("Error opening legal draft:", err);
-                setError("Failed to open templated draft");
+                setError(t("open"));
                 return null;
             }
         },
-        []
+        [t]
     );
 
     const saveDraft = useCallback(
@@ -385,7 +373,7 @@ export function useDraftDocuments(): DraftDocuments {
                         ? { sections: legalSectionsSnapshot }
                         : {}),
                     ...(legalMetadata !== undefined ? { metadata: legalMetadata } : {}),
-                    lastEdited: "Just now",
+                    editedAt: new Date().toISOString(),
                 };
 
                 setDocuments(prev =>
@@ -421,6 +409,7 @@ export interface DocumentGeneratorProps {
  * `fill` box: every screen brings its own padding and fills the tab.
  */
 export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
+    const t = useTranslations("generator.drafts");
     const router = useToolRouter();
     const { createDraft, saveDraft } = drafts;
 
@@ -475,7 +464,7 @@ export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
         const template: DocumentTemplate = {
             id: registryTemplate.id,
             name: registryTemplate.name,
-            category: "Legal",
+            category: "legal",
             description: registryTemplate.description,
             preview: "",
             isLegal: true,
@@ -504,7 +493,7 @@ export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
         case "new":
         case "documents":
             main = drafts.isLoading ? (
-                <LoadingState label="Loading documents…" />
+                <LoadingState label={t("loadingDocuments")} />
             ) : drafts.error ? (
                 <ErrorState message={drafts.error} onRetry={() => void drafts.reload()} />
             ) : (
@@ -534,7 +523,7 @@ export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
                     />
                 );
             } else if (drafts.isLoading) {
-                main = <LoadingState label="Loading documents…" />;
+                main = <LoadingState label={t("loadingDocuments")} />;
             } else if (!listed) {
                 main = drafts.error ? (
                     <ErrorState message={drafts.error} onRetry={() => void drafts.reload()} />
@@ -542,7 +531,7 @@ export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
                     <DraftNotFound onShowDocuments={showDocuments} />
                 );
             } else {
-                main = <LoadingState label="Opening document…" />;
+                main = <LoadingState label={t("openingDocument")} />;
             }
             break;
         case "assistant":
@@ -550,7 +539,7 @@ export function DocumentGenerator({ screen, drafts }: DocumentGeneratorProps) {
         case "not-found":
             main = (
                 <Padded>
-                    <ToolNotFound home="/" homeLabel="New document" />
+                    <ToolNotFound home="/" homeLabel={t("newDocument")} />
                 </Padded>
             );
             break;
@@ -589,6 +578,7 @@ function DraftEditor({
         editorSections?: EditorSection[]
     ) => Promise<void>;
 }) {
+    const t = useTranslations("generator.drafts");
     const templateId = document.template;
     const resolvedFields = templateId ? (TEMPLATE_REGISTRY[templateId]?.fields ?? []) : [];
     const legalSections = getLegalSectionsForDocument(document);
@@ -621,7 +611,7 @@ function DraftEditor({
                 initialCitations={document.citations}
                 documentId={parseInt(document.id)}
                 onBack={onBack}
-                backLabel="My documents"
+                backLabel={t("myDocuments")}
                 onSave={(title, content, citations) =>
                     void onSave(document, title, content, citations)
                 }
@@ -650,13 +640,14 @@ function LoadingState({ label }: { label: string }) {
 }
 
 function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+    const tc = useTranslations("common");
     return (
         <LegalGeneratorTheme>
             <div className="flex h-full items-center justify-center">
                 <div className="flex max-w-md flex-col items-center gap-4 text-center">
                     <p className="text-danger">{message}</p>
                     <Button variant="outline" size="sm" onClick={onRetry}>
-                        Try again
+                        {tc("actions.tryAgain")}
                     </Button>
                 </div>
             </div>
@@ -672,20 +663,16 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
  * before the list arrives, and the next screen the person picks replaces it.
  */
 function DraftNotFound({ onShowDocuments }: { onShowDocuments: () => void }) {
+    const t = useTranslations("generator.drafts.notFound");
     const { forgetCurrent } = useToolNav();
     useEffect(() => forgetCurrent(), [forgetCurrent]);
     return (
         <Padded>
             <div className="border-line bg-panel flex max-w-xl flex-col items-start gap-2 rounded-lg border px-5 py-5">
-                <div className="text-ink text-sm font-medium">
-                    This draft is not in My documents
-                </div>
-                <p className="text-ink-2 text-sm">
-                    It may have been deleted, or it is someone else&apos;s: drafts are private to
-                    whoever made them, in the workspace they made them in.
-                </p>
+                <div className="text-ink text-sm font-medium">{t("title")}</div>
+                <p className="text-ink-2 text-sm">{t("body")}</p>
                 <Button size="sm" variant="outline" className="mt-1" onClick={onShowDocuments}>
-                    Go to My documents
+                    {t("action")}
                 </Button>
             </div>
         </Padded>

@@ -1,0 +1,694 @@
+{
+  "drafts": {
+    "loadingDocuments": "正在加载文档…",
+    "openingDocument": "正在打开文档…",
+    "newDocument": "新建文档",
+    "myDocuments": "我的文档",
+    "errors": {
+      "fetch": "获取文档失败",
+      "load": "加载文档失败",
+      "unknownTemplate": "未知模板：{id}",
+      "create": "创建草稿失败",
+      "open": "打开模板草稿失败"
+    },
+    "notFound": {
+      "title": "“我的文档”中没有这份草稿",
+      "body": "它可能已被删除，或者属于其他人：草稿仅对创建者本人可见，并且只存在于创建时所在的工作区。",
+      "action": "前往我的文档"
+    }
+  },
+  "home": {
+    "title": "生成一份<em>法律</em>文档",
+    "subtitle": "选择一个模板，Drift 会根据你的公司知识和对方信息自动填写。也可以描述你的需求，助手会为你推荐合适的模板。",
+    "searchTemplates": "搜索法律模板…",
+    "searchDocuments": "搜索你的文档…",
+    "stages": {
+      "confidentiality": "保密",
+      "formation": "公司设立",
+      "commercial": "商务",
+      "fundraising": "融资",
+      "employment": "雇佣",
+      "product": "产品",
+      "offboarding": "离职",
+      "legal": "法律"
+    },
+    "banner": {
+      "title": "不确定需要哪个模板？",
+      "body": "描述你的情况，助手会推荐模板，并在你回答时根据对话预填字段。",
+      "placeholder": "例如：新员工保密协议…",
+      "askAi": "询问 AI"
+    },
+    "recentTitle": "工作区最近的文档",
+    "shownOfTotal": "{shown} / {total}",
+    "templateCount": "{count, plural, other {# 个模板}}",
+    "myDocuments": "我的文档",
+    "tile": {
+      "fields": "{count, plural, other {# 个字段}}",
+      "required": "{count} 个必填",
+      "draft": "草稿",
+      "open": "打开 →",
+      "edited": "{template} · {when}编辑",
+      "customTemplate": "自定义"
+    },
+    "edited": {
+      "justNow": "刚刚",
+      "minutes": "{count, plural, other {# 分钟前}}",
+      "hours": "{count, plural, other {# 小时前}}",
+      "days": "{count, plural, other {# 天前}}"
+    },
+    "emptyTemplates": {
+      "title": "没有匹配的模板",
+      "query": "没有与“{query}”匹配的结果。换个关键词试试，或清除筛选条件。",
+      "filter": "换个筛选条件试试。"
+    },
+    "emptyDocuments": {
+      "title": "还没有文档",
+      "body": "从模板生成你的第一份法律文档，它就会显示在这里。",
+      "action": "新建文档"
+    }
+  },
+  "editor": {
+    "titlePlaceholderRewrite": "添加标题（可选）",
+    "titlePlaceholder": "未命名文档",
+    "savedAt": "已保存 {time}",
+    "downloadDocx": "下载 DOCX",
+    "saveToDocuments": "保存到文档",
+    "ai": "AI",
+    "tools": "工具",
+    "fileFallback": "文档",
+    "format": {
+      "bold": "加粗（Ctrl+B）",
+      "italic": "斜体（Ctrl+I）",
+      "underline": "下划线",
+      "bulletList": "无序列表",
+      "numberedList": "有序列表",
+      "alignLeft": "左对齐",
+      "alignCenter": "居中",
+      "alignRight": "右对齐"
+    },
+    "wordCount": "{count, plural, other {# 个词}}",
+    "placeholderRewrite": "在此粘贴或输入文本，然后选中文本，使用 AI 面板改写…",
+    "placeholder": "开始写作，或使用 AI 工具…",
+    "assistant": {
+      "title": "AI 助手",
+      "hintRewriteSelected": "已选中文本，让 AI 改写它",
+      "hintRewrite": "粘贴或输入文本，然后选中并让 AI 改写",
+      "hintSelected": "已选中文本，让 AI 编辑它",
+      "hint": "让 AI 添加内容",
+      "howTo": "如何使用 AI",
+      "howToSelect": "• 选中文本，让 AI 编辑",
+      "howToType": "• 输入需求，添加新内容",
+      "howToQuick": "• 使用下方的快捷操作",
+      "howToShortcut": "• 按 ⌘K 快速打开",
+      "editSelected": "编辑选中文本",
+      "quickActions": "快捷操作",
+      "you": "你",
+      "processing": "AI 正在处理…",
+      "selectedText": "选中文本",
+      "promptSelected": "让 AI 编辑所选内容…",
+      "prompt": "让 AI 添加内容…",
+      "sending": "处理中…",
+      "send": "发送给 AI"
+    },
+    "actions": {
+      "generateSection": "生成章节",
+      "continue": "续写",
+      "expand": "扩写",
+      "rewrite": "改写",
+      "summarize": "总结",
+      "changeTone": "改为专业语气"
+    },
+    "chat": {
+      "rewriteReady": "准备好后，查看文档上方的预览，点击“接受”应用更改，或点击“拒绝”放弃。不着急！",
+      "applied": {
+        "generateSection": "已生成新章节，更改已应用到你的文档。",
+        "continue": "已续写，更改已应用到你的文档。",
+        "expand": "已扩写文本，更改已应用到你的文档。",
+        "rewrite": "已改写文本，更改已应用到你的文档。",
+        "summarize": "已总结文本，更改已应用到你的文档。",
+        "changeTone": "已将文本调整为专业语气，更改已应用到你的文档。"
+      },
+      "error": "抱歉，生成内容时出错，请重试。",
+      "rewriteApplied": "已应用改写。按 Cmd+Z 可撤销。",
+      "invalidResponse": "服务器返回了无效的响应，请重试。"
+    }
+  },
+  "toolPalette": {
+    "title": "工具",
+    "subtitle": "完善你的文档",
+    "expandSidebar": "展开侧栏",
+    "collapseSidebar": "收起侧栏",
+    "quickActions": "快捷操作",
+    "selectText": "（需选中文本）",
+    "shortcuts": "快捷键",
+    "shortcutAi": "AI",
+    "tools": {
+      "aiGenerate": {
+        "name": "AI 内容",
+        "description": "生成、扩写或改写内容"
+      },
+      "docResearch": {
+        "name": "文档检索",
+        "description": "搜索你上传的文档"
+      },
+      "webResearch": {
+        "name": "网络检索",
+        "description": "从网络查找信息"
+      },
+      "arxivResearch": {
+        "name": "arXiv 论文",
+        "description": "搜索 arXiv 上的学术论文"
+      },
+      "grammar": {
+        "name": "语法与文风",
+        "description": "检查语法，提升文字质量"
+      },
+      "outline": {
+        "name": "大纲",
+        "description": "生成或查看文档结构"
+      },
+      "citation": {
+        "name": "引用",
+        "description": "管理参考文献和书目"
+      },
+      "export": {
+        "name": "导出",
+        "description": "下载为 PDF、DOCX 或 Markdown"
+      }
+    },
+    "quick": {
+      "generateSection": {
+        "label": "生成章节",
+        "short": "生成"
+      },
+      "continue": {
+        "label": "续写",
+        "short": "续写"
+      },
+      "expand": {
+        "label": "扩写",
+        "short": "扩写"
+      },
+      "rewrite": {
+        "label": "改写",
+        "short": "改写"
+      }
+    }
+  },
+  "research": {
+    "title": "检索",
+    "placeholderArxiv": "搜索 arXiv 论文…",
+    "placeholder": "搜索文档和网络…",
+    "searchType": {
+      "general": "通用",
+      "academic": "学术",
+      "news": "新闻"
+    },
+    "categories": {
+      "all": "全部分类",
+      "ai": "AI",
+      "machineLearning": "机器学习",
+      "nlp": "NLP",
+      "computerVision": "计算机视觉",
+      "statisticsMl": "统计机器学习",
+      "physics": "物理",
+      "mathematics": "数学",
+      "biology": "生物",
+      "economics": "经济"
+    },
+    "tabs": {
+      "all": "全部（{count}）",
+      "documents": "文档（{count}）",
+      "web": "网络（{count}）",
+      "arxiv": "arXiv（{count}）"
+    },
+    "errors": {
+      "failed": "搜索失败",
+      "generic": "搜索时出错"
+    },
+    "emptyArxiv": "搜索学术论文，来源：<br></br><link>arXiv.org</link>",
+    "empty": "搜索可以写进文档的信息",
+    "searching": "正在搜索…",
+    "insertCite": "插入并引用",
+    "documentFallback": "文档",
+    "page": "第 {page} 页",
+    "insert": "插入",
+    "etAl": "{authors} 等"
+  },
+  "citations": {
+    "title": "引用",
+    "formats": {
+      "apa": "APA 第 7 版",
+      "mla": "MLA 第 9 版",
+      "chicago": "芝加哥格式",
+      "ieee": "IEEE",
+      "harvard": "哈佛格式"
+    },
+    "sourceTypes": {
+      "website": "网站",
+      "book": "图书",
+      "journal": "期刊",
+      "article": "文章",
+      "document": "文档"
+    },
+    "formatAll": "全部格式化",
+    "add": "添加引用",
+    "edit": "编辑引用",
+    "sourceType": "来源类型",
+    "titleLabel": "标题 *",
+    "titlePlaceholder": "输入标题",
+    "authors": "作者（每行一位，格式：姓, 名）",
+    "authorsPlaceholder": "Smith, John\nDoe, Jane",
+    "publisher": "出版方",
+    "publisherPlaceholder": "出版方名称",
+    "publishedDate": "出版日期",
+    "volume": "卷",
+    "issue": "期",
+    "pages": "页码",
+    "empty": "还没有添加引用",
+    "emptyHint": "从检索结果中添加来源，或手动添加",
+    "inText": "文内引用：{citation}",
+    "insert": "插入",
+    "bibliographyPreview": "参考文献预览"
+  },
+  "export": {
+    "title": "导出文档",
+    "description": "选择格式和选项，下载你的文档。",
+    "format": "格式",
+    "formats": {
+      "pdf": {
+        "name": "PDF",
+        "description": "便携式文档格式"
+      },
+      "markdown": {
+        "name": "Markdown",
+        "description": "带格式的纯文本"
+      },
+      "html": {
+        "name": "HTML",
+        "description": "网页格式"
+      },
+      "text": {
+        "name": "纯文本",
+        "description": "无格式文本"
+      }
+    },
+    "pageSize": "页面尺寸",
+    "letter": "Letter（美式信纸）",
+    "fontSize": "字号",
+    "includeBibliography": "包含参考文献",
+    "includeBibliographyHint": "在文末添加参考文献部分",
+    "estimate": "约 {count} 页 • {description}",
+    "exporting": "正在导出…",
+    "done": "完成！"
+  },
+  "grammar": {
+    "title": "语法与文风",
+    "severity": {
+      "error": "错误",
+      "warning": "警告",
+      "suggestion": "建议"
+    },
+    "actions": {
+      "check": "全面语法检查",
+      "improveClarity": "提升清晰度",
+      "adjustFormality": "调整正式程度",
+      "consistency": "检查一致性"
+    },
+    "formality": {
+      "veryFormal": "非常正式",
+      "formal": "正式",
+      "neutral": "中性",
+      "casual": "随意",
+      "veryCasual": "非常随意"
+    },
+    "qualityScore": "质量评分",
+    "errorCount": "{count, plural, other {# 个错误}}",
+    "warningCount": "{count, plural, other {# 个警告}}",
+    "suggestionCount": "{count, plural, other {# 条建议}}",
+    "applyAll": "全部应用（{count}）",
+    "empty": "未发现问题",
+    "emptyHint": "运行检查，分析你的内容",
+    "analyzing": "正在分析你的内容…",
+    "types": {
+      "grammar": "语法",
+      "spelling": "拼写",
+      "punctuation": "标点",
+      "style": "文风",
+      "clarity": "清晰度",
+      "formality": "正式程度",
+      "consistency": "一致性"
+    },
+    "applied": "已应用",
+    "recheck": "重新检查"
+  },
+  "outline": {
+    "title": "大纲",
+    "topicPlaceholder": "文档主题或描述…",
+    "generating": "正在生成…",
+    "generate": "生成大纲",
+    "empty": "还没有大纲",
+    "emptyHint": "生成一个大纲，或手动添加章节",
+    "addSection": "添加章节",
+    "insertHint": "点击章节标题，即可将其插入文档",
+    "newSection": "新章节",
+    "addChild": "添加子章节"
+  },
+  "inlineDiff": {
+    "title": "改写预览",
+    "edits": "{count, plural, other {# 处修改}}",
+    "accept": "接受",
+    "reject": "拒绝"
+  },
+  "rewritePreview": {
+    "title": "改写<em>预览</em>",
+    "noEdits": "无修改 · 与原文一致",
+    "pending": "{count, plural, other {# 处修改}} · 待审阅",
+    "rejectSection": "拒绝此段",
+    "acceptSection": "接受此段",
+    "original": "原文",
+    "proposed": "建议",
+    "emptyOriginal": "没有可比较的原文。",
+    "emptyProposed": "改写结果为空。",
+    "why": "修改原因",
+    "summary": {
+      "none": "未提出修改，改写结果与原文逐字一致。",
+      "expanded": "共 {edits, plural, other {# 处修改}}，增加了 {words, plural, other {# 个词}}。接受前请查看高亮部分。",
+      "tightened": "共 {edits, plural, other {# 处修改}}，精简了 {words, plural, other {# 个词}}。接受前请查看高亮部分。",
+      "same": "提出了 {edits, plural, other {# 处修改}}，总长度不变。接受前请查看高亮部分。"
+    }
+  },
+  "rewriteWorkflow": {
+    "errors": {
+      "network": "网络错误",
+      "invalidResponse": "服务器返回了无效的响应，请重试。",
+      "failed": "改写文本失败"
+    },
+    "presets": {
+      "tighten": "精简措辞",
+      "casual": "更随意",
+      "formal": "更正式",
+      "plain": "通俗易懂",
+      "detail": "补充细节",
+      "active": "使用主动语态"
+    },
+    "guardrails": {
+      "structure": {
+        "label": "保留结构",
+        "sub": "保持段落分隔不变"
+      },
+      "voice": {
+        "label": "贴合我的风格",
+        "sub": "不偏离原有语气"
+      },
+      "conflict": {
+        "label": "有冲突时停止",
+        "sub": "标记出来，而不是猜测"
+      }
+    },
+    "untitledSource": "未命名原文",
+    "sectionFallback": "{index}. 段落",
+    "sectionFallbackShort": "段落",
+    "noEdits": "无修改",
+    "summary": {
+      "none": "此段未提出修改，改写结果与原文一致。",
+      "expanded": "共 {edits, plural, other {# 处修改}}，增加了 {words, plural, other {# 个词}}。",
+      "tightened": "共 {edits, plural, other {# 处修改}}，精简了 {words, plural, other {# 个词}}。",
+      "same": "{edits, plural, other {# 处修改}}，总长度不变。"
+    },
+    "breadcrumbReview": "审阅 v2",
+    "breadcrumbNew": "新建改写",
+    "exit": "退出",
+    "crumbDocuments": "文档",
+    "crumbRewrite": "改写",
+    "versionWords": "v1 · {count, plural, other {# 个词}}",
+    "scope": {
+      "title": "改写范围",
+      "sub": "Drift 只会改写你选择的段落，并保留已定义的术语和引用。",
+      "source": "原文",
+      "sourcePlaceholder": "在此粘贴或输入原文…",
+      "instruction": "改写要求",
+      "instructionPlaceholder": "描述你希望如何改写…",
+      "sections": "要改写的段落",
+      "guardrails": "约束条件",
+      "toggleOn": "{label}：开",
+      "toggleOff": "{label}：关",
+      "rewriting": "正在改写…",
+      "run": "开始改写 · {count, plural, other {# 段}}",
+      "ctaMeta": "约 10 秒 · {count, plural, other {# 个词}}"
+    },
+    "pipeline": {
+      "status": {
+        "accepted": "已接受",
+        "rejected": "已拒绝",
+        "unchanged": "未更改"
+      },
+      "pending": "{count, plural, other {# 处修改}} · 待审阅",
+      "sectionTitle": "第 {index} 段 · <em>{name}</em>",
+      "prev": "上一段",
+      "next": "下一段",
+      "rejectSection": "拒绝此段",
+      "acceptSection": "接受此段",
+      "original": "原文 · v1",
+      "proposed": "建议 · v2",
+      "why": "修改原因",
+      "emptyOriginal": "此段没有原文。",
+      "emptyProposed": "改写结果为空。"
+    },
+    "empty": {
+      "ready": "准备<em>改写</em>",
+      "drafting": "正在起草<em>改写</em>",
+      "paste": "粘贴<em>原文</em>",
+      "pick": "选择<em>段落</em>",
+      "readySub": "调整改写要求和预设，然后点击“开始改写”。Drift 会把建议与原文并排展示。",
+      "draftingSub": "Drift 正在阅读每个选中的段落并提出修改，通常需要约 10 秒。",
+      "pasteSub": "把要改写的文本放进原文框，然后开始改写。",
+      "pickSub": "请至少选择一个段落。Drift 只会改写你指定的部分。"
+    },
+    "review": {
+      "title": "审阅 · {count, plural, other {# 段}}",
+      "counts": "已接受 {accepted} · 已拒绝 {rejected} · 待处理 {pending}",
+      "ready": "{count, plural, other {# 段}}已就绪 · 开始改写后即可审阅",
+      "applyCta": "应用 {count} 段已接受的修改 → v2",
+      "sections": "段落",
+      "empty": "还没有段落，粘贴原文即可开始。",
+      "metaUnchanged": "未更改",
+      "metaAccepted": "已接受 · {delta}",
+      "metaRejected": "已拒绝 · {delta}",
+      "metaPending": "待处理 · {delta}",
+      "finalTitle": "最终审阅",
+      "finalReady": "就绪",
+      "finalInProgress": "进行中",
+      "finalAllReviewed": "所有段落均已审阅。应用已接受的建议即可生成 v2。",
+      "finalPending": "还有 {count, plural, other {# 段}}待处理。请在应用前接受或拒绝。",
+      "rejectAll": "全部拒绝"
+    }
+  },
+  "chatbot": {
+    "confirm": {
+      "fields": "{count, plural, other {# 个字段}}",
+      "required": "{count} 个必填",
+      "useTemplate": "使用此模板",
+      "pickAnother": "换一个"
+    },
+    "noMatch": {
+      "title": "没有完全匹配的模板",
+      "body": "我们的模板都不完全适合。试试换种方式描述，或浏览模板库。",
+      "startOver": "重新开始"
+    },
+    "ready": {
+      "title": "可以填写字段表单了",
+      "body": "<strong>{template}</strong> · 已收集 {count, plural, other {# 个字段}}。在下一步确认后，文档就会打开供你编辑。",
+      "cta": "继续填写模板字段"
+    },
+    "tileMatch": "{required} 个必填 · 匹配度 {percent}%",
+    "errors": {
+      "server": "服务器错误（{status}），请重试。",
+      "connect": "无法连接到服务器，请重试。"
+    },
+    "intro": {
+      "nameAndAddress": "我看到你的公司是 **{name}**，位于 **{address}**。我会自动预填这些信息。",
+      "name": "我看到你的公司是 **{name}**。我会自动预填这些信息。",
+      "address": "我看到你的公司位于 **{address}**。我会自动预填这些信息。"
+    },
+    "confirmMessage": "我想使用“{name}”模板。",
+    "pickDifferentMessage": "能推荐其他选项吗？",
+    "topBarMeta": "Drift Assist · 法律",
+    "assistantName": "Drift Assist",
+    "subFilling": "正在填写 · {template}",
+    "subReady": "就绪 · 选择模板即可开始",
+    "showAllFields": "显示所有字段",
+    "settings": "设置",
+    "progress": {
+      "filled": "已填 {filled} / {total}",
+      "next": "下一项：{label}",
+      "allFilled": "全部已填"
+    },
+    "composer": {
+      "placeholderAnswer": "回答问题，或描述要修改的内容…",
+      "placeholder": "描述你的需求…",
+      "send": "发送消息",
+      "hint": "⌘↵ 发送 · Drift 会逐渐记住你的默认信息"
+    },
+    "preview": {
+      "liveDocument": "实时文档",
+      "live": "· 实时预览",
+      "draftPill": "草稿 · {filled}/{total}",
+      "awaiting": "等待中",
+      "full": "完整",
+      "emptyTitle": "选择模板即可开始",
+      "emptySub": "告诉助手你的需求。你回答问题时，文档会在这里实时填充。",
+      "collecting": "继续收集字段 — 共 {count} 个字段，逐个询问。"
+    },
+    "fieldSummary": {
+      "head": "字段汇总 · {total}",
+      "filled": "已填 {filled} / {total}",
+      "askingNow": "正在询问…",
+      "awaiting": "等待中"
+    },
+    "source": {
+      "asking": "询问中",
+      "awaiting": "待填写",
+      "company": "公司",
+      "ai": "AI 辅助",
+      "you": "你"
+    },
+    "welcome": {
+      "title": "你需要什么<em>法律</em>文档？",
+      "sub": "描述你的情况，我会推荐合适的模板并帮你填写，你回答时文档会实时填充。",
+      "suggestions": {
+        "nda": "我需要一份新员工保密协议",
+        "contractor": "准备签一份承包商协议",
+        "seed": "我们正在进行种子轮融资",
+        "privacy": "我们的应用需要一份隐私政策"
+      }
+    }
+  },
+  "legalEditor": {
+    "hints": {
+      "date": "日期",
+      "percent": "0–100%",
+      "number": "数字",
+      "freeText": "自由文本"
+    },
+    "required": "必填",
+    "groups": {
+      "parties": "当事方",
+      "signatures": "签署",
+      "governingLaw": "适用法律",
+      "termsDates": "期限与日期",
+      "details": "详细信息"
+    },
+    "validation": {
+      "required": "{label} 为必填项",
+      "number": "{label} 必须是有效的数字",
+      "negative": "{label} 不能为负数",
+      "percent": "{label} 必须介于 0% 到 100% 之间",
+      "positive": "{label} 必须大于 0",
+      "invalid": "{label} 的值无效"
+    },
+    "toast": {
+      "templateMissing": "模板未配置",
+      "exportUnavailable": "无法导出文档。",
+      "generateUnavailable": "无法生成文档，请联系支持人员。",
+      "generatingDocx": "正在生成 DOCX…",
+      "downloaded": "文档已下载！",
+      "exportFailed": "导出失败",
+      "exportFailedFallback": "无法生成 DOCX 文件",
+      "validationErrors": "文档存在校验错误",
+      "validationErrorsBody": "请先修复 {count, plural, other {# 个字段错误}}，再应用修订。",
+      "generatingTracked": "正在生成带修订的文档…",
+      "noEdits": "没有可应用的修改",
+      "noEditsBody": "所有字段都在使用默认占位符",
+      "trackedReady": "带修订的文档已就绪！",
+      "trackedReadyBody": "已应用 {applied, plural, other {# 处修改}}。下载已开始。",
+      "trackedReadySkippedBody": "已应用 {applied, plural, other {# 处修改}}，跳过 {skipped} 处。下载已开始。",
+      "trackFailed": "应用修订失败",
+      "unknownError": "发生未知错误",
+      "trackNotConfigured": "修订功能未配置",
+      "trackNotConfiguredBody": "红线修订服务（Adeu）尚未设置。请让管理员配置 ADEU_SERVICE_URL。",
+      "trackUnreachable": "无法连接红线修订服务",
+      "trackUnreachableBody": "Adeu 服务未运行。请用 Docker Compose 启动它，或检查 .env 中的 ADEU_SERVICE_URL。",
+      "trackBatchFailed": "修订失败",
+      "trackBatchFailedBody": "部分字段修改无法应用，文档中可能存在重复的字段引用。"
+    },
+    "errors": {
+      "exportHttp": "导出失败：HTTP {status}",
+      "generateDocx": "生成 DOCX 失败",
+      "templateNotFound": "未找到模板",
+      "generationHttp": "文档生成失败：HTTP {status}",
+      "applyEdits": "应用修改失败"
+    },
+    "chat": {
+      "noFields": "此文档没有可编辑的高亮字段。",
+      "parseFailed": "无法从中识别出字段修改。请写明具体字段，例如“将 Effective Date 设为 2026 年 3 月 4 日”。",
+      "noMatch": "没有匹配的字段被更新。请写明具体字段，例如“Effective Date”。",
+      "updated": "已更新：{fields}。",
+      "noChange": "没有可见的变化。请写明具体字段和新值。",
+      "error": "抱歉，出错了，请重试。"
+    },
+    "documentFallback": "文档",
+    "status": {
+      "saved": "已保存",
+      "unsaved": "草稿 · 未保存",
+      "autosaved": "草稿 · 已自动保存"
+    },
+    "backToDocuments": "返回我的文档",
+    "myDocuments": "我的文档",
+    "crumbLegal": "法律",
+    "savedAt": "已保存 {time}",
+    "titlePlaceholder": "文档标题",
+    "editCount": "{count, plural, other {# 处编辑}}",
+    "fieldsProgress": "已填 {filled} / {total} 个字段",
+    "hideHighlights": "隐藏字段高亮",
+    "showHighlights": "显示字段高亮",
+    "hideFields": "隐藏字段",
+    "showFields": "显示字段",
+    "exportDocx": "导出 DOCX",
+    "sendForReview": "提交审阅",
+    "toolbar": {
+      "redo": "重做",
+      "bold": "加粗",
+      "italic": "斜体",
+      "underline": "下划线",
+      "alignLeft": "左对齐",
+      "alignCenter": "居中",
+      "list": "列表",
+      "highlight": "高亮"
+    },
+    "req": "必填",
+    "clickField": "点击高亮字段进行编辑",
+    "blocking": "<strong>{count}</strong> 个问题导致无法保存 — <link>在“校验”标签页查看</link>",
+    "tabs": {
+      "fields": "字段",
+      "ai": "AI 辅助",
+      "validate": "校验"
+    },
+    "groupProgress": "{filled} / {total}",
+    "placeholderRequired": "例如：{label}",
+    "placeholderOptional": "可选 · {label}",
+    "selectPlaceholder": "请选择…",
+    "askDrift": "询问 Drift",
+    "promptSection": "让 AI 更新高亮字段…",
+    "prompt": "点击文档中的某个段落，或描述要修改的字段…",
+    "presets": {
+      "today": "将生效日期设为今天",
+      "delaware": "以特拉华州法律为适用法律",
+      "term": "将期限缩短为 18 个月",
+      "placeholders": "用占位符填写剩余的必填字段"
+    },
+    "sending": "发送中…",
+    "recent": "最近",
+    "tip": "提示",
+    "tipBody": "Drift 只会编辑高亮字段，不会改写合同条款。引用字段时请使用准确的标签（例如“Effective Date”），效果最好。",
+    "openIssues": "待解决问题 · {count}",
+    "allComplete": "所有必填字段均已填写",
+    "allCompleteBody": "你可以保存此文档，或提交审阅。",
+    "passedChecks": "已通过的检查 · {count}",
+    "checks": {
+      "filled": "已填写 {filled} / {total} 个字段",
+      "allRequired": "所有必填值均已提供",
+      "placeholders": "源 HTML 中的字段占位符已保留"
+    }
+  }
+}

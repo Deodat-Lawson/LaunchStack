@@ -15,6 +15,7 @@ import {
     Upload,
     Wand2,
 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { useToolNav } from "~/components/tool-app/nav";
@@ -44,7 +45,8 @@ import { rewritePath } from "./rewrite-screens";
 export interface RewriteDocument {
     id: string;
     title: string;
-    lastEdited: string;
+    /** When it was last saved, as an ISO string; worded where it is shown. */
+    lastEditedAt: string;
     content: string;
     citations?: Citation[];
 }
@@ -55,6 +57,7 @@ const GUTTER = "px-10 @max-md:px-6";
 // ─── Hero ───────────────────────────────────────────────────────────────────
 
 function RewriteHero() {
+    const t = useTranslations("viewers.rewrite.hero");
     return (
         <div className={`${GUTTER} @max-md:pt-8 pb-4 pt-10`}>
             <div className="mx-auto w-full max-w-7xl">
@@ -63,16 +66,18 @@ function RewriteHero() {
                         <PenLine className="h-[18px] w-[18px]" />
                     </div>
                     <div className="space-y-2">
-                        <span className={s.eyebrow}>Rewrite</span>
+                        <span className={s.eyebrow}>{t("eyebrow")}</span>
                         <h1 className={`${s.title} ${s.rewriteTitle}`}>
-                            Refine your{" "}
-                            <span className={s.highlight}>
-                                <span className={s.accentWord}>prose</span>
-                            </span>
+                            {t.rich("title", {
+                                accent: chunks => (
+                                    <span className={s.highlight}>
+                                        <span className={s.accentWord}>{chunks}</span>
+                                    </span>
+                                ),
+                            })}
                         </h1>
                         <p className={s.sub} style={{ maxWidth: 560 }}>
-                            Paste or import text, pick a tone, preview the changes, then push the
-                            polished version into your editor.
+                            {t("subtitle")}
                         </p>
                     </div>
                 </div>
@@ -104,6 +109,7 @@ export function NewRewriteScreen({
     onStartWorkflow,
     onStartBlank,
 }: NewRewriteScreenProps) {
+    const t = useTranslations("viewers.rewrite.new");
     const [isDragActive, setIsDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -148,7 +154,7 @@ export function NewRewriteScreen({
                                             color: "var(--ink)",
                                         }}
                                     >
-                                        Step-by-step rewrite
+                                        {t("workflowTitle")}
                                     </h3>
                                     <p
                                         style={{
@@ -158,8 +164,7 @@ export function NewRewriteScreen({
                                             lineHeight: 1.55,
                                         }}
                                     >
-                                        Paste or drop in text, choose tone / length / audience,
-                                        preview the diff, then push to your document.
+                                        {t("workflowBody")}
                                     </p>
                                 </div>
                             </div>
@@ -170,7 +175,7 @@ export function NewRewriteScreen({
                                     onClick={onStartWorkflow}
                                 >
                                     <Wand2 className="h-4 w-4" />
-                                    Start workflow
+                                    {t("startWorkflow")}
                                     <ArrowRight className="h-3.5 w-3.5" />
                                 </button>
                             </div>
@@ -216,7 +221,7 @@ export function NewRewriteScreen({
                                 ref={fileInputRef}
                                 type="file"
                                 accept=".txt,.md,.pdf,.docx,.doc"
-                                aria-label="Import a document"
+                                aria-label={t("importTitle")}
                                 onChange={e => importFirst(e.target.files)}
                                 className="hidden"
                             />
@@ -227,14 +232,13 @@ export function NewRewriteScreen({
                                     <Upload className="h-5 w-5" />
                                 )}
                             </CardMark>
-                            <CardTitle>
-                                {isImporting ? "Importing…" : "Import a document"}
-                            </CardTitle>
+                            <CardTitle>{isImporting ? t("importing") : t("importTitle")}</CardTitle>
                             <CardText>
-                                Drag &amp; drop or click to browse.
+                                {t("importHint")}
                                 <br />
-                                Supports <code style={{ fontSize: 12 }}>.txt</code>,{" "}
-                                <code style={{ fontSize: 12 }}>.md</code>.
+                                {t.rich("importFormats", {
+                                    code: chunks => <code style={{ fontSize: 12 }}>{chunks}</code>,
+                                })}
                             </CardText>
                         </button>
 
@@ -248,10 +252,8 @@ export function NewRewriteScreen({
                             <CardMark>
                                 <Paperclip className="h-5 w-5" />
                             </CardMark>
-                            <CardTitle>Paste from clipboard</CardTitle>
-                            <CardText>
-                                Pull text you already copied and jump straight into the workflow.
-                            </CardText>
+                            <CardTitle>{t("pasteTitle")}</CardTitle>
+                            <CardText>{t("pasteBody")}</CardText>
                         </button>
 
                         {/* Blank slate */}
@@ -264,10 +266,8 @@ export function NewRewriteScreen({
                             <CardMark>
                                 <FileUp className="h-5 w-5" />
                             </CardMark>
-                            <CardTitle>Start from blank</CardTitle>
-                            <CardText>
-                                Open an empty editor and type or paste whatever you want to rewrite.
-                            </CardText>
+                            <CardTitle>{t("blankTitle")}</CardTitle>
+                            <CardText>{t("blankBody")}</CardText>
                         </button>
                     </div>
 
@@ -287,7 +287,7 @@ export function NewRewriteScreen({
                                         letterSpacing: "-0.01em",
                                     }}
                                 >
-                                    How the workflow works
+                                    {t("howTitle")}
                                 </h4>
                                 <div
                                     className="@max-md:grid-cols-1 mt-2 grid grid-cols-2 gap-x-6 gap-y-1.5"
@@ -297,14 +297,10 @@ export function NewRewriteScreen({
                                         lineHeight: 1.55,
                                     }}
                                 >
-                                    <Tip step="Input">Paste, drop, or type the source text.</Tip>
-                                    <Tip step="Options">Pick tone, length, audience, extras.</Tip>
-                                    <Tip step="Preview">
-                                        Side-by-side or inline diff, regenerate as needed.
-                                    </Tip>
-                                    <Tip step="Apply">
-                                        Push the chosen version to your document.
-                                    </Tip>
+                                    <Tip step={t("steps.input")}>{t("steps.inputBody")}</Tip>
+                                    <Tip step={t("steps.options")}>{t("steps.optionsBody")}</Tip>
+                                    <Tip step={t("steps.preview")}>{t("steps.previewBody")}</Tip>
+                                    <Tip step={t("steps.apply")}>{t("steps.applyBody")}</Tip>
                                 </div>
                             </div>
                         </div>
@@ -384,6 +380,7 @@ export function MyRewritesScreen({
     onSearchQueryChange,
     onNewRewrite,
 }: MyRewritesScreenProps) {
+    const t = useTranslations("viewers.rewrite.list");
     const filtered = documents.filter(doc =>
         doc.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -399,8 +396,8 @@ export function MyRewritesScreen({
                         <input
                             type="text"
                             className={s.input}
-                            placeholder="Search your rewrites…"
-                            aria-label="Search your rewrites"
+                            placeholder={t("searchPlaceholder")}
+                            aria-label={t("searchLabel")}
                             value={searchQuery}
                             onChange={e => onSearchQueryChange(e.target.value)}
                             style={{ paddingLeft: 40 }}
@@ -414,7 +411,7 @@ export function MyRewritesScreen({
                     <div
                         className="flex items-center justify-center py-16"
                         aria-busy="true"
-                        aria-label="Loading your rewrites"
+                        aria-label={t("loading")}
                     >
                         <Loader2 className="text-brand h-6 w-6 animate-spin" />
                     </div>
@@ -438,7 +435,7 @@ export function MyRewritesScreen({
                                 color: "var(--ink)",
                             }}
                         >
-                            {searchQuery ? "No rewrites match" : "No rewrites yet"}
+                            {searchQuery ? t("noMatchTitle") : t("emptyTitle")}
                         </h3>
                         <p
                             style={{
@@ -449,8 +446,8 @@ export function MyRewritesScreen({
                             }}
                         >
                             {searchQuery
-                                ? `Nothing matched "${searchQuery}". Try a different keyword.`
-                                : "Rewrite some prose to keep a history of polished drafts."}
+                                ? t("noMatchBody", { query: searchQuery })
+                                : t("emptyBody")}
                         </p>
                         <button
                             type="button"
@@ -459,7 +456,7 @@ export function MyRewritesScreen({
                             style={{ marginTop: 6 }}
                         >
                             <Plus className="h-4 w-4" />
-                            New rewrite
+                            {t("newRewrite")}
                         </button>
                     </div>
                 )}
@@ -468,8 +465,26 @@ export function MyRewritesScreen({
     );
 }
 
+type ListT = ReturnType<typeof useTranslations<"viewers.rewrite.list">>;
+
+/** "Just now", "5 mins ago", "3 days ago"; a date after a week. */
+function lastEditedText(iso: string, t: ListT, format: ReturnType<typeof useFormatter>): string {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return iso;
+    const diffMins = Math.floor((Date.now() - date.getTime()) / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return t("minutesAgo", { count: diffMins });
+    if (diffHours < 24) return t("hoursAgo", { count: diffHours });
+    if (diffDays < 7) return t("daysAgo", { count: diffDays });
+    return format.dateTime(date, { year: "numeric", month: "numeric", day: "numeric" });
+}
+
 /** A saved rewrite in the list: a real link, so ⌘-click opens it in a browser tab. */
 function RewriteDocumentRow({ doc }: { doc: RewriteDocument }) {
+    const t = useTranslations("viewers.rewrite.list");
+    const format = useFormatter();
     const preview = doc.content.replace(/<[^>]*>/g, "").slice(0, 160);
     return (
         <ToolLink href={rewritePath(doc.id)} className={s.docRow}>
@@ -491,7 +506,7 @@ function RewriteDocumentRow({ doc }: { doc: RewriteDocument }) {
                         {doc.title}
                     </h3>
                     <p style={{ margin: 0, fontSize: 12, color: "var(--ink-3)" }}>
-                        Last edited {doc.lastEdited}
+                        {t("lastEdited", { when: lastEditedText(doc.lastEditedAt, t, format) })}
                     </p>
                 </div>
             </div>
@@ -512,7 +527,7 @@ function RewriteDocumentRow({ doc }: { doc: RewriteDocument }) {
             </p>
             <div className="mt-auto">
                 <span className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} style={{ width: "100%" }}>
-                    Open rewrite
+                    {t("openRewrite")}
                     <ArrowRight className="h-3.5 w-3.5" />
                 </span>
             </div>
@@ -565,11 +580,12 @@ export function RewriteEditorScreen({
 }
 
 export function RewriteLoading() {
+    const t = useTranslations("viewers.rewrite");
     return (
         <div
             className="flex h-full items-center justify-center"
             aria-busy="true"
-            aria-label="Loading rewrite"
+            aria-label={t("loadingOne")}
         >
             <Loader2 className="text-brand h-6 w-6 animate-spin" />
         </div>
@@ -582,17 +598,16 @@ export function RewriteLoading() {
  * remembering the last screen that existed.
  */
 export function RewriteMissing({ onShowAll }: { onShowAll: () => void }) {
+    const t = useTranslations("viewers.rewrite.missing");
     const { forgetCurrent, entryKey } = useToolNav();
     useEffect(() => forgetCurrent(), [forgetCurrent, entryKey]);
     return (
         <div className="@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6">
             <div className="border-line bg-panel flex max-w-xl flex-col items-start gap-2 rounded-lg border px-5 py-5">
-                <div className="text-ink text-sm font-medium">This rewrite is not here</div>
-                <p className="text-ink-2 text-sm">
-                    It may have been deleted, or the link points at a rewrite in another workspace.
-                </p>
+                <div className="text-ink text-sm font-medium">{t("title")}</div>
+                <p className="text-ink-2 text-sm">{t("body")}</p>
                 <Button size="sm" variant="outline" className="mt-1" onClick={onShowAll}>
-                    Go to My rewrites
+                    {t("showAll")}
                 </Button>
             </div>
         </div>

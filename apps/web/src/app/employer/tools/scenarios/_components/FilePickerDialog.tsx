@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, Upload } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { InlineError } from "~/components/tools/EmptyState";
@@ -20,7 +21,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { ScenarioFileOption } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { filterFiles, fileKind, isCompanyFile } from "../_lib/files";
+import { UPLOAD_FOLDER, filterFiles, fileKind, isCompanyFile } from "../_lib/files";
 import { CompanyTag, FileGlyph, FileMeta } from "./FileBits";
 
 type View = "all" | "company" | "picked";
@@ -55,6 +56,8 @@ export function FilePickerDialog({
     /** Null when the viewer may not add files. */
     onUpload: (() => void) | null;
 }) {
+    const t = useTranslations("scenarios.picker");
+    const tc = useTranslations("common");
     const [query, setQuery] = useState("");
     const [view, setView] = useState<View>("all");
     const pickedSet = useMemo(() => new Set(picked), [picked]);
@@ -127,10 +130,9 @@ export function FilePickerDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="flex max-h-[min(720px,calc(100dvh-2rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-[640px]">
                 <DialogHeader className="px-5 pb-3 pt-5">
-                    <DialogTitle className="text-base">Choose files</DialogTitle>
+                    <DialogTitle className="text-base">{t("title")}</DialogTitle>
                     <DialogDescription className="text-[13px]">
-                        The people in the scenario are built from what these files say. Your
-                        company&rsquo;s own files come first.
+                        {t("description")}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-wrap items-center gap-2 px-5 pb-3">
@@ -139,8 +141,8 @@ export function FilePickerDialog({
                         <Input
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder="Find a file or folder"
-                            aria-label="Find a file or folder"
+                            placeholder={t("find")}
+                            aria-label={t("find")}
                             className="h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0 md:text-[13px] dark:bg-transparent"
                         />
                     </div>
@@ -150,16 +152,19 @@ export function FilePickerDialog({
                         variant="outline"
                         value={view}
                         onValueChange={v => v && setView(v as View)}
-                        aria-label="Show"
+                        aria-label={tc("actions.show")}
                     >
                         <ToggleGroupItem value="all" className="px-2.5 text-xs">
-                            All
+                            {tc("status.all")}
                         </ToggleGroupItem>
                         <ToggleGroupItem value="company" className="px-2.5 text-xs">
-                            Company files
+                            {t("companyFiles")}
                         </ToggleGroupItem>
                         <ToggleGroupItem value="picked" className="px-2.5 text-xs">
-                            Picked <span className="tabular-nums">{picked.length}</span>
+                            {t.rich("pickedView", {
+                                count: picked.length,
+                                n: chunks => <span className="tabular-nums">{chunks}</span>,
+                            })}
                         </ToggleGroupItem>
                     </ToggleGroup>
                 </div>
@@ -171,17 +176,17 @@ export function FilePickerDialog({
                     ) : shown.length === 0 ? (
                         <p className="text-ink-3 px-5 py-6 text-[13px]">
                             {files.length === 0
-                                ? "No files in this workspace yet. Upload a pitch deck, a price list or a policy to build people from."
+                                ? t("noFiles")
                                 : view === "picked" && !query.trim()
-                                  ? "Nothing picked yet."
+                                  ? t("nothingPicked")
                                   : view === "company" && !query.trim()
-                                    ? "No company files yet. Files the company profile counts, and anything in the Company folder, show here."
-                                    : "No file matches."}
+                                    ? t("noCompanyFiles", { folder: UPLOAD_FOLDER })
+                                    : t("noMatch")}
                         </p>
                     ) : (
                         <>
-                            {group("Company files", "Written by or about your company", company)}
-                            {group("Other files", "Everything else you can see", other)}
+                            {group(t("companyFiles"), t("companyNote"), company)}
+                            {group(t("otherFiles"), t("otherNote"), other)}
                         </>
                     )}
                 </div>
@@ -189,7 +194,7 @@ export function FilePickerDialog({
                     {onUpload ? (
                         <Button type="button" variant="outline" size="sm" onClick={onUpload}>
                             <Upload />
-                            Upload from computer
+                            {t("upload")}
                         </Button>
                     ) : (
                         <span />
@@ -202,10 +207,10 @@ export function FilePickerDialog({
                             )}
                             aria-live="polite"
                         >
-                            {picked.length} of {max} picked
+                            {t("picked", { count: picked.length, max })}
                         </span>
                         <Button type="button" size="sm" onClick={() => onOpenChange(false)}>
-                            Done
+                            {tc("actions.done")}
                         </Button>
                     </div>
                 </DialogFooter>

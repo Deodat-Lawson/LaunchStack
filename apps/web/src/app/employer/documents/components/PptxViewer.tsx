@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Loader2, AlertTriangle, ExternalLink, Monitor } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface PptxViewerProps {
     url: string;
@@ -27,6 +28,7 @@ function isPublicUrl(url: string): boolean {
  * files and shows a download fallback for locally stored files.
  */
 export function PptxViewer({ url, title }: PptxViewerProps) {
+    const t = useTranslations("viewers.pptx");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -41,13 +43,8 @@ export function PptxViewer({ url, title }: PptxViewerProps) {
                     <Monitor className="h-8 w-8 text-orange-500" />
                 </div>
                 <div>
-                    <p className="text-ink mb-1 text-sm font-medium">
-                        PowerPoint preview requires a publicly accessible URL
-                    </p>
-                    <p className="text-ink-3 mb-4 text-xs">
-                        This file is stored locally and cannot be embedded in the Office Online
-                        viewer. You can download it and open it in PowerPoint or Google Slides.
-                    </p>
+                    <p className="text-ink mb-1 text-sm font-medium">{t("needsPublicUrl")}</p>
+                    <p className="text-ink-3 mb-4 text-xs">{t("needsPublicUrlDetail")}</p>
                     <a
                         href={url}
                         target="_blank"
@@ -55,7 +52,7 @@ export function PptxViewer({ url, title }: PptxViewerProps) {
                         className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                     >
                         <ExternalLink className="h-4 w-4" />
-                        Download presentation
+                        {t("download")}
                     </a>
                 </div>
             </div>
@@ -70,7 +67,7 @@ export function PptxViewer({ url, title }: PptxViewerProps) {
             {loading && !error && (
                 <div className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
                     <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                    <p className="text-ink-3 text-sm font-medium">Loading presentation...</p>
+                    <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
                 </div>
             )}
 
@@ -81,12 +78,8 @@ export function PptxViewer({ url, title }: PptxViewerProps) {
                         <AlertTriangle className="h-7 w-7 text-red-500" />
                     </div>
                     <div>
-                        <p className="text-ink mb-1 text-sm font-medium">
-                            Office Online viewer failed to load
-                        </p>
-                        <p className="text-ink-3 mb-4 text-xs">
-                            The file may not be accessible. Try downloading it instead.
-                        </p>
+                        <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
+                        <p className="text-ink-3 mb-4 text-xs">{t("loadFailedDetail")}</p>
                         <a
                             href={url}
                             target="_blank"
@@ -94,7 +87,7 @@ export function PptxViewer({ url, title }: PptxViewerProps) {
                             className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                         >
                             <ExternalLink className="h-4 w-4" />
-                            Download presentation
+                            {t("download")}
                         </a>
                     </div>
                 </div>

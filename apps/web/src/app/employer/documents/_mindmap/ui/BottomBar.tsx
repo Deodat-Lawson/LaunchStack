@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Copy, Map as MapIcon, Maximize, Minus, Plus, Trash2, X } from "lucide-react";
 
 import {
@@ -40,6 +41,8 @@ import { Minimap } from "./Minimap";
 const selectZoom = (s: EditorState) => s.viewport.zoom;
 
 export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number } }) {
+    const t = useTranslations("mindmap");
+    const tc = useTranslations("common");
     const store = useStore();
     // `doc.pages` is a fresh array on every frame of a drag even though the page
     // list has not changed, so read it off the committed document instead.
@@ -101,7 +104,9 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                                     <DropdownMenuTrigger asChild>
                                         <button
                                             type="button"
-                                            aria-label={`${page.name} options`}
+                                            aria-label={t("bottomBar.pageOptions", {
+                                                name: page.name,
+                                            })}
                                             // ink-2, not ink-3: this sits on
                                             // the active tab's brand-soft
                                             // background, which is lighter
@@ -115,13 +120,17 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                                 </div>
                                 <DropdownMenuContent align="start" side="top">
                                     <DropdownMenuItem onSelect={() => setRenaming(page.id)}>
-                                        Rename
+                                        {tc("actions.rename")}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
-                                        onSelect={() => duplicatePage(store, page.id)}
+                                        onSelect={() =>
+                                            duplicatePage(store, page.id, name =>
+                                                t("pages.copy", { name })
+                                            )
+                                        }
                                     >
                                         <Copy className="size-3.5" />
-                                        Duplicate page
+                                        {t("bottomBar.duplicatePage")}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
@@ -130,7 +139,7 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                                         className="text-danger"
                                     >
                                         <Trash2 className="size-3.5" />
-                                        Delete page
+                                        {t("bottomBar.deletePage")}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -139,9 +148,11 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
 
                     <button
                         type="button"
-                        onClick={() => addPage(store)}
-                        aria-label="Add page"
-                        title="Add page"
+                        onClick={() =>
+                            addPage(store, t("pages.numbered", { number: pages.length + 1 }))
+                        }
+                        aria-label={t("bottomBar.addPage")}
+                        title={t("bottomBar.addPage")}
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 shrink-0 items-center justify-center rounded-md"
                     >
                         <Plus className="size-4" />
@@ -153,7 +164,11 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                         <PopoverTrigger asChild>
                             <button
                                 type="button"
-                                title={showMinimap ? "Hide minimap" : "Show minimap"}
+                                title={
+                                    showMinimap
+                                        ? t("bottomBar.hideMinimap")
+                                        : t("bottomBar.showMinimap")
+                                }
                                 aria-pressed={showMinimap}
                                 className={cn(
                                     "flex size-7 items-center justify-center rounded-md transition-colors",
@@ -176,8 +191,8 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                     <button
                         type="button"
                         onClick={() => fitToScreen(store, canvasSize)}
-                        title="Fit to screen (⌘1)"
-                        aria-label="Fit to screen"
+                        title={t("zoom.fitTip")}
+                        aria-label={t("zoom.fit")}
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md"
                     >
                         <Maximize className="size-4" />
@@ -185,8 +200,8 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                     <button
                         type="button"
                         onClick={() => zoomByStep(store, -1, canvasSize)}
-                        title="Zoom out (− or ⌘-)"
-                        aria-label="Zoom out"
+                        title={t("zoom.outTip")}
+                        aria-label={t("zoom.out")}
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md"
                     >
                         <Minus className="size-4" />
@@ -211,19 +226,19 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                             ))}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={() => setZoom(store, 1, canvasSize)}>
-                                Zoom to 100%
+                                {t("zoom.actual")}
                                 <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
                                     ⌘0
                                 </span>
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => fitToScreen(store, canvasSize)}>
-                                Fit to screen
+                                {t("zoom.fit")}
                                 <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
                                     ⌘1
                                 </span>
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => zoomToSelection(store, canvasSize)}>
-                                Zoom to selection
+                                {t("zoom.selection")}
                                 <span className="text-ink-3 ml-auto pl-6 font-mono text-[11px]">
                                     ⌘2
                                 </span>
@@ -233,8 +248,8 @@ export function BottomBar({ canvasSize }: { canvasSize: { w: number; h: number }
                     <button
                         type="button"
                         onClick={() => zoomByStep(store, 1, canvasSize)}
-                        title="Zoom in (+ or ⌘=)"
-                        aria-label="Zoom in"
+                        title={t("zoom.inTip")}
+                        aria-label={t("zoom.in")}
                         className="text-ink-3 hover:bg-panel-2 hover:text-ink flex size-7 items-center justify-center rounded-md"
                     >
                         <Plus className="size-4" />

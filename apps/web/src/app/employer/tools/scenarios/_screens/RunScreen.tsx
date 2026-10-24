@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Pencil, Trash2, X } from "lucide-react";
+import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,8 +20,7 @@ import { Progress } from "~/components/ui/progress";
 import { Switch } from "~/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
-import { SCENARIO_CAVEAT, SCENARIO_LIMITS, type ScenarioDetail } from "~/lib/scenarios/types";
-import { relativeTime } from "~/lib/tools/format";
+import { SCENARIO_LIMITS, type ScenarioDetail } from "~/lib/scenarios/types";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
@@ -34,7 +34,7 @@ import { ReportTab } from "../_components/ReportTab";
 import { SourcesTab } from "../_components/SourcesTab";
 import { useScenarios } from "../_lib/context";
 import { runPath, type RunTab, type ScenariosScreen } from "../_lib/screens";
-import { isLive, progressValue, progressWords, sizeWords } from "~/lib/scenarios/words";
+import { isLive, progressLabel, progressValue, sizeLabel } from "~/lib/scenarios/words";
 
 type RunScreenProps = { screen: Extract<ScenariosScreen, { kind: "run" }> };
 
@@ -46,6 +46,8 @@ type RunScreenProps = { screen: Extract<ScenariosScreen, { kind: "run" }> };
  * location, so Back and a shared link both land on them.
  */
 export function RunScreen({ screen }: RunScreenProps) {
+    const t = useTranslations("scenarios.run");
+    const tt = useTranslations("scenarios.tool");
     const { navigate } = useToolNav();
     const { list } = useScenarios();
     const [polling, setPolling] = useState(true);
@@ -78,9 +80,9 @@ export function RunScreen({ screen }: RunScreenProps) {
         return (
             <ToolNotFound
                 home="/runs"
-                homeLabel="Scenarios"
-                title="This scenario is not here any more"
-                body="It may have been deleted, or it was not shared with the workspace."
+                homeLabel={tt("title")}
+                title={t("notFoundTitle")}
+                body={t("notFoundBody")}
             />
         );
     }
@@ -114,7 +116,7 @@ export function RunScreen({ screen }: RunScreenProps) {
 
             {res.error && (
                 <InlineError
-                    message={`Could not refresh: ${res.error}`}
+                    message={t("refreshError", { error: res.error })}
                     onRetry={() => void res.reload()}
                 />
             )}
@@ -124,18 +126,18 @@ export function RunScreen({ screen }: RunScreenProps) {
                     role="alert"
                     className="border-danger/40 bg-danger-soft flex flex-col items-start gap-2 rounded-lg border px-4 py-3"
                 >
-                    <div className="text-danger text-sm font-medium">This scenario failed</div>
+                    <div className="text-danger text-sm font-medium">{t("failedTitle")}</div>
                     {run.error && <p className="text-ink-2 text-[13px]">{run.error}</p>}
                     <Button asChild size="sm" variant="outline">
-                        <ToolLink href="/new">Start a new scenario</ToolLink>
+                        <ToolLink href="/new">{t("startNew")}</ToolLink>
                     </Button>
                 </div>
             )}
             {run.status === "cancelled" && (
                 <p className="text-ink-2 text-[13px]">
-                    Cancelled{" "}
-                    {run.round > 0 ? `after round ${run.round}` : "before the first round"}. What
-                    happened up to then is below.
+                    {run.round > 0
+                        ? t("cancelledAfter", { round: run.round })
+                        : t("cancelledBefore")}
                 </p>
             )}
 
@@ -147,13 +149,13 @@ export function RunScreen({ screen }: RunScreenProps) {
                         value="report"
                         className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
                     >
-                        Report
+                        {t("tabs.report")}
                     </TabsTrigger>
                     <TabsTrigger
                         value="feed"
                         className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
                     >
-                        Feed
+                        {t("tabs.feed")}
                         {run.posts.length > 0 && (
                             <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
                                 {run.posts.length}
@@ -164,7 +166,7 @@ export function RunScreen({ screen }: RunScreenProps) {
                         value="people"
                         className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
                     >
-                        People
+                        {t("tabs.people")}
                         {run.people.length > 0 && (
                             <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
                                 {run.people.length}
@@ -175,13 +177,13 @@ export function RunScreen({ screen }: RunScreenProps) {
                         value="ask"
                         className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
                     >
-                        Ask
+                        {t("tabs.ask")}
                     </TabsTrigger>
                     <TabsTrigger
                         value="sources"
                         className="@max-sm:flex-1 @max-sm:px-1.5 flex-none px-3"
                     >
-                        Sources
+                        {t("tabs.sources")}
                         {run.sources.length > 0 && (
                             <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
                                 {run.sources.length}
@@ -233,6 +235,11 @@ function RunHeader({
     onChanged: () => void;
     onReloadList: () => Promise<void>;
 }) {
+    const t = useTranslations("scenarios.run");
+    const tw = useTranslations("scenarios.words");
+    const tc = useTranslations("common");
+    const format = useFormatter();
+    const now = useNow();
     const { navigate } = useToolNav();
     const live = isLive(run.status);
     const [editing, setEditing] = useState(false);
@@ -256,7 +263,7 @@ function RunHeader({
             onChanged();
             void onReloadList();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not rename it");
+            toast.error(e instanceof Error ? e.message : t("renameError"));
         } finally {
             setSaving(false);
         }
@@ -266,12 +273,12 @@ function RunHeader({
         setShared(next);
         try {
             await scenariosApi.patch(run.id, { shared: next });
-            toast(next ? "Shared with the workspace" : "Only you can see it now");
+            toast(next ? t("sharedToast") : t("privateToast"));
             onChanged();
             void onReloadList();
         } catch (e) {
             setShared(!next);
-            toast.error(e instanceof Error ? e.message : "Could not change sharing");
+            toast.error(e instanceof Error ? e.message : t("sharingError"));
         }
     };
 
@@ -281,16 +288,16 @@ function RunHeader({
         try {
             if (which === "cancel") {
                 await scenariosApi.cancel(run.id);
-                toast("Scenario cancelled. Rounds that finished are kept.");
+                toast(t("cancelledToast"));
                 onChanged();
             } else if (which === "delete") {
                 await scenariosApi.remove(run.id);
-                toast("Scenario deleted");
+                toast(t("deletedToast"));
                 navigate("/runs", { replace: true });
             }
             void onReloadList();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not work");
+            toast.error(e instanceof Error ? e.message : t("actionError"));
         } finally {
             setBusy(false);
             setConfirm(null);
@@ -314,7 +321,7 @@ function RunHeader({
                                 value={draft}
                                 onChange={e => setDraft(e.target.value)}
                                 maxLength={120}
-                                aria-label="Title"
+                                aria-label={tc("fields.title")}
                                 className="text-lg"
                                 onKeyDown={e => {
                                     if (e.key === "Escape") setEditing(false);
@@ -324,7 +331,7 @@ function RunHeader({
                                 type="submit"
                                 size="icon"
                                 variant="outline"
-                                aria-label="Save title"
+                                aria-label={t("saveTitle")}
                                 disabled={saving}
                             >
                                 <Check aria-hidden />
@@ -333,7 +340,7 @@ function RunHeader({
                                 type="button"
                                 size="icon"
                                 variant="ghost"
-                                aria-label="Keep the old title"
+                                aria-label={t("keepTitle")}
                                 onClick={() => setEditing(false)}
                             >
                                 <X aria-hidden />
@@ -349,7 +356,7 @@ function RunHeader({
                                     size="icon"
                                     variant="ghost"
                                     className="text-ink-3 mt-0.5 size-8 shrink-0"
-                                    aria-label="Rename"
+                                    aria-label={tc("actions.rename")}
                                     onClick={() => {
                                         setDraft(run.title);
                                         setEditing(true);
@@ -363,11 +370,7 @@ function RunHeader({
                     {/* A title that is the whole situation would repeat it word for word. */}
                     {(run.kind === "post_test" || run.subject !== run.title) && (
                         <SituationText
-                            lead={
-                                run.kind === "post_test"
-                                    ? "The draft tested: "
-                                    : "What happens if: "
-                            }
+                            lead={run.kind === "post_test" ? t("draftTested") : t("whatHappensIf")}
                             text={
                                 run.kind === "post_test"
                                     ? (run.draft?.text ?? run.subject)
@@ -378,15 +381,17 @@ function RunHeader({
                     <div className="text-ink-3 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                         <StatusPill run={run} />
                         <span aria-hidden>·</span>
-                        <span>{sizeWords(run)}</span>
+                        <span>{sizeLabel(tw, run)}</span>
                         <span aria-hidden>·</span>
                         <span>
-                            {run.createdByMe ? "You" : run.createdByName},{" "}
-                            {relativeTime(run.createdAt)}
+                            {t("createdBy", {
+                                name: run.createdByMe ? t("you") : run.createdByName,
+                                when: format.relativeTime(new Date(run.createdAt), now),
+                            })}
                         </span>
                         {run.shared && (
                             <Badge variant="secondary" className="ml-1">
-                                Shared
+                                {t("shared")}
                             </Badge>
                         )}
                     </div>
@@ -403,7 +408,7 @@ function RunHeader({
                                 htmlFor={`scenario-share-${run.id}`}
                                 className="text-ink-2 text-xs font-normal"
                             >
-                                Share with workspace
+                                {t("shareLabel")}
                             </Label>
                         </span>
                         {live && (
@@ -412,7 +417,7 @@ function RunHeader({
                                 variant="outline"
                                 onClick={() => setConfirm("cancel")}
                             >
-                                Cancel run
+                                {t("cancelRun")}
                             </Button>
                         )}
                         <Button
@@ -422,7 +427,7 @@ function RunHeader({
                             onClick={() => setConfirm("delete")}
                         >
                             <Trash2 aria-hidden />
-                            Delete
+                            {tc("actions.delete")}
                         </Button>
                     </div>
                 )}
@@ -431,28 +436,24 @@ function RunHeader({
             {live && (
                 <div className="flex max-w-[640px] flex-col gap-1.5" aria-live="polite">
                     <div className="text-ink-2 flex items-baseline justify-between text-xs">
-                        <span>{progressWords(run)}</span>
+                        <span>{progressLabel(tw, run)}</span>
                         <span className="text-ink-3 tabular-nums">
-                            {run.round} of {run.rounds} rounds done
+                            {t("roundsDone", { round: run.round, rounds: run.rounds })}
                         </span>
                     </div>
                     <Progress value={progressValue(run)} className="h-1.5" />
                 </div>
             )}
 
-            <p className="text-ink-3 text-xs">{SCENARIO_CAVEAT}</p>
+            <p className="text-ink-3 text-xs">{tw("caveat")}</p>
 
             <ConfirmDialog
                 open={confirm !== null}
                 onOpenChange={open => !open && !busy && setConfirm(null)}
-                title={confirm === "cancel" ? "Cancel this scenario?" : "Delete this scenario?"}
-                description={
-                    confirm === "cancel"
-                        ? "It stops after the round in progress. Rounds that finished stay readable; there will be no report."
-                        : "The feed, the people, the report and the interviews go with it. This cannot be undone."
-                }
-                confirmLabel={confirm === "cancel" ? "Cancel run" : "Delete"}
-                cancelLabel={confirm === "cancel" ? "Keep running" : "Keep it"}
+                title={confirm === "cancel" ? t("confirmCancelTitle") : t("confirmDeleteTitle")}
+                description={confirm === "cancel" ? t("confirmCancelBody") : t("confirmDeleteBody")}
+                confirmLabel={confirm === "cancel" ? t("cancelRun") : tc("actions.delete")}
+                cancelLabel={confirm === "cancel" ? t("keepRunning") : t("keepIt")}
                 destructive
                 onConfirm={() => void act()}
             />
@@ -463,6 +464,8 @@ function RunHeader({
 /** While it runs, the creator can drop something into the next round. */
 /** The situation as written; a long one (a plan, its actions, the current cases) opens on request. */
 function SituationText({ lead, text }: { lead: string; text: string }) {
+    const t = useTranslations("scenarios.run");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const long = text.length > 320 || text.split("\n").length > 3;
     return (
@@ -474,7 +477,7 @@ function SituationText({ lead, text }: { lead: string; text: string }) {
                     long && !open ? "line-clamp-3" : "whitespace-pre-line"
                 )}
             >
-                <span className="text-ink-3">{lead}</span>
+                <span className="text-ink-3">{lead} </span>
                 {text}
             </p>
             {long && (
@@ -486,7 +489,7 @@ function SituationText({ lead, text }: { lead: string; text: string }) {
                     aria-expanded={open}
                     onClick={() => setOpen(o => !o)}
                 >
-                    {open ? "Show less" : "Show all of it"}
+                    {open ? tc("actions.showLess") : t("showSituation")}
                 </Button>
             )}
         </div>
@@ -494,6 +497,7 @@ function SituationText({ lead, text }: { lead: string; text: string }) {
 }
 
 function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }) {
+    const t = useTranslations("scenarios.run");
     const [text, setText] = useState("");
     const [adding, setAdding] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -508,7 +512,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
             setText("");
             onAdded();
         } catch (e) {
-            setError(e instanceof Error ? e.message : "Could not add the event");
+            setError(e instanceof Error ? e.message : t("addEventError"));
         } finally {
             setAdding(false);
         }
@@ -517,8 +521,8 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
     return (
         <section className="border-line bg-panel flex flex-col gap-3 rounded-lg border p-4">
             <SectionHeading
-                title="Add an event"
-                aside={closed ? "The last round has started" : "It appears in the next round"}
+                title={t("addEventTitle")}
+                aside={closed ? t("eventsClosed") : t("eventsOpen")}
                 className="mb-0"
             />
             <Textarea
@@ -527,8 +531,8 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
                 rows={2}
                 maxLength={max}
                 disabled={closed || adding}
-                aria-label="What happens"
-                placeholder="A competitor cuts its price in half."
+                aria-label={t("eventLabel")}
+                placeholder={t("eventPlaceholder")}
                 className="text-[13px]"
             />
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -538,7 +542,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
                     disabled={closed || adding || !text.trim()}
                     onClick={() => void add()}
                 >
-                    {adding ? "Adding…" : "Add event"}
+                    {adding ? t("adding") : t("addEvent")}
                 </Button>
                 <span className="text-ink-3 @max-sm:hidden font-mono text-[11px] tabular-nums">
                     {text.length}/{max}
@@ -564,8 +568,8 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
                                 )}
                             >
                                 {i.round === null
-                                    ? "appears in the next round"
-                                    : `round ${i.round}`}
+                                    ? t("injectionPending")
+                                    : t("injectionRound", { round: i.round })}
                             </span>
                         </li>
                     ))}

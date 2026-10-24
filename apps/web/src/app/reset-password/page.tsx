@@ -10,19 +10,21 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Check, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { AuthChrome } from "~/app/_components/AuthChrome";
-import { NETWORK_ERROR, rateLimitMessage } from "~/components/auth/auth-errors";
+import { networkErrorMessage, rateLimitMessage } from "~/components/auth/auth-errors";
 import { PasswordInput } from "~/components/auth/password-input";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { authClient } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 
-const EXPIRED =
-    "This reset link has expired or was already used. Reset links work once, for an hour.";
-
 function ResetPasswordPage() {
+    const t = useTranslations("auth.resetPassword");
+    const tf = useTranslations("auth.form");
+    const te = useTranslations("auth.errors");
+    const tc = useTranslations("common.status");
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
@@ -62,10 +64,10 @@ function ResetPasswordPage() {
             // Thrown fetch: the request never got an answer.
         }
         setIsSubmitting(false);
-        if (status === 0) setError(NETWORK_ERROR);
-        else if (status === 429) setError(rateLimitMessage(null));
+        if (status === 0) setError(networkErrorMessage(te));
+        else if (status === 429) setError(rateLimitMessage(null, te));
         else if (status === 400 && /token/i.test(message ?? "")) setExpired(true);
-        else setError(message ?? EXPIRED);
+        else setError(message ?? t("expired"));
     };
 
     const longEnough = password.length >= 8;
@@ -76,22 +78,29 @@ function ResetPasswordPage() {
             <div className="flex flex-1 items-center justify-center px-6 py-12">
                 <div className="w-full max-w-md">
                     <h1 className="display mb-2 text-[32px] leading-[1.1] tracking-[-0.02em]">
-                        {expired ? "That link has expired." : "Choose a new password."}
+                        {expired ? t("expiredTitle") : t("title")}
                     </h1>
                     {expired ? (
                         <div className="border-line bg-panel mt-6 flex flex-col gap-3 rounded-xl border p-5">
-                            <p className="text-ink-3 m-0 text-[13px] leading-relaxed">{EXPIRED}</p>
+                            <p className="text-ink-3 m-0 text-[13px] leading-relaxed">
+                                {t("expired")}
+                            </p>
                             <Button asChild className="self-start">
-                                <Link href="/signin?view=forgot">Send a new link</Link>
+                                <Link href="/signin?view=forgot">{t("sendNewLink")}</Link>
                             </Button>
                         </div>
                     ) : !token ? (
                         <p className="text-ink-3 mt-4 text-sm leading-relaxed">
-                            This page only works from a reset link. Request one from the{" "}
-                            <Link href="/signin?view=forgot" className="text-brand font-semibold">
-                                sign-in page
-                            </Link>
-                            .
+                            {t.rich("noToken", {
+                                link: chunks => (
+                                    <Link
+                                        href="/signin?view=forgot"
+                                        className="text-brand font-semibold"
+                                    >
+                                        {chunks}
+                                    </Link>
+                                ),
+                            })}
                         </p>
                     ) : (
                         <form
@@ -100,7 +109,7 @@ function ResetPasswordPage() {
                             className="border-line bg-panel mt-6 flex flex-col gap-3.5 rounded-xl border p-5"
                         >
                             <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="new-password">New password</Label>
+                                <Label htmlFor="new-password">{t("newPassword")}</Label>
                                 <PasswordInput
                                     ref={passwordRef}
                                     id="new-password"
@@ -120,7 +129,7 @@ function ResetPasswordPage() {
                                     )}
                                 >
                                     {longEnough && <Check className="size-3" aria-hidden />}
-                                    At least 8 characters
+                                    {tf("passwordLength")}
                                 </p>
                             </div>
                             {error && (
@@ -135,7 +144,7 @@ function ResetPasswordPage() {
                                 className="w-full"
                             >
                                 {isSubmitting && <Loader2 className="animate-spin" aria-hidden />}
-                                {isSubmitting ? "Saving…" : "Set new password"}
+                                {isSubmitting ? tc("saving") : t("submit")}
                             </Button>
                         </form>
                     )}

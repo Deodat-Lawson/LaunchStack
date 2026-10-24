@@ -202,11 +202,22 @@ export interface CompanyDetail extends Omit<CompanyRow, "people"> {
     profiledAt: string | null;
 }
 
+/**
+ * What a to-do item says, as data, so the screen words it in the reader's
+ * language (`growth.prospects.home.todoItems`). `title`, `detail` and the
+ * action label stay English for every other reader of the API.
+ */
+export type TodoCopy =
+    | { key: "review"; count: number; highFit: boolean }
+    | { key: "due"; steps: { name: string; nextAction: string | null }[] }
+    | { key: "stale"; deals: { name: string; days: number }[] };
+
 export interface TodoItem {
     id: string;
     title: string;
     detail: string;
     action: { label: string; href: string };
+    copy?: TodoCopy;
 }
 
 export interface HomeDto {

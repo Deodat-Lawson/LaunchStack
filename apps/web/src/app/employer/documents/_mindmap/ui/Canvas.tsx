@@ -16,7 +16,7 @@ import { RemoteCursors, RemoteSelections } from "./PresenceLayer";
 import { Rulers } from "./Rulers";
 import type { PresencePeer } from "./usePresence";
 import { NodePorts, SelectionOverlay } from "./SelectionOverlay";
-import { CanvasDefs, ShapeView } from "./ShapeView";
+import { CanvasDefs, ShapeView, useCanvasIdScope } from "./ShapeView";
 import { useCanvasInteractions, type CanvasCallbacks } from "./useCanvasInteractions";
 import { useElementSize } from "./useElementSize";
 import styles from "./Canvas.module.css";
@@ -65,6 +65,7 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     const svgRef = useRef<SVGSVGElement | null>(null);
     const wrapRef = useRef<HTMLDivElement | null>(null);
     const size = useElementSize(wrapRef);
+    const idScope = useCanvasIdScope();
 
     const doc = useEditor(selectDoc);
     const selection = useEditor(selectSelection);
@@ -204,12 +205,13 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                 onDoubleClick={interactions.onDoubleClick}
                 onContextMenu={interactions.onContextMenu}
             >
-                <CanvasDefs />
+                <CanvasDefs idScope={idScope} />
                 <BackgroundGrid
                     pattern={doc.settings.showGrid ? page.background.pattern : "plain"}
                     spacing={page.background.spacing}
                     viewport={viewport}
                     size={size}
+                    idScope={idScope}
                 />
 
                 {/* Connectors */}
@@ -254,6 +256,7 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                             }
                             highlighted={highlighted.has(node.id)}
                             zoom={viewport.zoom}
+                            idScope={idScope}
                         />
                     ))}
                 </g>
@@ -384,11 +387,13 @@ const NodeHit = memo(function NodeHit({
     hideText,
     highlighted,
     zoom,
+    idScope,
 }: {
     node: DiagramNode;
     hideText: boolean;
     highlighted: boolean;
     zoom: number;
+    idScope: string;
 }) {
     const def = shapeDef(node.shape);
     const transform = node.rotation
@@ -416,7 +421,7 @@ const NodeHit = memo(function NodeHit({
                     <rect width={node.w} height={node.h} fill="transparent" />
                 </g>
             )}
-            <ShapeView node={node} hideText={hideText} />
+            <ShapeView node={node} hideText={hideText} idScope={idScope} />
             {node.locked && <LockBadge node={node} zoom={zoom} />}
         </g>
     );
@@ -675,11 +680,13 @@ function BackgroundGrid({
     spacing,
     viewport,
     size,
+    idScope,
 }: {
     pattern: "plain" | "grid" | "dots" | "lines";
     spacing: number;
     viewport: { x: number; y: number; zoom: number };
     size: { w: number; h: number };
+    idScope: string;
 }) {
     if (pattern === "plain") return null;
     // Below ~4 screen px a grid becomes visual noise, so it fades out instead
@@ -694,7 +701,7 @@ function BackgroundGrid({
         w: Math.max(size.w, 1) / viewport.zoom,
         h: Math.max(size.h, 1) / viewport.zoom,
     };
-    const id = `lswmm-bg-${pattern}-${step}`;
+    const id = `${idScope}-bg-${pattern}-${step}`;
 
     return (
         <>

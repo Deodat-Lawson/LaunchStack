@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { useContextTarget } from "~/components/context-menu";
@@ -36,13 +37,12 @@ import {
     INVITABLE_BUILTIN_ROLES,
     ROLE_LABELS,
     normalizeRoleSlug,
-    roleLabel,
     type Permission,
 } from "~/lib/authz/permissions";
 import { invalidatePermissions } from "~/lib/use-permissions";
 
-import { errorMessage, peopleApi, type Member, type MemberCounts, type Role } from "./api";
-import { relativeTime } from "./format";
+import { peopleApi, type Member, type MemberCounts, type Role } from "./api";
+import { useTimeFormat } from "./format";
 import {
     ConfirmDialog,
     EmptyState,
@@ -51,6 +51,8 @@ import {
     Panel,
     StatusPill,
     TabIntro,
+    useErrorText,
+    useRoleLabel,
 } from "./ui";
 
 interface MembersTabProps {
@@ -92,16 +94,19 @@ function MemberRow({
     handlers: MemberMenuHandlers;
     children: React.ReactNode;
 }) {
+    const t = useTranslations("settings.people.members");
+    const tm = useTranslations("settings.people.menu");
     const ctxTarget = useContextTarget({
         kind: "member",
         id: String(member.id),
-        label: `Actions for ${member.name || member.email}`,
+        label: t("actionsFor", { name: member.name || member.email }),
         data: member,
         items: () =>
             buildMemberMenuItems(
                 member,
                 { roles, roleEditable, canManage, canTransfer, owner: isOwner(member), busy },
-                handlers
+                handlers,
+                tm
             ),
     });
     return (
@@ -116,6 +121,11 @@ function isOwner(member: Member): boolean {
 }
 
 export function MembersTab({ can }: MembersTabProps) {
+    const t = useTranslations("settings.people.members");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
+    const errorText = useErrorText();
+    const roleName = useRoleLabel();
     const [members, setMembers] = useState<Member[]>([]);
     const [counts, setCounts] = useState<MemberCounts>({ active: 0, pending: 0, suspended: 0 });
     const [roles, setRoles] = useState<RoleOption[]>(FALLBACK_ROLES);
@@ -140,11 +150,11 @@ export function MembersTab({ can }: MembersTabProps) {
             setCounts(membersRes.counts);
             if (rolesRes) setRoles(rolesRes.roles);
         } catch (err) {
-            setError(errorMessage(err, "Could not load the member list."));
+            setError(errorText(err, t("loadFailed")));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [errorText, t]);
 
     useEffect(() => {
         void load();
@@ -174,7 +184,7 @@ export function MembersTab({ can }: MembersTabProps) {
             toast.success(success);
             await load();
         } catch (err) {
-            toast.error(errorMessage(err, "That change didn't go through."));
+            toast.error(errorText(err, t("changeFailed")));
         } finally {
             setBusyId(null);
         }
@@ -183,7 +193,11 @@ export function MembersTab({ can }: MembersTabProps) {
     const changeRole = (member: Member, role: string) => {
         if (role === member.role) return;
         const name = roles.find(r => r.slug === role)?.name;
-        void patch(member, { role }, `${member.name} is now ${roleLabel(role, name)}`);
+        void patch(
+            member,
+            { role },
+            t("nowRole", { name: member.name, role: roleName(role, name) })
+        );
     };
 
     const runPending = async () => {
@@ -193,13 +207,13 @@ export function MembersTab({ can }: MembersTabProps) {
         try {
             if (pending.kind === "remove") {
                 await peopleApi.members.remove(pending.member.id);
-                toast.success(`${pending.member.name} was removed from the workspace`);
+                toast.success(t("removedToast", { name: pending.member.name }));
             } else if (pending.kind === "suspend") {
                 await peopleApi.members.update(pending.member.id, { status: "suspended" });
-                toast.success(`${pending.member.name}'s access is suspended`);
+                toast.success(t("suspendedToast", { name: pending.member.name }));
             } else if (pending.kind === "transfer") {
                 await peopleApi.members.transferOwnership(pending.member.id);
-                toast.success(`${pending.member.name} now owns this workspace`);
+                toast.success(t("transferredToast", { name: pending.member.name }));
                 void invalidatePermissions();
             } else {
                 const res = await peopleApi.members.leave();
@@ -209,7 +223,7 @@ export function MembersTab({ can }: MembersTabProps) {
             setPending(null);
             await load();
         } catch (err) {
-            setPendingError(errorMessage(err, "That didn't go through."));
+            setPendingError(errorText(err, t("pendingFailed")));
         } finally {
             setPendingBusy(false);
         }
@@ -224,31 +238,21 @@ export function MembersTab({ can }: MembersTabProps) {
         if (!pending) return { title: "", body: "", confirmLabel: "", danger: false };
         switch (pending.kind) {
             case "remove":
-                return {
-                    title: `Remove ${pending.member.name}?`,
-                    body: `${pending.member.name} loses access to this workspace immediately. Documents they added stay. You can invite them again later.`,
-                    confirmLabel: "Remove from workspace",
-                    danger: true,
-                };
             case "suspend":
+            case "transfer": {
+                const name = pending.member.name;
                 return {
-                    title: `Suspend ${pending.member.name}'s access?`,
-                    body: `${pending.member.name} stays listed as a member but can't open anything until you reinstate them.`,
-                    confirmLabel: "Suspend access",
+                    title: t(`confirm.${pending.kind}.title`, { name }),
+                    body: t(`confirm.${pending.kind}.body`, { name }),
+                    confirmLabel: t(`confirm.${pending.kind}.confirm`),
                     danger: true,
                 };
-            case "transfer":
-                return {
-                    title: `Transfer ownership to ${pending.member.name}?`,
-                    body: `${pending.member.name} becomes the Owner — billing, ownership, and everything else. You become an Admin. Only the new owner can transfer it back.`,
-                    confirmLabel: "Transfer ownership",
-                    danger: true,
-                };
+            }
             case "leave":
                 return {
-                    title: "Leave this workspace?",
-                    body: "You lose access immediately. Documents you added stay. An admin can invite you back.",
-                    confirmLabel: "Leave workspace",
+                    title: t("confirm.leave.title"),
+                    body: t("confirm.leave.body"),
+                    confirmLabel: t("confirm.leave.confirm"),
                     danger: true,
                 };
         }
@@ -259,15 +263,22 @@ export function MembersTab({ can }: MembersTabProps) {
     return (
         <div>
             <TabIntro
-                title="Members"
-                description="Everyone in the workspace, with the role that decides what they can do. Approve people who joined with a link, change roles, or suspend access without removing anyone."
+                title={t("intro.title")}
+                description={t("intro.description")}
                 actions={
-                    <div className="flex flex-wrap items-center gap-1.5" aria-label="Member counts">
-                        <Badge variant="success">{counts.active} active</Badge>
-                        <Badge variant={counts.pending > 0 ? "warn" : "secondary"}>
-                            {counts.pending} pending
+                    <div
+                        className="flex flex-wrap items-center gap-1.5"
+                        aria-label={t("counts.label")}
+                    >
+                        <Badge variant="success">
+                            {t("counts.active", { count: counts.active })}
                         </Badge>
-                        <Badge variant="secondary">{counts.suspended} suspended</Badge>
+                        <Badge variant={counts.pending > 0 ? "warn" : "secondary"}>
+                            {t("counts.pending", { count: counts.pending })}
+                        </Badge>
+                        <Badge variant="secondary">
+                            {t("counts.suspended", { count: counts.suspended })}
+                        </Badge>
                     </div>
                 }
             />
@@ -280,24 +291,21 @@ export function MembersTab({ can }: MembersTabProps) {
 
             <Panel>
                 {loading ? (
-                    <LoadingNote label="Loading members…" />
+                    <LoadingNote label={t("loading")} />
                 ) : members.length === 0 ? (
-                    <EmptyState
-                        title="No members yet"
-                        body="Invite someone from the Invitations tab, or share a join link."
-                    />
+                    <EmptyState title={t("empty.title")} body={t("empty.body")} />
                 ) : (
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-panel-2/50">
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Role</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Groups</TableHead>
-                                    <TableHead>Last active</TableHead>
+                                    <TableHead>{tc("fields.name")}</TableHead>
+                                    <TableHead>{tc("fields.role")}</TableHead>
+                                    <TableHead>{tc("fields.status")}</TableHead>
+                                    <TableHead>{t("columns.groups")}</TableHead>
+                                    <TableHead>{t("columns.lastActive")}</TableHead>
                                     <TableHead className="w-12 text-right">
-                                        <span className="sr-only">Actions</span>
+                                        <span className="sr-only">{t("columns.actions")}</span>
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -319,20 +327,20 @@ export function MembersTab({ can }: MembersTabProps) {
                                                 onChangeRole: role => changeRole(member, role),
                                                 onCopyEmail: () => {
                                                     void copyText(member.email).then(ok => {
-                                                        if (ok) toast.success("Email copied");
+                                                        if (ok) toast.success(t("emailCopied"));
                                                     });
                                                 },
                                                 onApprove: () =>
                                                     void patch(
                                                         member,
                                                         { status: "active" },
-                                                        `${member.name} can now open the workspace`
+                                                        t("approvedToast", { name: member.name })
                                                     ),
                                                 onReinstate: () =>
                                                     void patch(
                                                         member,
                                                         { status: "active" },
-                                                        `${member.name}'s access is back`
+                                                        t("reinstatedToast", { name: member.name })
                                                     ),
                                                 onSuspend: () =>
                                                     setPending({ kind: "suspend", member }),
@@ -368,7 +376,9 @@ export function MembersTab({ can }: MembersTabProps) {
                                                                 </span>
                                                             )}
                                                             {member.isSelf && (
-                                                                <Badge variant="outline">You</Badge>
+                                                                <Badge variant="outline">
+                                                                    {t("you")}
+                                                                </Badge>
                                                             )}
                                                         </span>
                                                         <span className="text-ink-3 truncate text-xs">
@@ -391,7 +401,9 @@ export function MembersTab({ can }: MembersTabProps) {
                                                         <SelectTrigger
                                                             size="sm"
                                                             className="w-[160px]"
-                                                            aria-label={`Change ${member.name}'s role`}
+                                                            aria-label={t("changeRoleFor", {
+                                                                name: member.name,
+                                                            })}
                                                         >
                                                             <SelectValue />
                                                         </SelectTrigger>
@@ -402,14 +414,14 @@ export function MembersTab({ can }: MembersTabProps) {
                                                                     value={r.slug}
                                                                     disabled={!r.assignable}
                                                                 >
-                                                                    {r.name}
+                                                                    {roleName(r.slug, r.name)}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
                                                     </Select>
                                                 ) : (
                                                     <span className="text-ink-2 text-sm">
-                                                        {member.roleName}
+                                                        {roleName(member.role, member.roleName)}
                                                     </span>
                                                 )}
                                             </TableCell>
@@ -430,7 +442,7 @@ export function MembersTab({ can }: MembersTabProps) {
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-ink-3 whitespace-nowrap text-sm">
-                                                {relativeTime(member.lastActiveAt)}
+                                                {time.relative(member.lastActiveAt)}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 {!member.isSelf && (canManage || canTransfer) && (
@@ -443,14 +455,18 @@ export function MembersTab({ can }: MembersTabProps) {
                                                             void patch(
                                                                 member,
                                                                 { status: "active" },
-                                                                `${member.name} can now open the workspace`
+                                                                t("approvedToast", {
+                                                                    name: member.name,
+                                                                })
                                                             )
                                                         }
                                                         onReinstate={() =>
                                                             void patch(
                                                                 member,
                                                                 { status: "active" },
-                                                                `${member.name}'s access is back`
+                                                                t("reinstatedToast", {
+                                                                    name: member.name,
+                                                                })
                                                             )
                                                         }
                                                         onSuspend={() =>
@@ -476,22 +492,18 @@ export function MembersTab({ can }: MembersTabProps) {
 
             {self && !isOwner(self) && (
                 <div className="mt-4 flex items-center justify-between gap-3">
-                    <p className="text-ink-3 m-0 text-[12.5px]">
-                        Leaving removes your access to this workspace. Documents you added stay.
-                    </p>
+                    <p className="text-ink-3 m-0 text-[12.5px]">{t("leaveNote")}</p>
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setPending({ kind: "leave" })}
                     >
-                        Leave workspace
+                        {t("confirm.leave.confirm")}
                     </Button>
                 </div>
             )}
             {self && isOwner(self) && members.length > 1 && (
-                <p className="text-ink-3 mt-4 text-[12.5px]">
-                    As the owner you can&apos;t leave. Transfer ownership to someone first.
-                </p>
+                <p className="text-ink-3 mt-4 text-[12.5px]">{t("ownerCantLeave")}</p>
             )}
 
             <ConfirmDialog
@@ -533,33 +545,35 @@ function RowActions({
     onRemove: () => void;
     onTransfer: () => void;
 }) {
+    const t = useTranslations("settings.people.members");
+    const tm = useTranslations("settings.people.menu");
     const owner = isOwner(member);
     const items: React.ReactNode[] = [];
     if (canManage && member.status === "pending") {
         items.push(
             <DropdownMenuItem key="approve" onSelect={onApprove}>
-                Approve
+                {tm("approve")}
             </DropdownMenuItem>
         );
     }
     if (canManage && member.status === "active" && !owner) {
         items.push(
             <DropdownMenuItem key="suspend" onSelect={onSuspend}>
-                Suspend access
+                {t("confirm.suspend.confirm")}
             </DropdownMenuItem>
         );
     }
     if (canManage && member.status === "suspended") {
         items.push(
             <DropdownMenuItem key="reinstate" onSelect={onReinstate}>
-                Reinstate access
+                {tm("reinstate")}
             </DropdownMenuItem>
         );
     }
     if (canTransfer && member.status === "active" && !owner) {
         items.push(
             <DropdownMenuItem key="transfer" onSelect={onTransfer}>
-                Transfer ownership
+                {t("confirm.transfer.confirm")}
             </DropdownMenuItem>
         );
     }
@@ -571,7 +585,7 @@ function RowActions({
                 onSelect={onRemove}
                 className="text-danger focus:text-danger"
             >
-                Remove from workspace
+                {t("confirm.remove.confirm")}
             </DropdownMenuItem>
         );
     }
@@ -585,7 +599,7 @@ function RowActions({
                     size="icon"
                     className="h-8 w-8"
                     disabled={busy}
-                    aria-label={`Actions for ${member.name}`}
+                    aria-label={t("actionsFor", { name: member.name })}
                 >
                     <MoreHorizontal />
                 </Button>

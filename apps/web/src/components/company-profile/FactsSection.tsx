@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -10,7 +11,6 @@ import { Textarea } from "~/components/ui/textarea";
 import type { CiteEvidence } from "~/components/tools/Cite";
 import { SectionHeading } from "~/components/tools/PageHeader";
 import type { ProfileEntryDto, ProfileFactDto, ProfileFactPatch } from "~/lib/company-profile/dto";
-import { plural } from "~/lib/tools/format";
 
 import { ProfileRow } from "./ProfileRow";
 import { factPathFor } from "./words";
@@ -30,16 +30,19 @@ export function FactsSection({
     canEdit: boolean;
     onSave: SaveFact;
 }) {
+    const t = useTranslations("companyProfile.facts");
     const cited = facts.some(f => f.cites.length > 0);
     if (facts.length === 0 && !canEdit) return null;
     return (
-        <section aria-label="Facts">
+        <section aria-label={t("title")}>
             <SectionHeading
-                title="Facts"
+                title={t("title")}
                 aside={
                     facts.length === 0
-                        ? "Nothing proven yet"
-                        : `${plural(facts.length, "fact")}${cited ? " · hover a number to see the source" : ""}`
+                        ? t("nothingProven")
+                        : cited
+                          ? t("countCited", { count: facts.length })
+                          : t("count", { count: facts.length })
                 }
             />
             <div className="border-line bg-panel overflow-hidden rounded-lg border">
@@ -51,7 +54,7 @@ export function FactsSection({
                         cites={fact.cites}
                         evidence={evidence}
                         edited={fact.source === "manual"}
-                        clearHint="Clear the text to remove the fact."
+                        clearHint={t("clearFact")}
                         onSave={canEdit ? value => onSave({ path: fact.path, value }) : undefined}
                         onReset={
                             canEdit && fact.source === "manual"
@@ -67,6 +70,8 @@ export function FactsSection({
 }
 
 function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
+    const t = useTranslations("companyProfile.facts");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const [label, setLabel] = useState("");
     const [value, setValue] = useState("");
@@ -88,7 +93,7 @@ function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
                 className="text-ink-2 border-line-2 h-auto w-full justify-start gap-2 rounded-none border-t px-4 py-2.5 text-left text-[13px] font-normal first:border-t-0"
             >
                 <Plus className="size-3.5" />
-                Add a fact the documents do not say
+                {t("addOpen")}
             </Button>
         );
     }
@@ -96,7 +101,7 @@ function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
     return (
         <form
             className="border-line-2 grid gap-2 border-t px-4 py-3 first:border-t-0"
-            aria-label="Add a fact"
+            aria-label={t("addLabel")}
             onSubmit={e => {
                 e.preventDefault();
                 const name = label.trim();
@@ -112,20 +117,20 @@ function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
             <div className="@max-md:grid-cols-1 grid grid-cols-[180px_minmax(0,1fr)] gap-1.5">
                 <div className="grid content-start gap-1">
                     <Label htmlFor={`${id}-label`} className="text-xs">
-                        Label
+                        {t("label")}
                     </Label>
                     <Input
                         id={`${id}-label`}
                         value={label}
                         onChange={e => setLabel(e.target.value)}
-                        placeholder="Annual budget"
+                        placeholder={t("labelPlaceholder")}
                         maxLength={120}
                         autoFocus
                     />
                 </div>
                 <div className="grid gap-1">
                     <Label htmlFor={`${id}-value`} className="text-xs">
-                        Value
+                        {t("value")}
                     </Label>
                     <Textarea
                         id={`${id}-value`}
@@ -138,17 +143,17 @@ function AddFact({ taken, onSave }: { taken: string[]; onSave: SaveFact }) {
                             }
                         }}
                         rows={2}
-                        placeholder="$1.2m in FY2025, 60% from foundations"
+                        placeholder={t("valuePlaceholder")}
                         className="text-[13px]"
                     />
                 </div>
             </div>
             <div className="flex gap-2">
                 <Button size="sm" type="submit" disabled={busy || !label.trim() || !value.trim()}>
-                    Add fact
+                    {t("add")}
                 </Button>
                 <Button size="sm" variant="ghost" type="button" onClick={close} disabled={busy}>
-                    Cancel
+                    {tc("actions.cancel")}
                 </Button>
             </div>
         </form>
@@ -169,6 +174,7 @@ export function EntriesSection({
     canEdit: boolean;
     onSave: SaveFact;
 }) {
+    const t = useTranslations("companyProfile.facts");
     if (entries.length === 0) return null;
     return (
         <section aria-label={title}>
@@ -185,7 +191,7 @@ export function EntriesSection({
                             evidence={evidence}
                             edited={entry.source === "manual"}
                             prominent
-                            clearHint="Clear the text to remove it."
+                            clearHint={t("clearEntry")}
                             onSave={
                                 canEdit && detailPath
                                     ? value => onSave({ path: detailPath, value })

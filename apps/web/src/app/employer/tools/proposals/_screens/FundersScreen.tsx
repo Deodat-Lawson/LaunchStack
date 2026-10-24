@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,21 +32,25 @@ import { FitMeter } from "~/components/tools/FitMeter";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { plural } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { NewApplicationDialog } from "../_components/NewApplicationDialog";
 import { StatusWord } from "../_components/Pills";
 import { useProposals } from "../_lib/context";
-import { amountWords, closeWords, FUNDER_STATUS_LABEL } from "../_lib/words";
+import { amountWords, closeWords } from "../_lib/words";
 import { proposalsApi, type ApplicantType, type FunderRow, type FunderStatus } from "../api";
 
-type View = "all" | "strong" | "saved" | "dismissed";
+const VIEWS = ["all", "strong", "saved", "dismissed"] as const;
+type View = (typeof VIEWS)[number];
 
-const SOURCE_WORD: Record<FunderRow["source"], string> = {
-    grants_gov: "Grants.gov",
-    web: "Web",
-    manual: "Added by hand",
-};
+/** Labels are `proposals.funders.applicantType.<value>`; "auto" plans from the profile. */
+const APPLICANT_OPTIONS = [
+    "auto",
+    "nonprofit",
+    "small_business",
+    "for_profit",
+    "individual",
+    "any",
+] as const satisfies readonly (ApplicantType | "auto")[];
 
 const STATUS_TONE: Record<FunderStatus, "quiet" | "info" | "won" | "active"> = {
     candidate: "quiet",
@@ -65,8 +70,12 @@ function FunderItem({
     onApply: () => void;
     href: (path: string) => string;
 }) {
+    const t = useTranslations("proposals.funders");
+    const tWords = useTranslations("proposals.words");
+    const tStatus = useTranslations("proposals.funderStatus");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
-    const amount = amountWords(f.amountMin, f.amountMax);
+    const amount = amountWords(tWords, f.amountMin, f.amountMax);
     return (
         <div className="border-line-2 border-t first:border-t-0">
             <div className="@max-lg:grid-cols-[20px_minmax(0,1fr)_110px_auto] @max-md:grid-cols-[20px_minmax(0,1fr)_auto] grid grid-cols-[20px_minmax(0,1fr)_120px_110px_auto] items-center gap-3 px-3 py-2.5">
@@ -74,7 +83,7 @@ function FunderItem({
                     type="button"
                     onClick={() => setOpen(o => !o)}
                     className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm outline-none focus-visible:ring-2"
-                    aria-label={open ? "Hide details" : "Show details"}
+                    aria-label={open ? t("hideDetails") : t("showDetails")}
                     aria-expanded={open}
                 >
                     {open ? (
@@ -86,7 +95,7 @@ function FunderItem({
                 <span className="min-w-0">
                     <span className="text-ink block truncate text-sm font-medium">{f.title}</span>
                     <span className="text-ink-3 block truncate text-xs">
-                        {f.funder} · {SOURCE_WORD[f.source]}
+                        {f.funder} · {t(`source.${f.source}`)}
                         {amount ? ` · ${amount}` : ""}
                     </span>
                 </span>
@@ -98,7 +107,7 @@ function FunderItem({
                             : "text-ink-3"
                     )}
                 >
-                    {closeWords(f.closesOn, f.daysLeft)}
+                    {closeWords(tWords, f.closesOn, f.daysLeft)}
                 </span>
                 <span className="@max-md:hidden">
                     <FitMeter value={f.fit} threshold={70} />
@@ -107,14 +116,14 @@ function FunderItem({
                     {f.status === "applied" && f.applicationId ? (
                         <Button size="sm" variant="outline" asChild>
                             <ToolLink href={href(`/write/${f.applicationId}`)}>
-                                Open application
+                                {t("openApplication")}
                             </ToolLink>
                         </Button>
                     ) : (
                         <>
                             {f.status !== "saved" && (
                                 <Button size="sm" variant="ghost" onClick={() => onStatus("saved")}>
-                                    Save
+                                    {tc("actions.save")}
                                 </Button>
                             )}
                             {f.status !== "dismissed" ? (
@@ -123,7 +132,7 @@ function FunderItem({
                                     variant="ghost"
                                     onClick={() => onStatus("dismissed")}
                                 >
-                                    Dismiss
+                                    {tc("actions.dismiss")}
                                 </Button>
                             ) : (
                                 <Button
@@ -131,11 +140,11 @@ function FunderItem({
                                     variant="ghost"
                                     onClick={() => onStatus("candidate")}
                                 >
-                                    Restore
+                                    {tc("actions.restore")}
                                 </Button>
                             )}
                             <Button size="sm" variant="outline" onClick={onApply}>
-                                Apply
+                                {t("apply")}
                             </Button>
                         </>
                     )}
@@ -146,7 +155,7 @@ function FunderItem({
                     <div className="grid gap-2">
                         {f.why.length > 0 && (
                             <div>
-                                <div className="text-ink-3 mb-1 text-xs">Why it fits</div>
+                                <div className="text-ink-3 mb-1 text-xs">{t("whyFits")}</div>
                                 <ul className="list-disc space-y-0.5 pl-4">
                                     {f.why.map(w => (
                                         <li key={w}>{w}</li>
@@ -156,7 +165,7 @@ function FunderItem({
                         )}
                         {f.concerns.length > 0 && (
                             <div>
-                                <div className="text-ink-3 mb-1 text-xs">Concerns</div>
+                                <div className="text-ink-3 mb-1 text-xs">{t("concerns")}</div>
                                 <ul className="list-disc space-y-0.5 pl-4">
                                     {f.concerns.map(c => (
                                         <li key={c}>{c}</li>
@@ -165,21 +174,19 @@ function FunderItem({
                             </div>
                         )}
                         {f.why.length === 0 && f.concerns.length === 0 && (
-                            <p className="text-ink-3 text-xs">
-                                Not scored: build your profile and search again to see why it fits.
-                            </p>
+                            <p className="text-ink-3 text-xs">{t("notScored")}</p>
                         )}
                     </div>
                     <div className="grid content-start gap-2">
                         {f.summary && <p className="leading-relaxed">{f.summary}</p>}
                         {f.eligibility && (
                             <p className="text-ink-3 text-xs leading-relaxed">
-                                Eligibility: {f.eligibility}
+                                {t("eligibility", { text: f.eligibility })}
                             </p>
                         )}
                         <div className="flex items-center gap-3">
                             <StatusWord tone={STATUS_TONE[f.status]}>
-                                {FUNDER_STATUS_LABEL[f.status]}
+                                {tStatus(f.status)}
                             </StatusWord>
                             {f.url && (
                                 <a
@@ -188,7 +195,7 @@ function FunderItem({
                                     rel="noreferrer"
                                     className="text-brand-ink inline-flex items-center gap-1 text-xs hover:underline"
                                 >
-                                    Open the call
+                                    {t("openCall")}
                                     <ExternalLink className="size-3" />
                                 </a>
                             )}
@@ -209,6 +216,9 @@ function AddFunderDialog({
     onOpenChange: (open: boolean) => void;
     onAdded: () => void;
 }) {
+    const t = useTranslations("proposals.funders.add");
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const [title, setTitle] = useState("");
     const [funder, setFunder] = useState("");
     const [url, setUrl] = useState("");
@@ -226,7 +236,7 @@ function AddFunderDialog({
                 closesOn: closesOn || null,
                 amountMax: amountMax ? Number(amountMax) : null,
             });
-            toast.success("Funder saved");
+            toast.success(t("saved"));
             onAdded();
             onOpenChange(false);
             setTitle("");
@@ -235,7 +245,7 @@ function AddFunderDialog({
             setClosesOn("");
             setAmountMax("");
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not add the funder");
+            toast.error(e instanceof Error ? e.message : t("failed"));
         } finally {
             setBusy(false);
         }
@@ -244,10 +254,8 @@ function AddFunderDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Add a funder</DialogTitle>
-                    <DialogDescription>
-                        A call you heard about elsewhere. It is saved straight away.
-                    </DialogDescription>
+                    <DialogTitle>{t("title")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -258,7 +266,7 @@ function AddFunderDialog({
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="funder-title" className="text-xs">
-                            Programme or call
+                            {t("programme")}
                         </Label>
                         <Input
                             id="funder-title"
@@ -269,7 +277,7 @@ function AddFunderDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="funder-name" className="text-xs">
-                            Funder
+                            {tp("funder")}
                         </Label>
                         <Input
                             id="funder-name"
@@ -279,7 +287,7 @@ function AddFunderDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="funder-url" className="text-xs">
-                            Link
+                            {t("link")}
                         </Label>
                         <Input
                             id="funder-url"
@@ -292,7 +300,7 @@ function AddFunderDialog({
                     <div className="grid grid-cols-2 gap-3">
                         <div className="grid gap-1.5">
                             <Label htmlFor="funder-closes" className="text-xs">
-                                Closes
+                                {t("closes")}
                             </Label>
                             <Input
                                 id="funder-closes"
@@ -303,7 +311,7 @@ function AddFunderDialog({
                         </div>
                         <div className="grid gap-1.5">
                             <Label htmlFor="funder-amount" className="text-xs">
-                                Award up to (USD)
+                                {t("awardUpTo")}
                             </Label>
                             <Input
                                 id="funder-amount"
@@ -320,10 +328,10 @@ function AddFunderDialog({
                             onClick={() => onOpenChange(false)}
                             disabled={busy}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={!valid}>
-                            Save funder
+                            {t("submit")}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -339,6 +347,8 @@ function AddFunderDialog({
  * from here.
  */
 export function FundersScreen() {
+    const t = useTranslations("proposals.funders");
+    const tp = useTranslations("proposals.common");
     const { href, trackRun, finishedTick } = useProposals();
     const res = useResource("proposals:funders", () => proposalsApi.funders("all"));
     const reload = res.reload;
@@ -394,7 +404,7 @@ export function FundersScreen() {
             });
             trackRun(run);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not start the search");
+            toast.error(e instanceof Error ? e.message : t("searchFailed"));
         } finally {
             setStarting(false);
         }
@@ -408,24 +418,26 @@ export function FundersScreen() {
                 funders: current.funders.map(x => (x.id === funder.id ? funder : x)),
             }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not update the funder");
+            toast.error(e instanceof Error ? e.message : t("updateFailed"));
         }
     };
 
     const sources = res.data?.sources;
     const sub = sources
-        ? `Searches ${sources.grantsGov ? "Grants.gov" : "no federal source"}${sources.web ? " and the web" : " · web search needs an EXA or SERPER key"}`
+        ? sources.grantsGov
+            ? t(sources.web ? "subGrantsAndWeb" : "subGrantsNoWeb")
+            : t(sources.web ? "subWebOnly" : "subNone")
         : undefined;
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
             <PageHeader
-                title="Funders that"
-                accent="fit"
+                title={t("title")}
+                accent={t("accent")}
                 sub={sub}
                 actions={
                     <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                        Add by hand
+                        {t("addByHand")}
                     </Button>
                 }
             />
@@ -440,42 +452,41 @@ export function FundersScreen() {
             >
                 <div className="grid gap-1.5">
                     <Label htmlFor="funders-keywords" className="text-ink-3 text-xs font-normal">
-                        Focus — leave empty to plan from your profile
+                        {t("focusLabel")}
                     </Label>
                     <Input
                         id="funders-keywords"
                         value={keywords}
                         onChange={e => setKeywords(e.target.value)}
-                        placeholder="youth literacy, after-school"
+                        placeholder={t("focusPlaceholder")}
                     />
                 </div>
                 <div className="grid gap-1.5">
                     <Label htmlFor="funders-geo" className="text-ink-3 text-xs font-normal">
-                        Where
+                        {t("where")}
                     </Label>
                     <Input
                         id="funders-geo"
                         value={geography}
                         onChange={e => setGeography(e.target.value)}
-                        placeholder="Oregon"
+                        placeholder={t("wherePlaceholder")}
                     />
                 </div>
                 <div className="grid gap-1.5">
-                    <Label className="text-ink-3 text-xs font-normal">Applicant</Label>
+                    <Label className="text-ink-3 text-xs font-normal">{t("applicant")}</Label>
                     <Select
                         value={applicantType}
                         onValueChange={v => setApplicantType(v as ApplicantType | "auto")}
                     >
-                        <SelectTrigger aria-label="Applicant type">
+                        <SelectTrigger aria-label={t("applicantAria")}>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="auto">From profile</SelectItem>
-                            <SelectItem value="nonprofit">Nonprofit</SelectItem>
-                            <SelectItem value="small_business">Small business</SelectItem>
-                            <SelectItem value="for_profit">Company</SelectItem>
-                            <SelectItem value="individual">Individual</SelectItem>
-                            <SelectItem value="any">Any</SelectItem>
+                            {APPLICANT_OPTIONS.map(option => (
+                                <SelectItem key={option} value={option}>
+                                    {t(`applicantType.${option}`)}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -485,19 +496,19 @@ export function FundersScreen() {
                             checked={includeWeb}
                             onCheckedChange={setIncludeWeb}
                             disabled={sources ? !sources.web : false}
-                            aria-label="Include the web"
+                            aria-label={t("includeWeb")}
                         />
-                        Web
+                        {t("web")}
                     </label>
                     <Button type="submit" size="sm" disabled={starting}>
-                        Find funders
+                        {tp("findFunders")}
                     </Button>
                 </div>
             </form>
 
             <section>
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-                    <SectionHeading title="Funders" className="mb-0" />
+                    <SectionHeading title={t("heading")} className="mb-0" />
                     <ToggleGroup
                         type="single"
                         value={view}
@@ -505,30 +516,23 @@ export function FundersScreen() {
                         size="sm"
                         variant="outline"
                     >
-                        <ToggleGroupItem value="all">All · {counts.all}</ToggleGroupItem>
-                        <ToggleGroupItem value="strong">
-                            Strong fit · {counts.strong}
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="saved">Saved · {counts.saved}</ToggleGroupItem>
-                        <ToggleGroupItem value="dismissed">
-                            Dismissed · {counts.dismissed}
-                        </ToggleGroupItem>
+                        {VIEWS.map(v => (
+                            <ToggleGroupItem key={v} value={v}>
+                                {t(`views.${v}`, { count: counts[v] })}
+                            </ToggleGroupItem>
+                        ))}
                     </ToggleGroup>
                 </div>
                 {res.loading ? (
                     <SkeletonRows rows={5} height={52} />
                 ) : shown.length === 0 ? (
                     <EmptyState
-                        title={funders.length === 0 ? "No funders yet" : "Nothing in this view"}
-                        body={
-                            funders.length === 0
-                                ? "Run a search: every open call that matches comes back with why it fits and what to worry about."
-                                : "Change the view, or search again with other words."
-                        }
+                        title={funders.length === 0 ? t("emptyTitle") : tp("nothingInView")}
+                        body={funders.length === 0 ? t("emptyBody") : t("emptyViewBody")}
                         action={
                             funders.length === 0 ? (
                                 <Button size="sm" onClick={() => void find()} disabled={starting}>
-                                    Find funders
+                                    {tp("findFunders")}
                                 </Button>
                             ) : undefined
                         }
@@ -548,21 +552,22 @@ export function FundersScreen() {
                 )}
                 {!res.loading && shown.length > 0 && (
                     <p className="text-ink-3 mt-2 text-xs">
-                        {plural(shown.length, "funder")} · fit above 70 is a strong match for your
-                        profile
+                        {t("footer", { count: shown.length })}
                     </p>
                 )}
             </section>
 
             <p className="text-ink-3 max-w-[70ch] text-[13px]">
-                Raising equity instead of grants?{" "}
-                <ToolLink
-                    href="/employer/documents?feature=investors"
-                    className="text-brand-ink hover:underline"
-                >
-                    Investor relations
-                </ToolLink>{" "}
-                finds the venture funds raising now and drafts the pitch from the same sources.
+                {t.rich("equity", {
+                    link: chunks => (
+                        <ToolLink
+                            href="/employer/documents?feature=investors"
+                            className="text-brand-ink hover:underline"
+                        >
+                            {chunks}
+                        </ToolLink>
+                    ),
+                })}
             </p>
 
             <AddFunderDialog

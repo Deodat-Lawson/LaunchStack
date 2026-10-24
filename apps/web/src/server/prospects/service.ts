@@ -276,6 +276,7 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
                 .map(r => r.name)
                 .join(", "),
             action: { label: "Review", href: "/companies?view=new" },
+            copy: { key: "review", count: toReview.length, highFit: freshHigh.length > 0 },
         });
 
     const endOfToday = new Date();
@@ -294,6 +295,13 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
                 .map(i => `${i.org.name}: ${i.relationship.nextAction ?? "follow up"}`)
                 .join(" · "),
             action: { label: "Open deals", href: "/deals" },
+            copy: {
+                key: "due",
+                steps: due.map(i => ({
+                    name: i.org.name,
+                    nextAction: i.relationship.nextAction ?? null,
+                })),
+            },
         });
 
     const stale = live.filter(r => r.staleDays !== null);
@@ -303,6 +311,10 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
             title: `${stale.length} ${stale.length === 1 ? "deal has" : "deals have"} gone quiet`,
             detail: stale.map(r => `${r.name} for ${r.staleDays} days`).join(" · "),
             action: { label: "Follow up", href: "/deals" },
+            copy: {
+                key: "stale",
+                deals: stale.map(r => ({ name: r.name, days: r.staleDays ?? 0 })),
+            },
         });
 
     const funnelStages: SalesStage[] = [

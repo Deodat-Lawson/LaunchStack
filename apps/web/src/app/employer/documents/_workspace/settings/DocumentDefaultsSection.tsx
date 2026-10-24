@@ -11,6 +11,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Card, Section } from "~/components/layout/page-shell";
 import { getSetting, type SettingDefinition } from "~/lib/settings/registry";
@@ -31,6 +32,7 @@ interface Bootstrap {
 const PROCESSING_DEFINITION = getSetting("documents.defaultProcessingMethod")!;
 
 export function DocumentDefaultsSection(_: SettingsSectionProps) {
+    const t = useTranslations("settings.documents");
     const [bootstrap, setBootstrap] = useState<Bootstrap | null>(null);
     // The narrowed options matter only to someone who may pick one, and the
     // bootstrap is refused to everyone else; their read-only rows keep the
@@ -78,34 +80,23 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
 
     return (
         <>
-            <Section
-                title="Storage"
-                description="Where the bytes of a new upload go. Existing documents stay where they are."
-            >
+            <Section title={t("storage.title")} description={t("storage.description")}>
                 <Card>
-                    {s3 && (
-                        <StatusNote tone="muted">
-                            This server stores uploads in S3; the preference below is ignored while
-                            that is configured.
-                        </StatusNote>
-                    )}
+                    {s3 && <StatusNote tone="muted">{t("storage.s3Note")}</StatusNote>}
                     <SettingRow
                         settingKey="documents.uploadStorage"
                         disabledReason={
                             s3
-                                ? "S3 is configured on the server."
+                                ? t("storage.s3Reason")
                                 : bootstrap && !bootstrap.isUploadThingConfigured
-                                  ? "UPLOADTHING_TOKEN is not set on the server, so only the built-in storage is available."
+                                  ? t("storage.noUploadThing")
                                   : null
                         }
                     />
                 </Card>
             </Section>
 
-            <Section
-                title="Processing and destination"
-                description="Pre-filled in the upload dialog; the person uploading can still change either per batch. Folders may override the processing method for what lands in them."
-            >
+            <Section title={t("processing.title")} description={t("processing.description")}>
                 <Card>
                     <SettingRow
                         settingKey="documents.defaultProcessingMethod"
@@ -114,19 +105,23 @@ export function DocumentDefaultsSection(_: SettingsSectionProps) {
                     <SettingRow settingKey="documents.defaultFolder">
                         {bootstrap && bootstrap.categories.length > 0 && (
                             <div className="text-ink-3 mt-1.5 text-[11.5px]">
-                                Existing folders:{" "}
-                                {bootstrap.categories
-                                    .slice(0, 8)
-                                    .map(c => c.name)
-                                    .join(", ")}
-                                {bootstrap.categories.length > 8 ? ", …" : ""}
+                                {t("processing.existingFolders", {
+                                    list:
+                                        bootstrap.categories
+                                            .slice(0, 8)
+                                            .map(c => c.name)
+                                            .join(t("listSeparator")) +
+                                        (bootstrap.categories.length > 8
+                                            ? `${t("listSeparator")}…`
+                                            : ""),
+                                })}
                             </div>
                         )}
                     </SettingRow>
                 </Card>
             </Section>
 
-            <Section title="Creating" description="What the Create menu opens on.">
+            <Section title={t("creating.title")} description={t("creating.description")}>
                 <Card>
                     <SettingRow settingKey="documents.createNativeGoogleDoc" />
                 </Card>

@@ -45,7 +45,10 @@ export const SCENARIO_LIMITS = {
     documentsMax: 20,
 } as const;
 
-/** The line every scenario surface shows. */
+/**
+ * The line every scenario surface shows, in English. Screens say it in the
+ * reader's language with `useTranslations("scenarios.words")("caveat")`.
+ */
 export const SCENARIO_CAVEAT =
     "A scenario among simulated people built from your records — something to think with, not a forecast.";
 

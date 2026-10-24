@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { vantageApi, type AgendaDto } from "../api";
@@ -59,6 +60,7 @@ export function useAutoDraft(args: {
     onDrafted: (agenda: AgendaDto) => unknown;
 }): AutoDraft {
     const { week, auto } = args;
+    const t = useTranslations("vantage.autoDraft");
     const [drafting, setDrafting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const onDrafted = useRef(args.onDrafted);
@@ -70,11 +72,9 @@ export function useAutoDraft(args: {
         setError(null);
         void draftWeek(week)
             .then(agenda => onDrafted.current(agenda))
-            .catch((e: unknown) =>
-                setError(e instanceof Error ? e.message : "Vantage could not draft the week")
-            )
+            .catch((e: unknown) => setError(e instanceof Error ? e.message : t("failed")))
             .finally(() => setDrafting(false));
-    }, [week]);
+    }, [week, t]);
 
     // Weeks this screen has drafted on its own since it opened.
     const attempted = useRef(new Set<string>());

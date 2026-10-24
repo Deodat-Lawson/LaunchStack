@@ -11,6 +11,7 @@ import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadat
 import { readFact } from "@launchstack/tools/company-context/facts";
 import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -189,7 +190,12 @@ async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {
 
         // Build conversation for the LLM
         const templateSummary = buildTemplateSummary();
-        const systemPrompt = buildSystemPrompt(templateSummary, companyDefaults);
+        const replyLanguage = replyLanguageInstruction(localeOfRequest(request));
+        const systemPrompt =
+            buildSystemPrompt(templateSummary, companyDefaults) +
+            (replyLanguage
+                ? `\n\n${replyLanguage} This applies to the "message" field only: JSON keys, template ids, field keys and extracted values stay exactly as specified above.`
+                : "");
 
         // Include field details when a template has been selected in prior messages
         const lastAssistantMsg = [...parsed.data.messages]

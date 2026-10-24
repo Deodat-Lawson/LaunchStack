@@ -1,16 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 import { cn } from "~/lib/utils";
 
+import { useGrowthFormat } from "../../_lib/format";
 import type { FoundVia, SourceKind } from "../api";
-import { relativeTime } from "~/lib/tools/format";
-
-const KIND_WORD: Record<SourceKind, string> = {
-    api: "Directory or API",
-    recipe: "Search-index listing",
-    signal: "Signal",
-};
 
 /**
  * An outline chip naming the platform a company was seen on. A dashed
@@ -30,6 +26,8 @@ export function SourceChip({
     at?: string | null;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects");
+    const { relativeTime } = useGrowthFormat();
     const chip = (
         <span
             className={cn(
@@ -49,7 +47,7 @@ export function SourceChip({
             </HoverCardTrigger>
             <HoverCardContent align="start" className="w-72 p-3 text-xs">
                 <div className="text-ink font-medium">{label}</div>
-                <div className="text-ink-3 mt-0.5">{KIND_WORD[kind]}</div>
+                <div className="text-ink-3 mt-0.5">{t(`sourceKind.${kind}`)}</div>
                 {url && (
                     <a
                         href={url}
@@ -60,7 +58,11 @@ export function SourceChip({
                         {url.replace(/^https?:\/\//, "")}
                     </a>
                 )}
-                {at && <div className="text-ink-3 mt-1">Seen {relativeTime(at)}</div>}
+                {at && (
+                    <div className="text-ink-3 mt-1">
+                        {t("sourceChip.seen", { when: relativeTime(at) })}
+                    </div>
+                )}
             </HoverCardContent>
         </HoverCard>
     );

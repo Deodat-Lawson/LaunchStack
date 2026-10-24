@@ -17,6 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Bot,
     Copy,
@@ -38,20 +39,15 @@ import { Button } from "~/components/ui/button";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
-import {
-    AGENT_AUTONOMY_META,
-    DEFAULT_AGENT_AUTONOMY,
-    effectiveAutonomy,
-    isAgentAutonomy,
-} from "~/lib/agents/autonomy";
+import { DEFAULT_AGENT_AUTONOMY, effectiveAutonomy, isAgentAutonomy } from "~/lib/agents/autonomy";
 import { agentFileName, serializeAgentFile } from "~/lib/agents/agent-file";
 import {
-    AGENT_MODE_META,
     AGENT_TOOLS,
     agentAllows,
     coerceAgentDefinition,
     type AgentDefinition,
 } from "~/lib/agents/definition";
+import { useAgentCopy } from "~/lib/agents/i18n";
 import { agentRosterAccess } from "~/lib/agents/roster-access";
 import { starterAgent } from "~/lib/agents/starter-agents";
 import { usePermissions } from "~/lib/use-permissions";
@@ -93,6 +89,9 @@ function toDefinition(persona: AgentPersonaRecord): AgentDefinition {
 }
 
 export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: AgentsPaneProps) {
+    const t = useTranslations("collab.agentsPane");
+    const ts = useTranslations("collab.shared");
+    const tc = useTranslations("common");
     const { data, loading, error, refresh } = useAgents({ includeArchived: true });
     const { can } = usePermissions();
     const access = agentRosterAccess(can);
@@ -149,21 +148,21 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 persona?: AgentPersonaRecord;
             };
             if (!response.ok) {
-                setNotice(body.error ?? "That did not work");
+                setNotice(body.error ?? t("failed"));
                 return null;
             }
             setNotice(done);
             await refresh();
             return body.persona ?? null;
         },
-        [refresh]
+        [refresh, t]
     );
 
     const retire = (persona: AgentPersonaRecord) =>
         request(
             `/api/collab/agents/${persona.dbId}`,
             { method: "DELETE" },
-            `${persona.displayName} retired. Past transcripts keep the name.`
+            t("retiredNotice", { name: persona.displayName })
         );
     const restore = (persona: AgentPersonaRecord) =>
         request(
@@ -181,7 +180,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 ? request(
                       `/api/collab/agents/${persona.dbId}/reset`,
                       { method: "POST" },
-                      `${persona.displayName} is back.`
+                      t("backNotice", { name: persona.displayName })
                   )
                 : request(
                       "/api/collab/agents/import",
@@ -193,14 +192,14 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                               replace: true,
                           }),
                       },
-                      `${persona.displayName} is back.`
+                      t("backNotice", { name: persona.displayName })
                   )
         );
     const reset = (persona: AgentPersonaRecord) =>
         request(
             `/api/collab/agents/${persona.dbId}/reset`,
             { method: "POST" },
-            `${persona.displayName} restored to the shipped definition.`
+            ts("restoredNotice", { name: persona.displayName })
         );
 
     const importFile = async (file: File) => {
@@ -220,10 +219,15 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
             return;
         }
         if (!response.ok) {
-            setNotice(body.error ?? "Could not import that file");
+            setNotice(body.error ?? t("importFailed"));
             return;
         }
-        setNotice(`${body.persona?.displayName ?? "Agent"} imported from ${file.name}.`);
+        setNotice(
+            t("importedNotice", {
+                name: body.persona?.displayName ?? t("agentFallback"),
+                file: file.name,
+            })
+        );
         await refresh();
         if (body.persona) setSelectedId(body.persona.dbId);
     };
@@ -239,10 +243,15 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
             persona?: AgentPersonaRecord;
         };
         if (!response.ok) {
-            setNotice(replaced.error ?? "Could not import that file");
+            setNotice(replaced.error ?? t("importFailed"));
             return;
         }
-        setNotice(`${replaced.persona?.displayName ?? "Agent"} replaced from ${fileName}.`);
+        setNotice(
+            t("replacedNotice", {
+                name: replaced.persona?.displayName ?? t("agentFallback"),
+                file: fileName,
+            })
+        );
         await refresh();
         if (replaced.persona) setSelectedId(replaced.persona.dbId);
     };
@@ -253,11 +262,10 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 <div className="border-line flex items-center gap-2 border-b px-4 py-3">
                     <div className="min-w-0 flex-1">
                         <div className="mono text-ink-3 text-[10px] font-bold uppercase tracking-[0.1em]">
-                            Agents
+                            {t("heading")}
                         </div>
                         <div className="text-ink-2 mt-0.5 text-[12.5px]">
-                            {active.length} on the roster
-                            {retired.length > 0 ? ` · ${retired.length} retired` : ""}
+                            {t("rosterCount", { active: active.length, retired: retired.length })}
                         </div>
                     </div>
                     <input
@@ -277,8 +285,8 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                                 variant="ghost"
                                 size="icon"
                                 className="size-7"
-                                title="Import a definition file"
-                                aria-label="Import a definition file"
+                                title={t("importFile")}
+                                aria-label={t("importFile")}
                                 onClick={() => importInput.current?.click()}
                             >
                                 <Upload className="size-3.5" />
@@ -286,8 +294,8 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                             <Button
                                 size="icon"
                                 className="size-7"
-                                title="New agent"
-                                aria-label="New agent"
+                                title={ts("newAgent")}
+                                aria-label={ts("newAgent")}
                                 onClick={() => setEditing({ persona: null })}
                             >
                                 <Plus className="size-3.5" />
@@ -301,14 +309,16 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                         <input
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder="Find an agent"
+                            placeholder={t("search")}
                             className="text-ink placeholder:text-ink-3 w-full bg-transparent text-[12.5px] outline-none"
                         />
                     </label>
                 </div>
                 <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4 pt-2">
                     {loading && personas.length === 0 && (
-                        <div className="text-ink-3 px-2 py-3 text-[12.5px]">Loading agents…</div>
+                        <div className="text-ink-3 px-2 py-3 text-[12.5px]">
+                            {ts("loadingAgents")}
+                        </div>
                     )}
                     {error && <div className="text-danger px-2 py-3 text-[12.5px]">{error}</div>}
                     {filtered.active.map(persona => (
@@ -322,7 +332,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                     {filtered.retired.length > 0 && (
                         <>
                             <div className="mono text-ink-3 px-2 pb-1 pt-4 text-[9.5px] font-bold uppercase tracking-[0.1em]">
-                                Retired
+                                {t("retiredHeading")}
                             </div>
                             {filtered.retired.map(persona => (
                                 <RosterRow
@@ -345,7 +355,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                         <button
                             className="opacity-70 hover:opacity-100"
                             onClick={() => setNotice(null)}
-                            aria-label="Dismiss"
+                            aria-label={tc("actions.dismiss")}
                         >
                             ×
                         </button>
@@ -368,7 +378,9 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                                           seed: {
                                               ...toDefinition(selected),
                                               key: `${selected.id}-copy`,
-                                              displayName: `${selected.displayName} (copy)`,
+                                              displayName: t("copyName", {
+                                                  name: selected.displayName,
+                                              }),
                                           },
                                       })
                                 : undefined
@@ -389,13 +401,9 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                     <div className="text-ink-3 flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
                         <Bot className="size-8 opacity-50" />
                         <div className="text-ink text-[15px] font-medium">
-                            {access.manageRoster ? "Pick an agent, or write one" : "Pick an agent"}
+                            {access.manageRoster ? t("emptyTitleManager") : t("emptyTitle")}
                         </div>
-                        <p className="max-w-sm text-[12.5px] leading-relaxed">
-                            An agent is a name, a role and standing instructions grounded in a
-                            method that works. The same agent sits in meetings, answers in chat when
-                            picked or @mentioned, and can be exported as a file.
-                        </p>
+                        <p className="max-w-sm text-[12.5px] leading-relaxed">{t("emptyBody")}</p>
                     </div>
                 )}
             </main>
@@ -409,7 +417,7 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 onClose={() => setEditing(null)}
                 onSaved={async persona => {
                     setEditing(null);
-                    setNotice(`${persona.displayName} saved.`);
+                    setNotice(t("savedNotice", { name: persona.displayName }));
                     await refresh();
                     setSelectedId(persona.dbId);
                 }}
@@ -419,13 +427,15 @@ export function AgentsPane({ onUseInChat, onStartMeeting, selectRequest }: Agent
                 onOpenChange={next => {
                     if (!next) setConflict(null);
                 }}
-                title={`Replace ${conflict?.displayName ?? "this agent"}?`}
+                title={t("conflictTitle", {
+                    name: conflict?.displayName ?? t("conflictFallback"),
+                })}
                 description={
                     conflict
-                        ? `${conflict.displayName} already uses the handle in ${conflict.fileName}. Replacing swaps its definition for the file's.`
+                        ? t("conflictBody", { name: conflict.displayName, file: conflict.fileName })
                         : undefined
                 }
-                confirmLabel="Replace"
+                confirmLabel={tc("actions.replace")}
                 onConfirm={() => {
                     const asked = conflict;
                     setConflict(null);
@@ -520,6 +530,10 @@ function AgentDetail({
     onUseInChat?: () => void;
     onStartMeeting?: () => void;
 }) {
+    const t = useTranslations("collab.agentsPane");
+    const ts = useTranslations("collab.shared");
+    const tc = useTranslations("common");
+    const copy = useAgentCopy();
     const [tab, setTab] = useState("try");
     const definition = useMemo(() => toDefinition(persona), [persona]);
     const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
@@ -536,8 +550,10 @@ function AgentDetail({
                                 {persona.displayName}
                             </h1>
                             <span className="mono text-ink-3 text-[12px]">@{persona.id}</span>
-                            {persona.archived && <Badge variant="warn">retired</Badge>}
-                            {persona.builtin && <Badge variant="secondary">starter</Badge>}
+                            {persona.archived && <Badge variant="warn">{t("retiredBadge")}</Badge>}
+                            {persona.builtin && (
+                                <Badge variant="secondary">{t("starterBadge")}</Badge>
+                            )}
                         </div>
                         <div className="text-ink-2 mt-0.5 text-[13.5px] font-medium">
                             {persona.role}
@@ -552,7 +568,7 @@ function AgentDetail({
                         {persona.archived ? (
                             onRestore && (
                                 <Button variant="outline" size="sm" onClick={onRestore}>
-                                    <RotateCcw className="size-3.5" /> Bring back
+                                    <RotateCcw className="size-3.5" /> {t("bringBack")}
                                 </Button>
                             )
                         ) : (
@@ -561,9 +577,9 @@ function AgentDetail({
                                     <Button
                                         size="sm"
                                         onClick={onUseInChat}
-                                        title="Pick this agent in the chat composer"
+                                        title={t("useInChatTitle")}
                                     >
-                                        <MessageSquare className="size-3.5" /> Use in chat
+                                        <MessageSquare className="size-3.5" /> {t("useInChat")}
                                     </Button>
                                 )}
                                 {onStartMeeting && (
@@ -571,14 +587,14 @@ function AgentDetail({
                                         variant="outline"
                                         size="sm"
                                         onClick={onStartMeeting}
-                                        title="Open a new meeting with this agent seated"
+                                        title={t("putInMeetingTitle")}
                                     >
-                                        <Users className="size-3.5" /> Put in a meeting
+                                        <Users className="size-3.5" /> {t("putInMeeting")}
                                     </Button>
                                 )}
                                 {onEdit && (
                                     <Button variant="outline" size="sm" onClick={onEdit}>
-                                        Edit
+                                        {tc("actions.edit")}
                                     </Button>
                                 )}
                                 {onDuplicate && (
@@ -586,8 +602,8 @@ function AgentDetail({
                                         variant="ghost"
                                         size="icon"
                                         className="size-8"
-                                        title="Duplicate"
-                                        aria-label="Duplicate"
+                                        title={tc("actions.duplicate")}
+                                        aria-label={tc("actions.duplicate")}
                                         onClick={onDuplicate}
                                     >
                                         <Copy className="size-3.5" />
@@ -598,8 +614,8 @@ function AgentDetail({
                                         variant="ghost"
                                         size="icon"
                                         className="size-8"
-                                        title="Restore the shipped definition"
-                                        aria-label="Restore the shipped definition"
+                                        title={ts("restoreShipped")}
+                                        aria-label={ts("restoreShipped")}
                                         onClick={onReset}
                                     >
                                         <RotateCcw className="size-3.5" />
@@ -610,8 +626,8 @@ function AgentDetail({
                                         variant="ghost"
                                         size="icon"
                                         className="text-ink-3 hover:text-danger size-8"
-                                        title="Retire"
-                                        aria-label="Retire"
+                                        title={t("retire")}
+                                        aria-label={t("retire")}
                                         onClick={onRetire}
                                     >
                                         <Trash2 className="size-3.5" />
@@ -623,31 +639,48 @@ function AgentDetail({
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center gap-1.5">
-                    <Badge variant="info" title={AGENT_MODE_META[persona.mode].description}>
-                        {AGENT_MODE_META[persona.mode].label}
+                    <Badge variant="info" title={copy.modeDescription(persona.mode)}>
+                        {copy.modeLabel(persona.mode)}
                     </Badge>
                     <Badge
                         variant={autonomy === "full" ? "secondary" : "warn"}
-                        title={AGENT_AUTONOMY_META[autonomy].description}
+                        title={copy.autonomyDescription(autonomy)}
                     >
-                        {AGENT_AUTONOMY_META[autonomy].label}
-                        {isAgentAutonomy(persona.autonomy) ? "" : " · default"}
+                        {isAgentAutonomy(persona.autonomy)
+                            ? copy.autonomyLabel(autonomy)
+                            : ts("autonomyDefault", { level: copy.autonomyLabel(autonomy) })}
                     </Badge>
                     <Badge variant="secondary">
-                        {persona.route ? `${persona.route} route` : "default route"}
+                        {persona.route
+                            ? t("routeBadge", { route: persona.route })
+                            : t("defaultRoute")}
                     </Badge>
-                    {persona.style && <Badge variant="secondary">{persona.style}</Badge>}
-                    {persona.temperature !== undefined && (
-                        <Badge variant="outline">temp {persona.temperature}</Badge>
+                    {persona.style && (
+                        <Badge variant="secondary">
+                            {t("styleBadge", { style: persona.style })}
+                        </Badge>
                     )}
-                    {persona.nodeId && <Badge variant="outline">node {persona.nodeId}</Badge>}
+                    {persona.temperature !== undefined && (
+                        <Badge variant="outline">
+                            {t("temperatureBadge", { value: persona.temperature })}
+                        </Badge>
+                    )}
+                    {persona.nodeId && (
+                        <Badge variant="outline">{t("nodeBadge", { node: persona.nodeId })}</Badge>
+                    )}
                     <span className="text-ink-4 mx-1">·</span>
                     {AGENT_TOOLS.map(tool => {
                         const on = agentAllows(persona.tools, tool.id);
                         return (
                             <span
                                 key={tool.id}
-                                title={`${tool.description}${on ? "" : " (off for this agent)"}`}
+                                title={
+                                    on
+                                        ? copy.toolDescription(tool.id)
+                                        : t("toolOffTitle", {
+                                              description: copy.toolDescription(tool.id),
+                                          })
+                                }
                                 className={cn(
                                     "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px]",
                                     on
@@ -655,14 +688,12 @@ function AgentDetail({
                                         : "bg-line-2 text-ink-3 line-through"
                                 )}
                             >
-                                {tool.label}
+                                {copy.toolLabel(tool.id)}
                             </span>
                         );
                     })}
                     {persona.tools === null && (
-                        <span className="text-ink-3 text-[11px]">
-                            · every tool, including new ones
-                        </span>
+                        <span className="text-ink-3 text-[11px]">{t("everyTool")}</span>
                     )}
                 </div>
             </header>
@@ -671,11 +702,11 @@ function AgentDetail({
                 <div className="border-line bg-panel border-b px-6 py-2">
                     <TabsList>
                         <TabsTrigger value="try">
-                            <Play className="size-3.5" /> Try it
+                            <Play className="size-3.5" /> {t("tabTry")}
                         </TabsTrigger>
-                        <TabsTrigger value="instructions">Instructions</TabsTrigger>
+                        <TabsTrigger value="instructions">{t("tabInstructions")}</TabsTrigger>
                         <TabsTrigger value="file">
-                            <FileText className="size-3.5" /> Definition file
+                            <FileText className="size-3.5" /> {t("tabFile")}
                         </TabsTrigger>
                     </TabsList>
                 </div>
@@ -687,7 +718,7 @@ function AgentDetail({
                     className="min-h-0 flex-1 overflow-y-auto px-6 py-5"
                 >
                     <div className="text-ink-3 mb-2 text-[11.5px] uppercase tracking-[0.08em]">
-                        Standing instructions
+                        {t("standingInstructions")}
                     </div>
                     <pre className="text-ink-2 border-line bg-panel m-0 max-w-[760px] whitespace-pre-wrap rounded-xl border px-5 py-4 font-sans text-[13.5px] leading-relaxed">
                         {persona.systemPrompt}
@@ -695,28 +726,33 @@ function AgentDetail({
                     {starter && (
                         <div className="border-line bg-panel-2 mt-5 max-w-[760px] rounded-xl border px-5 py-4">
                             <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                Prompt source
+                                {t("promptSource")}
                             </div>
                             <p className="text-ink-2 m-0 text-[13px] leading-relaxed">
-                                Taken from{" "}
-                                <a
-                                    href={starter.source.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="text-brand-ink underline-offset-2 hover:underline"
-                                >
-                                    {starter.source.name}
-                                </a>{" "}
-                                — <span className="mono text-[12px]">{starter.source.file}</span> ·{" "}
-                                {starter.source.license}. {starter.source.adaptation}
+                                {t.rich("takenFrom", {
+                                    name: starter.source.name,
+                                    file: starter.source.file,
+                                    license: starter.source.license,
+                                    adaptation: starter.source.adaptation,
+                                    link: chunks => (
+                                        <a
+                                            href={starter.source.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-brand-ink underline-offset-2 hover:underline"
+                                        >
+                                            {chunks}
+                                        </a>
+                                    ),
+                                    mono: chunks => (
+                                        <span className="mono text-[12px]">{chunks}</span>
+                                    ),
+                                })}
                             </p>
                         </div>
                     )}
                     <div className="text-ink-3 mt-4 max-w-[760px] text-[12px] leading-relaxed">
-                        In chat these instructions go above the answer style
-                        {persona.style ? ` (${persona.style})` : ""}; in a meeting they go under the
-                        meeting&apos;s objective, agenda and current phase. The agent always sees
-                        the workspace&apos;s cited passages when retrieval is on.
+                        {t("instructionsNote", { style: persona.style ?? "none" })}
                     </div>
                 </TabsContent>
                 <TabsContent value="file" className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
@@ -740,14 +776,15 @@ function DefinitionFile({
     personaDbId: string;
     canImport: boolean;
 }) {
+    const t = useTranslations("collab.agentsPane");
+    const tc = useTranslations("common");
     const text = useMemo(() => serializeAgentFile(definition), [definition]);
     const [copied, setCopied] = useState(false);
     return (
         <div className="max-w-[760px]">
             <div className="text-ink-3 mb-3 text-[12.5px] leading-relaxed">
-                The same agent as a file — front matter for the settings, the body is the
-                instructions. It is the shape OpenCode and Claude Code agents use, so it moves
-                between tools.{canImport ? " Import one with the upload button on the left." : ""}
+                {t("fileIntro")}
+                {canImport ? ` ${t("fileIntroImport")}` : ""}
             </div>
             <div className="border-line bg-panel overflow-hidden rounded-xl border">
                 <div className="border-line flex items-center gap-2 border-b px-3 py-2">
@@ -767,11 +804,12 @@ function DefinitionFile({
                             }
                         }}
                     >
-                        <Copy className="size-3.5" /> {copied ? "Copied" : "Copy"}
+                        <Copy className="size-3.5" />{" "}
+                        {copied ? tc("actions.copied") : tc("actions.copy")}
                     </Button>
                     <Button variant="ghost" size="sm" asChild>
                         <a href={`/api/collab/agents/${personaDbId}/file?download=1`}>
-                            <Download className="size-3.5" /> Download
+                            <Download className="size-3.5" /> {tc("actions.download")}
                         </a>
                     </Button>
                 </div>
@@ -796,6 +834,10 @@ interface PlayTurn {
 }
 
 function Playground({ persona }: { persona: AgentPersonaRecord }) {
+    const t = useTranslations("collab.agentsPane");
+    const ts = useTranslations("collab.shared");
+    const te = useTranslations("collab.errors");
+    const copy = useAgentCopy();
     const { companyId } = usePermissions();
     const [turns, setTurns] = useState<PlayTurn[]>([]);
     const [draft, setDraft] = useState("");
@@ -814,7 +856,8 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
         const history = turns
             .slice(-6)
             .map(
-                t => `${t.role === "user" ? "User" : persona.displayName}: ${t.text.slice(0, 800)}`
+                turn =>
+                    `${turn.role === "user" ? "User" : persona.displayName}: ${turn.text.slice(0, 800)}`
             )
             .join("\n\n");
         setTurns(prev => [...prev, { role: "user", text: question }]);
@@ -837,7 +880,10 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                     ...prev,
                     {
                         role: "assistant",
-                        text: data.message ?? data.error ?? `Request failed (${response.status})`,
+                        text:
+                            data.message ??
+                            data.error ??
+                            te("requestFailed", { status: response.status }),
                         error: true,
                     },
                 ]);
@@ -847,7 +893,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                 ...prev,
                 {
                     role: "assistant",
-                    text: data.summarizedAnswer ?? "(no answer)",
+                    text: data.summarizedAnswer ?? t("noAnswer"),
                     citations: data.references?.length ?? 0,
                     notes: data.agent?.notes,
                 },
@@ -857,7 +903,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                 ...prev,
                 {
                     role: "assistant",
-                    text: err instanceof Error ? err.message : "Could not reach the model",
+                    text: err instanceof Error ? err.message : t("unreachable"),
                     error: true,
                 },
             ]);
@@ -867,9 +913,9 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
     };
 
     const suggestions = [
-        `What should I ask you about, ${persona.displayName}?`,
-        "Summarize what my sources say about our biggest risk right now.",
-        "What would you push back on in our current plan?",
+        t("suggestionAsk", { name: persona.displayName }),
+        t("suggestionRisk"),
+        t("suggestionPushBack"),
     ];
 
     return (
@@ -879,12 +925,10 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                     {turns.length === 0 ? (
                         <div className="text-ink-3 flex flex-col gap-3 pt-6">
                             <div className="text-ink text-[14px] font-medium">
-                                Try {persona.displayName} before you rely on it
+                                {t("tryTitle", { name: persona.displayName })}
                             </div>
                             <p className="m-0 max-w-[560px] text-[12.5px] leading-relaxed">
-                                A scratch conversation held with this agent over the
-                                workspace&apos;s sources, through the same route the main chat uses.
-                                Nothing here is saved.
+                                {t("tryBody")}
                             </p>
                             <div className="flex flex-wrap gap-2">
                                 {suggestions.map(s => (
@@ -905,18 +949,17 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                                 <div className="mb-1.5 flex items-center gap-2">
                                     {turn.role === "user" ? (
                                         <span className="bg-ink text-panel inline-flex size-5 items-center justify-center rounded-full text-[9px] font-bold">
-                                            You
+                                            {ts("you")}
                                         </span>
                                     ) : (
                                         <AgentAvatar agent={persona} size={20} />
                                     )}
                                     <span className="text-ink text-[12.5px] font-semibold">
-                                        {turn.role === "user" ? "You" : persona.displayName}
+                                        {turn.role === "user" ? ts("you") : persona.displayName}
                                     </span>
                                     {turn.citations !== undefined && turn.citations > 0 && (
                                         <span className="text-ink-3 text-[10.5px]">
-                                            · {turn.citations} passage
-                                            {turn.citations === 1 ? "" : "s"}
+                                            {t("passages", { count: turn.citations })}
                                         </span>
                                     )}
                                 </div>
@@ -930,7 +973,11 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                                 </div>
                                 {turn.notes && turn.notes.length > 0 && (
                                     <div className="text-ink-3 mt-1 text-[11px]">
-                                        Agent policy: {turn.notes.join("; ")}.
+                                        {t("policy", {
+                                            notes: turn.notes
+                                                .map(note => copy.turnNote(note))
+                                                .join(t("noteSeparator")),
+                                        })}
                                     </div>
                                 )}
                             </div>
@@ -939,7 +986,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                     {busy && (
                         <div className="text-ink-3 flex items-center gap-2 text-[12px] italic">
                             <span className="bg-brand size-1.5 animate-pulse rounded-full" />
-                            {persona.displayName} is thinking…
+                            {t("thinking", { name: persona.displayName })}
                         </div>
                     )}
                 </div>
@@ -956,7 +1003,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                             }
                         }}
                         rows={1}
-                        placeholder={`Ask ${persona.displayName} something…`}
+                        placeholder={t("askPlaceholder", { name: persona.displayName })}
                         className="min-h-0 flex-1 resize-none border-0 bg-transparent p-0 text-[13.5px] shadow-none focus-visible:ring-0 dark:bg-transparent"
                     />
                     <Button
@@ -968,8 +1015,7 @@ function Playground({ persona }: { persona: AgentPersonaRecord }) {
                     </Button>
                 </div>
                 <div className="text-ink-3 mx-auto mt-1.5 max-w-[760px] text-[11px]">
-                    Enter to send · answers cite the workspace&apos;s sources · not saved to your
-                    chat history
+                    {t("footer")}
                 </div>
             </div>
         </div>

@@ -13,17 +13,10 @@ export const FUNNEL_STAGES: SalesStage[] = [
 
 export const EXIT_STAGES: SalesStage[] = ["lost", "nurture"];
 
-export const STAGE_LABELS: Record<SalesStage, string> = {
-    lead: "Lead",
-    qualified: "Qualified",
-    contacted: "Contacted",
-    meeting: "Meeting",
-    proposal: "Proposal",
-    negotiating: "Negotiating",
-    won: "Won",
-    lost: "Not a fit",
-    nurture: "Nurture",
-};
+/*
+ * A stage's name is `growth.prospects.stages.<stage>` in the catalogue:
+ * `useTranslations("growth.prospects.stages")(stage)`.
+ */
 
 export type StageTone = "quiet" | "info" | "active" | "won" | "lost";
 

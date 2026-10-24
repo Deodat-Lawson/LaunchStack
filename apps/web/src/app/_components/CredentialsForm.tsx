@@ -17,6 +17,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Loader2, MailCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -26,10 +27,11 @@ import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { PasswordInput } from "~/components/auth/password-input";
 import {
-    NETWORK_ERROR,
+    networkErrorMessage,
     parseRetryAfter,
     rateLimitMessage,
     signInFailureMessage,
+    type AuthErrorsTranslator,
     type AuthFailure,
 } from "~/components/auth/auth-errors";
 import { withNext } from "~/components/auth/next-path";
@@ -112,12 +114,16 @@ function startSocialSignIn(provider: SocialProvider, targets: SocialTargets) {
     return attempt(hooks => authClient.signIn.social({ provider, ...targets }, hooks));
 }
 
-function socialFailureMessage(provider: SocialProvider, failure: AuthFailure): React.ReactNode {
+function socialFailureMessage(
+    provider: SocialProvider,
+    failure: AuthFailure,
+    t: AuthErrorsTranslator
+): React.ReactNode {
     return failure.status === 0
-        ? NETWORK_ERROR
+        ? networkErrorMessage(t)
         : failure.status === 429
-          ? rateLimitMessage(failure.retryAfter)
-          : `Couldn't start ${SOCIAL[provider].label} sign-in. Try again in a moment.`;
+          ? rateLimitMessage(failure.retryAfter, t)
+          : t("socialStartFailed", { provider: SOCIAL[provider].label });
 }
 
 function SocialButtons({
@@ -126,7 +132,7 @@ function SocialButtons({
     disabled,
     lastMethod,
     onStart,
-    divider = "or use email",
+    divider,
 }: {
     providers: SocialProvider[];
     pending: string | null;
@@ -135,6 +141,7 @@ function SocialButtons({
     onStart: (provider: SocialProvider) => void;
     divider?: string;
 }) {
+    const t = useTranslations("auth.form");
     return (
         <>
             <div className="flex flex-col gap-2">
@@ -155,7 +162,7 @@ function SocialButtons({
                             ) : (
                                 <Icon size={16} />
                             )}
-                            Continue with {label}
+                            {t("continueWith", { provider: label })}
                             {lastMethod === provider && (
                                 <LastUsedBadge className="absolute -top-2 right-3" />
                             )}
@@ -166,7 +173,7 @@ function SocialButtons({
             <div className="text-ink-4 flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.12em]">
                 <Separator className="flex-1" />
                 <span className="flex items-center gap-2">
-                    {divider}
+                    {divider ?? t("orUseEmail")}
                     {lastMethod === "email" && <LastUsedBadge />}
                 </span>
                 <Separator className="flex-1" />
@@ -176,12 +183,13 @@ function SocialButtons({
 }
 
 function LastUsedBadge({ className }: { className?: string }) {
+    const t = useTranslations("auth.form");
     return (
         <Badge
             variant="info"
             className={cn("px-1.5 py-0 font-mono text-[9.5px] uppercase tracking-wider", className)}
         >
-            Last used
+            {t("lastUsed")}
         </Badge>
     );
 }
@@ -235,6 +243,9 @@ export function SignInForm({
     newUserRedirectTo?: string;
     onAuthStart?: () => void;
 } = {}) {
+    const t = useTranslations("auth.form");
+    const te = useTranslations("auth.errors");
+    const tc = useTranslations("common");
     const [view, setView] = useState<View>(initialView);
     const [email, setEmail] = useState(defaultEmail);
     const [password, setPassword] = useState("");
@@ -316,7 +327,11 @@ export function SignInForm({
         });
         if (failure) {
             const wrongCredentials = failure.status === 401 || failure.status === 400;
-            fail(failure, signInFailureMessage(failure), wrongCredentials ? "password" : undefined);
+            fail(
+                failure,
+                signInFailureMessage(failure, te),
+                wrongCredentials ? "password" : undefined
+            );
             return;
         }
         // Full navigation on purpose: middleware routes a fresh session to
@@ -336,8 +351,8 @@ export function SignInForm({
         // Any answer from the server reads the same whether or not the
         // address has an account — no probing. Only a request that never
         // arrived, or one that was throttled, is worth telling apart.
-        if (failure?.status === 0) return fail(failure, NETWORK_ERROR, "email");
-        if (failure?.status === 429) return fail(failure, rateLimitMessage(failure.retryAfter));
+        if (failure?.status === 0) return fail(failure, networkErrorMessage(te), "email");
+        if (failure?.status === 429) return fail(failure, rateLimitMessage(failure.retryAfter, te));
         setPending(null);
         setResendAt(Date.now() + RESEND_COOLDOWN_S * 1000);
         setView("sent");
@@ -357,7 +372,7 @@ export function SignInForm({
         });
         // On success better-auth sends the window to the provider; leave
         // the button spinning until it goes.
-        if (failure) fail(failure, socialFailureMessage(provider, failure));
+        if (failure) fail(failure, socialFailureMessage(provider, failure, te));
     };
 
     if (view === "sent") {
@@ -371,12 +386,13 @@ export function SignInForm({
                     tabIndex={-1}
                     className="text-ink text-sm font-semibold outline-none"
                 >
-                    Check your email
+                    {t("sentTitle")}
                 </div>
                 <p className="text-ink-3 m-0 text-[13px] leading-relaxed">
-                    If an account exists for <span className="text-ink font-medium">{email}</span>,
-                    a reset link is on its way. It expires in an hour — check spam if it
-                    doesn&rsquo;t arrive in a minute or two.
+                    {t.rich("sentBody", {
+                        email,
+                        b: chunks => <span className="text-ink font-medium">{chunks}</span>,
+                    })}
                 </p>
                 {error && <ErrorText>{error.message}</ErrorText>}
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
@@ -388,7 +404,7 @@ export function SignInForm({
                         onClick={() => void sendResetLink()}
                     >
                         {pending === "reset" && <Loader2 className="animate-spin" aria-hidden />}
-                        {resendIn > 0 ? `Resend link in ${resendIn}s` : "Resend link"}
+                        {resendIn > 0 ? t("resendIn", { seconds: resendIn }) : t("resend")}
                     </Button>
                     <Button
                         type="button"
@@ -397,7 +413,7 @@ export function SignInForm({
                         className="text-ink-3 h-auto px-0"
                         onClick={() => switchView("forgot")}
                     >
-                        Use a different email
+                        {t("differentEmail")}
                     </Button>
                 </div>
                 <Separator />
@@ -409,7 +425,7 @@ export function SignInForm({
                     onClick={() => switchView("signin")}
                 >
                     <ArrowLeft aria-hidden />
-                    Back to sign in
+                    {t("backToSignIn")}
                 </Button>
             </div>
         );
@@ -445,15 +461,14 @@ export function SignInForm({
             >
                 {forgot && (
                     <div className="flex flex-col gap-1">
-                        <div className="text-ink text-sm font-semibold">Reset your password</div>
+                        <div className="text-ink text-sm font-semibold">{t("resetTitle")}</div>
                         <p className="text-ink-3 m-0 text-[12.5px] leading-relaxed">
-                            Enter the email you sign in with and we&rsquo;ll send you a link to
-                            choose a new password.
+                            {t("resetIntro")}
                         </p>
                     </div>
                 )}
                 <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email">{tc("fields.email")}</Label>
                     <Input
                         ref={emailRef}
                         id="signin-email"
@@ -475,7 +490,7 @@ export function SignInForm({
                 </div>
                 {!forgot && (
                     <div className="relative flex flex-col gap-1.5">
-                        <Label htmlFor="signin-password">Password</Label>
+                        <Label htmlFor="signin-password">{tc("fields.password")}</Label>
                         <PasswordInput
                             ref={passwordRef}
                             id="signin-password"
@@ -500,7 +515,7 @@ export function SignInForm({
                             className="text-ink-3 hover:text-brand absolute right-0 top-0.5 h-auto p-0 text-[11.5px] font-medium leading-none"
                             onClick={() => switchView("forgot")}
                         >
-                            Forgot password?
+                            {t("forgotPassword")}
                         </Button>
                     </div>
                 )}
@@ -515,7 +530,7 @@ export function SignInForm({
                             htmlFor="signin-remember"
                             className="text-ink-2 text-[12.5px] font-normal"
                         >
-                            Keep me signed in
+                            {t("keepSignedIn")}
                         </Label>
                     </div>
                 )}
@@ -525,14 +540,14 @@ export function SignInForm({
                     disabled={busy || lockedFor > 0}
                 >
                     {lockedFor > 0
-                        ? `Try again in ${lockedFor}s`
+                        ? t("tryAgainIn", { seconds: lockedFor })
                         : forgot
                           ? pending === "reset"
-                              ? "Sending…"
-                              : "Email me a reset link"
+                              ? t("sending")
+                              : t("emailResetLink")
                           : pending === "email"
-                            ? "Signing in…"
-                            : "Sign in"}
+                            ? t("signingIn")
+                            : tc("actions.signIn")}
                 </SubmitButton>
                 {forgot && (
                     <Button
@@ -543,7 +558,7 @@ export function SignInForm({
                         onClick={() => switchView("signin")}
                     >
                         <ArrowLeft aria-hidden />
-                        Back to sign in
+                        {t("backToSignIn")}
                     </Button>
                 )}
             </form>
@@ -574,6 +589,9 @@ export function SignUpForm({
     /** Where a social sign-up lands, new account or not. */
     socialRedirectTo?: string;
 } = {}) {
+    const t = useTranslations("auth.form");
+    const te = useTranslations("auth.errors");
+    const tc = useTranslations("common");
     const [name, setName] = useState("");
     const [email, setEmail] = useState(defaultEmail);
     const [password, setPassword] = useState("");
@@ -593,7 +611,7 @@ export function SignUpForm({
             errorCallbackURL: withNext(`/signin?provider=${provider}`, socialRedirectTo),
         });
         if (failure) {
-            setError(socialFailureMessage(provider, failure));
+            setError(socialFailureMessage(provider, failure, te));
             setSocialPending(null);
         }
     };
@@ -610,7 +628,7 @@ export function SignUpForm({
             setError(
                 failure.status === 422 ? (
                     <>
-                        An account with this email already exists.{" "}
+                        {t("accountExists")}{" "}
                         {onSignInInstead ? (
                             <Button
                                 type="button"
@@ -618,20 +636,20 @@ export function SignUpForm({
                                 className="text-brand h-auto p-0 text-[12.5px] font-semibold"
                                 onClick={onSignInInstead}
                             >
-                                Sign in instead →
+                                {t("signInInstead")}
                             </Button>
                         ) : (
                             <Link href={signInHref} className="text-brand font-semibold">
-                                Sign in instead →
+                                {t("signInInstead")}
                             </Link>
                         )}
                     </>
                 ) : failure.status === 0 ? (
-                    NETWORK_ERROR
+                    networkErrorMessage(te)
                 ) : failure.status === 429 ? (
-                    rateLimitMessage(failure.retryAfter)
+                    rateLimitMessage(failure.retryAfter, te)
                 ) : (
-                    (failure.message ?? "Sign-up failed. Try again in a moment.")
+                    (failure.message ?? te("signUpFailed"))
                 )
             );
             setIsSubmitting(false);
@@ -651,7 +669,7 @@ export function SignUpForm({
             className="border-line bg-panel flex flex-col gap-3.5 rounded-xl border p-5"
         >
             <div className="flex flex-col gap-1.5">
-                <Label htmlFor="signup-name">Name</Label>
+                <Label htmlFor="signup-name">{t("name")}</Label>
                 <Input
                     id="signup-name"
                     name="name"
@@ -659,11 +677,11 @@ export function SignUpForm({
                     required
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    placeholder="Ada Lovelace"
+                    placeholder={t("namePlaceholder")}
                 />
             </div>
             <div className="flex flex-col gap-1.5">
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-email">{tc("fields.email")}</Label>
                 <Input
                     id="signup-email"
                     name="email"
@@ -679,12 +697,12 @@ export function SignUpForm({
                 />
                 {lockEmail && (
                     <p id={emailHintId} className="text-ink-3 m-0 text-[11.5px]">
-                        The invitation is for this address.
+                        {t("inviteEmailHint")}
                     </p>
                 )}
             </div>
             <div className="flex flex-col gap-1.5">
-                <Label htmlFor="signup-password">Password</Label>
+                <Label htmlFor="signup-password">{tc("fields.password")}</Label>
                 <PasswordInput
                     id="signup-password"
                     name="password"
@@ -703,12 +721,12 @@ export function SignUpForm({
                     )}
                 >
                     {longEnough && <Check className="size-3" aria-hidden />}
-                    At least 8 characters
+                    {t("passwordLength")}
                 </p>
             </div>
             {error && <ErrorText>{error}</ErrorText>}
             <SubmitButton pending={isSubmitting} disabled={busy}>
-                {isSubmitting ? "Creating account…" : "Create account"}
+                {isSubmitting ? t("creatingAccount") : t("createAccount")}
             </SubmitButton>
         </form>
     );

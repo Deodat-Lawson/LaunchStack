@@ -7,6 +7,9 @@
  * could help, and the raw text only behind a details toggle.
  */
 
+import { useMemo } from "react";
+import { useTranslations } from "next-intl";
+
 export type SourceFailureCategory =
     | "embedding_quota"
     | "embedding_unavailable"
@@ -276,4 +279,79 @@ export function sourceFailureReportText(report: SourceFailureReport): {
             .filter((line): line is string => line !== null)
             .join("\n"),
     };
+}
+
+// ---------------------------------------------------------------------------
+// In the reader's language
+// ---------------------------------------------------------------------------
+//
+// `COPY` and `SOURCE_FAILURE_CATEGORY_NAMES` above are the English, kept for
+// callers that have no translator (the server, tests). What a person reads
+// goes through `sources.failure` instead: pass its `t` to the functions
+// below, or call `useSourceFailureCopy()` in a component.
+
+/** `useTranslations("sources.failure")`. */
+export type SourceFailureTranslator = ReturnType<typeof useTranslations<"sources.failure">>;
+
+/** The failure with its label and message in the reader's language. */
+export function localizeSourceFailure(
+    failure: SourceFailure,
+    t: SourceFailureTranslator
+): SourceFailure {
+    return {
+        ...failure,
+        label: t(`categories.${failure.category}.label`),
+        message: t(`categories.${failure.category}.message`),
+    };
+}
+
+/** The category's words in a support request, in the reader's language. */
+export function sourceFailureCategoryName(
+    category: SourceFailureCategory,
+    t: SourceFailureTranslator
+): string {
+    return t(`categories.${category}.name`);
+}
+
+/** `sourceFailureReportText` in the reader's language. */
+export function localizedSourceFailureReportText(
+    report: SourceFailureReport,
+    t: SourceFailureTranslator
+): { subject: string; details: string } {
+    return {
+        subject: t("report.subject", { document: report.document }),
+        details: [
+            t("report.document", { document: report.document }),
+            report.documentId !== undefined
+                ? t("report.documentId", { id: String(report.documentId) })
+                : null,
+            t("report.error", {
+                name: sourceFailureCategoryName(report.category, t),
+                category: report.category,
+            }),
+            report.jobId ? t("report.jobId", { jobId: report.jobId }) : null,
+        ]
+            .filter((line): line is string => line !== null)
+            .join("\n"),
+    };
+}
+
+/**
+ * Everything above, bound to the reader's language: `describe` is
+ * `describeSourceFailure` with translated words.
+ */
+export function useSourceFailureCopy(): {
+    describe: (raw: string | null | undefined) => SourceFailure;
+    categoryName: (category: SourceFailureCategory) => string;
+    reportText: (report: SourceFailureReport) => { subject: string; details: string };
+} {
+    const t = useTranslations("sources.failure");
+    return useMemo(
+        () => ({
+            describe: raw => localizeSourceFailure(describeSourceFailure(raw), t),
+            categoryName: category => sourceFailureCategoryName(category, t),
+            reportText: report => localizedSourceFailureReportText(report, t),
+        }),
+        [t]
+    );
 }

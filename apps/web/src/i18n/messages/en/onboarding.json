@@ -1,0 +1,167 @@
+{
+  "page": {
+    "label": "First steps",
+    "title": "Set up your workspace"
+  },
+  "flow": {
+    "yourCompany": "your company",
+    "steps": {
+      "company": "Your company",
+      "documents": "Documents",
+      "understood": "What we understood"
+    },
+    "stepOf": "Step {step} of {total} · {name}",
+    "skipSetup": "Skip setup",
+    "progressLabel": "Setup progress",
+    "fromSources": "From your sources: {value}",
+    "skipStep": "Skip this step",
+    "errors": {
+      "badWebsite": "That doesn't look like a web address. Try something like acme.com.",
+      "saveFailed": "Saving failed",
+      "importFailed": "Import failed",
+      "fetchFailed": "The page could not be fetched (HTTP {status})",
+      "uploadFailed": "Upload failed"
+    },
+    "company": {
+      "title": "Tell us about {company}",
+      "intro": "We read your website and documents and build a profile of the company that every tool here uses: chat answers, proposals, outreach. What you write here is kept as your own facts; you can change any of it later in Settings › Company.",
+      "website": "Website",
+      "homepageIsSource": "Your homepage is already a source; it is not imported again.",
+      "homepageImport": "We import your homepage as a source, so the profile can quote it.",
+      "description": "What does the company do?",
+      "descriptionPlaceholder": "A sentence or two: what you offer and to whom.",
+      "idea": "What’s the idea you’re working on?",
+      "ideaPlaceholder": "What you're building, for whom, and why now.",
+      "industry": "Industry",
+      "industryPlaceholder": "Choose one (optional)"
+    },
+    "industries": {
+      "technology": "Technology",
+      "healthcare": "Healthcare",
+      "finance": "Finance",
+      "legal": "Legal",
+      "education": "Education",
+      "manufacturing": "Manufacturing",
+      "retail": "Retail",
+      "government": "Government",
+      "nonProfit": "Non-profit",
+      "other": "Other"
+    },
+    "documents": {
+      "title": "Add documents about the company",
+      "intro": "A pitch deck, one-pager, plan, past proposal or report. Only documents written by or about {company} count toward its profile; anything else you add later is kept for search and set aside, and each source says why.",
+      "drop": "Drop files here, or",
+      "choose": "Choose files",
+      "chooseLabel": "Choose documents about the company",
+      "formats": "PDF, Word, PowerPoint, Markdown or text",
+      "added": "Added documents"
+    },
+    "upload": {
+      "uploading": "Uploading",
+      "failed": "Failed",
+      "failedWith": "Failed: {message}",
+      "added": "Added"
+    },
+    "understood": {
+      "title": "Here's what we understood so far",
+      "reading": "Your sources are being read now. This page updates as they are, and you can leave at any time: the profile keeps building.",
+      "ready": "This is the profile of {company} as your sources and answers stand. Add documents any time and it grows.",
+      "importing": "Importing the homepage",
+      "imported": "Homepage imported",
+      "importFailedKept": "{message}. It stays your website; change it in Settings › Company.",
+      "profileFailed": "The profile could not be built. Your answers and sources are kept; rebuild it from the company profile.",
+      "profileFailedReason": "The profile could not be built: {reason} Your answers and sources are kept; rebuild it from the company profile.",
+      "profileFailedReasonStop": "The profile could not be built: {reason}. Your answers and sources are kept; rebuild it from the company profile.",
+      "writingSummary": "Writing the summary…",
+      "noSummary": "No summary yet. It is written from your sources: add your website or a document about the company.",
+      "progress": "{read} of {total} sources read. {facts, plural, one {# fact} other {# facts}} so far.",
+      "progressNoSources": "{facts, plural, one {# fact} other {# facts}} so far.",
+      "factsLabel": "Facts so far",
+      "fromYou": "· from you",
+      "moreInProfile": "{count} more in the company profile",
+      "sources": "Sources",
+      "sourcesLabel": "Sources being read",
+      "then": "Then try",
+      "tiles": {
+        "ask": {
+          "title": "Ask your sources",
+          "text": "Answers cite the exact passage they come from."
+        },
+        "proposal": {
+          "title": "Write a proposal",
+          "text": "Drafts grant and funding applications from the profile."
+        },
+        "buyers": {
+          "title": "Find buyers",
+          "text": "Searches for companies that match what you sell."
+        }
+      },
+      "review": "Review the company profile",
+      "open": "Open your workspace"
+    },
+    "sourceState": {
+      "failed": "Could not be read",
+      "reading": "Reading…",
+      "aboutYou": "About you",
+      "aboutYouFacts": "About you · {count, plural, one {# fact} other {# facts}}",
+      "nothing": "Nothing to read",
+      "setAside": "Set aside"
+    },
+    "readOnly": {
+      "title": "Setting up {company}",
+      "body": "A workspace admin tells the profile about the company: its website, what it does and the documents about it. You can read the profile and ask questions of everything in the workspace.",
+      "see": "See the company profile"
+    }
+  },
+  "pending": {
+    "crumbSuspended": "Access suspended",
+    "crumbPending": "Pending approval",
+    "thisWorkspace": "this workspace",
+    "titleSuspended": "Your access is suspended",
+    "title": "Waiting for approval",
+    "bodySuspended": "An admin of {workspace} has paused your access. You stay a member, but nothing opens until they reinstate you.",
+    "body": "An admin of {workspace} has to confirm you before anything opens. You'll get an email as soon as they do.",
+    "loadFailed": "Could not load your membership.",
+    "loadFailedStatus": "Could not load your membership ({status}).",
+    "yourRequest": "Your request",
+    "workspace": "Workspace",
+    "submitted": "Submitted",
+    "openOther": "Open a different workspace",
+    "stuck": "Stuck? Ask the person who invited you, or <link>contact support</link>."
+  },
+  "contact": {
+    "crumb": "Contact",
+    "eyebrow": "Support",
+    "titleReport": "Report a processing error",
+    "title": "Get in touch",
+    "descriptionMail": "Questions, feedback, or bug reports. Your message opens in your mail client.",
+    "description": "Questions, feedback, or bug reports.",
+    "noAddress": "This instance has no support address configured. Whoever operates it can set <code>SUPPORT_CONTACT_EMAIL</code> to receive messages here.",
+    "issueTracker": "For problems with Launchstack itself, open an issue on <link>the issue tracker</link>.",
+    "yourName": "Your name",
+    "namePlaceholder": "Jane Doe",
+    "subject": "Subject",
+    "subjectPlaceholder": "What's this about?",
+    "message": "Message",
+    "messagePlaceholder": "Tell us what's on your mind…",
+    "messageTemplate": "What I was doing:",
+    "opensIn": "Opens in your mail client, addressed to {email}.",
+    "compose": "Compose message",
+    "rows": {
+      "emailHint": "Fastest for questions about your workspace.",
+      "community": "Community",
+      "communityHint": "Ask other people running this instance.",
+      "responseTime": "Response time",
+      "responseTimeHint": "Set by whoever operates this instance.",
+      "software": "Launchstack itself",
+      "softwareHint": "Bugs and feature requests for the software."
+    },
+    "report": {
+      "document": "Document",
+      "jobId": "Job / trace ID",
+      "inMessage": "These details are already in your message, so whoever runs this instance can find the error in its logs.",
+      "include": "Include these details in your report, so whoever runs this instance can find the error in its logs.",
+      "copy": "Copy details"
+    }
+  }
+}

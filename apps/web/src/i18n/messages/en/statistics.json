@@ -1,0 +1,109 @@
+{
+  "view": {
+    "refresh": "Refresh data",
+    "refreshing": "Refreshing…",
+    "eyebrow": "Analytics",
+    "title": "Analytics dashboard",
+    "description": "Company-wide view of documents, employee activity, and query trends. Refresh to pull the latest.",
+    "loadFailed": "Failed to load",
+    "loadFailedFallback": "Failed to fetch dashboard data",
+    "loading": "Fetching company analytics and employee data…",
+    "tiles": {
+      "employees": "Total employees",
+      "documents": "Total documents",
+      "active": "Active members",
+      "views": "30-day views"
+    },
+    "trends": {
+      "title": "Trends",
+      "description": "Query volume and activity over the last 30 days."
+    },
+    "documents": {
+      "title": "Documents",
+      "description": "Per-document stats and hit rates."
+    },
+    "employees": {
+      "title": "Employees",
+      "description": "Activity broken down by team member."
+    }
+  },
+  "charts": {
+    "employeesSeries": "Employees",
+    "viewsSeries": "Views",
+    "employeeGrowth": "Employee Growth",
+    "documentViews": "Document Views"
+  },
+  "time": {
+    "never": "Never",
+    "justNow": "Just now",
+    "minutesAgo": "{count} min ago",
+    "hoursAgo": "{count} hr ago",
+    "daysAgo": "{count, plural, one {# day} other {# days}} ago"
+  },
+  "documents": {
+    "title": "Document Statistics",
+    "hint": "Click a row to view details",
+    "searchPlaceholder": "Search documents...",
+    "shown": "{shown} / {total}",
+    "columns": {
+      "document": "Document",
+      "category": "Category",
+      "views": "Views",
+      "lastViewed": "Last Viewed"
+    },
+    "empty": "No documents found",
+    "emptyHint": "Try adjusting your search"
+  },
+  "members": {
+    "title": "Member activity",
+    "total": "{count, number} total",
+    "columns": {
+      "name": "Name",
+      "role": "Role",
+      "status": "Status",
+      "queries": "Queries made",
+      "lastOnline": "Last online"
+    },
+    "empty": "No members yet.",
+    "statuses": {
+      "active": "Active",
+      "pending": "Pending approval",
+      "suspended": "Suspended"
+    },
+    "roles": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "member": "Member",
+      "viewer": "Viewer",
+      "guest": "Guest"
+    }
+  },
+  "details": {
+    "viewsSeries": "Views",
+    "justNow": "Just now",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago",
+    "created": "Created {date}",
+    "viewDoc": "View Doc",
+    "loadFailed": "Failed to load details: {error}",
+    "loadFailedFallback": "Failed to fetch document details",
+    "loading": "Loading statistics...",
+    "tiles": {
+      "views": "Views",
+      "allTime": "All time",
+      "unique": "Unique",
+      "viewers": "Viewers",
+      "thirtyDays": "30 Days",
+      "recent": "Recent"
+    },
+    "activity": "30 Day Activity",
+    "recentViewers": "Recent Viewers",
+    "shown": "{count, number} shown",
+    "columns": {
+      "user": "User",
+      "when": "When"
+    },
+    "noViews": "No views yet"
+  }
+}

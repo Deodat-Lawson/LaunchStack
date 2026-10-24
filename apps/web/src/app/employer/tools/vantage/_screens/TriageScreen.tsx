@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -24,15 +25,7 @@ import { cn } from "~/lib/utils";
 import { vantageApi } from "../api";
 import { CommitmentStatus } from "../_components/CheckInRow";
 import { Field, FormError, StatusWord } from "../_components/Primitives";
-import {
-    addDaysIso,
-    agoWords,
-    dueWords,
-    fmtDate,
-    plural,
-    todayIso,
-    weekLabel,
-} from "../_lib/format";
+import { addDaysIso, todayIso, useVantageFormat } from "../_lib/format";
 import { vantagePath } from "../_lib/paths";
 
 /**
@@ -48,6 +41,10 @@ import { vantagePath } from "../_lib/paths";
  * their way, and only the error when the first response failed.
  */
 export function TriageScreen() {
+    const t = useTranslations("vantage.triage");
+    const tf = useTranslations("vantage.frame");
+    const tc = useTranslations("common");
+    const fmt = useVantageFormat();
     const { can, loaded, error: permissionsError, refresh } = usePermissions();
     const allowed = can("settings.manage");
     const res = useResource(allowed ? "vantage:triage" : null, () => vantageApi.triage(), {
@@ -61,14 +58,11 @@ export function TriageScreen() {
     if (loaded && !allowed) {
         return (
             <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
-                <PageHeader title="Where the team" accent="needs a hand" />
+                <PageHeader title={t("title")} accent={t("accent")} />
                 {permissionsError ? (
                     <InlineError message={permissionsError} onRetry={() => void refresh()} />
                 ) : (
-                    <EmptyState
-                        title="Triage is the program's view"
-                        body="It gathers what founders chose to share — requests for help, commitments that slipped, program deadlines — for the people who run the program. Opening it needs permission to manage this workspace's settings; an owner or admin can grant it."
-                    />
+                    <EmptyState title={tf("deniedTitle")} body={tf("deniedBody")} />
                 )}
             </div>
         );
@@ -77,7 +71,7 @@ export function TriageScreen() {
     if (res.error && !data) {
         return (
             <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
-                <PageHeader title="Where the team" accent="needs a hand" />
+                <PageHeader title={t("title")} accent={t("accent")} />
                 <InlineError message={res.error} onRetry={() => void res.reload()} />
             </div>
         );
@@ -88,29 +82,31 @@ export function TriageScreen() {
             await vantageApi.deleteDeadline(id);
             res.mutate(c => ({ ...c, deadlines: c.deadlines.filter(d => d.id !== id) }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not remove it");
+            toast.error(e instanceof Error ? e.message : t("removeError"));
         }
     };
 
     const sub = data
         ? [
-              plural(data.helpRequests.length, "request for help", "requests for help"),
-              plural(data.missedCommitments.length, "missed commitment"),
-              plural(data.deadlines.filter(d => d.dueOn >= today).length, "deadline") + " ahead",
-              data.lastEntryAt ? `last update ${agoWords(data.lastEntryAt)}` : "no updates yet",
+              t("sub.help", { count: data.helpRequests.length }),
+              t("sub.missed", { count: data.missedCommitments.length }),
+              t("sub.deadlines", { count: data.deadlines.filter(d => d.dueOn >= today).length }),
+              data.lastEntryAt
+                  ? t("sub.lastUpdate", { ago: fmt.ago(data.lastEntryAt) })
+                  : t("sub.noUpdates"),
           ].join(" · ")
         : undefined;
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="Where the team"
-                accent="needs a hand"
+                title={t("title")}
+                accent={t("accent")}
                 sub={sub}
                 actions={
                     can("settings.manage") ? (
                         <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                            Add a program deadline
+                            {t("addProgramDeadline")}
                         </Button>
                     ) : undefined
                 }
@@ -126,24 +122,24 @@ export function TriageScreen() {
                     )}
                 >
                     <StatusWord tone={data.quiet ? "warn" : "success"}>
-                        {data.quiet ? "Quiet" : "Active"}
+                        {data.quiet ? t("quiet") : t("active")}
                     </StatusWord>
                     <span className="text-ink-2 text-[13px]">
                         {data.lastEntryAt
-                            ? `Last entry ${agoWords(data.lastEntryAt)}${data.quiet ? " — more than a week without an update is worth a message." : "."}`
-                            : "This team has not logged anything yet."}
+                            ? t(data.quiet ? "lastEntryQuiet" : "lastEntry", {
+                                  ago: fmt.ago(data.lastEntryAt),
+                              })
+                            : t("nothingLogged")}
                     </span>
                 </div>
             )}
 
             <section>
-                <SectionHeading title="Requests for help" aside="from shared topics" />
+                <SectionHeading title={t("helpTitle")} aside={t("helpAside")} />
                 {loading ? (
                     <SkeletonRows rows={2} height={52} />
                 ) : !data || data.helpRequests.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">
-                        No open requests. A founder can ask for help on any agenda topic they share.
-                    </p>
+                    <p className="text-ink-3 text-[13px]">{t("helpEmpty")}</p>
                 ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {data.helpRequests.map(({ topic, weekStart }) => (
@@ -159,7 +155,7 @@ export function TriageScreen() {
                                         {topic.title}
                                     </ToolLink>
                                     <span className="text-ink-3 shrink-0 text-[11.5px]">
-                                        {weekLabel(weekStart)}
+                                        {fmt.weekOf(weekStart)}
                                     </span>
                                 </div>
                                 <p className="text-ink-2 max-w-[70ch] text-[13px]">
@@ -167,7 +163,7 @@ export function TriageScreen() {
                                 </p>
                                 {topic.decisionQuestion && (
                                     <p className="text-ink-3 text-[12px]">
-                                        Decision on the table: {topic.decisionQuestion}
+                                        {t("decisionOnTable", { question: topic.decisionQuestion })}
                                     </p>
                                 )}
                             </div>
@@ -177,11 +173,11 @@ export function TriageScreen() {
             </section>
 
             <section>
-                <SectionHeading title="Missed commitments" aside="shared ones" />
+                <SectionHeading title={t("missedTitle")} aside={t("sharedOnes")} />
                 {loading ? (
                     <SkeletonRows rows={2} height={44} />
                 ) : !data || data.missedCommitments.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">Nothing shared has slipped.</p>
+                    <p className="text-ink-3 text-[13px]">{t("missedEmpty")}</p>
                 ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {data.missedCommitments.map(c => (
@@ -196,8 +192,8 @@ export function TriageScreen() {
                                     <div className="text-ink-3 text-[11.5px]">
                                         {c.owner} ·{" "}
                                         {c.status === "open"
-                                            ? dueWords(c.dueOn)
-                                            : `was due ${fmtDate(c.dueOn)}`}
+                                            ? fmt.due(c.dueOn)
+                                            : t("wasDue", { date: fmt.date(c.dueOn) })}
                                         {c.outcome ? ` · ${c.outcome}` : ""}
                                     </div>
                                 </div>
@@ -210,7 +206,7 @@ export function TriageScreen() {
 
             {data && data.dueSoon.length > 0 && (
                 <section>
-                    <SectionHeading title="Due in the next two weeks" aside="shared ones" />
+                    <SectionHeading title={t("dueSoonTitle")} aside={t("sharedOnes")} />
                     <div className="border-line bg-panel rounded-lg border">
                         {data.dueSoon.map(c => (
                             <div
@@ -231,17 +227,17 @@ export function TriageScreen() {
             )}
 
             <section>
-                <SectionHeading title="Program deadlines" />
+                <SectionHeading title={t("deadlinesTitle")} />
                 {loading ? (
                     <SkeletonRows rows={2} height={40} />
                 ) : !data || data.deadlines.length === 0 ? (
                     <EmptyState
-                        title="No program deadlines"
-                        body="Demo day, an application window, a report due — put them here and every founder sees them on the agenda week they fall in."
+                        title={t("deadlinesEmptyTitle")}
+                        body={t("deadlinesEmptyBody")}
                         action={
                             can("settings.manage") ? (
                                 <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                                    Add a deadline
+                                    {t("addDeadline")}
                                 </Button>
                             ) : undefined
                         }
@@ -268,8 +264,8 @@ export function TriageScreen() {
                                     )}
                                 >
                                     {d.dueOn < today
-                                        ? `passed ${fmtDate(d.dueOn)}`
-                                        : dueWords(d.dueOn)}
+                                        ? t("passed", { date: fmt.date(d.dueOn) })
+                                        : fmt.due(d.dueOn)}
                                 </span>
                                 {can("settings.manage") && (
                                     <Button
@@ -278,7 +274,7 @@ export function TriageScreen() {
                                         className="h-7 px-2 text-[12px]"
                                         onClick={() => void removeDeadline(d.id)}
                                     >
-                                        Remove
+                                        {tc("actions.remove")}
                                     </Button>
                                 )}
                             </div>
@@ -305,6 +301,8 @@ function DeadlineDialog({
     onOpenChange: (o: boolean) => void;
     onSaved: () => void;
 }) {
+    const t = useTranslations("vantage.triage");
+    const tc = useTranslations("common");
     const [title, setTitle] = useState("");
     const [dueOn, setDueOn] = useState(addDaysIso(todayIso(), 14));
     const [note, setNote] = useState("");
@@ -322,11 +320,11 @@ function DeadlineDialog({
         setError(null);
         try {
             await vantageApi.addDeadline({ title, dueOn, note: note || null });
-            toast("Deadline added");
+            toast(t("deadlineAdded"));
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(e instanceof Error ? e.message : t("saveError"));
         } finally {
             setBusy(false);
         }
@@ -335,20 +333,20 @@ function DeadlineDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[480px]">
                 <DialogHeader>
-                    <DialogTitle>Add a program deadline</DialogTitle>
-                    <DialogDescription>Every team sees it in the week it falls.</DialogDescription>
+                    <DialogTitle>{t("addProgramDeadline")}</DialogTitle>
+                    <DialogDescription>{t("deadlineDescription")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
-                    <Field label="What" htmlFor="dl-title">
+                    <Field label={t("what")} htmlFor="dl-title">
                         <Input
                             id="dl-title"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             autoFocus
-                            placeholder="Demo day rehearsal"
+                            placeholder={t("whatPlaceholder")}
                         />
                     </Field>
-                    <Field label="When" htmlFor="dl-due">
+                    <Field label={t("when")} htmlFor="dl-due">
                         <Input
                             id="dl-due"
                             type="date"
@@ -356,22 +354,22 @@ function DeadlineDialog({
                             onChange={e => setDueOn(e.target.value)}
                         />
                     </Field>
-                    <Field label="Note" htmlFor="dl-note">
+                    <Field label={t("note")} htmlFor="dl-note">
                         <Input
                             id="dl-note"
                             value={note}
                             onChange={e => setNote(e.target.value)}
-                            placeholder="Optional"
+                            placeholder={tc("status.optional")}
                         />
                     </Field>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void save()} disabled={busy || !title.trim() || !dueOn}>
-                        Add
+                        {tc("actions.add")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

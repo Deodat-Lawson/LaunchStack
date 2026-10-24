@@ -10,6 +10,7 @@
  */
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export interface PickedDoc {
     readonly fileId: string;
@@ -116,36 +117,40 @@ export interface OpenPickerOptions {
 }
 
 export function useGooglePicker() {
+    const t = useTranslations("sources.driveConnect");
     const [opening, setOpening] = useState(false);
 
-    const openPicker = useCallback(async (options: OpenPickerOptions) => {
-        setOpening(true);
-        try {
-            const picker = await loadPicker(options.scriptUrl);
-            const builder = new picker.PickerBuilder().setTitle("Pick files and folders to sync");
-            for (const view of buildDriveViews(picker)) builder.addView(view);
+    const openPicker = useCallback(
+        async (options: OpenPickerOptions) => {
+            setOpening(true);
+            try {
+                const picker = await loadPicker(options.scriptUrl);
+                const builder = new picker.PickerBuilder().setTitle(t("pickerTitle"));
+                for (const view of buildDriveViews(picker)) builder.addView(view);
 
-            builder
-                .setOAuthToken(options.accessToken)
-                .setDeveloperKey(options.apiKey)
-                .setAppId(options.appId)
-                .enableFeature(picker.Feature.MULTISELECT_ENABLED)
-                .setCallback(data => {
-                    if (data.action !== picker.Action.PICKED) return;
-                    const docs: PickedDoc[] = (data.docs ?? []).map(doc => ({
-                        fileId: doc.id,
-                        name: doc.name ?? "Untitled",
-                        mimeType: doc.mimeType ?? "",
-                        kind: doc.mimeType === GOOGLE_FOLDER_MIME ? "folder" : "file",
-                    }));
-                    if (docs.length > 0) options.onPicked(docs);
-                })
-                .build()
-                .setVisible(true);
-        } finally {
-            setOpening(false);
-        }
-    }, []);
+                builder
+                    .setOAuthToken(options.accessToken)
+                    .setDeveloperKey(options.apiKey)
+                    .setAppId(options.appId)
+                    .enableFeature(picker.Feature.MULTISELECT_ENABLED)
+                    .setCallback(data => {
+                        if (data.action !== picker.Action.PICKED) return;
+                        const docs: PickedDoc[] = (data.docs ?? []).map(doc => ({
+                            fileId: doc.id,
+                            name: doc.name ?? "Untitled",
+                            mimeType: doc.mimeType ?? "",
+                            kind: doc.mimeType === GOOGLE_FOLDER_MIME ? "folder" : "file",
+                        }));
+                        if (docs.length > 0) options.onPicked(docs);
+                    })
+                    .build()
+                    .setVisible(true);
+            } finally {
+                setOpening(false);
+            }
+        },
+        [t]
+    );
 
     return { openPicker, opening };
 }

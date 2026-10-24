@@ -107,7 +107,7 @@ describe("loadWorkspaceChatModelsScope", () => {
         expect(scope.config).toBeUndefined();
         expect(scope.error?.message).toMatch(/can't be read on this server/);
         await expect(withWorkspaceChatModels(5, () => resolveChatModel())).rejects.toThrow(
-            /Settings › Models/
+            /Settings › Bring your own keys/
         );
     });
 

@@ -31,7 +31,7 @@ export async function GET(request: Request) {
         const back = new URL("/employer/documents", origin);
         back.searchParams.set("feature", "settings");
         back.searchParams.set("openrouter", "unavailable");
-        back.hash = "models";
+        back.hash = "byok";
         return NextResponse.redirect(back);
     }
 

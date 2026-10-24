@@ -240,11 +240,13 @@ export const UploadDocumentSchema = z.object({
 
 export const UpdateCompanySchema = z
     .object({
+        // Optional: Bring your own keys saves credentials alone.
         name: z
             .string()
             .min(1, "Company name is required")
             .max(256, "Company name is too long")
-            .trim(),
+            .trim()
+            .optional(),
         description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
         industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
         embeddingIndexKey: z

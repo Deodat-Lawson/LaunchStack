@@ -301,11 +301,14 @@ export async function POST(request: Request) {
             employeepasskey: string;
             numberOfEmployees: string;
             useUploadThing: boolean;
-        }> = {
-            name,
-            numberOfEmployees,
-        };
+        }> = {};
 
+        if (name !== undefined) {
+            updateData.name = name;
+        }
+        if (numberOfEmployees !== undefined) {
+            updateData.numberOfEmployees = numberOfEmployees;
+        }
         if (description !== undefined) {
             updateData.description = description?.trim() ?? null;
         }
@@ -352,11 +355,15 @@ export async function POST(request: Request) {
             }
         }
 
-        const updateResult = await db
-            .update(company)
-            .set(updateData)
-            .where(eq(company.id, companyIdNum))
-            .returning({ id: company.id });
+        // A credentials-only save (Bring your own keys) leaves the row alone.
+        const updateResult =
+            Object.keys(updateData).length > 0
+                ? await db
+                      .update(company)
+                      .set(updateData)
+                      .where(eq(company.id, companyIdNum))
+                      .returning({ id: company.id })
+                : [{ id: companyIdNum }];
 
         if (!updateResult || updateResult.length === 0) {
             return NextResponse.json(

@@ -83,6 +83,7 @@ describe("SETTINGS_SECTION_ACCESS", () => {
         // The API gates behind each section's mount-time GET. A section is
         // never shown to someone its data would answer 403.
         const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
+            byok: "settings.manage", // GET /api/settings/models/workspace
             models: "settings.manage", // GET /api/settings/models
             usage: "analytics.view", // GET /api/settings/usage
             archive: "settings.manage", // GET /api/settings/archive
@@ -137,9 +138,10 @@ describe("SETTINGS_SECTION_ACCESS", () => {
 
 describe("settingsSectionFromHash", () => {
     it("lands old deep links and registry keys where the hub did", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
         expect(settingsSectionFromHash("#profile")).toBe("company");
-        expect(settingsSectionFromHash("#keys")).toBe("processing");
+        expect(settingsSectionFromHash("#keys")).toBe("byok");
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         // Hashes arrive lower-cased; the personal row is the one everyone reaches.
         expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");

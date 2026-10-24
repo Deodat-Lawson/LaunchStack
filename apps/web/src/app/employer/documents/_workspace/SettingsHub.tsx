@@ -32,9 +32,9 @@ import {
     Bot,
     Building2,
     Coins,
-    Cpu,
     FileText,
     FlaskConical,
+    KeyRound,
     Keyboard,
     Palette,
     Plug,
@@ -89,9 +89,7 @@ const ShortcutsSection = load(() =>
 const PeopleAccessSection = load(() =>
     import("./settings/PeopleAccessSection").then(m => m.PeopleAccessSection)
 );
-const ProcessingSettings = load(() =>
-    import("./settings/ProcessingSettings").then(m => m.ProcessingSettings)
-);
+const KeysSection = load(() => import("./settings/KeysSection").then(m => m.KeysSection));
 const ModelsSection = load(() => import("./settings/ModelsSection").then(m => m.ModelsSection));
 const AgentsPanel = load(() => import("./collab/AgentsPanel").then(m => m.AgentsPanel));
 const DocumentDefaultsSection = load(() =>
@@ -194,15 +192,15 @@ export const SECTIONS: SectionDef[] = [
         wide: true,
     },
     {
-        id: "processing",
+        id: "byok",
         group: "workspace",
-        label: "Processing",
-        blurb: "Embedding index and keys",
-        eyebrow: "Processing",
-        title: "How documents get indexed",
+        label: "Bring your own keys",
+        blurb: "Your API and embedding keys",
+        eyebrow: "Keys",
+        title: "Bring your own keys",
         description:
-            "The embedding index behind semantic search, the credentials it uses, and any self-hosted endpoints. Changing the index schedules a reindex of the whole corpus.",
-        Icon: Cpu,
+            "Your own provider account for the workspace's AI, and your own key for embeddings. Both are optional: anything left empty runs on the server's keys.",
+        Icon: KeyRound,
     },
     {
         id: "models",
@@ -212,7 +210,7 @@ export const SECTIONS: SectionDef[] = [
         eyebrow: "Models",
         title: "Which model serves each kind of request",
         description:
-            "Run this workspace on your own provider account, or on the server's default models. The default's routes and models are set in the server's configuration file and shown here read-only.",
+            "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead.",
         Icon: Sparkles,
     },
     {
@@ -325,12 +323,12 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
         const applyHash = () => {
             const hash = window.location.hash.replace("#", "").toLowerCase();
             if (!hash) {
-                // OpenRouter's return leg (`?feature=settings&openrouter=…#models`)
-                // belongs on Models, whose body reads the outcome. The shell's
+                // OpenRouter's return leg (`?feature=settings&openrouter=…#byok`)
+                // belongs on Bring your own keys, whose body reads the outcome. The shell's
                 // `?feature=` cleanup can drop the hash before this lazy hub
                 // mounts, so the parameter alone is enough.
                 if (new URLSearchParams(window.location.search).has("openrouter")) {
-                    setSection("models");
+                    setSection("byok");
                 }
                 return;
             }
@@ -590,8 +588,8 @@ function SectionBody({
             return <PeopleAccessSection onActions={onActions} />;
         case "company":
             return <CompanyProfileView variant="settings" onActions={onActions} />;
-        case "processing":
-            return <ProcessingSettings onActions={onActions} />;
+        case "byok":
+            return <KeysSection onActions={onActions} />;
         case "models":
             return <ModelsSection onActions={onActions} />;
         case "agents":

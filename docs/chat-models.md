@@ -58,7 +58,7 @@ unrelated `OPENAI_API_KEY` in the environment.
 
 Everything above is the **server default**. A workspace admin (anyone with
 `settings.manage`) can instead point their whole workspace at their own
-OpenAI-compatible endpoint in **Settings › Models › Your own model**:
+OpenAI-compatible endpoint in **Settings › Bring your own keys › API key**:
 
 - **API key.** Pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter,
   or "Other OpenAI-compatible"). Picking one only fills in the address, which
@@ -132,7 +132,7 @@ Not covered yet: OCR itself (the document converter and the Azure, Landing AI
 or Datalab providers it routes to), image generation, transcription (and
 transcript translation, which runs on the transcription endpoint) and
 reranking keep the server's settings. Embeddings have their own per-workspace
-key and endpoint in Settings › Processing.
+key and endpoint in Settings › Bring your own keys › Embedding key.
 
 ## Routes
 

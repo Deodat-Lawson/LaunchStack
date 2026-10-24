@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Settings › Models › Your own model.
+ * Settings › Bring your own keys › API key.
  *
  * A workspace admin points the workspace's AI — chat, drafting, meetings,
  * background work — at their own provider account: OpenRouter in one click,
@@ -353,8 +353,8 @@ export function WorkspaceModelPanel({
 
     return (
         <Section
-            title="Your own model"
-            description="Run this workspace's AI on your own provider account. Chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits."
+            title="API key"
+            description="Optional. Run this workspace's AI on your own provider account: chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits. Without one, the workspace runs on the server's default models."
         >
             {note && (
                 <div ref={noteRef} role="status">

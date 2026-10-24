@@ -1,5 +1,5 @@
 /**
- * Settings › Models › Your own model. What must not regress: only
+ * Settings › Bring your own keys › API key. What must not regress: only
  * `settings.manage` reaches any of it, the key goes in and never comes back
  * out, a stored key is never re-aimed at a new address, and the OpenRouter
  * return leg refuses anything but the flow it started.
@@ -364,7 +364,7 @@ describe("Connect OpenRouter", () => {
         );
 
         expect(outcome(response)).toBe("connected");
-        expect(new URL(response.headers.get("location")!).hash).toBe("#models");
+        expect(new URL(response.headers.get("location")!).hash).toBe("#byok");
         const [url, init] = fetchSpy.mock.calls[0]!;
         expect(url).toBe("https://openrouter.ai/api/v1/auth/keys");
         expect(JSON.parse(init?.body as string)).toEqual({

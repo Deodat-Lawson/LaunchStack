@@ -127,6 +127,10 @@ const serverSchema = z.object({
     LINKEDIN_ACCESS_TOKEN: optionalString(),
     BLUESKY_HANDLE: optionalString(),
     BLUESKY_APP_PASSWORD: optionalString(),
+    // Which workspace (company id) the keys above post for. Unset, they belong
+    // to the only workspace on the server; with two or more workspaces and
+    // nothing set, no workspace may post through them (each connects its own).
+    BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID: optionalString(),
     // Azure Document Intelligence (for OCR pipeline)
     AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
     AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
@@ -564,6 +568,7 @@ function parseServerEnv() {
         LINKEDIN_ACCESS_TOKEN: process.env.LINKEDIN_ACCESS_TOKEN,
         BLUESKY_HANDLE: process.env.BLUESKY_HANDLE,
         BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
+        BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID: process.env.BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID,
         AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
         AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
         AZURE_DOC_INTELLIGENCE_MODEL: process.env.AZURE_DOC_INTELLIGENCE_MODEL,

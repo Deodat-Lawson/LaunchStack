@@ -82,13 +82,6 @@
       "title": "Who shows up to a meeting, and how much they may do alone",
       "description": "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect."
     },
-    "documents": {
-      "label": "Document defaults",
-      "blurb": "Storage, processing, destination",
-      "eyebrow": "Documents",
-      "title": "What a new document gets unless someone says otherwise",
-      "description": "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc. Folders can override the processing default."
-    },
     "integrations": {
       "label": "Integrations",
       "blurb": "Connections, Slack, remote nodes",
@@ -220,44 +213,6 @@
         "label": "Default autonomy for agents",
         "description": "How much an agent with no level of its own may do unattended. Each agent can be set lower or higher on its card.",
         "consequence": "Lowering this can stop meetings from mirroring to Slack or running on their own until the room's agents are raised again."
-      }
-    },
-    "documents": {
-      "uploadStorage": {
-        "label": "Where uploaded files are stored",
-        "description": "The storage that receives new uploads. Existing files stay where they are.",
-        "options": {
-          "cloud": {
-            "description": "Needs UPLOADTHING_TOKEN on the server."
-          },
-          "database": {
-            "label": "Blob / database",
-            "description": "The server's own storage."
-          }
-        }
-      },
-      "defaultProcessingMethod": {
-        "label": "Default processing method",
-        "description": "What a new upload is processed with unless the person uploading picks otherwise.",
-        "options": {
-          "standard": {
-            "label": "Standard",
-            "description": "No OCR. For text-based PDFs."
-          },
-          "auto": {
-            "label": "Auto",
-            "description": "Pick the best method per document."
-          }
-        }
-      },
-      "defaultFolder": {
-        "label": "Default folder for new uploads",
-        "description": "Pre-selected in the upload dialog. Leave blank for Unfiled.",
-        "placeholder": "Unfiled"
-      },
-      "createNativeGoogleDoc": {
-        "label": "Create new documents as Google Docs",
-        "description": "When Drive linking is on, the Add source dialog opens on Google Doc instead of a local file."
       }
     },
     "usage": {
@@ -570,25 +525,6 @@
       "keyBody": "Anything using this key stops working at its next request. This can't be undone.",
       "connectionBody": "It loses access to this workspace at its next request. Conversations it already saved stay. You can connect it again any time.",
       "revokeKeyLabel": "Revoke key"
-    }
-  },
-  "documents": {
-    "listSeparator": ", ",
-    "storage": {
-      "title": "Storage",
-      "description": "Where the bytes of a new upload go. Existing documents stay where they are.",
-      "s3Note": "This server stores uploads in S3; the preference below is ignored while that is configured.",
-      "s3Reason": "S3 is configured on the server.",
-      "noUploadThing": "UPLOADTHING_TOKEN is not set on the server, so only the built-in storage is available."
-    },
-    "processing": {
-      "title": "Processing and destination",
-      "description": "Pre-filled in the upload dialog; the person uploading can still change either per batch. Folders may override the processing method for what lands in them.",
-      "existingFolders": "Existing folders: {list}"
-    },
-    "creating": {
-      "title": "Creating",
-      "description": "What the Create menu opens on."
     }
   },
   "integrations": {

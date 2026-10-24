@@ -82,13 +82,6 @@
       "title": "谁参加会议，以及他们可以独立做多少事",
       "description": "每个智能体都是会议中的一个席位：有名字、角色、常设指令和自主程度。智能体可以在本应用中运行，也可以在你连接的其他机器上运行。"
     },
-    "documents": {
-      "label": "文档默认设置",
-      "blurb": "存储、处理、存放位置",
-      "eyebrow": "文档",
-      "title": "新文档默认会得到什么",
-      "description": "上传文件存储在哪里、如何处理、放入哪个文件夹，以及“新建”是否打开 Google 文档。文件夹可以覆盖默认的处理方式。"
-    },
     "integrations": {
       "label": "集成",
       "blurb": "连接、Slack、远程节点",
@@ -220,44 +213,6 @@
         "label": "智能体的默认自主程度",
         "description": "未单独设置级别的智能体在无人值守时可以做多少事。每个智能体都可以在自己的卡片上调低或调高。",
         "consequence": "调低后，会议可能无法同步到 Slack，也无法自动进行，直到会议中的智能体级别重新调高。"
-      }
-    },
-    "documents": {
-      "uploadStorage": {
-        "label": "上传文件的存储位置",
-        "description": "接收新上传文件的存储。已有文件保持原位不动。",
-        "options": {
-          "cloud": {
-            "description": "需要在服务器上配置 UPLOADTHING_TOKEN。"
-          },
-          "database": {
-            "label": "Blob / 数据库",
-            "description": "服务器自带的存储。"
-          }
-        }
-      },
-      "defaultProcessingMethod": {
-        "label": "默认处理方式",
-        "description": "新上传的文件默认使用的处理方式，除非上传者另行选择。",
-        "options": {
-          "standard": {
-            "label": "标准",
-            "description": "不使用 OCR，适用于文本型 PDF。"
-          },
-          "auto": {
-            "label": "自动",
-            "description": "为每个文档选择最合适的方式。"
-          }
-        }
-      },
-      "defaultFolder": {
-        "label": "新上传文件的默认文件夹",
-        "description": "在上传对话框中预先选中。留空则放入“未归类”。",
-        "placeholder": "未归类"
-      },
-      "createNativeGoogleDoc": {
-        "label": "以 Google 文档形式新建文档",
-        "description": "开启 Drive 关联后，“添加来源”对话框默认打开 Google 文档，而不是本地文件。"
       }
     },
     "usage": {
@@ -570,25 +525,6 @@
       "keyBody": "所有使用此密钥的程序都会在下一次请求时停止工作。此操作无法撤销。",
       "connectionBody": "它会在下一次请求时失去对此工作区的访问权限。它已保存的对话会保留。你可以随时重新连接。",
       "revokeKeyLabel": "撤销密钥"
-    }
-  },
-  "documents": {
-    "listSeparator": "、",
-    "storage": {
-      "title": "存储",
-      "description": "新上传文件的存放位置。已有文档保持原位。",
-      "s3Note": "此服务器将上传文件存储在 S3 中；配置 S3 期间，下面的偏好设置不会生效。",
-      "s3Reason": "服务器已配置 S3。",
-      "noUploadThing": "服务器未设置 UPLOADTHING_TOKEN，因此只能使用内置存储。"
-    },
-    "processing": {
-      "title": "处理与存放位置",
-      "description": "在上传对话框中预先填好；上传者仍可按批次修改其中任意一项。文件夹可以为放入其中的文件覆盖处理方式。",
-      "existingFolders": "现有文件夹：{list}"
-    },
-    "creating": {
-      "title": "新建",
-      "description": "“新建”菜单默认打开的内容。"
     }
   },
   "integrations": {

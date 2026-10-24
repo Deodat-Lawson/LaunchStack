@@ -167,7 +167,7 @@
     "processingMethod": "Processing method",
     "uploadDate": "Upload date",
     "uploadDateHint": "Optional: override the upload date for all documents",
-    "storageNote": "Uploads are stored {where, select, s3 {in S3} cloud {with UploadThing} other {in the built-in storage}}. Change that under Settings → Document defaults.",
+    "storageNote": "Uploads are stored {where, select, s3 {in S3} cloud {with UploadThing} other {in the built-in storage}}.",
     "applyAll": "Apply to all"
   },
   "form": {

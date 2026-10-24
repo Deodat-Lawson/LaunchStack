@@ -37,7 +37,8 @@ export const SCENARIO_LIMITS = {
     agents: { min: 5, max: 200, default: 30 },
     rounds: { min: 1, max: 30, default: 8 },
     postTest: { agents: 20, rounds: 3 },
-    subjectMax: 600,
+    /** Room for a plan, the actions behind it and where things stand; longer material goes in files. */
+    subjectMax: 4000,
     notesMax: 8000,
     eventMax: 500,
     questionMax: 600,
@@ -68,7 +69,10 @@ export interface ScenarioSources {
 
 export interface CreateScenarioInput {
     title?: string;
-    /** The situation or question, e.g. "We raise prices 20% for new customers in January." */
+    /**
+     * The situation or question, e.g. "We raise prices 20% for new customers in
+     * January." — or a few paragraphs: the plan, the actions, the current cases.
+     */
     subject: string;
     sources: ScenarioSources;
     agents: number;

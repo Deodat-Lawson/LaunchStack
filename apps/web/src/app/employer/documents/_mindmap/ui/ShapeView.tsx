@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useMemo } from "react";
+import React, { memo, useId, useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 import { shapeGeometry, shapeTextBox } from "../model/shapes";
@@ -15,8 +15,28 @@ import type { DiagramNode, StrokeStyle, TextStyle } from "../model/types";
  * the other four hundred.
  */
 
-export const SHADOW_FILTER_ID = "lswmm-shadow";
-export const SHADOW_FILTER = `url(#${SHADOW_FILTER_ID})`;
+// ---------------------------------------------------------------------------
+// Ids
+// ---------------------------------------------------------------------------
+
+/**
+ * The prefix for every `id` one canvas defines and points at with `url(#…)`.
+ *
+ * Each canvas gets its own. A `url(#…)` resolves to the first element with that
+ * id anywhere in the page, and Studio keeps hidden panes mounted: with a map's
+ * preview in one tab and its editor in another, a shared id resolved into the
+ * `display: none` pane and the browser painted nothing — the central topic, the
+ * one shape with a shadow, vanished from the editor. Export clones the live
+ * `<svg>`, defs included, so a scoped id still resolves inside the file.
+ */
+export function useCanvasIdScope(): string {
+    // `useId` can return `:r0:` or `«r0»` depending on the React build, which a
+    // selector would have to escape; the word characters alone are unique.
+    return `lswmm-${useId().replace(/[^\w-]/g, "")}`;
+}
+
+const shadowFilterId = (scope: string) => `${scope}-shadow`;
+const clipPathId = (scope: string, nodeId: string) => `${scope}-clip-${nodeId}`;
 
 export function dashArray(style: StrokeStyle, strokeWidth: number): string | undefined {
     const w = Math.max(strokeWidth, 0.5);
@@ -84,9 +104,16 @@ interface ShapeViewProps {
     hideText?: boolean;
     /** Extra opacity multiplier, used to ghost a shape while it is dragged. */
     ghost?: boolean;
+    /** The owning canvas's `useCanvasIdScope()`. */
+    idScope: string;
 }
 
-export const ShapeView = memo(function ShapeView({ node, hideText, ghost }: ShapeViewProps) {
+export const ShapeView = memo(function ShapeView({
+    node,
+    hideText,
+    ghost,
+    idScope,
+}: ShapeViewProps) {
     const { style, textStyle } = node;
     const geometry = useMemo(
         () => shapeGeometry(node.shape, node.w, node.h, style.radius),
@@ -119,14 +146,14 @@ export const ShapeView = memo(function ShapeView({ node, hideText, ghost }: Shap
         <g
             transform={transform}
             opacity={(ghost ? 0.45 : 1) * style.opacity}
-            filter={style.shadow ? SHADOW_FILTER : undefined}
+            filter={style.shadow ? `url(#${shadowFilterId(idScope)})` : undefined}
         >
             {geometry.backing?.map((d, i) => (
                 <path key={`b${i}`} d={d} {...common} />
             ))}
             {geometry.path ? <path d={geometry.path} {...common} /> : null}
 
-            {node.shape === "image" ? <ImageBody node={node} /> : null}
+            {node.shape === "image" ? <ImageBody node={node} idScope={idScope} /> : null}
             {node.shape === "ink" ? <InkBody node={node} /> : null}
 
             {geometry.decorations?.map((d, i) => (
@@ -167,7 +194,7 @@ export const ShapeView = memo(function ShapeView({ node, hideText, ghost }: Shap
 // Special bodies
 // ---------------------------------------------------------------------------
 
-function ImageBody({ node }: { node: DiagramNode }) {
+function ImageBody({ node, idScope }: { node: DiagramNode; idScope: string }) {
     const t = useTranslations("mindmap.canvas");
     const src = node.data?.src;
     if (!src) {
@@ -195,7 +222,7 @@ function ImageBody({ node }: { node: DiagramNode }) {
             </>
         );
     }
-    const clipId = `clip-${node.id}`;
+    const clipId = clipPathId(idScope, node.id);
     return (
         <>
             <defs>
@@ -257,10 +284,10 @@ function ProgressBar({ w, h, value, tint }: { w: number; h: number; value: numbe
 // ---------------------------------------------------------------------------
 
 /** Mounted once by the canvas; referenced by every shadowed shape. */
-export function CanvasDefs() {
+export function CanvasDefs({ idScope }: { idScope: string }) {
     return (
         <defs>
-            <filter id={SHADOW_FILTER_ID} x="-30%" y="-30%" width="160%" height="160%">
+            <filter id={shadowFilterId(idScope)} x="-30%" y="-30%" width="160%" height="160%">
                 <feDropShadow
                     dx="0"
                     dy="2"

@@ -5,6 +5,7 @@ import { createBrandPosts, publishBrandPost } from "@launchstack/pipelines/marke
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 import { defaultChannelFor, NETWORK_LABELS } from "~/server/brand/accounts";
+import { CLAIM_GATE_MESSAGE, claimGate } from "~/server/brand/claim-gate";
 import { publishForWorkspace } from "~/server/brand/publish";
 
 export const runtime = "nodejs";
@@ -14,6 +15,8 @@ const PublishSchema = z.object({
     platform: MarketingPlatformEnum,
     message: z.string().min(1).max(5000),
     title: z.string().max(300).optional(),
+    /** The member saw which claims their documents don't back and posts anyway. */
+    acknowledgeUnsupportedClaims: z.boolean().optional(),
 });
 
 /**
@@ -35,7 +38,11 @@ export async function POST(request: Request) {
             return fail("Invalid input", 400, { errors: validation.error.flatten() });
         }
 
-        const { platform, message, title } = validation.data;
+        const { platform, message, title, acknowledgeUnsupportedClaims } = validation.data;
+        if (!acknowledgeUnsupportedClaims) {
+            const blocked = await claimGate(ctx.data.companyId, message);
+            if (blocked) return fail(CLAIM_GATE_MESSAGE, 409, blocked);
+        }
         const channel = await defaultChannelFor(ctx.data.companyId, platform);
         if (!channel) {
             // LinkedIn and Bluesky are connected per workspace; X and Reddit

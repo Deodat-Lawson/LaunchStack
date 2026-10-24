@@ -1,10 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { cn } from "~/lib/utils";
 
 import type { SalesStage } from "../api";
-import { FUNNEL_STAGES, STAGE_LABELS, stageTone } from "../_lib/stages";
+import { useGrowthFormat } from "../../_lib/format";
+import { FUNNEL_STAGES, stageTone } from "../_lib/stages";
 
 /**
  * One row whose segment widths are the counts, so it needs no legend and no
@@ -20,6 +23,9 @@ export function FunnelBar({
     hrefFor?: (stage: SalesStage) => string;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects.funnel");
+    const ts = useTranslations("growth.prospects.stages");
+    const { joinList } = useGrowthFormat();
     const byStage = new Map(counts.map(c => [c.stage, c.count]));
     const total = FUNNEL_STAGES.reduce((sum, s) => sum + (byStage.get(s) ?? 0), 0);
     return (
@@ -27,9 +33,11 @@ export function FunnelBar({
             <div
                 className="border-line bg-panel flex h-8 overflow-hidden rounded-md border"
                 role="img"
-                aria-label={FUNNEL_STAGES.map(
-                    s => `${STAGE_LABELS[s]} ${byStage.get(s) ?? 0}`
-                ).join(", ")}
+                aria-label={joinList(
+                    FUNNEL_STAGES.map(s =>
+                        t("segment", { stage: ts(s), count: byStage.get(s) ?? 0 })
+                    )
+                )}
             >
                 {FUNNEL_STAGES.map((stage, i) => {
                     const count = byStage.get(stage) ?? 0;
@@ -56,7 +64,7 @@ export function FunnelBar({
                                 i < FUNNEL_STAGES.length - 1 && "border-line border-r"
                             )}
                             style={{ flex: `${grow} 1 0` }}
-                            title={`${STAGE_LABELS[stage]}: ${count}`}
+                            title={t("title", { stage: ts(stage), count })}
                         >
                             {hrefFor ? (
                                 <ToolLink href={hrefFor(stage)} className="block h-full">
@@ -79,7 +87,7 @@ export function FunnelBar({
                             className="min-w-0 truncate px-0.5 text-center"
                             style={{ flex: `${grow} 1 0` }}
                         >
-                            {STAGE_LABELS[stage]}
+                            {ts(stage)}
                         </span>
                     );
                 })}

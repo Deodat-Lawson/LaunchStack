@@ -10,7 +10,7 @@ import {
     type TopicDto,
     type VantageCommitmentStatus,
 } from "../api";
-import { addDaysIso, fmtDate, todayIso } from "./format";
+import { addDaysIso, todayIso, useVantageFormat, type VantageFormat } from "./format";
 import { hideSuggestion, unhideSuggestion } from "./hidden";
 
 /**
@@ -19,6 +19,10 @@ import { hideSuggestion, unhideSuggestion } from "./hidden";
  * takes the card off the screen at once, runs the builder, refreshes, and
  * offers the Undo — or puts the card back and says why when it failed.
  * `gone` covers only the moment between the click and the refreshed data.
+ *
+ * Builders say what happened in the reader's language: they take the
+ * `VantageFormat` from `useVantageFormat()` (`fmt.t` is the `vantage`
+ * namespace).
  */
 export interface Outcome {
     message: string;
@@ -34,22 +38,33 @@ const CHANGED = "vantage:changed";
  * click ends here, so a misclick costs one more click, not a hunt. An Undo
  * that fails says so and offers to try again, since its toast is gone.
  */
-export function undoToast(message: string, undo: () => Promise<unknown>, description?: string) {
+export function undoToast(
+    fmt: Pick<VantageFormat, "t">,
+    message: string,
+    undo: () => Promise<unknown>,
+    description?: string
+) {
+    const { t } = fmt;
     const run = () => {
         undo().then(
             () => window.dispatchEvent(new Event(CHANGED)),
             (e: unknown) =>
-                toast.error(e instanceof Error ? e.message : "Could not undo that", {
+                toast.error(e instanceof Error ? e.message : t("actions.undoFailed"), {
                     description,
                     duration: 10000,
-                    action: { label: "Try again", onClick: run },
+                    action: { label: t("actions.tryAgain"), onClick: run },
                 })
         );
     };
-    toast(message, { description, duration: 6000, action: { label: "Undo", onClick: run } });
+    toast(message, {
+        description,
+        duration: 6000,
+        action: { label: t("actions.undo"), onClick: run },
+    });
 }
 
 export function useOneClick(refresh: () => Promise<unknown> | void) {
+    const fmt = useVantageFormat();
     const [gone, setGone] = useState<ReadonlySet<string>>(() => new Set());
     // An Undo clicked after moving to another screen still shows up there.
     useEffect(() => {
@@ -81,7 +96,7 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
             } catch (e) {
                 running.current.delete(id);
                 restore(id);
-                toast.error(e instanceof Error ? e.message : "That did not work");
+                toast.error(e instanceof Error ? e.message : fmt.t("actions.failed"));
                 return;
             }
             // The card stays off the screen only until fresh data agrees; after
@@ -98,44 +113,39 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
                 return;
             }
             // The screen re-reads through the "changed" event once Undo lands.
-            undoToast(message, undo, description);
+            undoToast(fmt, message, undo, description);
         },
-        [refresh, restore]
+        [refresh, restore, fmt]
     );
     return { gone, act };
 }
 
-export async function keepTopic(topic: TopicDto): Promise<Outcome> {
+export async function keepTopic(fmt: VantageFormat, topic: TopicDto): Promise<Outcome> {
     await vantageApi.patchTopic(topic.id, { status: "kept" });
     return {
-        message: "Added to the agenda",
+        message: fmt.t("actions.added"),
         description: topic.title,
         undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
     };
 }
 
-export async function ignoreTopic(topic: TopicDto): Promise<Outcome> {
+export async function ignoreTopic(fmt: VantageFormat, topic: TopicDto): Promise<Outcome> {
     await vantageApi.patchTopic(topic.id, { status: "dismissed" });
     return {
-        message: "Ignored",
+        message: fmt.t("actions.ignored"),
         description: topic.title,
         undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
     };
 }
 
-const RESOLVED_WORDS: Record<Exclude<VantageCommitmentStatus, "open">, string> = {
-    done: "Marked done",
-    missed: "Marked missed — it comes back on the next agenda",
-    dropped: "Dropped",
-};
-
 export async function resolveCommitment(
+    fmt: VantageFormat,
     commitment: CommitmentDto,
     status: Exclude<VantageCommitmentStatus, "open">
 ): Promise<Outcome> {
     await vantageApi.patchCommitment(commitment.id, { status });
     return {
-        message: RESOLVED_WORDS[status],
+        message: fmt.t(`actions.resolved.${status}`),
         description: commitment.title,
         undo: () =>
             vantageApi.patchCommitment(commitment.id, {
@@ -168,25 +178,29 @@ export function canCommitInOneClick(topic: TopicDto): boolean {
  * and the commitment opens with the proposed owner and date (a week out
  * when none was proposed). Undo takes both back.
  */
-export async function commitToNextStep(topic: TopicDto, today = todayIso()): Promise<Outcome> {
+export async function commitToNextStep(
+    fmt: VantageFormat,
+    topic: TopicDto,
+    today = todayIso()
+): Promise<Outcome> {
     const step = topic.proposedNextStep.trim();
     const owner = (topic.proposedOwner ?? "").trim();
     const dueOn = topic.proposedDue ?? addDaysIso(today, 7);
     const { topic: saved } = await vantageApi.decide(topic.id, {
-        decision: `Agreed: ${step}`,
+        decision: fmt.t("actions.agreed", { step }),
         commitment: { title: step, owner, dueOn, test: null, shared: topic.shared },
     });
     return {
-        message: `Committed — ${owner}, due ${fmtDate(dueOn)}`,
+        message: fmt.t("actions.committed", { owner, date: fmt.date(dueOn) }),
         description: step,
         undo: () => vantageApi.undoDecision(topic.id, saved.commitmentId),
     };
 }
 
-export async function markReady(agenda: AgendaDto): Promise<Outcome> {
+export async function markReady(fmt: VantageFormat, agenda: AgendaDto): Promise<Outcome> {
     await vantageApi.setAgendaStatus(agenda.id, "ready");
     return {
-        message: "Agenda marked ready for the meeting",
+        message: fmt.t("actions.ready"),
         undo: () => vantageApi.setAgendaStatus(agenda.id, agenda.status),
     };
 }

@@ -1,0 +1,580 @@
+{
+  "accountMenu": {
+    "fallbackName": "你的账户",
+    "triggerLabel": "账户：{name}",
+    "switchWorkspace": "切换工作区",
+    "switch": "切换",
+    "lightTheme": "切换到浅色主题",
+    "darkTheme": "切换到深色主题",
+    "settings": "设置",
+    "documentation": "文档",
+    "logOut": "退出登录"
+  },
+  "common": {
+    "actionsFor": "{name} 的操作",
+    "openInANewTab": "在新标签页中打开",
+    "opening": "正在打开…",
+    "indexingReason": "该来源仍在索引中。",
+    "viewOnly": "你可以查看此文件，但不能修改。",
+    "everyPaneTaken": "所有窗格都已占用。",
+    "notSplit": "工作区尚未拆分。",
+    "splitRight": "向右拆分",
+    "splitDown": "向下拆分",
+    "restorePanes": "恢复其他窗格",
+    "maximizePane": "最大化此窗格",
+    "closePane": "关闭此窗格",
+    "newMindmap": "新建思维导图",
+    "linkCopied": "链接已复制"
+  },
+  "page": {
+    "documentsCrumb": "文档"
+  },
+  "viewerPage": {
+    "loading": "正在加载文档…",
+    "notFound": "未找到该文档。",
+    "backToWorkspace": "返回工作区",
+    "pageTitle": "文档"
+  },
+  "relativeTime": {
+    "justNow": "刚刚",
+    "hoursAgo": "{count} 小时前",
+    "yesterday": "昨天",
+    "daysAgo": "{count} 天前",
+    "lastWeek": "上周",
+    "weeksAgo": "{count} 周前"
+  },
+  "sourceRows": {
+    "shapes": "{count, plural, other {# 个形状}}",
+    "fetchFailed": "获取文档失败（{status}）",
+    "fetchFailedGeneric": "获取文档失败"
+  },
+  "studioGroups": {
+    "workspace": "工作区",
+    "tools": "工具",
+    "management": "管理"
+  },
+  "studioApps": {
+    "chat": {
+      "label": "对话",
+      "description": "基于你的知识库提出有据可查的问题"
+    },
+    "knowledge": {
+      "label": "知识库",
+      "description": "浏览、筛选并扩充工作区可引用的一切内容"
+    },
+    "meetings": {
+      "label": "会议",
+      "description": "智能体在频道中推进一个目标——你可以随时加入"
+    },
+    "agents": {
+      "label": "智能体",
+      "description": "你的智能体：试用、编辑指令、导入定义文件"
+    },
+    "team": {
+      "label": "团队",
+      "description": "成员以及你与每个人共享的内容、可一键共享的群组，以及谁添加、共享或移动了什么"
+    },
+    "investors": {
+      "label": "投资人关系",
+      "description": "从 SEC 申报文件中找到正在募资的风投基金，并依据你的来源起草一页纸简介、路演文稿和引荐邮件"
+    },
+    "draft": {
+      "label": "模板草稿",
+      "description": "用针对你的来源调校过的模板生成新文档"
+    },
+    "rewrite": {
+      "label": "改写",
+      "description": "以差异对比优先的方式改写，优化现有文字"
+    },
+    "settings": {
+      "label": "设置",
+      "description": "你的账户、外观和快捷键；工作区的成员、处理、智能体和集成"
+    },
+    "analytics": {
+      "label": "分析",
+      "description": "整个工作区的文档、查询和活动"
+    },
+    "mindmap": {
+      "label": "思维导图",
+      "description": "图表、思维导图和流程图——你亲手绘制的来源"
+    },
+    "workflows": {
+      "label": "工作流",
+      "description": "在你的来源之间自动执行重复任务"
+    },
+    "metadata": {
+      "label": "公司档案",
+      "description": "工作区对你公司的了解"
+    }
+  },
+  "studioDeniedNotes": {
+    "team": "你的角色只能看到共享给你的内容，因此没有团队列表。新的共享会出现在侧边栏顶部的铃铛里。"
+  },
+  "paletteLinks": {
+    "knowledge": {
+      "label": "知识库",
+      "description": "浏览并扩充工作区可引用的一切内容"
+    },
+    "meetings": {
+      "label": "会议",
+      "description": "智能体在你可加入的频道中推进一个目标"
+    },
+    "agents": {
+      "label": "智能体",
+      "description": "智能体名册：试用、编辑指令或导入一个智能体"
+    },
+    "team": {
+      "label": "团队",
+      "description": "成员、群组，以及工作区里谁做了什么"
+    },
+    "draft": {
+      "label": "起草",
+      "description": "用 AI 生成新文档"
+    },
+    "rewrite": {
+      "label": "改写",
+      "description": "优化现有内容"
+    },
+    "workflows": {
+      "label": "工作流",
+      "description": "在你的来源之间自动执行重复任务"
+    },
+    "mindmap": {
+      "label": "新建思维导图",
+      "description": "可被引用的图表、思维导图和流程图"
+    },
+    "artifacts": {
+      "label": "导入 Claude 工件",
+      "description": "把在 Claude 中构建的页面、图表和组件作为来源"
+    },
+    "agentSessions": {
+      "label": "导入编程会话",
+      "description": "把 Claude Code 和 Codex 对话作为来源"
+    },
+    "growth": {
+      "description": "品牌与潜在客户合而为一：排期并发布帖子，找到可能购买的公司，推进交易"
+    },
+    "brand": {
+      "label": "品牌",
+      "description": "一次撰写、多平台发布，安排排期、查看日历，并从你的文档生成营销活动"
+    },
+    "prospects": {
+      "label": "潜在客户",
+      "description": "找到可能购买你产品的公司，用证据建立档案，并推进交易"
+    },
+    "vantage": {
+      "description": "依据证据准备下周会议：带引用的议程、决策，以及在下一周核查的承诺"
+    },
+    "scenarios": {
+      "description": "模拟根据你的记录构建的人物如何应对某个情境"
+    },
+    "proposals": {
+      "description": "依据来源中的证据撰写资助和融资提案：找到资助方，把征集公告变成清单，为每个问题起草带引用的回答"
+    },
+    "investors": {
+      "label": "投资人关系",
+      "description": "找到正在募资的风投基金，并依据你的来源起草融资材料"
+    },
+    "audit": {
+      "label": "预测缺口",
+      "description": "缺失的附件、附表和合规缺口"
+    },
+    "analytics": {
+      "label": "分析",
+      "description": "文档、查询和活动"
+    },
+    "peopleAccess": {
+      "label": "成员与权限",
+      "description": "角色、邀请、加入链接、审计"
+    },
+    "profile": {
+      "label": "公司档案",
+      "description": "AI 提取的公司情报"
+    },
+    "agentsNodes": {
+      "label": "智能体与节点",
+      "description": "会议名册，以及运行它的机器"
+    },
+    "deploy": {
+      "label": "自托管 / 自带密钥",
+      "description": "Vercel、Docker、你自己的密钥"
+    }
+  },
+  "history": {
+    "kinds": {
+      "chat": "对话",
+      "trendSearch": "趋势搜索",
+      "prospector": "潜客挖掘",
+      "repoExplainer": "代码库解读",
+      "distribution": "分发",
+      "email": "邮件营销活动",
+      "weeklyReview": "每周回顾",
+      "vantage": "Vantage 议程",
+      "proposals": "提案"
+    },
+    "status": {
+      "queued": "排队中",
+      "running": "运行中",
+      "done": "已完成",
+      "failed": "失败"
+    },
+    "groups": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "week": "过去 7 天",
+      "month": "过去 30 天",
+      "older": "更早"
+    },
+    "relative": {
+      "now": "刚刚",
+      "minutes": "{count} 分钟",
+      "hours": "{count} 小时",
+      "days": "{count} 天"
+    }
+  },
+  "commandPalette": {
+    "placeholder": "跳转到任何内容——来源、功能、设置…",
+    "groups": {
+      "action": "操作",
+      "feature": "功能",
+      "agent": "智能体",
+      "source": "来源",
+      "history": "历史记录",
+      "setting": "设置"
+    },
+    "action": "操作",
+    "actionWithShortcut": "操作 · {shortcut}",
+    "submenuItem": "{menu}：{item}",
+    "askAgent": "向 {name} 提问",
+    "openAgent": "在智能体中打开 {name}",
+    "openAgentSub": "编辑、试用、导出 · @{handle}",
+    "sharedBy": "由 {name} 共享 · {time}",
+    "aTeammate": "一位同事",
+    "settingSub": "设置 · {description}",
+    "language": "语言：{language}",
+    "languageCurrent": "当前语言",
+    "languageSwitch": "切换界面语言",
+    "noMatches": "没有与<mono>“{query}”</mono>匹配的结果",
+    "navigate": "导航",
+    "open": "打开",
+    "results": "{count} 个结果"
+  },
+  "contextMenu": {
+    "openLinkInNewTab": "在新标签页中打开链接",
+    "copyLinkAddress": "复制链接地址",
+    "copyPageLink": "复制此页面的链接",
+    "theme": "主题",
+    "themes": {
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统"
+    },
+    "selection": "所选内容"
+  },
+  "studioDrawer": {
+    "title": "工作台应用",
+    "description": "打开一个工作区应用——按住 ⌘ 点击可在当前内容旁边打开。列出哪些应用取决于你的权限。",
+    "openBeside": "在旁边打开",
+    "comingSoon": "即将推出",
+    "comingSoonReason": "即将推出。",
+    "soon": "即将推出"
+  },
+  "paneLauncher": {
+    "allApps": "所有应用"
+  },
+  "studioTabs": {
+    "moved": "{label} 已移到第 {position} 位，共 {total} 个",
+    "inPane": "{label}，第 {index} 个窗格，共 {count} 个",
+    "openSomethingFirst": "请先在这里打开一些内容。",
+    "paneActions": "窗格操作",
+    "closePaneAndTabs": "关闭此窗格及其中的 {count} 个标签页",
+    "openApps": "已打开的应用",
+    "alreadyOnlyTab": "它已经是这里唯一的标签页。",
+    "closeOthers": "关闭其他标签页",
+    "closeToRight": "关闭右侧所有标签页",
+    "nothingElseOpen": "这里没有其他打开的内容。",
+    "nothingToRight": "右侧没有内容。",
+    "tabTitle": "{label}——{description}",
+    "closeTab": "关闭 {label}",
+    "openStudioApp": "打开工作台应用",
+    "paneMenuTitle": "拆分、最大化或关闭此窗格"
+  },
+  "splitView": {
+    "tooNarrow": "宽度不足，无法左右拆分。",
+    "tooShort": "高度不足，无法上下拆分。",
+    "resizeRow": "调整两侧窗格的大小",
+    "resizeColumn": "调整上下窗格的大小",
+    "dividerTitle": "拖动以调整大小 · 双击平均分配",
+    "zones": {
+      "center": "在此打开",
+      "left": "向左拆分",
+      "right": "向右拆分",
+      "up": "向上拆分",
+      "down": "向下拆分"
+    },
+    "rootZones": {
+      "left": "左侧，占满高度",
+      "right": "右侧，占满高度",
+      "up": "顶部，占满宽度",
+      "down": "底部，占满宽度"
+    }
+  },
+  "studioPanes": {
+    "comingSoonTitle": "{title}（即将推出）",
+    "comingSoon": "即将推出",
+    "studioEyebrow": "工作台",
+    "chat": {
+      "eyebrow": "工作区",
+      "title": "对话",
+      "body": "基于已索引的来源提出有据可查的问题。在左侧选择来源来限定提问范围，或在整个工作区内提问。",
+      "hint": "在侧边栏中选择<strong>对话</strong>回到你的对话，或关闭工作台。"
+    },
+    "knowledge": {
+      "eyebrow": "知识库",
+      "title": "你的资料库",
+      "body": "工作区可引用的一切——上传的文件、粘贴的笔记和已连接的工具——并附带筛选、合集和索引状态。",
+      "open": "打开知识库"
+    },
+    "predictive": {
+      "eyebrow": "预测缺口",
+      "title": "这份文档缺了什么",
+      "body": "扫描整份文档，标记指向缺失附件的交叉引用、数字不一致之处以及缺失的附表。先从来源栏选择一份文档，再运行分析器。",
+      "crossReferences": "将附表、附件和附录与实际资料库交叉核对",
+      "domainAware": "按领域识别：合同 / 财务 / 合规 / 研究 / 人事 / 教育",
+      "findingsLink": "每条发现都链接回触发它的原文片段",
+      "back": "返回工作区"
+    },
+    "workflows": {
+      "eyebrow": "自动化",
+      "title": "工作流（即将推出）",
+      "body": "串联能感知来源的步骤：“每周五总结新的客户访谈，起草一条 Slack 更新，并排队等待审阅。”目前正在设计中。",
+      "scheduled": "定时或由事件触发",
+      "composable": "可组合的操作：查询、起草、改写、导出、通知",
+      "dryRun": "首次运行前可预演预览"
+    },
+    "mindmap": {
+      "linkTitle": "思维导图",
+      "linkBody": "图表、思维导图和流程图与其他来源一起存放在你的资料库中。从“添加来源 → 创建”开始新建。",
+      "eyebrow": "思维导图",
+      "title": "你绘制的来源",
+      "body": "图表、思维导图和流程图与其他来源一起存放在你的资料库中。从侧栏打开即可预览、就地编辑，准备好后让它可被引用。"
+    },
+    "unknown": "此版本的应用中没有“{label}”。"
+  },
+  "confirmDialog": {
+    "working": "处理中…"
+  },
+  "mindmapHost": {
+    "couldNotOpen": "无法打开该思维导图。"
+  },
+  "documentViewerHeader": {
+    "backToLibrary": "返回资料库",
+    "library": "资料库",
+    "hideDetails": "隐藏版本和笔记",
+    "showDetails": "显示版本和笔记"
+  },
+  "documentViewer": {
+    "versionActions": "版本 {number} 的操作",
+    "addedBy": "由 {name} 添加",
+    "addedByWithTime": "由 {name} 添加 · {time}",
+    "you": "你",
+    "failedStatus": "失败（{status}）",
+    "loadPreviewFailed": "预览加载失败",
+    "openMindmapFailed": "无法打开此思维导图",
+    "loadVersionsFailed": "版本加载失败",
+    "publishFailed": "无法发布此思维导图",
+    "publishedNew": "已添加到你的来源——稍后将完成索引",
+    "publishedUpdate": "可引用副本已更新——稍后将完成索引",
+    "upload": {
+      "typeMismatch": "文件类型必须与当前版本一致（{expected}），实际为 {actual}。",
+      "unknownType": "未知",
+      "signIn": "请登录后重试。",
+      "storageFailed": "存储上传失败（HTTP {status}）。",
+      "invalidStorage": "存储服务的响应无效。",
+      "noUrl": "存储服务未返回 URL。",
+      "versionFailed": "版本上传失败",
+      "timedOut": "上传超时。",
+      "unavailable": "存储服务不可用。"
+    },
+    "restoreFailed": "版本恢复失败",
+    "saveFailed": "保存失败",
+    "unsaved": "未保存",
+    "publishing": "正在发布…",
+    "updateCitable": "更新可引用副本",
+    "makeCitable": "设为可引用",
+    "staleHint": "可引用副本比此思维导图旧",
+    "indexHint": "为此思维导图建立索引，以便回答引用它",
+    "askAbout": "就此提问",
+    "shareHint": "共享 · {audience}",
+    "deleteDocument": "删除文档",
+    "previewingBanner": "正在预览 v{number}。搜索仍使用当前版本。",
+    "mindmapError": "无法打开此思维导图：{error}",
+    "processing": "该来源仍在处理中——索引完成后将显示内容。",
+    "previewError": "无法加载预览：{error}",
+    "openStandalone": "在独立查看器中打开",
+    "loadingPreview": "正在加载预览…",
+    "versionsTab": "版本",
+    "notesTab": "笔记",
+    "versionHistory": "版本历史",
+    "uploadedRevisions": "该来源已上传的各个版本。",
+    "uploadingPercent": "正在上传 {percent}%…",
+    "indexingVersion": "正在为新版本建立索引…",
+    "uploadNewVersion": "上传新版本",
+    "mustMatch": "必须匹配：{mime}",
+    "noVersions": "该来源没有可用的版本历史。",
+    "versionLabel": "v{number}",
+    "versionCurrent": "v{number}（当前）",
+    "previewingShort": "正在预览 v{number}。",
+    "restoring": "正在恢复…",
+    "restoreThis": "恢复此版本",
+    "details": "详细信息",
+    "metaAdded": "添加时间",
+    "metaSize": "大小",
+    "metaFolder": "文件夹",
+    "unfiled": "未归档",
+    "metaIndexed": "索引",
+    "readyToQuery": "✓ 可供查询",
+    "metaEdited": "编辑时间",
+    "metaCitable": "可引用",
+    "citableYes": "✓ 回答可以引用它",
+    "citableStale": "改动尚不可引用",
+    "citableNo": "尚未",
+    "mindmapHistoryHint": "在编辑器中保存的快照。可在编辑器的历史记录面板中恢复。",
+    "noSnapshots": "还没有快照——在编辑器中按 ⌘S 即可保存一个。",
+    "revisionLabel": "r{number}",
+    "revisionLatest": "r{number}（最新）",
+    "confirmRestoreTitle": "恢复此版本？",
+    "confirmTrashTitle": "将“{title}”移到回收站？",
+    "confirmDeleteTitle": "删除“{title}”？",
+    "confirmRestoreBody": "它将成为当前版本，之后的回答都会引用它。其他版本仍保留在历史记录中。",
+    "confirmTrashBody": "之后可以立即撤销。",
+    "confirmDeleteBody": "此操作无法撤销。",
+    "moveToTrash": "移到回收站"
+  },
+  "documentMenu": {
+    "askMindmap": "就此思维导图提问",
+    "askDocument": "就此文档提问",
+    "makeCitableFirst": "请先将此思维导图设为可引用。",
+    "rename": "重命名…",
+    "downloadOriginal": "下载原文件",
+    "originalLoading": "原文件仍在加载中。",
+    "copyLink": "复制链接",
+    "revisionHistory": "修订历史",
+    "versionHistory": "版本历史",
+    "notes": "笔记",
+    "share": "共享…",
+    "moveToTrash": "移到回收站…",
+    "delete": "删除…",
+    "previewVersion": "预览此版本",
+    "isCurrent": "这是当前版本。",
+    "downloadVersion": "下载此版本",
+    "restoreVersion": "恢复此版本…",
+    "restoreRunning": "已有恢复操作正在进行。"
+  },
+  "shell": {
+    "loading": "正在打开你的工作区…",
+    "sources": "来源",
+    "splitEmptyPane": "此窗格为空：请先在其中打开一些内容。",
+    "chatGone": "该对话已不可用",
+    "chatReopenFailed": "无法重新打开该对话",
+    "chatRenameFailed": "无法重命名该对话",
+    "chatDeleteFailed": "无法删除该对话",
+    "chatContinued": "已在新对话中继续",
+    "chatContinuedDescription": "此副本归你所有且仅你可见，原对话保持不变。",
+    "chatContinueFailed": "无法继续该对话",
+    "chatNoLongerShared": "该对话已不再与你共享",
+    "runDeleted": "已删除",
+    "runDeleteFailed": "无法删除",
+    "continuationMessage": "继续 **{title}**——导入的转录文本已固定为来源，我已把该对话的结尾部分纳入上下文。从你上次停下的地方继续吧。",
+    "continuationFailed": "无法加载导入的会话以继续",
+    "queuedEditGone": "该排队消息已发送或被移除，你的编辑内容仍保留在输入框中。",
+    "forkSaved": "分支已保存为新对话",
+    "forkSavedDescription": "截至此处的对话轮次都已带上，原对话保持不变。",
+    "recoveryRetryFailed": "无法保存提示词恢复副本。请先释放浏览器存储空间再重试；原对话完好无损。",
+    "retryFailed": "无法重试此回答",
+    "recoveryEditFailed": "无法保存提示词恢复副本。请先释放浏览器存储空间再编辑；原对话完好无损。",
+    "editedSaved": "编辑后的问题已随提示词保存在原对话中。",
+    "editFailed": "无法编辑此消息",
+    "noteDefaultTitle": "对话回答",
+    "noteSaved": "已保存到你的笔记本",
+    "noteSaveFailed": "无法保存该笔记",
+    "movedToTrash": "已移到回收站",
+    "restoreMindmapFailed": "无法恢复该思维导图",
+    "deleteSourceFailed": "删除来源失败",
+    "clipboardRefused": "剪贴板访问被拒绝——请改用 ⌘V 粘贴",
+    "clipboardEmpty": "剪贴板为空",
+    "retrying": "正在重试",
+    "retryProcessingFailed": "无法重试处理",
+    "movedTo": "已移到 {folder}",
+    "movedToTop": "已将 {name} 移到顶层",
+    "moveFailed": "无法移动",
+    "requestFailed": "请求失败（{status}）",
+    "requestFailedGeneric": "请求失败",
+    "folderCreated": "已创建“{name}”",
+    "folderCreatedDescription": "此工作区已有名为“{name}”的文件夹。",
+    "deniedApp": "你的角色无法使用“{app}”",
+    "connectorConnected": "{name} 已连接",
+    "connectorNoChannels": "{name} 已连接，但登录时未授予发布权限。请在“账户”中检查授权范围。",
+    "connectorPartial": "{name} 已连接，但无法读取其主页。请在“账户”中刷新主页。",
+    "connectorCancelled": "{name} 连接已取消",
+    "connectorFailed": "{name} 连接失败——请重试",
+    "agentWillAnswer": "{name} 将回答你的下一条消息",
+    "thisChat": "此对话",
+    "sourceGone": "该来源已不在资料库中。",
+    "appUnavailable": "此应用不可用。",
+    "longSelection": "所选内容过长：仅保留了前 {count, number} 个字符。",
+    "thisConversation": "此对话",
+    "launcher": {
+      "titleSplit": "在这里打开内容",
+      "titleEmpty": "你的工作区已就绪，随时可以开始",
+      "hintSplit": "选择一个应用，或从侧边栏把标签页或来源拖到这里。",
+      "hintEmpty": "打开一个应用即可开始。之后可以把标签页或来源拖到任意边缘来拆分，或按住 ⌘ 点击在旁边打开。"
+    },
+    "actions": {
+      "newChat": "新对话",
+      "addKnowledge": "添加知识",
+      "pasteSource": "粘贴以创建来源",
+      "palette": "命令面板",
+      "focusNext": "聚焦下一个窗格",
+      "hideSidebar": "隐藏侧边栏",
+      "showSidebar": "显示侧边栏",
+      "askAgain": "重新提问",
+      "waitForAnswer": "请等待当前回答完成。",
+      "branch": "从这里分支出新对话",
+      "saveNote": "将回答保存为笔记",
+      "saveSource": "将回答保存为来源",
+      "saveTranscript": "将对话记录保存为来源",
+      "nothingToSave": "暂无可保存的内容。",
+      "askAboutThis": "就此提问",
+      "explain": "解释这段",
+      "summarise": "总结这段",
+      "copyCited": "带引用复制",
+      "copiedCited": "已带引用复制",
+      "addNote": "用这段内容添加笔记"
+    },
+    "questions": {
+      "explain": "解释这段内容。",
+      "summarise": "总结这段内容。"
+    },
+    "deleteDialog": {
+      "mindmapTitle": "将此思维导图移到回收站？",
+      "mindmapBody": "“{title}”将移出资料库。之后可以立即撤销。",
+      "sourceTitle": "删除此来源？",
+      "sourceBody": "“{title}”将从此工作区中移除。此操作无法撤销。",
+      "manyTitle": "删除 {count} 个来源？",
+      "manyBodyDocuments": "{documents, plural, other {# 个文档将从此工作区中移除——此操作无法撤销}}。",
+      "manyBodyMindmaps": "{mindmaps, plural, other {# 个思维导图将移到回收站，可以撤销}}。",
+      "manyBodyBoth": "{documents, plural, other {# 个文档将从此工作区中移除——此操作无法撤销}}；{mindmaps, plural, other {# 个思维导图将移到回收站，可以撤销}}。"
+    }
+  },
+  "aiChat": {
+    "requestFailed": "请求失败，状态码 {status}",
+    "noResponse": "未能获取 AI 回答",
+    "stopped": "回答已停止",
+    "sendFailed": "发送问题失败"
+  },
+  "chatRoutes": {
+    "noImages": "提供视觉路由的模型不接受图片。",
+    "alwaysReasons": "提供推理路由的模型始终会进行推理，无需切换。"
+  }
+}

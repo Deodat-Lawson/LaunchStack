@@ -1,5 +1,6 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
-import type { ComponentType } from "react";
+import { useMemo, type ComponentType } from "react";
+import { useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
 import type { SourceProcessingView } from "~/lib/source-progress";
@@ -879,3 +880,183 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         ],
     },
 ];
+
+// ---------------------------------------------------------------------------
+// The registries above in the reader's language
+// ---------------------------------------------------------------------------
+//
+// The `label` / `desc` fields stay the English source of truth (tests and the
+// palette's search read them); what a person reads goes through these, which
+// look the same entries up in the catalogue. An id with no message falls
+// back to its English field rather than to a key.
+//
+// Most words are the workspace's own (`workspace.studioApps`, …). The tools
+// with screens of their own are named by `tools.registry`, so a tool reads
+// the same here as inside its tab; source types are `sources.sourceTypes`,
+// shared with the rail.
+
+/** `t` for the `workspace` namespace. */
+export type WorkspaceTranslator = ReturnType<typeof useTranslations<"workspace">>;
+
+/** `t` for `tools.registry` — the tools' own names and descriptions. */
+export type ToolRegistryTranslator = ReturnType<typeof useTranslations<"tools.registry">>;
+
+/** `t` for `sources.sourceTypes`. */
+export type SourceTypeTranslator = ReturnType<typeof useTranslations<"sources.sourceTypes">>;
+
+/** What the Studio lookups below read from: `useStudioText()`. */
+export interface StudioText {
+    workspace: WorkspaceTranslator;
+    tools: ToolRegistryTranslator;
+}
+
+/** The translators the Studio lookups take, for the reader's language. */
+export function useStudioText(): StudioText {
+    const workspace = useTranslations("workspace");
+    const tools = useTranslations("tools.registry");
+    return useMemo(() => ({ workspace, tools }), [workspace, tools]);
+}
+
+/** A source type's name, e.g. "File" / "文件" — `useTranslations("sources.sourceTypes")`. */
+export function sourceTypeLabel(t: SourceTypeTranslator, type: SourceTypeId): string {
+    return t(type);
+}
+
+const STUDIO_GROUP_MESSAGE_KEYS = {
+    workspace: "workspace",
+    tools: "tools",
+    management: "management",
+} as const;
+
+/** A Studio group's heading ("Workspace", "Tools", "Management"). */
+export function studioGroupLabel(
+    text: StudioText,
+    group: Pick<StudioGroup, "id" | "label">
+): string {
+    const key = lookup(STUDIO_GROUP_MESSAGE_KEYS, group.id);
+    return key ? text.workspace(`studioGroups.${key}`) : group.label;
+}
+
+/** Tools named by `tools.registry` rather than by the workspace. */
+const TOOL_REGISTRY_KEYS = {
+    growth: "growth",
+    proposals: "proposals",
+    vantage: "vantage",
+    scenarios: "scenarios",
+} as const;
+
+const STUDIO_APP_MESSAGE_KEYS = {
+    chat: "chat",
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    investors: "investors",
+    draft: "draft",
+    rewrite: "rewrite",
+    settings: "settings",
+    analytics: "analytics",
+    mindmap: "mindmap",
+    workflows: "workflows",
+    metadata: "metadata",
+} as const;
+
+const STUDIO_DENIED_NOTE_KEYS = { team: "team" } as const;
+
+/** A Studio app's name — a tab's label, a picker tile, a launcher button. */
+export function studioFeatureLabel(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "label">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.name`);
+    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    return key ? text.workspace(`studioApps.${key}.label`) : feature.label;
+}
+
+/** What a Studio app is for — the picker's second line, a tab's tooltip. */
+export function studioFeatureDescription(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "desc">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.description`);
+    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    return key ? text.workspace(`studioApps.${key}.description`) : feature.desc;
+}
+
+/** Why an app did not open for someone without its permission; undefined when it says nothing. */
+export function studioFeatureDeniedNote(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "deniedNote">
+): string | undefined {
+    if (!feature.deniedNote) return undefined;
+    const key = lookup(STUDIO_DENIED_NOTE_KEYS, feature.id);
+    return key ? text.workspace(`studioDeniedNotes.${key}`) : feature.deniedNote;
+}
+
+/** A Studio feature with its name, description and denied note in the reader's language. */
+export function localizedStudioFeature<F extends StudioFeature>(text: StudioText, feature: F): F {
+    return {
+        ...feature,
+        label: studioFeatureLabel(text, feature),
+        desc: studioFeatureDescription(text, feature),
+        deniedNote: studioFeatureDeniedNote(text, feature),
+    };
+}
+
+const PALETTE_LINK_LABEL_KEYS = {
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    draft: "draft",
+    rewrite: "rewrite",
+    workflows: "workflows",
+    mindmap: "mindmap",
+    artifacts: "artifacts",
+    "agent-sessions": "agentSessions",
+    brand: "brand",
+    prospects: "prospects",
+    investors: "investors",
+    audit: "audit",
+    analytics: "analytics",
+    "people-access": "peopleAccess",
+    profile: "profile",
+    "agents-nodes": "agentsNodes",
+    deploy: "deploy",
+} as const;
+
+/** Every palette row has a description of its own — the tools' rows included. */
+const PALETTE_LINK_DESCRIPTION_KEYS = {
+    ...PALETTE_LINK_LABEL_KEYS,
+    growth: "growth",
+    proposals: "proposals",
+    vantage: "vantage",
+    scenarios: "scenarios",
+} as const;
+
+/** A ⌘K quick link's name (`DEMOTED_FEATURES`); a tool's row says the tool's own name. */
+export function demotedFeatureLabel(
+    text: StudioText,
+    feature: Pick<DemotedFeature, "id" | "label">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.name`);
+    const key = lookup(PALETTE_LINK_LABEL_KEYS, feature.id);
+    return key ? text.workspace(`paletteLinks.${key}.label`) : feature.label;
+}
+
+/** A ⌘K quick link's second line. */
+export function demotedFeatureDescription(
+    text: StudioText,
+    feature: Pick<DemotedFeature, "id" | "desc">
+): string {
+    const key = lookup(PALETTE_LINK_DESCRIPTION_KEYS, feature.id);
+    return key ? text.workspace(`paletteLinks.${key}.description`) : feature.desc;
+}
+
+/** The message key an id maps to, or undefined for an id the map does not know. */
+function lookup<M extends Record<string, string>>(map: M, id: string): M[keyof M] | undefined {
+    return Object.prototype.hasOwnProperty.call(map, id) ? map[id as keyof M] : undefined;
+}

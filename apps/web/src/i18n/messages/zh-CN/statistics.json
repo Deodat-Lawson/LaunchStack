@@ -1,0 +1,109 @@
+{
+  "view": {
+    "refresh": "刷新数据",
+    "refreshing": "正在刷新…",
+    "eyebrow": "分析",
+    "title": "分析仪表盘",
+    "description": "全公司范围的文档、员工活动和提问趋势概览。刷新即可获取最新数据。",
+    "loadFailed": "加载失败",
+    "loadFailedFallback": "获取仪表盘数据失败",
+    "loading": "正在获取公司分析数据和员工数据…",
+    "tiles": {
+      "employees": "员工总数",
+      "documents": "文档总数",
+      "active": "活跃成员",
+      "views": "30 天浏览量"
+    },
+    "trends": {
+      "title": "趋势",
+      "description": "过去 30 天的提问量和活动情况。"
+    },
+    "documents": {
+      "title": "文档",
+      "description": "每个文档的统计数据和命中率。"
+    },
+    "employees": {
+      "title": "员工",
+      "description": "按团队成员细分的活动情况。"
+    }
+  },
+  "charts": {
+    "employeesSeries": "员工",
+    "viewsSeries": "浏览量",
+    "employeeGrowth": "员工增长",
+    "documentViews": "文档浏览量"
+  },
+  "time": {
+    "never": "从未",
+    "justNow": "刚刚",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前",
+    "daysAgo": "{count, plural, other {# 天}}前"
+  },
+  "documents": {
+    "title": "文档统计",
+    "hint": "点击某一行查看详情",
+    "searchPlaceholder": "搜索文档…",
+    "shown": "{shown} / {total}",
+    "columns": {
+      "document": "文档",
+      "category": "分类",
+      "views": "浏览量",
+      "lastViewed": "最近浏览"
+    },
+    "empty": "未找到文档",
+    "emptyHint": "请尝试调整搜索条件"
+  },
+  "members": {
+    "title": "成员活动",
+    "total": "共 {count, number} 人",
+    "columns": {
+      "name": "姓名",
+      "role": "角色",
+      "status": "状态",
+      "queries": "提问次数",
+      "lastOnline": "最近在线"
+    },
+    "empty": "还没有成员。",
+    "statuses": {
+      "active": "活跃",
+      "pending": "待审批",
+      "suspended": "已停用"
+    },
+    "roles": {
+      "owner": "所有者",
+      "admin": "管理员",
+      "member": "成员",
+      "viewer": "查看者",
+      "guest": "访客"
+    }
+  },
+  "details": {
+    "viewsSeries": "浏览量",
+    "justNow": "刚刚",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前",
+    "daysAgo": "{count} 天前",
+    "created": "创建于 {date}",
+    "viewDoc": "查看文档",
+    "loadFailed": "详情加载失败：{error}",
+    "loadFailedFallback": "获取文档详情失败",
+    "loading": "正在加载统计数据…",
+    "tiles": {
+      "views": "浏览量",
+      "allTime": "全部时间",
+      "unique": "独立",
+      "viewers": "访问者",
+      "thirtyDays": "30 天",
+      "recent": "近期"
+    },
+    "activity": "30 天活动",
+    "recentViewers": "最近访问者",
+    "shown": "显示 {count, number} 位",
+    "columns": {
+      "user": "用户",
+      "when": "时间"
+    },
+    "noViews": "还没有浏览记录"
+  }
+}

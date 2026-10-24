@@ -15,6 +15,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Building2, CornerDownRight, Lock, ShieldCheck, Users, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
@@ -36,12 +37,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
+import { useRoleLabel } from "~/lib/authz/i18n";
 import { isGrantLevel, type GrantLevel, type PrincipalType } from "~/lib/authz/permissions";
 import { folderLeafName } from "~/lib/folders/path";
 import { usePeople } from "~/lib/profile/use-people";
 
 import { errorMessage, peopleApi, type Grant, type OwnerRef } from "../settings/people/api";
-import { LEVEL_LABELS } from "./audience";
+import type { AccessTranslator } from "./audience";
 import { chatShareAdapter } from "./chatShareAdapter";
 import { PrincipalPicker, principalKey, type PickedPrincipal } from "./PrincipalPicker";
 
@@ -70,19 +72,43 @@ export interface ShareState {
     general: GeneralAccess;
     grants: ShareGrant[];
     canManage: boolean;
-    /** What "open" means here. */
-    open: {
-        kind: "workspace" | "inherit";
-        label: string;
-        hint: string;
-        /** For "inherit": the folder it follows, to say "whoever can open it, plus …". */
-        from?: string;
-    };
+    /** What "open" means here; worded by `shareOpenLabel` / `shareOpenHint`. */
+    open: ShareOpen;
     /** Levels a grant may take; chats are view-only. */
     levels: readonly GrantLevel[];
     owner: OwnerRef | null;
     /** People who can open it under the saved state, when the server knows. */
     audienceCount: number | null;
+}
+
+/**
+ * What General access "open" means for a thing:
+ * - `workspace` — everyone in the workspace (`read` for a chat, `open` for the rest);
+ * - `inherit` — it follows the folder above. With `workspaceName`, that folder
+ *   is itself open to the workspace; without, it is restricted and whoever
+ *   can open it can open this ("…, plus 1 person").
+ */
+export type ShareOpen =
+    | { kind: "workspace"; workspaceName: string; verb: "open" | "read" }
+    | { kind: "inherit"; folder: string; workspaceName?: string };
+
+/** "Everyone at Acme" / "Same as Q4" — the General access option. */
+export function shareOpenLabel(t: AccessTranslator, open: ShareOpen): string {
+    return open.kind === "workspace"
+        ? t("share.open.everyoneAt", { workspace: open.workspaceName })
+        : t("share.open.sameAs", { folder: open.folder });
+}
+
+/** "Anyone in Acme can open it." — what the option means. */
+export function shareOpenHint(t: AccessTranslator, open: ShareOpen): string {
+    if (open.kind === "workspace") {
+        return open.verb === "read"
+            ? t("share.open.hintRead", { workspace: open.workspaceName })
+            : t("share.open.hintOpen", { workspace: open.workspaceName });
+    }
+    return open.workspaceName
+        ? t("share.open.hintFolderOpen", { workspace: open.workspaceName, folder: open.folder })
+        : t("share.open.hintInherit", { folder: open.folder });
 }
 
 export interface ShareAdapter {
@@ -110,21 +136,11 @@ function toShareGrant(grant: Grant): ShareGrant {
 function openFor(
     inherits: { path: string | null; restricted: boolean },
     workspaceName: string
-): ShareState["open"] {
+): ShareOpen {
     if (inherits.restricted && inherits.path) {
-        const name = folderLeafName(inherits.path);
-        return {
-            kind: "inherit",
-            label: `Same as ${name}`,
-            hint: `Whoever can open ${name} can open this.`,
-            from: name,
-        };
+        return { kind: "inherit", folder: folderLeafName(inherits.path) };
     }
-    return {
-        kind: "workspace",
-        label: `Everyone at ${workspaceName}`,
-        hint: `Anyone in ${workspaceName} can open it.`,
-    };
+    return { kind: "workspace", workspaceName, verb: "open" };
 }
 
 const FULL_LEVELS = ["view", "edit", "manage"] as const satisfies readonly GrantLevel[];
@@ -164,12 +180,12 @@ export const documentShareAdapter: ShareAdapter = {
         if (target.kind !== "document") throw new Error("Not a document");
         const res = await peopleApi.access.document(target.id);
         const inherits = res.inheritsFrom;
-        const open =
+        const open: ShareOpen =
             inherits.folder && !inherits.restricted
                 ? {
-                      kind: "inherit" as const,
-                      label: `Same as ${folderLeafName(inherits.folder)}`,
-                      hint: `Everyone at ${res.workspaceName} can open ${folderLeafName(inherits.folder)}.`,
+                      kind: "inherit",
+                      folder: folderLeafName(inherits.folder),
+                      workspaceName: res.workspaceName,
                   }
                 : openFor(inherits, res.workspaceName);
         return {
@@ -209,15 +225,18 @@ function sameGrants(a: readonly ShareGrant[], b: readonly ShareGrant[]): boolean
 }
 
 /** The one line under General access that says who will be able to open it. */
-export function shareSummary(input: {
-    general: GeneralAccess;
-    grants: readonly ShareGrant[];
-    open: ShareState["open"];
-    /** The viewer's auth subject id. */
-    selfAuthId: string | null;
-    audienceCount: number | null;
-    dirty: boolean;
-}): string {
+export function shareSummary(
+    t: AccessTranslator,
+    input: {
+        general: GeneralAccess;
+        grants: readonly ShareGrant[];
+        open: ShareOpen;
+        /** The viewer's auth subject id. */
+        selfAuthId: string | null;
+        audienceCount: number | null;
+        dirty: boolean;
+    }
+): string {
     const isSelf = (g: ShareGrant) =>
         g.principalType === "user" && Boolean(g.authUserId) && g.authUserId === input.selfAuthId;
     const others = input.grants.filter(g => !isSelf(g));
@@ -225,31 +244,30 @@ export function shareSummary(input: {
     const groups = others.filter(g => g.principalType === "group").length;
     const roles = others.filter(g => g.principalType === "role").length;
     const parts: string[] = [];
-    if (people > 0) parts.push(`${people} ${people === 1 ? "person" : "people"}`);
-    if (groups > 0) parts.push(`${groups} ${groups === 1 ? "group" : "groups"}`);
-    if (roles > 0) parts.push(`${roles} ${roles === 1 ? "role" : "roles"}`);
-    const counted =
+    if (people > 0) parts.push(t("counts.people", { count: people }));
+    if (groups > 0) parts.push(t("counts.groups", { count: groups }));
+    if (roles > 0) parts.push(t("counts.roles", { count: roles }));
+    const who = parts.join(t("list.separator"));
+    const counted = (text: string) =>
         input.audienceCount !== null && !input.dirty
-            ? ` (${input.audienceCount} ${input.audienceCount === 1 ? "person" : "people"})`
-            : "";
+            ? t("share.summary.withCount", { text, count: input.audienceCount })
+            : text;
 
     if (input.general === "open") {
         // Inheriting, people added here open it too — on top of the folder's audience.
-        if (input.open.kind === "inherit" && input.open.from && parts.length > 0) {
-            return `Whoever can open ${input.open.from}, plus ${parts.join(", ")}, can open this.${counted}`;
+        if (input.open.kind === "inherit" && !input.open.workspaceName && parts.length > 0) {
+            return counted(t("share.summary.plus", { folder: input.open.folder, who }));
         }
-        return `${input.open.hint}${counted}`;
+        return counted(shareOpenHint(t, input.open));
     }
-    if (others.length === 0) return "Only you can open it.";
+    if (others.length === 0) return t("share.summary.onlyYou");
     const listed = input.grants.some(isSelf);
-    return `${listed ? "You and " : ""}${parts.join(", ")} can open it.`;
+    return listed ? t("share.summary.youAnd", { who }) : t("share.summary.listed", { who });
 }
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
-
-const TYPE_LABEL = { user: "Person", group: "Group", role: "Role" } as const;
 
 export function ShareDialog({
     target,
@@ -267,6 +285,10 @@ export function ShareDialog({
     /** Override the adapter for `target.kind` (tests, harnesses). */
     adapter?: ShareAdapter;
 }) {
+    const t = useTranslations("team.access");
+    const tTeam = useTranslations("team");
+    const tc = useTranslations("common");
+    const roleLabel = useRoleLabel();
     const open = target !== null;
     const [saved, setSaved] = useState<ShareState | null>(null);
     const [general, setGeneral] = useState<GeneralAccess>("restricted");
@@ -300,7 +322,7 @@ export function ShareDialog({
                 setGeneral(state.general);
                 setGrants(state.grants);
             } catch (err) {
-                if (!cancelled) setError(errorMessage(err, "Could not load who has access."));
+                if (!cancelled) setError(errorMessage(err, t("share.loadError")));
             } finally {
                 if (!cancelled) setLoading(false);
             }
@@ -308,7 +330,7 @@ export function ShareDialog({
         return () => {
             cancelled = true;
         };
-    }, [target, use]);
+    }, [target, use, t]);
 
     const canManage = saved?.canManage ?? false;
     const levels = saved?.levels ?? FULL_LEVELS;
@@ -378,11 +400,11 @@ export function ShareDialog({
             requestAnimationFrame(() => saveRef.current?.focus());
             toast.success(
                 memberIds.length > 0
-                    ? `Created “${group.name}” with ${memberIds.length} ${memberIds.length === 1 ? "person" : "people"}`
-                    : `Created “${group.name}” — add people in Team › Groups`
+                    ? t("share.groupCreatedWith", { name: group.name, count: memberIds.length })
+                    : t("share.groupCreatedEmpty", { name: group.name })
             );
         } catch (err) {
-            setError(errorMessage(err, "The group wasn't created."));
+            setError(errorMessage(err, t("share.groupError")));
         } finally {
             setCreatingGroup(false);
         }
@@ -396,20 +418,23 @@ export function ShareDialog({
             await use.save(target, { general, grants });
             toast.success(
                 general === "open"
-                    ? `“${target.name}” — ${saved.open.label.toLowerCase()}`
-                    : `Sharing for “${target.name}” updated`
+                    ? t("share.savedOpen", {
+                          name: target.name,
+                          access: shareOpenLabel(t, saved.open).toLowerCase(),
+                      })
+                    : t("share.saved", { name: target.name })
             );
             onSaved?.();
             onClose();
         } catch (err) {
-            setError(errorMessage(err, "The change wasn't saved."));
+            setError(errorMessage(err, t("share.saveError")));
         } finally {
             setSaving(false);
         }
     };
 
     const summary = saved
-        ? shareSummary({
+        ? shareSummary(t, {
               general,
               grants,
               open: saved.open,
@@ -433,27 +458,26 @@ export function ShareDialog({
             <DialogContent className="max-h-[90vh] grid-cols-[minmax(0,1fr)] overflow-y-auto sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="truncate pr-6">
-                        Share “{target?.name ?? ""}”
+                        {t("share.title", { name: target?.name ?? "" })}
                     </DialogTitle>
                     <DialogDescription>
                         {target?.kind === "folder"
-                            ? "Everything inside follows the folder unless it has its own sharing."
+                            ? t("share.descriptionFolder")
                             : target?.kind === "chat"
-                              ? "People you add can read this chat and continue it as their own."
-                              : "Who can open this file."}
+                              ? t("share.descriptionChat")
+                              : t("share.descriptionDocument")}
                     </DialogDescription>
                 </DialogHeader>
 
                 {loading ? (
                     <p className="text-ink-3 m-0 text-sm" role="status">
-                        Loading who has access…
+                        {t("share.loading")}
                     </p>
                 ) : (
                     <div className="flex flex-col gap-4">
                         {saved && !canManage && (
                             <p className="bg-panel-2 text-ink-2 m-0 rounded-lg px-3 py-2 text-[12.5px] leading-relaxed">
-                                You can see who has access but not change it. Ask someone who can
-                                manage it.
+                                {t("share.readOnly")}
                             </p>
                         )}
 
@@ -471,8 +495,8 @@ export function ShareDialog({
                                         onClick={() => setGroupDraft("")}
                                     >
                                         {listedPeople.length > 1
-                                            ? `Make a group of these ${listedPeople.length} people…`
-                                            : "New group…"}
+                                            ? t("share.makeGroup", { count: listedPeople.length })
+                                            : t("share.newGroup")}
                                     </button>
                                 ) : (
                                     <form
@@ -487,8 +511,8 @@ export function ShareDialog({
                                             autoFocus
                                             value={groupDraft}
                                             onChange={e => setGroupDraft(e.target.value)}
-                                            placeholder="Group name, e.g. Sales team"
-                                            aria-label="New group name"
+                                            placeholder={t("share.groupPlaceholder")}
+                                            aria-label={t("share.groupLabel")}
                                             className="h-8"
                                             maxLength={80}
                                         />
@@ -497,7 +521,9 @@ export function ShareDialog({
                                             size="sm"
                                             disabled={creatingGroup || !groupDraft.trim()}
                                         >
-                                            {creatingGroup ? "Creating…" : "Create"}
+                                            {creatingGroup
+                                                ? t("share.creating")
+                                                : tc("actions.create")}
                                         </Button>
                                         <Button
                                             type="button"
@@ -505,16 +531,19 @@ export function ShareDialog({
                                             variant="ghost"
                                             onClick={() => setGroupDraft(null)}
                                         >
-                                            Cancel
+                                            {tc("actions.cancel")}
                                         </Button>
                                     </form>
                                 )}
                             </div>
                         )}
 
-                        <section aria-label="People with access" className="flex flex-col gap-1.5">
+                        <section
+                            aria-label={t("share.peopleWithAccess")}
+                            className="flex flex-col gap-1.5"
+                        >
                             <h3 className="text-ink-2 m-0 text-xs font-semibold">
-                                People with access
+                                {t("share.peopleWithAccess")}
                             </h3>
                             <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
                                 {saved?.owner &&
@@ -533,10 +562,14 @@ export function ShareDialog({
                                             <span className="text-ink min-w-0 flex-1 truncate text-[13px]">
                                                 {ownerName}
                                                 {saved?.owner?.authUserId === selfAuthId && (
-                                                    <span className="text-ink-3"> (you)</span>
+                                                    <span className="text-ink-3">
+                                                        {tTeam("you")}
+                                                    </span>
                                                 )}
                                             </span>
-                                            <span className="text-ink-3 text-[12px]">Owner</span>
+                                            <span className="text-ink-3 text-[12px]">
+                                                {t("share.owner")}
+                                            </span>
                                         </li>
                                     )}
                                 {grants.map(g => {
@@ -550,7 +583,10 @@ export function ShareDialog({
                                         g.principalType === "user" &&
                                         Boolean(g.authUserId) &&
                                         g.authUserId === saved?.owner?.authUserId;
-                                    const name = look?.displayName ?? g.principalName;
+                                    const name =
+                                        g.principalType === "role"
+                                            ? roleLabel(g.principalId, g.principalName)
+                                            : (look?.displayName ?? g.principalName);
                                     return (
                                         <li key={key} className="flex items-center gap-3 py-1.5">
                                             {g.principalType === "user" ? (
@@ -572,7 +608,9 @@ export function ShareDialog({
                                             <span className="text-ink min-w-0 flex-1 truncate text-[13px]">
                                                 {name}
                                                 {isSelf && (
-                                                    <span className="text-ink-3"> (you)</span>
+                                                    <span className="text-ink-3">
+                                                        {tTeam("you")}
+                                                    </span>
                                                 )}
                                             </span>
                                             {g.principalType !== "user" && (
@@ -582,12 +620,12 @@ export function ShareDialog({
                                                     variant="secondary"
                                                     className="max-sm:hidden"
                                                 >
-                                                    {TYPE_LABEL[g.principalType]}
+                                                    {t(`share.types.${g.principalType}`)}
                                                 </Badge>
                                             )}
                                             {isOwner && g.level === "manage" ? (
                                                 <span className="text-ink-3 w-[104px] shrink-0 text-right text-[12px] sm:w-[118px]">
-                                                    Owner
+                                                    {t("share.owner")}
                                                 </span>
                                             ) : (
                                                 <Select
@@ -603,14 +641,14 @@ export function ShareDialog({
                                                     <SelectTrigger
                                                         size="sm"
                                                         className="w-[104px] shrink-0 sm:w-[118px]"
-                                                        aria-label={`Access level for ${name}`}
+                                                        aria-label={t("share.levelFor", { name })}
                                                     >
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {levels.map(level => (
                                                             <SelectItem key={level} value={level}>
-                                                                {LEVEL_LABELS[level]}
+                                                                {tTeam(`levels.${level}`)}
                                                             </SelectItem>
                                                         ))}
                                                     </SelectContent>
@@ -622,7 +660,7 @@ export function ShareDialog({
                                                     size="icon"
                                                     className="h-7 w-7"
                                                     disabled={saving}
-                                                    aria-label={`Remove ${name}`}
+                                                    aria-label={t("share.remove", { name })}
                                                     onClick={() => removeGrant(key)}
                                                 >
                                                     <X />
@@ -635,16 +673,19 @@ export function ShareDialog({
                                 })}
                                 {grants.length === 0 && !saved?.owner && (
                                     <li className="text-ink-3 py-1 text-[12.5px]">
-                                        No one added yet.
+                                        {t("share.noOne")}
                                     </li>
                                 )}
                             </ul>
                         </section>
 
                         {saved && (
-                            <section aria-label="General access" className="flex flex-col gap-1.5">
+                            <section
+                                aria-label={t("share.general")}
+                                className="flex flex-col gap-1.5"
+                            >
                                 <h3 className="text-ink-2 m-0 text-xs font-semibold">
-                                    General access
+                                    {t("share.general")}
                                 </h3>
                                 <div className="flex items-start gap-3">
                                     <span
@@ -671,16 +712,16 @@ export function ShareDialog({
                                             <SelectTrigger
                                                 size="sm"
                                                 className="w-fit min-w-[200px]"
-                                                aria-label="General access"
+                                                aria-label={t("share.general")}
                                             >
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="restricted">
-                                                    Only people with access
+                                                    {t("share.restrictedOption")}
                                                 </SelectItem>
                                                 <SelectItem value="open">
-                                                    {saved.open.label}
+                                                    {shareOpenLabel(t, saved.open)}
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -705,11 +746,11 @@ export function ShareDialog({
 
                 <DialogFooter className="items-center sm:justify-between">
                     <span className="text-ink-3 truncate text-[12px]">
-                        {ownerName ? `Added by ${ownerName}` : ""}
+                        {ownerName ? t("share.addedBy", { name: ownerName }) : ""}
                     </span>
                     <div className="flex gap-2">
                         <Button variant="outline" onClick={onClose} disabled={saving}>
-                            {canManage ? "Cancel" : "Close"}
+                            {canManage ? tc("actions.cancel") : tc("actions.close")}
                         </Button>
                         {canManage && (
                             <Button
@@ -717,7 +758,7 @@ export function ShareDialog({
                                 onClick={() => void save()}
                                 disabled={!dirty || saving || loading}
                             >
-                                {saving ? "Saving…" : "Save"}
+                                {saving ? tc("status.saving") : tc("actions.save")}
                             </Button>
                         )}
                     </div>

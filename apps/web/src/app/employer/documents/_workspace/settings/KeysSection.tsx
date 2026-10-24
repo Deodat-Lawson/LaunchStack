@@ -21,6 +21,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -54,37 +55,26 @@ const OPENROUTER_OUTCOMES: readonly OpenRouterOutcome[] = [
     "error",
 ];
 
+type KeysT = ReturnType<typeof useTranslations<"settings.keys">>;
+
 function openRouterNote(
+    t: KeysT,
     outcome: OpenRouterOutcome,
     endpoint: WorkspaceEndpointView | null
 ): { tone: StatusTone; message: string } {
     switch (outcome) {
         case "connected":
             return endpoint?.active
-                ? { tone: "ok", message: "OpenRouter is connected, and this workspace uses it." }
-                : {
-                      tone: "ok",
-                      message:
-                          "OpenRouter is connected. Choose a model to switch your workspace over.",
-                  };
+                ? { tone: "ok", message: t("openRouter.connectedActive") }
+                : { tone: "ok", message: t("openRouter.connected") };
         case "denied":
-            return {
-                tone: "muted",
-                message: "OpenRouter sign-in was cancelled. Nothing changed.",
-            };
+            return { tone: "muted", message: t("openRouter.denied") };
         case "expired":
-            return { tone: "warn", message: "That sign-in expired, try again." };
+            return { tone: "warn", message: t("openRouter.expired") };
         case "unavailable":
-            return {
-                tone: "danger",
-                message:
-                    "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
-            };
+            return { tone: "danger", message: t("openRouter.unavailable") };
         case "error":
-            return {
-                tone: "danger",
-                message: "Couldn't connect OpenRouter. Try again, or use an API key instead.",
-            };
+            return { tone: "danger", message: t("openRouter.error") };
     }
 }
 
@@ -114,6 +104,7 @@ function takeOpenRouterOutcome(): OpenRouterOutcome | null {
 // ---------------------------------------------------------------------------
 
 export function KeysSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.keys");
     const [endpoint, setEndpoint] = useState<WorkspaceEndpointView | null>(null);
     const [endpointLoaded, setEndpointLoaded] = useState(false);
     const [endpointError, setEndpointError] = useState<string | null>(null);
@@ -140,7 +131,7 @@ export function KeysSection({ onActions }: SettingsSectionProps) {
                 };
                 if (!res.ok)
                     throw new Error(
-                        body.error ?? `Couldn't read your model setup (${res.status}).`
+                        body.error ?? t("endpointFailedStatus", { status: res.status })
                     );
                 if (!cancelled) {
                     setEndpoint(body.endpoint ?? null);
@@ -148,9 +139,7 @@ export function KeysSection({ onActions }: SettingsSectionProps) {
                 }
             } catch (err) {
                 if (!cancelled) {
-                    setEndpointError(
-                        err instanceof Error ? err.message : "Couldn't read your model setup."
-                    );
+                    setEndpointError(err instanceof Error ? err.message : t("endpointFailed"));
                 }
             } finally {
                 if (!cancelled) setEndpointLoaded(true);
@@ -159,7 +148,7 @@ export function KeysSection({ onActions }: SettingsSectionProps) {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [t]);
 
     const endpointChanged = useCallback((next: WorkspaceEndpointView | null) => {
         setEndpoint(next);
@@ -173,7 +162,7 @@ export function KeysSection({ onActions }: SettingsSectionProps) {
         embeddingActions,
     ]);
 
-    const note = openRouter ? openRouterNote(openRouter, endpoint) : null;
+    const note = openRouter ? openRouterNote(t, openRouter, endpoint) : null;
 
     return (
         <>
@@ -239,6 +228,8 @@ function EmbeddingKey({
 }: {
     registerActions: (actions: SettingsSectionActions | null) => void;
 }) {
+    const t = useTranslations("settings.keys.embedding");
+    const tc = useTranslations("common");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [apiKey, setApiKey] = useState("");
@@ -264,10 +255,7 @@ function EmbeddingKey({
             } catch (error) {
                 console.error(error);
                 if (!cancelled) {
-                    setStatus({
-                        message: "Something went wrong loading the embedding key.",
-                        tone: "danger",
-                    });
+                    setStatus({ message: t("loadFailed"), tone: "danger" });
                 }
             } finally {
                 if (!cancelled) setLoading(false);
@@ -276,7 +264,7 @@ function EmbeddingKey({
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [t]);
 
     const typedKey = apiKey.trim();
     const trimmedUrl = baseUrl.trim();
@@ -293,24 +281,21 @@ function EmbeddingKey({
             // changed: the server asks for the key again before moving a saved
             // key to a different address.
             if (typedKey || urlChanged) body.embeddingOpenAIBaseUrl = trimmedUrl || null;
-            await saveCredentials(body, "Couldn't save the embedding key.");
+            await saveCredentials(body, t("saveFailed"));
 
             if (typedKey) setStoredKey({ hasKey: true, last4: typedKey.slice(-4) });
             setStoredBaseUrl(trimmedUrl || null);
             setApiKey("");
-            setStatus({ tone: "ok", message: "Embedding key saved." });
+            setStatus({ tone: "ok", message: t("saved") });
         } catch (error) {
             setStatus({
                 tone: "danger",
-                message:
-                    error instanceof Error && error.message
-                        ? error.message
-                        : "Couldn't save the embedding key.",
+                message: error instanceof Error && error.message ? error.message : t("saveFailed"),
             });
         } finally {
             setSaving(false);
         }
-    }, [typedKey, urlChanged, trimmedUrl]);
+    }, [typedKey, urlChanged, trimmedUrl, t]);
 
     const remove = useCallback(async () => {
         setSaving(true);
@@ -318,33 +303,28 @@ function EmbeddingKey({
         try {
             await saveCredentials(
                 { embeddingOpenAIApiKey: null, embeddingOpenAIBaseUrl: null },
-                "Couldn't remove the embedding key."
+                t("removeFailed")
             );
             setStoredKey({ hasKey: false, last4: null });
             setStoredBaseUrl(null);
             setBaseUrl("");
             setApiKey("");
-            setStatus({
-                tone: "ok",
-                message: "Removed. Embeddings run on the server's key again.",
-            });
+            setStatus({ tone: "ok", message: t("removed") });
         } catch (error) {
             setStatus({
                 tone: "danger",
                 message:
-                    error instanceof Error && error.message
-                        ? error.message
-                        : "Couldn't remove the embedding key.",
+                    error instanceof Error && error.message ? error.message : t("removeFailed"),
             });
         } finally {
             setSaving(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         registerActions({
-            primaryLabel: "Save changes",
-            primaryBusyLabel: "Saving…",
+            primaryLabel: tc("actions.saveChanges"),
+            primaryBusyLabel: tc("status.saving"),
             onPrimary: save,
             busy: saving,
             // Nothing to save until something is edited — a permanently-enabled
@@ -352,28 +332,27 @@ function EmbeddingKey({
             disabled: loading || !dirty,
         });
         return () => registerActions(null);
-    }, [registerActions, save, saving, loading, dirty]);
+    }, [registerActions, save, saving, loading, dirty, tc]);
 
     const hasKey = Boolean(storedKey?.hasKey);
     // An Ollama or Hugging Face index never reads this key.
     const keyUnused = model !== null && model.provider !== "openai";
 
     return (
-        <Section
-            title="Embedding key"
-            description="Optional. An OpenAI-compatible key for the vectors behind semantic search, sent only to the endpoint it belongs to. Without one, embeddings run on the server's key."
-        >
+        <Section title={t("title")} description={t("description")}>
             {status && <StatusNote tone={status.tone}>{status.message}</StatusNote>}
             {loading ? (
-                <StatusNote tone="muted">Loading the embedding key…</StatusNote>
+                <StatusNote tone="muted">{t("loading")}</StatusNote>
             ) : (
                 <Card>
                     <div className="flex flex-wrap items-center gap-2">
                         <div className="text-ink min-w-0 flex-1 text-[13px]">
                             {hasKey ? (
                                 <>
-                                    Key ending{" "}
-                                    <span className="mono">{storedKey?.last4 ?? "****"}</span>
+                                    {t.rich("keyEnding", {
+                                        last4: storedKey?.last4 ?? "****",
+                                        mono: chunks => <span className="mono">{chunks}</span>,
+                                    })}
                                     {storedBaseUrl && (
                                         <>
                                             {" · "}
@@ -384,11 +363,11 @@ function EmbeddingKey({
                                     )}
                                 </>
                             ) : (
-                                <span className="text-ink-3">Using the server&rsquo;s key.</span>
+                                <span className="text-ink-3">{t("usingServerKey")}</span>
                             )}
                         </div>
                         <Badge variant={hasKey ? "success" : "secondary"}>
-                            {hasKey ? "Your key" : "Not set"}
+                            {hasKey ? t("yourKey") : t("notSet")}
                         </Badge>
                         {hasKey && (
                             <Button
@@ -398,45 +377,35 @@ function EmbeddingKey({
                                 onClick={() => setConfirmRemove(true)}
                                 disabled={saving}
                             >
-                                Remove
+                                {tc("actions.remove")}
                             </Button>
                         )}
                     </div>
                     {model && (
                         <p className="text-ink-3 m-0 mt-1.5 text-[12.5px] leading-normal">
-                            {keyUnused ? (
-                                <>
-                                    This workspace&rsquo;s index embeds with{" "}
-                                    <span className="mono">{model.model}</span> on {model.provider},
-                                    which doesn&rsquo;t use an OpenAI-compatible key.
-                                </>
-                            ) : (
-                                <>
-                                    This workspace&rsquo;s index embeds with{" "}
-                                    <span className="mono">{model.model}</span> ({model.dimension}{" "}
-                                    dimensions), so the endpoint has to serve that model.
-                                </>
-                            )}
+                            {keyUnused
+                                ? t.rich("indexOtherProvider", {
+                                      model: model.model,
+                                      provider: model.provider,
+                                      mono: chunks => <span className="mono">{chunks}</span>,
+                                  })
+                                : t.rich("indexModel", {
+                                      model: model.model,
+                                      dimension: model.dimension,
+                                      mono: chunks => <span className="mono">{chunks}</span>,
+                                  })}
                         </p>
                     )}
 
                     <div className="mt-4">
                         {hasKey && !storedBaseUrl && (
-                            <StatusNote tone="warn">
-                                The saved key has no endpoint URL, so embedding with it will fail
-                                until one is set. Enter the endpoint URL and the key together, then
-                                save.
-                            </StatusNote>
+                            <StatusNote tone="warn">{t("noEndpoint")}</StatusNote>
                         )}
 
                         <Field
-                            label="Embedding API key"
+                            label={t("keyLabel")}
                             htmlFor="embedding-api-key"
-                            hint={
-                                hasKey
-                                    ? "Leave blank to keep the saved key."
-                                    : "Leave blank to use the server's key."
-                            }
+                            hint={hasKey ? t("keepHint") : t("serverHint")}
                         >
                             <TextInput
                                 id="embedding-api-key"
@@ -445,16 +414,18 @@ function EmbeddingKey({
                                 onChange={e => setApiKey(e.target.value)}
                                 placeholder={
                                     hasKey
-                                        ? `Leave blank to keep the key ending ${storedKey?.last4 ?? "****"}`
+                                        ? t("keepPlaceholder", {
+                                              last4: storedKey?.last4 ?? "****",
+                                          })
                                         : "<your-api-key>"
                                 }
                                 autoComplete="off"
                             />
                         </Field>
                         <Field
-                            label="Embeddings endpoint URL"
+                            label={t("endpointLabel")}
                             htmlFor="embedding-base-url"
-                            hint="The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again."
+                            hint={t("endpointHint")}
                         >
                             <TextInput
                                 id="embedding-base-url"
@@ -474,9 +445,9 @@ function EmbeddingKey({
             <ConfirmDialog
                 open={confirmRemove}
                 onOpenChange={setConfirmRemove}
-                title="Remove the embedding key?"
-                description="The saved key and its endpoint are deleted, and embeddings run on the server's key again. Documents already indexed stay searchable."
-                confirmLabel="Remove"
+                title={t("confirmTitle")}
+                description={t("confirmDescription")}
+                confirmLabel={tc("actions.remove")}
                 onConfirm={() => void remove()}
             />
         </Section>

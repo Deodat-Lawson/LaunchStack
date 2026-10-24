@@ -1,6 +1,7 @@
 "use client";
 
 import { Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -10,8 +11,8 @@ import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SegmentField } from "../api";
+import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
-import { plural, shortDate } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
@@ -24,6 +25,8 @@ function FieldRow({
     field: SegmentField;
     onSave: (value: string | string[]) => Promise<void>;
 }) {
+    const t = useTranslations("growth.prospects.segment");
+    const tc = useTranslations("common");
     const [editing, setEditing] = useState(false);
     const isList = Array.isArray(field.value);
     const [draft, setDraft] = useState(
@@ -37,7 +40,7 @@ function FieldRow({
             await onSave(
                 isList
                     ? draft
-                          .split(",")
+                          .split(/[,，、]/)
                           .map(s => s.trim())
                           .filter(Boolean)
                     : draft.trim()
@@ -72,15 +75,13 @@ function FieldRow({
                                 aria-label={field.label}
                             />
                         )}
-                        {isList && (
-                            <span className="text-ink-3 text-xs">Separate items with commas.</span>
-                        )}
+                        {isList && <span className="text-ink-3 text-xs">{t("separateItems")}</span>}
                         <div className="flex gap-1.5">
                             <Button size="sm" onClick={() => void save()} disabled={busy}>
-                                Save
+                                {tc("actions.save")}
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>
-                                Cancel
+                                {tc("actions.cancel")}
                             </Button>
                         </div>
                     </div>
@@ -98,7 +99,7 @@ function FieldRow({
                             </span>
                         ))}
                         {(field.value as string[]).length === 0 && (
-                            <span className="text-ink-3 text-[13px]">None</span>
+                            <span className="text-ink-3 text-[13px]">{tc("status.none")}</span>
                         )}
                     </div>
                 ) : (
@@ -123,9 +124,9 @@ function FieldRow({
                         type="button"
                         onClick={() => setEditing(true)}
                         className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-xs outline-none focus-visible:ring-[3px]"
-                        aria-label={`Edit ${field.label}`}
+                        aria-label={t("editAria", { label: field.label })}
                     >
-                        <Pencil className="size-3" /> Edit
+                        <Pencil className="size-3" /> {tc("actions.edit")}
                     </button>
                 )}
             </div>
@@ -134,6 +135,8 @@ function FieldRow({
 }
 
 export function SegmentScreen() {
+    const t = useTranslations("growth.prospects.segment");
+    const { shortDate } = useGrowthFormat();
     const { segmentId, reloadSegments } = useProspects();
     const res = useResource(segmentId ? `segment:${segmentId}` : null, () =>
         prospectsApi.segment(segmentId!)
@@ -148,9 +151,9 @@ export function SegmentScreen() {
             const { segment } = await prospectsApi.confirmSegment(s.id);
             res.mutate(() => ({ segment }));
             await reloadSegments();
-            toast.success("Segment confirmed. Runs will use this version.");
+            toast.success(t("confirmed"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not confirm");
+            toast.error(e instanceof Error ? e.message : t("confirmFailed"));
         } finally {
             setBusy(null);
         }
@@ -161,11 +164,9 @@ export function SegmentScreen() {
         try {
             const { segment } = await prospectsApi.deriveSegment(s.id);
             res.mutate(() => ({ segment }));
-            toast.success(
-                `Re-derived from your company profile and ${plural(segment.basis.documents, "document")}.`
-            );
+            toast.success(t("rederived", { count: segment.basis.documents }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not re-derive");
+            toast.error(e instanceof Error ? e.message : t("rederiveFailed"));
         } finally {
             setBusy(null);
         }
@@ -176,9 +177,9 @@ export function SegmentScreen() {
             const { segment } = await prospectsApi.patchSegment(s.id, { [key]: value });
             res.mutate(() => ({ segment }));
             await reloadSegments();
-            toast.success("Saved. Confirm the segment again before the next run.");
+            toast.success(t("saved"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save");
+            toast.error(e instanceof Error ? e.message : t("saveFailed"));
             throw e;
         }
     };
@@ -186,24 +187,21 @@ export function SegmentScreen() {
     return (
         <div className="mx-auto flex max-w-[900px] flex-col gap-5">
             <PageHeader
-                title="Who you sell to,"
-                accent="as far as we can tell"
+                title={t("title")}
+                accent={t("accent")}
                 sub={
-                    s ? (
-                        s.status === "confirmed" && s.confirmedAt ? (
-                            <>
-                                Confirmed {shortDate(s.confirmedAt)} · drafted from your company
-                                profile and {plural(s.basis.documents, "document")} on{" "}
-                                {shortDate(s.derivedAt)}
-                            </>
-                        ) : (
-                            <>
-                                Drafted from your company profile and{" "}
-                                {plural(s.basis.documents, "document")} on {shortDate(s.derivedAt)}.
-                                Confirm it, or fix anything first.
-                            </>
-                        )
-                    ) : undefined
+                    s
+                        ? s.status === "confirmed" && s.confirmedAt
+                            ? t("subConfirmed", {
+                                  confirmed: shortDate(s.confirmedAt),
+                                  count: s.basis.documents,
+                                  derived: shortDate(s.derivedAt),
+                              })
+                            : t("subDraft", {
+                                  count: s.basis.documents,
+                                  derived: shortDate(s.derivedAt),
+                              })
+                        : undefined
                 }
                 actions={
                     s && (
@@ -214,14 +212,14 @@ export function SegmentScreen() {
                                 onClick={() => void derive()}
                                 disabled={busy !== null}
                             >
-                                Re-derive
+                                {t("rederive")}
                             </Button>
                             <Button
                                 size="sm"
                                 onClick={() => void confirm()}
                                 disabled={busy !== null || s.status === "confirmed"}
                             >
-                                {s.status === "confirmed" ? "Confirmed" : "Confirm segment"}
+                                {s.status === "confirmed" ? t("confirmedButton") : t("confirm")}
                             </Button>
                         </>
                     )
@@ -237,12 +235,7 @@ export function SegmentScreen() {
                     ))}
                 </div>
             )}
-            {s && !s.basis.hasProfile && (
-                <p className="text-ink-2 text-[13px]">
-                    There is no company profile yet, so this draft leans on documents alone. Add one
-                    under Settings to sharpen it.
-                </p>
-            )}
+            {s && !s.basis.hasProfile && <p className="text-ink-2 text-[13px]">{t("noProfile")}</p>}
         </div>
     );
 }

@@ -9,18 +9,45 @@ export type ChatStreamEvent<T> =
 /**
  * What the chat shows for a `status` event. The model-call phases are sent as
  * keywords; a tool call sends its own sentence (`Searching the web for "…"`).
- * Until its first words arrive the model is thinking, whether or not its
- * endpoint shows the thoughts; the chat says "Writing…" once they do.
  */
 const STATUS_LABELS: Record<string, string> = {
-    generating: "Thinking…",
+    generating: "Generating…",
     finalizing: "Finishing…",
 };
 
-export const CHAT_WRITING_LABEL = "Writing…";
-
 export function chatStatusLabel(status: string): string {
     return STATUS_LABELS[status] ?? status;
+}
+
+/** The keyword statuses, which a screen names in the reader's language (`chat.runtime.stages`). */
+export type ChatStatusKeyword = "generating" | "finalizing";
+
+/** The keyword a `status` event carries, or null for a tool's own sentence. */
+export function chatStatusKeyword(status: string): ChatStatusKeyword | null {
+    return status === "generating" || status === "finalizing" ? status : null;
+}
+
+/**
+ * What the stream says when it breaks, by key. The English travels as the
+ * error's message (through `useAIChat`, which keeps only the text); a screen
+ * looks the text up with `chatStreamErrorKey` and shows
+ * `chat.runtime.streamErrors.<key>` instead.
+ */
+export const CHAT_STREAM_ERRORS = {
+    malformed: "The chat stream contained malformed data. Please retry.",
+    invalidEvent: "Invalid chat stream event",
+    unavailable: "The chat stream is unavailable. Please retry.",
+    tooLarge: "The chat stream event exceeded its size limit.",
+    ended: "The chat stream ended before the answer completed. Please retry.",
+    failed: "The chat response failed. Please retry.",
+} as const;
+
+export type ChatStreamErrorKey = keyof typeof CHAT_STREAM_ERRORS;
+
+export function chatStreamErrorKey(message: string): ChatStreamErrorKey | null {
+    for (const [key, text] of Object.entries(CHAT_STREAM_ERRORS))
+        if (text === message) return key as ChatStreamErrorKey;
+    return null;
 }
 
 export function throwIfChatAborted(signal: AbortSignal): void {
@@ -32,9 +59,9 @@ function parseEvent<T>(line: string): ChatStreamEvent<T> {
     try {
         value = JSON.parse(line);
     } catch {
-        throw new Error("The chat stream contained malformed data. Please retry.");
+        throw new Error(CHAT_STREAM_ERRORS.malformed);
     }
-    if (!value || typeof value !== "object") throw new Error("Invalid chat stream event");
+    if (!value || typeof value !== "object") throw new Error(CHAT_STREAM_ERRORS.invalidEvent);
     const event = value as Record<string, unknown>;
     if (
         (event.type === "status" && typeof event.status === "string") ||
@@ -47,7 +74,7 @@ function parseEvent<T>(line: string): ChatStreamEvent<T> {
             typeof (event.response as Record<string, unknown>).success === "boolean")
     )
         return value as ChatStreamEvent<T>;
-    throw new Error("Invalid chat stream event");
+    throw new Error(CHAT_STREAM_ERRORS.invalidEvent);
 }
 
 /** Decode lines across arbitrary network and UTF-8 boundaries; never invent a final answer. */
@@ -56,7 +83,7 @@ export async function readChatStream<T>(
     signal: AbortSignal,
     onEvent?: (event: ChatStreamEvent<T>) => void
 ): Promise<T> {
-    if (!response.body) throw new Error("The chat stream is unavailable. Please retry.");
+    if (!response.body) throw new Error(CHAT_STREAM_ERRORS.unavailable);
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let pending = "";
@@ -70,8 +97,7 @@ export async function readChatStream<T>(
             const { value, done } = await reader.read();
             throwIfChatAborted(signal);
             pending += done ? decoder.decode() : decoder.decode(value, { stream: true });
-            if (pending.length > 8_000_000)
-                throw new Error("The chat stream event exceeded its size limit.");
+            if (pending.length > 8_000_000) throw new Error(CHAT_STREAM_ERRORS.tooLarge);
             const lines = pending.split("\n");
             pending = lines.pop() ?? "";
             if (done && pending.trim()) {
@@ -86,8 +112,7 @@ export async function readChatStream<T>(
                 if (event.type === "error") throw new Error(event.message);
                 if (event.type === "result") return event.response;
             }
-            if (done)
-                throw new Error("The chat stream ended before the answer completed. Please retry.");
+            if (done) throw new Error(CHAT_STREAM_ERRORS.ended);
         }
     } finally {
         signal.removeEventListener("abort", abort);
@@ -122,7 +147,7 @@ export function createChatStream<T>(
                     throwIfChatAborted(abortController.signal);
                     emit({ type: "result", response });
                 } catch (error) {
-                    const message = onError?.(error) ?? "The chat response failed. Please retry.";
+                    const message = onError?.(error) ?? CHAT_STREAM_ERRORS.failed;
                     if (!abortController.signal.aborted) {
                         emit({ type: "error", message });
                     }

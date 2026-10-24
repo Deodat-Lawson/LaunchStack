@@ -1,8 +1,17 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
 import {
     describeSourceProgress,
     retryCountdown,
     type SourceProcessingView,
 } from "~/lib/source-progress";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "sources.progress",
+});
 
 const NOW = new Date("2026-10-23T12:00:00Z");
 
@@ -23,20 +32,20 @@ function at(stage: "reading" | "chunking" | "embedding" | "finishing", extra = {
 
 describe("describeSourceProgress", () => {
     it("has no number before the worker has reported anything", () => {
-        expect(describeSourceProgress(undefined, NOW)).toEqual({
+        expect(describeSourceProgress(undefined, t, NOW)).toEqual({
             percent: null,
             label: "Syncing…",
             waiting: null,
         });
         // Running, but from before progress was recorded: no made-up figure.
-        expect(describeSourceProgress(view(), NOW)).toMatchObject({
+        expect(describeSourceProgress(view(), t, NOW)).toMatchObject({
             percent: null,
             label: "Processing",
         });
     });
 
     it("starts a queued job at zero", () => {
-        expect(describeSourceProgress(view({ status: "queued" }), NOW)).toMatchObject({
+        expect(describeSourceProgress(view({ status: "queued" }), t, NOW)).toMatchObject({
             percent: 0,
             label: "Queued",
         });
@@ -51,7 +60,7 @@ describe("describeSourceProgress", () => {
             at("embedding", { done: 267, total: 267, pages: 259 }),
             at("finishing", { pages: 259 }),
         ];
-        const shown = steps.map(progress => describeSourceProgress(view({ progress }), NOW));
+        const shown = steps.map(progress => describeSourceProgress(view({ progress }), t, NOW));
 
         expect(shown.map(s => s.label)).toEqual([
             "Reading pages",
@@ -71,6 +80,7 @@ describe("describeSourceProgress", () => {
     it("never claims 100 while the source is still processing", () => {
         const done = describeSourceProgress(
             view({ progress: at("embedding", { done: 999, total: 10 }) }),
+            t,
             NOW
         );
         expect(done.percent).toBe(95);
@@ -87,6 +97,7 @@ describe("describeSourceProgress", () => {
                     lastError: "OpenAI API error: 429 - RESOURCE_EXHAUSTED",
                 },
             }),
+            t,
             NOW
         );
         expect(shown.percent).toBe(57);
@@ -104,6 +115,7 @@ describe("describeSourceProgress", () => {
                     lastError: null,
                 },
             }),
+            t,
             NOW
         );
         expect(shown.label).toBe("Retrying");
@@ -112,8 +124,8 @@ describe("describeSourceProgress", () => {
 
 describe("retryCountdown", () => {
     it("rounds to what a person reads at a glance", () => {
-        expect(retryCountdown(new Date("2026-10-23T12:00:03Z"), NOW)).toBe("now");
-        expect(retryCountdown(new Date("2026-10-23T12:00:40Z"), NOW)).toBe("in 40 s");
-        expect(retryCountdown(new Date("2026-10-23T12:16:10Z"), NOW)).toBe("in 16 min");
+        expect(retryCountdown(new Date("2026-10-23T12:00:03Z"), t, NOW)).toBe("Retrying now");
+        expect(retryCountdown(new Date("2026-10-23T12:00:40Z"), t, NOW)).toBe("Retrying in 40 s");
+        expect(retryCountdown(new Date("2026-10-23T12:16:10Z"), t, NOW)).toBe("Retrying in 16 min");
     });
 });

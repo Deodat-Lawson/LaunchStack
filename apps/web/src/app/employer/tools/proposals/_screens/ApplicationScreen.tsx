@@ -11,6 +11,7 @@ import {
     Plus,
     Sparkles,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -48,7 +49,7 @@ import { cn } from "~/lib/utils";
 import { EvidenceRows } from "~/components/tools/Cite";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { SkeletonBlock } from "~/components/tools/SkeletonRows";
-import { plural, relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import {
     ApplicationStatusMenu,
@@ -61,7 +62,6 @@ import { runIsLive, useProposals } from "../_lib/context";
 import { SECTION_TONE, amountWords, deadlineTone, deadlineWords } from "../_lib/words";
 import {
     ProposalsApiError,
-    REWRITE_PRESET_LABEL,
     proposalsApi,
     type ApplicationDetail,
     type ApplicationStatus,
@@ -71,14 +71,7 @@ import {
     type SectionDto,
 } from "../api";
 
-const KIND_LABEL: Record<RequirementDto["kind"], string> = {
-    eligibility: "Eligibility",
-    deadline: "Deadline",
-    budget: "Budget",
-    section: "Sections",
-    attachment: "Attachments",
-    format: "Format",
-};
+/** Checklist groups in this order; labels are `proposals.requirementKind.<kind>`. */
 const KIND_ORDER: RequirementDto["kind"][] = [
     "eligibility",
     "deadline",
@@ -89,7 +82,13 @@ const KIND_ORDER: RequirementDto["kind"][] = [
 ];
 const PRESETS: RewritePreset[] = ["tighten", "specific", "plainer", "stronger", "custom"];
 
-/** A question for the Studio chat about this section, with the sources in view. */
+/** What a run that could not start was for: `proposals.application.startFailed.<what>`. */
+type RunWhat = "rewrite" | "drafting" | "review" | "extract";
+
+/**
+ * A question for the Studio chat about this section, with the sources in
+ * view. It is a prompt for the model, so it stays in English.
+ */
 function askPrompt(section: SectionDto, app: ApplicationDetail): string {
     return `I am writing the "${section.question}" section of our proposal to ${app.funder ?? "a funder"} ("${app.title}"). Which of our sources say something about this? Quote the passages, name the documents, and tell me what is missing.`;
 }
@@ -120,11 +119,15 @@ function Outline({
     readiness: number;
     children?: React.ReactNode;
 }) {
+    const t = useTranslations("proposals.application.outline");
     return (
         <aside className="@max-xl:row-span-2 @max-lg:static @max-lg:row-auto @max-lg:self-auto sticky top-6 flex flex-col gap-3 self-start">
             <div className="flex items-center justify-between px-1">
                 <span className="text-ink-3 text-xs">
-                    {sections.filter(s => s.status !== "empty").length} of {sections.length} written
+                    {t("written", {
+                        written: sections.filter(s => s.status !== "empty").length,
+                        total: sections.length,
+                    })}
                 </span>
                 <ReadinessMeter value={readiness} />
             </div>
@@ -181,6 +184,9 @@ function AddSectionForm({
     applicationId: string;
     onAdded: (section: SectionDto) => void;
 }) {
+    const t = useTranslations("proposals.application.addSection");
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState("");
     const [limit, setLimit] = useState("");
@@ -197,7 +203,7 @@ function AddSectionForm({
             setLimit("");
             setOpen(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not add the section");
+            toast.error(e instanceof Error ? e.message : t("failed"));
         } finally {
             setBusy(false);
         }
@@ -210,7 +216,7 @@ function AddSectionForm({
                 className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-2 rounded-md px-1 py-1 text-[13px] outline-none focus-visible:ring-2"
             >
                 <Plus className="size-3.5" />
-                Add a section
+                {t("open")}
             </button>
         );
     return (
@@ -223,7 +229,7 @@ function AddSectionForm({
         >
             <div className="grid gap-1">
                 <Label htmlFor="new-section" className="text-xs">
-                    Question
+                    {tp("question")}
                 </Label>
                 <Input
                     id="new-section"
@@ -234,7 +240,7 @@ function AddSectionForm({
             </div>
             <div className="grid gap-1">
                 <Label htmlFor="new-section-limit" className="text-xs">
-                    Word limit
+                    {t("wordLimit")}
                 </Label>
                 <Input
                     id="new-section-limit"
@@ -245,10 +251,10 @@ function AddSectionForm({
             </div>
             <div className="flex gap-2">
                 <Button type="submit" size="sm" disabled={!question.trim() || busy}>
-                    Add
+                    {tc("actions.add")}
                 </Button>
                 <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
-                    Cancel
+                    {tc("actions.cancel")}
                 </Button>
             </div>
         </form>
@@ -258,13 +264,14 @@ function AddSectionForm({
 // ─── Editor ──────────────────────────────────────────────────────────────────
 
 function WordMeter({ words, limit }: { words: number; limit: number | null }) {
+    const t = useTranslations("proposals.application.editor");
     if (!limit) return null;
     const share = Math.min(100, (words / limit) * 100);
     const over = words > limit;
     return (
         <span
             className="bg-line relative block h-1 w-24 overflow-hidden rounded-full"
-            title={`${words} of ${limit} words`}
+            title={t("wordMeter", { words, limit })}
             aria-hidden
         >
             <span
@@ -287,6 +294,8 @@ function RewriteDialog({
     onOpenChange: (open: boolean) => void;
     onSubmit: (instruction: string) => void;
 }) {
+    const t = useTranslations("proposals.application.rewriteDialog");
+    const tc = useTranslations("common");
     const [text, setText] = useState("");
     useEffect(() => {
         if (open) setText("");
@@ -295,11 +304,8 @@ function RewriteDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Rewrite with instructions</DialogTitle>
-                    <DialogDescription>
-                        Say what should change. Facts stay tied to the evidence; anything the
-                        instruction needs that the sources do not give is listed as a gap.
-                    </DialogDescription>
+                    <DialogTitle>{t("title")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -312,17 +318,17 @@ function RewriteDialog({
                         value={text}
                         onChange={e => setText(e.target.value)}
                         rows={4}
-                        placeholder="Open with the outcome for families, then the numbers. Mention the two new schools by name."
-                        aria-label="Rewrite instruction"
+                        placeholder={t("placeholder")}
+                        aria-label={t("aria")}
                         autoFocus
                         maxLength={600}
                     />
                     <DialogFooter>
                         <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={!text.trim()}>
-                            Rewrite
+                            {t("submit")}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -346,12 +352,16 @@ function SectionEditor({
     section: SectionDto;
     busy: boolean;
     onChange: (section: SectionDto) => void;
-    onRun: (start: () => Promise<{ run: RunDto }>, what: string) => Promise<void>;
+    onRun: (start: () => Promise<{ run: RunDto }>, what: RunWhat) => Promise<void>;
     onRemove: () => void;
     index: number;
     total: number;
     onStep: (delta: 1 | -1) => void;
 }) {
+    const t = useTranslations("proposals.application.editor");
+    const tp = useTranslations("proposals.common");
+    const tPreset = useTranslations("proposals.rewritePreset");
+    const format = useToolFormat();
     const [draft, setDraft] = useState(section.draft ?? "");
     const [saving, setSaving] = useState(false);
     const [dirty, setDirty] = useState(false);
@@ -376,7 +386,7 @@ function SectionEditor({
             setDirty(false);
             if (done) toast.success(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save the section");
+            toast.error(e instanceof Error ? e.message : t("saveFailed"));
         } finally {
             setSaving(false);
         }
@@ -390,14 +400,14 @@ function SectionEditor({
     const rewrite = (preset: RewritePreset, instruction?: string) =>
         void onRun(
             () => proposalsApi.rewriteSection(app.id, section.id, { preset, instruction }),
-            "the rewrite"
+            "rewrite"
         );
     const saveToLibrary = async () => {
         try {
             await proposalsApi.saveToLibrary(app.id, section.id);
-            toast.success("Saved to the library");
+            toast.success(t("savedToLibrary"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save to the library");
+            toast.error(e instanceof Error ? e.message : t("saveToLibraryFailed"));
         }
     };
     const hasDraft = draft.trim().length > 0;
@@ -410,8 +420,8 @@ function SectionEditor({
             <header className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                     <div className="text-ink-3 text-xs">
-                        Section {index + 1} of {total}
-                        {!section.required && " · optional"}
+                        {t("position", { n: index + 1, total })}
+                        {!section.required && ` · ${t("optional")}`}
                     </div>
                     <h2 className="text-ink mt-0.5 text-[16px] font-semibold leading-snug">
                         {section.question}
@@ -429,7 +439,7 @@ function SectionEditor({
                         className="size-7"
                         disabled={index === 0}
                         onClick={() => onStep(-1)}
-                        aria-label="Previous section"
+                        aria-label={t("previous")}
                     >
                         <ArrowUp className="size-3.5" />
                     </Button>
@@ -439,7 +449,7 @@ function SectionEditor({
                         className="size-7"
                         disabled={index >= total - 1}
                         onClick={() => onStep(1)}
-                        aria-label="Next section"
+                        aria-label={t("next")}
                     >
                         <ArrowDown className="size-3.5" />
                     </Button>
@@ -448,9 +458,7 @@ function SectionEditor({
 
             {!hasDraft && section.status === "empty" ? (
                 <div className="border-line-2 flex flex-col items-start gap-2 rounded-md border border-dashed px-4 py-5">
-                    <p className="text-ink-2 text-[13px]">
-                        Nothing written yet. Draft it from your sources, or start typing.
-                    </p>
+                    <p className="text-ink-2 text-[13px]">{t("empty")}</p>
                     <div className="flex flex-wrap gap-2">
                         <Button
                             size="sm"
@@ -463,10 +471,10 @@ function SectionEditor({
                             }
                         >
                             <Sparkles className="size-3.5" />
-                            Draft from sources
+                            {t("draft")}
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => onType(" ")}>
-                            Write it by hand
+                            {t("byHand")}
                         </Button>
                     </div>
                 </div>
@@ -476,19 +484,23 @@ function SectionEditor({
                     onChange={e => onType(e.target.value)}
                     rows={Math.min(26, Math.max(10, Math.ceil(draft.length / 80)))}
                     className="text-[14px] leading-[1.6]"
-                    aria-label={`Answer: ${section.question}`}
+                    aria-label={t("answerAria", { question: section.question })}
                 />
             )}
 
             <div className="text-ink-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 <WordMeter words={words} limit={section.wordLimit} />
                 <span className={cn("tabular-nums", over && "text-warn")}>
-                    {words} words{section.wordLimit ? ` of ${section.wordLimit}` : ""}
-                    {over ? " · over the limit" : ""}
+                    {section.wordLimit
+                        ? t("wordsOfLimit", { words, limit: section.wordLimit })
+                        : t("words", { words })}
+                    {over ? ` · ${t("overLimit")}` : ""}
                 </span>
                 <SectionStatusPill status={section.status} />
-                {section.draftedAt && <span>drafted {relativeTime(section.draftedAt)}</span>}
-                {saving ? <span>saving…</span> : dirty ? <span>unsaved</span> : null}
+                {section.draftedAt && (
+                    <span>{t("drafted", { time: format.relativeTime(section.draftedAt) })}</span>
+                )}
+                {saving ? <span>{t("saving")}</span> : dirty ? <span>{t("unsaved")}</span> : null}
             </div>
 
             <div className="border-line-2 flex flex-wrap items-center gap-2 border-t pt-3">
@@ -501,17 +513,17 @@ function SectionEditor({
                     }
                 >
                     <Sparkles className="size-3.5" />
-                    {hasDraft ? "Redraft from sources" : "Draft from sources"}
+                    {hasDraft ? t("redraft") : t("draft")}
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild disabled={busy || !hasDraft}>
                         <Button size="sm" variant="outline">
-                            Rewrite
+                            {t("rewrite")}
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="w-64">
                         <DropdownMenuLabel className="text-ink-3 text-xs font-normal">
-                            Keeps the facts and the citations
+                            {t("rewriteKeeps")}
                         </DropdownMenuLabel>
                         {PRESETS.map(preset => (
                             <DropdownMenuItem
@@ -521,7 +533,7 @@ function SectionEditor({
                                     preset === "custom" ? setCustomOpen(true) : rewrite(preset)
                                 }
                             >
-                                {REWRITE_PRESET_LABEL[preset]}
+                                {tPreset(preset)}
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuContent>
@@ -531,20 +543,18 @@ function SectionEditor({
                         <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => void save({ status: "edited" }, "Approval removed")}
+                            onClick={() => void save({ status: "edited" }, t("approvalRemoved"))}
                         >
-                            Unapprove
+                            {t("unapprove")}
                         </Button>
                     ) : (
                         <Button
                             size="sm"
                             disabled={!hasDraft || saving}
-                            onClick={() =>
-                                void save({ draft, status: "approved" }, "Section approved")
-                            }
+                            onClick={() => void save({ draft, status: "approved" }, t("approved"))}
                         >
                             <Check className="size-3.5" />
-                            Approve
+                            {t("approve")}
                         </Button>
                     )}
                     <DropdownMenu>
@@ -553,7 +563,7 @@ function SectionEditor({
                                 variant="ghost"
                                 size="icon"
                                 className="size-8"
-                                aria-label="Section actions"
+                                aria-label={t("actions")}
                             >
                                 <MoreHorizontal className="size-4" />
                             </Button>
@@ -563,13 +573,13 @@ function SectionEditor({
                                 onSelect={() => void saveToLibrary()}
                                 disabled={!hasDraft}
                             >
-                                Save to the library
+                                {t("saveToLibrary")}
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <ToolLink href={askHref(section, app)}>Ask in chat</ToolLink>
+                                <ToolLink href={askHref(section, app)}>{tp("askInChat")}</ToolLink>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={onRemove}>Remove section</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={onRemove}>{t("remove")}</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </span>
@@ -597,6 +607,8 @@ function EvidenceRail({
     app: ApplicationDetail;
     libraryHref: string;
 }) {
+    const t = useTranslations("proposals.application.evidence");
+    const tp = useTranslations("proposals.common");
     const cited = section.evidence.filter(e => section.cites.includes(e.n));
     const other = section.evidence.filter(e => !section.cites.includes(e.n));
     const [showOther, setShowOther] = useState(false);
@@ -604,16 +616,14 @@ function EvidenceRail({
         <aside className="@max-xl:static @max-xl:self-auto sticky top-6 flex flex-col gap-4 self-start">
             <section>
                 <h3 className="text-ink mb-1.5 text-[13px] font-semibold">
-                    Evidence
+                    {t("heading")}
                     <span className="text-ink-3 ml-1.5 text-xs font-normal">
-                        {cited.length === 0 ? "none cited" : `${cited.length} cited`}
+                        {cited.length === 0 ? t("noneCited") : t("cited", { count: cited.length })}
                     </span>
                 </h3>
                 {cited.length === 0 ? (
                     <p className="text-ink-3 text-xs leading-relaxed">
-                        {section.status === "empty"
-                            ? "Excerpts from your sources appear here once the section is drafted."
-                            : "This answer cites none of your sources. Redraft it, or approve it as written knowledge."}
+                        {section.status === "empty" ? t("emptyDrafted") : t("noCites")}
                     </p>
                 ) : (
                     <EvidenceRows evidence={cited} />
@@ -624,8 +634,9 @@ function EvidenceRail({
                         onClick={() => setShowOther(v => !v)}
                         className="text-ink-3 hover:text-ink mt-1.5 text-xs"
                     >
-                        {showOther ? "Hide" : "Show"} {plural(other.length, "excerpt")} found but
-                        not cited
+                        {showOther
+                            ? t("hideOther", { count: other.length })
+                            : t("showOther", { count: other.length })}
                     </button>
                 )}
                 {showOther && other.length > 0 && (
@@ -636,7 +647,7 @@ function EvidenceRail({
             </section>
             {section.gaps.length > 0 && (
                 <section className="bg-warn-soft rounded-md px-3 py-2.5">
-                    <h3 className="text-warn mb-1 text-xs font-semibold">Still needed from you</h3>
+                    <h3 className="text-warn mb-1 text-xs font-semibold">{t("gaps")}</h3>
                     <ul className="text-warn list-disc pl-4 text-xs leading-relaxed">
                         {section.gaps.map(g => (
                             <li key={g}>{g}</li>
@@ -645,13 +656,13 @@ function EvidenceRail({
                 </section>
             )}
             <section>
-                <h3 className="text-ink mb-1.5 text-[13px] font-semibold">Reused</h3>
+                <h3 className="text-ink mb-1.5 text-[13px] font-semibold">{t("reused")}</h3>
                 <p className="text-ink-3 text-xs leading-relaxed">
                     {section.libraryItemIds.length === 0
-                        ? "No saved answer matched this question."
-                        : `${plural(section.libraryItemIds.length, "saved answer")} from the library shaped this draft.`}{" "}
+                        ? t("noReuse")
+                        : t("reuse", { count: section.libraryItemIds.length })}{" "}
                     <ToolLink href={libraryHref} className="text-brand-ink hover:underline">
-                        Library
+                        {tp("library")}
                     </ToolLink>
                 </p>
             </section>
@@ -662,9 +673,9 @@ function EvidenceRail({
                 >
                     <MessageSquare className="text-brand-ink mt-0.5 size-3.5 shrink-0" />
                     <span>
-                        <span className="font-medium">Ask in chat</span>
+                        <span className="font-medium">{tp("askInChat")}</span>
                         <span className="text-ink-3 mt-0.5 block leading-relaxed">
-                            Open the Studio with this question about your sources in the composer.
+                            {t("askBody")}
                         </span>
                     </span>
                 </ToolLink>
@@ -686,6 +697,9 @@ function DetailsDialog({
     app: ApplicationDetail;
     onSaved: (app: ApplicationDetail) => void;
 }) {
+    const t = useTranslations("proposals.application");
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const [title, setTitle] = useState(app.title);
     const [funder, setFunder] = useState(app.funder ?? "");
     const [deadline, setDeadline] = useState(app.deadline ?? "");
@@ -707,7 +721,7 @@ function DetailsDialog({
             onSaved(application);
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save");
+            toast.error(e instanceof Error ? e.message : t("saveFailed"));
         } finally {
             setBusy(false);
         }
@@ -716,8 +730,8 @@ function DetailsDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Proposal details</DialogTitle>
-                    <DialogDescription>Title, funder and the date it is due.</DialogDescription>
+                    <DialogTitle>{t("details.title")}</DialogTitle>
+                    <DialogDescription>{t("details.description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -728,7 +742,7 @@ function DetailsDialog({
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="d-title" className="text-xs">
-                            Title
+                            {tp("title")}
                         </Label>
                         <Input
                             id="d-title"
@@ -739,7 +753,7 @@ function DetailsDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="d-funder" className="text-xs">
-                            Funder
+                            {tp("funder")}
                         </Label>
                         <Input
                             id="d-funder"
@@ -749,7 +763,7 @@ function DetailsDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="d-deadline" className="text-xs">
-                            Deadline
+                            {tp("deadline")}
                         </Label>
                         <Input
                             id="d-deadline"
@@ -765,10 +779,10 @@ function DetailsDialog({
                             onClick={() => onOpenChange(false)}
                             disabled={busy}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={busy}>
-                            Save
+                            {tc("actions.save")}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -788,6 +802,9 @@ function PreviewTab({
     version: string;
     onExport: () => void;
 }) {
+    const t = useTranslations("proposals.application.preview");
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const res = useResource(`proposals:markdown:${id}:${version}`, () => proposalsApi.markdown(id));
     const [copied, setCopied] = useState(false);
     const copy = async () => {
@@ -797,7 +814,7 @@ function PreviewTab({
             setCopied(true);
             window.setTimeout(() => setCopied(false), 1500);
         } catch {
-            toast.error("Could not copy");
+            toast.error(t("copyFailed"));
         }
     };
     return (
@@ -810,14 +827,12 @@ function PreviewTab({
                     disabled={!res.data}
                 >
                     {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    {copied ? "Copied" : "Copy as markdown"}
+                    {copied ? tc("actions.copied") : t("copyMarkdown")}
                 </Button>
                 <Button size="sm" variant="outline" onClick={onExport}>
-                    Export to Sources
+                    {tp("exportToSources")}
                 </Button>
-                <span className="text-ink-3 text-xs">
-                    Sections in order, then the checklist and the evidence the drafts cite.
-                </span>
+                <span className="text-ink-3 text-xs">{t("hint")}</span>
             </div>
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
             {res.loading || !res.data ? (
@@ -866,6 +881,13 @@ function PreviewTab({
  * and exports when it reads right.
  */
 export function ApplicationScreen({ id }: { id: string }) {
+    const t = useTranslations("proposals.application");
+    const tp = useTranslations("proposals.common");
+    const tWords = useTranslations("proposals.words");
+    const tKind = useTranslations("proposals.requirementKind");
+    const tName = useTranslations("tools.registry.proposals");
+    const tc = useTranslations("common");
+    const format = useToolFormat();
     const { href, trackRun, activeRun, finishedTick } = useProposals();
     const router = useToolRouter();
     const res = useResource(`proposals:application:${id}`, () => proposalsApi.application(id));
@@ -907,17 +929,17 @@ export function ApplicationScreen({ id }: { id: string }) {
             },
         }));
 
-    const run = async (start: () => Promise<{ run: RunDto }>, what: string) => {
+    const run = async (start: () => Promise<{ run: RunDto }>, what: RunWhat) => {
         try {
             const { run: started } = await start();
             trackRun(started);
         } catch (e) {
             const message =
                 e instanceof ProposalsApiError && e.status === 402
-                    ? "Not enough credits for this run"
+                    ? t("noCredits")
                     : e instanceof Error
                       ? e.message
-                      : `Could not start ${what}`;
+                      : t(`startFailed.${what}`);
             toast.error(message);
         }
     };
@@ -930,27 +952,27 @@ export function ApplicationScreen({ id }: { id: string }) {
             setApp(application);
             if (done) toast.success(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save");
+            toast.error(e instanceof Error ? e.message : t("saveFailed"));
         }
     };
     const exportToSources = async () => {
         try {
             const { application } = await proposalsApi.exportApplication(id);
             setApp(application);
-            toast.success("Exported to Sources — it is now citable knowledge");
+            toast.success(t("exported"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not export");
+            toast.error(e instanceof Error ? e.message : t("exportFailed"));
         }
     };
     const remove = async () => {
         try {
             await proposalsApi.deleteApplication(id);
-            toast("Proposal deleted");
+            toast(t("deleted"));
             // Replace, not push: the tab's Back would otherwise return to a
             // proposal that no longer exists.
             router.replace(href("/write"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not delete");
+            toast.error(e instanceof Error ? e.message : t("deleteFailed"));
         } finally {
             setDeleting(false);
         }
@@ -965,9 +987,9 @@ export function ApplicationScreen({ id }: { id: string }) {
                     sectionList: current.application.sectionList.filter(s => s.id !== removing.id),
                 },
             }));
-            toast("Section removed");
+            toast(t("sectionRemoved"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not remove the section");
+            toast.error(e instanceof Error ? e.message : t("removeFailed"));
         } finally {
             setRemoving(null);
         }
@@ -992,9 +1014,9 @@ export function ApplicationScreen({ id }: { id: string }) {
         return (
             <ToolNotFound
                 home={href("/write")}
-                homeLabel="Applications"
-                title="This application is no longer here"
-                body="It may have been deleted, or the link is from another workspace."
+                homeLabel={t("notFoundHome")}
+                title={t("notFoundTitle")}
+                body={t("notFoundBody")}
             />
         );
     }
@@ -1011,7 +1033,7 @@ export function ApplicationScreen({ id }: { id: string }) {
         <div className="mx-auto max-w-[1200px]">
             <div className="text-ink-3 mb-3 flex items-center gap-3 text-xs">
                 <ToolLink href={href("/write")} className="hover:text-ink">
-                    Proposals
+                    {tName("name")}
                 </ToolLink>
                 <span aria-hidden>/</span>
                 <span className="text-ink truncate font-medium">
@@ -1026,40 +1048,44 @@ export function ApplicationScreen({ id }: { id: string }) {
                     </h1>
                     {app && (
                         <div className="text-ink-3 mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
-                            <span>{app.funder ?? "Funder not set"}</span>
+                            <span>{app.funder ?? tp("funderNotSet")}</span>
                             <span
                                 className={cn(
                                     tone === "warn" && "text-warn",
                                     tone === "lost" && "text-danger"
                                 )}
                             >
-                                {deadlineWords(app.deadline, app.daysLeft)}
-                                {app.deadline ? ` · ${app.deadline}` : ""}
+                                {app.deadline
+                                    ? t("deadlineWithDate", {
+                                          words: deadlineWords(tWords, app.deadline, app.daysLeft),
+                                          date: app.deadline,
+                                      })
+                                    : deadlineWords(tWords, app.deadline, app.daysLeft)}
                             </span>
-                            {amountWords(app.amountMin, app.amountMax) && (
-                                <span>{amountWords(app.amountMin, app.amountMax)}</span>
+                            {amountWords(tWords, app.amountMin, app.amountMax) && (
+                                <span>{amountWords(tWords, app.amountMin, app.amountMax)}</span>
                             )}
                             <button
                                 type="button"
                                 onClick={() => setDetails(true)}
                                 className="text-brand-ink hover:underline"
                             >
-                                Edit details
+                                {tp("editDetails")}
                             </button>
                         </div>
                     )}
                     {app && (
                         <div className="mt-3 flex flex-wrap items-center gap-3">
-                            <ReadinessMeter value={app.readiness} label="Ready" />
+                            <ReadinessMeter value={app.readiness} label={tp("ready")} />
                             <ApplicationStatusMenu
                                 status={app.status}
                                 onChange={(status: ApplicationStatus) =>
-                                    void patch({ status }, "Status updated")
+                                    void patch({ status }, t("statusUpdated"))
                                 }
                             />
                             {app.blockers > 0 && (
                                 <span className="text-danger text-xs">
-                                    {plural(app.blockers, "blocker")}
+                                    {t("blockers", { count: app.blockers })}
                                 </span>
                             )}
                             {app.exportedHref && (
@@ -1067,7 +1093,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     href={app.exportedHref}
                                     className="text-brand-ink inline-flex items-center gap-1 text-xs hover:underline"
                                 >
-                                    In Sources
+                                    {t("inSources")}
                                     <ExternalLink className="size-3" />
                                 </ToolLink>
                             )}
@@ -1080,9 +1106,9 @@ export function ApplicationScreen({ id }: { id: string }) {
                             size="sm"
                             variant="outline"
                             disabled={busy}
-                            onClick={() => void run(() => proposalsApi.review(id), "the review")}
+                            onClick={() => void run(() => proposalsApi.review(id), "review")}
                         >
-                            Review
+                            {t("review")}
                         </Button>
                         <Button
                             size="sm"
@@ -1091,8 +1117,10 @@ export function ApplicationScreen({ id }: { id: string }) {
                         >
                             <Sparkles className="size-3.5" />
                             {emptyCount === 0
-                                ? "All drafted"
-                                : `Draft ${emptyCount === sections.length ? "every section" : plural(emptyCount, "section")}`}
+                                ? t("allDrafted")
+                                : emptyCount === sections.length
+                                  ? t("draftEvery")
+                                  : t("draftSome", { count: emptyCount })}
                         </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -1100,21 +1128,21 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     variant="ghost"
                                     size="icon"
                                     className="size-8"
-                                    aria-label="More"
+                                    aria-label={tc("actions.more")}
                                 >
                                     <MoreHorizontal className="size-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem onSelect={() => void exportToSources()}>
-                                    Export to Sources
+                                    {tp("exportToSources")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onSelect={() => setDetails(true)}>
-                                    Edit details
+                                    {tp("editDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onSelect={() => setDeleting(true)}>
-                                    Delete proposal
+                                    {t("deleteProposal")}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -1129,28 +1157,34 @@ export function ApplicationScreen({ id }: { id: string }) {
                     {/* Five tabs outgrow a narrow tab: the list scrolls sideways
                         instead of pushing the page wider. */}
                     <TabsList className="max-w-full justify-start overflow-x-auto [scrollbar-width:none]">
-                        <TabsTrigger value="write">Write · {sections.length}</TabsTrigger>
+                        <TabsTrigger value="write">
+                            {t("tabs.write", { count: sections.length })}
+                        </TabsTrigger>
                         <TabsTrigger value="checklist">
-                            Checklist · {app.requirements.filter(r => r.done).length}/
-                            {app.requirements.length}
+                            {t("tabs.checklist", {
+                                done: app.requirements.filter(r => r.done).length,
+                                total: app.requirements.length,
+                            })}
                         </TabsTrigger>
                         <TabsTrigger value="review">
-                            Review{app.review ? ` · ${app.review.findings.length}` : ""}
+                            {app.review
+                                ? t("tabs.reviewCount", { count: app.review.findings.length })
+                                : t("tabs.review")}
                         </TabsTrigger>
-                        <TabsTrigger value="request">Request</TabsTrigger>
-                        <TabsTrigger value="preview">Preview</TabsTrigger>
+                        <TabsTrigger value="request">{t("tabs.request")}</TabsTrigger>
+                        <TabsTrigger value="preview">{t("tabs.preview")}</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="write">
                         {sections.length === 0 ? (
                             <EmptyState
-                                title="No sections yet"
+                                title={t("noSections")}
                                 body={
                                     app.requestText || app.requestUrl
                                         ? busy
-                                            ? "Reading the request now; the sections appear when it is done."
-                                            : "The request has not been read into sections yet."
-                                        : "Give the funder's request on the Request tab, or add the questions by hand."
+                                            ? t("noSectionsReading")
+                                            : t("noSectionsUnread")
+                                        : t("noSectionsNoRequest")
                                 }
                                 action={
                                     app.requestText || app.requestUrl ? (
@@ -1158,13 +1192,10 @@ export function ApplicationScreen({ id }: { id: string }) {
                                             size="sm"
                                             disabled={busy}
                                             onClick={() =>
-                                                void run(
-                                                    () => proposalsApi.extract(id),
-                                                    "reading the request"
-                                                )
+                                                void run(() => proposalsApi.extract(id), "extract")
                                             }
                                         >
-                                            Read the request
+                                            {t("readRequest")}
                                         </Button>
                                     ) : (
                                         <Button
@@ -1172,7 +1203,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                             variant="outline"
                                             onClick={() => setTab("request")}
                                         >
-                                            Add the request
+                                            {t("addRequest")}
                                         </Button>
                                     )
                                 }
@@ -1249,17 +1280,17 @@ export function ApplicationScreen({ id }: { id: string }) {
 
                     <TabsContent value="checklist" className="flex flex-col gap-5">
                         {app.requirements.length === 0 ? (
-                            <EmptyState
-                                title="No checklist yet"
-                                body="It is built from the funder's request: eligibility rules, every question, attachments and format."
-                            />
+                            <EmptyState title={t("noChecklist")} body={t("noChecklistBody")} />
                         ) : (
                             grouped.map(([kind, rows]) => (
                                 <section key={kind}>
                                     <h2 className="text-ink mb-2 text-[13px] font-semibold">
-                                        {KIND_LABEL[kind]}
+                                        {tKind(kind)}
                                         <span className="text-ink-3 ml-2 text-xs font-normal">
-                                            {rows.filter(r => r.done).length} of {rows.length}
+                                            {t("doneOf", {
+                                                done: rows.filter(r => r.done).length,
+                                                total: rows.length,
+                                            })}
                                         </span>
                                     </h2>
                                     <div className="border-line bg-panel overflow-hidden rounded-lg border">
@@ -1308,7 +1339,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                             <StatusWord
                                                                 tone={SECTION_TONE[section.status]}
                                                             >
-                                                                open
+                                                                {t("openSection")}
                                                             </StatusWord>
                                                         </button>
                                                     )}
@@ -1318,7 +1349,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     </div>
                                     {kind === "section" && (
                                         <p className="text-ink-3 mt-1.5 text-xs">
-                                            A section ticks itself when it is approved.
+                                            {t("sectionTicks")}
                                         </p>
                                     )}
                                 </section>
@@ -1329,17 +1360,17 @@ export function ApplicationScreen({ id }: { id: string }) {
                     <TabsContent value="review" className="flex flex-col gap-4">
                         {!app.review ? (
                             <EmptyState
-                                title="Not reviewed yet"
-                                body="The review checks every requirement against the drafts and reads them the way a programme officer would: unanswered questions, vague claims, missing numbers, contradictions."
+                                title={t("notReviewed")}
+                                body={t("notReviewedBody")}
                                 action={
                                     <Button
                                         size="sm"
                                         disabled={busy}
                                         onClick={() =>
-                                            void run(() => proposalsApi.review(id), "the review")
+                                            void run(() => proposalsApi.review(id), "review")
                                         }
                                     >
-                                        Review now
+                                        {t("reviewNow")}
                                     </Button>
                                 }
                             />
@@ -1349,10 +1380,12 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     <div className="flex flex-wrap items-center gap-3">
                                         <ReadinessMeter
                                             value={app.review.readiness}
-                                            label="Ready"
+                                            label={tp("ready")}
                                         />
                                         <span className="text-ink-3 text-xs">
-                                            reviewed {relativeTime(app.review.reviewedAt)}
+                                            {t("reviewed", {
+                                                time: format.relativeTime(app.review.reviewedAt),
+                                            })}
                                         </span>
                                         <Button
                                             size="sm"
@@ -1360,13 +1393,10 @@ export function ApplicationScreen({ id }: { id: string }) {
                                             disabled={busy}
                                             className="ml-auto"
                                             onClick={() =>
-                                                void run(
-                                                    () => proposalsApi.review(id),
-                                                    "the review"
-                                                )
+                                                void run(() => proposalsApi.review(id), "review")
                                             }
                                         >
-                                            Review again
+                                            {t("reviewAgain")}
                                         </Button>
                                     </div>
                                     <p className="text-ink mt-2 max-w-[70ch] text-[13.5px] leading-relaxed">
@@ -1374,7 +1404,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     </p>
                                 </div>
                                 {app.review.findings.length === 0 ? (
-                                    <p className="text-ink-3 text-[13px]">Nothing to fix.</p>
+                                    <p className="text-ink-3 text-[13px]">{t("nothingToFix")}</p>
                                 ) : (
                                     <div className="border-line bg-panel overflow-hidden rounded-lg border">
                                         {app.review.findings.map(f => (
@@ -1399,7 +1429,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                         onClick={() => goToSection(f.sectionKey)}
                                                         className="text-brand-ink self-start text-xs hover:underline"
                                                     >
-                                                        Go to section
+                                                        {t("goToSection")}
                                                     </button>
                                                 )}
                                             </div>
@@ -1418,7 +1448,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                         )}
                         <div className="grid gap-1.5">
                             <Label htmlFor="req-url" className="text-ink-3 text-xs font-normal">
-                                Link to the call
+                                {t("requestLink")}
                             </Label>
                             <div className="flex gap-2">
                                 <Input
@@ -1435,24 +1465,24 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     onClick={() =>
                                         void patch(
                                             { requestUrl: requestUrl.trim() || null },
-                                            "Link saved"
+                                            t("linkSaved")
                                         )
                                     }
                                 >
-                                    Save
+                                    {tc("actions.save")}
                                 </Button>
                             </div>
                         </div>
                         <div className="grid gap-1.5">
                             <Label htmlFor="req-text" className="text-ink-3 text-xs font-normal">
-                                The request as given
+                                {t("requestText")}
                             </Label>
                             <Textarea
                                 id="req-text"
                                 value={requestText}
                                 onChange={e => setRequestText(e.target.value)}
                                 rows={14}
-                                placeholder="Paste the call, the guidelines or the form's questions…"
+                                placeholder={t("requestPlaceholder")}
                                 className="font-mono text-[12.5px] leading-[1.5]"
                             />
                             <div className="flex flex-wrap items-center gap-2">
@@ -1463,11 +1493,11 @@ export function ApplicationScreen({ id }: { id: string }) {
                                     onClick={() =>
                                         void patch(
                                             { requestText: requestText.trim() || null },
-                                            "Request saved"
+                                            t("requestSaved")
                                         )
                                     }
                                 >
-                                    Save text
+                                    {t("saveText")}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -1481,17 +1511,12 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                 requestText: requestText.trim() || null,
                                                 requestUrl: requestUrl.trim() || null,
                                             });
-                                        await run(
-                                            () => proposalsApi.extract(id),
-                                            "reading the request"
-                                        );
+                                        await run(() => proposalsApi.extract(id), "extract");
                                     }}
                                 >
-                                    {sections.length > 0 ? "Read it again" : "Read the request"}
+                                    {sections.length > 0 ? t("readAgain") : t("readRequest")}
                                 </Button>
-                                <span className="text-ink-3 text-xs">
-                                    Re-reading keeps the drafts of sections that are still asked.
-                                </span>
+                                <span className="text-ink-3 text-xs">{t("rereadHint")}</span>
                             </div>
                         </div>
                     </TabsContent>
@@ -1517,17 +1542,17 @@ export function ApplicationScreen({ id }: { id: string }) {
             <ConfirmDialog
                 open={deleting}
                 onOpenChange={setDeleting}
-                title="Delete this proposal?"
-                description="Its sections, checklist and review are deleted. Answers you saved to the library stay."
-                confirmLabel="Delete"
+                title={t("deleteTitle")}
+                description={t("deleteBody")}
+                confirmLabel={tc("actions.delete")}
                 onConfirm={() => void remove()}
             />
             <ConfirmDialog
                 open={removing !== null}
                 onOpenChange={open => !open && setRemoving(null)}
-                title="Remove this section?"
-                description="Its draft goes with it. The funder's request is unchanged; re-reading it brings the section back."
-                confirmLabel="Remove"
+                title={t("removeTitle")}
+                description={t("removeBody")}
+                confirmLabel={tc("actions.remove")}
                 onConfirm={() => void removeSection()}
             />
         </div>

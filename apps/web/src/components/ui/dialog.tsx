@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
@@ -49,6 +50,7 @@ function DialogContent({
     /** Classes for the backdrop, e.g. to lift it with the panel above a raised surface. */
     overlayClassName?: string;
 }) {
+    const t = useTranslations("common.a11y");
     return (
         <DialogPortal data-slot="dialog-portal">
             <DialogOverlay className={overlayClassName} />
@@ -63,7 +65,7 @@ function DialogContent({
                 {children}
                 <DialogPrimitive.Close className="ring-offset-background focus:ring-brand data-[state=open]:bg-brand-soft data-[state=open]:text-ink-3 rounded-xs focus:outline-hidden absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
                     <XIcon />
-                    <span className="sr-only">Close</span>
+                    <span className="sr-only">{t("close")}</span>
                 </DialogPrimitive.Close>
             </DialogPrimitive.Content>
         </DialogPortal>

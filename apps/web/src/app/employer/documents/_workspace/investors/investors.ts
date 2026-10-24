@@ -4,17 +4,17 @@
  * Everything here is a function of a search result, so it is tested without
  * rendering anything.
  */
+import type { useTranslations } from "next-intl";
+
 import type { FundProfile, InvestorSearchResult } from "@launchstack/tools/investor-search";
 
 export type { FundProfile, InvestorSearchResult };
 
-/** The windows the search route accepts, in days. */
-export const WITHIN_OPTIONS = [
-    { days: 30, label: "Last 30 days" },
-    { days: 90, label: "Last 90 days" },
-    { days: 180, label: "Last 6 months" },
-    { days: 365, label: "Last 12 months" },
-] as const;
+/** `team.investors` — what the pane says. The prompts and the saved list stay English. */
+export type InvestorsTranslator = ReturnType<typeof useTranslations<"team.investors">>;
+
+/** The windows the search route accepts, in days; labelled `team.investors.within.d<days>`. */
+export const WITHIN_OPTIONS = [{ days: 30 }, { days: 90 }, { days: 180 }, { days: 365 }] as const;
 
 export const US_STATES: ReadonlyArray<readonly [code: string, name: string]> = [
     ["AL", "Alabama"],
@@ -86,6 +86,7 @@ export function formatUsd(amount: number): string {
 /**
  * "Raising $500M · nothing closed yet", "Raising $80M · $21M closed",
  * "Size not stated · $1.9B closed". Undefined when the filing was not read.
+ * English, for the intro prompt and the saved list; the card uses `raiseLine`.
  */
 export function describeRaise(fund: FundProfile): string | undefined {
     if (!fund.detailed) return undefined;
@@ -96,6 +97,21 @@ export function describeRaise(fund: FundProfile): string | undefined {
     const sold = fund.amountSold ?? 0;
     const closed = sold > 0 ? `${formatUsd(sold)} closed` : "nothing closed yet";
     return `${target} · ${closed}`;
+}
+
+/** `describeRaise` in the reader's language, for the fund card. */
+export function raiseLine(t: InvestorsTranslator, fund: FundProfile): string | undefined {
+    if (!fund.detailed) return undefined;
+    const sold = fund.amountSold ?? 0;
+    if (fund.offeringAmount === null || fund.offeringAmount === undefined) {
+        return sold > 0
+            ? t("raise.unstatedClosed", { sold: formatUsd(sold) })
+            : t("raise.unstatedNothing");
+    }
+    const target = formatUsd(fund.offeringAmount);
+    return sold > 0
+        ? t("raise.raisingClosed", { target, sold: formatUsd(sold) })
+        : t("raise.raisingNothing", { target });
 }
 
 /** Largest first by what the fund means to raise; unknown sizes last. */
@@ -187,11 +203,29 @@ export function fundsMarkdown(
 }
 
 export interface PitchStarter {
-    id: string;
-    title: string;
-    desc: string;
+    /** The card's words are `team.investors.starters.<PITCH_STARTER_KEYS[id]>.{title,desc}`. */
+    id: PitchStarterId;
+    /** What the chat is asked — English, like every prompt. */
     prompt: string;
 }
+
+export type PitchStarterId =
+    | "one-pager"
+    | "deck"
+    | "hard-questions"
+    | "metrics"
+    | "update"
+    | "data-room";
+
+/** `one-pager` → `onePager`: the catalogue key of a starter. */
+export const PITCH_STARTER_KEYS = {
+    "one-pager": "onePager",
+    deck: "deck",
+    "hard-questions": "hardQuestions",
+    metrics: "metrics",
+    update: "update",
+    "data-room": "dataRoom",
+} as const satisfies Record<PitchStarterId, string>;
 
 /**
  * Pitch work the chat does from the workspace's sources. Each asks for
@@ -201,54 +235,46 @@ export interface PitchStarter {
 export const PITCH_STARTERS: readonly PitchStarter[] = [
     {
         id: "one-pager",
-        title: "Investor one-pager",
-        desc: "Problem, solution, market, traction, model, team, the raise",
         prompt: "Write a one-page investor memo for our company from our workspace sources: the problem, our solution, market size, traction, business model, team, competition, and the raise with its use of funds. Cite the documents you draw from. End with a list of anything an investor would expect that our sources don't cover.",
     },
     {
         id: "deck",
-        title: "Pitch deck outline",
-        desc: "Ten to twelve slides, each with its headline and proof",
         prompt: "Outline a 10–12 slide seed pitch deck for our company from our workspace sources. For each slide give the headline (a claim, not a label), three talking points, and the source that backs it. Mark any slide our sources can't support yet.",
     },
     {
         id: "hard-questions",
-        title: "Hard questions",
-        desc: "What a sceptical partner will ask, and our best answers",
         prompt: "List the ten hardest questions a sceptical venture partner would ask about our company. Answer each from our workspace sources, cite them, and say plainly where our answer is weak or unsupported.",
     },
     {
         id: "metrics",
-        title: "Traction summary",
-        desc: "The numbers that matter, with where each comes from",
         prompt: "Pull together our traction for an investor: revenue, growth, customers, retention, pipeline and any other metric our workspace sources state. Give each number with its date and cite the document it comes from. Don't estimate a number that isn't written down — list it as missing.",
     },
     {
         id: "update",
-        title: "Investor update",
-        desc: "A monthly update for the investors you already have",
         prompt: "Draft this month's investor update from our workspace sources: highlights, lowlights, key metrics, what we shipped, hiring, and two or three specific asks. Plain and short; cite sources for every number.",
     },
     {
         id: "data-room",
-        title: "Data-room checklist",
-        desc: "What diligence will ask for, and what we already have",
         prompt: "Make a seed / Series A data-room checklist: corporate, cap table, financials, contracts, IP, team, product and customers. For each item, say whether our workspace sources already contain it (name the document) or it is missing.",
     },
 ];
 
 /** The summary line under the search. */
-export function resultSummary(result: InvestorSearchResult, shown: number): string {
-    const parts = [`${shown} ${shown === 1 ? "fund" : "funds"}`];
+export function resultSummary(
+    t: InvestorsTranslator,
+    result: InvestorSearchResult,
+    shown: number
+): string {
+    const parts = [t("summary.funds", { count: shown })];
     if (result.totalFilings > shown) {
         parts.push(
-            `${result.totalFilings >= 10_000 ? "10,000+" : result.totalFilings.toLocaleString("en-US")} filings in the window`
+            result.totalFilings >= 10_000
+                ? t("summary.filingsMany", { count: 10_000 })
+                : t("summary.filings", { count: result.totalFilings })
         );
     }
     if (result.singleDealVehiclesHidden > 0) {
-        parts.push(
-            `${result.singleDealVehiclesHidden} single-deal ${result.singleDealVehiclesHidden === 1 ? "vehicle" : "vehicles"} hidden`
-        );
+        parts.push(t("summary.hidden", { count: result.singleDealVehiclesHidden }));
     }
     return parts.join(" · ");
 }

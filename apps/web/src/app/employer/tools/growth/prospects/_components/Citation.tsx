@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 
 import type { Claim, EvidenceItem } from "../api";
@@ -14,6 +16,7 @@ export function evidenceAnchorId(n: number): string {
  * "E12" token that had nowhere to go.
  */
 export function Citation({ n, evidence }: { n: number; evidence: EvidenceItem[] }) {
+    const t = useTranslations("growth.prospects.citation");
     const item = evidence.find(e => e.n === n);
     const jump = () => {
         const el = document.getElementById(evidenceAnchorId(n));
@@ -27,7 +30,7 @@ export function Citation({ n, evidence }: { n: number; evidence: EvidenceItem[] 
             type="button"
             onClick={jump}
             className="text-brand-ink focus-visible:ring-brand/50 ml-px rounded-sm px-0.5 align-super font-mono text-[10px] leading-none outline-none hover:underline focus-visible:ring-2"
-            aria-label={item ? `Evidence ${n}: ${item.title}` : `Evidence ${n}`}
+            aria-label={item ? t("withTitle", { n, title: item.title }) : t("plain", { n })}
         >
             {n}
         </button>

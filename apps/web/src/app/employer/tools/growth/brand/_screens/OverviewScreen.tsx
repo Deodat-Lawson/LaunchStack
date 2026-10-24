@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -7,9 +8,9 @@ import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Button } from "~/components/ui/button";
-import { plural } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 
+import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
@@ -17,7 +18,6 @@ import { PostRow, PostsReadOnly } from "../_components/PostRow";
 import { StatStrip } from "../_components/StatStrip";
 import { TrackRecordSection } from "../_components/TrackRecord";
 import { tokenExpiry } from "../_lib/channels";
-import { compact } from "../_lib/numbers";
 import { openCount } from "../_lib/threads";
 import { DAY, addDays, postMoment } from "../_lib/time";
 import { brandApi } from "../api";
@@ -37,6 +37,10 @@ interface AttentionItem {
  * that deals with it.
  */
 export function OverviewScreen() {
+    const t = useTranslations("growth.brand");
+    const tc = useTranslations("growth.common.counts");
+    const tChannels = useTranslations("growth.brand.channels");
+    const { compact } = useGrowthFormat();
     const paths = useGrowthPaths();
     const accounts = useResource("brand:accounts", () => brandApi.accounts());
     const window = useMemo(() => {
@@ -77,20 +81,20 @@ export function OverviewScreen() {
     if (accounts.data && channels.length === 0) {
         attention.push({
             id: "connect",
-            title: "Connect an account",
-            detail: "Nothing can go out until a LinkedIn Page, profile or Bluesky account is connected.",
-            action: { label: "Open Accounts", href: paths.brand("/accounts") },
+            title: t("common.connectAccount"),
+            detail: t("overview.connectDetail"),
+            action: { label: t("common.openAccounts"), href: paths.brand("/accounts") },
             tone: "plain",
         });
     }
     for (const channel of channels.filter(c => c.status === "reconnect")) {
         attention.push({
             id: `reconnect:${channel.id}`,
-            title: `Reconnect ${channel.name}`,
+            title: t("overview.reconnectTitle", { name: channel.name }),
             detail:
                 channel.statusReason ??
-                `${NETWORK_LABEL[channel.platform]} refused the sign-in; nothing posts here until it is reconnected.`,
-            action: { label: "Open Accounts", href: paths.brand("/accounts") },
+                t("overview.reconnectDetail", { network: NETWORK_LABEL[channel.platform] }),
+            action: { label: t("common.openAccounts"), href: paths.brand("/accounts") },
             tone: "danger",
             avatar: (
                 <ChannelAvatar
@@ -103,13 +107,17 @@ export function OverviewScreen() {
         });
     }
     for (const connection of connections) {
-        const expiry = tokenExpiry(connection);
+        const expiry = tokenExpiry(tChannels, connection);
         if (expiry.tone === "ok") continue;
         attention.push({
             id: `expiry:${connection.id}`,
-            title: `${connection.accountName ?? NETWORK_LABEL[connection.platform]}'s ${NETWORK_LABEL[connection.platform]} sign-in: ${expiry.word.toLowerCase()}`,
-            detail: "Reconnect before it runs out, or scheduled posts on its channels will fail.",
-            action: { label: "Open Accounts", href: paths.brand("/accounts") },
+            title: t("overview.expiryTitle", {
+                account: connection.accountName ?? NETWORK_LABEL[connection.platform],
+                network: NETWORK_LABEL[connection.platform],
+                status: expiry.word.toLowerCase(),
+            }),
+            detail: t("overview.expiryDetail"),
+            action: { label: t("common.openAccounts"), href: paths.brand("/accounts") },
             tone: expiry.tone,
             avatar: <NetworkMark platform={connection.platform} size={24} />,
         });
@@ -117,18 +125,18 @@ export function OverviewScreen() {
     if (failed.length > 0) {
         attention.push({
             id: "failed",
-            title: `${plural(failed.length, "post")} failed`,
-            detail: failed[0]?.error ?? "The network did not accept it.",
-            action: { label: "Open calendar", href: paths.brand("/calendar") },
+            title: t("overview.failedTitle", { count: failed.length }),
+            detail: failed[0]?.error ?? t("overview.notAccepted"),
+            action: { label: t("overview.openCalendar"), href: paths.brand("/calendar") },
             tone: "danger",
         });
     }
     if (waiting > 0) {
         attention.push({
             id: "comments",
-            title: `${plural(waiting, "comment")} waiting for a reply`,
-            detail: `On ${plural(waitingPosts, "post")}. Reply as the channel, or mark them done.`,
-            action: { label: "Open Engagement", href: paths.brand("/engagement") },
+            title: t("overview.commentsTitle", { count: waiting }),
+            detail: t("overview.commentsDetail", { count: waitingPosts }),
+            action: { label: t("overview.openEngagement"), href: paths.brand("/engagement") },
             tone: "plain",
         });
     }
@@ -141,9 +149,11 @@ export function OverviewScreen() {
 
     const sub = posts.data
         ? [
-              `${plural(upcoming.length - failed.length, "post")} coming up`,
-              `${plural(wentOut.length, "post")} out in the last 7 days`,
-              accounts.data ? plural(channels.filter(c => c.enabled).length, "channel") : null,
+              t("overview.comingUpCount", { count: upcoming.length - failed.length }),
+              t("overview.outLastWeek", { count: wentOut.length }),
+              accounts.data
+                  ? tc("channels", { count: channels.filter(c => c.enabled).length })
+                  : null,
           ]
               .filter(Boolean)
               .join(" · ")
@@ -153,18 +163,20 @@ export function OverviewScreen() {
         <PostsReadOnly.Provider value={posts.data?.canPublish === false}>
             <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
                 <PageHeader
-                    title="Your brand,"
-                    accent="this week"
+                    title={t("overview.title")}
+                    accent={t("overview.accent")}
                     sub={sub}
                     actions={
                         <>
                             <Button asChild variant="outline" size="sm">
                                 <ToolLink href={paths.brand("/campaigns")}>
-                                    Generate a campaign
+                                    {t("overview.generateCampaign")}
                                 </ToolLink>
                             </Button>
                             <Button asChild size="sm">
-                                <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
+                                <ToolLink href={paths.brand("/compose")}>
+                                    {t("common.compose")}
+                                </ToolLink>
                             </Button>
                         </>
                     }
@@ -177,8 +189,8 @@ export function OverviewScreen() {
                 {attention.length > 0 && (
                     <section>
                         <SectionHeading
-                            title="Needs attention"
-                            aside={plural(attention.length, "item")}
+                            title={t("overview.needsAttention")}
+                            aside={tc("items", { count: attention.length })}
                         />
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {attention.map(item => (
@@ -227,10 +239,10 @@ export function OverviewScreen() {
 
                 <section>
                     <SectionHeading
-                        title="Last 30 days"
+                        title={t("overview.last30")}
                         aside={
                             <ToolLink href={paths.brand("/analytics")} className="hover:text-ink">
-                                Analytics
+                                {t("overview.analytics")}
                             </ToolLink>
                         }
                     />
@@ -241,21 +253,23 @@ export function OverviewScreen() {
                         />
                     ) : (
                         <StatStrip
-                            label="Last 30 days"
+                            label={t("overview.last30")}
                             loading={insights.loading}
                             stats={[
                                 {
-                                    label: "Impressions",
+                                    label: t("stats.impressions"),
                                     value: compact(totals?.impressions),
-                                    hint: totals ? plural(totals.posts, "post") : undefined,
+                                    hint: totals ? tc("posts", { count: totals.posts }) : undefined,
                                 },
-                                { label: "Reactions", value: compact(totals?.reactions) },
-                                { label: "Comments", value: compact(totals?.comments) },
+                                { label: t("stats.reactions"), value: compact(totals?.reactions) },
+                                { label: t("stats.comments"), value: compact(totals?.comments) },
                                 {
-                                    label: "Followers",
+                                    label: t("stats.followers"),
                                     value: compact(followers),
                                     hint: followerChannels.length
-                                        ? `across ${plural(followerChannels.length, "channel")}`
+                                        ? t("overview.acrossChannels", {
+                                              count: followerChannels.length,
+                                          })
                                         : undefined,
                                 },
                             ]}
@@ -267,11 +281,11 @@ export function OverviewScreen() {
 
                 <section>
                     <SectionHeading
-                        title="Coming up"
+                        title={t("overview.comingUp")}
                         aside={
                             failed.length > 0 ? (
                                 <span className="text-danger">
-                                    {plural(failed.length, "post")} failed
+                                    {t("overview.failedTitle", { count: failed.length })}
                                 </span>
                             ) : undefined
                         }
@@ -280,12 +294,12 @@ export function OverviewScreen() {
                         <SkeletonRows rows={3} height={44} />
                     ) : upcoming.length === 0 ? (
                         <EmptyState
-                            title="Nothing scheduled"
-                            body="Write a post and pick a time; it goes out on its own. Or generate a campaign from your documents and schedule the drafts."
+                            title={t("overview.nothingScheduled")}
+                            body={t("overview.nothingScheduledBody")}
                             action={
                                 <Button asChild size="sm" variant="outline">
                                     <ToolLink href={paths.brand("/compose")}>
-                                        Compose a post
+                                        {t("common.composeAPost")}
                                     </ToolLink>
                                 </Button>
                             }
@@ -304,14 +318,17 @@ export function OverviewScreen() {
                                     href={paths.brand("/calendar")}
                                     className="text-ink-2 hover:text-ink border-line-2 block border-t px-4 py-2 text-[13px]"
                                 >
-                                    {upcoming.length - 8} more on the calendar
+                                    {t("overview.moreOnCalendar", { count: upcoming.length - 8 })}
                                 </ToolLink>
                             )}
                         </div>
                     )}
                     {drafts.length > 0 && (
                         <div className="mt-4">
-                            <SectionHeading title="Drafts" aside={plural(drafts.length, "draft")} />
+                            <SectionHeading
+                                title={t("overview.drafts")}
+                                aside={tc("drafts", { count: drafts.length })}
+                            />
                             <div className="border-line bg-panel rounded-lg border">
                                 {drafts.slice(0, 5).map(post => (
                                     <PostRow
@@ -326,13 +343,11 @@ export function OverviewScreen() {
                 </section>
 
                 <section>
-                    <SectionHeading title="Went out" aside="last 7 days" />
+                    <SectionHeading title={t("overview.wentOut")} aside={t("overview.last7")} />
                     {posts.loading ? (
                         <SkeletonRows rows={2} height={44} />
                     ) : wentOut.length === 0 ? (
-                        <p className="text-ink-3 text-[13px]">
-                            Nothing published in the last week.
-                        </p>
+                        <p className="text-ink-3 text-[13px]">{t("overview.nothingPublished")}</p>
                     ) : (
                         <div className="border-line bg-panel rounded-lg border">
                             {wentOut.slice(0, 6).map(post => (

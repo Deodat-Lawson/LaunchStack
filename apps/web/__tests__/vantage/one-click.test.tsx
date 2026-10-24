@@ -19,6 +19,8 @@ import {
 } from "~/app/employer/tools/vantage/_lib/actions";
 import { addDaysIso, todayIso } from "~/app/employer/tools/vantage/_lib/format";
 
+import { englishFormat } from "./factories";
+
 jest.mock("sonner", () => ({ toast: Object.assign(jest.fn(), { error: jest.fn() }) }));
 jest.mock("~/app/employer/tools/vantage/api", () => ({ vantageApi: {} }));
 
@@ -144,7 +146,7 @@ describe("useOneClick", () => {
         const { unmount } = renderHook(() => useOneClick(refresh));
         unmount();
 
-        undoToast("Ignored", () => Promise.resolve());
+        undoToast(englishFormat, "Ignored", () => Promise.resolve());
         act(() => lastAction(mockToast).onClick());
         await settle();
 
@@ -161,7 +163,7 @@ describe("undoToast", () => {
             .mockRejectedValueOnce(new Error("Network down"))
             .mockResolvedValueOnce(undefined);
 
-        undoToast("Committed — Dana, due 10 Oct", undo, "Ship the SSO beta");
+        undoToast(englishFormat, "Committed — Dana, due 10 Oct", undo, "Ship the SSO beta");
         act(() => lastAction(mockToast).onClick());
         await settle();
 
@@ -185,7 +187,7 @@ describe("undoToast", () => {
     it("keeps offering Try again while the Undo keeps failing, in plain words without a message", async () => {
         const undo = jest.fn<Promise<unknown>, []>().mockRejectedValue("nope");
 
-        undoToast("Ignored", undo);
+        undoToast(englishFormat, "Ignored", undo);
         act(() => lastAction(mockToast).onClick());
         await settle();
         act(() => lastAction(mockToast.error).onClick());

@@ -16,6 +16,7 @@ import { createNotesEmbeddingsProvider } from "~/server/notes/embedding-config";
 import { normalizeModelContent } from "../services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -93,7 +94,11 @@ export async function POST(request: Request) {
                 const resolved = resolveConfiguredChatModel();
                 const reply = await resolved.chat.invoke(
                     resolved.prepareMessages([
-                        new SystemMessage(SYSTEM_PROMPT),
+                        new SystemMessage(
+                            [SYSTEM_PROMPT, replyLanguageInstruction(localeOfRequest(request))]
+                                .filter(Boolean)
+                                .join("\n\n")
+                        ),
                         new HumanMessage(`Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`),
                     ])
                 );

@@ -16,6 +16,14 @@ import {
     unavailableReason,
 } from "~/app/employer/tools/growth/brand/_lib/channels";
 import type { BrandChannel } from "~/app/employer/tools/growth/brand/api";
+import { englishMessages } from "~/i18n/messages";
+import { createTranslator } from "use-intl";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "growth.brand.channels",
+});
 
 function channel(id: string, patch: Partial<BrandChannel> = {}): BrandChannel {
     return {
@@ -58,16 +66,16 @@ describe("initials", () => {
 describe("capabilityWords", () => {
     it("lists what a channel can do, publishing assumed", () => {
         expect(
-            capabilityWords({ publish: true, images: true, analytics: true, comments: true })
+            capabilityWords(t, { publish: true, images: true, analytics: true, comments: true })
         ).toEqual(["Images", "Analytics", "Comments"]);
         expect(
-            capabilityWords({ publish: true, images: true, analytics: false, comments: false })
+            capabilityWords(t, { publish: true, images: true, analytics: false, comments: false })
         ).toEqual(["Images"]);
     });
 
     it("says so when a channel cannot publish", () => {
         expect(
-            capabilityWords({ publish: false, images: false, analytics: true, comments: false })
+            capabilityWords(t, { publish: false, images: false, analytics: true, comments: false })
         ).toEqual(["Cannot publish", "Analytics"]);
     });
 });
@@ -145,22 +153,22 @@ describe("Compose's channels", () => {
     });
 
     it("says why a channel cannot be picked", () => {
-        expect(unavailableReason(page)).toBeNull();
-        expect(unavailableReason(brokenPage)).toBe("LinkedIn revoked the token.");
-        expect(unavailableReason(channel("x", { status: "reconnect" }))).toMatch(/reconnect/i);
+        expect(unavailableReason(t, page)).toBeNull();
+        expect(unavailableReason(t, brokenPage)).toBe("LinkedIn revoked the token.");
+        expect(unavailableReason(t, channel("x", { status: "reconnect" }))).toMatch(/reconnect/i);
     });
 });
 
 describe("tokenExpiry", () => {
     it("a refreshable sign-in renews itself whatever its expiry", () => {
-        expect(tokenExpiry({ refreshable: true, expiresAt: inDays(3) }, NOW)).toEqual({
+        expect(tokenExpiry(t, { refreshable: true, expiresAt: inDays(3) }, NOW)).toEqual({
             word: "Renews itself",
             tone: "ok",
         });
     });
 
     it("a token without an expiry does not expire", () => {
-        expect(tokenExpiry({ refreshable: false, expiresAt: null }, NOW)).toEqual({
+        expect(tokenExpiry(t, { refreshable: false, expiresAt: null }, NOW)).toEqual({
             word: "Does not expire",
             tone: "ok",
         });
@@ -172,7 +180,7 @@ describe("tokenExpiry", () => {
         [13, "Expires in 13 days", "warn"],
         [1, "Expires in 1 day", "warn"],
     ])("%s days left → %s (%s)", (days, word, tone) => {
-        expect(tokenExpiry({ refreshable: false, expiresAt: inDays(days) }, NOW)).toEqual({
+        expect(tokenExpiry(t, { refreshable: false, expiresAt: inDays(days) }, NOW)).toEqual({
             word,
             tone,
         });
@@ -181,6 +189,7 @@ describe("tokenExpiry", () => {
     it("under a day, counts hours", () => {
         expect(
             tokenExpiry(
+                t,
                 { refreshable: false, expiresAt: new Date(NOW + 5 * 3_600_000).toISOString() },
                 NOW
             )
@@ -188,11 +197,11 @@ describe("tokenExpiry", () => {
     });
 
     it("an expired token is danger", () => {
-        expect(tokenExpiry({ refreshable: false, expiresAt: inDays(-0.2) }, NOW)).toEqual({
+        expect(tokenExpiry(t, { refreshable: false, expiresAt: inDays(-0.2) }, NOW)).toEqual({
             word: "Expired today",
             tone: "danger",
         });
-        expect(tokenExpiry({ refreshable: false, expiresAt: inDays(-3) }, NOW)).toEqual({
+        expect(tokenExpiry(t, { refreshable: false, expiresAt: inDays(-3) }, NOW)).toEqual({
             word: "Expired 3 days ago",
             tone: "danger",
         });

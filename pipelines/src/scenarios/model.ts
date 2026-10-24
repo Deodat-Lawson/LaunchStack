@@ -63,6 +63,7 @@ const castSchema = z.object({
 const briefSchema = z.object({
     brief: z.string(),
     openingPost: z.string(),
+    situation: z.string(),
     evidenceIds: z.array(z.string()),
 });
 

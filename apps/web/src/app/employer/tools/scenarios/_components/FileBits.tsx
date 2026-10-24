@@ -14,13 +14,15 @@ import {
     X,
     type LucideIcon,
 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
+import { useCallback } from "react";
 
 import { Button } from "~/components/ui/button";
 import type { ScenarioFileOption } from "~/lib/scenarios/types";
-import { relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
 
-import { FILE_KIND_LABEL, fileKind, formatSize, type FileKind } from "../_lib/files";
+import { UPLOAD_FOLDER, fileKind, sizeParts, type FileKind } from "../_lib/files";
 import type { UploadItem } from "../_lib/useUploads";
 
 const KIND_LOOK: Record<FileKind, { icon: LucideIcon; tile: string }> = {
@@ -34,6 +36,24 @@ const KIND_LOOK: Record<FileKind, { icon: LucideIcon; tile: string }> = {
     image: { icon: FileImage, tile: "bg-panel-2 text-ink-2" },
     file: { icon: FileIcon, tile: "bg-panel-2 text-ink-2" },
 };
+
+/** "12 KB", "1.4 MB" — the number in the reader's locale. */
+function useFormatSize(): (bytes: number) => string {
+    const t = useTranslations("scenarios.files.size");
+    const format = useFormatter();
+    return useCallback(
+        (bytes: number) => {
+            const { unit, value, digits } = sizeParts(bytes);
+            return t(unit, {
+                size: format.number(value, {
+                    minimumFractionDigits: digits,
+                    maximumFractionDigits: digits,
+                }),
+            });
+        },
+        [t, format]
+    );
+}
 
 /** A file's kind as a small coloured tile, the way a file browser shows it. */
 export function FileGlyph({ kind, className }: { kind: FileKind; className?: string }) {
@@ -55,26 +75,29 @@ export function FileGlyph({ kind, className }: { kind: FileKind; className?: str
 
 /** "About your company": the company profile counts this file as the company's own. */
 export function CompanyTag({ className }: { className?: string }) {
+    const t = useTranslations("scenarios.files");
     return (
         <span
             className={cn(
                 "bg-brand-soft text-brand-ink inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-px text-[11px] font-medium",
                 className
             )}
-            title="Your company profile counts this file as written by or about the company."
+            title={t("companyTitle")}
         >
             <Building2 className="size-3" aria-hidden />
-            About your company
+            {t("aboutCompany")}
         </span>
     );
 }
 
 /** Folder · kind · when it was added (unless `compact`), and where reading it stands. */
 export function FileMeta({ file, compact }: { file: ScenarioFileOption; compact?: boolean }) {
+    const t = useTranslations("scenarios.files");
+    const fmt = useToolFormat();
     const parts = [
         file.folder,
-        FILE_KIND_LABEL[fileKind(file)],
-        compact ? null : `added ${relativeTime(file.addedAt)}`,
+        t(`kind.${fileKind(file)}`),
+        compact ? null : t("added", { when: fmt.relativeTime(file.addedAt) }),
     ].filter((p): p is string => Boolean(p));
     return (
         <span className="text-ink-3 flex min-w-0 flex-wrap items-center gap-x-1.5 text-xs">
@@ -85,18 +108,19 @@ export function FileMeta({ file, compact }: { file: ScenarioFileOption; compact?
 }
 
 export function FileStatus({ status }: { status: ScenarioFileOption["status"] }) {
+    const t = useTranslations("scenarios.files");
     if (status === "processing")
         return (
             <span className="text-ink-2 inline-flex items-center gap-1">
                 <Loader2 className="size-3 animate-spin motion-reduce:animate-none" aria-hidden />
-                Being read
+                {t("reading")}
             </span>
         );
     if (status === "failed")
         return (
             <span className="text-danger inline-flex items-center gap-1">
                 <CircleAlert className="size-3" aria-hidden />
-                Could not be read
+                {t("unreadable")}
             </span>
         );
     return null;
@@ -110,6 +134,7 @@ export function AttachedFile({
     file: ScenarioFileOption;
     onRemove: () => void;
 }) {
+    const t = useTranslations("scenarios.files");
     return (
         <li
             className={cn(
@@ -126,19 +151,21 @@ export function AttachedFile({
                     {file.aboutCompany && (
                         <Building2
                             className="text-brand-ink size-3 shrink-0"
-                            aria-label="About your company"
+                            aria-label={t("aboutCompany")}
                         />
                     )}
                 </div>
                 <FileMeta file={file} compact />
             </div>
-            <RemoveButton label={`Remove ${file.title}`} onClick={onRemove} />
+            <RemoveButton label={t("remove", { name: file.title })} onClick={onRemove} />
         </li>
     );
 }
 
 /** An upload in the situation box, before it is a workspace file. */
 export function UploadingFile({ item, onDismiss }: { item: UploadItem; onDismiss: () => void }) {
+    const t = useTranslations("scenarios.files");
+    const formatSize = useFormatSize();
     const failed = item.state === "failed";
     return (
         <li
@@ -154,7 +181,7 @@ export function UploadingFile({ item, onDismiss }: { item: UploadItem; onDismiss
                 </span>
                 {failed ? (
                     <span className="text-danger block text-xs leading-snug">
-                        {item.message ?? "Upload failed"}
+                        {item.message ?? t("uploadFailed")}
                     </span>
                 ) : (
                     <span className="text-ink-2 inline-flex items-center gap-1 text-xs">
@@ -162,17 +189,20 @@ export function UploadingFile({ item, onDismiss }: { item: UploadItem; onDismiss
                             className="size-3 animate-spin motion-reduce:animate-none"
                             aria-hidden
                         />
-                        Uploading · {formatSize(item.size)}
+                        {t("uploading", { size: formatSize(item.size) })}
                     </span>
                 )}
             </div>
-            {failed && <RemoveButton label={`Dismiss ${item.name}`} onClick={onDismiss} />}
+            {failed && (
+                <RemoveButton label={t("dismiss", { name: item.name })} onClick={onDismiss} />
+            )}
         </li>
     );
 }
 
 /** A file just uploaded that the file list has not caught up with yet. */
 export function ArrivingFile({ name, onRemove }: { name: string; onRemove: () => void }) {
+    const t = useTranslations("scenarios.files");
     return (
         <li className="border-line bg-surface flex min-w-0 items-center gap-2.5 rounded-lg border py-2 pl-2 pr-1">
             <FileGlyph kind={fileKind({ title: name, mimeType: null })} />
@@ -181,11 +211,11 @@ export function ArrivingFile({ name, onRemove }: { name: string; onRemove: () =>
                     {name}
                 </span>
                 <span className="text-ink-3 flex flex-wrap items-center gap-x-1.5 text-xs">
-                    Company
+                    {UPLOAD_FOLDER}
                     <FileStatus status="processing" />
                 </span>
             </div>
-            <RemoveButton label={`Remove ${name}`} onClick={onRemove} />
+            <RemoveButton label={t("remove", { name })} onClick={onRemove} />
         </li>
     );
 }

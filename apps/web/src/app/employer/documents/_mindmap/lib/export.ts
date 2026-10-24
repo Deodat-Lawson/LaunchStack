@@ -17,6 +17,20 @@ import type { DiagramPage, MindmapDoc, Rect } from "../model/types";
 
 export const OMIT_ATTR = "data-export";
 
+/**
+ * An export that could not run. `code` is what the dialog shows, in the
+ * reader's language (`mindmap.errors`); `message` stays English for logs.
+ */
+export class ExportError extends Error {
+    constructor(
+        readonly code: "noCanvas" | "encodePng" | "rasterise" | "notReady" | "noImageClipboard",
+        message: string
+    ) {
+        super(message);
+        this.name = "ExportError";
+    }
+}
+
 export interface SvgExportOptions {
     /** World rect to export. Defaults to the page's content bounds. */
     bounds?: Rect;
@@ -140,11 +154,12 @@ export async function svgToPngBlob(svg: string, scale = 2): Promise<Blob> {
     canvas.width = Math.max(1, Math.round(image.width * scale));
     canvas.height = Math.max(1, Math.round(image.height * scale));
     const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas 2D is unavailable in this browser");
+    if (!ctx) throw new ExportError("noCanvas", "Canvas 2D is unavailable in this browser");
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     return new Promise<Blob>((resolve, reject) => {
         canvas.toBlob(
-            blob => (blob ? resolve(blob) : reject(new Error("Failed to encode PNG"))),
+            blob =>
+                blob ? resolve(blob) : reject(new ExportError("encodePng", "Failed to encode PNG")),
             "image/png"
         );
     });
@@ -158,7 +173,7 @@ export async function svgToThumbnail(svg: string, maxWidth = 480): Promise<strin
     canvas.width = Math.max(1, Math.round(image.width * scale));
     canvas.height = Math.max(1, Math.round(image.height * scale));
     const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas 2D is unavailable in this browser");
+    if (!ctx) throw new ExportError("noCanvas", "Canvas 2D is unavailable in this browser");
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     return canvas.toDataURL("image/png", 0.8);
 }
@@ -178,7 +193,8 @@ function loadSvgImage(svg: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => resolve(image);
-        image.onerror = () => reject(new Error("Failed to rasterise the diagram"));
+        image.onerror = () =>
+            reject(new ExportError("rasterise", "Failed to rasterise the diagram"));
         image.src = encoded;
     });
 }
@@ -293,7 +309,7 @@ export async function runExport(request: ExportRequest): Promise<void> {
         return;
     }
 
-    if (!request.svgElement) throw new Error("The canvas is not ready yet");
+    if (!request.svgElement) throw new ExportError("notReady", "The canvas is not ready yet");
     const bounds = request.bounds ?? pageBounds(page) ?? undefined;
     const svg = exportSvg(request.svgElement, {
         bounds,
@@ -320,7 +336,10 @@ export async function copyPageAsImage(svgElement: SVGSVGElement, page: DiagramPa
     });
     const blob = await svgToPngBlob(svg, 2);
     if (typeof ClipboardItem === "undefined" || !navigator.clipboard?.write) {
-        throw new Error("This browser cannot copy images to the clipboard");
+        throw new ExportError(
+            "noImageClipboard",
+            "This browser cannot copy images to the clipboard"
+        );
     }
     await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
 }

@@ -10,6 +10,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
@@ -64,17 +65,27 @@ function formatBytes(bytes: number): string {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function relativeTime(iso: string): string {
-    const then = Date.parse(iso);
-    if (!Number.isFinite(then)) return "";
-    const diffMin = Math.floor((Date.now() - then) / 60_000);
-    if (diffMin < 1) return "just now";
-    if (diffMin < 60) return `${diffMin}m ago`;
-    const diffHr = Math.floor(diffMin / 60);
-    if (diffHr < 24) return `${diffHr}h ago`;
-    const diffDay = Math.floor(diffHr / 24);
-    if (diffDay < 7) return `${diffDay}d ago`;
-    return new Date(then).toLocaleDateString();
+/** "3m ago", then hours and days, then the date — in the reader's language. */
+function useRelativeTime(): (iso: string) => string {
+    const t = useTranslations("agents.sessions.ago");
+    const tc = useTranslations("common.time");
+    const format = useFormatter();
+    return iso => {
+        const then = Date.parse(iso);
+        if (!Number.isFinite(then)) return "";
+        const diffMin = Math.floor((Date.now() - then) / 60_000);
+        if (diffMin < 1) return tc("justNow");
+        if (diffMin < 60) return t("minutes", { count: diffMin });
+        const diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return t("hours", { count: diffHr });
+        const diffDay = Math.floor(diffHr / 24);
+        if (diffDay < 7) return t("days", { count: diffDay });
+        return format.dateTime(new Date(then), {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+        });
+    };
 }
 
 /** `/Users/me/code/app` → `app`; Claude's slug encoding → last segment. */
@@ -91,31 +102,32 @@ function projectLabel(item: AgentSessionItem): string | null {
 }
 
 function StatusBadge({ item }: { item: AgentSessionItem }) {
+    const t = useTranslations("agents.sessions.status");
     if (item.active) {
         return (
             <span className="text-warn inline-flex items-center gap-1 font-mono text-[10px] font-semibold uppercase tracking-wide">
                 <CircleDot className="h-3 w-3 animate-pulse" />
-                Live
+                {t("live")}
             </span>
         );
     }
     if (item.imported?.stale) {
         return (
             <span className="bg-warn/10 text-warn rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
-                Update available
+                {t("updateAvailable")}
             </span>
         );
     }
     if (item.imported) {
         return (
             <span className="bg-success/10 text-success rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
-                Imported
+                {t("imported")}
             </span>
         );
     }
     return (
         <span className="bg-panel-2 text-ink-3 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
-            New
+            {t("new")}
         </span>
     );
 }
@@ -138,6 +150,10 @@ function SessionRow({
     onContinue?: (documentId: number) => void;
 }) {
     const router = useRouter();
+    const t = useTranslations("agents.sessions");
+    const tm = useTranslations("agents.sessions.menu");
+    const tc = useTranslations("common");
+    const relativeTime = useRelativeTime();
     const { label, Icon } = TOOL_META[item.tool];
     const project = projectLabel(item);
     const imported = item.imported;
@@ -152,28 +168,32 @@ function SessionRow({
     const ctxTarget = useContextTarget({
         kind: "agent-session",
         id: item.sourceId,
-        label: `Actions for ${item.title}`,
+        label: t("actionsFor", { title: item.title }),
         data: item,
         items: () =>
-            buildSessionMenuItems(item, {
-                busy,
-                onImport: () => onImport(item),
-                onOpen: imported ? () => openTranscript(imported.documentId) : undefined,
-                onContinue: imported ? () => continueInChat(imported.documentId) : undefined,
-                onCopyPath: item.projectPath
-                    ? () => {
-                          void copyText(item.projectPath ?? "").then(ok => {
-                              if (ok) toast.success("Path copied");
-                          });
-                      }
-                    : undefined,
-                onCopyId: () => {
-                    void copyText(item.sourceId).then(ok => {
-                        if (ok) toast.success("Session id copied");
-                    });
+            buildSessionMenuItems(
+                item,
+                {
+                    busy,
+                    onImport: () => onImport(item),
+                    onOpen: imported ? () => openTranscript(imported.documentId) : undefined,
+                    onContinue: imported ? () => continueInChat(imported.documentId) : undefined,
+                    onCopyPath: item.projectPath
+                        ? () => {
+                              void copyText(item.projectPath ?? "").then(ok => {
+                                  if (ok) toast.success(t("pathCopied"));
+                              });
+                          }
+                        : undefined,
+                    onCopyId: () => {
+                        void copyText(item.sourceId).then(ok => {
+                            if (ok) toast.success(t("idCopied"));
+                        });
+                    },
+                    onRemoveImport: onRemoveImport ? () => onRemoveImport(item) : undefined,
                 },
-                onRemoveImport: onRemoveImport ? () => onRemoveImport(item) : undefined,
-            }),
+                tm
+            ),
     });
 
     return (
@@ -194,7 +214,7 @@ function SessionRow({
                     {item.archived && (
                         <span className="text-ink-4 inline-flex items-center gap-0.5 font-mono text-[10px]">
                             <ArchiveRestore className="h-3 w-3" />
-                            archived
+                            {t("archived")}
                         </span>
                     )}
                 </div>
@@ -236,7 +256,7 @@ function SessionRow({
                                 ) : (
                                     <RefreshCw className="h-3.5 w-3.5" />
                                 )}
-                                Update
+                                {t("update")}
                             </Button>
                         )}
                         <TooltipProvider delayDuration={300}>
@@ -249,11 +269,11 @@ function SessionRow({
                                         onClick={() => openTranscript(item.imported!.documentId)}
                                     >
                                         <ExternalLink className="h-3.5 w-3.5" />
-                                        Open
+                                        {tc("actions.open")}
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="bottom">
-                                    <p className="text-xs">View the imported transcript</p>
+                                    <p className="text-xs">{t("openHint")}</p>
                                 </TooltipContent>
                             </Tooltip>
                             <Tooltip>
@@ -264,11 +284,11 @@ function SessionRow({
                                         onClick={() => continueInChat(item.imported!.documentId)}
                                     >
                                         <MessageSquarePlus className="h-3.5 w-3.5" />
-                                        Continue
+                                        {t("continue")}
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="bottom">
-                                    <p className="text-xs">Pick this conversation up in chat</p>
+                                    <p className="text-xs">{t("continueHint")}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -285,7 +305,7 @@ function SessionRow({
                         ) : (
                             <Download className="h-3.5 w-3.5" />
                         )}
-                        Import
+                        {tc("actions.import")}
                     </Button>
                 )}
             </div>
@@ -314,6 +334,8 @@ export function SessionsBrowser({
     onContinue,
     embedded = false,
 }: SessionsBrowserProps = {}) {
+    const t = useTranslations("agents.sessions");
+    const tc = useTranslations("common");
     const [preview, setPreview] = useState<SessionsPreview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AgentSessionsApiError | null>(null);
@@ -327,6 +349,19 @@ export function SessionsBrowser({
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
     const [projectFilter, setProjectFilter] = useState<string>("all");
 
+    /** The server's words when it sent some; otherwise the client's own, translated. */
+    const errorText = useCallback(
+        (cause: unknown, fallback: string): string => {
+            if (cause instanceof AgentSessionsApiError && !cause.fromServer) {
+                return cause.status === undefined
+                    ? fallback
+                    : t("errors.requestFailed", { status: cause.status });
+            }
+            return cause instanceof Error ? cause.message : fallback;
+        },
+        [t]
+    );
+
     const load = useCallback(async () => {
         setError(null);
         try {
@@ -335,7 +370,7 @@ export function SessionsBrowser({
             setError(
                 cause instanceof AgentSessionsApiError
                     ? cause
-                    : new AgentSessionsApiError("Failed to load sessions.")
+                    : new AgentSessionsApiError("Failed to load sessions.", undefined, false)
             );
         } finally {
             setLoading(false);
@@ -370,15 +405,13 @@ export function SessionsBrowser({
                     : prev
             );
             if (failed.length > 0) {
-                toast.error(
-                    `${failed.length} session${failed.length === 1 ? "" : "s"} failed to import`
-                );
+                toast.error(t("toasts.someFailed", { count: failed.length }));
             }
             // The host's library is what Open and Continue read from, so it
             // has to see the new document before either becomes useful.
             if (stored.length > 0) void onImported?.();
         },
-        [onImported]
+        [onImported, t]
     );
 
     const importOne = useCallback(
@@ -388,18 +421,14 @@ export function SessionsBrowser({
                 const report = await importSessions([item.sourceId]);
                 applyReport(report.stored, report.failed);
                 if (report.stored.length > 0) {
-                    toast.success(
-                        `Imported "${item.title}" — indexing now, it will be searchable shortly`
-                    );
+                    toast.success(t("toasts.imported", { title: item.title }));
                 } else if (report.skipped.some(s => s.reason === "unchanged")) {
-                    toast.info("Already imported and unchanged");
+                    toast.info(t("toasts.unchanged"));
                 } else if (report.failed.length === 0) {
-                    toast.error("The session could not be imported");
+                    toast.error(t("toasts.importFailed"));
                 }
             } catch (cause) {
-                toast.error(
-                    cause instanceof Error ? cause.message : "The session could not be imported"
-                );
+                toast.error(errorText(cause, t("toasts.importFailed")));
             } finally {
                 setBusyIds(prev => {
                     const next = new Set(prev);
@@ -408,40 +437,43 @@ export function SessionsBrowser({
                 });
             }
         },
-        [applyReport]
+        [applyReport, errorText, t]
     );
 
     /**
      * Drop an imported transcript from the workspace. The local session file
      * is untouched, so the row goes back to "New" and can be imported again.
      */
-    const removeImport = useCallback(async (item: AgentSessionItem) => {
-        const documentId = item.imported?.documentId;
-        if (!documentId) return;
-        try {
-            const res = await fetch("/api/deleteDocument", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ docId: String(documentId) }),
-            });
-            if (!res.ok) throw new Error(`Failed (${res.status})`);
-            setPreview(prev =>
-                prev
-                    ? {
-                          ...prev,
-                          items: prev.items.map(entry =>
-                              entry.sourceId === item.sourceId
-                                  ? { ...entry, imported: null }
-                                  : entry
-                          ),
-                      }
-                    : prev
-            );
-            toast.success("Import removed");
-        } catch {
-            toast.error("Couldn't remove that import");
-        }
-    }, []);
+    const removeImport = useCallback(
+        async (item: AgentSessionItem) => {
+            const documentId = item.imported?.documentId;
+            if (!documentId) return;
+            try {
+                const res = await fetch("/api/deleteDocument", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ docId: String(documentId) }),
+                });
+                if (!res.ok) throw new Error(`Failed (${res.status})`);
+                setPreview(prev =>
+                    prev
+                        ? {
+                              ...prev,
+                              items: prev.items.map(entry =>
+                                  entry.sourceId === item.sourceId
+                                      ? { ...entry, imported: null }
+                                      : entry
+                              ),
+                          }
+                        : prev
+                );
+                toast.success(t("toasts.removed"));
+            } catch {
+                toast.error(t("toasts.removeFailed"));
+            }
+        },
+        [t]
+    );
 
     const importAll = useCallback(async () => {
         setImportingAll(true);
@@ -449,14 +481,17 @@ export function SessionsBrowser({
             const report = await importAllSessions();
             applyReport(report.stored, report.failed);
             toast.success(
-                `Imported ${report.counts.stored} of ${report.counts.discovered} sessions`
+                t("toasts.importedAll", {
+                    stored: report.counts.stored,
+                    discovered: report.counts.discovered,
+                })
             );
         } catch (cause) {
-            toast.error(cause instanceof Error ? cause.message : "Bulk import failed");
+            toast.error(errorText(cause, t("toasts.bulkFailed")));
         } finally {
             setImportingAll(false);
         }
-    }, [applyReport]);
+    }, [applyReport, errorText, t]);
 
     const projects = useMemo(() => {
         const seen = new Set<string>();
@@ -497,7 +532,7 @@ export function SessionsBrowser({
         return (
             <div className="flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-7 w-7 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Scanning local sessions…</p>
+                <p className="text-ink-3 text-sm font-medium">{t("scanning")}</p>
             </div>
         );
     }
@@ -511,28 +546,24 @@ export function SessionsBrowser({
                         <ShieldAlert className="text-ink-3 h-6 w-6" />
                     </div>
                     <h2 className="text-ink mb-2 text-base font-semibold">
-                        {disabled
-                            ? "The sessions connector is turned off"
-                            : "Can't browse sessions"}
+                        {disabled ? t("errors.disabledTitle") : t("errors.title")}
                     </h2>
                     <p className="text-ink-3 mb-4 text-sm leading-relaxed">
-                        {disabled ? (
-                            <>
-                                This browser reads Claude Code and Codex folders on the machine that
-                                hosts LaunchStack, so it ships disabled. Set{" "}
-                                <code className="bg-panel-2 border-line-2 rounded border px-1 py-0.5 font-mono text-[11.5px]">
-                                    AGENT_SESSIONS_CONNECTOR_ENABLED=true
-                                </code>{" "}
-                                on that server to turn it on.
-                            </>
-                        ) : (
-                            error.message
-                        )}
+                        {disabled
+                            ? t.rich("errors.disabledBody", {
+                                  flag: "AGENT_SESSIONS_CONNECTOR_ENABLED=true",
+                                  code: chunks => (
+                                      <code className="bg-panel-2 border-line-2 rounded border px-1 py-0.5 font-mono text-[11.5px]">
+                                          {chunks}
+                                      </code>
+                                  ),
+                              })
+                            : errorText(error, t("errors.loadFailed"))}
                     </p>
                     {!disabled && (
                         <Button size="sm" variant="outline" onClick={() => void load()}>
                             <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
-                            Try again
+                            {tc("actions.tryAgain")}
                         </Button>
                     )}
                 </div>
@@ -552,19 +583,15 @@ export function SessionsBrowser({
             <div className="flex flex-wrap items-start justify-between gap-3">
                 {embedded ? (
                     <p className="text-ink-3 min-w-[min(100%,240px)] flex-1 text-[13px]">
-                        Claude Code and Codex conversations on this machine. Import one to make it
-                        searchable workspace knowledge — then continue it in chat.
+                        {t("intro")}
                     </p>
                 ) : (
                     <div>
                         <h1 className="text-ink flex items-center gap-2 text-lg font-semibold">
                             <MessagesSquare className="text-brand-ink h-5 w-5" />
-                            Coding sessions
+                            {t("title")}
                         </h1>
-                        <p className="text-ink-3 mt-0.5 text-[13px]">
-                            Claude Code and Codex conversations on this machine. Import one to make
-                            it searchable workspace knowledge — then continue it in chat.
-                        </p>
+                        <p className="text-ink-3 mt-0.5 text-[13px]">{t("intro")}</p>
                     </div>
                 )}
                 <div className="flex items-center gap-2">
@@ -578,7 +605,7 @@ export function SessionsBrowser({
                         }}
                     >
                         <RefreshCw className="h-3.5 w-3.5" />
-                        Rescan
+                        {t("rescan")}
                     </Button>
                     <Button
                         size="sm"
@@ -591,7 +618,7 @@ export function SessionsBrowser({
                         ) : (
                             <Download className="h-3.5 w-3.5" />
                         )}
-                        Import all new
+                        {t("importAllNew")}
                     </Button>
                 </div>
             </div>
@@ -604,13 +631,16 @@ export function SessionsBrowser({
                             className={`h-1.5 w-1.5 rounded-full ${root.exists ? "bg-success" : "bg-line"}`}
                         />
                         {root.dir}
-                        {root.exists ? ` · ${root.sessionCount}` : " · not found"}
+                        {" · "}
+                        {root.exists ? root.sessionCount : t("roots.notFound")}
                     </span>
                 ))}
                 <span className="ml-auto">
-                    {counts.imported}/{counts.total} imported
-                    {counts.stale > 0 ? ` · ${counts.stale} with updates` : ""}
-                    {preview?.truncated ? " · list truncated" : ""}
+                    {t("counts.imported", { imported: counts.imported, total: counts.total })}
+                    {counts.stale > 0
+                        ? ` · ${t("counts.withUpdates", { count: counts.stale })}`
+                        : ""}
+                    {preview?.truncated ? ` · ${t("counts.truncated")}` : ""}
                 </span>
             </div>
 
@@ -621,7 +651,7 @@ export function SessionsBrowser({
                     <Input
                         value={query}
                         onChange={e => setQuery(e.target.value)}
-                        placeholder="Search titles, prompts, projects…"
+                        placeholder={t("filters.search")}
                         className="h-8 pl-8 text-[13px]"
                     />
                 </div>
@@ -633,7 +663,7 @@ export function SessionsBrowser({
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">All tools</SelectItem>
+                        <SelectItem value="all">{t("filters.allTools")}</SelectItem>
                         <SelectItem value="claude-code">Claude Code</SelectItem>
                         <SelectItem value="codex">Codex</SelectItem>
                     </SelectContent>
@@ -646,10 +676,10 @@ export function SessionsBrowser({
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">All statuses</SelectItem>
-                        <SelectItem value="new">Not imported</SelectItem>
-                        <SelectItem value="imported">Imported</SelectItem>
-                        <SelectItem value="stale">Update available</SelectItem>
+                        <SelectItem value="all">{t("filters.allStatuses")}</SelectItem>
+                        <SelectItem value="new">{t("filters.notImported")}</SelectItem>
+                        <SelectItem value="imported">{t("status.imported")}</SelectItem>
+                        <SelectItem value="stale">{t("status.updateAvailable")}</SelectItem>
                     </SelectContent>
                 </Select>
                 <Select value={projectFilter} onValueChange={setProjectFilter}>
@@ -657,7 +687,7 @@ export function SessionsBrowser({
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">All projects</SelectItem>
+                        <SelectItem value="all">{t("filters.allProjects")}</SelectItem>
                         {projects.map(p => (
                             <SelectItem key={p} value={p}>
                                 {p}
@@ -672,9 +702,7 @@ export function SessionsBrowser({
                 {filtered.length === 0 ? (
                     <div className="border-line text-ink-3 flex items-center justify-center gap-2 rounded-xl border border-dashed py-16 text-[13px]">
                         <MessagesSquare className="h-4 w-4" />
-                        {counts.total === 0
-                            ? "No Claude Code or Codex sessions were found on this machine."
-                            : "No sessions match these filters."}
+                        {counts.total === 0 ? t("empty.none") : t("empty.noMatch")}
                     </div>
                 ) : (
                     <div className="flex flex-col gap-2 pb-6">
@@ -698,13 +726,11 @@ export function SessionsBrowser({
                 onOpenChange={next => {
                     if (!next) setRemoving(null);
                 }}
-                title="Remove the imported transcript?"
+                title={t("remove.title")}
                 description={
-                    removing
-                        ? `“${removing.title}” leaves the workspace and its search. The session on this machine stays, so you can import it again.`
-                        : undefined
+                    removing ? t("remove.description", { title: removing.title }) : undefined
                 }
-                confirmLabel="Remove import"
+                confirmLabel={t("remove.confirm")}
                 onConfirm={() => {
                     const target = removing;
                     setRemoving(null);

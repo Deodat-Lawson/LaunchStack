@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Loader2, AlertTriangle, RotateCw, Download } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DocxViewerProps {
     url: string;
@@ -14,6 +15,8 @@ interface DocxViewerProps {
  * styled HTML — same pattern as XlsxViewer with SheetJS.
  */
 export function DocxViewer({ url, title }: DocxViewerProps) {
+    const t = useTranslations("viewers.docxPreview");
+    const tc = useTranslations("common");
     const [html, setHtml] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,7 +28,7 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
 
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch document (${response.status})`);
+            if (!response.ok) throw new Error(t("fetchFailed", { status: response.status }));
 
             const arrayBuffer = await response.arrayBuffer();
 
@@ -33,13 +36,13 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
             const result = await mammoth.convertToHtml({ arrayBuffer });
 
             if (!result.value || result.value.trim().length === 0) {
-                throw new Error("Document appears to be empty");
+                throw new Error(t("empty"));
             }
 
             setHtml(result.value);
         } catch (err) {
             console.error("[DocxViewer] Error converting document:", err);
-            setError(err instanceof Error ? err.message : "Failed to render document");
+            setError(err instanceof Error ? err.message : t("renderFailed"));
         } finally {
             setLoading(false);
         }
@@ -54,7 +57,7 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Loading document...</p>
+                <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
             </div>
         );
     }
@@ -66,7 +69,7 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-ink mb-1 text-sm font-medium">Failed to render document</p>
+                    <p className="text-ink mb-1 text-sm font-medium">{t("renderFailed")}</p>
                     <p className="text-ink-3 mb-4 text-xs">{error}</p>
                     <div className="flex items-center gap-3">
                         <button
@@ -74,7 +77,7 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
                             className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                         >
                             <RotateCw className="h-4 w-4" />
-                            Retry
+                            {tc("actions.retry")}
                         </button>
                         <a
                             href={url}
@@ -82,7 +85,7 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
                             className="border-line text-ink-3 hover:text-ink inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
                         >
                             <Download className="h-4 w-4" />
-                            Download
+                            {tc("actions.download")}
                         </a>
                     </div>
                 </div>
@@ -93,14 +96,14 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
     return (
         <div className="flex h-full w-full flex-col overflow-hidden bg-white dark:bg-zinc-900">
             <div className="border-line bg-panel-2/30 flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
-                <span className="text-ink-3 text-xs font-medium">Word Document Preview</span>
+                <span className="text-ink-3 text-xs font-medium">{t("header")}</span>
                 <a
                     href={url}
                     download
                     className="text-ink-3 hover:text-ink hover:bg-panel-2/50 inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-colors"
                 >
                     <Download className="h-3.5 w-3.5" />
-                    Download
+                    {tc("actions.download")}
                 </a>
             </div>
 

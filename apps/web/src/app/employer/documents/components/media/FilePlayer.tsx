@@ -15,6 +15,7 @@ import {
     Volume2,
     VolumeX,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -58,6 +59,7 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
     { src, kind, title, onTimeChange, fill = false },
     ref
 ) {
+    const t = useTranslations("viewers.media");
     const mediaRef = useRef<HTMLVideoElement>(null);
     const [loadState, setLoadState] = useState<LoadState>("loading");
     const [hasPicture, setHasPicture] = useState(kind === "video");
@@ -149,8 +151,8 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                     variant="ghost"
                     size="icon"
                     className="text-ink-2 size-8"
-                    aria-label={muted ? "Unmute" : "Mute"}
-                    title={muted ? "Unmute" : "Mute"}
+                    aria-label={muted ? t("unmute") : t("mute")}
+                    title={muted ? t("unmute") : t("mute")}
                     onClick={toggleMute}
                 >
                     {muted ? <VolumeX /> : <Volume2 />}
@@ -161,8 +163,8 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                     <Button
                         variant="ghost"
                         size="sm"
-                        aria-label={`Playback speed, ${rate}×`}
-                        title="Playback speed"
+                        aria-label={t("speedLabel", { rate })}
+                        title={t("speed")}
                         className="text-ink-2 font-mono text-xs tabular-nums"
                     >
                         <Gauge />
@@ -171,19 +173,19 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel className="text-ink-3 text-xs">
-                        Playback speed
+                        {t("speed")}
                     </DropdownMenuLabel>
                     <DropdownMenuRadioGroup value={String(rate)} onValueChange={changeRate}>
                         {PLAYBACK_RATES.map(r => (
                             <DropdownMenuRadioItem key={r} value={String(r)}>
-                                {r === 1 ? "Normal" : `${r}×`}
+                                {r === 1 ? t("normalSpeed") : t("rate", { rate: r })}
                             </DropdownMenuRadioItem>
                         ))}
                     </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="ghost" size="icon" asChild className="text-ink-2 size-8">
-                <a href={src} download aria-label="Download the file" title="Download">
+                <a href={src} download aria-label={t("downloadFile")} title={t("download")}>
                     <Download />
                 </a>
             </Button>
@@ -256,7 +258,9 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                 <div className="border-line flex items-center gap-2 border-b px-4 py-1.5">
                     <Film className="text-ink-3 size-4 shrink-0" aria-hidden />
                     <span className="text-ink-3 min-w-0 flex-1 truncate text-xs">
-                        Video{durationLabel ? ` · ${durationLabel}` : ""}
+                        {durationLabel
+                            ? t("videoWithDuration", { duration: durationLabel })
+                            : t("video")}
                     </span>
                     {actions}
                 </div>
@@ -269,7 +273,7 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                         <div className="min-w-0 flex-1">
                             <p className="text-ink truncate text-sm font-semibold">{title}</p>
                             <p className="text-ink-3 text-xs">
-                                {kind === "video" ? "Audio only" : "Audio"}
+                                {kind === "video" ? t("audioOnly") : t("audio")}
                                 {durationLabel ? ` · ${durationLabel}` : ""}
                             </p>
                         </div>
@@ -282,7 +286,7 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                         step={0.1}
                         value={[Math.min(scrubTime ?? currentTime, duration > 0 ? duration : 1)]}
                         disabled={duration === 0}
-                        thumbLabel="Seek"
+                        thumbLabel={t("seek")}
                         onValueChange={([value]) => {
                             if (value !== undefined) setScrubTime(value);
                         }}
@@ -300,8 +304,8 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                                 variant="ghost"
                                 size="icon"
                                 className="text-ink-2 size-8"
-                                aria-label={`Back ${SKIP_SECONDS} seconds`}
-                                title={`Back ${SKIP_SECONDS}s`}
+                                aria-label={t("backLabel", { seconds: SKIP_SECONDS })}
+                                title={t("backShort", { seconds: SKIP_SECONDS })}
                                 onClick={() => skip(-SKIP_SECONDS)}
                             >
                                 <RotateCcw />
@@ -309,7 +313,7 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                             <Button
                                 size="icon"
                                 className="size-10 rounded-full"
-                                aria-label={playing ? "Pause" : "Play"}
+                                aria-label={playing ? t("pause") : t("play")}
                                 // Never disabled while loading: iOS fetches nothing,
                                 // metadata included, until the first tap on play.
                                 onClick={togglePlay}
@@ -326,8 +330,8 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                                 variant="ghost"
                                 size="icon"
                                 className="text-ink-2 size-8"
-                                aria-label={`Forward ${SKIP_SECONDS} seconds`}
-                                title={`Forward ${SKIP_SECONDS}s`}
+                                aria-label={t("forwardLabel", { seconds: SKIP_SECONDS })}
+                                title={t("forwardShort", { seconds: SKIP_SECONDS })}
                                 onClick={() => skip(SKIP_SECONDS)}
                             >
                                 <RotateCw />
@@ -352,6 +356,8 @@ function PlaybackError({
     src: string;
     onRetry: () => void;
 }) {
+    const t = useTranslations("viewers.media");
+    const tc = useTranslations("common");
     return (
         <div
             role="alert"
@@ -361,23 +367,18 @@ function PlaybackError({
                 <AlertTriangle className="size-5" aria-hidden />
             </div>
             <div>
-                <p className="text-ink text-sm font-semibold">
-                    This {kind === "video" ? "video" : "recording"} can&apos;t be played here
-                </p>
-                <p className="text-ink-3 mt-1 max-w-sm text-xs">
-                    Your browser may not support its format, or the file is no longer available. You
-                    can still download it.
-                </p>
+                <p className="text-ink text-sm font-semibold">{t("unplayable", { kind })}</p>
+                <p className="text-ink-3 mt-1 max-w-sm text-xs">{t("unplayableDetail")}</p>
             </div>
             <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={onRetry}>
                     <RotateCw />
-                    Try again
+                    {tc("actions.tryAgain")}
                 </Button>
                 <Button size="sm" asChild>
                     <a href={src} download>
                         <Download />
-                        Download
+                        {tc("actions.download")}
                     </a>
                 </Button>
             </div>

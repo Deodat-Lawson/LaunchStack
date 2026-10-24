@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import {
     Circle,
     Diamond,
@@ -36,18 +37,36 @@ import { ShapePalette } from "./ShapePalette";
  * tooltip states it, which is how people graduate from clicking to typing.
  */
 
+type ToolKey =
+    | "select"
+    | "hand"
+    | "topic"
+    | "connector"
+    | "text"
+    | "sticky"
+    | "frame"
+    | "ink"
+    | "eraser"
+    | "rectangle"
+    | "ellipse"
+    | "diamond";
+
+/**
+ * `id` names the tool in `mindmap.toolbar.tools`. `hint` is the key that
+ * picks it; `hintKey` is a hint with words in it, from `toolbar.hints`.
+ */
 interface ToolEntry {
-    id: string;
+    id: ToolKey;
     tool: ToolId;
     shape?: ShapeId;
     Icon: LucideIcon;
-    label: string;
-    hint: string;
+    hint?: string;
+    hintKey?: "hand" | "topic";
 }
 
 const TOOLS: readonly ToolEntry[] = [
-    { id: "select", tool: "select", Icon: MousePointer2, label: "Select", hint: "V" },
-    { id: "hand", tool: "hand", Icon: Hand, label: "Pan", hint: "H · hold Space" },
+    { id: "select", tool: "select", Icon: MousePointer2, hint: "V" },
+    { id: "hand", tool: "hand", Icon: Hand, hintKey: "hand" },
     // The node and the connector are the two halves of "draw me a diagram", so
     // they sit together at the top rather than the topic hiding in the library.
     {
@@ -55,28 +74,20 @@ const TOOLS: readonly ToolEntry[] = [
         tool: "shape",
         shape: "mind-branch",
         Icon: RectangleHorizontal,
-        label: "Topic",
-        hint: "Box you type in",
+        hintKey: "topic",
     },
-    { id: "connector", tool: "connector", Icon: Spline, label: "Connector", hint: "C" },
-    { id: "text", tool: "text", Icon: Type, label: "Text", hint: "T" },
-    { id: "sticky", tool: "sticky", Icon: StickyNote, label: "Sticky note", hint: "N" },
-    { id: "frame", tool: "frame", Icon: Frame, label: "Frame", hint: "F" },
-    { id: "ink", tool: "ink", Icon: PenLine, label: "Pen", hint: "P" },
-    { id: "eraser", tool: "eraser", Icon: Eraser, label: "Eraser", hint: "E" },
+    { id: "connector", tool: "connector", Icon: Spline, hint: "C" },
+    { id: "text", tool: "text", Icon: Type, hint: "T" },
+    { id: "sticky", tool: "sticky", Icon: StickyNote, hint: "N" },
+    { id: "frame", tool: "frame", Icon: Frame, hint: "F" },
+    { id: "ink", tool: "ink", Icon: PenLine, hint: "P" },
+    { id: "eraser", tool: "eraser", Icon: Eraser, hint: "E" },
 ];
 
 const QUICK_SHAPES: readonly ToolEntry[] = [
-    {
-        id: "rectangle",
-        tool: "shape",
-        shape: "rectangle",
-        Icon: Square,
-        label: "Rectangle",
-        hint: "R",
-    },
-    { id: "ellipse", tool: "shape", shape: "ellipse", Icon: Circle, label: "Ellipse", hint: "O" },
-    { id: "diamond", tool: "shape", shape: "diamond", Icon: Diamond, label: "Diamond", hint: "D" },
+    { id: "rectangle", tool: "shape", shape: "rectangle", Icon: Square, hint: "R" },
+    { id: "ellipse", tool: "shape", shape: "ellipse", Icon: Circle, hint: "O" },
+    { id: "diamond", tool: "shape", shape: "diamond", Icon: Diamond, hint: "D" },
 ];
 
 /**
@@ -84,7 +95,7 @@ const QUICK_SHAPES: readonly ToolEntry[] = [
  * others; the rest stay one click away behind "All shapes". Everything depth
  * shows the full rail regardless of kind.
  */
-const TOOLSETS: Record<DiagramKind, ReadonlySet<string>> = {
+const TOOLSETS: Record<DiagramKind, ReadonlySet<ToolKey>> = {
     mindmap: new Set(["select", "topic", "connector", "text", "sticky"]),
     board: new Set(["select", "sticky", "text", "frame", "connector"]),
     flowchart: new Set(TOOLS.map(t => t.id)),
@@ -101,6 +112,7 @@ export function Toolbar({
     onOpenShapes: () => void;
     depth?: ChromeDepth;
 }) {
+    const t = useTranslations("mindmap.toolbar");
     const store = useStore();
     const active = useEditor(selectTool);
 
@@ -146,13 +158,13 @@ export function Toolbar({
                                 <button
                                     type="button"
                                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
-                                    aria-label="All shapes"
+                                    aria-label={t("allShapes")}
                                 >
                                     <Shapes className="size-[18px]" />
                                 </button>
                             </PopoverTrigger>
                         </TooltipTrigger>
-                        <TooltipContent side="right">All shapes</TooltipContent>
+                        <TooltipContent side="right">{t("allShapes")}</TooltipContent>
                     </Tooltip>
                     <PopoverContent
                         side="right"
@@ -169,12 +181,12 @@ export function Toolbar({
                             type="button"
                             onClick={onOpenShapes}
                             className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-9 shrink-0 items-center justify-center rounded-md transition-colors"
-                            aria-label="All shapes"
+                            aria-label={t("allShapes")}
                         >
                             <Shapes className="size-[18px]" />
                         </button>
                     </TooltipTrigger>
-                    <TooltipContent side="right">All shapes</TooltipContent>
+                    <TooltipContent side="right">{t("allShapes")}</TooltipContent>
                 </Tooltip>
             )}
         </div>
@@ -190,7 +202,10 @@ function ToolButton({
     active: boolean;
     onClick: () => void;
 }) {
+    const t = useTranslations("mindmap.toolbar");
     const { Icon } = entry;
+    const label = t(`tools.${entry.id}`);
+    const hint = entry.hintKey ? t(`hints.${entry.hintKey}`) : entry.hint;
     return (
         <Tooltip>
             <TooltipTrigger asChild>
@@ -198,7 +213,7 @@ function ToolButton({
                     type="button"
                     onClick={onClick}
                     aria-pressed={active}
-                    aria-label={entry.label}
+                    aria-label={label}
                     className={cn(
                         "flex size-9 shrink-0 items-center justify-center rounded-md transition-colors",
                         active
@@ -210,8 +225,8 @@ function ToolButton({
                 </button>
             </TooltipTrigger>
             <TooltipContent side="right">
-                <span className="font-medium">{entry.label}</span>
-                <span className="text-ink-3 ml-2">{entry.hint}</span>
+                <span className="font-medium">{label}</span>
+                <span className="text-ink-3 ml-2">{hint}</span>
             </TooltipContent>
         </Tooltip>
     );

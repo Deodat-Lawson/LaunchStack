@@ -64,7 +64,7 @@ export function personaSystem(world: World, agent: AgentState): string {
         p.interests.length > 0 ? `You care about: ${p.interests.join(", ")}.` : "",
         `Your view on the subject below is currently: ${stanceLabel(agent.stance)}.`,
         "",
-        `Subject everyone is reacting to: ${world.subject}`,
+        `Subject everyone is reacting to: ${world.situation ?? world.subject}`,
         world.brief ? `Background everyone knows:\n${world.brief}` : "",
     ]
         .filter(line => line !== "")

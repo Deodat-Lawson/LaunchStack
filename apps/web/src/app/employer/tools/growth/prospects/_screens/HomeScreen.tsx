@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
@@ -9,10 +10,9 @@ import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
-import { prospectsApi, type SourceYield } from "../api";
+import { prospectsApi, type SourceYield, type TodoItem } from "../api";
+import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
-import { plural, relativeTime } from "~/lib/tools/format";
-import { STAGE_LABELS } from "../_lib/stages";
 import { useResource } from "~/lib/tools/useResource";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { FitMeter } from "~/components/tools/FitMeter";
@@ -21,8 +21,9 @@ import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function YieldRow({ y, max }: { y: SourceYield; max: number }) {
+    const t = useTranslations("growth.prospects");
     const off = y.status === "off" || y.status === "skipped";
-    const found = y.kind === "signal" ? `${y.found} signals` : String(y.found);
+    const found = y.kind === "signal" ? t("common.signals", { count: y.found }) : String(y.found);
     return (
         <div className="border-line-2 grid grid-cols-[minmax(120px,150px)_1fr_64px_56px] items-center gap-3 border-t px-4 py-2 text-[13px] first:border-t-0">
             <span className={cn("truncate", off ? "text-ink-3" : "text-ink")}>{y.label}</span>
@@ -41,7 +42,11 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
                 )}
             </span>
             <span className="text-ink-2 text-right tabular-nums">
-                {off ? <span className="text-ink-3 text-xs">{y.detail ?? "off"}</span> : found}
+                {off ? (
+                    <span className="text-ink-3 text-xs">{y.detail ?? t("home.off")}</span>
+                ) : (
+                    found
+                )}
             </span>
             <span className="text-ink-2 text-right tabular-nums">
                 {off || y.kind === "signal" ? "" : (y.inDeals ?? "—")}
@@ -51,6 +56,9 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
 }
 
 export function HomeScreen() {
+    const t = useTranslations("growth.prospects");
+    const tg = useTranslations("growth.common.counts");
+    const { relativeTime } = useGrowthFormat();
     const { segmentId, href, startRun, activeRun } = useProspects();
     const home = useResource(segmentId ? `home:${segmentId}` : null, () =>
         prospectsApi.home(segmentId!)
@@ -66,7 +74,7 @@ export function HomeScreen() {
         try {
             await startRun();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not start the run");
+            toast.error(e instanceof Error ? e.message : t("common.startFailed"));
         }
     };
 
@@ -76,17 +84,23 @@ export function HomeScreen() {
     return (
         <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
             <PageHeader
-                title={d ? `${headline},` : "Loading your segment"}
-                accent={d ? "this week" : undefined}
+                title={d ? t("home.title", { headline }) : t("home.loadingTitle")}
+                accent={d ? t("home.accent") : undefined}
                 sub={
                     d ? (
-                        <>
-                            {plural(d.segment.counts.companies, "company", "companies")} ·{" "}
-                            {plural(d.segment.counts.deals, "deal")} ·{" "}
-                            {d.lastRunAt
-                                ? `last run ${relativeTime(d.lastRunAt)} across ${plural(d.segment.counts.sources, "source")}`
-                                : "no run yet"}
-                        </>
+                        d.lastRunAt ? (
+                            t("home.subWithRun", {
+                                companies: d.segment.counts.companies,
+                                deals: d.segment.counts.deals,
+                                when: relativeTime(d.lastRunAt),
+                                sources: d.segment.counts.sources,
+                            })
+                        ) : (
+                            t("home.subNoRun", {
+                                companies: d.segment.counts.companies,
+                                deals: d.segment.counts.deals,
+                            })
+                        )
                     ) : (
                         <Skeleton className="h-3 w-64" />
                     )
@@ -94,10 +108,10 @@ export function HomeScreen() {
                 actions={
                     <>
                         <Button variant="ghost" size="sm" asChild>
-                            <ToolLink href={href("/segment")}>Segment</ToolLink>
+                            <ToolLink href={href("/segment")}>{t("common.segment")}</ToolLink>
                         </Button>
                         <Button size="sm" onClick={() => void find()} disabled={!segmentId}>
-                            Find companies
+                            {t("common.findCompanies")}
                         </Button>
                     </>
                 }
@@ -107,25 +121,25 @@ export function HomeScreen() {
 
             <section>
                 <SectionHeading
-                    title="To do"
-                    aside={d ? plural(d.todo.length, "item") : undefined}
+                    title={t("home.todo")}
+                    aside={d ? tg("items", { count: d.todo.length }) : undefined}
                 />
                 {home.loading ? (
                     <SkeletonRows rows={3} height={56} />
                 ) : d && d.todo.length === 0 ? (
                     d.lastRunAt ? (
                         <EmptyState
-                            title="Nothing waiting on you"
-                            body="New high-fit companies, replies due and stale deals show up here."
+                            title={t("home.nothingWaiting")}
+                            body={t("home.nothingWaitingBody")}
                         />
                     ) : (
                         <EmptyState
                             mark
-                            title="Find your first companies"
-                            body={`Searches the ${plural(d.segment.counts.sources, "source")} this segment has on, profiles the best matches with cited evidence, and finds people to contact.`}
+                            title={t("home.firstTitle")}
+                            body={t("home.firstBody", { count: d.segment.counts.sources })}
                             action={
                                 <Button size="sm" onClick={() => void find()}>
-                                    Find companies
+                                    {t("common.findCompanies")}
                                 </Button>
                             }
                         />
@@ -138,12 +152,16 @@ export function HomeScreen() {
                                 className="border-line-2 flex items-center gap-4 border-t px-4 py-3 first:border-t-0"
                             >
                                 <div className="min-w-0 flex-1">
-                                    <div className="text-ink text-sm font-medium">{item.title}</div>
-                                    <div className="text-ink-3 truncate text-xs">{item.detail}</div>
+                                    <div className="text-ink text-sm font-medium">
+                                        {todoText(t, item).title}
+                                    </div>
+                                    <div className="text-ink-3 truncate text-xs">
+                                        {todoText(t, item).detail}
+                                    </div>
                                 </div>
                                 <Button variant="outline" size="sm" asChild>
                                     <ToolLink href={href(item.action.href)}>
-                                        {item.action.label}
+                                        {todoText(t, item).action}
                                     </ToolLink>
                                 </Button>
                             </div>
@@ -154,10 +172,14 @@ export function HomeScreen() {
 
             <section>
                 <SectionHeading
-                    title="Deals"
+                    title={t("common.deals")}
                     aside={
                         d?.medianDays
-                            ? `median ${d.medianDays.days} days from ${STAGE_LABELS[d.medianDays.from]} to ${STAGE_LABELS[d.medianDays.to]}`
+                            ? t("home.median", {
+                                  days: d.medianDays.days,
+                                  from: t(`stages.${d.medianDays.from}`),
+                                  to: t(`stages.${d.medianDays.to}`),
+                              })
                             : undefined
                     }
                 />
@@ -170,14 +192,11 @@ export function HomeScreen() {
 
             <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-7">
                 <section className="min-w-0">
-                    <SectionHeading title="Where companies come from" aside="found · in a deal" />
+                    <SectionHeading title={t("home.whereFrom")} aside={t("home.whereFromAside")} />
                     {home.loading || !d ? (
                         <SkeletonRows rows={6} height={38} />
                     ) : d.yield.length === 0 ? (
-                        <EmptyState
-                            title="No sources have run yet"
-                            body="Each platform's yield shows here after the first run."
-                        />
+                        <EmptyState title={t("home.noSources")} body={t("home.noSourcesBody")} />
                     ) : (
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {d.yield.map(y => (
@@ -188,16 +207,13 @@ export function HomeScreen() {
                 </section>
                 <section className="min-w-0">
                     <SectionHeading
-                        title="New and worth a look"
-                        aside={d?.lastRunAt ? `from the last run` : undefined}
+                        title={t("home.fresh")}
+                        aside={d?.lastRunAt ? t("home.fromLastRun") : undefined}
                     />
                     {home.loading || !d ? (
                         <SkeletonRows rows={4} height={56} />
                     ) : d.fresh.length === 0 ? (
-                        <EmptyState
-                            title="Nothing new yet"
-                            body="Companies above the fit threshold from the latest run appear here."
-                        />
+                        <EmptyState title={t("home.nothingNew")} body={t("home.nothingNewBody")} />
                     ) : (
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {d.fresh.map(c => (
@@ -223,4 +239,46 @@ export function HomeScreen() {
             </div>
         </div>
     );
+}
+
+type ProspectsTranslator = ReturnType<typeof useTranslations<"growth.prospects">>;
+
+/** A to-do item in the reader's language; the server's English when it sent no copy. */
+function todoText(
+    t: ProspectsTranslator,
+    item: TodoItem
+): { title: string; detail: string; action: string } {
+    const copy = item.copy;
+    if (!copy) return { title: item.title, detail: item.detail, action: item.action.label };
+    switch (copy.key) {
+        case "review":
+            return {
+                title: t("home.todoItems.review.title", {
+                    count: copy.count,
+                    highFit: String(copy.highFit),
+                }),
+                // The companies' own names.
+                detail: item.detail,
+                action: t("home.todoItems.review.action"),
+            };
+        case "due":
+            return {
+                title: t("home.todoItems.due.title", { count: copy.steps.length }),
+                detail: copy.steps
+                    .map(step =>
+                        t("home.todoItems.due.step", {
+                            name: step.name,
+                            action: step.nextAction ?? t("home.todoItems.due.followUp"),
+                        })
+                    )
+                    .join(" · "),
+                action: t("home.todoItems.due.action"),
+            };
+        case "stale":
+            return {
+                title: t("home.todoItems.stale.title", { count: copy.deals.length }),
+                detail: copy.deals.map(deal => t("home.todoItems.stale.deal", deal)).join(" · "),
+                action: t("home.todoItems.stale.action"),
+            };
+    }
 }

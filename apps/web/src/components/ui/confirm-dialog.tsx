@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -33,8 +34,8 @@ export function ConfirmDialog({
     onOpenChange,
     title,
     description,
-    confirmLabel = "Delete",
-    cancelLabel = "Cancel",
+    confirmLabel,
+    cancelLabel,
     destructive = true,
     layerClassName,
     onConfirm,
@@ -55,6 +56,7 @@ export function ConfirmDialog({
     layerClassName?: string;
     onConfirm: () => void;
 }) {
+    const t = useTranslations("common.actions");
     // Callers clear their pending item as the dialog closes, which would
     // blank the title and description halfway through the fade-out. While
     // closed, keep saying what was last asked.
@@ -92,7 +94,7 @@ export function ConfirmDialog({
                         onClick={() => onOpenChange(false)}
                         data-testid="confirm-cancel"
                     >
-                        {cancelLabel}
+                        {cancelLabel ?? t("cancel")}
                     </Button>
                     <Button
                         variant={shown.destructive ? "destructive" : "default"}
@@ -105,7 +107,7 @@ export function ConfirmDialog({
                         }}
                         data-testid="confirm-accept"
                     >
-                        {shown.confirmLabel}
+                        {shown.confirmLabel ?? t("delete")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

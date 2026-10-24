@@ -2,6 +2,7 @@
 
 import { AUDIT_ACTIONS } from "~/lib/authz/audit-actions";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight, Download } from "lucide-react";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
@@ -17,10 +18,20 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import type { Permission } from "~/lib/authz/permissions";
+import { getSetting } from "~/lib/settings/registry";
+import { useSettingCopier } from "~/lib/settings/useSettings";
 
-import { errorMessage, peopleApi, type AuditEvent } from "./api";
-import { actionLabel, auditSentence, formatDateTime, relativeTime } from "./format";
-import { EmptyState, ErrorNote, LoadingNote, Panel, TabIntro } from "./ui";
+import { peopleApi, type AuditEvent } from "./api";
+import { actionLabel, auditSentence, useTimeFormat, type AuditNames } from "./format";
+import {
+    EmptyState,
+    ErrorNote,
+    LoadingNote,
+    Panel,
+    TabIntro,
+    useErrorText,
+    useRoleLabel,
+} from "./ui";
 
 interface AuditTabProps {
     can: (permission: Permission | undefined) => boolean;
@@ -41,6 +52,24 @@ interface Filters {
 const EMPTY_FILTERS: Filters = { action: ALL, from: "", to: "" };
 
 export function AuditTab({ can }: AuditTabProps) {
+    const t = useTranslations("settings.people.auditTab");
+    const ta = useTranslations("settings.people.audit");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
+    const copier = useSettingCopier();
+    // Roles and settings named the way the rest of the screen names them.
+    const names = useMemo<AuditNames>(
+        () => ({
+            role: (slug, customName) => roleLabel(slug, customName),
+            setting: (key, stored) => {
+                const definition = key ? getSetting(key) : undefined;
+                return definition ? copier(definition).label : stored;
+            },
+        }),
+        [roleLabel, copier]
+    );
     const canView = can("audit.view");
 
     const [draft, setDraft] = useState<Filters>(EMPTY_FILTERS);
@@ -76,13 +105,13 @@ export function AuditTab({ can }: AuditTabProps) {
                 setEvents(prev => (more ? [...prev, ...res.events] : res.events));
                 setNextCursor(res.nextCursor);
             } catch (err) {
-                setError(errorMessage(err, "Could not load the audit log."));
+                setError(errorText(err, t("loadFailed")));
             } finally {
                 if (more) setLoadingMore(false);
                 else setLoading(false);
             }
         },
-        [queryFor]
+        [queryFor, errorText, t]
     );
 
     useEffect(() => {
@@ -107,12 +136,9 @@ export function AuditTab({ can }: AuditTabProps) {
     if (!canView) {
         return (
             <div>
-                <TabIntro title="Audit log" />
+                <TabIntro title={t("title")} />
                 <Panel>
-                    <EmptyState
-                        title="The audit log is not part of your role"
-                        body="Ask an admin for the “Read the audit log” permission if you need it."
-                    />
+                    <EmptyState title={t("notAllowed.title")} body={t("notAllowed.body")} />
                 </Panel>
             </div>
         );
@@ -121,12 +147,12 @@ export function AuditTab({ can }: AuditTabProps) {
     return (
         <div>
             <TabIntro
-                title="Audit log"
-                description="Who changed what, newest first: roles, memberships, invitations, groups, and folder access. Filter by action or date, or export the current view."
+                title={t("title")}
+                description={t("description")}
                 actions={
                     <Button asChild variant="outline" size="sm">
                         <a href={csvUrl} download>
-                            <Download /> Export CSV
+                            <Download /> {t("exportCsv")}
                         </a>
                     </Button>
                 }
@@ -140,7 +166,7 @@ export function AuditTab({ can }: AuditTabProps) {
                 }}
             >
                 <div className="flex min-w-[220px] flex-col gap-1.5">
-                    <Label htmlFor="audit-action">Action</Label>
+                    <Label htmlFor="audit-action">{t("action")}</Label>
                     <Select
                         value={draft.action}
                         onValueChange={value => setDraft(d => ({ ...d, action: value }))}
@@ -149,17 +175,17 @@ export function AuditTab({ can }: AuditTabProps) {
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={ALL}>All actions</SelectItem>
+                            <SelectItem value={ALL}>{t("allActions")}</SelectItem>
                             {actionOptions.map(a => (
                                 <SelectItem key={a} value={a}>
-                                    {actionLabel(a)}
+                                    {actionLabel(ta, a)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="audit-from">From</Label>
+                    <Label htmlFor="audit-from">{t("from")}</Label>
                     <Input
                         id="audit-from"
                         type="date"
@@ -170,7 +196,7 @@ export function AuditTab({ can }: AuditTabProps) {
                     />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="audit-to">To</Label>
+                    <Label htmlFor="audit-to">{t("to")}</Label>
                     <Input
                         id="audit-to"
                         type="date"
@@ -181,7 +207,7 @@ export function AuditTab({ can }: AuditTabProps) {
                     />
                 </div>
                 <Button type="submit" size="sm" variant="outline" disabled={!filtersDirty}>
-                    Apply filters
+                    {t("apply")}
                 </Button>
                 {(filtersActive || filtersDirty) && (
                     <Button
@@ -193,7 +219,7 @@ export function AuditTab({ can }: AuditTabProps) {
                             setApplied(EMPTY_FILTERS);
                         }}
                     >
-                        Reset
+                        {tc("actions.reset")}
                     </Button>
                 )}
             </form>
@@ -206,17 +232,11 @@ export function AuditTab({ can }: AuditTabProps) {
 
             <Panel>
                 {loading ? (
-                    <LoadingNote label="Loading the audit log…" />
+                    <LoadingNote label={t("loading")} />
                 ) : events.length === 0 ? (
                     <EmptyState
-                        title={
-                            filtersActive ? "Nothing matches these filters" : "Nothing recorded yet"
-                        }
-                        body={
-                            filtersActive
-                                ? "Widen the date range or pick a different action."
-                                : "Changes to people, roles, groups, and folder access will show up here."
-                        }
+                        title={filtersActive ? t("empty.filteredTitle") : t("empty.title")}
+                        body={filtersActive ? t("empty.filteredBody") : t("empty.body")}
                     />
                 ) : (
                     <ol className="m-0 list-none p-0">
@@ -229,7 +249,7 @@ export function AuditTab({ can }: AuditTabProps) {
                             const actorName =
                                 (trimmedName?.length ? trimmedName : undefined) ??
                                 event.actor?.email ??
-                                "System";
+                                t("system");
                             return (
                                 <li key={event.id} className="border-line border-b last:border-b-0">
                                     <div className="flex items-start gap-3 px-4 py-3">
@@ -242,7 +262,7 @@ export function AuditTab({ can }: AuditTabProps) {
                                         />
                                         <div className="min-w-0 flex-1">
                                             <div className="text-ink text-[13.5px] leading-snug">
-                                                {auditSentence(event)}
+                                                {auditSentence(ta, event, names)}
                                             </div>
                                             <div className="text-ink-3 mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px]">
                                                 {event.actor?.email && (
@@ -250,9 +270,9 @@ export function AuditTab({ can }: AuditTabProps) {
                                                 )}
                                                 <time
                                                     dateTime={event.createdAt}
-                                                    title={formatDateTime(event.createdAt)}
+                                                    title={time.dateTime(event.createdAt)}
                                                 >
-                                                    {relativeTime(event.createdAt)}
+                                                    {time.relative(event.createdAt)}
                                                 </time>
                                                 <Badge
                                                     variant="secondary"
@@ -279,7 +299,7 @@ export function AuditTab({ can }: AuditTabProps) {
                                                 }
                                             >
                                                 {isOpen ? <ChevronDown /> : <ChevronRight />}
-                                                Details
+                                                {t("details")}
                                             </Button>
                                         )}
                                     </div>
@@ -304,7 +324,7 @@ export function AuditTab({ can }: AuditTabProps) {
                             disabled={loadingMore}
                             onClick={() => void load(applied, nextCursor)}
                         >
-                            {loadingMore ? "Loading…" : "Load more"}
+                            {loadingMore ? tc("status.loading") : t("loadMore")}
                         </Button>
                     </div>
                 )}

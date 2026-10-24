@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink, MoreHorizontal } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,18 +19,12 @@ import {
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
-import {
-    EVIDENCE_KINDS,
-    EVIDENCE_KIND_LABEL,
-    vantageApi,
-    type EvidenceDto,
-    type VantageEvidenceKind,
-} from "../api";
+import { EVIDENCE_KINDS, vantageApi, type EvidenceDto, type VantageEvidenceKind } from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
 import { KindPill, SharedMark } from "../_components/Primitives";
 import { WeekSuggestions } from "../_components/WeekSuggestions";
 import { useOneClick } from "../_lib/actions";
-import { plural, todayIso } from "../_lib/format";
+import { todayIso } from "../_lib/format";
 import { useHiddenSuggestions } from "../_lib/hidden";
 import { weekSuggestions } from "../_lib/suggestions";
 
@@ -42,6 +37,10 @@ type Filter = "all" | VantageEvidenceKind;
  * has been logged for over a week.
  */
 export function EvidenceScreen() {
+    const t = useTranslations("vantage.evidence");
+    const tk = useTranslations("vantage.evidenceKind");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const list = useResource("vantage:evidence", () => vantageApi.evidence());
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -82,9 +81,9 @@ export function EvidenceScreen() {
         try {
             await vantageApi.deleteEvidence(e.id);
             list.mutate(current => ({ evidence: current.evidence.filter(x => x.id !== e.id) }));
-            toast("Removed");
+            toast(t("removed"));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not remove it");
+            toast.error(err instanceof Error ? err.message : t("removeError"));
         }
     };
 
@@ -96,23 +95,19 @@ export function EvidenceScreen() {
                 evidence: current.evidence.map(x => (x.id === e.id ? evidence : x)),
             }));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not change visibility");
+            toast.error(err instanceof Error ? err.message : t("visibilityError"));
         }
     };
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="Everything the week"
-                accent="can cite"
-                sub={
-                    list.data
-                        ? `${plural(items.length, "item")} · newest first · private unless you share it`
-                        : undefined
-                }
+                title={t("title")}
+                accent={t("accent")}
+                sub={list.data ? t("sub", { count: items.length }) : undefined}
                 actions={
                     <Button size="sm" onClick={() => setAdding(true)}>
-                        Add evidence
+                        {t("add")}
                     </Button>
                 }
             />
@@ -130,7 +125,7 @@ export function EvidenceScreen() {
             )}
 
             <div className="flex flex-wrap items-center gap-2">
-                <div className="flex flex-wrap gap-1" role="tablist" aria-label="Kind">
+                <div className="flex flex-wrap gap-1" role="tablist" aria-label={t("kindLabel")}>
                     {(["all", ...EVIDENCE_KINDS] as Filter[]).map(k => (
                         <button
                             key={k}
@@ -145,7 +140,7 @@ export function EvidenceScreen() {
                                     : "text-ink-2 hover:bg-panel/60 hover:text-ink"
                             )}
                         >
-                            {k === "all" ? "All" : EVIDENCE_KIND_LABEL[k]}
+                            {k === "all" ? tc("status.all") : tk(`label.${k}`)}
                             {k !== "all" && counts.get(k) ? (
                                 <span className="text-ink-3 font-mono text-[11px] tabular-nums">
                                     {counts.get(k)}
@@ -157,8 +152,8 @@ export function EvidenceScreen() {
                 <Input
                     value={q}
                     onChange={e => setQ(e.target.value)}
-                    placeholder="Search title, text, source"
-                    aria-label="Search evidence"
+                    placeholder={t("searchPlaceholder")}
+                    aria-label={t("searchLabel")}
                     // 16rem, not `w-64`: uploadthing's stylesheet redefines
                     // `.w-64` after ours, which would beat `@max-sm:w-full`.
                     className="@max-sm:ml-0 @max-sm:w-full ml-auto h-8 w-[16rem] text-[13px]"
@@ -169,16 +164,16 @@ export function EvidenceScreen() {
                 <SkeletonRows rows={6} height={44} />
             ) : items.length === 0 ? (
                 <EmptyState
-                    title="Nothing here yet"
-                    body="Paste a customer conversation, drop in a note from a call, keep a link, or record a claim from a deck so it can be checked against the numbers. Everything you add carries a date and a source, which is what makes it citable."
+                    title={t("emptyTitle")}
+                    body={t("emptyBody")}
                     action={
                         <Button size="sm" onClick={() => setAdding(true)}>
-                            Add the first item
+                            {t("addFirst")}
                         </Button>
                     }
                 />
             ) : filtered.length === 0 ? (
-                <p className="text-ink-3 text-[13px]">Nothing matches that filter.</p>
+                <p className="text-ink-3 text-[13px]">{t("noMatch")}</p>
             ) : (
                 <div className="border-line bg-panel rounded-lg border">
                     {filtered.map(e => {
@@ -215,19 +210,19 @@ export function EvidenceScreen() {
                                                 variant="ghost"
                                                 size="icon"
                                                 className="size-7"
-                                                aria-label={`Actions for ${e.title}`}
+                                                aria-label={t("actionsFor", { title: e.title })}
                                             >
                                                 <MoreHorizontal className="size-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem onSelect={() => setEditing(e)}>
-                                                Edit
+                                                {tc("actions.edit")}
                                             </DropdownMenuItem>
                                             <DropdownMenuItem onSelect={() => void toggleShared(e)}>
                                                 {e.visibility === "shared"
-                                                    ? "Make private"
-                                                    : "Share with the program"}
+                                                    ? t("makePrivate")
+                                                    : t("share")}
                                             </DropdownMenuItem>
                                             {e.sourceUrl && (
                                                 <DropdownMenuItem asChild>
@@ -236,7 +231,7 @@ export function EvidenceScreen() {
                                                         target="_blank"
                                                         rel="noreferrer"
                                                     >
-                                                        Open link{" "}
+                                                        {t("openLink")}{" "}
                                                         <ExternalLink className="ml-auto size-3" />
                                                     </a>
                                                 </DropdownMenuItem>
@@ -245,7 +240,7 @@ export function EvidenceScreen() {
                                                 className="text-danger"
                                                 onSelect={() => void remove(e)}
                                             >
-                                                Remove
+                                                {tc("actions.remove")}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -256,7 +251,9 @@ export function EvidenceScreen() {
                                             {e.body}
                                         </p>
                                         <div className="text-ink-3 mt-2 flex flex-wrap gap-x-3 text-[11.5px]">
-                                            {e.source && <span>Source: {e.source}</span>}
+                                            {e.source && (
+                                                <span>{t("source", { source: e.source })}</span>
+                                            )}
                                             {e.sourceUrl && (
                                                 <a
                                                     href={e.sourceUrl}
@@ -268,7 +265,13 @@ export function EvidenceScreen() {
                                                 </a>
                                             )}
                                             <span>
-                                                Added {new Date(e.createdAt).toLocaleDateString()}
+                                                {t("addedOn", {
+                                                    date: format.dateTime(new Date(e.createdAt), {
+                                                        year: "numeric",
+                                                        month: "numeric",
+                                                        day: "numeric",
+                                                    }),
+                                                })}
                                             </span>
                                         </div>
                                     </div>

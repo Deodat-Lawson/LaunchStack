@@ -1,13 +1,14 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { SectionHeading } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
 
 import { vantageApi, type MetricObservationDto, type WeeklySignals } from "../api";
 import { setAside, SET_ASIDE_DAYS, type Outcome } from "../_lib/actions";
-import { fmtDate, fmtNumber } from "../_lib/format";
+import { useVantageFormat, type VantageFormat } from "../_lib/format";
 import { SuggestionCard, SuggestionNudge } from "./Suggestion";
 
 type Conflict = WeeklySignals["metricConflicts"][number];
@@ -19,6 +20,7 @@ const conflictId = (c: Conflict) => `conflict:${c.a.observationId}:${c.b.observa
  * records it again exactly as it was (value, period, source, note).
  */
 async function keepOne(
+    fmt: VantageFormat,
     keep: Conflict["a"],
     drop: Conflict["b"],
     metricId: string,
@@ -28,8 +30,11 @@ async function keepOne(
     const dropped = observations.find(o => o.id === drop.observationId);
     await vantageApi.deleteObservation(drop.observationId);
     return {
-        message: `Kept ${fmtNumber(keep.value)} for ${name}`,
-        description: `Removed ${fmtNumber(drop.value)} (${drop.source ?? "no source"})`,
+        message: fmt.t("metricSuggestions.kept", { value: fmt.number(keep.value), name }),
+        description: fmt.t("metricSuggestions.removed", {
+            value: fmt.number(drop.value),
+            source: drop.source ?? fmt.t("metricSuggestions.noSource"),
+        }),
         undo: () =>
             vantageApi.addObservation({
                 metricId,
@@ -64,6 +69,8 @@ export function MetricSuggestions({
     hidden: ReadonlySet<string>;
     onRecord: (metricId: string) => void;
 }) {
+    const t = useTranslations("vantage.metricSuggestions");
+    const fmt = useVantageFormat();
     const show = (id: string) => !gone.has(id) && !hidden.has(id);
     const conflicts = signals.metricConflicts.filter(c => show(conflictId(c)));
     const missing = signals.metricsWithoutData
@@ -71,35 +78,35 @@ export function MetricSuggestions({
         .filter(m => show(m.id));
     if (conflicts.length === 0 && missing.length === 0) return null;
     return (
-        <section aria-label="Suggested by Vantage">
+        <section aria-label={t("title")}>
             <SectionHeading
-                title="Suggested by Vantage"
-                aside={`${conflicts.length + missing.length} to settle`}
+                title={t("title")}
+                aside={t("toSettle", { count: conflicts.length + missing.length })}
             />
             <div className="flex flex-col gap-2.5">
                 {conflicts.map(c => {
                     const id = conflictId(c);
-                    const src = (s: string | null) => s ?? "no source";
+                    const src = (s: string | null) => s ?? t("noSource");
                     return (
                         <SuggestionCard
                             key={id}
-                            label={`${c.name}: two numbers disagree`}
-                            kicker="Two numbers disagree"
-                            meta={`${fmtDate(c.a.periodStart)}–${fmtDate(c.a.periodEnd)}`}
-                            title={
-                                <>
-                                    {c.name}:{" "}
-                                    <span className="font-mono tabular-nums">
-                                        {fmtNumber(c.a.value)}
-                                    </span>{" "}
-                                    from {src(c.a.source)}, or{" "}
-                                    <span className="font-mono tabular-nums">
-                                        {fmtNumber(c.b.value)}
-                                    </span>{" "}
-                                    from {src(c.b.source)}?
-                                </>
-                            }
-                            reason="Every draft that cites this metric depends on which one counts. Keep one and the other is removed — Undo puts it back."
+                            label={t("conflictLabel", { name: c.name })}
+                            kicker={t("conflictKicker")}
+                            meta={t("period", {
+                                start: fmt.date(c.a.periodStart),
+                                end: fmt.date(c.a.periodEnd),
+                            })}
+                            title={t.rich("conflictTitle", {
+                                name: c.name,
+                                a: fmt.number(c.a.value),
+                                sourceA: src(c.a.source),
+                                b: fmt.number(c.b.value),
+                                sourceB: src(c.b.source),
+                                num: chunks => (
+                                    <span className="font-mono tabular-nums">{chunks}</span>
+                                ),
+                            })}
+                            reason={t("conflictReason")}
                             actions={
                                 <>
                                     <Button
@@ -107,22 +114,42 @@ export function MetricSuggestions({
                                         variant="outline"
                                         onClick={() =>
                                             void act(id, () =>
-                                                keepOne(c.a, c.b, c.metricId, c.name, observations)
+                                                keepOne(
+                                                    fmt,
+                                                    c.a,
+                                                    c.b,
+                                                    c.metricId,
+                                                    c.name,
+                                                    observations
+                                                )
                                             )
                                         }
                                     >
-                                        Keep {fmtNumber(c.a.value)} · {src(c.a.source)}
+                                        {t("keep", {
+                                            value: fmt.number(c.a.value),
+                                            source: src(c.a.source),
+                                        })}
                                     </Button>
                                     <Button
                                         size="sm"
                                         variant="outline"
                                         onClick={() =>
                                             void act(id, () =>
-                                                keepOne(c.b, c.a, c.metricId, c.name, observations)
+                                                keepOne(
+                                                    fmt,
+                                                    c.b,
+                                                    c.a,
+                                                    c.metricId,
+                                                    c.name,
+                                                    observations
+                                                )
                                             )
                                         }
                                     >
-                                        Keep {fmtNumber(c.b.value)} · {src(c.b.source)}
+                                        {t("keep", {
+                                            value: fmt.number(c.b.value),
+                                            source: src(c.b.source),
+                                        })}
                                     </Button>
                                     <Button
                                         size="sm"
@@ -132,13 +159,13 @@ export function MetricSuggestions({
                                                 setAside(
                                                     id,
                                                     SET_ASIDE_DAYS.conflict,
-                                                    "Ignored — both numbers stay"
+                                                    t("ignoredBoth")
                                                 )
                                             )
                                         }
                                     >
                                         <X aria-hidden="true" />
-                                        Ignore
+                                        {t("ignore")}
                                     </Button>
                                 </>
                             }
@@ -148,28 +175,24 @@ export function MetricSuggestions({
                 {missing.map(m => (
                     <SuggestionNudge
                         key={m.id}
-                        label={`Record ${m.name}`}
-                        title={<>No number yet this week for {m.name}.</>}
+                        label={t("recordLabel", { name: m.name })}
+                        title={t("noNumber", { name: m.name })}
                         actions={
                             <>
                                 <Button size="sm" onClick={() => onRecord(m.metricId)}>
-                                    Record it
+                                    {t("recordIt")}
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="ghost"
                                     onClick={() =>
                                         void act(m.id, () =>
-                                            setAside(
-                                                m.id,
-                                                SET_ASIDE_DAYS.nudge,
-                                                "Hidden for the rest of the week"
-                                            )
+                                            setAside(m.id, SET_ASIDE_DAYS.nudge, t("hiddenWeek"))
                                         )
                                     }
                                 >
                                     <X aria-hidden="true" />
-                                    Ignore
+                                    {t("ignore")}
                                 </Button>
                             </>
                         }

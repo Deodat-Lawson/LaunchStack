@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import UploadForm, { type AvailableProviders } from "~/app/employer/upload/UploadForm";
 
@@ -50,6 +51,7 @@ interface UploadViewProps {
 }
 
 export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewProps) {
+    const t = useTranslations("upload.view");
     const [categories, setCategories] = useState<Category[]>([]);
     const [useUploadThing, setUseUploadThing] = useState<boolean>(true);
     const [isUploadThingConfigured, setIsUploadThingConfigured] = useState<boolean>(false);
@@ -93,45 +95,54 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
         void fetchBootstrap();
     }, [fetchBootstrap]);
 
-    const handleAddCategory = useCallback(async (newCategory: string) => {
-        if (!newCategory.trim()) return;
-        try {
-            const res = await fetch("/api/Categories/AddCategories", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ CategoryName: newCategory }),
-            });
-            if (!res.ok) throw new Error("Failed to create category");
+    const handleAddCategory = useCallback(
+        async (newCategory: string) => {
+            if (!newCategory.trim()) return;
+            try {
+                const res = await fetch("/api/Categories/AddCategories", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ CategoryName: newCategory }),
+                });
+                if (!res.ok) throw new Error("Failed to create category");
 
-            const rawData = (await res.json()) as CategoryResponse;
-            if (rawData.success) {
-                setCategories(prev => [...prev, { id: rawData.id.toString(), name: rawData.name }]);
-                toast.success(`Category "${rawData.name}" created`);
-            } else {
-                toast.error("Invalid category data format");
+                const rawData = (await res.json()) as CategoryResponse;
+                if (rawData.success) {
+                    setCategories(prev => [
+                        ...prev,
+                        { id: rawData.id.toString(), name: rawData.name },
+                    ]);
+                    toast.success(t("categoryCreated", { name: rawData.name }));
+                } else {
+                    toast.error(t("invalidCategory"));
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error(t("createCategoryFailed"));
             }
-        } catch (error) {
-            console.error(error);
-            toast.error("Error creating category. Check console for details.");
-        }
-    }, []);
+        },
+        [t]
+    );
 
-    const handleRemoveCategory = useCallback(async (id: string, categoryName: string) => {
-        try {
-            const res = await fetch("/api/Categories/DeleteCategories", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id }),
-            });
-            if (!res.ok) throw new Error("Failed to remove category");
+    const handleRemoveCategory = useCallback(
+        async (id: string, categoryName: string) => {
+            try {
+                const res = await fetch("/api/Categories/DeleteCategories", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id }),
+                });
+                if (!res.ok) throw new Error("Failed to remove category");
 
-            setCategories(prev => prev.filter(cat => cat.id !== id));
-            toast.success(`Category "${categoryName}" removed`);
-        } catch (error) {
-            console.error(error);
-            toast.error("Error removing category. Check console for details.");
-        }
-    }, []);
+                setCategories(prev => prev.filter(cat => cat.id !== id));
+                toast.success(t("categoryRemoved", { name: categoryName }));
+            } catch (error) {
+                console.error(error);
+                toast.error(t("removeCategoryFailed"));
+            }
+        },
+        [t]
+    );
 
     const form = (
         <UploadForm
@@ -188,7 +199,7 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
                             marginBottom: 10,
                         }}
                     >
-                        Upload
+                        {t("eyebrow")}
                     </div>
                     <h1
                         className="display"
@@ -200,7 +211,7 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
                             margin: 0,
                         }}
                     >
-                        Add sources
+                        {t("title")}
                     </h1>
                     <div
                         style={{
@@ -211,9 +222,7 @@ export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewP
                             maxWidth: 640,
                         }}
                     >
-                        Drop files, connect a repo, paste text, or point us at a URL. Everything you
-                        bring in is indexed into your knowledge base, chunked for retrieval, and
-                        ready for the workspace.
+                        {t("subtitle")}
                     </div>
                 </div>
 

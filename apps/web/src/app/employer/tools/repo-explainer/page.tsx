@@ -1,20 +1,24 @@
 "use client";
 
 import { Loader2, Network, Share2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { useRepoExplainer } from "./useRepoExplainer";
 import type { DiagramType } from "@launchstack/pipelines/repo-explainer";
 
-const DIAGRAM_TYPE_OPTIONS: { value: DiagramType; label: string }[] = [
-    { value: "architecture", label: "Architecture" },
-    { value: "component", label: "Component" },
-    { value: "sequence", label: "Sequence" },
-    { value: "class", label: "Class" },
-    { value: "er", label: "ER Diagram" },
-];
+/** Labels are `tools.repoExplainer.diagramTypes.<value>`. */
+const DIAGRAM_TYPE_OPTIONS = [
+    "architecture",
+    "component",
+    "sequence",
+    "class",
+    "er",
+] as const satisfies readonly DiagramType[];
 
 export default function RepoExplainerPage() {
+    const t = useTranslations("tools.repoExplainer");
+    const tRegistry = useTranslations("tools.registry.repoExplainer");
     const {
         url,
         setUrl,
@@ -42,11 +46,10 @@ export default function RepoExplainerPage() {
                         </div>
                         <div>
                             <h1 className="text-lg font-semibold tracking-tight text-slate-900 md:text-xl dark:text-slate-50">
-                                GitHub Repo Explainer
+                                {t("title")}
                             </h1>
                             <p className="text-xs text-slate-500 md:text-sm dark:text-slate-400">
-                                Paste any GitHub repository URL and get a summary plus Mermaid
-                                diagram.
+                                {tRegistry("description")}
                             </p>
                         </div>
                     </div>
@@ -59,14 +62,14 @@ export default function RepoExplainerPage() {
                                 htmlFor="repo-url"
                                 className="text-xs font-medium text-slate-700 dark:text-slate-300"
                             >
-                                GitHub repository URL
+                                {t("urlLabel")}
                             </label>
                             <div className="flex flex-col gap-2 md:flex-row md:items-center">
                                 <div className="flex-1">
                                     <input
                                         id="repo-url"
                                         type="text"
-                                        placeholder="https://github.com/owner/repo or owner/repo"
+                                        placeholder={t("urlPlaceholder")}
                                         className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                         value={url}
                                         onChange={e => setUrl(e.target.value)}
@@ -82,12 +85,12 @@ export default function RepoExplainerPage() {
                                     {loading ? (
                                         <>
                                             <Loader2 className="h-4 w-4 animate-spin" />
-                                            Generating…
+                                            {t("generating")}
                                         </>
                                     ) : (
                                         <>
                                             <Share2 className="h-4 w-4" />
-                                            Generate diagram
+                                            {t("generate")}
                                         </>
                                     )}
                                 </button>
@@ -99,12 +102,12 @@ export default function RepoExplainerPage() {
                                 htmlFor="github-token"
                                 className="text-xs font-medium text-slate-700 dark:text-slate-300"
                             >
-                                GitHub token (optional, required for private repos)
+                                {t("tokenLabel")}
                             </label>
                             <input
                                 id="github-token"
                                 type="password"
-                                placeholder="<your-github-token> or fine-grained token"
+                                placeholder={t("tokenPlaceholder")}
                                 className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                 value={githubToken}
                                 onChange={e => setGithubToken(e.target.value)}
@@ -115,22 +118,22 @@ export default function RepoExplainerPage() {
 
                         <div className="space-y-1.5">
                             <label className="text-xs font-medium text-slate-700 dark:text-slate-300">
-                                Diagram type
+                                {t("diagramType")}
                             </label>
                             <div className="flex flex-wrap gap-1.5">
-                                {DIAGRAM_TYPE_OPTIONS.map(opt => (
+                                {DIAGRAM_TYPE_OPTIONS.map(value => (
                                     <button
-                                        key={opt.value}
+                                        key={value}
                                         type="button"
                                         disabled={loading}
-                                        onClick={() => setDiagramType(opt.value)}
+                                        onClick={() => setDiagramType(value)}
                                         className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-all ${
-                                            diagramType === opt.value
+                                            diagramType === value
                                                 ? "border-brand bg-brand-soft text-brand-ink ring-brand ring-1"
                                                 : "border-line bg-panel-2 text-ink-2 hover:border-brand"
                                         } ${loading ? "cursor-not-allowed opacity-50" : ""}`}
                                     >
-                                        {opt.label}
+                                        {t(`diagramTypes.${value}`)}
                                     </button>
                                 ))}
                             </div>
@@ -141,11 +144,11 @@ export default function RepoExplainerPage() {
                                 htmlFor="instructions"
                                 className="text-xs font-medium text-slate-700 dark:text-slate-300"
                             >
-                                Additional instructions (optional)
+                                {t("instructionsLabel")}
                             </label>
                             <textarea
                                 id="instructions"
-                                placeholder='E.g. "Focus on API design and generate a UML component diagram."'
+                                placeholder={t("instructionsPlaceholder")}
                                 className="border-line bg-panel-2 text-ink shadow-1 focus:border-brand focus:ring-brand-glow min-h-[70px] w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                 value={instructions}
                                 onChange={e => setInstructions(e.target.value)}
@@ -162,27 +165,26 @@ export default function RepoExplainerPage() {
 
                     {!error && !loading && !result && (
                         <div className="border-line bg-surface-sunk text-ink-3 mt-4 rounded-md border border-dashed px-3 py-2 text-xs">
-                            Tip: try{" "}
-                            <button
-                                type="button"
-                                className="underline underline-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
-                                onClick={() => setUrl("https://github.com/facebook/react")}
-                            >
-                                https://github.com/facebook/react
-                            </button>{" "}
-                            with instructions like{" "}
-                            <button
-                                type="button"
-                                className="underline underline-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
-                                onClick={() =>
-                                    setInstructions(
-                                        "Generate a high-level UML diagram of the main components and how they interact."
-                                    )
-                                }
-                            >
-                                &quot;Generate a high-level UML diagram…&quot;
-                            </button>
-                            .
+                            {t.rich("tip", {
+                                url: chunks => (
+                                    <button
+                                        type="button"
+                                        className="underline underline-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
+                                        onClick={() => setUrl("https://github.com/facebook/react")}
+                                    >
+                                        {chunks}
+                                    </button>
+                                ),
+                                example: chunks => (
+                                    <button
+                                        type="button"
+                                        className="underline underline-offset-2 hover:text-slate-700 dark:hover:text-slate-200"
+                                        onClick={() => setInstructions(t("tipInstruction"))}
+                                    >
+                                        {chunks}
+                                    </button>
+                                ),
+                            })}
                         </div>
                     )}
                 </section>
@@ -197,7 +199,7 @@ export default function RepoExplainerPage() {
                         {summary && (
                             <div className="border-line bg-surface-sunk text-ink-2 mb-4 rounded-md border p-4 text-sm leading-relaxed">
                                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    Summary
+                                    {t("summary")}
                                 </h3>
                                 <p className="whitespace-pre-wrap">{summary}</p>
                             </div>
@@ -205,19 +207,19 @@ export default function RepoExplainerPage() {
                         {mermaidCode ? (
                             <div>
                                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    Architecture Diagram
+                                    {t("architectureDiagram")}
                                 </h3>
                                 <MermaidDiagram code={mermaidCode} repoName={result.repo} />
                             </div>
                         ) : (
                             <pre className="border-line bg-surface-sunk text-ink-2 overflow-x-auto rounded-md border p-3 text-xs">
-                                {result.explanation || "No diagram generated."}
+                                {result.explanation || t("noDiagram")}
                             </pre>
                         )}
                         {result.umlJson && (
                             <details className="border-line bg-surface-sunk mt-4 rounded-md border p-3">
                                 <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    UML JSON response
+                                    {t("umlJson")}
                                 </summary>
                                 <pre className="border-line bg-panel-2 text-ink-2 mt-2 overflow-x-auto rounded-md border p-3 text-xs">
                                     {JSON.stringify(result.umlJson, null, 2)}

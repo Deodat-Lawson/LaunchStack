@@ -14,6 +14,8 @@
  * client, so the rules about what a folder may be called live in one place.
  */
 
+import type { useTranslations } from "next-intl";
+
 export const FOLDER_SEPARATOR = "/";
 export const UNFILED_FOLDER = "Unfiled";
 /** `document.category` and `category.name` are both varchar(256). */
@@ -100,39 +102,91 @@ export function displayFolderPath(path: string): string {
     return splitFolderPath(path).join(" / ") || UNFILED_FOLDER;
 }
 
+/**
+ * Why a folder name or path is not acceptable, as data: the client words it
+ * in the reader's language (`describeFolderIssue`), the server in English
+ * (`validateFolderName` / `validateFolderPath`).
+ */
+export type FolderPathIssue =
+    | { code: "required" }
+    | { code: "separator"; separator: string }
+    | { code: "nameTooLong"; max: number }
+    | { code: "unfiledReserved"; unfiled: string }
+    | { code: "underUnfiled"; unfiled: string }
+    | { code: "tooDeep"; max: number }
+    | { code: "pathTooLong"; max: number };
+
 /** Why a single folder name is not acceptable, or null when it is. */
-export function validateFolderName(name: string): string | null {
+export function folderNameIssue(name: string): FolderPathIssue | null {
     const trimmed = name.replace(/\s+/g, " ").trim();
-    if (!trimmed) return "Folder name is required.";
+    if (!trimmed) return { code: "required" };
     if (trimmed.includes(FOLDER_SEPARATOR))
-        return `Folder names can't contain "${FOLDER_SEPARATOR}".`;
+        return { code: "separator", separator: FOLDER_SEPARATOR };
     if (trimmed.length > MAX_FOLDER_NAME_CHARS) {
-        return `Folder name is too long (max ${MAX_FOLDER_NAME_CHARS} characters).`;
+        return { code: "nameTooLong", max: MAX_FOLDER_NAME_CHARS };
     }
     return null;
 }
 
 /** Why a full path is not acceptable as a folder, or null when it is. */
-export function validateFolderPath(path: string): string | null {
+export function folderPathIssue(path: string): FolderPathIssue | null {
     const segments = splitFolderPath(path);
-    if (segments.length === 0) return "Folder name is required.";
+    if (segments.length === 0) return { code: "required" };
     if (segments[0] === UNFILED_FOLDER) {
         return segments.length === 1
-            ? `"${UNFILED_FOLDER}" is where sources without a folder live; it can't be created.`
-            : `Folders can't be nested under "${UNFILED_FOLDER}".`;
+            ? { code: "unfiledReserved", unfiled: UNFILED_FOLDER }
+            : { code: "underUnfiled", unfiled: UNFILED_FOLDER };
     }
     for (const segment of segments) {
-        const problem = validateFolderName(segment);
-        if (problem) return problem;
+        const issue = folderNameIssue(segment);
+        if (issue) return issue;
     }
-    if (segments.length > MAX_FOLDER_DEPTH) {
-        return `Folders can be nested at most ${MAX_FOLDER_DEPTH} deep.`;
-    }
+    if (segments.length > MAX_FOLDER_DEPTH) return { code: "tooDeep", max: MAX_FOLDER_DEPTH };
     const joined = segments.join(FOLDER_SEPARATOR);
     if (joined.length > MAX_FOLDER_PATH_CHARS) {
-        return `The full folder path is too long (max ${MAX_FOLDER_PATH_CHARS} characters).`;
+        return { code: "pathTooLong", max: MAX_FOLDER_PATH_CHARS };
     }
     return null;
+}
+
+/** The English sentence for an issue — what the server answers with. */
+function folderIssueText(issue: FolderPathIssue): string {
+    switch (issue.code) {
+        case "required":
+            return "Folder name is required.";
+        case "separator":
+            return `Folder names can't contain "${issue.separator}".`;
+        case "nameTooLong":
+            return `Folder name is too long (max ${issue.max} characters).`;
+        case "unfiledReserved":
+            return `"${issue.unfiled}" is where sources without a folder live; it can't be created.`;
+        case "underUnfiled":
+            return `Folders can't be nested under "${issue.unfiled}".`;
+        case "tooDeep":
+            return `Folders can be nested at most ${issue.max} deep.`;
+        case "pathTooLong":
+            return `The full folder path is too long (max ${issue.max} characters).`;
+    }
+}
+
+/** Why a single folder name is not acceptable, or null when it is. */
+export function validateFolderName(name: string): string | null {
+    const issue = folderNameIssue(name);
+    return issue ? folderIssueText(issue) : null;
+}
+
+/** Why a full path is not acceptable as a folder, or null when it is. */
+export function validateFolderPath(path: string): string | null {
+    const issue = folderPathIssue(path);
+    return issue ? folderIssueText(issue) : null;
+}
+
+/** `useTranslations("sources.folderIssues")`. */
+export type FolderIssueTranslator = ReturnType<typeof useTranslations<"sources.folderIssues">>;
+
+/** An issue in the reader's language. */
+export function describeFolderIssue(issue: FolderPathIssue, t: FolderIssueTranslator): string {
+    return t(issue.code, issue);
 }
 
 /** Segment-wise, case-insensitive; `Unfiled` sorts last at the top level. */

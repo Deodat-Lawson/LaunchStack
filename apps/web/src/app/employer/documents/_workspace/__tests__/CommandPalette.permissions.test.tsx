@@ -14,8 +14,18 @@ import "@testing-library/jest-dom";
 
 import { BUILTIN_ROLE_PERMISSIONS, type Permission } from "~/lib/authz/permissions";
 
+import type * as Registry from "~/lib/settings/registry";
+
 jest.mock("next/navigation", () => ({ useRouter: () => ({ push: jest.fn() }) }));
-jest.mock("~/lib/settings/useSettings", () => ({ useSettingValue: () => false }));
+jest.mock("~/lib/settings/useSettings", () => ({
+    useSettingValue: () => false,
+    // The real registry search, in English: what a Member may find is what is under test.
+    useSettingsSearch: () => (query: string, limit?: number) => {
+        const registry: typeof Registry = jest.requireActual("~/lib/settings/registry");
+        return registry.searchSettings(query, limit);
+    },
+    useSettingCopier: () => (definition: { label: string; description: string }) => definition,
+}));
 jest.mock("~/lib/context-menu", () => ({
     APP_TARGET_KIND: "app",
     actionItems: () => [],

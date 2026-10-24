@@ -16,7 +16,14 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
-import { GoogleDriveBanner } from "./GoogleDriveBanner";
+import { IconDrive } from "~/components/icons/brand";
+import {
+    GoogleDriveBanner,
+    driveLinkSummary,
+    setDriveBarHidden,
+    useDriveBarHidden,
+    useDriveLinkStatus,
+} from "./GoogleDriveBanner";
 import type { DocumentType } from "../types/document";
 import { getMindmap } from "../_mindmap/lib/api";
 import { openMindmapDocument } from "../_mindmap/lib/open";
@@ -359,6 +366,19 @@ export function DocumentViewer({
         },
         [narrow]
     );
+
+    /**
+     * The Google Drive line over a linkable document. It can be hidden — a
+     * choice remembered across documents, like the rail — and the header's
+     * Drive button brings it back, so nothing it offers is lost with it.
+     */
+    const driveDocumentId =
+        !isMindmap && typeof source.documentId === "number" && source.documentId > 0
+            ? source.documentId
+            : null;
+    const drive = useDriveLinkStatus(driveDocumentId);
+    const driveBarHidden = useDriveBarHidden();
+    const driveLink = drive.status?.link ?? null;
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
@@ -879,6 +899,26 @@ export function DocumentViewer({
                   },
               ]
             : []),
+        ...(drive.status?.linkable
+            ? [
+                  {
+                      id: "drive",
+                      label: driveBarHidden ? "Show Google Drive bar" : "Hide Google Drive bar",
+                      icon: <IconDrive size={14} />,
+                      onSelect: () => setDriveBarHidden(!driveBarHidden),
+                      iconOnly: true,
+                      tone: driveBarHidden ? undefined : ("on" as const),
+                      // Hidden, the line's one essential fact — how fresh this
+                      // copy is — still answers a hover.
+                      hint: driveBarHidden
+                          ? driveLink
+                              ? `${driveLinkSummary(driveLink)} — click to show the bar`
+                              : "Show the Google Drive bar"
+                          : "Hide the Google Drive bar",
+                      testId: "viewer-drive-toggle",
+                  },
+              ]
+            : []),
         {
             id: "delete",
             label: "Delete document",
@@ -978,11 +1018,20 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
-                    {!isMindmap &&
-                        typeof source.documentId === "number" &&
-                        source.documentId > 0 && (
-                            <GoogleDriveBanner documentId={source.documentId} />
-                        )}
+                    {driveDocumentId !== null && !driveBarHidden && (
+                        <GoogleDriveBanner
+                            documentId={driveDocumentId}
+                            status={drive.status}
+                            refresh={drive.refresh}
+                            onHide={() => {
+                                setDriveBarHidden(true);
+                                toast("Google Drive bar hidden", {
+                                    description:
+                                        "The Drive button at the top of the document brings it back.",
+                                });
+                            }}
+                        />
+                    )}
                     {viewingOld && (
                         <div
                             style={{

@@ -15,6 +15,7 @@ import { NextResponse } from "next/server";
 import { MissingSecretsKeyError, timingSafeStringEqual } from "@launchstack/store/crypto";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_BASE_URL,
     OPENROUTER_CALLBACK_PATH,
@@ -32,7 +33,7 @@ export const runtime = "nodejs";
 type Outcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 function backToSettings(request: Request, outcome: Outcome): NextResponse {
-    const url = new URL("/employer/documents", new URL(request.url).origin);
+    const url = new URL("/employer/documents", publicOrigin(request));
     url.searchParams.set("feature", "settings");
     url.searchParams.set("openrouter", outcome);
     url.hash = "models";

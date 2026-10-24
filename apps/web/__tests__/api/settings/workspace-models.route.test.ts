@@ -407,4 +407,68 @@ describe("Connect OpenRouter", () => {
         expect(outcome(response)).toBe("error");
         expect(mockStore.save).not.toHaveBeenCalled();
     });
+
+    describe("behind the proxy", () => {
+        /** What a route handler sees in the image: the bind address, whatever the Host says. */
+        const PROXIED = "https://0.0.0.0:3000";
+        const PUBLIC = "https://app.example.com";
+        const saved = process.env.BETTER_AUTH_URL;
+
+        beforeEach(() => {
+            process.env.BETTER_AUTH_URL = PUBLIC;
+        });
+        afterEach(() => {
+            if (saved === undefined) delete process.env.BETTER_AUTH_URL;
+            else process.env.BETTER_AUTH_URL = saved;
+        });
+
+        const proxied = (path: string, init?: RequestInit) =>
+            new Request(`${PROXIED}${path}`, {
+                ...init,
+                headers: { host: "app.example.com", ...init?.headers },
+            });
+        const location = (response: Response) => new URL(response.headers.get("location")!);
+
+        it("sends OpenRouter back to the public origin", async () => {
+            const response = await startOpenRouter(
+                proxied("/api/settings/models/workspace/openrouter")
+            );
+            expect(location(response).searchParams.get("callback_url")).toBe(
+                `${PUBLIC}/api/settings/models/workspace/openrouter/callback`
+            );
+            expect(response.cookies.get(OPENROUTER_COOKIE)!.secure).toBe(true);
+        });
+
+        it("says the server can't store keys on the public origin", async () => {
+            mockServerEnv.EMBEDDING_SECRETS_KEY = undefined;
+            try {
+                const response = await startOpenRouter(
+                    proxied("/api/settings/models/workspace/openrouter")
+                );
+                expect(location(response).origin).toBe(PUBLIC);
+            } finally {
+                mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
+            }
+        });
+
+        it("returns the admin to the public origin, not the bind address", async () => {
+            jest.spyOn(global, "fetch").mockResolvedValue(
+                new Response(JSON.stringify({ key: "openrouter-fixture-key" }), { status: 200 })
+            );
+            mockStore.row.mockResolvedValue(null);
+            const flow = encodeFlowCookie({ v: "v", s: "s", c: "5" });
+            const connected = await openRouterCallback(
+                proxied("/api/settings/models/workspace/openrouter/callback?code=abc&state=s", {
+                    headers: { cookie: `${OPENROUTER_COOKIE}=${flow}` },
+                })
+            );
+            expect(location(connected).origin).toBe(PUBLIC);
+            expect(outcome(connected)).toBe("connected");
+
+            const denied = await openRouterCallback(
+                proxied("/api/settings/models/workspace/openrouter/callback?state=s")
+            );
+            expect(location(denied).origin).toBe(PUBLIC);
+        });
+    });
 });

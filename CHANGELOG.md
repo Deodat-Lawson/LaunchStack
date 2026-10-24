@@ -155,6 +155,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Proposal exports now refuse to publish cited Source content to a wider
+  audience, before storing a file or starting ingestion. Restricted Sources
+  cannot be copied into workspace-visible Proposals, even when every current
+  member can read them. Equal or narrower restricted policies account for
+  nested folders, guests and explicit file grants; same-day re-exports check
+  the existing Source's actual access settings. Missing or foreign Source
+  provenance fails closed. Group/role membership coincidence is not treated
+  as a durable audience guarantee, and later ACL changes do not synchronize
+  previously exported copies.
 - A fresh checkout's `next dev --turbo` answered 500 on every route,
   `/api/auth/*` included, whenever Google Fonts served its extensionless
   `l/font?kit=…&skey=…` URLs, which Next 15.5 rejects; the same response failed

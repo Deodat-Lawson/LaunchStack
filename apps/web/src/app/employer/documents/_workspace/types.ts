@@ -856,12 +856,6 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
                 desc: "Import a vault — re-import to update",
             },
             {
-                id: "drive",
-                label: "Google Drive",
-                Icon: IconDrive,
-                desc: "Docs, Sheets, PDFs — kept in sync",
-            },
-            {
                 id: "slack",
                 label: "Slack",
                 Icon: IconSlack,

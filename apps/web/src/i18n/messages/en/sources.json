@@ -141,10 +141,6 @@
         "label": "Obsidian",
         "desc": "Import a vault — re-import to update"
       },
-      "drive": {
-        "label": "Google Drive",
-        "desc": "Docs, Sheets, PDFs — kept in sync"
-      },
       "slack": {
         "label": "Slack",
         "desc": "Mirror agent meetings to a channel"
@@ -163,7 +159,6 @@
       }
     },
     "mindmapAudienceNote": "This applies to the published copy, the one the workspace can cite.",
-    "driveFolderNote": "Files you pick one by one go here. A folder you import becomes a folder of its own, visible only to you until you share it.",
     "fixedDestination": {
       "gmail": "Gmail/your mailbox",
       "notion": "Notion/your workspace",
@@ -339,7 +334,6 @@
     "tagTitle": "Who can see it: {label}"
   },
   "driveConnect": {
-    "pickerTitle": "Pick files and folders to sync",
     "destination": {
       "inDrive": "In Google Drive",
       "inFolder": "In {path}",
@@ -352,30 +346,11 @@
       "two": "“{first}” and “{second}”",
       "more": "“{first}”, “{second}” and {count} more"
     },
-    "syncFailedAfterAdd": "Added, but the sync didn't start — try Sync now",
-    "pickedOne": "“{name}” added — syncing",
-    "pickedMany": "{count} items added — syncing",
-    "saveSelectionFailed": "Could not save the selection",
-    "notDriveLink": "That isn't a Google Drive link. In Drive, use Share › Copy link.",
-    "addLinkFailed": "Could not add that link",
-    "linkAddedWithMessage": "{message} Syncing now.",
-    "linkAdded": "Added. Syncing now.",
-    "pickerNotConfigured": "Picker is not configured — set NEXT_PUBLIC_GOOGLE_API_KEY and NEXT_PUBLIC_GOOGLE_APP_ID",
-    "noDriveAccess": "Could not get Drive access — try reconnecting",
-    "pickerFailed": "Google's picker didn't load — check your connection and try again",
     "syncRequested": "Sync requested",
     "syncStartFailed": "Could not start the sync",
-    "disconnected": "Google Drive disconnected — documents were kept",
-    "disconnectFailed": "Disconnect failed",
     "checking": "Checking Google Drive…",
-    "checkFailed": "Couldn’t check Google Drive just now.",
-    "notConfiguredTitle": "Google Drive is not configured on this server",
-    "notConfiguredBody": "Ask your operator to set <code>GOOGLE_OAUTH_CLIENT_ID</code>, <code>GOOGLE_OAUTH_CLIENT_SECRET</code> and the Picker keys — the steps are in <code>.env.example</code> under “Workspace connections”.",
     "reconnectTitle": "Reconnect Google Drive",
-    "connectTitle": "Connect Google Drive",
     "reconnectBody": "Google access was revoked or expired — connect again to resume syncing.",
-    "connectBodyFolders": "Pick files in Google's picker; only what you pick is shared. To import whole folders, allow folder access once connected.",
-    "connectBody": "Pick files in Google's picker; only what you pick is shared.",
     "allowTitle": "Allow folder access to import folders",
     "allowBody": "For now LaunchStack opens only the files you pick, so a picked folder brings nothing from inside it. Allow folder access to let LaunchStack read your Drive; then folders come in whole, subfolders and later additions included.",
     "allowButton": "Allow folder access",
@@ -385,21 +360,41 @@
     "emptyReady": "Nothing came in from {names} — Drive lists {count, plural, one {it} other {them}} as empty.",
     "emptyNoAccess": "Nothing came in from {names}: this connection can't see inside folders.",
     "accessLost": "{count} file(s) can no longer be opened — deleted, unshared, or (for files picked one by one) the grant is gone. Pick them again to refresh access.",
-    "pasteLinkLabel": "Paste a folder link",
-    "adding": "Adding…",
-    "addFolder": "Add folder",
-    "linkHintAccount": "Works for any folder {account} can open, including ones shared with it and shared drives.",
-    "linkHintThis": "Works for any folder this account can open, including ones shared with it and shared drives.",
     "syncedFromDrive": "SYNCED FROM DRIVE ({count})",
-    "nothingYet": "Nothing yet — choose files or folders to start syncing.",
+    "nothingYet": "Nothing yet — pick files or a folder from Google Drive in Add source.",
     "stopSyncingTitle": "Stop syncing (keeps imported documents)",
     "stopSyncingAria": "Stop syncing {name}",
-    "openingPicker": "Opening picker…",
-    "chooseInDrive": "Choose in Google Drive",
     "syncing": "Syncing…",
     "starting": "Starting…",
     "syncNow": "Sync now",
-    "disconnectConfirm": "Disconnect? Imported documents are kept."
+    "cardTitle": "Synced from Google Drive",
+    "notConnected": "Nothing syncs from Google Drive yet. Pick files from Drive in Add source › Files, or a folder in Add source › Folder, and they’re listed here."
+  },
+  "driveSource": {
+    "chooseFiles": "From Google Drive",
+    "chooseFolder": "From Google Drive",
+    "connect": "Connect Google Drive",
+    "reconnect": "Reconnect Google Drive",
+    "pickerTitleFiles": "Choose files from Google Drive",
+    "pickerTitleFolders": "Choose a folder from Google Drive",
+    "filesSync": "Files you pick from Google Drive stay in sync — edits made in Drive show up here.",
+    "folderSyncs": "A Drive folder comes in whole and stays in sync, files added to it later included.",
+    "folderNeedsAccess": "Google asks once to let LaunchStack read your Drive folders, then you pick one.",
+    "addedOne": "Adding “{name}” from Google Drive — it shows up in a moment and stays in sync.",
+    "addedMany": "Adding {count} files from Google Drive — they show up in a moment and stay in sync.",
+    "addedFolder": "Adding the folder “{name}” from Google Drive — it fills in over the next minute and stays in sync.",
+    "linkAdded": "Adding that folder from Google Drive — it fills in over the next minute and stays in sync.",
+    "addFailed": "Couldn’t add that from Google Drive",
+    "syncLater": "Added. The sync hasn’t started yet — it runs on its own shortly.",
+    "pickerNotConfigured": "Picker is not configured — set NEXT_PUBLIC_GOOGLE_API_KEY and NEXT_PUBLIC_GOOGLE_APP_ID",
+    "noDriveAccess": "Could not get Drive access — try reconnecting",
+    "pickerFailed": "Google's picker didn't load — check your connection and try again",
+    "notDriveLink": "That isn't a Google Drive link. In Drive, use Share › Copy link.",
+    "pasteLinkLabel": "Or paste a Drive folder link",
+    "adding": "Adding…",
+    "addFolder": "Add folder",
+    "linkHintAccount": "Works for any folder {account} can open, including ones shared with it and shared drives.",
+    "linkHintThis": "Works for any folder this account can open, including ones shared with it and shared drives."
   },
   "gmailConnect": {
     "labelsLoadFailed": "Could not load your labels — try reconnecting Gmail.",

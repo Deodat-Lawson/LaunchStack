@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_google_drive_picked_item" ADD COLUMN "destination" varchar(256);

@@ -41,7 +41,7 @@ export async function resolveDriveLink(
             ok: false,
             reason: "not-a-link",
             message: "That isn't a Google Drive link. In Drive, use Share › Copy link.",
-            copy: { key: "sources.driveConnect.notDriveLink" },
+            copy: { key: "sources.driveSource.notDriveLink" },
         };
     }
     if (!grantsFolderAccess(connection.scopes)) {

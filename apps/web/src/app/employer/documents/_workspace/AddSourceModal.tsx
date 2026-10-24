@@ -25,8 +25,14 @@ import { cn } from "~/lib/utils";
 import { AddDestinationBar } from "./AddDestinationBar";
 import { planFolderUpload, type AudienceSummary } from "./addDestination";
 import { ADD_TABS, SOURCE_META, type AddSourceTab, type ItemAccessView } from "./types";
-import { DriveConnectPanel } from "./DriveConnectPanel";
-import type { FolderAccessState } from "./driveStatus";
+import {
+    DriveFilesButton,
+    DriveFolderButton,
+    DriveFolderHint,
+    DriveFolderLinkForm,
+    drivePickShown,
+} from "./DriveSource";
+import { useDriveSource } from "./useDriveSource";
 import { GmailConnectPanel } from "./GmailConnectPanel";
 import { NotionConnectPanel } from "./NotionConnectPanel";
 import { ObsidianImportPanel } from "./ObsidianImportPanel";
@@ -70,12 +76,16 @@ import type { IconProps } from "~/components/icons/types";
  * the right panel hosts the active tab. Above every tab's content sits the
  * destination bar (`AddDestinationBar`): the folder it goes to and who will
  * be able to open it, so neither is a surprise after the upload. Tabs that
- * always file in one place (Drive, Coding sessions, Gmail) show that place;
+ * always file in one place (Coding sessions, Gmail) show that place;
  * connectors that add nothing to a folder show no bar.
  *
  * Backend integration is kept unchanged:
  *   - Files / Audio / Video: `/api/storage/upload` → `/api/uploadDocument`
  *   - Folder: same as above, fanned out across the picked files
+ *   - Google Drive is not a tab: Files picks Drive files and Folder picks a
+ *     Drive folder (DriveSource), posted to `/api/connectors/google-drive/
+ *     items` with the destination folder; they land there and stay in sync.
+ *     Managing what syncs is Settings → Integrations.
  *   - Paste: wraps the text in a `.md` File and runs the file path
  *   - URL: `/api/upload/website`
  *   - YouTube: `/api/upload/video-url`
@@ -86,7 +96,7 @@ import type { IconProps } from "~/components/icons/types";
  *     Drive and opens it in a new tab; the source exists here immediately and
  *     the Drive reconciler folds later edits back in. The tab is hidden unless
  *     `/api/connectors/google` reports the feature enabled.
- *   - Connectors: Drive/Slack/GitHub/Notion start the workspace OAuth flow at
+ *   - Connectors: Slack/GitHub/Notion start the workspace OAuth flow at
  *     `/api/connectors/<provider>/oauth/start`. Notion has its own panel
  *     (NotionConnectPanel): the pages picked on Notion's consent screen sync
  *     into `Notion/<workspace>`. Gmail has its own panel
@@ -126,8 +136,8 @@ export interface AddSourceModalProps {
     onCreateFolder?: (name: string) => void | Promise<string | null | void>;
     /**
      * Tab to open on. Set when the caller already knows what the user picked —
-     * the Knowledge pane's connector strip opens straight onto Slack or Drive
-     * rather than dropping them on Files first.
+     * a connector's OAuth return reopens its own tab rather than dropping them
+     * on Files first.
      */
     initialTab?: string;
     /** Prefill for the URL tab — "paste to create a source" with a link on the clipboard. */
@@ -263,9 +273,19 @@ const PICKS_FOLDER = new Set([
     "artifact",
 ]);
 
+/**
+ * Tab ids that moved. Google Drive was a Connect tab; a link to it (a
+ * bookmark, an old reconnect link) opens Files, where Drive is picked now.
+ */
+const TAB_ALIASES: Record<string, string> = { drive: "files" };
+
+function openingTab(initialTab: string | undefined): string {
+    if (!initialTab) return "files";
+    return Object.hasOwn(TAB_ALIASES, initialTab) ? TAB_ALIASES[initialTab]! : initialTab;
+}
+
 /** Connectors that file everything in one folder of their own. */
 const FIXED_DESTINATIONS: Record<string, string> = {
-    drive: "Google Drive",
     // The connector files every session here (AGENT_SESSIONS_CATEGORY).
     "agent-sessions": "Agent Sessions",
 };
@@ -302,7 +322,6 @@ const TAB_KEYS = {
     gmail: "gmail",
     notion: "notion",
     obsidian: "obsidian",
-    drive: "drive",
     slack: "slack",
     github: "github",
     "agent-sessions": "agentSessions",
@@ -354,18 +373,17 @@ export function AddSourceModal({
 }: AddSourceModalProps) {
     const t = useTranslations("sources.addSourceModal");
     const tc = useTranslations("common");
-    const [tab, setTab] = useState<string>(initialTab ?? "files");
+    const [tab, setTab] = useState<string>(openingTab(initialTab));
     const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
     /** The Folder tab's new folder, made inside `folder`; null until one is picked. */
     const [folderChild, setFolderChild] = useState<string | null>(null);
     const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
-    const [driveFolderAccess, setDriveFolderAccess] = useState<FolderAccessState | null>(null);
     const shellRef = useRef<HTMLDivElement>(null);
     const known = useMemo(() => knownFolders ?? folders, [knownFolders, folders]);
     useEffect(() => {
         if (!open) return;
         setFolder(defaultCategory || "Unfiled");
-        setTab(initialTab ?? "files");
+        setTab(openingTab(initialTab));
     }, [open, defaultCategory, initialTab]);
 
     useEffect(() => {
@@ -430,6 +448,7 @@ export function AddSourceModal({
                 userId={userId}
                 category={folder}
                 onUploaded={handleUploaded}
+                onSynced={onUploaded}
             />
         );
     } else if (tab === "folder") {
@@ -439,6 +458,7 @@ export function AddSourceModal({
                 destination={folder}
                 onNameChange={setFolderChild}
                 onUploaded={handleUploaded}
+                onSynced={onUploaded}
             />
         );
     } else if (tab === "audio" || tab === "video") {
@@ -465,8 +485,6 @@ export function AddSourceModal({
         );
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
-    } else if (tab === "drive") {
-        panel = <DriveConnectPanel tab={active} onFolderAccess={setDriveFolderAccess} />;
     } else if (tab === "gmail") {
         panel = <GmailConnectPanel tab={active} />;
     } else if (tab === "notion") {
@@ -532,19 +550,7 @@ export function AddSourceModal({
         );
     } else if (FIXED_DESTINATIONS[active.id]) {
         destination = (
-            <AddDestinationBar
-                mode="fixed"
-                value={FIXED_DESTINATIONS[active.id]!}
-                audienceNote={
-                    // A picked Drive folder doesn't land in "Google Drive"
-                    // (server/…/google-drive/destinations.ts) — said only while
-                    // folder import works; drive.file alone imports nothing from one.
-                    active.id === "drive" && driveFolderAccess === "ready"
-                        ? t("driveFolderNote")
-                        : undefined
-                }
-                {...barProps}
-            />
+            <AddDestinationBar mode="fixed" value={FIXED_DESTINATIONS[active.id]!} {...barProps} />
         );
     } else if (active.id === "gmail") {
         destination = (
@@ -576,7 +582,7 @@ export function AddSourceModal({
     }
 
     return (
-        // Not the kit Dialog on purpose: Drive's tab opens Google's Picker, an
+        // Not the kit Dialog on purpose: Files and Folder open Google's Picker, an
         // iframe Google appends to <body>, and a Radix modal would make it
         // unclickable (pointer-events: none outside the content) and pull
         // focus back out of it.
@@ -968,6 +974,8 @@ interface FilesPanelProps {
     userId: string | null;
     category: string;
     onUploaded: () => void;
+    /** Files from Google Drive land seconds after the dialog closes: refresh the list then. */
+    onSynced?: () => void;
 }
 
 /** The server's per-file cap (upload-local), checked before the bytes leave. */
@@ -989,7 +997,43 @@ const KIND_ICON: Record<FilesPanelProps["kind"], ComponentType<IconProps>> = {
     video: SOURCE_META.video.Icon,
 };
 
-function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
+/**
+ * "Browse files", and beside it Google Drive (DriveSource): picked Drive
+ * files go to the same folder and stay in sync. Its own component so the
+ * Drive status is only asked for on the Files tab.
+ */
+function BrowseOrDrive({
+    busy,
+    onBrowse,
+    destination,
+    onDriveAdded,
+    onDriveSynced,
+}: {
+    busy: boolean;
+    onBrowse: () => void;
+    destination: string;
+    onDriveAdded: () => void;
+    onDriveSynced?: () => void;
+}) {
+    const t = useTranslations("sources.addSourceModal");
+    const td = useTranslations("sources.driveSource");
+    const drive = useDriveSource({ onSynced: onDriveSynced });
+    return (
+        <>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+                <Button type="button" onClick={onBrowse} disabled={busy}>
+                    {t("files.files.browse")}
+                </Button>
+                <DriveFilesButton drive={drive} destination={destination} onAdded={onDriveAdded} />
+            </div>
+            {drivePickShown(drive.state) && (
+                <p className="text-ink-3 mt-3 text-xs">{td("filesSync")}</p>
+            )}
+        </>
+    );
+}
+
+function FilesPanel({ kind, userId, category, onUploaded, onSynced }: FilesPanelProps) {
     const t = useTranslations("sources.addSourceModal");
     const tc = useTranslations("common");
     const tu = useTranslations("sources.sourceUpload");
@@ -1116,22 +1160,19 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                 <div style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 16 }}>
                     {t(`files.${kind}.hint`, { max })}
                 </div>
-                <button
-                    onClick={() => inputRef.current?.click()}
-                    disabled={busy}
-                    style={{
-                        background: "var(--accent)",
-                        color: "white",
-                        padding: "8px 16px",
-                        borderRadius: 8,
-                        fontSize: 13,
-                        fontWeight: 600,
-                        opacity: busy ? 0.6 : 1,
-                        cursor: busy ? "not-allowed" : "pointer",
-                    }}
-                >
-                    {t(`files.${kind}.browse`)}
-                </button>
+                {kind === "files" ? (
+                    <BrowseOrDrive
+                        busy={busy}
+                        onBrowse={() => inputRef.current?.click()}
+                        destination={category}
+                        onDriveAdded={onUploaded}
+                        onDriveSynced={onSynced}
+                    />
+                ) : (
+                    <Button type="button" onClick={() => inputRef.current?.click()} disabled={busy}>
+                        {t(`files.${kind}.browse`)}
+                    </Button>
+                )}
                 <input
                     ref={inputRef}
                     type="file"
@@ -1281,6 +1322,8 @@ interface FolderPanelProps {
     /** The new folder's name as it stands, or null — the destination bar shows it after `destination`. */
     onNameChange: (name: string | null) => void;
     onUploaded: () => void;
+    /** A Drive folder lands seconds after the dialog closes: refresh the list then. */
+    onSynced?: () => void;
 }
 
 interface PickedFolder {
@@ -1294,7 +1337,13 @@ function relativePathOf(file: File): string {
     return (file as File & { webkitRelativePath?: string }).webkitRelativePath || file.name;
 }
 
-function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPanelProps) {
+function FolderPanel({
+    userId,
+    destination,
+    onNameChange,
+    onUploaded,
+    onSynced,
+}: FolderPanelProps) {
     const t = useTranslations("sources.addSourceModal");
     const ts = useTranslations("sources");
     const tc = useTranslations("common");
@@ -1306,6 +1355,7 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
     const [busy, setBusy] = useState(false);
     const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const drive = useDriveSource({ onSynced });
 
     // The bar above shows "<destination> › <name>  New folder" while a folder is picked.
     useEffect(() => {
@@ -1391,29 +1441,40 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
 
     if (!picked) {
         return (
-            <div className="border-line bg-line-2 rounded-xl border-[1.5px] border-dashed px-6 py-10 text-center">
-                <div className="border-line bg-panel text-brand mb-3 inline-flex size-11 items-center justify-center rounded-xl border">
-                    <IconFolder size={20} />
+            <div>
+                <div className="border-line bg-line-2 rounded-xl border-[1.5px] border-dashed px-6 py-10 text-center">
+                    <div className="border-line bg-panel text-brand mb-3 inline-flex size-11 items-center justify-center rounded-xl border">
+                        <IconFolder size={20} />
+                    </div>
+                    <div className="text-ink mb-1 text-[15px] font-semibold">
+                        {t("folder.pickTitle")}
+                    </div>
+                    <p className="text-ink-3 mx-auto mb-4 max-w-[360px] text-[13px]">
+                        {t("folder.pickIntro")}
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                        <Button type="button" onClick={() => inputRef.current?.click()}>
+                            {t("folder.choose")}
+                        </Button>
+                        <DriveFolderButton
+                            drive={drive}
+                            destination={destination}
+                            onAdded={onUploaded}
+                        />
+                    </div>
+                    <DriveFolderHint drive={drive} />
+                    <input
+                        ref={inputRef}
+                        type="file"
+                        // @ts-expect-error — `webkitdirectory` is a non-standard HTMLInputElement attribute
+                        webkitdirectory=""
+                        directory=""
+                        multiple
+                        className="hidden"
+                        onChange={e => onFolderPicked(e.target.files)}
+                    />
                 </div>
-                <div className="text-ink mb-1 text-[15px] font-semibold">
-                    {t("folder.pickTitle")}
-                </div>
-                <p className="text-ink-3 mx-auto mb-4 max-w-[360px] text-[13px]">
-                    {t("folder.pickIntro")}
-                </p>
-                <Button type="button" onClick={() => inputRef.current?.click()}>
-                    {t("folder.choose")}
-                </Button>
-                <input
-                    ref={inputRef}
-                    type="file"
-                    // @ts-expect-error — `webkitdirectory` is a non-standard HTMLInputElement attribute
-                    webkitdirectory=""
-                    directory=""
-                    multiple
-                    className="hidden"
-                    onChange={e => onFolderPicked(e.target.files)}
-                />
+                <DriveFolderLinkForm drive={drive} destination={destination} onAdded={onUploaded} />
             </div>
         );
     }
@@ -1916,7 +1977,7 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
 // ---------------------------------------------------------------------------
 // Connect panel. Slack / GitHub connect via workspace OAuth (management role
 // required, tokens live server-side only); the rest are coming-soon CTAs.
-// Drive, Gmail and Notion have panels of their own.
+// Gmail and Notion have panels of their own; Drive is picked from Files.
 // ---------------------------------------------------------------------------
 
 interface ConnectPanelProps {
@@ -1925,8 +1986,8 @@ interface ConnectPanelProps {
 
 /**
  * Tab id → connector provider for the providers this generic panel serves.
- * Drive and Notion have their own panels (DriveConnectPanel,
- * NotionConnectPanel) with sync controls, so they are deliberately absent.
+ * Notion has its own panel (NotionConnectPanel) with sync controls, and
+ * Drive is picked from the Files and Folder tabs, so both are absent.
  */
 const CONNECTABLE_PROVIDERS: Record<string, string> = {
     slack: "slack",

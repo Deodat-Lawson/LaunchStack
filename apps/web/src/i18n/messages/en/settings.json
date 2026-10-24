@@ -535,7 +535,7 @@
     "removing": "Removing…",
     "listSeparator": ", ",
     "drive": {
-      "description": "Link PDFs and Word documents to Google Drive so they can be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs. Settled edits sync back as document versions.",
+      "description": "Files and folders picked from Google Drive in Add source stay in sync; what syncs is listed here. Linking also lets PDFs and Word documents be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs — and settled edits sync back as document versions.",
       "actions": "Google Drive actions",
       "connectMenu": "Connect Google Drive…",
       "linking": "Drive linking",

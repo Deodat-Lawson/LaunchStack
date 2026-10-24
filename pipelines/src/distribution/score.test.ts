@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { computeFit, deriveRiskFlags, templateRationale } from "./score";
+import {
+    IRRELEVANT_CEILING,
+    computeFit,
+    deriveRiskFlags,
+    templateRationale,
+    topicRelevance,
+} from "./score";
 import type { Dossier, PartnerOrgRecord, ProgramRecord } from "./types";
 
 const program: ProgramRecord = {
@@ -231,6 +237,62 @@ describe("computeFit", () => {
         });
         expect(fit.total).toBeLessThanOrEqual(100);
         expect(fit.total).toBeGreaterThanOrEqual(0);
+    });
+});
+
+describe("relevance gates the score", () => {
+    // A readable website in the right country with fresh evidence used to
+    // reach ~40-45 with zero topic overlap and sit among real prospects.
+    const offTopic = org({
+        name: "Mango",
+        domain: "trymango.example",
+        roles: [],
+        categories: ["B2B", "Productivity"],
+        description: "AI meeting notes for remote teams",
+    });
+
+    it("caps a company with nothing in common with the segment well below the threshold", () => {
+        const fit = computeFit({
+            program,
+            org: offTopic,
+            kind: "importer",
+            territory: { country: "DE" },
+            dossier: null,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            now,
+        });
+        expect(fit.categoryOverlap).toBe(0);
+        expect(fit.total).toBeLessThanOrEqual(IRRELEVANT_CEILING);
+        expect(
+            deriveRiskFlags({
+                dossier: null,
+                breakdown: fit,
+                evidenceCount: 12,
+                budgetExhausted: false,
+            })
+        ).toContain("nothing in common with what you sell");
+    });
+
+    it("leaves relevant companies uncapped", () => {
+        const fit = computeFit({
+            program,
+            org: org(),
+            kind: "importer",
+            territory: { country: "DE" },
+            dossier,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            now,
+        });
+        expect(fit.total).toBeGreaterThan(IRRELEVANT_CEILING);
+    });
+
+    it("measures relevance from the company's own words", () => {
+        expect(topicRelevance(program, ["Mango", "AI meeting notes"])).toBe(0);
+        expect(topicRelevance(program, ["Specialty coffee importer"])).toBeGreaterThan(0);
     });
 });
 

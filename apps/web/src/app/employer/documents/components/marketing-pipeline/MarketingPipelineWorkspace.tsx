@@ -29,6 +29,7 @@ import {
     Target,
     X,
 } from "lucide-react";
+import { cn } from "~/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
@@ -48,6 +49,7 @@ import {
     type PlatformMeta,
     type ThinkingEntry,
 } from "./shared";
+import { ClaimGateDialog, SUPPORT_TONE, claimVerdict } from "./ClaimGate";
 import { useMarketingPipelineController } from "./useMarketingPipelineController";
 
 export interface MarketingPipelineWorkspaceProps {
@@ -709,13 +711,31 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
     );
 }
 
-function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
+/**
+ * Each claim with its verdict: stated in a document, contradicted by one,
+ * not stated, or not checked. It used to show a similarity percentage and a
+ * green tick for anything similar, which read as "verified" and was not.
+ */
+function ClaimSourcesPanel({
+    claims,
+    unavailable,
+}: {
+    claims: ClaimSourceUI[];
+    unavailable?: boolean;
+}) {
     const t = useTranslations("growth.marketingPipeline.claims");
     const [open, setOpen] = useState(false);
 
+    if (unavailable) {
+        return (
+            <div className="bg-warn-soft text-ink-2 rounded-md p-3 text-[0.8125rem]">
+                {t("unavailable")}
+            </div>
+        );
+    }
     if (claims.length === 0) return null;
 
-    const sourced = claims.filter(c => c.match !== null);
+    const supported = claims.filter(c => c.support === "supported");
 
     return (
         <div className={styles.strategyCard}>
@@ -725,54 +745,32 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                 onClick={() => setOpen(prev => !prev)}
             >
                 <FileText size={14} />
-                <span>{t("title", { sourced: sourced.length, total: claims.length })}</span>
+                <span>{t("title", { supported: supported.length, total: claims.length })}</span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {open && (
                 <div className={styles.strategyContent}>
+                    <p className="text-ink-3 mb-2 text-xs">{t("explainer")}</p>
                     {claims.map((claim, i) => (
                         <div
                             key={i}
-                            style={{
-                                marginBottom: "0.5rem",
-                                padding: "0.5rem",
-                                borderRadius: "0.375rem",
-                                background: claim.match
-                                    ? "var(--success-soft)"
-                                    : "var(--warn-soft)",
-                                fontSize: "0.8125rem",
-                            }}
+                            className={cn(
+                                "mb-2 rounded-md p-2 text-[0.8125rem]",
+                                SUPPORT_TONE[claim.support]
+                            )}
                         >
-                            <div style={{ fontWeight: 600, marginBottom: "0.125rem" }}>
-                                {claim.match ? "✓" : "?"} {claim.claim}
+                            <div className="mb-0.5 font-semibold">{claim.claim}</div>
+                            <div className="text-ink-3">
+                                {claimVerdict(t, {
+                                    support: claim.support,
+                                    sourceDoc: claim.match?.sourceDoc ?? null,
+                                })}
                             </div>
-                            <div style={{ color: "var(--ink-3)" }}>
-                                {claim.match ? (
-                                    <>
-                                        {t("source", { doc: claim.match.sourceDoc })}
-                                        {claim.match.relevance != null && (
-                                            <span style={{ marginLeft: "0.5rem" }}>
-                                                {t("relevance", {
-                                                    pct: Math.round(claim.match.relevance * 100),
-                                                })}
-                                            </span>
-                                        )}
-                                    </>
-                                ) : claim.error ? (
-                                    t("lookupFailed")
-                                ) : (
-                                    t("noMatch")
-                                )}
-                            </div>
+                            {claim.reason && (
+                                <div className="text-ink-3 mt-1 text-xs">{claim.reason}</div>
+                            )}
                             {claim.match?.excerpt && (
-                                <div
-                                    style={{
-                                        marginTop: "0.25rem",
-                                        fontStyle: "italic",
-                                        color: "var(--ink-3)",
-                                        fontSize: "0.75rem",
-                                    }}
-                                >
+                                <div className="text-ink-3 mt-1 text-xs italic">
                                     &ldquo;{claim.match.excerpt}&rdquo;
                                 </div>
                             )}
@@ -1268,6 +1266,9 @@ export function MarketingPipelineWorkspace({
         publishing,
         publishResult,
         publishPost,
+        claimGate,
+        confirmClaimGate,
+        dismissClaimGate,
         evaluating,
         evalResult,
         evalError,
@@ -1311,6 +1312,11 @@ export function MarketingPipelineWorkspace({
             className={embedded ? styles.embeddedRoot : undefined}
             style={embedded ? undefined : { display: "contents" }}
         >
+            <ClaimGateDialog
+                gate={claimGate}
+                onConfirm={() => void confirmClaimGate()}
+                onCancel={dismissClaimGate}
+            />
             {!embedded && (
                 <div className={styles.pageHeaderRow}>
                     <div className={styles.pageTitleIcon}>
@@ -2068,7 +2074,7 @@ export function MarketingPipelineWorkspace({
                                                         side="right"
                                                         className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
                                                     >
-                                                        <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
+                                                        <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
                                                             <SheetTitle className="text-lg font-semibold">
                                                                 {t("workspace.refineTitle")}
                                                             </SheetTitle>
@@ -2112,12 +2118,13 @@ export function MarketingPipelineWorkspace({
                                                     />
                                                 )}
 
-                                                {result.claimSources &&
-                                                    result.claimSources.length > 0 && (
-                                                        <ClaimSourcesPanel
-                                                            claims={result.claimSources}
-                                                        />
-                                                    )}
+                                                {(result.claimCheckUnavailable === true ||
+                                                    (result.claimSources?.length ?? 0) > 0) && (
+                                                    <ClaimSourcesPanel
+                                                        claims={result.claimSources ?? []}
+                                                        unavailable={result.claimCheckUnavailable}
+                                                    />
+                                                )}
 
                                                 {showDnaDebugSection && result.dnaDebug && (
                                                     <div

@@ -606,7 +606,7 @@
     },
     "campaigns": {
       "title": "营销活动",
-      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断都可追溯到来源。可以直接在这里发布，也可以排到日历上。"
+      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断在发出前都会对照你的文档核对。可以直接在这里发布，也可以排到日历上。"
     },
     "accounts": {
       "title": "账号",
@@ -772,7 +772,7 @@
       "checkingPerformance": "检查历史表现",
       "buildingStrategy": "制定传播策略",
       "generatingContent": "生成内容变体",
-      "verifyingClaims": "核验论断来源"
+      "verifyingClaims": "对照你的文档核对论断"
     },
     "stepper": {
       "completedIn": "用时 {seconds} 秒完成",
@@ -818,11 +818,18 @@
       "performance": "表现洞察"
     },
     "claims": {
-      "title": "论断来源（{sourced}/{total} 条有来源）",
-      "source": "来源：{doc}",
-      "relevance": "（相关度 {pct}%）",
-      "lookupFailed": "来源查找失败——请人工核查",
-      "noMatch": "知识库中未找到匹配的来源"
+      "title": "已对照你的文档核对论断（{supported}/{total} 条有依据）",
+      "explainer": "“有依据”表示你的文档中有段落明确陈述了该论断。文档未涉及的论断无从判断，请自行核实。",
+      "supported": "见于 {doc}",
+      "contradicted": "你的文档说法不同（{doc}）",
+      "unsupported": "你的文档中没有这样的陈述",
+      "unchecked": "无法核对——请自行检查",
+      "unavailable": "这篇帖子中的论断未能核对。发布前请自行检查。",
+      "gateTitle": "{count, plural, other {# 条论断}}没有文档依据",
+      "gateBody": "以公司名义发布之前，请核实：{claims}",
+      "gateBodyUnavailable": "论断核对未能运行，因此还没有人对照你的文档检查过这篇帖子中的论断。",
+      "gateConfirm": "仍然发布",
+      "gateCancel": "返回修改"
     },
     "tones": {
       "conversational": "口语化",

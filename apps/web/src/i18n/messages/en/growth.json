@@ -606,7 +606,7 @@
     },
     "campaigns": {
       "title": "Campaigns",
-      "sub": "Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
+      "sub": "Drafts grounded in your documents: angles, brand voice, persona, and every claim checked against your documents before it goes out. Publish from here or schedule it on the calendar."
     },
     "accounts": {
       "title": "Accounts",
@@ -772,7 +772,7 @@
       "checkingPerformance": "Checking performance history",
       "buildingStrategy": "Building messaging strategies",
       "generatingContent": "Generating content variants",
-      "verifyingClaims": "Verifying claim sources"
+      "verifyingClaims": "Checking claims against your documents"
     },
     "stepper": {
       "completedIn": "Completed in {seconds}s",
@@ -818,11 +818,18 @@
       "performance": "Performance insights"
     },
     "claims": {
-      "title": "Claim sources ({sourced}/{total} sourced)",
-      "source": "Source: {doc}",
-      "relevance": "({pct}% relevance)",
-      "lookupFailed": "Source lookup failed — review manually",
-      "noMatch": "No matching source found in the knowledge base"
+      "title": "Claims checked against your documents ({supported}/{total} supported)",
+      "explainer": "Supported means a passage in your documents states the claim. It says nothing about claims your documents don't cover — check those yourself.",
+      "supported": "Stated in {doc}",
+      "contradicted": "Your documents say otherwise ({doc})",
+      "unsupported": "Not stated in your documents",
+      "unchecked": "Couldn't be checked — review it yourself",
+      "unavailable": "The claims in this post couldn't be checked. Review them yourself before posting.",
+      "gateTitle": "{count, plural, one {# claim isn't} other {# claims aren't}} backed by your documents",
+      "gateBody": "Before this goes out as the company, check: {claims}",
+      "gateBodyUnavailable": "The claim check couldn't run, so nobody has checked this post's claims against your documents.",
+      "gateConfirm": "Post anyway",
+      "gateCancel": "Go back and edit"
     },
     "tones": {
       "conversational": "Conversational",

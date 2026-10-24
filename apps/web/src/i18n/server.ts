@@ -18,6 +18,18 @@ export async function getRequestLocale(): Promise<Locale> {
     });
 }
 
+/**
+ * The language of the person behind `request`, from its own headers — for a
+ * route handler that has the request in hand (and for its tests, which have
+ * no Next request scope).
+ */
+export function localeOfRequest(request: Request): Locale {
+    return resolveLocale({
+        cookieHeader: request.headers.get("cookie"),
+        acceptLanguage: request.headers.get("accept-language"),
+    });
+}
+
 /** The browser's IANA zone, once ./TimeZoneSync has written it. */
 export async function getRequestTimeZone(): Promise<string | undefined> {
     const raw = (await cookies()).get(TIME_ZONE_COOKIE)?.value;

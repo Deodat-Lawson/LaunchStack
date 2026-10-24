@@ -81,6 +81,7 @@ import {
     resolveChatAgent,
 } from "~/server/collab/chat-agent";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -1171,6 +1172,10 @@ export async function POST(request: Request) {
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
             }
             if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
+            // Answer in the language the person reads the app in, unless they
+            // write in another one (src/i18n/server.ts).
+            const replyLanguage = replyLanguageInstruction(localeOfRequest(request));
+            if (replyLanguage) systemPrompt += `\n\n${replyLanguage}`;
 
             const passageBlock = passageSection ? `${passageSection}\n\n` : "";
             const documentContent =

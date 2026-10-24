@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
                             skipped.push({ relationshipId, reason: "not found in this program" });
                             continue;
                         }
-                        if (["contracted", "active", "declined"].includes(relationship.stage)) {
+                        if (relationship.stage === "won" || relationship.stage === "lost") {
                             skipped.push({
                                 relationshipId,
                                 reason: `stage is ${relationship.stage}`,

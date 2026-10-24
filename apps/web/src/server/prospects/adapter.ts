@@ -3,15 +3,23 @@
  * records (programs, partner organisations, relationships, evidence, runs) to
  * the Prospects contract in `~/app/employer/tools/growth/prospects/api`.
  *
- * This is the bridge until the pipeline reframe lands. It never invents data
+ * Stages are stored in the funnel's own words (lead … won, lost, nurture),
+ * so a deal's stage passes straight through. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
  * sources are the three the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
  */
 import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
-import { ALLOWED_TRANSITIONS, stageRequirements } from "@launchstack/pipelines/distribution/stages";
 import {
+    ALLOWED_TRANSITIONS,
+    IN_MOTION_STAGES,
+    STAGE_ORDER,
+    stageRequirements,
+} from "@launchstack/pipelines/distribution/stages";
+import {
+    RELATIONSHIP_STAGES,
     RUN_STATUSES,
+    TERMINAL_STAGES,
     type EvidenceRecord,
     type PartnerOrgRecord,
     type ProgramRecord,
@@ -51,31 +59,15 @@ const DAY = 86_400_000;
 
 // ── Stages ────────────────────────────────────────────────────────────────
 
-export const SALES_STAGES: SalesStage[] = [
-    "lead",
-    "qualified",
-    "contacted",
-    "meeting",
-    "proposal",
-    "negotiating",
-    "won",
-    "lost",
-    "nurture",
-];
+/** The stored stages are the sales stages; this fails to compile if they drift apart. */
+const SAME_VOCABULARY: [SalesStage] extends [RelationshipStage]
+    ? [RelationshipStage] extends [SalesStage]
+        ? true
+        : never
+    : never = true;
+void SAME_VOCABULARY;
 
-/** The pipeline's ten relationship stages folded onto the sales funnel. */
-export const SALES_OF: Record<RelationshipStage, SalesStage> = {
-    candidate: "lead",
-    researched: "lead",
-    qualified: "qualified",
-    contacted: "contacted",
-    in_conversation: "meeting",
-    negotiating: "negotiating",
-    contracted: "won",
-    active: "won",
-    declined: "lost",
-    dormant: "nurture",
-};
+export const SALES_STAGES: SalesStage[] = [...RELATIONSHIP_STAGES];
 
 const STAGE_WORD: Record<SalesStage, string> = {
     lead: "Lead",
@@ -89,43 +81,13 @@ const STAGE_WORD: Record<SalesStage, string> = {
     nurture: "Nurture",
 };
 
-const IN_MOTION = new Set<SalesStage>(["contacted", "meeting", "proposal", "negotiating"]);
-
-/** Which relationship stage a sales-stage move lands on, from where the deal is now. */
-export function relationshipTarget(
-    current: RelationshipStage,
-    to: SalesStage
-): RelationshipStage | null {
-    switch (to) {
-        case "lead":
-            return (
-                (["researched", "candidate"] as const).find(s =>
-                    ALLOWED_TRANSITIONS[current].includes(s)
-                ) ?? null
-            );
-        case "qualified":
-            return "qualified";
-        case "contacted":
-            return "contacted";
-        case "meeting":
-            return "in_conversation";
-        case "negotiating":
-            return "negotiating";
-        case "won":
-            return "contracted";
-        case "lost":
-            return "declined";
-        case "nurture":
-            return "dormant";
-        case "proposal":
-            return null;
-    }
-}
+const IN_MOTION = new Set<SalesStage>(IN_MOTION_STAGES);
 
 export const REQUIREMENT_WORDS: Record<string, string> = {
     owner_required: "Needs an owner",
     next_action_required: "Needs a next step",
     agreement_required: "Needs an agreement recorded in Distribution",
+    stage_changed_concurrently: "Someone else moved this deal just now",
 };
 
 export function moveReason(
@@ -133,20 +95,21 @@ export function moveReason(
     hasAgreement: boolean,
     to: SalesStage
 ): string | null {
-    const current = SALES_OF[rel.stage];
+    const current = rel.stage;
     if (to === current) return "Current stage";
-    if (to === "proposal") return "Not a stage in this workspace yet";
-    const target = relationshipTarget(rel.stage, to);
-    if (!target || !ALLOWED_TRANSITIONS[rel.stage].includes(target)) {
+    if (!ALLOWED_TRANSITIONS[current].includes(to)) {
         if (current === "won") return "Won deals stay won";
-        const nextForward = ALLOWED_TRANSITIONS[rel.stage]
-            .map(s => SALES_OF[s])
-            .find(s => s !== current && s !== "lost" && s !== "nurture");
+        const rank = STAGE_ORDER.indexOf(current);
+        if (rank >= 0 && STAGE_ORDER.includes(to) && STAGE_ORDER.indexOf(to) < rank)
+            return "Move back one stage at a time";
+        const nextForward = ALLOWED_TRANSITIONS[current].find(
+            s => STAGE_ORDER.indexOf(s) > rank && !TERMINAL_STAGES.has(s)
+        );
         return nextForward
             ? `Move to ${STAGE_WORD[nextForward]} first`
             : `Not available from ${STAGE_WORD[current]}`;
     }
-    const missing = stageRequirements(target, {
+    const missing = stageRequirements(to, {
         ownerUserId: rel.ownerUserId,
         nextAction: rel.nextAction,
         hasAgreement,
@@ -208,7 +171,7 @@ export function isExcluded(
     rel: Pick<RelationshipRecord, "stage">,
     excludedDomains: ReadonlySet<string>
 ): boolean {
-    return rel.stage === "declined" && org.domain !== null && excludedDomains.has(org.domain);
+    return rel.stage === "lost" && org.domain !== null && excludedDomains.has(org.domain);
 }
 
 // ── Evidence and claims ───────────────────────────────────────────────────
@@ -436,7 +399,7 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         why: whyOf(item),
         fit: rel.fitScore,
         fitThreshold: FIT_THRESHOLD,
-        stage: SALES_OF[rel.stage],
+        stage: rel.stage,
         staleDays: staleDays(item, ctx.now),
         people,
         lastActivityAt: iso(rel.lastActivityAt),
@@ -492,7 +455,7 @@ export function toDeal(
     return {
         id: rel.id,
         companyId: rel.id,
-        stage: SALES_OF[rel.stage],
+        stage: rel.stage,
         ownerName: owner,
         ownerInitials: owner ? (owner === "You" ? "ME" : initials(owner)) : null,
         nextStep: rel.nextAction,

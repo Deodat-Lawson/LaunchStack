@@ -67,7 +67,8 @@ type Coverage =
 const API = "apps/web/src/app/api";
 const JOBS = "apps/web/src/server/inngest/functions";
 
-const MARKETING_RUN = `${API}/marketing-pipeline/route.ts`;
+/** The post writer runs off the request: the executor enters the scope in after() and on the worker. */
+const MARKETING_RUN = "apps/web/src/server/marketing/executor.ts";
 const MARKETING_EVALUATE = `${API}/marketing-pipeline/evaluate/route.ts`;
 const MARKETING_REFINE = `${API}/marketing-pipeline/refine/route.ts`;
 /** Every route that drafts an email template (generateTemplate / prepareEmailCampaign). */
@@ -414,6 +415,8 @@ const NO_MODEL_CALL: Record<string, string> = {
             "reads and edits prospect rows or answers 409; the service reaches the email pipeline only for draftOutreach (prospects/outreach)",
         ])
     ),
+    [`${API}/marketing-pipeline/runs/route.ts`]:
+        "POST only queues a post-writer run (the executor scopes it in after() or on the worker); the barrel import is for its input schema",
     [`${API}/client-prospector/route.ts`]:
         "POST only queues client-prospector/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
     [`${API}/trend-search/route.ts`]:

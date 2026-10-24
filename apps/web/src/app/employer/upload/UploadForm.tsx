@@ -15,7 +15,6 @@ import { SourceGrid, type SourceType } from "./SourceGrid";
 import { SourceDialog } from "./SourceDialog";
 import { FileQueue } from "./FileQueue";
 import { UploadSettings } from "./UploadSettings";
-import { useSettingsPayload } from "~/lib/settings/useSettings";
 
 const { uploadFiles } = genUploader<OurFileRouter>();
 
@@ -150,27 +149,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
         uploadDate: new Date().toISOString().split("T")[0]!,
         storageMethod: useUploadThing && isUploadThingConfigured ? "cloud" : "database",
     });
-
-    // Workspace defaults (Settings → Document defaults) pre-fill the batch
-    // until the person uploading picks otherwise.
-    const { payload: settings } = useSettingsPayload();
-    const defaultProcessing = settings?.settings["documents.defaultProcessingMethod"]?.value;
-    const defaultFolder = settings?.settings["documents.defaultFolder"]?.value;
-    const defaultsApplied = useRef(false);
-    useEffect(() => {
-        if (defaultsApplied.current || !settings) return;
-        defaultsApplied.current = true;
-        setBatchSettings(prev => ({
-            ...prev,
-            processingMethod:
-                typeof defaultProcessing === "string" ? defaultProcessing : prev.processingMethod,
-            category:
-                prev.category ||
-                (typeof defaultFolder === "string" && categories.some(c => c.name === defaultFolder)
-                    ? defaultFolder
-                    : prev.category),
-        }));
-    }, [settings, defaultProcessing, defaultFolder, categories]);
     const [expandedDocId, setExpandedDocId] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);

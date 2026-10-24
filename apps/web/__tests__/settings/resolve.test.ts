@@ -11,7 +11,7 @@ import type { SettingDefinition } from "~/lib/settings/registry";
 
 const definition: SettingDefinition<string> = {
     key: "test.level",
-    section: "documents",
+    section: "labs",
     label: "Level",
     description: "",
     aliases: [],

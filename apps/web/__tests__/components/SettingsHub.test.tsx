@@ -179,7 +179,6 @@ describe("SettingsHub", () => {
             "Bring your own keys",
             "Models and routes",
             "Agents and autonomy",
-            "Document defaults",
             "Integrations",
             "Usage and costs",
             "Archive and retention",
@@ -393,7 +392,6 @@ describe("SettingsHub by role", () => {
             "Shortcuts",
             "People and access",
             "Company profile",
-            "Document defaults",
             "Data and privacy",
             "Labs",
         ]);

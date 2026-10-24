@@ -33,7 +33,6 @@ import {
     Bot,
     Building2,
     Coins,
-    FileText,
     FlaskConical,
     KeyRound,
     Keyboard,
@@ -93,9 +92,6 @@ const PeopleAccessSection = load(() =>
 const KeysSection = load(() => import("./settings/KeysSection").then(m => m.KeysSection));
 const ModelsSection = load(() => import("./settings/ModelsSection").then(m => m.ModelsSection));
 const AgentsPanel = load(() => import("./collab/AgentsPanel").then(m => m.AgentsPanel));
-const DocumentDefaultsSection = load(() =>
-    import("./settings/DocumentDefaultsSection").then(m => m.DocumentDefaultsSection)
-);
 const IntegrationsPanel = load(() =>
     import("./settings/IntegrationsPanel").then(m => m.IntegrationsPanel)
 );
@@ -135,7 +131,6 @@ export const SECTIONS: SectionDef[] = [
     { id: "byok", group: "workspace", Icon: KeyRound },
     { id: "models", group: "workspace", Icon: Sparkles },
     { id: "agents", group: "workspace", Icon: Bot },
-    { id: "documents", group: "workspace", Icon: FileText },
     { id: "integrations", group: "workspace", Icon: Plug },
     { id: "usage", group: "data", Icon: Coins, wide: true },
     { id: "archive", group: "data", Icon: Archive, wide: true },
@@ -442,8 +437,6 @@ function SectionBody({
             return <ModelsSection onActions={onActions} />;
         case "agents":
             return <AgentsPanel onActions={onActions} />;
-        case "documents":
-            return <DocumentDefaultsSection onActions={onActions} />;
         case "integrations":
             return <IntegrationsPanel onActions={onActions} />;
         case "usage":

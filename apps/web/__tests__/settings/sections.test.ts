@@ -59,11 +59,10 @@ describe("SETTINGS_SECTION_ACCESS", () => {
                 "shortcuts",
                 "people",
                 "company",
-                "documents",
                 "privacy",
                 "labs",
             ]);
-            expect(readOnlyFor(role)).toEqual(["company", "documents", "labs"]);
+            expect(readOnlyFor(role)).toEqual(["company", "labs"]);
         }
     });
 
@@ -73,7 +72,6 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             "appearance",
             "shortcuts",
             "company",
-            "documents",
             "privacy",
             "labs",
         ]);

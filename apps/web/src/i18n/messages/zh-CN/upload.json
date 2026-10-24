@@ -167,7 +167,7 @@
     "processingMethod": "处理方式",
     "uploadDate": "上传日期",
     "uploadDateHint": "可选：覆盖所有文档的上传日期",
-    "storageNote": "上传内容存储于{where, select, s3 { S3} cloud { UploadThing} other {内置存储}}。可在“设置 → 文档默认值”中更改。",
+    "storageNote": "上传内容存储于{where, select, s3 { S3} cloud { UploadThing} other {内置存储}}。",
     "applyAll": "全部应用"
   },
   "form": {

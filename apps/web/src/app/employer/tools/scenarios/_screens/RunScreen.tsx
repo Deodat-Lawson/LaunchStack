@@ -210,7 +210,7 @@ export function RunScreen({ screen }: RunScreenProps) {
                     />
                 </TabsContent>
                 <TabsContent value="sources">
-                    <SourcesTab run={run} focusSource={screen.source} />
+                    <SourcesTab run={run} focusSource={screen.source} onPerson={openPerson} />
                 </TabsContent>
             </Tabs>
 
@@ -369,18 +369,16 @@ function RunHeader({
                             )}
                         </div>
                     )}
-                    {/* A title taken from the situation would repeat it word for word. */}
-                    {(run.kind === "post_test" || !run.subject.startsWith(run.title)) && (
-                        <p className="text-ink-2 mt-2 max-w-[75ch] text-[13.5px] leading-relaxed">
-                            <span className="text-ink-3">
-                                {run.kind === "post_test"
-                                    ? t("draftTested")
-                                    : t("whatHappensIf")}{" "}
-                            </span>
-                            {run.kind === "post_test"
-                                ? (run.draft?.text ?? run.subject)
-                                : run.subject}
-                        </p>
+                    {/* A title that is the whole situation would repeat it word for word. */}
+                    {(run.kind === "post_test" || run.subject !== run.title) && (
+                        <SituationText
+                            lead={run.kind === "post_test" ? t("draftTested") : t("whatHappensIf")}
+                            text={
+                                run.kind === "post_test"
+                                    ? (run.draft?.text ?? run.subject)
+                                    : run.subject
+                            }
+                        />
                     )}
                     <div className="text-ink-3 mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                         <StatusPill run={run} />
@@ -466,6 +464,40 @@ function RunHeader({
 }
 
 /** While it runs, the creator can drop something into the next round. */
+/** The situation as written; a long one (a plan, its actions, the current cases) opens on request. */
+function SituationText({ lead, text }: { lead: string; text: string }) {
+    const t = useTranslations("scenarios.run");
+    const tc = useTranslations("common");
+    const [open, setOpen] = useState(false);
+    const long = text.length > 320 || text.split("\n").length > 3;
+    return (
+        <div className="mt-2 max-w-[75ch]">
+            <p
+                className={cn(
+                    "text-ink-2 text-[13.5px] leading-relaxed",
+                    // Closed, paragraphs run on so three lines hold text, not blank breaks.
+                    long && !open ? "line-clamp-3" : "whitespace-pre-line"
+                )}
+            >
+                <span className="text-ink-3">{lead} </span>
+                {text}
+            </p>
+            {long && (
+                <Button
+                    type="button"
+                    variant="link"
+                    size="sm"
+                    className="h-auto px-0 py-0.5 text-xs"
+                    aria-expanded={open}
+                    onClick={() => setOpen(o => !o)}
+                >
+                    {open ? tc("actions.showLess") : t("showSituation")}
+                </Button>
+            )}
+        </div>
+    );
+}
+
 function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }) {
     const errorText = useErrorText();
     const t = useTranslations("scenarios.run");

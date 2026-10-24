@@ -616,6 +616,18 @@
     "aria": "网页来源",
     "count": "{count, plural, other {# 个网页来源}}"
   },
+  "createdSources": {
+    "aria": "已创建的文档",
+    "count": "{count, plural, other {已创建 # 个文档}}",
+    "open": "打开",
+    "private": "私有",
+    "place": "{place} · {audience}",
+    "audience": {
+      "private": "仅你可见",
+      "shared": "已共享",
+      "workspace": "工作区所有成员"
+    }
+  },
   "failure": {
     "categories": {
       "embedding_quota": {

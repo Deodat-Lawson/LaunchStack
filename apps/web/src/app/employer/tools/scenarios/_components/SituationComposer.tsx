@@ -115,7 +115,7 @@ export function SituationComposer({
                         onChange={e => onChange(e.target.value)}
                         rows={3}
                         placeholder={t("subjectPlaceholder")}
-                        className="mt-1 min-h-[84px] rounded-none border-0 bg-transparent px-0 py-0 leading-[1.55] shadow-none focus-visible:ring-0 md:text-[15px] dark:bg-transparent"
+                        className="mt-1 max-h-[45vh] min-h-[84px] overflow-y-auto rounded-none border-0 bg-transparent px-0 py-0 leading-[1.55] shadow-none [field-sizing:content] focus-visible:ring-0 md:text-[15px] dark:bg-transparent"
                         aria-invalid={tooLong || undefined}
                         aria-describedby="scenario-subject-help"
                     />

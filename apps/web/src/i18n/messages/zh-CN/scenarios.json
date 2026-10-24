@@ -39,6 +39,12 @@
     "list": {
       "separator": "、",
       "last": "{rest}和{last}"
+    },
+    "shift": {
+      "warmed": "态度转暖：{stance}",
+      "softened": "态度缓和：{stance}",
+      "cooled": "态度降温：{stance}",
+      "turned": "转为{stance}"
     }
   },
   "tool": {
@@ -80,23 +86,27 @@
     "allRounds": "所有轮次",
     "opening": "开场",
     "round": "第 {round, number} 轮",
-    "openingLower": "开场",
     "roundLower": "第 {round, number} 轮",
-    "roundStats": "{posts, plural, other {# 条帖子}} · {comments, plural, other {# 条评论}} · 情绪 {mean}（{mood}）",
     "showMore": "{count, plural, other {再显示 # 条帖子}}",
     "tag": {
       "draft": "正在测试的草稿",
       "situation": "情景",
-      "event": "模拟期间加入的事件",
-      "repost": "转发",
-      "quote": "引用"
+      "event": "模拟期间加入的事件"
     },
     "postAria": "{name}，{tag}",
     "likes": "{count, plural, other {# 个赞}}",
     "dislikes": "{count, plural, other {# 个踩}}",
     "shares": "{count, plural, other {# 次分享}}",
     "comments": "{count, plural, other {# 条评论}}",
-    "commentsLabel": "评论"
+    "commentsLabel": "评论",
+    "reposted": "{name} 转发了",
+    "moreReplies": "再显示 {count, number} 条回复",
+    "fewerReplies": "收起回复",
+    "rounds": "轮次",
+    "mostVocal": "最活跃的人",
+    "roundMeta": "{posts, number} 条帖子 · {comments, number} 条回复",
+    "quotedAria": "前往 {name} 被引用的帖子",
+    "openProfile": "打开 {name} 的主页"
   },
   "people": {
     "grounded": "有据可依",
@@ -107,25 +117,32 @@
     "nobody": "这个情景没有构建任何人物。",
     "summary": "{count, plural, other {# 个人物}} · {grounded, number} 个基于你的记录构建 · {invented, number} 个为补足空缺而虚构",
     "filterLabel": "显示",
-    "activity": "{posts, plural, other {# 条帖子}} · {comments, plural, other {# 条评论}}"
+    "followers": "{count, number} 位关注者",
+    "from": "来源：{label}",
+    "fromMore": "来源：{label} 等 {more, number} 项",
+    "hiddenFile": "你无权打开的文件",
+    "keptQuiet": "从未发帖。心里在想：",
+    "readAlong": "只浏览，没有发帖。"
   },
   "personSheet": {
     "caresAbout": "关注",
     "builtFrom": "构建依据",
     "invented": "你的记录中没有相关内容：这个人物是为补足空缺而虚构的。",
-    "sourceRedacted": "{id} · 你无权访问的文件",
-    "source": "{id} · {label}",
-    "stance": "立场",
-    "stanceAside": "起初{from}，现在{to}",
-    "lastThought": "最近的内心想法",
-    "posts": "帖子",
-    "postsAside": "{posts, plural, other {# 条帖子}} · {comments, plural, other {# 条评论}}",
     "readAlong": "只看不发。",
-    "postRound": "第 {round, number} 轮",
-    "postRoundReposted": "第 {round, number} 轮 · 转发",
-    "postRoundQuoted": "第 {round, number} 轮 · 引用",
     "seeInFeed": "在动态中查看",
-    "ask": "向 {name} 提问"
+    "ask": "向 {name} 提问",
+    "followers": "{count, plural, other {关注者}}",
+    "following": "正在关注",
+    "postsCount": "{count, plural, other {帖子}}",
+    "repliesCount": "{count, plural, other {回复}}",
+    "onTheirMind": "{name}此刻在想",
+    "redacted": "你无权访问的文件",
+    "journey": "立场如何变化",
+    "started": "起初：{stance}",
+    "round": "第 {round, number} 轮",
+    "repliedTo": "回复了 {handle}",
+    "reposted": "转发了 {handle}",
+    "quoted": "引用了 {handle}"
   },
   "report": {
     "narrator": "旁白",
@@ -191,8 +208,9 @@
     "sourceAria": "来源 {id}",
     "title": "来源",
     "builtFrom": "构建依据：{used}",
-    "kindCited": "{kind} · {count, plural, other {# 个人物}}据此构建",
-    "redacted": "你无权访问的文件"
+    "redacted": "你无权访问的文件",
+    "openPerson": "打开 {name}",
+    "peopleBuilt": "据此构建了 {count, number} 人"
   },
   "chart": {
     "start": "开始",
@@ -240,9 +258,9 @@
     "uploadLabel": "上传与该情景相关的文件",
     "situationLabel": "情景",
     "subjectLabel": "如果……会怎样",
-    "subjectPlaceholder": "一件可能发生的事：调价、新品发布、新政策、竞争对手的动作…",
-    "subjectHint": "用平实的语言描述一个情景，它会作为所有人都能看到的开场帖子。附上与它相关的材料，比如定价页面、政策草案或路演 PPT。",
-    "subjectHintUpload": "用平实的语言描述一个情景，它会作为所有人都能看到的开场帖子。附上与它相关的材料，比如定价页面、政策草案或路演 PPT；把文件拖到框中即可上传。",
+    "subjectPlaceholder": "可能发生的事——新品发布、调价、新政策——如有帮助，也写下背后的计划、你会采取的行动，以及目前的进展…",
+    "subjectHint": "用平实的语言描述一个情景——一句话，或几段关于计划、行动和当前案例的说明。附上与它相关的材料：商业计划书、行动计划、案例记录或定价页面。",
+    "subjectHintUpload": "用平实的语言描述一个情景——一句话，或几段关于计划、行动和当前案例的说明。附上与它相关的材料：商业计划书、行动计划、案例记录或定价页面；把文件拖到框中即可上传。",
     "starters": {
       "raisePrices": "我们从 1 月起对新客户涨价 20%。",
       "freeCompetitor": "竞争对手推出了我们产品的免费替代品。",
@@ -379,6 +397,7 @@
     "keepTitle": "保留原标题",
     "draftTested": "测试的草稿：",
     "whatHappensIf": "如果：",
+    "showSituation": "展开全文",
     "createdBy": "{name}，{when}",
     "you": "你",
     "shared": "已共享",

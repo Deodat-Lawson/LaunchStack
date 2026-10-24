@@ -616,6 +616,18 @@
     "aria": "Web sources",
     "count": "{count, plural, one {# web source} other {# web sources}}"
   },
+  "createdSources": {
+    "aria": "Created documents",
+    "count": "{count, plural, one {Created # document} other {Created # documents}}",
+    "open": "Open",
+    "private": "Private",
+    "place": "{place} · {audience}",
+    "audience": {
+      "private": "Only you",
+      "shared": "Shared",
+      "workspace": "Everyone in the workspace"
+    }
+  },
   "failure": {
     "categories": {
       "embedding_quota": {

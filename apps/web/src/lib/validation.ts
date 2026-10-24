@@ -912,6 +912,7 @@ export const SessionMessageSchema = z.object({
             id: z.string().max(128).optional(),
             status: z.enum(["complete", "stopped", "error"]).optional(),
             reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
+            thoughtMs: z.number().nonnegative().optional(),
             elapsedMs: z.number().nonnegative().optional(),
             send: ChatSendPayloadSchema.optional(),
             tokenBreakdown: z
@@ -924,6 +925,16 @@ export const SessionMessageSchema = z.object({
             webSources: z
                 .array(z.object({ title: z.string().max(500), url: z.string().url().max(2000) }))
                 .max(20)
+                .optional(),
+            createdSources: z
+                .array(
+                    z.object({
+                        documentId: z.number().int().positive(),
+                        title: z.string().max(300),
+                        folder: z.string().max(300),
+                    })
+                )
+                .max(5)
                 .optional(),
         })
         .optional(),

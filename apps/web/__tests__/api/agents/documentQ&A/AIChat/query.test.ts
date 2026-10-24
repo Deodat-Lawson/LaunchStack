@@ -229,6 +229,40 @@ jest.mock("~/server/chat-source-tools", () => ({
         overview ? "No source is attached; you did not look." : "No overview; you did not look.",
 }));
 
+// Writing documents as a tool. The session holds no tool unless a test turns
+// it on, so the turns above keep their own tool lists; the tool's own
+// behaviour is tested in __tests__/server/chat-document-tools.test.ts.
+let mockDocumentToolsOn = false;
+const mockWriteDocument = jest.fn(
+    async (..._args: unknown[]) => 'Created "Scenario Simulator — Business Plan" (d90)'
+);
+const mockCreateDocumentTools = jest.fn((..._args: unknown[]) => {
+    const session = { created: [] as unknown[], tools: [] as unknown[] };
+    if (mockDocumentToolsOn) {
+        session.tools.push({
+            name: "create_document",
+            description: "create",
+            parameters: { type: "object", properties: {} },
+            describe: () => "Writing “Scenario Simulator — Business Plan”",
+            run: async (args: unknown) => {
+                const text = await mockWriteDocument(args);
+                session.created.push({
+                    documentId: 90,
+                    title: "Scenario Simulator — Business Plan",
+                    folder: "Unfiled",
+                });
+                return text;
+            },
+        });
+    }
+    return session;
+});
+jest.mock("~/server/chat-document-tools", () => ({
+    createDocumentTools: (...args: unknown[]) => mockCreateDocumentTools(...args),
+    documentToolsPrompt: () => "## Writing documents",
+    noDocumentToolsPrompt: () => "This person's role cannot add documents.",
+}));
+
 const mockInvoke = jest.fn();
 const mockStream = jest.fn();
 /** Tools are bound on the same scripted model; the specs are recorded. */
@@ -2257,5 +2291,178 @@ describe("the workspace's sources as tools the model calls", () => {
             "search_web",
             "fetch_page",
         ]);
+    });
+});
+
+describe("documents the model writes into the workspace", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: { temperature: "supported", systemMessages: "supported" },
+    };
+    const PLAN = "# Scenario Simulator — Business Plan\n\n## 1. Executive Summary";
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        useContext({ role: "owner" });
+        mockBehavior = TOOL_MODEL;
+        mockSearchProvider = null;
+        mockChatSource = "deployment";
+        mockSourcesOverview = NO_SOURCES;
+        mockDocumentToolsOn = true;
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockStream.mockReset();
+        mockBuildReferences.mockImplementation(() => []);
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+    });
+
+    afterAll(() => {
+        mockDocumentToolsOn = false;
+        mockBehavior = {};
+    });
+
+    const toolNames = () =>
+        (mockBindTools.mock.calls[0] as unknown as [{ function: { name: string } }[]])[0].map(
+            tool => tool.function.name
+        );
+    const systemPrompt = (call = 0) =>
+        String((mockInvoke.mock.calls[call] as [{ content: unknown }[]])[0][0]?.content);
+
+    it("creates the document asked for and returns it for the chat to open", async () => {
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [
+                    {
+                        id: "call_1",
+                        name: "create_document",
+                        args: { title: "Scenario Simulator — Business Plan", content: PLAN },
+                    },
+                ],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({
+                content: "I created Scenario Simulator — Business Plan in your Private section.",
+                response_metadata: {},
+            });
+
+        const response = await POST(
+            queryRequest({
+                question:
+                    "Write a business plan for the Launchstack Scenario Simulator and put it in my private space",
+                searchScope: "none",
+            })
+        );
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(response.status).toBe(200);
+        // Even with no sources to search, the person can be given a document.
+        expect(toolNames()).toEqual(["create_document"]);
+        expect(mockCreateDocumentTools).toHaveBeenCalledWith(
+            expect.objectContaining({ companyId: BigInt(5) }),
+            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query" }
+        );
+        expect(systemPrompt()).toContain("## Writing documents");
+        expect(mockWriteDocument).toHaveBeenCalledWith({
+            title: "Scenario Simulator — Business Plan",
+            content: PLAN,
+        });
+        expect(body).toMatchObject({
+            success: true,
+            summarizedAnswer:
+                "I created Scenario Simulator — Business Plan in your Private section.",
+            createdSources: [
+                { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+            ],
+        });
+    });
+
+    it("lists no created documents when the model wrote none", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        const response = await POST(queryRequest({ question: "hi", searchScope: "none" }));
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(toolNames()).toEqual(["create_document"]);
+        expect(body.createdSources).toBeUndefined();
+    });
+
+    it("offers it beside the source tools, after them", async () => {
+        mockSourcesOverview = {
+            inventory: { total: 2, byOrigin: [{ from: null, count: 2 }] },
+            connected: [],
+        };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(queryRequest({ question: "hi", searchScope: "none" }));
+            expect(toolNames()).toEqual([
+                "list_sources",
+                "search_sources",
+                "read_source",
+                "create_document",
+            ]);
+        } finally {
+            mockSourcesOverview = NO_SOURCES;
+        }
+    });
+
+    it("gives a turn that may write a round more for looking first", async () => {
+        const tools = [1, 2, 3, 4, 5].map(n => ({
+            content: "",
+            tool_calls: [{ id: `call_${n}`, name: "create_document", args: { title: `Doc ${n}` } }],
+            response_metadata: {},
+        }));
+        for (const round of tools) mockInvoke.mockResolvedValueOnce(round);
+        mockInvoke.mockResolvedValueOnce({ content: "done", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write five docs", searchScope: "none" }));
+
+        // Four rounds with tools, then one that must answer.
+        expect(mockWriteDocument).toHaveBeenCalledTimes(4);
+    });
+
+    it("offers no document tool to a role that cannot add files, and says why", async () => {
+        useContext({ role: "viewer" });
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write me a plan", searchScope: "none" }));
+
+        expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(systemPrompt()).toContain("This person's role cannot add documents.");
+        expect(systemPrompt()).not.toContain("## Writing documents");
+    });
+
+    it("offers no document tool to an agent without write", async () => {
+        mockAgentTools = ["retrieval", "web"];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(
+                queryRequest({
+                    question: "write me a plan",
+                    searchScope: "none",
+                    agentKey: "restricted",
+                })
+            );
+            expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+            expect(systemPrompt()).not.toContain("## Writing documents");
+            // The agent was barred, not the person: no word about their role.
+            expect(systemPrompt()).not.toContain("role cannot add documents");
+        } finally {
+            mockAgentTools = null;
+        }
+    });
+
+    it("offers no document tool to a model that does not take tools", async () => {
+        mockBehavior = { ...TOOL_MODEL, nativeStructuredOutput: ["json-schema"] };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write me a plan", searchScope: "none" }));
+
+        expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+        expect(mockBindTools).not.toHaveBeenCalled();
     });
 });

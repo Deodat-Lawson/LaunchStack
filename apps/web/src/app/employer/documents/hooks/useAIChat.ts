@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { readChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import type { SourceReference } from "~/app/api/agents/documentQ&A/services";
 import type { ChatPassagePayload } from "~/lib/chat-passages";
+import type { ChatCreatedSource } from "~/lib/chat-turns";
 
 export type { SourceReference };
 
@@ -91,6 +92,8 @@ export interface AIChatResponse {
     searchScope?: "document" | "company" | "archive" | "selected" | "none";
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
+    /** Documents the answer created in the workspace. */
+    createdSources?: ChatCreatedSource[];
     agent?: AIChatAgentInfo | null;
     message?: string;
     error?: string;

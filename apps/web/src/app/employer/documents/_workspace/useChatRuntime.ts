@@ -109,11 +109,13 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             id: message.id,
             status: message.status === "streaming" ? undefined : message.status,
             reasoning: message.reasoning,
+            thoughtMs: message.thoughtMs,
             elapsedMs: message.elapsedMs,
             send: message.send,
             tokenBreakdown: message.tokenBreakdown,
             chunksAnalyzed: message.chunksAnalyzed,
             webSources: message.webSources,
+            createdSources: message.createdSources,
         },
     };
 }
@@ -131,6 +133,8 @@ export function useChatRuntime(input: {
     agents: ChatAgentOption[];
     companyId: number | null;
     refreshHistory: () => Promise<unknown> | void;
+    /** An answer created documents: reload the sources so they can be opened. */
+    onSourcesCreated?: () => Promise<unknown> | void;
 }) {
     const currentInput = useRef(input);
     currentInput.current = input;
@@ -176,7 +180,13 @@ export function useChatRuntime(input: {
 
     const emit = useCallback((context: Conversation) => {
         if (keyRef.current !== context.key || contexts.current.get(context.key) !== context) return;
-        currentInput.current.setThread([...context.messages]);
+        // A streaming answer is written in place as deltas arrive. Each emit
+        // hands out a fresh copy of it, or the memoized row never re-renders.
+        currentInput.current.setThread(
+            context.messages.map(message =>
+                message.status === "streaming" ? { ...message } : message
+            )
+        );
         setView({
             key: context.key,
             busy: context.busy,
@@ -333,14 +343,20 @@ export function useChatRuntime(input: {
 
         const onEvent = (event: AIChatStreamEvent) => {
             if (signal.aborted) return;
-            if (event.type === "text") answer.text += event.delta;
-            if (event.type === "reasoning")
+            const now = performance.now() - started;
+            if (event.type === "text") {
+                answer.text += event.delta;
+                answer.stage = words.current.t("stages.writing");
+            }
+            if (event.type === "reasoning") {
                 answer.reasoning = (answer.reasoning ?? "") + event.delta;
+                answer.thoughtMs = now;
+            }
             if (event.type === "status") {
                 const keyword = chatStatusKeyword(event.status);
                 answer.stage = keyword ? words.current.t(`stages.${keyword}`) : event.status;
             }
-            answer.elapsedMs = performance.now() - started;
+            answer.elapsedMs = now;
             emit(context);
         };
         let savedUser = Boolean(persistedUser);
@@ -449,6 +465,7 @@ export function useChatRuntime(input: {
             if (signal.aborted || response.cancelled)
                 throw new DOMException("Stopped", "AbortError");
             applyResponse(answer, response, sourceList, words.current);
+            if (answer.createdSources) void currentInput.current.onSourcesCreated?.();
             if (!response.success) context.held = true;
         } catch (error) {
             const stopped =
@@ -840,6 +857,15 @@ function applyResponse(
         .slice(0, 20)
         .map(({ title, url }) => ({ title: title.slice(0, 500), url }));
     answer.webSources = webSources.length > 0 ? webSources : undefined;
+    const created = (response.createdSources ?? [])
+        .filter(({ documentId }) => Number.isInteger(documentId) && documentId > 0)
+        .slice(0, 5)
+        .map(({ documentId, title, folder }) => ({
+            documentId,
+            title: title.slice(0, 300),
+            folder: folder.slice(0, 300),
+        }));
+    answer.createdSources = created.length > 0 ? created : undefined;
     answer.citations = (response.references ?? []).flatMap(reference => {
         const source = sources.find(s => s.documentId === Number(reference.documentId));
         return source

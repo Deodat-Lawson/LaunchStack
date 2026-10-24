@@ -3,6 +3,7 @@ import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
+import type { ChatCreatedSource } from "~/lib/chat-turns";
 import type { SourceProcessingView } from "~/lib/source-progress";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
@@ -260,6 +261,8 @@ export interface ThreadMessage {
     status?: "streaming" | "complete" | "stopped" | "error";
     stage?: string;
     reasoning?: string;
+    /** When the last reasoning arrived, from the start of the turn: how long it thought. */
+    thoughtMs?: number;
     elapsedMs?: number;
     send?: ComposerSend;
     role: "user" | "assistant";
@@ -284,6 +287,8 @@ export interface ThreadMessage {
     chunksAnalyzed?: number;
     /** Web pages the model read, in the [Source N] order its answer cites. */
     webSources?: { title: string; url: string }[];
+    /** Documents the answer created in the workspace, listed under it with a way to open them. */
+    createdSources?: ChatCreatedSource[];
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];

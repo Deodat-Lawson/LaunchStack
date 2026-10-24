@@ -20,6 +20,7 @@ import {
     postReception,
     runRound,
     stripCitations,
+    turnSituation,
     totalUsage,
     type Account,
     type Brief,
@@ -283,6 +284,7 @@ export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promis
               };
         const world = createWorld({
             subject: run.subject,
+            situation: turnSituation(run.subject, run.brief),
             brief,
             personas,
             accounts,

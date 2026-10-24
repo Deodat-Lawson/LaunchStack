@@ -54,6 +54,11 @@ import {
     noSourceToolsPrompt,
     sourceToolsPrompt,
 } from "~/server/chat-source-tools";
+import {
+    createDocumentTools,
+    documentToolsPrompt,
+    noDocumentToolsPrompt,
+} from "~/server/chat-document-tools";
 import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
@@ -1155,7 +1160,21 @@ export async function POST(request: Request) {
                 sourcesOverview.inventory.total > 0
                     ? createSourceTools(ctx.data, {}, locale)
                     : null;
-            const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
+            // Writing is a tool as well: asked for a document, the model makes
+            // one in the workspace instead of pasting it here and telling the
+            // person to copy it into a file. Offered to anyone who may add
+            // files, when the model takes tools and the agent may write.
+            const writeAllowed = takesTools && (agent ? agent.turn.write : true);
+            const mayUpload = ctx.data.can("documents.upload");
+            const documentTools =
+                writeAllowed && mayUpload
+                    ? createDocumentTools(ctx.data, { requestUrl: request.url })
+                    : null;
+            const tools = [
+                ...(sourceTools?.tools ?? []),
+                ...(documentTools?.tools ?? []),
+                ...(webTools?.tools ?? []),
+            ];
 
             const attachmentContext = { request, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
@@ -1196,6 +1215,11 @@ export async function POST(request: Request) {
             if (chatMode === "plan") {
                 systemPrompt +=
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
+            }
+            if (documentTools) {
+                systemPrompt += `\n\n${documentToolsPrompt()}`;
+            } else if (writeAllowed && !mayUpload) {
+                systemPrompt += `\n\n${noDocumentToolsPrompt()}`;
             }
             if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
             // Answer in the language the person reads the app in, unless they
@@ -1273,6 +1297,9 @@ export async function POST(request: Request) {
                         onReasoning: delta => emit({ type: "reasoning", delta }),
                     },
                     onStatus: status => emit?.({ type: "status", status }),
+                    // Looking (a search, a read) and then writing takes a
+                    // round more than looking alone.
+                    ...(documentTools ? { maxToolRounds: 4 } : {}),
                 });
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
@@ -1403,6 +1430,10 @@ export async function POST(request: Request) {
                                   resultsCount: webTools.sources.length,
                               }
                             : undefined,
+                    // The documents the answer wrote, for the chat to list and open.
+                    createdSources: documentTools?.created.length
+                        ? documentTools.created
+                        : undefined,
                     disclaimer: supervision.disclaimer,
                     guardrails: !supervision.approved
                         ? {

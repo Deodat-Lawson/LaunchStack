@@ -28,10 +28,18 @@ jest.mock("~/server/brand/channels", () => {
         markConnectionReconnect: (...a: unknown[]) => mockMarkConnectionReconnect(...a),
         refusedSignInReason: () =>
             "LinkedIn no longer accepts this sign-in. Reconnect it under Accounts.",
+        NETWORK_LABELS: { linkedin: "LinkedIn", x: "X", bluesky: "Bluesky", reddit: "Reddit" },
         parseDeploymentChannelId: (id: string) =>
             id.startsWith("deployment:") ? id.slice("deployment:".length) : null,
     };
 });
+
+const mockMayUseDeploymentAccounts = jest.fn();
+jest.mock("~/server/brand/deployment-accounts", () => ({
+    mayUseDeploymentAccounts: (...a: unknown[]) => mockMayUseDeploymentAccounts(...a),
+    deploymentAccountRefusal: (network: string) =>
+        `This server hosts more than one workspace, so its shared ${network} account is not this workspace's to post from.`,
+}));
 
 const mockLoadPublishMedia = jest.fn();
 jest.mock("~/server/brand/media", () => {
@@ -85,6 +93,7 @@ const IMAGE = { data: new Uint8Array([1, 2, 3]), mimeType: "image/png", alt: "Te
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockMayUseDeploymentAccounts.mockResolvedValue(true);
     mockLoadPublishMedia.mockResolvedValue([IMAGE]);
     mockGetChannelRow.mockResolvedValue(PAGE);
     mockResolveChannelTarget.mockResolvedValue({
@@ -151,12 +160,35 @@ it("a disconnected channel fails with a plain reason", async () => {
     expect(mockPublishToPlatform).not.toHaveBeenCalled();
 });
 
-it("legacy and deployment posts use the deployment's keys", async () => {
+it("legacy and deployment posts use the deployment's keys in the workspace that owns them", async () => {
     await publishForWorkspace(post({ channelId: null, media: [] }));
     await publishForWorkspace(post({ channelId: "deployment:linkedin", media: [] }));
     expect(mockGetChannelRow).not.toHaveBeenCalled();
     for (const call of mockPublishToPlatform.mock.calls)
         expect((call[0] as { target?: unknown }).target).toBeUndefined();
+});
+
+it("a workspace that does not own the deployment account never posts through it", async () => {
+    // The shared-server case: workspace 5 scheduled on "deployment:x" (or
+    // before channels existed), and the operator's X account is not its.
+    mockMayUseDeploymentAccounts.mockResolvedValue(false);
+    for (const channelId of ["deployment:x", null]) {
+        const result = await publishForWorkspace(post({ platform: "x", channelId, media: [] }));
+        expect(result).toMatchObject({ success: false, platform: "x" });
+        expect(result.error).toMatch(/not this workspace's/);
+        // Not a transient failure: retrying would only post as the wrong company later.
+        expect(result.retryable).toBeUndefined();
+        expect(result.authFailed).toBeUndefined();
+    }
+    expect(mockMayUseDeploymentAccounts).toHaveBeenCalledWith(BigInt(5));
+    expect(mockPublishToPlatform).not.toHaveBeenCalled();
+});
+
+it("a workspace's own channel does not depend on owning the deployment account", async () => {
+    mockMayUseDeploymentAccounts.mockResolvedValue(false);
+    const result = await publishForWorkspace(post());
+    expect(result.success).toBe(true);
+    expect(mockMayUseDeploymentAccounts).not.toHaveBeenCalled();
 });
 
 it("storage being down is worth another try", async () => {

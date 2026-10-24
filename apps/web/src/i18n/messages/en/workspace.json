@@ -1,0 +1,13 @@
+{
+  "accountMenu": {
+    "fallbackName": "Your account",
+    "triggerLabel": "Account: {name}",
+    "switchWorkspace": "Switch workspace",
+    "switch": "Switch",
+    "lightTheme": "Switch to light theme",
+    "darkTheme": "Switch to dark theme",
+    "settings": "Settings",
+    "documentation": "Documentation",
+    "logOut": "Log out"
+  }
+}

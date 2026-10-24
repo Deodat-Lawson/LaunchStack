@@ -26,6 +26,7 @@ import {
     DEFAULT_AGENT_AUTONOMY,
 } from "~/lib/agents/autonomy";
 import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
+import { DEFAULT_LOCALE, LOCALE_CODES, LOCALES } from "~/i18n/locales";
 
 import type { SettingControl, SettingsSectionId, StoredScope } from "./types";
 
@@ -84,6 +85,26 @@ export const SETTINGS: readonly SettingDefinition[] = [
     // ------------------------------------------------------------------
     // You
     // ------------------------------------------------------------------
+    {
+        key: "appearance.language",
+        section: "appearance",
+        label: "Language",
+        description:
+            "The language of menus, buttons and messages. Assistants answer in it too, unless you write in another one.",
+        aliases: ["language", "translation", "chinese", "english", "locale", "语言", "中文"],
+        scopes: ["member"],
+        permission: null,
+        schema: z.enum(LOCALE_CODES),
+        // Stored only once the person picks one: until then the browser's
+        // own languages decide (src/i18n/locales.ts).
+        default: DEFAULT_LOCALE,
+        control: {
+            kind: "select",
+            options: LOCALES.map(locale => ({ value: locale.code, label: locale.nativeName })),
+        },
+        // Drawn by LanguageRow, which shows the language the page is in.
+        custom: true,
+    },
     {
         key: "appearance.theme",
         section: "appearance",

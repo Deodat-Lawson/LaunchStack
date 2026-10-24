@@ -1,0 +1,13 @@
+{
+  "accountMenu": {
+    "fallbackName": "你的账户",
+    "triggerLabel": "账户：{name}",
+    "switchWorkspace": "切换工作区",
+    "switch": "切换",
+    "lightTheme": "切换到浅色主题",
+    "darkTheme": "切换到深色主题",
+    "settings": "设置",
+    "documentation": "文档",
+    "logOut": "退出登录"
+  }
+}

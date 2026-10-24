@@ -134,13 +134,6 @@
       "createFailed": "无法创建细分市场",
       "title": "新建细分市场",
       "description": "你想把产品卖给谁、卖到哪里。之后可以随时调整每一项。",
-      "namePlaceholder": "履约服务商 · 欧盟",
-      "offering": "你卖什么",
-      "offeringPlaceholder": "面向电商仓库的拣货机器人，按台按月租赁",
-      "industries": "行业 <hint>（用逗号分隔）</hint>",
-      "industriesPlaceholder": "电商履约、第三方物流、合同物流",
-      "countries": "国家/地区 <hint>（两位字母代码）</hint>",
-      "countriesPlaceholder": "NL, DE, GB",
       "create": "创建细分市场"
     },
     "runSheet": {
@@ -363,6 +356,24 @@
       "draftFor": "为 {count} 人起草营销活动",
       "draftInbox": "起草发往公共邮箱的邮件",
       "drafted": "已在邮件中起草营销活动，共 {count, plural, other {# 位联系人}}。请在那里审批；这里不会发送任何邮件。"
+    },
+    "setup": {
+      "title": "你的客户是谁？",
+      "body": "回答三个问题，Growth 就开始查找。之后可以在“细分”里修改每一项。",
+      "buyers": "谁会购买你的产品",
+      "buyersPlaceholder": "餐厅、咖啡店、牙科诊所",
+      "buyersHint": "要查找的公司类型，用逗号分隔。完全不涉及这些内容的公司会被排除。",
+      "where": "地点",
+      "wherePlaceholder": "Baltimore, MD, USA; Netherlands",
+      "whereHint": "城市、州或国家。多个地点用“;”分隔。范围之外的公司会被排除。",
+      "whereFromProfile": "来自你的公司资料。如需在别处查找请修改。",
+      "offering": "你销售什么",
+      "offeringPlaceholder": "为独立餐厅提供记账和薪资服务",
+      "offeringHint": "用你自己的话写一两句即可。",
+      "offeringFromProfile": "根据你的公司资料起草。可按这群客户修改。",
+      "submit": "查找公司",
+      "failed": "无法开始查找",
+      "defaultName": "{buyers} · {where}"
     }
   },
   "brand": {

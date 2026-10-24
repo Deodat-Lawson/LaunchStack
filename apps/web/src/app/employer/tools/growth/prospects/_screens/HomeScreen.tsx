@@ -13,6 +13,7 @@ import { cn } from "~/lib/utils";
 import { prospectsApi, type SourceYield, type TodoItem } from "../api";
 import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
+import { SegmentSetup } from "../_components/SegmentSetup";
 import { useResource } from "~/lib/tools/useResource";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { FitMeter } from "~/components/tools/FitMeter";
@@ -59,7 +60,7 @@ export function HomeScreen() {
     const t = useTranslations("growth.prospects");
     const tg = useTranslations("growth.common.counts");
     const { relativeTime } = useGrowthFormat();
-    const { segmentId, href, startRun, activeRun } = useProspects();
+    const { segmentId, href, startRun, activeRun, segments, segmentsLoading } = useProspects();
     const home = useResource(segmentId ? `home:${segmentId}` : null, () =>
         prospectsApi.home(segmentId!)
     );
@@ -80,6 +81,10 @@ export function HomeScreen() {
 
     const headline = d?.segment.headline ?? "";
     const maxFound = d ? Math.max(1, ...d.yield.map(y => y.found)) : 1;
+
+    // No segment yet: ask who you sell to, on the page, instead of a disabled
+    // button and a popover to find.
+    if (!segmentsLoading && segments.length === 0) return <SegmentSetup />;
 
     return (
         <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
@@ -190,7 +195,7 @@ export function HomeScreen() {
                 )}
             </section>
 
-            <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-7">
+            <div className="grid grid-cols-2 gap-7 @max-lg:grid-cols-1">
                 <section className="min-w-0">
                     <SectionHeading title={t("home.whereFrom")} aside={t("home.whereFromAside")} />
                     {home.loading || !d ? (

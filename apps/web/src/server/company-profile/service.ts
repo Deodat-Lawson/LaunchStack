@@ -98,7 +98,7 @@ export async function startRebuild(ctx: Ctx): Promise<CompanyProfileDto> {
         const changedBy = ctx.authUserId;
         after(async () => {
             try {
-                await withWorkspaceChatModels(companyId, () =>
+                await withWorkspaceChatModels(companyId, "companyProfile", () =>
                     rebuildProfile(companyId, createProfilePorts(), { changedBy })
                 );
             } catch (error) {
@@ -149,7 +149,7 @@ async function buildAfterResponse(
     const token = await startBuildIfIdle(companyId);
     after(async () => {
         try {
-            await withWorkspaceChatModels(companyId, work);
+            await withWorkspaceChatModels(companyId, "companyProfile", work);
             if (token) await finishBuild(companyId, token, "idle");
         } catch (error) {
             console.error(`[company-profile] ${label} failed:`, error);
@@ -202,7 +202,7 @@ export function reassembleAfterDelete(companyId: bigint, changedBy: string): voi
         try {
             const row = await getProfileRow(companyId);
             if (!row?.builtAt) return;
-            await withWorkspaceChatModels(companyId, () =>
+            await withWorkspaceChatModels(companyId, "companyProfile", () =>
                 catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
             );
         } catch (error) {

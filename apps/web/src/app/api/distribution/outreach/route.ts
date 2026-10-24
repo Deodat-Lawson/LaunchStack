@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(ctx.data.companyId, () =>
+    return withWorkspaceChatModels(ctx.data.companyId, "distribution", () =>
         withRateLimit(
             request,
             {

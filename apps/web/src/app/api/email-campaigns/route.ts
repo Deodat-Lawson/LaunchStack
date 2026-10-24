@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
             const parsed = CreateSchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

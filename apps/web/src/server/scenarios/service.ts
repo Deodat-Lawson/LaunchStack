@@ -591,7 +591,7 @@ export async function askScenario(
             ? buildAnalystRequest(world, run.report?.summary ?? "", question, history)
             : buildInterviewRequest(world, agentId, question, history);
     await requireCredits(ctx, 4_000);
-    const reply = await withWorkspaceChatModels(ctx.companyId, () =>
+    const reply = await withWorkspaceChatModels(ctx.companyId, "scenarios", () =>
         createLlmSimulationModel().complete(request)
     );
     const credits = llmChatTokens(reply.usage?.inputTokens ?? 0, reply.usage?.outputTokens ?? 0);

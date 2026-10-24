@@ -61,7 +61,9 @@ jest.mock("~/lib/credits", () => ({ getBalance: jest.fn(), debitTokens: jest.fn(
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn(() => false) }));
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
+        fn()
+    ),
 }));
 
 const mockDb = jest.requireMock<{ getCompanyRun: jest.Mock; listVisibleRuns: jest.Mock }>(

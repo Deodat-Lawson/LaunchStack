@@ -19,7 +19,7 @@ jest.mock("~/lib/require-workspace-context", () => ({
 // Records whose models the route read under; runs the work as-is.
 const mockScopes: unknown[] = [];
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
     },

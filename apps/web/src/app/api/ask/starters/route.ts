@@ -33,7 +33,7 @@ export async function GET(request: Request) {
             if (!ctx.success) return ctx.response;
 
             const scope = await ctx.data.documentScope();
-            const payload = await withWorkspaceChatModels(ctx.data.companyId, () =>
+            const payload = await withWorkspaceChatModels(ctx.data.companyId, "ask", () =>
                 getAskStarters({
                     companyId: ctx.data.companyId,
                     scope,

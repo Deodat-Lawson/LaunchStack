@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
         // Generation and review run under the workspace's own models when it
         // brought them; delivery calls no model.
-        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
             const parsed = AutomatedRunSchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

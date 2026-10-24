@@ -511,7 +511,7 @@ export async function POST(request: Request) {
             // Everything the answer runs (route resolution, web search, the model
             // call, a streamed body) resolves against the workspace's own models
             // when it brought them.
-            return await withWorkspaceChatModels(ctx.data.companyId, () => answer(ctx));
+            return await withWorkspaceChatModels(ctx.data.companyId, "ask", () => answer(ctx));
         } catch (error) {
             if (request.signal.aborted) {
                 recordResult("error");

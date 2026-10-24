@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         const weekStart = parsed.data.weekStart
             ? weekStartOf(parseIsoDate(parsed.data.weekStart)!)
             : defaultAgendaWeek(new Date());
-        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, () =>
+        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, "vantage", () =>
             prepareWeek({ companyId: auth.ctx.companyId, userId: auth.ctx.userId, weekStart })
         );
         return json({ agenda }, 201);

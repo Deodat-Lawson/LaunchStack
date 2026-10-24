@@ -44,7 +44,7 @@ export async function POST(
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
             const campaignId = parseCampaignId((await params).campaignId);
             if (campaignId === null)
                 return fail(

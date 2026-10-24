@@ -98,10 +98,10 @@
     },
     "usage": {
       "label": "Usage and costs",
-      "blurb": "Balance, burn, estimate",
+      "blurb": "Model tokens, cost, balance",
       "eyebrow": "Usage",
       "title": "What the workspace is spending",
-      "description": "The token balance, what has been drawing on it and when, and an estimate of cost from a price you set. The numbers exist to inform the two settings on this page."
+      "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
     },
     "archive": {
       "label": "Archive and retention",
@@ -1568,6 +1568,54 @@
       "granted": "Granted",
       "purchased": "Purchased"
     },
+    "models": {
+      "title": "AI model usage",
+      "description": "Every call this workspace made to an AI model, from every feature, counted from the provider's own report. Separate from the balance below, which only some features draw on.",
+      "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
+      "tokens": "Model tokens in the last {days} days",
+      "split": "{input} in · {output} out · {calls} calls",
+      "cost": "Model cost",
+      "costPriced": "From the price set for each model.",
+      "costFallback": "Models without a set price are counted at {price} per 1M.",
+      "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
+      "costNone": "No price is set for these models. Set a price below to estimate.",
+      "efficiency": "Cache and reasoning",
+      "cached": "Input from cache",
+      "reasoning": "Reasoning tokens",
+      "nothing": "No model calls in this window.",
+      "feature": "Feature",
+      "route": "Model route",
+      "calls": "Calls",
+      "input": "Input",
+      "output": "Output",
+      "costColumn": "Cost",
+      "features": {
+        "ask": "Ask",
+        "mcp": "Assistants (MCP)",
+        "notes": "Notes",
+        "documentWriter": "Document writer",
+        "marketing": "Marketing pipeline",
+        "emailCampaigns": "Email outreach",
+        "prospects": "Prospects",
+        "distribution": "Distribution research",
+        "proposals": "Proposals",
+        "scenarios": "Scenarios",
+        "trends": "Trend search",
+        "predictiveAnalysis": "Predictive analysis",
+        "repoExplainer": "Repo explainer",
+        "meetings": "Meetings",
+        "vantage": "Vantage",
+        "companyProfile": "Company profile",
+        "ingestion": "Document processing"
+      },
+      "routes": {
+        "default": "Standard",
+        "fast": "Fast",
+        "reasoning": "Reasoning",
+        "vision": "Images",
+        "auxiliary": "Document processing"
+      }
+    },
     "burn": {
       "title": "Burn by day",
       "description": "Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers.",
@@ -1581,12 +1629,6 @@
       "operations": "Operations",
       "share": "Share",
       "empty": "Nothing in this window."
-    },
-    "byRoute": {
-      "title": "By chat route",
-      "description": "Only chat debits record a route, so this covers Ask and meetings, not embeddings or OCR.",
-      "route": "Route",
-      "calls": "Calls"
     },
     "pricing": {
       "title": "Pricing and warnings",

@@ -98,10 +98,10 @@
     },
     "usage": {
       "label": "用量与费用",
-      "blurb": "余额、消耗、估算",
+      "blurb": "模型 token、费用、余额",
       "eyebrow": "用量",
       "title": "工作区的支出情况",
-      "description": "token 余额、哪些功能在何时消耗了它，以及根据你设定的单价估算的费用。这些数字是为本页的两项设置提供参考。"
+      "description": "工作区的每一次 AI 模型调用及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的两项设置提供参考。"
     },
     "archive": {
       "label": "归档与保留",
@@ -1568,6 +1568,54 @@
       "granted": "赠送",
       "purchased": "购买"
     },
+    "models": {
+      "title": "AI 模型用量",
+      "description": "此工作区各项功能对 AI 模型的每一次调用，按模型服务商自己的报告计数。与下方余额分开统计，余额只由部分功能扣除。",
+      "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
+      "tokens": "最近 {days} 天的模型 token",
+      "split": "输入 {input} · 输出 {output} · {calls} 次调用",
+      "cost": "模型费用",
+      "costPriced": "按每个模型设定的价格计算。",
+      "costFallback": "未设定价格的模型按每百万 {price} 计算。",
+      "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
+      "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",
+      "efficiency": "缓存与推理",
+      "cached": "来自缓存的输入",
+      "reasoning": "推理 token",
+      "nothing": "此时间段内没有模型调用。",
+      "feature": "功能",
+      "route": "模型路由",
+      "calls": "调用次数",
+      "input": "输入",
+      "output": "输出",
+      "costColumn": "费用",
+      "features": {
+        "ask": "提问",
+        "mcp": "助手（MCP）",
+        "notes": "笔记",
+        "documentWriter": "文档撰写",
+        "marketing": "营销流程",
+        "emailCampaigns": "邮件外联",
+        "prospects": "潜在客户",
+        "distribution": "分发调研",
+        "proposals": "提案",
+        "scenarios": "情景模拟",
+        "trends": "趋势搜索",
+        "predictiveAnalysis": "预测分析",
+        "repoExplainer": "代码库解读",
+        "meetings": "会议",
+        "vantage": "Vantage",
+        "companyProfile": "公司档案",
+        "ingestion": "文档处理"
+      },
+      "routes": {
+        "default": "标准",
+        "fast": "快速",
+        "reasoning": "推理",
+        "vision": "图像",
+        "auxiliary": "文档处理"
+      }
+    },
     "burn": {
       "title": "每日消耗",
       "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
@@ -1581,12 +1629,6 @@
       "operations": "操作数",
       "share": "占比",
       "empty": "此时间段内没有记录。"
-    },
-    "byRoute": {
-      "title": "按对话路由",
-      "description": "只有对话扣费会记录路由，因此这里涵盖提问和会议，不包括嵌入或 OCR。",
-      "route": "路由",
-      "calls": "调用次数"
     },
     "pricing": {
       "title": "价格与提醒",

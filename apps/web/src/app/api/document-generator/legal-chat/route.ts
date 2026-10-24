@@ -139,7 +139,9 @@ export async function POST(request: Request) {
     if (!ctx.success) return ctx.response;
     // The reply and the wording of its failure both use the workspace's own
     // models when it brought them, so the catch below runs in the scope too.
-    return withWorkspaceChatModels(ctx.data.companyId, () => legalChat(request, ctx));
+    return withWorkspaceChatModels(ctx.data.companyId, "documentWriter", () =>
+        legalChat(request, ctx)
+    );
 }
 
 async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {

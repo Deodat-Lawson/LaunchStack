@@ -82,7 +82,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "repoExplainer", async () => {
             const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
             if (!validation.success) {
                 return validation.response;

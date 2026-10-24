@@ -350,7 +350,7 @@ jest.mock("@launchstack/llm", () => ({
 let mockChatSource: "deployment" | "workspace" = "deployment";
 const mockScopes: unknown[] = [];
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
     },

@@ -35,7 +35,11 @@ export async function transcribeCallNotesAudio(input: {
         const provider = await getTranscriptionProvider();
         input.signal?.throwIfAborted();
         const result = await provider.transcribe(
-            Buffer.from(input.audioWav.buffer, input.audioWav.byteOffset, input.audioWav.byteLength),
+            Buffer.from(
+                input.audioWav.buffer,
+                input.audioWav.byteOffset,
+                input.audioWav.byteLength
+            ),
             "capture.wav",
             { mimeType: "audio/wav", timestamps: false }
         );
@@ -52,7 +56,11 @@ export async function transcribeCallNotesAudio(input: {
         // Still fail closed when boot-time validation was explicitly skipped.
         throw new Error("Azure Speech transcription is not configured");
     }
-    const language = input.language?.trim() || env.server.CALL_NOTES_TRANSCRIPTION_LANGUAGE?.trim();
+    const inputLanguage = input.language?.trim() ?? "";
+    const language =
+        inputLanguage.length > 0
+            ? inputLanguage
+            : env.server.CALL_NOTES_TRANSCRIPTION_LANGUAGE?.trim();
     const form = new FormData();
     form.append(
         "audio",

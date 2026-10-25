@@ -51,7 +51,11 @@ Replace the example token with the complete `lsc_…` token returned by pairing.
 pnpm --filter @launchstack/call-worker dev < ~/.config/launchstack/call-worker.json
 ```
 
-The worker stays idle and long-polls until Calls assigns a capture to this paired device. Reaching EOF after the config line does not stop it. Use Calls to stop the capture; Ctrl-C or SIGTERM gracefully drains and shuts down the worker. For a bundled development run:
+The worker stays idle and long-polls until Calls assigns a capture to this paired device. Reaching EOF after the config line does not stop it. Use Calls to stop the capture; Ctrl-C or SIGTERM gracefully drains and shuts down the worker.
+
+Graceful app Quit, `shutdown`, Ctrl-C and SIGTERM end a running capture's source with `source_stopped` before draining queued transcripts and finalizing. The server records `stopReason: "call_ended"`; no separate web Stop is required. Device revocation and unexpected source/device failures still interrupt capture rather than reporting a successful completion.
+
+For a bundled development run:
 
 ```sh
 pnpm --filter @launchstack/call-worker build

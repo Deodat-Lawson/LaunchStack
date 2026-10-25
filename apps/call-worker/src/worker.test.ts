@@ -564,6 +564,14 @@ await test("shutdown IPC and SIGTERM-style abort both drain the active capture g
             await runtime.close();
             assert.equal(backend.finishes.length, 1);
             assert.equal(
+                backend.events.find(event => event.kind === "attempt_ended")?.reason,
+                "source_stopped"
+            );
+            assert.equal(
+                backend.events.find(event => event.kind === "occurrence_ended")?.reason,
+                "source_stopped"
+            );
+            assert.equal(
                 backend.events.some(event => event.kind === "attempt_failed"),
                 false
             );

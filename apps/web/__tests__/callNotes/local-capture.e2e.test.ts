@@ -210,7 +210,8 @@ async function startHttpHost(): Promise<HttpTestHost> {
                     ...(chunks.length ? { body: Buffer.concat(chunks) } : {}),
                 });
                 const body: unknown =
-                    chunks.length && incoming.headers["content-type"]?.startsWith("application/json")
+                    chunks.length &&
+                    incoming.headers["content-type"]?.startsWith("application/json")
                         ? JSON.parse(Buffer.concat(chunks).toString())
                         : null;
                 const poll =
@@ -232,7 +233,8 @@ async function startHttpHost(): Promise<HttpTestHost> {
                     response = await pairDevice(request);
                 } else if (url.pathname === "/api/call-notes/devices/transcribe") {
                     const form = await request.clone().formData();
-                    host.transcriptionChannels.push(String(form.get("channel")));
+                    const channel = form.get("channel");
+                    if (typeof channel === "string") host.transcriptionChannels.push(channel);
                     response = await transcribeAudio(request);
                 } else if (url.pathname.startsWith("/api/call-notes/devices/")) {
                     response = await revokeDevice(request, {
@@ -416,18 +418,24 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         releaseModel?.();
         releaseEnrichment?.();
         enrichmentStreamAbort?.abort();
-        await runtime?.close();
-        await runtimeRun?.catch(() => undefined);
-        await Promise.allSettled(mockAfterTasks);
-        if (host?.server.listening) {
-            host.server.closeAllConnections();
-            const closed = deferred();
-            host.server.close(error => (error ? closed.reject(error) : closed.resolve()));
-            await closed.promise;
+        try {
+            await runtime?.close();
+        } finally {
+            await runtimeRun?.catch(() => undefined);
+            await Promise.allSettled(mockAfterTasks);
+            try {
+                if (host?.server.listening) {
+                    host.server.closeAllConnections();
+                    const closed = deferred();
+                    host.server.close(error => (error ? closed.reject(error) : closed.resolve()));
+                    await closed.promise;
+                }
+            } finally {
+                await mockTestDb?.close();
+                if (originalAuthUrl === undefined) delete process.env.BETTER_AUTH_URL;
+                else process.env.BETTER_AUTH_URL = originalAuthUrl;
+            }
         }
-        await mockTestDb?.close();
-        if (originalAuthUrl === undefined) delete process.env.BETTER_AUTH_URL;
-        else process.env.BETTER_AUTH_URL = originalAuthUrl;
     });
 
     it("stays idle until Start, drains final words on Stop, finalizes and creates a reviewable AI proposal", async () => {
@@ -491,9 +499,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         const idleList = await fetch(`${host!.origin}/api/call-notes`);
         expect(await idleList.json()).toEqual([]);
         const available = await eventually(
-            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
-                available: boolean;
-            }>,
+            async () =>
+                (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                    available: boolean;
+                }>,
             status => status.available
         );
         expect(available).toMatchObject({ available: true });
@@ -604,7 +613,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
                 title: accepted.note!.title,
             }),
         ]);
-        const repeatedStop = await command(host!.origin, { kind: "stop_capture", callId: ready.id });
+        const repeatedStop = await command(host!.origin, {
+            kind: "stop_capture",
+            callId: ready.id,
+        });
         expect(repeatedStop.status).toBe("completed");
         await eventually(
             async () => host!.pendingLongPolls,
@@ -657,9 +669,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             runtimeFailure = error;
         });
         await eventually(
-            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
-                available: boolean;
-            }>,
+            async () =>
+                (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                    available: boolean;
+                }>,
             status => status.available
         );
         const started = await command(host!.origin, {
@@ -733,6 +746,14 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         const callsResponse = await fetch(`${host!.origin}/api/call-notes`);
         const calls = (await callsResponse.json()) as unknown[];
         expect(calls).toHaveLength(1);
+        await runtime.handleControl({ type: "shutdown" });
+        await expect(runtimeRun).resolves.toBeUndefined();
+        const completed = await eventually(readSnapshot, call => call.status === "completed");
+        expect(completed.capture).toMatchObject({
+            outcome: "complete",
+            stopReason: "call_ended",
+        });
+        expect(completed.transcript).toHaveLength(3);
     }, 30_000);
 
     it("automatically stops after both channels become quiet with stopReason silence", async () => {
@@ -760,9 +781,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         runtimeRun = runtime.run();
         void runtimeRun.catch(() => undefined);
         await eventually(
-            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
-                available: boolean;
-            }>,
+            async () =>
+                (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                    available: boolean;
+                }>,
             status => status.available
         );
         const started = await command(host!.origin, {
@@ -805,9 +827,10 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         runtimeRun = runtime.run();
         void runtimeRun.catch(() => undefined);
         await eventually(
-            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
-                available: boolean;
-            }>,
+            async () =>
+                (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                    available: boolean;
+                }>,
             status => status.available
         );
         const started = await command(host!.origin, {

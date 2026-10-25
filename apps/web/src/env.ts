@@ -431,10 +431,7 @@ const serverSchema = z.object({
     ),
     // Capture-only provider override. Unset keeps the shared transcription
     // registry; Azure credentials are held by this server, never the worker.
-    CALL_NOTES_TRANSCRIPTION_PROVIDER: z.preprocess(
-        normalize,
-        z.enum(["azure_speech"]).optional()
-    ),
+    CALL_NOTES_TRANSCRIPTION_PROVIDER: z.preprocess(normalize, z.enum(["azure_speech"]).optional()),
     CALL_NOTES_TRANSCRIPTION_BASE_URL: z.preprocess(
         normalize,
         z

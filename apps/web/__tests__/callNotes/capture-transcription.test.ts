@@ -273,11 +273,15 @@ describe("call-notes transcription environment validation", () => {
         }
 
         expect(failure).toBeInstanceOf(Error);
-        for (const key of missing) {
-            expect((failure as Error).message).toContain(
-                `${key} is required when CALL_NOTES_TRANSCRIPTION_PROVIDER is "azure_speech"`
-            );
-        }
+        expect(failure).toMatchObject({
+            issues: expect.arrayContaining(
+                missing.map(key => ({
+                    code: "custom",
+                    path: [key],
+                    message: `${key} is required when CALL_NOTES_TRANSCRIPTION_PROVIDER is "azure_speech"`,
+                }))
+            ),
+        });
     });
 
     it("maps all four Azure transcription process variables into validated server settings", () => {

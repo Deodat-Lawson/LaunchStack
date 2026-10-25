@@ -206,7 +206,7 @@ export class CallWorkerRuntime {
         this.externalAbortCleanup?.();
         this.externalAbortCleanup = undefined;
         this.closePromise = (async () => {
-            await this.active?.pipeline.stop();
+            await this.active?.pipeline.stop("source_stopped");
             await this.runPromise?.catch(() => undefined);
         })();
         return this.closePromise;
@@ -233,7 +233,7 @@ export class CallWorkerRuntime {
             clearInterval(this.progressTimer);
             this.externalAbortCleanup?.();
             this.externalAbortCleanup = undefined;
-            if (signal.aborted) await this.active?.pipeline.stop();
+            if (signal.aborted) await this.active?.pipeline.stop("source_stopped");
             else await this.active?.pipeline.close();
         }
     }

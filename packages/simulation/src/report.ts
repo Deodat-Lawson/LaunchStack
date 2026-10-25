@@ -11,6 +11,7 @@ import {
     postReception,
     stanceShifts,
     topPosts,
+    wouldPayCounts,
     type FactionKey,
     type PostReception,
 } from "./metrics";
@@ -115,6 +116,23 @@ export function buildReportRequest(
         const a = findAgent(world, s.agentId)!;
         return `${a.persona.handle} (${a.persona.role}): ${stanceLabel(s.from)} → ${stanceLabel(s.to)}`;
     });
+    // Worlds from before turns were asked "would you pay?" have no answers; leave the block out.
+    const [yes, maybe, no] = wouldPayCounts(world);
+    const answered = yes + maybe + no;
+    const objections = world.agents
+        .filter(a => a.objection)
+        .slice(0, 12)
+        .map(a => `${a.persona.handle} (${a.persona.role}): "${clip(a.objection!, 120)}"`);
+    const money =
+        answered > 0
+            ? [
+                  "",
+                  `Would pay at the end, of the ${answered} who answered: yes ${yes}, maybe ${maybe}, no ${no}.`,
+                  ...(objections.length > 0
+                      ? ["What still holds people back:", ...objections]
+                      : []),
+              ]
+            : [];
     const events = world.posts
         .filter(p => p.kind === "event" || p.kind === "seed")
         .map(
@@ -133,6 +151,7 @@ export function buildReportRequest(
         "headline: one sentence, at most 20 words. summary: at most 120 words.",
         "dynamics: three to five things that drove the conversation. turningPoints: up to four moments, by round.",
         "factions: one entry per group present (supportive, neutral, critical), with a short label and what they cared about.",
+        "Liking the subject and paying for it are different: when the would-pay answers tell a different story from the stances, say so, and name what holds people back.",
         "watchFor: up to four signals the team could watch for in the real world to see whether this pattern is happening.",
         "Reply with JSON only.",
     ].join("\n");
@@ -151,6 +170,7 @@ export function buildReportRequest(
         "",
         "Factions at the end:",
         factionLines.join("\n"),
+        ...money,
         "",
         "Biggest changes of mind:",
         shifts.join("\n") || "(nobody changed their mind)",

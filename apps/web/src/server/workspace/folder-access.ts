@@ -18,6 +18,7 @@ import type { FolderVisibility } from "~/lib/authz/permissions";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 import { folderParentPath, normalizeFolderPath } from "~/lib/folders/path";
 import { createFolder } from "~/server/folders";
+import { copy } from "~/i18n/copy";
 
 import {
     canManageFolderPath,
@@ -76,7 +77,7 @@ async function loadFolder(companyId: bigint, categoryId: number): Promise<Folder
         .from(category)
         .where(and(eq(category.companyId, companyId), eq(category.id, categoryId)))
         .limit(1);
-    if (!row) throw notFound("Folder not found.");
+    if (!row) throw notFound(copy("team.server.errors.folderNotFound"));
     return { id: Number(row.id), name: row.name };
 }
 
@@ -111,7 +112,8 @@ export async function canManageFolder(ctx: WorkspaceContext, categoryId: number)
 async function requireVisibleFolder(ctx: WorkspaceContext, categoryId: number): Promise<FolderRef> {
     const folder = await loadFolder(ctx.companyId, categoryId);
     const scope = await ctx.documentScope();
-    if (!scopeAllowsCategory(scope, folder.name)) throw notFound("Folder not found.");
+    if (!scopeAllowsCategory(scope, folder.name))
+        throw notFound(copy("team.server.errors.folderNotFound"));
     return folder;
 }
 
@@ -177,7 +179,8 @@ export async function getFolderAccessByPath(
     if (existing) return getFolderAccess(ctx, existing.id);
 
     const scope = await ctx.documentScope();
-    if (!scopeAllowsCategory(scope, path)) throw notFound("Folder not found.");
+    if (!scopeAllowsCategory(scope, path))
+        throw notFound(copy("team.server.errors.folderNotFound"));
     const [members, inheritsFrom, wsName, access, lineage] = await Promise.all([
         activeMemberPrincipals(ctx.companyId),
         inheritedAudience(ctx.companyId, folderParentPath(path)),
@@ -208,11 +211,11 @@ export async function setFolderAccessByPath(
     let folder = await findFolderByPath(ctx.companyId, path);
     if (!folder) {
         if (!(await canManageFolderPath(ctx, path))) {
-            throw forbidden("You do not manage this folder.");
+            throw forbidden(copy("team.server.errors.notFolderManager"));
         }
         await createFolder(ctx.companyId, path);
         folder = await findFolderByPath(ctx.companyId, path);
-        if (!folder) throw notFound("Folder not found.");
+        if (!folder) throw notFound(copy("team.server.errors.folderNotFound"));
     }
     return setFolderAccess(ctx, folder.id, input);
 }
@@ -234,7 +237,7 @@ export async function setFolderAccess(
     ]);
 
     if (!(await canManageFolderPath(ctx, folder.name))) {
-        throw forbidden("You do not manage this folder.");
+        throw forbidden(copy("team.server.errors.notFolderManager"));
     }
 
     const desired = await validatePrincipals(ctx.companyId, input.grants);
@@ -242,7 +245,7 @@ export async function setFolderAccess(
     // Restricting a folder hides it from everyone not granted — the person
     // doing it included, since no role reads past a restriction.
     if (wantRestricted && !hasManageGrant(ctx, groupIds, desired)) {
-        throw forbidden("Keep a manage-level grant for yourself, or you will lose access.");
+        throw forbidden(copy("team.server.errors.keepManageGrant"));
     }
 
     const diff = diffGrants(existing, desired);

@@ -17,8 +17,11 @@ import "@testing-library/jest-dom";
 import type { HistoryEntry } from "~/lib/workspace-history";
 
 jest.mock("next/navigation", () => ({ useRouter: () => ({ push: jest.fn() }) }));
-jest.mock("~/lib/settings/useSettings", () => ({ useSettingValue: () => false }));
-jest.mock("~/lib/settings/registry", () => ({ searchSettings: () => [] }));
+jest.mock("~/lib/settings/useSettings", () => ({
+    useSettingValue: () => false,
+    useSettingsSearch: () => () => [],
+    useSettingCopier: () => (definition: unknown) => definition,
+}));
 jest.mock("~/lib/context-menu", () => ({
     APP_TARGET_KIND: "app",
     actionItems: () => [],

@@ -13,6 +13,8 @@ import { db } from "~/server/db/index";
 import { eq, and, desc } from "drizzle-orm";
 import { generatedDocuments } from "~/server/db/schema";
 import { z } from "zod";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -90,6 +92,8 @@ function transformCitations(
  * Query: ?templateId=rewrite to filter rewrite documents only
  */
 export async function GET(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -126,10 +130,7 @@ export async function GET(request: Request) {
         });
     } catch (error) {
         console.error("❌ [Document Generator] Error fetching documents:", error);
-        return NextResponse.json(
-            { success: false, message: "Failed to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, message: t("fetchDocuments") }, { status: 500 });
     }
 }
 
@@ -137,6 +138,8 @@ export async function GET(request: Request) {
  * POST - Create a new generated document
  */
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -148,7 +151,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Invalid request body",
+                    message: t("invalidRequestBody"),
                     errors: validation.error.errors,
                 },
                 { status: 400 }
@@ -186,10 +189,7 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         console.error("❌ [Document Generator] Error creating document:", error);
-        return NextResponse.json(
-            { success: false, message: "Failed to create document" },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, message: t("createDocument") }, { status: 500 });
     }
 }
 
@@ -197,6 +197,8 @@ export async function POST(request: Request) {
  * PUT - Update an existing generated document
  */
 export async function PUT(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -208,7 +210,7 @@ export async function PUT(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Invalid request body",
+                    message: t("invalidRequestBody"),
                     errors: validation.error.errors,
                 },
                 { status: 400 }
@@ -232,7 +234,7 @@ export async function PUT(request: Request) {
 
         if (!existingDoc) {
             return NextResponse.json(
-                { success: false, message: "Document not found or access denied" },
+                { success: false, message: t("documentNotFound") },
                 { status: 404 }
             );
         }
@@ -266,10 +268,7 @@ export async function PUT(request: Request) {
         });
     } catch (error) {
         console.error("❌ [Document Generator] Error updating document:", error);
-        return NextResponse.json(
-            { success: false, message: "Failed to update document" },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, message: t("updateDocument") }, { status: 500 });
     }
 }
 
@@ -277,6 +276,8 @@ export async function PUT(request: Request) {
  * DELETE - Delete a generated document
  */
 export async function DELETE(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -288,7 +289,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Invalid request body",
+                    message: t("invalidRequestBody"),
                     errors: validation.error.errors,
                 },
                 { status: 400 }
@@ -312,7 +313,7 @@ export async function DELETE(request: Request) {
 
         if (!existingDoc) {
             return NextResponse.json(
-                { success: false, message: "Document not found or access denied" },
+                { success: false, message: t("documentNotFound") },
                 { status: 404 }
             );
         }
@@ -322,13 +323,10 @@ export async function DELETE(request: Request) {
 
         return NextResponse.json({
             success: true,
-            message: "Document deleted successfully",
+            message: t("documentDeleted"),
         });
     } catch (error) {
         console.error("❌ [Document Generator] Error deleting document:", error);
-        return NextResponse.json(
-            { success: false, message: "Failed to delete document" },
-            { status: 500 }
-        );
+        return NextResponse.json({ success: false, message: t("deleteDocument") }, { status: 500 });
     }
 }

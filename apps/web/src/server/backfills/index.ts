@@ -5,7 +5,12 @@ import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
-import { countUnstampedFileUploads, stampFileUploadsCompanyId } from "./file-uploads-company-id";
+import {
+    countCanonicallyOwnedUnstampedFileUploads,
+    countUnstampedFileUploads,
+    stampCanonicallyOwnedFileUploads,
+    stampFileUploadsCompanyId,
+} from "./file-uploads-company-id";
 import {
     countUsersMissingMembership,
     provisionMissingMemberships,
@@ -144,6 +149,29 @@ const fileUploadsCompanyId: Backfill = {
 };
 
 /**
+ * Stamp file_uploads rows written without company_id after the backfill above
+ * completed (the ledger never re-runs a finished entry). The Drive, Gmail and
+ * agent-knowledge sinks uploaded unstamped until 2026-10, so their files were
+ * readable only by the OCR worker. Additive: NULL rows with a canonical owner
+ * only, nothing cleared.
+ */
+const fileUploadsRestamp: Backfill = {
+    id: "2026-10-file-uploads-restamp",
+    description: "Stamp file_uploads.company_id on rows written without it (connector syncs)",
+    requiresEngine: false,
+    requiresMigration: "20260809142627_file_uploads_company_id",
+
+    estimate: ({ db }) => countCanonicallyOwnedUnstampedFileUploads(db),
+
+    async step({ db }) {
+        const remaining = await countCanonicallyOwnedUnstampedFileUploads(db);
+        await stampCanonicallyOwnedFileUploads(db);
+        // One statement covers every row, so there is never a resume point.
+        return { cursor: null, processed: remaining };
+    },
+};
+
+/**
  * Give pre-memberships accounts the membership row the new workspace
  * resolution requires.
  *
@@ -219,4 +247,5 @@ export const BACKFILLS: Backfill[] = [
     userCompanyMembershipsBackfill,
     workspaceAccessBackfill,
     websiteSourceMarkersBackfill,
+    fileUploadsRestamp,
 ];

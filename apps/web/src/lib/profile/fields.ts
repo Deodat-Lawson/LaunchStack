@@ -8,6 +8,8 @@
 
 import { z } from "zod";
 
+import { V, v } from "~/i18n/validation";
+
 export const PROFILE_LIMITS = {
     name: 120,
     displayName: 80,
@@ -39,7 +41,7 @@ function clearable(max: number) {
     return z
         .string()
         .trim()
-        .max(max, `Keep it under ${max} characters.`)
+        .max(max, v("keepItUnder", { max }))
         .nullable()
         .transform(value => (value === "" ? null : value));
 }
@@ -49,14 +51,14 @@ export const ProfilePatchSchema = z
         name: z
             .string()
             .trim()
-            .min(1, "Your name can't be empty.")
-            .max(PROFILE_LIMITS.name, `Keep it under ${PROFILE_LIMITS.name} characters.`)
+            .min(1, V.nameEmpty)
+            .max(PROFILE_LIMITS.name, v("keepItUnder", { max: PROFILE_LIMITS.name }))
             .optional(),
         displayName: clearable(PROFILE_LIMITS.displayName).optional(),
         title: clearable(PROFILE_LIMITS.title).optional(),
         pronouns: clearable(PROFILE_LIMITS.pronouns).optional(),
         timeZone: clearable(PROFILE_LIMITS.timeZone)
-            .refine(value => value === null || isValidTimeZone(value), "Unknown time zone.")
+            .refine(value => value === null || isValidTimeZone(value), V.unknownTimeZone)
             .optional(),
         bio: clearable(PROFILE_LIMITS.bio).optional(),
     })

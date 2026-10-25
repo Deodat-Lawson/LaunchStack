@@ -19,6 +19,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
@@ -35,7 +36,7 @@ import type { SocialProvider } from "~/server/auth/providers";
 
 import { AssistantsBlock } from "./AssistantsBlock";
 import type { SettingsSectionProps } from "./contract";
-import { relativeTime } from "./people/format";
+import { useTimeFormat } from "./people/format";
 import { ProfileEditor } from "./ProfileEditor";
 import { StatusNote } from "./ui";
 
@@ -56,11 +57,19 @@ interface AccountRow {
     createdAt: Date | string;
 }
 
-const PROVIDER_LABEL: Record<string, string> = {
-    credential: "Email and password",
+/** `useTranslations("settings.account")`. */
+type AccountT = ReturnType<typeof useTranslations<"settings.account">>;
+
+/** Brand names stay as they are; the password is said in the reader's language. */
+const PROVIDER_BRAND: Record<string, string> = {
     google: "Google",
     github: "GitHub",
 };
+
+function providerLabel(t: AccountT, providerId: string): string | undefined {
+    if (providerId === "credential") return t("providers.credential");
+    return PROVIDER_BRAND[providerId];
+}
 
 const PROVIDER_ICON: Record<string, IconComponent> = {
     credential: KeyRound,
@@ -98,8 +107,8 @@ function takeArrival(): Arrival {
 }
 
 /** "Chrome on macOS" from a user-agent string, or the raw string's first words. */
-function describeAgent(userAgent: string | null | undefined): string {
-    if (!userAgent) return "Unknown browser";
+function describeAgent(t: AccountT, userAgent: string | null | undefined): string {
+    if (!userAgent) return t("agent.unknown");
     const ua = userAgent;
     const browser = ua.includes("Edg/")
         ? "Edge"
@@ -112,8 +121,8 @@ function describeAgent(userAgent: string | null | undefined): string {
               : ua.includes("Safari/")
                 ? "Safari"
                 : ua.includes("Electron/")
-                  ? "Desktop app"
-                  : "Browser";
+                  ? t("agent.desktopApp")
+                  : t("agent.browser");
     const os = ua.includes("Windows")
         ? "Windows"
         : ua.includes("Mac OS X") || ua.includes("Macintosh")
@@ -125,7 +134,7 @@ function describeAgent(userAgent: string | null | undefined): string {
               : ua.includes("Linux")
                 ? "Linux"
                 : null;
-    return os ? `${browser} on ${os}` : browser;
+    return os ? t("agent.on", { browser, os }) : browser;
 }
 
 function iso(value: Date | string): string {
@@ -133,6 +142,10 @@ function iso(value: Date | string): string {
 }
 
 export function AccountSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.account");
+    const tc = useTranslations("common");
+    const tAuthErrors = useTranslations("auth.errors");
+    const time = useTimeFormat();
     const { user } = useUser();
     const session = authClient.useSession();
     const currentToken = session.data?.session.token ?? null;
@@ -166,13 +179,13 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             setAccountsFailed(Boolean(linked.error));
             if (!linked.error) setAccounts((linked.data ?? []) as AccountRow[]);
             setOffered(signIn?.providers ?? []);
-            if (list.error) throw new Error(list.error.message ?? "Could not list sessions.");
+            if (list.error) throw new Error(list.error.message ?? t("couldNotListSessions"));
             setSessions((list.data ?? []) as SessionRow[]);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load your account.");
+            setError(err instanceof Error ? err.message : t("couldNotLoad"));
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void refresh();
@@ -190,8 +203,14 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         if (connected.error) {
             setConnectFailure({ provider: connected.provider, error: connected.error });
         } else {
-            toast.success(`${PROVIDER_LABEL[connected.provider] ?? "Account"} connected`);
+            toast.success(
+                t("connected", {
+                    provider: providerLabel(t, connected.provider) ?? t("accountFallback"),
+                })
+            );
         }
+        // Once, on arrival; `t` changing would replay the toast.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Once the block has its rows, so it doesn't move after the jump.
@@ -214,14 +233,15 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             });
             if (result.error) {
                 throw new Error(
-                    result.error.message ?? `Could not connect ${PROVIDER_LABEL[provider]}.`
+                    result.error.message ??
+                        t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
                 );
             }
         } catch (err) {
             toast.error(
                 err instanceof Error
                     ? err.message
-                    : `Could not connect ${PROVIDER_LABEL[provider]}.`
+                    : t("couldNotConnect", { provider: providerLabel(t, provider) ?? provider })
             );
             setBusy(null);
         }
@@ -231,12 +251,11 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         setBusy(token);
         try {
             const result = await authClient.revokeSession({ token });
-            if (result.error)
-                throw new Error(result.error.message ?? "Could not end that session.");
-            toast.success("Session ended");
+            if (result.error) throw new Error(result.error.message ?? t("couldNotEndSession"));
+            toast.success(t("sessionEnded"));
             await refresh();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not end that session.");
+            toast.error(err instanceof Error ? err.message : t("couldNotEndSession"));
         } finally {
             setBusy(null);
         }
@@ -246,12 +265,11 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         setBusy("others");
         try {
             const result = await authClient.revokeOtherSessions();
-            if (result.error)
-                throw new Error(result.error.message ?? "Could not end the other sessions.");
-            toast.success("Every other session ended");
+            if (result.error) throw new Error(result.error.message ?? t("couldNotEndOthers"));
+            toast.success(t("othersEnded"));
             await refresh();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not end the other sessions.");
+            toast.error(err instanceof Error ? err.message : t("couldNotEndOthers"));
         } finally {
             setBusy(null);
         }
@@ -270,27 +288,25 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             <ProfileEditor onActions={onActions} emailVerified={user ? user.emailVerified : null} />
 
             <div ref={signInRef} className="scroll-mt-4" />
-            <Section
-                title="Sign-in"
-                description="How you get in, and any accounts linked to yours."
-            >
+            <Section title={t("signIn.title")} description={t("signIn.description")}>
                 {connectFailure && (
                     <StatusNote tone="danger">
                         {connectErrorMessage(
                             connectFailure.error,
                             connectFailure.provider,
-                            user?.email
+                            user?.email,
+                            tAuthErrors
                         )}
                     </StatusNote>
                 )}
                 <Card>
                     {accountsFailed ? (
                         <StatusNote tone="danger" style={{ marginBottom: 0 }}>
-                            Couldn&apos;t load how you sign in. Reload the page to try again.
+                            {t("signIn.loadFailed")}
                         </StatusNote>
                     ) : accounts === null ? (
                         <StatusNote tone="muted" style={{ marginBottom: 0 }}>
-                            Loading…
+                            {tc("status.loading")}
                         </StatusNote>
                     ) : (
                         <ul className="m-0 list-none p-0">
@@ -305,11 +321,13 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     <ProviderMark providerId={account.providerId} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {PROVIDER_LABEL[account.providerId] ??
+                                            {providerLabel(t, account.providerId) ??
                                                 account.providerId}
                                         </div>
                                         <div className="text-ink-3 text-[12px]">
-                                            Linked {relativeTime(iso(account.createdAt))}
+                                            {t("signIn.linked", {
+                                                when: time.relative(iso(account.createdAt)),
+                                            })}
                                         </div>
                                     </div>
                                     {account.providerId !== "credential" && accounts.length > 1 && (
@@ -326,23 +344,23 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                                     if (result.error) {
                                                         throw new Error(
                                                             result.error.message ??
-                                                                "Could not unlink."
+                                                                t("signIn.couldNotUnlink")
                                                         );
                                                     }
-                                                    toast.success("Account unlinked");
+                                                    toast.success(t("signIn.unlinked"));
                                                     await refresh();
                                                 } catch (err) {
                                                     toast.error(
                                                         err instanceof Error
                                                             ? err.message
-                                                            : "Could not unlink."
+                                                            : t("signIn.couldNotUnlink")
                                                     );
                                                 } finally {
                                                     setBusy(null);
                                                 }
                                             }}
                                         >
-                                            Unlink
+                                            {t("signIn.unlink")}
                                         </Button>
                                     )}
                                 </li>
@@ -358,9 +376,11 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     <ProviderMark providerId={provider} />
                                     <div className="min-w-0 flex-1">
                                         <div className="text-ink text-[13px] font-semibold">
-                                            {PROVIDER_LABEL[provider]}
+                                            {providerLabel(t, provider) ?? provider}
                                         </div>
-                                        <div className="text-ink-3 text-[12px]">Not connected</div>
+                                        <div className="text-ink-3 text-[12px]">
+                                            {tc("status.notConnected")}
+                                        </div>
                                     </div>
                                     <Button
                                         size="sm"
@@ -368,7 +388,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                         disabled={busy?.startsWith("connect:") ?? false}
                                         onClick={() => void connect(provider)}
                                     >
-                                        {busy === `connect:${provider}` ? "Connecting…" : "Connect"}
+                                        {busy === `connect:${provider}`
+                                            ? t("signIn.connecting")
+                                            : tc("actions.connect")}
                                     </Button>
                                 </li>
                             ))}
@@ -380,13 +402,12 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                     (hasPassword ? <PasswordCard /> : <SetPasswordCard onSet={refresh} />)}
             </Section>
 
-            <Section
-                title="Sessions"
-                description="Every browser that currently holds a session for you. Ending one signs that browser out on its next request."
-            >
+            <Section title={t("sessions.title")} description={t("sessions.description")}>
                 <Card padding={0}>
                     {sessions === null ? (
-                        <div className="text-ink-3 px-5 py-4 text-[13px]">Loading…</div>
+                        <div className="text-ink-3 px-5 py-4 text-[13px]">
+                            {tc("status.loading")}
+                        </div>
                     ) : (
                         sessions
                             .slice()
@@ -405,17 +426,30 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                     >
                                         <div className="min-w-0 flex-1">
                                             <div className="text-ink flex items-center gap-2 text-[13px] font-semibold">
-                                                {describeAgent(row.userAgent)}
+                                                {describeAgent(t, row.userAgent)}
                                                 {current && (
-                                                    <Badge variant="success">This browser</Badge>
+                                                    <Badge variant="success">
+                                                        {t("sessions.thisBrowser")}
+                                                    </Badge>
                                                 )}
                                             </div>
                                             {/* An IPv6 address has no break opportunities of its
                                                 own; without this it widens a narrow pane. */}
                                             <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
-                                                {row.ipAddress ? `${row.ipAddress} · ` : ""}
-                                                last active {relativeTime(iso(row.updatedAt))} ·
-                                                expires {relativeTime(iso(row.expiresAt))}
+                                                {row.ipAddress
+                                                    ? t("sessions.metaWithIp", {
+                                                          ip: row.ipAddress,
+                                                          active: time.relative(iso(row.updatedAt)),
+                                                          expires: time.relative(
+                                                              iso(row.expiresAt)
+                                                          ),
+                                                      })
+                                                    : t("sessions.meta", {
+                                                          active: time.relative(iso(row.updatedAt)),
+                                                          expires: time.relative(
+                                                              iso(row.expiresAt)
+                                                          ),
+                                                      })}
                                             </div>
                                         </div>
                                         {!current && (
@@ -425,7 +459,9 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                                 disabled={busy === row.token}
                                                 onClick={() => void revoke(row.token)}
                                             >
-                                                {busy === row.token ? "Ending…" : "End session"}
+                                                {busy === row.token
+                                                    ? t("sessions.ending")
+                                                    : t("sessions.end")}
                                             </Button>
                                         )}
                                     </div>
@@ -442,8 +478,8 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                             onClick={() => void revokeOthers()}
                         >
                             {busy === "others"
-                                ? "Ending…"
-                                : `End the other ${others.length === 1 ? "session" : `${others.length} sessions`}`}
+                                ? t("sessions.ending")
+                                : t("sessions.endOthers", { count: others.length })}
                         </Button>
                     </div>
                 )}
@@ -472,6 +508,7 @@ function ProviderMark({ providerId }: { providerId: string }) {
  * to ask for, so the session is the proof (see /api/profile/sign-in).
  */
 function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
+    const t = useTranslations("settings.account.password");
     const [next, setNext] = useState("");
     const [confirm, setConfirm] = useState("");
     const [saving, setSaving] = useState(false);
@@ -493,14 +530,14 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
             });
             if (!res.ok) {
                 const body = (await res.json().catch(() => null)) as { error?: string } | null;
-                throw new Error(body?.error ?? "Could not set a password.");
+                throw new Error(body?.error ?? t("couldNotSet"));
             }
-            toast.success("Password set. You can now sign in with your email and password.");
+            toast.success(t("passwordSet"));
             setNext("");
             setConfirm("");
             await onSet();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not set a password.");
+            setError(err instanceof Error ? err.message : t("couldNotSet"));
         } finally {
             setSaving(false);
         }
@@ -509,12 +546,10 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
     return (
         <Card className="mt-3.5">
             <form onSubmit={submit}>
-                <div className="text-ink text-[13px] font-semibold">Set a password</div>
-                <p className="text-ink-3 mb-3 mt-1 text-[12.5px] leading-normal">
-                    Sign in with your email and a password as well as the accounts above.
-                </p>
+                <div className="text-ink text-[13px] font-semibold">{t("setTitle")}</div>
+                <p className="text-ink-3 mb-3 mt-1 text-[12.5px] leading-normal">{t("setBody")}</p>
                 <div className="grid gap-3.5 md:grid-cols-2">
-                    <Field label="New password" hint="At least 8 characters.">
+                    <Field label={t("newPassword")} hint={t("hint")}>
                         <TextInput
                             type="password"
                             autoComplete="new-password"
@@ -523,8 +558,8 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                         />
                     </Field>
                     <Field
-                        label="Repeat it"
-                        error={confirm && confirm !== next ? "Does not match." : undefined}
+                        label={t("repeat")}
+                        error={confirm && confirm !== next ? t("mismatch") : undefined}
                     >
                         <TextInput
                             type="password"
@@ -543,7 +578,7 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                 )}
                 <div className="mt-4 flex justify-end">
                     <Button type="submit" disabled={!canSave || saving}>
-                        {saving ? "Setting…" : "Set password"}
+                        {saving ? t("setting") : t("setSubmit")}
                     </Button>
                 </div>
             </form>
@@ -552,6 +587,7 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
 }
 
 function PasswordCard() {
+    const t = useTranslations("settings.account.password");
     const [current, setCurrent] = useState("");
     const [next, setNext] = useState("");
     const [confirm, setConfirm] = useState("");
@@ -572,14 +608,13 @@ function PasswordCard() {
                 newPassword: next,
                 revokeOtherSessions: signOutOthers,
             });
-            if (result.error)
-                throw new Error(result.error.message ?? "Could not change your password.");
-            toast.success("Password changed");
+            if (result.error) throw new Error(result.error.message ?? t("couldNotChange"));
+            toast.success(t("changed"));
             setCurrent("");
             setNext("");
             setConfirm("");
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not change your password.");
+            setError(err instanceof Error ? err.message : t("couldNotChange"));
         } finally {
             setSaving(false);
         }
@@ -588,8 +623,8 @@ function PasswordCard() {
     return (
         <Card className="mt-3.5">
             <form onSubmit={submit}>
-                <div className="text-ink mb-3 text-[13px] font-semibold">Change password</div>
-                <Field label="Current password">
+                <div className="text-ink mb-3 text-[13px] font-semibold">{t("changeTitle")}</div>
+                <Field label={t("current")}>
                     <TextInput
                         type="password"
                         autoComplete="current-password"
@@ -598,7 +633,7 @@ function PasswordCard() {
                     />
                 </Field>
                 <div className="grid gap-3.5 md:grid-cols-2">
-                    <Field label="New password" hint="At least 8 characters.">
+                    <Field label={t("newPassword")} hint={t("hint")}>
                         <TextInput
                             type="password"
                             autoComplete="new-password"
@@ -607,8 +642,8 @@ function PasswordCard() {
                         />
                     </Field>
                     <Field
-                        label="Repeat it"
-                        error={confirm && confirm !== next ? "Does not match." : undefined}
+                        label={t("repeat")}
+                        error={confirm && confirm !== next ? t("mismatch") : undefined}
                     >
                         <TextInput
                             type="password"
@@ -624,7 +659,7 @@ function PasswordCard() {
                         checked={signOutOthers}
                         onChange={e => setSignOutOthers(e.target.checked)}
                     />
-                    Sign out every other browser
+                    {t("signOutOthers")}
                 </label>
                 {error && (
                     <div className="mt-3">
@@ -635,7 +670,7 @@ function PasswordCard() {
                 )}
                 <div className="mt-4 flex justify-end">
                     <Button type="submit" disabled={!canSave || saving}>
-                        {saving ? "Changing…" : "Change password"}
+                        {saving ? t("changing") : t("changeSubmit")}
                     </Button>
                 </div>
             </form>

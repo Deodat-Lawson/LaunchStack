@@ -4,6 +4,8 @@ import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateToolCallSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertToolCallOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -17,11 +19,13 @@ export async function PATCH(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { toolCallId } = await params;
 
-        const owned = await assertToolCallOwnedByUser(toolCallId, ctx.data.authUserId);
+        const owned = await assertToolCallOwnedByUser(toolCallId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateToolCallSchema);
@@ -44,7 +48,7 @@ export async function PATCH(
             .returning();
 
         if (!updatedToolCall) {
-            return NextResponse.json({ error: "Tool call not found" }, { status: 404 });
+            return NextResponse.json({ error: t("toolCallNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -53,6 +57,6 @@ export async function PATCH(
         });
     } catch (error) {
         console.error("Error updating tool call:", error);
-        return NextResponse.json({ error: "Failed to update tool call" }, { status: 500 });
+        return NextResponse.json({ error: t("updateToolCall") }, { status: 500 });
     }
 }

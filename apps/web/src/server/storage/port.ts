@@ -27,6 +27,7 @@ export function createAppStoragePort(): StoragePort {
                 data: input.data,
                 contentType: input.contentType,
                 userId: input.userId ?? "system",
+                companyId: input.companyId,
             });
             return {
                 url: result.url,

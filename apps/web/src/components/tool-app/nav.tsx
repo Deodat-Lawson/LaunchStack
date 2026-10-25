@@ -10,6 +10,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
+import { useTranslations } from "next-intl";
 
 import {
     formatToolHref,
@@ -387,4 +388,50 @@ export function useToolSearchParams(): URLSearchParams {
 /** True while this tool's tab is the focused one. Gate `window` key listeners on it. */
 export function useToolActive(): boolean {
     return useOptionalToolNav()?.active ?? true;
+}
+
+/**
+ * Message keys of the Studio tools' names and one-line descriptions, by the
+ * tool id the workspace uses (`?feature=<id>`).
+ */
+const TOOL_REGISTRY_KEYS = {
+    growth: "growth",
+    proposals: "proposals",
+    vantage: "vantage",
+    scenarios: "scenarios",
+    "knowledge-graph": "knowledgeGraph",
+    "repo-explainer": "repoExplainer",
+} as const;
+
+export type RegisteredToolId = keyof typeof TOOL_REGISTRY_KEYS;
+
+function registryKey(toolId: string) {
+    return Object.prototype.hasOwnProperty.call(TOOL_REGISTRY_KEYS, toolId)
+        ? TOOL_REGISTRY_KEYS[toolId as RegisteredToolId]
+        : null;
+}
+
+/**
+ * A tool's name and description in the reader's language (`tools.registry`).
+ * A tool id the registry does not know answers the caller's fallback, so a
+ * launcher row can switch to this before every tool has a message.
+ */
+export function useToolRegistryText(): {
+    name: (toolId: string, fallback: string) => string;
+    description: (toolId: string, fallback: string) => string;
+} {
+    const t = useTranslations("tools.registry");
+    return useMemo(
+        () => ({
+            name: (toolId, fallback) => {
+                const key = registryKey(toolId);
+                return key ? t(`${key}.name`) : fallback;
+            },
+            description: (toolId, fallback) => {
+                const key = registryKey(toolId);
+                return key ? t(`${key}.description`) : fallback;
+            },
+        }),
+        [t]
+    );
 }

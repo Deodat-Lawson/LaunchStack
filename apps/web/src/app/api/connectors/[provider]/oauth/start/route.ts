@@ -1,11 +1,15 @@
 /**
- * Start a Slack/GitHub OAuth flow: build the consent URL with an HMAC-signed
- * state, double the nonce into an httpOnly cookie, and redirect. Google Drive
- * connects through its own flow at /api/connectors/google/oauth/start.
+ * Start a generic-provider OAuth flow (Slack, GitHub, LinkedIn, Notion):
+ * build the consent URL with an HMAC-signed state, double the nonce into an
+ * httpOnly cookie, and redirect. Google Drive and Gmail connect through their
+ * own flow at /api/connectors/google/oauth/start. For Notion, running this
+ * again reopens Notion's page picker, which is how more pages are added.
  */
 
 import { NextResponse } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { createValidationError } from "~/lib/api-utils";
 import { handleApiError } from "~/lib/api-utils";
 import {
@@ -28,15 +32,17 @@ import { publicOrigin } from "~/server/public-origin";
 export const runtime = "nodejs";
 
 export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
+    const locale = localeOfRequest(request);
     try {
         const { provider } = await params;
         if (!isOAuthProvider(provider)) {
+            const t = translatorFor(locale, "sources.server.connectors");
             return createValidationError(
                 provider === "google-drive"
-                    ? "Google Drive connects via /api/connectors/google/oauth/start."
+                    ? t("driveConnectsElsewhere")
                     : provider === "gmail"
-                      ? "Gmail connects via /api/connectors/google/oauth/start?provider=gmail."
-                      : `Unknown connector provider: ${provider}`
+                      ? t("gmailConnectsElsewhere")
+                      : t("unknownProvider", { provider })
             );
         }
 
@@ -44,7 +50,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         if (!guard.ok) return guard.response;
 
         const config = getConnectorConfig(provider, publicOrigin(request));
-        if (!config) return notConfiguredResponse(provider);
+        if (!config) return notConfiguredResponse(provider, locale);
 
         const nonce = createNonce();
         const state = signState({
@@ -67,6 +73,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         });
         return response;
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

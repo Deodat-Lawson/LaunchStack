@@ -7,38 +7,59 @@
  * already handles ZIP extraction, file filtering, and ingestion.
  */
 
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
+
 const MAX_ZIP_SIZE_BYTES = 500 * 1024 * 1024; // 500 MB
 
 // ---------------------------------------------------------------------------
 // Custom error classes
 // ---------------------------------------------------------------------------
 
-export class GitHubRepoNotFoundError extends Error {
+/**
+ * A reason the repository can't be indexed, for the person who asked:
+ * `message` is the English, `copy` its key (`upload.server.github`) for the
+ * route to word in the reader's language.
+ */
+export class GitHubRepoError extends Error {
+    readonly copy: Copy;
+
+    constructor(copy: Copy) {
+        super(englishCopy(copy));
+        this.name = "GitHubRepoError";
+        this.copy = copy;
+    }
+}
+
+export class GitHubRepoNotFoundError extends GitHubRepoError {
     constructor(owner: string, repo: string) {
-        super(
-            `Repository "${owner}/${repo}" not found. Check that the URL is correct ` +
-                `and that the repository is public (or provide an access token for private repos).`
-        );
+        super({ key: "upload.server.github.repoNotFound", values: { repo: `${owner}/${repo}` } });
         this.name = "GitHubRepoNotFoundError";
     }
 }
 
-export class GitHubAuthError extends Error {
+export class GitHubAuthError extends GitHubRepoError {
     constructor(owner: string, repo: string, hadToken: boolean) {
-        const hint = hadToken
-            ? "The provided access token may lack permissions or has expired."
-            : "This may be a private repository. Provide a personal access token with 'repo' scope.";
-        super(`Access denied for "${owner}/${repo}". ${hint}`);
+        super({
+            key: hadToken
+                ? "upload.server.github.accessDeniedToken"
+                : "upload.server.github.accessDeniedNoToken",
+            values: { repo: `${owner}/${repo}` },
+        });
         this.name = "GitHubAuthError";
     }
 }
 
-export class GitHubRateLimitError extends Error {
+export class GitHubRateLimitError extends GitHubRepoError {
     constructor(retryAfter?: string) {
-        const hint = retryAfter
-            ? ` Retry after ${retryAfter} seconds.`
-            : " Please wait before retrying or provide a GitHub access token for higher limits.";
-        super(`GitHub API rate limit exceeded.${hint}`);
+        super(
+            retryAfter
+                ? {
+                      key: "upload.server.github.rateLimitRetryAfter",
+                      values: { seconds: retryAfter },
+                  }
+                : { key: "upload.server.github.rateLimit" }
+        );
         this.name = "GitHubRateLimitError";
     }
 }
@@ -67,19 +88,17 @@ export function parseGitHubUrl(url: string): ParsedGitHubUrl {
     try {
         parsed = new URL(url);
     } catch {
-        throw new Error(`Invalid URL: "${url}"`);
+        throw new GitHubRepoError({ key: "upload.server.github.invalidUrl", values: { url } });
     }
 
     if (parsed.hostname !== "github.com" && parsed.hostname !== "www.github.com") {
-        throw new Error(`Not a GitHub URL: "${url}". Expected a URL with hostname "github.com".`);
+        throw new GitHubRepoError({ key: "upload.server.github.notGithub", values: { url } });
     }
 
     const segments = parsed.pathname.split("/").filter(s => s.length > 0);
 
     if (segments.length < 2) {
-        throw new Error(
-            `Invalid GitHub repository URL: "${url}". Expected format: https://github.com/owner/repo`
-        );
+        throw new GitHubRepoError({ key: "upload.server.github.invalidRepoUrl", values: { url } });
     }
 
     const owner = segments[0]!;
@@ -151,26 +170,32 @@ export async function downloadGitHubRepoZip(
     // Check Content-Length header first for early rejection
     const contentLength = response.headers.get("content-length");
     if (contentLength && parseInt(contentLength, 10) > MAX_ZIP_SIZE_BYTES) {
-        throw new Error(
-            `Repository archive is too large (${(parseInt(contentLength, 10) / 1024 / 1024).toFixed(0)}MB). ` +
-                `Maximum supported size is ${MAX_ZIP_SIZE_BYTES / 1024 / 1024}MB.`
-        );
+        throw new GitHubRepoError({
+            key: "upload.server.github.tooLarge",
+            values: {
+                mb: (parseInt(contentLength, 10) / 1024 / 1024).toFixed(0),
+                max: String(MAX_ZIP_SIZE_BYTES / 1024 / 1024),
+            },
+        });
     }
 
     const buffer = Buffer.from(await response.arrayBuffer());
 
     if (buffer.length > MAX_ZIP_SIZE_BYTES) {
-        throw new Error(
-            `Repository archive is too large (${(buffer.length / 1024 / 1024).toFixed(0)}MB). ` +
-                `Maximum supported size is ${MAX_ZIP_SIZE_BYTES / 1024 / 1024}MB.`
-        );
+        throw new GitHubRepoError({
+            key: "upload.server.github.tooLarge",
+            values: {
+                mb: (buffer.length / 1024 / 1024).toFixed(0),
+                max: String(MAX_ZIP_SIZE_BYTES / 1024 / 1024),
+            },
+        });
     }
 
     if (buffer.length < 100) {
-        throw new Error(
-            `Repository archive appears empty (${buffer.length} bytes). ` +
-                `The repository may be empty or the branch may not exist.`
-        );
+        throw new GitHubRepoError({
+            key: "upload.server.github.empty",
+            values: { bytes: String(buffer.length) },
+        });
     }
 
     console.log(

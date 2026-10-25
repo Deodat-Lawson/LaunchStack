@@ -4,6 +4,8 @@ import { db } from "~/server/db";
 import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -17,11 +19,13 @@ export async function GET(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { taskId } = await params;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const [task] = await db
@@ -30,7 +34,7 @@ export async function GET(
             .where(eq(agentAiChatbotTask.id, taskId));
 
         if (!task) {
-            return NextResponse.json({ error: "Task not found" }, { status: 404 });
+            return NextResponse.json({ error: t("taskNotFound") }, { status: 404 });
         }
 
         // Get execution steps for this task
@@ -47,7 +51,7 @@ export async function GET(
         });
     } catch (error) {
         console.error("Error fetching task:", error);
-        return NextResponse.json({ error: "Failed to fetch task" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchTask") }, { status: 500 });
     }
 }
 
@@ -58,11 +62,13 @@ export async function PATCH(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { taskId } = await params;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateTaskSchema);
@@ -84,7 +90,7 @@ export async function PATCH(
             .returning();
 
         if (!updatedTask) {
-            return NextResponse.json({ error: "Task not found" }, { status: 404 });
+            return NextResponse.json({ error: t("taskNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -93,6 +99,6 @@ export async function PATCH(
         });
     } catch (error) {
         console.error("Error updating task:", error);
-        return NextResponse.json({ error: "Failed to update task" }, { status: 500 });
+        return NextResponse.json({ error: t("updateTask") }, { status: 500 });
     }
 }

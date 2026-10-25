@@ -7,6 +7,7 @@
 
 import { createGmailClient } from "@launchstack/pipelines/connectors/gmail";
 
+import { requestTranslator } from "~/i18n/server";
 import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -18,11 +19,15 @@ import {
 
 export const runtime = "nodejs";
 
-const SYSTEM_LABELS_SHOWN: Record<string, { name: string; order: number }> = {
-    INBOX: { name: "Inbox", order: 0 },
-    SENT: { name: "Sent", order: 1 },
-    STARRED: { name: "Starred", order: 2 },
-    IMPORTANT: { name: "Important", order: 3 },
+/** `name` is the label's key in `sources.server.gmail.labels`, worded per reader. */
+const SYSTEM_LABELS_SHOWN: Record<
+    string,
+    { name: "inbox" | "sent" | "starred" | "important"; order: number }
+> = {
+    INBOX: { name: "inbox", order: 0 },
+    SENT: { name: "sent", order: 1 },
+    STARRED: { name: "starred", order: 2 },
+    IMPORTANT: { name: "important", order: 3 },
 };
 
 export async function GET(request: Request) {
@@ -33,16 +38,20 @@ export async function GET(request: Request) {
             const own = await requireOwnActiveGmailConnection(guard.ctx);
             if (!own.ok) return own.response;
 
+            const t = requestTranslator(request, "sources.server.gmail.labels");
             const accessToken = await getGmailAccessToken(own.connection);
             const labels = await createGmailClient({ accessToken }).listLabels();
 
             const shown = labels
                 .filter(label => label.type === "user" || SYSTEM_LABELS_SHOWN[label.id])
-                .map(label => ({
-                    id: label.id,
-                    name: SYSTEM_LABELS_SHOWN[label.id]?.name ?? label.name,
-                    system: label.type !== "user",
-                }))
+                .map(label => {
+                    const system = SYSTEM_LABELS_SHOWN[label.id];
+                    return {
+                        id: label.id,
+                        name: system ? t(system.name) : label.name,
+                        system: label.type !== "user",
+                    };
+                })
                 .sort((a, b) => {
                     const ao = SYSTEM_LABELS_SHOWN[a.id]?.order ?? 100;
                     const bo = SYSTEM_LABELS_SHOWN[b.id]?.order ?? 100;
@@ -51,7 +60,7 @@ export async function GET(request: Request) {
 
             return createSuccessResponse({ labels: shown });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

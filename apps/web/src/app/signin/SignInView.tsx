@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { useAuth } from "~/lib/auth-client";
@@ -33,6 +34,8 @@ import type { SocialProvider } from "~/server/auth/providers";
  *   view=forgot       open on the reset-link form (from an expired link)
  */
 export function SignInView({ socialProviders }: { socialProviders: SocialProvider[] }) {
+    const t = useTranslations("auth.signIn");
+    const te = useTranslations("auth.errors");
     const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
     const searchParams = useSearchParams();
     const nextParam = searchParams.get("next");
@@ -40,9 +43,12 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
 
     // One-shot messages are read once, then dropped from the address bar so
     // a refresh or a bookmark doesn't replay them.
-    const [oauthError] = useState(() =>
-        oauthErrorMessage(searchParams.get("error"), searchParams.get("provider"))
-    );
+    // The code, not the sentence: the sentence follows the language if it changes.
+    const [oauthError] = useState(() => ({
+        code: searchParams.get("error"),
+        provider: searchParams.get("provider"),
+    }));
+    const oauthErrorText = oauthErrorMessage(oauthError.code, oauthError.provider, te);
     const [passwordReset] = useState(() => searchParams.get("notice") === "password-reset");
     const [initialView] = useState(() =>
         searchParams.get("view") === "forgot" ? ("forgot" as const) : ("signin" as const)
@@ -76,31 +82,22 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
             <div className="flex min-h-0 flex-1 items-stretch">
                 <main className="flex min-w-0 flex-1 items-center justify-center px-6 py-12">
                     <div className="w-full max-w-[440px]">
-                        <div className="text-ink-3 mb-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em]">
-                            Welcome back
-                        </div>
                         <h1 className="display text-ink mb-2 text-[32px] leading-[1.1] tracking-[-0.02em]">
-                            Sign in to your workspace.
+                            {t("title")}
                         </h1>
-                        <p className="text-ink-3 mb-7 text-sm leading-[1.55]">
-                            Your sources, threads, and answers — right where you left them.
-                        </p>
+                        <p className="text-ink-3 mb-7 text-sm leading-[1.55]">{t("subtitle")}</p>
 
-                        {oauthError ? (
-                            <Notice tone="danger">{oauthError}</Notice>
+                        {oauthErrorText ? (
+                            <Notice tone="danger">{oauthErrorText}</Notice>
                         ) : passwordReset ? (
-                            <Notice tone="success">
-                                Password updated. Sign in with your new password.
-                            </Notice>
+                            <Notice tone="success">{t("passwordUpdated")}</Notice>
                         ) : reauthForAssistant ? (
-                            <Notice tone="info">
-                                Sign in to connect your assistant to LaunchStack.
-                            </Notice>
+                            <Notice tone="info">{t("assistantReauth")}</Notice>
                         ) : next !== "/" && signedInOnArrival !== true ? (
                             <Notice tone="info">
                                 {next.startsWith("/invite/")
-                                    ? "Sign in to accept your invitation."
-                                    : "Sign in to continue — you'll go straight back to the page you opened."}
+                                    ? t("acceptInvitation")
+                                    : t("continueToPage")}
                             </Notice>
                         ) : null}
 
@@ -115,13 +112,16 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                         )}
 
                         <div className="text-ink-3 mt-6 text-center text-[12.5px]">
-                            New to Launchstack?{" "}
-                            <Link
-                                href={withNext("/signup", nextParam)}
-                                className="text-brand font-semibold no-underline hover:underline"
-                            >
-                                Start a free workspace →
-                            </Link>
+                            {t.rich("newHere", {
+                                link: chunks => (
+                                    <Link
+                                        href={withNext("/signup", nextParam)}
+                                        className="text-brand font-semibold no-underline hover:underline"
+                                    >
+                                        {chunks}
+                                    </Link>
+                                ),
+                            })}
                         </div>
                         <AuthLegalLinks className="mt-4" />
                     </div>
@@ -132,9 +132,8 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                 */}
                 <div className="grid w-[46%] max-[960px]:hidden">
                     <AuthBrandPanel
-                        tagline="Built for solo builders"
-                        headline="Your second brain, grounded in sources you trust."
-                        description="Drop in your docs, notes, transcripts, and repos. Ask anything. Every answer cites the exact passage."
+                        headline={t("brandHeadline")}
+                        description={t("brandDescription")}
                     />
                 </div>
             </div>
@@ -143,8 +142,12 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
 }
 
 const NOTICE_TONES = {
-    info: { Icon: Info, icon: "text-info", box: "bg-info-soft border-info/25" },
-    success: { Icon: CheckCircle2, icon: "text-success", box: "bg-success-soft border-success/25" },
+    info: { Icon: Info, icon: "text-info-ink", box: "bg-info-soft border-info/25" },
+    success: {
+        Icon: CheckCircle2,
+        icon: "text-success-ink",
+        box: "bg-success-soft border-success/25",
+    },
     danger: { Icon: AlertCircle, icon: "text-danger", box: "bg-danger-soft border-danger/25" },
 } as const;
 
@@ -187,24 +190,23 @@ function Notice({
  * the app would otherwise have done automatically.
  */
 function AlreadySignedIn({ continueHref }: { continueHref: string }) {
+    const t = useTranslations("auth.signIn.alreadySignedIn");
+    const tc = useTranslations("common.actions");
     const { signOut } = useAuth();
     return (
         <div className="border-line flex flex-col items-start gap-3.5 rounded-xl border px-6 py-7">
-            <div className="text-ink text-sm font-semibold">You&rsquo;re already signed in.</div>
-            <p className="text-ink-3 m-0 text-[13px] leading-[1.55]">
-                We couldn&rsquo;t work out which workspace to open for you. Continue to pick one, or
-                sign out and start again.
-            </p>
+            <div className="text-ink text-sm font-semibold">{t("title")}</div>
+            <p className="text-ink-3 m-0 text-[13px] leading-[1.55]">{t("body")}</p>
             <div className="flex flex-wrap gap-2.5">
                 <Button asChild>
-                    <Link href={continueHref}>Continue</Link>
+                    <Link href={continueHref}>{tc("continue")}</Link>
                 </Button>
                 <Button
                     type="button"
                     variant="outline"
                     onClick={() => void signOut({ redirectUrl: LANDING_HREF })}
                 >
-                    Sign out
+                    {tc("signOut")}
                 </Button>
             </div>
         </div>

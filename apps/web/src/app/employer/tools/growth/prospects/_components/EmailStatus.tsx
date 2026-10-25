@@ -1,20 +1,16 @@
+import { useTranslations } from "next-intl";
+
 import { cn } from "~/lib/utils";
 
 import type { EmailStatusKind } from "../api";
 
-export const EMAIL_STATUS_LABEL: Record<EmailStatusKind, string> = {
-    verified: "Verified",
-    found: "Found",
-    generic: "Generic",
-    guess: "Guess",
-};
+/** Every status, in the order the People filter lists them. */
+export const EMAIL_STATUSES: readonly EmailStatusKind[] = ["verified", "found", "generic", "guess"];
 
-export const EMAIL_STATUS_HELP: Record<EmailStatusKind, string> = {
-    verified: "Mailbox confirmed by the provider.",
-    found: "Published on a page we fetched; not verified.",
-    generic: "A shared inbox such as info@ or sales@.",
-    guess: "Built from the company's address pattern. Confirm before using.",
-};
+/*
+ * A status's word and its explanation are `growth.prospects.emailStatus.label.<status>`
+ * and `.help.<status>` in the catalogue.
+ */
 
 /** A word first, colour second: only verified and guess carry colour. */
 export function EmailStatus({
@@ -24,18 +20,19 @@ export function EmailStatus({
     status: EmailStatusKind;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects.emailStatus");
     return (
         <span
-            title={EMAIL_STATUS_HELP[status]}
+            title={t(`help.${status}`)}
             className={cn(
                 "inline-flex h-[18px] items-center whitespace-nowrap rounded px-1.5 text-[11px] leading-none",
-                status === "verified" && "bg-success-soft text-success",
-                status === "guess" && "bg-warn-soft text-warn",
+                status === "verified" && "bg-success-soft text-success-ink",
+                status === "guess" && "bg-warn-soft text-warn-ink",
                 (status === "found" || status === "generic") && "border-line text-ink-2 border",
                 className
             )}
         >
-            {EMAIL_STATUS_LABEL[status]}
+            {t(`label.${status}`)}
         </span>
     );
 }

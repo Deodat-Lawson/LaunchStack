@@ -99,7 +99,7 @@ export default async function AuthorizationPage({
                                 {check.scopes.map(scope => (
                                     <li key={scope} className="flex items-start gap-2 text-sm">
                                         <ShieldCheck
-                                            className="text-success mt-0.5 size-4 shrink-0"
+                                            className="text-success-ink mt-0.5 size-4 shrink-0"
                                             aria-hidden
                                         />
                                         <span>

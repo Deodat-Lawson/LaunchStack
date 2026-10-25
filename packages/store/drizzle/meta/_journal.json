@@ -36,6 +36,13 @@
       "when": 1792254326046,
       "tag": "20261017162525_company_embedding_base_url",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792730143499,
+      "tag": "20261023043543_ocr_job_progress",
+      "breakpoints": true
     }
   ]
 }

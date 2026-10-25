@@ -153,7 +153,7 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 
 jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     normalizeModelContent: (content: unknown) => String(content),
-    getSystemPrompt: () => "system",
+    getSystemPrompt: (...args: unknown[]) => mockGetSystemPrompt(...args),
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
     buildReferences: (...args: unknown[]) => mockBuildReferences(...args),
@@ -161,6 +161,13 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
 }));
 
 const mockBuildReferences = jest.fn((..._args: unknown[]) => [] as unknown[]);
+const mockGetSystemPrompt = jest.fn((..._args: unknown[]) => "system");
+
+// The person's `chat.responseStyle`; unset unless a test stores one.
+const mockReadSettingValue = jest.fn(async (..._args: unknown[]): Promise<unknown> => undefined);
+jest.mock("~/server/settings/store", () => ({
+    readSettingValue: (...args: unknown[]) => mockReadSettingValue(...args),
+}));
 
 // The workspace's sources as tools. What the person can open is scripted per
 // test (nothing, by default, so a turn offers no source tools); the tools'
@@ -241,6 +248,40 @@ jest.mock("~/server/chat-source-tools", () => ({
         `## The workspace's sources (attached: ${attached})`,
     noSourceToolsPrompt: (overview: unknown) =>
         overview ? "No source is attached; you did not look." : "No overview; you did not look.",
+}));
+
+// Writing documents as a tool. The session holds no tool unless a test turns
+// it on, so the turns above keep their own tool lists; the tool's own
+// behaviour is tested in __tests__/server/chat-document-tools.test.ts.
+let mockDocumentToolsOn = false;
+const mockWriteDocument = jest.fn(
+    async (..._args: unknown[]) => 'Created "Scenario Simulator — Business Plan" (d90)'
+);
+const mockCreateDocumentTools = jest.fn((..._args: unknown[]) => {
+    const session = { created: [] as unknown[], tools: [] as unknown[] };
+    if (mockDocumentToolsOn) {
+        session.tools.push({
+            name: "create_document",
+            description: "create",
+            parameters: { type: "object", properties: {} },
+            describe: () => "Writing “Scenario Simulator — Business Plan”",
+            run: async (args: unknown) => {
+                const text = await mockWriteDocument(args);
+                session.created.push({
+                    documentId: 90,
+                    title: "Scenario Simulator — Business Plan",
+                    folder: "Unfiled",
+                });
+                return text;
+            },
+        });
+    }
+    return session;
+});
+jest.mock("~/server/chat-document-tools", () => ({
+    createDocumentTools: (...args: unknown[]) => mockCreateDocumentTools(...args),
+    documentToolsPrompt: () => "## Writing documents",
+    noDocumentToolsPrompt: () => "This person's role cannot add documents.",
 }));
 
 const mockInvoke = jest.fn();
@@ -330,7 +371,7 @@ jest.mock("@launchstack/llm", () => ({
 let mockChatSource: "deployment" | "workspace" = "deployment";
 const mockScopes: unknown[] = [];
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
     },
@@ -405,6 +446,15 @@ function queryRequest(body: unknown) {
     });
 }
 
+/** The same request from someone reading the app in Simplified Chinese. */
+function chineseQueryRequest(body: unknown) {
+    return new Request("http://localhost/api/agents/documentQ&A/AIChat/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+        body: JSON.stringify(body),
+    });
+}
+
 describe("POST /api/agents/documentQ&A/AIChat/query", () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -460,6 +510,56 @@ describe("POST /api/agents/documentQ&A/AIChat/query", () => {
             // stray id is never read, and nothing is attached to it.
             expect(mockSelectCount.value).toBe(1);
             expect(mockInsertValues).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("answer style", () => {
+        const styleUsed = () => mockGetSystemPrompt.mock.calls[0]?.[0];
+        const userPrompt = () =>
+            String((mockInvoke.mock.calls[0] as [{ content: unknown }[]])[0][1]?.content);
+
+        beforeEach(() => {
+            mockReadSettingValue.mockReset().mockResolvedValue(undefined);
+        });
+
+        it("answers in the person's own style when the request names none", async () => {
+            mockReadSettingValue.mockResolvedValue("detailed");
+
+            const response = await POST(
+                queryRequest({ question: "what is this?", searchScope: "none" })
+            );
+
+            expect(response.status).toBe(200);
+            expect(styleUsed()).toBe("detailed");
+        });
+
+        it("keeps an explicitly requested concise over a different setting", async () => {
+            mockReadSettingValue.mockResolvedValue("detailed");
+
+            const response = await POST(
+                queryRequest({ question: "what is this?", searchScope: "none", style: "concise" })
+            );
+
+            expect(response.status).toBe(200);
+            expect(styleUsed()).toBe("concise");
+        });
+
+        it("falls back to balanced when the setting is unset or unreadable", async () => {
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+            mockReadSettingValue.mockRejectedValueOnce(new Error("settings down"));
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+
+            expect(mockGetSystemPrompt.mock.calls.map(([style]) => style)).toEqual([
+                "balanced",
+                "balanced",
+            ]);
+        });
+
+        it("leaves the answer's length to the style, not the question wrapper", async () => {
+            await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
+
+            expect(userPrompt()).toContain(`User's question: "what is this?"`);
+            expect(userPrompt()).not.toMatch(/conversational/i);
         });
     });
 
@@ -1274,6 +1374,39 @@ describe("chat attachment limits and ownership", () => {
         expect(mockInvoke).not.toHaveBeenCalled();
     });
 
+    it("words its refusals in the reader's language and keeps the English for others", async () => {
+        mockBehavior = { image: { maxImages: 1 } };
+        const twoImages = {
+            question: "Review",
+            searchScope: "none",
+            attachments: [attachment, attachment],
+        };
+        const english = await POST(queryRequest(twoImages));
+        expect(await english.json()).toMatchObject({
+            message: "The configured vision model accepts at most 1 image(s) per request.",
+        });
+        const chinese = await POST(chineseQueryRequest(twoImages));
+        expect(await chinese.json()).toMatchObject({
+            message: "所配置的视觉模型每次请求最多接受 1 张图片。",
+        });
+
+        mockBehavior = { image: { mimeTypes: ["image/png"] } };
+        fetchSpy.mockImplementation(
+            async () => new Response(pngBytes, { headers: { "content-type": "image/jpeg" } })
+        );
+        const oneImage = { question: "Review", searchScope: "none", attachments: [attachment] };
+        const mismatched = await POST(queryRequest(oneImage));
+        expect(await mismatched.json()).toMatchObject({
+            message:
+                'Attachment "image.png" is not a supported image or its content type does not match its bytes.',
+        });
+        const worded = await POST(chineseQueryRequest(oneImage));
+        expect(worded.status).toBe(400);
+        expect(await worded.json()).toMatchObject({
+            message: "附件“image.png”不是受支持的图片，或其内容类型与实际内容不符。",
+        });
+    });
+
     it("rejects mismatched image headers and actual model MIME limits", async () => {
         fetchSpy.mockResolvedValueOnce(
             new Response(pngBytes, { headers: { "content-type": "image/jpeg" } })
@@ -1824,6 +1957,46 @@ describe("web search as a tool the model calls", () => {
         });
     });
 
+    it("names the tool call in the reader's language", async () => {
+        const chunk = (content: string, toolCalls?: unknown[]): Record<string, unknown> => ({
+            content,
+            tool_calls: toolCalls ?? [],
+            additional_kwargs: {},
+            response_metadata: {},
+            concat(other: { content: string; tool_calls: unknown[] }) {
+                return chunk(content + other.content, [...(toolCalls ?? []), ...other.tool_calls]);
+            },
+        });
+        mockStream
+            .mockImplementationOnce(async function* () {
+                yield chunk("", [{ id: "call_1", name: "search_web", args: { query: "news" } }]);
+            })
+            .mockImplementationOnce(async function* () {
+                yield chunk("The news [Source 1].");
+            });
+
+        const response = await POST(
+            chineseQueryRequest({
+                question: "What is in the news?",
+                searchScope: "none",
+                enableWebSearch: true,
+                stream: true,
+            })
+        );
+
+        const events = (await response.text())
+            .trim()
+            .split("\n")
+            .map(line => JSON.parse(line) as Record<string, unknown>);
+        // The keywords stay keywords: the chat screen names those itself.
+        expect(events.filter(event => event.type === "status").map(event => event.status)).toEqual([
+            "generating",
+            "正在网上搜索“news”",
+            "generating",
+            "finalizing",
+        ]);
+    });
+
     it("streams a Searching… status while the tool runs", async () => {
         const chunk = (content: string, toolCalls?: unknown[]): Record<string, unknown> => ({
             content,
@@ -1984,6 +2157,7 @@ describe("the workspace's sources as tools the model calls", () => {
         expect(mockCreateSourceTools).toHaveBeenCalledWith(
             expect.objectContaining({ companyId: BigInt(5) }),
             {},
+            "en",
             { attached: [] }
         );
         expect(systemPrompt()).toContain("## The workspace's sources (attached: false)");
@@ -2144,6 +2318,179 @@ describe("the workspace's sources as tools the model calls", () => {
     });
 });
 
+describe("documents the model writes into the workspace", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: { temperature: "supported", systemMessages: "supported" },
+    };
+    const PLAN = "# Scenario Simulator — Business Plan\n\n## 1. Executive Summary";
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockQueuedRows = [];
+        useContext({ role: "owner" });
+        mockBehavior = TOOL_MODEL;
+        mockSearchProvider = null;
+        mockChatSource = "deployment";
+        mockSourcesOverview = NO_SOURCES;
+        mockDocumentToolsOn = true;
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockStream.mockReset();
+        mockBuildReferences.mockImplementation(() => []);
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+    });
+
+    afterAll(() => {
+        mockDocumentToolsOn = false;
+        mockBehavior = {};
+    });
+
+    const toolNames = () =>
+        (mockBindTools.mock.calls[0] as unknown as [{ function: { name: string } }[]])[0].map(
+            tool => tool.function.name
+        );
+    const systemPrompt = (call = 0) =>
+        String((mockInvoke.mock.calls[call] as [{ content: unknown }[]])[0][0]?.content);
+
+    it("creates the document asked for and returns it for the chat to open", async () => {
+        mockInvoke
+            .mockResolvedValueOnce({
+                content: "",
+                tool_calls: [
+                    {
+                        id: "call_1",
+                        name: "create_document",
+                        args: { title: "Scenario Simulator — Business Plan", content: PLAN },
+                    },
+                ],
+                response_metadata: {},
+            })
+            .mockResolvedValueOnce({
+                content: "I created Scenario Simulator — Business Plan in your Private section.",
+                response_metadata: {},
+            });
+
+        const response = await POST(
+            queryRequest({
+                question:
+                    "Write a business plan for the Launchstack Scenario Simulator and put it in my private space",
+                searchScope: "none",
+            })
+        );
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(response.status).toBe(200);
+        // Even with no sources to search, the person can be given a document.
+        expect(toolNames()).toEqual(["create_document"]);
+        expect(mockCreateDocumentTools).toHaveBeenCalledWith(
+            expect.objectContaining({ companyId: BigInt(5) }),
+            { requestUrl: "http://localhost/api/agents/documentQ&A/AIChat/query", locale: "en" }
+        );
+        expect(systemPrompt()).toContain("## Writing documents");
+        expect(mockWriteDocument).toHaveBeenCalledWith({
+            title: "Scenario Simulator — Business Plan",
+            content: PLAN,
+        });
+        expect(body).toMatchObject({
+            success: true,
+            summarizedAnswer:
+                "I created Scenario Simulator — Business Plan in your Private section.",
+            createdSources: [
+                { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+            ],
+        });
+    });
+
+    it("lists no created documents when the model wrote none", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        const response = await POST(queryRequest({ question: "hi", searchScope: "none" }));
+
+        const body = (await response.json()) as Record<string, unknown>;
+        expect(toolNames()).toEqual(["create_document"]);
+        expect(body.createdSources).toBeUndefined();
+    });
+
+    it("offers it beside the source tools, after them", async () => {
+        mockSourcesOverview = {
+            inventory: { total: 2, byOrigin: [{ from: null, count: 2 }] },
+            connected: [],
+        };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(queryRequest({ question: "hi", searchScope: "none" }));
+            expect(toolNames()).toEqual([
+                "list_sources",
+                "search_sources",
+                "read_source",
+                "create_document",
+            ]);
+        } finally {
+            mockSourcesOverview = NO_SOURCES;
+        }
+    });
+
+    it("gives a turn that may write a round more for looking first", async () => {
+        const tools = [1, 2, 3, 4, 5].map(n => ({
+            content: "",
+            tool_calls: [{ id: `call_${n}`, name: "create_document", args: { title: `Doc ${n}` } }],
+            response_metadata: {},
+        }));
+        for (const round of tools) mockInvoke.mockResolvedValueOnce(round);
+        mockInvoke.mockResolvedValueOnce({ content: "done", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write five docs", searchScope: "none" }));
+
+        // Four rounds with tools, then one that must answer.
+        expect(mockWriteDocument).toHaveBeenCalledTimes(4);
+    });
+
+    it("offers no document tool to a role that cannot add files, and says why", async () => {
+        useContext({ role: "viewer" });
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write me a plan", searchScope: "none" }));
+
+        expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(systemPrompt()).toContain("This person's role cannot add documents.");
+        expect(systemPrompt()).not.toContain("## Writing documents");
+    });
+
+    it("offers no document tool to an agent without write", async () => {
+        mockAgentTools = ["retrieval", "web"];
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+        try {
+            await POST(
+                queryRequest({
+                    question: "write me a plan",
+                    searchScope: "none",
+                    agentKey: "restricted",
+                })
+            );
+            expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+            expect(systemPrompt()).not.toContain("## Writing documents");
+            // The agent was barred, not the person: no word about their role.
+            expect(systemPrompt()).not.toContain("role cannot add documents");
+        } finally {
+            mockAgentTools = null;
+        }
+    });
+
+    it("offers no document tool to a model that does not take tools", async () => {
+        mockBehavior = { ...TOOL_MODEL, nativeStructuredOutput: ["json-schema"] };
+        mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
+
+        await POST(queryRequest({ question: "write me a plan", searchScope: "none" }));
+
+        expect(mockCreateDocumentTools).not.toHaveBeenCalled();
+        expect(mockBindTools).not.toHaveBeenCalled();
+    });
+});
+
 describe("a message with files attached", () => {
     const TOOL_MODEL = {
         input: ["text"],
@@ -2240,9 +2587,10 @@ describe("a message with files attached", () => {
         expect(system).toContain("You were given 10 passages from 10 of the 37 files");
         expect(system).toContain("What you weren't shown is unknown, not absent");
         expect(system).toContain("call `ask_each`");
-        const [, , options] = mockCreateSourceTools.mock.calls[0] as [
+        const [, , , options] = mockCreateSourceTools.mock.calls[0] as [
             unknown,
             unknown,
+            string,
             { attached: { id: number; label: string }[] },
         ];
         expect(options.attached.map(file => file.id)).toEqual(IDS);

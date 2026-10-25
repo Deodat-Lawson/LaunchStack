@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V, v } from "~/i18n/validation";
+import { zodErrorText } from "~/i18n/zod";
+import type { Locale } from "~/i18n/locales";
+import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
 import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
@@ -11,11 +17,11 @@ import {
     PRINCIPAL_TYPES,
 } from "~/lib/authz/permissions";
 
-export const createErrorResponse = (message: string, status = 400) => {
+export const createErrorResponse = (message: string, status = 400, locale: Locale = "en") => {
     return NextResponse.json(
         {
             success: false,
-            error: "Validation Error",
+            error: translatorFor(locale, "errors.api")("validationError"),
             message,
         },
         { status }
@@ -32,46 +38,49 @@ export const createErrorResponse = (message: string, status = 400) => {
  *   return serverError('Failed to process request')
  * }
  */
-export const serverError = (message = "Internal server error", status = 500) => {
-    return NextResponse.json({ success: false, error: message }, { status });
+export const serverError = (message?: string, status = 500, locale: Locale = "en") => {
+    return NextResponse.json(
+        { success: false, error: message ?? translatorFor(locale, "errors.api")("internal") },
+        { status }
+    );
 };
 
 export const validateRequestBody = async <T>(
     request: Request,
     schema: z.ZodSchema<T>
 ): Promise<{ success: true; data: T } | { success: false; response: NextResponse }> => {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "errors.api");
     try {
         const body = (await request.json()) as unknown;
         const validatedData = schema.parse(body);
         return { success: true, data: validatedData };
     } catch (error) {
         if (error instanceof z.ZodError) {
-            const errorMessage = error.errors
-                .map(err => `${err.path.join(".")}: ${err.message}`)
-                .join(", ");
+            const detail = zodErrorText(error, locale, ", ", { pathAlways: true });
             return {
                 success: false,
-                response: createErrorResponse(`Invalid request data: ${errorMessage}`),
+                response: createErrorResponse(t("invalidRequestData", { detail }), 400, locale),
             };
         }
         return {
             success: false,
-            response: createErrorResponse("Invalid JSON format"),
+            response: createErrorResponse(t("invalidJsonFormat"), 400, locale),
         };
     }
 };
 
 export const DocumentIdSchema = z.object({
-    documentId: z.number().int().positive("Document ID must be a positive integer"),
+    documentId: z.number().int().positive(V.documentIdPositive),
 });
 
 export const CompanyIdSchema = z.object({
-    companyId: z.string().min(1, "Company ID is required"),
+    companyId: z.string().min(1, V.companyIdRequired),
 });
 
 export const PredictiveAnalysisSchema = z
     .object({
-        documentId: z.number().int().positive("Document ID must be a positive integer"),
+        documentId: z.number().int().positive(V.documentIdPositive),
         analysisType: z
             .enum(["contract", "financial", "technical", "compliance", "general"])
             .optional(),
@@ -95,7 +104,7 @@ const aiPersonaOptions = [
     "math-reasoning",
 ] as const;
 const AttachmentPayloadSchema = z.object({
-    url: z.string().url("Attachment url must be a valid URL"),
+    url: z.string().url(V.attachmentUrlInvalid),
     name: z.string().min(1).max(512),
     mimeType: z.string().min(1).max(256),
     kind: z.enum(["image", "text"]),
@@ -113,11 +122,10 @@ export const QuestionSchema = z
     .object({
         documentId: z.number().int().positive().optional(),
         companyId: z.number().int().positive().optional(),
-        question: z
-            .string()
-            .min(1, "Question is required")
-            .max(120_000, "Question must be at most 120000 characters"),
-        style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
+        question: z.string().min(1, V.questionRequired).max(120_000, V.questionTooLong),
+        // Absent means "the person's own setting"; `bullet-points` is the old
+        // name for `organized`.
+        style: z.enum([...AGENT_STYLE_IDS, "bullet-points"]).optional(),
         searchScope: z.enum(["document", "company", "archive", "selected", "none"]).optional(),
         archiveName: z.string().optional(),
         // Document IDs for the "selected" scope — a user-picked subset of docs in
@@ -167,7 +175,7 @@ export const QuestionSchema = z
             documentId: data.documentId,
             companyId: data.companyId,
             question: data.question,
-            style: data.style ?? "concise",
+            style: data.style,
             searchScope: data.searchScope ?? "document",
             archiveName: data.archiveName,
             selectedDocumentIds: data.selectedDocumentIds,
@@ -191,103 +199,97 @@ export const QuestionSchema = z
 export type AttachmentPayload = z.infer<typeof AttachmentPayloadSchema>;
 
 export const ChatHistoryAddSchema = z.object({
-    documentId: z.number().int().positive("Document ID must be a positive integer"),
-    question: z.string().min(1, "Question is required"),
-    documentTitle: z.string().min(1, "Document title is required"),
-    response: z.string().min(1, "Response is required"),
+    documentId: z.number().int().positive(V.documentIdPositive),
+    question: z.string().min(1, V.questionRequired),
+    documentTitle: z.string().min(1, V.documentTitleRequired),
+    response: z.string().min(1, V.responseRequired),
     pages: z.array(z.number().int().positive()).optional(),
 });
 
 export const ChatHistoryFetchSchema = z.object({
-    documentId: z.number().int().positive("Document ID must be a positive integer"),
+    documentId: z.number().int().positive(V.documentIdPositive),
 });
 
 export const DeleteDocumentSchema = z.object({
-    docId: z.string().min(1, "Document ID is required"),
+    docId: z.string().min(1, V.documentIdRequired),
 });
 
 export const CategorySchema = z.object({
-    name: z.string().min(1, "Category name is required").max(256, "Category name is too long"),
-    companyId: z.string().min(1, "Company ID is required"),
+    name: z.string().min(1, V.categoryNameRequired).max(256, V.categoryNameTooLong),
+    companyId: z.string().min(1, V.companyIdRequired),
 });
 
 export const ApproveEmployeeSchema = z.object({
-    employeeId: z.number().int().positive("Employee ID must be a positive integer"),
-    companyId: z.string().min(1, "Company ID is required"),
+    employeeId: z.number().int().positive(V.employeeIdPositive),
+    companyId: z.string().min(1, V.companyIdRequired),
 });
 
 export const UploadDocumentSchema = z.object({
-    documentName: z
-        .string()
-        .min(1, "Document name is required")
-        .max(256, "Document name is too long")
-        .trim(),
-    documentUrl: z
-        .string()
-        .url("Document URL must be a valid URL")
-        .max(2048, "Document URL is too long")
-        .trim(),
+    documentName: z.string().min(1, V.documentNameRequired).max(256, V.documentNameTooLong).trim(),
+    documentUrl: z.string().url(V.documentUrlInvalid).max(2048, V.documentUrlTooLong).trim(),
     documentCategory: z
         .string()
-        .min(1, "Document category is required")
-        .max(256, "Document category is too long")
+        .min(1, V.documentCategoryRequired)
+        .max(256, V.documentCategoryTooLong)
         .trim(),
     enableOCR: z.boolean().optional(),
 });
 
 export const UpdateCompanySchema = z
     .object({
+        // Optional: Bring your own keys saves credentials alone.
         name: z
             .string()
-            .min(1, "Company name is required")
-            .max(256, "Company name is too long")
-            .trim(),
-        description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
-        industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
+            .min(1, V.companyNameRequired)
+            .max(256, V.companyNameTooLong)
+            .trim()
+            .optional(),
+        description: z.string().max(5000, V.descriptionTooLong).trim().optional().nullable(),
+        industry: z.string().max(256, V.industryTooLong).trim().optional().nullable(),
         embeddingIndexKey: z
             .string()
-            .max(128, "Embedding index key is too long")
+            .max(128, V.embeddingIndexKeyTooLong)
             .trim()
             .optional()
             .nullable(),
         embeddingOpenAIApiKey: z
             .string()
-            .max(5000, "OpenAI API key is too long")
+            .max(5000, V.openAiKeyTooLong)
             .trim()
             .optional()
             .nullable(),
         /** The OpenAI-compatible embeddings endpoint the key above belongs to. */
         embeddingOpenAIBaseUrl: z
             .string()
-            .max(1024, "Embeddings endpoint URL is too long")
+            .max(1024, V.embeddingsUrlTooLong)
             .trim()
             .optional()
             .nullable(),
         embeddingHuggingFaceApiKey: z
             .string()
-            .max(5000, "Hugging Face API key is too long")
+            .max(5000, V.huggingFaceKeyTooLong)
             .trim()
             .optional()
             .nullable(),
         embeddingOllamaBaseUrl: z
             .string()
-            .max(1024, "Ollama base URL is too long")
+            .max(1024, V.ollamaUrlTooLong)
             .trim()
             .optional()
             .nullable(),
         embeddingOllamaModel: z
             .string()
-            .max(256, "Ollama model is too long")
+            .max(256, V.ollamaModelTooLong)
             .trim()
             .optional()
             .nullable(),
-        employerPasskey: z.string().max(256, "Employer passkey is too long").trim().optional(),
-        employeePasskey: z.string().max(256, "Employee passkey is too long").trim().optional(),
+        employerPasskey: z.string().max(256, V.employerPasskeyTooLong).trim().optional(),
+        employeePasskey: z.string().max(256, V.employeePasskeyTooLong).trim().optional(),
         numberOfEmployees: z
             .string()
             .trim()
-            .regex(/^\d*$/, "Number of employees must contain only digits")
-            .max(9, "Number of employees is too long")
+            .regex(/^\d*$/, V.employeeCountDigits)
+            .max(9, V.employeeCountTooLong)
             .optional(),
         useUploadThing: z.boolean().optional(),
     })
@@ -348,9 +350,9 @@ export const UpdateUploadPreferenceSchema = z.object({
 // ============================================================================
 
 export const EmployerCompanySignupSchema = z.object({
-    companyName: z.string().min(1, "Company name is required").max(256).trim(),
-    name: z.string().min(1, "User name is required").max(256).trim(),
-    email: z.string().email("Valid email is required"),
+    companyName: z.string().min(1, V.companyNameRequired).max(256).trim(),
+    name: z.string().min(1, V.userNameRequired).max(256).trim(),
+    email: z.string().email(V.validEmailRequired),
     numberOfEmployees: z.string().max(9).optional().default("0"),
     embeddingIndexKey: z.string().trim().optional(),
     embeddingOpenAIApiKey: z.string().nullish(),
@@ -361,18 +363,18 @@ export const EmployerCompanySignupSchema = z.object({
 });
 
 export const JoinWithInviteSchema = z.object({
-    name: z.string().trim().min(1, "Name is required").max(256),
-    email: z.string().trim().toLowerCase().email("Valid email is required"),
-    inviteCode: z.string().trim().min(1, "Invite code is required").max(64),
+    name: z.string().trim().min(1, V.nameRequired).max(256),
+    email: z.string().trim().toLowerCase().email(V.validEmailRequired),
+    inviteCode: z.string().trim().min(1, V.inviteCodeRequired).max(64),
 });
 
 // ============================================================================
 // Workspace membership, roles, groups, and access
 // ============================================================================
 
-const RoleSlugSchema = z.string().trim().min(1, "Role is required").max(64);
-const EmailSchema = z.string().trim().toLowerCase().email("Valid email is required");
-const NameSchema = z.string().trim().min(1, "Name is required").max(120);
+const RoleSlugSchema = z.string().trim().min(1, V.roleRequired).max(64);
+const EmailSchema = z.string().trim().toLowerCase().email(V.validEmailRequired);
+const NameSchema = z.string().trim().min(1, V.nameRequired).max(120);
 const DescriptionSchema = z.string().trim().max(2000).nullable().optional();
 const PositiveIdSchema = z.number().int().positive();
 
@@ -382,7 +384,7 @@ export const UpdateMemberSchema = z
         status: z.enum(["active", "suspended"]).optional(),
     })
     .refine(v => v.role !== undefined || v.status !== undefined, {
-        message: "Provide a role or a status",
+        message: V.roleOrStatus,
     });
 
 export const TransferOwnershipSchema = z.object({
@@ -402,7 +404,7 @@ export const AcceptInvitationSchema = z
         name: z.string().trim().min(1).max(256).optional(),
     })
     .refine(v => v.token !== undefined || v.invitationId !== undefined, {
-        message: "Provide a token or an invitationId",
+        message: V.tokenOrInvitation,
     });
 
 export const CreateJoinLinkSchema = z.object({
@@ -418,11 +420,11 @@ export const UpdateJoinLinkSchema = z
         requiresApproval: z.boolean().optional(),
     })
     .refine(v => v.role !== undefined || v.requiresApproval !== undefined, {
-        message: "Nothing to change",
+        message: V.nothingToChange,
     });
 
 export const AcceptJoinLinkSchema = z.object({
-    code: z.string().trim().min(1, "Join code is required").max(64),
+    code: z.string().trim().min(1, V.joinCodeRequired).max(64),
     name: z.string().trim().min(1).max(256).optional(),
     email: EmailSchema.optional(),
 });
@@ -438,7 +440,7 @@ export const UpdateGroupSchema = z
         description: DescriptionSchema,
     })
     .refine(v => v.name !== undefined || v.description !== undefined, {
-        message: "Provide a name or a description",
+        message: V.nameOrDescription,
     });
 
 export const GroupMembersSchema = z.object({
@@ -461,7 +463,7 @@ export const UpdateRoleSchema = z
     })
     .refine(
         v => v.name !== undefined || v.description !== undefined || v.permissions !== undefined,
-        { message: "Nothing to change" }
+        { message: V.nothingToChange }
     );
 
 export const DeleteRoleSchema = z.object({
@@ -489,7 +491,7 @@ export const WorkspaceSettingsPatchSchema = z
         auditRetentionDays: z.number().int().min(1).max(3650).nullable().optional(),
     })
     .refine(v => v.auditRetentionDays !== undefined, {
-        message: "Nothing to change",
+        message: V.nothingToChange,
     });
 
 export const AuditQuerySchema = z.object({
@@ -545,7 +547,7 @@ export const CreateNoteSchema = z
                 Boolean(value)
             ),
         {
-            message: "At least one of title, content, contentMarkdown, or contentRich is required",
+            message: V.noteContentRequired,
         }
     );
 
@@ -564,7 +566,7 @@ export const UpdateNoteSchema = z.object({
 // ============================================================================
 
 export const TrackDocumentViewSchema = z.object({
-    documentId: z.number().int().positive("Document ID must be a positive integer"),
+    documentId: z.number().int().positive(V.documentIdPositive),
 });
 
 // ============================================================================
@@ -588,10 +590,10 @@ export const PresignUploadSchema = z
     .object({
         filename: z.string().optional(),
         fileName: z.string().optional(),
-        contentType: z.string().min(1, "contentType is required"),
+        contentType: z.string().min(1, V.contentTypeRequired),
     })
     .refine(data => [data.filename, data.fileName].some(value => Boolean(value)), {
-        message: "filename or fileName is required",
+        message: V.fileNameRequired,
     });
 
 // ============================================================================
@@ -609,10 +611,10 @@ const TTS_MAX_INPUT_BYTES = 5000;
 export const TextToSpeechSchema = z.object({
     text: z
         .string()
-        .min(1, "Text is required")
+        .min(1, V.textRequired)
         .refine(
             value => new TextEncoder().encode(value).length <= TTS_MAX_INPUT_BYTES,
-            `Text must be at most ${TTS_MAX_INPUT_BYTES} bytes when UTF-8 encoded`
+            v("textTooLong", { bytes: String(TTS_MAX_INPUT_BYTES) })
         ),
     voiceId: z.string().optional(),
     languageCode: z.string().optional(),
@@ -623,7 +625,7 @@ export const TextToSpeechSchema = z.object({
 // ============================================================================
 
 export const CreateChatSchema = z.object({
-    title: z.string().min(1, "title is required").max(512),
+    title: z.string().min(1, V.titleFieldRequired).max(512),
     agentMode: z.enum(["autonomous", "interactive", "assisted"]).optional().default("interactive"),
     visibility: z.enum(["public", "private"]).optional().default("private"),
     aiStyle: z
@@ -649,7 +651,7 @@ export const UpdateChatSchema = z.object({
 });
 
 export const CreateMessageSchema = z.object({
-    chatId: z.string().min(1, "chatId is required"),
+    chatId: z.string().min(1, V.chatIdRequired),
     role: z.enum(["user", "assistant", "system", "tool"]),
     content: z.unknown(),
     messageType: z
@@ -660,16 +662,16 @@ export const CreateMessageSchema = z.object({
 });
 
 export const CreateVoteSchema = z.object({
-    chatId: z.string().min(1, "chatId is required"),
-    messageId: z.string().min(1, "messageId is required"),
+    chatId: z.string().min(1, V.chatIdRequired),
+    messageId: z.string().min(1, V.messageIdRequired),
     isUpvoted: z.boolean(),
     feedback: z.string().max(2000).optional(),
 });
 
 export const CreateTaskSchema = z.object({
-    chatId: z.string().min(1, "chatId is required"),
-    description: z.string().min(1, "description is required").max(2000),
-    objective: z.string().min(1, "objective is required").max(2000),
+    chatId: z.string().min(1, V.chatIdRequired),
+    description: z.string().min(1, V.descriptionFieldRequired).max(2000),
+    objective: z.string().min(1, V.objectiveRequired).max(2000),
     priority: z.number().int().min(0).max(100).optional().default(0),
     metadata: z.unknown().optional(),
 });
@@ -682,9 +684,9 @@ export const UpdateTaskSchema = z.object({
 });
 
 export const CreateToolCallSchema = z.object({
-    messageId: z.string().min(1, "messageId is required"),
+    messageId: z.string().min(1, V.messageIdRequired),
     taskId: z.string().min(1).optional(),
-    toolName: z.string().min(1, "toolName is required"),
+    toolName: z.string().min(1, V.toolNameRequired),
     toolInput: z.unknown(),
 });
 
@@ -696,9 +698,9 @@ export const UpdateToolCallSchema = z.object({
 });
 
 export const CreateMemorySchema = z.object({
-    chatId: z.string().min(1, "chatId is required"),
+    chatId: z.string().min(1, V.chatIdRequired),
     memoryType: z.enum(["short_term", "long_term", "working", "episodic"]),
-    key: z.string().min(1, "key is required").max(512),
+    key: z.string().min(1, V.keyRequired).max(512),
     value: z.unknown(),
     importance: z.number().int().min(0).max(10).optional().default(5),
     embedding: z.array(z.number()).optional(),
@@ -706,10 +708,10 @@ export const CreateMemorySchema = z.object({
 });
 
 export const CreateExecutionStepSchema = z.object({
-    taskId: z.string().min(1, "taskId is required"),
+    taskId: z.string().min(1, V.taskIdRequired),
     stepNumber: z.number().int().min(0),
     stepType: z.enum(["reasoning", "planning", "execution", "evaluation", "decision"]),
-    description: z.string().min(1, "description is required").max(5000),
+    description: z.string().min(1, V.descriptionFieldRequired).max(5000),
     reasoning: z.string().max(10000).optional(),
     input: z.unknown().optional(),
     output: z.unknown().optional(),
@@ -761,7 +763,7 @@ export const UpdateMindmapSchema = z
         /** Bring the map back out of the trash. */
         restore: z.boolean().optional(),
     })
-    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+    .refine(data => Object.keys(data).length > 0, { message: V.noFieldsToUpdate });
 
 export const PublishMindmapSchema = z.object({
     /** Folder in the Sources library to file the exported document under. */
@@ -795,7 +797,7 @@ export const ImportArtifactSchema = z
         fetchFromUrl: z.boolean().optional(),
     })
     .refine(data => data.content !== undefined || (data.fetchFromUrl && data.sourceUrl), {
-        message: "Provide artifact content, or set fetchFromUrl with a sourceUrl",
+        message: V.artifactContentRequired,
     });
 
 export const UpdateArtifactSchema = z
@@ -811,7 +813,7 @@ export const UpdateArtifactSchema = z
         /** Bring the artifact back out of the trash. */
         restore: z.boolean().optional(),
     })
-    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+    .refine(data => Object.keys(data).length > 0, { message: V.noFieldsToUpdate });
 
 // ---------------------------------------------------------------------------
 // Workspace chat sessions (sidebar History)
@@ -880,7 +882,7 @@ export const ChatQueueSchema = z
             .max(50),
     })
     .refine(data => new Set(data.items.map(item => item.id)).size === data.items.length, {
-        message: "Queue ids must be unique",
+        message: V.queueIdsUnique,
     });
 export const ClaimChatQueueSchema = z.object({
     revision: z.number().int().nonnegative(),
@@ -911,6 +913,7 @@ export const SessionMessageSchema = z.object({
             id: z.string().max(128).optional(),
             status: z.enum(["complete", "stopped", "error"]).optional(),
             reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
+            thoughtMs: z.number().nonnegative().optional(),
             elapsedMs: z.number().nonnegative().optional(),
             send: ChatSendPayloadSchema.optional(),
             tokenBreakdown: z
@@ -923,6 +926,16 @@ export const SessionMessageSchema = z.object({
             webSources: z
                 .array(z.object({ title: z.string().max(500), url: z.string().url().max(2000) }))
                 .max(20)
+                .optional(),
+            createdSources: z
+                .array(
+                    z.object({
+                        documentId: z.number().int().positive(),
+                        title: z.string().max(300),
+                        folder: z.string().max(300),
+                    })
+                )
+                .max(5)
                 .optional(),
         })
         .optional(),
@@ -953,7 +966,7 @@ export const UpdateSessionSchema = z
         title: z.string().min(1).max(300).optional(),
         agentKey: SessionAgentKeySchema,
     })
-    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+    .refine(data => Object.keys(data).length > 0, { message: V.noFieldsToUpdate });
 
 /**
  * Chat sharing (ADR-014): people, groups or roles at `view`, plus "Everyone at
@@ -980,7 +993,7 @@ export const SessionStateSchema = z
         seen: z.literal(true).optional(),
     })
     .refine(data => data.pinned !== undefined || data.archived !== undefined || data.seen, {
-        message: "No fields to update",
+        message: V.noFieldsToUpdate,
     });
 
 /** The caller's pinned chats, top first. */

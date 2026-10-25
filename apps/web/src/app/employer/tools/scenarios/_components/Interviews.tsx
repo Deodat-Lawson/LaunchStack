@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useState, type ReactNode } from "react";
 
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
@@ -10,27 +11,33 @@ import {
     type ScenarioDetail,
     type ScenarioInterview,
 } from "~/lib/scenarios/types";
-import { relativeTime } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { ANALYST_ID } from "../api";
 
+export type InterviewsT = ReturnType<typeof useTranslations<"scenarios.interviews">>;
+
 /** Why nobody can be asked yet, or null when they can. */
-export function askBlockedReason(run: ScenarioDetail): string | null {
+export function askBlockedReason(t: InterviewsT, run: ScenarioDetail): string | null {
     if (run.round >= 1) return null;
-    if (run.status === "failed" || run.status === "cancelled")
-        return "This scenario stopped before the first round finished, so there is nobody to ask.";
-    return "People can answer once the first round has finished.";
+    if (run.status === "failed" || run.status === "cancelled") return t("blockedStopped");
+    return t("blockedWaiting");
 }
 
-/** Questions asked and their answers, oldest first. */
+/** Questions asked and their answers, oldest first; `answerer` puts a face beside each answer. */
 export function InterviewThread({
     interviews,
     answererName,
+    answerer,
 }: {
     interviews: ScenarioInterview[];
     answererName: (agentId: string) => string;
+    answerer?: (agentId: string) => ReactNode;
 }) {
+    const t = useTranslations("scenarios.interviews");
+    const format = useFormatter();
+    const now = useNow();
     if (interviews.length === 0) return null;
     return (
         <ol className="flex flex-col gap-4">
@@ -39,13 +46,19 @@ export function InterviewThread({
                     <div className="bg-panel-2 text-ink self-end rounded-lg px-3 py-2 text-[13px] leading-snug">
                         {item.question}
                     </div>
-                    <div className="max-w-[72ch]">
-                        <div className="text-ink-3 text-xs">
-                            {answererName(item.agentId)} · {relativeTime(item.createdAt)}
+                    <div className="flex max-w-[72ch] items-start gap-2.5">
+                        {answerer?.(item.agentId)}
+                        <div className="min-w-0">
+                            <div className="text-ink-3 text-xs">
+                                {t("answeredBy", {
+                                    name: answererName(item.agentId),
+                                    when: format.relativeTime(new Date(item.createdAt), now),
+                                })}
+                            </div>
+                            <p className="text-ink-2 mt-0.5 whitespace-pre-wrap text-[13.5px] leading-relaxed">
+                                {item.answer}
+                            </p>
                         </div>
-                        <p className="text-ink-2 mt-0.5 whitespace-pre-wrap text-[13.5px] leading-relaxed">
-                            {item.answer}
-                        </p>
                     </div>
                 </li>
             ))}
@@ -65,6 +78,8 @@ export function AskBox({
     onAsk: (agentId: string, question: string) => Promise<void>;
     placeholder?: string;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("scenarios.interviews");
     const [question, setQuestion] = useState("");
     const [asking, setAsking] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -76,7 +91,7 @@ export function AskBox({
             await onAsk(agentId, question.trim());
             setQuestion("");
         } catch (e) {
-            setError(e instanceof Error ? e.message : "Could not ask that");
+            setError(errorText(e, t("askError")));
         } finally {
             setAsking(false);
         }
@@ -97,12 +112,10 @@ export function AskBox({
                 rows={2}
                 maxLength={max}
                 disabled={Boolean(blocked) || asking}
-                aria-label="Your question"
+                aria-label={t("questionLabel")}
                 placeholder={
                     placeholder ??
-                    (agentId === ANALYST_ID
-                        ? "Why did the critics soften after round 4?"
-                        : "What would change your mind?")
+                    (agentId === ANALYST_ID ? t("placeholderAnalyst") : t("placeholderPerson"))
                 }
                 className="text-[13px]"
             />
@@ -114,7 +127,7 @@ export function AskBox({
                     onClick={() => void ask()}
                 >
                     {asking && <Spinner className="size-3.5 motion-reduce:animate-none" />}
-                    {asking ? "Asking…" : "Ask"}
+                    {asking ? t("asking") : t("ask")}
                 </Button>
                 <span
                     className={cn("text-ink-3 text-xs", error && "text-danger")}
@@ -122,9 +135,7 @@ export function AskBox({
                 >
                     {error ??
                         blocked ??
-                        (agentId === ANALYST_ID
-                            ? "The analyst has read the whole run and answers about all of it."
-                            : "They answer in character, from what they saw in the run.")}
+                        (agentId === ANALYST_ID ? t("hintAnalyst") : t("hintPerson"))}
                 </span>
             </div>
         </div>

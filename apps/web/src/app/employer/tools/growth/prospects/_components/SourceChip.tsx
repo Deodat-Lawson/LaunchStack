@@ -1,16 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 import { cn } from "~/lib/utils";
 
+import { useCopyText } from "~/lib/tools/copyText";
+import { useGrowthFormat } from "../../_lib/format";
 import type { FoundVia, SourceKind } from "../api";
-import { relativeTime } from "~/lib/tools/format";
-
-const KIND_WORD: Record<SourceKind, string> = {
-    api: "Directory or API",
-    recipe: "Search-index listing",
-    signal: "Signal",
-};
 
 /**
  * An outline chip naming the platform a company was seen on. A dashed
@@ -30,6 +27,8 @@ export function SourceChip({
     at?: string | null;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects");
+    const { relativeTime } = useGrowthFormat();
     const chip = (
         <span
             className={cn(
@@ -49,7 +48,7 @@ export function SourceChip({
             </HoverCardTrigger>
             <HoverCardContent align="start" className="w-72 p-3 text-xs">
                 <div className="text-ink font-medium">{label}</div>
-                <div className="text-ink-3 mt-0.5">{KIND_WORD[kind]}</div>
+                <div className="text-ink-3 mt-0.5">{t(`sourceKind.${kind}`)}</div>
                 {url && (
                     <a
                         href={url}
@@ -60,19 +59,30 @@ export function SourceChip({
                         {url.replace(/^https?:\/\//, "")}
                     </a>
                 )}
-                {at && <div className="text-ink-3 mt-1">Seen {relativeTime(at)}</div>}
+                {at && (
+                    <div className="text-ink-3 mt-1">
+                        {t("sourceChip.seen", { when: relativeTime(at) })}
+                    </div>
+                )}
             </HoverCardContent>
         </HoverCard>
     );
 }
 
 export function FoundViaChips({ items, max = 3 }: { items: FoundVia[]; max?: number }) {
+    const word = useCopyText();
     const shown = items.slice(0, max);
     const rest = items.length - shown.length;
     return (
         <span className="inline-flex flex-wrap items-center gap-1">
             {shown.map(f => (
-                <SourceChip key={f.sourceId} label={f.label} kind={f.kind} url={f.url} at={f.at} />
+                <SourceChip
+                    key={f.sourceId}
+                    label={word(f.labelCopy, f.label)}
+                    kind={f.kind}
+                    url={f.url}
+                    at={f.at}
+                />
             ))}
             {rest > 0 && <span className="text-ink-3 text-[11px]">+{rest}</span>}
         </span>

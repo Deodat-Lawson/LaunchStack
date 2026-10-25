@@ -58,7 +58,7 @@ unrelated `OPENAI_API_KEY` in the environment.
 
 Everything above is the **server default**. A workspace admin (anyone with
 `settings.manage`) can instead point their whole workspace at their own
-OpenAI-compatible endpoint in **Settings › Models › Your own model**:
+OpenAI-compatible endpoint in **Settings › Bring your own keys › API key**:
 
 - **API key.** Pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter,
   or "Other OpenAI-compatible"). Picking one only fills in the address, which
@@ -132,7 +132,7 @@ Not covered yet: OCR itself (the document converter and the Azure, Landing AI
 or Datalab providers it routes to), image generation, transcription (and
 transcript translation, which runs on the transcription endpoint) and
 reranking keep the server's settings. Embeddings have their own per-workspace
-key and endpoint in Settings › Processing.
+key and endpoint in Settings › Bring your own keys › Embedding key.
 
 ## Routes
 
@@ -148,6 +148,12 @@ you decide which model does it.
 
 `fast` is a cost and latency preference, not a capability — pointing it at the
 same model as `default` is a perfectly good configuration.
+
+The chat composer's picker offers two of these: **Standard** (`default`) and
+**Fast**. `reasoning` and `vision` are not picked by hand. A message with an
+image goes to `vision` when the picked route can't read it, and how hard
+Standard thinks is its reasoning-effort setting. `reasoning` remains for
+agents and server-side callers that ask for it.
 
 Specialized routes **fail closed**. If `vision` is unassigned and the default
 model is text-only, the route reports itself unavailable: the image attach
@@ -246,6 +252,37 @@ models:
 
 An unknown model is never silently classified as text-only: leaving `behavior`
 off entirely is a startup error telling you to declare it.
+
+### Pricing
+
+Every chat completion the app makes for a workspace is counted from the
+provider's own usage report (input, output, reasoning and cached tokens) as it
+passes the shared transport, whichever feature made it, and lands in
+`ai_usage_daily`. Settings › Usage shows it by feature and by route. To turn
+those counts into dollars, declare what each model costs, in US dollars per
+million tokens:
+
+```yaml
+models:
+  primary:
+    id: google/gemini-3.8-flash
+    preset: google/gemini-3.8-flash
+    pricing: # illustrative: copy the numbers from your provider's price list
+      input: 1.25
+      output: 4.25 # reasoning tokens bill as output
+      cachedInput: 0.15 # optional; defaults to `input`
+```
+
+`pricing` is optional and never sent to the endpoint. A model without it is
+still counted, just not priced; the usage page then falls back to the
+workspace's own "price per 1M tokens" setting for those calls, or shows no
+cost. The price is applied when the call is recorded, so changing it (or
+switching models) does not reprice past days. A workspace's own model
+(Settings › Bring your own keys) carries no price: its provider bills the
+workspace directly, and the page says how many calls went there.
+
+Like the rest of the file, a price change takes effect on restart of the app
+and the worker.
 
 ## Behavior reference
 

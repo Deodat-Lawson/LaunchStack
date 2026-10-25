@@ -1,5 +1,5 @@
 import type { ActionMenuItem } from "~/components/ui/action-menu";
-import type { WorkspaceSource } from "./types";
+import type { WorkspaceSource, WorkspaceTranslator } from "./types";
 
 /**
  * Declarative items for the document viewer's right-click targets: the
@@ -42,15 +42,16 @@ export interface DocumentMenuHandlers {
 export function buildDocumentMenuItems(
     source: WorkspaceSource,
     state: DocumentMenuState,
-    handlers: DocumentMenuHandlers
+    handlers: DocumentMenuHandlers,
+    t: WorkspaceTranslator
 ): ActionMenuItem[] {
-    const indexingReason = "This source is still being indexed.";
+    const indexingReason = t("common.indexingReason");
     const viewOnly = state.editable === false;
     /** Rename and delete: the row must exist and be one the caller may change. */
     const changeReason = !state.persisted
         ? indexingReason
         : viewOnly
-          ? "You can view this file but not change it."
+          ? t("common.viewOnly")
           : undefined;
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: source.title }];
     items.push({
@@ -58,16 +59,16 @@ export function buildDocumentMenuItems(
         id: "ask",
         // Named for what it is: a text selection's own "Ask about this" can
         // sit in the same menu, right above this one.
-        label: state.isMindmap ? "Ask about this mindmap" : "Ask about this document",
+        label: state.isMindmap ? t("documentMenu.askMindmap") : t("documentMenu.askDocument"),
         icon: "ask",
         disabled: !state.askable,
-        disabledReason: state.askable ? undefined : "Make this map citable first.",
+        disabledReason: state.askable ? undefined : t("documentMenu.makeCitableFirst"),
         onSelect: handlers.onAskAbout,
     });
     items.push({
         type: "item",
         id: "rename",
-        label: "Rename…",
+        label: t("documentMenu.rename"),
         icon: "rename",
         disabled: changeReason !== undefined,
         disabledReason: changeReason,
@@ -77,7 +78,7 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "open-tab",
-            label: "Open in a new tab",
+            label: t("common.openInANewTab"),
             icon: "external",
             disabled: !state.persisted,
             disabledReason: state.persisted ? undefined : indexingReason,
@@ -88,17 +89,17 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "download",
-            label: "Download original",
+            label: t("documentMenu.downloadOriginal"),
             icon: "download",
             disabled: !state.originalUrl,
-            disabledReason: state.originalUrl ? undefined : "The original is still loading.",
+            disabledReason: state.originalUrl ? undefined : t("documentMenu.originalLoading"),
             onSelect: () => handlers.onDownload?.(),
         });
     }
     items.push({
         type: "item",
         id: "copy-link",
-        label: "Copy link",
+        label: t("documentMenu.copyLink"),
         icon: "link",
         onSelect: handlers.onCopyLink,
     });
@@ -107,7 +108,9 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "versions",
-            label: state.isMindmap ? "Revision history" : "Version history",
+            label: state.isMindmap
+                ? t("documentMenu.revisionHistory")
+                : t("documentMenu.versionHistory"),
             icon: "history",
             onSelect: () => handlers.onShowVersions?.(),
         });
@@ -116,7 +119,7 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "notes",
-            label: "Notes",
+            label: t("documentMenu.notes"),
             icon: "note",
             disabled: !state.persisted,
             disabledReason: state.persisted ? undefined : indexingReason,
@@ -127,7 +130,7 @@ export function buildDocumentMenuItems(
         items.push({
             type: "item",
             id: "access",
-            label: "Share…",
+            label: t("documentMenu.share"),
             icon: "share",
             disabled: !state.persisted,
             disabledReason: state.persisted ? undefined : indexingReason,
@@ -138,7 +141,7 @@ export function buildDocumentMenuItems(
     items.push({
         type: "item",
         id: "delete",
-        label: state.isMindmap ? "Move to trash…" : "Delete…",
+        label: state.isMindmap ? t("documentMenu.moveToTrash") : t("documentMenu.delete"),
         icon: "delete",
         danger: true,
         disabled: changeReason !== undefined,
@@ -157,24 +160,27 @@ export interface VersionMenuHandlers {
 export function buildVersionMenuItems(
     version: { versionNumber: number; isCurrent: boolean },
     state: { reverting: boolean },
-    handlers: VersionMenuHandlers
+    handlers: VersionMenuHandlers,
+    t: WorkspaceTranslator
 ): ActionMenuItem[] {
-    const label = `v${version.versionNumber}${version.isCurrent ? " (current)" : ""}`;
+    const label = version.isCurrent
+        ? t("documentViewer.versionCurrent", { number: version.versionNumber })
+        : t("documentViewer.versionLabel", { number: version.versionNumber });
     return [
         { type: "label", id: "title", label },
         {
             type: "item",
             id: "preview",
-            label: "Preview this version",
+            label: t("documentMenu.previewVersion"),
             icon: "open",
             disabled: version.isCurrent,
-            disabledReason: version.isCurrent ? "This is the current version." : undefined,
+            disabledReason: version.isCurrent ? t("documentMenu.isCurrent") : undefined,
             onSelect: handlers.onPreview,
         },
         {
             type: "item",
             id: "download",
-            label: "Download this version",
+            label: t("documentMenu.downloadVersion"),
             icon: "download",
             onSelect: handlers.onDownload,
         },
@@ -182,13 +188,13 @@ export function buildVersionMenuItems(
         {
             type: "item",
             id: "restore",
-            label: "Restore this version…",
+            label: t("documentMenu.restoreVersion"),
             icon: "restore",
             disabled: version.isCurrent || state.reverting,
             disabledReason: version.isCurrent
-                ? "This is the current version."
+                ? t("documentMenu.isCurrent")
                 : state.reverting
-                  ? "A restore is already running."
+                  ? t("documentMenu.restoreRunning")
                   : undefined,
             onSelect: handlers.onRestore,
         },

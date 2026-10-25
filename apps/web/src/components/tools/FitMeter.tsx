@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { cn } from "~/lib/utils";
 
 /**
@@ -17,9 +19,10 @@ export function FitMeter({
     label?: string;
     className?: string;
 }) {
+    const t = useTranslations("tools.fitMeter");
     if (value === null) {
         return (
-            <span className={cn("text-ink-3 text-xs", className)} title="Not scored yet">
+            <span className={cn("text-ink-3 text-xs", className)} title={t("notScored")}>
                 {label ? `${label} —` : "—"}
             </span>
         );
@@ -29,8 +32,12 @@ export function FitMeter({
     return (
         <span
             className={cn("inline-grid grid-cols-[44px_auto] items-center gap-2", className)}
-            title={`Fit ${clamped} of 100${high ? "" : ` (threshold ${threshold})`}`}
-            aria-label={`Fit ${clamped} of 100`}
+            title={
+                high
+                    ? t("title", { value: clamped })
+                    : t("titleBelowThreshold", { value: clamped, threshold })
+            }
+            aria-label={t("label", { value: clamped })}
         >
             <span className="bg-line relative block h-1.5 overflow-hidden rounded-full">
                 <span

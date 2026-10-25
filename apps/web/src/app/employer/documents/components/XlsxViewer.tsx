@@ -2,7 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Loader2, AlertTriangle, RotateCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "~/lib/utils";
+import { ViewerNotice } from "./ViewerNotice";
+import { Button } from "~/components/ui/button";
 
 interface SheetData {
     name: string;
@@ -19,6 +22,8 @@ interface XlsxViewerProps {
  * Shows a tabbed interface for multi-sheet workbooks.
  */
 export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
+    const t = useTranslations("viewers.xlsx");
+    const tc = useTranslations("common");
     const [sheets, setSheets] = useState<SheetData[]>([]);
     const [activeSheet, setActiveSheet] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -32,7 +37,7 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
 
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch spreadsheet (${response.status})`);
+            if (!response.ok) throw new Error(t("fetchFailed", { status: response.status }));
 
             const arrayBuffer = await response.arrayBuffer();
 
@@ -42,7 +47,11 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
 
             const parsed: SheetData[] = workbook.SheetNames.map(name => {
                 const sheet = workbook.Sheets[name];
-                if (!sheet) return { name, html: "<p>Empty sheet</p>" };
+                if (!sheet) {
+                    const empty = document.createElement("p");
+                    empty.textContent = t("emptySheet");
+                    return { name, html: empty.outerHTML };
+                }
 
                 const html = XLSX.utils.sheet_to_html(sheet, {
                     id: `sheet-${name}`,
@@ -52,13 +61,13 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
             });
 
             if (parsed.length === 0) {
-                throw new Error("No sheets found in the workbook");
+                throw new Error(t("noSheets"));
             }
 
             setSheets(parsed);
         } catch (err) {
             console.error("[XlsxViewer] Error converting spreadsheet:", err);
-            setError(err instanceof Error ? err.message : "Failed to render spreadsheet");
+            setError(err instanceof Error ? err.message : t("renderFailed"));
         } finally {
             setLoading(false);
         }
@@ -73,38 +82,31 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Loading spreadsheet...</p>
+                <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">
-                        Failed to render spreadsheet
-                    </p>
-                    <p className="text-ink-3 mb-4 text-xs">{error}</p>
-                    <button
-                        onClick={() => void loadSpreadsheet()}
-                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-                    >
-                        <RotateCw className="h-4 w-4" />
-                        Retry
-                    </button>
-                </div>
-            </div>
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("renderFailed")}
+                detail={error}
+                action={
+                    <Button onClick={() => void loadSpreadsheet()}>
+                        <RotateCw />
+                        {tc("actions.retry")}
+                    </Button>
+                }
+            />
         );
     }
 
     const currentSheet = sheets[activeSheet];
 
     return (
-        <div className="flex h-full w-full flex-col overflow-hidden bg-white dark:bg-zinc-900">
+        <div className="bg-panel flex h-full w-full flex-col overflow-hidden">
             {/* Sheet Tabs */}
             {sheets.length > 1 && (
                 <div className="border-line bg-panel-2/30 flex-shrink-0 overflow-x-auto border-b px-2 pt-2">
@@ -116,7 +118,7 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
                                 className={cn(
                                     "whitespace-nowrap rounded-t-lg px-4 py-2 text-xs font-medium transition-all",
                                     idx === activeSheet
-                                        ? "border-line text-brand-ink border border-b-0 bg-white shadow-sm dark:bg-zinc-900"
+                                        ? "border-line text-brand-ink bg-panel border border-b-0 shadow-sm"
                                         : "text-ink-3 hover:text-ink hover:bg-panel-2/50"
                                 )}
                             >
@@ -139,39 +141,27 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
           }
           .xlsx-viewer-content th,
           .xlsx-viewer-content td {
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--line);
             padding: 0.375rem 0.625rem;
             text-align: left;
             white-space: nowrap;
             max-width: 300px;
             overflow: hidden;
             text-overflow: ellipsis;
-          }
-          .dark .xlsx-viewer-content th,
-          .dark .xlsx-viewer-content td {
-            border-color: #374151;
+            font-variant-numeric: tabular-nums;
           }
           .xlsx-viewer-content th {
-            background: #f3f4f6;
+            background: var(--panel-2);
             font-weight: 600;
             position: sticky;
             top: 0;
             z-index: 1;
           }
-          .dark .xlsx-viewer-content th {
-            background: #1f2937;
-          }
           .xlsx-viewer-content tr:nth-child(even) td {
-            background: #f9fafb;
-          }
-          .dark .xlsx-viewer-content tr:nth-child(even) td {
-            background: #111827;
+            background: var(--bg-2);
           }
           .xlsx-viewer-content tr:hover td {
-            background: #ede9fe;
-          }
-          .dark .xlsx-viewer-content tr:hover td {
-            background: #1e1b4b;
+            background: var(--accent-soft);
           }
         `}</style>
                 {currentSheet && <div dangerouslySetInnerHTML={{ __html: currentSheet.html }} />}

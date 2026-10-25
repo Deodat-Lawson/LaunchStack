@@ -10,7 +10,8 @@
  * there never swaps out the link people already have.
  */
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Link2, RotateCw } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,11 +28,22 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 
-import { errorMessage, peopleApi, type JoinLink, type Role } from "./api";
-import { plural, untilTime } from "./format";
-import { ConfirmDialog, CopyButton, ErrorNote, LoadingNote, Panel } from "./ui";
+import { peopleApi, type JoinLink, type Role } from "./api";
+import { untilTime, type TimeWords } from "./format";
+import {
+    ConfirmDialog,
+    CopyButton,
+    ErrorNote,
+    LoadingNote,
+    Panel,
+    useErrorText,
+    useRoleLabel,
+} from "./ui";
 
 export type RoleOption = Pick<Role, "slug" | "name" | "assignable">;
+
+/** `useTranslations("settings.people.links")`. */
+export type LinksT = ReturnType<typeof useTranslations<"settings.people.links">>;
 
 /** Whether a not-revoked link still lets people in. */
 export function joinLinkState(link: JoinLink, now: number = Date.now()) {
@@ -41,20 +53,36 @@ export function joinLinkState(link: JoinLink, now: number = Date.now()) {
 }
 
 /** "2 of 10 uses · expires in 3 days" — the terms a link was made with. */
-export function joinLinkTerms(link: JoinLink): string {
+export function joinLinkTerms(
+    t: LinksT,
+    words: TimeWords,
+    link: JoinLink,
+    now: number = Date.now()
+): string {
     const uses =
         link.maxUses !== null
-            ? `${link.useCount} of ${link.maxUses} uses`
-            : plural(link.useCount, "use");
+            ? t("terms.usesOf", { used: link.useCount, max: link.maxUses })
+            : t("terms.uses", { count: link.useCount });
     // untilTime already says "expired 4 days ago" for a date in the past.
-    const until = untilTime(link.expiresAt);
+    const past = link.expiresAt !== null && new Date(link.expiresAt).getTime() <= now;
     const expiry =
         link.expiresAt === null
-            ? "never expires"
-            : until.startsWith("expired")
-              ? until
-              : `expires ${until}`;
-    return `${uses} · ${expiry}`;
+            ? t("terms.neverExpires")
+            : past
+              ? untilTime(words, link.expiresAt, now)
+              : t("terms.expires", { when: untilTime(words, link.expiresAt, now) });
+    return t("terms.joined", { uses, expiry });
+}
+
+/** The terms in the reader's language, for a component. */
+export function useJoinLinkTerms(): (link: JoinLink) => string {
+    const t = useTranslations("settings.people.links");
+    const tf = useTranslations("settings.people.format");
+    const locale = useLocale();
+    return useCallback(
+        (link: JoinLink) => joinLinkTerms(t, { t: tf, locale }, link),
+        [t, tf, locale]
+    );
 }
 
 /** Open-ended: no use cap and no expiry. */
@@ -94,6 +122,10 @@ export function InviteLinkCard({
     onSaved: (link: JoinLink, replaces?: number) => void;
     onRemoved: (id: number) => void;
 }) {
+    const t = useTranslations("settings.people.links");
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
+    const terms = useJoinLinkTerms();
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // What the controls show while a change is in flight, so the switch moves
@@ -108,7 +140,7 @@ export function InviteLinkCard({
     const create = async () => {
         const role = defaultRole(roles);
         if (!role) {
-            setError("There is no role a link can hand out yet.");
+            setError(t("noRole"));
             return;
         }
         setBusy(true);
@@ -116,9 +148,9 @@ export function InviteLinkCard({
         try {
             const res = await peopleApi.joinLinks.create({ role });
             onSaved(res.link);
-            toast.success("Invite link created — copy it and share it");
+            toast.success(t("createdToast"));
         } catch (err) {
-            setError(errorMessage(err, "The link wasn't created."));
+            setError(errorText(err, t("createFailed")));
         } finally {
             setBusy(false);
         }
@@ -135,13 +167,13 @@ export function InviteLinkCard({
             onSaved(res.link);
             toast.success(
                 change.requiresApproval === undefined
-                    ? `The link now hands out ${res.link.roleName}`
+                    ? t("nowHandsOut", { role: roleLabel(res.link.role, res.link.roleName) })
                     : change.requiresApproval
-                      ? "New joiners now wait for approval"
-                      : "New joiners now land straight in"
+                      ? t("nowApproval")
+                      : t("nowStraightIn")
             );
         } catch (err) {
-            toast.error(errorMessage(err, "The link wasn't changed."));
+            toast.error(errorText(err, t("changeFailed")));
         } finally {
             setDraft(null);
             setBusy(false);
@@ -156,19 +188,16 @@ export function InviteLinkCard({
             if (confirm === "reset") {
                 const res = await peopleApi.joinLinks.reset(link.id);
                 onSaved(res.link, link.id);
-                toast.success("Invite link reset — share the new one");
+                toast.success(t("resetToast"));
             } else {
                 await peopleApi.joinLinks.revoke(link.id);
                 onRemoved(link.id);
-                toast.success("Invite link turned off");
+                toast.success(t("offToast"));
             }
             setConfirmOpen(false);
         } catch (err) {
             setConfirmError(
-                errorMessage(
-                    err,
-                    confirm === "reset" ? "The link wasn't reset." : "The link wasn't turned off."
-                )
+                errorText(err, confirm === "reset" ? t("resetFailed") : t("offFailed"))
             );
         } finally {
             setConfirmBusy(false);
@@ -178,7 +207,7 @@ export function InviteLinkCard({
     const header = (
         <div className="flex items-center gap-2">
             <Link2 className="text-ink-3 h-4 w-4" />
-            <h3 className="text-ink m-0 text-sm font-semibold">Invite link</h3>
+            <h3 className="text-ink m-0 text-sm font-semibold">{t("title")}</h3>
         </div>
     );
 
@@ -186,7 +215,7 @@ export function InviteLinkCard({
         return (
             <Panel className="p-5">
                 {header}
-                <LoadingNote label="Loading the invite link…" />
+                <LoadingNote label={t("loading")} />
             </Panel>
         );
     }
@@ -196,13 +225,10 @@ export function InviteLinkCard({
             <Panel className="flex flex-col gap-3 p-5">
                 {header}
                 <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-ink-3 m-0 text-[13px] leading-relaxed">
-                        Share one link to bring people in. They create an account and land in the
-                        workspace.
-                    </p>
+                    <p className="text-ink-3 m-0 text-[13px] leading-relaxed">{t("emptyBody")}</p>
                     <Button className="shrink-0" disabled={busy} onClick={() => void create()}>
                         <Link2 />
-                        {busy ? "Creating…" : "Create invite link"}
+                        {busy ? t("creating") : t("create")}
                     </Button>
                 </div>
                 {error && <ErrorNote message={error} />}
@@ -216,7 +242,7 @@ export function InviteLinkCard({
     const options = roles.some(r => r.slug === link.role)
         ? roles
         : [{ slug: link.role, name: link.roleName, assignable: false }, ...roles];
-    const roleName = options.find(r => r.slug === role)?.name ?? link.roleName;
+    const roleName = roleLabel(role, options.find(r => r.slug === role)?.name ?? link.roleName);
     const state = joinLinkState(link);
     const limited = link.maxUses !== null || link.expiresAt !== null;
 
@@ -225,22 +251,22 @@ export function InviteLinkCard({
             <div className="flex flex-wrap items-center justify-between gap-2">
                 {header}
                 {state !== "live" && (
-                    <Badge variant="warn">{state === "expired" ? "Expired" : "Used up"}</Badge>
+                    <Badge variant="warn">{state === "expired" ? t("expired") : t("usedUp")}</Badge>
                 )}
-                {state === "live" && link.legacy && <Badge variant="warn">Old short link</Badge>}
+                {state === "live" && link.legacy && <Badge variant="warn">{t("legacy")}</Badge>}
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Input
                     readOnly
                     value={link.url}
-                    aria-label="Invite link"
+                    aria-label={t("title")}
                     className="min-w-0 flex-1 font-mono text-xs"
                     onFocus={e => e.currentTarget.select()}
                 />
                 <CopyButton
                     value={link.url}
-                    label="Copy link"
+                    label={t("copyLink")}
                     variant="default"
                     size="default"
                     className="shrink-0"
@@ -248,31 +274,26 @@ export function InviteLinkCard({
             </div>
 
             <p className="text-ink-2 m-0 text-[13px] leading-relaxed">
-                {requiresApproval
-                    ? "People who open it wait on the Pending list until an admin approves them."
-                    : `Anyone with this link can create an account and land straight in the workspace as ${roleName}.`}
+                {requiresApproval ? t("approvalNote") : t("openNote", { role: roleName })}
                 {state !== "live" && (
-                    <span className="text-warn">
+                    <span className="text-warn-ink">
                         {" "}
-                        It no longer works ({joinLinkTerms(link)}) — reset it for a fresh one.
+                        {t("noLongerWorks", { terms: terms(link) })}
                     </span>
                 )}
                 {state === "live" && limited && (
-                    <span className="text-ink-3"> {joinLinkTerms(link)}.</span>
-                )}
-                {link.legacy && (
-                    <span className="text-warn">
+                    <span className="text-ink-3">
                         {" "}
-                        This is an old short link that could be guessed, so it always waits for
-                        approval. Reset it to get a secure link that can let people straight in.
+                        {t("termsSentence", { terms: terms(link) })}
                     </span>
                 )}
+                {link.legacy && <span className="text-warn-ink"> {t("legacyNote")}</span>}
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
                 <div className="flex items-center gap-2">
                     <Label htmlFor="invite-link-role" className="text-ink-2 shrink-0 text-[13px]">
-                        Joins as
+                        {t("joinsAs")}
                     </Label>
                     <Select
                         value={role}
@@ -285,14 +306,14 @@ export function InviteLinkCard({
                             id="invite-link-role"
                             size="sm"
                             className="w-[160px]"
-                            aria-label="Role the invite link hands out"
+                            aria-label={t("roleLabel")}
                         >
-                            <SelectValue placeholder="Choose a role" />
+                            <SelectValue placeholder={t("chooseRole")} />
                         </SelectTrigger>
                         <SelectContent>
                             {options.map(r => (
                                 <SelectItem key={r.slug} value={r.slug} disabled={!r.assignable}>
-                                    {r.name}
+                                    {roleLabel(r.slug, r.name)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -307,7 +328,7 @@ export function InviteLinkCard({
                         onCheckedChange={next => void update(link, { requiresApproval: next })}
                     />
                     <Label htmlFor="invite-link-approval" className="text-ink-2 text-[13px]">
-                        Require admin approval
+                        {t("requireAdminApproval")}
                     </Label>
                 </div>
             </div>
@@ -324,7 +345,7 @@ export function InviteLinkCard({
                     }}
                 >
                     <RotateCw />
-                    Reset link
+                    {t("resetLink")}
                 </Button>
                 <Button
                     variant="ghost"
@@ -337,20 +358,16 @@ export function InviteLinkCard({
                         setConfirmOpen(true);
                     }}
                 >
-                    Turn off
+                    {t("turnOff")}
                 </Button>
             </div>
 
             <ConfirmDialog
                 open={confirmOpen}
-                title={confirm === "off" ? "Turn off the invite link?" : "Reset the invite link?"}
-                body={
-                    confirm === "off"
-                        ? "The link stops working right away. People who already joined keep their access."
-                        : "The current link stops working right away and you get a new one to share. People who already joined keep their access."
-                }
-                confirmLabel={confirm === "off" ? "Turn off link" : "Reset link"}
-                busyLabel={confirm === "off" ? "Turning off…" : "Resetting…"}
+                title={confirm === "off" ? t("confirmOffTitle") : t("confirmResetTitle")}
+                body={confirm === "off" ? t("confirmOffBody") : t("confirmResetBody")}
+                confirmLabel={confirm === "off" ? t("turnOffLink") : t("resetLink")}
+                busyLabel={confirm === "off" ? t("turningOff") : t("resetting")}
                 danger={confirm === "off"}
                 busy={confirmBusy}
                 error={confirmError}

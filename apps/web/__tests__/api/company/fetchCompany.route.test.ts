@@ -1,6 +1,7 @@
 /**
- * `GET /api/fetchCompany` feeds Settings › Processing: the embedding index,
- * the tail of each stored provider key and the self-hosted endpoint. It used
+ * `GET /api/fetchCompany` feeds Settings › Bring your own keys: the embedding
+ * index and its model, the tail of each stored provider key and the
+ * self-hosted endpoint. It used
  * to answer any member, a Guest included, and to carry the legacy employer and
  * employee passkeys besides. Only `settings.manage` reads it now, and the
  * passkeys are not selected at all.
@@ -29,6 +30,7 @@ const STORED = {
     description: "Widgets",
     industry: "Manufacturing",
     embeddingIndexKey: "ollama-768",
+    activeEmbeddingIndexKey: "gemini-embedding-768",
     employerpasskey: "EMPLOYER-SECRET",
     employeepasskey: "EMPLOYEE-SECRET",
     numberOfEmployees: "12",
@@ -57,8 +59,11 @@ jest.mock("~/server/db/index", () => ({
 }));
 
 const mockGetRedactedCredentials = jest.fn();
+const mockResolveEmbeddingIndex = jest.fn();
 jest.mock("@launchstack/llm/embeddings", () => ({
     getRedactedCredentials: (companyId: number) => mockGetRedactedCredentials(companyId),
+    resolveEmbeddingIndex: (indexKey: unknown, config: unknown) =>
+        mockResolveEmbeddingIndex(indexKey, config),
 }));
 
 function signInAs(role: string) {
@@ -79,12 +84,21 @@ describe("GET /api/fetchCompany", () => {
             ollamaBaseUrl: "http://gpu-box.internal:11434",
             ollamaModel: "nomic-embed-text",
         });
+        mockResolveEmbeddingIndex.mockReturnValue({
+            indexKey: "gemini-embedding-768",
+            provider: "openai",
+            model: "gemini-embedding-001",
+            dimension: 768,
+            enabled: true,
+            storageKind: "dimension_table",
+            version: "v1",
+        });
     });
 
     it.each(["member", "viewer", "guest"])("refuses a %s before reading anything", async role => {
         signInAs(role);
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/fetchCompany"));
 
         expect(response.status).toBe(403);
         expect(await response.json()).toEqual({
@@ -101,15 +115,15 @@ describe("GET /api/fetchCompany", () => {
             response: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 }),
         });
 
-        expect((await GET()).status).toBe(401);
+        expect((await GET(new Request("http://localhost/api/fetchCompany"))).status).toBe(401);
     });
 
     it.each(["owner", "admin"])(
-        "gives an %s what Processing shows, and no passkeys",
+        "gives an %s what Bring your own keys shows, and no passkeys",
         async role => {
             signInAs(role);
 
-            const response = await GET();
+            const response = await GET(new Request("http://localhost/api/fetchCompany"));
 
             expect(response.status).toBe(200);
             const body = (await response.json()) as Record<string, unknown>;
@@ -122,7 +136,15 @@ describe("GET /api/fetchCompany", () => {
                 embeddingHuggingFaceApiKey: { hasKey: false, last4: null },
                 embeddingOllamaBaseUrl: "http://gpu-box.internal:11434",
                 embeddingOllamaModel: "nomic-embed-text",
+                // The model a key of the workspace's own has to run.
+                embeddingModel: {
+                    indexKey: "gemini-embedding-768",
+                    provider: "openai",
+                    model: "gemini-embedding-001",
+                    dimension: 768,
+                },
             });
+            expect(body).not.toHaveProperty("activeEmbeddingIndexKey");
             expect(body).not.toHaveProperty("employerpasskey");
             expect(body).not.toHaveProperty("employeepasskey");
             expect(JSON.stringify(body)).not.toMatch(/EMPLOYER-SECRET|EMPLOYEE-SECRET/);
@@ -134,6 +156,28 @@ describe("GET /api/fetchCompany", () => {
         }
     );
 
+    it("resolves the model from the active index, which wins over the legacy column", async () => {
+        signInAs("owner");
+
+        await GET(new Request("http://localhost/api/fetchCompany"));
+
+        expect(mockResolveEmbeddingIndex).toHaveBeenCalledWith(undefined, {
+            embeddingIndexKey: "gemini-embedding-768",
+        });
+    });
+
+    it("leaves the model out when the index isn't registered here", async () => {
+        signInAs("owner");
+        mockResolveEmbeddingIndex.mockImplementation(() => {
+            throw new Error('Embedding index "ollama-768" is not registered or not enabled.');
+        });
+
+        const response = await GET(new Request("http://localhost/api/fetchCompany"));
+
+        expect(response.status).toBe(200);
+        expect(await response.json()).toMatchObject({ embeddingModel: null });
+    });
+
     it("lets a custom role that holds settings.manage read it", async () => {
         mockRequireWorkspaceContext.mockResolvedValue({
             success: true,
@@ -144,6 +188,6 @@ describe("GET /api/fetchCompany", () => {
             }),
         });
 
-        expect((await GET()).status).toBe(200);
+        expect((await GET(new Request("http://localhost/api/fetchCompany"))).status).toBe(200);
     });
 });

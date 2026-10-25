@@ -7,11 +7,11 @@ import { NextResponse } from "next/server";
 
 import { env } from "~/env";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_CALLBACK_PATH,
     OPENROUTER_COOKIE,
     OPENROUTER_COOKIE_MAX_AGE,
-    appOrigin,
     createPkceFlow,
     encodeFlowCookie,
     openRouterAuthorizeUrl,
@@ -26,15 +26,15 @@ export async function GET(request: Request) {
 
     // Without a key to seal it with, the server could not keep what OpenRouter
     // hands back; say so before sending the admin away to approve one.
+    const origin = publicOrigin(request);
     if (!env.server.EMBEDDING_SECRETS_KEY) {
-        const back = new URL("/employer/documents", new URL(request.url).origin);
+        const back = new URL("/employer/documents", origin);
         back.searchParams.set("feature", "settings");
         back.searchParams.set("openrouter", "unavailable");
-        back.hash = "models";
+        back.hash = "byok";
         return NextResponse.redirect(back);
     }
 
-    const origin = appOrigin(request);
     const flow = createPkceFlow();
     const response = NextResponse.redirect(
         openRouterAuthorizeUrl(flow, new URL(OPENROUTER_CALLBACK_PATH, origin).toString())

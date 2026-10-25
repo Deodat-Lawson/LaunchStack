@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useState, useRef, useEffect, useCallback, useId, useLayoutEffect } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     ArrowLeft,
     Save,
@@ -41,6 +42,16 @@ import {
     type OutlineItem,
 } from "./generator";
 import { WysiwygEditor, type WysiwygEditorHandle, type SelectionInfo } from "./WysiwygEditor";
+
+/** The message key of each AI action's button and of its "done" reply. */
+const ACTION_KEYS = {
+    generate_section: "generateSection",
+    continue: "continue",
+    expand: "expand",
+    rewrite: "rewrite",
+    summarize: "summarize",
+    change_tone: "changeTone",
+} as const satisfies Record<AIAction, string>;
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -100,7 +111,7 @@ interface DocumentGeneratorEditorProps {
     initialCitations?: Citation[];
     documentId?: number;
     onBack: () => void;
-    /** The back button's label: where `onBack` goes ("My documents"). Default "Back". */
+    /** The back button's label: where `onBack` goes ("My documents"). Default "Back", translated. */
     backLabel?: string;
     onSave: (title: string, content: string, citations?: Citation[]) => void;
     mode?: "full" | "rewrite";
@@ -113,11 +124,15 @@ export function DocumentGeneratorEditor({
     initialCitations = [],
     documentId,
     onBack,
-    backLabel = "Back",
+    backLabel: backLabelProp,
     onSave,
     mode = "full",
     docxBase64,
 }: DocumentGeneratorEditorProps) {
+    const t = useTranslations("generator.editor");
+    const tc = useTranslations("common");
+    const format = useFormatter();
+    const backLabel = backLabelProp ?? tc("actions.back");
     const isRewriteMode = mode === "rewrite";
     // Tool tabs are hidden, not unmounted: the shortcuts below must not fire
     // (or swallow ⌘K) while the person is typing in another tab.
@@ -461,10 +476,7 @@ export function DocumentGeneratorEditor({
                 // Known response shape of our AI generation route.
                 data = JSON.parse(rawText) as typeof data;
             } catch {
-                setAiError(
-                    rawText?.slice(0, 120) ||
-                        "Server returned an invalid response. Please try again."
-                );
+                setAiError(rawText?.slice(0, 120) || t("chat.invalidResponse"));
                 return;
             }
 
@@ -486,8 +498,7 @@ export function DocumentGeneratorEditor({
                         ...prev,
                         {
                             role: "assistant",
-                            content:
-                                "When you're ready—check the preview above your document and click Accept to apply or Reject to discard. No rush!",
+                            content: t("chat.rewriteReady"),
                         },
                     ]);
                     return;
@@ -518,7 +529,7 @@ export function DocumentGeneratorEditor({
                     ...prev,
                     {
                         role: "assistant",
-                        content: `I've ${action === "generate_section" ? "generated a new section" : action === "continue" ? "continued writing" : `${action}ed the text`}. The changes have been applied to your document.`,
+                        content: t(`chat.applied.${ACTION_KEYS[action]}`),
                     },
                 ]);
             }
@@ -527,7 +538,7 @@ export function DocumentGeneratorEditor({
                 ...prev,
                 {
                     role: "assistant",
-                    content: "Sorry, there was an error generating content. Please try again.",
+                    content: t("chat.error"),
                 },
             ]);
         } finally {
@@ -567,9 +578,9 @@ export function DocumentGeneratorEditor({
         lastSelectionRef.current = null;
         setChatMessages(prev => [
             ...prev,
-            { role: "assistant", content: "Rewrite applied. Use Cmd+Z to undo." },
+            { role: "assistant", content: t("chat.rewriteApplied") },
         ]);
-    }, [rewritePreview, content]);
+    }, [rewritePreview, content, t]);
 
     const handleRewriteReject = useCallback(() => {
         setRewritePreview(null);
@@ -599,10 +610,7 @@ export function DocumentGeneratorEditor({
                 // Known response shape of our AI generation route.
                 data = JSON.parse(rawText) as typeof data;
             } catch {
-                setAiError(
-                    rawText?.slice(0, 120) ||
-                        "Server returned an invalid response. Please try again."
-                );
+                setAiError(rawText?.slice(0, 120) || t("chat.invalidResponse"));
                 return;
             }
             if (data.success && data.generatedContent) {
@@ -613,7 +621,7 @@ export function DocumentGeneratorEditor({
         } finally {
             setIsRetryingRewrite(false);
         }
-    }, [rewritePreview, title, content]);
+    }, [rewritePreview, title, content, t]);
 
     // Handle inserting content from research
     const handleInsertContent = (
@@ -782,17 +790,9 @@ export function DocumentGeneratorEditor({
         }
     };
 
-    const quickActions = [
-        { label: "Generate Section", action: "generate_section" as AIAction },
-        { label: "Continue Writing", action: "continue" as AIAction },
-    ];
+    const quickActions: AIAction[] = ["generate_section", "continue"];
 
-    const editActions = [
-        { label: "Expand", action: "expand" as AIAction },
-        { label: "Rewrite", action: "rewrite" as AIAction },
-        { label: "Summarize", action: "summarize" as AIAction },
-        { label: "Make Professional", action: "change_tone" as AIAction },
-    ];
+    const editActions: AIAction[] = ["expand", "rewrite", "summarize", "change_tone"];
 
     // Below ~760px of tab width — a split column, a phone — the document and a
     // side panel cannot sit side by side: the page shrinks to a few words a
@@ -820,15 +820,21 @@ export function DocumentGeneratorEditor({
                             onChange={e => setTitle(e.target.value)}
                             className="text-ink min-w-0 max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0 dark:bg-transparent"
                             placeholder={
-                                isRewriteMode ? "Add a title (optional)" : "Untitled Document"
+                                isRewriteMode ? t("titlePlaceholderRewrite") : t("titlePlaceholder")
                             }
                         />
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                         {lastSaved && !compact && (
                             <span className="text-ink-3 flex items-center gap-1 text-xs">
-                                <CheckCircle className="text-success h-3 w-3" />
-                                Saved {lastSaved.toLocaleTimeString()}
+                                <CheckCircle className="text-success-ink h-3 w-3" />
+                                {t("savedAt", {
+                                    time: format.dateTime(lastSaved, {
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    }),
+                                })}
                             </span>
                         )}
                         {docxBase64 && (
@@ -848,7 +854,7 @@ export function DocumentGeneratorEditor({
                                     const url = URL.createObjectURL(blob);
                                     const a = document.createElement("a");
                                     a.href = url;
-                                    a.download = `${title || "document"}.docx`;
+                                    a.download = `${title || t("fileFallback")}.docx`;
                                     document.body.appendChild(a);
                                     a.click();
                                     document.body.removeChild(a);
@@ -858,9 +864,9 @@ export function DocumentGeneratorEditor({
                             >
                                 <Download className={cn("h-4 w-4", !compact && "mr-2")} />
                                 {compact ? (
-                                    <span className="sr-only">Download DOCX</span>
+                                    <span className="sr-only">{t("downloadDocx")}</span>
                                 ) : (
-                                    "Download DOCX"
+                                    t("downloadDocx")
                                 )}
                             </Button>
                         )}
@@ -876,12 +882,12 @@ export function DocumentGeneratorEditor({
                             ) : (
                                 <Save className="mr-2 h-4 w-4" />
                             )}
-                            {isRewriteMode && !compact ? "Save to Documents" : "Save"}
+                            {isRewriteMode && !compact ? t("saveToDocuments") : tc("actions.save")}
                         </Button>
                         {compact && (
                             <Button variant="outline" size="sm" onClick={() => setPanelOpen(true)}>
                                 <Sparkles className="h-4 w-4" />
-                                {isRewriteMode ? "AI" : "Tools"}
+                                {isRewriteMode ? t("ai") : t("tools")}
                             </Button>
                         )}
                     </div>
@@ -893,7 +899,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Bold (Ctrl+B)"
+                        title={t("format.bold")}
                         onMouseDown={e => {
                             e.preventDefault();
                             if (wysiwygEditorRef.current) {
@@ -909,7 +915,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Italic (Ctrl+I)"
+                        title={t("format.italic")}
                         onMouseDown={e => {
                             e.preventDefault();
                             if (wysiwygEditorRef.current) {
@@ -925,7 +931,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Underline"
+                        title={t("format.underline")}
                         onMouseDown={e => {
                             e.preventDefault();
                             if (wysiwygEditorRef.current) {
@@ -942,7 +948,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Bullet List"
+                        title={t("format.bulletList")}
                         onMouseDown={e => {
                             e.preventDefault();
                             if (wysiwygEditorRef.current) {
@@ -958,7 +964,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Numbered List"
+                        title={t("format.numberedList")}
                         onMouseDown={e => {
                             e.preventDefault();
                             if (wysiwygEditorRef.current) {
@@ -975,7 +981,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Align Left"
+                        title={t("format.alignLeft")}
                         onMouseDown={e => {
                             e.preventDefault();
                             wysiwygEditorRef.current?.setTextAlign("left");
@@ -987,7 +993,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Align Center"
+                        title={t("format.alignCenter")}
                         onMouseDown={e => {
                             e.preventDefault();
                             wysiwygEditorRef.current?.setTextAlign("center");
@@ -999,7 +1005,7 @@ export function DocumentGeneratorEditor({
                         variant="ghost"
                         size="sm"
                         className="text-ink-3 hover:text-ink h-8 w-8 p-0"
-                        title="Align Right"
+                        title={t("format.alignRight")}
                         onMouseDown={e => {
                             e.preventDefault();
                             wysiwygEditorRef.current?.setTextAlign("right");
@@ -1010,7 +1016,7 @@ export function DocumentGeneratorEditor({
 
                     {/* Word count */}
                     <div className="text-ink-3 ml-auto text-xs">
-                        {content.split(/\s+/).filter(Boolean).length} words
+                        {t("wordCount", { count: content.split(/\s+/).filter(Boolean).length })}
                     </div>
                 </div>
             </div>
@@ -1039,9 +1045,7 @@ export function DocumentGeneratorEditor({
                                     lastSelectionRef.current = info.text ? info : null;
                                 }}
                                 placeholder={
-                                    isRewriteMode
-                                        ? "Paste or type text here, then select and use the AI panel to rewrite..."
-                                        : "Start writing or use the AI tools..."
+                                    isRewriteMode ? t("placeholderRewrite") : t("placeholder")
                                 }
                                 className="min-h-[900px] w-full [&_.ProseMirror]:min-h-[900px]"
                             />
@@ -1075,16 +1079,16 @@ export function DocumentGeneratorEditor({
                 <div className="border-line bg-surface/50 flex-shrink-0 border-b p-4 backdrop-blur-md">
                     <div className="mb-1 flex items-center gap-2">
                         <Sparkles className="text-brand-ink h-5 w-5" />
-                        <h3 className="text-ink font-semibold">AI Assistant</h3>
+                        <h3 className="text-ink font-semibold">{t("assistant.title")}</h3>
                     </div>
                     <p className="text-ink-3 text-xs">
                         {isRewriteMode
                             ? selectedText
-                                ? "Selected text - Ask AI to rewrite it"
-                                : "Paste or type text, then select and ask AI to rewrite"
+                                ? t("assistant.hintRewriteSelected")
+                                : t("assistant.hintRewrite")
                             : selectedText
-                              ? "Selected text - Ask AI to edit it"
-                              : "Ask AI to add content"}
+                              ? t("assistant.hintSelected")
+                              : t("assistant.hint")}
                     </p>
                 </div>
 
@@ -1096,34 +1100,32 @@ export function DocumentGeneratorEditor({
                                 <div className="border-brand bg-brand-soft rounded-lg border p-3">
                                     <p className="text-ink mb-2 flex items-center gap-2 text-sm font-medium">
                                         <Sparkles className="text-brand-ink h-4 w-4" />
-                                        How to use AI
+                                        {t("assistant.howTo")}
                                     </p>
                                     <ul className="text-ink-3 space-y-1 text-xs">
-                                        <li>• Select text to ask AI to edit it</li>
-                                        <li>• Type requests to add new content</li>
-                                        <li>• Use quick actions below</li>
-                                        <li>• Press ⌘K for quick access</li>
+                                        <li>{t("assistant.howToSelect")}</li>
+                                        <li>{t("assistant.howToType")}</li>
+                                        <li>{t("assistant.howToQuick")}</li>
+                                        <li>{t("assistant.howToShortcut")}</li>
                                     </ul>
                                 </div>
 
                                 {selectedText ? (
                                     <div>
                                         <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
-                                            EDIT SELECTED TEXT
+                                            {t("assistant.editSelected")}
                                         </p>
                                         <div className="space-y-2">
                                             {editActions.map(action => (
                                                 <Button
-                                                    key={action.label}
+                                                    key={action}
                                                     variant="outline"
                                                     size="sm"
                                                     className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
-                                                    onClick={() =>
-                                                        void handleAIAction(action.action)
-                                                    }
+                                                    onClick={() => void handleAIAction(action)}
                                                     disabled={isProcessing}
                                                 >
-                                                    {action.label}
+                                                    {t(`actions.${ACTION_KEYS[action]}`)}
                                                 </Button>
                                             ))}
                                         </div>
@@ -1131,22 +1133,20 @@ export function DocumentGeneratorEditor({
                                 ) : (
                                     <div>
                                         <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
-                                            QUICK ACTIONS
+                                            {t("assistant.quickActions")}
                                         </p>
                                         <div className="space-y-2">
                                             {quickActions.map(action => (
                                                 <Button
-                                                    key={action.label}
+                                                    key={action}
                                                     variant="outline"
                                                     size="sm"
                                                     className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
-                                                    onClick={() =>
-                                                        void handleAIAction(action.action)
-                                                    }
+                                                    onClick={() => void handleAIAction(action)}
                                                     disabled={isProcessing}
                                                 >
                                                     <Sparkles className="text-brand-ink mr-2 h-3 w-3" />
-                                                    {action.label}
+                                                    {t(`actions.${ACTION_KEYS[action]}`)}
                                                 </Button>
                                             ))}
                                         </div>
@@ -1166,7 +1166,9 @@ export function DocumentGeneratorEditor({
                                 )}
                             >
                                 <p className="text-ink-3 mb-1 text-[10px] font-black uppercase tracking-widest">
-                                    {message.role === "user" ? "You" : "AI Assistant"}
+                                    {message.role === "user"
+                                        ? t("assistant.you")
+                                        : t("assistant.title")}
                                 </p>
                                 <p className="text-ink text-sm leading-relaxed">
                                     {message.content}
@@ -1177,7 +1179,7 @@ export function DocumentGeneratorEditor({
                         {isProcessing && (
                             <div className="text-ink-3 flex animate-pulse items-center gap-2 text-sm">
                                 <Loader2 className="h-4 w-4 animate-spin" />
-                                AI is processing...
+                                {t("assistant.processing")}
                             </div>
                         )}
                     </div>
@@ -1189,7 +1191,7 @@ export function DocumentGeneratorEditor({
                         {selectedText && (
                             <div className="border-brand-soft bg-brand-soft dark:border-brand-soft rounded-xl border p-2 text-[10px]">
                                 <p className="text-brand-ink mb-1 font-black uppercase tracking-widest">
-                                    Selected Text
+                                    {t("assistant.selectedText")}
                                 </p>
                                 <p className="text-ink-3 line-clamp-2 italic">
                                     &quot;{selectedText}&quot;
@@ -1198,9 +1200,7 @@ export function DocumentGeneratorEditor({
                         )}
                         <Textarea
                             placeholder={
-                                selectedText
-                                    ? "Ask AI to edit selection..."
-                                    : "Ask AI to add content..."
+                                selectedText ? t("assistant.promptSelected") : t("assistant.prompt")
                             }
                             value={aiPrompt}
                             onChange={e => setAiPrompt(e.target.value)}
@@ -1216,18 +1216,18 @@ export function DocumentGeneratorEditor({
                         <Button
                             onClick={() => void handleAIRequest()}
                             disabled={!aiPrompt.trim() || isProcessing}
-                            className="bg-brand shadow-brand-glow hover:bg-brand-hi w-full rounded-xl text-white shadow-lg"
+                            className="bg-brand shadow-brand-glow hover:bg-brand-hi text-brand-fg w-full rounded-xl shadow-lg"
                             size="sm"
                         >
                             {isProcessing ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Processing...
+                                    {t("assistant.sending")}
                                 </>
                             ) : (
                                 <>
                                     <Send className="mr-2 h-4 w-4" />
-                                    Send to AI
+                                    {t("assistant.send")}
                                 </>
                             )}
                         </Button>
@@ -1301,7 +1301,7 @@ export function DocumentGeneratorEditor({
             <Sheet open={compact && panelOpen} onOpenChange={setPanelOpen}>
                 <SheetContent side="right" className="w-full gap-0 p-0 sm:max-w-[420px]">
                     <SheetTitle className="sr-only">
-                        {isRewriteMode ? "AI Assistant" : "Tools"}
+                        {isRewriteMode ? t("assistant.title") : t("tools")}
                     </SheetTitle>
                     {isRewriteMode ? (
                         sidePanel

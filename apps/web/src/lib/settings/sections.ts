@@ -74,29 +74,28 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
     // Everyone reads the profile (agents cite it to everyone) and may rebuild
     // it; the body says so, and withholds the curation actions.
     company: { edit: "settings.manage", aliases: ["company", "metadata", "profile"] },
-    // Keys and endpoints. The form would take edits it can never save.
-    processing: {
-        view: "settings.manage",
-        edit: "settings.manage",
-        aliases: ["processing", "byok", "embedding", "keys"],
-    },
-    // Its read is refused outright. Also where a workspace brings its own
-    // model: an endpoint and API key, or OpenRouter.
-    models: {
+    // The workspace's own model and embedding keys. The form would take edits
+    // it can never save. `processing` was this section's name once.
+    byok: {
         view: "settings.manage",
         edit: "settings.manage",
         aliases: [
-            "models",
-            "routes",
-            "llm",
-            "chat model",
-            "gemini",
-            "openai",
-            "own model",
+            "byok",
+            "keys",
             "api key",
+            "own model",
             "openrouter",
             "endpoint",
+            "embedding",
+            "embeddings",
+            "processing",
         ],
+    },
+    // Its read is refused outright.
+    models: {
+        view: "settings.manage",
+        edit: "settings.manage",
+        aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone
     // tries an agent in the Agents app, and anyone who edits documents may
@@ -105,11 +104,6 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         view: "settings.manage",
         edit: "settings.manage",
         aliases: ["agents", "nodes", "roster", "autonomy"],
-    },
-    // Readable by all: where an upload goes, and how it is processed.
-    documents: {
-        edit: "settings.manage",
-        aliases: ["documents", "upload", "storage", "defaults", "ocr"],
     },
     // Workspace connections. Someone's own Gmail is connected and removed
     // from Add knowledge, not here.

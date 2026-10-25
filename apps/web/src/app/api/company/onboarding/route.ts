@@ -16,6 +16,7 @@ import {
 } from "~/lib/require-workspace-context";
 import { loadOnboarding, saveOnboarding } from "~/server/company-profile/onboarding";
 import { reassembleAfterResponse } from "~/server/company-profile/service";
+import { requestTranslator } from "~/i18n/server";
 
 export async function POST(request: Request) {
     try {
@@ -30,17 +31,23 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, website: saved.website });
     } catch (error) {
         console.error("[company/onboarding] POST error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         return NextResponse.json(await loadOnboarding(ctx.data));
     } catch (error) {
         console.error("[company/onboarding] GET error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -11,7 +12,7 @@ import { cn } from "~/lib/utils";
 import { InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { plural } from "~/lib/tools/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthPaths } from "../../_lib/paths";
 import { useResource } from "~/lib/tools/useResource";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -26,6 +27,7 @@ import {
 import {
     addDays,
     dayNumber,
+    fullDate,
     isDue,
     monthYear,
     postMoment,
@@ -35,31 +37,44 @@ import {
     weekRange,
     weekday,
 } from "../_lib/time";
-import { brandApi, type BrandPost } from "../api";
+import { brandApi, type BrandPost, type BrandPostStatus } from "../api";
 
 /**
  * A post on a day: time, the channel it goes out as, first words, an image
  * mark, and once it is out its numbers. The status is a colour only where
  * it is one.
  */
+/** The dot before a calendar post's time: its status at a glance. */
+const STATUS_DOT: Record<BrandPostStatus | "due", string> = {
+    draft: "bg-ink-4",
+    cancelled: "bg-ink-4",
+    scheduled: "bg-ink-3",
+    due: "bg-warn",
+    publishing: "bg-brand",
+    published: "bg-success",
+    failed: "bg-danger",
+};
+
 function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) {
+    const t = useTranslations("growth.brand.calendar");
+    const ts = useTranslations("growth.brand.status");
+    const locale = useLocale();
     const at = postMoment(post);
     const quiet = post.status === "cancelled" || post.status === "draft";
+    const status = post.status === "scheduled" && isDue(post) ? "due" : post.status;
     return (
         <PostActions post={post} onChange={onChange}>
             <button
                 type="button"
-                className={cn(
-                    "focus-visible:ring-brand/50 hover:bg-panel-2 flex w-full flex-col gap-0.5 rounded-md border-l-2 py-1 pl-2 pr-1 text-left outline-none focus-visible:ring-[3px]",
-                    post.status === "scheduled" && !isDue(post) && "border-ink-3",
-                    post.status === "scheduled" && isDue(post) && "border-warn",
-                    post.status === "publishing" && "border-brand",
-                    post.status === "published" && "border-success",
-                    post.status === "failed" && "border-danger",
-                    quiet && "border-line"
-                )}
+                className="focus-visible:ring-brand/50 hover:bg-panel-2 flex w-full flex-col gap-0.5 rounded-md px-1.5 py-1 text-left outline-none focus-visible:ring-[3px]"
             >
                 <span className="flex min-w-0 items-center gap-1.5">
+                    <span
+                        aria-hidden
+                        title={ts(status)}
+                        className={cn("size-1.5 shrink-0 rounded-full", STATUS_DOT[status])}
+                    />
+                    <span className="sr-only">{ts(status)}</span>
                     {post.channel ? (
                         <ChannelAvatar
                             name={post.channel.name}
@@ -72,7 +87,7 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
                         <NetworkMark platform={post.platform} size={14} muted={quiet} />
                     )}
                     <span className="text-ink-2 shrink-0 font-mono text-[11px] tabular-nums">
-                        {post.status === "draft" ? "draft" : timeOfDay(at)}
+                        {post.status === "draft" ? t("draft") : timeOfDay(at, locale)}
                     </span>
                     <MediaMark count={post.media.length} className="ml-auto shrink-0" />
                 </span>
@@ -82,7 +97,8 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
                         quiet ? "text-ink-3" : "text-ink-2"
                     )}
                 >
-                    {post.channel?.name ?? `${NETWORK_LABEL[post.platform]} · disconnected`}
+                    {post.channel?.name ??
+                        t("disconnected", { network: NETWORK_LABEL[post.platform] })}
                 </span>
                 <span
                     className={cn(
@@ -109,6 +125,9 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
  * from its popover; the list under the grid is the same week for a phone.
  */
 export function CalendarScreen() {
+    const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
+    const locale = useLocale();
     const paths = useGrowthPaths();
     const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
     const range = useMemo(() => weekRange(weekStart), [weekStart]);
@@ -132,13 +151,13 @@ export function CalendarScreen() {
         try {
             const result = await brandApi.publishDue();
             const n = result.published.length;
-            if (n > 0) toast.success(`Published ${plural(n, "overdue post")}`);
+            if (n > 0) toast.success(t("calendar.publishedOverdue", { count: n }));
             if (result.failed.length > 0)
-                toast.error(`${plural(result.failed.length, "post")} failed; see the calendar`);
-            if (n === 0 && result.failed.length === 0) toast("Nothing was overdue");
+                toast.error(t("calendar.failedSee", { count: result.failed.length }));
+            if (n === 0 && result.failed.length === 0) toast(t("calendar.nothingOverdue"));
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not publish");
+            toast.error(errorText(e, t("calendar.publishFailed")));
         }
     };
 
@@ -147,10 +166,16 @@ export function CalendarScreen() {
             <div className="mx-auto flex max-w-[1200px] flex-col gap-5">
                 <PageHeader
                     size="md"
-                    title="Calendar"
+                    title={t("calendar.title")}
                     sub={
                         res.data
-                            ? `${plural(scheduled, "post")} scheduled and ${published} out this week${due.length ? ` · ${plural(due.length, "post")} overdue` : ""}`
+                            ? due.length
+                                ? t("calendar.subOverdue", {
+                                      scheduled,
+                                      published,
+                                      overdue: due.length,
+                                  })
+                                : t("calendar.sub", { scheduled, published })
                             : undefined
                     }
                     actions={
@@ -161,11 +186,13 @@ export function CalendarScreen() {
                                     variant="outline"
                                     onClick={() => void publishDue()}
                                 >
-                                    Publish overdue now
+                                    {t("calendar.publishOverdue")}
                                 </Button>
                             )}
                             <Button asChild size="sm">
-                                <ToolLink href={paths.brand("/compose")}>Compose</ToolLink>
+                                <ToolLink href={paths.brand("/compose")}>
+                                    {t("common.compose")}
+                                </ToolLink>
                             </Button>
                         </>
                     }
@@ -176,7 +203,7 @@ export function CalendarScreen() {
                         size="sm"
                         variant="outline"
                         className="size-8 p-0"
-                        aria-label="Previous week"
+                        aria-label={t("calendar.previousWeek")}
                         onClick={() => setWeekStart(w => addDays(w, -7))}
                     >
                         <ChevronLeft className="size-4" />
@@ -185,7 +212,7 @@ export function CalendarScreen() {
                         size="sm"
                         variant="outline"
                         className="size-8 p-0"
-                        aria-label="Next week"
+                        aria-label={t("calendar.nextWeek")}
                         onClick={() => setWeekStart(w => addDays(w, 7))}
                     >
                         <ChevronRight className="size-4" />
@@ -196,12 +223,17 @@ export function CalendarScreen() {
                             variant="ghost"
                             onClick={() => setWeekStart(startOfWeek(new Date()))}
                         >
-                            This week
+                            {t("calendar.thisWeek")}
                         </Button>
                     )}
-                    <span className="text-ink text-[13px] font-medium">{monthYear(weekStart)}</span>
+                    <span className="text-ink text-[13px] font-medium">
+                        {monthYear(weekStart, locale)}
+                    </span>
                     <span className="text-ink-3 text-[13px]">
-                        week of {dayNumber(weekStart)}–{dayNumber(addDays(weekStart, 6))}
+                        {t("calendar.weekOf", {
+                            start: dayNumber(weekStart, locale),
+                            end: dayNumber(addDays(weekStart, 6), locale),
+                        })}
                     </span>
                 </div>
 
@@ -223,7 +255,7 @@ export function CalendarScreen() {
                                         i > 0 && "@max-md:border-l-0 @max-md:border-t border-l",
                                         isToday && "bg-surface-2/60"
                                     )}
-                                    aria-label={day.toDateString()}
+                                    aria-label={fullDate(day, locale)}
                                 >
                                     <header className="flex items-baseline justify-between px-0.5">
                                         <span
@@ -234,7 +266,7 @@ export function CalendarScreen() {
                                                     : "text-ink-3"
                                             )}
                                         >
-                                            {weekday(day)}
+                                            {weekday(day, locale)}
                                         </span>
                                         <span
                                             className={cn(
@@ -244,7 +276,7 @@ export function CalendarScreen() {
                                                     : "text-ink-3"
                                             )}
                                         >
-                                            {dayNumber(day)}
+                                            {dayNumber(day, locale)}
                                         </span>
                                     </header>
                                     {dayPosts.map(post => (
@@ -261,14 +293,16 @@ export function CalendarScreen() {
                 )}
                 {!res.loading && posts.length === 0 && (
                     <p className="text-ink-3 text-[13px]">
-                        Nothing on this week.{" "}
-                        <ToolLink
-                            href={paths.brand("/compose")}
-                            className="text-brand-ink hover:underline"
-                        >
-                            Compose a post
-                        </ToolLink>{" "}
-                        or generate a campaign and schedule its drafts.
+                        {t.rich("calendar.nothing", {
+                            link: chunks => (
+                                <ToolLink
+                                    href={paths.brand("/compose")}
+                                    className="text-brand-ink hover:underline"
+                                >
+                                    {chunks}
+                                </ToolLink>
+                            ),
+                        })}
                     </p>
                 )}
             </div>

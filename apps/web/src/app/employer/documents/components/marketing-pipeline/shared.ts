@@ -20,26 +20,45 @@ export type PipelineStepId =
 
 export interface PipelineStepInfo {
     id: PipelineStepId;
-    label: string;
+    /** The step's name is `growth.marketingPipeline.steps.<key>` in the catalogue. */
+    key: PipelineStepKey;
 }
 
+export type PipelineStepKey =
+    | "loadingContext"
+    | "extractingDna"
+    | "analyzingCompetitors"
+    | "researchingTrends"
+    | "extractingVoice"
+    | "extractingPersona"
+    | "checkingPerformance"
+    | "buildingStrategy"
+    | "generatingContent"
+    | "verifyingClaims";
+
 export const PIPELINE_STEP_ORDER: PipelineStepInfo[] = [
-    { id: "loading-context", label: "Loading company knowledge" },
-    { id: "extracting-dna", label: "Extracting company DNA" },
-    { id: "analyzing-competitors", label: "Analyzing competitors" },
-    { id: "researching-trends", label: "Researching platform trends" },
-    { id: "extracting-voice", label: "Detecting brand voice" },
-    { id: "extracting-persona", label: "Building target persona" },
-    { id: "checking-performance", label: "Checking performance history" },
-    { id: "building-strategy", label: "Building messaging strategies" },
-    { id: "generating-content", label: "Generating content variants" },
-    { id: "verifying-claims", label: "Verifying claim sources" },
+    { id: "loading-context", key: "loadingContext" },
+    { id: "extracting-dna", key: "extractingDna" },
+    { id: "analyzing-competitors", key: "analyzingCompetitors" },
+    { id: "researching-trends", key: "researchingTrends" },
+    { id: "extracting-voice", key: "extractingVoice" },
+    { id: "extracting-persona", key: "extractingPersona" },
+    { id: "checking-performance", key: "checkingPerformance" },
+    { id: "building-strategy", key: "buildingStrategy" },
+    { id: "generating-content", key: "generatingContent" },
+    { id: "verifying-claims", key: "verifyingClaims" },
 ];
+
+/** A step id's catalogue key. */
+export const PIPELINE_STEP_KEY = Object.fromEntries(
+    PIPELINE_STEP_ORDER.map(step => [step.id, step.key])
+) as Record<PipelineStepId, PipelineStepKey>;
 
 export type StepStatus = "pending" | "active" | "completed" | "skipped" | "failed";
 
 export interface PipelineStepState {
     id: PipelineStepId;
+    /** The server's own name for the step (English); the screen says `PIPELINE_STEP_KEY[id]`. */
     label: string;
     status: StepStatus;
     durationMs?: number;
@@ -203,8 +222,8 @@ export const MARKETING_ACTIVE_SESSION_KEY = "pdr.marketingPipeline.activeSession
 export const MAX_MARKETING_SESSIONS = 25;
 
 export interface PlatformFieldConfig {
+    /** Its label is `growth.marketingPipeline.fields.<type>`. */
     type: "subreddit" | "hashtags";
-    label: string;
     maxItems: number;
     suggestions: string[];
 }
@@ -221,38 +240,31 @@ export interface MessageVariant {
     createdAt: number;
 }
 
+/**
+ * A platform the generator writes for. Its name is a brand and stays as it
+ * is; the card's words (subtitle, best for, length, prompt placeholder and
+ * the three prompt templates) are `growth.marketingPipeline.platforms.<id>`.
+ */
 export interface PlatformOption {
     id: MarketingPlatform;
     label: string;
-    subtitle: string;
-    bestFor: string;
-    charLimit: string;
     logoText: string;
     logoImg?: string;
-    placeholder: string;
-    promptTemplates: string[];
     platformFields?: PlatformFieldConfig[];
 }
+
+/** The prompt templates each platform card offers: `platforms.<id>.templates.<key>`. */
+export const PROMPT_TEMPLATE_KEYS = ["t1", "t2", "t3"] as const;
 
 export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "reddit",
         label: "Reddit",
-        subtitle: "Community-first threads",
-        bestFor: "Developer communities, authentic discussion",
-        charLimit: "~10,000 chars",
         logoText: "reddit",
         logoImg: REDDIT_SNOO_URL,
-        placeholder: "What do you want to share or discuss with the Reddit community?",
-        promptTemplates: [
-            "Share how we solved a common pain point in our industry",
-            "Ask for feedback on our new open-source tool",
-            "Tell the story behind why we built this product",
-        ],
         platformFields: [
             {
                 type: "subreddit",
-                label: "Target subreddit",
                 maxItems: 1,
                 suggestions: [
                     "r/startups",
@@ -269,20 +281,10 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "x",
         label: "Twitter / X",
-        subtitle: "Fast-moving trends",
-        bestFor: "Viral reach, real-time engagement",
-        charLimit: "~280 chars",
         logoText: "𝕏",
-        placeholder: "What quick insight or announcement do you want to share?",
-        promptTemplates: [
-            "Announce a new feature launch with a bold hook",
-            "Share a surprising metric or result from our product",
-            "React to a trending topic in our industry",
-        ],
         platformFields: [
             {
                 type: "hashtags",
-                label: "Hashtags",
                 maxItems: 2,
                 suggestions: ["#AI", "#Tech", "#SaaS", "#Startup", "#DevTools", "#OpenSource"],
             },
@@ -291,20 +293,10 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "linkedin",
         label: "LinkedIn",
-        subtitle: "B2B + thought leadership",
-        bestFor: "Professional audience, long-form storytelling",
-        charLimit: "~1,300 chars",
         logoText: "in",
-        placeholder: "What insight or story do you want to share with your professional network?",
-        promptTemplates: [
-            "Promote our new feature to CTOs and engineering leaders",
-            "Share a customer success story about improving workflows",
-            "Thought leadership post about AI in our industry",
-        ],
         platformFields: [
             {
                 type: "hashtags",
-                label: "Hashtags",
                 maxItems: 5,
                 suggestions: [
                     "#AI",
@@ -322,20 +314,10 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "bluesky",
         label: "Bluesky",
-        subtitle: "Decentralized trends",
-        bestFor: "Early adopters, open-web advocates",
-        charLimit: "~300 chars",
         logoText: "🦋",
-        placeholder: "What do you want to share with the Bluesky community?",
-        promptTemplates: [
-            "Introduce our product to the open-source community",
-            "Share a behind-the-scenes look at what we're building",
-            "Start a conversation about a trend in our space",
-        ],
         platformFields: [
             {
                 type: "hashtags",
-                label: "Hashtags",
                 maxItems: 3,
                 suggestions: ["#OpenWeb", "#Tech", "#AI", "#IndieWeb", "#OpenSource", "#Fediverse"],
             },

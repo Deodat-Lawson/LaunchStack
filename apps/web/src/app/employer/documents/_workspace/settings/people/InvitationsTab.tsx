@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { useContextTarget } from "~/components/context-menu";
@@ -32,22 +33,15 @@ import {
 import { INVITABLE_BUILTIN_ROLES, ROLE_LABELS, type Permission } from "~/lib/authz/permissions";
 import { cn } from "~/lib/utils";
 
-import {
-    errorMessage,
-    peopleApi,
-    type Group,
-    type Invitation,
-    type InvitationSent,
-    type JoinLink,
-} from "./api";
-import { relativeTime, untilTime } from "./format";
+import { peopleApi, type Group, type Invitation, type InvitationSent, type JoinLink } from "./api";
+import { useTimeFormat } from "./format";
 import {
     defaultRole,
     InviteLinkCard,
     isOpenEnded,
     joinLinkState,
-    joinLinkTerms,
     pickInviteLink,
+    useJoinLinkTerms,
     type RoleOption,
 } from "./InviteLinkCard";
 import {
@@ -58,6 +52,8 @@ import {
     LoadingNote,
     Panel,
     TabIntro,
+    useErrorText,
+    useRoleLabel,
 } from "./ui";
 
 interface InvitationsTabProps {
@@ -88,10 +84,12 @@ function InvitationRow({
     onRevoke: () => void;
     children: React.ReactNode;
 }) {
+    const t = useTranslations("settings.people.invitations");
+    const tm = useTranslations("settings.people.menu");
     const ctxTarget = useContextTarget({
         kind: "invitation",
         id: String(invitation.id),
-        label: `Actions for the invitation to ${invitation.email}`,
+        label: t("actionsFor", { email: invitation.email }),
         data: invitation,
         items: () =>
             buildInvitationMenuItems(
@@ -101,11 +99,12 @@ function InvitationRow({
                     onResend,
                     onCopyEmail: () => {
                         void copyText(invitation.email).then(ok => {
-                            if (ok) toast.success("Email copied");
+                            if (ok) toast.success(t("emailCopied"));
                         });
                     },
                     onRevoke,
-                }
+                },
+                tm
             ),
     });
     return (
@@ -116,6 +115,8 @@ function InvitationRow({
 }
 
 export function InvitationsTab({ can }: InvitationsTabProps) {
+    const t = useTranslations("settings.people.invitations");
+    const errorText = useErrorText();
     const canInvite = can("members.invite");
 
     const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -142,11 +143,11 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
             if (rl) setRoles(rl.roles);
             setGroups(gr.groups);
         } catch (err) {
-            setError(errorMessage(err, "Could not load invitations."));
+            setError(errorText(err, t("loadFailed")));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [errorText, t]);
 
     useEffect(() => {
         if (!canInvite) {
@@ -196,12 +197,9 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
     if (!canInvite) {
         return (
             <div>
-                <TabIntro title="Invitations" />
+                <TabIntro title={t("intro.title")} />
                 <Panel>
-                    <EmptyState
-                        title="Inviting is not part of your role"
-                        body="Ask an admin to invite people or to give your role the “Send invitations” permission."
-                    />
+                    <EmptyState title={t("notAllowed.title")} body={t("notAllowed.body")} />
                 </Panel>
             </div>
         );
@@ -209,10 +207,7 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
 
     return (
         <div className="flex flex-col gap-6">
-            <TabIntro
-                title="Invitations"
-                description="Share one invite link to bring people in, or invite someone by email. Both hand out a role you choose. Invitations expire; links can be reset or turned off."
-            />
+            <TabIntro title={t("intro.title")} description={t("intro.description")} />
 
             {error && <ErrorNote message={error} onRetry={() => void load()} />}
 
@@ -238,7 +233,7 @@ export function InvitationsTab({ can }: InvitationsTabProps) {
 
             <Panel>
                 {loading ? (
-                    <LoadingNote label="Loading invitations…" />
+                    <LoadingNote label={t("loading")} />
                 ) : (
                     <InvitationList
                         invitations={invitations}
@@ -274,6 +269,11 @@ function InviteForm({
     emailDelivery: boolean;
     onCreated: (invitation: Invitation) => void;
 }) {
+    const t = useTranslations("settings.people.invitations");
+    const tl = useTranslations("settings.people.links");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
     const [email, setEmail] = useState("");
     const [role, setRole] = useState<string>("");
     const [groupIds, setGroupIds] = useState<number[]>([]);
@@ -293,11 +293,11 @@ function InviteForm({
         e.preventDefault();
         const trimmed = email.trim().toLowerCase();
         if (!EMAIL_RE.test(trimmed)) {
-            setError("Enter a full email address, like ada@example.com.");
+            setError(t("form.invalidEmail"));
             return;
         }
         if (!role) {
-            setError("Choose the role this person should have.");
+            setError(t("form.chooseRole"));
             return;
         }
         setBusy(true);
@@ -313,12 +313,10 @@ function InviteForm({
             setEmail("");
             setGroupIds([]);
             toast.success(
-                res.emailSent
-                    ? `Invitation emailed to ${trimmed}`
-                    : "Invitation created — copy the link to send it"
+                res.emailSent ? t("form.emailedToast", { email: trimmed }) : t("form.createdToast")
             );
         } catch (err) {
-            setError(errorMessage(err, "The invitation wasn't sent."));
+            setError(errorText(err, t("form.failed")));
         } finally {
             setBusy(false);
         }
@@ -329,11 +327,11 @@ function InviteForm({
             <form onSubmit={e => void submit(e)} className="flex flex-col gap-4">
                 <div className="flex items-center gap-2">
                     <Mail className="text-ink-3 h-4 w-4" />
-                    <h3 className="text-ink m-0 text-sm font-semibold">Invite by email</h3>
+                    <h3 className="text-ink m-0 text-sm font-semibold">{t("form.title")}</h3>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_200px]">
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="invite-email">Email</Label>
+                        <Label htmlFor="invite-email">{tc("fields.email")}</Label>
                         <Input
                             id="invite-email"
                             type="email"
@@ -348,18 +346,15 @@ function InviteForm({
                         />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="invite-role">Role</Label>
+                        <Label htmlFor="invite-role">{tc("fields.role")}</Label>
                         <Select value={role} onValueChange={setRole} disabled={busy}>
-                            <SelectTrigger
-                                id="invite-role"
-                                aria-label="Role for the invited person"
-                            >
-                                <SelectValue placeholder="Choose a role" />
+                            <SelectTrigger id="invite-role" aria-label={t("form.roleLabel")}>
+                                <SelectValue placeholder={tl("chooseRole")} />
                             </SelectTrigger>
                             <SelectContent>
                                 {roles.map(r => (
                                     <SelectItem key={r.slug} value={r.slug}>
-                                        {r.name}
+                                        {roleLabel(r.slug, r.name)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -370,7 +365,11 @@ function InviteForm({
                 {groups.length > 0 && (
                     <fieldset className="m-0 border-0 p-0">
                         <legend className="text-ink-2 mb-1.5 text-xs font-semibold">
-                            Add to groups <span className="text-ink-3 font-normal">(optional)</span>
+                            {t.rich("form.addToGroups", {
+                                optional: chunks => (
+                                    <span className="text-ink-3 font-normal">{chunks}</span>
+                                ),
+                            })}
                         </legend>
                         <div className="flex flex-wrap gap-x-4 gap-y-2">
                             {groups.map(g => {
@@ -408,11 +407,11 @@ function InviteForm({
                     <Button type="submit" disabled={busy || !email.trim()}>
                         {emailDelivery
                             ? busy
-                                ? "Sending…"
-                                : "Send invitation"
+                                ? t("form.sending")
+                                : t("form.send")
                             : busy
-                              ? "Creating…"
-                              : "Create invitation link"}
+                              ? tl("creating")
+                              : t("form.createLink")}
                     </Button>
                 </div>
             </form>
@@ -439,9 +438,13 @@ function SentNotice({
     className?: string;
     onDone: () => void;
 }) {
+    const t = useTranslations("settings.people.invitations");
+    const tl = useTranslations("settings.people.links");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
     const { invitation, acceptUrl, emailSent } = sent;
-    const expires = `It expires ${untilTime(invitation.expiresAt)}.`;
-    const earlier = renewed ? " The earlier link no longer works." : "";
+    const when = time.until(invitation.expiresAt);
+    const expiry = renewed ? t("sent.expiresRenewed", { when }) : t("sent.expires", { when });
     return (
         <div
             role="status"
@@ -454,34 +457,32 @@ function SentNotice({
             <div
                 className={cn(
                     "text-[13px] font-semibold",
-                    emailSent ? "text-success" : "text-warn"
+                    emailSent ? "text-success-ink" : "text-warn-ink"
                 )}
             >
-                {emailSent
-                    ? `Invitation emailed to ${invitation.email}.`
-                    : "Email isn't set up on this server, so nothing was sent."}
+                {emailSent ? t("sent.emailed", { email: invitation.email }) : t("sent.notSent")}
             </div>
             <p className="text-ink-2 m-0 mt-1 whitespace-normal text-[12.5px] leading-relaxed">
                 {emailSent
-                    ? `You can also share the link yourself. ${expires}${earlier}`
-                    : `Copy this link and send it to ${invitation.email} yourself. ${expires}${earlier}`}
+                    ? t("sent.shareToo", { expiry })
+                    : t("sent.copyAndSend", { email: invitation.email, expiry })}
             </p>
             <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Input
                     readOnly
                     value={acceptUrl}
-                    aria-label={`Invitation link for ${invitation.email}`}
+                    aria-label={t("sent.linkFor", { email: invitation.email })}
                     className="bg-panel min-w-0 flex-1 font-mono text-xs"
                     onFocus={e => e.currentTarget.select()}
                 />
                 <div className="flex items-center gap-2">
                     <CopyButton
                         value={acceptUrl}
-                        label="Copy link"
+                        label={tl("copyLink")}
                         variant={emailSent ? "outline" : "default"}
                     />
                     <Button variant="ghost" size="sm" onClick={onDone}>
-                        Done
+                        {tc("actions.done")}
                     </Button>
                 </div>
             </div>
@@ -502,6 +503,11 @@ function InvitationList({
     emailDelivery: boolean;
     onChanged: () => void;
 }) {
+    const t = useTranslations("settings.people.invitations");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
     const [busyId, setBusyId] = useState<number | null>(null);
     const [revoking, setRevoking] = useState<Invitation | null>(null);
     const [revokeBusy, setRevokeBusy] = useState(false);
@@ -515,12 +521,12 @@ function InvitationList({
             setResent(res);
             toast.success(
                 res.emailSent
-                    ? `Invitation resent to ${invitation.email}`
-                    : "New invitation link ready — copy it to send it"
+                    ? t("list.resentToast", { email: invitation.email })
+                    : t("list.newLinkToast")
             );
             onChanged();
         } catch (err) {
-            toast.error(errorMessage(err, "The invitation wasn't resent."));
+            toast.error(errorText(err, t("list.resendFailed")));
         } finally {
             setBusyId(null);
         }
@@ -532,11 +538,11 @@ function InvitationList({
         setRevokeError(null);
         try {
             await peopleApi.invitations.revoke(revoking.id);
-            toast.success(`Invitation to ${revoking.email} withdrawn`);
+            toast.success(t("list.withdrawnToast", { email: revoking.email }));
             setRevoking(null);
             onChanged();
         } catch (err) {
-            setRevokeError(errorMessage(err, "The invitation wasn't withdrawn."));
+            setRevokeError(errorText(err, t("list.withdrawFailed")));
         } finally {
             setRevokeBusy(false);
         }
@@ -550,12 +556,7 @@ function InvitationList({
     }, [invitations]);
 
     if (sorted.length === 0) {
-        return (
-            <EmptyState
-                title="No invitations yet"
-                body="Send one above. It lands here until it is accepted or expires."
-            />
-        );
+        return <EmptyState title={t("list.empty.title")} body={t("list.empty.body")} />;
     }
 
     return (
@@ -564,13 +565,13 @@ function InvitationList({
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-panel-2/50">
-                            <TableHead>Email</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Invited by</TableHead>
-                            <TableHead>Expires</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>{tc("fields.email")}</TableHead>
+                            <TableHead>{tc("fields.role")}</TableHead>
+                            <TableHead>{t("list.columns.invitedBy")}</TableHead>
+                            <TableHead>{t("list.columns.expires")}</TableHead>
+                            <TableHead>{tc("fields.status")}</TableHead>
                             <TableHead className="text-right">
-                                <span className="sr-only">Actions</span>
+                                <span className="sr-only">{t("list.columns.actions")}</span>
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -593,16 +594,18 @@ function InvitationList({
                                         <TableCell className="text-ink font-medium">
                                             {inv.email}
                                         </TableCell>
-                                        <TableCell className="text-ink-2">{inv.roleName}</TableCell>
+                                        <TableCell className="text-ink-2">
+                                            {roleLabel(inv.role, inv.roleName)}
+                                        </TableCell>
                                         <TableCell className="text-ink-3 text-sm">
                                             {inv.invitedBy?.name ?? inv.invitedBy?.email ?? "—"}
                                             <span className="text-ink-4">
                                                 {" "}
-                                                · {relativeTime(inv.createdAt)}
+                                                · {time.relative(inv.createdAt)}
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-ink-3 whitespace-nowrap text-sm">
-                                            {open ? untilTime(inv.expiresAt) : "—"}
+                                            {open ? time.until(inv.expiresAt) : "—"}
                                         </TableCell>
                                         <TableCell>
                                             <InvitationStatus status={inv.status} />
@@ -618,11 +621,11 @@ function InvitationList({
                                                     >
                                                         {emailDelivery
                                                             ? busy
-                                                                ? "Resending…"
-                                                                : "Resend"
+                                                                ? t("list.resending")
+                                                                : t("list.resend")
                                                             : busy
-                                                              ? "Making a new link…"
-                                                              : "New link"}
+                                                              ? t("list.makingLink")
+                                                              : t("list.newLink")}
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -634,7 +637,7 @@ function InvitationList({
                                                             setRevoking(inv);
                                                         }}
                                                     >
-                                                        Revoke
+                                                        {tc("actions.revoke")}
                                                     </Button>
                                                 </div>
                                             )}
@@ -660,9 +663,9 @@ function InvitationList({
 
             <ConfirmDialog
                 open={revoking !== null}
-                title={`Withdraw the invitation to ${revoking?.email ?? ""}?`}
-                body="The link stops working right away. You can send a new invitation any time."
-                confirmLabel="Revoke invitation"
+                title={t("list.confirm.title", { email: revoking?.email ?? "" })}
+                body={t("list.confirm.body")}
+                confirmLabel={t("list.confirm.confirm")}
                 danger
                 busy={revokeBusy}
                 error={revokeError}
@@ -674,15 +677,16 @@ function InvitationList({
 }
 
 function InvitationStatus({ status }: { status: Invitation["status"] }) {
+    const t = useTranslations("settings.people.invitations.status");
     switch (status) {
         case "pending":
-            return <Badge variant="warn">Pending</Badge>;
+            return <Badge variant="warn">{t("pending")}</Badge>;
         case "accepted":
-            return <Badge variant="success">Accepted</Badge>;
+            return <Badge variant="success">{t("accepted")}</Badge>;
         case "revoked":
-            return <Badge variant="secondary">Revoked</Badge>;
+            return <Badge variant="secondary">{t("revoked")}</Badge>;
         case "expired":
-            return <Badge variant="secondary">Expired</Badge>;
+            return <Badge variant="secondary">{t("expired")}</Badge>;
     }
 }
 
@@ -703,6 +707,12 @@ function MoreLinks({
     onSaved: (link: JoinLink, replaces?: number) => void;
     onRemoved: (id: number) => void;
 }) {
+    const t = useTranslations("settings.people.invitations.more");
+    const tl = useTranslations("settings.people.links");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
+    const terms = useJoinLinkTerms();
     // Folded away until there is something in it; the reader's choice wins.
     const [openChoice, setOpenChoice] = useState<boolean | null>(null);
     const open = openChoice ?? links.length > 0;
@@ -739,15 +749,15 @@ function MoreLinks({
         const days = parseOptionalInt(expiresInDays);
         const uses = parseOptionalInt(maxUses);
         if (days === "invalid") {
-            setError("Expiry must be a whole number of days, or blank for no expiry.");
+            setError(t("invalidDays"));
             return;
         }
         if (uses === "invalid") {
-            setError("Max uses must be a whole number, or blank for unlimited.");
+            setError(t("invalidUses"));
             return;
         }
         if (!role) {
-            setError("Choose the role the link should hand out.");
+            setError(t("chooseRole"));
             return;
         }
         setBusy(true);
@@ -761,16 +771,12 @@ function MoreLinks({
             });
             onSaved(res.link);
             // An open-ended link becomes the one the card at the top shows.
-            toast.success(
-                isOpenEnded(res.link)
-                    ? "Link created — it's the invite link at the top now"
-                    : "Link created"
-            );
+            toast.success(isOpenEnded(res.link) ? t("createdTop") : t("created"));
             setExpiresInDays("");
             setMaxUses("");
             setRequiresApproval(false);
         } catch (err) {
-            setError(errorMessage(err, "The link wasn't created."));
+            setError(errorText(err, tl("createFailed")));
         } finally {
             setBusy(false);
         }
@@ -791,19 +797,16 @@ function MoreLinks({
             if (action === "reset") {
                 const res = await peopleApi.joinLinks.reset(link.id);
                 onSaved(res.link, link.id);
-                toast.success("Link reset — the old one no longer works");
+                toast.success(t("resetToast"));
             } else {
                 await peopleApi.joinLinks.revoke(link.id);
                 onRemoved(link.id);
-                toast.success("Join link revoked");
+                toast.success(t("revokedToast"));
             }
             setPendingOpen(false);
         } catch (err) {
             setPendingError(
-                errorMessage(
-                    err,
-                    action === "reset" ? "The link wasn't reset." : "The link wasn't revoked."
-                )
+                errorText(err, action === "reset" ? tl("resetFailed") : t("revokeFailed"))
             );
         } finally {
             setPendingBusy(false);
@@ -818,14 +821,11 @@ function MoreLinks({
                         <ChevronDown
                             className={cn("transition-transform", !open && "-rotate-90")}
                         />
-                        More links
+                        {t("title")}
                         {links.length > 0 && <Badge variant="secondary">{links.length}</Badge>}
                     </Button>
                 </CollapsibleTrigger>
-                <span className="text-ink-3 text-[12.5px] leading-relaxed">
-                    Extra links with their own role, expiry or use cap. Each link decides whether
-                    people join straight in or wait for approval.
-                </span>
+                <span className="text-ink-3 text-[12.5px] leading-relaxed">{t("description")}</span>
             </div>
 
             <CollapsibleContent>
@@ -833,40 +833,37 @@ function MoreLinks({
                     <form onSubmit={e => void create(e)} className="flex flex-col gap-4">
                         <div className="grid gap-4 sm:grid-cols-3">
                             <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="link-role">Role</Label>
+                                <Label htmlFor="link-role">{tc("fields.role")}</Label>
                                 <Select value={role} onValueChange={setRole} disabled={busy}>
-                                    <SelectTrigger
-                                        id="link-role"
-                                        aria-label="Role the link hands out"
-                                    >
-                                        <SelectValue placeholder="Choose a role" />
+                                    <SelectTrigger id="link-role" aria-label={t("roleLabel")}>
+                                        <SelectValue placeholder={tl("chooseRole")} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {roles.map(r => (
                                             <SelectItem key={r.slug} value={r.slug}>
-                                                {r.name}
+                                                {roleLabel(r.slug, r.name)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="link-expires">Expires in (days)</Label>
+                                <Label htmlFor="link-expires">{t("expiresIn")}</Label>
                                 <Input
                                     id="link-expires"
                                     inputMode="numeric"
-                                    placeholder="Never"
+                                    placeholder={t("never")}
                                     value={expiresInDays}
                                     onChange={e => setExpiresInDays(e.target.value)}
                                     disabled={busy}
                                 />
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <Label htmlFor="link-max">Max uses</Label>
+                                <Label htmlFor="link-max">{t("maxUses")}</Label>
                                 <Input
                                     id="link-max"
                                     inputMode="numeric"
-                                    placeholder="Unlimited"
+                                    placeholder={t("unlimited")}
                                     value={maxUses}
                                     onChange={e => setMaxUses(e.target.value)}
                                     disabled={busy}
@@ -881,13 +878,13 @@ function MoreLinks({
                                 disabled={busy}
                             />
                             <Label htmlFor="link-approval" className="text-ink-2 text-[13px]">
-                                Require approval
+                                {t("requireApproval")}
                             </Label>
                         </div>
                         {error && <ErrorNote message={error} />}
                         <div>
                             <Button type="submit" variant="outline" disabled={busy}>
-                                {busy ? "Creating…" : "Create link"}
+                                {busy ? tl("creating") : t("createLink")}
                             </Button>
                         </div>
                     </form>
@@ -895,12 +892,9 @@ function MoreLinks({
 
                 <Panel className="mt-3">
                     {loading ? (
-                        <LoadingNote label="Loading links…" />
+                        <LoadingNote label={t("loading")} />
                     ) : links.length === 0 ? (
-                        <EmptyState
-                            title="No other links"
-                            body="The invite link above is the only one. Create another here when a group needs its own role, an expiry or a cap."
-                        />
+                        <EmptyState title={t("empty.title")} body={t("empty.body")} />
                     ) : (
                         <ul className="divide-line m-0 list-none divide-y p-0">
                             {links.map(link => {
@@ -918,21 +912,23 @@ function MoreLinks({
                                         >
                                             <div className="flex flex-wrap items-center gap-2">
                                                 <span className="text-ink text-sm font-medium">
-                                                    {link.roleName}
+                                                    {roleLabel(link.role, link.roleName)}
                                                 </span>
                                                 {link.requiresApproval && (
-                                                    <Badge variant="warn">Needs approval</Badge>
+                                                    <Badge variant="warn">
+                                                        {t("needsApproval")}
+                                                    </Badge>
                                                 )}
                                                 {link.legacy && (
                                                     <Badge variant="secondary">
-                                                        Old short link
+                                                        {tl("legacy")}
                                                     </Badge>
                                                 )}
                                                 {state !== "live" && (
                                                     <Badge variant="secondary">
                                                         {state === "expired"
-                                                            ? "Expired"
-                                                            : "Used up"}
+                                                            ? tl("expired")
+                                                            : tl("usedUp")}
                                                     </Badge>
                                                 )}
                                             </div>
@@ -943,13 +939,13 @@ function MoreLinks({
                                                 {link.url}
                                             </div>
                                             <div className="text-ink-3 mt-0.5 text-[12.5px]">
-                                                {joinLinkTerms(link)}
+                                                {terms(link)}
                                             </div>
                                         </div>
                                         <div className="-ml-2 flex flex-wrap gap-1 sm:ml-0 sm:justify-end">
                                             <CopyButton
                                                 value={link.url}
-                                                label="Copy link"
+                                                label={tl("copyLink")}
                                                 variant="ghost"
                                             />
                                             <Button
@@ -957,7 +953,7 @@ function MoreLinks({
                                                 size="sm"
                                                 onClick={() => ask(link, "reset")}
                                             >
-                                                Reset
+                                                {tc("actions.reset")}
                                             </Button>
                                             <Button
                                                 variant="ghost"
@@ -965,7 +961,7 @@ function MoreLinks({
                                                 className="text-danger hover:text-danger"
                                                 onClick={() => ask(link, "revoke")}
                                             >
-                                                Revoke
+                                                {tc("actions.revoke")}
                                             </Button>
                                         </div>
                                     </li>
@@ -978,14 +974,12 @@ function MoreLinks({
 
             <ConfirmDialog
                 open={pendingOpen}
-                title={pending?.action === "reset" ? "Reset this link?" : "Revoke this link?"}
-                body={
-                    pending?.action === "reset"
-                        ? "The current link stops working right away and a new one with the same terms replaces it. People who already joined keep their access."
-                        : "Anyone who has the link can no longer use it. People who already joined keep their access."
+                title={
+                    pending?.action === "reset" ? t("confirmResetTitle") : t("confirmRevokeTitle")
                 }
-                confirmLabel={pending?.action === "reset" ? "Reset link" : "Revoke link"}
-                busyLabel={pending?.action === "reset" ? "Resetting…" : "Revoking…"}
+                body={pending?.action === "reset" ? t("resetBody") : t("revokeBody")}
+                confirmLabel={pending?.action === "reset" ? tl("resetLink") : t("revokeLink")}
+                busyLabel={pending?.action === "reset" ? tl("resetting") : t("revoking")}
                 danger={pending?.action !== "reset"}
                 busy={pendingBusy}
                 error={pendingError}

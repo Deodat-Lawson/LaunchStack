@@ -10,6 +10,7 @@
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { V } from "~/i18n/validation";
 
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { loadSettings, writeSetting } from "~/server/settings/store";
@@ -26,7 +27,7 @@ const WriteSchema = z
         reset: z.boolean().optional(),
     })
     .refine(body => body.reset === true || body.value !== undefined, {
-        message: "Send a value, or reset: true",
+        message: V.valueOrReset,
     });
 
 export async function GET(request: Request) {
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
         });
         return NextResponse.json(payload);
     } catch (error) {
-        return workspaceErrorResponse(error, "[settings GET]");
+        return workspaceErrorResponse(error, "[settings GET]", request);
     }
 }
 
@@ -52,6 +53,6 @@ export async function PUT(request: Request) {
         const resolved = await writeSetting(ctx.data, body.data);
         return NextResponse.json({ setting: resolved });
     } catch (error) {
-        return workspaceErrorResponse(error, "[settings PUT]");
+        return workspaceErrorResponse(error, "[settings PUT]", request);
     }
 }

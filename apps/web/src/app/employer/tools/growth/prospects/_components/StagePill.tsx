@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
     DropdownMenu,
@@ -12,8 +13,9 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 
+import { useCopyText } from "~/lib/tools/copyText";
 import type { SalesStage, StageMove } from "../api";
-import { EXIT_STAGES, STAGE_LABELS, stageTone } from "../_lib/stages";
+import { EXIT_STAGES, stageTone } from "../_lib/stages";
 
 const DOT: Record<ReturnType<typeof stageTone>, string> = {
     quiet: "bg-ink-4",
@@ -33,15 +35,18 @@ export function StagePill({
     staleDays?: number | null;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects");
     return (
         <span
             className={cn("text-ink-2 inline-flex items-center gap-1.5 text-xs", className)}
             data-stage={stage}
         >
             <span className={cn("size-[7px] shrink-0 rounded-full", DOT[stageTone(stage)])} />
-            <span className="whitespace-nowrap">{STAGE_LABELS[stage]}</span>
+            <span className="whitespace-nowrap">{t(`stages.${stage}`)}</span>
             {staleDays !== null && staleDays !== undefined && staleDays > 0 && (
-                <span className="text-warn whitespace-nowrap">· {staleDays} days</span>
+                <span className="text-warn-ink whitespace-nowrap">
+                    {t("stagePill.staleDays", { count: staleDays })}
+                </span>
             )}
         </span>
     );
@@ -65,6 +70,7 @@ export function StageMenu({
     disabled?: boolean;
     size?: "sm" | "md";
 }) {
+    const t = useTranslations("growth.prospects");
     const forward = moves.filter(m => !EXIT_STAGES.includes(m.stage));
     const exits = moves.filter(m => EXIT_STAGES.includes(m.stage));
     return (
@@ -76,7 +82,7 @@ export function StageMenu({
                         "border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 inline-flex items-center gap-1.5 rounded-md border font-medium outline-none transition-colors focus-visible:ring-[3px] disabled:opacity-60",
                         size === "sm" ? "h-8 px-2.5 text-xs" : "h-9 px-3 text-sm"
                     )}
-                    aria-label={`Stage: ${STAGE_LABELS[stage]}. Change stage`}
+                    aria-label={t("stagePill.menuAria", { stage: t(`stages.${stage}`) })}
                 >
                     <StagePill stage={stage} className="text-ink" />
                     <ChevronDown className="text-ink-3 size-3.5" />
@@ -84,7 +90,7 @@ export function StageMenu({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-64">
                 <DropdownMenuLabel className="text-ink-3 text-xs font-normal">
-                    Move to
+                    {t("stagePill.moveTo")}
                 </DropdownMenuLabel>
                 {forward.map(m => (
                     <MoveItem key={m.stage} move={m} current={stage} onMove={onMove} />
@@ -107,6 +113,8 @@ function MoveItem({
     current: SalesStage;
     onMove: (stage: SalesStage) => void;
 }) {
+    const t = useTranslations("growth.prospects.stagePill");
+    const word = useCopyText();
     const isCurrent = move.stage === current;
     const blocked = move.reason !== null;
     return (
@@ -117,10 +125,12 @@ function MoveItem({
         >
             <span className="flex w-full items-center justify-between gap-3">
                 <StagePill stage={move.stage} className="text-ink" />
-                {isCurrent && <span className="text-ink-3 text-[11px]">current</span>}
+                {isCurrent && <span className="text-ink-3 text-[11px]">{t("current")}</span>}
             </span>
             {blocked && !isCurrent && (
-                <span className="text-ink-3 text-[11.5px] leading-snug">{move.reason}</span>
+                <span className="text-ink-3 text-[11.5px] leading-snug">
+                    {word(move.reasonCopy, move.reason ?? "")}
+                </span>
             )}
         </DropdownMenuItem>
     );

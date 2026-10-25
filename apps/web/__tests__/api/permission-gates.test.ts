@@ -232,6 +232,7 @@ import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[vers
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
 import { POST as createVersion } from "~/app/api/documents/[id]/versions/route";
+import { POST as retryProcessing } from "~/app/api/documents/[id]/retry/route";
 import { POST as uploadDocument } from "~/app/api/uploadDocument/route";
 import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
@@ -343,13 +344,14 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/metadata (raw export, excerpts from every folder)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadata(),
+        call: () => getCompanyMetadata(new Request("http://localhost/api/company/metadata")),
     },
     {
         route: "GET /api/company/metadata/history",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadataHistory(),
+        call: () =>
+            getCompanyMetadataHistory(new Request("http://localhost/api/company/metadata/history")),
     },
     {
         route: "PATCH /api/company/profile/facts",
@@ -380,13 +382,13 @@ const GATES: readonly Gate[] = [
         route: "GET /api/employer/upload/bootstrap",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => uploadBootstrap(),
+        call: () => uploadBootstrap(new Request("http://localhost/api/employer/upload/bootstrap")),
     },
     {
         route: "GET /api/fetchCompany (key tails, Ollama endpoint)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => fetchCompany(),
+        call: () => fetchCompany(new Request("http://localhost/api/fetchCompany")),
     },
     // The agent roster: adding, retiring and restoring are the managers', and
     // so are an agent's policy fields; what an agent says is any editor's.
@@ -476,6 +478,14 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () =>
             createVersion(json("/api/documents/1/versions", "POST", {}), params({ id: "1" })),
+    },
+    // Retrying re-runs processing for the file, like a new version does.
+    {
+        route: "POST /api/documents/[id]/retry",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            retryProcessing(json("/api/documents/1/retry", "POST", {}), params({ id: "1" })),
     },
     {
         route: "POST /api/uploadDocument",
@@ -630,7 +640,8 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/analysis-dashboard",
         permission: "analytics.view",
         deniedRole: "member",
-        call: () => analysisDashboard(),
+        call: () =>
+            analysisDashboard(new Request("http://localhost/api/company/analysis-dashboard")),
     },
     {
         route: "GET /api/company/documents/[documentId]/stats",

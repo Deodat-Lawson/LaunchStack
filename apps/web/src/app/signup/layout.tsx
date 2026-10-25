@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-    title: "Get Started with Launchstack — Free",
-    description:
-        "Your second brain for docs, notes, and code. Set up your personal Launchstack workspace in under a minute — built for solo founders, developers, and students.",
-    alternates: {
-        canonical: "/signup",
-    },
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("auth.signUp");
+    return {
+        title: t("metaTitle"),
+        description: t("metaDescription"),
+        alternates: {
+            canonical: "/signup",
+        },
+    };
+}
 
 export default function SignupLayout({ children }: { children: React.ReactNode }) {
     return (

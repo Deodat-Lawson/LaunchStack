@@ -1,11 +1,18 @@
 "use client";
 
-import { Megaphone, Radio } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { ScenarioSummary, Stance } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { STANCE_BG, STANCE_LABEL, initials, isLive, progressWords } from "~/lib/scenarios/words";
+import {
+    STANCE_BG,
+    isLive,
+    progressLabel,
+    stanceLabel,
+    type ScenarioWordsT,
+} from "~/lib/scenarios/words";
 
 /** A run's state as a dot and a word: "Round 3 of 8", "Done", "Failed". */
 export function StatusPill({
@@ -15,6 +22,7 @@ export function StatusPill({
     run: Pick<ScenarioSummary, "status" | "stage" | "round" | "rounds" | "agents">;
     className?: string;
 }) {
+    const t = useTranslations("scenarios.words");
     const live = isLive(run.status);
     return (
         <span
@@ -35,42 +43,7 @@ export function StatusPill({
                     run.status === "cancelled" && "bg-ink-4"
                 )}
             />
-            {progressWords(run)}
-        </span>
-    );
-}
-
-/** A person's monogram; the narrator and the draft under test get a glyph. */
-export function Monogram({
-    name,
-    kind = "agent",
-    size = 32,
-    className,
-}: {
-    name: string;
-    kind?: "agent" | "narrator" | "brand";
-    size?: number;
-    className?: string;
-}) {
-    return (
-        <span
-            aria-hidden
-            className={cn(
-                "inline-flex shrink-0 items-center justify-center rounded-full font-medium",
-                kind === "agent" && "bg-panel-2 text-ink-2 border-line border",
-                kind === "narrator" && "bg-ink text-surface",
-                kind === "brand" && "bg-brand-soft text-brand-ink",
-                className
-            )}
-            style={{ width: size, height: size, fontSize: Math.round(size * 0.36) }}
-        >
-            {kind === "narrator" ? (
-                <Radio className="size-[45%]" />
-            ) : kind === "brand" ? (
-                <Megaphone className="size-[45%]" />
-            ) : (
-                initials(name)
-            )}
+            {progressLabel(t, run)}
         </span>
     );
 }
@@ -101,6 +74,7 @@ export function StanceTrail({
     width?: number;
     height?: number;
 }) {
+    const t = useTranslations("scenarios.words");
     if (history.length === 0) return null;
     const pad = 3;
     const x = (i: number) =>
@@ -115,7 +89,11 @@ export function StanceTrail({
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             role="img"
-            aria-label={`Stance by round: ${history.map(s => STANCE_LABEL[s].toLowerCase()).join(", ")}`}
+            aria-label={t("stanceByRound", {
+                stances: history
+                    .map(s => stanceLabel(t, s).toLowerCase())
+                    .join(t("list.separator")),
+            })}
             className="shrink-0 overflow-visible"
         >
             <line
@@ -156,7 +134,41 @@ function stanceFill(s: Stance): string {
     }[s];
 }
 
+/**
+ * A change of mind in a few words, with the arrow in the direction's colour:
+ * "Turned critical", "Softened to critical" (less critical than before),
+ * "Warmed to supportive", "Cooled to neutral".
+ */
+export function Shift({ from, to, className }: { from: Stance; to: Stance; className?: string }) {
+    const t = useTranslations("scenarios.words");
+    const warmer = to > from;
+    const key = warmer
+        ? to > 0
+            ? "shift.warmed"
+            : "shift.softened"
+        : to < 0
+          ? "shift.turned"
+          : "shift.cooled";
+    const Icon = warmer ? TrendingUp : TrendingDown;
+    return (
+        <span
+            className={cn(
+                "text-ink inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium",
+                className
+            )}
+        >
+            <Icon
+                className={cn("size-3.5 shrink-0", warmer ? "text-info-ink" : "text-danger")}
+                aria-hidden
+            />
+            {t(key, { stance: stanceLabel(t, to).toLowerCase() })}
+        </span>
+    );
+}
+
 /** "Neutral → Critical", or one word when it did not move. */
-export function stanceMove(from: Stance, to: Stance): string {
-    return from === to ? STANCE_LABEL[to] : `${STANCE_LABEL[from]} → ${STANCE_LABEL[to]}`;
+export function stanceMove(t: ScenarioWordsT, from: Stance, to: Stance): string {
+    return from === to
+        ? stanceLabel(t, to)
+        : t("stanceMove", { from: stanceLabel(t, from), to: stanceLabel(t, to) });
 }

@@ -55,22 +55,22 @@ jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => (
 // Section bodies are exercised by their own tests and by the API tests. Here
 // they are replaced with probes that publish known actions, so the assertions
 // are about the chrome rather than about five unrelated data fetches.
-// Processing publishes whatever a test sets; unless it says otherwise, a Save
+// Bring your own keys publishes whatever a test sets; unless it says otherwise, a Save
 // with nothing in its way.
 const SAVE: SettingsContract.SettingsSectionActions = {
     primaryLabel: "Save changes",
     onPrimary: () => undefined,
     disabled: false,
 };
-let mockProcessingActions: SettingsContract.SettingsSectionActions = SAVE;
-jest.mock("~/app/employer/documents/_workspace/settings/ProcessingSettings", () => {
+let mockKeysActions: SettingsContract.SettingsSectionActions = SAVE;
+jest.mock("~/app/employer/documents/_workspace/settings/KeysSection", () => {
     const { usePublishedActions } = jest.requireActual<typeof SettingsContract>(
         "~/app/employer/documents/_workspace/settings/contract"
     );
     return {
-        ProcessingSettings: ({ onActions }: { onActions?: unknown }) => {
-            usePublishedActions(onActions as never, mockProcessingActions, []);
-            return <div data-testid="body-processing">processing body</div>;
+        KeysSection: ({ onActions }: { onActions?: unknown }) => {
+            usePublishedActions(onActions as never, mockKeysActions, []);
+            return <div data-testid="body-byok">keys body</div>;
         },
     };
 });
@@ -127,8 +127,10 @@ function setHash(hash: string) {
 
 describe("settingsSectionFromHash", () => {
     it("maps every documented alias, including the ones that used to be routes", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
-        expect(settingsSectionFromHash("#embedding")).toBe("processing");
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#embedding")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
+        expect(settingsSectionFromHash("#openrouter")).toBe("byok");
         expect(settingsSectionFromHash("#agents")).toBe("agents");
         expect(settingsSectionFromHash("#nodes")).toBe("agents");
         expect(settingsSectionFromHash("#slack")).toBe("integrations");
@@ -146,7 +148,7 @@ describe("settingsSectionFromHash", () => {
     });
 
     it("is case-insensitive and tolerates a missing #", () => {
-        expect(settingsSectionFromHash("BYOK")).toBe("processing");
+        expect(settingsSectionFromHash("BYOK")).toBe("byok");
         expect(settingsSectionFromHash("#Agents")).toBe("agents");
     });
 
@@ -161,7 +163,7 @@ describe("SettingsHub", () => {
         setHash("");
         mockReplace.mockReset();
         mockPermissions = OWNER;
-        mockProcessingActions = SAVE;
+        mockKeysActions = SAVE;
     });
 
     it("lists every section in one grouped rail", () => {
@@ -174,10 +176,9 @@ describe("SettingsHub", () => {
             "Shortcuts",
             "People and access",
             "Company profile",
-            "Processing",
+            "Bring your own keys",
             "Models and routes",
             "Agents and autonomy",
-            "Document defaults",
             "Integrations",
             "Usage and costs",
             "Archive and retention",
@@ -220,8 +221,8 @@ describe("SettingsHub", () => {
         render(<SettingsHub />);
         await findBody("body-account");
 
-        await user.click(screen.getByRole("button", { name: /^Processing/i }));
-        await findBody("body-processing");
+        await user.click(screen.getByRole("button", { name: /^Bring your own keys/i }));
+        await findBody("body-byok");
         expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "New agent" })).not.toBeInTheDocument();
 
@@ -246,15 +247,15 @@ describe("SettingsHub", () => {
     });
 
     it("disables the primary button a section disables, even when it is not busy", async () => {
-        // Processing publishes `busy: isSaving` beside `disabled: !dirty`. The
+        // Bring your own keys publishes `busy: isSaving` beside `disabled: !dirty`. The
         // chrome used to read `busy ?? disabled`, so busy's `false` won and
         // Save stayed live with nothing edited.
         const onPrimary = jest.fn();
-        mockProcessingActions = { ...SAVE, onPrimary, busy: false, disabled: true };
+        mockKeysActions = { ...SAVE, onPrimary, busy: false, disabled: true };
         setHash("#byok");
         const user = userEvent.setup();
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-byok");
 
         const save = screen.getByRole("button", { name: "Save changes" });
         expect(save).toBeDisabled();
@@ -263,7 +264,7 @@ describe("SettingsHub", () => {
     });
 
     it("disables the primary button while the section is busy, whatever it says about disabled", async () => {
-        mockProcessingActions = {
+        mockKeysActions = {
             ...SAVE,
             primaryBusyLabel: "Saving…",
             busy: true,
@@ -271,7 +272,7 @@ describe("SettingsHub", () => {
         };
         setHash("#byok");
         render(<SettingsHub />);
-        await findBody("body-processing");
+        await findBody("body-byok");
 
         expect(screen.getByRole("button", { name: "Saving…" })).toBeDisabled();
     });
@@ -280,10 +281,8 @@ describe("SettingsHub", () => {
         setHash("#byok");
         render(<SettingsHub />);
 
-        await findBody("body-processing");
-        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            "How documents get indexed"
-        );
+        await findBody("body-byok");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Bring your own keys");
     });
 
     it("sends the analytics hashes to the Studio, where the dashboard lives now", async () => {
@@ -393,7 +392,6 @@ describe("SettingsHub by role", () => {
             "Shortcuts",
             "People and access",
             "Company profile",
-            "Document defaults",
             "Data and privacy",
             "Labs",
         ]);
@@ -432,15 +430,15 @@ describe("SettingsHub by role", () => {
 
         await waitFor(() =>
             expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-                "How documents get indexed"
+                "Bring your own keys"
             )
         );
         expect(
             screen.getByText(
-                "Processing isn't part of your role (Member). Ask an admin if you need it."
+                "Bring your own keys isn't part of your role (Member). Ask an admin if you need it."
             )
         ).toBeInTheDocument();
-        expect(screen.queryByTestId("body-processing")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("body-byok")).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
     });
 
@@ -452,7 +450,7 @@ describe("SettingsHub by role", () => {
         expect(screen.getByText("Loading…")).toBeInTheDocument();
         expect(screen.queryByText(/isn't part of your role/)).not.toBeInTheDocument();
         // Fails closed: only the ungated sections are listed meanwhile.
-        expect(railLabels()).not.toContain("Processing");
+        expect(railLabels()).not.toContain("Bring your own keys");
     });
 
     it("says the roles failed to load, not that the section isn't theirs", () => {

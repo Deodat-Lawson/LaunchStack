@@ -31,6 +31,7 @@ import { grantLevelRank, isGrantLevel, type GrantLevel } from "~/lib/authz/permi
 import { scopeAllowsCategory, scopeAllowsDocument } from "~/lib/authz/scope-types";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { readableSessionIds } from "~/server/sessions/access";
+import { copy } from "~/i18n/copy";
 
 import { notFound } from "../errors";
 
@@ -274,7 +275,7 @@ export async function sharedBetween(
             )
         )
         .limit(1);
-    if (!other) throw notFound("Member not found.");
+    if (!other) throw notFound(copy("team.server.errors.memberNotFound"));
     if (otherUserPk === ctx.userPk) return { sharedWithMe: [], iShared: [] };
 
     const groups = await groupsOf(ctx.companyId, [ctx.userPk, otherUserPk]);

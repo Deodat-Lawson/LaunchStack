@@ -78,6 +78,7 @@ x-shared-env: &shared-env
   DATALAB_API_KEY: ${DATALAB_API_KEY:-}
   AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
   AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
+  AZURE_DOC_INTELLIGENCE_MODEL: ${AZURE_DOC_INTELLIGENCE_MODEL:-}
   LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
   GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
   GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
@@ -124,6 +125,8 @@ x-shared-env: &shared-env
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+  # text-layer-first (unset) | provider-first — see .env.example.
+  OCR_PDF_STRATEGY: ${OCR_PDF_STRATEGY:-}
   # Gotenberg PDF rendering (ADR-009). Basic auth instead of X-API-Key —
   # that is the auth Gotenberg ships — but the same fail-closed local-default
   # contract as the other services: override the password in production.
@@ -155,7 +158,7 @@ x-shared-env: &shared-env
   AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
   AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
   AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
-  # Workspace connectors: Google Drive + Gmail, GitHub, Slack.
+  # Workspace connectors: Google Drive + Gmail, GitHub, Slack, Notion.
   GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
   GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
   GOOGLE_OAUTH_REDIRECT_URL: ${GOOGLE_OAUTH_REDIRECT_URL:-}
@@ -172,6 +175,8 @@ x-shared-env: &shared-env
   SLACK_CLIENT_ID: ${SLACK_CLIENT_ID:-}
   SLACK_CLIENT_SECRET: ${SLACK_CLIENT_SECRET:-}
   SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
+  NOTION_OAUTH_CLIENT_ID: ${NOTION_OAUTH_CLIENT_ID:-}
+  NOTION_OAUTH_CLIENT_SECRET: ${NOTION_OAUTH_CLIENT_SECRET:-}
   # Growth › Brand social accounts. LinkedIn: the app pair and the exact
   # scopes its Auth tab lists. The deployment-wide keys below are the
   # fallback for networks a workspace has not connected itself.

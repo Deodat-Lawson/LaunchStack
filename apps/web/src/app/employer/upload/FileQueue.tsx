@@ -2,6 +2,7 @@
 
 import React from "react";
 import { X, Check, AlertCircle, Loader2, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 interface DocumentFile {
     id: string;
@@ -51,6 +52,8 @@ export function FileQueue({
     onToggleExpand,
     formatFileSize,
 }: FileQueueProps) {
+    const t = useTranslations("upload.queue");
+    const format = useFormatter();
     return (
         <div
             style={{
@@ -78,7 +81,7 @@ export function FileQueue({
                         textTransform: "uppercase",
                     }}
                 >
-                    Queue · {documents.length} {documents.length === 1 ? "file" : "files"}
+                    {t("title", { count: documents.length })}
                 </div>
                 <button
                     onClick={onClearAll}
@@ -93,7 +96,7 @@ export function FileQueue({
                         cursor: "pointer",
                     }}
                 >
-                    Clear all
+                    {t("clearAll")}
                 </button>
             </div>
 
@@ -218,7 +221,10 @@ export function FileQueue({
                                                     fontWeight: 600,
                                                 }}
                                             >
-                                                {doc.progress}%
+                                                {format.number(doc.progress / 100, {
+                                                    style: "percent",
+                                                    maximumFractionDigits: 0,
+                                                })}
                                             </span>
                                         )}
                                         {doc.status === "pending" && (
@@ -228,7 +234,7 @@ export function FileQueue({
                                                     e.stopPropagation();
                                                     onRemove(doc.id);
                                                 }}
-                                                aria-label="Remove file"
+                                                aria-label={t("removeFile")}
                                                 style={{
                                                     background: "transparent",
                                                     border: "none",
@@ -292,7 +298,7 @@ export function FileQueue({
                                                 marginBottom: 6,
                                             }}
                                         >
-                                            Document title{" "}
+                                            {t("titleLabel")}{" "}
                                             <span style={{ color: "var(--danger)" }}>*</span>
                                         </label>
                                         <input
@@ -301,7 +307,7 @@ export function FileQueue({
                                             onChange={e =>
                                                 onUpdate(doc.id, { title: e.target.value })
                                             }
-                                            placeholder="Enter document title"
+                                            placeholder={t("titlePlaceholder")}
                                             style={{
                                                 ...inputStyle,
                                                 borderColor: errors[`title-${doc.id}`]
@@ -333,7 +339,7 @@ export function FileQueue({
                                                 marginBottom: 6,
                                             }}
                                         >
-                                            Category
+                                            {t("categoryLabel")}
                                         </label>
                                         <select
                                             id={`category-${doc.id}`}
@@ -343,7 +349,7 @@ export function FileQueue({
                                             }
                                             style={inputStyle}
                                         >
-                                            <option value="">Select a category (optional)</option>
+                                            <option value="">{t("categoryPlaceholder")}</option>
                                             {categories.map(c => (
                                                 <option key={c.id} value={c.name}>
                                                     {c.name}
@@ -370,7 +376,7 @@ export function FileQueue({
                                         }}
                                     >
                                         <Trash2 size={13} />
-                                        Remove from queue
+                                        {t("removeFromQueue")}
                                     </button>
                                 </div>
                             )}

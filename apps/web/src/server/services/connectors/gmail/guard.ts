@@ -8,6 +8,9 @@
 
 import type { NextResponse } from "next/server";
 
+import type { Locale } from "~/i18n/locales";
+import { requestLocaleOrDefault } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { createForbiddenError, createNotFoundError, createValidationError } from "~/lib/api-utils";
 import {
     requireWorkspaceContext,
@@ -23,11 +26,9 @@ export type GmailGuardResult =
     | { readonly ok: true; readonly ctx: WorkspaceContext }
     | { readonly ok: false; readonly response: NextResponse };
 
-export function gmailNotConfiguredResponse(): NextResponse {
-    return createForbiddenError(
-        "The Gmail connector is not enabled on this server. Set GMAIL_CONNECTOR_ENABLED=true, " +
-            "GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY."
-    );
+/** In `locale` (English by default, as before). */
+export function gmailNotConfiguredResponse(locale: Locale = "en"): NextResponse {
+    return createForbiddenError(translatorFor(locale, "sources.server.gmail")("notConfigured"));
 }
 
 /** Any active member may read their own Gmail status. */
@@ -41,7 +42,9 @@ export async function requireGmailReader(): Promise<GmailGuardResult> {
 export async function requireGmailWriter(): Promise<GmailGuardResult> {
     const context = await requireWorkspacePermission("documents.upload");
     if (!context.success) return { ok: false, response: context.response };
-    if (!isGmailConnectorConfigured()) return { ok: false, response: gmailNotConfiguredResponse() };
+    if (!isGmailConnectorConfigured()) {
+        return { ok: false, response: gmailNotConfiguredResponse(await requestLocaleOrDefault()) };
+    }
     return { ok: true, ctx: context.data };
 }
 
@@ -54,11 +57,13 @@ export async function requireOwnActiveGmailConnection(
     ctx: WorkspaceContext
 ): Promise<OwnConnectionResult> {
     const connection = await getGmailConnectionForUser(ctx.companyId, ctx.userPk);
-    if (!connection) return { ok: false, response: createNotFoundError("Connect Gmail first.") };
-    if (connection.status !== "active") {
+    if (!connection || connection.status !== "active") {
+        const t = translatorFor(await requestLocaleOrDefault(), "sources.server.gmail");
         return {
             ok: false,
-            response: createValidationError("Gmail access was revoked — reconnect first."),
+            response: connection
+                ? createValidationError(t("accessRevoked"))
+                : createNotFoundError(t("connectFirst")),
         };
     }
     return { ok: true, connection };

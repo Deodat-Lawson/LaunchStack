@@ -46,6 +46,9 @@
         "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
         "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
         "./connectors/gmail": "./src/connectors/gmail/index.ts",
+        "./connectors/notion": "./src/connectors/notion/index.ts",
+        "./connectors/obsidian": "./src/connectors/obsidian/index.ts",
+        "./connectors/obsidian/paths": "./src/connectors/obsidian/paths.ts",
         "./package.json": "./package.json",
         "./distribution": "./src/distribution/index.ts",
         "./distribution/db": "./src/distribution/db.ts",
@@ -215,6 +218,18 @@
             "./connectors/agent-sessions": {
                 "types": "./dist/connectors/agent-sessions/index.d.ts",
                 "default": "./dist/connectors/agent-sessions/index.js"
+            },
+            "./connectors/notion": {
+                "types": "./dist/connectors/notion/index.d.ts",
+                "default": "./dist/connectors/notion/index.js"
+            },
+            "./connectors/obsidian": {
+                "types": "./dist/connectors/obsidian/index.d.ts",
+                "default": "./dist/connectors/obsidian/index.js"
+            },
+            "./connectors/obsidian/paths": {
+                "types": "./dist/connectors/obsidian/paths.d.ts",
+                "default": "./dist/connectors/obsidian/paths.js"
             },
             "./package.json": "./package.json",
             "./distribution": {

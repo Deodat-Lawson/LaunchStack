@@ -8,7 +8,7 @@ import { OPPORTUNITY_STATUSES } from "@launchstack/pipelines/proposals/types";
 
 import { addFunder, loadFunders } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../_http";
 
 const NewFunderSchema = z.object({
     title: z.string().min(1).max(512),
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
             sources: describeGrantSources(),
         });
     } catch (err) {
-        return handleProposalsError("GET funders", err);
+        return handleProposalsError("GET funders", err, request);
     }
 }
 
@@ -47,9 +47,9 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = NewFunderSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error("A funder needs a title and a name", 400);
+        if (!parsed.success) return error(say(request, "funderNeedsName"), 400);
         return json({ funder: await addFunder(auth.ctx, parsed.data) }, 201);
     } catch (err) {
-        return handleProposalsError("POST funders", err);
+        return handleProposalsError("POST funders", err, request);
     }
 }

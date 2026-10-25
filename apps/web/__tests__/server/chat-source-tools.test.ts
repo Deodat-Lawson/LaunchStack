@@ -119,6 +119,18 @@ describe("list_sources", () => {
         expect(tool.describe({})).toBe("Looking through your sources");
     });
 
+    it("names what it is doing in the reader's language; the model's text stays English", () => {
+        const session = createSourceTools(ctx, {}, "zh-CN");
+        const [list, search, read] = session.tools;
+        expect(list!.describe({ from: "google-drive" })).toBe("正在查看你的 Google Drive 文件");
+        expect(list!.describe({ folder: " Resumes " })).toBe("正在查看“Resumes”");
+        expect(list!.describe({})).toBe("正在查看你的来源");
+        expect(search!.describe({ query: "Python" })).toBe("正在你的来源中搜索“Python”");
+        expect(search!.describe({})).toBe("正在你的来源中搜索");
+        expect(read!.describe({ id: "d81" })).toBe("正在阅读一个来源");
+        expect(list!.description).toMatch(/^List the sources/);
+    });
+
     it("says plainly when nothing matches", async () => {
         const list = jest.fn(async (): Promise<SourceListing> => ({ folders: [], documents: [] }));
         const { list: tool } = toolsWith({ list });
@@ -357,11 +369,9 @@ describe("ask_each", () => {
             usage: { inputTokens: 100, outputTokens: 5, totalTokens: 105 },
         }));
         const read = jest.fn(async (_ctx: unknown, id: number) => resume(id));
-        const session = createSourceTools(
-            ctx,
-            { read, askFile: () => askFile, ...ports },
-            { attached }
-        );
+        const session = createSourceTools(ctx, { read, askFile: () => askFile, ...ports }, "en", {
+            attached,
+        });
         const tool = session.tools.find(t => t.name === "ask_each")!;
         return { session, tool, askFile, read };
     }
@@ -405,6 +415,22 @@ describe("ask_each", () => {
             },
         });
         expect(session.texts).toEqual([text]);
+    });
+
+    it("words its status line in the interface language", async () => {
+        const askFile = jest.fn(async () => ({ answer: "", quote: "", usage: {} }));
+        const read = jest.fn(async (_ctx: unknown, id: number) => resume(id));
+        const tool = createSourceTools(ctx, { read, askFile: () => askFile }, "zh-CN", {
+            attached: ATTACHED.slice(0, 2),
+        }).tools.find(t => t.name === "ask_each")!;
+        const progress = jest.fn();
+
+        expect(tool.describe({ question: "Who?" })).toBe("正在阅读 2 个来源");
+        await tool.run({ question: "Who?" }, signal, progress);
+        expect(progress).toHaveBeenLastCalledWith("正在阅读 2 个来源…已完成 2 个");
+        expect(
+            createSourceTools(ctx, {}, "en", { attached: ATTACHED }).tools.at(-1)!.describe({})
+        ).toBe("Reading 37 sources");
     });
 
     it("reads at most eight sources at once", async () => {

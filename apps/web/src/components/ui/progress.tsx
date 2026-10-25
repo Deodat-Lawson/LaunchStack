@@ -13,6 +13,8 @@ function Progress({
     return (
         <ProgressPrimitive.Root
             data-slot="progress"
+            // Passed through so the bar announces its value (aria-valuenow).
+            value={value}
             className={cn(
                 "bg-brand/20 relative h-2 w-full overflow-hidden rounded-full",
                 className

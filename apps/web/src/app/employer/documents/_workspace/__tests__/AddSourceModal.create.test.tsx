@@ -259,7 +259,7 @@ describe("where it goes and who will see it (ADR-014)", () => {
     });
 
     it("shows where a connector files things, and who sees them there", async () => {
-        folderFacts["Google Drive"] = {
+        folderFacts["Agent Sessions"] = {
             visibility: "workspace",
             grants: [],
             audienceCount: 8,
@@ -267,8 +267,8 @@ describe("where it goes and who will see it (ADR-014)", () => {
             inheritsFrom: { path: null, restricted: false },
             workspaceName: "Acme",
         };
-        mount({ initialTab: "drive" });
-        expect(screen.getByTestId("add-destination-path")).toHaveTextContent("Google Drive");
+        mount({ initialTab: "agent-sessions" });
+        expect(screen.getByTestId("add-destination-path")).toHaveTextContent("Agent Sessions");
         expect(screen.queryByTestId("add-destination-picker")).not.toBeInTheDocument();
         await waitFor(() =>
             expect(screen.getByTestId("add-source-audience")).toHaveTextContent("Everyone at Acme")

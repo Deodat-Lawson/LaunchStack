@@ -54,6 +54,11 @@ import {
     noSourceToolsPrompt,
     sourceToolsPrompt,
 } from "~/server/chat-source-tools";
+import {
+    createDocumentTools,
+    documentToolsPrompt,
+    noDocumentToolsPrompt,
+} from "~/server/chat-document-tools";
 import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import {
     FULL_READ_TOKEN_BUDGET,
@@ -85,6 +90,7 @@ import { isMeteringEnabled } from "@launchstack/store/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { isAgentStyle, mentionedAgentKeys, type AgentStyleId } from "~/lib/agents/definition";
+import { DEFAULT_STYLE } from "~/lib/ai/styles";
 import { readSettingValue } from "~/server/settings/store";
 import {
     locatePassageContext,
@@ -100,6 +106,10 @@ import {
     resolveChatAgent,
 } from "~/server/collab/chat-agent";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { copy, type Copy } from "~/i18n/copy";
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
+import { englishCopy, translatorFor, wordEnglish, wordOr } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -110,9 +120,9 @@ async function defaultAssistantStyle(
 ): Promise<AgentStyleId> {
     try {
         const value = await readSettingValue<string>(ctx, "chat.responseStyle");
-        return isAgentStyle(value) ? value : "concise";
+        return isAgentStyle(value) ? value : DEFAULT_STYLE;
     } catch {
-        return "concise";
+        return DEFAULT_STYLE;
     }
 }
 
@@ -133,6 +143,11 @@ async function knownAgentKeys(companyId: bigint, question: string): Promise<stri
 }
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
+
+/** `describeChatError` writes English; `chat.server.endpoint` has the reader's words. */
+function endpointText(message: string, locale: Locale): string {
+    return wordEnglish(message, "chat.server.endpoint", locale);
+}
 
 const qaAnnOptimizer = new ANNOptimizer({
     strategy: "hnsw",
@@ -175,12 +190,16 @@ async function extractDocxText(buffer: ArrayBuffer): Promise<string> {
 const ATTACHMENT_DOWNLOAD_CAP_BYTES = 50 * 1024 * 1024;
 const ATTACHMENT_FILE_DOWNLOAD_CAP_BYTES = 50 * 1024 * 1024;
 
+/** A refused attachment. The sentence is a `Copy` where this route wrote it. */
 class AttachmentReadError extends Error {
+    readonly copy: Copy | null;
+
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status = 400
     ) {
-        super(message);
+        super(typeof message === "string" ? message : englishCopy(message));
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -241,7 +260,7 @@ async function fetchAttachment(
         )
         .limit(1);
     if (file && file.companyId !== companyId)
-        throw new AttachmentReadError("Attachment not found.", 404);
+        throw new AttachmentReadError(copy("chat.server.attachments.notFound"), 404);
     const backed = await db
         .select({ id: document.id, category: document.category, companyId: document.companyId })
         .from(document)
@@ -259,19 +278,18 @@ async function fetchAttachment(
         row => row.companyId === companyId && scopeAllowsDocument(scope, row)
     );
     if ((!file && (internal || !readable)) || (backed.length > 0 && !readable)) {
-        throw new AttachmentReadError(
-            "Attachment not found or unavailable in your document scope.",
-            404
-        );
+        throw new AttachmentReadError(copy("chat.server.attachments.outOfScope"), 404);
     }
     throwIfChatAborted(request.signal);
     if (internal && file?.storageProvider === "database") {
         if (!file.fileData)
-            throw new AttachmentReadError("Attachment content is unavailable.", 404);
+            throw new AttachmentReadError(copy("chat.server.attachments.contentUnavailable"), 404);
         const bytes = Buffer.byteLength(file.fileData, "base64");
         const cap = att.kind === "image" ? 10 * 1024 * 1024 : ATTACHMENT_FILE_DOWNLOAD_CAP_BYTES;
         if (bytes > cap)
-            throw new AttachmentReadError(`Attachment "${att.name}" exceeds the size limit.`);
+            throw new AttachmentReadError(
+                copy("chat.server.attachments.tooLarge", { name: att.name })
+            );
         const content = Buffer.from(file.fileData, "base64");
         return new Response(content, {
             headers: { "content-type": file.mimeType, "content-length": String(bytes) },
@@ -279,7 +297,7 @@ async function fetchAttachment(
     }
     const storageUrl = internal ? file?.storageUrl : att.url;
     if (!storageUrl || !isConfiguredStorageUrl(storageUrl)) {
-        throw new AttachmentReadError("Attachment storage is unavailable.", 404);
+        throw new AttachmentReadError(copy("chat.server.attachments.storageUnavailable"), 404);
     }
     // Private configured S3 is allowed only after the ownership check, and cannot redirect.
     return await fetch(storageUrl, { signal: request.signal, redirect: "error" });
@@ -296,7 +314,10 @@ async function readAttachmentBytes(
     if (!res.ok) {
         await res.body?.cancel();
         throw new AttachmentReadError(
-            `Attachment "${att.name}" is unavailable (HTTP ${res.status}). Attach it again or remove it before sending.`,
+            copy("chat.server.attachments.unavailable", {
+                name: att.name,
+                status: String(res.status),
+            }),
             res.status === 404 || res.status === 410 ? 404 : 400
         );
     }
@@ -305,7 +326,7 @@ async function readAttachmentBytes(
     if (announcedSize > limit) {
         await res.body?.cancel();
         throw new AttachmentReadError(
-            `Attachment "${att.name}" exceeds the remaining download size limit.`
+            copy("chat.server.attachments.downloadLimit", { name: att.name })
         );
     }
     if (!res.body) return { content: new Uint8Array(), mimeType: "" };
@@ -322,7 +343,7 @@ async function readAttachmentBytes(
             budget.remaining -= chunk.value.byteLength;
             if (bytes > limit)
                 throw new AttachmentReadError(
-                    `Attachment "${att.name}" exceeds the remaining download size limit.`
+                    copy("chat.server.attachments.downloadLimit", { name: att.name })
                 );
             chunks.push(chunk.value);
         }
@@ -372,12 +393,12 @@ async function buildImageAttachmentUrls(
         const actualMime = detectedImageMime(content);
         if (!actualMime || (mimeType.startsWith("image/") && mimeType !== actualMime)) {
             throw new AttachmentReadError(
-                `Attachment "${att.name}" is not a supported image or its content type does not match its bytes.`
+                copy("chat.server.attachments.notAnImage", { name: att.name })
             );
         }
         if (acceptedMimeTypes && !acceptedMimeTypes.includes(actualMime)) {
             throw new AttachmentReadError(
-                `The configured vision model does not accept ${actualMime}.`
+                copy("chat.server.attachments.visionMimeRejected", { mime: actualMime })
             );
         }
         urls.push(`data:${actualMime};base64,${Buffer.from(content).toString("base64")}`);
@@ -400,7 +421,7 @@ async function extractAttachmentText(
     if (verifiedKind === "docx") return await extractDocxText(content.buffer);
     if (mimeType.startsWith("image/"))
         throw new AttachmentReadError(
-            `Attachment "${att.name}" contains an image; attach it as an image to use vision.`
+            copy("chat.server.attachments.imageAsText", { name: att.name })
         );
     return new TextDecoder().decode(content);
 }
@@ -451,7 +472,7 @@ async function buildAttachmentTextBlock(
             if (err instanceof AttachmentReadError) throw err;
             console.warn(`[AIChat] Failed to read attachment "${att.name}":`, err);
             throw new AttachmentReadError(
-                `Attachment "${att.name}" could not be read. Attach a valid file again or remove it before sending. For a scanned document, add it as a Source to run OCR.`
+                copy("chat.server.attachments.unreadable", { name: att.name })
             );
         }
     }
@@ -477,6 +498,9 @@ async function buildAttachmentTextBlock(
  */
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
+        // The reader's language, for every sentence this route answers with.
+        const locale: Locale = localeOfRequest(request);
+        const t = translatorFor(locale, "chat.server");
         const startTime = Date.now();
         const endTimer = qaRequestDuration.startTimer();
         let retrievalMethod = "not_started";
@@ -500,25 +524,25 @@ export async function POST(request: Request) {
             if (!ctx.data.can("documents.read")) {
                 recordAuthzDenied("documents.read", ROUTE);
                 recordResult("error");
-                return forbiddenForPermission("documents.read");
+                return forbiddenForPermission("documents.read", locale);
             }
 
             // Everything the answer runs (route resolution, web search, the model
             // call, a streamed body) resolves against the workspace's own models
             // when it brought them.
-            return await withWorkspaceChatModels(ctx.data.companyId, () => answer(ctx));
+            return await withWorkspaceChatModels(ctx.data.companyId, "ask", () => answer(ctx));
         } catch (error) {
             if (request.signal.aborted) {
                 recordResult("error");
                 return NextResponse.json(
-                    { success: false, cancelled: true, message: "Response stopped" },
+                    { success: false, cancelled: true, message: t("query.stopped") },
                     { status: 499 }
                 );
             }
             if (error instanceof AttachmentReadError) {
                 recordResult("error");
                 return NextResponse.json(
-                    { success: false, message: error.message },
+                    { success: false, message: wordOr(error.copy, error.message, locale) },
                     { status: error.status }
                 );
             }
@@ -527,7 +551,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: "An error occurred while processing your question.",
+                    error: t("query.failed"),
                 },
                 { status: 500 }
             );
@@ -599,7 +623,10 @@ export async function POST(request: Request) {
                 if (agentError instanceof ChatAgentError) {
                     recordResult("error");
                     return NextResponse.json(
-                        { success: false, message: agentError.message },
+                        {
+                            success: false,
+                            message: wordOr(agentError.copy, agentError.message, locale),
+                        },
                         { status: agentError.status }
                     );
                 }
@@ -615,9 +642,7 @@ export async function POST(request: Request) {
             // setting for the default assistant (member over workspace over the
             // product default), unless the request named one explicitly.
             const style =
-                agent?.turn.style ??
-                (requestedStyle !== "concise" ? requestedStyle : null) ??
-                (await defaultAssistantStyle(ctx.data));
+                agent?.turn.style ?? requestedStyle ?? (await defaultAssistantStyle(ctx.data));
 
             // Resolve the chat route before any retrieval, web search, or
             // embedding work: an unavailable route is a 400, and paying for
@@ -677,14 +702,17 @@ export async function POST(request: Request) {
                 });
             } catch (modelError) {
                 recordResult("error");
-                const failure = describeChatResolutionFailure(modelError);
+                const failure = describeChatResolutionFailure(modelError, locale);
                 return NextResponse.json(
                     { success: false, message: failure.message },
                     { status: failure.status }
                 );
             }
 
-            const compatibility = validateDeprecatedChatSelection({ provider, model: aiModel });
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                locale
+            );
             if (!compatibility.ok) {
                 recordResult("error");
                 return NextResponse.json(
@@ -709,7 +737,9 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: `The configured vision model accepts at most ${resolved.behavior.image.maxImages} image(s) per request.`,
+                        message: t("query.tooManyImages", {
+                            max: String(resolved.behavior.image.maxImages),
+                        }),
                     },
                     { status: 400 }
                 );
@@ -721,7 +751,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "documentId is required for document search",
+                        message: t("query.documentIdRequired"),
                     },
                     { status: 400 }
                 );
@@ -732,7 +762,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "archiveName is required for archive search",
+                        message: t("query.archiveNameRequired"),
                     },
                     { status: 400 }
                 );
@@ -746,7 +776,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "selectedDocumentIds is required for selected-documents search",
+                        message: t("query.selectedIdsRequired"),
                     },
                     { status: 400 }
                 );
@@ -779,7 +809,7 @@ export async function POST(request: Request) {
                     return NextResponse.json(
                         {
                             success: false,
-                            message: "Document not found.",
+                            message: t("documentNotFound"),
                         },
                         { status: 404 }
                     );
@@ -815,7 +845,7 @@ export async function POST(request: Request) {
                     return NextResponse.json(
                         {
                             success: false,
-                            message: "The document a selected passage came from was not found.",
+                            message: t("query.passageDocumentNotFound"),
                         },
                         { status: 404 }
                     );
@@ -861,7 +891,7 @@ export async function POST(request: Request) {
                         recordResult("empty");
                         return NextResponse.json({
                             success: false,
-                            message: "No relevant content found for the given question.",
+                            message: t("query.noRelevantContent"),
                         });
                     }
                 } else if (searchScope === "archive" && archiveName) {
@@ -880,7 +910,7 @@ export async function POST(request: Request) {
                         return NextResponse.json(
                             {
                                 success: false,
-                                message: `No documents found in archive "${archiveName}".`,
+                                message: t("query.archiveEmpty", { archive: archiveName }),
                             },
                             { status: 404 }
                         );
@@ -902,7 +932,7 @@ export async function POST(request: Request) {
                         return NextResponse.json(
                             {
                                 success: false,
-                                message: "None of the selected documents were found.",
+                                message: t("query.selectedNotFound"),
                             },
                             { status: 404 }
                         );
@@ -1104,7 +1134,7 @@ export async function POST(request: Request) {
                     recordResult("empty");
                     return NextResponse.json({
                         success: false,
-                        message: "No relevant content found for the given question.",
+                        message: t("query.noRelevantContent"),
                     });
                 }
             }
@@ -1158,7 +1188,9 @@ export async function POST(request: Request) {
             // search provider key is configured and the model takes tools. A
             // question that needs no web pays nothing for it.
             const webTools =
-                enableWebSearch && webSearchAvailable() && takesTools ? createWebTools() : null;
+                enableWebSearch && webSearchAvailable() && takesTools
+                    ? createWebTools({}, locale)
+                    : null;
 
             // The workspace's sources are tools too, offered whenever the model
             // takes tools, the agent may use retrieval and the person can open
@@ -1179,9 +1211,23 @@ export async function POST(request: Request) {
                 sourcesAllowed &&
                 sourcesOverview &&
                 sourcesOverview.inventory.total > 0
-                    ? createSourceTools(ctx.data, {}, { attached: scopeFiles })
+                    ? createSourceTools(ctx.data, {}, locale, { attached: scopeFiles })
                     : null;
-            const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
+            // Writing is a tool as well: asked for a document, the model makes
+            // one in the workspace instead of pasting it here and telling the
+            // person to copy it into a file. Offered to anyone who may add
+            // files, when the model takes tools and the agent may write.
+            const writeAllowed = takesTools && (agent ? agent.turn.write : true);
+            const mayUpload = ctx.data.can("documents.upload");
+            const documentTools =
+                writeAllowed && mayUpload
+                    ? createDocumentTools(ctx.data, { requestUrl: request.url, locale })
+                    : null;
+            const tools = [
+                ...(sourceTools?.tools ?? []),
+                ...(documentTools?.tools ?? []),
+                ...(webTools?.tools ?? []),
+            ];
 
             const attachmentContext = { request, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
@@ -1194,7 +1240,7 @@ export async function POST(request: Request) {
                 resolved.behavior.image?.mimeTypes
             );
 
-            const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
+            const selectedStyle = style satisfies keyof typeof SYSTEM_PROMPTS;
 
             // Build conversation context
             let conversationContext = "";
@@ -1226,7 +1272,16 @@ export async function POST(request: Request) {
                 systemPrompt +=
                     "\n\nPLAN MODE: Produce a concrete, ordered plan for the user request, including dependencies, assumptions, verification steps, and any essential unanswered questions. Treat this as planning: do not claim to have performed actions or completed implementation.";
             }
+            if (documentTools) {
+                systemPrompt += `\n\n${documentToolsPrompt()}`;
+            } else if (writeAllowed && !mayUpload) {
+                systemPrompt += `\n\n${noDocumentToolsPrompt()}`;
+            }
             if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
+            // Answer in the language the person reads the app in, unless they
+            // write in another one (src/i18n/server.ts).
+            const replyLanguage = replyLanguageInstruction(locale);
+            if (replyLanguage) systemPrompt += `\n\n${replyLanguage}`;
 
             const passageBlock = passageSection ? `${passageSection}\n\n` : "";
             const documentContent =
@@ -1242,7 +1297,7 @@ export async function POST(request: Request) {
                         ? `Relevant passages (${coverage.passages} from ${coverage.filesShown} of ${scopeFiles.length} attached file${scopeFiles.length === 1 ? "" : "s"}):`
                         : "Relevant passages:";
             const manifest = scopeFiles.length > 0 ? `${manifestBlock(scopeFiles)}\n\n` : "";
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}${manifest}${contentHeading}\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}${manifest}${contentHeading}\n${documentContent}${attachmentTextBlock}\n\nAnswer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1289,8 +1344,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message:
-                            "The expanded chat input exceeds 120000 characters. Shorten your prompt, remove source or attachment context, or start a new conversation.",
+                        message: t("query.inputTooLong"),
                     },
                     { status: 400 }
                 );
@@ -1314,6 +1368,9 @@ export async function POST(request: Request) {
                         onReasoning: delta => emit({ type: "reasoning", delta }),
                     },
                     onStatus: status => emit?.({ type: "status", status }),
+                    // Looking (a search, a read) and then writing takes a
+                    // round more than looking alone.
+                    ...(documentTools ? { maxToolRounds: 4 } : {}),
                 });
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
@@ -1458,6 +1515,10 @@ export async function POST(request: Request) {
                                   resultsCount: webTools.sources.length,
                               }
                             : undefined,
+                    // The documents the answer wrote, for the chat to list and open.
+                    createdSources: documentTools?.created.length
+                        ? documentTools.created
+                        : undefined,
                     disclaimer: supervision.disclaimer,
                     guardrails: !supervision.approved
                         ? {
@@ -1473,9 +1534,11 @@ export async function POST(request: Request) {
                     error => {
                         recordResult("error");
                         const friendly = describeChatError(error, selectedAiModel);
-                        if (friendly) return friendly.message;
+                        if (friendly) return endpointText(friendly.message, locale);
                         // The provider's own text can name the vendor or its
-                        // billing page; it goes to the log, not the screen.
+                        // billing page; it goes to the log, not the screen. This one
+                        // stays English: the chat screen finds it again
+                        // (`chatStreamErrorKey`) and shows its own words.
                         console.error("[AIChat] Streamed response failed:", error);
                         return "The chat response failed. Please retry.";
                     }
@@ -1492,7 +1555,7 @@ export async function POST(request: Request) {
                 if (friendly) {
                     recordResult("error");
                     return NextResponse.json(
-                        { success: false, message: friendly.message },
+                        { success: false, message: endpointText(friendly.message, locale) },
                         { status: friendly.status }
                     );
                 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { cn } from "~/lib/utils";
 
 /**
@@ -21,24 +23,28 @@ export function BulkBar({
     onClear: () => void;
     className?: string;
 }) {
+    const t = useTranslations("growth.prospects.bulkBar");
+    const tc = useTranslations("common.actions");
     if (count === 0) return null;
     return (
         <div
             role="toolbar"
-            aria-label={`${count} selected`}
+            aria-label={t("selected", { count })}
             className={cn(
                 "bg-panel border-line shadow-3 animate-in fade-in-0 slide-in-from-bottom-2 sticky bottom-5 z-30 flex max-w-full flex-wrap items-center gap-2 self-center rounded-lg border px-3 py-2 text-sm duration-200 motion-reduce:animate-none",
                 className
             )}
         >
-            <span className="text-ink mr-1 font-medium tabular-nums">{count} selected</span>
+            <span className="text-ink mr-1 font-medium tabular-nums">
+                {t("selected", { count })}
+            </span>
             {children}
             <button
                 type="button"
                 onClick={onClear}
                 className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 ml-1 rounded-md px-2 py-1 text-xs outline-none focus-visible:ring-[3px]"
             >
-                Clear
+                {tc("clear")}
             </button>
         </div>
     );

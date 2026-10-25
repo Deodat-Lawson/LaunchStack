@@ -34,6 +34,14 @@ import type {
 } from "./contract-v1";
 import type { CommitmentDto, MetricObservationDto, WeeklySignals } from "./types";
 import { calendarAdd, reportingDate, validDate } from "./period-v1";
+import {
+    assemblePreviousVantageContext,
+    MAX_PREVIOUS_VANTAGE_REFS,
+    MAX_PREVIOUS_VANTAGE_TOPICS,
+    previousTopicRefs,
+    previousVantageFingerprint,
+    type PreviousVantageSource,
+} from "./previous-context-v1";
 
 type Db = ReturnType<typeof getDb>;
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
@@ -166,11 +174,235 @@ async function read(
 export function getAgendaV1(companyId: bigint, selector: { id: string } | { weekStart: string }) {
     return read(getDb(), companyId, selector);
 }
+
+/** Read existing Vantage entities only. A company document row is never an actor ACL grant. */
+async function previousVantageSnapshot(
+    db: ReadDb,
+    companyId: bigint,
+    period: ReportPeriod,
+    actorId: string | undefined,
+    knownMetricDefinitions: readonly { id: string }[]
+) {
+    const knownMetricIds = new Set(knownMetricDefinitions.map(definition => definition.id));
+    const weekStart = calendarAdd(period.weekStart, -7);
+    const [row] = await db
+        .select()
+        .from(agendas)
+        .where(and(eq(agendas.companyId, companyId), eq(agendas.weekStart, weekStart)));
+    if (!row)
+        return {
+            context: null,
+            fingerprint: previousVantageFingerprint({
+                actorId: actorId ?? null,
+                weekStart,
+                missing: true,
+            }),
+        };
+    const [priorTopics, priorActions, priorState] = await Promise.all([
+        db
+            .select()
+            .from(topics)
+            .where(and(eq(topics.companyId, companyId), eq(topics.agendaId, row.id)))
+            .orderBy(asc(topics.position), asc(topics.id)),
+        db
+            .select()
+            .from(commitments)
+            .where(
+                and(
+                    eq(commitments.companyId, companyId),
+                    or(
+                        eq(commitments.agendaId, row.id),
+                        inArray(
+                            commitments.topicId,
+                            db
+                                .select({ id: topics.id })
+                                .from(topics)
+                                .where(
+                                    and(
+                                        eq(topics.companyId, companyId),
+                                        eq(topics.agendaId, row.id)
+                                    )
+                                )
+                        )
+                    )
+                )
+            )
+            .orderBy(asc(commitments.id)),
+        state(db, companyId, row.id),
+    ]);
+    const report: AgendaV1Dto = {
+        id: row.id,
+        weekStart: row.weekStart,
+        weekEnd: calendarAdd(row.weekStart, 6),
+        status: row.status,
+        summary: row.summary,
+        signals: row.signals as unknown as WeeklySignals | null,
+        modelMetadata: row.modelMetadata,
+        generatedAt: row.generatedAt?.toISOString() ?? null,
+        heldAt: row.heldAt?.toISOString() ?? null,
+        createdAt: row.createdAt.toISOString(),
+        topics: priorTopics.map(topic => ({
+            ...toTopicDto(
+                topic,
+                priorActions.find(action => action.topicId === topic.id)?.id ?? null
+            ),
+            contentVersion: priorState.data.topicVersions[topic.id] ?? 1,
+        })),
+        reportPeriod: priorState.data.period ?? null,
+        version: priorState.version,
+        enhancements: priorState.data.enhancements,
+        execution: priorState.data.execution ?? null,
+    };
+    const rawRefs = [
+        ...new Set(
+            report.topics
+                .slice(0, MAX_PREVIOUS_VANTAGE_TOPICS)
+                .flatMap(topic => previousTopicRefs(topic).slice(0, MAX_PREVIOUS_VANTAGE_REFS))
+        ),
+    ].sort();
+    const parse = (ref: string) => {
+        const match = /^(ev|obs|cm):([^\s]{1,64})$/.exec(ref);
+        return match ? { kind: match[1]!, id: match[2]! } : null;
+    };
+    const ids = (kind: string) =>
+        rawRefs.flatMap(ref => {
+            const parsed = parse(ref);
+            return parsed?.kind === kind ? [parsed.id] : [];
+        });
+    const [sourceEvidence, sourceObservations, sourceActions] = await Promise.all([
+        ids("ev").length
+            ? db
+                  .select()
+                  .from(evidence)
+                  .where(and(eq(evidence.companyId, companyId), inArray(evidence.id, ids("ev"))))
+                  .orderBy(asc(evidence.id))
+            : Promise.resolve([]),
+        ids("obs").length
+            ? db
+                  .select()
+                  .from(observations)
+                  .where(
+                      and(
+                          eq(observations.companyId, companyId),
+                          inArray(observations.id, ids("obs"))
+                      )
+                  )
+                  .orderBy(asc(observations.id))
+            : Promise.resolve([]),
+        ids("cm").length
+            ? db
+                  .select()
+                  .from(commitments)
+                  .where(
+                      and(eq(commitments.companyId, companyId), inArray(commitments.id, ids("cm")))
+                  )
+                  .orderBy(asc(commitments.id))
+            : Promise.resolve([]),
+    ]);
+    const cutoff = Date.parse(period.asOf);
+    const cutoffDay = reportingDate(new Date(period.asOf));
+    const afterCutoff = (item: {
+        createdAt: Date;
+        updatedAt?: Date | null;
+        resolvedAt?: Date | null;
+    }) =>
+        item.createdAt.getTime() > cutoff ||
+        (item.updatedAt?.getTime() ?? 0) > cutoff ||
+        (item.resolvedAt?.getTime() ?? 0) > cutoff;
+    const sourceStates: PreviousVantageSource[] = rawRefs.map(ref => {
+        const parsed = parse(ref);
+        if (!parsed)
+            return {
+                ref: "unsupported",
+                status: "unsupported-ref",
+                documentVerification: "unavailable",
+            };
+        const source =
+            parsed.kind === "ev"
+                ? sourceEvidence.find(item => item.id === parsed.id)
+                : parsed.kind === "obs"
+                  ? sourceObservations.find(item => item.id === parsed.id)
+                  : sourceActions.find(item => item.id === parsed.id);
+        if (
+            !source ||
+            (parsed.kind === "obs" &&
+                !knownMetricIds.has((source as (typeof sourceObservations)[number]).metricId))
+        )
+            return {
+                ref,
+                status: "missing-or-unauthorized",
+                documentVerification: "not-applicable",
+            };
+        const document = "kind" in source && source.kind === "document";
+        const futureCoverage =
+            ("observedAt" in source && source.observedAt > cutoffDay) ||
+            ("periodEnd" in source &&
+                (source.periodEnd > cutoffDay || source.periodStart > source.periodEnd));
+        return {
+            ref,
+            status:
+                afterCutoff(source) || futureCoverage
+                    ? "after-cutoff"
+                    : document
+                      ? "document-verification-unavailable"
+                      : "available",
+            documentVerification: document ? "unavailable" : "not-applicable",
+        };
+    });
+    const fingerprint = previousVantageFingerprint({
+        actorId: actorId ?? null,
+        report: row,
+        topics: priorTopics,
+        actions: priorActions,
+        state: priorState,
+        sourceEvidence,
+        sourceObservations,
+        sourceActions,
+        sourceStates,
+        sourceDefinitions: knownMetricDefinitions
+            .filter(definition =>
+                sourceObservations.some(observation => observation.metricId === definition.id)
+            )
+            .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
+    });
+    return {
+        // Legacy three-argument readers remain valid, but cannot introduce actor-bound history.
+        context: actorId
+            ? assemblePreviousVantageContext({
+                  currentPeriod: period,
+                  report,
+                  actions: priorActions.map(action => toCommitmentDto(action, null)),
+                  sourceStates,
+                  reportUpdatedAt: row.updatedAt?.toISOString() ?? null,
+                  topicState: Object.fromEntries(
+                      priorTopics.map(topic => [
+                          topic.id,
+                          {
+                              createdAt: topic.createdAt.toISOString(),
+                              updatedAt: topic.updatedAt?.toISOString() ?? null,
+                          },
+                      ])
+                  ),
+                  actionState: Object.fromEntries(
+                      priorActions.map(action => [
+                          action.id,
+                          {
+                              updatedAt: action.updatedAt?.toISOString() ?? null,
+                          },
+                      ])
+                  ),
+                  snapshotVersion: fingerprint,
+              })
+            : null,
+        fingerprint,
+    };
+}
 async function generationSnapshotFromDb(
     companyId: bigint,
     period: ReportPeriod,
     mode: GenerationInput["generationMode"],
-    db: ReadDb
+    db: ReadDb,
+    actorId?: string
 ) {
     const endDate = reportingDate(new Date(period.endExclusive));
     const last = period.kind === "completed-week" ? calendarAdd(endDate, -1) : endDate;
@@ -218,6 +450,7 @@ async function generationSnapshotFromDb(
             ),
     ]);
     const names = new Map(defs.map(d => [d.id, d]));
+    const previous = await previousVantageSnapshot(db, companyId, period, actorId, defs);
     const mapObs = (o: (typeof obs)[number]): MetricObservationDto => ({
         id: o.id,
         metricId: o.metricId,
@@ -273,20 +506,25 @@ async function generationSnapshotFromDb(
                     t.contentVersion > 1
             )
             .map(topic => ({ topic, contentVersion: topic.contentVersion })),
+        previousVantageContext: previous.context,
     };
     input.inputVersion = fingerprint({
         period: input.reportPeriod,
         data: input.data,
         reviewedTopics: input.reviewedTopics,
+        previousVantageContext: input.previousVantageContext,
+        previousVantageStateFingerprint: previous.fingerprint,
+        actorId: actorId ?? null,
     });
-    return { input, expectedReportFingerprint: fingerprint(agenda) };
+    return { input, expectedReportFingerprint: fingerprint(agenda), actorId };
 }
 export async function generationSnapshot(
     companyId: bigint,
     period: ReportPeriod,
-    mode: GenerationInput["generationMode"]
+    mode: GenerationInput["generationMode"],
+    options: { actorId?: string } = {}
 ) {
-    return generationSnapshotFromDb(companyId, period, mode, getDb());
+    return generationSnapshotFromDb(companyId, period, mode, getDb(), options.actorId);
 }
 export async function saveGeneration(
     companyId: bigint,
@@ -294,6 +532,8 @@ export async function saveGeneration(
     snapshot: Awaited<ReturnType<typeof generationSnapshot>>,
     result: GenerationResult
 ) {
+    if (snapshot.actorId && snapshot.actorId !== userId)
+        throw new VantageError("Generation actor changed.", 403, "generation_failed");
     return getDb().transaction(async tx => {
         await lock(tx);
         // Re-read every source collection after taking the short write lock.
@@ -303,7 +543,8 @@ export async function saveGeneration(
             companyId,
             snapshot.input.reportPeriod,
             snapshot.input.generationMode,
-            tx
+            tx,
+            snapshot.actorId
         );
         if (currentSnapshot.expectedReportFingerprint !== snapshot.expectedReportFingerprint)
             throw new VantageError(

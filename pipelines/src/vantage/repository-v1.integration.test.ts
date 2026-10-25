@@ -7,6 +7,7 @@ import { configureDatabase, createDb } from "@launchstack/store/client";
 import { company } from "@launchstack/store/schema";
 import {
     vantageAgendas as agendas,
+    vantageAgendaTopics as agendaTopics,
     vantageCommitments as actions,
     vantageContractState as states,
     vantageEvidence as evidence,
@@ -34,6 +35,7 @@ import {
 } from "./repository-v1";
 import { getCommitment, getEvidence, getObservation } from "./db";
 import { reportPeriod } from "./period-v1";
+import { previousVantageFingerprint } from "./previous-context-v1";
 import type { GenerationResult } from "./contract-v1";
 
 const target = process.env.VANTAGE_TL_TEST_DATABASE_URL;
@@ -149,6 +151,259 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
             commitment: action,
         });
 
+    async function previousReport(
+        options: { sourceCompany?: bigint; document?: boolean; extraTopics?: number } = {}
+    ) {
+        const id = randomUUID(),
+            topicId = randomUUID(),
+            sourceId = randomUUID(),
+            actionId = randomUUID();
+        const stamp = new Date("2026-10-09T14:00:00Z");
+        await connection.db.insert(evidence).values({
+            id: sourceId,
+            companyId: options.sourceCompany ?? ours,
+            createdByUserId: userId,
+            kind: options.document ? "document" : "note",
+            title: "Historical source",
+            body: "Historical source content",
+            observedAt: "2026-10-09",
+            visibility: "private",
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        await connection.db.insert(agendas).values({
+            id,
+            companyId: ours,
+            createdByUserId: userId,
+            weekStart: "2026-10-05",
+            status: "held",
+            summary: "PRIVATE derived prior AI summary",
+            generatedAt: stamp,
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        const topic = {
+            companyId: ours,
+            agendaId: id,
+            origin: "ai" as const,
+            status: "kept" as const,
+            title: "PRIVATE derived prior issue",
+            whyItMatters: "PRIVATE interpretation",
+            proposedNextStep: "PRIVATE historical proposal",
+            proposedDue: "2026-10-10",
+            facts: [
+                {
+                    text: "Historical assertion",
+                    refs: [{ ref: `ev:${sourceId}`, label: "Prior source", date: "2026-10-09" }],
+                },
+            ],
+            createdAt: stamp,
+            updatedAt: null,
+        };
+        await connection.db.insert(agendaTopics).values({ ...topic, id: topicId, position: 0 });
+        for (let n = 0; n < (options.extraTopics ?? 0); n++)
+            await connection.db
+                .insert(agendaTopics)
+                .values({ ...topic, id: `${topicId}-${n}`, position: n + 1 });
+        await connection.db.insert(actions).values({
+            id: actionId,
+            companyId: ours,
+            createdByUserId: userId,
+            agendaId: id,
+            topicId,
+            title: "Original recorded action",
+            owner: "Founder",
+            dueOn: "2026-10-10",
+            test: "Record the original result",
+            status: "open",
+            outcome: null,
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        await connection.db.insert(states).values({
+            agendaId: id,
+            companyId: ours,
+            version: 2,
+            payload: { topicVersions: { [topicId]: 2 }, enhancements: [], submissions: {} },
+        });
+        return { id, topicId, sourceId, actionId };
+    }
+
+    it("loads exact prior-week history and preserves the old report and action across new generation", async () => {
+        const prior = await previousReport();
+        const oldReport = await getAgendaV1(ours, { id: prior.id });
+        const oldActions = await listCommitmentsV1({ companyId: ours });
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(s.input.previousVantageContext).toMatchObject({
+            reportId: prior.id,
+            weekStart: "2026-10-05",
+            reportVersion: 2,
+            topics: [
+                {
+                    topicId: prior.topicId,
+                    recordedDecision: null,
+                    reportedActions: [{ id: prior.actionId, status: "open" }],
+                },
+            ],
+        });
+        const current = await saveGeneration(ours, userId, s, result(s));
+        expect(current.id).not.toBe(prior.id);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(oldReport);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+        const regenerated = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(regenerated.input.previousVantageContext!.reportId).toBe(prior.id);
+        expect(regenerated.input.previousVantageContext!.reportId).not.toBe(current.id);
+        await saveGeneration(ours, userId, regenerated, result(regenerated));
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(oldReport);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+    });
+
+    it("binds history to the requesting actor without breaking legacy snapshot readers", async () => {
+        await previousReport();
+        expect((await snapshot()).input.previousVantageContext).toBeNull();
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        await expect(saveGeneration(ours, "different-actor", s, result(s))).rejects.toMatchObject({
+            code: "generation_failed",
+        });
+        expect(await getAgendaV1(ours, { weekStart: period.weekStart })).toBeNull();
+    });
+
+    it.each(["foreign", "document", "deleted"] as const)(
+        "masks prior derived content for %s sources",
+        async kind => {
+            const prior = await previousReport({
+                sourceCompany: kind === "foreign" ? other : ours,
+                document: kind === "document",
+            });
+            if (kind === "deleted")
+                await connection.db
+                    .delete(evidence)
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            expect(s.input.previousVantageContext!.topics).toEqual([]);
+            expect(s.input.previousVantageContext!.summary).toBeNull();
+            expect(s.input.previousVantageContext!.unavailableSources).toHaveLength(1);
+            expect(JSON.stringify(s.input.previousVantageContext)).not.toContain("PRIVATE");
+            expect(await getAgendaV1(ours, { id: prior.id })).not.toBeNull();
+        }
+    );
+
+    it.each(["evidence", "observation"] as const)(
+        "withholds future-dated prior %s references even when created before cutoff",
+        async kind => {
+            const prior = await previousReport();
+            if (kind === "evidence") {
+                await connection.db
+                    .update(evidence)
+                    .set({ observedAt: "2026-10-17", updatedAt: null })
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            } else {
+                const metricId = randomUUID(),
+                    observationId = randomUUID(),
+                    stamp = new Date("2026-10-09T14:00Z");
+                await connection.db.insert(definitions).values({
+                    id: metricId,
+                    companyId: ours,
+                    key: "historical-" + ours,
+                    name: "Historical metric",
+                    definition: "Synthetic count",
+                    unit: "count",
+                    createdAt: stamp,
+                    updatedAt: null,
+                });
+                await connection.db.insert(observations).values({
+                    id: observationId,
+                    companyId: ours,
+                    metricId,
+                    createdByUserId: userId,
+                    value: 10,
+                    periodStart: "2026-10-12",
+                    periodEnd: "2026-10-17",
+                    createdAt: stamp,
+                });
+                await connection.db
+                    .update(agendaTopics)
+                    .set({
+                        facts: [
+                            {
+                                text: "Historical claim",
+                                refs: [
+                                    {
+                                        ref: `obs:${observationId}`,
+                                        label: "Prior metric",
+                                        date: "2026-10-17",
+                                    },
+                                ],
+                            },
+                        ],
+                        updatedAt: null,
+                    })
+                    .where(
+                        and(eq(agendaTopics.companyId, ours), eq(agendaTopics.id, prior.topicId))
+                    );
+            }
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            expect(s.input.previousVantageContext!.topics).toEqual([]);
+            expect(s.input.previousVantageContext!.summary).toBeNull();
+            expect(s.input.previousVantageContext!.unavailableSources[0]!.status).toBe(
+                "after-cutoff"
+            );
+        }
+    );
+
+    it.each(["decision", "source", "omitted-topic", "report-delete", "source-delete"] as const)(
+        "rejects persistence after prior %s changes during generation",
+        async kind => {
+            const prior = await previousReport({ extraTopics: 7 });
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            if (kind === "decision")
+                await decideV1({
+                    companyId: ours,
+                    userId,
+                    topicId: prior.topicId,
+                    key: "past-decision",
+                    decision: "Changed human choice",
+                    commitment: null,
+                });
+            if (kind === "source")
+                await connection.db
+                    .update(evidence)
+                    .set({ body: "Changed full source body", updatedAt: null })
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            if (kind === "omitted-topic")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ whyItMatters: "Changed beyond bounded history", updatedAt: null })
+                    .where(
+                        and(
+                            eq(agendaTopics.companyId, ours),
+                            eq(agendaTopics.id, `${prior.topicId}-6`)
+                        )
+                    );
+            if (kind === "report-delete")
+                await connection.db
+                    .delete(agendas)
+                    .where(and(eq(agendas.companyId, ours), eq(agendas.id, prior.id)));
+            if (kind === "source-delete")
+                await connection.db
+                    .delete(evidence)
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            await expect(saveGeneration(ours, userId, s, result(s))).rejects.toMatchObject({
+                code: "stale_context",
+            });
+            expect(await getAgendaV1(ours, { weekStart: period.weekStart })).toBeNull();
+        }
+    );
+
+    it("rejects a pending generation if a previously missing prior report appears", async () => {
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(s.input.previousVantageContext).toBeNull();
+        await previousReport();
+        await expect(saveGeneration(ours, userId, s, result(s))).rejects.toMatchObject({
+            code: "stale_context",
+        });
+    });
+
     it("has applied both migration sets and the SQL/schema primary-action invariant", async () => {
         const [engine] =
             await connection.client`SELECT count(*)::int AS count FROM _launchstack_migrations WHERE state='applied'`;
@@ -221,6 +476,13 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
                 period: input.reportPeriod,
                 data: input.data,
                 reviewedTopics: input.reviewedTopics,
+                previousVantageContext: null,
+                previousVantageStateFingerprint: previousVantageFingerprint({
+                    actorId: null,
+                    weekStart: "2026-10-05",
+                    missing: true,
+                }),
+                actorId: null,
             })
         );
     });

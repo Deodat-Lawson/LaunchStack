@@ -20,6 +20,10 @@ export class StructuredAttemptSetupError extends Error {
         super("The model attempt could not be prepared within its limits.");
     }
 }
+/** Shared with bounded callers so schema overhead is included before invoking a provider. */
+export function structuredSchemaInstruction<T>(schema: z.ZodType<T>): string {
+    return `Return only JSON matching this schema, without Markdown fences:\n${JSON.stringify(zodToJsonSchema(schema))}`;
+}
 export async function invokeStructuredAttempt<T>(
     resolved: ResolvedChatModel,
     schema: z.ZodType<T>,
@@ -37,10 +41,7 @@ export async function invokeStructuredAttempt<T>(
         throw new StructuredAttemptSetupError();
     }
     const prompt = resolved.prepareMessages([
-        ...systemMessageFor(
-            resolved.behavior,
-            `Return only JSON matching this schema, without Markdown fences:\n${JSON.stringify(zodToJsonSchema(schema))}`
-        ),
+        ...systemMessageFor(resolved.behavior, structuredSchemaInstruction(schema)),
         ...messages,
     ]);
     if (Buffer.byteLength(JSON.stringify(prompt.map(m => m.content)), "utf8") > 24000) {

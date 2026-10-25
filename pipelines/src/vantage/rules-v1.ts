@@ -1,6 +1,11 @@
 import type { EnhancementCandidate, GenerationInput } from "./contract-v1";
 import type { AgendaDraft, DraftTopic, EvidencePack, VantageEvidenceRef } from "./types";
 import { dayAdd, localDate } from "./evidence-v1";
+import {
+    matchingPreviousTopic,
+    unchangedHistoricalAction,
+    usablePreviousVantage,
+} from "./revalidate-previous-v1";
 
 export function canonicalRefs(input: GenerationInput): Map<string, VantageEvidenceRef> {
     const refs = new Map<string, VantageEvidenceRef>();
@@ -194,6 +199,9 @@ export function rulesGeneration(
                 ...input.data.carryForwardCommitments,
                 ...input.data.resolvedCommitments,
             ].find(c => item.ref === `cm:${c.id}`)!;
+            // Silence and an unchanged carry-forward row are not a new progress event.
+            // Current evidence can still raise a fresh question about this action.
+            if (unchangedHistoricalAction(input, c)) continue;
             const context =
                 c.status === "open"
                     ? "Carry-forward commitment"
@@ -223,7 +231,7 @@ export function rulesGeneration(
             topics.push(
                 make(
                     `Discuss ${e.title}`,
-                    `The supplied ${e.kind} records: ${e.body.slice(0, 450)}`,
+                    `The ${e.kind === "document" ? "Vantage document submission reports" : `supplied ${e.kind} records`}: ${e.body.slice(0, 450)}`,
                     refs(item.ref),
                     `What should we learn or test next from ${e.title}?`,
                     "This individual source does not establish prevalence; whether the observation repeats is unknown."
@@ -235,10 +243,9 @@ export function rulesGeneration(
             topic.rationale = `Selected because “${short(e.title, 100)}” offers a specific observation that can be checked this week, not because its wider impact is established.`;
             // Only specialize an explicit navigation difficulty in the supplied excerpt.
             // Other feedback keeps a general follow-up check; no task is invented.
-            const navigation = e.body
-                .slice(0, 450)
-                .match(
-                    /\b(?:could not|couldn't|cannot|can't|unable to) find (?:the |a |an )?([^.!?\n]{1,70}?\b(?:action|button|link))(?=[.!?,;\s]|$)/i
+            const navigation =
+                /\b(?:could not|couldn't|cannot|can't|unable to) find (?:the |a |an )?([^.!?\n]{1,70}?\b(?:action|button|link))(?=[.!?,;\s]|$)/i.exec(
+                    e.body.slice(0, 450)
                 );
             if (e.kind === "interview" && navigation) {
                 const task = navigation[1]!;
@@ -257,7 +264,7 @@ export function rulesGeneration(
                 topic,
                 `${hasMetricChange ? "Separately, the" : "The"} ${e.kind} reports: ${short(e.body, 150)}`
             );
-            if (!focus) focus = topic;
+            focus ??= topic;
         }
     }
     if (!topics.length) {
@@ -283,6 +290,57 @@ export function rulesGeneration(
         topics[0]!.proposedNextStep =
             "Find a prior observation with the same definition and reporting coverage, or collect the next equivalent window. Compare only after confirming that the windows are comparable.";
     }
+    // Reassess only independently selected CURRENT candidates. Never create a topic
+    // by iterating last week's suggestions, nor classify "completed" from keywords.
+    for (const topic of topics) {
+        const currentRefs = topic.facts.flatMap(f => f.refs.map(r => r.ref));
+        const currentEvidence = input.data.currentEvidence.find(e =>
+            currentRefs.includes(`ev:${e.id}`)
+        );
+        const prior = matchingPreviousTopic(
+            input,
+            [topic.title, ...topic.facts.map(f => f.text)].join(" "),
+            currentRefs
+        );
+        if (!prior) continue;
+        topic.title = `Reassess ${currentEvidence?.title ?? topic.title}`.slice(0, 200);
+        if (currentEvidence) {
+            topic.facts[0]!.text = `The current Vantage source reports: ${currentEvidence.body.slice(0, 450)}`;
+            takeaways.set(topic, `The current source reports: ${short(currentEvidence.body, 150)}`);
+        }
+        topic.whyItMatters =
+            "This current source may resolve, contradict, or leave open a historical question. A historical AI interpretation is not a factual premise; source-reported progress and recorded action completion are different.";
+        topic.decisionQuestion = `Does the current evidence resolve, contradict, or leave open the historical question “${short(prior.title, 160)}”, and is any new clarification useful?`;
+        // A clarification is useful without manufacturing another work recommendation.
+        topic.proposedNextStep = "";
+        topic.proposedOwner = null;
+        topic.proposedDue = null;
+        topic.unknowns = [
+            "What this current account establishes about the historical issue needs review; it does not automatically change any recorded action state.",
+        ];
+        if (currentEvidence?.kind === "document") {
+            topic.unknowns.push(
+                "Automatic workspace document verification is unavailable. A changed document or version alone does not prove completion."
+            );
+        }
+        // Show the current recorded state beside reported progress when selected.
+        const previousActions = new Set(prior.reportedActions.map(action => action.id));
+        for (const action of [
+            ...input.data.carryForwardCommitments,
+            ...input.data.resolvedCommitments,
+        ]
+            .filter(action => previousActions.has(action.id))
+            .slice(0, 2)) {
+            const citation = refs(`cm:${action.id}`);
+            if (!citation.length || currentRefs.includes(`cm:${action.id}`)) continue;
+            topic.facts.push({
+                text: `The current action record reports status ${action.status}; recorded outcome: ${action.outcome ?? "none"}; recorded resolution: ${action.resolvedAt ?? "none"}. This is a reported action state, not an inference from the historical suggestion.`,
+                refs: citation,
+            });
+        }
+        topic.rationale =
+            "Selected because current authorized evidence relates to a historical question. No prior recommendation, deadline, decision, or action is automatically renewed.";
+    }
     focus ??= topics[0];
     // Human-readable attribution supplements the full canonical refs on facts.
     // Keep observations and attribution together within the summary budget.
@@ -295,10 +353,12 @@ export function rulesGeneration(
     const highlights = topics.slice(0, 2).map(t => highlight(t, 180));
     if (focus && !topics.slice(0, 2).includes(focus)) highlights.push(highlight(focus, 110));
     const summary = focus
-        ? `${highlights.join(" ")}\n\nSuggested weekly focus: ${short(focus.proposedNextStep!.replace(/^Suggested check for /, "Investigate "), 310)} Why this focus: ${short(focus.rationale, 130)}\n\nUncertainty: ${short(focus.unknowns[0]!, 125)}${hasMetricChange && focus.facts.some(f => f.refs.some(r => r.ref.startsWith("ev:"))) ? " Monitor the metric separately; the evidence does not establish a link or explain its change." : ""}${reviewedMatch(focus, input) ? " Consider this separately without changing the existing decision." : ""}`
-        : pack.items.length
-          ? "Only prior context is available in the selected sources. It does not establish a current-week change. Suggested weekly focus: collect a current observation with matching coverage before interpreting a trend."
-          : "No eligible evidence is available for this period.";
+        ? `${highlights.join(" ")}\n\nSuggested weekly focus: ${short((focus.proposedNextStep || focus.decisionQuestion).replace(/^Suggested check for /, "Investigate "), 310)} Why this focus: ${short(focus.rationale, 130)}\n\nUncertainty: ${short(focus.unknowns[0]!, 125)}${hasMetricChange && focus.facts.some(f => f.refs.some(r => r.ref.startsWith("ev:"))) ? " Monitor the metric separately; the evidence does not establish a link or explain its change." : ""}${reviewedMatch(focus, input) ? " Consider this separately without changing the existing decision." : ""}`
+        : usablePreviousVantage(input)
+          ? "No current eligible evidence establishes progress on the previous report's questions. Historical suggestions are not renewed, and missing feedback proves neither completion nor failure. Automatic workspace document verification is unavailable."
+          : pack.items.length
+            ? "Only prior context is available in the selected sources. It does not establish a current-week change. Suggested weekly focus: collect a current observation with matching coverage before interpreting a trend."
+            : "No eligible evidence is available for this period.";
     const protectedResult = protectReviewedTopics(input, topics, []);
     return {
         draft: {

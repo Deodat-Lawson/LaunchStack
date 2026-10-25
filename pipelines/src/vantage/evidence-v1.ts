@@ -1,6 +1,7 @@
 /** Pure v1 input preparation. Never fetches URLs, documents, or database rows. */
 import type { GenerationInput } from "./contract-v1";
 import type { EvidencePack, MetricObservationDto, PackItem, WeeklySignals } from "./types";
+import { matchingPreviousTopic } from "./revalidate-previous-v1";
 
 export const MAX_GENERATION_ITEMS = 40;
 export const MAX_EVIDENCE_BYTES = 14000;
@@ -196,13 +197,17 @@ export function selectGenerationEvidence(input: GenerationInput, signals: Weekly
     );
     for (const e of data.currentEvidence)
         ranked.push({
-            priority: 3,
+            // Search the supplied authorized current evidence for historical questions.
+            // This bounded association never inserts a historical source into the pack.
+            priority: matchingPreviousTopic(input, `${e.title} ${e.body}`, [`ev:${e.id}`])
+                ? 2.5
+                : 3,
             item: {
                 ref: `ev:${e.id}`,
                 kind: "evidence",
                 label: e.source ?? e.title,
                 date: e.observedAt,
-                text: `${e.title}\n${e.body}\nVisibility: ${e.visibility}. A source URL is not fetched.`,
+                text: `${e.title}\n${e.kind === "document" ? "Workspace document verification: unavailable. This is a Vantage submission, not an actor-authorized document/version read.\n" : ""}${e.body}\nVisibility: ${e.visibility}. A source URL is not fetched.`,
             },
         });
     for (const [rows, context] of [

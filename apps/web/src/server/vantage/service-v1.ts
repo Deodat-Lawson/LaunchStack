@@ -29,7 +29,8 @@ export async function prepareWeekV1(
     const snapshot = await generationSnapshot(
         args.companyId,
         period,
-        args.generationMode ?? "configured-model"
+        args.generationMode ?? "configured-model",
+        { actorId: args.userId }
     );
     const generate = options.generate ?? getVantageGenerationPort();
     const controller = new AbortController();

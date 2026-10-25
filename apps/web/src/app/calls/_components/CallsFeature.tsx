@@ -331,7 +331,13 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                     { cache: "no-store" }
                 );
                 const body: unknown = await response.json().catch(() => null);
-                if (!response.ok) throw new Error(commandErrorMessage(body, response.status));
+                if (!response.ok)
+                    throw new Error(
+                        commandErrorMessage(
+                            body,
+                            t("feature.commandFailedStatus", { status: response.status })
+                        )
+                    );
                 const snapshot = CallSnapshotSchema.parse(body);
                 if (!active || sequence !== pollSequenceRef.current) return;
                 detailFailedRef.current.delete(selectedCallId);
@@ -343,11 +349,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             } catch (error) {
                 if (!active) return;
                 detailFailedRef.current.add(selectedCallId);
-                setRefreshError(
-                    error instanceof Error
-                        ? error.message
-                        : "The selected Call Note could not be loaded"
-                );
+                setRefreshError(error instanceof Error ? error.message : t("feature.loadFailed"));
             } finally {
                 detailPendingRef.current.delete(selectedCallId);
             }
@@ -355,7 +357,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
         return () => {
             active = false;
         };
-    }, [applySnapshot, detailRetry, selectedCallId, selectedCallLoaded]);
+    }, [applySnapshot, detailRetry, selectedCallId, selectedCallLoaded, t]);
 
     const retryRefresh = useCallback(() => {
         detailFailedRef.current.clear();

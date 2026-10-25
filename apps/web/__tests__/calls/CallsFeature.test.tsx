@@ -371,7 +371,7 @@ it("confirms a device revocation before deleting it and refreshes the devices", 
     await user.click(await screen.findByRole("button", { name: `Revoke ${mac.name}` }));
     expect(mockRevoke).not.toHaveBeenCalled();
     const dialog = screen.getByRole("dialog", { name: `Revoke ${mac.name}?` });
-    await user.click(within(dialog).getByRole("button", { name: "Revoke", exact: true }));
+    await user.click(within(dialog).getByRole("button", { name: "Revoke" }));
     expect(mockRevoke).toHaveBeenCalledWith(`/api/call-notes/devices/${mac.id}`);
     await waitFor(() =>
         expect(screen.queryByRole("button", { name: `Revoke ${mac.name}` })).not.toBeInTheDocument()

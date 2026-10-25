@@ -130,9 +130,29 @@ Optional integrations:
   `services/document-converter`) deployed separately to Fly.io / Railway /
   Cloud Run
 
-### Trend search (optional)
+### Web search (optional)
 
-Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_API_KEY` and set `SEARCH_PROVIDER` as documented in [`.env.example`](../.env.example) (`exa`, `serper`, `fallback`, or `parallel`). If no API key backs the chosen path, the pipeline returns empty results and `providerUsed` may be `none`—this is expected when keys are omitted for local or OSS setups.
+One key turns on web search across the app. `EXA_API_KEY` is the recommended
+single key: Exa is the default engine for Ask's `search_web` tool, Prospects
+company search and lookalikes, competitor analysis, grant search (Find
+funders), the document generator's web research, and trend search (news).
+Exa bills the operator about $7 per 1,000 searches (type `auto`, up to 10
+results) and $1 per 1,000 pages for contents and summaries; new accounts get
+$10 of free credit that resets monthly. Create a key at
+<https://dashboard.exa.ai/api-keys>.
+
+`SERPER_API_KEY` is an optional fallback: Serper serves general and trend
+search when it is the only key, but not company search or lookalikes, which
+need Exa's company index. `SEARCH_PROVIDER` matters only when both keys are
+set: `exa` (default) uses Exa for everything; `serper` moves general and
+trend search to Serper; `fallback` (Serper first, Exa when it finds nothing)
+and `parallel` (both, merged) apply to trend search only. See
+[`.env.example`](../.env.example).
+
+With no key, those features skip their web step (trend search returns empty
+results with `providerUsed: none`, and Ask does not offer `search_web`) —
+expected for local or OSS setups. Ask still reads links people paste into a
+question without any key.
 
 ### Verifying object-storage uploads
 
@@ -191,9 +211,9 @@ The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 [ADR-004](./architecture/ADR-004-compute-service-consolidation.md); while the
 migration completes, set both the new and the legacy name if a service isn't
 being picked up.
-| `EXA_API_KEY` | Optional | Exa (trend search); required for `exa` / `fallback` / `parallel` when using Exa |
-| `SERPER_API_KEY` | Optional | Serper Google News (trend search); required for `serper` / `fallback` / `parallel` when using Serper |
-| `SEARCH_PROVIDER` | Optional | `exa` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
+| `EXA_API_KEY` | Optional (recommended) | Exa, the default web search engine: Ask's `search_web`, Prospects company search + lookalikes, competitor analysis, grant search, document research, trend search. ~$7 per 1,000 searches; $10 free monthly credit — see [Web search](#web-search-optional) |
+| `SERPER_API_KEY` | Optional | Serper (Google) as a fallback for general and trend search; no company search or lookalikes |
+| `SEARCH_PROVIDER` | Optional | With both keys: `exa` (default), `serper`, or the trend-search-only `fallback` / `parallel` — see `.env.example` |
 | `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |

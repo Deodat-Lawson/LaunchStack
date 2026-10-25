@@ -3,13 +3,18 @@
  *
  * Two sources behind one result: Grants.gov (federal, keyless, always
  * available) and the web (foundations, state programmes, corporate giving)
- * through the web-research tool when a search key is configured. Results
+ * through the web-research tool's general search (Exa first, Serper as the
+ * fallback) when a search key is configured. Results
  * are listings — a title, a funder, dates and amounts where the source has
  * them — for a caller to score against what it knows about the applicant.
  * Nothing here calls a model.
  */
 import { createTtlCache } from "../web-research/cache";
-import { executeSearch, type RawSearchResult } from "../web-research";
+import {
+    searchWeb as searchGeneralWeb,
+    type RawSearchResult,
+    type SearchWebOptions,
+} from "../web-research";
 
 import { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
 import { DEFAULT_LIMIT, MAX_LIMIT, searchGrantsGov, type GrantsGovOptions } from "./grants-gov";
@@ -35,7 +40,7 @@ export {
 export { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
 
 export interface FindGrantsOptions {
-    /** Injectable for tests; defaults to global fetch. */
+    /** Injectable for tests (Grants.gov and the default web search); defaults to global fetch. */
     fetchImpl?: typeof fetch;
     signal?: AbortSignal;
     /** Web search over planned queries; injectable for tests. Null skips the web. */
@@ -100,6 +105,45 @@ export function webQueriesFor(query: GrantSearchQuery): string[] {
     ];
 }
 
+/** Results per planned web query. */
+const WEB_RESULTS_PER_QUERY = 10;
+
+/**
+ * The default web source: each planned query through general web search, not
+ * news — funders post calls on their own sites. One query failing keeps the
+ * others' hits; every query failing fails the source, so the report says the
+ * search failed rather than that nothing exists.
+ */
+async function searchWebForListings(
+    queries: string[],
+    options: Pick<SearchWebOptions, "fetchImpl" | "signal">
+): Promise<RawSearchResult[]> {
+    const settled = await Promise.allSettled(
+        queries.map(query =>
+            searchGeneralWeb(query, {
+                ...options,
+                maxResults: WEB_RESULTS_PER_QUERY,
+                snippetChars: 600,
+            })
+        )
+    );
+    const failed = settled.find(outcome => outcome.status === "rejected");
+    if (failed && settled.every(outcome => outcome.status === "rejected")) {
+        throw failed.reason;
+    }
+    return settled.flatMap(outcome =>
+        outcome.status === "fulfilled"
+            ? outcome.value.results.map(hit => ({
+                  url: hit.url,
+                  title: hit.title,
+                  content: hit.snippet,
+                  score: 0,
+                  ...(hit.publishedDate ? { publishedDate: hit.publishedDate } : {}),
+              }))
+            : []
+    );
+}
+
 const LISTING_HINT =
     /\b(grant|grants|funding|fund|foundation|rfp|request for proposals|fellowship|prize|award)\b/i;
 
@@ -140,16 +184,11 @@ export async function findGrants(
     const searchWeb =
         options.searchWeb === undefined
             ? hasWebSearchKey()
-                ? async (queries: string[]) =>
-                      (
-                          await executeSearch(
-                              queries.map(searchQuery => ({
-                                  searchQuery,
-                                  category: "grant-listing",
-                                  rationale: "grant search",
-                              }))
-                          )
-                      ).results
+                ? (queries: string[]) =>
+                      searchWebForListings(queries, {
+                          fetchImpl: options.fetchImpl,
+                          signal: options.signal,
+                      })
                 : null
             : options.searchWeb;
     const useWeb = query.includeWeb !== false && searchWeb !== null;

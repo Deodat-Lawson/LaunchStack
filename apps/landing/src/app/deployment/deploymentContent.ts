@@ -616,7 +616,8 @@ export const GUIDES: Guide[] = [
             {
                 title: "Web research",
                 body: [
-                    "SEARCH_PROVIDER selects exa, serper, fallback, or parallel. Supply EXA_API_KEY and/or SERPER_API_KEY for the chosen strategy. Forward settings absent from the Compose allowlist to the processes that use them.",
+                    "EXA_API_KEY is the recommended single key: Exa is the default engine for every web search (Ask's search_web tool, Prospects company search and lookalikes, competitor analysis, grant search, document research, trend search). It costs about $7 per 1,000 searches, and new Exa accounts get $10 of free credit each month.",
+                    "SERPER_API_KEY is an optional fallback for general and trend search; it has no company search or lookalikes. SEARCH_PROVIDER (exa, serper, fallback, or parallel) matters only when both keys are set. Forward settings absent from the Compose allowlist to the processes that use them.",
                 ],
             },
             {

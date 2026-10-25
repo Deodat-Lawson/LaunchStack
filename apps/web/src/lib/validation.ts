@@ -895,7 +895,8 @@ export const SessionMessageSchema = z.object({
     role: z.enum(["user", "assistant"]),
     text: z.string().max(MAX_SESSION_MESSAGE_CHARS),
     refs: z.array(z.string().max(64)).max(200).optional(),
-    citations: z.array(z.unknown()).max(20).optional(),
+    // One per cited source: an answer about every attached file cites each one.
+    citations: z.array(z.unknown()).max(100).optional(),
     attachments: z.array(z.unknown()).max(100).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),

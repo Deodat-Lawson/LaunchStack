@@ -39,8 +39,12 @@ export interface ChatTool {
     parameters: Record<string, unknown>;
     /** What the chat shows while this call runs, e.g. `Searching the web for "…"`. */
     describe(args: unknown): string;
-    /** The result text handed back to the model. A throw becomes an error result. */
-    run(args: unknown, signal: AbortSignal): Promise<string>;
+    /**
+     * The result text handed back to the model. A throw becomes an error
+     * result. A long call may report progress ("Reading 37 sources… 12
+     * done"), which replaces the `describe` text in the chat.
+     */
+    run(args: unknown, signal: AbortSignal, progress?: (status: string) => void): Promise<string>;
 }
 
 export interface ToolCallRecord {
@@ -292,7 +296,7 @@ export async function answerWithTools(
             } else {
                 onStatus?.(tool.describe(call.args));
                 try {
-                    content = await tool.run(call.args, signal);
+                    content = await tool.run(call.args, signal, status => onStatus?.(status));
                     ok = true;
                 } catch (error) {
                     throwIfChatAborted(signal);

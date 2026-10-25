@@ -55,6 +55,25 @@ import {
     sourceToolsPrompt,
 } from "~/server/chat-source-tools";
 import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
+import {
+    FULL_READ_TOKEN_BUDGET,
+    MAX_CITED_SOURCES,
+    attachedFilesPrompt,
+    citeSources,
+    excerptsBlock,
+    filesShown,
+    fitsFullRead,
+    fullReadBlock,
+    labelScopeFiles,
+    manifestBlock,
+    onePerSource,
+    passageResult,
+    type Coverage,
+    type ScopeFile,
+    type SourcePassage,
+} from "~/server/chat-sources";
+import { loadScopeFiles, readWholeFiles } from "~/server/chat-source-data";
+import { addTokenUsage } from "@launchstack/llm";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
@@ -818,6 +837,10 @@ export async function POST(request: Request) {
 
             let documents: SearchResult[] = [];
             retrievalMethod = "none";
+            // The files attached to the message, listed for the model by id,
+            // and read whole when they fit the full-read budget.
+            let scopeFiles: ScopeFile[] = [];
+            let wholeFiles: Map<number, SourcePassage[]> | null = null;
             if (searchScope !== "none") {
                 const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
@@ -904,8 +927,44 @@ export async function POST(request: Request) {
                             ? "selected_ensemble_rrf"
                             : "document_ensemble_rrf";
 
+                const scopeIds =
+                    searchDocumentIds ??
+                    (searchScope === "document" && authorizedDocument
+                        ? [authorizedDocument.id]
+                        : []);
                 try {
-                    if (searchDocumentIds?.length) {
+                    scopeFiles = labelScopeFiles(await loadScopeFiles(scopeIds));
+                    if (fitsFullRead(scopeFiles)) {
+                        const whole = await readWholeFiles(scopeFiles.map(file => file.id));
+                        const chars = [...whole.values()]
+                            .flat()
+                            .reduce((sum, passage) => sum + passage.content.length, 0);
+                        // The index's token counts are estimates; the text read
+                        // is the check that it really fits.
+                        if (
+                            chars <= FULL_READ_TOKEN_BUDGET * 5 &&
+                            scopeFiles.every(file => (whole.get(file.id)?.length ?? 0) > 0)
+                        ) {
+                            wholeFiles = whole;
+                        }
+                    }
+                } catch (scopeError) {
+                    // Without the file list the turn still answers, as it did
+                    // before: from the retrieved passages.
+                    console.warn("[AIChat] Could not read the attached files:", scopeError);
+                    scopeFiles = [];
+                    wholeFiles = null;
+                }
+
+                try {
+                    if (wholeFiles) {
+                        // Small enough to read whole: no ranking, nothing left out.
+                        const read = wholeFiles;
+                        retrievalMethod = `${searchScope}_full_read`;
+                        documents = scopeFiles.flatMap(file =>
+                            (read.get(file.id) ?? []).map(passage => passageResult(passage, file))
+                        );
+                    } else if (searchDocumentIds?.length) {
                         // One path for every set of ids: from the retriever's
                         // perspective the caller's whole scope, an archive, and a
                         // hand-picked set are identical (`document_id = ANY(...)`).
@@ -1061,34 +1120,28 @@ export async function POST(request: Request) {
                 whole: anchorsRetrieved,
             });
 
-            // Build comprehensive context from retrieved documents
-            const combinedContent = promptDocuments
-                .map((doc, idx) => {
-                    const page = doc.metadata?.page ?? "Unknown";
-                    const source = doc.metadata?.source ?? retrievalMethod;
-                    const distance = doc.metadata?.distance ?? 0;
-                    const relevanceScore = Math.round((1 - Number(distance)) * 100);
-
-                    console.log(
-                        `📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`
-                    );
-
-                    // A company fact is a curated, cited statement, not a passage;
-                    // label it so the model treats it as such (ADR-011).
-                    const heading =
-                        source === "company_fact"
-                            ? `=== Company fact #${idx + 1}${
-                                  doc.metadata?.documentTitle
-                                      ? ` (from ${doc.metadata.documentTitle})`
-                                      : ""
-                              } ===`
-                            : `=== Chunk #${idx + 1}, Page ${page} ===`;
-                    return `${heading}\n${doc.pageContent}`;
-                })
-                .join("\n\n");
-
+            // What the model is told about the attached files: the list, each
+            // passage under its file's id, and how much of the set it saw
+            // (chat-sources.ts). Without that it reads a sample as the whole.
+            const coverage: Coverage = wholeFiles
+                ? { mode: "full" }
+                : promptDocuments.length > 0
+                  ? {
+                        mode: "excerpts",
+                        passages: promptDocuments.length,
+                        filesShown: filesShown(promptDocuments, scopeFiles),
+                    }
+                  : { mode: "passage-only" };
+            const combinedContent = wholeFiles
+                ? fullReadBlock(scopeFiles, wholeFiles)
+                : excerptsBlock(promptDocuments, scopeFiles);
             console.log(
-                `✅ [AIChat] Built context with pages: ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
+                `✅ [AIChat] Context: ${retrievalMethod}, ${scopeFiles.length} attached file(s), ` +
+                    (coverage.mode === "excerpts"
+                        ? `${coverage.passages} passage(s) from ${coverage.filesShown} file(s), pages ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
+                        : coverage.mode === "full"
+                          ? `${documents.length} section(s) read whole (${combinedContent.length} chars)`
+                          : "selected passage only")
             );
 
             // A workspace's own model has no tool-calling answer to read
@@ -1097,7 +1150,7 @@ export async function POST(request: Request) {
             // refuses them costs a retry without them (chat-tool-loop.ts), not
             // the answer.
             const takesTools =
-                resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
+                (resolved.behavior.nativeStructuredOutput ?? []).includes("tool-calling") ||
                 getChatModelsSource() === "workspace";
 
             // Web search is a tool the model may call, not a step before the
@@ -1126,7 +1179,7 @@ export async function POST(request: Request) {
                 sourcesAllowed &&
                 sourcesOverview &&
                 sourcesOverview.inventory.total > 0
-                    ? createSourceTools(ctx.data)
+                    ? createSourceTools(ctx.data, {}, { attached: scopeFiles })
                     : null;
             const tools = [...(sourceTools?.tools ?? []), ...(webTools?.tools ?? [])];
 
@@ -1155,6 +1208,9 @@ export async function POST(request: Request) {
             let systemPrompt = agent
                 ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
                 : stylePrompt;
+            if (scopeFiles.length > 0) {
+                systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
+            }
             if (sourceTools && sourcesOverview) {
                 systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
             } else if (searchScope === "none") {
@@ -1177,7 +1233,16 @@ export async function POST(request: Request) {
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
+            const contentHeading =
+                scopeFiles.length === 0
+                    ? "Relevant document content:"
+                    : coverage.mode === "full"
+                      ? "Full text of every attached file:"
+                      : coverage.mode === "excerpts"
+                        ? `Relevant passages (${coverage.passages} from ${coverage.filesShown} of ${scopeFiles.length} attached file${scopeFiles.length === 1 ? "" : "s"}):`
+                        : "Relevant passages:";
+            const manifest = scopeFiles.length > 0 ? `${manifestBlock(scopeFiles)}\n\n` : "";
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}${manifest}${contentHeading}\n${documentContent}${attachmentTextBlock}\n\nProvide a natural, conversational answer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Address the user directly and maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1216,7 +1281,10 @@ export async function POST(request: Request) {
                     }, 0)
                 );
             }, 0);
-            if (promptCharacters > 120_000) {
+            // A whole-file read has its own budget (FULL_READ_TOKEN_BUDGET);
+            // the limit holds for everything else in the prompt.
+            const fullReadCharacters = wholeFiles ? combinedContent.length : 0;
+            if (promptCharacters - fullReadCharacters > 120_000) {
                 recordResult("error");
                 return NextResponse.json(
                     {
@@ -1237,6 +1305,9 @@ export async function POST(request: Request) {
                     chat,
                     messages,
                     tools,
+                    // Checking every file can take a listing, a fan-out and a
+                    // second page of it before the answer.
+                    maxToolRounds: sourceTools ? 6 : 3,
                     signal,
                     stream: emit && {
                         onText: delta => emit({ type: "text", delta }),
@@ -1250,13 +1321,25 @@ export async function POST(request: Request) {
                 let summarizedAnswer = normalizeModelContent(
                     emit ? reply.finalText : reply.finalContent
                 );
+                // The sources the answer cites by id become its source list;
+                // the ids themselves are taken out of the text.
+                const rawAnswer = summarizedAnswer;
+                const cited = citeSources(
+                    rawAnswer,
+                    [...documents, ...(sourceTools?.passages ?? [])],
+                    scopeFiles
+                );
+                summarizedAnswer = cited.text;
                 const totalTime = Date.now() - startTime;
 
                 // Log + meter LLM token usage, summed over every model call
                 // of the turn. Normalized at the chat boundary so credits are
                 // debited the same way whichever deployment endpoint answered;
                 // a workspace's own endpoint is never debited.
-                const usage = reply.usage;
+                // The per-source reads `ask_each` made are part of the turn.
+                const usage = sourceTools
+                    ? addTokenUsage(reply.usage, sourceTools.usage())
+                    : reply.usage;
                 const promptTokens = usage.inputTokens ?? 0;
                 const completionTokens = usage.outputTokens ?? 0;
                 console.log(
@@ -1332,12 +1415,14 @@ export async function POST(request: Request) {
                 throwIfChatAborted(signal);
                 recordResult("success");
 
-                // Citations: the attached sources' passages first, then what
-                // the model found with search_sources and drew on.
+                // Citations: the sources the answer cites, one entry each. An
+                // answer that cites none falls back to the attached sources'
+                // passages, then what the tools found that it names.
                 const references = buildReferences(
                     retrievalQuery,
-                    [...documents, ...citedPassages(toolPassages, summarizedAnswer)],
-                    5
+                    cited.cited ??
+                        onePerSource([...documents, ...citedPassages(toolPassages, rawAnswer)]),
+                    MAX_CITED_SOURCES
                 );
 
                 return {

@@ -161,7 +161,7 @@ function meterStream(response: Response, report: UsageReport): Response {
 
     const stream = new ReadableStream<Uint8Array>({
         async pull(controller) {
-            let chunk: ReadableStreamReadResult<Uint8Array>;
+            let chunk: Awaited<ReturnType<typeof reader.read>>;
             try {
                 chunk = await reader.read();
             } catch (error) {

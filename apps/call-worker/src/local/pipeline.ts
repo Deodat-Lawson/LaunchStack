@@ -253,6 +253,7 @@ export class LocalCapturePipeline {
     private pendingAutoStop?: "silence" | "call_ended";
     private stopReason: "user_stopped" | "silence_timeout" | "source_stopped" = "user_stopped";
     private stoppingNotified = false;
+    private attemptEndPromise?: Promise<void>;
 
     constructor(private readonly options: LocalCapturePipelineOptions) {
         const session = LocalCaptureSessionSchema.parse(options.session);
@@ -419,6 +420,12 @@ export class LocalCapturePipeline {
         this.stopRequested = true;
         this.stopReason = reason;
         this.stopSources(new Error("local capture stopped by user"));
+        if (reason !== "user_stopped") {
+            // Commit auto-stop at countdown expiry even if transcription is still draining.
+            void this.endAttempt(new Date().toISOString()).catch(error =>
+                this.recordFatalFailure(error)
+            );
+        }
         this.drainPromise = this.finishDrain(this.run());
         return this.drainPromise;
     }
@@ -988,6 +995,19 @@ export class LocalCapturePipeline {
         await this.transcriptAppendTail;
     }
 
+    private endAttempt(
+        occurredAt = (this.lastFrameEnd ?? this.activeCapture.startedAt).toISOString()
+    ): Promise<void> {
+        this.attemptEndPromise ??= this.appendEvent({
+            kind: "attempt_ended",
+            sourceAttemptKey: this.activeCapture.attemptKey,
+            sourceOccurrenceKey: this.activeCapture.occurrenceKey,
+            reason: this.pauseRequested ? "user_paused" : this.stopReason,
+            occurredAt,
+        });
+        return this.attemptEndPromise;
+    }
+
     private async finishCapture(): Promise<void> {
         if (this.finishPromise) return this.finishPromise;
         if (this.activeCapture.finished || this.activeCapture.failed) return;
@@ -996,13 +1016,7 @@ export class LocalCapturePipeline {
             for (const state of this.streams) this.scheduleUtteranceFlush(state);
             await this.waitForPendingFlushes();
             this.assertOperationAvailable();
-            await this.appendEvent({
-                kind: "attempt_ended",
-                sourceAttemptKey: this.activeCapture.attemptKey,
-                sourceOccurrenceKey: this.activeCapture.occurrenceKey,
-                reason: this.pauseRequested ? "user_paused" : this.stopReason,
-                occurredAt: (this.lastFrameEnd ?? this.activeCapture.startedAt).toISOString(),
-            });
+            await this.endAttempt();
             if (this.pauseRequested) {
                 this.activeCapture.finished = true;
                 return;

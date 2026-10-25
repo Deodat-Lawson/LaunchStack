@@ -633,10 +633,11 @@ await test("silence auto-stop counts down, keep_recording cancels and resets, th
     context.mock.timers.enable({ apis: ["setTimeout", "Date"], now: CAPTURE_START.getTime() });
     const messages: AutoStopMessage[] = [];
     const backend = new RecordingBackend();
+    const transcription = new GatedTranscription();
     const pipeline = createPipeline({
-        source: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        source: new ScriptedAudioSource([pcmFrame(12_000, 0), pcmFrame(0, 1)], undefined, true),
         systemSource: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
-        transcription: new RecordingTranscription([]),
+        transcription,
         backend,
         silenceTimeoutMs: 1_000,
         onAutoStop: message => messages.push(message),
@@ -644,6 +645,7 @@ await test("silence auto-stop counts down, keep_recording cancels and resets, th
     const running = pipeline.run();
     try {
         await nextTurn();
+        await transcription.started.promise;
         context.mock.timers.tick(999);
         assert.equal(messages.length, 0);
         context.mock.timers.tick(1);
@@ -666,10 +668,22 @@ await test("silence auto-stop counts down, keep_recording cancels and resets, th
         context.mock.timers.tick(59_999);
         assert.equal(backend.finishes.length, 0);
         context.mock.timers.tick(1);
+        const expiryEvent = backend.events.find(event => event.kind === "attempt_ended");
+        assert.equal(
+            expiryEvent?.kind === "attempt_ended" && expiryEvent.reason,
+            "silence_timeout"
+        );
+        assert.equal(
+            backend.finishes.length,
+            0,
+            "finish waits for the pending transcription drain"
+        );
+        transcription.release.resolve("Drained after countdown expiry");
         await running;
         assert.deepEqual(eventKinds(backend), [
             "attempt_connected",
             "attempt_ended",
+            "transcript_segment",
             "occurrence_ended",
         ]);
         const ended = backend.events.find(event => event.kind === "attempt_ended");
@@ -677,6 +691,7 @@ await test("silence auto-stop counts down, keep_recording cancels and resets, th
         assert.equal(backend.finishes.length, 1);
         assert.deepEqual(backend.finishes[0], { callId: SESSION.callId, autoEnrich: false });
     } finally {
+        transcription.release.resolve("");
         await pipeline.close();
     }
 });

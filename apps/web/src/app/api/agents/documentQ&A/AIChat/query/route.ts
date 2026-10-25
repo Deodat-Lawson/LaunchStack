@@ -285,6 +285,8 @@ class AttachmentReadError extends Error {
 
 interface AttachmentReadContext {
     request: Request;
+    /** The answer's own signal: it also ends when the reader cancels the stream. */
+    signal: AbortSignal;
     companyId: bigint;
     scope: DocumentScope;
 }
@@ -313,8 +315,8 @@ async function fetchAttachment(
     att: AttachmentPayload,
     context: AttachmentReadContext
 ): Promise<Response> {
-    const { request, companyId, scope } = context;
-    throwIfChatAborted(request.signal);
+    const { request, signal, companyId, scope } = context;
+    throwIfChatAborted(signal);
     const requestOrigin = new URL(request.url).origin;
     const internal =
         isInternalFileUrl(att.url, requestOrigin) ||
@@ -322,7 +324,7 @@ async function fetchAttachment(
     const storage = isConfiguredStorageUrl(att.url);
     if (!internal && !storage) {
         try {
-            return await fetchPublicUrl(att.url, { signal: request.signal });
+            return await fetchPublicUrl(att.url, { signal });
         } catch (error) {
             if (error instanceof UrlGuardError) throw new AttachmentReadError(error.message);
             throw error;
@@ -360,7 +362,7 @@ async function fetchAttachment(
     if ((!file && (internal || !readable)) || (backed.length > 0 && !readable)) {
         throw new AttachmentReadError(copy("chat.server.attachments.outOfScope"), 404);
     }
-    throwIfChatAborted(request.signal);
+    throwIfChatAborted(signal);
     if (internal && file?.storageProvider === "database") {
         if (!file.fileData)
             throw new AttachmentReadError(copy("chat.server.attachments.contentUnavailable"), 404);
@@ -380,7 +382,7 @@ async function fetchAttachment(
         throw new AttachmentReadError(copy("chat.server.attachments.storageUnavailable"), 404);
     }
     // Private configured S3 is allowed only after the ownership check, and cannot redirect.
-    return await fetch(storageUrl, { signal: request.signal, redirect: "error" });
+    return await fetch(storageUrl, { signal, redirect: "error" });
 }
 
 async function readAttachmentBytes(
@@ -389,7 +391,7 @@ async function readAttachmentBytes(
     budget: { remaining: number },
     perFileLimit = ATTACHMENT_FILE_DOWNLOAD_CAP_BYTES
 ): Promise<{ content: Uint8Array<ArrayBuffer>; mimeType: string }> {
-    const { signal } = context.request;
+    const { signal } = context;
     const res = await fetchAttachment(att, context);
     if (!res.ok) {
         await res.body?.cancel();
@@ -496,8 +498,7 @@ async function extractAttachmentText(
         mimeType === "application/octet-stream" || !mimeType
             ? guessAttachmentKind(att.name, att.mimeType)
             : guessAttachmentKind("", mimeType);
-    if (verifiedKind === "pdf")
-        return await extractChatPdfText(content.buffer, context.request.signal);
+    if (verifiedKind === "pdf") return await extractChatPdfText(content.buffer, context.signal);
     if (verifiedKind === "docx") return await extractDocxText(content.buffer);
     if (mimeType.startsWith("image/"))
         throw new AttachmentReadError(
@@ -515,7 +516,7 @@ async function buildAttachmentTextBlock(
     context: AttachmentReadContext
 ): Promise<string> {
     if (textAttachments.length === 0) return "";
-    const { signal } = context.request;
+    const { signal } = context;
 
     let remainingBudget = ATTACHMENT_TEXT_CAP_BYTES;
     const downloadBudget = { remaining: ATTACHMENT_DOWNLOAD_CAP_BYTES };
@@ -1445,7 +1446,7 @@ export async function POST(request: Request) {
             const attachmentCount = textAttachments.length + imageAttachments.length;
             if (attachmentCount > 0)
                 step("attachments", "active", ts("readingAttachments", { count: attachmentCount }));
-            const attachmentContext = { request, companyId: userCompanyId, scope };
+            const attachmentContext = { request, signal, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
                 textAttachments,
                 attachmentContext

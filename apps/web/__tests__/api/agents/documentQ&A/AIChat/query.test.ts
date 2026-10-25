@@ -1275,6 +1275,55 @@ describe("chat transport and general scope", () => {
         expect(validateQAResponse).not.toHaveBeenCalled();
     });
 
+    it("stops reading attachments when the response reader is cancelled", async () => {
+        mockBehavior = { parameters: { streaming: "supported" } };
+        let fetchSignal: AbortSignal | undefined;
+        const fetchSpy = jest.spyOn(global, "fetch").mockImplementation(
+            (_url, init) =>
+                new Promise<Response>((_resolve, reject) => {
+                    fetchSignal = init?.signal ?? undefined;
+                    fetchSignal?.addEventListener("abort", () =>
+                        reject(new DOMException("Aborted", "AbortError"))
+                    );
+                })
+        );
+        try {
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    stream: true,
+                    attachments: [
+                        {
+                            name: "note.txt",
+                            kind: "text",
+                            mimeType: "text/plain",
+                            url: "https://example.com/note.txt",
+                        },
+                    ],
+                })
+            );
+            const reader = response.body!.getReader();
+            const decoder = new TextDecoder();
+            let seen = "";
+            while (!seen.includes('"id":"attachments"')) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                seen += decoder.decode(value, { stream: true });
+            }
+            await new Promise(resolve => setTimeout(resolve, 0));
+            expect(fetchSignal?.aborted).toBe(false);
+            // The request itself stays open: only the reader went away.
+            await reader.cancel();
+            expect(fetchSignal?.aborted).toBe(true);
+            await new Promise(resolve => setTimeout(resolve, 0));
+            expect(mockStream).not.toHaveBeenCalled();
+            expect(mockInvoke).not.toHaveBeenCalled();
+        } finally {
+            fetchSpy.mockRestore();
+        }
+    });
+
     it("propagates request cancellation to attachment fetch and skips the model", async () => {
         const controller = new AbortController();
         const fetchSpy = jest.spyOn(global, "fetch").mockImplementation(async (_url, init) => {

@@ -38,6 +38,7 @@ const WEB_TESTS = [
     "__tests__/server/vantage-service-v1.test.ts",
     "__tests__/server/vantage-auth-v1.integration.test.ts",
     "__tests__/server/vantage-company-architecture.integration.test.ts",
+    "__tests__/server/vantage-sophia-composition.integration.test.ts",
     "__tests__/lib/require-workspace-context.test.ts",
     "__tests__/lib/active-workspace.test.ts",
     "__tests__/authz/resolve.test.ts",

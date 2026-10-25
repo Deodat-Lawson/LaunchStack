@@ -113,7 +113,7 @@ Define the output A must produce and the interfaces B must use. Publish runtime 
 
 | Contract               | Required information or behavior                                                                                                                                   |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Program and Cycle      | Stable identity, public URLs, available dates/timezone, rolling or unknown state, and provenance. Missing values must remain unknown.                              |
+| Program and Cycle      | Stable identity, public URLs, a required sourced logo, available dates/timezone, rolling or unknown state, and provenance. Missing dates remain unknown.           |
 | Program profile        | Description and target-applicant narrative, source references, checked date, and distinction between source statements and AI interpretations.                     |
 | Form and Field         | Stable identity/order, question, instructions, type, required state, options, character/word limits, limit evidence, and Form source/review status.                |
 | Import                 | Validate versioned records through a trusted operator command; return actionable errors and re-import without duplicate identities.                                |
@@ -123,7 +123,7 @@ Define the output A must produce and the interfaces B must use. Publish runtime 
 
 Program target applicants are **not** restricted to a stage enum such as `pre_idea` or `early_stage`. The descriptive narrative is a first-class matching input. C can add useful structured facts, but must not discard the richer source description or turn an interpretation into a hard requirement.
 
-The implementation uses schema version 1, a nullable 0–100 fit score, ten Field types, UTF-16 selection offsets, and atomic integer answer revisions. See section 12 for the exported contracts. The access gate, explicit matching trigger, existing credit policy, checked/supported-Form gate, empty-only drafting, operator import, and shared company version remain the approved product rules.
+The implementation uses schema version 2 with a required Program logo, a nullable 0–100 fit score, ten Field types, UTF-16 selection offsets, and atomic integer answer revisions. See section 12 for the exported contracts. The access gate, explicit matching trigger, existing credit policy, checked/supported-Form gate, empty-only drafting, operator import, and shared company version remain the approved product rules.
 
 ### Spike step 2. Build storage, import, and company boundaries
 
@@ -206,17 +206,18 @@ This completes C's documented working-base handoff. Neither the reference data n
 ### Required workflow
 
 1. Propose the starter Program list and record count for product approval, identifying which records C has already supplied.
-2. Collect relevant official pages and, where useful, other public sources. Preserve where each piece of information came from.
+2. Collect relevant official pages and, where useful, other public sources. Collect each Program's official logo or brand mark and preserve its source.
 3. Run the collected text through AI to write the descriptive Program profile and target-applicant narrative.
 4. Check that the output is supported. Preserve gaps, conflicting descriptions, and the distinction between reported facts and interpretations.
 5. Collect and check the actual application questions, order, types, options, required flags, and limits where access permits.
-6. Submit versioned data files and validate one complete record at a time. Use the trusted operator command to prove import into the named installation and confirm that the record appears correctly in the product.
+6. Submit versioned data files and logo assets and validate one complete record at a time. Use the trusted operator command to prove import into the named installation and confirm that the record and its logo appear correctly in the product.
 
 The final Program list and coverage must be approved for this delivery. The old issue's record count is not an automatic commitment, and an approved Program list does not establish that every Form is accessible.
 
 ### Data quality rules
 
 - Include source URLs, supporting text, and checked dates; do not invent dates, terms, preferences, or questions.
+- Every Program requires its official logo or brand mark. Commit the image under `apps/web/public/accelerators/logos/` with the record, cite the official source, and check its appearance on the Program list and detail page. Do not substitute generated artwork, initials, or an unrelated image.
 - Official statements and third-party descriptions must remain distinguishable. Repeated web text is not automatically a verified consensus.
 - Keep target applicants as evidence-backed narrative, not a forced pair of categories or a company-specific fit score.
 - Check Forms against the portal where access is permitted. Never label an estimated template as the exact current Form.
@@ -231,7 +232,7 @@ A durable pipeline is welcome only if it does not delay the checked records. Sch
 
 ### Done when
 
-The approved Program set is delivered as versioned data files and imported in C's format into the named installation using the trusted operator command. Records display correctly; narrative summaries have traceable support; checked/supported Forms can start Applications, and unconfirmed or unsupported Forms cannot. Form coverage and limitations are explicit. Local-only database changes are not the deliverable, and any missing portion of the approved set remains incomplete even if C's reference flow works.
+The approved Program set is delivered as versioned data files and logo assets and imported in C's format into the named installation using the trusted operator command. Every entry displays its sourced official logo; narrative summaries have traceable support; checked/supported Forms can start Applications, and unconfirmed or unsupported Forms cannot. Form coverage and limitations are explicit. Local-only database changes are not the deliverable, and any missing portion of the approved set remains incomplete even if C's reference flow works.
 
 A supplies Program information. C's matcher, not A's collection step, computes fit for each company.
 
@@ -340,7 +341,7 @@ Reuse shared modules or extract shared components as needed. Keep grants' behavi
 - Main integrated at `a869cd9f`.
 - Required prior C trust fixes: `510-person-c-integration` at `9626c11d`.
 - Merge commit before feature work: `7c3bf9c7`.
-- Feature implementation: [`862fabc9`](https://github.com/Deodat-Lawson/LaunchStack/commit/862fabc9), pushed successfully to `origin/grants-pipeline`. Use this code base for both A and B; the branch also contains the handoff closeout. Do not use the old documentation branch as the feature base.
+- Original C implementation: [`862fabc9`](https://github.com/Deodat-Lawson/LaunchStack/commit/862fabc9), pushed to `origin/grants-pipeline`. A and B must use the current branch tip, including the required-logo/schema-version-2 update, not the original implementation or old documentation branch.
 
 ### Concrete contracts and storage
 
@@ -356,6 +357,18 @@ Reuse shared modules or extract shared components as needed. Keep grants' behavi
 | Workspace UI and separate local/saved buffers | `apps/web/src/app/employer/tools/accelerators/`                                                                 |
 
 The shared implementation lives inside Proposals because both product surfaces use the same Application/Section storage and executor. The public Accelerators exports and API remain separate. This preserves the repository's rule against relative imports between feature verticals.
+
+### Required Program logos
+
+Every Program requires `logo: { path, sourceId }`. `path` is a local image URL under `/accelerators/logos/`; the corresponding non-empty asset must be committed under `apps/web/public/accelerators/logos/`. `sourceId` references an entry in that Program's `sources`, recording the official page, the original asset URL in its supporting text, and the checked date. Images are served locally; opening the Catalogue does not fetch logos from third-party websites.
+
+The importer rejects missing logo metadata, external logo paths, missing source references, and missing/empty local assets. A must supply the image and record together. Keep the official mark intact; do not crop it into a different mark or generate a replacement.
+
+The format is now **schema version 2**. Update and re-import all version-1 records before running the updated UI. There is no version-1 fallback. This is a Catalogue JSON update, not a SQL schema migration; existing Application snapshots and answers remain unchanged. Importing changed Program records marks their saved fit results out of date, without starting another paid match.
+
+YC, aboveA, and Techstars London include checked official marks, shown beside their names in both the list and detail pages.
+
+### Answer contracts
 
 The supported Field types are `short_text`, `long_text`, `url`, `email`, `number`, `date`, `select`, `multi_select`, `file`, and `video`. File/video requirements are visible manual actions, not uploads. Only empty prose Fields have basic Draft. A required Field may be saved unfinished. Numeric length limits need source evidence; unknown limits remain unknown.
 
@@ -428,7 +441,7 @@ The demo seeder requires a named workspace and loopback database, and refuses to
 
 Fit is an assessment, not an admission probability. The local Core profile is synthetic, so these demonstration scores are not evidence of production accuracy.
 
-### Exercised evidence
+### C base verification before the logo update
 
 - Applied all 6 engine and 38 product migrations to an isolated Postgres instance; migration verification reports up to date. Journal checks and `drizzle-kit check` pass. Wire schema drift check passes for 22 existing contracts.
 - Imported the three reference records through the operator command. A repeated import reported `inserted: 0`, `updated: 0`, `unchanged: 3`. Duplicate input identities were rejected before database writes, then the corrected input succeeded.
@@ -442,13 +455,19 @@ Fit is an assessment, not an admission probability. The local Core profile is sy
 - The full web run reports 578 passed suites and 2 skipped suites: 6,500 passed tests, 4 skipped, no failed assertions. The runner nevertheless remains alive after its summary, including with `--detectOpenHandles`, and was terminated at the command deadline. This is not a clean full-suite command pass; no `--forceExit` or test exclusions were added to hide it.
 - Repaired the LLM package's build-only ambient DOM type dependency with an explicit Node web-stream type import. No runtime metering behavior changed.
 
+### Required-logo update verification
+
+- All 55 pipeline test files pass: 629 tests, including rejection of missing, remote, and unsourced logos. The 9 Accelerator database regressions pass.
+- Pipeline/web typechecks, changed-file lint, and the pipeline package build pass.
+- Re-imported the three reference Programs with required logo data and assets. Verified all three images load in the actual Program list and the YC mark appears in Program detail. No paid matching was started.
+
 ### Broader repository gate
 
 The installation-wide publish-export check still reports an unrelated missing `@launchstack/conversion/heading-chunker` artifact. Its source export also points to a missing file. This slice does not remove or replace that pre-existing public export. Do not report the whole repository's publish gate as green because the Accelerators path works.
 
 ### File ownership for parallel work
 
-- **A:** further files under `fixtures/accelerators/programs/` and its own collection scripts. Do not change the public schema, importer, migration, or company-specific scores without C's agreement.
+- **A:** further files under `fixtures/accelerators/programs/`, their official logo assets under `apps/web/public/accelerators/logos/`, and its own collection scripts. Do not change the public schema, importer, migration, or company-specific scores without C's agreement.
 - **B:** selected-text UI/handler modules under the Accelerators feature, integration in `FieldEditor.tsx`, its API client/editor context, and the matching `en`/`zh-CN` messages. Own the complete feature and its behavioral proof, not checks of C's drafting.
 - **C:** shared contracts, database/migrations, access, workspace host, run/executor/credit integration, grants separation, and final integration. Coordinate changes here before B merges the selected-text execution extension.
 

@@ -1,7 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "y-combinator",
   "name": "Y Combinator",
+  "logo": {
+    "path": "/accelerators/logos/y-combinator.png",
+    "sourceId": "official-logo"
+  },
   "websiteUrl": "https://www.ycombinator.com/",
   "applyUrl": "https://apply.ycombinator.com/home",
   "description": {
@@ -25,6 +29,13 @@
     "interpretation": true
   },
   "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.ycombinator.com/",
+      "title": "YC official site — YC brand mark",
+      "quote": "https://bookface-static.ycombinator.com/assets/ycdc/favicon-c8a914eeeba9fe6f7a863b35608b55aeedd7c1ff409c97b9ecb96b7a6c278d70.ico",
+      "checkedAt": "2026-10-25T09:52:21.494Z"
+    },
     {
       "id": "yc-program-overview",
       "url": "https://www.ycombinator.com/about",

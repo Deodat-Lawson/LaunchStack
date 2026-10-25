@@ -1,7 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "techstars-london",
   "name": "Techstars London Accelerator",
+  "logo": {
+    "path": "/accelerators/logos/techstars-london.png",
+    "sourceId": "official-logo"
+  },
   "websiteUrl": "https://www.techstars.com/accelerators/london",
   "applyUrl": "https://apply.techstars.com/",
   "description": {
@@ -15,6 +19,13 @@
     "interpretation": true
   },
   "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.techstars.com/accelerators/london",
+      "title": "Techstars official Program page — Techstars brand mark",
+      "quote": "https://cdn.bfldr.com/T71J6AJ4/at/q86ewb-df6l8w-98fkd7/TS_favcon.png?format=png",
+      "checkedAt": "2026-10-25T09:52:21.494Z"
+    },
     {
       "id": "london-overview",
       "url": "https://www.techstars.com/accelerators/london",

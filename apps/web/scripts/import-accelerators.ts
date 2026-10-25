@@ -6,9 +6,9 @@
  *
  * DATABASE_URL selects the installation. --installation names that target in the output.
  * Validation needs no database; imports validate all files before one idempotent transaction.
- * Files contain a single schemaVersion:1 Program or an array of Programs.
+ * Files contain a single schemaVersion:2 Program or an array of Programs, with committed logo assets.
  */
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 import dotenv from "dotenv";
@@ -66,6 +66,14 @@ async function main(): Promise<void> {
         for (const [index, value] of (Array.isArray(raw) ? raw : [raw]).entries()) {
             const parsed = CatalogueProgramSchema.safeParse(value);
             if (!parsed.success) throw new Error(`${file}[${index}]: ${parsed.error.message}`);
+            const logo = await stat(
+                new URL(`../public${parsed.data.logo.path}`, import.meta.url)
+            ).catch(() => null);
+            if (!logo?.isFile() || logo.size === 0) {
+                throw new Error(
+                    `${file}[${index}].logo.path: add the logo asset at apps/web/public${parsed.data.logo.path}`
+                );
+            }
             records.push(parsed.data);
         }
     }

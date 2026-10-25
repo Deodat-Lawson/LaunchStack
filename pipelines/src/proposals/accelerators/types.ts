@@ -191,11 +191,25 @@ export const ProgramCycleSchema = z
     });
 export type ProgramCycle = z.infer<typeof ProgramCycleSchema>;
 
+export const ProgramLogoSchema = z
+    .object({
+        path: z
+            .string()
+            .regex(
+                /^\/accelerators\/logos\/[a-z0-9][a-z0-9._-]*\.(?:png|webp|jpe?g|svg)$/i,
+                "Use a versioned local logo asset under /accelerators/logos/"
+            ),
+        sourceId: IdSchema,
+    })
+    .strict();
+export type ProgramLogo = z.infer<typeof ProgramLogoSchema>;
+
 export const CatalogueProgramSchema = z
     .object({
-        schemaVersion: z.literal(1),
+        schemaVersion: z.literal(2),
         id: IdSchema,
         name: z.string().trim().min(1).max(256),
+        logo: ProgramLogoSchema,
         websiteUrl: HttpUrlSchema,
         applyUrl: HttpUrlSchema,
         description: SourcedNarrativeSchema,
@@ -221,6 +235,7 @@ export const CatalogueProgramSchema = z
             });
         }
         const references: { ids: string[]; path: (string | number)[] }[] = [
+            { ids: [program.logo.sourceId], path: ["logo", "sourceId"] },
             { ids: program.description.sourceIds, path: ["description", "sourceIds"] },
             { ids: program.targetApplicants.sourceIds, path: ["targetApplicants", "sourceIds"] },
             ...program.cycles.map((cycle, index) => ({

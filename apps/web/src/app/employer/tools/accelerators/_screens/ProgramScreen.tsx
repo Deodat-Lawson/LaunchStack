@@ -2,6 +2,7 @@
 
 import { canStartForm } from "@launchstack/pipelines/accelerators/types";
 import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
@@ -34,7 +35,16 @@ export function ProgramScreen({ id }: { id: string }) {
                     </ToolLink>
                 </Button>
                 <div className="flex flex-wrap items-start justify-between gap-4">
-                    <h1 className="display text-ink text-2xl tracking-tight">{program.name}</h1>
+                    <div className="flex min-w-0 items-center gap-3">
+                        <Image
+                            src={program.logo.path}
+                            alt=""
+                            width={56}
+                            height={56}
+                            className="size-14 shrink-0 rounded-md object-contain"
+                        />
+                        <h1 className="display text-ink text-2xl tracking-tight">{program.name}</h1>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                         <Button asChild variant="outline" size="sm">
                             <a href={program.websiteUrl} target="_blank" rel="noopener noreferrer">

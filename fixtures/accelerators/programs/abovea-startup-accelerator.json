@@ -1,7 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "abovea-startup-accelerator",
   "name": "aboveA Startup Accelerator",
+  "logo": {
+    "path": "/accelerators/logos/abovea-startup-accelerator.webp",
+    "sourceId": "official-logo"
+  },
   "websiteUrl": "https://abovea.tech/academy/main/",
   "applyUrl": "https://abovea.tech/academy/accelerator-application-form/",
   "description": {
@@ -25,6 +29,13 @@
     "interpretation": true
   },
   "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA official Program page — aboveA brand mark",
+      "quote": "https://abovea.tech/wp-content/uploads/2024/03/aboveA-Blue-Logo.webp",
+      "checkedAt": "2026-10-25T09:52:21.494Z"
+    },
     {
       "id": "abovea-program-overview",
       "url": "https://abovea.tech/academy/main/",

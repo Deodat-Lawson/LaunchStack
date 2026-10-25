@@ -27,9 +27,10 @@ const field: FormField = {
     limitSource: null,
 };
 const program: CatalogueProgram = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     id: "validation-test",
     name: "Validation test Program",
+    logo: { path: "/accelerators/logos/validation-test.png", sourceId: "official" },
     websiteUrl: "https://example.test/",
     applyUrl: "https://example.test/apply",
     description: { text: "A test description", sourceIds: ["official"], interpretation: false },
@@ -73,6 +74,24 @@ describe("Catalogue and Form validation", () => {
         expect(canStartForm({ ...form, supported: false })).toBe(false);
         expect(canStartForm({ ...form, fields: [] })).toBe(false);
         expect(canStartForm({ ...form, checkedAt: null })).toBe(false);
+    });
+
+    it("rejects missing logos, external logo requests, and untraceable logo sources", () => {
+        expect(CatalogueProgramSchema.safeParse({ ...program, logo: undefined }).success).toBe(
+            false
+        );
+        expect(
+            CatalogueProgramSchema.safeParse({
+                ...program,
+                logo: { ...program.logo, path: "https://tracker.example/logo.png" },
+            }).success
+        ).toBe(false);
+        expect(
+            CatalogueProgramSchema.safeParse({
+                ...program,
+                logo: { ...program.logo, sourceId: "missing" },
+            }).success
+        ).toBe(false);
     });
 
     it("rejects duplicate Field identities and positions, options, unsourced limits, and dangling sources", () => {

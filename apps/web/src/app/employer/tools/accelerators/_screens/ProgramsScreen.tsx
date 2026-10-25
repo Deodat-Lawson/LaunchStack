@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, FileText, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import Image from "next/image";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
@@ -124,14 +125,23 @@ export function ProgramsScreen() {
                             className="border-line bg-panel flex flex-col gap-4 rounded-xl border p-5"
                         >
                             <div className="flex flex-wrap items-start justify-between gap-3">
-                                <h2 className="text-ink text-lg font-semibold">
-                                    <ToolLink
-                                        href={programPath(view.program.id)}
-                                        className="hover:text-brand underline-offset-4 hover:underline"
-                                    >
-                                        {view.program.name}
-                                    </ToolLink>
-                                </h2>
+                                <div className="flex min-w-0 flex-1 items-center gap-3">
+                                    <Image
+                                        src={view.program.logo.path}
+                                        alt=""
+                                        width={48}
+                                        height={48}
+                                        className="size-12 shrink-0 rounded-md object-contain"
+                                    />
+                                    <h2 className="text-ink text-lg font-semibold">
+                                        <ToolLink
+                                            href={programPath(view.program.id)}
+                                            className="hover:text-brand underline-offset-4 hover:underline"
+                                        >
+                                            {view.program.name}
+                                        </ToolLink>
+                                    </h2>
+                                </div>
                                 <FitStatus view={view} />
                             </div>
                             <p className="text-ink-2 line-clamp-4 text-sm leading-relaxed">

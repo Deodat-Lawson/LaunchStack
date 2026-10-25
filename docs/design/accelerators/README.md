@@ -192,10 +192,10 @@ A or B can inspect early contracts and work independently, but the formal handof
 - [x] Two-company isolation, colleague sharing, restricted access, and live access revocation were exercised.
 - [x] Revision checks and the editor buffer preserve newer saved and unsaved text during late generation.
 - [x] The affected shared grant storage, run, scope, and approval paths have regression coverage.
-- [ ] The approved spike is pushed; the handoff names its branch, commit, setup/import/run commands, checks, and known data limitations.
-- [ ] A and B receive their bounded assignments below and a clear list of files/modules they own.
+- [x] Implementation commit `862fabc9` is pushed to `origin/grants-pipeline`; setup, checks, commands, and data limitations are recorded below.
+- [x] A/B's bounded assignments and file ownership are published below for handoff.
 
-The final task report supplies push confirmation and the exact handoff commit. The two remaining checklist items are complete only after that push and handoff. Neither the reference data nor C's working base means A's or B's assignment is complete.
+This completes C's documented working-base handoff. Neither the reference data nor C's implementation means A's or B's assignment is complete. The broader repository gate and full-suite runner limitation below remain visible; this is not a claim that every release check is green.
 
 ## 6. Person A — collect, process, and deliver Program data
 
@@ -340,7 +340,7 @@ Reuse shared modules or extract shared components as needed. Keep grants' behavi
 - Main integrated at `a869cd9f`.
 - Required prior C trust fixes: `510-person-c-integration` at `9626c11d`.
 - Merge commit before feature work: `7c3bf9c7`.
-- The exact feature commit and successful remote push are supplied in the final handoff report. Do not use the old documentation branch as the feature base.
+- Feature implementation: [`862fabc9`](https://github.com/Deodat-Lawson/LaunchStack/commit/862fabc9), pushed successfully to `origin/grants-pipeline`. Use this code base for both A and B; the branch also contains the handoff closeout. Do not use the old documentation branch as the feature base.
 
 ### Concrete contracts and storage
 

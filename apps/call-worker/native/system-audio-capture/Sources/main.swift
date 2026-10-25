@@ -1,11 +1,12 @@
 import AVFAudio
+import AVFoundation
 import CoreGraphics
 import CoreMedia
 import Darwin
 import Foundation
 import ScreenCaptureKit
 
-private enum HelperError: Error {
+enum HelperError: Error {
     case usage(String)
     case unsupported(String)
     case permissionDenied(String)
@@ -39,10 +40,15 @@ private enum HelperError: Error {
     }
 }
 
+private enum AudioSource: String {
+    case microphone
+    case system
+}
+
 private enum Command {
     case status
-    case requestPermission
-    case capture(sampleRate: Int)
+    case requestPermission(AudioSource)
+    case capture(source: AudioSource, sampleRate: Int)
 }
 
 private enum CLIArguments {
@@ -52,98 +58,223 @@ private enum CLIArguments {
         if arguments == ["--status"] {
             return .status
         }
-        if arguments == ["--request-permission"] {
-            return .requestPermission
-        }
-        guard arguments.count == 2, arguments[0] == "--sample-rate" else {
-            throw HelperError.usage(
-                "usage: launchstack-system-audio --status | --request-permission | --sample-rate <8000-192000>"
-            )
+        if arguments.first == "--request-permission" {
+            guard arguments.count <= 2 else {
+                throw usage()
+            }
+            let source = try parseSource(arguments.count == 2 ? arguments[1] : "system")
+            return .requestPermission(source)
         }
 
-        let value = arguments[1]
-        guard let sampleRate = Int(value), (8_000...192_000).contains(sampleRate) else {
-            throw HelperError.usage(
-                "--sample-rate must be an integer between 8000 and 192000 Hz"
-            )
+        var source = AudioSource.system
+        var sampleRate: Int?
+        var hasSource = false
+        var index = 0
+        while index < arguments.count {
+            guard index + 1 < arguments.count else { throw usage() }
+            switch arguments[index] {
+            case "--source":
+                guard !hasSource else { throw usage() }
+                source = try parseSource(arguments[index + 1])
+                hasSource = true
+            case "--sample-rate":
+                guard sampleRate == nil else { throw usage() }
+                guard let value = Int(arguments[index + 1]),
+                      (8_000...192_000).contains(value) else {
+                    throw HelperError.usage(
+                        "--sample-rate must be an integer between 8000 and 192000 Hz"
+                    )
+                }
+                sampleRate = value
+            default:
+                throw usage()
+            }
+            index += 2
         }
-        return .capture(sampleRate: sampleRate)
+        guard let sampleRate else { throw usage() }
+        return .capture(source: source, sampleRate: sampleRate)
+    }
+
+    private static func parseSource(_ value: String) throws -> AudioSource {
+        guard let source = AudioSource(rawValue: value) else {
+            throw HelperError.usage("--source and --request-permission accept microphone or system")
+        }
+        return source
+    }
+
+    private static func usage() -> HelperError {
+        .usage(
+            "usage: launchstack-system-audio --status | --request-permission [microphone|system] | [--source microphone|system] --sample-rate <8000-192000>; capture stdout is mono signed-16-bit little-endian PCM, default source is system"
+        )
     }
 }
 
-private struct StatusPayload: Encodable {
+private enum PermissionState: String, Encodable {
+    case authorized
+    case denied
+    case restricted
+    case notDetermined = "not_determined"
+    case unsupported
+    case unknown
+}
+
+private struct SourceStatusPayload: Encodable {
     let supported: Bool
     let authorized: Bool
     let reason: String
     let message: String
+    let state: PermissionState
 
-    static func ready() -> StatusPayload {
-        StatusPayload(
+    static func ready(_ message: String) -> SourceStatusPayload {
+        SourceStatusPayload(
             supported: true,
             authorized: true,
             reason: "ready",
-            message: "ScreenCaptureKit system-audio capture is available"
+            message: message,
+            state: .authorized
         )
     }
 
-    static func unsupported(_ message: String) -> StatusPayload {
-        StatusPayload(
+    static func unsupported(_ message: String) -> SourceStatusPayload {
+        SourceStatusPayload(
             supported: false,
             authorized: false,
             reason: "unsupported",
-            message: message
+            message: message,
+            state: .unsupported
         )
     }
 
-    static func permissionDenied(_ message: String) -> StatusPayload {
-        StatusPayload(
+    static func permissionDenied(
+        _ message: String,
+        state: PermissionState = .unknown
+    ) -> SourceStatusPayload {
+        SourceStatusPayload(
             supported: true,
             authorized: false,
             reason: "permission_denied",
-            message: message
+            message: String(message.prefix(1_024)),
+            state: state
         )
+    }
+}
+
+private struct StatusPayload: Encodable {
+    let microphone: SourceStatusPayload
+    let system: SourceStatusPayload
+
+    func source(_ source: AudioSource) -> SourceStatusPayload {
+        switch source {
+        case .microphone: return microphone
+        case .system: return system
+        }
+    }
+}
+
+private final class SourceStatusCompletion {
+    private let lock = NSLock()
+    private var continuation: CheckedContinuation<SourceStatusPayload, Never>?
+
+    init(_ continuation: CheckedContinuation<SourceStatusPayload, Never>) {
+        self.continuation = continuation
+    }
+
+    func finish(_ payload: SourceStatusPayload) {
+        lock.lock()
+        let continuation = self.continuation
+        self.continuation = nil
+        lock.unlock()
+        continuation?.resume(returning: payload)
     }
 }
 
 private enum PermissionProbe {
     static func status() async -> StatusPayload {
-        guard #available(macOS 14.0, *) else {
-            return .unsupported("macOS 14.0 or newer is required")
-        }
+        StatusPayload(
+            microphone: microphoneStatus(),
+            system: await systemStatus()
+        )
+    }
 
-        // Preflight is deliberately non-prompting. The UI owns the user-facing
-        // permission request and may invoke --request-permission when needed.
-        guard CGPreflightScreenCaptureAccess() else {
+    private static func microphoneStatus() -> SourceStatusPayload {
+        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+        case .authorized:
+            return .ready("AVAudioEngine microphone capture is authorized")
+        case .denied:
             return .permissionDenied(
-                "Screen Recording permission is not granted; enable it for launchstack-system-audio in System Settings > Privacy & Security > Screen Recording"
+                "Microphone permission is denied; enable it for LaunchStack Capture in System Settings > Privacy & Security > Microphone",
+                state: .denied
             )
-        }
-
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(
-                false,
-                onScreenWindowsOnly: false
-            )
-            guard !content.displays.isEmpty else {
-                return .permissionDenied(
-                    "ScreenCaptureKit found no capturable display; connect or unlock a macOS display and try again"
-                )
-            }
-            return .ready()
-        } catch {
+        case .restricted:
             return .permissionDenied(
-                "ScreenCaptureKit could not enumerate shareable content: \(error.localizedDescription)"
+                "Microphone access is restricted by macOS or device policy",
+                state: .restricted
             )
+        case .notDetermined:
+            return .permissionDenied(
+                "Microphone permission has not been requested; run --request-permission microphone",
+                state: .notDetermined
+            )
+        @unknown default:
+            return .permissionDenied("macOS reported an unknown microphone permission state")
         }
     }
 
-    static func requestPermission() async -> StatusPayload {
+    private static func systemStatus() async -> SourceStatusPayload {
         guard #available(macOS 14.0, *) else {
             return .unsupported("macOS 14.0 or newer is required")
         }
 
-        if !CGPreflightScreenCaptureAccess() {
-            _ = CGRequestScreenCaptureAccess()
+        // CoreGraphics does not distinguish a first request from an explicit
+        // denial. Preflight never prompts; only --request-permission does.
+        guard CGPreflightScreenCaptureAccess() else {
+            return .permissionDenied(
+                "Screen Recording permission is not granted; enable it for LaunchStack Capture in System Settings > Privacy & Security > Screen Recording"
+            )
+        }
+
+        // ScreenCaptureKit can stall while the display service is unavailable.
+        // An unstructured task lets the CLI return a bounded status instead of
+        // a task group waiting indefinitely for a non-cancellable OS request.
+        return await withCheckedContinuation { continuation in
+            let completion = SourceStatusCompletion(continuation)
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(5)) {
+                completion.finish(.permissionDenied(
+                    "ScreenCaptureKit status timed out after 5 seconds; unlock a macOS display and try again"
+                ))
+            }
+            Task {
+                do {
+                    let content = try await SCShareableContent.excludingDesktopWindows(
+                        false,
+                        onScreenWindowsOnly: false
+                    )
+                    guard !content.displays.isEmpty else {
+                        completion.finish(.permissionDenied(
+                            "ScreenCaptureKit found no capturable display; connect or unlock a macOS display and try again"
+                        ))
+                        return
+                    }
+                    completion.finish(.ready("ScreenCaptureKit system-audio capture is available"))
+                } catch {
+                    completion.finish(.permissionDenied(
+                        "ScreenCaptureKit could not enumerate shareable content: \(error.localizedDescription)"
+                    ))
+                }
+            }
+        }
+    }
+
+    static func requestPermission(_ source: AudioSource) async -> StatusPayload {
+        switch source {
+        case .microphone:
+            if AVCaptureDevice.authorizationStatus(for: .audio) == .notDetermined {
+                _ = await AVCaptureDevice.requestAccess(for: .audio)
+            }
+        case .system:
+            if !CGPreflightScreenCaptureAccess() {
+                _ = CGRequestScreenCaptureAccess()
+            }
         }
         return await status()
     }
@@ -165,7 +296,7 @@ private func writeDiagnostic(_ message: String) {
 // A signal handler may only perform async-signal-safe operations. A single
 // Int32 flag is enough; a DispatchSourceTimer below observes it outside the
 // signal context and performs the actual ScreenCaptureKit shutdown.
-private let terminationFlag: UnsafeMutablePointer<Int32> = {
+let terminationFlag: UnsafeMutablePointer<Int32> = {
     let pointer = UnsafeMutablePointer<Int32>.allocate(capacity: 1)
     pointer.initialize(to: 0)
     return pointer
@@ -182,7 +313,7 @@ private func installSignalHandlers() {
     _ = Darwin.signal(SIGPIPE, SIG_IGN)
 }
 
-private final class SignalMonitor {
+final class SignalMonitor {
     private let timer: DispatchSourceTimer
 
     init(handler: @escaping () -> Void) {
@@ -213,12 +344,11 @@ private final class SignalMonitor {
     }
 }
 
-private final class PCMOutputWriter {
+final class PCMOutputWriter {
     private static let chunkSize = 64 * 1024
     private static let backpressureTimeoutNanoseconds: UInt64 = 1_000_000_000
 
     private let lock = NSLock()
-    private var scratch = [UInt8](repeating: 0, count: PCMOutputWriter.chunkSize)
     private let originalFlags: Int32
     private var restored = false
 
@@ -253,37 +383,16 @@ private final class PCMOutputWriter {
         lock.lock()
         defer { lock.unlock() }
 
-        var frameOffset = 0
-        try scratch.withUnsafeMutableBytes { rawBuffer in
-            guard let baseAddress = rawBuffer.baseAddress else {
-                throw HelperError.output("could not allocate a PCM output chunk")
-            }
-
-            while frameOffset < frameCount {
-                if terminationFlag.pointee != 0 {
-                    throw HelperError.output("capture interrupted while stdout was backpressured")
-                }
-
-                let framesThisChunk = min(
-                    frameCount - frameOffset,
-                    PCMOutputWriter.chunkSize / MemoryLayout<Int16>.size
-                )
-                for index in 0..<framesThisChunk {
-                    let sample = UInt16(bitPattern: samples[frameOffset + index]).littleEndian
-                    rawBuffer[index * 2] = UInt8(truncatingIfNeeded: sample)
-                    rawBuffer[index * 2 + 1] = UInt8(truncatingIfNeeded: sample >> 8)
-                }
-
-                try writeBytes(
-                    baseAddress,
-                    count: framesThisChunk * MemoryLayout<Int16>.size
-                )
-                frameOffset += framesThisChunk
-            }
-        }
+        // Every supported macOS architecture is little-endian. The converter
+        // already owns contiguous mono Int16 storage, so write it without an
+        // intermediate allocation or sample-by-sample copy.
+        try writeBytes(
+            UnsafeRawPointer(samples),
+            count: frameCount * MemoryLayout<Int16>.size
+        )
     }
 
-    private func writeBytes(_ baseAddress: UnsafeMutableRawPointer, count: Int) throws {
+    private func writeBytes(_ baseAddress: UnsafeRawPointer, count: Int) throws {
         var offset = 0
         let deadline = DispatchTime.now().uptimeNanoseconds
             + PCMOutputWriter.backpressureTimeoutNanoseconds
@@ -862,21 +971,32 @@ private final class SystemAudioCapture: NSObject, SCStreamOutput, SCStreamDelega
 @MainActor
 private struct LaunchStackSystemAudio {
     static func main() async {
+        installSignalHandlers()
         do {
+            let lifetimeMonitor = try ProcessLifetimeMonitor()
+            defer { lifetimeMonitor.stop() }
+
             let command = try CLIArguments.parse(CommandLine.arguments)
             switch command {
             case .status:
                 let payload = await PermissionProbe.status()
                 try writeStatus(payload)
-                exit(statusExitCode(payload))
-            case .requestPermission:
-                let payload = await PermissionProbe.requestPermission()
+                // Status is an observation, not a request to capture both
+                // sources. Callers inspect each source independently.
+                exit(0)
+            case let .requestPermission(source):
+                let payload = await PermissionProbe.requestPermission(source)
                 try writeStatus(payload)
-                exit(statusExitCode(payload))
-            case let .capture(sampleRate):
-                installSignalHandlers()
-                let capture = try await SystemAudioCapture.make(sampleRate: sampleRate)
-                try await capture.run()
+                exit(statusExitCode(payload.source(source)))
+            case let .capture(source, sampleRate):
+                switch source {
+                case .microphone:
+                    let capture = try MicrophoneCapture.make(sampleRate: sampleRate)
+                    try await capture.run()
+                case .system:
+                    let capture = try await SystemAudioCapture.make(sampleRate: sampleRate)
+                    try await capture.run()
+                }
                 exit(0)
             }
         } catch let error as HelperError {
@@ -888,7 +1008,7 @@ private struct LaunchStackSystemAudio {
         }
     }
 
-    private static func statusExitCode(_ payload: StatusPayload) -> Int32 {
+    private static func statusExitCode(_ payload: SourceStatusPayload) -> Int32 {
         guard payload.supported, payload.authorized, payload.reason == "ready" else {
             return payload.reason == "unsupported" ? 3 : 2
         }

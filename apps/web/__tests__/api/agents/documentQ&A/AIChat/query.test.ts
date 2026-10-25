@@ -2017,17 +2017,24 @@ describe("web search as a tool the model calls", () => {
         });
     });
 
-    it("offers no tools without a search provider key, and the prompt never mentions them", async () => {
+    it("offers only fetch_page without a search provider key, and says it cannot search", async () => {
         mockSearchProvider = null;
         mockInvoke.mockResolvedValueOnce({ content: "answer", response_metadata: {} });
 
-        await POST(queryRequest({ question: "hi", searchScope: "none", enableWebSearch: true }));
+        await POST(
+            queryRequest({
+                question: "Summarise https://acme.example/pricing",
+                searchScope: "none",
+                enableWebSearch: true,
+            })
+        );
 
-        expect(mockBindTools).not.toHaveBeenCalled();
+        expect(toolNames()).toEqual(["fetch_page"]);
         expect(mockInvoke).toHaveBeenCalledTimes(1);
         const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
-        expect(messages[0]?.content).not.toContain("Web search");
-        expect(messages[1]?.content).not.toContain("[Source");
+        expect(messages[0]?.content).toContain("## Web pages");
+        expect(messages[0]?.content).toContain("You cannot search the web.");
+        expect(messages[0]?.content).not.toContain("search_web");
     });
 
     it("offers no tools to a model that does not declare tool calling", async () => {

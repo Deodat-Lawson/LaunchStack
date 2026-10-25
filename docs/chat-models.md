@@ -54,6 +54,86 @@ A credential belonging to another vendor (`OPENAI_API_KEY`,
 placeholder credential is sent so the OpenAI SDK cannot fall back to an
 unrelated `OPENAI_API_KEY` in the environment.
 
+## A workspace's own model
+
+Everything above is the **server default**. A workspace admin (anyone with
+`settings.manage`) can instead point their whole workspace at their own
+OpenAI-compatible endpoint in **Settings › Bring your own keys › API key**:
+
+- **API key.** Pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter,
+  or "Other OpenAI-compatible"). Picking one only fills in the address, which
+  stays editable. Then paste a key, load or type the model ids, test, and save.
+- **Connect OpenRouter.** A one-click OAuth PKCE sign-in
+  ([OpenRouter docs](https://openrouter.ai/docs/use-cases/oauth-pkce)) that
+  creates a key on the admin's own OpenRouter account. No client registration
+  is needed. The workspace switches over once an admin picks a model.
+
+Once a model is chosen, **every chat-model call made for the workspace** uses
+it: Ask, drafting, meetings, notes, Studio tools and background jobs. So does
+the AI that runs while its documents are ingested: table summaries and entity
+extraction use its fast model, and page image descriptions use its model for
+images (see "Not covered yet" below for what still runs on the server's own
+AI). Other workspaces on the same server keep the server default. The provider
+bills the workspace directly, so chat and entity extraction on its own endpoint
+spend no LaunchStack credits.
+
+How it works:
+
+| Piece | Where |
+| --- | --- |
+| Storage | `workspace_model_endpoints`: the key is sealed with the secret box (`EMBEDDING_SECRETS_KEY`), and only its last four characters are readable |
+| Scope | `withWorkspaceChatModels(companyId, fn)` (`apps/web/src/server/workspace-models/scope.ts`) runs work under `runWithChatModelsScope` (`packages/llm/src/chat-scope.ts`), so every `resolveChatModel()` inside resolves against the workspace's endpoint |
+| Ingestion | `resolveAuxiliaryModel(route)` (`packages/llm/src/auxiliary-model.ts`) picks the model for table summaries, image descriptions and entity extraction from the same scope; the worker enters it per job in `apps/worker/src/ports/ingestion.ts` |
+| Coverage guard | `apps/web/__tests__/server/workspace-model-scope-coverage.test.ts` lists every call site that resolves a chat or ingestion model and the entry point that scopes it |
+| API | `/api/settings/models/workspace` (GET, PUT, DELETE), `/test`, `/models`, `/openrouter` (+ `/callback`) |
+
+Rules it keeps:
+
+- **Behavior is declared, not inferred.** The admin says whether each model
+  reads images, whether it reasons, and whether it follows a JSON schema
+  (`response_format: json_schema`). That last one starts ticked for OpenAI,
+  Gemini and OpenRouter and unticked for Anthropic and "Other". Nothing else is
+  assumed: no `temperature` and no output-token cap, because some compatible
+  servers reject them. A model that doesn't follow a schema gets its structured
+  calls by JSON prompting. If a server refuses the schema or silently ignores
+  it, the call falls back to prompting rather than failing.
+- **Fails closed.** If the workspace's endpoint can't be used (an unreadable
+  key, a refused address, a provider error), the request fails with a message
+  pointing at Settings. It never falls back to the server default. Ingestion
+  still indexes the document, without the AI step: a plain table description,
+  no image description (also when none of the workspace's models reads images),
+  no entities.
+- **A key only goes where it was entered.** Changing the address requires
+  entering the key again. Test and list refuse to send a saved key anywhere
+  else, and workspace endpoints never follow redirects.
+- **Address policy.** With `DEPLOYMENT_MODE=cloud`, only `https` addresses that
+  resolve to public hosts are allowed. A self-hosted deployment may use plain
+  `http` and private addresses (a vLLM or LM Studio server on the LAN).
+- **The identity rule still applies**, so the assistant introduces itself as
+  Launchstack's AI assistant whichever model answers.
+
+Subscriptions:
+
+- **ChatGPT Plus/Pro** isn't built yet. OpenAI's plan-usage sign-in is
+  [self-serve for open-source and locally or self-hosted apps](https://developers.openai.com/siwc/token-sharing-open-source),
+  including an open-source app on a
+  [remote VM](https://developers.openai.com/siwc/token-sharing-open-source/self-hosted-vms):
+  you sign in on your own machine, then move the credential to the server. A
+  paid or remotely hosted app, such as a hosted LaunchStack, needs OpenAI's
+  approval through the interest form. Each sign-in is one person's plan, and
+  requests go through the Responses API only.
+- **Claude Free/Pro/Max** can't be used: Anthropic
+  [does not permit third-party apps to offer Claude.ai login or use plan credentials](https://code.claude.com/docs/en/legal-and-compliance).
+
+API keys from all three vendors work through the key form, including a Gemini
+API key from Google AI Studio.
+
+Not covered yet: OCR itself (the document converter and the Azure, Landing AI
+or Datalab providers it routes to), image generation, transcription (and
+transcript translation, which runs on the transcription endpoint) and
+reranking keep the server's settings. Embeddings have their own per-workspace
+key and endpoint in Settings › Bring your own keys › Embedding key.
+
 ## Routes
 
 A route is a **job**, not a model. Callers ask for the kind of work they need;
@@ -68,6 +148,12 @@ you decide which model does it.
 
 `fast` is a cost and latency preference, not a capability — pointing it at the
 same model as `default` is a perfectly good configuration.
+
+The chat composer's picker offers two of these: **Standard** (`default`) and
+**Fast**. `reasoning` and `vision` are not picked by hand. A message with an
+image goes to `vision` when the picked route can't read it, and how hard
+Standard thinks is its reasoning-effort setting. `reasoning` remains for
+agents and server-side callers that ask for it.
 
 Specialized routes **fail closed**. If `vision` is unassigned and the default
 model is text-only, the route reports itself unavailable: the image attach
@@ -166,6 +252,37 @@ models:
 
 An unknown model is never silently classified as text-only: leaving `behavior`
 off entirely is a startup error telling you to declare it.
+
+### Pricing
+
+Every chat completion the app makes for a workspace is counted from the
+provider's own usage report (input, output, reasoning and cached tokens) as it
+passes the shared transport, whichever feature made it, and lands in
+`ai_usage_daily`. Settings › Usage shows it by feature and by route. To turn
+those counts into dollars, declare what each model costs, in US dollars per
+million tokens:
+
+```yaml
+models:
+  primary:
+    id: google/gemini-3.8-flash
+    preset: google/gemini-3.8-flash
+    pricing: # illustrative: copy the numbers from your provider's price list
+      input: 1.25
+      output: 4.25 # reasoning tokens bill as output
+      cachedInput: 0.15 # optional; defaults to `input`
+```
+
+`pricing` is optional and never sent to the endpoint. A model without it is
+still counted, just not priced; the usage page then falls back to the
+workspace's own "price per 1M tokens" setting for those calls, or shows no
+cost. The price is applied when the call is recorded, so changing it (or
+switching models) does not reprice past days. A workspace's own model
+(Settings › Bring your own keys) carries no price: its provider bills the
+workspace directly, and the page says how many calls went there.
+
+Like the rest of the file, a price change takes effect on restart of the app
+and the worker.
 
 ## Behavior reference
 

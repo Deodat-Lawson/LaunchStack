@@ -9,13 +9,18 @@
  */
 
 import React, { type CSSProperties, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 
 export type StatusTone = "ok" | "warn" | "danger" | "muted";
 
 const TONES: Record<StatusTone, { bg: string; fg: string; border: string }> = {
     ok: { bg: "var(--accent-soft)", fg: "var(--accent-ink)", border: "var(--accent-glow)" },
     warn: { bg: "oklch(0.96 0.07 70)", fg: "oklch(0.4 0.13 55)", border: "oklch(0.85 0.12 70)" },
-    danger: { bg: "oklch(0.96 0.05 25)", fg: "var(--danger)", border: "oklch(0.85 0.09 25)" },
+    danger: {
+        bg: "var(--danger-soft)",
+        fg: "var(--danger)",
+        border: "color-mix(in oklch, var(--danger) 35%, var(--danger-soft))",
+    },
     muted: { bg: "var(--panel-2)", fg: "var(--ink-3)", border: "var(--line)" },
 };
 
@@ -58,8 +63,8 @@ export function StatusRow({
     label,
     detail,
     ok,
-    okLabel = "Ready",
-    offLabel = "Not configured",
+    okLabel,
+    offLabel,
     trailing,
 }: {
     label: string;
@@ -69,6 +74,8 @@ export function StatusRow({
     offLabel?: string;
     trailing?: ReactNode;
 }) {
+    const t = useTranslations("settings.ui");
+    const tc = useTranslations("common");
     const accent = ok ? "oklch(0.58 0.15 165)" : "oklch(0.72 0.14 60)";
     return (
         <div
@@ -105,7 +112,7 @@ export function StatusRow({
                             color: ok ? "oklch(0.45 0.14 165)" : "oklch(0.45 0.13 55)",
                         }}
                     >
-                        {ok ? okLabel : offLabel}
+                        {ok ? (okLabel ?? tc("status.ready")) : (offLabel ?? t("notConfigured"))}
                     </span>
                 </div>
                 <div
@@ -140,6 +147,7 @@ export function Code({ children }: { children: ReactNode }) {
 
 /** A copyable command block. */
 export function CommandBlock({ title, command }: { title: string; command: string }) {
+    const tc = useTranslations("common");
     const [copied, setCopied] = React.useState(false);
     return (
         <div
@@ -189,7 +197,7 @@ export function CommandBlock({ title, command }: { title: string; command: strin
                         fontWeight: 500,
                     }}
                 >
-                    {copied ? "Copied" : "Copy"}
+                    {copied ? tc("actions.copied") : tc("actions.copy")}
                 </button>
             </div>
             <pre

@@ -9,13 +9,16 @@
  * read scope. Rows with no company stamp belong to no known tenant and are
  * denied. Legacy rows get `company_id` from the
  * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
- * attribute authoritatively.
+ * attribute authoritatively; `2026-10-file-uploads-restamp` does the same for
+ * rows connector syncs wrote unstamped after it ran.
  *
  * The stored type is the uploader's claim, so responses go out through
  * `storedFileHeaders`: anything a browser could execute is sandboxed.
  */
 
 import { NextResponse } from "next/server";
+
+import { requestTranslator } from "~/i18n/server";
 import { and, eq, like, or } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
@@ -73,12 +76,13 @@ interface RouteParams {
 }
 
 export async function GET(request: Request, { params }: RouteParams) {
+    const t = requestTranslator(request, "upload.server.errors");
     try {
         const { id } = await params;
         const fileId = parseInt(id, 10);
 
         if (isNaN(fileId)) {
-            return NextResponse.json({ error: "Invalid file ID" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidFileId") }, { status: 400 });
         }
 
         // Token path: the OCR worker has no session but carries a
@@ -104,13 +108,13 @@ export async function GET(request: Request, { params }: RouteParams) {
         const [file] = await db.select().from(fileUploads).where(eq(fileUploads.id, fileId));
 
         if (!file) {
-            return NextResponse.json({ error: "File not found" }, { status: 404 });
+            return NextResponse.json({ error: t("fileNotFound") }, { status: 404 });
         }
 
         // Company ownership check for session-based requests.
         if (sessionCompanyId !== null) {
             if (file.companyId == null || file.companyId !== sessionCompanyId) {
-                return NextResponse.json({ error: "File not found" }, { status: 404 });
+                return NextResponse.json({ error: t("fileNotFound") }, { status: 404 });
             }
             // The file is the bytes behind a document (current or a past
             // version); serving it would bypass the document's folder. A file
@@ -128,7 +132,7 @@ export async function GET(request: Request, { params }: RouteParams) {
                         )
                     );
                 if (backed.length > 0 && !backed.some(doc => scopeAllows(sessionScope, doc))) {
-                    return NextResponse.json({ error: "File not found" }, { status: 404 });
+                    return NextResponse.json({ error: t("fileNotFound") }, { status: 404 });
                 }
             }
         }
@@ -151,7 +155,7 @@ export async function GET(request: Request, { params }: RouteParams) {
                 }
                 if (!blobRes.ok) {
                     return NextResponse.json(
-                        { error: "Failed to retrieve file from storage" },
+                        { error: t("fileStorageReadFailed") },
                         { status: 502 }
                     );
                 }
@@ -176,10 +180,7 @@ export async function GET(request: Request, { params }: RouteParams) {
         }
 
         if (!file.fileData) {
-            return NextResponse.json(
-                { error: "File is not available in database storage" },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: t("fileNotInDatabase") }, { status: 404 });
         }
 
         // Decode base64 data back to binary
@@ -212,11 +213,6 @@ export async function GET(request: Request, { params }: RouteParams) {
         });
     } catch (error) {
         console.error("Error serving file:", error);
-        return NextResponse.json(
-            {
-                error: "Failed to serve file",
-            },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: t("serveFileFailed") }, { status: 500 });
     }
 }

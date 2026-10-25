@@ -12,6 +12,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { unlinkDocument } from "~/server/services/google-drive/sync";
@@ -23,7 +25,7 @@ const BodySchema = z.object({ keepDriveFile: z.boolean().optional() }).optional(
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         const { id: rawId } = await context.params;
-        const auth = await authorizeDriveRoute(rawId);
+        const auth = await authorizeDriveRoute(rawId, { request });
         if (!auth.ok) return auth.response;
 
         let keepDriveFile: boolean | undefined;
@@ -46,9 +48,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                     {
                         success: false,
                         error: "final_sync_failed",
-                        message:
-                            "Could not pull the latest Google Drive edits, so the link was kept. " +
-                            "Try again, or resolve the error first.",
+                        message: requestTranslator(
+                            request,
+                            "sources.server.drive"
+                        )("finalSyncFailed"),
                         outcome: result.finalPull,
                     },
                     { status: 409 }
@@ -58,7 +61,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             return NextResponse.json({ success: true, ...result });
         } catch (err) {
             console.error("[google-docs/unlink] failed:", err);
-            return driveErrorResponse(err);
+            return driveErrorResponse(err, request);
         }
     });
 }

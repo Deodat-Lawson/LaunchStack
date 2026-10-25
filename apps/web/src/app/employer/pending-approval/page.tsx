@@ -11,29 +11,41 @@ import React, { useEffect, useState } from "react";
 import { Building, Clock, Mail, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useFormatter, useTranslations } from "next-intl";
 import { useAuth } from "~/lib/auth-client";
-import type { MembershipStatus } from "~/lib/authz/permissions";
+import { isBuiltinRole, normalizeRoleSlug, type MembershipStatus } from "~/lib/authz/permissions";
 
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Card, PageShell } from "~/components/layout/page-shell";
 import { Button } from "~/components/ui/button";
-import { LANDING_CONTACT_URL } from "~/config/landing";
+import { LANDING_CONTACT_HREF } from "~/config/landing";
 
 interface UserInfo {
     name?: string;
     email?: string;
     company?: string;
+    /** The role's slug; `roleName` is the server's (English) name for it. */
+    role?: string;
     roleName?: string;
     membershipStatus?: MembershipStatus;
+    /** When the account was created, ISO; `submissionDate` is the server's English rendering. */
+    createdAt?: string;
     submissionDate?: string;
 }
 
+/** Why the membership could not be read: the HTTP status, or nothing for a network failure. */
+type LoadError = { status: number | null };
+
 export default function PendingApproval() {
+    const t = useTranslations("onboarding.pending");
+    const tRoles = useTranslations("auth.roles");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const router = useRouter();
     const { userId, signOut } = useAuth();
 
     const [info, setInfo] = useState<UserInfo | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<LoadError | null>(null);
 
     useEffect(() => {
         if (!userId) return;
@@ -51,7 +63,8 @@ export default function PendingApproval() {
                         router.replace("/workspaces");
                         return;
                     }
-                    throw new Error(`Could not load your membership (${response.status}).`);
+                    if (!cancelled) setError({ status: response.status });
+                    return;
                 }
                 const data = (await response.json()) as UserInfo;
                 if (cancelled) return;
@@ -60,12 +73,8 @@ export default function PendingApproval() {
                     return;
                 }
                 setInfo(data);
-            } catch (err) {
-                if (!cancelled) {
-                    setError(
-                        err instanceof Error ? err.message : "Could not load your membership."
-                    );
-                }
+            } catch {
+                if (!cancelled) setError({ status: null });
             }
         })();
         return () => {
@@ -74,13 +83,20 @@ export default function PendingApproval() {
     }, [userId, router]);
 
     const suspended = info?.membershipStatus === "suspended";
-    const workspace = info?.company ?? "this workspace";
+    const workspace = info?.company ?? t("thisWorkspace");
+    const roleSlug = info?.role ? normalizeRoleSlug(info.role) : null;
+    const roleName = roleSlug && isBuiltinRole(roleSlug) ? tRoles(roleSlug) : info?.roleName;
+    const createdAt = info?.createdAt ? new Date(info.createdAt) : null;
+    const submitted =
+        createdAt && !Number.isNaN(createdAt.getTime())
+            ? format.dateTime(createdAt, { dateStyle: "medium", timeStyle: "short" })
+            : info?.submissionDate;
 
     return (
         <>
             <EmployerChrome
                 pageLabel="Launchstack"
-                pageTitle={suspended ? "Access suspended" : "Pending approval"}
+                pageTitle={suspended ? t("crumbSuspended") : t("crumbPending")}
             />
             <PageShell>
                 <div className="mx-auto max-w-[540px] pt-10">
@@ -89,63 +105,71 @@ export default function PendingApproval() {
                             <Clock className="h-7 w-7" />
                         </div>
                         <h1 className="display text-ink m-0 text-[28px] leading-[1.15] tracking-tight">
-                            {suspended ? "Your access is suspended" : "Waiting for approval"}
+                            {suspended ? t("titleSuspended") : t("title")}
                         </h1>
                         <p className="text-ink-3 mx-auto mt-2 max-w-[420px] text-sm leading-relaxed">
                             {suspended
-                                ? `An admin of ${workspace} has paused your access. You stay a member, but nothing opens until they reinstate you.`
-                                : `An admin of ${workspace} has to confirm you before anything opens. You'll get an email as soon as they do.`}
+                                ? t("bodySuspended", { workspace })
+                                : t("body", { workspace })}
                         </p>
 
                         {error && (
                             <p role="alert" className="text-danger mt-4 text-[13px]">
-                                {error}
+                                {error.status === null
+                                    ? t("loadFailed")
+                                    : t("loadFailedStatus", { status: error.status })}
                             </p>
                         )}
 
                         <div className="border-line bg-panel-2 mt-6 rounded-xl border p-5 text-left">
                             <div className="mono text-ink-3 mb-2.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                Your request
+                                {t("yourRequest")}
                             </div>
                             <div className="grid gap-2.5">
                                 <DetailRow
                                     Icon={Building}
-                                    label="Workspace"
+                                    label={t("workspace")}
                                     value={info?.company}
                                 />
-                                <DetailRow Icon={ShieldCheck} label="Role" value={info?.roleName} />
-                                <DetailRow Icon={Mail} label="Email" value={info?.email} />
                                 <DetailRow
-                                    Icon={Clock}
-                                    label="Submitted"
-                                    value={info?.submissionDate}
+                                    Icon={ShieldCheck}
+                                    label={tc("fields.role")}
+                                    value={roleName}
                                 />
+                                <DetailRow
+                                    Icon={Mail}
+                                    label={tc("fields.email")}
+                                    value={info?.email}
+                                />
+                                <DetailRow Icon={Clock} label={t("submitted")} value={submitted} />
                             </div>
                         </div>
 
                         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                             <Button asChild variant="outline" size="sm">
-                                <Link href="/workspaces">Open a different workspace</Link>
+                                <Link href="/workspaces">{t("openOther")}</Link>
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => void signOut({ redirectUrl: "/signin" })}
                             >
-                                Sign out
+                                {tc("actions.signOut")}
                             </Button>
                         </div>
 
                         <p className="text-ink-3 mt-5 text-xs">
-                            Stuck? Ask the person who invited you, or{" "}
-                            <a
-                                href={LANDING_CONTACT_URL}
-                                rel="noopener"
-                                className="text-brand font-semibold"
-                            >
-                                contact support
-                            </a>
-                            .
+                            {t.rich("stuck", {
+                                link: chunks => (
+                                    <a
+                                        href={LANDING_CONTACT_HREF}
+                                        rel="noopener"
+                                        className="text-brand font-semibold"
+                                    >
+                                        {chunks}
+                                    </a>
+                                ),
+                            })}
                         </p>
                     </Card>
                 </div>

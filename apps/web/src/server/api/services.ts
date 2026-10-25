@@ -229,6 +229,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Stateless: every search reads SEC EDGAR live (keyless, paced under SEC's 10 req/s). Pitch drafting is the chat, seeded from the Studio pane.",
     },
     {
+        id: "scenarios",
+        tier: "tool",
+        summary:
+            "Simulate how people built from the workspace's own records react to a situation: a social network in rounds (the OASIS design), a cited report, and interviews with any simulated person. Brand's post tests run on it too.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/scenarios",
+        routes: ["scenarios"],
+        notes: "Runs are private to their creator until shared with the workspace; evidence from files a shared reader can't open is redacted for them. Runs execute after the response in the web process (resuming on poll after a restart) or, with SCENARIOS_EXECUTOR=worker, one Inngest step per round. Brand's /api/brand/post-tests routes use the same service.",
+    },
+    {
         id: "mindmaps",
         tier: "tool",
         summary: "Collaborative canvas: draw a map, share it, publish a revision.",
@@ -351,6 +361,23 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
         feature: "@launchstack/pipelines/connectors",
         routes: ["connectors"],
         notes: "One connector today, environment-gated.",
+    },
+    {
+        id: "assistants",
+        tier: "platform",
+        summary:
+            "Let Claude, ChatGPT and Gemini search the workspace and save conversations into it (the MCP server), and manage who is connected.",
+        scope: "mixed",
+        routes: ["mcp", "assistants", "oauth"],
+        unscopedRoutes: {
+            mcp: "Called by assistants with an OAuth access token or access key, never a session; the credential names the workspace.",
+            "oauth/workspace-choice":
+                "Runs mid-sign-in for an assistant, to pick the workspace the connection will be bound to.",
+        },
+        notes:
+            "The OAuth server itself is better-auth's mcp() plugin under `auth`, with its discovery " +
+            "documents at the origin's /.well-known paths. `assistants/*` is the Settings side: the " +
+            "member's own connections and access keys, and admin-created OAuth clients.",
     },
 ];
 

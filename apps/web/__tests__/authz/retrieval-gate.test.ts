@@ -15,6 +15,11 @@ import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
+}));
+
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");
     return { ...actual, requireWorkspaceContext: jest.fn() };
@@ -119,11 +124,7 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 
 jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     normalizeModelContent: (content: unknown) => String(content),
-    performWebSearch: jest
-        .fn()
-        .mockResolvedValue({ content: "", results: [], refinedQuery: "", reasoning: "" }),
     getSystemPrompt: () => "system",
-    getWebSearchInstruction: () => "",
     describeChatError: () => null,
     getEmbeddings: () => ({ embedQuery: jest.fn() }),
     buildReferences: () => [],
@@ -136,9 +137,20 @@ jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: () => ({
         modelId: "gpt-4o-mini",
         chat: { invoke: mockInvoke },
-        behavior: {},
+        behavior: { nativeStructuredOutput: [] },
         prepareMessages: (messages: unknown) => messages,
     }),
+}));
+
+// The model above takes no tools, so the source tools are never offered.
+jest.mock("~/server/chat-source-tools", () => ({
+    citedPassages: (passages: unknown[]) => passages,
+    loadSourcesOverview: async () => null,
+    createSourceTools: () => {
+        throw new Error("source tools are not offered in these tests");
+    },
+    sourceToolsPrompt: () => "",
+    noSourceToolsPrompt: () => "",
 }));
 
 jest.mock("~/server/chat-request-compat", () => ({
@@ -148,6 +160,8 @@ jest.mock("~/server/chat-request-compat", () => ({
 jest.mock("@launchstack/llm", () => ({
     isChatRequestError: () => false,
     normalizeTokenUsage: () => ({ inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
+    addTokenUsage: (a: unknown) => a,
+    getChatModelsSource: () => "deployment",
 }));
 
 jest.mock("@launchstack/llm/types", () => ({

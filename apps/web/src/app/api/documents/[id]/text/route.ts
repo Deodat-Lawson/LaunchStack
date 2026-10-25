@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { and, eq, asc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { readableMarkdown } from "~/lib/indexed-text";
 
 interface RouteParams {
     params: Promise<{ id: string }>;
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+/**
+ * The text ingestion read from a document, in reading order.
+ *
+ * `?format=markdown` returns it as Markdown, with the headings the stored
+ * breadcrumbs carry put back (the website viewer renders it); the default is
+ * the older escaped-HTML rendering.
+ */
+export async function GET(request: Request, { params }: RouteParams) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -17,7 +29,10 @@ export async function GET(_request: Request, { params }: RouteParams) {
         const { id } = await params;
         const docId = parseInt(id, 10);
         if (isNaN(docId)) {
-            return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("invalidDocumentId") },
+                { status: 400 }
+            );
         }
 
         const [doc] = await db
@@ -35,7 +50,10 @@ export async function GET(_request: Request, { params }: RouteParams) {
             );
 
         if (!doc) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
 
         // A document without a current pointer has no current text. Never fall
@@ -60,9 +78,20 @@ export async function GET(_request: Request, { params }: RouteParams) {
                           asc(documentContextChunks.id)
                       );
 
+        if (new URL(request.url).searchParams.get("format") === "markdown") {
+            return NextResponse.json({
+                markdown: readableMarkdown(
+                    chunks.map(c => c.content),
+                    doc.title
+                ),
+                chunkCount: chunks.length,
+                documentId: docId,
+            });
+        }
+
         if (chunks.length === 0) {
             return NextResponse.json({
-                html: "<p>No extracted text available for this document. It may still be processing.</p>",
+                html: `<p>${t("noExtractedText")}</p>`,
                 chunkCount: 0,
                 documentId: docId,
             });
@@ -104,6 +133,6 @@ export async function GET(_request: Request, { params }: RouteParams) {
         });
     } catch (error) {
         console.error("[DocumentText] Error:", error);
-        return NextResponse.json({ error: "Failed to retrieve document text" }, { status: 500 });
+        return NextResponse.json({ error: t("documentTextFailed") }, { status: 500 });
     }
 }

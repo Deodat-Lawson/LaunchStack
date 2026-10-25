@@ -50,10 +50,34 @@ describe("settings registry", () => {
 
     it("groups rows by section and resolves keys", () => {
         expect(settingsForSection("appearance").map(d => d.key)).toEqual([
+            "appearance.language",
             "appearance.theme",
             "appearance.density",
             "appearance.reducedMotion",
+            "chat.responseStyle",
         ]);
         expect(getSetting("nope")).toBeUndefined();
+    });
+
+    it("names a separate workspace section only for a setting with a personal override", () => {
+        for (const definition of SETTINGS) {
+            if (!definition.workspaceSection) continue;
+            expect(definition.scopes).toEqual(expect.arrayContaining(["workspace", "member"]));
+            expect(definition.workspaceSection).not.toBe(definition.section);
+            expect(SETTINGS_SECTION_IDS).toContain(definition.workspaceSection);
+            // Drawn by hand, once per scope, so the generic section list skips it.
+            expect(definition.custom).toBe(true);
+        }
+    });
+
+    it("finds the answer style by what people call it", () => {
+        expect(searchSettings("response style")[0]?.key).toBe("chat.responseStyle");
+        expect(searchSettings("answer length")[0]?.key).toBe("chat.responseStyle");
+    });
+
+    it("finds the interface language in English or Chinese", () => {
+        for (const query of ["language", "chinese", "语言", "中文"]) {
+            expect(searchSettings(query).map(d => d.key)).toContain("appearance.language");
+        }
     });
 });

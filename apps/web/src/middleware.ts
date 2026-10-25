@@ -64,6 +64,11 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/workspace/join-links/preview",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     "/api/ocr/benchmark",
+    // The MCP server for assistants (Claude, ChatGPT, Gemini). They call it
+    // with an OAuth access token or an access key, never a session cookie;
+    // the route authenticates every request itself and answers 401 with the
+    // RFC 9728 challenge that tells an assistant how to sign in.
+    "/api/mcp",
     // Prometheus scrapes without a session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     "/api/metrics",
@@ -154,9 +159,9 @@ export default async function middleware(req: NextRequest) {
     const requestStart = Date.now();
     let dbQueryMs: number | null = null;
     // Fast-path: no session cookie at all means anonymous — skip the session
-    // lookup entirely. With a cookie present, getSession answers from the
-    // signed cookie cache most of the time and hits Postgres only when the
-    // cache has expired.
+    // lookup entirely. With a cookie present, getSession reads the session
+    // row (there is no cookie cache; see ~/server/auth), so an ended session
+    // is refused on its very next request.
     let userId: string | null = null;
     if (getSessionCookie(req)) {
         try {
@@ -291,6 +296,14 @@ export default async function middleware(req: NextRequest) {
                         return NextResponse.redirect(new URL("/employer/documents", req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
+                    // An assistant's OAuth request can ask for a fresh sign-in
+                    // (prompt=login) even with a session; better-auth then
+                    // sends the browser to /signin with the request signed in
+                    // the query. Bouncing that to the dashboard would strand
+                    // the assistant, so leave it on the page.
+                    if (pathname === "/signin" && req.nextUrl.searchParams.has("sig")) {
+                        return;
+                    }
                     // Signed-in member on / or /signup – send to their dashboard.
                     // Users with 2+ memberships pick a workspace first.
                     if (existingUser.membershipCount >= 2) {
@@ -320,7 +333,10 @@ export default async function middleware(req: NextRequest) {
 //
 // Note that the upload-local / files exclusion below is a no-op in practice:
 // the first pattern already matches any path without one of those static file
-// extensions, so both routes do run through this middleware.
+// extensions, so both routes do run through this middleware. Upload bodies
+// survive it because patches/next@15.5.7.patch makes Next await its body
+// hand-off before the route handler reads the request (the "body stream
+// conflicts" below); see __tests__/middleware/request-body-after-middleware.test.ts.
 export const config = {
     runtime: "nodejs",
     matcher: [

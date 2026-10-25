@@ -46,6 +46,19 @@ export async function ensureSyncState(
         });
 }
 
+/**
+ * Forget the changes-feed cursor so the next run walks everything picked.
+ * A new pick changes nothing in Drive, so without this an idle feed would
+ * short-circuit the very sync meant to import it. Fingerprints still stop
+ * unchanged files from downloading again.
+ */
+export async function resetSyncCursor(connectionId: number): Promise<void> {
+    await db
+        .update(googleDriveSyncState)
+        .set({ startPageToken: null })
+        .where(eq(googleDriveSyncState.connectionId, connectionId));
+}
+
 /** True when this call claimed the lease; false when another sync holds it. */
 export async function claimSyncLease(connectionId: number): Promise<boolean> {
     const staleBefore = new Date(Date.now() - SYNC_LEASE_STALE_MS);
@@ -107,10 +120,16 @@ export interface PickedItemInput {
     readonly mimeType: string | null;
 }
 
+/**
+ * `destination` is the folder chosen in Add source (see the column). A
+ * re-pick that names one takes it — it only matters for files not placed
+ * yet; what is already in LaunchStack stays where it is.
+ */
 export async function addPickedItems(
     connectionId: number,
     items: readonly PickedItemInput[],
-    addedByUserPk: number
+    addedByUserPk: number,
+    destination: string | null = null
 ): Promise<void> {
     if (items.length === 0) return;
     await db
@@ -123,6 +142,7 @@ export async function addPickedItems(
                 name: item.name,
                 mimeType: item.mimeType,
                 addedByUserPk,
+                destination,
             }))
         )
         // Re-picking is how users refresh a drive.file folder grant, so the
@@ -133,6 +153,7 @@ export async function addPickedItems(
                 name: sql`excluded.name`,
                 mimeType: sql`excluded.mime_type`,
                 kind: sql`excluded.kind`,
+                destination: sql`coalesce(excluded.destination, ${googleDrivePickedItem.destination})`,
             },
         });
 }

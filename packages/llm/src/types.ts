@@ -137,6 +137,18 @@ export interface ChatEndpointConfig {
      * from another service's environment variable.
      */
     apiKey?: string;
+    /**
+     * Deployment-wide instructions sent with every chat completion to this
+     * endpoint, folded into the request's system message (or sent as one).
+     * The app sets the assistant identity rule here; see `endpoint-fetch.ts`.
+     */
+    systemInstructions?: string;
+    /**
+     * Who configured this endpoint. `workspace` means a workspace admin brought
+     * it in Settings, so failures are worded for them rather than for the
+     * operator's environment variables. Omitted means the deployment's.
+     */
+    owner?: "deployment" | "workspace";
 }
 
 // ---------------------------------------------------------------------------
@@ -284,12 +296,28 @@ export interface ChatModelBehavior {
 }
 
 /** A named model in the operator's configuration. */
+/**
+ * What a model costs, in US dollars per million tokens, as the operator
+ * declared it in the model file. Optional: without it, usage is still
+ * counted, just not priced.
+ */
+export interface ChatModelPricing {
+    /** Per 1M input (prompt) tokens. */
+    input: number;
+    /** Per 1M output tokens, reasoning tokens included. */
+    output: number;
+    /** Per 1M input tokens served from the provider's prompt cache. Defaults to `input`. */
+    cachedInput?: number;
+}
+
 export interface ChatModelDefinition {
     /** Arbitrary model id, sent verbatim to the endpoint. */
     id: string;
     behavior: ChatModelBehavior;
     /** Preset the behavior started from, when one was referenced. */
     preset?: string;
+    /** Price per token, when the operator declared one. */
+    pricing?: ChatModelPricing;
 }
 
 // ---------------------------------------------------------------------------

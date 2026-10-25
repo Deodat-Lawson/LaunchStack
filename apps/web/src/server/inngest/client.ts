@@ -110,6 +110,15 @@ export type ProposalsRunEvent = {
     data: ProposalRunEventData;
 };
 
+export type ScenarioRunEvent = {
+    name: "scenarios/run.requested";
+    data: {
+        runId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+    };
+};
+
 export type GoogleDriveSyncEvent = {
     name: "google-drive/sync.requested";
     data: {
@@ -122,6 +131,16 @@ export type GoogleDriveSyncEvent = {
 
 export type GmailSyncEvent = {
     name: "gmail/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
+export type NotionSyncEvent = {
+    name: "notion/sync.requested";
     data: {
         /** Serialized bigint — event payloads must be JSON. */
         connectionId: string;
@@ -143,8 +162,10 @@ export type Events =
     | RepoExplainerJobEvent
     | GoogleDriveSyncEvent
     | GmailSyncEvent
+    | NotionSyncEvent
     | DistributionRunEvent
-    | ProposalsRunEvent;
+    | ProposalsRunEvent
+    | ScenarioRunEvent;
 
 /**
  * Create the Inngest client.

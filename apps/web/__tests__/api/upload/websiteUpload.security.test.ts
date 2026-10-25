@@ -104,9 +104,14 @@ function fetchResponse(status: number, headers: Record<string, string> = {}, htm
         headers: { get: (name: string) => lower[name.toLowerCase()] ?? null },
         body: undefined,
         url: "https://example.com/docs",
-        arrayBuffer: () => Promise.resolve(Buffer.from(html, "utf-8").buffer),
+        // A fresh ArrayBuffer: a small Buffer's `.buffer` is the shared pool, garbage and all.
+        arrayBuffer: () => Promise.resolve(new TextEncoder().encode(html).buffer),
     } as unknown as Response;
 }
+
+/** Enough words to be worth keeping as a source. */
+const PAGE_COPY =
+    "<h1>Acme docs</h1><p>Acme builds reusable rockets for small satellite teams, with launch windows every week and pricing that starts low.</p>";
 
 const originalFetch = global.fetch;
 const fetchMock = jest.fn();
@@ -195,7 +200,7 @@ describe("POST /api/upload/website", () => {
                 fetchResponse(
                     200,
                     { "Content-Type": "text/html" },
-                    "<html><head><title>Docs</title></head><body>hi</body></html>"
+                    `<html><head><title>Docs</title></head><body>${PAGE_COPY}</body></html>`
                 )
             );
         uploadFileMock.mockResolvedValue({
@@ -222,7 +227,38 @@ describe("POST /api/upload/website", () => {
             "https://example.com/docs",
             expect.objectContaining({ redirect: "manual" })
         );
-        expect(processDocumentUploadMock).toHaveBeenCalled();
+        // Marked as a saved web page, so the viewer shows the site, not its HTML.
+        expect(processDocumentUploadMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                isWebsite: true,
+                ocrMetadata: expect.objectContaining({
+                    kind: "website",
+                    url: "https://example.com/start",
+                }),
+            })
+        );
+    });
+
+    it("refuses a page with no readable text instead of saving an empty source", async () => {
+        lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
+        // What a site that builds itself with JavaScript serves before its scripts run.
+        fetchMock.mockResolvedValueOnce(
+            fetchResponse(
+                200,
+                { "Content-Type": "text/html" },
+                '<html><head><title>Acme</title><script src="/app.js"></script></head>' +
+                    "<body><noscript>You need to enable JavaScript to run this app.</noscript>" +
+                    '<div id="root"></div></body></html>'
+            )
+        );
+
+        const response = await POST(requestFor({ url: "https://www.example.com/" }));
+        const json = (await response.json()) as { error?: string };
+
+        expect(response.status).toBe(422);
+        expect(json.error).toContain("example.com");
+        expect(uploadFileMock).not.toHaveBeenCalled();
+        expect(processDocumentUploadMock).not.toHaveBeenCalled();
     });
 
     it("dispatches a crawl with the session user, ignoring a spoofed body userId", async () => {

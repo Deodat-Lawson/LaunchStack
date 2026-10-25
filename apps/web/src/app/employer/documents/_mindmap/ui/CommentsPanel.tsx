@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Check, MessageSquarePlus, Trash2, Undo2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -37,6 +38,10 @@ export function CommentsPanel({
     author: string;
     canvasSize: { w: number; h: number };
 }) {
+    const t = useTranslations("mindmap.comments");
+    const tc = useTranslations("common");
+    const format = useFormatter();
+    const when = (iso: string) => formatWhen(iso, t, tc("time.justNow"), format);
     const store = useStore();
     const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
@@ -72,23 +77,20 @@ export function CommentsPanel({
                 {
                     key: "all",
                     header: null as string | null,
-                    empty: elsewhere.length === 0 ? "No comments yet." : null,
+                    empty: elsewhere.length === 0 ? t("noComments") : null,
                     highlight: false,
                     threads: elsewhere,
                 },
             ];
         }
         const name = anchorNode
-            ? trimmedOr(anchorNode.text.split("\n")[0], "this shape")
-            : "this shape";
+            ? trimmedOr(anchorNode.text.split("\n")[0], t("thisShape"))
+            : t("thisShape");
         const groups = [
             {
                 key: "shape",
-                header: `On “${name}”`,
-                empty:
-                    onShape.length === 0
-                        ? "Nothing here yet — the box above posts to this shape."
-                        : null,
+                header: t("onShape", { name }),
+                empty: onShape.length === 0 ? t("emptyShape") : null,
                 highlight: true,
                 threads: onShape,
             },
@@ -96,14 +98,14 @@ export function CommentsPanel({
         if (elsewhere.length > 0) {
             groups.push({
                 key: "page",
-                header: "Elsewhere on this page",
+                header: t("elsewhere"),
                 empty: null,
                 highlight: false,
                 threads: elsewhere,
             });
         }
         return groups;
-    }, [onShape, elsewhere, anchorNode]);
+    }, [onShape, elsewhere, anchorNode, t]);
 
     const submit = () => {
         const body = draft.trim();
@@ -127,30 +129,32 @@ export function CommentsPanel({
                     }}
                     placeholder={
                         anchorNode
-                            ? `Comment on “${trimmedOr(anchorNode.text.split("\n")[0], "this shape")}”…`
-                            : "Comment on this page…"
+                            ? t("placeholderShape", {
+                                  name: trimmedOr(anchorNode.text.split("\n")[0], t("thisShape")),
+                              })
+                            : t("placeholderPage")
                     }
                     className="min-h-[64px] resize-none text-[13px]"
                 />
                 <div className="mt-2 flex items-center justify-between">
-                    <span className="text-ink-3 text-[11px]">⌘↵ to post</span>
+                    <span className="text-ink-3 text-[11px]">{t("postHint")}</span>
                     <Button size="sm" onClick={submit} disabled={!draft.trim()}>
                         <MessageSquarePlus className="size-3.5" />
-                        Comment
+                        {t("comment")}
                     </Button>
                 </div>
             </div>
 
             <div className="border-line flex items-center justify-between border-b px-3 py-1.5">
                 <span className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                    {total} thread{total === 1 ? "" : "s"}
+                    {t("threads", { count: total })}
                 </span>
                 <button
                     type="button"
                     onClick={() => setShowResolved(v => !v)}
                     className="text-ink-3 hover:text-ink-2 text-[11px] underline-offset-2 hover:underline"
                 >
-                    {showResolved ? "Hide resolved" : "Show resolved"}
+                    {showResolved ? t("hideResolved") : t("showResolved")}
                 </button>
             </div>
 
@@ -182,16 +186,16 @@ export function CommentsPanel({
                                             {thread.author}
                                         </span>
                                         <time className="text-ink-3 text-[11px]">
-                                            {formatWhen(thread.createdAt)}
+                                            {when(thread.createdAt)}
                                         </time>
                                         <span className="flex-1" />
                                         <button
                                             type="button"
-                                            title={thread.resolved ? "Reopen" : "Resolve"}
+                                            title={thread.resolved ? t("reopen") : t("resolve")}
                                             onClick={() =>
                                                 resolveComment(store, thread.id, !thread.resolved)
                                             }
-                                            className="text-ink-3 hover:text-success"
+                                            className="text-ink-3 hover:text-success-ink"
                                         >
                                             {thread.resolved ? (
                                                 <Undo2 className="size-3.5" />
@@ -201,7 +205,7 @@ export function CommentsPanel({
                                         </button>
                                         <button
                                             type="button"
-                                            title="Delete thread"
+                                            title={t("deleteThread")}
                                             onClick={() => deleteComment(store, thread.id)}
                                             className="text-ink-3 hover:text-danger"
                                         >
@@ -221,7 +225,7 @@ export function CommentsPanel({
                                             }
                                             className="text-brand-ink mt-1.5 text-[11px] underline-offset-2 hover:underline"
                                         >
-                                            Jump to shape
+                                            {t("jumpToShape")}
                                         </button>
                                     )}
 
@@ -233,7 +237,7 @@ export function CommentsPanel({
                                                         {reply.author}
                                                     </span>{" "}
                                                     <span className="text-ink-3 text-[11px]">
-                                                        {formatWhen(reply.createdAt)}
+                                                        {when(reply.createdAt)}
                                                     </span>
                                                     <p className="text-ink-2 whitespace-pre-wrap text-[12.5px]">
                                                         {reply.body}
@@ -268,7 +272,7 @@ export function CommentsPanel({
                                                     }
                                                     if (e.key === "Escape") setReplyTo(null);
                                                 }}
-                                                placeholder="Reply…"
+                                                placeholder={t("replyPlaceholder")}
                                                 className="min-h-[52px] resize-none text-[13px]"
                                             />
                                         </div>
@@ -279,7 +283,7 @@ export function CommentsPanel({
                                                 onClick={() => setReplyTo(thread.id)}
                                                 className="text-ink-3 hover:text-ink-2 mt-1.5 text-[11px] underline-offset-2 hover:underline"
                                             >
-                                                Reply
+                                                {t("reply")}
                                             </button>
                                         )
                                     )}
@@ -293,13 +297,19 @@ export function CommentsPanel({
     );
 }
 
-function formatWhen(iso: string): string {
+/** `just now`, `5m ago`, `3h ago`, then the date — in the reader's language. */
+function formatWhen(
+    iso: string,
+    t: ReturnType<typeof useTranslations<"mindmap.comments">>,
+    justNow: string,
+    format: ReturnType<typeof useFormatter>
+): string {
     const then = new Date(iso).getTime();
     if (!Number.isFinite(then)) return "";
     const minutes = Math.round((Date.now() - then) / 60000);
-    if (minutes < 1) return "just now";
-    if (minutes < 60) return `${minutes}m ago`;
+    if (minutes < 1) return justNow;
+    if (minutes < 60) return t("minutesAgo", { count: minutes });
     const hours = Math.round(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    return new Date(iso).toLocaleDateString();
+    if (hours < 24) return t("hoursAgo", { count: hours });
+    return format.dateTime(new Date(iso));
 }

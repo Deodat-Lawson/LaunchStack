@@ -3,12 +3,14 @@ import { and, eq, inArray } from "drizzle-orm";
 import pLimit from "p-limit";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { validateRequestBody } from "~/lib/validation";
 import {
     findBatchOwnedByUser,
@@ -17,6 +19,7 @@ import {
     updateBatchStatus,
     type UploadBatchFileRecord,
 } from "~/server/services/upload-batches";
+import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { recordUpload } from "~/server/workspace/added-documents";
 
@@ -29,13 +32,14 @@ const CommitSchema = z.object({
 const MAX_CONCURRENCY = 3;
 
 export async function POST(request: Request, { params }: { params: Promise<{ batchId: string }> }) {
+    const t = requestTranslator(request, "upload.server.errors");
     const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         const { batchId } = await params;
         if (!batchId) {
-            return NextResponse.json({ error: "Batch ID is required" }, { status: 400 });
+            return NextResponse.json({ error: t("batchIdRequired") }, { status: 400 });
         }
 
         const validation = await validateRequestBody(request, CommitSchema);
@@ -47,21 +51,21 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!batch) {
-            return NextResponse.json({ error: "Batch not found" }, { status: 404 });
+            return NextResponse.json({ error: t("batchNotFound") }, { status: 404 });
         }
 
         if (["processing"].includes(batch.status)) {
-            return NextResponse.json({ error: "Batch is already processing" }, { status: 409 });
+            return NextResponse.json({ error: t("batchProcessing") }, { status: 409 });
         }
         if (["complete"].includes(batch.status)) {
-            return NextResponse.json({ error: "Batch has already completed" }, { status: 409 });
+            return NextResponse.json({ error: t("batchCompleted") }, { status: 409 });
         }
 
         const pendingFiles = batch.files.filter(file => file.status === "queued");
         if (pendingFiles.length > 0) {
             return NextResponse.json(
                 {
-                    error: "Batch still has files that have not finished uploading",
+                    error: t("batchFilesPending"),
                     files: pendingFiles.map(file => ({
                         id: file.id,
                         filename: file.filename,
@@ -76,10 +80,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             file => file.status === "uploaded" || file.status === "failed"
         );
         if (filesToProcess.length === 0) {
-            return NextResponse.json(
-                { error: "No uploaded or failed files are ready to commit" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: t("nothingToCommit") }, { status: 400 });
         }
 
         // Every folder this commit writes into must be one the caller may
@@ -91,7 +92,15 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
         }
         for (const folder of targetFolders) {
             if (!(await canEditFolder(ctx.data, folder))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    {
+                        error: requestTranslator(
+                            request,
+                            "sources.server.errors"
+                        )("folderEditDenied"),
+                    },
+                    { status: 403 }
+                );
             }
         }
 
@@ -162,7 +171,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                         jobId: uploadResult.jobId,
                     };
                 } catch (error) {
-                    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+                    const errorMessage = isTranscriptionError(error)
+                        ? error.userMessage
+                        : error instanceof Error
+                          ? error.message
+                          : "Unknown error";
                     await markFileFailed(batchId, file.id, errorMessage);
 
                     return { fileId: file.id, status: "failed" as const, error: errorMessage };
@@ -206,7 +219,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!refreshedBatch) {
-            return NextResponse.json({ error: "Batch not found after commit" }, { status: 404 });
+            return NextResponse.json({ error: t("batchNotFoundAfterCommit") }, { status: 404 });
         }
 
         return NextResponse.json(

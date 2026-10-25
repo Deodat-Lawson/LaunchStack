@@ -4,7 +4,8 @@
  * Google Drive connects through its own flow (`/api/connectors/google/oauth/*`
  * and `~/server/services/google-drive/*` — the OAuth client pair is
  * GOOGLE_OAUTH_CLIENT_ID/SECRET); this module owns the generic layer that
- * serves Slack and GitHub, plus the cross-provider status map the UI reads.
+ * serves Slack, GitHub, LinkedIn and Notion, plus the cross-provider status
+ * map the UI reads.
  *
  * "Configured" requires the provider's OAuth client pair AND the secret-box
  * key — without EMBEDDING_SECRETS_KEY there is nowhere safe to put a token,
@@ -13,14 +14,17 @@
 
 import { env } from "~/env";
 import type { ConnectorProvider } from "~/server/db/schema/connectors";
+import { configuredPublicOrigin } from "~/server/public-origin";
+import { googleStandInUrl } from "../google-drive/config";
 import { isGmailConnectorEnabled } from "./gmail/config";
 import * as github from "./providers/github";
 import * as linkedin from "./providers/linkedin";
+import * as notion from "./providers/notion";
 import * as slack from "./providers/slack";
 import type { ProviderGrant, ProviderOAuthConfig, RefreshedProviderToken } from "./providers/types";
 
 /** The providers whose OAuth handshake this generic layer performs. */
-export const OAUTH_PROVIDERS = ["slack", "github", "linkedin"] as const;
+export const OAUTH_PROVIDERS = ["slack", "github", "linkedin", "notion"] as const;
 export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
 export function isOAuthProvider(value: string): value is OAuthProvider {
@@ -45,6 +49,7 @@ export const PROVIDER_MODULES: Record<OAuthProvider, ProviderModule> = {
     slack: slack,
     github: github,
     linkedin: linkedin,
+    notion: notion,
 };
 
 function clientPair(provider: OAuthProvider): { clientId: string; clientSecret: string } | null {
@@ -52,6 +57,7 @@ function clientPair(provider: OAuthProvider): { clientId: string; clientSecret: 
         slack: [env.server.SLACK_CLIENT_ID, env.server.SLACK_CLIENT_SECRET],
         github: [env.server.GITHUB_OAUTH_CLIENT_ID, env.server.GITHUB_OAUTH_CLIENT_SECRET],
         linkedin: [env.server.LINKEDIN_CLIENT_ID, env.server.LINKEDIN_CLIENT_SECRET],
+        notion: [env.server.NOTION_OAUTH_CLIENT_ID, env.server.NOTION_OAUTH_CLIENT_SECRET],
     };
     const [clientId, clientSecret] = pairs[provider];
     return clientId && clientSecret ? { clientId, clientSecret } : null;
@@ -80,17 +86,17 @@ export function isConnectorConfigured(provider: ConnectorProvider): boolean {
 }
 
 /**
- * @param requestOrigin Origin of the current request (e.g. `http://localhost:3000`),
- * used only when APP_PUBLIC_URL is not set.
+ * @param origin The public origin of the current request, `publicOrigin(request)`.
+ * Without one (a refresh in the worker) BETTER_AUTH_URL's origin is used.
  */
 export function getConnectorConfig(
     provider: OAuthProvider,
-    requestOrigin?: string
+    origin?: string
 ): ProviderOAuthConfig | null {
     const pair = clientPair(provider);
     if (!pair || !env.server.EMBEDDING_SECRETS_KEY) return null;
 
-    const base = env.server.APP_PUBLIC_URL ?? requestOrigin;
+    const base = origin ?? configuredPublicOrigin();
 
     return {
         ...pair,
@@ -122,11 +128,29 @@ export function linkedInRequestedScopes(): readonly string[] {
     return linkedInOverrides().scopes ?? linkedin.LINKEDIN_DEFAULT_SCOPES;
 }
 
-/** Browser-side Google Picker config; both values are public by design. */
-export function getPickerPublicConfig(): { apiKey: string | null; appId: string | null } {
+export const GOOGLE_PICKER_SCRIPT = "https://apis.google.com/js/api.js";
+
+export interface PickerPublicConfig {
+    readonly apiKey: string | null;
+    readonly appId: string | null;
+    /** Where the Picker's script loads from: Google, or the dev stand-in's copy. */
+    readonly scriptUrl: string;
+}
+
+/** Browser-side Google Picker config; every value is public by design. */
+export function getPickerPublicConfig(): PickerPublicConfig {
+    const standIn = googleStandInUrl();
+    if (standIn) {
+        return {
+            apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? "stand-in-api-key",
+            appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? "stand-in-app",
+            scriptUrl: `${standIn}/picker/api.js`,
+        };
+    }
     return {
         apiKey: env.client.NEXT_PUBLIC_GOOGLE_API_KEY ?? null,
         appId: env.client.NEXT_PUBLIC_GOOGLE_APP_ID ?? null,
+        scriptUrl: GOOGLE_PICKER_SCRIPT,
     };
 }
 
@@ -138,6 +162,7 @@ export function getConnectorProvidersStatus(): ConnectorProvidersStatus {
         slack: { configured: isConnectorConfigured("slack") },
         github: { configured: isConnectorConfigured("github") },
         gmail: { configured: isConnectorConfigured("gmail") },
+        notion: { configured: isConnectorConfigured("notion") },
         linkedin: { configured: isConnectorConfigured("linkedin") },
         bluesky: { configured: isConnectorConfigured("bluesky") },
     };

@@ -19,6 +19,8 @@
 import { NextResponse } from "next/server";
 import { and, desc, eq, sql } from "drizzle-orm";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -64,7 +66,8 @@ function filePlayback(doc: { id: number; mimeType: string | null }): MediaPlayba
     };
 }
 
-export async function GET(_request: Request, { params }: RouteParams) {
+export async function GET(request: Request, { params }: RouteParams) {
+    const locale = localeOfRequest(request);
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -72,7 +75,10 @@ export async function GET(_request: Request, { params }: RouteParams) {
         const { id } = await params;
         const docId = Number(id);
         if (!Number.isInteger(docId) || docId <= 0) {
-            return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("invalidDocumentId") },
+                { status: 400 }
+            );
         }
 
         const inScope = scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope());
@@ -89,7 +95,10 @@ export async function GET(_request: Request, { params }: RouteParams) {
             .from(document)
             .where(and(eq(document.id, docId), inScope));
         if (!doc) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
 
         const marker = transcriptMarkerOf(doc.ocrMetadata);
@@ -140,7 +149,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
                     documentId: doc.id,
                     title: doc.title,
                     language: marker?.language ?? null,
+                    languages: marker?.languages ?? null,
                     segments: marker?.segments ?? null,
+                    translations: marker?.translations ?? [],
                 },
                 durationSeconds: marker?.durationSeconds ?? null,
             };
@@ -151,7 +162,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
         const kind = kindOfStored(doc);
         if (!kind) {
             return NextResponse.json(
-                { error: "This document has no audio or video" },
+                { error: translatorFor(locale, "viewers.server.errors")("noMedia") },
                 { status: 404 }
             );
         }
@@ -182,7 +193,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
                       documentId: transcriptDoc.id,
                       title: transcriptDoc.title,
                       language: transcriptMarker?.language ?? null,
+                      languages: transcriptMarker?.languages ?? null,
                       segments: transcriptMarker?.segments ?? null,
+                      translations: transcriptMarker?.translations ?? [],
                   }
                 : null,
             durationSeconds: transcriptMarker?.durationSeconds ?? null,
@@ -190,6 +203,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
         return NextResponse.json(preview);
     } catch (error) {
         console.error("Error resolving document media:", error);
-        return NextResponse.json({ error: "Failed to load media" }, { status: 500 });
+        return NextResponse.json(
+            { error: translatorFor(locale, "viewers.server.errors")("mediaLoadFailed") },
+            { status: 500 }
+        );
     }
 }

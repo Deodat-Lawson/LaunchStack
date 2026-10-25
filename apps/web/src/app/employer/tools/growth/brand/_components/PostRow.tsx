@@ -1,25 +1,27 @@
 "use client";
 
 import { ExternalLink, Eye, ImageIcon, MessageSquare, ThumbsUp } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { createContext, useContext, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { plural } from "~/lib/tools/format";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
 import { compact } from "../_lib/numbers";
-import { STATUS_WORD, dayAndMonth, isDue, postMoment, timeOfDay, toLocalInput } from "../_lib/time";
+import { dayAndMonth, isDue, postMoment, timeOfDay, toLocalInput } from "../_lib/time";
 import { brandApi, type BrandPost, type BrandPostMetrics } from "../api";
 import { ChannelAvatar, ChannelLabel } from "./ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "./NetworkMark";
 
 /** Status as a dot and a word; semantic colour only where the status is one. */
 export function PostStatus({ post, className }: { post: BrandPost; className?: string }) {
+    const t = useTranslations("growth.brand.status");
     const due = isDue(post);
-    const word = due ? "Due" : STATUS_WORD[post.status];
+    const word = due ? t("due") : t(post.status);
     return (
         <span
             className={cn(
@@ -29,7 +31,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                 post.status === "failed" && "text-danger",
                 post.status === "cancelled" && "text-ink-3",
                 post.status === "draft" && "text-ink-3",
-                post.status === "scheduled" && (due ? "text-warn" : "text-ink-2"),
+                post.status === "scheduled" && (due ? "text-warn-ink" : "text-ink-2"),
                 className
             )}
         >
@@ -58,13 +60,16 @@ export function PostMetricsInline({
     metrics: BrandPostMetrics;
     className?: string;
 }) {
+    const t = useTranslations("growth.brand.metrics");
+    const locale = useLocale();
+    type Metric = "impressions" | "reactions" | "comments";
     const items = [
         metrics.impressions !== null
-            ? { icon: Eye, n: metrics.impressions, word: "impression" }
+            ? { icon: Eye, n: metrics.impressions, word: "impressions" as const }
             : null,
-        { icon: ThumbsUp, n: metrics.reactions, word: "reaction" },
-        { icon: MessageSquare, n: metrics.comments, word: "comment" },
-    ].filter(Boolean) as Array<{ icon: typeof Eye; n: number; word: string }>;
+        { icon: ThumbsUp, n: metrics.reactions, word: "reactions" as const },
+        { icon: MessageSquare, n: metrics.comments, word: "comments" as const },
+    ].filter(Boolean) as Array<{ icon: typeof Eye; n: number; word: Metric }>;
     return (
         <span
             className={cn(
@@ -76,11 +81,11 @@ export function PostMetricsInline({
                 <span
                     key={word}
                     className="inline-flex items-center gap-0.5"
-                    title={plural(n, word)}
+                    title={t(word, { count: n })}
                 >
                     <Icon className="size-3" aria-hidden />
-                    <span aria-hidden>{compact(n)}</span>
-                    <span className="sr-only">{plural(n, word)}</span>
+                    <span aria-hidden>{compact(n, locale)}</span>
+                    <span className="sr-only">{t(word, { count: n })}</span>
                 </span>
             ))}
         </span>
@@ -89,15 +94,16 @@ export function PostMetricsInline({
 
 /** A small image mark when a post carries images, with the count past one. */
 export function MediaMark({ count, className }: { count: number; className?: string }) {
+    const t = useTranslations("growth.brand.metrics");
     if (count === 0) return null;
     return (
         <span
             className={cn("text-ink-3 inline-flex items-center gap-0.5 text-[11px]", className)}
-            title={plural(count, "image")}
+            title={t("images", { count })}
         >
             <ImageIcon className="size-3" aria-hidden />
             {count > 1 && <span className="tabular-nums">{count}</span>}
-            <span className="sr-only">{plural(count, "image")}</span>
+            <span className="sr-only">{t("images", { count })}</span>
         </span>
     );
 }
@@ -123,6 +129,10 @@ export function PostActions({
     onChange: () => void;
     children: React.ReactNode;
 }) {
+    const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
+    const tc = useTranslations("common.actions");
+    const locale = useLocale();
     const [open, setOpen] = useState(false);
     const [busy, setBusy] = useState(false);
     const [when, setWhen] = useState(() =>
@@ -141,7 +151,7 @@ export function PostActions({
             onChange();
             setOpen(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not work");
+            toast.error(errorText(e, t("postActions.failed")));
         } finally {
             setBusy(false);
         }
@@ -181,11 +191,17 @@ export function PostActions({
                 )}
                 <div className="text-ink-3 mt-2 text-xs">
                     {post.status === "published" && post.publishedAt
-                        ? `Went out ${dayAndMonth(new Date(post.publishedAt))} at ${timeOfDay(new Date(post.publishedAt))}`
+                        ? t("postActions.wentOut", {
+                              date: dayAndMonth(new Date(post.publishedAt), locale),
+                              time: timeOfDay(new Date(post.publishedAt), locale),
+                          })
                         : post.scheduledAt
-                          ? `Due ${dayAndMonth(new Date(post.scheduledAt))} at ${timeOfDay(new Date(post.scheduledAt))}`
-                          : "No time set"}
-                    {post.source?.kind === "campaign" ? " · from a campaign" : ""}
+                          ? t("postActions.due", {
+                                date: dayAndMonth(new Date(post.scheduledAt), locale),
+                                time: timeOfDay(new Date(post.scheduledAt), locale),
+                            })
+                          : t("postActions.noTime")}
+                    {post.source?.kind === "campaign" ? ` · ${t("postActions.fromCampaign")}` : ""}
                 </div>
                 {post.metrics && <PostMetricsInline metrics={post.metrics} className="mt-1.5" />}
                 {post.error && <p className="text-danger mt-2 text-xs">{post.error}</p>}
@@ -197,7 +213,7 @@ export function PostActions({
                             value={when}
                             onChange={e => setWhen(e.target.value)}
                             className="h-8 text-[13px]"
-                            aria-label="New time"
+                            aria-label={t("postActions.newTime")}
                         />
                         <Button
                             size="sm"
@@ -210,11 +226,13 @@ export function PostActions({
                                             scheduledAt: new Date(when).toISOString(),
                                             status: "scheduled",
                                         }),
-                                    "Rescheduled"
+                                    t("postActions.rescheduled")
                                 )
                             }
                         >
-                            {post.status === "scheduled" ? "Move" : "Schedule"}
+                            {post.status === "scheduled"
+                                ? t("postActions.move")
+                                : t("postActions.schedule")}
                         </Button>
                     </div>
                 )}
@@ -228,12 +246,12 @@ export function PostActions({
                                     const { post: result } = await brandApi.publish(post.id);
                                     if (result.status !== "published")
                                         throw new Error(
-                                            result.error ?? "The network did not accept it"
+                                            result.error ?? t("postActions.notAccepted")
                                         );
-                                }, "Published")
+                                }, t("postActions.published"))
                             }
                         >
-                            Publish now
+                            {t("postActions.publishNow")}
                         </Button>
                     )}
                     {post.status === "scheduled" && !readOnly && (
@@ -244,11 +262,11 @@ export function PostActions({
                             onClick={() =>
                                 void run(
                                     () => brandApi.patch(post.id, { status: "cancelled" }),
-                                    "Cancelled. It stays on the calendar."
+                                    t("postActions.cancelled")
                                 )
                             }
                         >
-                            Cancel
+                            {tc("cancel")}
                         </Button>
                     )}
                     {editable && (
@@ -257,15 +275,17 @@ export function PostActions({
                             variant="ghost"
                             className="text-danger hover:text-danger"
                             disabled={busy}
-                            onClick={() => void run(() => brandApi.remove(post.id), "Deleted")}
+                            onClick={() =>
+                                void run(() => brandApi.remove(post.id), t("postActions.deleted"))
+                            }
                         >
-                            Delete
+                            {tc("delete")}
                         </Button>
                     )}
                     {post.postUrl && (
                         <Button asChild size="sm" variant="outline" className="ml-auto">
                             <a href={post.postUrl} target="_blank" rel="noreferrer">
-                                Open on {NETWORK_LABEL[post.platform]}
+                                {t("common.openOn", { network: NETWORK_LABEL[post.platform] })}
                                 <ExternalLink className="size-3.5" aria-hidden />
                             </a>
                         </Button>
@@ -278,6 +298,7 @@ export function PostActions({
 
 /** One post as a list row: when, where, what, status (or its numbers once out). Click for the actions. */
 export function PostRow({ post, onChange }: { post: BrandPost; onChange: () => void }) {
+    const locale = useLocale();
     const at = postMoment(post);
     const muted = post.status === "cancelled";
     return (
@@ -287,8 +308,8 @@ export function PostRow({ post, onChange }: { post: BrandPost; onChange: () => v
                 className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 @max-md:grid-cols-[72px_22px_minmax(0,1fr)_auto] grid w-full grid-cols-[164px_minmax(0,170px)_minmax(0,1fr)_auto] items-center gap-3 border-t px-4 py-2.5 text-left outline-none first:border-t-0 focus-visible:ring-[3px]"
             >
                 <span className="text-ink-2 text-[13px] tabular-nums">
-                    <span className="@max-md:hidden">{dayAndMonth(at)} · </span>
-                    {timeOfDay(at)}
+                    <span className="@max-md:hidden">{dayAndMonth(at, locale)} · </span>
+                    {timeOfDay(at, locale)}
                 </span>
                 <span className="@max-md:hidden flex min-w-0 items-center">
                     <ChannelLabel

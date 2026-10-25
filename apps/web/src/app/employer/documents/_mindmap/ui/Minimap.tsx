@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 import { activePage, pageBounds, visibleNodes } from "../model/doc";
 import { expandRect, nodeBounds } from "../model/geometry";
@@ -22,6 +23,7 @@ const HEIGHT = 124;
 const selectViewport = (s: EditorState) => s.viewport;
 
 export function Minimap({ canvasSize }: { canvasSize: { w: number; h: number } }) {
+    const t = useTranslations("mindmap.bottomBar");
     const store = useStore();
     const doc = useCommittedDoc();
     const viewport = useEditor(selectViewport);
@@ -94,7 +96,7 @@ export function Minimap({ canvasSize }: { canvasSize: { w: number; h: number } }
             onPointerMove={e => {
                 if (e.buttons === 1) jumpTo(e.clientX, e.clientY);
             }}
-            aria-label="Minimap"
+            aria-label={t("minimap")}
         >
             {nodes.map(node => {
                 const b = nodeBounds(node);

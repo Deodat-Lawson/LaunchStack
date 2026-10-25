@@ -11,6 +11,7 @@ import {
 } from "@launchstack/pipelines/proposals";
 
 import { createProposalPorts } from "~/server/proposals/ports";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { inngest } from "../client";
 
@@ -51,9 +52,13 @@ export const proposalsRunJob = inngest.createFunction(
         const data = ProposalRunEventDataSchema.parse(event.data);
         const companyId = BigInt(data.companyId);
         const result = await step.run("execute", async () => {
-            const run = await executeProposalRun(
-                { runId: data.runId, companyId, userId: data.userId },
-                createProposalPorts(companyId)
+            // A step body runs outside the handler's async context, so the
+            // workspace's models are entered here rather than around the handler.
+            const run = await withWorkspaceChatModels(companyId, "proposals", () =>
+                executeProposalRun(
+                    { runId: data.runId, companyId, userId: data.userId },
+                    createProposalPorts(companyId)
+                )
             );
             return { status: run.status, headline: run.summary?.headline ?? null };
         });

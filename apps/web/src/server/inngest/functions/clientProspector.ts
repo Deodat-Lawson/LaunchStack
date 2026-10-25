@@ -18,6 +18,7 @@
 
 import { inngest } from "../client";
 import { runClientProspector } from "@launchstack/pipelines/client-prospector";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { updateJobResults, updateJobStatus } from "@launchstack/pipelines/client-prospector/db";
 import {
     ProspectorEventDataSchema,
@@ -146,9 +147,13 @@ export const clientProspectorJob = inngest.createFunction(
             // Start with "planning" status so the user sees progress immediately.
             await onStageChange("planning");
 
-            return runClientProspector(toPipelineInput(eventData), {
-                onStageChange,
-            });
+            // A step body runs outside the handler's async context, so the
+            // workspace's models are entered here rather than around the handler.
+            return withWorkspaceChatModels(companyId, "prospects", () =>
+                runClientProspector(toPipelineInput(eventData), {
+                    onStageChange,
+                })
+            );
         })) as ProspectorOutput;
 
         // Step 2: Save results to DB and mark the job as "completed".

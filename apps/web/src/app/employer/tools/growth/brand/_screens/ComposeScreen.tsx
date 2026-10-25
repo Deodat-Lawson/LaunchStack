@@ -1,6 +1,7 @@
 "use client";
 
-import { ImagePlus, RotateCw, X } from "lucide-react";
+import { FlaskConical, ImagePlus, RotateCw, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,15 +17,18 @@ import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
-import { plural } from "~/lib/tools/format";
+import { SCENARIO_LIMITS, normalizeDraft } from "~/lib/scenarios/types";
+import { formatPercent, isLive, progressLabel } from "~/lib/scenarios/words";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
+import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
+import { PostTestSheet } from "../_components/PostTestSheet";
 import {
-    KIND_WORD,
     byKindThenName,
     composeChannels,
     defaultChannelSelection,
@@ -42,15 +46,16 @@ import {
     postLength,
     previewText,
 } from "../_lib/compose";
-import { count } from "../_lib/numbers";
 import { dayAndMonth, nextSlot, timeOfDay, toLocalInput } from "../_lib/time";
 import {
+    BrandApiError,
     COMPOSE_HANDOFF_KEY,
     brandApi,
     type BrandChannel,
     type BrandMedia,
     type BrandPostSource,
     type ComposeHandoff,
+    type PostTestResult,
 } from "../api";
 
 type When = "now" | "later" | "draft";
@@ -67,12 +72,12 @@ interface Attachment {
 }
 
 /** The first value with something in it, for a Reddit title that falls back to the first line. */
-function firstNonEmpty(...values: Array<string | undefined>): string {
+function firstNonEmpty(...values: Array<string | undefined>): string | null {
     for (const value of values) {
         const trimmed = value?.trim();
         if (trimmed) return trimmed;
     }
-    return "Untitled";
+    return null;
 }
 
 function readHandoff(): ComposeHandoff | null {
@@ -143,11 +148,16 @@ function ChannelPreview({
     attachments: Attachment[];
     whenLabel: string;
 }) {
+    const t = useTranslations("growth.brand");
+    const tRules = useTranslations("growth.brand.composeRules");
+    const tc = useTranslations("common.status");
+    const { count } = useGrowthFormat();
     const [expanded, setExpanded] = useState(false);
     const text = body.trim();
     const length = postLength(body);
     const over = overLimit(channel, body);
     const note = channelMediaNote(
+        tRules,
         channel,
         attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
     );
@@ -157,7 +167,7 @@ function ChannelPreview({
         : [];
     return (
         <article
-            aria-label={`Preview for ${channel.name}`}
+            aria-label={t("compose.previewFor", { name: channel.name })}
             className={cn(
                 "border-line bg-panel overflow-hidden rounded-lg border",
                 (over || note?.tone === "error") && "border-danger/60"
@@ -175,7 +185,8 @@ function ChannelPreview({
                         {channel.name}
                     </div>
                     <div className="text-ink-3 truncate text-[11.5px]">
-                        {KIND_WORD[channel.kind]} · {NETWORK_LABEL[channel.platform]} · {whenLabel}
+                        {t(`kinds.${channel.kind}`)} · {NETWORK_LABEL[channel.platform]} ·{" "}
+                        {whenLabel}
                     </div>
                 </div>
                 {channel.limit !== null && (
@@ -191,12 +202,12 @@ function ChannelPreview({
             </header>
             {channel.platform === "reddit" && (
                 <div className="text-ink px-3 pt-2 text-[13px] font-medium">
-                    {firstNonEmpty(title, text.split("\n")[0])}
+                    {firstNonEmpty(title, text.split("\n")[0]) ?? tc("untitled")}
                 </div>
             )}
             <p className="text-ink-2 whitespace-pre-wrap break-words px-3 py-2.5 text-[13px] leading-[1.45]">
                 {!text ? (
-                    <span className="text-ink-3">Your post appears here.</span>
+                    <span className="text-ink-3">{t("compose.yourPost")}</span>
                 ) : over && channel.limit !== null ? (
                     <>
                         {text.slice(0, channel.limit)}
@@ -212,7 +223,7 @@ function ChannelPreview({
                             onClick={() => setExpanded(true)}
                             className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm outline-none focus-visible:ring-2"
                         >
-                            …see more
+                            {t("compose.seeMore")}
                         </button>
                     </>
                 ) : (
@@ -228,7 +239,10 @@ function ChannelPreview({
                     )}
                 >
                     {over
-                        ? `${count(length - (channel.limit ?? 0))} characters over ${channel.name}'s limit.`
+                        ? t("compose.overLimit", {
+                              count: length - (channel.limit ?? 0),
+                              name: channel.name,
+                          })
                         : note?.text}
                 </p>
             )}
@@ -243,6 +257,14 @@ function ChannelPreview({
  * A campaign hands its edited post here to be scheduled.
  */
 export function ComposeScreen() {
+    const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
+    const tRules = useTranslations("growth.brand.composeRules");
+    const tChannels = useTranslations("growth.brand.channels");
+    const tCounts = useTranslations("growth.common.counts");
+    const tc = useTranslations("common");
+    const locale = useLocale();
+    const { count, joinList } = useGrowthFormat();
     const router = useToolRouter();
     const paths = useGrowthPaths();
     const accounts = useResource("brand:accounts", () => brandApi.accounts());
@@ -263,6 +285,24 @@ export function ComposeScreen() {
     const fileInput = useRef<HTMLInputElement>(null);
     const attachmentsRef = useRef(attachments);
     attachmentsRef.current = attachments;
+
+    // The latest post test of this draft. It is polled until it ends; a
+    // finished test of the exact text goes out with the post, so its result
+    // can be compared with the real one later.
+    const [testId, setTestId] = useState<number | null>(null);
+    const [testOpen, setTestOpen] = useState(false);
+    const [startingTest, setStartingTest] = useState(false);
+    const [testProblem, setTestProblem] = useState<string | null>(null);
+    const [testEnded, setTestEnded] = useState(false);
+    const testRes = useResource(
+        testId === null ? null : `brand:post-test:${testId}`,
+        () => brandApi.postTest(testId!),
+        { pollMs: testId !== null && !testEnded ? 1500 : null }
+    );
+    const test = testRes.data?.test.runId === testId ? (testRes.data?.test ?? null) : null;
+    const ended = test !== null && !isLive(test.status);
+    if (ended !== testEnded) setTestEnded(ended);
+    const testStale = test !== null && normalizeDraft(body) !== normalizeDraft(test.text);
 
     // A hand-off from Campaigns is read once (it is removed as it is read).
     useEffect(() => {
@@ -303,6 +343,7 @@ export function ComposeScreen() {
     const over = chosen.filter(c => overLimit(c, body));
     const mediaErrors = chosen.flatMap(c => {
         const note = channelMediaNote(
+            tRules,
             c,
             attachments.map(a => ({ mimeType: a.file.type, size: a.file.size }))
         );
@@ -321,25 +362,28 @@ export function ComposeScreen() {
         !submitting;
     const canSend = canSave && (when !== "later" || Boolean(at));
     const blocked = !canPublish
-        ? "Your role can read Brand but not post as the company. Ask an admin for Member access."
+        ? t("compose.readOnly")
         : over.length > 0
-          ? `Too long for ${over.map(c => c.name).join(", ")}`
+          ? t("compose.tooLong", { names: joinList(over.map(c => c.name)) })
           : mediaErrors.length > 0
             ? mediaErrors[0]!.text
             : uploading
-              ? "Waiting for images to finish uploading"
+              ? t("compose.uploading")
               : failedUpload
-                ? "An image did not upload; retry or remove it"
+                ? t("compose.uploadFailedBlock")
                 : null;
 
     const whenLabel =
         when === "now"
-            ? "Now"
+            ? t("compose.whenNow")
             : when === "draft"
-              ? "Draft"
+              ? t("compose.whenDraft")
               : at
-                ? `${dayAndMonth(new Date(at))}, ${timeOfDay(new Date(at))}`
-                : "Pick a time";
+                ? t("compose.whenAt", {
+                      date: dayAndMonth(new Date(at), locale),
+                      time: timeOfDay(new Date(at), locale),
+                  })
+                : t("compose.pickTime");
 
     const toggle = (id: string, on: boolean) =>
         setSelected(current =>
@@ -356,7 +400,7 @@ export function ComposeScreen() {
                 list.map(a => (a.key === key ? { ...a, status: "ready", media } : a))
             );
         } catch (e) {
-            const error = e instanceof Error ? e.message : "The upload failed";
+            const error = errorText(e, t("compose.uploadFailed"));
             setAttachments(list =>
                 list.map(a => (a.key === key ? { ...a, status: "error", error } : a))
             );
@@ -370,11 +414,14 @@ export function ComposeScreen() {
         const problems: string[] = [];
         if (list.length > room)
             problems.push(
-                `A post takes ${MEDIA_MAX_COUNT} images at most; ${plural(list.length - Math.max(0, room), "image")} left out.`
+                t("compose.tooMany", {
+                    max: MEDIA_MAX_COUNT,
+                    count: list.length - Math.max(0, room),
+                })
             );
         const added: Attachment[] = [];
         for (const file of list.slice(0, Math.max(0, room))) {
-            const why = mediaRejection(file);
+            const why = mediaRejection(tRules, file);
             if (why) {
                 problems.push(why);
                 continue;
@@ -404,6 +451,33 @@ export function ComposeScreen() {
         setMediaProblem(null);
     };
 
+    const startTest = async () => {
+        setStartingTest(true);
+        setTestProblem(null);
+        try {
+            const networks = [...new Set(chosen.map(c => c.platform))];
+            const { test: started } = await brandApi.startPostTest({
+                text: body.trim(),
+                networks,
+            });
+            setTestEnded(!isLive(started.status));
+            setTestId(started.runId);
+            setTestOpen(true);
+        } catch (e) {
+            const status = e instanceof BrandApiError ? e.status : null;
+            const message = errorText(e, t("compose.testStartFailed"));
+            setTestProblem(
+                status === 403
+                    ? t("compose.testForbidden")
+                    : status === 402
+                      ? t("compose.noCredits", { message })
+                      : message
+            );
+        } finally {
+            setStartingTest(false);
+        }
+    };
+
     const submit = async () => {
         setSubmitting(true);
         try {
@@ -418,26 +492,32 @@ export function ComposeScreen() {
                 scheduledAt: when === "later" ? new Date(at).toISOString() : null,
                 publishNow: when === "now",
                 source,
+                // Only a finished test of exactly this text says anything about it.
+                postTestId: test && test.status === "done" && !testStale ? test.runId : undefined,
             });
             const name = (p: (typeof result.posts)[number]) =>
                 p.channel?.name ?? NETWORK_LABEL[p.platform];
             const failed = result.posts.filter(p => p.status === "failed");
             if (when === "now") {
                 if (failed.length === result.posts.length)
-                    toast.error(failed[0]?.error ?? "The networks did not accept the post");
+                    toast.error(failed[0]?.error ?? t("compose.allFailed"));
                 else if (failed.length > 0)
                     toast.warning(
-                        `Published to ${plural(result.posts.length - failed.length, "channel")}; ${failed.map(name).join(", ")} failed`
+                        t("compose.partial", {
+                            count: result.posts.length - failed.length,
+                            names: joinList(failed.map(name)),
+                        })
                     );
-                else toast.success(`Published to ${plural(result.posts.length, "channel")}`);
+                else toast.success(t("compose.published", { count: result.posts.length }));
             } else if (when === "later") {
-                toast.success(`Scheduled on ${plural(result.posts.length, "channel")}`);
+                toast.success(t("compose.scheduled", { count: result.posts.length }));
             } else {
-                toast(`Saved ${plural(result.posts.length, "draft")}`);
+                toast(t("compose.saved", { count: result.posts.length }));
             }
+            if (result.postTest?.stale) toast.warning(t("compose.staleTest"));
             router.push(paths.brand("/calendar"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save the post");
+            toast.error(errorText(e, t("compose.saveFailed")));
         } finally {
             setSubmitting(false);
         }
@@ -446,20 +526,16 @@ export function ComposeScreen() {
     if (accounts.data && offered.length === 0) {
         return (
             <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
-                <PageHeader size="md" title="Compose" />
+                <PageHeader size="md" title={t("common.compose")} />
                 <EmptyState
-                    title={
-                        all.length > 0 ? "Every channel is switched off" : "Nothing to post to yet"
-                    }
-                    body={
-                        all.length > 0
-                            ? "An admin turned off Offer in Compose for every channel. Switch one back on in Accounts."
-                            : "Posts go out as a LinkedIn Page or profile, or a Bluesky account. Connect one first."
-                    }
+                    title={all.length > 0 ? t("compose.allOff") : t("compose.nothingToPost")}
+                    body={all.length > 0 ? t("compose.allOffBody") : t("compose.nothingToPostBody")}
                     action={
                         <Button asChild size="sm">
                             <ToolLink href={paths.brand("/accounts")}>
-                                {all.length > 0 ? "Open Accounts" : "Connect an account"}
+                                {all.length > 0
+                                    ? t("common.openAccounts")
+                                    : t("common.connectAccount")}
                             </ToolLink>
                         </Button>
                     }
@@ -472,9 +548,9 @@ export function ComposeScreen() {
         <div className="mx-auto flex max-w-[1140px] flex-col gap-6">
             <PageHeader
                 size="md"
-                title="Say it once,"
-                accent="everywhere it belongs"
-                sub="Pick the channels, check each preview against its limit, then publish now or put it on the calendar."
+                title={t("compose.title")}
+                accent={t("compose.accent")}
+                sub={t("compose.sub")}
             />
             {accounts.error && (
                 <InlineError message={accounts.error} onRetry={() => void accounts.reload()} />
@@ -484,38 +560,40 @@ export function ComposeScreen() {
                 <div className="flex flex-col gap-5">
                     <div>
                         <Label htmlFor="brand-body" className="text-ink-3 text-xs font-normal">
-                            Post
+                            {t("common.post")}
                         </Label>
                         <Textarea
                             id="brand-body"
                             value={body}
                             onChange={e => setBody(e.target.value)}
                             rows={9}
-                            placeholder="What do you want people to know this week?"
+                            placeholder={t("compose.placeholder")}
                             className="mt-1.5 text-[14px] leading-[1.5]"
                         />
                         <div className="text-ink-3 mt-1 flex justify-between gap-3 text-xs tabular-nums">
                             <span>
                                 {source?.kind === "campaign"
-                                    ? "From a campaign draft; edit freely."
+                                    ? t("compose.fromCampaign")
                                     : chosen.some(c => c.platform === "linkedin")
-                                      ? "LinkedIn folds a post after about 210 characters; lead with the point."
+                                      ? t("compose.linkedinFold")
                                       : ""}
                             </span>
-                            <span className="shrink-0">{count(length)} characters</span>
+                            <span className="shrink-0">
+                                {t("compose.characters", { count: length })}
+                            </span>
                         </div>
                     </div>
 
                     {chosen.some(c => c.platform === "reddit") && (
                         <div>
                             <Label htmlFor="brand-title" className="text-ink-3 text-xs font-normal">
-                                Reddit title
+                                {t("compose.redditTitle")}
                             </Label>
                             <Input
                                 id="brand-title"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
-                                placeholder="Falls back to the first line"
+                                placeholder={t("compose.redditTitlePlaceholder")}
                                 className="mt-1.5"
                                 maxLength={300}
                             />
@@ -524,8 +602,8 @@ export function ComposeScreen() {
 
                     <div>
                         <SectionHeading
-                            title="Images"
-                            aside={`JPEG, PNG, GIF or WebP · up to 5 MB · ${MEDIA_MAX_COUNT} per post`}
+                            title={t("compose.images")}
+                            aside={t("compose.imagesAside", { max: MEDIA_MAX_COUNT })}
                         />
                         <div className="flex flex-wrap items-start gap-3">
                             {attachments.map(a => (
@@ -557,7 +635,7 @@ export function ComposeScreen() {
                                                     onClick={() => void upload(a.key, a.file)}
                                                 >
                                                     <RotateCw className="size-3" aria-hidden />
-                                                    Retry
+                                                    {tc("actions.retry")}
                                                 </Button>
                                             </span>
                                         )}
@@ -565,7 +643,7 @@ export function ComposeScreen() {
                                             size="icon"
                                             variant="secondary"
                                             className="absolute right-1 top-1 size-6 rounded-full"
-                                            aria-label={`Remove ${a.file.name}`}
+                                            aria-label={t("compose.remove", { name: a.file.name })}
                                             onClick={() => removeAttachment(a.key)}
                                         >
                                             <X className="size-3.5" aria-hidden />
@@ -582,8 +660,8 @@ export function ComposeScreen() {
                                                 )
                                             )
                                         }
-                                        placeholder="Describe it"
-                                        aria-label={`Alt text for ${a.file.name}`}
+                                        placeholder={t("compose.describe")}
+                                        aria-label={t("compose.altFor", { name: a.file.name })}
                                         maxLength={1000}
                                         rows={2}
                                         // Two lines that wrap: alt text is a sentence, and 132px shows
@@ -592,11 +670,7 @@ export function ComposeScreen() {
                                     />
                                     <span className="text-ink-3 truncate text-[11px]">
                                         {fileSize(a.file.size)} ·{" "}
-                                        {a.status === "uploading"
-                                            ? "uploading"
-                                            : a.status === "ready"
-                                              ? "ready"
-                                              : "not uploaded"}
+                                        {t(`compose.attachment.${a.status}`)}
                                     </span>
                                 </div>
                             ))}
@@ -608,7 +682,7 @@ export function ComposeScreen() {
                                         onClick={() => fileInput.current?.click()}
                                     >
                                         <ImagePlus className="size-3.5" aria-hidden />
-                                        Add image
+                                        {t("compose.addImage")}
                                     </Button>
                                     <input
                                         ref={fileInput}
@@ -635,13 +709,13 @@ export function ComposeScreen() {
 
                     <div>
                         <SectionHeading
-                            title="Channels"
+                            title={t("common.channels")}
                             aside={
                                 <ToolLink
                                     href={paths.brand("/accounts")}
                                     className="hover:text-ink"
                                 >
-                                    Accounts
+                                    {t("common.accounts")}
                                 </ToolLink>
                             }
                         />
@@ -661,7 +735,10 @@ export function ComposeScreen() {
                                         </div>
                                         <div className="border-line bg-panel rounded-lg border">
                                             {group.items.map(channel => {
-                                                const reason = unavailableReason(channel);
+                                                const reason = unavailableReason(
+                                                    tChannels,
+                                                    channel
+                                                );
                                                 const id = `brand-ch-${channel.id}`;
                                                 const on = selected.includes(channel.id) && !reason;
                                                 return (
@@ -698,7 +775,7 @@ export function ComposeScreen() {
                                                                     {channel.name}
                                                                 </span>
                                                                 <span className="text-ink-3 text-xs">
-                                                                    {KIND_WORD[channel.kind]}
+                                                                    {t(`kinds.${channel.kind}`)}
                                                                 </span>
                                                             </Label>
                                                             {reason && (
@@ -710,7 +787,9 @@ export function ComposeScreen() {
                                                                         )}
                                                                         className="text-ink-2 hover:text-ink underline underline-offset-2"
                                                                     >
-                                                                        Reconnect in Accounts
+                                                                        {t(
+                                                                            "compose.reconnectInAccounts"
+                                                                        )}
                                                                     </ToolLink>
                                                                 </p>
                                                             )}
@@ -724,7 +803,7 @@ export function ComposeScreen() {
                                                             )}
                                                         >
                                                             {channel.limit === null
-                                                                ? "no limit"
+                                                                ? t("compose.noLimit")
                                                                 : `${count(length)} / ${count(channel.limit)}`}
                                                         </span>
                                                     </div>
@@ -743,22 +822,16 @@ export function ComposeScreen() {
                                 value={when}
                                 onValueChange={v => setWhen(v as When)}
                                 className="flex flex-wrap items-center gap-x-5 gap-y-2"
-                                aria-label="When"
+                                aria-label={t("compose.whenAria")}
                             >
-                                {(
-                                    [
-                                        ["later", "Schedule for"],
-                                        ["now", "Publish now"],
-                                        ["draft", "Save as draft"],
-                                    ] as Array<[When, string]>
-                                ).map(([value, label]) => (
+                                {(["later", "now", "draft"] as const).map(value => (
                                     <div key={value} className="inline-flex items-center gap-2">
                                         <RadioGroupItem value={value} id={`brand-when-${value}`} />
                                         <Label
                                             htmlFor={`brand-when-${value}`}
                                             className="text-ink text-[13px] font-normal"
                                         >
-                                            {label}
+                                            {t(`compose.when.${value}`)}
                                         </Label>
                                     </div>
                                 ))}
@@ -769,34 +842,64 @@ export function ComposeScreen() {
                                     value={at}
                                     onChange={e => setAt(e.target.value)}
                                     className="h-8 w-auto text-[13px]"
-                                    aria-label="When to publish"
+                                    aria-label={t("compose.whenToPublish")}
                                 />
                             )}
                         </div>
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                             <Button size="sm" disabled={!canSend} onClick={() => void submit()}>
                                 {submitting
-                                    ? "Saving…"
+                                    ? tc("status.saving")
                                     : when === "now"
-                                      ? `Publish to ${plural(chosen.length, "channel")}`
+                                      ? t("compose.publishTo", { count: chosen.length })
                                       : when === "later"
-                                        ? "Schedule"
-                                        : "Save draft"}
+                                        ? t("compose.schedule")
+                                        : t("compose.saveDraft")}
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={!body.trim() || !canPublish || startingTest}
+                                onClick={() => void startTest()}
+                            >
+                                <FlaskConical aria-hidden />
+                                {startingTest ? t("compose.startingTest") : t("compose.testPost")}
                             </Button>
                             {blocked && <span className="text-danger text-xs">{blocked}</span>}
                             {!blocked && chosen.length === 0 && seeded && (
-                                <span className="text-ink-3 text-xs">Pick a channel first.</span>
+                                <span className="text-ink-3 text-xs">
+                                    {t("compose.pickChannel")}
+                                </span>
                             )}
                         </div>
+                        <PostTestNote
+                            problem={testProblem}
+                            test={test}
+                            stale={testStale}
+                            starting={startingTest}
+                            onView={() => setTestOpen(true)}
+                            onTestAgain={() => void startTest()}
+                        />
                     </div>
+                    <PostTestSheet
+                        open={testOpen}
+                        onOpenChange={setTestOpen}
+                        test={test}
+                        error={testRes.error}
+                        onRetry={() => void testRes.reload()}
+                        stale={testStale}
+                        testing={startingTest}
+                        onTestAgain={() => void startTest()}
+                    />
                 </div>
 
                 <aside className="flex flex-col gap-3">
-                    <SectionHeading title="Preview" aside={plural(chosen.length, "channel")} />
+                    <SectionHeading
+                        title={t("compose.preview")}
+                        aside={tCounts("channels", { count: chosen.length })}
+                    />
                     {chosen.length === 0 ? (
-                        <p className="text-ink-3 text-[13px]">
-                            Pick a channel to see the post as it will go out.
-                        </p>
+                        <p className="text-ink-3 text-[13px]">{t("compose.previewEmpty")}</p>
                     ) : (
                         chosen.map(channel => (
                             <ChannelPreview
@@ -812,5 +915,75 @@ export function ComposeScreen() {
                 </aside>
             </div>
         </div>
+    );
+}
+
+/**
+ * One line under the buttons about the latest post test: running, its
+ * result, or that the draft has changed since and the result no longer
+ * describes it.
+ */
+function PostTestNote({
+    problem,
+    test,
+    stale,
+    starting,
+    onView,
+    onTestAgain,
+}: {
+    problem: string | null;
+    test: PostTestResult | null;
+    stale: boolean;
+    starting: boolean;
+    onView: () => void;
+    onTestAgain: () => void;
+}) {
+    const t = useTranslations("growth.brand");
+    const tc = useTranslations("common.actions");
+    const tw = useTranslations("scenarios.words");
+    const locale = useLocale();
+    const link =
+        "text-ink-2 hover:text-ink focus-visible:ring-brand/50 rounded-sm underline underline-offset-2 outline-none focus-visible:ring-2";
+    if (problem) {
+        return (
+            <p role="alert" className="text-danger text-xs">
+                {problem}
+            </p>
+        );
+    }
+    if (!test) return null;
+    if (stale) {
+        return (
+            <p className="text-warn-ink text-xs">
+                {t("compose.testNote.stale")}{" "}
+                <button type="button" className={link} disabled={starting} onClick={onTestAgain}>
+                    {starting ? t("postTest.starting") : t("postTest.testAgain")}
+                </button>
+            </p>
+        );
+    }
+    const reception = test.reception;
+    return (
+        <p className="text-ink-3 text-xs" aria-live="polite">
+            {isLive(test.status)
+                ? t("compose.testNote.testing", {
+                      progress: progressLabel(tw, {
+                          ...test,
+                          agents: SCENARIO_LIMITS.postTest.agents,
+                      }).toLowerCase(),
+                  })
+                : test.status === "done" && reception
+                  ? t("compose.testNote.tested", {
+                        engaged: reception.engaged,
+                        exposed: reception.exposed,
+                        rate: formatPercent(reception.engagementRate, locale),
+                    })
+                  : test.status === "failed"
+                    ? t("compose.testNote.failed")
+                    : t("compose.testNote.cancelled")}{" "}
+            <button type="button" className={link} onClick={onView}>
+                {test.status === "done" ? t("compose.testNote.seeResult") : tc("view")}
+            </button>
+        </p>
     );
 }

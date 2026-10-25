@@ -6,11 +6,13 @@
  *
  * This adapter is only enabled when the converter is configured
  * (DOCUMENT_CONVERTER_URL → ocr.converter), and it is registered *before*
- * the built-in mammoth/sheetjs adapters in
- * [src/lib/ingestion/adapters/index.ts] so it preempts them. When the
- * converter is unreachable, findAdapter will fall through to the legacy
- * adapters.
+ * the built-in mammoth/sheetjs adapters in `./index.ts` so it preempts them.
+ * A converter without Docling behind it — the lean deployment runs none — or
+ * one that cannot reach Docling, or that does not answer at all, hands the
+ * file to the built-in adapter for its format instead of failing it.
  */
+
+import { getStoragePort } from "@launchstack/runtime";
 
 import type {
     SourceAdapter,
@@ -18,8 +20,27 @@ import type {
     StandardizedDocument,
     StandardizedPage,
 } from "../../types";
-import { createDoclingAdapter } from "../../ocr-processing/adapters/ossAdapter";
+import {
+    createDoclingAdapter,
+    DocumentConverterError,
+} from "../../ocr-processing/adapters/ossAdapter";
 import { getOcrConfig } from "../../ocr-processing/config";
+import { DocxAdapter } from "./docx-adapter";
+import { PptxAdapter } from "./pptx-adapter";
+import { SpreadsheetAdapter } from "./spreadsheet-adapter";
+
+/** Converter error codes that mean "no Docling here", not "this file is bad". */
+const DOCLING_UNAVAILABLE_CODES = new Set([
+    "docling-not-configured",
+    "docling-failed",
+    "converter-unreachable",
+]);
+
+const BUILT_IN_ADAPTERS: SourceAdapter[] = [
+    new DocxAdapter(),
+    new PptxAdapter(),
+    new SpreadsheetAdapter(),
+];
 
 const OFFICE_MIMES = new Set([
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -60,7 +81,23 @@ export class DoclingIngestionAdapter implements SourceAdapter {
         }
 
         const adapter = createDoclingAdapter();
-        const normalized = await adapter.uploadDocument(input);
+        let normalized: Awaited<ReturnType<typeof adapter.uploadDocument>>;
+        try {
+            normalized = await adapter.uploadDocument(input);
+        } catch (error) {
+            const fallback = this.builtInFallback(error, options);
+            if (!fallback) throw error;
+            console.warn(
+                `[DoclingIngestionAdapter] Docling unavailable (${(error as DocumentConverterError).code}); converting ${filename} with ${fallback.name}`
+            );
+            const response = await getStoragePort().download(input);
+            if (!response.ok) {
+                throw new Error(
+                    `[DoclingIngestionAdapter] Failed to fetch ${filename} for ${fallback.name}: ${response.status} ${response.statusText}`
+                );
+            }
+            return fallback.process(Buffer.from(await response.arrayBuffer()), options);
+        }
 
         const pages: StandardizedPage[] = normalized.pages.map(p => ({
             pageNumber: p.pageNumber,
@@ -80,6 +117,25 @@ export class DoclingIngestionAdapter implements SourceAdapter {
                 mimeType: options?.mimeType,
             },
         };
+    }
+
+    /**
+     * The built-in adapter to use when Docling is unavailable, or undefined
+     * when the error is about the file itself (or no built-in adapter reads
+     * this format, as with EPUB) and should stand.
+     */
+    private builtInFallback(
+        error: unknown,
+        options?: SourceAdapterOptions
+    ): SourceAdapter | undefined {
+        if (!(error instanceof DocumentConverterError)) return undefined;
+        if (!DOCLING_UNAVAILABLE_CODES.has(error.code)) return undefined;
+        const mimeType = options?.mimeType ?? "";
+        const filename = options?.filename ?? "";
+        const extension = filename.includes(".")
+            ? filename.slice(filename.lastIndexOf(".")).toLowerCase()
+            : "";
+        return BUILT_IN_ADAPTERS.find(adapter => adapter.canHandle(mimeType, extension));
     }
 
     private inferSourceType(

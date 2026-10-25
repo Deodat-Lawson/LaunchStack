@@ -8,7 +8,7 @@ import { invokeStructuredWithUsage } from "./structured-output";
 /** A chat model that records what withStructuredOutput received. */
 function fakeResolved(
     parsed: unknown,
-    options: { nativeError?: Error; nativeErrors?: Error[]; text?: string } = {}
+    options: { nativeError?: Error; nativeErrors?: Error[]; text?: string; texts?: string[] } = {}
 ) {
     const seen: {
         schema?: unknown;
@@ -16,11 +16,14 @@ function fakeResolved(
         method?: string;
         strict?: boolean;
         plainCalls: number;
+        plainMessages: unknown[][];
     } = {
         schemas: [],
         plainCalls: 0,
+        plainMessages: [],
     };
     const queued = [...(options.nativeErrors ?? [])];
+    const texts = [...(options.texts ?? [])];
     const chat = {
         withStructuredOutput(schema: unknown, config: { method?: string; strict?: boolean }) {
             seen.schema = schema;
@@ -36,9 +39,10 @@ function fakeResolved(
                 },
             };
         },
-        invoke: async () => {
+        invoke: async (messages: unknown[]) => {
             seen.plainCalls += 1;
-            return { content: options.text ?? "" };
+            seen.plainMessages.push(messages);
+            return { content: texts.shift() ?? options.text ?? "" };
         },
     };
     const resolved = {
@@ -306,6 +310,54 @@ describe("invokeStructuredWithUsage in json-schema mode", () => {
 
         expect(result).toEqual({ title: "t", priorities: [] });
         expect(seen.plainCalls).toBe(1);
+        warn.mockRestore();
+    });
+
+    it("falls back to the prompt path when the endpoint ignores the schema", async () => {
+        // Some compatible servers accept `response_format` and drop it: the
+        // answer comes back unstructured, so there is nothing parsed.
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const { resolved, seen } = fakeResolved(null, {
+            text: '{"title":"t","priorities":[]}',
+        });
+
+        const { result } = await invokeStructuredWithUsage(resolved, schema, [], { name: "plan" });
+
+        expect(result).toEqual({ title: "t", priorities: [] });
+        expect(seen.plainCalls).toBe(1);
+        warn.mockRestore();
+    });
+
+    it("parses math-looking JSON values on the prompt path without rewriting them", async () => {
+        const refused = Object.assign(new Error("400 status code (no body)"), { status: 400 });
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const value = { title: "(x^{2} + 1)", priorities: [{ item: String.raw`( \frac{1}{2} )` }] };
+        const { resolved } = fakeResolved(undefined, {
+            nativeError: refused,
+            text: JSON.stringify(value),
+        });
+
+        const { result } = await invokeStructuredWithUsage(resolved, schema, [], { name: "plan" });
+
+        expect(result).toEqual(value);
+        warn.mockRestore();
+    });
+
+    it("repairs with the first answer verbatim and parses the second unchanged", async () => {
+        const refused = Object.assign(new Error("400 status code (no body)"), { status: 400 });
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const first = String.raw`{"title": "( \frac{1}{2} )"}`;
+        const value = { title: "(x^{2} + 1)", priorities: [] };
+        const { resolved, seen } = fakeResolved(undefined, {
+            nativeError: refused,
+            texts: [first, JSON.stringify(value)],
+        });
+
+        const { result } = await invokeStructuredWithUsage(resolved, schema, [], { name: "plan" });
+
+        expect(result).toEqual(value);
+        const repair = seen.plainMessages[1]!.at(-1) as { content: unknown };
+        expect(repair.content).toContain(`Previous response:\n${first}\n`);
         warn.mockRestore();
     });
 

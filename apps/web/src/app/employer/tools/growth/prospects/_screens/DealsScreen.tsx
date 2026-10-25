@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { toast } from "sonner";
 
@@ -9,9 +10,10 @@ import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 
 import { ProspectsApiError, prospectsApi, type DealRow, type SalesStage } from "../api";
+import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "~/lib/tools/format";
-import { EXIT_STAGES, FUNNEL_STAGES, STAGE_LABELS } from "../_lib/stages";
+import { EXIT_STAGES, FUNNEL_STAGES } from "../_lib/stages";
 import { useResource } from "~/lib/tools/useResource";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { FitMeter } from "~/components/tools/FitMeter";
@@ -22,6 +24,10 @@ import { StageMenu } from "../_components/StagePill";
 const BOARD: SalesStage[] = FUNNEL_STAGES.filter(s => s !== "lead");
 
 export function DealsScreen() {
+    const t = useTranslations("growth.prospects");
+    const { relativeTime, joinList } = useGrowthFormat();
+    const ts = useTranslations("growth.server");
+    const errorText = useErrorText();
     const { segmentId, href } = useProspects();
     const res = useResource(segmentId ? `deals:${segmentId}` : null, () =>
         prospectsApi.deals(segmentId!)
@@ -48,9 +54,7 @@ export function DealsScreen() {
                     typeof e.body === "object" &&
                     "reason" in e.body
                     ? String((e.body as { reason: unknown }).reason)
-                    : e instanceof Error
-                      ? e.message
-                      : "Could not move the deal"
+                    : errorText(e, t("deals.moveFailed"))
             );
         }
     };
@@ -59,27 +63,30 @@ export function DealsScreen() {
         <div className="mx-auto flex max-w-[1400px] flex-col gap-5">
             <PageHeader
                 size="md"
-                title="Deals"
+                title={t("common.deals")}
                 sub={
                     res.data ? (
                         <>
-                            {deals.length - leads} in motion ·{" "}
+                            {t("deals.inMotion", { count: deals.length - leads })} ·{" "}
                             <ToolLink
                                 href={href("/companies?view=uncontacted")}
                                 className="hover:text-ink"
                             >
-                                {leads} leads not yet qualified
+                                {t("deals.leadsNotQualified", { count: leads })}
                             </ToolLink>
                             {exits.some(e => e.count > 0) && (
                                 <>
                                     {" "}
                                     ·{" "}
-                                    {exits
-                                        .filter(e => e.count > 0)
-                                        .map(
-                                            e => `${e.count} ${STAGE_LABELS[e.stage].toLowerCase()}`
-                                        )
-                                        .join(", ")}
+                                    {joinList(
+                                        exits
+                                            .filter(e => e.count > 0)
+                                            .map(e =>
+                                                e.stage === "lost"
+                                                    ? t("deals.exits.lost", { count: e.count })
+                                                    : t("deals.exits.nurture", { count: e.count })
+                                            )
+                                    )}
                                 </>
                             )}
                         </>
@@ -90,10 +97,7 @@ export function DealsScreen() {
             {res.loading ? (
                 <SkeletonRows rows={6} height={64} />
             ) : deals.length - leads === 0 ? (
-                <EmptyState
-                    title="No deals in motion"
-                    body="Qualify a company from the Companies list, or move one here from its page. Leads stay in Companies until you do."
-                />
+                <EmptyState title={t("deals.empty")} body={t("deals.emptyBody")} />
             ) : (
                 <div className="grid auto-cols-[minmax(232px,1fr)] grid-flow-col gap-3 overflow-x-auto pb-3">
                     {BOARD.map(stage => {
@@ -102,11 +106,11 @@ export function DealsScreen() {
                             <section
                                 key={stage}
                                 className="bg-surface-2 border-line flex min-h-[300px] flex-col rounded-lg border"
-                                aria-label={STAGE_LABELS[stage]}
+                                aria-label={t(`stages.${stage}`)}
                             >
                                 <header className="flex items-center justify-between px-3 py-2">
                                     <span className="text-ink text-xs font-semibold">
-                                        {STAGE_LABELS[stage]}
+                                        {t(`stages.${stage}`)}
                                     </span>
                                     <span className="text-ink-3 font-mono text-[11px] tabular-nums">
                                         {items.length}
@@ -132,8 +136,15 @@ export function DealsScreen() {
                                             <div className="text-ink-3 mt-1 truncate text-xs">
                                                 {d.nextStep ??
                                                     (d.staleDays && d.staleDays > 0
-                                                        ? `No activity for ${d.staleDays} days`
-                                                        : `Last activity ${relativeTime(d.lastActivityAt ?? d.stageChangedAt)}`)}
+                                                        ? t("deals.noActivity", {
+                                                              count: d.staleDays,
+                                                          })
+                                                        : t("deals.lastActivity", {
+                                                              when: relativeTime(
+                                                                  d.lastActivityAt ??
+                                                                      d.stageChangedAt
+                                                              ),
+                                                          }))}
                                             </div>
                                             <div className="mt-2 flex items-center justify-between gap-2">
                                                 <FitMeter
@@ -144,7 +155,11 @@ export function DealsScreen() {
                                                     {d.ownerInitials && (
                                                         <Avatar
                                                             className="size-5"
-                                                            title={d.ownerName ?? undefined}
+                                                            title={
+                                                                d.ownerIsViewer
+                                                                    ? ts("you")
+                                                                    : (d.ownerName ?? undefined)
+                                                            }
                                                         >
                                                             <AvatarFallback className="text-[9px]">
                                                                 {d.ownerInitials}
@@ -162,7 +177,7 @@ export function DealsScreen() {
                                     ))}
                                     {items.length === 0 && (
                                         <p className="text-ink-4 px-1 py-6 text-center text-xs">
-                                            Empty
+                                            {t("deals.emptyColumn")}
                                         </p>
                                     )}
                                 </div>

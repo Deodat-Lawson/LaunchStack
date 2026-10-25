@@ -18,6 +18,8 @@ import type { PersonLook } from "./resolve";
 const CHUNK = 100;
 
 let cache = new Map<string, PersonLook | null>();
+/** Ids whose lookup failed (network, 4xx/5xx), as opposed to answered "not a member". */
+let failed = new Set<string>();
 const inflight = new Set<string>();
 let queued = new Set<string>();
 let scheduled = false;
@@ -45,11 +47,17 @@ async function fetchChunk(ids: string[]) {
         const body = response.ok
             ? ((await response.json()) as { people?: Record<string, PersonLook> })
             : {};
-        for (const id of ids) cache.set(id, body.people?.[id] ?? null);
+        for (const id of ids) {
+            cache.set(id, body.people?.[id] ?? null);
+            if (!response.ok) failed.add(id);
+        }
     } catch {
         // Unknown for this page load; the avatar falls back to initials. Not
         // retried per render, which would loop while the network is down.
-        for (const id of ids) cache.set(id, null);
+        for (const id of ids) {
+            cache.set(id, null);
+            failed.add(id);
+        }
     } finally {
         for (const id of ids) inflight.delete(id);
         emit();
@@ -77,6 +85,7 @@ function request(ids: readonly string[]) {
 
 export function resetPeopleCache() {
     cache = new Map();
+    failed = new Set();
     emit();
 }
 
@@ -101,4 +110,41 @@ export function usePeople(ids: readonly string[]): Record<string, PersonLook> {
         // `tick` is the cache version: a resolved lookup must produce a new object.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [key, tick]);
+}
+
+/**
+ * One person, for a surface whose wording differs by outcome: still asking,
+ * a current member, someone the workspace no longer has ("gone" — left, or
+ * never a member), or a lookup that failed. A failure is kept apart from
+ * "gone" so nobody is described as having left because the network blinked.
+ */
+export type PersonLookup =
+    | { status: "pending" }
+    | { status: "member"; look: PersonLook }
+    | { status: "gone" }
+    | { status: "unknown" };
+
+const PENDING: PersonLookup = { status: "pending" };
+const GONE: PersonLookup = { status: "gone" };
+const UNKNOWN: PersonLookup = { status: "unknown" };
+
+/** Look one person up through the same batched cache; no id is "unknown" and asks nothing. */
+export function usePerson(id: string | null | undefined): PersonLookup {
+    const tick = useSyncExternalStore(
+        subscribe,
+        () => version,
+        () => version
+    );
+    useEffect(() => {
+        if (id) request([id]);
+    }, [id, tick]);
+    return useMemo(() => {
+        if (!id) return UNKNOWN;
+        if (!cache.has(id)) return PENDING;
+        const look = cache.get(id);
+        if (look) return { status: "member", look };
+        return failed.has(id) ? UNKNOWN : GONE;
+        // `tick` is the cache version: a resolved lookup must produce a new object.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, tick]);
 }

@@ -26,9 +26,16 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
-import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    forbiddenForPermission,
+    requireWorkspaceContext,
+    type WorkspaceContext,
+} from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -138,11 +145,23 @@ async function getDocumentDetails(
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
-    if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
+    if (!ctx.data.can("documents.read")) {
+        return forbiddenForPermission("documents.read", localeOfRequest(request));
+    }
 
+    // The analysis resolves its models against the workspace's own, if it brought them.
+    return withWorkspaceChatModels(ctx.data.companyId, "predictiveAnalysis", () =>
+        analyze(request, ctx)
+    );
+}
+
+function analyze(request: Request, ctx: { data: WorkspaceContext }) {
     // Apply rate limiting: 20 requests per 15 minutes for predictive analysis
     // This is a compute-intensive AI operation
     return withRateLimit(request, RateLimitPresets.strict, async () => {
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "agents.server.analysis");
+        const tApi = translatorFor(locale, "errors.api");
         const endTimer = predictiveAnalysisDuration.startTimer();
         let cachedLabel: "true" | "false" = "false";
         const recordResult = (result: "success" | "error") => {
@@ -169,7 +188,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Invalid documentId. Must be a positive number.",
+                        message: t("invalidDocumentId"),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.BAD_REQUEST }
@@ -181,7 +200,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: `Invalid analysisType. Must be one of: ${ANALYSIS_TYPES.join(", ")}`,
+                        message: t("invalidAnalysisType", { types: ANALYSIS_TYPES.join(", ") }),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.BAD_REQUEST }
@@ -196,7 +215,10 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: `Invalid timeoutMs. Must be between ${TIMEOUT_LIMITS.MIN_MS} and ${TIMEOUT_LIMITS.MAX_MS}`,
+                        message: t("invalidTimeout", {
+                            min: String(TIMEOUT_LIMITS.MIN_MS),
+                            max: String(TIMEOUT_LIMITS.MAX_MS),
+                        }),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.BAD_REQUEST }
@@ -212,7 +234,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Document not found.",
+                        message: t("documentNotFound"),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.NOT_FOUND }
@@ -224,7 +246,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "No current document version found.",
+                        message: t("noVersion"),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.NOT_FOUND }
@@ -288,7 +310,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "No chunks found for the given documentId.",
+                        message: t("noChunks"),
                         errorType: ERROR_TYPES.VALIDATION,
                     },
                     { status: HTTP_STATUS.NOT_FOUND }
@@ -383,37 +405,35 @@ export async function POST(request: Request) {
             console.error("Predictive Document Analysis Error:", sanitizeErrorMessage(error));
 
             let status: number = HTTP_STATUS.INTERNAL_SERVER_ERROR;
-            let message = "Failed to perform predictive document analysis";
+            let message = t("failed");
             let errorType: ErrorType = ERROR_TYPES.UNKNOWN;
 
             if (error instanceof Error) {
                 if (error.message.includes("timed out") || error.message.includes("timeout")) {
                     status = HTTP_STATUS.TIMEOUT;
-                    message =
-                        "The AI analysis took too long to complete. Please try again or reduce the document size.";
+                    message = t("tookTooLong");
                     errorType = ERROR_TYPES.TIMEOUT;
                 } else if (
                     error.message.includes("database") ||
                     error.message.includes("connection")
                 ) {
                     status = HTTP_STATUS.SERVICE_UNAVAILABLE;
-                    message = "Database connection error. Please try again later.";
+                    message = tApi("databaseConnection");
                     errorType = ERROR_TYPES.DATABASE;
                 } else if (error.message.includes("search") || error.message.includes("fetch")) {
                     status = HTTP_STATUS.BAD_GATEWAY;
-                    message =
-                        "External service error. Analysis completed with limited functionality.";
+                    message = t("externalLimited");
                     errorType = ERROR_TYPES.EXTERNAL_SERVICE;
                 } else if (error.message.includes("openai") || error.message.includes("api")) {
                     status = HTTP_STATUS.BAD_GATEWAY;
-                    message = "AI service temporarily unavailable. Please try again later.";
+                    message = tApi("aiUnavailable");
                     errorType = ERROR_TYPES.AI_SERVICE;
                 } else if (
                     error.message.includes("validation") ||
                     error.message.includes("invalid")
                 ) {
                     status = HTTP_STATUS.BAD_REQUEST;
-                    message = "Invalid request data provided.";
+                    message = tApi("invalidDataProvided");
                     errorType = ERROR_TYPES.VALIDATION;
                 }
             }

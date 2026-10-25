@@ -4,7 +4,12 @@
  * Two Google products share this door, told apart by `?provider=`:
  *
  * - (default) `google-drive` — workspace-scoped. A `connectors.manage`
- *   holder grants drive.file for the whole workspace.
+ *   holder grants drive.file for the whole workspace. `?access=folders`
+ *   (the panel's "Allow folder access") also asks for drive.readonly, when
+ *   the operator allows folder import (GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED);
+ *   a plain connect never does, so it stays clear of the warning Google
+ *   shows for a restricted scope until the app is verified. Its state
+ *   carries a prefix so the callback knows folder access was asked for.
  * - `gmail` — per-user. Any `documents.upload` holder grants gmail.readonly
  *   for their own mailbox; the connection belongs to them, and the mail
  *   lands in a folder only they can see.
@@ -29,12 +34,14 @@ import {
     isGmailConnectorConfigured,
 } from "~/server/services/connectors/gmail/config";
 import {
-    GOOGLE_DRIVE_SCOPES,
+    DRIVE_FOLDERS_STATE_PREFIX,
+    googleDriveScopes,
     GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
+import { publicOrigin } from "~/server/public-origin";
 
 function redirectToConsent(
     request: Request,
@@ -43,7 +50,7 @@ function redirectToConsent(
     const nonce = randomUUID();
     const url = buildAuthorizationUrl({
         clientId: getGoogleOAuthApp().clientId,
-        redirectUri: getOAuthRedirectUrl(new URL(request.url).origin),
+        redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         scopes: input.scopes,
         state: `${input.statePrefix}${nonce}`,
     });
@@ -60,7 +67,8 @@ function redirectToConsent(
 }
 
 export async function GET(request: Request) {
-    const provider = new URL(request.url).searchParams.get("provider");
+    const search = new URL(request.url).searchParams;
+    const provider = search.get("provider");
 
     if (provider === "gmail") {
         if (!isGmailConnectorConfigured()) {
@@ -81,9 +89,10 @@ export async function GET(request: Request) {
 
     const ctx = await requireWorkspacePermission("connectors.manage");
     if (!ctx.success) return ctx.response;
+    const folderAccess = search.get("access") === "folders";
     return redirectToConsent(request, {
-        scopes: GOOGLE_DRIVE_SCOPES,
+        scopes: googleDriveScopes({ folderAccess }),
         cookieName: GOOGLE_OAUTH_STATE_COOKIE,
-        statePrefix: "",
+        statePrefix: folderAccess ? DRIVE_FOLDERS_STATE_PREFIX : "",
     });
 }

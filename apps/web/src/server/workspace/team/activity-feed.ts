@@ -113,7 +113,7 @@ export async function annotateOpenable(
 
 export async function activityFeed(
     ctx: WorkspaceContext,
-    options: { limit?: number; before?: number; actorUserId?: string } = {}
+    options: Parameters<typeof listActivity>[1] = {}
 ): Promise<ActivityFeed> {
     const page = await listActivity(ctx, options);
     return { entries: await annotateOpenable(ctx, page.entries), nextBefore: page.nextBefore };

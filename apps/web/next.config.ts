@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 import "./src/env";
 
@@ -37,11 +38,13 @@ const config: NextConfig = {
         "@launchstack/retrieval",
         "@launchstack/orchestration",
         "@launchstack/collab",
+        "@launchstack/simulation",
         "@launchstack/editing",
         "@launchstack/google-drive",
         "@launchstack/evidence",
         "@launchstack/pipelines",
         "@launchstack/tools",
+        "@launchstack/design-tokens",
     ],
 
     // Production builds fail on type errors (ADR-006). Lint runs as its own
@@ -185,4 +188,8 @@ const config: NextConfig = {
     ],
 };
 
-export default config;
+// The interface language comes from src/i18n/request.ts (cookie, then the
+// browser's Accept-Language); there is no locale segment in the URL.
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+export default withNextIntl(config);

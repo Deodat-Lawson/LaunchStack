@@ -26,12 +26,20 @@ import {
     DEFAULT_AGENT_AUTONOMY,
 } from "~/lib/agents/autonomy";
 import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
+import { DEFAULT_LOCALE, LOCALE_CODES, LOCALES } from "~/i18n/locales";
 
-import type { SettingControl, SettingsSectionId, StoredScope } from "./types";
+import type { SettingControl, SettingOption, SettingsSectionId, StoredScope } from "./types";
 
 export interface SettingDefinition<T = unknown> {
     key: string;
+    /** Where the row lives, and where `#key` lands. */
     section: SettingsSectionId;
+    /**
+     * Where the workspace-scope row is drawn, when that is not `section`. Set
+     * when the personal row belongs with the other You preferences but the
+     * workspace default is policy for admins.
+     */
+    workspaceSection?: SettingsSectionId;
     /** Row label. Short. */
     label: string;
     /** What it does, one sentence. */
@@ -47,25 +55,29 @@ export interface SettingDefinition<T = unknown> {
     schema: z.ZodType<T>;
     default: T;
     control: SettingControl;
-    /** A feature surface renders this one; the generic row is not used. Still searchable. */
+    /**
+     * Placed by hand, so `SectionRows` leaves it out: a feature surface renders
+     * it, or its row is drawn somewhere specific (once per scope). Still
+     * searchable, and `#key` still lands on `section`.
+     */
     custom?: boolean;
     /** Lives in a legacy column, joined in by the server's bindings rather than `settings_values`. */
     bound?: boolean;
 }
 
 const RETENTION_DAYS_OPTIONS = [
-    { value: null, label: "Keep forever" },
-    { value: 30, label: "30 days" },
-    { value: 90, label: "90 days" },
-    { value: 180, label: "180 days" },
-    { value: 365, label: "One year" },
+    { value: null, key: "forever", label: "Keep forever" },
+    { value: 30, key: "days30", label: "30 days" },
+    { value: 90, key: "days90", label: "90 days" },
+    { value: 180, key: "days180", label: "180 days" },
+    { value: 365, key: "days365", label: "One year" },
 ] as const;
 
 const TRASH_DAYS_OPTIONS = [
-    { value: null, label: "Keep until deleted by hand" },
-    { value: 7, label: "7 days" },
-    { value: 30, label: "30 days" },
-    { value: 90, label: "90 days" },
+    { value: null, key: "untilDeleted", label: "Keep until deleted by hand" },
+    { value: 7, key: "days7", label: "7 days" },
+    { value: 30, key: "days30", label: "30 days" },
+    { value: 90, key: "days90", label: "90 days" },
 ] as const;
 
 /** Declared as a plain array so each entry keeps its own value type. */
@@ -73,6 +85,26 @@ export const SETTINGS: readonly SettingDefinition[] = [
     // ------------------------------------------------------------------
     // You
     // ------------------------------------------------------------------
+    {
+        key: "appearance.language",
+        section: "appearance",
+        label: "Language",
+        description:
+            "The language of menus, buttons and messages. Assistants answer in it too, unless you write in another one.",
+        aliases: ["language", "translation", "chinese", "english", "locale", "语言", "中文"],
+        scopes: ["member"],
+        permission: null,
+        schema: z.enum(LOCALE_CODES),
+        // Stored only once the person picks one: until then the browser's
+        // own languages decide (src/i18n/locales.ts).
+        default: DEFAULT_LOCALE,
+        control: {
+            kind: "select",
+            options: LOCALES.map(locale => ({ value: locale.code, label: locale.nativeName })),
+        },
+        // Drawn by LanguageRow, which shows the language the page is in.
+        custom: true,
+    },
     {
         key: "appearance.theme",
         section: "appearance",
@@ -82,7 +114,9 @@ export const SETTINGS: readonly SettingDefinition[] = [
         scopes: ["member"],
         permission: null,
         schema: z.enum(["system", "light", "dark"]),
-        default: "system",
+        // Dark, like the landing site and the sign-in screens: "system" here
+        // flipped people to light the moment they entered a workspace.
+        default: "dark",
         control: {
             kind: "radio",
             options: [
@@ -132,6 +166,64 @@ export const SETTINGS: readonly SettingDefinition[] = [
                 { value: "allow", label: "Allow" },
             ],
         },
+    },
+    {
+        key: "chat.responseStyle",
+        section: "appearance",
+        label: "Answer style of the default assistant",
+        description:
+            "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
+        aliases: [
+            "response style",
+            "balanced",
+            "concise",
+            "detailed",
+            "academic",
+            "organized",
+            "answer length",
+            "tone",
+        ],
+        // Two rows, one per scope: each person's own choice under Appearance,
+        // and the workspace default (what everyone else gets) under Agents and
+        // autonomy, which only admins see. `#chat.responseStyle` lands on the
+        // personal row, because everyone can reach that one.
+        workspaceSection: "agents",
+        scopes: ["workspace", "member"],
+        permission: "settings.manage",
+        schema: z.enum(AGENT_STYLE_IDS),
+        default: "balanced",
+        control: {
+            kind: "select",
+            options: [
+                {
+                    value: "balanced",
+                    label: "Balanced",
+                    description:
+                        "Length matches the question: a line for a lookup, a full answer for a how or why.",
+                },
+                {
+                    value: "concise",
+                    label: "Concise",
+                    description: "Short and direct: the answer first, no filler.",
+                },
+                {
+                    value: "detailed",
+                    label: "Detailed",
+                    description: "Comprehensive, with context and background.",
+                },
+                {
+                    value: "academic",
+                    label: "Academic",
+                    description: "Analytical and precise, formal structure.",
+                },
+                {
+                    value: "organized",
+                    label: "Organized",
+                    description: "Sections and bullets, built to scan.",
+                },
+            ],
+        },
+        custom: true,
     },
     {
         key: "shortcuts.bindings",
@@ -198,130 +290,6 @@ export const SETTINGS: readonly SettingDefinition[] = [
                 description: AGENT_AUTONOMY_META[level].description,
             })),
         },
-    },
-    {
-        key: "chat.responseStyle",
-        section: "agents",
-        label: "Answer style of the default assistant",
-        description:
-            "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one.",
-        aliases: [
-            "response style",
-            "concise",
-            "detailed",
-            "academic",
-            "organized",
-            "answer length",
-            "tone",
-        ],
-        scopes: ["workspace", "member"],
-        permission: "settings.manage",
-        schema: z.enum(AGENT_STYLE_IDS),
-        default: "concise",
-        control: {
-            kind: "select",
-            options: [
-                {
-                    value: "concise",
-                    label: "Concise",
-                    description: "Direct and short. Under 150 words when it can be.",
-                },
-                {
-                    value: "detailed",
-                    label: "Detailed",
-                    description: "Comprehensive, with context and background.",
-                },
-                {
-                    value: "academic",
-                    label: "Academic",
-                    description: "Analytical and precise, formal structure.",
-                },
-                {
-                    value: "organized",
-                    label: "Organized",
-                    description: "Sections and bullets, built to scan.",
-                },
-            ],
-        },
-    },
-    {
-        key: "documents.uploadStorage",
-        section: "documents",
-        label: "Where uploaded files are stored",
-        description: "The storage that receives new uploads. Existing files stay where they are.",
-        aliases: ["storage", "uploadthing", "blob", "s3", "upload preference"],
-        scopes: ["workspace"],
-        permission: "settings.manage",
-        schema: z.enum(["cloud", "database"]),
-        default: "cloud",
-        control: {
-            kind: "radio",
-            options: [
-                {
-                    value: "cloud",
-                    label: "UploadThing",
-                    description: "Needs UPLOADTHING_TOKEN on the server.",
-                },
-                {
-                    value: "database",
-                    label: "Blob / database",
-                    description: "The server's own storage.",
-                },
-            ],
-        },
-        bound: true,
-    },
-    {
-        key: "documents.defaultProcessingMethod",
-        section: "documents",
-        label: "Default processing method",
-        description:
-            "What a new upload is processed with unless the person uploading picks otherwise.",
-        aliases: ["ocr", "processing", "docling", "azure", "landing ai", "datalab"],
-        scopes: ["workspace", "folder"],
-        permission: "settings.manage",
-        schema: z.enum(["standard", "auto", "azure", "landing_ai", "datalab", "docling"]),
-        default: "standard",
-        control: {
-            kind: "select",
-            options: [
-                {
-                    value: "standard",
-                    label: "Standard",
-                    description: "No OCR. For text-based PDFs.",
-                },
-                { value: "auto", label: "Auto", description: "Pick the best method per document." },
-                { value: "azure", label: "Azure OCR" },
-                { value: "landing_ai", label: "Landing AI" },
-                { value: "datalab", label: "Datalab" },
-                { value: "docling", label: "Docling" },
-            ],
-        },
-    },
-    {
-        key: "documents.defaultFolder",
-        section: "documents",
-        label: "Default folder for new uploads",
-        description: "Pre-selected in the upload dialog. Leave blank for Unfiled.",
-        aliases: ["folder", "category", "destination", "where documents land"],
-        scopes: ["workspace"],
-        permission: "settings.manage",
-        schema: z.string().max(256),
-        default: "",
-        control: { kind: "text", placeholder: "Unfiled" },
-    },
-    {
-        key: "documents.createNativeGoogleDoc",
-        section: "documents",
-        label: "Create new documents as Google Docs",
-        description:
-            "When Drive linking is on, the Add source dialog opens on Google Doc instead of a local file.",
-        aliases: ["google docs", "drive", "create", "native doc"],
-        scopes: ["workspace"],
-        permission: "settings.manage",
-        schema: z.boolean(),
-        default: false,
-        control: { kind: "switch" },
     },
 
     // ------------------------------------------------------------------
@@ -397,25 +365,60 @@ export function settingsForSection(section: SettingsSectionId): SettingDefinitio
     return SETTINGS.filter(definition => definition.section === section);
 }
 
-/** Ranked search over labels, aliases, keys and descriptions. Empty query → nothing. */
-export function searchSettings(query: string, limit = 8): SettingDefinition[] {
+/**
+ * The words a reader sees for a setting, when they differ from the English
+ * declared here (`useSettingCopier` in ./useSettings gives the translated ones).
+ */
+export interface SettingSearchCopy {
+    label: string;
+    description: string;
+}
+
+/**
+ * The stable message key of an option (`settings.registry.<key>.options.<this>`):
+ * its declared `key`, or its value when that is a string, camel-cased
+ * (`landing_ai` → `landingAi`). Null for a value that names nothing.
+ */
+export function settingOptionKey(option: SettingOption): string | null {
+    if (option.key) return option.key;
+    if (typeof option.value !== "string" || !option.value) return null;
+    const key = option.value.replace(/[_-]+([a-z0-9])/gi, (_, c: string) => c.toUpperCase());
+    return /^[A-Za-z][A-Za-z0-9]*$/.test(key) ? key : null;
+}
+
+/**
+ * Ranked search over labels, aliases, keys and descriptions. Empty query → nothing.
+ *
+ * `copy` adds the words the reader sees (their language's label and
+ * description), matched alongside the English ones and the aliases — someone
+ * reading Chinese types Chinese.
+ */
+export function searchSettings(
+    query: string,
+    limit = 8,
+    copy?: (definition: SettingDefinition) => SettingSearchCopy
+): SettingDefinition[] {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const scored: Array<{ definition: SettingDefinition; score: number }> = [];
+    const scored: Array<{ definition: SettingDefinition; score: number; label: string }> = [];
     for (const definition of SETTINGS) {
-        const label = definition.label.toLowerCase();
+        const shown = copy?.(definition);
+        const labels = [definition.label.toLowerCase()];
+        const descriptions = [definition.description.toLowerCase()];
+        if (shown) {
+            labels.push(shown.label.toLowerCase());
+            descriptions.push(shown.description.toLowerCase());
+        }
         const key = definition.key.toLowerCase();
         let score = 0;
-        if (label === q || key === q) score = 100;
-        else if (label.startsWith(q)) score = 80;
+        if (labels.some(label => label === q) || key === q) score = 100;
+        else if (labels.some(label => label.startsWith(q))) score = 80;
         else if (definition.aliases.some(alias => alias.toLowerCase() === q)) score = 75;
-        else if (label.includes(q) || key.includes(q)) score = 60;
+        else if (labels.some(label => label.includes(q)) || key.includes(q)) score = 60;
         else if (definition.aliases.some(alias => alias.toLowerCase().includes(q))) score = 50;
-        else if (definition.description.toLowerCase().includes(q)) score = 30;
-        if (score > 0) scored.push({ definition, score });
+        else if (descriptions.some(description => description.includes(q))) score = 30;
+        if (score > 0) scored.push({ definition, score, label: shown?.label ?? definition.label });
     }
-    scored.sort(
-        (a, b) => b.score - a.score || a.definition.label.localeCompare(b.definition.label)
-    );
+    scored.sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
     return scored.slice(0, limit).map(entry => entry.definition);
 }

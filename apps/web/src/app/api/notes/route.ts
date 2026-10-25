@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray, or } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { requestNoteEmbedding } from "~/server/notes/embed-note";
+import { createNote } from "~/server/notes/create-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
-import { syncNoteLinks } from "~/server/notes/wiki-links";
 import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { filterNotesByDocumentScope, isNoteDocumentVisible } from "~/server/notes/document-scope";
-import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -30,7 +30,10 @@ export async function GET(request: Request) {
         // A document outside the caller's scope has no notes to list — it reads
         // as missing, the same as a document that does not exist.
         if (documentId && !(await isNoteDocumentVisible(documentId, ctx.data.companyId, scope))) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
         // Scope to the active workspace. Legacy rows with null companyId still
         // surface for the owning user so old notes are not silently dropped.
@@ -102,11 +105,12 @@ export async function GET(request: Request) {
         return NextResponse.json({ notes: notes.map(serializeNote) }, { status: 200 });
     } catch (error) {
         console.error("Error fetching notes:", error);
-        return NextResponse.json({ error: "Failed to fetch notes" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchNotesFailed") }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -121,59 +125,32 @@ export async function POST(request: Request) {
             versionId: body.versionId,
             companyId: ctx.data.companyId,
             scope,
+            request,
         });
         if (!target.ok) return target.response;
 
-        const versionIdBigint =
-            body.versionId !== undefined && body.versionId !== null ? BigInt(body.versionId) : null;
-
-        const [note] = await db
-            .insert(documentNotes)
-            .values({
-                userId: ctx.data.authUserId,
-                documentId: body.documentId ?? null,
-                companyId: String(ctx.data.companyId),
-                versionId: versionIdBigint,
-                title: body.title ?? null,
-                content: body.content ?? null,
-                contentRich: body.contentRich ?? null,
-                contentMarkdown: body.contentMarkdown ?? null,
-                anchor: body.anchor ?? null,
-                anchorStatus: body.anchorStatus ?? "resolved",
-                tags: body.tags ?? [],
-            })
-            .returning();
-
-        if (note) {
-            // Post-commit side effects: the note row is already persisted, so a
-            // failed outbox enqueue (or link sync) must log loudly but never fail
-            // the save — parity with the old fire-and-forget path. Tradeoff: the
-            // embedding may lag until the next edit re-enqueues it.
-            try {
-                // The insert above always stamps the active workspace, so the hint is
-                // only a guard for legacy rows that came back with a null companyId.
-                await requestNoteEmbedding(
-                    note.id,
-                    "created",
-                    note.companyId ?? String(ctx.data.companyId)
-                );
-            } catch (err) {
-                console.error(
-                    `[notes] requestNoteEmbedding failed for note ${note.id} (note saved; embedding deferred to next edit):`,
-                    err
-                );
-            }
-            await syncNoteLinks({
-                noteId: note.id,
-                rich: (note.contentRich as JSONContent | null) ?? null,
-                companyId: note.companyId,
-                scope,
-            }).catch(err => console.error("[syncNoteLinks] failed:", err));
-        }
+        // Insert, then the post-commit side effects (embedding, wiki links),
+        // which log but never fail the save — see ~/server/notes/create-note.
+        const note = await createNote(
+            {
+                authUserId: ctx.data.authUserId,
+                companyId: ctx.data.companyId,
+                documentId: body.documentId,
+                versionId: body.versionId,
+                title: body.title,
+                content: body.content,
+                contentRich: body.contentRich,
+                contentMarkdown: body.contentMarkdown,
+                anchor: body.anchor,
+                anchorStatus: body.anchorStatus,
+                tags: body.tags,
+            },
+            scope
+        );
 
         return NextResponse.json({ note: note ? serializeNote(note) : note }, { status: 201 });
     } catch (error) {
         console.error("Error creating note:", error);
-        return NextResponse.json({ error: "Failed to create note" }, { status: 500 });
+        return NextResponse.json({ error: t("createFailed") }, { status: 500 });
     }
 }

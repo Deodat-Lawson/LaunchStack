@@ -9,7 +9,7 @@ jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { POST as ACCEPT } from "~/app/api/workspace/join-links/accept/route";
 import { GET as PREVIEW } from "~/app/api/workspace/join-links/preview/route";
-import { POST } from "~/app/api/workspace/join-links/route";
+import { GET, POST } from "~/app/api/workspace/join-links/route";
 import { PATCH } from "~/app/api/workspace/join-links/[id]/route";
 import { POST as RESET } from "~/app/api/workspace/join-links/[id]/reset/route";
 import { getServerSession } from "~/server/auth";
@@ -52,6 +52,10 @@ function linkRow(overrides: Partial<Record<string, unknown>> = {}) {
 beforeEach(() => {
     fakeDb.reset();
     jest.clearAllMocks();
+    // Links are built on the configured public origin; the repo .env may set
+    // one, and these assertions are about the request fallback.
+    delete process.env.APP_PUBLIC_URL;
+    delete process.env.BETTER_AUTH_URL;
     session.mockResolvedValue({ user: { id: "user-x", email: "new@example.com", name: "Newt" } });
 });
 
@@ -280,6 +284,57 @@ describe("POST /api/workspace/join-links", () => {
             jsonRequest("/api/workspace/join-links", "POST", { role: "member" })
         );
         expect(res.status).toBe(403);
+    });
+});
+
+describe("join link origin", () => {
+    // What the standalone server hands a route behind the proxy: its bind address, not the Host.
+    const PROXIED = "https://0.0.0.0:3000";
+
+    function proxiedCreate() {
+        return new Request(`${PROXIED}/api/workspace/join-links`, {
+            method: "POST",
+            headers: { "content-type": "application/json", host: "app.example.com" },
+            body: JSON.stringify({ role: "member" }),
+        });
+    }
+
+    it("points at the deployment's public URL, not the server's bind address", async () => {
+        process.env.BETTER_AUTH_URL = "https://app.example.com/";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onReturning(inviteCodes, [linkRow()]);
+
+        const res = await POST(proxiedCreate());
+
+        const { link } = (await res.json()) as { link: { url: string } };
+        expect(link.url).toBe(`https://app.example.com/join/${CODE.toLowerCase()}`);
+    });
+
+    it("ignores APP_PUBLIC_URL, which may be the services' internal address", async () => {
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
+        process.env.APP_PUBLIC_URL = "http://app:3000";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onReturning(inviteCodes, [linkRow()]);
+
+        const res = await POST(proxiedCreate());
+
+        const { link } = (await res.json()) as { link: { url: string } };
+        expect(link.url).toBe(`https://app.example.com/join/${CODE.toLowerCase()}`);
+    });
+
+    it("lists existing links on the public URL — the card Settings › People renders", async () => {
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ code: LEGACY })]);
+
+        const res = await GET(new Request(`${PROXIED}/api/workspace/join-links`));
+
+        expect(res.status).toBe(200);
+        const { links } = (await res.json()) as { links: { url: string }[] };
+        // Only the code is stored, so a link issued before the fix reads right too.
+        expect(links.map(l => l.url)).toEqual([
+            `https://app.example.com/join/${LEGACY.toLowerCase()}`,
+        ]);
     });
 });
 
@@ -559,5 +614,56 @@ describe("legacy 8-character links", () => {
         expect(fakeDb.insertedInto(inviteCodes)[0]?.code).toMatch(/^[0-9A-F]{32}$/);
         const { link } = (await res.json()) as { link: { legacy: boolean } };
         expect(link.legacy).toBe(false);
+    });
+});
+
+describe("in the reader's language", () => {
+    function chinese(url: string, method: string, body?: unknown): Request {
+        return new Request(`http://localhost${url}`, {
+            method,
+            headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+        });
+    }
+
+    it("says why a link can't be used, in English without the cookie", async () => {
+        fakeDb.onSelect(inviteCodes, [linkRow({ maxUses: 2, useCount: 2 })]);
+        const english = await ACCEPT(
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
+        );
+        expect(english.status).toBe(410);
+        await expect(english.json()).resolves.toEqual({
+            error: "This join link has reached its use limit.",
+        });
+
+        fakeDb.onSelect(inviteCodes, [linkRow({ maxUses: 2, useCount: 2 })]);
+        const chineseReply = await ACCEPT(
+            chinese("/api/workspace/join-links/accept", "POST", { code: CODE })
+        );
+        expect(chineseReply.status).toBe(410);
+        await expect(chineseReply.json()).resolves.toEqual({
+            error: "这个加入链接已达到使用次数上限。",
+        });
+    });
+
+    it("refuses to change a revoked link in Chinese", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ isActive: false })]);
+        const res = await PATCH(
+            chinese("/api/workspace/join-links/3", "PATCH", { requiresApproval: false }),
+            params({ id: "3" })
+        );
+        expect(res.status).toBe(409);
+        await expect(res.json()).resolves.toEqual({ error: "这个加入链接已被撤销，请新建一个。" });
+    });
+
+    it("words an invalid id", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        const res = await PATCH(
+            chinese("/api/workspace/join-links/x", "PATCH", { requiresApproval: false }),
+            params({ id: "x" })
+        );
+        expect(res.status).toBe(400);
+        await expect(res.json()).resolves.toEqual({ error: "ID 无效" });
     });
 });

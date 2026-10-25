@@ -9,15 +9,19 @@
  *
  * States: loading → not-configured → not-connected → connected (chosen
  * labels and searches, label picker, search input, sync now, disconnect) →
- * syncing (polls status) → revoked (reconnect). All data comes from
+ * syncing (polls status; a sync that never starts says so, see
+ * useConnectorSync) → revoked (reconnect). All data comes from
  * /api/connectors/gmail.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { X as IconX } from "lucide-react";
 
+import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
+import { useConnectorSync, useSyncStatusLabel } from "./useConnectorSync";
 
 interface ScopeRow {
     readonly id: string;
@@ -91,6 +95,9 @@ const buttonStyle = (variant: "primary" | "quiet" | "danger", disabled: boolean)
     }) as const;
 
 export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
+    const t = useTranslations("sources.gmailConnect");
+    const tc = useTranslations("common");
+    const syncStatusLabel = useSyncStatusLabel();
     const Icon = tab.Icon;
     const [status, setStatus] = useState<GmailStatus | null>(null);
     const [loading, setLoading] = useState(true);
@@ -101,7 +108,6 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const [pickingLabels, setPickingLabels] = useState(false);
     const [selectedLabelIds, setSelectedLabelIds] = useState<Set<string>>(new Set());
     const [query, setQuery] = useState("");
-    const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const refresh = useCallback(async () => {
         const next = await fetchStatus();
@@ -114,31 +120,9 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
         void refresh();
     }, [refresh]);
 
-    // Poll while a sync is running so the counts land without a manual refresh.
-    useEffect(() => {
-        if (status?.lastSyncStatus === "running" && !pollRef.current) {
-            pollRef.current = setInterval(() => void refresh(), 3000);
-        }
-        if (status?.lastSyncStatus !== "running" && pollRef.current) {
-            clearInterval(pollRef.current);
-            pollRef.current = null;
-        }
-        return () => {
-            if (pollRef.current) {
-                clearInterval(pollRef.current);
-                pollRef.current = null;
-            }
-        };
-    }, [status?.lastSyncStatus, refresh]);
-
-    const startSync = useCallback(async (): Promise<boolean> => {
-        const res = await postJson(`${BASE}/sync`, "POST", {});
-        if (res.ok) {
-            setStatus(prev => (prev ? { ...prev, lastSyncStatus: "running" } : prev));
-            return true;
-        }
-        return false;
-    }, []);
+    // Polls while a sync is starting or running, so the counts land without
+    // a manual refresh.
+    const { phase, requestSync: startSync } = useConnectorSync(status, refresh, `${BASE}/sync`);
 
     const openLabelPicker = useCallback(async () => {
         setPickingLabels(true);
@@ -146,12 +130,12 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
         if (labels) return;
         const res = await fetch(`${BASE}/labels`);
         if (!res.ok) {
-            setLabelsError("Could not load your labels — try reconnecting Gmail.");
+            setLabelsError(t("labelsLoadFailed"));
             return;
         }
         const payload = (await res.json()) as { data?: { labels?: LabelOption[] } };
         setLabels(payload.data?.labels ?? []);
-    }, [labels]);
+    }, [labels, t]);
 
     const addLabels = useCallback(async () => {
         if (!labels || selectedLabelIds.size === 0) return;
@@ -162,18 +146,18 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 .map(label => ({ kind: "label" as const, value: label.id, name: label.name }));
             const res = await postJson(`${BASE}/items`, "POST", { items });
             if (!res.ok) {
-                toast.error("Could not save the selection");
+                toast.error(t("saveSelectionFailed"));
                 return;
             }
-            toast.success(`${items.length} label(s) added — syncing`);
             setSelectedLabelIds(new Set());
             setPickingLabels(false);
             await refresh();
-            await startSync();
+            if (await startSync()) toast.success(t("labelsAdded", { count: items.length }));
+            else toast.error(t("labelsAddedNoSync", { count: items.length }));
         } finally {
             setBusy(false);
         }
-    }, [labels, selectedLabelIds, refresh, startSync]);
+    }, [labels, selectedLabelIds, refresh, startSync, t]);
 
     const addQuery = useCallback(async () => {
         const value = query.trim();
@@ -184,17 +168,17 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 items: [{ kind: "query", value }],
             });
             if (!res.ok) {
-                toast.error("Could not save the search");
+                toast.error(t("saveSearchFailed"));
                 return;
             }
-            toast.success("Search added — syncing");
             setQuery("");
             await refresh();
-            await startSync();
+            if (await startSync()) toast.success(t("searchAdded"));
+            else toast.error(t("searchAddedNoSync"));
         } finally {
             setBusy(false);
         }
-    }, [query, refresh, startSync]);
+    }, [query, refresh, startSync, t]);
 
     const removeItem = useCallback(
         async (id: string) => {
@@ -207,30 +191,30 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await startSync()) toast.success("Sync started");
-            else toast.error("Could not start the sync");
+            if (await startSync()) toast.success(t("syncRequested"));
+            else toast.error(t("syncStartFailed"));
         } finally {
             setBusy(false);
         }
-    }, [startSync]);
+    }, [startSync, t]);
 
     const disconnect = useCallback(async () => {
         setBusy(true);
         try {
             const res = await fetch(BASE, { method: "DELETE" });
-            if (res.ok) toast.success("Gmail disconnected — synced emails were kept");
-            else toast.error("Disconnect failed");
+            if (res.ok) toast.success(t("disconnected"));
+            else toast.error(t("disconnectFailed"));
             setConfirmingDisconnect(false);
             setLabels(null);
             void refresh();
         } finally {
             setBusy(false);
         }
-    }, [refresh]);
+    }, [refresh, t]);
 
     if (loading) {
         return (
-            <div style={{ padding: 24, fontSize: 13, color: "var(--ink-3)" }}>Checking Gmail…</div>
+            <div style={{ padding: 24, fontSize: 13, color: "var(--ink-3)" }}>{t("checking")}</div>
         );
     }
 
@@ -247,11 +231,9 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 }}
             >
                 <div style={{ fontWeight: 600, color: "var(--ink)", marginBottom: 6 }}>
-                    Gmail is not enabled on this server
+                    {t("notEnabledTitle")}
                 </div>
-                Ask your operator to set <code>GMAIL_CONNECTOR_ENABLED=true</code> alongside the
-                Google OAuth client — the steps, including the Gmail scope on the consent screen,
-                are in <code>.env.example</code> under &ldquo;Gmail&rdquo;.
+                {t.rich("notEnabledBody", { code: chunks => <code>{chunks}</code> })}
             </div>
         );
     }
@@ -288,12 +270,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     </div>
                     <div style={{ flex: 1 }}>
                         <div style={{ fontSize: 15, fontWeight: 600 }}>
-                            {reconnect ? "Reconnect your Gmail" : "Connect your Gmail"}
+                            {reconnect ? t("reconnectTitle") : t("connectTitle")}
                         </div>
                         <div style={{ fontSize: 13, color: "var(--ink-3)" }}>
                             {reconnect
-                                ? `Google access was revoked or expired${status.statusDetail ? ` (${status.statusDetail})` : ""} — connect again to resume syncing.`
-                                : "Read-only. Pick labels or searches afterwards; threads land in a folder only you can see."}
+                                ? status.statusDetail
+                                    ? t("reconnectBodyDetail", { detail: status.statusDetail })
+                                    : t("reconnectBody")
+                                : t("connectBody")}
                         </div>
                     </div>
                 </div>
@@ -304,20 +288,18 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                         }}
                         style={{ ...buttonStyle("primary", false), width: "100%", padding: 12 }}
                     >
-                        {reconnect ? "Reconnect Gmail" : "Connect Gmail"}
+                        {reconnect ? t("reconnectButton") : t("connectButton")}
                     </button>
                 ) : (
-                    <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>
-                        Your role can&rsquo;t add sources to this workspace, so it can&rsquo;t
-                        connect a mailbox. Ask an admin for upload access.
-                    </div>
+                    <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>{t("noPermission")}</div>
                 )}
             </div>
         );
     }
 
     const scope = status.scope ?? [];
-    const syncing = status.lastSyncStatus === "running";
+    const syncing = phase === "running";
+    const starting = phase === "starting";
     const report = status.lastSyncReport;
     const historyExpired = report?.historyExpired === true;
 
@@ -338,20 +320,21 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 <span style={{ color: "var(--accent)", display: "flex" }}>
                     <Icon size={16} />
                 </span>
-                <span style={{ fontWeight: 600 }}>{status.accountEmail ?? "Connected"}</span>
-                <span style={{ marginLeft: "auto", color: "var(--ink-3)", fontSize: 12 }}>
-                    {syncing
-                        ? "Syncing…"
-                        : status.lastSyncAt
-                          ? `Last sync ${new Date(status.lastSyncAt).toLocaleString()}`
-                          : "Not synced yet"}
+                <span style={{ fontWeight: 600 }}>
+                    {status.accountEmail ?? tc("status.connected")}
+                </span>
+                <span className="text-ink-3 ml-auto text-xs">
+                    {syncStatusLabel(phase, status.lastSyncAt)}
                 </span>
             </div>
 
+            {phase === "stalled" ? <SyncStalledNotice /> : null}
+
             <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 12 }}>
-                Synced threads go to{" "}
-                <strong style={{ color: "var(--ink-2)" }}>{status.folder}</strong>, a folder only
-                you and folder admins can see. Every 15 minutes, read-only.
+                {t.rich("syncedTo", {
+                    folder: status.folder ?? "",
+                    b: chunks => <strong style={{ color: "var(--ink-2)" }}>{chunks}</strong>,
+                })}
             </div>
 
             {status.lastSyncStatus === "error" && status.lastSyncError ? (
@@ -365,24 +348,23 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                         marginBottom: 12,
                     }}
                 >
-                    Last sync failed: {status.lastSyncError}
+                    {t("lastSyncFailed", { error: status.lastSyncError })}
                 </div>
             ) : null}
 
             {report && !syncing && !report.noScope ? (
                 <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginBottom: 12 }}>
-                    Last run: {reportCount(report, "threads")} thread(s) and{" "}
-                    {reportCount(report, "attachments")} attachment(s) imported,{" "}
-                    {reportCount(report, "unchanged")} unchanged, {reportCount(report, "failed")}{" "}
-                    failed.
-                    {historyExpired
-                        ? " Gmail's change history had expired, so everything was re-checked."
-                        : ""}
+                    {t(historyExpired ? "lastRunHistoryExpired" : "lastRun", {
+                        threads: reportCount(report, "threads"),
+                        attachments: reportCount(report, "attachments"),
+                        unchanged: reportCount(report, "unchanged"),
+                        failed: reportCount(report, "failed"),
+                    })}
                 </div>
             ) : null}
 
             <div style={{ fontSize: 12, fontWeight: 600, color: "var(--ink-3)", marginBottom: 8 }}>
-                SYNCED FROM GMAIL ({scope.length})
+                {t("syncedFromGmail", { count: scope.length })}
             </div>
             <ul
                 style={{
@@ -398,9 +380,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 }}
             >
                 {scope.length === 0 ? (
-                    <li style={{ fontSize: 13, color: "var(--ink-3)" }}>
-                        Nothing selected yet — choose labels or add a search to start syncing.
-                    </li>
+                    <li style={{ fontSize: 13, color: "var(--ink-3)" }}>{t("nothingSelected")}</li>
                 ) : (
                     scope.map(item => (
                         <li
@@ -424,7 +404,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                                     textTransform: "uppercase",
                                 }}
                             >
-                                {item.kind === "label" ? "Label" : "Search"}
+                                {item.kind === "label" ? t("kindLabel") : t("kindSearch")}
                             </span>
                             <span
                                 style={{
@@ -440,7 +420,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                             </span>
                             <button
                                 onClick={() => void removeItem(item.id)}
-                                title="Stop syncing (keeps imported emails)"
+                                title={t("stopSyncingTitle")}
                                 style={{
                                     background: "none",
                                     border: "none",
@@ -467,16 +447,16 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     }}
                 >
                     <div style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 8 }}>
-                        Choose labels to sync
+                        {t("chooseLabelsTitle")}
                     </div>
                     {labelsError ? (
                         <div style={{ fontSize: 12.5, color: "var(--danger)" }}>{labelsError}</div>
                     ) : !labels ? (
-                        <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>Loading labels…</div>
-                    ) : labels.length === 0 ? (
                         <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>
-                            No labels found in this mailbox.
+                            {t("loadingLabels")}
                         </div>
+                    ) : labels.length === 0 ? (
+                        <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>{t("noLabels")}</div>
                     ) : (
                         <div
                             style={{
@@ -521,12 +501,12 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                                         <span>{label.name}</span>
                                         {label.system ? (
                                             <span style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                                                system
+                                                {t("system")}
                                             </span>
                                         ) : null}
                                         {already ? (
                                             <span style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                                                syncing
+                                                {t("syncingTag")}
                                             </span>
                                         ) : null}
                                     </label>
@@ -540,8 +520,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                             onClick={() => void addLabels()}
                             style={buttonStyle("primary", busy || selectedLabelIds.size === 0)}
                         >
-                            Add {selectedLabelIds.size > 0 ? `${selectedLabelIds.size} ` : ""}
-                            label{selectedLabelIds.size === 1 ? "" : "s"}
+                            {t("addLabels", { count: selectedLabelIds.size })}
                         </button>
                         <button
                             onClick={() => {
@@ -550,7 +529,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                             }}
                             style={buttonStyle("quiet", false)}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </button>
                     </div>
                 </div>
@@ -566,8 +545,8 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                 <input
                     value={query}
                     onChange={event => setQuery(event.target.value)}
-                    placeholder="Gmail search, e.g. from:investor@fund.com newer_than:1y"
-                    aria-label="Gmail search to sync"
+                    placeholder={t("searchPlaceholder")}
+                    aria-label={t("searchAria")}
                     style={{
                         flex: 1,
                         padding: "9px 12px",
@@ -584,7 +563,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     disabled={busy || query.trim().length < 2}
                     style={buttonStyle("quiet", busy || query.trim().length < 2)}
                 >
-                    Add search
+                    {t("addSearch")}
                 </button>
             </form>
 
@@ -594,32 +573,32 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                     onClick={() => void openLabelPicker()}
                     style={buttonStyle("primary", busy || pickingLabels)}
                 >
-                    Choose labels
+                    {t("chooseLabels")}
                 </button>
                 <button
-                    disabled={busy || syncing || scope.length === 0}
+                    disabled={busy || syncing || starting || scope.length === 0}
                     onClick={() => void syncNow()}
-                    style={buttonStyle("quiet", busy || syncing || scope.length === 0)}
+                    style={buttonStyle("quiet", busy || syncing || starting || scope.length === 0)}
                 >
-                    {syncing ? "Syncing…" : "Sync now"}
+                    {syncing ? t("syncing") : starting ? t("starting") : t("syncNow")}
                 </button>
                 {confirmingDisconnect ? (
                     <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
                         <span style={{ fontSize: 12.5, color: "var(--ink-2)" }}>
-                            Disconnect? Imported emails are kept.
+                            {t("disconnectConfirm")}
                         </span>
                         <button
                             disabled={busy}
                             onClick={() => void disconnect()}
                             style={buttonStyle("danger", busy)}
                         >
-                            Disconnect
+                            {tc("actions.disconnect")}
                         </button>
                         <button
                             onClick={() => setConfirmingDisconnect(false)}
                             style={buttonStyle("quiet", false)}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </button>
                     </span>
                 ) : (
@@ -627,7 +606,7 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
                         onClick={() => setConfirmingDisconnect(true)}
                         style={{ ...buttonStyle("quiet", false), marginLeft: "auto" }}
                     >
-                        Disconnect
+                        {tc("actions.disconnect")}
                     </button>
                 )}
             </div>

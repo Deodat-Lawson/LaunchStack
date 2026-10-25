@@ -1,0 +1,1009 @@
+{
+  "sourceRail": {
+    "actionsFor": "“{title}”的操作",
+    "actions": "操作",
+    "unavailableAsContext": "无法用作上下文：索引失败",
+    "removeFromContext": "从上下文中移除",
+    "addToContext": "添加到上下文",
+    "openBesideHint": "⌘ 点击可在侧边打开",
+    "actionsForFolder": "文件夹“{path}”的操作",
+    "deselectFolder": "取消选择文件夹",
+    "selectAllInFolder": "选择文件夹内全部",
+    "folderActions": "文件夹操作",
+    "unfiled": "未归档",
+    "sections": {
+      "workspace": "工作区",
+      "shared": "共享",
+      "private": "私有"
+    },
+    "privateEmptyHint": "你添加的文件会先放在这里，准备好后再共享。",
+    "onlyPeopleWithAccess": "仅有权限的人可见",
+    "you": "你",
+    "addedBy": "由 {name} 添加",
+    "addedByWhen": "由 {name} 添加 · {added}",
+    "sidebarActions": "侧边栏操作",
+    "sidebarTabs": "侧边栏标签页",
+    "tabSources": "来源",
+    "tabHistory": "历史记录",
+    "sidebarSection": "侧边栏分区",
+    "filterHistory": "筛选历史记录",
+    "filterSources": "筛选来源",
+    "backToAll": "返回全部文件夹",
+    "empty": "这里还没有内容。<add>添加来源</add>。",
+    "selectedAsContext": "<dim>已选择</dim> <b>{count}</b> <dim>个作为上下文</dim>",
+    "clear": "清除"
+  },
+  "railCommands": {
+    "workspaceNav": "工作区",
+    "showSidebar": "显示侧边栏",
+    "hideSidebar": "隐藏侧边栏",
+    "jumpToAnything": "跳转到任意内容",
+    "addKnowledge": "添加知识",
+    "resizeAria": "调整侧边栏宽度",
+    "resizeTitle": "拖动以调整宽度 · 双击恢复默认"
+  },
+  "knowledgePane": {
+    "heading": "此工作区可用于推理的全部内容",
+    "statSources": "<b>{count}</b> {count, plural, other {个来源}}",
+    "statCollections": "<b>{count}</b> {count, plural, other {个文件夹}}",
+    "indexingCount": "{count} 个正在索引…",
+    "searchPlaceholder": "搜索标题、标签、文件夹",
+    "clearSearch": "清除搜索",
+    "filterCollection": "文件夹",
+    "allCollections": "全部文件夹",
+    "filterType": "类型",
+    "allTypes": "全部类型",
+    "clearFilters": "清除筛选",
+    "selectedCount": "已选择 {count} 个",
+    "askAboutThese": "就这些提问",
+    "loading": "正在加载你的知识库…",
+    "gridView": "网格视图",
+    "listView": "列表视图",
+    "actionsFor": "“{title}”的操作",
+    "deselectSource": "取消选择来源",
+    "selectSource": "选择来源",
+    "unfiled": "未归档",
+    "restrictedTitle": "仅有权限的人可以查看此文档",
+    "restricted": "受限",
+    "indexingTag": "正在索引…",
+    "staleCitable": "更改尚不可引用",
+    "notCitable": "暂不可引用",
+    "colSource": "来源",
+    "colType": "类型",
+    "colCollection": "文件夹",
+    "colDomain": "领域",
+    "colAdded": "添加时间",
+    "emptyFilteredTitle": "没有符合筛选条件的内容",
+    "emptyTitle": "还没有知识",
+    "emptyFilteredBody": "放宽搜索范围，或清除筛选以查看全部内容。",
+    "emptyBody": "上传文档、粘贴笔记或连接工具。你在这里添加的所有内容，都可以被智能体在会议中引用。",
+    "addFirst": "添加你的第一个来源"
+  },
+  "addSourceModal": {
+    "title": "添加来源",
+    "waysToAdd": "添加方式",
+    "groups": {
+      "create": "创建",
+      "upload": "上传",
+      "connect": "连接"
+    },
+    "tabs": {
+      "mindmap": {
+        "label": "思维导图",
+        "desc": "先画出来，再引用它"
+      },
+      "googleDoc": {
+        "label": "Google 文档",
+        "desc": "在 Google 文档中撰写"
+      },
+      "paste": {
+        "label": "粘贴文本",
+        "desc": "放入笔记或摘录"
+      },
+      "files": {
+        "label": "文件",
+        "desc": "PDF、DOCX、XLSX、图片"
+      },
+      "folder": {
+        "label": "文件夹",
+        "desc": "批量上传，保留结构"
+      },
+      "audio": {
+        "label": "音频",
+        "desc": "MP3、M4A、WAV 等，自动转录"
+      },
+      "video": {
+        "label": "视频",
+        "desc": "MP4，自动转录"
+      },
+      "url": {
+        "label": "网址",
+        "desc": "抓取网页内容"
+      },
+      "youtube": {
+        "label": "YouTube",
+        "desc": "提取转录文本"
+      },
+      "artifact": {
+        "label": "Claude 工件",
+        "desc": "在 Claude 中构建的页面、图表或组件"
+      },
+      "gmail": {
+        "label": "Gmail",
+        "desc": "你的邮箱，仅你可见"
+      },
+      "notion": {
+        "label": "Notion",
+        "desc": "选择页面或数据库"
+      },
+      "obsidian": {
+        "label": "Obsidian",
+        "desc": "导入仓库，重新导入即可更新"
+      },
+      "slack": {
+        "label": "Slack",
+        "desc": "将智能体会议同步到频道"
+      },
+      "github": {
+        "label": "GitHub",
+        "desc": "供代码库讲解器使用的私有代码库"
+      },
+      "agentSessions": {
+        "label": "编程会话",
+        "desc": "Claude Code 和 Codex 的转录文本"
+      },
+      "dropbox": {
+        "label": "Dropbox",
+        "desc": "文件夹保持同步"
+      }
+    },
+    "mindmapAudienceNote": "这适用于已发布的副本，即工作区可以引用的那一份。",
+    "fixedDestination": {
+      "gmail": "Gmail/你的邮箱",
+      "notion": "Notion/你的工作区",
+      "obsidian": "Obsidian/你的仓库"
+    },
+    "fixedAudience": {
+      "gmail": {
+        "headline": "仅你可见",
+        "detail": "邮件会存入你自己的 Gmail 文件夹，工作区中的其他人都无法打开。"
+      },
+      "notion": {
+        "headline": "在你共享之前仅你可见",
+        "detail": "你连接的每个 Notion 工作区都会在 Notion 下拥有自己的文件夹，仅你可见。需要团队查看这些页面时再共享。"
+      },
+      "obsidian": {
+        "headline": "仅你可见",
+        "detail": "每个仓库都会存入 Obsidian 下的独立文件夹，在你共享之前其他人都无法打开。"
+      }
+    },
+    "size": {
+      "bytes": "{size} B",
+      "kb": "{size} KB",
+      "mb": "{size} MB",
+      "gb": "{size} GB"
+    },
+    "uploadedTo": "{count, plural, other {已上传 # 个文件到“{folder}”}}",
+    "uploadedNoFolder": "{count, plural, other {已上传 # 个文件（无文件夹）}}",
+    "uploadFailed": "“{name}”上传失败",
+    "filesFailed": "{count, plural, other {# 个文件上传失败}}",
+    "signInUpload": "登录后才能上传文件",
+    "chars": "{count} 个字符",
+    "fileBadge": "文件",
+    "mindmap": {
+      "createFailed": "无法创建该思维导图",
+      "intro": "在这里绘制，准备好后再设为可引用。",
+      "untitled": "未命名思维导图",
+      "openingEditor": "正在打开编辑器…"
+    },
+    "googleDoc": {
+      "connectIntro": "为此工作区连接一个 Google 账号后，新文档会创建在它的 Drive 中的 <b>LaunchStack</b> 文件夹里。",
+      "connectGoogle": "连接 Google",
+      "created": "已在 Google 文档中创建",
+      "createFailed": "无法创建该文档",
+      "intro": "在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
+      "introAs": "以 {email} 的身份在 Google 文档中撰写。文档会立即出现在这里，之后的编辑会作为新版本同步回来，供工作区引用。",
+      "untitled": "未命名文档",
+      "blank": "空白文档",
+      "creating": "正在 Google 文档中创建…",
+      "opensInNewTab": "在新标签页中打开"
+    },
+    "files": {
+      "files": {
+        "title": "将文件拖放到这里",
+        "hint": "PDF、DOCX、XLSX、PPTX、图片、代码文件，每个最大 {max} MB",
+        "browse": "浏览文件"
+      },
+      "audio": {
+        "title": "拖放音频文件",
+        "hint": "MP3、M4A、WAV、AAC、FLAC、OGG，最大 {max} MB。按所说的语言转录，可在查看器中播放",
+        "browse": "浏览音频"
+      },
+      "video": {
+        "title": "拖放视频文件",
+        "hint": "MP4，最大 {max} MB。按所说的语言转录，可在查看器中播放",
+        "browse": "浏览视频"
+      }
+    },
+    "tooBigOne": "“{name}”超过了 {max} MB 的上限",
+    "tooBigMany": "{count} 个文件超过了 {max} MB 的上限",
+    "tooBigOneDetail": "该文件大小为 {size}。请拆分文件，或以较低质量导出。",
+    "tooBigItem": "{name}（{size}）",
+    "ocrNote": "扫描版 PDF 和图片会自动进行 OCR。",
+    "transcribing": "正在转录“{name}”…较长的录音需要几分钟，请不要关闭此窗口。",
+    "uploadingProgress": "正在上传 {current} / {total}…",
+    "readyToUpload": "{count, plural, other {# 个文件待上传}}",
+    "uploadButton": "{count, plural, other {上传 # 个文件}}",
+    "uploadButtonTo": "{count, plural, other {上传 # 个文件到“{folder}”}}",
+    "folder": {
+      "pickTitle": "选择文件夹",
+      "pickIntro": "每个文件都会成为独立的来源。该文件夹会添加到上方选定的文件夹中，子文件夹保持原样。",
+      "choose": "选择文件夹",
+      "filesIntoFolders": "{files, plural, other {# 个文件}}，分入 {folders, plural, other {# 个文件夹}}",
+      "name": "文件夹名称",
+      "hiddenExcluded": "已排除隐藏文件和系统文件",
+      "addFiles": "{count, plural, other {添加 # 个文件}}",
+      "addFilesTo": "{count, plural, other {添加 # 个文件到“{folder}”}}"
+    },
+    "paste": {
+      "signIn": "登录后才能保存笔记",
+      "defaultTitle": "粘贴的笔记",
+      "addedTo": "已将“{title}”添加到“{folder}”",
+      "addedNoFolder": "已添加“{title}”（无文件夹）",
+      "saveFailed": "笔记保存失败",
+      "titlePlaceholder": "标题（可选）",
+      "textPlaceholder": "粘贴笔记、邮件、转录文本等任何内容…",
+      "add": "添加为笔记"
+    },
+    "url": {
+      "signIn": "登录后才能抓取网页",
+      "indexFailed": "网站索引失败",
+      "queued": "网站已加入索引队列",
+      "fetchFailed": "网址抓取失败",
+      "intro": "粘贴任意网址，我们会抓取正文内容并去除页面框架。",
+      "fetching": "正在抓取…",
+      "fetch": "抓取",
+      "tip": "提示：在网址末尾加上 <code>/**</code> 即可递归抓取整个子目录。"
+    },
+    "youtube": {
+      "signIn": "登录后才能转录视频",
+      "processFailed": "视频处理失败",
+      "transcribed": "视频已转录：“{title}”",
+      "videoFallback": "视频",
+      "intro": "粘贴 YouTube 网址，我们会提取转录文本和时间戳。",
+      "titlePlaceholder": "自定义标题（可选）",
+      "transcribing": "正在转录…",
+      "transcribe": "转录"
+    },
+    "connect": {
+      "title": "连接 {name}",
+      "oneClick": "一键 OAuth 授权，可随时撤销。",
+      "disconnected": "已断开 {name}",
+      "disconnectFailed": "无法断开 {name}",
+      "statusReconnect": "{status}，请重新连接",
+      "connectedBy": "由 {name} 连接",
+      "removing": "正在移除…",
+      "another": "连接另一个 {name} 账号",
+      "askAdmin": "请让管理员添加此提供商的 OAuth 密钥，步骤见 .env.example",
+      "comingSoon": "即将推出",
+      "checking": "正在检查…",
+      "notConfigured": "连接 {name}：此服务器尚未配置",
+      "comingSoonButton": "连接 {name}：即将推出",
+      "perks": {
+        "gmailLabels": "选择标签或 Gmail 搜索",
+        "gmailPrivate": "仅你可见，存入你自己的文件夹",
+        "gmailResync": "每 15 分钟重新同步一次，只读",
+        "gmailAttachments": "包含 PDF 和 Office 附件",
+        "slackMirror": "将智能体会议同步到 Slack 频道",
+        "slackNotAdded": "消息和文件不会添加到你的来源中",
+        "slackExport": "如需搜索 Slack，请上传导出的 JSON 文件",
+        "githubRepoExplainer": "让代码库讲解器读取你的私有代码库",
+        "githubNotSynced": "代码、issue 和 PR 不会同步到你的来源中",
+        "githubZip": "如需搜索代码库，请以 ZIP 格式上传",
+        "dropboxFolders": "选择文件夹，保持同步",
+        "dropboxAllTypes": "索引所有文件类型",
+        "dropboxShared": "支持共享文件夹"
+      }
+    }
+  },
+  "addDestinationBar": {
+    "sectionAria": "存放位置及可见范围",
+    "goesTo": "存放到",
+    "addTo": "添加到",
+    "newFolder": "新文件夹",
+    "whoCanSee": "谁可以查看",
+    "changeAccessTitle": "更改谁可以打开“{folder}”",
+    "changeAccess": "更改权限",
+    "loadFailed": "暂时无法加载此文件夹的可见范围。",
+    "checking": "正在检查谁可以查看…",
+    "peopleWithAccess": "有权限的成员",
+    "you": "你",
+    "group": "群组",
+    "role": "角色",
+    "more": "还有 {count} 个",
+    "createdInside": "位于“{parent}”中 · 沿用其共享设置",
+    "createdPrivate": "仅你可见",
+    "pickerAria": "添加到：{folder}。更改文件夹",
+    "findPlaceholder": "查找或新建文件夹…",
+    "findAria": "查找或新建文件夹",
+    "foldersAria": "文件夹",
+    "unfiled": "未归档",
+    "noMatch": "没有这个名称的文件夹。",
+    "create": "新建“{name}”",
+    "tagTitle": "谁可以查看：{label}"
+  },
+  "driveConnect": {
+    "destination": {
+      "inDrive": "位于 Google Drive",
+      "inFolder": "位于“{path}”",
+      "inPrivateFolder": "位于选择者的私有文件夹中",
+      "becomesFolder": "下次同步时会成为独立的文件夹",
+      "needsAccess": "需要文件夹访问权限才能导入其内容"
+    },
+    "names": {
+      "one": "“{name}”",
+      "two": "“{first}”和“{second}”",
+      "more": "“{first}”、“{second}”及另外 {count} 个"
+    },
+    "syncRequested": "已请求同步",
+    "syncStartFailed": "无法开始同步",
+    "checking": "正在检查 Google Drive…",
+    "reconnectTitle": "重新连接 Google Drive",
+    "reconnectBody": "Google 访问权限已被撤销或已过期，重新连接即可恢复同步。",
+    "allowTitle": "允许文件夹访问以导入文件夹",
+    "allowBody": "目前 LaunchStack 只能打开你选中的文件，因此选中文件夹并不会导入其中的内容。允许文件夹访问后，LaunchStack 才能读取你的 Drive，文件夹会被完整导入，包括子文件夹和之后新增的内容。",
+    "allowButton": "允许文件夹访问",
+    "filesOnly": "只会导入你逐个选中的文件。由于此服务器未开启文件夹导入，选中文件夹不会带入其中的内容，请在选择器中打开文件夹并选择其中的文件。运维人员请参阅 <code>.env.example</code> 中的 <code>GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED</code>。",
+    "lastSyncFailed": "上次同步失败：{error}",
+    "lastRun": "上次运行：导入 {stored} 个，未变化 {unchanged} 个，失败 {failed} 个。",
+    "emptyReady": "{names} 中没有导入任何内容：Drive 显示{count, plural, =1 {它} other {它们}}是空的。",
+    "emptyNoAccess": "{names} 中没有导入任何内容：此连接无法查看文件夹内部。",
+    "accessLost": "{count} 个文件已无法打开：可能已被删除、取消共享，或（对于逐个选中的文件）授权已失效。请重新选择它们以刷新访问权限。",
+    "syncedFromDrive": "从 Drive 同步的内容（{count}）",
+    "nothingYet": "暂无内容。在“添加来源”中从 Google Drive 选择文件或文件夹即可。",
+    "stopSyncingTitle": "停止同步（保留已导入的文档）",
+    "stopSyncingAria": "停止同步“{name}”",
+    "syncing": "正在同步…",
+    "starting": "正在启动…",
+    "syncNow": "立即同步",
+    "cardTitle": "从 Google Drive 同步的内容",
+    "notConnected": "目前没有从 Google Drive 同步任何内容。在“添加来源 › 文件”中从 Drive 选择文件，或在“添加来源 › 文件夹”中选择文件夹，它们就会列在这里。"
+  },
+  "driveSource": {
+    "chooseFiles": "从 Google Drive 选择",
+    "chooseFolder": "从 Google Drive 选择",
+    "connect": "连接 Google Drive",
+    "reconnect": "重新连接 Google Drive",
+    "pickerTitleFiles": "从 Google Drive 选择文件",
+    "pickerTitleFolders": "从 Google Drive 选择文件夹",
+    "filesSync": "从 Google Drive 选择的文件会保持同步，在 Drive 中的修改会同步到这里。",
+    "folderSyncs": "Drive 文件夹会被完整导入并保持同步，之后新增的文件也会包含在内。",
+    "folderNeedsAccess": "Google 会请你授权一次，允许 LaunchStack 读取你的 Drive 文件夹，然后即可选择文件夹。",
+    "addedOne": "正在从 Google Drive 添加“{name}”，稍后就会出现，并保持同步。",
+    "addedMany": "正在从 Google Drive 添加 {count} 个文件，稍后就会出现，并保持同步。",
+    "addedFolder": "正在从 Google Drive 添加文件夹“{name}”，内容会在一分钟内陆续出现，并保持同步。",
+    "linkAdded": "正在从 Google Drive 添加该文件夹，内容会在一分钟内陆续出现，并保持同步。",
+    "addFailed": "无法从 Google Drive 添加该内容",
+    "syncLater": "已添加。同步尚未开始，稍后会自动运行。",
+    "pickerNotConfigured": "选择器尚未配置，请设置 NEXT_PUBLIC_GOOGLE_API_KEY 和 NEXT_PUBLIC_GOOGLE_APP_ID",
+    "noDriveAccess": "无法获取 Drive 访问权限，请尝试重新连接",
+    "pickerFailed": "Google 选择器未能加载，请检查网络连接后重试",
+    "notDriveLink": "这不是 Google Drive 链接。请在 Drive 中使用“共享 › 复制链接”。",
+    "pasteLinkLabel": "或粘贴 Drive 文件夹链接",
+    "adding": "正在添加…",
+    "addFolder": "添加文件夹",
+    "linkHintAccount": "适用于 {account} 能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。",
+    "linkHintThis": "适用于此账号能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。"
+  },
+  "gmailConnect": {
+    "labelsLoadFailed": "无法加载你的标签，请尝试重新连接 Gmail。",
+    "saveSelectionFailed": "无法保存所选内容",
+    "labelsAdded": "已添加 {count} 个标签，正在同步",
+    "labelsAddedNoSync": "已添加 {count} 个标签，但同步无法开始",
+    "saveSearchFailed": "无法保存该搜索",
+    "searchAdded": "已添加搜索，正在同步",
+    "searchAddedNoSync": "已添加搜索，但同步无法开始",
+    "syncRequested": "已请求同步",
+    "syncStartFailed": "无法开始同步",
+    "disconnected": "已断开 Gmail，已同步的邮件已保留",
+    "disconnectFailed": "断开连接失败",
+    "checking": "正在检查 Gmail…",
+    "notEnabledTitle": "此服务器未启用 Gmail",
+    "notEnabledBody": "请让运维人员在配置 Google OAuth 客户端的同时设置 <code>GMAIL_CONNECTOR_ENABLED=true</code>。具体步骤（包括在同意屏幕中添加 Gmail 权限范围）见 <code>.env.example</code> 中的“Gmail”部分。",
+    "reconnectTitle": "重新连接你的 Gmail",
+    "connectTitle": "连接你的 Gmail",
+    "reconnectBody": "Google 访问权限已被撤销或已过期，重新连接即可恢复同步。",
+    "reconnectBodyDetail": "Google 访问权限已被撤销或已过期（{detail}），重新连接即可恢复同步。",
+    "connectBody": "只读。连接后再选择标签或搜索，邮件会话会存入仅你可见的文件夹。",
+    "reconnectButton": "重新连接 Gmail",
+    "connectButton": "连接 Gmail",
+    "noPermission": "你的角色无法向此工作区添加来源，因此不能连接邮箱。请向管理员申请上传权限。",
+    "syncedTo": "同步的邮件会话会存入 <b>{folder}</b>，该文件夹仅你和文件夹管理员可见。每 15 分钟同步一次，只读。",
+    "lastSyncFailed": "上次同步失败：{error}",
+    "lastRun": "上次运行：导入 {threads} 个会话和 {attachments} 个附件，未变化 {unchanged} 个，失败 {failed} 个。",
+    "lastRunHistoryExpired": "上次运行：导入 {threads} 个会话和 {attachments} 个附件，未变化 {unchanged} 个，失败 {failed} 个。Gmail 的变更历史已过期，因此重新检查了所有内容。",
+    "syncedFromGmail": "从 Gmail 同步的内容（{count}）",
+    "nothingSelected": "尚未选择任何内容。选择标签或添加搜索即可开始同步。",
+    "kindLabel": "标签",
+    "kindSearch": "搜索",
+    "stopSyncingTitle": "停止同步（保留已导入的邮件）",
+    "chooseLabelsTitle": "选择要同步的标签",
+    "loadingLabels": "正在加载标签…",
+    "noLabels": "此邮箱中没有找到标签。",
+    "system": "系统",
+    "syncingTag": "同步中",
+    "addLabels": "{count, plural, =0 {添加标签} other {添加 # 个标签}}",
+    "searchPlaceholder": "Gmail 搜索，例如 from:investor@fund.com newer_than:1y",
+    "searchAria": "要同步的 Gmail 搜索",
+    "addSearch": "添加搜索",
+    "chooseLabels": "选择标签",
+    "syncing": "正在同步…",
+    "starting": "正在启动…",
+    "syncNow": "立即同步",
+    "disconnectConfirm": "要断开连接吗？已导入的邮件会保留。"
+  },
+  "notionConnect": {
+    "perks": {
+      "pick": "在 Notion 自己的授权页面中选择页面和数据库",
+      "sources": "同步的页面会成为提问时可搜索和引用的来源",
+      "resync": "每 15 分钟重新同步一次，只读，LaunchStack 绝不会修改你的 Notion"
+    },
+    "summary": {
+      "pages": "{count, plural, other {# 个页面}}",
+      "updated": "已更新 {count} 个",
+      "failed": "失败 {count} 个",
+      "tooLarge": "过大 {count} 个",
+      "pageLimit": "已达页面上限"
+    },
+    "workspaceFallback": "Notion 工作区",
+    "syncRequested": "已请求同步",
+    "syncStartFailed": "无法开始同步",
+    "disconnected": "已断开“{name}”。已同步的页面已保留。",
+    "disconnectFailed": "无法断开“{name}”",
+    "revoked": "访问权限已被撤销，重新连接即可继续同步",
+    "connectedBy": "由 {name} 连接",
+    "reconnect": "重新连接",
+    "syncNow": "立即同步",
+    "choosePages": "选择页面",
+    "disconnectName": "断开“{name}”",
+    "connectTitle": "连接 Notion",
+    "oneClick": "一键 OAuth 授权，可随时撤销。",
+    "checking": "正在检查 Notion…",
+    "forbidden": "只有工作区管理员可以连接 Notion。请让管理员连接，他们选择的页面会出现在来源中。",
+    "loadError": "无法加载 Notion 连接，请稍后再试。",
+    "notConfigured": "此服务器尚未配置 Notion。LaunchStack 的运维人员需要添加 NOTION_OAUTH_CLIENT_ID 和 NOTION_OAUTH_CLIENT_SECRET，具体步骤见 .env.example。",
+    "connectAnother": "连接另一个 Notion 工作区"
+  },
+  "obsidianImport": {
+    "noNotes": "所选内容中没有找到 Markdown 笔记。请选择仓库本身的文件夹。",
+    "zipFailed": "无法读取该 .zip 文件。",
+    "stoppedAfter": "导入在 {count} 篇笔记后中止。",
+    "finishFailed": "笔记已导入，但检查仓库中已删除的笔记时失败。请再次导入该仓库以完成。",
+    "imported": "{count, plural, other {已从“{name}”导入 # 篇笔记}}",
+    "upToDate": "“{name}”已是最新",
+    "importFailed": "导入失败。",
+    "title": "导入 Obsidian 仓库",
+    "intro": "选择你的仓库文件夹或它的 .zip 压缩包。笔记会保留原有的文件夹结构，链接和标签仍然可读。随时再次导入即可带入更改，只会重新读取有变化的笔记。",
+    "chooseFolder": "选择仓库文件夹",
+    "reading": "正在读取…",
+    "chooseZip": "选择 .zip",
+    "notesFound": "{count, plural, other {找到 # 篇笔记}}",
+    "looksLikeVault": "Obsidian 仓库",
+    "noSettingsFolder": "没有 .obsidian 文件夹，仍会导入其中的 Markdown 文件",
+    "otherFilesLeftOut": "已排除 {count} 个其他文件",
+    "vaultName": "仓库名称",
+    "reimportHint": "使用相同名称重新导入即可更新，而不会新增副本。",
+    "progress": "{done} / {total} 篇笔记",
+    "importing": "正在导入…",
+    "importNotes": "导入笔记",
+    "chooseAnother": "重新选择",
+    "totals": {
+      "imported": "已导入 {count} 篇",
+      "unchanged": "未变化 {count} 篇",
+      "skipped": "已排除 {count} 篇",
+      "failed": "失败 {count} 篇",
+      "missing": "{count} 篇已不在仓库中",
+      "inFolder": "{summary}，位于“{folder}”"
+    },
+    "importedVaults": "已导入的仓库",
+    "vaultNotes": "{count, plural, other {# 篇笔记}}",
+    "updateHint": "如需更新某个仓库，请再次选择它的文件夹，并保持仓库名称不变。"
+  },
+  "artifactImport": {
+    "defaultTitle": "Claude 工件",
+    "linkError": "请使用 http(s) 链接。",
+    "tooBigToast": "该文件超过 10 MB。工件应是单个独立的文件。",
+    "signIn": "登录后才能添加来源",
+    "added": "已将“{name}”添加到“{folder}”",
+    "addFailed": "无法添加该工件",
+    "readFailed": "无法读取“{title}”（HTTP {status}）",
+    "archiveFailed": "已添加“{title}”，但无法归档旧副本",
+    "itemFailed": "“{title}”失败",
+    "movedToast": "{count, plural, other {已将 # 个工件添加到“{folder}”。旧副本位于“设置 → 归档”。}}",
+    "modeAria": "导入工件的方式",
+    "pasteCode": "粘贴代码",
+    "uploadFile": "上传文件",
+    "codeAria": "工件代码",
+    "codePlaceholder": "粘贴工件的代码：HTML 页面、React 组件、SVG、Markdown 或 Mermaid 图表。",
+    "chooseFile": "选择文件",
+    "fileHint": "HTML、SVG、Markdown、Mermaid、JSX 或 TSX，最大 10 MB",
+    "fileAria": "工件文件",
+    "type": "类型",
+    "typeDetected": "类型（自动识别）",
+    "linkLabel": "原始链接（可选）",
+    "linkHint": "保留作为返回原始内容的入口。这里无法读取 claude.ai 链接，请在上方直接粘贴代码。",
+    "tooBig": "超过 10 MB，单个工件过大",
+    "chars": "{count} 个字符",
+    "addAsSource": "添加为来源",
+    "legacy": "<b>{count, plural, other {# 个工件}}</b>创建于工件成为来源之前。将它们添加到“{folder}”即可搜索和引用，旧副本会移到“设置 → 归档”。",
+    "movingProgress": "{done} / {total}",
+    "addIt": "将其添加为来源",
+    "addAll": "将全部 {count} 个添加为来源"
+  },
+  "googleDriveBanner": {
+    "openFailed": "无法在 Google Drive 中打开该文档。",
+    "unreachable": "无法连接服务器。",
+    "synced": "已从 Google Drive 同步 v{version}，现已显示。",
+    "upToDate": "已是最新。",
+    "syncResult": "同步结果：{kind}。",
+    "syncFailed": "同步失败。",
+    "unlinkFailed": "取消关联失败，关联已保留。",
+    "unlinked": "已取消关联。Drive 中的副本已移至 Drive 回收站。",
+    "editPrompt": "用专业工具编辑此文档：它会在 Google Drive 中打开，并同步回这里。",
+    "connectPrompt": "连接 Google 账号即可在 Google Drive 中编辑此文档。",
+    "linking": "正在关联…",
+    "openInDrive": "在 Google Drive 中打开",
+    "connectDrive": "连接 Google Drive",
+    "never": "从未",
+    "orphaned": "Google Drive 中的副本已被删除或移至回收站。",
+    "livesIn": "存放在 Google Drive · 上次同步：{synced}",
+    "livesInLinkedBy": "存放在 Google Drive，由 {name} 关联 · 上次同步：{synced}",
+    "syncing": "正在同步…",
+    "syncNow": "立即同步",
+    "relinking": "正在重新关联…",
+    "relink": "从当前版本重新关联",
+    "unlink": "取消关联",
+    "fidelity": "此文件已转换为原生 Google 文档，同步时格式可能会有偏差。",
+    "confirmTitle": "取消与 Google Drive 的关联",
+    "confirmBody": "最后一次同步会把 Drive 中剩余的编辑存入版本历史记录，随后 Drive 中的副本会移至 Drive 回收站，并恢复为在应用内编辑。",
+    "unlinking": "正在取消关联…",
+    "hide": "隐藏 Google Drive 栏",
+    "hideHint": "隐藏此栏，顶部的 Drive 按钮可以把它找回来",
+    "show": "显示 Google Drive 栏",
+    "showHint": "显示 Google Drive 栏",
+    "hideToggleHint": "隐藏 Google Drive 栏",
+    "summaryShowHint": "{summary}，点击显示此栏",
+    "hidden": "已隐藏 Google Drive 栏",
+    "hiddenBody": "文档顶部的 Drive 按钮可以把它找回来。"
+  },
+  "folderDialog": {
+    "alreadyExists": "该位置已有名为“{name}”的文件夹。",
+    "renameTitle": "重命名文件夹",
+    "newSubfolder": "新建子文件夹",
+    "newFolder": "新建文件夹",
+    "insideParent": "位于“{parent}”中。文件夹中的所有内容都会随之移动。",
+    "topLevelHint": "文件夹用于存放来源，文件夹中也可以包含其他文件夹。",
+    "subPlaceholder": "例如 2026",
+    "topPlaceholder": "例如：合同、第一季度融资",
+    "creating": "正在创建…",
+    "createFolder": "创建文件夹"
+  },
+  "deleteFolderDialog": {
+    "unfiled": "未归档",
+    "sourcesMove": "{count, plural, other {其中的 # 个来源将移至“{destination}”。}}",
+    "subfoldersRemoved": "{count, plural, other {# 个子文件夹也会被删除。}}",
+    "empty": "该文件夹是空的。",
+    "title": "删除“{name}”？",
+    "titleFallback": "删除文件夹？",
+    "description": "不会删除任何来源。{consequences}",
+    "deleting": "正在删除…",
+    "deleteFolder": "删除文件夹"
+  },
+  "renameSource": {
+    "failed": "无法重命名此来源，请重试。",
+    "failedFallback": "重命名失败",
+    "title": "重命名来源",
+    "inputAria": "来源标题",
+    "empty": "标题不能为空。"
+  },
+  "webSources": {
+    "aria": "网页来源",
+    "count": "{count, plural, other {# 个网页来源}}"
+  },
+  "createdSources": {
+    "aria": "已创建的文档",
+    "count": "{count, plural, other {已创建 # 个文档}}",
+    "open": "打开",
+    "private": "私有",
+    "place": "{place} · {audience}",
+    "audience": {
+      "private": "仅你可见",
+      "shared": "已共享",
+      "workspace": "工作区所有成员"
+    }
+  },
+  "failure": {
+    "categories": {
+      "embedding_quota": {
+        "label": "已达用量上限",
+        "message": "向量化服务已超出用量上限。请过几分钟再试。",
+        "name": "向量化用量上限"
+      },
+      "embedding_unavailable": {
+        "label": "向量化服务离线",
+        "message": "向量化服务暂不可用。请过几分钟再试。",
+        "name": "向量化服务不可用"
+      },
+      "ocr_unavailable": {
+        "label": "OCR 不可用",
+        "message": "OCR 服务暂不可用。请过几分钟再试。",
+        "name": "OCR 服务不可用"
+      },
+      "transcription_unavailable": {
+        "label": "转录服务离线",
+        "message": "转录服务暂不可用。请过几分钟再试。",
+        "name": "转录服务不可用"
+      },
+      "misconfigured": {
+        "label": "尚未配置",
+        "message": "此服务器尚未配置处理这类文件，暂时重试也没有用。",
+        "name": "服务器配置"
+      },
+      "file_unreadable": {
+        "label": "无法读取文件",
+        "message": "无法读取此文件。它可能已损坏、受密码保护，或是无法打开的格式。",
+        "name": "无法读取的文件"
+      },
+      "file_missing": {
+        "label": "文件缺失",
+        "message": "无法加载已上传的文件。请重新上传。",
+        "name": "文件缺失"
+      },
+      "timeout": {
+        "label": "耗时过长",
+        "message": "处理耗时过长，已被中止。请重试。",
+        "name": "超时"
+      },
+      "interrupted": {
+        "label": "已中断",
+        "message": "处理多次在完成前中断。请重试。",
+        "name": "已中断"
+      },
+      "internal": {
+        "label": "处理出错",
+        "message": "我们这边在处理此文件时出了问题。",
+        "name": "内部错误"
+      },
+      "unknown": {
+        "label": "无法处理",
+        "message": "处理此文件时出了问题。",
+        "name": "未知错误"
+      }
+    },
+    "report": {
+      "subject": "处理“{document}”时出现问题",
+      "document": "文档：{document}",
+      "documentId": "文档 ID：{id}",
+      "error": "错误：{name}（{category}）",
+      "jobId": "任务 / 追踪 ID：{jobId}"
+    }
+  },
+  "progress": {
+    "syncing": "正在同步…",
+    "readingPages": "正在读取页面",
+    "preparingPages": "正在准备 {pages} 页",
+    "preparingText": "正在准备文本",
+    "embeddingCount": "正在向量化 {done}/{total}",
+    "embedding": "正在向量化",
+    "finishing": "即将完成",
+    "retrying": "正在重试",
+    "retryingNow": "即将重试",
+    "retryingInSeconds": "{seconds} 秒后重试",
+    "retryingInMinutes": "{minutes} 分钟后重试",
+    "queued": "排队中",
+    "processing": "处理中"
+  },
+  "sourceStatus": {
+    "progressLabel": "{label}，{percent}%",
+    "waitingReason": "{message}第 {attempt} 次尝试，共 {maxAttempts} 次。",
+    "failureTrigger": "{label}：查看“{title}”出了什么问题",
+    "cardTitle": "无法处理此来源",
+    "failedAgain": "{count, plural, other {重试 # 次后仍然失败。}}",
+    "contactUs": "就此错误联系我们",
+    "details": "详细信息",
+    "jobId": "任务 ID",
+    "retryAria": "重新处理“{title}”"
+  },
+  "folderIssues": {
+    "required": "请输入文件夹名称。",
+    "separator": "文件夹名称不能包含“{separator}”。",
+    "nameTooLong": "文件夹名称过长（最多 {max} 个字符）。",
+    "unfiledReserved": "“{unfiled}”是存放无文件夹来源的保留名称，不能用来新建文件夹。",
+    "underUnfiled": "不能在“{unfiled}”下新建文件夹。",
+    "tooDeep": "文件夹最多只能嵌套 {max} 层。",
+    "pathTooLong": "文件夹的完整路径过长（最多 {max} 个字符）。"
+  },
+  "audience": {
+    "onlyYou": "仅你可见",
+    "sharedWith": "已共享给 {count} 个对象",
+    "sharedWithSpecific": "已共享给特定成员",
+    "everyoneAt": "{workspace} 的所有成员",
+    "everyoneInWorkspace": "工作区所有成员",
+    "moveInherits": "现在所有能打开“{folder}”的人都可以查看",
+    "moveMadePrivate": "现在仅你可见",
+    "moveKeptAudience": "仍然只有之前能查看的人可以查看"
+  },
+  "addDestination": {
+    "specificPeople": "特定成员",
+    "sharedWithPeople": "已共享给 {count, plural, other {# 人}}",
+    "unfiledPrivate": "没有文件夹的文件在你共享之前仅你可见。",
+    "newTopPrivate": "“{folder}”是新文件夹。新文件夹默认仅你可见。",
+    "newSubPrivate": "“{folder}”是位于“{parent}”中的新文件夹，而“{parent}”仅你可见。",
+    "newSubFollows": "“{folder}”是位于“{parent}”中的新文件夹，因此沿用“{parent}”的共享设置。",
+    "followsPrivate": "“{folder}”沿用“{governing}”的设置，而“{governing}”仅你可见。",
+    "privateToYou": "“{folder}”仅你可见。",
+    "workspaceCanOpen": "工作区中的任何人都可以打开“{folder}”。",
+    "followsSharing": "“{folder}”沿用“{governing}”的共享设置。",
+    "sharedOnly": "只有获得“{folder}”共享的人才能打开它。",
+    "tagOnlyYou": "仅你",
+    "tagShared": "共享",
+    "tagEveryone": "所有人",
+    "peopleCount": "{count, plural, other {# 人}}",
+    "noFolder": "无文件夹",
+    "noName": "请为新文件夹命名。",
+    "noSlash": "文件夹名称不能包含“/”。",
+    "pathProblem": "{path}：{problem}"
+  },
+  "contextMenu": {
+    "indexing": "此来源仍在索引中。",
+    "viewOnly": "你可以查看此文件，但不能修改。",
+    "folderLocked": "你无法向此文件夹添加文件。",
+    "deleteReserved": "只有添加此文件的人或它的管理者才能删除。",
+    "unfiled": "未归档",
+    "open": "打开",
+    "openBeside": "在侧边打开",
+    "removeFromContext": "从上下文中移除",
+    "addToContext": "添加到上下文",
+    "openInNewTab": "在新标签页中打开",
+    "showInKnowledge": "在知识库中显示",
+    "rename": "重命名…",
+    "moveToFolder": "移动到文件夹",
+    "cut": "剪切",
+    "copyTitle": "复制标题",
+    "copyLink": "复制链接",
+    "share": "共享…",
+    "delete": "删除…",
+    "openFolder": "打开文件夹",
+    "newSourceInFolder": "在此文件夹中新建来源…",
+    "newSubfolder": "新建子文件夹…",
+    "pasteHere": "{count, plural, other {将 # 个来源粘贴到此处}}",
+    "collapseAll": "全部折叠",
+    "expandAll": "全部展开",
+    "moveTo": "移动到…",
+    "topLevel": "顶层",
+    "deselectAllInFolder": "取消选择文件夹内全部",
+    "selectAllInFolder": "选择文件夹内全部",
+    "pasteTopLevel": "{count, plural, other {将 # 个来源粘贴到顶层}}",
+    "addKnowledge": "添加知识",
+    "newFolder": "新建文件夹",
+    "selectionViewOnlyAll": "你可以查看这些来源，但不能修改。",
+    "selectionViewOnlySome": "{count, plural, other {其中 # 个你只能查看、不能修改，将被跳过。}}",
+    "selectionIndexingAll": "这些来源仍在索引中。",
+    "selectionIndexingSome": "{count, plural, other {其中 # 个仍在索引中，将被跳过。}}",
+    "selectedCount": "{count, plural, other {已选择 # 个来源}}",
+    "removeAllFromContext": "全部从上下文中移除",
+    "moveSelection": "将 {count} 个移动到文件夹",
+    "moveSelectionSome": "将 {count} 个中的 {movable} 个移动到文件夹",
+    "deleteSelection": "{count, plural, other {删除 # 个来源…}}",
+    "deleteSelectionSome": "{count, plural, other {删除 # 个来源中的 {movable} 个…}}"
+  },
+  "connectorSync": {
+    "syncing": "正在同步…",
+    "starting": "正在启动同步…",
+    "lastSync": "上次同步：{at}",
+    "notSynced": "尚未同步",
+    "stalled": "同步请求已发出 {seconds} 秒，但仍未开始。此服务器的后台任务运行器可能已停止。请联系 LaunchStack 的运维人员检查，然后再次点击“立即同步”。"
+  },
+  "sourceApi": {
+    "renameMindmap": "思维导图重命名失败",
+    "renameDocument": "文档重命名失败",
+    "moveMindmap": "思维导图移动失败",
+    "moveDocument": "文档移动失败",
+    "deleteMindmap": "思维导图删除失败",
+    "restoreMindmap": "思维导图恢复失败",
+    "deleteDocument": "文档删除失败",
+    "stillAdding": "此来源仍在添加中",
+    "nothingToRetry": "此来源没有可重试的内容",
+    "retry": "无法重新处理"
+  },
+  "sourceUpload": {
+    "withReason": "{name}：{reason}",
+    "uploadFailed": "{name}：上传失败（HTTP {status}）",
+    "registerFailed": "{name}：无法添加（HTTP {status}）"
+  },
+  "sourceTypes": {
+    "doc": "文件",
+    "audio": "音频",
+    "video": "视频",
+    "github": "GitHub",
+    "notion": "Notion",
+    "gmail": "Gmail",
+    "drive": "Drive",
+    "slack": "Slack",
+    "dropbox": "Dropbox",
+    "web": "网站",
+    "youtube": "YouTube",
+    "paste": "笔记",
+    "mindmap": "思维导图",
+    "artifact": "Claude 工件"
+  },
+  "domains": {
+    "contract": {
+      "label": "合同",
+      "desc": "附件、附表、补充条款"
+    },
+    "financial": {
+      "label": "财务",
+      "desc": "资产负债表、审计报告"
+    },
+    "technical": {
+      "label": "技术",
+      "desc": "规格说明、手册、图表"
+    },
+    "compliance": {
+      "label": "合规",
+      "desc": "监管备案、认证"
+    },
+    "educational": {
+      "label": "教育",
+      "desc": "教学大纲、讲义、阅读材料"
+    },
+    "hr": {
+      "label": "人力资源",
+      "desc": "制度、表单、员工手册"
+    },
+    "research": {
+      "label": "研究",
+      "desc": "论文、数据集、资料"
+    },
+    "general": {
+      "label": "通用",
+      "desc": "交叉引用和附件"
+    }
+  },
+  "server": {
+    "errors": {
+      "folderEditDenied": "你没有此文件夹的编辑权限。",
+      "documentEditDenied": "你可以查看此文件，但不能修改它。",
+      "documentDeleteDenied": "只有添加此文件的人，或管理此文件的人，才能删除它。",
+      "invalidDocumentId": "文档 ID 无效",
+      "noMutableFields": "没有提供可修改的字段",
+      "updateDocumentFailed": "更新文档失败",
+      "someDocumentsNotFound": "有文档未找到",
+      "deletedDocuments": "{count, plural, other {已删除 # 个文档}}",
+      "deleteDocumentsFailed": "删除文档失败",
+      "viewTracked": "已记录查看",
+      "trackViewFailed": "无法记录文档查看",
+      "processingStatusFailed": "获取处理状态失败",
+      "retryFailed": "无法重新处理",
+      "storageReadFailed": "无法从存储中获取文档",
+      "serveDocumentFailed": "文档读取失败",
+      "noExtractedText": "此文档还没有提取出的文本，可能仍在处理中。",
+      "documentTextFailed": "获取文档文本失败",
+      "storageReadHttp": "无法从存储中读取文档（HTTP {status}）。",
+      "storageRead": "无法从存储中读取文档。",
+      "categoryNotFoundPeriod": "未找到该文件夹。",
+      "categoryNotFound": "未找到该文件夹",
+      "invalidCategoryId": "文件夹 ID 无效",
+      "deleteCategoryFailed": "删除文件夹失败",
+      "renameCategoryFailed": "重命名文件夹失败",
+      "createCategoryFailed": "创建文件夹失败",
+      "fetchCategoriesFailed": "无法获取文件夹列表",
+      "invalidDocumentIdFormat": "文档 ID 格式无效",
+      "documentDeleted": "文档及其所有相关数据已删除",
+      "deleteDocumentFailed": "删除文档失败",
+      "graphLoadFailed": "知识图谱加载失败",
+      "fetchDocumentsFailed": "无法获取文档"
+    },
+    "retry": {
+      "notFailed": "此来源没有处理失败，因此无需重试。",
+      "alreadyRunning": "此来源正在处理中。",
+      "noJob": "此来源没有可重试的处理。"
+    },
+    "folders": {
+      "pathRequired": "请提供文件夹路径。",
+      "bothPathsRequired": "请同时提供当前文件夹路径和新的文件夹路径。",
+      "cycle": "不能把文件夹移到它自身之中。",
+      "notFound": "未找到该文件夹。",
+      "unfiledCantMove": "“{unfiled}”不能重命名或移动。",
+      "unfiledCantDelete": "“{unfiled}”不能删除。",
+      "nameTaken": "这个名称已被使用，请换一个。",
+      "noEditAccessThat": "你没有那个文件夹的编辑权限。",
+      "notManager": "你不是此文件夹的管理者。",
+      "noEditAccessDestination": "你没有目标文件夹的编辑权限。"
+    },
+    "drive": {
+      "notEnabled": "此部署未启用 Google Drive 关联。",
+      "notConfigured": "Google Drive 关联尚未配置。请设置 GOOGLE_OAUTH_CLIENT_ID 和 GOOGLE_OAUTH_CLIENT_SECRET（以及 GOOGLE_DOCS_EDITING_ENABLED=true）。",
+      "connectFirst": "请先为此工作区连接一个 Google 账号。",
+      "accessRevoked": "Google 已撤销此工作区的访问权限。重新连接 Google 账号即可恢复同步。",
+      "unsupportedType": "只有 .docx 和 .pdf 文档可以关联到 Google Drive。",
+      "alreadyInDrive": "此文件已在 Google Drive 中，并从那里同步。请在 Drive 中编辑。",
+      "tooLarge": "此文档超过了 {mb} MB 的关联大小上限。",
+      "notLinked": "此文档未关联到 Google Drive。",
+      "finalSyncFailed": "无法拉取 Google Drive 中的最新编辑，因此关联已保留。请重试，或先解决该错误。",
+      "invalidTitleOrFolder": "标题或文件夹无效。",
+      "linkedEdit": "此文档已关联到 Google Drive，需在那里编辑。请先同步或取消关联，再在应用内编辑。",
+      "linkedUpload": "此文档已关联到 Google Drive，需在那里编辑。请先同步或取消关联，再在应用内上传新版本。",
+      "linkedRestore": "此文档已关联到 Google Drive，需在那里编辑。请先同步或取消关联，再在应用内恢复版本。",
+      "linkNeedsFolderAccess": "此连接只能打开在 Google 选择器中选中的文件。允许文件夹访问后才能添加链接。",
+      "linkNotFound": "{account} 无法打开该链接。请让链接所有者将其共享给 {account}，然后重新粘贴。",
+      "linkNotFoundAccount": "已连接的 Google 账号无法打开该链接。请让链接所有者将其共享给该账号，然后重新粘贴。",
+      "linkTrashed": "“{name}”在 Drive 回收站中。"
+    },
+    "versions": {
+      "invalidVersionId": "版本 ID 无效",
+      "versionNotFound": "此文档中未找到该版本",
+      "fileTypeNotInitialized": "文档的文件类型尚未初始化。请先运行版本回填：pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
+      "fileTypeMismatch": "文件类型不匹配",
+      "fileTypeMismatchDetail": "此文档的文件类型固定为 {expected}，收到的是 {received}。新版本必须与原文件类型相同。",
+      "uploaded": "新版本已上传，开始处理",
+      "numberConflict": "版本号冲突",
+      "numberConflictDetail": "另一个版本先完成了上传，请重试此请求。",
+      "createFailed": "创建新文档版本失败",
+      "listFailed": "获取文档版本列表失败",
+      "cannotDeleteCurrent": "不能删除当前版本",
+      "cannotDeleteCurrentDetail": "请先将文档恢复到其他版本，再删除这个版本。",
+      "cannotDeleteOnly": "不能删除文档仅有的版本",
+      "cannotDeleteOnlyDetail": "如需删除整个文档，请改用 DELETE /api/deleteDocument。",
+      "blobDeleteFailed": "从存储中删除版本文件失败",
+      "deleted": "版本已删除",
+      "deleteFailed": "删除文档版本失败",
+      "revertFailed": "恢复文档版本失败",
+      "storageReadFailed": "无法从存储中获取版本文件",
+      "serveFailed": "版本内容读取失败"
+    },
+    "connectors": {
+      "manageRequired": "需要 connectors.manage 权限。",
+      "notConfigured": "{provider} 连接器尚未配置。请在服务器上设置 {vars}。",
+      "connectionNotFound": "未找到该连接。",
+      "disconnectedRevoked": "已断开连接，并已在服务提供方撤销授权。",
+      "disconnectedNotRevoked": "已断开连接。服务提供方那边的授权可能仍然存在，如有需要，请在其安全设置中撤销。",
+      "pickerDriveOnly": "只有 google-drive 才有选择器令牌。",
+      "noActiveDrive": "没有可用的 Google Drive 连接。",
+      "statusDriveNotionOnly": "只有 google-drive 和 notion 提供状态详情。",
+      "syncDriveNotionOnly": "只有 google-drive 和 notion 支持同步。",
+      "invalidBody": "请求内容无效。",
+      "notionRevoked": "Notion 访问权限已被撤销，请先重新连接。",
+      "connectNotionFirst": "请先连接 Notion。",
+      "syncStarted": "已开始同步。",
+      "connectDriveFirst": "请先连接 Google Drive。",
+      "googleRevoked": "Google 访问权限已被撤销，请先重新连接。",
+      "pickedDriveOnly": "只有 google-drive 才有已选项目。",
+      "noDrive": "没有 Google Drive 连接。",
+      "itemAdded": "已添加“{name}”。",
+      "itemsAdded": "已添加 {count} 项。",
+      "selectionUpdatedDocuments": "已更新所选内容。已导入的文档会保留。",
+      "obsidianNeedsUpload": "导入笔记需要添加文档的权限。",
+      "driveConnectsElsewhere": "Google Drive 需通过 /api/connectors/google/oauth/start 连接。",
+      "gmailConnectsElsewhere": "Gmail 需通过 /api/connectors/google/oauth/start?provider=gmail 连接。",
+      "unknownProvider": "未知的连接器提供方：{provider}"
+    },
+    "gmail": {
+      "notConfigured": "此服务器未启用 Gmail 连接器。请设置 GMAIL_CONNECTOR_ENABLED=true、GOOGLE_OAUTH_CLIENT_ID、GOOGLE_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。",
+      "connectFirst": "请先连接 Gmail。",
+      "accessRevoked": "Gmail 访问权限已被撤销，请先重新连接。",
+      "disconnected": "已断开 Gmail。已同步的邮件保留在你的文件夹中。",
+      "disconnectedNotRevoked": "已断开 Gmail。已同步的邮件已保留；如果 Google 账号的“已关联的应用”中仍列有 LaunchStack，请在那里将其移除。",
+      "pickSomething": "请至少选择一个标签或搜索来同步。",
+      "itemsAdded": "已添加 {count} 项。",
+      "selectionUpdated": "已更新所选内容。已导入的邮件会保留。",
+      "labels": {
+        "inbox": "收件箱",
+        "sent": "已发送",
+        "starred": "已加星标",
+        "important": "重要"
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/types";
 
 /**
@@ -110,25 +111,29 @@ export const predictiveAnalysisJob = inngest.createFunction(
             });
         }
 
+        // A step body runs outside the handler's async context, so the
+        // workspace's models are entered inside the step, not around the handler.
         const { result: analysisResult, stats } = await step.run("run-analysis", async () => {
-            return analyzeDocumentChunks(
-                chunks as PdfChunk[],
-                {
-                    type: analysisType as
-                        | "contract"
-                        | "financial"
-                        | "technical"
-                        | "compliance"
-                        | "general",
-                    includeRelatedDocs,
-                    existingDocuments,
-                    title: docDetails.title,
-                    category: docDetails.category,
-                    companyId: Number(companyId),
-                    documentId,
-                },
-                timeoutMs ?? 60000,
-                ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
+            return withWorkspaceChatModels(companyId, "predictiveAnalysis", () =>
+                analyzeDocumentChunks(
+                    chunks as PdfChunk[],
+                    {
+                        type: analysisType as
+                            | "contract"
+                            | "financial"
+                            | "technical"
+                            | "compliance"
+                            | "general",
+                        includeRelatedDocs,
+                        existingDocuments,
+                        title: docDetails.title,
+                        category: docDetails.category,
+                        companyId: Number(companyId),
+                        documentId,
+                    },
+                    timeoutMs ?? 60000,
+                    ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
+                )
             );
         });
 

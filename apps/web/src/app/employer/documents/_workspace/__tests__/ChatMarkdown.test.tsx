@@ -39,6 +39,14 @@ it("renders GFM lists/tasks/tables/math and sanitizes model HTML/URLs", () => {
         "noopener noreferrer"
     );
 });
+it("renders prices as text while inline math still renders", () => {
+    const sentence = "You'll pay $0.05 for the ball (and $1.05 for the bat).";
+    const { container } = render(<ChatMarkdown text={`${sentence}\n\nThe area is $\\pi r^2$.`} />);
+    expect(screen.getByText(sentence)).toBeInTheDocument();
+    const math = container.querySelectorAll(".katex");
+    expect(math).toHaveLength(1);
+    expect(math[0]?.querySelector("annotation")?.textContent).toBe("\\pi r^2");
+});
 it("copies table values as CSV with quote escaping and as Markdown", async () => {
     render(<ChatMarkdown text={'| Name | Value |\n| --- | --- |\n| A, B | Say "yes" |'} />);
     fireEvent.click(screen.getByRole("button", { name: "Copy as CSV" }));

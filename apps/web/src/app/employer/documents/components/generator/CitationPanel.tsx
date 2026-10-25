@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Quote,
     Plus,
@@ -68,21 +69,18 @@ interface CitationPanelProps {
     onClose: () => void;
 }
 
-const formatLabels: Record<CitationFormat, string> = {
-    apa: "APA 7th",
-    mla: "MLA 9th",
-    chicago: "Chicago",
-    ieee: "IEEE",
-    harvard: "Harvard",
+// Labels: `generator.citations.formats.<format>` and `.sourceTypes.<type>`.
+const CITATION_FORMATS: CitationFormat[] = ["apa", "mla", "chicago", "ieee", "harvard"];
+
+const sourceTypeIcons: Record<SourceType, React.ReactNode> = {
+    website: <Globe className="h-4 w-4" />,
+    book: <BookOpen className="h-4 w-4" />,
+    journal: <FileText className="h-4 w-4" />,
+    article: <Newspaper className="h-4 w-4" />,
+    document: <FileText className="h-4 w-4" />,
 };
 
-const sourceTypeLabels: Record<SourceType, { label: string; icon: React.ReactNode }> = {
-    website: { label: "Website", icon: <Globe className="h-4 w-4" /> },
-    book: { label: "Book", icon: <BookOpen className="h-4 w-4" /> },
-    journal: { label: "Journal", icon: <FileText className="h-4 w-4" /> },
-    article: { label: "Article", icon: <Newspaper className="h-4 w-4" /> },
-    document: { label: "Document", icon: <FileText className="h-4 w-4" /> },
-};
+const SOURCE_TYPES = Object.keys(sourceTypeIcons) as SourceType[];
 
 export function CitationPanel({
     citations,
@@ -90,6 +88,8 @@ export function CitationPanel({
     onInsertCitation,
     onClose,
 }: CitationPanelProps) {
+    const t = useTranslations("generator.citations");
+    const tc = useTranslations("common");
     const [format, setFormat] = useState<CitationFormat>("apa");
     const [formattedCitations, setFormattedCitations] = useState<FormattedCitation[]>([]);
     const [isFormatting, setIsFormatting] = useState(false);
@@ -201,10 +201,10 @@ export function CitationPanel({
                 <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <Quote className="h-4 w-4" />
-                        Citations
+                        {t("title")}
                     </h3>
                     <Button variant="ghost" size="sm" onClick={onClose}>
-                        Close
+                        {tc("actions.close")}
                     </Button>
                 </div>
 
@@ -215,9 +215,9 @@ export function CitationPanel({
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            {Object.entries(formatLabels).map(([key, label]) => (
+                            {CITATION_FORMATS.map(key => (
                                 <SelectItem key={key} value={key}>
-                                    {label}
+                                    {t(`formats.${key}`)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -227,7 +227,11 @@ export function CitationPanel({
                         disabled={isFormatting || citations.length === 0}
                         variant="outline"
                     >
-                        {isFormatting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Format All"}
+                        {isFormatting ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            t("formatAll")
+                        )}
                     </Button>
                 </div>
             </div>
@@ -244,19 +248,17 @@ export function CitationPanel({
                     <DialogTrigger asChild>
                         <Button className="bg-brand hover:bg-brand-hi w-full">
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Citation
+                            {t("add")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                         <DialogHeader>
-                            <DialogTitle>
-                                {editingCitation ? "Edit Citation" : "Add Citation"}
-                            </DialogTitle>
+                            <DialogTitle>{editingCitation ? t("edit") : t("add")}</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             {/* Source Type */}
                             <div className="space-y-2">
-                                <Label>Source Type</Label>
+                                <Label>{t("sourceType")}</Label>
                                 <Select
                                     value={newCitation.sourceType}
                                     onValueChange={v =>
@@ -270,36 +272,34 @@ export function CitationPanel({
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.entries(sourceTypeLabels).map(
-                                            ([key, { label }]) => (
-                                                <SelectItem key={key} value={key}>
-                                                    {label}
-                                                </SelectItem>
-                                            )
-                                        )}
+                                        {SOURCE_TYPES.map(key => (
+                                            <SelectItem key={key} value={key}>
+                                                {t(`sourceTypes.${key}`)}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
 
                             {/* Title */}
                             <div className="space-y-2">
-                                <Label>Title *</Label>
+                                <Label>{t("titleLabel")}</Label>
                                 <Input
                                     value={newCitation.title ?? ""}
                                     onChange={e =>
                                         setNewCitation({ ...newCitation, title: e.target.value })
                                     }
-                                    placeholder="Enter title"
+                                    placeholder={t("titlePlaceholder")}
                                 />
                             </div>
 
                             {/* Authors */}
                             <div className="space-y-2">
-                                <Label>Authors (one per line, Last, First)</Label>
+                                <Label>{t("authors")}</Label>
                                 <textarea
                                     value={authorsInput}
                                     onChange={e => setAuthorsInput(e.target.value)}
-                                    placeholder="Smith, John&#10;Doe, Jane"
+                                    placeholder={t("authorsPlaceholder")}
                                     className="h-20 w-full resize-none rounded-md border px-3 py-2 text-sm"
                                 />
                             </div>
@@ -321,7 +321,7 @@ export function CitationPanel({
 
                             {/* Publisher */}
                             <div className="space-y-2">
-                                <Label>Publisher</Label>
+                                <Label>{t("publisher")}</Label>
                                 <Input
                                     value={newCitation.publisher ?? ""}
                                     onChange={e =>
@@ -330,13 +330,13 @@ export function CitationPanel({
                                             publisher: e.target.value,
                                         })
                                     }
-                                    placeholder="Publisher name"
+                                    placeholder={t("publisherPlaceholder")}
                                 />
                             </div>
 
                             {/* Date */}
                             <div className="space-y-2">
-                                <Label>Published Date</Label>
+                                <Label>{t("publishedDate")}</Label>
                                 <Input
                                     type="date"
                                     value={newCitation.publishedDate ?? ""}
@@ -354,7 +354,7 @@ export function CitationPanel({
                                 <>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div className="space-y-2">
-                                            <Label>Volume</Label>
+                                            <Label>{t("volume")}</Label>
                                             <Input
                                                 value={newCitation.volume ?? ""}
                                                 onChange={e =>
@@ -366,7 +366,7 @@ export function CitationPanel({
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label>Issue</Label>
+                                            <Label>{t("issue")}</Label>
                                             <Input
                                                 value={newCitation.issue ?? ""}
                                                 onChange={e =>
@@ -380,7 +380,7 @@ export function CitationPanel({
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div className="space-y-2">
-                                            <Label>Pages</Label>
+                                            <Label>{t("pages")}</Label>
                                             <Input
                                                 value={newCitation.pages ?? ""}
                                                 onChange={e =>
@@ -410,14 +410,14 @@ export function CitationPanel({
                         </div>
                         <div className="flex justify-end gap-2">
                             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                                Cancel
+                                {tc("actions.cancel")}
                             </Button>
                             <Button
                                 onClick={handleAddCitation}
                                 disabled={!newCitation.title?.trim()}
                                 className="bg-brand hover:bg-brand-hi"
                             >
-                                {editingCitation ? "Update" : "Add"}
+                                {editingCitation ? tc("actions.update") : tc("actions.add")}
                             </Button>
                         </div>
                     </DialogContent>
@@ -430,13 +430,13 @@ export function CitationPanel({
                     {citations.length === 0 ? (
                         <div className="text-ink-3 flex flex-col items-center justify-center py-12">
                             <Quote className="mb-4 h-12 w-12 opacity-20" />
-                            <p className="text-sm">No citations added yet</p>
-                            <p className="mt-1 text-xs">Add sources from research or manually</p>
+                            <p className="text-sm">{t("empty")}</p>
+                            <p className="mt-1 text-xs">{t("emptyHint")}</p>
                         </div>
                     ) : (
                         citations.map(citation => {
                             const formatted = getFormattedCitation(citation.id);
-                            const sourceInfo = sourceTypeLabels[citation.sourceType];
+                            const sourceIcon = sourceTypeIcons[citation.sourceType];
 
                             return (
                                 <div
@@ -445,7 +445,7 @@ export function CitationPanel({
                                 >
                                     <div className="mb-2 flex items-start justify-between gap-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-ink-3">{sourceInfo.icon}</span>
+                                            <span className="text-ink-3">{sourceIcon}</span>
                                             <span className="line-clamp-1 text-sm font-medium">
                                                 {citation.title}
                                             </span>
@@ -461,7 +461,7 @@ export function CitationPanel({
                                     {formatted && (
                                         <div className="bg-panel-2/50 mt-2 rounded p-2 text-xs">
                                             <p className="mb-1 font-medium">
-                                                In-text: {formatted.inText}
+                                                {t("inText", { citation: formatted.inText })}
                                             </p>
                                             <p className="text-ink-3 line-clamp-2">
                                                 {formatted.bibliography}
@@ -480,7 +480,7 @@ export function CitationPanel({
                                                 }}
                                             >
                                                 <Plus className="mr-1 h-3 w-3" />
-                                                Insert
+                                                {t("insert")}
                                             </Button>
                                         )}
                                         {formatted && (
@@ -497,7 +497,7 @@ export function CitationPanel({
                                                 ) : (
                                                     <Copy className="mr-1 h-3 w-3" />
                                                 )}
-                                                Copy
+                                                {tc("actions.copy")}
                                             </Button>
                                         )}
                                         <Button
@@ -507,7 +507,7 @@ export function CitationPanel({
                                             onClick={() => handleEdit(citation)}
                                         >
                                             <Edit2 className="mr-1 h-3 w-3" />
-                                            Edit
+                                            {tc("actions.edit")}
                                         </Button>
                                         <Button
                                             size="sm"
@@ -528,7 +528,7 @@ export function CitationPanel({
             {/* Bibliography Preview */}
             {formattedCitations.length > 0 && (
                 <div className="border-line border-t p-4">
-                    <p className="mb-2 text-xs font-medium">Bibliography Preview</p>
+                    <p className="mb-2 text-xs font-medium">{t("bibliographyPreview")}</p>
                     <div className="bg-panel-2/50 max-h-32 overflow-y-auto rounded p-2 text-xs">
                         {formattedCitations.map(fc => (
                             <p key={fc.id} className="text-ink-3 mb-1">

@@ -18,6 +18,15 @@ jest.mock("~/lib/require-workspace-context", () => ({ requireWorkspaceContext: j
 
 jest.mock("~/server/ask-starters", () => ({ getAskStarters: jest.fn() }));
 
+// Records whose models the starters were generated under; runs the work as-is.
+const scopes: unknown[] = [];
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
+        scopes.push(companyId);
+        return fn();
+    },
+}));
+
 const limiterCalls: RateLimitConfig[] = [];
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (
@@ -52,6 +61,7 @@ const PAYLOAD = {
 
 beforeEach(() => {
     limiterCalls.length = 0;
+    scopes.length = 0;
     jest.mocked(requireWorkspaceContext).mockReset();
     jest.mocked(getAskStarters).mockReset();
 });
@@ -82,20 +92,28 @@ describe("GET /api/ask/starters", () => {
             companyId: BigInt(42),
             scope: { kind: "everything" },
             refresh: false,
+            locale: "en",
         });
         expect(limiterCalls).toEqual([RateLimitPresets.standard]);
+        expect(scopes).toEqual([BigInt(42)]);
     });
 
     it("treats refresh=1 as a guaranteed model call and applies the burst limiter", async () => {
         jest.mocked(requireWorkspaceContext).mockResolvedValue({ success: true, data: CTX });
         jest.mocked(getAskStarters).mockResolvedValue(PAYLOAD);
 
-        await GET(new Request("http://localhost/api/ask/starters?refresh=1"));
+        await GET(
+            new Request("http://localhost/api/ask/starters?refresh=1", {
+                headers: { cookie: "ls-locale=zh-CN.1" },
+            })
+        );
 
+        // The reader's language rides along, so the questions come back in it.
         expect(getAskStarters).toHaveBeenCalledWith({
             companyId: BigInt(42),
             scope: { kind: "everything" },
             refresh: true,
+            locale: "zh-CN",
         });
         expect(limiterCalls).toEqual([RateLimitPresets.burst]);
     });

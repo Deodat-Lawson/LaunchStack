@@ -211,6 +211,55 @@
       "when": 1791941425860,
       "tag": "20261014013025_brand_channels",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1792131847989,
+      "tag": "20261016062407_mcp_server_oauth",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1792253874646,
+      "tag": "20261017161754_drive_folder_import",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1792276629858,
+      "tag": "20261017223709_workspace_model_endpoints",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1792279509930,
+      "tag": "20261017232509_scenario_simulation",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1792728154217,
+      "tag": "20261023040234_notion_connector",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1792878556252,
+      "tag": "20261024214916_ai_usage_daily",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1792882362467,
+      "tag": "20261024225242_drive_pick_destination",
+      "breakpoints": true
     }
   ]
 }

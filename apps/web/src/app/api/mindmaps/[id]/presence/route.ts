@@ -11,12 +11,14 @@
  */
 
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { and, eq, gt, ne, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { mindmapPresence, mindmaps } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
+import { draftVisibilityWhere, draftReader } from "~/server/mindmap/access";
 import { workspaceLooks } from "~/server/profile/store";
 
 /** A client is "here" if it checked in within this window. */
@@ -55,7 +57,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
         const id = Number.parseInt((await params).id, 10);
         if (!Number.isInteger(id) || id <= 0) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         const body = ((await request.json().catch(() => ({}))) ?? {}) as HeartbeatBody;
@@ -65,9 +70,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const [row] = await db
             .select({ id: mindmaps.id, revision: mindmaps.revision })
             .from(mindmaps)
-            .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
+            .where(and(eq(mindmaps.id, id), draftVisibilityWhere(await draftReader(ctx.data))))
             .limit(1);
-        if (!row) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!row)
+            return NextResponse.json(
+                { error: requestTranslator(request, "mindmap.server.errors")("notFound") },
+                { status: 404 }
+            );
 
         const cursor =
             body.cursor && typeof body.cursor === "object"
@@ -142,19 +151,22 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         return NextResponse.json({ peers, revision: row.revision }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] presence failed:", error);
-        return serverError("Failed to update presence");
+        return serverError(requestTranslator(request, "mindmap.server.errors")("presenceFailed"));
     }
 }
 
 /** Called on unload so a colleague's avatar disappears promptly. */
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = Number.parseInt((await params).id, 10);
         if (!Number.isInteger(id) || id <= 0) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         await db
@@ -168,6 +180,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
         return NextResponse.json({ left: true }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] presence leave failed:", error);
-        return serverError("Failed to leave");
+        return serverError(requestTranslator(request, "mindmap.server.errors")("leaveFailed"));
     }
 }

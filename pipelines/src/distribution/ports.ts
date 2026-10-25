@@ -4,11 +4,7 @@
  * and is passed in by the Inngest function.
  */
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import {
-    createLangchainAgentPort,
-    normalizeModelContent,
-    resolveChatModel,
-} from "@launchstack/llm";
+import { createLangchainAgentPort, modelContentToText, resolveChatModel } from "@launchstack/llm";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import {
     geocodeLocation,
@@ -80,7 +76,7 @@ export function createDefaultPorts(options: CreateDefaultPortsOptions = {}): Dis
                     new HumanMessage(input),
                 ])
             );
-            return normalizeModelContent(response.content);
+            return modelContentToText(response.content);
         },
         creditsPerCandidate: options.creditsPerCandidate ?? DEFAULT_CREDITS_PER_CANDIDATE,
     };

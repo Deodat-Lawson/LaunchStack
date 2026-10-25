@@ -1,13 +1,23 @@
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
 import { POST } from "~/app/api/updateCompany/route";
-import { validateRequestBody } from "~/lib/validation";
+import { UpdateCompanySchema, validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db/index";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import {
+    getCompanyCredentialsPlaintext,
+    getCompanyReindexState,
+    upsertCompanyCredentials,
+} from "@launchstack/llm/embeddings";
+import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
+import { inngest } from "~/server/inngest/client";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
+const mockIsCloud = jest.fn(() => false);
+
+jest.mock("~/server/deployment", () => ({ isCloudDeployment: () => mockIsCloud() }));
 
 jest.mock("~/lib/require-workspace-context", () =>
     jest
@@ -212,5 +222,281 @@ describe("POST /api/updateCompany", () => {
             success: false,
             message: "Unable to update company record.",
         });
+    });
+});
+
+describe("POST /api/updateCompany: the embeddings key and its endpoint URL", () => {
+    const makeRequest = (query = "") =>
+        new Request(`http://localhost/api/updateCompany${query}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+        });
+
+    const stored = (openAIApiKey: string | null, openAIBaseUrl: string | null) =>
+        (getCompanyCredentialsPlaintext as jest.Mock).mockResolvedValue({
+            openAIApiKey,
+            openAIBaseUrl,
+            huggingFaceApiKey: null,
+            ollamaBaseUrl: null,
+            ollamaModel: null,
+        });
+
+    const body = (data: Record<string, unknown>) =>
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: { name: "Acme Corp", numberOfEmployees: "0", ...data },
+        });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockIsCloud.mockReturnValue(false);
+        mockCtx("owner");
+        stored(null, null);
+        const returning = jest.fn().mockResolvedValue([{ id: 7 }]);
+        const where = jest.fn().mockReturnValue({ returning });
+        (db.update as jest.Mock).mockReturnValue({ set: jest.fn().mockReturnValue({ where }) });
+    });
+
+    async function expectRefused(code: string, message: RegExp) {
+        const response = await POST(makeRequest());
+        const json = (await response.json()) as { success: boolean; code: string; message: string };
+        expect(response.status).toBe(400);
+        expect(json).toMatchObject({ success: false, code });
+        expect(json.message).toMatch(message);
+        // Nothing written, nothing scheduled.
+        expect(upsertCompanyCredentials).not.toHaveBeenCalled();
+        expect(db.update).not.toHaveBeenCalled();
+        expect(inngest.send).not.toHaveBeenCalled();
+    }
+
+    it("refuses a new key with no URL in the request or stored", async () => {
+        body({ embeddingOpenAIApiKey: "sk-new-key" });
+
+        await expectRefused("EMBEDDING_ENDPOINT_REQUIRED", /endpoint URL this key belongs to/);
+    });
+
+    it("refuses before an index change can schedule a reindex", async () => {
+        body({ embeddingOpenAIApiKey: "sk-new-key", embeddingIndexKey: "legacy-openai-1536" });
+
+        await expectRefused("EMBEDDING_ENDPOINT_REQUIRED", /endpoint URL/);
+        expect(getCompanyReindexState).not.toHaveBeenCalled();
+    });
+
+    it("saves a new key with its URL, normalized", async () => {
+        body({
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "https://API.openai.com/v1/",
+        });
+
+        const response = await POST(makeRequest());
+
+        expect(response.status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: "sk-new-key",
+            openAIBaseUrl: "https://api.openai.com/v1",
+        });
+        const auditKeys = (recordAuditEvent as jest.Mock).mock.calls[0][1].detail.keys;
+        expect(auditKeys).toEqual(expect.arrayContaining(["openAIApiKey", "openAIBaseUrl"]));
+    });
+
+    it("saves the key and URL alone, without the company's name, leaving the row untouched", async () => {
+        // What Bring your own keys sends: credentials and nothing else.
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: {
+                embeddingOpenAIApiKey: "sk-new-key",
+                embeddingOpenAIBaseUrl: "https://api.openai.com/v1",
+            },
+        });
+
+        const response = await POST(makeRequest());
+
+        expect(response.status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: "sk-new-key",
+            openAIBaseUrl: "https://api.openai.com/v1",
+        });
+        expect(db.update).not.toHaveBeenCalled();
+        const auditKeys = (recordAuditEvent as jest.Mock).mock.calls[0][1].detail.keys;
+        expect(auditKeys).toEqual(["openAIApiKey", "openAIBaseUrl"]);
+    });
+
+    it("pairs a new key with the URL already stored", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingOpenAIApiKey: "sk-new-key" });
+
+        const response = await POST(makeRequest());
+
+        expect(response.status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, { openAIApiKey: "sk-new-key" });
+    });
+
+    it("refuses moving a stored key to a new URL without re-entering it", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingOpenAIBaseUrl: "https://other.example/v1" });
+
+        await expectRefused("EMBEDDING_KEY_REQUIRED", /enter the API key for the new address/);
+    });
+
+    it("refuses giving a stored key with no URL an address without re-entering it", async () => {
+        stored("sk-old-key", null);
+        body({ embeddingOpenAIBaseUrl: "https://other.example/v1" });
+
+        await expectRefused("EMBEDDING_KEY_REQUIRED", /enter the API key/);
+    });
+
+    it("refuses removing the URL from under a stored key", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingOpenAIBaseUrl: null });
+
+        await expectRefused("EMBEDDING_ENDPOINT_REQUIRED", /needs its endpoint URL/);
+    });
+
+    it("accepts the same URL resent with no key", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingOpenAIBaseUrl: "https://embeddings.example/v1/" });
+
+        expect((await POST(makeRequest())).status).toBe(200);
+    });
+
+    it("accepts a new URL with the key re-entered", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "https://other.example/v1",
+        });
+
+        expect((await POST(makeRequest())).status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: "sk-new-key",
+            openAIBaseUrl: "https://other.example/v1",
+        });
+    });
+
+    it("accepts a URL alone when no key is stored", async () => {
+        body({ embeddingOpenAIBaseUrl: "https://embeddings.example/v1" });
+
+        expect((await POST(makeRequest())).status).toBe(200);
+    });
+
+    it("accepts clearing the key and the URL together", async () => {
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingOpenAIApiKey: null, embeddingOpenAIBaseUrl: null });
+
+        expect((await POST(makeRequest())).status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: null,
+            openAIBaseUrl: null,
+        });
+    });
+
+    it("hosted: refuses a private address", async () => {
+        mockIsCloud.mockReturnValue(true);
+        body({
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "https://10.0.0.5/v1",
+        });
+
+        await expectRefused("INVALID_EMBEDDING_ENDPOINT", /private network/);
+    });
+
+    it("hosted: refuses plain http", async () => {
+        mockIsCloud.mockReturnValue(true);
+        body({
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "http://embeddings.example/v1",
+        });
+
+        await expectRefused("INVALID_EMBEDDING_ENDPOINT", /https:\/\//);
+    });
+
+    it("self-hosted: allows a server on the local network", async () => {
+        body({
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "http://10.0.0.5:8000/v1",
+        });
+
+        expect((await POST(makeRequest())).status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: "sk-new-key",
+            openAIBaseUrl: "http://10.0.0.5:8000/v1",
+        });
+    });
+
+    it("refuses an address that isn't one", async () => {
+        body({ embeddingOpenAIApiKey: "sk-new-key", embeddingOpenAIBaseUrl: "not a url" });
+
+        await expectRefused("INVALID_EMBEDDING_ENDPOINT", /isn't a web address/);
+    });
+
+    it("?validate=true test-embeds against the URL being saved", async () => {
+        (validateEmbeddingCredentials as jest.Mock).mockResolvedValue({ ok: true });
+        body({
+            embeddingIndexKey: undefined,
+            embeddingOpenAIApiKey: "sk-new-key",
+            embeddingOpenAIBaseUrl: "https://api.openai.com/v1",
+        });
+        const select = jest.fn().mockReturnValue({
+            from: () => ({ where: () => ({ limit: () => Promise.resolve([]) }) }),
+        });
+        (db.select as jest.Mock).mockImplementation(select);
+
+        const response = await POST(makeRequest("?validate=true"));
+
+        expect(response.status).toBe(200);
+        expect(validateEmbeddingCredentials).toHaveBeenCalledWith(
+            undefined,
+            expect.objectContaining({
+                openAIApiKey: "sk-new-key",
+                openAIBaseUrl: "https://api.openai.com/v1",
+            })
+        );
+    });
+
+    it("?validate=true falls back to the stored URL when the request has none", async () => {
+        (validateEmbeddingCredentials as jest.Mock).mockResolvedValue({ ok: true });
+        stored("sk-old-key", "https://embeddings.example/v1");
+        body({ embeddingIndexKey: "legacy-openai-1536", embeddingOpenAIApiKey: "sk-new-key" });
+        (getCompanyReindexState as jest.Mock).mockResolvedValue({
+            activeIndexKey: "legacy-openai-1536",
+            status: "STABLE",
+        });
+
+        const response = await POST(makeRequest("?validate=true"));
+
+        expect(response.status).toBe(200);
+        expect(validateEmbeddingCredentials).toHaveBeenCalledWith(
+            "legacy-openai-1536",
+            expect.objectContaining({
+                openAIApiKey: "sk-new-key",
+                openAIBaseUrl: "https://embeddings.example/v1",
+            })
+        );
+    });
+});
+
+describe("UpdateCompanySchema: name", () => {
+    it("is optional, so credentials can be saved alone", () => {
+        const parsed = UpdateCompanySchema.parse({ embeddingOpenAIApiKey: "sk-new-key" });
+        expect(parsed.name).toBeUndefined();
+        expect(parsed.embeddingOpenAIApiKey).toBe("sk-new-key");
+    });
+
+    it("still refuses an empty one", () => {
+        expect(() => UpdateCompanySchema.parse({ name: "" })).toThrow("Company name is required");
+    });
+});
+
+describe("UpdateCompanySchema: embeddingOpenAIBaseUrl", () => {
+    it.each([
+        [undefined, undefined],
+        [null, null],
+        ["", null],
+        ["   ", null],
+        ["  https://api.openai.com/v1  ", "https://api.openai.com/v1"],
+    ])("%p parses to %p", (input, expected) => {
+        const parsed = UpdateCompanySchema.parse({ name: "Acme", embeddingOpenAIBaseUrl: input });
+        expect(parsed.embeddingOpenAIBaseUrl).toBe(expected);
     });
 });

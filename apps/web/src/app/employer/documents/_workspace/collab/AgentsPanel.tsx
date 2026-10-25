@@ -7,9 +7,14 @@
  * chrome, and everything here is built from the shared kit and layout components
  * so it reads as the same screen as Processing and Integrations rather than as
  * a bolted-on panel.
+ *
+ * The section is the roster managers' screen, but its buttons follow the same
+ * rule as the Agents app (`lib/agents/roster-access.ts`) rather than assuming
+ * who reached it.
  */
 
 import React, { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Bot, RotateCcw } from "lucide-react";
 
@@ -17,24 +22,31 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import {
-    AGENT_AUTONOMY_META,
     DEFAULT_AGENT_AUTONOMY,
     effectiveAutonomy,
     isAgentAutonomy,
     type AgentAutonomy,
 } from "~/lib/agents/autonomy";
-import { AGENT_MODE_META, agentTool, disabledTools } from "~/lib/agents/definition";
+import { disabledTools } from "~/lib/agents/definition";
+import { useAgentCopy } from "~/lib/agents/i18n";
+import { agentRosterAccess } from "~/lib/agents/roster-access";
+import { usePermissions } from "~/lib/use-permissions";
+import { WorkspaceAnswerStyleRow } from "../settings/AnswerStyle";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { SettingRow } from "../settings/SettingRow";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
 import { Trash2 as IconTrash } from "lucide-react";
 import { AgentAvatar } from "./AgentAvatar";
 import { AgentEditor } from "./AgentEditor";
-import { useAgents } from "./useMeetings";
+import { useAgents, useAgo } from "./useMeetings";
 import { type AgentPersonaRecord, type WorkerNode } from "./types";
 
 export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
+    const t = useTranslations("collab.agentsPanel");
+    const ts = useTranslations("collab.shared");
     const { data, loading, error, refresh } = useAgents();
+    const { can } = usePermissions();
+    const access = agentRosterAccess(can);
     const [editing, setEditing] = useState<AgentPersonaRecord | "new" | null>(null);
     const [notice, setNotice] = useState<string | null>(null);
 
@@ -45,12 +57,14 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
     usePublishedActions(
         onActions,
-        {
-            primaryLabel: "New agent",
-            onPrimary: () => setEditing("new"),
-            disabled: loading && !data,
-        },
-        [loading, data]
+        access.manageRoster
+            ? {
+                  primaryLabel: ts("newAgent"),
+                  onPrimary: () => setEditing("new"),
+                  disabled: loading && !data,
+              }
+            : {},
+        [loading, data, access.manageRoster, ts]
     );
 
     const archive = useCallback(
@@ -60,13 +74,13 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             });
             if (!response.ok) {
                 const body = (await response.json().catch(() => ({}))) as { error?: string };
-                setNotice(body.error ?? "Could not retire that agent");
+                setNotice(body.error ?? t("retireFailed"));
                 return;
             }
-            setNotice(`${persona.displayName} retired. Past transcripts keep their name.`);
+            setNotice(t("retiredNotice", { name: persona.displayName }));
             await refresh();
         },
-        [refresh]
+        [refresh, t]
     );
 
     const reset = useCallback(
@@ -76,13 +90,13 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             });
             if (!response.ok) {
                 const body = (await response.json().catch(() => ({}))) as { error?: string };
-                setNotice(body.error ?? "Could not restore that agent");
+                setNotice(body.error ?? t("restoreFailed"));
                 return;
             }
-            setNotice(`${persona.displayName} restored to the shipped definition.`);
+            setNotice(ts("restoredNotice", { name: persona.displayName }));
             await refresh();
         },
-        [refresh]
+        [refresh, t, ts]
     );
 
     return (
@@ -90,37 +104,30 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             {notice && <StatusNote tone="ok">{notice}</StatusNote>}
             {error && <StatusNote tone="danger">{error}</StatusNote>}
 
-            <Section
-                title="Autonomy"
-                description="How much an agent may do without a person in the loop. The room's least autonomous agent decides what a meeting may do; the API refuses the rest."
-            >
+            <Section title={t("autonomyTitle")} description={t("autonomyDescription")}>
                 <Card>
                     <SettingRow settingKey="agents.defaultAutonomy" />
                 </Card>
             </Section>
 
             <Section
-                title="The default assistant"
-                description="How Launchstack answers in chat when no agent is picked. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting."
+                title={t("defaultAssistantTitle")}
+                description={t("defaultAssistantDescription")}
             >
                 <Card>
-                    <SettingRow settingKey="chat.responseStyle" />
+                    <WorkspaceAnswerStyleRow />
                 </Card>
             </Section>
 
-            <Section
-                title="Roster"
-                description="The same agents sit in meetings, answer in chat when picked or @mentioned, and can be tried out on the Agents app. Editing one changes what it does next time — never what it said last time."
-            >
+            <Section title={t("rosterTitle")} description={t("rosterDescription")}>
                 <StatusNote tone="muted" style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <Bot size={14} />
                     <span style={{ flex: 1 }}>
-                        Try an agent before putting it in a room, or import one from a definition
-                        file, in <strong>Studio → Agents</strong>.
+                        {t.rich("tryNote", { b: chunks => <strong>{chunks}</strong> })}
                     </span>
                 </StatusNote>
                 {loading && personas.length === 0 ? (
-                    <StatusNote tone="muted">Loading agents…</StatusNote>
+                    <StatusNote tone="muted">{ts("loadingAgents")}</StatusNote>
                 ) : (
                     <div
                         style={{
@@ -135,9 +142,15 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
                                 persona={persona}
                                 defaultAutonomy={defaultAutonomy}
                                 node={data?.nodes.find(n => n.nodeId === persona.nodeId) ?? null}
-                                onEdit={() => setEditing(persona)}
-                                onArchive={() => void archive(persona)}
-                                onReset={persona.builtin ? () => void reset(persona) : undefined}
+                                onEdit={access.editContent ? () => setEditing(persona) : undefined}
+                                onArchive={
+                                    access.manageRoster ? () => void archive(persona) : undefined
+                                }
+                                onReset={
+                                    access.manageRoster && persona.builtin
+                                        ? () => void reset(persona)
+                                        : undefined
+                                }
                             />
                         ))}
                     </div>
@@ -155,6 +168,7 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
             <AgentEditor
                 open={editing !== null}
                 persona={editing === "new" || editing === null ? null : editing}
+                contentOnly={!access.manageRoster}
                 nodeIds={(data?.nodes ?? []).map(node => node.nodeId)}
                 onClose={() => setEditing(null)}
                 onSaved={async () => {
@@ -181,10 +195,14 @@ function AgentCard({
     persona: AgentPersonaRecord;
     defaultAutonomy: AgentAutonomy;
     node: WorkerNode | null;
-    onEdit: () => void;
-    onArchive: () => void;
+    onEdit?: () => void;
+    onArchive?: () => void;
     onReset?: () => void;
 }) {
+    const t = useTranslations("collab.agentsPanel");
+    const ts = useTranslations("collab.shared");
+    const tc = useTranslations("common");
+    const copy = useAgentCopy();
     const autonomy = effectiveAutonomy(persona.autonomy, defaultAutonomy);
     const inheritsAutonomy = !isAgentAutonomy(persona.autonomy);
     const denied = disabledTools(persona.tools);
@@ -221,24 +239,28 @@ function AgentCard({
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 <span
                     title={
-                        (inheritsAutonomy ? "Inherits the workspace default. " : "") +
-                        AGENT_AUTONOMY_META[autonomy].description
+                        inheritsAutonomy
+                            ? t("inheritsTitle", {
+                                  description: copy.autonomyDescription(autonomy),
+                              })
+                            : copy.autonomyDescription(autonomy)
                     }
                 >
                     <Badge variant={autonomy === "full" ? "secondary" : "warn"}>
-                        {AGENT_AUTONOMY_META[autonomy].label}
-                        {inheritsAutonomy ? " · default" : ""}
+                        {inheritsAutonomy
+                            ? ts("autonomyDefault", { level: copy.autonomyLabel(autonomy) })
+                            : copy.autonomyLabel(autonomy)}
                     </Badge>
                 </span>
                 {persona.mode !== "all" && (
-                    <span title={AGENT_MODE_META[persona.mode].description}>
-                        <Badge variant="info">{AGENT_MODE_META[persona.mode].label}</Badge>
+                    <span title={copy.modeDescription(persona.mode)}>
+                        <Badge variant="info">{copy.modeLabel(persona.mode)}</Badge>
                     </span>
                 )}
                 {denied.map(tool => (
-                    <span key={tool} title={`${agentTool(tool)?.label ?? tool} is switched off`}>
+                    <span key={tool} title={t("toolOffTitle", { tool: copy.toolLabel(tool) })}>
                         <Badge variant="outline">
-                            no {(agentTool(tool)?.label ?? tool).toLowerCase()}
+                            {t("noTool", { tool: copy.toolLabel(tool).toLowerCase() })}
                         </Badge>
                     </span>
                 ))}
@@ -247,45 +269,51 @@ function AgentCard({
                     <span
                         title={
                             node?.connected
-                                ? `Node "${persona.nodeId}" is connected`
-                                : `Node "${persona.nodeId}" is not connected — turns for this agent will fail until it registers`
+                                ? t("nodeConnected", { node: persona.nodeId })
+                                : t("nodeDisconnected", { node: persona.nodeId })
                         }
                     >
                         <Badge variant={node?.connected ? "success" : "warn"}>
-                            {persona.nodeId} · {node?.connected ? "online" : "offline"}
+                            {node?.connected
+                                ? t("nodeOnline", { node: persona.nodeId })
+                                : t("nodeOffline", { node: persona.nodeId })}
                         </Badge>
                     </span>
                 ) : (
-                    <Badge variant="secondary">runs here</Badge>
+                    <Badge variant="secondary">{t("runsHere")}</Badge>
                 )}
                 <div style={{ flex: 1 }} />
-                <Button
-                    variant="ghost"
-                    onClick={onEdit}
-                    style={{ padding: "5px 10px", fontSize: 12 }}
-                >
-                    Edit
-                </Button>
+                {onEdit && (
+                    <Button
+                        variant="ghost"
+                        onClick={onEdit}
+                        className="px-2.5 py-[5px] text-[12px]"
+                    >
+                        {tc("actions.edit")}
+                    </Button>
+                )}
                 {onReset && (
                     <Button
                         variant="ghost"
                         onClick={onReset}
-                        title="Restore the shipped definition"
-                        aria-label={`Restore ${persona.displayName}`}
-                        style={{ padding: "5px 8px" }}
+                        title={ts("restoreShipped")}
+                        aria-label={t("restoreAria", { name: persona.displayName })}
+                        className="px-2 py-[5px]"
                     >
                         <RotateCcw size={13} />
                     </Button>
                 )}
-                <Button
-                    variant="ghost"
-                    onClick={onArchive}
-                    title="Retire agent"
-                    aria-label={`Retire ${persona.displayName}`}
-                    style={{ padding: "5px 8px" }}
-                >
-                    <IconTrash size={13} />
-                </Button>
+                {onArchive && (
+                    <Button
+                        variant="ghost"
+                        onClick={onArchive}
+                        title={t("retireTitle")}
+                        aria-label={t("retireAria", { name: persona.displayName })}
+                        className="px-2 py-[5px]"
+                    >
+                        <IconTrash size={13} />
+                    </Button>
+                )}
             </div>
         </Card>
     );
@@ -304,6 +332,8 @@ function NodesSection({
     network: { enabled: boolean; hubId: string | null; hubPath: string };
     personas: AgentPersonaRecord[];
 }) {
+    const t = useTranslations("collab.agentsPanel");
+    const ago = useAgo();
     const origin = typeof window === "undefined" ? "https://your-app" : window.location.origin;
     const command = [
         `COLLAB_HUB_URL=${origin}${network.hubPath} \\`,
@@ -320,19 +350,18 @@ function NodesSection({
     ].join("\n");
 
     return (
-        <Section
-            title="Machines"
-            description="An agent can run on a different machine from this app. The worker dials in and answers turn requests — all outbound, so it needs no public address of its own."
-        >
+        <Section title={t("machinesTitle")} description={t("machinesDescription")}>
             {!network.enabled ? (
                 <StatusNote tone="warn">
-                    Remote agents are off. Set <Code>COLLAB_HUB_SECRET</Code> on this deployment to
-                    accept worker machines — until then every agent runs in this process.
+                    {t.rich("remoteOff", { code: chunks => <Code>{chunks}</Code> })}
                 </StatusNote>
             ) : (
                 <StatusNote tone="ok">
-                    Hub <Code>{network.hubId}</Code> is accepting nodes at{" "}
-                    <Code>{network.hubPath}</Code>.
+                    {t.rich("hubAccepting", {
+                        hubId: network.hubId ?? "",
+                        hubPath: network.hubPath,
+                        code: chunks => <Code>{chunks}</Code>,
+                    })}
                 </StatusNote>
             )}
 
@@ -369,37 +398,31 @@ function NodesSection({
                                     className="mono"
                                     style={{ fontSize: 11, color: "var(--ink-3)" }}
                                 >
-                                    {node.nodeId} · serves{" "}
-                                    {node.personaIds.length > 0
-                                        ? node.personaIds.join(", ")
-                                        : "any agent"}
+                                    {t("nodeServes", {
+                                        node: node.nodeId,
+                                        agents:
+                                            node.personaIds.length > 0
+                                                ? node.personaIds.join(", ")
+                                                : t("anyAgent"),
+                                    })}
                                 </div>
                             </div>
                             <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
                                 {node.connected
-                                    ? "connected"
-                                    : `last seen ${relativeTime(node.lastSeenAt)}`}
+                                    ? t("connected")
+                                    : t("lastSeen", {
+                                          when: ago(node.lastSeenAt, { seconds: true }),
+                                      })}
                             </span>
                         </div>
                     ))}
                 </Card>
             )}
 
-            <CommandBlock title="Connect a machine" command={command} />
+            <CommandBlock title={t("connectTitle")} command={command} />
             <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 10, lineHeight: 1.6 }}>
-                Set an agent&apos;s node id to that <Code>COLLAB_NODE_ID</Code> and its turns are
-                produced on that machine, against that machine&apos;s model. Each message records
-                the node that served it, so a transcript shows where every turn came from.
+                {t.rich("nodeNote", { code: chunks => <Code>{chunks}</Code> })}
             </div>
         </Section>
     );
-}
-
-function relativeTime(epochMs: number): string {
-    if (!epochMs) return "never";
-    const seconds = Math.max(0, Math.round((Date.now() - epochMs) / 1000));
-    if (seconds < 60) return `${seconds}s ago`;
-    if (seconds < 3600) return `${Math.round(seconds / 60)}m ago`;
-    if (seconds < 86_400) return `${Math.round(seconds / 3600)}h ago`;
-    return `${Math.round(seconds / 86_400)}d ago`;
 }

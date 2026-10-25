@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Search,
     Plus,
@@ -18,6 +19,7 @@ import { legalTheme as s } from "./LegalGeneratorTheme";
 export interface DocumentTemplate {
     id: string;
     name: string;
+    /** A `Stage` id ("employment", …); "legal" for anything unstaged. */
     category: string;
     description: string;
     preview: string;
@@ -29,7 +31,8 @@ interface GeneratedDocument {
     id: string;
     title: string;
     template: string;
-    lastEdited: string;
+    /** ISO time of the last save. */
+    editedAt: string;
     content: string;
 }
 
@@ -48,49 +51,79 @@ interface DocumentGeneratorHomeProps {
     generatedDocuments: GeneratedDocument[];
 }
 
-const STAGE_MAP: Record<string, string> = {
-    nda: "Confidentiality",
-    founders_agreement: "Formation",
-    ip_assignment: "Formation",
-    service_agreement: "Commercial",
-    contractor_agreement: "Commercial",
-    safe: "Fundraising",
-    advisory_agreement: "Fundraising",
-    employment_contract: "Employment",
-    employee_nda: "Employment",
-    invention_assignment: "Employment",
-    at_will_employment: "Employment",
-    non_compete: "Employment",
-    privacy_policy: "Product",
-    terms_of_service: "Product",
-    termination_letter: "Offboarding",
-    severance_agreement: "Offboarding",
-};
-
 const STAGE_ORDER = [
-    "Confidentiality",
-    "Formation",
-    "Commercial",
-    "Fundraising",
-    "Employment",
-    "Product",
-    "Offboarding",
-];
+    "confidentiality",
+    "formation",
+    "commercial",
+    "fundraising",
+    "employment",
+    "product",
+    "offboarding",
+] as const;
+
+/** A library section; "legal" holds a template no stage claims. */
+type Stage = (typeof STAGE_ORDER)[number] | "legal";
+
+const STAGE_MAP: Record<string, Stage> = {
+    nda: "confidentiality",
+    founders_agreement: "formation",
+    ip_assignment: "formation",
+    service_agreement: "commercial",
+    contractor_agreement: "commercial",
+    safe: "fundraising",
+    advisory_agreement: "fundraising",
+    employment_contract: "employment",
+    employee_nda: "employment",
+    invention_assignment: "employment",
+    at_will_employment: "employment",
+    non_compete: "employment",
+    privacy_policy: "product",
+    terms_of_service: "product",
+    termination_letter: "offboarding",
+    severance_agreement: "offboarding",
+};
 
 const STAGE_ICONS: Record<string, React.ReactNode> = {
-    Confidentiality: <Shield className="h-4 w-4" />,
-    Formation: <Briefcase className="h-4 w-4" />,
-    Commercial: <Briefcase className="h-4 w-4" />,
-    Fundraising: <Briefcase className="h-4 w-4" />,
-    Employment: <UserCheck className="h-4 w-4" />,
-    Product: <Shield className="h-4 w-4" />,
-    Offboarding: <Gavel className="h-4 w-4" />,
+    confidentiality: <Shield className="h-4 w-4" />,
+    formation: <Briefcase className="h-4 w-4" />,
+    commercial: <Briefcase className="h-4 w-4" />,
+    fundraising: <Briefcase className="h-4 w-4" />,
+    employment: <UserCheck className="h-4 w-4" />,
+    product: <Shield className="h-4 w-4" />,
+    offboarding: <Gavel className="h-4 w-4" />,
 };
+
+const STAGES = new Set<string>([...STAGE_ORDER, "legal"]);
+
+function isStage(category: string): category is Stage {
+    return STAGES.has(category);
+}
+
+type HomeT = ReturnType<typeof useTranslations<"generator.home">>;
+
+/** The section name a category shows as. */
+function stageLabel(category: string, t: HomeT): string {
+    return isStage(category) ? t(`stages.${category}`) : category;
+}
+
+/** "5 mins ago", "Just now", or the date once it is a week old. */
+function editedLabel(iso: string, t: HomeT, format: ReturnType<typeof useFormatter>): string {
+    const date = new Date(iso);
+    const diffMins = Math.floor((Date.now() - date.getTime()) / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    if (Number.isNaN(diffMins)) return iso;
+    if (diffMins < 1) return t("edited.justNow");
+    if (diffMins < 60) return t("edited.minutes", { count: diffMins });
+    if (diffHours < 24) return t("edited.hours", { count: diffHours });
+    if (diffDays < 7) return t("edited.days", { count: diffDays });
+    return format.dateTime(date);
+}
 
 const templates: DocumentTemplate[] = Object.values(TEMPLATE_REGISTRY).map(t => ({
     id: t.id,
     name: t.name,
-    category: STAGE_MAP[t.id] ?? "Legal",
+    category: STAGE_MAP[t.id] ?? "legal",
     description: t.description,
     preview: "",
     isLegal: true,
@@ -105,11 +138,13 @@ export function DocumentGeneratorHome({
     onShowNew,
     generatedDocuments,
 }: DocumentGeneratorHomeProps) {
+    const t = useTranslations("generator.home");
+    const tc = useTranslations("common");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
     const [chatInput, setChatInput] = useState("");
 
-    const categories = ["all", ...STAGE_ORDER];
+    const categories: (Stage | "all")[] = ["all", ...STAGE_ORDER];
 
     const filteredTemplates = templates.filter(template => {
         const matchesSearch =
@@ -126,9 +161,9 @@ export function DocumentGeneratorHome({
 
     const groupedTemplates =
         selectedCategory === "all"
-            ? STAGE_ORDER.map(stage => ({
+            ? STAGE_ORDER.map((stage): { stage: string; items: DocumentTemplate[] } => ({
                   stage,
-                  items: filteredTemplates.filter(t => t.category === stage),
+                  items: filteredTemplates.filter(tpl => tpl.category === stage),
               })).filter(g => g.items.length > 0)
             : [{ stage: selectedCategory, items: filteredTemplates }];
 
@@ -145,14 +180,10 @@ export function DocumentGeneratorHome({
                     and My documents are the tool rail's screens, not tabs here. */}
                 <div className={s.libContentHead}>
                     <h1 className={s.libHeroHeading}>
-                        Generate a <em>legal</em> document
+                        {t.rich("title", { em: chunks => <em>{chunks}</em> })}
                     </h1>
                 </div>
-                <p className={s.libHeroSub}>
-                    Pick a template — Drift fills it from your company knowledge and the
-                    counterparty. Or describe what you need and the assistant will recommend the
-                    right one.
-                </p>
+                <p className={s.libHeroSub}>{t("subtitle")}</p>
 
                 {/* Search + filter strip — kept compact, sized like the design's chips */}
                 <div
@@ -167,9 +198,7 @@ export function DocumentGeneratorHome({
                             type="text"
                             className={s.input}
                             placeholder={
-                                viewMode === "new"
-                                    ? "Search legal templates…"
-                                    : "Search your documents…"
+                                viewMode === "new" ? t("searchTemplates") : t("searchDocuments")
                             }
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
@@ -195,7 +224,9 @@ export function DocumentGeneratorHome({
                                             selectedCategory === category ? s.chipBtnActive : ""
                                         }`}
                                     >
-                                        {category === "all" ? "All" : category}
+                                        {category === "all"
+                                            ? tc("status.all")
+                                            : t(`stages.${category}`)}
                                         <span style={{ color: "var(--ink-4)", marginLeft: 4 }}>
                                             {count}
                                         </span>
@@ -226,7 +257,7 @@ export function DocumentGeneratorHome({
                                                     color: "var(--ink)",
                                                 }}
                                             >
-                                                Not sure which template you need?
+                                                {t("banner.title")}
                                             </h3>
                                             <p
                                                 style={{
@@ -236,9 +267,7 @@ export function DocumentGeneratorHome({
                                                     margin: 0,
                                                 }}
                                             >
-                                                Describe your situation — the assistant recommends a
-                                                template and pre-fills fields from chat as you
-                                                answer.
+                                                {t("banner.body")}
                                             </p>
                                         </div>
                                     </div>
@@ -253,7 +282,7 @@ export function DocumentGeneratorHome({
                                                         onStartChat(chatInput.trim());
                                                     }
                                                 }}
-                                                placeholder="e.g. NDA for new employees…"
+                                                placeholder={t("banner.placeholder")}
                                                 className={s.input}
                                             />
                                         </div>
@@ -264,7 +293,7 @@ export function DocumentGeneratorHome({
                                             }
                                         >
                                             <Sparkles className="h-3.5 w-3.5" />
-                                            Ask AI
+                                            {t("banner.askAi")}
                                             <ArrowRight className="h-3 w-3" />
                                         </button>
                                     </div>
@@ -278,12 +307,12 @@ export function DocumentGeneratorHome({
                             !searchQuery && (
                                 <section className={s.libSection}>
                                     <div className={s.libSectionHead}>
-                                        <h2 className={s.libSectionTitle}>
-                                            Recent in your workspace
-                                        </h2>
+                                        <h2 className={s.libSectionTitle}>{t("recentTitle")}</h2>
                                         <span className={s.libSectionMono}>
-                                            {Math.min(3, generatedDocuments.length)} of{" "}
-                                            {generatedDocuments.length}
+                                            {t("shownOfTotal", {
+                                                shown: Math.min(3, generatedDocuments.length),
+                                                total: generatedDocuments.length,
+                                            })}
                                         </span>
                                     </div>
                                     <div className={s.libGrid}>
@@ -304,10 +333,9 @@ export function DocumentGeneratorHome({
                         {groupedTemplates.map(({ stage, items }) => (
                             <section key={stage} className={s.libSection}>
                                 <div className={s.libSectionHead}>
-                                    <h2 className={s.libSectionTitle}>{stage}</h2>
+                                    <h2 className={s.libSectionTitle}>{stageLabel(stage, t)}</h2>
                                     <span className={s.libSectionMono}>
-                                        {items.length}{" "}
-                                        {items.length === 1 ? "template" : "templates"}
+                                        {t("templateCount", { count: items.length })}
                                     </span>
                                 </div>
                                 <div className={s.libGrid}>
@@ -325,9 +353,12 @@ export function DocumentGeneratorHome({
                 ) : filteredDocuments.length > 0 ? (
                     <section className={s.libSection}>
                         <div className={s.libSectionHead}>
-                            <h2 className={s.libSectionTitle}>My documents</h2>
+                            <h2 className={s.libSectionTitle}>{t("myDocuments")}</h2>
                             <span className={s.libSectionMono}>
-                                {filteredDocuments.length} of {generatedDocuments.length}
+                                {t("shownOfTotal", {
+                                    shown: filteredDocuments.length,
+                                    total: generatedDocuments.length,
+                                })}
                             </span>
                         </div>
                         <div className={s.libGrid}>
@@ -353,24 +384,25 @@ function TemplateTile({
     template: DocumentTemplate;
     onSelect: (t: DocumentTemplate) => void;
 }) {
+    const t = useTranslations("generator.home");
     const fieldCount = template.fields?.length ?? 0;
     const requiredCount = template.fields?.filter(f => f.required).length ?? 0;
     const icon = STAGE_ICONS[template.category] ?? <FileText className="h-4 w-4" />;
-    const fieldText = fieldCount > 0 ? `${fieldCount} field${fieldCount === 1 ? "" : "s"}` : "";
+    const fieldText = fieldCount > 0 ? t("tile.fields", { count: fieldCount }) : "";
     return (
         <button type="button" className={s.libTile} onClick={() => onSelect(template)}>
             <div className={s.libTileIcon}>{icon}</div>
             <div className={s.libTileTitle}>{template.name}</div>
             <p className={s.libTileSub}>
-                {template.category}
+                {stageLabel(template.category, t)}
                 {fieldText ? ` · ${fieldText}` : ""}
                 {requiredCount > 0 && requiredCount < fieldCount
-                    ? ` · ${requiredCount} required`
+                    ? ` · ${t("tile.required", { count: requiredCount })}`
                     : ""}
             </p>
             <div className={s.libTileMeta}>
                 <span>DOCX</span>
-                <span>Open →</span>
+                <span>{t("tile.open")}</span>
             </div>
         </button>
     );
@@ -385,6 +417,8 @@ function RecentTile({
     doc: GeneratedDocument;
     onOpen: (doc: GeneratedDocument) => void;
 }) {
+    const t = useTranslations("generator.home");
+    const format = useFormatter();
     return (
         <button type="button" className={s.libTile} onClick={() => onOpen(doc)}>
             <div className={s.libTileIcon}>
@@ -401,11 +435,14 @@ function RecentTile({
                 {doc.title}
             </div>
             <p className={s.libTileSub}>
-                {doc.template} · edited {doc.lastEdited}
+                {t("tile.edited", {
+                    template: doc.template === "Custom" ? t("tile.customTemplate") : doc.template,
+                    when: editedLabel(doc.editedAt, t, format),
+                })}
             </p>
             <div className={s.libTileMeta}>
-                <span>DRAFT</span>
-                <span>Open →</span>
+                <span>{t("tile.draft")}</span>
+                <span>{t("tile.open")}</span>
             </div>
         </button>
     );
@@ -414,6 +451,7 @@ function RecentTile({
 // ─── Empty states ────────────────────────────────────────────────────────────
 
 function EmptyTemplates({ query }: { query: string }) {
+    const t = useTranslations("generator.home.emptyTemplates");
     return (
         <div
             className={`${s.panel} flex flex-col items-center gap-3 py-16 text-center`}
@@ -421,18 +459,17 @@ function EmptyTemplates({ query }: { query: string }) {
         >
             <FileText className="h-10 w-10" style={{ color: "var(--ink-4)" }} />
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
-                No templates match
+                {t("title")}
             </h3>
             <p style={{ margin: 0, fontSize: 12, color: "var(--ink-3)", maxWidth: 360 }}>
-                {query
-                    ? `Nothing matched "${query}". Try a different keyword or clear the filter.`
-                    : "Try a different filter."}
+                {query ? t("query", { query }) : t("filter")}
             </p>
         </div>
     );
 }
 
 function EmptyDocuments({ onSwitch }: { onSwitch: () => void }) {
+    const t = useTranslations("generator.home.emptyDocuments");
     return (
         <div
             className={`${s.panel} mx-auto flex max-w-md flex-col items-center gap-3 py-16 text-center`}
@@ -440,10 +477,10 @@ function EmptyDocuments({ onSwitch }: { onSwitch: () => void }) {
         >
             <FileText className="h-12 w-12" style={{ color: "var(--ink-4)" }} />
             <h3 style={{ margin: 0, fontSize: 16, fontWeight: 500, color: "var(--ink)" }}>
-                No documents yet
+                {t("title")}
             </h3>
             <p style={{ margin: 0, fontSize: 13, color: "var(--ink-3)", maxWidth: 340 }}>
-                Generate your first legal document from a template to see it here.
+                {t("body")}
             </p>
             <button
                 className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
@@ -451,7 +488,7 @@ function EmptyDocuments({ onSwitch }: { onSwitch: () => void }) {
                 style={{ marginTop: 8 }}
             >
                 <Plus className="h-3.5 w-3.5" />
-                Create new document
+                {t("action")}
             </button>
         </div>
     );

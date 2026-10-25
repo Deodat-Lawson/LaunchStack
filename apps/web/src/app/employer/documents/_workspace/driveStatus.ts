@@ -1,0 +1,109 @@
+/**
+ * The Drive status (`/api/connectors/google-drive/status`) as Add source's
+ * Drive buttons and Settings' DriveSyncPanel read it: the payload's shape,
+ * and the pure decisions made from it — which folder-access notice to show,
+ * which picked folders came back empty, and where each picked item's files
+ * are. Kept out of the components so they can be tested without rendering.
+ */
+
+import type { useTranslations } from "next-intl";
+
+import { displayFolderPath } from "~/lib/folders/path";
+
+/** `useTranslations("sources.driveConnect")`. */
+export type DriveTranslator = ReturnType<typeof useTranslations<"sources.driveConnect">>;
+
+export interface DrivePickedItem {
+    readonly fileId: string;
+    readonly kind: string;
+    readonly name: string;
+    readonly mimeType: string | null;
+    /**
+     * A picked folder's LaunchStack folder (null until its first sync); for a
+     * file, the folder it was picked into from Add source.
+     */
+    readonly folderPath?: string | null;
+    /** Imported into a folder private to someone else, so its name isn't shown. */
+    readonly folderHidden?: boolean;
+}
+
+export interface DriveStatus {
+    readonly configured: boolean;
+    readonly connected: boolean;
+    readonly connectionId?: string;
+    readonly status?: string;
+    readonly accountEmail?: string | null;
+    readonly pickedItems?: readonly DrivePickedItem[];
+    readonly lastSyncAt?: string | null;
+    readonly lastSyncStatus?: string | null;
+    readonly lastSyncError?: string | null;
+    readonly lastSyncReport?: Record<string, unknown> | null;
+    readonly picker: {
+        readonly apiKey: string | null;
+        readonly appId: string | null;
+        readonly scriptUrl: string;
+    };
+    /** `enabled`: the server may ask for folder access. `granted`: this connection holds it. */
+    readonly folderAccess?: { readonly enabled: boolean; readonly granted: boolean };
+}
+
+/**
+ * - `ready`: folders import whole.
+ * - `allow`: the server can, but this connection only holds drive.file — the
+ *   user opts in with "Allow folder access" (a second consent).
+ * - `files-only`: the server can't (operator flag off): only picked files come in.
+ */
+export type FolderAccessState = "ready" | "allow" | "files-only";
+
+export function folderAccessState(status: DriveStatus): FolderAccessState {
+    if (status.folderAccess?.granted) return "ready";
+    return status.folderAccess?.enabled ? "allow" : "files-only";
+}
+
+export function reportCount(
+    report: Record<string, unknown> | null | undefined,
+    key: string
+): number {
+    const value = report?.[key];
+    if (typeof value === "number") return value;
+    return Array.isArray(value) ? value.length : 0;
+}
+
+/** Picked folders the last sync listed and found nothing in, by name. */
+export function emptyFolderNames(status: DriveStatus): string[] {
+    const ids = status.lastSyncReport?.emptyFolders;
+    if (!Array.isArray(ids) || ids.length === 0) return [];
+    const byId = new Map((status.pickedItems ?? []).map(item => [item.fileId, item.name]));
+    return ids.flatMap(id => {
+        const name = typeof id === "string" ? byId.get(id) : undefined;
+        return name ? [name] : [];
+    });
+}
+
+/** The line under a picked item: where its files are in LaunchStack. */
+export function pickedItemDestination(
+    t: DriveTranslator,
+    item: DrivePickedItem,
+    access: FolderAccessState
+): string {
+    if (item.kind !== "folder") {
+        if (item.folderPath) {
+            return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
+        }
+        return item.folderHidden ? t("destination.inPrivateFolder") : t("destination.inDrive");
+    }
+    if (item.folderPath) {
+        return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
+    }
+    if (item.folderHidden) return t("destination.inPrivateFolder");
+    return access === "ready" ? t("destination.becomesFolder") : t("destination.needsAccess");
+}
+
+/** "“a”", "“a” and “b”", "“a”, “b” and 2 more". */
+export function listNames(t: DriveTranslator, names: readonly string[]): string {
+    const [first, second] = names;
+    if (first === undefined) return "";
+    if (second === undefined) return t("names.one", { name: first });
+    if (names.length === 2) return t("names.two", { first, second });
+    return t("names.more", { first, second, count: names.length - 2 });
+}

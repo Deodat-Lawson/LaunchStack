@@ -1,5 +1,6 @@
 /**
- * OAuth return leg for Slack/GitHub (Google Drive has its own at
+ * OAuth return leg for the generic providers — Slack, GitHub, LinkedIn and
+ * Notion (Google Drive and Gmail have their own at
  * /api/connectors/google/oauth/callback). Session-gated: the auth session
  * cookie is SameSite=Lax, so it rides along on the provider's top-level GET
  * redirect — no middleware allowlist entry is needed. The state must verify
@@ -11,7 +12,7 @@
  * callbacks render in a top-level navigation, so JSON errors would strand
  * the user on a blank page. LinkedIn is connected from Growth › Brand, so
  * it returns into that tab's Accounts screen, after its Pages have been
- * read and turned into channels.
+ * read and turned into channels. A Notion connect queues its first sync.
  */
 
 import { NextResponse } from "next/server";
@@ -25,9 +26,12 @@ import {
     type OAuthProvider,
 } from "~/server/services/connectors/config";
 import { discoverLinkedInChannels } from "~/server/brand/channels";
+import { inngest } from "~/server/inngest/client";
 import { upsertConnection } from "~/server/services/connectors/connection-store";
+import { ensureSyncState as ensureNotionSyncState } from "~/server/services/connectors/notion/store";
 import { oauthNonceCookieName, verifyState } from "~/server/services/connectors/oauth-state";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { publicOrigin } from "~/server/public-origin";
 
 export const runtime = "nodejs";
 
@@ -44,7 +48,7 @@ function backToDocuments(
     provider: OAuthProvider | null,
     result: string
 ): NextResponse {
-    const url = new URL("/employer/documents", new URL(request.url).origin);
+    const url = new URL("/employer/documents", publicOrigin(request));
     if (provider === "linkedin") {
         url.searchParams.set("feature", "growth");
         // A code, never text: a crafted link cannot put words in the app's mouth.
@@ -107,7 +111,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
         return backToDocuments(request, provider, "error");
     }
 
-    const config = getConnectorConfig(provider, new URL(request.url).origin);
+    const config = getConnectorConfig(provider, publicOrigin(request));
     if (!config) return backToDocuments(request, provider, "error");
 
     try {
@@ -119,6 +123,24 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             grantedByUserId: guard.ctx.userPk,
             grant,
         });
+
+        if (provider === "notion") {
+            // The pages were just picked on Notion's consent screen: bring
+            // them in now rather than at the next cron tick. Best-effort —
+            // the connection is stored, and the cron or Sync now catches up.
+            try {
+                await ensureNotionSyncState(connection.id);
+                await inngest.send({
+                    name: "notion/sync.requested",
+                    data: {
+                        connectionId: String(connection.id),
+                        companyId: guard.ctx.companyId.toString(),
+                    },
+                });
+            } catch (syncError) {
+                console.error("[connectors] Notion first sync could not be queued:", syncError);
+            }
+        }
 
         if (provider === "linkedin") {
             // The grant is stored either way; a failed Page read is retried

@@ -156,7 +156,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Prepare the host and domains",
                 body: [
-                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, /api/inngest to worker:8020, files to SeaweedFS, and the public site to landing:3001.",
+                    "Use a current Docker Compose plugin that supports !reset (2.24.4 or newer). Point DOMAIN, files.DOMAIN, and home.DOMAIN at the server. The supplied Caddy configuration sends the product to app:3000, files to SeaweedFS, and the public site to landing:3001. The worker stays private.",
                 ],
                 code: "DOMAIN=workspace.example.com\nACME_EMAIL=ops@example.com\nBETTER_AUTH_URL=https://workspace.example.com\nAPP_PUBLIC_URL=https://workspace.example.com\nOCR_DEFAULT_PROVIDER=AZURE\nAZURE_DOC_INTELLIGENCE_ENDPOINT=https://your-resource.cognitiveservices.azure.com\nAZURE_DOC_INTELLIGENCE_KEY=replace-with-your-resource-key\nCONVERTER_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com\nADEU_ALLOWED_FETCH_ORIGINS=https://workspace.example.com,https://files.workspace.example.com",
                 file: ".env · example public origins and cloud OCR",
@@ -171,9 +171,9 @@ export const GUIDES: Guide[] = [
             {
                 title: "Forward settings to both processes",
                 body: [
-                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings absent from the base file, including APP_PUBLIC_URL and any OAuth or feature flags you enable.",
+                    "Compose uses an explicit environment allowlist. A value in .env reaches a container only if that service forwards it. Add an operator override for settings the base file does not forward. The example also makes APP_PUBLIC_URL required, so Compose refuses to start without the origin your document services fetch files from.",
                 ],
-                code: "services:\n  app:\n    environment: &operator-env\n      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Set the public app origin}\n  worker:\n    environment: *operator-env",
+                code: "services:\n  app:\n    environment: &operator-env\n      APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Set the origin the document services fetch files from}\n  worker:\n    environment: *operator-env",
                 file: "docker-compose.operator.yml",
                 note: "Add provider client IDs, secrets, and feature flags to this shared block when enabling connections or optional capabilities. Existing base values are retained by the Compose merge.",
             },
@@ -207,7 +207,7 @@ export const GUIDES: Guide[] = [
                 ],
                 code: "docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml --env-file .env config --services\ndocker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml --env-file .env up --build -d\ndocker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.operator.yml logs --tail=100 migrate app worker caddy",
                 file: "Terminal",
-                note: "The lean overlay disables local Whisper and the Inngest dev server. Configure cloud transcription and OCR, or explicitly enable the relevant profiles. The supplied files hostname serves objects anonymously by URL; choose storage and access controls that fit your deployment.",
+                note: "The lean overlay disables local Whisper and the Inngest dev server, and runs a self-hosted Inngest server instead. Configure cloud transcription and OCR, or explicitly enable the relevant profiles. The supplied files hostname serves objects anonymously by URL; choose storage and access controls that fit your deployment.",
                 links: [
                     guideLink("Workers & scheduled jobs", "workers"),
                     guideLink("Health, updates & backups", "operations"),
@@ -242,7 +242,7 @@ export const GUIDES: Guide[] = [
                 ],
                 code: "DATABASE_URL=postgresql://postgres:your-password@localhost:5433/pdr_ai_v2\nBETTER_AUTH_URL=http://localhost:3000\nAPP_PUBLIC_URL=http://host.docker.internal:3000\nTRANSCRIPTION_SERVICE_URL=http://localhost:8000\nDOCUMENT_CONVERTER_URL=http://localhost:8002\nADEU_SERVICE_URL=http://localhost:8003\nGOTENBERG_SERVICE_URL=http://localhost:8004",
                 file: ".env · host-run processes",
-                note: "host.docker.internal lets Docker Desktop services fetch database-backed files from your host. Linux hosts need an equivalent host-gateway mapping. Allow that exact origin in the converter/editing fetch allowlists. Use a browser-reachable APP_PUBLIC_URL when testing OAuth callbacks.",
+                note: "host.docker.internal lets Docker Desktop services fetch database-backed files from your host. Linux hosts need an equivalent host-gateway mapping. Allow that exact origin in the converter/editing fetch allowlists. OAuth callbacks are built on BETTER_AUTH_URL, so they stay on localhost.",
                 links: [
                     guideLink("Storage configuration", "storage"),
                     guideLink("Document services", "processing"),
@@ -384,6 +384,7 @@ export const GUIDES: Guide[] = [
                 title: "Required account configuration",
                 body: [
                     "The app uses Better Auth with its PostgreSQL database. Generate a stable BETTER_AUTH_SECRET and set BETTER_AUTH_URL to the actual public product origin, particularly behind a reverse proxy.",
+                    "Invite links, emails and OAuth callbacks are built on BETTER_AUTH_URL. APP_PUBLIC_URL is only where the document services fetch files from; behind a proxy it is usually the same origin.",
                 ],
                 code: "BETTER_AUTH_SECRET=replace-with-a-random-secret\nBETTER_AUTH_URL=https://workspace.example.com\nAPP_PUBLIC_URL=https://workspace.example.com\nDEPLOYMENT_MODE=self-hosted",
                 file: ".env",
@@ -438,11 +439,11 @@ export const GUIDES: Guide[] = [
             {
                 title: "Production Inngest",
                 body: [
-                    "The production overlay clears INNGEST_DEV and removes the dev server from the default stack. For workflows using Inngest, configure an event key and signing key, then register the worker's publicly reachable serve URL with your Inngest environment.",
+                    "The production overlay replaces the dev server with a self-hosted Inngest server (inngest start), keeping its history in an inngest database on the same Postgres and its queue in a small Redis. It finds the worker at http://worker:8020/api/inngest on its own. Set your own event key and signing key; Compose refuses to start without them (with an event key and no signing key, jobs are accepted and never run).",
                 ],
-                code: "INNGEST_EVENT_KEY=replace-with-your-event-key\nINNGEST_SIGNING_KEY=replace-with-your-signing-key",
+                code: "# each value: the output of openssl rand -hex 32\nINNGEST_EVENT_KEY=replace-with-64-hex-characters\nINNGEST_SIGNING_KEY=replace-with-64-hex-characters",
                 file: ".env",
-                note: "The supplied Caddy route serves the worker at https://your-domain/api/inngest. Keep the signing key consistent with the registered Inngest environment.",
+                note: "Nothing outside the server calls the worker, so Caddy does not route /api/inngest. The Inngest dashboard has no login: it listens on 127.0.0.1 only, so reach it over an SSH tunnel. To use Inngest Cloud instead, see the runbook in docs/runbooks/azure-lean-deploy.md.",
                 links: [
                     {
                         label: "Serving Inngest functions",
@@ -551,7 +552,7 @@ export const GUIDES: Guide[] = [
             {
                 title: "Provider configuration",
                 body: [
-                    "Register each callback on your public APP_PUBLIC_URL. Connection credentials are separate from AUTH_GOOGLE_* and AUTH_GITHUB_* social sign-in credentials.",
+                    "Register each callback on BETTER_AUTH_URL, your public product origin. Connection credentials are separate from AUTH_GOOGLE_* and AUTH_GITHUB_* social sign-in credentials.",
                 ],
                 rows: [
                     {
@@ -570,8 +571,12 @@ export const GUIDES: Guide[] = [
                         name: "Gmail · opt-in",
                         detail: "The Google OAuth pair plus GMAIL_CONNECTOR_ENABLED=true. Uses a separate mailbox grant and the shared Google callback; reads mail without sending or deleting it.",
                     },
+                    {
+                        name: "Drive folder import · opt-in",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true lets an admin add read-only Drive access after connecting (Allow folder access), so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Connecting itself asks only for the files picked one by one, so it never shows Google's unverified-app warning; only allowing folder access does, until the app is verified. Without the flag, only files picked one by one can be imported. The connection belongs to the workspace, so once folder access is allowed every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
+                    },
                 ],
-                note: "Gmail uses the restricted gmail.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling it for users.",
+                note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",
             },
             {
                 title: "Google Picker and linked editing",

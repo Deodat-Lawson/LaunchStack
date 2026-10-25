@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { searchWikiLinkCandidates } from "~/server/notes/wiki-links";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
@@ -24,6 +25,9 @@ export async function GET(request: Request) {
         return NextResponse.json({ candidates }, { status: 200 });
     } catch (err) {
         console.error("[/api/notes/resolve] failed:", err);
-        return NextResponse.json({ error: "Resolve failed" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "notes.server.errors")("resolveFailed") },
+            { status: 500 }
+        );
     }
 }

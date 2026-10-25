@@ -75,7 +75,7 @@ export function CompanyProfilePreview({
 
     return (
         <div data-preview="company-profile" className="bg-surface text-ink flex min-h-dvh flex-col">
-            <div className="bg-warn-soft text-warn border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
+            <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data; a reload starts over.{" "}
                 {STATE_NOTE[state]}
             </div>
@@ -153,7 +153,7 @@ function SettingsFrame({ readOnly }: { readOnly: boolean }) {
                     {!readOnly && actions?.primaryLabel && (
                         <Button
                             onClick={() => void actions.onPrimary?.()}
-                            disabled={actions.busy ?? actions.disabled ?? false}
+                            disabled={Boolean(actions.busy) || Boolean(actions.disabled)}
                             className="px-4 py-[9px]"
                         >
                             {actions.busy ? busyLabel : actions.primaryLabel}

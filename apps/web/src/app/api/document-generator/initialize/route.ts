@@ -12,7 +12,10 @@ import {
     resolveConfiguredChatModel,
     normalizeModelContent,
 } from "~/app/api/agents/documentQ&A/services";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 120; // Allow more time for research + generation
@@ -269,140 +272,149 @@ function getTemplateStructure(templateId: string): string {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = (await request.json()) as unknown;
-        const validation = InitializeSchema.safeParse(body);
+        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
+            const body = (await request.json()) as unknown;
+            const validation = InitializeSchema.safeParse(body);
 
-        if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
-                { status: 400 }
+            if (!validation.success) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: tApi("invalidRequest"),
+                        errors: validation.error.errors,
+                    },
+                    { status: 400 }
+                );
+            }
+
+            const { templateId, title, description, keywords, options } = validation.data;
+            const startTime = Date.now();
+
+            // Determine if we should include research
+            const includeResearch =
+                options?.includeResearch ??
+                ["research", "whitepaper", "technical"].includes(templateId);
+
+            let arxivPapers: ArxivPaper[] = [];
+            let citations: Citation[] = [];
+
+            // Fetch research from arXiv for research-oriented templates
+            if (includeResearch) {
+                const searchQuery = keywords?.join(" ") ?? description ?? title;
+                arxivPapers = await searchArxiv(searchQuery, 5, options?.arxivCategory);
+                citations = buildCitations(arxivPapers);
+                console.log(`📚 [Initialize] Found ${arxivPapers.length} arXiv papers`);
+            }
+
+            // Get the AI model
+            const resolved = resolveConfiguredChatModel();
+            const { chat } = resolved;
+
+            // Build system prompt
+            let systemPrompt = getTemplateSystemPrompt(templateId);
+            systemPrompt += `\n\n${getTemplateStructure(templateId)}`;
+
+            // Add tone and audience guidance
+            if (options?.tone) {
+                systemPrompt += `\n\nWrite in a ${options.tone} tone.`;
+            }
+            if (options?.audience) {
+                systemPrompt += `\n\nTarget audience: ${options.audience}. Adjust complexity accordingly.`;
+            }
+            if (options?.length) {
+                const lengthGuide: Record<string, string> = {
+                    brief: "Keep the document concise, around 500-800 words total.",
+                    medium: "Aim for a moderate length, around 1000-1500 words total.",
+                    detailed: "Provide detailed content, around 2000-3000 words total.",
+                    comprehensive: "Be thorough and comprehensive, 3000+ words.",
+                };
+                systemPrompt += `\n\n${lengthGuide[options.length]}`;
+            }
+
+            // Build user prompt
+            let userPrompt = `Create a ${templateId} document with the following details:
+
+    **Title:** ${title}`;
+
+            if (description) {
+                userPrompt += `\n\n**Description/Topic:** ${description}`;
+            }
+
+            if (keywords && keywords.length > 0) {
+                userPrompt += `\n\n**Keywords:** ${keywords.join(", ")}`;
+            }
+
+            // Include arXiv research in the prompt
+            if (arxivPapers.length > 0) {
+                userPrompt += `\n\n---\n\n**RESEARCH SOURCES TO INCORPORATE:**\n\nYou MUST incorporate insights from these research papers and cite them using [1], [2], etc.:\n`;
+
+                arxivPapers.forEach((paper, index) => {
+                    userPrompt += `\n[${index + 1}] **${paper.title}**\n`;
+                    userPrompt += `Authors: ${paper.authors.slice(0, 3).join(", ")}${paper.authors.length > 3 ? " et al." : ""}\n`;
+                    userPrompt += `Summary: ${paper.summary.slice(0, 500)}...\n`;
+                    userPrompt += `arXiv ID: ${paper.arxivId}\n`;
+                });
+
+                userPrompt += `\n---\n\nNow write the complete document, incorporating insights from these papers with proper citations.`;
+            } else {
+                userPrompt += `\n\nNow write the complete document with substantive, well-researched content. Do NOT use placeholder text.`;
+            }
+
+            console.log(`🤖 [Initialize] Generating document content...`);
+
+            // Call the AI model
+            const response = await chat.invoke(
+                resolved.prepareMessages([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(userPrompt),
+                ])
             );
-        }
 
-        const { templateId, title, description, keywords, options } = validation.data;
-        const startTime = Date.now();
+            let generatedContent = normalizeModelContent(response.content);
 
-        // Determine if we should include research
-        const includeResearch =
-            options?.includeResearch ??
-            ["research", "whitepaper", "technical"].includes(templateId);
+            // Add references section if we have citations
+            if (citations.length > 0) {
+                generatedContent += `\n\n## References\n\n`;
+                citations.forEach((citation, index) => {
+                    const authors = citation.authors?.slice(0, 3).join(", ") ?? "Unknown";
+                    const year = citation.year ?? "n.d.";
+                    generatedContent += `[${index + 1}] ${authors}${citation.authors && citation.authors.length > 3 ? " et al." : ""}. (${year}). *${citation.title}*. arXiv:${citation.arxivId}. ${citation.url}\n\n`;
+                });
+            }
 
-        let arxivPapers: ArxivPaper[] = [];
-        let citations: Citation[] = [];
+            const processingTimeMs = Date.now() - startTime;
 
-        // Fetch research from arXiv for research-oriented templates
-        if (includeResearch) {
-            const searchQuery = keywords?.join(" ") ?? description ?? title;
-            arxivPapers = await searchArxiv(searchQuery, 5, options?.arxivCategory);
-            citations = buildCitations(arxivPapers);
-            console.log(`📚 [Initialize] Found ${arxivPapers.length} arXiv papers`);
-        }
+            console.log(
+                `✅ [Initialize] Document generated in ${processingTimeMs}ms with ${citations.length} citations`
+            );
 
-        // Get the AI model
-        const resolved = resolveConfiguredChatModel();
-        const { chat } = resolved;
-
-        // Build system prompt
-        let systemPrompt = getTemplateSystemPrompt(templateId);
-        systemPrompt += `\n\n${getTemplateStructure(templateId)}`;
-
-        // Add tone and audience guidance
-        if (options?.tone) {
-            systemPrompt += `\n\nWrite in a ${options.tone} tone.`;
-        }
-        if (options?.audience) {
-            systemPrompt += `\n\nTarget audience: ${options.audience}. Adjust complexity accordingly.`;
-        }
-        if (options?.length) {
-            const lengthGuide: Record<string, string> = {
-                brief: "Keep the document concise, around 500-800 words total.",
-                medium: "Aim for a moderate length, around 1000-1500 words total.",
-                detailed: "Provide detailed content, around 2000-3000 words total.",
-                comprehensive: "Be thorough and comprehensive, 3000+ words.",
-            };
-            systemPrompt += `\n\n${lengthGuide[options.length]}`;
-        }
-
-        // Build user prompt
-        let userPrompt = `Create a ${templateId} document with the following details:
-
-**Title:** ${title}`;
-
-        if (description) {
-            userPrompt += `\n\n**Description/Topic:** ${description}`;
-        }
-
-        if (keywords && keywords.length > 0) {
-            userPrompt += `\n\n**Keywords:** ${keywords.join(", ")}`;
-        }
-
-        // Include arXiv research in the prompt
-        if (arxivPapers.length > 0) {
-            userPrompt += `\n\n---\n\n**RESEARCH SOURCES TO INCORPORATE:**\n\nYou MUST incorporate insights from these research papers and cite them using [1], [2], etc.:\n`;
-
-            arxivPapers.forEach((paper, index) => {
-                userPrompt += `\n[${index + 1}] **${paper.title}**\n`;
-                userPrompt += `Authors: ${paper.authors.slice(0, 3).join(", ")}${paper.authors.length > 3 ? " et al." : ""}\n`;
-                userPrompt += `Summary: ${paper.summary.slice(0, 500)}...\n`;
-                userPrompt += `arXiv ID: ${paper.arxivId}\n`;
+            return NextResponse.json({
+                success: true,
+                content: generatedContent,
+                citations,
+                researchPapers: arxivPapers.map(p => ({
+                    title: p.title,
+                    authors: p.authors,
+                    arxivId: p.arxivId,
+                    url: p.url,
+                })),
+                processingTimeMs,
             });
-
-            userPrompt += `\n---\n\nNow write the complete document, incorporating insights from these papers with proper citations.`;
-        } else {
-            userPrompt += `\n\nNow write the complete document with substantive, well-researched content. Do NOT use placeholder text.`;
-        }
-
-        console.log(`🤖 [Initialize] Generating document content...`);
-
-        // Call the AI model
-        const response = await chat.invoke(
-            resolved.prepareMessages([
-                new SystemMessage(systemPrompt),
-                new HumanMessage(userPrompt),
-            ])
-        );
-
-        let generatedContent = normalizeModelContent(response.content);
-
-        // Add references section if we have citations
-        if (citations.length > 0) {
-            generatedContent += `\n\n## References\n\n`;
-            citations.forEach((citation, index) => {
-                const authors = citation.authors?.slice(0, 3).join(", ") ?? "Unknown";
-                const year = citation.year ?? "n.d.";
-                generatedContent += `[${index + 1}] ${authors}${citation.authors && citation.authors.length > 3 ? " et al." : ""}. (${year}). *${citation.title}*. arXiv:${citation.arxivId}. ${citation.url}\n\n`;
-            });
-        }
-
-        const processingTimeMs = Date.now() - startTime;
-
-        console.log(
-            `✅ [Initialize] Document generated in ${processingTimeMs}ms with ${citations.length} citations`
-        );
-
-        return NextResponse.json({
-            success: true,
-            content: generatedContent,
-            citations,
-            researchPapers: arxivPapers.map(p => ({
-                title: p.title,
-                authors: p.authors,
-                arxivId: p.arxivId,
-                url: p.url,
-            })),
-            processingTimeMs,
         });
     } catch (error) {
         console.error("❌ [Initialize] Error:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to initialize document",
-                error: "Failed to initialize document",
+                message: t("initializeFailed"),
+                error: t("initializeFailed"),
             },
             { status: 500 }
         );

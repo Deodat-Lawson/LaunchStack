@@ -1,7 +1,10 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
-import type { ComponentType } from "react";
+import { useMemo, type ComponentType } from "react";
+import { useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
+import type { ChatCreatedSource } from "~/lib/chat-turns";
+import type { SourceProcessingView } from "~/lib/source-progress";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -25,7 +28,9 @@ import {
     Shield as IconShield,
     Sparkles as IconSparkle,
     Users as IconUsers,
+    UsersRound as IconTeam,
     Video as IconVideo,
+    Waypoints as IconScenarios,
     Workflow as IconWorkflow,
 } from "lucide-react";
 import {
@@ -35,6 +40,7 @@ import {
     IconGithub,
     IconGmail,
     IconNotion,
+    IconObsidian,
     IconSlack,
     IconYoutube,
 } from "~/components/icons/brand";
@@ -169,8 +175,14 @@ export interface WorkspaceSource {
     citability?: SourceCitability;
     /** Unset for local sources and mindmaps without a published document. */
     indexStatus?: SourceIndexStatus;
-    /** The processing failure reported by the worker, for the status tooltip. */
+    /**
+     * The worker's raw processing failure. Never shown as is:
+     * `describeSourceFailure` turns it into words, and the raw text sits
+     * behind the failure card's Details.
+     */
     errorMessage?: string;
+    /** Where processing stands, for sources not ready yet: the progress bar, retries, the job id. */
+    processing?: SourceProcessingView | null;
     title: string;
     type: SourceTypeId;
     size: string;
@@ -249,6 +261,8 @@ export interface ThreadMessage {
     status?: "streaming" | "complete" | "stopped" | "error";
     stage?: string;
     reasoning?: string;
+    /** When the last reasoning arrived, from the start of the turn: how long it thought. */
+    thoughtMs?: number;
     elapsedMs?: number;
     send?: ComposerSend;
     role: "user" | "assistant";
@@ -261,7 +275,6 @@ export interface ThreadMessage {
      * because you can't open their source. Never stored.
      */
     hiddenCitations?: number;
-    model?: string;
     /**
      * Total LLM tokens for the turn. Named for what it is: this used to be set
      * from `chunksAnalyzed`, so the UI reported a retrieval count as a token
@@ -272,6 +285,10 @@ export interface ThreadMessage {
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     /** Retrieved chunks the answer was grounded in — a different number. */
     chunksAnalyzed?: number;
+    /** Web pages the model read, in the [Source N] order its answer cites. */
+    webSources?: { title: string; url: string }[];
+    /** Documents the answer created in the workspace, listed under it with a way to open them. */
+    createdSources?: ChatCreatedSource[];
     gapCheck?: { domain: DocDomain; missing: number; conflicts: number };
     /** Files attached to THIS turn only — not added to the Sources library. */
     attachments?: EphemeralAttachment[];
@@ -363,6 +380,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=agents",
     },
     {
+        id: "team",
+        label: "Team",
+        Icon: IconTeam,
+        desc: "People, groups, and who did what across the workspace",
+        href: "/employer/documents?feature=team",
+    },
+    {
         id: "draft",
         label: "Draft",
         Icon: IconPen,
@@ -438,6 +462,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=vantage",
     },
     {
+        id: "scenarios",
+        label: "Scenarios",
+        Icon: IconScenarios,
+        desc: "Simulate how people built from your records react to a situation",
+        href: "/employer/documents?feature=scenarios",
+    },
+    {
         id: "proposals",
         label: "Proposals",
         Icon: IconProposals,
@@ -466,10 +497,12 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/settings#analytics",
     },
     {
-        id: "team",
-        label: "Workspace",
+        // Not `team`: that is the Team app above, and the palette keys and
+        // routes its rows by id.
+        id: "people-access",
+        label: "People and access",
         Icon: IconUsers,
-        desc: "People, roles, invitations, audit",
+        desc: "Roles, invitations, join links, audit",
         href: "/employer/settings#people",
     },
     {
@@ -522,6 +555,13 @@ export interface StudioFeature {
      * gated tile never flashes for someone who may not open it.
      */
     requires?: Permission;
+    /**
+     * What to tell someone who follows a link to this app (a teammate's
+     * link, a shortcut) without its permission. The app does not open for
+     * them; this sentence says why instead of leaving them where they were.
+     * Unset, nothing is said.
+     */
+    deniedNote?: string;
 }
 
 export interface StudioGroup {
@@ -558,6 +598,19 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Agents",
                 Icon: IconAgents,
                 desc: "Who your agents are: try them, edit their instructions, import a definition file",
+            },
+            {
+                // Who is here and what they have been doing. It was a tab of
+                // the sidebar; the sidebar is for making, filing and sharing
+                // sources, so the team is a tab of its own like every app.
+                id: "team",
+                label: "Team",
+                Icon: IconTeam,
+                desc: "People and what you share with each, groups to share with in one step, and who added, shared or moved what",
+                href: "/employer/documents?feature=team",
+                requires: "members.view",
+                deniedNote:
+                    "Your role sees only what is shared with you, so there is no team list. New shares arrive in the bell at the top of the sidebar.",
             },
         ],
     },
@@ -606,6 +659,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 href: "/employer/documents?feature=vantage",
             },
             {
+                // A simulated social network: people built from the
+                // workspace's records react to a situation over several
+                // rounds. List, form and runs are screens inside its tab.
+                id: "scenarios",
+                label: "Scenarios",
+                Icon: IconScenarios,
+                desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
+                href: "/employer/documents?feature=scenarios",
+            },
+            {
                 id: "draft",
                 label: "Templated Drafts",
                 Icon: IconPen,
@@ -628,12 +691,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             // survives as an id so old deep links open the right section.
             // Analytics is not one of them: it has its own pane and its own
             // permission, and Settings' `#analytics` only forwards to this tab.
+            //
+            // Ungated: everyone has an account, a theme and shortcuts to set,
+            // and the account menu offers Settings to everyone. Each section
+            // carries its own gate (`SETTINGS_SECTION_ACCESS`).
             {
                 id: "settings",
                 label: "Settings",
                 Icon: IconSettings,
-                desc: "People and access, processing, agents and nodes, integrations, company profile",
-                requires: "settings.manage",
+                desc: "Your account, appearance and shortcuts; the workspace's people, processing, agents and integrations",
             },
             {
                 id: "analytics",
@@ -759,7 +825,12 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "files", label: "Files", Icon: IconFile, desc: "PDF, DOCX, XLSX, images" },
             { id: "folder", label: "Folder", Icon: IconFolder, desc: "Bulk — keeps structure" },
-            { id: "audio", label: "Audio", Icon: IconAudio, desc: "MP3, M4A — transcribed" },
+            {
+                id: "audio",
+                label: "Audio",
+                Icon: IconAudio,
+                desc: "MP3, M4A, WAV and more — transcribed",
+            },
             { id: "video", label: "Video", Icon: IconVideo, desc: "MP4 — transcribed" },
             { id: "url", label: "URL", Icon: IconLink, desc: "Crawls the page" },
             { id: "youtube", label: "YouTube", Icon: IconYoutube, desc: "Pulls the transcript" },
@@ -778,9 +849,24 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         items: [
             { id: "gmail", label: "Gmail", Icon: IconGmail, desc: "Your mailbox, private to you" },
             { id: "notion", label: "Notion", Icon: IconNotion, desc: "Pick pages or databases" },
-            { id: "drive", label: "Google Drive", Icon: IconDrive, desc: "Folders stay in sync" },
-            { id: "slack", label: "Slack", Icon: IconSlack, desc: "Selected channels" },
-            { id: "github", label: "GitHub", Icon: IconGithub, desc: "Repos + issues + PRs" },
+            {
+                id: "obsidian",
+                label: "Obsidian",
+                Icon: IconObsidian,
+                desc: "Import a vault — re-import to update",
+            },
+            {
+                id: "slack",
+                label: "Slack",
+                Icon: IconSlack,
+                desc: "Mirror agent meetings to a channel",
+            },
+            {
+                id: "github",
+                label: "GitHub",
+                Icon: IconGithub,
+                desc: "Private repos for the Repo Explainer",
+            },
             {
                 id: "agent-sessions",
                 label: "Coding sessions",
@@ -791,3 +877,183 @@ export const ADD_TABS: { group: string; items: AddSourceTab[] }[] = [
         ],
     },
 ];
+
+// ---------------------------------------------------------------------------
+// The registries above in the reader's language
+// ---------------------------------------------------------------------------
+//
+// The `label` / `desc` fields stay the English source of truth (tests and the
+// palette's search read them); what a person reads goes through these, which
+// look the same entries up in the catalogue. An id with no message falls
+// back to its English field rather than to a key.
+//
+// Most words are the workspace's own (`workspace.studioApps`, …). The tools
+// with screens of their own are named by `tools.registry`, so a tool reads
+// the same here as inside its tab; source types are `sources.sourceTypes`,
+// shared with the rail.
+
+/** `t` for the `workspace` namespace. */
+export type WorkspaceTranslator = ReturnType<typeof useTranslations<"workspace">>;
+
+/** `t` for `tools.registry` — the tools' own names and descriptions. */
+export type ToolRegistryTranslator = ReturnType<typeof useTranslations<"tools.registry">>;
+
+/** `t` for `sources.sourceTypes`. */
+export type SourceTypeTranslator = ReturnType<typeof useTranslations<"sources.sourceTypes">>;
+
+/** What the Studio lookups below read from: `useStudioText()`. */
+export interface StudioText {
+    workspace: WorkspaceTranslator;
+    tools: ToolRegistryTranslator;
+}
+
+/** The translators the Studio lookups take, for the reader's language. */
+export function useStudioText(): StudioText {
+    const workspace = useTranslations("workspace");
+    const tools = useTranslations("tools.registry");
+    return useMemo(() => ({ workspace, tools }), [workspace, tools]);
+}
+
+/** A source type's name, e.g. "File" / "文件" — `useTranslations("sources.sourceTypes")`. */
+export function sourceTypeLabel(t: SourceTypeTranslator, type: SourceTypeId): string {
+    return t(type);
+}
+
+const STUDIO_GROUP_MESSAGE_KEYS = {
+    workspace: "workspace",
+    tools: "tools",
+    management: "management",
+} as const;
+
+/** A Studio group's heading ("Workspace", "Tools", "Management"). */
+export function studioGroupLabel(
+    text: StudioText,
+    group: Pick<StudioGroup, "id" | "label">
+): string {
+    const key = lookup(STUDIO_GROUP_MESSAGE_KEYS, group.id);
+    return key ? text.workspace(`studioGroups.${key}`) : group.label;
+}
+
+/** Tools named by `tools.registry` rather than by the workspace. */
+const TOOL_REGISTRY_KEYS = {
+    growth: "growth",
+    proposals: "proposals",
+    vantage: "vantage",
+    scenarios: "scenarios",
+} as const;
+
+const STUDIO_APP_MESSAGE_KEYS = {
+    chat: "chat",
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    investors: "investors",
+    draft: "draft",
+    rewrite: "rewrite",
+    settings: "settings",
+    analytics: "analytics",
+    mindmap: "mindmap",
+    workflows: "workflows",
+    metadata: "metadata",
+} as const;
+
+const STUDIO_DENIED_NOTE_KEYS = { team: "team" } as const;
+
+/** A Studio app's name — a tab's label, a picker tile, a launcher button. */
+export function studioFeatureLabel(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "label">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.name`);
+    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    return key ? text.workspace(`studioApps.${key}.label`) : feature.label;
+}
+
+/** What a Studio app is for — the picker's second line, a tab's tooltip. */
+export function studioFeatureDescription(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "desc">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.description`);
+    const key = lookup(STUDIO_APP_MESSAGE_KEYS, feature.id);
+    return key ? text.workspace(`studioApps.${key}.description`) : feature.desc;
+}
+
+/** Why an app did not open for someone without its permission; undefined when it says nothing. */
+export function studioFeatureDeniedNote(
+    text: StudioText,
+    feature: Pick<StudioFeature, "id" | "deniedNote">
+): string | undefined {
+    if (!feature.deniedNote) return undefined;
+    const key = lookup(STUDIO_DENIED_NOTE_KEYS, feature.id);
+    return key ? text.workspace(`studioDeniedNotes.${key}`) : feature.deniedNote;
+}
+
+/** A Studio feature with its name, description and denied note in the reader's language. */
+export function localizedStudioFeature<F extends StudioFeature>(text: StudioText, feature: F): F {
+    return {
+        ...feature,
+        label: studioFeatureLabel(text, feature),
+        desc: studioFeatureDescription(text, feature),
+        deniedNote: studioFeatureDeniedNote(text, feature),
+    };
+}
+
+const PALETTE_LINK_LABEL_KEYS = {
+    knowledge: "knowledge",
+    meetings: "meetings",
+    agents: "agents",
+    team: "team",
+    draft: "draft",
+    rewrite: "rewrite",
+    workflows: "workflows",
+    mindmap: "mindmap",
+    artifacts: "artifacts",
+    "agent-sessions": "agentSessions",
+    brand: "brand",
+    prospects: "prospects",
+    investors: "investors",
+    audit: "audit",
+    analytics: "analytics",
+    "people-access": "peopleAccess",
+    profile: "profile",
+    "agents-nodes": "agentsNodes",
+    deploy: "deploy",
+} as const;
+
+/** Every palette row has a description of its own — the tools' rows included. */
+const PALETTE_LINK_DESCRIPTION_KEYS = {
+    ...PALETTE_LINK_LABEL_KEYS,
+    growth: "growth",
+    proposals: "proposals",
+    vantage: "vantage",
+    scenarios: "scenarios",
+} as const;
+
+/** A ⌘K quick link's name (`DEMOTED_FEATURES`); a tool's row says the tool's own name. */
+export function demotedFeatureLabel(
+    text: StudioText,
+    feature: Pick<DemotedFeature, "id" | "label">
+): string {
+    const tool = lookup(TOOL_REGISTRY_KEYS, feature.id);
+    if (tool) return text.tools(`${tool}.name`);
+    const key = lookup(PALETTE_LINK_LABEL_KEYS, feature.id);
+    return key ? text.workspace(`paletteLinks.${key}.label`) : feature.label;
+}
+
+/** A ⌘K quick link's second line. */
+export function demotedFeatureDescription(
+    text: StudioText,
+    feature: Pick<DemotedFeature, "id" | "desc">
+): string {
+    const key = lookup(PALETTE_LINK_DESCRIPTION_KEYS, feature.id);
+    return key ? text.workspace(`paletteLinks.${key}.description`) : feature.desc;
+}
+
+/** The message key an id maps to, or undefined for an id the map does not know. */
+function lookup<M extends Record<string, string>>(map: M, id: string): M[keyof M] | undefined {
+    return Object.prototype.hasOwnProperty.call(map, id) ? map[id as keyof M] : undefined;
+}

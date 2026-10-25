@@ -46,6 +46,9 @@
         "./connectors/agent-sessions": "./src/connectors/agent-sessions/index.ts",
         "./connectors/google-drive": "./src/connectors/google-drive/index.ts",
         "./connectors/gmail": "./src/connectors/gmail/index.ts",
+        "./connectors/notion": "./src/connectors/notion/index.ts",
+        "./connectors/obsidian": "./src/connectors/obsidian/index.ts",
+        "./connectors/obsidian/paths": "./src/connectors/obsidian/paths.ts",
         "./package.json": "./package.json",
         "./distribution": "./src/distribution/index.ts",
         "./distribution/db": "./src/distribution/db.ts",
@@ -56,6 +59,9 @@
         "./proposals/db": "./src/proposals/db.ts",
         "./proposals/schema": "./src/proposals/schema.ts",
         "./proposals/types": "./src/proposals/types.ts",
+        "./scenarios": "./src/scenarios/index.ts",
+        "./scenarios/db": "./src/scenarios/db.ts",
+        "./scenarios/schema": "./src/scenarios/schema.ts",
         "./vantage": "./src/vantage/index.ts",
         "./vantage/schema": "./src/vantage/schema.ts"
     },
@@ -213,6 +219,18 @@
                 "types": "./dist/connectors/agent-sessions/index.d.ts",
                 "default": "./dist/connectors/agent-sessions/index.js"
             },
+            "./connectors/notion": {
+                "types": "./dist/connectors/notion/index.d.ts",
+                "default": "./dist/connectors/notion/index.js"
+            },
+            "./connectors/obsidian": {
+                "types": "./dist/connectors/obsidian/index.d.ts",
+                "default": "./dist/connectors/obsidian/index.js"
+            },
+            "./connectors/obsidian/paths": {
+                "types": "./dist/connectors/obsidian/paths.d.ts",
+                "default": "./dist/connectors/obsidian/paths.js"
+            },
             "./package.json": "./package.json",
             "./distribution": {
                 "types": "./dist/distribution/index.d.ts",
@@ -246,6 +264,18 @@
                 "types": "./dist/proposals/types.d.ts",
                 "default": "./dist/proposals/types.js"
             },
+            "./scenarios": {
+                "types": "./dist/scenarios/index.d.ts",
+                "default": "./dist/scenarios/index.js"
+            },
+            "./scenarios/db": {
+                "types": "./dist/scenarios/db.d.ts",
+                "default": "./dist/scenarios/db.js"
+            },
+            "./scenarios/schema": {
+                "types": "./dist/scenarios/schema.d.ts",
+                "default": "./dist/scenarios/schema.js"
+            },
             "./vantage": {
                 "types": "./dist/vantage/index.d.ts",
                 "default": "./dist/vantage/index.js"
@@ -272,6 +302,7 @@
         "@launchstack/llm": "workspace:^",
         "@launchstack/orchestration": "workspace:^",
         "@launchstack/runtime": "workspace:^",
+        "@launchstack/simulation": "workspace:^",
         "@launchstack/retrieval": "workspace:^",
         "@launchstack/store": "workspace:^",
         "@launchstack/tools": "workspace:^",

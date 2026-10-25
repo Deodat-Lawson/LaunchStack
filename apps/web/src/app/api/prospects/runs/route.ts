@@ -19,8 +19,16 @@ import { toRunDto } from "~/server/prospects/adapter";
 import { runKeylessProspects } from "~/server/prospects/keyless-run";
 import { pickRunMode, readRunEnvironment } from "~/server/prospects/run-mode";
 import { listRunDtos } from "~/server/prospects/service";
+import { loadWorkspaceChatModelsScope } from "~/server/workspace-models/scope";
 
-import { error, handleProspectsError, json, prospectsContext, readBody } from "../_http";
+import {
+    error,
+    handleProspectsError,
+    json,
+    prospectsContext,
+    prospectsT,
+    readBody,
+} from "../_http";
 
 const Schema = z.object({
     segmentId: z.string().min(1),
@@ -31,19 +39,28 @@ const Schema = z.object({
 });
 const RUN_MINIMUM_CREDITS = 3_000;
 
+/** Whether the workspace's own model (Settings › Bring your own keys) can serve a live run. */
+async function workspaceHasOwnModel(companyId: bigint | number): Promise<boolean> {
+    const scope = await loadWorkspaceChatModelsScope(companyId);
+    return scope.source === "workspace" && Boolean(scope.config);
+}
+
 export async function GET(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     try {
         const segmentId = request.nextUrl.searchParams.get("segmentId");
-        if (!segmentId) return error("segmentId is required", 400);
+        if (!segmentId) return error(prospectsT(request)("segmentIdRequired"), 400);
         return json({
             runs: await listRunDtos(auth.ctx, segmentId),
             // What "Find companies" will do next in this environment.
-            nextMode: pickRunMode("auto", readRunEnvironment(process.env)),
+            nextMode: pickRunMode(
+                "auto",
+                readRunEnvironment(process.env, await workspaceHasOwnModel(auth.ctx.companyId))
+            ),
         });
     } catch (err) {
-        return handleProspectsError("GET runs", err);
+        return handleProspectsError("GET runs", err, request);
     }
 }
 
@@ -60,21 +77,24 @@ export async function POST(request: NextRequest) {
         },
         async () => {
             try {
+                const t = prospectsT(request);
                 const parsed = Schema.safeParse(await readBody(request));
-                if (!parsed.success) return error("segmentId is required", 400);
+                if (!parsed.success) return error(t("segmentIdRequired"), 400);
                 const program = await getProgram(parsed.data.segmentId, ctx.companyId);
-                if (!program) return error("Segment not found", 404);
-                if (program.status !== "active")
-                    return error("Confirm the segment before running", 409);
+                if (!program) return error(t("segmentNotFound"), 404);
+                if (program.status !== "active") return error(t("confirmBeforeRun"), 409);
 
                 const requested = parsed.data.sample ? "sample" : (parsed.data.mode ?? "auto");
-                const mode = pickRunMode(requested, readRunEnvironment(process.env));
+                const mode = pickRunMode(
+                    requested,
+                    readRunEnvironment(process.env, await workspaceHasOwnModel(ctx.companyId))
+                );
                 if (mode === "live" && isMeteringEnforced()) {
                     const sufficient = await hasTokens(ctx.companyId, RUN_MINIMUM_CREDITS);
                     if (!sufficient)
                         return NextResponse.json(
                             {
-                                error: "Not enough credits to start a run",
+                                error: t("notEnoughCredits"),
                                 code: "insufficient_credits",
                                 required: RUN_MINIMUM_CREDITS,
                             },
@@ -134,7 +154,7 @@ export async function POST(request: NextRequest) {
                 });
                 return json({ run: toRunDto(run) }, 202);
             } catch (err) {
-                return handleProspectsError("POST runs", err);
+                return handleProspectsError("POST runs", err, request);
             }
         }
     );

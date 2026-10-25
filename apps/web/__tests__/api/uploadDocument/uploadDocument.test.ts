@@ -10,6 +10,7 @@ import {
 } from "~/server/services/document-upload";
 import { canEditFolder } from "~/server/services/folder-access";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
+import { TranscriptionError } from "@launchstack/conversion";
 
 import {
     makeWorkspaceContext,
@@ -373,6 +374,39 @@ describe("POST /api/uploadDocument", () => {
                 expect.stringContaining("Error triggering document processing"),
                 processingError
             );
+        } finally {
+            consoleErrorSpy.mockRestore();
+        }
+    });
+
+    it("says why a recording could not be transcribed instead of a generic 500", async () => {
+        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        mockAuthenticatedContext({ companyId: BigInt(7) });
+        const body = {
+            documentName: "oct_15_3_pm_HT.m4a",
+            documentUrl: "https://files.test/oct_15_3_pm_HT.m4a",
+            mimeType: "audio/x-m4a",
+        };
+
+        try {
+            mockValidRequest(body);
+            processDocumentUploadMock.mockRejectedValue(
+                new TranscriptionError(
+                    "Gemini transcription failed (429): Resource exhausted",
+                    "The transcription service is busy (rate limit). Try again in a minute.",
+                    502
+                )
+            );
+
+            const response = await POST(requestFor(body));
+            const json = await response.json();
+
+            expect(response.status).toBe(502);
+            expect(json).toEqual({
+                error: "The transcription service is busy (rate limit). Try again in a minute.",
+                code: "transcription_failed",
+            });
+            expect(mockRecordUpload).not.toHaveBeenCalled();
         } finally {
             consoleErrorSpy.mockRestore();
         }

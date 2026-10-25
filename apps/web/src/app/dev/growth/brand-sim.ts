@@ -28,6 +28,13 @@ import type {
     SyncResult,
 } from "~/app/employer/tools/growth/brand/api";
 
+import {
+    configurePostTests,
+    linkPostTest,
+    resetPostTests,
+    simulatePostTests,
+} from "./post-test-sim";
+
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
@@ -38,6 +45,10 @@ export interface BrandSimOptions {
     reconnect: boolean;
     empty: boolean;
     nosync: boolean;
+    /** Post tests: a track record with too few results to compare. */
+    fewTests: boolean;
+    /** Post tests: not enough credits to start one (402). */
+    broke: boolean;
 }
 
 const DEFAULT_OPTIONS: BrandSimOptions = {
@@ -46,6 +57,8 @@ const DEFAULT_OPTIONS: BrandSimOptions = {
     reconnect: false,
     empty: false,
     nosync: false,
+    fewTests: false,
+    broke: false,
 };
 
 // ── Pictures ──────────────────────────────────────────────────────────────
@@ -732,6 +745,7 @@ let store: Store = seed(DEFAULT_OPTIONS);
 /** Start over, with the harness URL's options. */
 export function resetBrandSim(options: Partial<BrandSimOptions> = {}, now = Date.now()): void {
     store = seed({ ...DEFAULT_OPTIONS, ...options }, now);
+    resetPostTests({ fewTests: store.options.fewTests, broke: store.options.broke }, now);
 }
 
 /**
@@ -746,6 +760,7 @@ export function configureBrandSim(options: Partial<BrandSimOptions>): void {
         next.nosync !== store.options.nosync;
     if (reseed) store = seed(next);
     else store.options = next;
+    configurePostTests({ fewTests: next.fewTests, broke: next.broke });
 }
 
 /**
@@ -947,7 +962,8 @@ function createPosts(body: Record<string, unknown>, now: number): Response {
     }));
     store.posts.push(...created);
     if (body.publishNow) for (const post of created) publish(post, now);
-    return json({ posts: created }, 201);
+    const postTest = linkPostTest(body.postTestId, text, created);
+    return json(postTest ? { posts: created, postTest } : { posts: created }, 201);
 }
 
 function patchPost(post: BrandPost, body: Record<string, unknown>): Response {
@@ -1141,7 +1157,11 @@ export async function simulateBrand(
     // A Viewer reads everything and changes nothing that speaks as the company.
     const speaks =
         method !== "GET" &&
-        (head === "posts" || head === "media" || head === "comments" || head === "insights");
+        (head === "posts" ||
+            head === "media" ||
+            head === "comments" ||
+            head === "insights" ||
+            head === "post-tests");
     if (speaks && !store.options.canPublish)
         return err(403, "Your role can read Brand but not post or reply as the company.");
 
@@ -1298,6 +1318,8 @@ export async function simulateBrand(
         }
         return err(405, "Method not allowed");
     }
+
+    if (head === "post-tests") return simulatePostTests(u, init, store.options.canPublish);
 
     if (head !== "posts") return err(404, "Not found");
 

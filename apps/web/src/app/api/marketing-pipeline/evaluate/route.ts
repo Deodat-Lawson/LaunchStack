@@ -5,6 +5,8 @@ import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -53,57 +55,68 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const parsed = EvaluateBodySchema.safeParse(await readJson(request));
-        if (!parsed.success) {
-            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
-        }
-        const body = parsed.data;
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
+            const parsed = EvaluateBodySchema.safeParse(await readJson(request));
+            if (!parsed.success) {
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: parsed.error.flatten(),
+                });
+            }
+            const body = parsed.data;
 
-        const message = body.message.trim();
-        const platform = body.platform ?? "";
-        if (!message) {
-            return fail("message is required", 400);
-        }
+            const message = body.message.trim();
+            const platform = body.platform ?? "";
+            if (!message) {
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("messageRequired"),
+                    400
+                );
+            }
 
-        // The judge is typed for x/linkedin/reddit; bluesky falls back to the x
-        // rubric with an empty reference.
-        const judgePlatform: ReferencePlatform =
-            platform === "linkedin" || platform === "reddit" ? platform : "x";
+            // The judge is typed for x/linkedin/reddit; bluesky falls back to the x
+            // rubric with an empty reference.
+            const judgePlatform: ReferencePlatform =
+                platform === "linkedin" || platform === "reddit" ? platform : "x";
 
-        const companyId = Number(ctx.data.companyId);
-        if (Number.isNaN(companyId)) {
-            return fail("Invalid company ID", 400);
-        }
+            const companyId = Number(ctx.data.companyId);
+            if (Number.isNaN(companyId)) {
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("invalidCompanyId"),
+                    400
+                );
+            }
 
-        // Prefer the exact knowledge context the generator used (passed from the
-        // pipeline result). Fall back to rebuilding it with the ORIGINAL campaign
-        // prompt (not the post text) so the RAG query matches generation.
-        const passedContext = body.companyContext?.trim();
-        const trimmedPrompt = body.prompt?.trim();
-        const baseContext =
-            passedContext && passedContext.length > 0
-                ? passedContext
-                : await buildCompanyKnowledgeContext({
-                      companyId,
-                      prompt: trimmedPrompt && trimmedPrompt.length > 0 ? trimmedPrompt : message,
-                  });
+            // Prefer the exact knowledge context the generator used (passed from the
+            // pipeline result). Fall back to rebuilding it with the ORIGINAL campaign
+            // prompt (not the post text) so the RAG query matches generation.
+            const passedContext = body.companyContext?.trim();
+            const trimmedPrompt = body.prompt?.trim();
+            const baseContext =
+                passedContext && passedContext.length > 0
+                    ? passedContext
+                    : await buildCompanyKnowledgeContext({
+                          companyId,
+                          prompt:
+                              trimmedPrompt && trimmedPrompt.length > 0 ? trimmedPrompt : message,
+                      });
 
-        const companyContext = composeEvalContext(baseContext, {
-            dna: body.dna,
-            brandVoice: body.brandVoice,
-            targetPersona: body.targetPersona,
+            const companyContext = composeEvalContext(baseContext, {
+                dna: body.dna,
+                brandVoice: body.brandVoice,
+                targetPersona: body.targetPersona,
+            });
+
+            const scored = await scorePost({
+                platform: judgePlatform,
+                companyContext,
+                post: message,
+                // Read the reference md for the SAME platform the post was generated for.
+                referenceMarkdown: REFERENCE_POSTS[platform as ReferencePlatform] ?? "",
+            });
+
+            return ok(scored);
         });
-
-        const scored = await scorePost({
-            platform: judgePlatform,
-            companyContext,
-            post: message,
-            // Read the reference md for the SAME platform the post was generated for.
-            referenceMarkdown: REFERENCE_POSTS[platform as ReferencePlatform] ?? "",
-        });
-
-        return ok(scored);
     } catch (error) {
-        return handleRouteError("marketing-pipeline/evaluate", error);
+        return handleRouteError("marketing-pipeline/evaluate", error, request);
     }
 }

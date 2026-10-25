@@ -1,5 +1,7 @@
 // GET  /api/brand/posts?from=&to=&status= — the calendar's rows
-// POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow? }
+// POST /api/brand/posts — compose: { channels, body, title?, media?, scheduledAt?, publishNow?, postTestId? }
+//   (with `postTestId`, a finished post test of the same text is linked to the
+//   new posts for Brand's track record; the answer then carries `postTest`)
 //   (a deployment account is a channel too: `deployment:<network>`, offered
 //   only while the workspace has no account of its own on that network)
 //
@@ -20,14 +22,19 @@ import {
     type BrandPostTarget,
 } from "@launchstack/pipelines/marketing/posts";
 
+import { localeOfRequest } from "~/i18n/server";
+import type { PostTestLink } from "~/lib/scenarios/types";
 import { listBrandChannels } from "~/server/brand/accounts";
 import { getBrandMediaRows, networkMediaProblem } from "~/server/brand/media";
 import { toPostViews } from "~/server/brand/post-views";
 import { publishForWorkspace } from "~/server/brand/publish";
+import { brandReason } from "~/server/brand/words";
+import { linkComposedPosts } from "~/server/scenarios/service";
 
 import {
     brandContext,
     brandPublishContext,
+    brandT,
     error,
     handleBrandError,
     json,
@@ -57,7 +64,32 @@ const CreateSchema = z.object({
             historyId: z.number().int().optional(),
         })
         .optional(),
+    /** A finished "Test this post" run; linked when the body is the tested text. */
+    postTestId: z.number().int().positive().optional(),
 });
+
+/** Link the composed posts to their post test. Never fails the compose. */
+async function linkTest(
+    ctx: { companyId: bigint; userId: string },
+    postTestId: number | undefined,
+    body: string,
+    postIds: string[]
+): Promise<{ postTest?: PostTestLink }> {
+    if (postTestId === undefined) return {};
+    try {
+        return {
+            postTest: await linkComposedPosts(
+                { companyId: ctx.companyId, authUserId: ctx.userId },
+                postTestId,
+                body,
+                postIds
+            ),
+        };
+    } catch (linkError) {
+        console.error("[brand] linking a post test failed:", linkError);
+        return { postTest: { runId: postTestId, linked: false, stale: false } };
+    }
+}
 
 function parseDate(value: string | null): Date | undefined {
     if (!value) return undefined;
@@ -102,42 +134,40 @@ export async function GET(request: NextRequest) {
             canPublish: auth.ctx.canPublish,
         });
     } catch (err) {
-        return handleBrandError("GET posts", err);
+        return handleBrandError("GET posts", err, request);
     }
 }
 
 export async function POST(request: NextRequest) {
-    const auth = await brandPublishContext();
+    const auth = await brandPublishContext(request);
     if (!auth.ok) return auth.response;
     try {
+        const t = brandT(request);
+        const locale = localeOfRequest(request);
         const parsed = CreateSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Check the post and try again", 400);
+        if (!parsed.success) return error(t("checkPost"), 400);
         const input = parsed.data;
         const scheduledAt = input.publishNow ? null : parseDate(input.scheduledAt ?? null);
         if (!input.publishNow && input.scheduledAt && !scheduledAt)
-            return error("That schedule time is not a date", 400);
+            return error(t("notADate"), 400);
 
         // Every channel must be this workspace's, switched on, and able to post.
         const targets: BrandPostTarget[] = [];
         {
             const available = new Map(
-                (await listBrandChannels(auth.ctx.companyId)).map(c => [c.id, c])
+                (await listBrandChannels(auth.ctx.companyId, undefined, locale)).map(c => [c.id, c])
             );
             for (const id of new Set(input.channels)) {
                 const channel = available.get(id);
-                if (!channel) return error("One of those channels is not connected any more.", 400);
-                if (!channel.enabled)
-                    return error(`${channel.name} is switched off under Accounts.`, 400);
+                if (!channel) return error(t("channelGone"), 400);
+                if (!channel.enabled) return error(t("switchedOff", { name: channel.name }), 400);
                 if (channel.status !== "active")
                     return error(
-                        channel.statusReason ?? `${channel.name} needs to be reconnected.`,
+                        channel.statusReason ?? t("needsReconnect", { name: channel.name }),
                         409
                     );
                 if (!channel.capabilities.publish)
-                    return error(
-                        `This deployment's LinkedIn app cannot post as ${channel.name}.`,
-                        400
-                    );
+                    return error(t("cannotPostAs", { name: channel.name }), 400);
                 targets.push({ platform: channel.platform, channelId: channel.id });
             }
         }
@@ -149,10 +179,10 @@ export async function POST(request: NextRequest) {
                 media.map(m => m.id)
             );
             if (found.length !== new Set(media.map(m => m.id)).size)
-                return error("One of the images is missing. Add it again.", 400);
+                return error(t("imageMissing"), 400);
             for (const platform of new Set(targets.map(t => t.platform))) {
                 const problem = networkMediaProblem(platform, found);
-                if (problem) return error(problem, 400);
+                if (problem) return error(brandReason(problem, locale), 400);
             }
         }
 
@@ -166,8 +196,14 @@ export async function POST(request: NextRequest) {
             scheduledAt: scheduledAt ?? null,
             source: input.source ?? { kind: "compose" },
         });
+        const link = await linkTest(
+            auth.ctx,
+            input.postTestId,
+            input.body,
+            created.map(p => p.id)
+        );
         if (!input.publishNow)
-            return json({ posts: await toPostViews(auth.ctx.companyId, created) }, 201);
+            return json({ posts: await toPostViews(auth.ctx.companyId, created), ...link }, 201);
         const posts = [];
         for (const post of created)
             posts.push(
@@ -175,8 +211,8 @@ export async function POST(request: NextRequest) {
                     publish: publishForWorkspace,
                 })
             );
-        return json({ posts: await toPostViews(auth.ctx.companyId, posts) }, 201);
+        return json({ posts: await toPostViews(auth.ctx.companyId, posts), ...link }, 201);
     } catch (err) {
-        return handleBrandError("POST posts", err);
+        return handleBrandError("POST posts", err, request);
     }
 }

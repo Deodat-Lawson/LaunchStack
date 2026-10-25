@@ -12,6 +12,7 @@ import { randomUUID } from "node:crypto";
 
 import { resolveChatModel } from "@launchstack/llm";
 import { createLangchainAgentPort } from "@launchstack/llm";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     RepoExplainerJobEventDataSchema,
     createDirectoryView,
@@ -68,97 +69,105 @@ export const repoExplainerJob = inngest.createFunction(
     async ({ event, step }) => {
         const { jobId, workspaceId, companyId } = RepoExplainerJobEventDataSchema.parse(event.data);
 
-        return step.run("explain", async () => {
-            const workspace = await getRepoWorkspace(workspaceId, BigInt(companyId));
-            if (!workspace) {
-                await failExplainerJob(jobId, null, "Workspace not found");
-                return { status: "failed", reason: "workspace_missing" };
-            }
-            if (!workspace.headSha || workspace.status !== "active") {
-                await failExplainerJob(
-                    jobId,
-                    null,
-                    `Workspace is not ready (status: ${workspace.status}). Sync it first.`
-                );
-                return { status: "failed", reason: "workspace_not_ready" };
-            }
-
-            const claimId = randomUUID();
-            const job = await claimExplainerJob(jobId, claimId, workspace.headSha);
-            // Someone else owns it, or it already finished — converge quietly.
-            if (!job) return { status: "skipped", reason: "not_claimable" };
-
-            const sha = workspace.headSha;
-            const mirrorPath = repoWorkspacePaths.mirrorPath(workspace);
-            const worktreePath = repoWorkspacePaths.worktreePath(workspace, sha);
-            const token = await resolveRepoCredentials({
-                provider: workspace.provider,
-                owner: workspace.owner,
-                repo: workspace.repo,
-            });
-
-            await repoWorkspaceGit.addWorktree({ mirrorPath, sha, worktreePath, token });
-            try {
-                const view = createDirectoryView(worktreePath, sha);
-
-                let bundleRow = await getContextBundle(workspace.id, sha);
-                if (!bundleRow) {
-                    const started = Date.now();
-                    const bundle = await deriveContextBundle(view);
-                    bundleRow = await saveContextBundle(workspace.id, bundle, Date.now() - started);
+        // A step body runs outside the handler's async context, so the
+        // workspace's models are entered inside the step.
+        return step.run("explain", () =>
+            withWorkspaceChatModels(companyId, "repoExplainer", async () => {
+                const workspace = await getRepoWorkspace(workspaceId, BigInt(companyId));
+                if (!workspace) {
+                    await failExplainerJob(jobId, null, "Workspace not found");
+                    return { status: "failed", reason: "workspace_missing" };
                 }
-
-                const port = createLangchainAgentPort(resolveChatModel());
-                const run = await runRepoExplanation({
-                    view,
-                    bundle: bundleRow.bundle,
-                    port,
-                    repoName: `${workspace.owner}/${workspace.repo}`,
-                    diagramType: job.diagramType,
-                    instructions: job.instructions,
-                });
-
-                if (!run.gate.ok) {
-                    const gateReport = run.gate.errors
-                        .map(gateError => `[${gateError.code}] ${gateError.message}`)
-                        .join("; ");
+                if (!workspace.headSha || workspace.status !== "active") {
                     await failExplainerJob(
                         jobId,
-                        claimId,
-                        `Validation failed after one repair: ${gateReport}`
+                        null,
+                        `Workspace is not ready (status: ${workspace.status}). Sync it first.`
                     );
-                    return { status: "failed", reason: "gate", errors: run.gate.errors };
+                    return { status: "failed", reason: "workspace_not_ready" };
                 }
 
-                const result: RepoExplanationJobResult = {
-                    summary: run.summary,
-                    mermaidCode: run.mermaidCode,
-                    filesRead: run.filesRead,
-                    path: run.path,
-                    turns: run.turns,
-                    provenance: {
-                        sha,
-                        skillVersion: run.skillVersion,
-                        skillHash: run.skillHash,
-                        modelId: run.modelId,
-                        promptVersion: run.promptVersion,
-                    },
-                    tokenUsage: {
-                        inputTokens: run.usage.inputTokens,
-                        outputTokens: run.usage.outputTokens,
-                        totalTokens: run.usage.totalTokens,
-                    },
-                };
-                const completed = await completeExplainerJob(jobId, claimId, result);
-                if (!completed) {
-                    console.error(`[RepoExplainer] Lost the claim while completing ${jobId}`);
+                const claimId = randomUUID();
+                const job = await claimExplainerJob(jobId, claimId, workspace.headSha);
+                // Someone else owns it, or it already finished — converge quietly.
+                if (!job) return { status: "skipped", reason: "not_claimable" };
+
+                const sha = workspace.headSha;
+                const mirrorPath = repoWorkspacePaths.mirrorPath(workspace);
+                const worktreePath = repoWorkspacePaths.worktreePath(workspace, sha);
+                const token = await resolveRepoCredentials({
+                    provider: workspace.provider,
+                    owner: workspace.owner,
+                    repo: workspace.repo,
+                });
+
+                await repoWorkspaceGit.addWorktree({ mirrorPath, sha, worktreePath, token });
+                try {
+                    const view = createDirectoryView(worktreePath, sha);
+
+                    let bundleRow = await getContextBundle(workspace.id, sha);
+                    if (!bundleRow) {
+                        const started = Date.now();
+                        const bundle = await deriveContextBundle(view);
+                        bundleRow = await saveContextBundle(
+                            workspace.id,
+                            bundle,
+                            Date.now() - started
+                        );
+                    }
+
+                    const port = createLangchainAgentPort(resolveChatModel());
+                    const run = await runRepoExplanation({
+                        view,
+                        bundle: bundleRow.bundle,
+                        port,
+                        repoName: `${workspace.owner}/${workspace.repo}`,
+                        diagramType: job.diagramType,
+                        instructions: job.instructions,
+                    });
+
+                    if (!run.gate.ok) {
+                        const gateReport = run.gate.errors
+                            .map(gateError => `[${gateError.code}] ${gateError.message}`)
+                            .join("; ");
+                        await failExplainerJob(
+                            jobId,
+                            claimId,
+                            `Validation failed after one repair: ${gateReport}`
+                        );
+                        return { status: "failed", reason: "gate", errors: run.gate.errors };
+                    }
+
+                    const result: RepoExplanationJobResult = {
+                        summary: run.summary,
+                        mermaidCode: run.mermaidCode,
+                        filesRead: run.filesRead,
+                        path: run.path,
+                        turns: run.turns,
+                        provenance: {
+                            sha,
+                            skillVersion: run.skillVersion,
+                            skillHash: run.skillHash,
+                            modelId: run.modelId,
+                            promptVersion: run.promptVersion,
+                        },
+                        tokenUsage: {
+                            inputTokens: run.usage.inputTokens,
+                            outputTokens: run.usage.outputTokens,
+                            totalTokens: run.usage.totalTokens,
+                        },
+                    };
+                    const completed = await completeExplainerJob(jobId, claimId, result);
+                    if (!completed) {
+                        console.error(`[RepoExplainer] Lost the claim while completing ${jobId}`);
+                    }
+                    return { status: "completed", path: run.path, turns: run.turns };
+                } finally {
+                    await repoWorkspaceGit
+                        .removeWorktree({ mirrorPath, worktreePath })
+                        .catch(() => undefined);
                 }
-                return { status: "completed", path: run.path, turns: run.turns };
-            } finally {
-                await repoWorkspaceGit
-                    .removeWorktree({ mirrorPath, worktreePath })
-                    .catch(() => undefined);
-            }
-        });
+            })
+        );
     }
 );

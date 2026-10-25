@@ -64,16 +64,29 @@ describe("typography", () => {
         expect(landing).toBe(web);
     });
 
-    it("the loader brings in exactly Inter and JetBrains Mono", () => {
-        const imports = /import\s*\{([^}]*)\}\s*from\s*"next\/font\/google"/.exec(
-            read(FONT_LOADERS[0]!)
+    it("the loader brings in exactly Inter and JetBrains Mono, self-hosted", () => {
+        const loader = read(FONT_LOADERS[0]!);
+        // next/font/google fetches from Google at build, and Google's
+        // extensionless l/font?kit= URLs break Next 15.5 (see fonts.ts).
+        expect(loader).not.toMatch(/from\s*"next\/font\/google"/);
+        expect(loader).toMatch(/import\s+localFont\s+from\s*"next\/font\/local"/);
+
+        const faces = [...loader.matchAll(/src:\s*"([^"]+)"[\s\S]*?variable:\s*"([^"]+)"/g)].map(
+            ([, src, variable]) => ({ src, variable })
         );
-        const families = imports?.[1]!
-            .split(",")
-            .map(s => s.trim())
-            .filter(Boolean)
-            .sort();
-        expect(families).toEqual(["Inter", "JetBrains_Mono"]);
+        expect(faces).toEqual([
+            {
+                src: "../../../../packages/design-tokens/fonts/Inter.woff2",
+                variable: "--font-inter",
+            },
+            {
+                src: "../../../../packages/design-tokens/fonts/JetBrainsMono.woff2",
+                variable: "--font-jetbrains-mono",
+            },
+        ]);
+        for (const { src } of faces) {
+            expect(statSync(join(REPO_ROOT, "apps/web/src/app", src!)).size).toBeGreaterThan(0);
+        }
     });
 
     it("nothing else calls next/font", () => {

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getConfiguredPublicChatConfig } from "~/lib/models";
+import { describeChatResolutionFailure, getConfiguredPublicChatConfig } from "~/lib/models";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -10,14 +13,25 @@ export const dynamic = "force-dynamic";
  * unavailable disables the matching control, and the reasoning levels here
  * are the only ones the server will accept. Endpoint URLs, credentials,
  * reasoning request patches, and internal context/output limits never appear.
+ *
+ * Read inside the caller's workspace scope, so a workspace that brought its
+ * own models sees the routes those models serve. A signed-out caller gets the
+ * deployment's, as before.
  */
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        return NextResponse.json(getConfiguredPublicChatConfig());
+        const ctx = await requireWorkspaceContext();
+        const companyId = ctx.success ? ctx.data.companyId : null;
+        return await withWorkspaceChatModels(companyId, "ask", () =>
+            NextResponse.json(getConfiguredPublicChatConfig())
+        );
     } catch (error) {
         // A broken configuration must not take the whole UI down — report every
         // route unavailable so controls disable themselves cleanly.
-        const message = error instanceof Error ? error.message : "Chat models are not configured";
+        // describeChatResolutionFailure logs the detail and keeps only words
+        // fit for every user: the fixed reason for a broken server file, or
+        // the workspace's own "fix it in Settings" when its endpoint is down.
+        const { message } = describeChatResolutionFailure(error, localeOfRequest(request));
         return NextResponse.json(
             {
                 routes: {

@@ -1,8 +1,16 @@
 /**
- * Mint a short-lived access token for the Google Picker. Exposing this to the
- * browser is inherent to how the Picker works and acceptable by construction:
- * the token is drive.file-scoped (it can see only what this app was already
- * granted) and only management roles of the owning workspace can fetch it.
+ * Mint a short-lived (~1h) access token for the Google Picker. Exposing it to
+ * the browser is inherent to how the Picker works, and only connectors.manage
+ * holders of the owning workspace can fetch it.
+ *
+ * What the token can read depends on the grant. Under drive.file alone it
+ * reaches only files this app was handed or created (though the Picker itself
+ * lets its holder browse and pick anything in the connected account). Once
+ * someone has allowed folder access (drive.readonly) it can read the connected
+ * account's whole Drive directly. Google documents no way to mint a narrower token from the
+ * same refresh token, so every admin of the workspace — and anything running
+ * in an admin's page — can read that account's Drive for the token's life.
+ * That is the trade the operator accepts with GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED.
  */
 
 import {
@@ -11,6 +19,8 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isConnectorConfigured } from "~/server/services/connectors/config";
@@ -24,17 +34,19 @@ import {
 export const runtime = "nodejs";
 
 export async function GET(request: Request, { params }: { params: Promise<{ provider: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { provider } = await params;
             if (provider !== "google-drive") {
-                return createValidationError("Picker tokens exist only for google-drive.");
+                return createValidationError(t("pickerDriveOnly"));
             }
 
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
             if (!isConnectorConfigured("google-drive")) {
-                return notConfiguredResponse("google-drive");
+                return notConfiguredResponse("google-drive", locale);
             }
 
             const [connection] = await listConnectionsForCompany(
@@ -42,13 +54,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 "google-drive"
             );
             if (!connection || connection.status !== "active") {
-                return createNotFoundError("No active Google Drive connection.");
+                return createNotFoundError(t("noActiveDrive"));
             }
 
             const accessToken = await getAccessTokenForConnection(connection);
             return createSuccessResponse({ accessToken });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

@@ -36,8 +36,14 @@ jest.mock("../../hooks/useChatRoutes", () => ({
         visionEnabled: true,
         reasoningEnabled: true,
         config: {
+            // `model` mimics an older server that still sent the id: the
+            // composer must never render it.
             routes: {
-                default: { available: true, model: "Default model" },
+                default: {
+                    available: true,
+                    model: "Default model",
+                    reasoning: { controllable: true, mode: "effort", efforts: ["low", "high"] },
+                },
                 fast: { available: true, model: "Speed model" },
                 reasoning: {
                     available: true,
@@ -602,13 +608,18 @@ describe("Composer uploads and completion", () => {
         );
     });
 
-    it("chooses configured models and only supported reasoning efforts", async () => {
+    it("offers Standard and Fast, with reasoning set by effort on Standard", async () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
         await user.click(screen.getByRole("button", { name: "Choose model" }));
-        await user.type(screen.getByRole("textbox", { name: "Search models" }), "Thinking");
-        await user.click(screen.getByRole("option", { name: /Thinking model/ }));
-        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        expect(
+            screen.queryByText(/Default model|Speed model|Thinking model|Image model/)
+        ).not.toBeInTheDocument();
+        expect(
+            within(screen.getByRole("listbox", { name: "Configured models" }))
+                .getAllByRole("option")
+                .map(option => option.textContent)
+        ).toEqual([expect.stringMatching(/^Standard/), expect.stringMatching(/^Fast/)]);
         await user.selectOptions(
             screen.getByRole("combobox", { name: "Reasoning effort" }),
             "high"
@@ -621,8 +632,44 @@ describe("Composer uploads and completion", () => {
         fireEvent.change(box, { target: { value: "Think carefully" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
-            expect.objectContaining({ modelRoute: "reasoning", reasoningEffort: "high" })
+            expect.objectContaining({ modelRoute: "default", reasoningEffort: "high" })
         );
+    });
+
+    it("restores a draft saved on a retired tier as Standard with its effort", () => {
+        localStorage.setItem(
+            "launchstack:composer:retired-tier",
+            JSON.stringify({
+                text: "Old reasoning draft",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "reasoning",
+                modelRoutes: ["reasoning", "vision"],
+                reasoningEffort: "high",
+            })
+        );
+        const { box, onSend } = mount({ draftKey: "retired-tier" });
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Standard");
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({ modelRoute: "default", reasoningEffort: "high" });
+        expect(sent).not.toHaveProperty("modelRoutes");
+    });
+
+    it("sends an image on Fast to the vision route when Fast can't read it", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        await user.click(screen.getByRole("option", { name: /Fast/ }));
+        attach(new File(["png"], "chart.png", { type: "image/png" }));
+        await waitFor(() => expect(UploadRequest.requests).toHaveLength(1));
+        act(() => UploadRequest.requests[0]!.complete());
+        fireEvent.change(box, { target: { value: "What does this show?" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(expect.objectContaining({ modelRoute: "vision" }));
     });
 
     it("queues during an active turn and offers Stop for an empty draft", () => {
@@ -870,9 +917,7 @@ describe("Composer uploads and completion", () => {
         fireEvent.click(screen.getByText("With an image"));
         await act(async () => {});
         expect(box).toHaveValue("With an image");
-        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent(
-            "Default model"
-        );
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Standard");
     });
 
     it("retains an actionable marker when an upload was interrupted by reload", () => {
@@ -907,9 +952,7 @@ describe("Composer uploads and completion", () => {
         fireEvent.change(box, { target: { value: "Comparison question" } });
         fireEvent.keyDown(box, { key: "Enter" });
         await waitFor(() => expect(box).toHaveValue("Comparison question"));
-        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent(
-            "Speed model"
-        );
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Fast");
         const retry = jest.fn<boolean, [ComposerSend]>(() => true);
         rerender(<Composer {...props} onSend={retry} />);
         fireEvent.keyDown(box, { key: "Enter" });

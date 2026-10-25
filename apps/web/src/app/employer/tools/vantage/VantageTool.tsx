@@ -1,6 +1,7 @@
 "use client";
 
 import { CalendarCheck, ChartLine, Handshake, Inbox, LifeBuoy, ListChecks } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { VantageMark } from "~/components/icons/vantage";
@@ -40,41 +41,44 @@ export function VantageTool({ host }: { host?: ToolHost }) {
  * then capture. Triage sits apart under "Program": it is the administrator's
  * side of the same table and only reads what the founder chose to share.
  */
-function screenGroups(admin: boolean): ToolNavGroup[] {
+type FrameT = ReturnType<typeof useTranslations<"vantage.frame">>;
+
+function screenGroups(t: FrameT, admin: boolean): ToolNavGroup[] {
     const groups: ToolNavGroup[] = [
         {
             id: "week",
-            label: "The week",
+            label: t("groups.week"),
             items: [
-                { to: vantagePath(""), label: "This week", icon: CalendarCheck, exact: true },
-                { to: vantagePath("/agenda"), label: "Agenda", icon: ListChecks },
-                { to: vantagePath("/commitments"), label: "Commitments", icon: Handshake },
+                { to: vantagePath(""), label: t("nav.thisWeek"), icon: CalendarCheck, exact: true },
+                { to: vantagePath("/agenda"), label: t("nav.agenda"), icon: ListChecks },
+                { to: vantagePath("/commitments"), label: t("nav.commitments"), icon: Handshake },
             ],
         },
         {
             id: "capture",
-            label: "Capture",
+            label: t("groups.capture"),
             items: [
-                { to: vantagePath("/evidence"), label: "Evidence", icon: Inbox },
-                { to: vantagePath("/metrics"), label: "Metrics", icon: ChartLine },
+                { to: vantagePath("/evidence"), label: t("nav.evidence"), icon: Inbox },
+                { to: vantagePath("/metrics"), label: t("nav.metrics"), icon: ChartLine },
             ],
         },
     ];
     if (admin) {
         groups.push({
             id: "program",
-            label: "Program",
-            items: [{ to: vantagePath("/program"), label: "Triage", icon: LifeBuoy }],
+            label: t("groups.program"),
+            items: [{ to: vantagePath("/program"), label: t("nav.triage"), icon: LifeBuoy }],
         });
     }
     return groups;
 }
 
 function VantageFrame() {
+    const t = useTranslations("vantage.frame");
     const { path, search } = useToolNav();
     const { can, loaded } = usePermissions();
     const admin = can("settings.manage");
-    const groups = useMemo(() => screenGroups(admin), [admin]);
+    const groups = useMemo(() => screenGroups(t, admin), [t, admin]);
     const screen = vantageScreenFor(
         `${path}${search}`,
         admin ? "allowed" : loaded ? "denied" : "pending"
@@ -87,6 +91,7 @@ function VantageFrame() {
 }
 
 function Screen({ screen }: { screen: VantageScreen }) {
+    const t = useTranslations("vantage.frame");
     switch (screen.kind) {
         case "overview":
             return <OverviewScreen />;
@@ -105,7 +110,7 @@ function Screen({ screen }: { screen: VantageScreen }) {
         case "triage-denied":
             return <TriageDenied />;
         case "not-found":
-            return <ToolNotFound home="/" homeLabel="This week" />;
+            return <ToolNotFound home="/" homeLabel={t("nav.thisWeek")} />;
     }
 }
 
@@ -115,15 +120,16 @@ function Screen({ screen }: { screen: VantageScreen }) {
  * exist" would be untrue; say whose screen it is instead.
  */
 function TriageDenied() {
+    const t = useTranslations("vantage.frame");
     const { navigate } = useToolNav();
     return (
         <EmptyState
             className="mx-auto max-w-[1100px]"
-            title="Triage is the program's view"
-            body="It gathers what founders chose to share — requests for help, commitments that slipped, program deadlines — for the people who run the program. Opening it needs permission to manage this workspace's settings; an owner or admin can grant it."
+            title={t("deniedTitle")}
+            body={t("deniedBody")}
             action={
                 <Button size="sm" variant="outline" onClick={() => navigate(vantagePath(""))}>
-                    Go to This week
+                    {t("goHome")}
                 </Button>
             }
         />

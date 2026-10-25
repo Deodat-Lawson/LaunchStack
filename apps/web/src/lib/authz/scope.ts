@@ -15,7 +15,7 @@
  * their groups, or their role.
  */
 
-import { and, eq, inArray, notInArray, or, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, notInArray, or, sql, type AnyColumn, type SQL } from "drizzle-orm";
 
 import { category, document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
@@ -309,17 +309,22 @@ function descendantPattern(path: string): string {
 }
 
 /**
- * The folder half of the scope as one CASE over `document.category`, rules
- * deepest first, so the nearest restricted ancestor decides. `undefined`
- * means the folders impose no filter.
+ * The folder half of the scope as one CASE over a folder-path column
+ * (`document.category` unless told otherwise), rules deepest first, so the
+ * nearest restricted ancestor decides. `undefined` means the folders impose
+ * no filter. Exported for other rows filed in folders — mindmap drafts — so
+ * they are listed by exactly the rule documents are.
  */
-function folderPredicate(scope: DocumentScope): SQL | undefined {
+export function folderScopePredicate(
+    scope: DocumentScope,
+    column: AnyColumn = document.category
+): SQL | undefined {
     const rules = scopeFolderRules(scope);
     const otherwise = scopeDefaultAllow(scope);
     if (rules.length === 0) return otherwise ? undefined : sql`false`;
     const whens = rules.map(
         rule =>
-            sql`WHEN (${document.category} = ${rule.path} OR ${document.category} LIKE ${descendantPattern(rule.path)}) THEN ${rule.allow ? sql`true` : sql`false`}`
+            sql`WHEN (${column} = ${rule.path} OR ${column} LIKE ${descendantPattern(rule.path)}) THEN ${rule.allow ? sql`true` : sql`false`}`
     );
     return sql`(CASE ${sql.join(whens, sql` `)} ELSE ${otherwise ? sql`true` : sql`false`} END)`;
 }
@@ -335,7 +340,7 @@ export function documentScopePredicate(scope: DocumentScope): SQL | undefined {
     const allowedIds = [...scope.allowedDocumentIds];
     const deniedIds = [...scope.deniedDocumentIds];
 
-    let base = folderPredicate(scope);
+    let base = folderScopePredicate(scope);
     if (deniedIds.length > 0) {
         const notDenied = notInArray(document.id, deniedIds);
         base = base ? and(base, notDenied) : notDenied;

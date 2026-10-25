@@ -12,6 +12,14 @@ import {
     postLength,
     previewText,
 } from "~/app/employer/tools/growth/brand/_lib/compose";
+import { englishMessages } from "~/i18n/messages";
+import { createTranslator } from "use-intl";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "growth.brand.composeRules",
+});
 
 const CAPS = { publish: true, images: true, analytics: true, comments: true };
 
@@ -54,19 +62,21 @@ describe("previewText", () => {
 
 describe("mediaRejection", () => {
     it.each(["image/jpeg", "image/png", "image/gif", "image/webp"])("takes %s", type => {
-        expect(mediaRejection({ type, size: 1000 })).toBeNull();
+        expect(mediaRejection(t, { type, size: 1000 })).toBeNull();
     });
 
     it("refuses other types, naming the file", () => {
-        expect(mediaRejection({ type: "image/svg+xml", size: 10, name: "logo.svg" })).toBe(
+        expect(mediaRejection(t, { type: "image/svg+xml", size: 10, name: "logo.svg" })).toBe(
             "logo.svg: attach a JPEG, PNG, GIF or WebP image."
         );
-        expect(mediaRejection({ type: "video/mp4", size: 10 })).toMatch(/JPEG, PNG, GIF or WebP/);
+        expect(mediaRejection(t, { type: "video/mp4", size: 10 })).toMatch(
+            /JPEG, PNG, GIF or WebP/
+        );
     });
 
     it("refuses anything over 5 MB", () => {
-        expect(mediaRejection({ type: "image/png", size: MEDIA_MAX_BYTES })).toBeNull();
-        expect(mediaRejection({ type: "image/png", size: MEDIA_MAX_BYTES + 1 })).toMatch(
+        expect(mediaRejection(t, { type: "image/png", size: MEDIA_MAX_BYTES })).toBeNull();
+        expect(mediaRejection(t, { type: "image/png", size: MEDIA_MAX_BYTES + 1 })).toMatch(
             /5 MB at most/
         );
     });
@@ -88,34 +98,34 @@ describe("channelMediaNote", () => {
     const webp = { mimeType: "image/webp" };
 
     it("says nothing without images", () => {
-        expect(channelMediaNote(textOnly, [])).toBeNull();
+        expect(channelMediaNote(t, textOnly, [])).toBeNull();
     });
 
     it("a channel without image support posts the text only", () => {
-        expect(channelMediaNote(textOnly, [png])).toEqual({
+        expect(channelMediaNote(t, textOnly, [png])).toEqual({
             tone: "note",
             text: "Dana Okafor will post the text only.",
         });
     });
 
     it("WebP on LinkedIn is an error; elsewhere it is fine", () => {
-        expect(channelMediaNote(linkedin, [png, webp])?.tone).toBe("error");
-        expect(channelMediaNote(linkedin, [png])).toBeNull();
-        expect(channelMediaNote(bluesky, [webp])).toBeNull();
+        expect(channelMediaNote(t, linkedin, [png, webp])?.tone).toBe("error");
+        expect(channelMediaNote(t, linkedin, [png])).toBeNull();
+        expect(channelMediaNote(t, bluesky, [webp])).toBeNull();
     });
 
     it("a text-only channel never complains about WebP", () => {
-        expect(channelMediaNote(textOnly, [webp])?.tone).toBe("note");
+        expect(channelMediaNote(t, textOnly, [webp])?.tone).toBe("note");
     });
 
     it("blocks an image Bluesky would refuse for size, before it fails at publish time", () => {
         const big = { mimeType: "image/jpeg", size: 2_400_000 };
-        expect(channelMediaNote(bluesky, [png, big])).toEqual({
+        expect(channelMediaNote(t, bluesky, [png, big])).toEqual({
             tone: "error",
             text: "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.",
         });
-        expect(channelMediaNote(linkedin, [big])).toBeNull();
-        expect(channelMediaNote(bluesky, [{ mimeType: "image/png", size: 900_000 }])).toBeNull();
+        expect(channelMediaNote(t, linkedin, [big])).toBeNull();
+        expect(channelMediaNote(t, bluesky, [{ mimeType: "image/png", size: 900_000 }])).toBeNull();
     });
 });
 

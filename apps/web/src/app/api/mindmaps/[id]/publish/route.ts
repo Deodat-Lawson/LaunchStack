@@ -15,7 +15,9 @@
  * Publishing adds a file to the library, so it takes what any upload takes
  * (ADR-014): `documents.upload`, edit access to the folder it lands in, and —
  * for a later publish — edit access to the copy it replaces. A first publish
- * into Unfiled is private to the publisher until they share it.
+ * into Unfiled is private to the publisher until they share it. It also writes
+ * the draft's published marker, so it takes edit access to the draft itself
+ * (`~/server/mindmap/access`); a draft the caller cannot see is a 404.
  */
 
 import { NextResponse } from "next/server";
@@ -24,6 +26,8 @@ import { and, eq, sql } from "drizzle-orm";
 import { getOcrConfig } from "@launchstack/conversion/ocr/config";
 import { buildInternalFileUrl } from "@launchstack/store/crypto";
 import { document as documentTable } from "@launchstack/store/schema";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
 import { getEngine } from "~/server/engine";
@@ -37,11 +41,8 @@ import {
     authorizeInternalFileRef,
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
-import {
-    DOCUMENT_EDIT_DENIED,
-    FOLDER_EDIT_DENIED,
-    canEditFolder,
-} from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
+import { canEditDraftAt, draftAccess, draftReader } from "~/server/mindmap/access";
 import { getMindmap, toDetail } from "~/server/mindmap/repository";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -65,13 +66,19 @@ function creationKeyFor(mindmapId: number): string {
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "mindmap.server.errors");
+    const sources = translatorFor(locale, "sources.server.errors");
     try {
         const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
 
         const id = Number.parseInt((await params).id, 10);
         if (!Number.isInteger(id) || id <= 0) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         const validation = await validateRequestBody(request, PublishMindmapSchema);
@@ -82,12 +89,15 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const requestedCategory =
             trimmedCategory === undefined || trimmedCategory === "" ? undefined : trimmedCategory;
 
-        const map = await getMindmap(id, ctx.data.companyId);
-        if (!map) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        const map = await getMindmap(id, await draftReader(ctx.data));
+        if (!map) return NextResponse.json({ error: t("notFound") }, { status: 404 });
+        if (!canEditDraftAt((await draftAccess(ctx.data, map)).level)) {
+            return NextResponse.json({ error: t("editDenied") }, { status: 403 });
+        }
 
         const documentCategory = requestedCategory ?? map.folder;
         if (!(await canEditFolder(ctx.data, documentCategory))) {
-            return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+            return NextResponse.json({ error: sources("folderEditDenied") }, { status: 403 });
         }
         if (map.publishedDocumentId !== null) {
             // A later publish replaces the citable copy's content: a new
@@ -109,7 +119,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
                     category: published.category,
                 }))
             ) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: sources("documentEditDenied") }, { status: 403 });
             }
         }
 
@@ -212,9 +222,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         );
     } catch (error) {
         if (error instanceof UploadAuthorizationError) {
-            return NextResponse.json({ error: error.message }, { status: 403 });
+            return NextResponse.json(
+                { error: wordOr(error.copy, error.message, locale) },
+                { status: 403 }
+            );
         }
         console.error("[mindmaps] publish failed:", error);
-        return serverError("Failed to publish mindmap");
+        return serverError(t("publishFailed"));
     }
 }

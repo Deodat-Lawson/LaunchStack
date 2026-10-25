@@ -40,7 +40,6 @@ export interface SessionMessageInput {
     refs?: string[];
     citations?: unknown[];
     attachments?: unknown[];
-    model?: string | null;
     tokens?: number | null;
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */
     agentKey?: string | null;
@@ -93,8 +92,9 @@ function toMessage(row: WorkspaceSessionMessageRow): SessionMessage {
         text: row.text,
         refs: row.refs ?? undefined,
         citations: row.citations ?? undefined,
+        // `row.model` stays in the table for operators; the browser never
+        // gets it, so turns saved before models were unnamed stay unnamed.
         attachments: row.attachments ?? undefined,
-        model: row.model,
         tokens: row.tokens,
         agentKey: row.agentKey ?? null,
         createdAt: iso(row.createdAt),
@@ -237,7 +237,6 @@ export async function createSession(
                     refs: message.refs ?? null,
                     citations: message.citations ?? null,
                     attachments: message.attachments ?? null,
-                    model: message.model ?? null,
                     tokens: message.tokens ?? null,
                     agentKey: message.agentKey ?? null,
                     metadata: metadata[index] ?? null,
@@ -332,7 +331,6 @@ export async function appendMessages(
                 refs: message.refs ?? null,
                 citations: message.citations ?? null,
                 attachments: message.attachments ?? null,
-                model: message.model ?? null,
                 tokens: message.tokens ?? null,
                 agentKey: message.agentKey ?? null,
                 metadata: metadata[index] ?? null,

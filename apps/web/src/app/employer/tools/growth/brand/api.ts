@@ -12,6 +12,16 @@
  * (the member and each Page they administer).
  */
 
+import type { Copy } from "~/i18n/copy";
+import type {
+    CreatePostTestInput,
+    PostTestLink,
+    PostTestResult,
+    TrackRecord,
+} from "~/lib/scenarios/types";
+
+export type { PostTestLink, PostTestResult, TrackRecord };
+
 export type BrandPlatform = "x" | "linkedin" | "bluesky" | "reddit";
 export const BRAND_PLATFORMS: readonly BrandPlatform[] = ["linkedin", "x", "bluesky", "reddit"];
 
@@ -78,6 +88,9 @@ export interface BrandNetwork {
     /** One line on cost and access. */
     note: string;
     limit: number | null;
+    /** `setup` and `note` as copies, for the screen to word (`useCopyText`). */
+    setupCopy?: Copy[];
+    noteCopy?: Copy;
 }
 
 export interface BrandAccounts {
@@ -162,6 +175,11 @@ export interface ComposeInput {
     scheduledAt?: string | null;
     publishNow?: boolean;
     source?: BrandPostSource;
+    /**
+     * A finished post test of this exact text. The server links it to the
+     * posts for the track record, or answers that it was stale.
+     */
+    postTestId?: number;
 }
 
 export interface PostPatch {
@@ -238,7 +256,13 @@ export class BrandApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "BrandApiError";
@@ -263,11 +287,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new BrandApiError(message, response.status, body);
+                : null;
+        throw new BrandApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }
@@ -314,7 +343,7 @@ export const brandApi = {
             `/api/brand/posts${q(params)}`
         ),
     compose: (input: ComposeInput) =>
-        call<{ posts: BrandPost[] }>("/api/brand/posts", {
+        call<{ posts: BrandPost[]; postTest?: PostTestLink }>("/api/brand/posts", {
             method: "POST",
             body: JSON.stringify(input),
         }),
@@ -348,6 +377,16 @@ export const brandApi = {
             method: "POST",
             body: JSON.stringify({ text }),
         }),
+    /** Run a draft past simulated readers (needs social.publish). */
+    startPostTest: (input: CreatePostTestInput) =>
+        call<{ test: PostTestResult }>("/api/brand/post-tests", {
+            method: "POST",
+            body: JSON.stringify(input),
+        }),
+    postTest: (runId: number) => call<{ test: PostTestResult }>(`/api/brand/post-tests/${runId}`),
+    /** How tested posts did for real, against the simulation. */
+    trackRecord: () => call<{ record: TrackRecord }>("/api/brand/post-tests/track-record"),
+
     setHandled: (id: string, handled: boolean) =>
         call<{ comment: BrandComment }>(`/api/brand/comments/${id}`, {
             method: "PATCH",

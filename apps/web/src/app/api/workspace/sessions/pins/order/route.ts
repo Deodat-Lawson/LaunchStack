@@ -14,6 +14,7 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { PinOrderSchema, serverError, validateRequestBody } from "~/lib/validation";
 import { reorderPins } from "~/server/sessions/user-state";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -26,6 +27,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ ids: await reorderPins(ctx.data, validation.data.ids) });
     } catch (error) {
         console.error("[workspace/sessions] pin reorder failed:", error);
-        return serverError("Failed to reorder pinned chats");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("reorderPinsFailed")
+        );
     }
 }

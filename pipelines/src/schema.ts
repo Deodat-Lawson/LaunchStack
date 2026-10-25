@@ -20,3 +20,4 @@ export * from "./repo-workspace/schema";
 export * from "./distribution/schema";
 export * from "./vantage/schema";
 export * from "./proposals/schema";
+export * from "./scenarios/schema";

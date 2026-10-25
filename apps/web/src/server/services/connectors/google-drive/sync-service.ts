@@ -12,11 +12,13 @@ import {
 } from "@launchstack/pipelines/connectors/google-drive";
 import { GoogleAuthError } from "@launchstack/google-drive";
 
-import { eq } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
+import { driveApiBaseUrl, grantsFolderAccess } from "~/server/services/google-drive/config";
 import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
+import type { OwnerRef } from "~/server/workspace/ownership";
 import { getConnectionById } from "../connection-store";
 import {
     claimSyncLease,
@@ -24,12 +26,19 @@ import {
     getSyncState,
     listPickedItems,
     releaseSyncLease,
+    resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
 import {
+    createDriveDestinations,
+    missingToMark,
+    ownerForPick,
+    type PickedRoot,
+} from "./destinations";
+import {
     GOOGLE_DRIVE_CATEGORY,
     createGoogleDriveSink,
-    listKnownSourceIds,
+    listKnownSources,
     markMissingDocuments,
 } from "./sink";
 
@@ -48,9 +57,42 @@ function reportCounts(report: GoogleDriveSyncResult): Record<string, unknown> {
         failed: report.failed.length,
         missing: report.missingSourceIds.length,
         accessLost: report.accessLost.length,
+        // Ids, not a count: the panel names the folders it couldn't read.
+        emptyFolders: report.emptyFolders,
         truncated: report.truncated,
         durationMs: report.durationMs,
     };
+}
+
+/**
+ * The people who picked items, as ADR-014 owners. Someone no longer an
+ * active member is absent: files the sync adds to their folder then take
+ * the folder's audience (handed over when they were removed) and no grant.
+ */
+async function ownersByUserPk(
+    companyId: bigint,
+    userPks: readonly (number | null)[]
+): Promise<Map<number, OwnerRef>> {
+    const wanted = [...new Set(userPks.filter((pk): pk is number => pk != null))];
+    if (wanted.length === 0) return new Map();
+    const rows = await db
+        .select({ id: users.id, authUserId: users.userId })
+        .from(users)
+        .innerJoin(
+            userCompanyMemberships,
+            and(
+                eq(userCompanyMemberships.userId, sql`${users.id}`),
+                eq(userCompanyMemberships.companyId, companyId),
+                eq(userCompanyMemberships.status, "active")
+            )
+        )
+        .where(inArray(users.id, wanted));
+    return new Map(
+        rows.map(row => [
+            Number(row.id),
+            { companyId, userPk: BigInt(row.id), authUserId: row.authUserId },
+        ])
+    );
 }
 
 export async function runGoogleDriveSync(
@@ -75,7 +117,7 @@ export async function runGoogleDriveSync(
 
     try {
         const accessToken = await getAccessTokenForConnection(connection);
-        const client = createDriveClient({ accessToken });
+        const client = createDriveClient({ accessToken, baseUrl: driveApiBaseUrl() });
 
         // The sink attributes uploads to the granting user's auth identity.
         if (connection.grantedByUserId == null) {
@@ -96,16 +138,45 @@ export async function runGoogleDriveSync(
         // can be restricted like any other folder.
         await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
-        const [syncState, pickedRows, knownSourceIds, sink] = await Promise.all([
+        const [syncState, pickedRows, knownSources] = await Promise.all([
             getSyncState(connectionId),
             listPickedItems(connectionId),
-            listKnownSourceIds(connection.companyId, connectionId),
-            createGoogleDriveSink({
-                companyId: connection.companyId,
-                connectionId,
-                userId: granter.authUserId,
-            }),
+            listKnownSources(connection.companyId, connectionId),
         ]);
+
+        // What a pick brings in belongs to whoever picked it (ADR-014) — a
+        // folder always, a file when it was picked into a folder from Add
+        // source; files picked before that stay a workspace import.
+        const pickers = await ownersByUserPk(
+            connection.companyId,
+            pickedRows.map(row => row.addedByUserPk)
+        );
+        // Whoever connected Drive stands in for a picker who has since left.
+        const granterOwner: OwnerRef = {
+            companyId: connection.companyId,
+            userPk: BigInt(connection.grantedByUserId),
+            authUserId: granter.authUserId,
+        };
+        const roots: PickedRoot[] = pickedRows.map(row => ({
+            id: row.id,
+            fileId: row.fileId,
+            kind: row.kind,
+            name: row.name,
+            folderCategoryId: row.folderCategoryId,
+            destination: row.destination,
+            owner: ownerForPick(row.addedByUserPk, pickers, granterOwner),
+        }));
+        const destinations = createDriveDestinations({
+            companyId: connection.companyId,
+            connectionId,
+            roots,
+        });
+        const sink = await createGoogleDriveSink({
+            companyId: connection.companyId,
+            connectionId,
+            userId: granter.authUserId,
+            place: item => destinations.placeFor(item),
+        });
 
         const report = await syncGoogleDrive({
             client,
@@ -115,12 +186,20 @@ export async function runGoogleDriveSync(
                 kind: row.kind === "folder" ? "folder" : "file",
             })),
             startPageToken: syncState?.startPageToken ?? undefined,
-            knownSourceIds,
+            knownSourceIds: knownSources.map(known => known.sourceId),
             force: options?.force,
         });
 
-        if (report.missingSourceIds.length > 0) {
-            await markMissingDocuments(connection.companyId, connectionId, report.missingSourceIds);
+        // Under drive.file an imported folder lists empty: its files are
+        // unseen, not removed from Drive, so they keep their documents
+        // unflagged until folder access shows what is really there.
+        const missing = missingToMark(
+            report.missingSourceIds,
+            knownSources,
+            grantsFolderAccess(connection.scopes) ? [] : report.emptyFolders
+        );
+        if (missing.length > 0) {
+            await markMissingDocuments(connection.companyId, connectionId, missing);
         }
 
         await releaseSyncLease(connectionId, {
@@ -128,6 +207,11 @@ export async function runGoogleDriveSync(
             startPageToken: report.nextStartPageToken,
             report: reportCounts(report),
         });
+        // A picked folder that listed empty is usually one the grant can't
+        // read yet. Nothing in Drive changes when access is granted, so a
+        // cursor would call every later run clean; walk it again instead
+        // (one listing per empty folder per run).
+        if (report.emptyFolders.length > 0) await resetSyncCursor(connectionId);
 
         return { outcome: report.dirty ? "synced" : "clean", report };
     } catch (error) {

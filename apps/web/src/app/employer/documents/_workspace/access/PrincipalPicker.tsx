@@ -8,9 +8,12 @@
 
 import React, { useEffect, useId, useState } from "react";
 import { Search, ShieldCheck, User, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Input } from "~/components/ui/input";
+import { useRoleLabel } from "~/lib/authz/i18n";
 import type { PrincipalType } from "~/lib/authz/permissions";
+
 import { errorMessage, peopleApi, type Principals } from "../settings/people/api";
 
 export interface PickedPrincipal {
@@ -35,6 +38,8 @@ export function PrincipalPicker({
     disabled?: boolean;
     onPick: (principal: PickedPrincipal) => void;
 }) {
+    const t = useTranslations("team.access.picker");
+    const roleLabel = useRoleLabel();
     const [query, setQuery] = useState("");
     const [focused, setFocused] = useState(false);
     const [results, setResults] = useState<Principals | null>(null);
@@ -56,7 +61,7 @@ export function PrincipalPicker({
                     setResults(res);
                     setError(null);
                 } catch (err) {
-                    if (!cancelled) setError(errorMessage(err, "Search didn't work."));
+                    if (!cancelled) setError(errorMessage(err, t("searchError")));
                 } finally {
                     if (!cancelled) setLoading(false);
                 }
@@ -66,7 +71,7 @@ export function PrincipalPicker({
             cancelled = true;
             clearTimeout(timer);
         };
-    }, [query, active, disabled]);
+    }, [query, active, disabled, t]);
 
     const pick = (principal: PickedPrincipal) => {
         onPick(principal);
@@ -80,7 +85,7 @@ export function PrincipalPicker({
     const groups: { label: string; Icon: typeof User; items: PickedPrincipal[] }[] = results
         ? [
               {
-                  label: "People",
+                  label: t("people"),
                   Icon: User,
                   items: results.users.map(u => ({
                       principalType: "user" as const,
@@ -90,7 +95,7 @@ export function PrincipalPicker({
                   })),
               },
               {
-                  label: "Groups",
+                  label: t("groups"),
                   Icon: Users,
                   items: results.groups.map(g => ({
                       principalType: "group" as const,
@@ -99,12 +104,12 @@ export function PrincipalPicker({
                   })),
               },
               {
-                  label: "Roles",
+                  label: t("roles"),
                   Icon: ShieldCheck,
                   items: results.roles.map(r => ({
                       principalType: "role" as const,
                       principalId: r.slug,
-                      principalName: r.name,
+                      principalName: roleLabel(r.slug, r.name),
                   })),
               },
           ]
@@ -133,8 +138,8 @@ export function PrincipalPicker({
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     disabled={disabled}
-                    placeholder="Add people, groups, or roles…"
-                    aria-label="Add a person, group, or role"
+                    placeholder={t("placeholder")}
+                    aria-label={t("label")}
                     aria-controls={listId}
                     aria-expanded={active && !disabled}
                     className="pl-8"
@@ -145,7 +150,7 @@ export function PrincipalPicker({
                 <div
                     id={listId}
                     role="listbox"
-                    aria-label="Matches"
+                    aria-label={t("matches")}
                     className="border-line bg-panel mt-1.5 max-h-56 overflow-y-auto rounded-lg border"
                     // Keep the list open while a click lands on it.
                     onMouseDown={e => e.preventDefault()}
@@ -153,10 +158,10 @@ export function PrincipalPicker({
                     {error ? (
                         <div className="text-danger px-3 py-2 text-[12.5px]">{error}</div>
                     ) : loading && !results ? (
-                        <div className="text-ink-3 px-3 py-2 text-[12.5px]">Searching…</div>
+                        <div className="text-ink-3 px-3 py-2 text-[12.5px]">{t("searching")}</div>
                     ) : groups.length === 0 ? (
                         <div className="text-ink-3 px-3 py-2 text-[12.5px]">
-                            {query.trim() ? "No one matches." : "Type a name, group, or role."}
+                            {query.trim() ? t("noMatch") : t("hint")}
                         </div>
                     ) : (
                         groups.map(group => (

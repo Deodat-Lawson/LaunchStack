@@ -28,26 +28,43 @@ import {
 import { ensurePrivateGmailFolder } from "~/server/services/connectors/gmail/folder";
 import { ensureSyncState as ensureGmailSyncState } from "~/server/services/connectors/gmail/store";
 import {
-    GOOGLE_DRIVE_SCOPES,
+    DRIVE_FOLDERS_STATE_PREFIX,
+    googleDriveScopes,
     GOOGLE_OAUTH_STATE_COOKIE,
     getGoogleOAuthApp,
     getOAuthRedirectUrl,
     isGoogleConnectConfigured,
 } from "~/server/services/google-drive/config";
 import { upsertGoogleConnection } from "~/server/services/google-drive/connections";
+import {
+    ensureSyncState,
+    listPickedItems,
+    resetSyncCursor,
+} from "~/server/services/connectors/google-drive/store";
+import { inngest } from "~/server/inngest/client";
+import { publicOrigin } from "~/server/public-origin";
 
 type Provider = "google-drive" | "gmail";
 
 /**
  * Lands on the shared connector return leg (`?connector=&result=`) so the
  * workspace shell reopens the provider's panel and toasts the outcome — the
- * same path the Slack/GitHub callbacks take.
+ * same path the Slack/GitHub callbacks take. Drive has no panel of its own:
+ * it reopens Add source on Files, or on Folder (`tab`) after "Allow folder
+ * access", which is asked from there.
  */
-function redirectToWorkspace(request: Request, provider: Provider, flag: string): NextResponse {
+function redirectToWorkspace(
+    request: Request,
+    provider: Provider,
+    flag: string,
+    tab?: "folder"
+): NextResponse {
     const result = flag === "connected" ? "connected" : flag === "cancelled" ? "denied" : "error";
-    const response = NextResponse.redirect(
-        new URL(`/employer/documents?connector=${provider}&result=${result}`, request.url)
-    );
+    const target = new URL("/employer/documents", publicOrigin(request));
+    target.searchParams.set("connector", provider);
+    target.searchParams.set("result", result);
+    if (tab) target.searchParams.set("tab", tab);
+    const response = NextResponse.redirect(target);
     response.cookies.delete(
         provider === "gmail" ? GMAIL_OAUTH_STATE_COOKIE : GOOGLE_OAUTH_STATE_COOKIE
     );
@@ -69,6 +86,27 @@ export async function GET(request: Request) {
 // Google Drive — workspace-scoped
 // ---------------------------------------------------------------------------
 
+/**
+ * A reconnect can widen what the grant sees (drive.file → drive.readonly is
+ * how a picked folder's contents become readable), and nothing in Drive
+ * changed, so the changes feed would call the next run clean and skip it.
+ * Forget the cursor and start the sync now, when something is picked. A
+ * runner that is down must not undo a good connect: the cron retries.
+ */
+async function resyncAfterReconnect(connectionId: number, companyId: bigint | number) {
+    try {
+        await ensureSyncState(connectionId);
+        await resetSyncCursor(connectionId);
+        if ((await listPickedItems(connectionId)).length === 0) return;
+        await inngest.send({
+            name: "google-drive/sync.requested",
+            data: { connectionId: String(connectionId), companyId: companyId.toString() },
+        });
+    } catch (err) {
+        console.warn("[google-oauth] connected, but the follow-up sync did not start:", err);
+    }
+}
+
 async function driveCallback(request: Request, url: URL, state: string | null) {
     if (!isGoogleConnectConfigured()) {
         return NextResponse.json({ error: "feature_disabled" }, { status: 404 });
@@ -82,38 +120,46 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
         return redirectToWorkspace(request, "google-drive", "forbidden");
     }
 
+    // "Allow folder access" prefixes its state; it picks the scopes to record
+    // should Google's token response leave `scope` out, and the tab to go
+    // back to.
+    const folderAccess = state?.startsWith(DRIVE_FOLDERS_STATE_PREFIX) ?? false;
+    const back = (flag: string) =>
+        redirectToWorkspace(request, "google-drive", flag, folderAccess ? "folder" : undefined);
+
     if (url.searchParams.get("error")) {
         // The user clicked "cancel" on the consent screen — not an error.
-        return redirectToWorkspace(request, "google-drive", "cancelled");
+        return back("cancelled");
     }
 
     const code = url.searchParams.get("code");
     const nonce = readCookie(request.headers.get("cookie") ?? "", GOOGLE_OAUTH_STATE_COOKIE);
+    const expectedState = `${folderAccess ? DRIVE_FOLDERS_STATE_PREFIX : ""}${nonce}`;
 
-    if (!code || !state || !nonce || state !== nonce) {
+    if (!code || !state || !nonce || state !== expectedState) {
         console.warn("[google-oauth] state mismatch or missing code — rejecting callback");
-        return redirectToWorkspace(request, "google-drive", "error");
+        return back("error");
     }
 
     try {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {
             // prompt=consent should always yield one; without it the link
             // would die within the hour, so refuse rather than half-connect.
             console.error("[google-oauth] token exchange returned no refresh_token");
-            return redirectToWorkspace(request, "google-drive", "error");
+            return back("error");
         }
 
         const claims = token.id_token ? decodeIdTokenClaims(token.id_token) : {};
         const accountId = claims.sub ?? claims.email;
         if (!accountId) {
             console.error("[google-oauth] no account identity in the token response");
-            return redirectToWorkspace(request, "google-drive", "error");
+            return back("error");
         }
 
         const connection = await upsertGoogleConnection({
@@ -122,7 +168,7 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             providerAccountId: accountId,
             providerAccountEmail: claims.email ?? null,
             refreshToken: token.refresh_token,
-            scopes: token.scope ?? GOOGLE_DRIVE_SCOPES.join(" "),
+            scopes: token.scope ?? googleDriveScopes({ folderAccess }).join(" "),
         });
 
         await recordAuditEvent(db, {
@@ -134,10 +180,12 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             detail: { connectionId: connection.id, accountEmail: claims.email ?? null },
         });
 
-        return redirectToWorkspace(request, "google-drive", "connected");
+        await resyncAfterReconnect(connection.id, ctx.data.companyId);
+
+        return back("connected");
     } catch (err) {
         console.error("[google-oauth] callback failed:", err);
-        return redirectToWorkspace(request, "google-drive", "error");
+        return back("error");
     }
 }
 
@@ -172,7 +220,7 @@ async function gmailCallback(request: Request, url: URL, state: string) {
         const token = await exchangeAuthorizationCode({
             app: getGoogleOAuthApp(),
             code,
-            redirectUri: getOAuthRedirectUrl(url.origin),
+            redirectUri: getOAuthRedirectUrl(publicOrigin(request)),
         });
 
         if (!token.refresh_token) {

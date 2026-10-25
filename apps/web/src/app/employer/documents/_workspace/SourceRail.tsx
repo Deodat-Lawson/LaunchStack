@@ -12,8 +12,8 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import {
-    CircleAlert,
     Folder,
     FolderOpen,
     Lock,
@@ -41,15 +41,14 @@ import {
 } from "~/lib/folders/path";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { Checkbox as UiCheckbox } from "~/components/ui/checkbox";
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { useActionMenu, useContextTarget } from "~/components/context-menu";
 import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
 import { HistoryRail, type HistoryRailProps } from "./HistoryRail";
 import { InboxBell } from "./team/InboxBell";
-import { TeamPanel } from "./team/TeamPanel";
-import type { TeamRailProps, TeamTarget } from "./team/types";
+import type { InboxRailProps, TeamTarget } from "./team/types";
 import { SOURCE_DRAG_MIME } from "./dragData";
+import { SourceFailureStatus, SourceProgressStatus } from "./SourceStatus";
 import {
     buildBlankRailMenuItems,
     buildSelectionMenuItems,
@@ -58,8 +57,6 @@ import {
     canChangeSource,
 } from "./sourceContextMenu";
 import {
-    PRIVATE_EMPTY_HINT,
-    RAIL_SECTION_LABELS,
     RAIL_SECTION_ORDER,
     audienceLabel,
     showsAudienceGlyph,
@@ -201,6 +198,8 @@ interface SourceRowProps {
     glyph?: Glyph | null;
     /** "Added by Ada · 2h ago", shown on hover. */
     addedLine?: string | null;
+    /** Run a failed source's processing again; absent where the caller may not. */
+    onRetry?: (source: WorkspaceSource) => Promise<void>;
 }
 
 function SourceRow({
@@ -212,13 +211,15 @@ function SourceRow({
     menuItems,
     glyph,
     addedLine,
+    onRetry,
 }: SourceRowProps) {
+    const t = useTranslations("sources.sourceRail");
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
     const menu = useActionMenu();
-    const menuLabel = `Actions for ${source.title}`;
+    const menuLabel = t("actionsFor", { title: source.title });
     const ctxTarget = useContextTarget(
         menuItems
             ? {
@@ -263,10 +264,10 @@ function SourceRow({
                 onClick={() => toggleSelected(source.id)}
                 title={
                     failed
-                        ? "Unavailable as context: indexing failed"
+                        ? t("unavailableAsContext")
                         : selected
-                          ? "Remove from context"
-                          : "Add to context"
+                          ? t("removeFromContext")
+                          : t("addToContext")
                 }
             />
             <div
@@ -274,7 +275,7 @@ function SourceRow({
                     if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
                     else onOpen?.(source);
                 }}
-                title={[addedLine, onOpenBeside ? "⌘-click to open beside" : null]
+                title={[addedLine, onOpenBeside ? t("openBesideHint") : null]
                     .filter(Boolean)
                     .join("\n")}
                 className="flex min-w-0 flex-1 cursor-pointer items-center gap-2"
@@ -292,38 +293,13 @@ function SourceRow({
                         </span>
                         {glyph && <AudienceGlyph glyph={glyph} />}
                     </div>
-                    {(visibleTags.length > 0 ||
-                        processing ||
-                        failed ||
-                        (source.gaps?.length ?? 0) > 0) && (
+                    {(visibleTags.length > 0 || failed || (source.gaps?.length ?? 0) > 0) && (
                         <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">
-                            {failed ? (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span
-                                            tabIndex={0}
-                                            className="text-danger inline-flex items-center gap-1"
-                                        >
-                                            <CircleAlert className="size-2.5" aria-hidden />
-                                            failed
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="max-w-xs">
-                                        {source.errorMessage ?? "This source could not be indexed."}
-                                    </TooltipContent>
-                                </Tooltip>
-                            ) : processing ? (
-                                <span
-                                    className="text-brand"
-                                    style={{ animation: "lsw-shimmer 1.6s ease-in-out infinite" }}
-                                >
-                                    syncing…
-                                </span>
-                            ) : null}
-                            {visibleTags.map((t, i) => (
-                                <Fragment key={t}>
+                            {failed && <SourceFailureStatus source={source} onRetry={onRetry} />}
+                            {visibleTags.map((tag, i) => (
+                                <Fragment key={tag}>
                                     {i > 0 && <span style={{ opacity: 0.4 }}>·</span>}
-                                    <TagChip tag={t} />
+                                    <TagChip tag={tag} />
                                 </Fragment>
                             ))}
                             {extra > 0 && (
@@ -332,7 +308,7 @@ function SourceRow({
                             {(source.gaps?.length ?? 0) > 0 && (
                                 <span
                                     title={source.gaps?.join(" · ")}
-                                    className="text-warn ml-auto inline-flex items-center gap-0.5 text-[10px] font-semibold"
+                                    className="text-warn-ink ml-auto inline-flex items-center gap-0.5 text-[10px] font-semibold"
                                 >
                                     <IconShield size={9} />
                                     {source.gaps?.length}
@@ -340,6 +316,7 @@ function SourceRow({
                             )}
                         </div>
                     )}
+                    {processing && !failed && <SourceProgressStatus source={source} />}
                 </div>
             </div>
             {menuItems && (
@@ -348,7 +325,7 @@ function SourceRow({
                     data-testid={`source-row-menu-${source.id}`}
                     aria-label={menuLabel}
                     aria-haspopup="menu"
-                    title="Actions"
+                    title={t("actions")}
                     onClick={e => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -431,10 +408,13 @@ function FolderHeader({
     onDragStart,
     onDragEnd,
 }: FolderHeaderProps) {
+    const t = useTranslations("sources.sourceRail");
     const [hover, setHover] = useState(false);
     const [menuFocus, setMenuFocus] = useState(false);
     const menu = useActionMenu();
-    const menuLabel = `Actions for folder ${displayFolderPath(node.path)}`;
+    const isUnfiled = node.path === UNFILED_FOLDER;
+    const folderName = isUnfiled ? t("unfiled") : displayFolderPath(node.path);
+    const menuLabel = t("actionsForFolder", { path: folderName });
     const ctxTarget = useContextTarget(
         menuItems
             ? { kind: "folder", id: node.path, label: menuLabel, data: node, items: menuItems }
@@ -484,7 +464,7 @@ function FolderHeader({
                 state={state}
                 disabled={selectableIds.length === 0}
                 onClick={() => onSelectAll(selectableIds, state !== "all")}
-                title={state === "all" ? "Deselect folder" : "Select all in folder"}
+                title={state === "all" ? t("deselectFolder") : t("selectAllInFolder")}
             />
             <div
                 onClick={onToggle}
@@ -519,9 +499,9 @@ function FolderHeader({
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                     }}
-                    title={displayFolderPath(node.path)}
+                    title={folderName}
                 >
-                    {node.name}
+                    {isUnfiled ? folderName : node.name}
                 </span>
                 {glyph && <AudienceGlyph glyph={glyph} />}
                 {menuItems && (
@@ -530,7 +510,7 @@ function FolderHeader({
                         data-testid={`folder-menu-${node.path}`}
                         aria-label={menuLabel}
                         aria-haspopup="menu"
-                        title="Folder actions"
+                        title={t("folderActions")}
                         onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -605,6 +585,11 @@ export interface SourceRailProps {
     /** "Share…" — the Share dialog for one file. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onDeleteSource?: (source: WorkspaceSource) => void;
+    /**
+     * Run a failed source's processing again. Offered on the failed row where
+     * the caller can edit the file — the same gate as uploading a new version.
+     */
+    onRetrySource?: (source: WorkspaceSource) => Promise<void>;
     /** Delete several at once — the multi-selection menu's Delete. */
     onDeleteSources?: (sources: WorkspaceSource[]) => void;
     /** Open the Add dialog with this folder pre-selected. */
@@ -640,10 +625,19 @@ export interface SourceRailProps {
      */
     history?: Omit<HistoryRailProps, "query">;
     /**
-     * The team layer (ADR-014): the Team tab and the inbox bell. Shown only
-     * alongside History, in the full workspace.
+     * The shared-with-you inbox bell (ADR-014), in the full workspace. The
+     * rest of the team layer — people, groups, activity — is the Team tab,
+     * not the sidebar: the sidebar makes, files and shares sources.
      */
-    team?: Omit<TeamRailProps, "query">;
+    inbox?: InboxRailProps;
+    /**
+     * Show the Sources or History half — something opened from elsewhere (the
+     * Team tab) lives there. Answered once: the rail calls `onRevealed` with
+     * the nonce and the shell drops the request, so a rail that mounts again
+     * later starts on the tab the member left it on.
+     */
+    revealTab?: { tab: "sources" | "history"; nonce: number } | null;
+    onRevealed?: (nonce: number) => void;
     /** "Everyone at <name>" on a workspace-wide row's glyph. */
     workspaceName?: string | null;
     /** The signed-in person's auth id: their own files read "Added by you". */
@@ -655,8 +649,11 @@ export interface SourceRailProps {
     loading?: boolean;
 }
 
-/** Which part of the rail is showing. Persisted, so a habit survives a reload. */
-type RailTab = "sources" | "history" | "team";
+/**
+ * Which part of the rail is showing. Persisted, so a habit survives a reload.
+ * A saved "team" — the tab the team layer once had here — reads as Sources.
+ */
+type RailTab = "sources" | "history";
 
 const RAIL_TAB_KEY = "workspace.railTab.v1";
 
@@ -683,6 +680,8 @@ interface BranchContext {
     sourceGlyph: (source: WorkspaceSource, topLevel: boolean) => Glyph | null;
     /** "Added by Ada · 2h ago". */
     addedLine: (source: WorkspaceSource) => string | null;
+    /** Retry for this failed source, when the caller may run it again. */
+    retryFor: (source: WorkspaceSource) => ((source: WorkspaceSource) => Promise<void>) | undefined;
     /** May the caller rename, move or delete this folder (ADR-014 manage)? */
     canManageFolder: (path: string) => boolean;
     /** May the caller add to this folder — a file dropped on it, a subfolder (edit)? */
@@ -738,6 +737,7 @@ function SourceRows({
                         menuItems={ctx.sourceMenuItems}
                         glyph={ctx.sourceGlyph(s, topLevel)}
                         addedLine={ctx.addedLine(s)}
+                        onRetry={ctx.retryFor(s)}
                     />
                 </div>
             ))}
@@ -839,7 +839,8 @@ function RailSectionBlock({
     /** Browsing (no filter): an empty Private section explains itself. */
     showEmptyHint: boolean;
 }) {
-    const label = RAIL_SECTION_LABELS[section.id];
+    const t = useTranslations("sources.sourceRail");
+    const label = t(`sections.${section.id}`);
     const empty = section.folders.length === 0 && section.items.length === 0;
     const takesDrop =
         section.id === "private" &&
@@ -879,7 +880,7 @@ function RailSectionBlock({
             {empty ? (
                 showEmptyHint && (
                     <p className="text-ink-3 px-2.5 py-1 text-xs leading-snug">
-                        {PRIVATE_EMPTY_HINT}
+                        {t("privateEmptyHint")}
                     </p>
                 )
             ) : (
@@ -911,6 +912,7 @@ export function SourceRail({
     onRenameSource,
     onRestrictAccess,
     onDeleteSource,
+    onRetrySource,
     onDeleteSources,
     onAddToFolder,
     activeFolder,
@@ -925,11 +927,17 @@ export function SourceRail({
     width = 280,
     shortcuts,
     history,
-    team,
+    inbox,
+    revealTab,
+    onRevealed,
     workspaceName,
     selfAuthId,
     loading = false,
 }: SourceRailProps) {
+    const t = useTranslations("sources.sourceRail");
+    const tr = useTranslations("sources.railCommands");
+    const tm = useTranslations("sources.contextMenu");
+    const ta = useTranslations("sources.audience");
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
     const [search, setSearch] = useState("");
@@ -942,7 +950,7 @@ export function SourceRail({
     useEffect(() => {
         try {
             const saved = localStorage.getItem(RAIL_TAB_KEY);
-            if (saved === "history" || saved === "team") setTab(saved);
+            if (saved === "history") setTab(saved);
         } catch {
             // Private mode / corrupt storage — Sources is the safe default.
         }
@@ -958,22 +966,29 @@ export function SourceRail({
         }
     }, [tab]);
 
-    /** Opening something from the inbox or the Team tab shows where it lives. */
-    const teamOpen = useCallback(
+    // Declared after the restore above, so a request made while the rail was
+    // hidden (it mounts fresh) wins over the saved tab.
+    useEffect(() => {
+        if (!revealTab) return;
+        setTab(revealTab.tab);
+        onRevealed?.(revealTab.nonce);
+    }, [revealTab, onRevealed]);
+
+    /** Opening something from the inbox shows where it lives. */
+    const inboxOpen = useCallback(
         (target: TeamTarget) => {
             if (target.type === "chat") {
                 if (history) setTab("history");
             } else {
                 setTab("sources");
             }
-            team?.onOpenTarget(target);
+            inbox?.onOpenTarget(target);
         },
-        [team, history]
+        [inbox, history]
     );
 
     // A rail without history props can never sit on a tab that isn't there.
-    const activeTab: RailTab =
-        tab === "team" ? (team ? "team" : "sources") : history ? tab : "sources";
+    const activeTab: RailTab = history ? tab : "sources";
 
     // A source may have been pinned while processing, before indexing failed.
     useEffect(() => {
@@ -1015,15 +1030,15 @@ export function SourceRail({
             if (!access) {
                 // From a server without per-caller access: the old lock.
                 return folder.restricted && topLevel
-                    ? { kind: "shared", label: "Only people with access" }
+                    ? { kind: "shared", label: t("onlyPeopleWithAccess") }
                     : null;
             }
             if (!showsAudienceGlyph(access, topLevel) || access.audience === "workspace") {
                 return null;
             }
-            return { kind: access.audience, label: audienceLabel(access, workspaceName) };
+            return { kind: access.audience, label: audienceLabel(access, workspaceName, ta) };
         },
-        [folderFor, workspaceName]
+        [folderFor, workspaceName, t, ta]
     );
 
     const sourceGlyph = useCallback(
@@ -1037,9 +1052,9 @@ export function SourceRail({
                 principalCount: 0,
             };
             if (!showsAudienceGlyph(access, topLevel)) return null;
-            return { kind: audience, label: audienceLabel(access, workspaceName) };
+            return { kind: audience, label: audienceLabel(access, workspaceName, ta) };
         },
-        [workspaceName]
+        [workspaceName, ta]
     );
 
     // Names as people appear in this workspace now, not as they were when
@@ -1060,11 +1075,13 @@ export function SourceRail({
             if (!by) return null;
             const name =
                 by.authUserId === selfAuthId
-                    ? "you"
+                    ? t("you")
                     : (people[by.authUserId]?.displayName ?? by.name);
-            return source.added ? `Added by ${name} · ${source.added}` : `Added by ${name}`;
+            return source.added
+                ? t("addedByWhen", { name, added: source.added })
+                : t("addedBy", { name });
         },
-        [people, selfAuthId]
+        [people, selfAuthId, t]
     );
 
     const canDropSource = useCallback(
@@ -1085,7 +1102,7 @@ export function SourceRail({
         (source: WorkspaceSource): ActionMenuItem[] => {
             if (selected.length > 1 && selected.includes(source.id)) {
                 const chosen = sources.filter(s => selected.includes(s.id));
-                return buildSelectionMenuItems(chosen, folders, {
+                return buildSelectionMenuItems(tm, chosen, folders, {
                     onRemoveFromContext: ids =>
                         setSelected(prev => prev.filter(id => !ids.includes(id))),
                     onMoveToFolder: onMoveToFolder
@@ -1094,7 +1111,7 @@ export function SourceRail({
                     onDelete: onDeleteSources,
                 });
             }
-            return buildSourceMenuItems(source, folders, selected, {
+            return buildSourceMenuItems(tm, source, folders, selected, {
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext:
@@ -1133,6 +1150,7 @@ export function SourceRail({
             });
         },
         [
+            tm,
             sources,
             folders,
             selected,
@@ -1175,7 +1193,7 @@ export function SourceRail({
             const subtree = collectFolderPaths(node);
             const manages = !isUnfiled && canManageFolder(path);
             const edits = canEditFolder(path);
-            return buildFolderMenuItems(path, {
+            return buildFolderMenuItems(tm, path, {
                 onOpen:
                     activeFolder === path
                         ? undefined
@@ -1223,6 +1241,7 @@ export function SourceRail({
             });
         },
         [
+            tm,
             selected,
             setSelected,
             activeFolder,
@@ -1248,9 +1267,9 @@ export function SourceRail({
     /** Empty rail space: the verbs that make something new. */
     const railTarget = useContextTarget({
         kind: "rail",
-        label: "Sidebar actions",
+        label: t("sidebarActions"),
         items: () =>
-            buildBlankRailMenuItems({
+            buildBlankRailMenuItems(tm, {
                 onAddKnowledge: onOpenAdd,
                 onNewFolder: onNewFolder ? () => onNewFolder(null) : undefined,
                 cutCount: cut.length,
@@ -1263,12 +1282,12 @@ export function SourceRail({
         history
             ? {
                   kind: "rail-tabs",
-                  label: "Sidebar tabs",
+                  label: t("sidebarTabs"),
                   items: (): ActionMenuItem[] => [
                       {
                           type: "item",
                           id: "tab-sources",
-                          label: "Sources",
+                          label: t("tabSources"),
                           icon: activeTab === "sources" ? "check" : "folder",
                           checked: activeTab === "sources",
                           onSelect: () => setTab("sources"),
@@ -1276,7 +1295,7 @@ export function SourceRail({
                       {
                           type: "item",
                           id: "tab-history",
-                          label: "History",
+                          label: t("tabHistory"),
                           icon: activeTab === "history" ? "check" : "history",
                           checked: activeTab === "history",
                           onSelect: () => setTab("history"),
@@ -1287,7 +1306,7 @@ export function SourceRail({
                                 {
                                     type: "item" as const,
                                     id: "hide",
-                                    label: "Hide sidebar",
+                                    label: tr("hideSidebar"),
                                     icon: "sidebar" as const,
                                     shortcut: "⌘\\",
                                     onSelect: onClose,
@@ -1369,6 +1388,13 @@ export function SourceRail({
         setDragOverFolder(null);
     };
 
+    // Retrying re-runs processing for the file, so it takes what a new
+    // version would: edit access. The server checks again.
+    const retryFor = (source: WorkspaceSource) =>
+        onRetrySource && source.indexStatus === "failed" && canChangeSource(source)
+            ? onRetrySource
+            : undefined;
+
     const branchCtx: BranchContext = {
         selected,
         collapsed,
@@ -1376,6 +1402,7 @@ export function SourceRail({
         folderGlyph,
         sourceGlyph,
         addedLine,
+        retryFor,
         canManageFolder,
         canEditFolder,
         canDropSource,
@@ -1411,12 +1438,12 @@ export function SourceRail({
                         {logoLabel}
                     </span>
                 </LandingLogoLink>
-                {team && <InboxBell onOpenTarget={teamOpen} />}
+                {inbox && <InboxBell onOpenTarget={inboxOpen} />}
                 {onClose && (
                     <button
                         onClick={onClose}
-                        title={withShortcut("Hide sidebar", shortcuts?.rail)}
-                        aria-label="Hide sidebar"
+                        title={withShortcut(tr("hideSidebar"), shortcuts?.rail)}
+                        aria-label={tr("hideSidebar")}
                         style={{
                             width: 26,
                             height: 26,
@@ -1451,7 +1478,7 @@ export function SourceRail({
                 {onOpenPalette && (
                     <RailCommand
                         icon={<IconSearch className="size-3.5" />}
-                        label="Jump to anything"
+                        label={tr("jumpToAnything")}
                         keys={shortcuts?.palette}
                         onClick={onOpenPalette}
                         testId="rail-palette"
@@ -1459,7 +1486,7 @@ export function SourceRail({
                 )}
                 <RailCommand
                     icon={<Plus className="text-brand size-3.5" />}
-                    label="Add knowledge"
+                    label={tr("addKnowledge")}
                     keys={shortcuts?.add}
                     onClick={onOpenAdd}
                     testId="rail-add"
@@ -1469,7 +1496,7 @@ export function SourceRail({
             {history && (
                 <div
                     role="tablist"
-                    aria-label="Sidebar section"
+                    aria-label={t("sidebarSection")}
                     {...tabsTarget}
                     style={{
                         margin: "0 14px 10px",
@@ -1482,9 +1509,8 @@ export function SourceRail({
                 >
                     {(
                         [
-                            { id: "sources", label: "Sources" },
-                            { id: "history", label: "History" },
-                            ...(team ? [{ id: "team", label: "Team" } as const] : []),
+                            { id: "sources", label: t("tabSources") },
+                            { id: "history", label: t("tabHistory") },
                         ] as const
                     ).map(item => {
                         const selected = activeTab === item.id;
@@ -1543,11 +1569,7 @@ export function SourceRail({
                         // that jumps; calling this one search too made it read
                         // as a smaller copy of that.
                         placeholder={
-                            activeTab === "history"
-                                ? "Filter history"
-                                : activeTab === "team"
-                                  ? "Filter people"
-                                  : "Filter sources"
+                            activeTab === "history" ? t("filterHistory") : t("filterSources")
                         }
                         style={{
                             flex: 1,
@@ -1570,7 +1592,7 @@ export function SourceRail({
                             setActiveFolder(null);
                             setActiveTag(null);
                         }}
-                        title="Back to all folders"
+                        title={t("backToAll")}
                         style={{
                             width: "100%",
                             display: "flex",
@@ -1594,16 +1616,18 @@ export function SourceRail({
                                 textOverflow: "ellipsis",
                             }}
                         >
-                            {activeFolder ? displayFolderPath(activeFolder) : `#${activeTag}`}
+                            {activeFolder
+                                ? activeFolder === UNFILED_FOLDER
+                                    ? t("unfiled")
+                                    : displayFolderPath(activeFolder)
+                                : `#${activeTag}`}
                         </span>
                         <IconX size={11} style={{ opacity: 0.5 }} />
                     </button>
                 </div>
             )}
 
-            {activeTab === "team" && team ? (
-                <TeamPanel {...team} onOpenTarget={teamOpen} query={search} />
-            ) : activeTab === "history" && history ? (
+            {activeTab === "history" && history ? (
                 <HistoryRail {...history} query={search} />
             ) : (
                 <div
@@ -1662,18 +1686,20 @@ export function SourceRail({
                                 fontSize: 13,
                             }}
                         >
-                            Nothing here.{" "}
-                            <button
-                                onClick={onOpenAdd}
-                                style={{
-                                    color: "var(--accent)",
-                                    fontWeight: 600,
-                                    textDecoration: "underline",
-                                }}
-                            >
-                                Add a source
-                            </button>
-                            .
+                            {t.rich("empty", {
+                                add: chunks => (
+                                    <button
+                                        onClick={onOpenAdd}
+                                        style={{
+                                            color: "var(--accent)",
+                                            fontWeight: 600,
+                                            textDecoration: "underline",
+                                        }}
+                                    >
+                                        {chunks}
+                                    </button>
+                                ),
+                            })}
                         </div>
                     )}
                 </div>
@@ -1692,8 +1718,11 @@ export function SourceRail({
                         color: "var(--accent-ink)",
                     }}
                 >
-                    <span style={{ fontWeight: 600 }}>{selected.length}</span>
-                    <span style={{ opacity: 0.7 }}>selected as context</span>
+                    {t.rich("selectedAsContext", {
+                        count: selected.length,
+                        b: chunks => <span style={{ fontWeight: 600 }}>{chunks}</span>,
+                        dim: chunks => <span style={{ opacity: 0.7 }}>{chunks}</span>,
+                    })}
                     <div style={{ flex: 1 }} />
                     <button
                         onClick={() => setSelected([])}
@@ -1710,7 +1739,7 @@ export function SourceRail({
                             e.currentTarget.style.opacity = "0.7";
                         }}
                     >
-                        clear
+                        {t("clear")}
                     </button>
                 </div>
             )}

@@ -21,6 +21,7 @@ import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { debitTokens } from "~/lib/credits";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 function toErrorMessage(error: unknown): string {
     if (error instanceof Error && error.message) return error.message;
@@ -82,6 +83,11 @@ export const distributionRunJob = inngest.createFunction(
             return { documentId: upload.document.id };
         };
 
+        // createDefaultPorts resolves its models when called, and a step body runs
+        // outside the handler's async context: each step that builds ports or
+        // calls a model enters the workspace's models itself.
+        const inWorkspace = <T>(work: () => Promise<T>) =>
+            withWorkspaceChatModels(companyId, "distribution", work);
         const ports = () =>
             createDefaultPorts({
                 publishDossier,
@@ -98,12 +104,16 @@ export const distributionRunJob = inngest.createFunction(
 
         const startedAtIso = await step.run("start", async () => new Date().toISOString());
 
-        const prepared = await step.run("prepare", () => prepareRun(ctx, ports()));
+        const prepared = await step.run("prepare", () =>
+            inWorkspace(() => prepareRun(ctx, ports()))
+        );
 
         const results: EnrichCandidateResult[] = [];
         for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
             const result = await step.run(`enrich-${index}`, () =>
-                enrichCandidate(ctx, ports(), { relationshipId, profile: prepared.profile })
+                inWorkspace(() =>
+                    enrichCandidate(ctx, ports(), { relationshipId, profile: prepared.profile })
+                )
             );
             results.push(result);
         }

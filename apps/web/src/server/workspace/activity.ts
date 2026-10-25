@@ -233,7 +233,13 @@ export async function filterVisibleActivity(
  */
 export async function listActivity(
     ctx: WorkspaceContext,
-    options: { limit?: number; before?: number; actorUserId?: string } = {}
+    options: {
+        limit?: number;
+        before?: number;
+        actorUserId?: string;
+        /** Only these verbs — one kind of activity (`ACTIVITY_KINDS`). */
+        verbs?: readonly string[];
+    } = {}
 ): Promise<{ entries: ActivityEntry[]; nextBefore: number | null }> {
     const limit = Math.min(Math.max(options.limit ?? 40, 1), 100);
     const out: ActivityEntry[] = [];
@@ -248,6 +254,9 @@ export async function listActivity(
                     cursor ? lt(workspaceActivity.id, cursor) : undefined,
                     options.actorUserId
                         ? eq(workspaceActivity.actorUserId, options.actorUserId)
+                        : undefined,
+                    options.verbs?.length
+                        ? inArray(workspaceActivity.verb, [...options.verbs])
                         : undefined
                 )
             )

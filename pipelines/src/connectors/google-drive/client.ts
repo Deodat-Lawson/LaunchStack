@@ -18,7 +18,7 @@ const DRIVE_BASE = "https://www.googleapis.com/drive/v3";
  * fingerprint an unchanged corpus without a single download.
  */
 export const DRIVE_FILE_FIELDS =
-    "id,name,mimeType,size,md5Checksum,headRevisionId,version,modifiedTime,trashed,parents,shortcutDetails";
+    "id,name,mimeType,size,md5Checksum,headRevisionId,version,modifiedTime,trashed,parents,driveId,shortcutDetails";
 
 export interface DriveFile {
     readonly id: string;
@@ -31,6 +31,8 @@ export interface DriveFile {
     readonly modifiedTime?: string;
     readonly trashed?: boolean;
     readonly parents?: readonly string[];
+    /** Set when the file lives in a shared drive; listing its folders needs it. */
+    readonly driveId?: string;
     readonly shortcutDetails?: {
         readonly targetId?: string;
         readonly targetMimeType?: string;
@@ -85,8 +87,12 @@ export class DriveApiError extends Error {
 
 export interface DriveClient {
     getFile(fileId: string): Promise<DriveFile>;
-    /** One page of a folder's direct, untrashed children. */
-    listChildren(folderId: string, pageToken?: string): Promise<DriveFileList>;
+    /**
+     * One page of a folder's direct, untrashed children. Pass the folder's
+     * `driveId` when it sits in a shared drive, so the query searches that
+     * drive rather than only My Drive and Shared with me.
+     */
+    listChildren(folderId: string, pageToken?: string, driveId?: string): Promise<DriveFileList>;
     getStartPageToken(): Promise<string>;
     listChanges(pageToken: string): Promise<DriveChangeList>;
     /** Raw bytes via files.get?alt=media. */
@@ -97,6 +103,8 @@ export interface DriveClient {
 
 export interface DriveClientOptions {
     readonly accessToken: string;
+    /** Drive v3 root; defaults to Google. The host points it at a dev stand-in. */
+    readonly baseUrl?: string;
     readonly fetch?: FetchLike;
     /** Retry attempts for rate limits / 5xx. */
     readonly maxAttempts?: number;
@@ -126,6 +134,7 @@ export function createDriveClient(options: DriveClientOptions): DriveClient {
     const fetchImpl = options.fetch ?? fetch;
     const sleep = options.sleep ?? defaultSleep;
     const maxAttempts = options.maxAttempts ?? 5;
+    const base = (options.baseUrl ?? DRIVE_BASE).replace(/\/$/, "");
 
     async function driveFetch(url: string, fileId?: string): Promise<Response> {
         let lastStatus = 0;
@@ -186,32 +195,36 @@ export function createDriveClient(options: DriveClientOptions): DriveClient {
 
     return {
         getFile(fileId) {
-            const url = new URL(`${DRIVE_BASE}/files/${fileId}`);
+            const url = new URL(`${base}/files/${fileId}`);
             url.searchParams.set("fields", DRIVE_FILE_FIELDS);
             url.searchParams.set("supportsAllDrives", "true");
             return json<DriveFile>(url.toString(), fileId);
         },
 
-        listChildren(folderId, pageToken) {
-            const url = new URL(`${DRIVE_BASE}/files`);
+        listChildren(folderId, pageToken, driveId) {
+            const url = new URL(`${base}/files`);
             url.searchParams.set("q", `'${folderId}' in parents and trashed = false`);
             url.searchParams.set("fields", `nextPageToken,files(${DRIVE_FILE_FIELDS})`);
             url.searchParams.set("pageSize", "1000");
             url.searchParams.set("supportsAllDrives", "true");
             url.searchParams.set("includeItemsFromAllDrives", "true");
+            if (driveId) {
+                url.searchParams.set("corpora", "drive");
+                url.searchParams.set("driveId", driveId);
+            }
             if (pageToken) url.searchParams.set("pageToken", pageToken);
             return json<DriveFileList>(url.toString(), folderId);
         },
 
         async getStartPageToken() {
-            const url = new URL(`${DRIVE_BASE}/changes/startPageToken`);
+            const url = new URL(`${base}/changes/startPageToken`);
             url.searchParams.set("supportsAllDrives", "true");
             const payload = await json<{ startPageToken: string }>(url.toString());
             return payload.startPageToken;
         },
 
         listChanges(pageToken) {
-            const url = new URL(`${DRIVE_BASE}/changes`);
+            const url = new URL(`${base}/changes`);
             url.searchParams.set("pageToken", pageToken);
             url.searchParams.set(
                 "fields",
@@ -224,14 +237,14 @@ export function createDriveClient(options: DriveClientOptions): DriveClient {
         },
 
         download(fileId) {
-            const url = new URL(`${DRIVE_BASE}/files/${fileId}`);
+            const url = new URL(`${base}/files/${fileId}`);
             url.searchParams.set("alt", "media");
             url.searchParams.set("supportsAllDrives", "true");
             return bytes(url.toString(), fileId);
         },
 
         exportFile(fileId, mimeType) {
-            const url = new URL(`${DRIVE_BASE}/files/${fileId}/export`);
+            const url = new URL(`${base}/files/${fileId}/export`);
             url.searchParams.set("mimeType", mimeType);
             return bytes(url.toString(), fileId);
         },

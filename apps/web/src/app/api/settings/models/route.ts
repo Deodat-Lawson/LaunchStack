@@ -1,26 +1,31 @@
 /**
- * The chat model configuration, made legible. Gated on `settings.manage`:
- * it names the endpoint host and the model ids, which is operator detail.
+ * The chat model configuration, made legible. Gated on `settings.manage`.
+ * It names routes and capabilities only; the endpoint and model ids stay on
+ * the server (see `~/server/settings/models`).
  */
 
 import { NextResponse } from "next/server";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { modelsOverview } from "~/server/settings/models";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json(modelsOverview());
     } catch (error) {
-        // A misconfigured file is exactly what this page exists to show.
-        const message =
-            error instanceof Error
-                ? error.message
-                : "The chat model configuration could not be read.";
-        return NextResponse.json({ error: message }, { status: 500 });
+        // The validation error quotes model ids and preset names, so the detail
+        // goes to the server log and the page says only that the file is wrong.
+        console.error("[settings/models] chat model configuration is invalid:", error);
+        return NextResponse.json(
+            {
+                error: requestTranslator(request, "settings.server.errors")("chatModelsUnreadable"),
+            },
+            { status: 500 }
+        );
     }
 }

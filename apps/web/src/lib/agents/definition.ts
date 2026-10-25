@@ -71,7 +71,13 @@ export {
 // ---------------------------------------------------------------------------
 
 /** Mirrors `~/lib/ai/styles` without importing its prompt bodies. */
-export const AGENT_STYLE_IDS = ["concise", "detailed", "academic", "organized"] as const;
+export const AGENT_STYLE_IDS = [
+    "balanced",
+    "concise",
+    "detailed",
+    "academic",
+    "organized",
+] as const;
 export type AgentStyleId = (typeof AGENT_STYLE_IDS)[number];
 
 export function isAgentStyle(value: unknown): value is AgentStyleId {
@@ -185,6 +191,10 @@ export interface ChatTurnRequest {
 }
 
 export interface ResolvedChatTurn {
+    /** Whether the model may look through the workspace's sources itself (the source tools). */
+    sources: boolean;
+    /** Whether the model may create documents in the workspace (`create_document`). */
+    write: boolean;
     webSearch: boolean;
     thinking: boolean;
     /** True when the agent refused an attachment the person sent. */
@@ -198,6 +208,26 @@ export interface ResolvedChatTurn {
 }
 
 /**
+ * The notes `resolveChatTurn` writes, by message id. They travel to the
+ * client in English (the chat response echoes them); the UI words them
+ * through `agents.turnNotes.<id>` with `agentTurnNoteId`.
+ */
+export const AGENT_TURN_NOTES = {
+    webOff: "web search is off for this agent",
+    reasoningOff: "extended reasoning is off for this agent",
+    noAttachments: "this agent does not read attachments",
+} as const;
+export type AgentTurnNoteId = keyof typeof AGENT_TURN_NOTES;
+
+/** The message id of a note `resolveChatTurn` wrote, or null for any other text. */
+export function agentTurnNoteId(note: string): AgentTurnNoteId | null {
+    for (const [id, text] of Object.entries(AGENT_TURN_NOTES)) {
+        if (text === note) return id as AgentTurnNoteId;
+    }
+    return null;
+}
+
+/**
  * What a turn may actually do once an agent's tool policy is applied to the
  * person's toggles. Pure, so the composer can show the effect before sending
  * and the route can enforce it after.
@@ -208,6 +238,8 @@ export function resolveChatTurn(
 ): ResolvedChatTurn {
     if (!agent) {
         return {
+            sources: true,
+            write: true,
             webSearch: request.webSearch,
             thinking: request.thinking,
             attachmentsDropped: false,
@@ -219,12 +251,14 @@ export function resolveChatTurn(
     }
     const notes: string[] = [];
     const webSearch = request.webSearch && agentAllows(agent.tools, "web");
-    if (request.webSearch && !webSearch) notes.push("web search is off for this agent");
+    if (request.webSearch && !webSearch) notes.push(AGENT_TURN_NOTES.webOff);
     const thinking = request.thinking && agentAllows(agent.tools, "reasoning");
-    if (request.thinking && !thinking) notes.push("extended reasoning is off for this agent");
+    if (request.thinking && !thinking) notes.push(AGENT_TURN_NOTES.reasoningOff);
     const attachmentsDropped = request.hasAttachments && !agentAllows(agent.tools, "attachments");
-    if (attachmentsDropped) notes.push("this agent does not read attachments");
+    if (attachmentsDropped) notes.push(AGENT_TURN_NOTES.noAttachments);
     return {
+        sources: agentAllows(agent.tools, "retrieval"),
+        write: agentAllows(agent.tools, "write"),
         webSearch,
         thinking,
         attachmentsDropped,

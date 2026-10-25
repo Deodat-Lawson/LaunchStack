@@ -78,6 +78,7 @@ export const SelectInput = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HT
                 className={cn(
                     "border-line bg-panel text-ink w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors",
                     "focus:border-brand focus:ring-brand-glow focus:ring-2",
+                    "disabled:cursor-not-allowed disabled:opacity-50",
                     className
                 )}
                 {...props}

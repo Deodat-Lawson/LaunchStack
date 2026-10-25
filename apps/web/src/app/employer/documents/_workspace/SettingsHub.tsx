@@ -11,10 +11,14 @@
  * chrome renders it in the same place every time.
  *
  * The rail is grouped: **You** holds member-scoped preferences that affect
- * nobody else; **Workspace** holds policy, gated on a permission and shown
- * read-only to everyone else rather than hidden; **Workspace data** holds the
+ * nobody else; **Workspace** holds policy; **Workspace data** holds the
  * expensive and the irreversible, kept together on purpose. Fourteen sections
  * is the ceiling — anything further goes inside one of these, not beside it.
+ *
+ * Everyone in the workspace may open Settings. Who sees and who changes each
+ * section is `SETTINGS_SECTION_ACCESS`: a section someone may see but not
+ * change is read-only, and says so; one whose data is refused to them is left
+ * out of the rail, and says why if a link lands on it anyway.
  *
  * Deep links: `#byok`, `#people` and friends still land on a section, and a
  * registry key such as `#appearance.theme` lands on the row itself.
@@ -23,14 +27,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
     Archive,
     Bot,
     Building2,
     Coins,
-    Cpu,
-    FileText,
     FlaskConical,
+    KeyRound,
     Keyboard,
     Palette,
     Plug,
@@ -53,8 +57,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
-import type { Permission } from "~/lib/authz/permissions";
-import { SETTINGS } from "~/lib/settings/registry";
+import {
+    canSeeSettingsSection,
+    SETTINGS_SECTION_ACCESS,
+    settingsSectionFromHash,
+} from "~/lib/settings/sections";
 import { isSettingsSectionId, type SettingsSectionId } from "~/lib/settings/types";
 import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
@@ -63,6 +70,8 @@ import { StatusNote } from "./settings/ui";
 import type { SettingsSectionActions } from "./settings/contract";
 
 export type { SettingsSectionId } from "~/lib/settings/types";
+// The redirect shims and old tests resolve hashes through the hub.
+export { settingsSectionFromHash } from "~/lib/settings/sections";
 
 const load = <
     T extends React.ComponentType<{ onActions?: (a: SettingsSectionActions | null) => void }>,
@@ -80,14 +89,9 @@ const ShortcutsSection = load(() =>
 const PeopleAccessSection = load(() =>
     import("./settings/PeopleAccessSection").then(m => m.PeopleAccessSection)
 );
-const ProcessingSettings = load(() =>
-    import("./settings/ProcessingSettings").then(m => m.ProcessingSettings)
-);
+const KeysSection = load(() => import("./settings/KeysSection").then(m => m.KeysSection));
 const ModelsSection = load(() => import("./settings/ModelsSection").then(m => m.ModelsSection));
 const AgentsPanel = load(() => import("./collab/AgentsPanel").then(m => m.AgentsPanel));
-const DocumentDefaultsSection = load(() =>
-    import("./settings/DocumentDefaultsSection").then(m => m.DocumentDefaultsSection)
-);
 const IntegrationsPanel = load(() =>
     import("./settings/IntegrationsPanel").then(m => m.IntegrationsPanel)
 );
@@ -102,243 +106,37 @@ const CompanyProfileView = dynamic(
 
 type GroupId = "you" | "workspace" | "data";
 
-const GROUPS: { id: GroupId; label: string; blurb: string }[] = [
-    { id: "you", label: "You", blurb: "Yours alone; changes affect nobody else." },
-    { id: "workspace", label: "Workspace", blurb: "Policy for everyone in the workspace." },
-    { id: "data", label: "Workspace data", blurb: "The expensive and the irreversible." },
-];
+/** Labels and blurbs: `settings.groups.<id>`. */
+const GROUPS: { id: GroupId }[] = [{ id: "you" }, { id: "workspace" }, { id: "data" }];
 
+/**
+ * A rail entry. Its words are `settings.sections.<id>`: `label` (rail, short),
+ * `blurb` (rail sub-label, one clause), `title` (header, sentence case) and
+ * `description` (what the section is *for*, not what it contains).
+ */
 interface SectionDef {
     id: SettingsSectionId;
     group: GroupId;
-    /** Rail label. Short. */
-    label: string;
-    /** Rail sub-label. One clause. */
-    blurb: string;
-    /** Header eyebrow. */
-    eyebrow: string;
-    /** Header title. Full sentence case. */
-    title: string;
-    /** Header description. Says what the section is *for*, not what it contains. */
-    description: string;
     Icon: React.ComponentType<{ size?: number; className?: string }>;
     /** Wide sections get the full column; forms stay readable at 840px. */
     wide?: boolean;
-    /** URL hashes that land here, so old deep links keep working. */
-    aliases: string[];
-    /** Needed to change anything here. Without it the section is read-only, never hidden. */
-    permission?: Permission;
 }
 
 export const SECTIONS: SectionDef[] = [
-    {
-        id: "account",
-        group: "you",
-        label: "Account",
-        blurb: "Profile, photo, password, sessions",
-        eyebrow: "Account",
-        title: "Who you are, and where you are signed in",
-        description:
-            "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session.",
-        Icon: User,
-        aliases: [
-            "account",
-            "profile",
-            "photo",
-            "avatar",
-            "picture",
-            "display name",
-            "pronouns",
-            "time zone",
-            "password",
-            "sessions",
-            "devices",
-            "me",
-        ],
-    },
-    {
-        id: "appearance",
-        group: "you",
-        label: "Appearance",
-        blurb: "Theme, density, motion",
-        eyebrow: "Appearance",
-        title: "How the app looks to you",
-        description:
-            "Three controls, not eleven. Board colours in a mindmap are part of the map, not the theme.",
-        Icon: Palette,
-        aliases: ["appearance", "theme", "dark", "light"],
-    },
-    {
-        id: "shortcuts",
-        group: "you",
-        label: "Shortcuts",
-        blurb: "Every command and its keys",
-        eyebrow: "Shortcuts",
-        title: "What the keyboard does",
-        description:
-            "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open.",
-        Icon: Keyboard,
-        aliases: ["shortcuts", "keys", "keybindings", "hotkeys"],
-    },
-    {
-        id: "people",
-        group: "workspace",
-        label: "People and access",
-        blurb: "Members, roles, folders",
-        eyebrow: "People",
-        title: "Who is in the workspace, and what they can see",
-        description:
-            "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else.",
-        Icon: Users,
-        wide: true,
-        aliases: [
-            "people",
-            "members",
-            "team",
-            "employees",
-            "invitations",
-            "roles",
-            "groups",
-            "audit",
-        ],
-    },
-    {
-        id: "company",
-        group: "workspace",
-        label: "Company profile",
-        blurb: "What your sources prove",
-        eyebrow: "Company",
-        title: "What your sources can prove",
-        description:
-            "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that.",
-        Icon: Building2,
-        wide: true,
-        aliases: ["company", "metadata", "profile"],
-        permission: "settings.manage",
-    },
-    {
-        id: "processing",
-        group: "workspace",
-        label: "Processing",
-        blurb: "Embedding index and keys",
-        eyebrow: "Processing",
-        title: "How documents get indexed",
-        description:
-            "The embedding index behind semantic search, the credentials it uses, and any self-hosted endpoints. Changing the index schedules a reindex of the whole corpus.",
-        Icon: Cpu,
-        aliases: ["processing", "byok", "embedding", "keys"],
-        permission: "settings.manage",
-    },
-    {
-        id: "models",
-        group: "workspace",
-        label: "Models and routes",
-        blurb: "Which model answers what",
-        eyebrow: "Models",
-        title: "Which model serves each kind of request",
-        description:
-            "The chat models this deployment is configured with, the route each one serves, and where that behaviour was declared. Read-only here: the configuration file is the source of truth.",
-        Icon: Sparkles,
-        aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
-        permission: "settings.manage",
-    },
-    {
-        id: "agents",
-        group: "workspace",
-        label: "Agents and autonomy",
-        blurb: "The roster, and what it may do",
-        eyebrow: "Agents",
-        title: "Who shows up to a meeting, and how much they may do alone",
-        description:
-            "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect.",
-        Icon: Bot,
-        aliases: ["agents", "nodes", "roster", "autonomy"],
-        permission: "settings.manage",
-    },
-    {
-        id: "documents",
-        group: "workspace",
-        label: "Document defaults",
-        blurb: "Storage, processing, destination",
-        eyebrow: "Documents",
-        title: "What a new document gets unless someone says otherwise",
-        description:
-            "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc. Folders can override the processing default.",
-        Icon: FileText,
-        aliases: ["documents", "upload", "storage", "defaults", "ocr"],
-        permission: "settings.manage",
-    },
-    {
-        id: "integrations",
-        group: "workspace",
-        label: "Integrations",
-        blurb: "Connections, Slack, remote nodes",
-        eyebrow: "Integrations",
-        title: "What this workspace connects to",
-        description:
-            "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent.",
-        Icon: Plug,
-        aliases: ["integrations", "slack", "hub", "connections", "drive", "github"],
-        permission: "connectors.manage",
-    },
-    {
-        id: "usage",
-        group: "data",
-        label: "Usage and costs",
-        blurb: "Balance, burn, estimate",
-        eyebrow: "Usage",
-        title: "What the workspace is spending",
-        description:
-            "The token balance, what has been drawing on it and when, and an estimate of cost from a price you set. The numbers exist to inform the two settings on this page.",
-        Icon: Coins,
-        wide: true,
-        aliases: ["usage", "costs", "credits", "tokens", "balance", "spend"],
-        permission: "analytics.view",
-    },
-    {
-        id: "archive",
-        group: "data",
-        label: "Archive and retention",
-        blurb: "Trash, retired agents, purge",
-        eyebrow: "Archive",
-        title: "What has been put away, and when it goes for good",
-        description:
-            "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own.",
-        Icon: Archive,
-        wide: true,
-        aliases: ["archive", "trash", "retention", "restore", "deleted"],
-        permission: "settings.manage",
-    },
-    {
-        id: "privacy",
-        group: "data",
-        label: "Data and privacy",
-        blurb: "What leaves the deployment",
-        eyebrow: "Privacy",
-        title: "What leaves this deployment, and what stays",
-        description:
-            "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive.",
-        Icon: ShieldCheck,
-        aliases: ["privacy", "telemetry", "data", "analytics opt out", "gdpr"],
-    },
-    {
-        id: "labs",
-        group: "data",
-        label: "Labs",
-        blurb: "Unfinished, opt-in",
-        eyebrow: "Labs",
-        title: "Features that are not finished",
-        description:
-            "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace.",
-        Icon: FlaskConical,
-        aliases: ["labs", "beta", "experimental", "preview"],
-        permission: "settings.manage",
-    },
+    { id: "account", group: "you", Icon: User },
+    { id: "appearance", group: "you", Icon: Palette },
+    { id: "shortcuts", group: "you", Icon: Keyboard },
+    { id: "people", group: "workspace", Icon: Users, wide: true },
+    { id: "company", group: "workspace", Icon: Building2, wide: true },
+    { id: "byok", group: "workspace", Icon: KeyRound },
+    { id: "models", group: "workspace", Icon: Sparkles },
+    { id: "agents", group: "workspace", Icon: Bot },
+    { id: "integrations", group: "workspace", Icon: Plug },
+    { id: "usage", group: "data", Icon: Coins, wide: true },
+    { id: "archive", group: "data", Icon: Archive, wide: true },
+    { id: "privacy", group: "data", Icon: ShieldCheck },
+    { id: "labs", group: "data", Icon: FlaskConical },
 ];
-
-const BY_ALIAS = new Map<string, SettingsSectionId>(
-    SECTIONS.flatMap(s => s.aliases.map(alias => [alias, s.id] as const))
-);
 
 /** Hashes that used to be settings sections and now live in the Studio. */
 const MOVED_TO_STUDIO: Record<string, string> = {
@@ -354,10 +152,11 @@ export interface SettingsHubProps {
 }
 
 export function SettingsHub({ embedded = false, initialSection }: SettingsHubProps) {
+    const t = useTranslations("settings");
     const router = useRouter();
     const [section, setSection] = useState<SettingsSectionId>(initialSection ?? "account");
     const [actions, setActions] = useState<SettingsSectionActions | null>(null);
-    const { loaded: permissionsLoaded, can } = usePermissions();
+    const { loaded: permissionsLoaded, error: permissionsError, roleName, can } = usePermissions();
 
     // `/employer/settings#byok`, `#metadata` and friends were all real
     // destinations once; a registry key like `#appearance.theme` is one now.
@@ -368,7 +167,16 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
         if (typeof window === "undefined") return;
         const applyHash = () => {
             const hash = window.location.hash.replace("#", "").toLowerCase();
-            if (!hash) return;
+            if (!hash) {
+                // OpenRouter's return leg (`?feature=settings&openrouter=…#byok`)
+                // belongs on Bring your own keys, whose body reads the outcome. The shell's
+                // `?feature=` cleanup can drop the hash before this lazy hub
+                // mounts, so the parameter alone is enough.
+                if (new URLSearchParams(window.location.search).has("openrouter")) {
+                    setSection("byok");
+                }
+                return;
+            }
             const moved = MOVED_TO_STUDIO[hash];
             if (moved) {
                 router.replace(moved);
@@ -394,7 +202,27 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
     }, []);
 
     const active = useMemo(() => SECTIONS.find(s => s.id === section) ?? SECTIONS[0]!, [section]);
-    const readOnly = Boolean(active.permission) && permissionsLoaded && !can(active.permission);
+    // Fails closed: until permissions load, only the ungated sections show.
+    // An admin's rail fills in a moment later; a Member never sees a section
+    // flash that would only answer with an error.
+    const groups = useMemo(
+        () =>
+            GROUPS.map(group => ({
+                ...group,
+                sections: SECTIONS.filter(
+                    item => item.group === group.id && canSeeSettingsSection(item.id, can)
+                ),
+            })).filter(group => group.sections.length > 0),
+        [can]
+    );
+    const visible = canSeeSettingsSection(active.id, can);
+    // Not when the roles failed to load: an owner would be told changing it
+    // isn't part of their role. The server still decides every write.
+    const readOnly =
+        visible &&
+        permissionsLoaded &&
+        !permissionsError &&
+        !can(SETTINGS_SECTION_ACCESS[active.id].edit);
 
     // The hub sizes itself by the space it is given, not by the viewport: as a
     // Studio tab it can sit in a split far narrower than the window. Below
@@ -411,7 +239,7 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             )}
         >
             <nav
-                aria-label="Settings sections"
+                aria-label={t("hub.navLabel")}
                 className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4 [@container(max-width:639px)]:hidden"
             >
                 {/* Standalone, the way back leads the rail as it does in
@@ -421,18 +249,18 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 {/* The workspace these settings belong to, and the one place
                     to switch to another — not a back arrow in the Studio. */}
                 <WorkspaceSwitchCard className="mb-4" />
-                <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
-                    Settings
+                <div className="mono text-ink-3 px-2.5 pb-3 text-[11px] font-bold uppercase tracking-[0.1em]">
+                    {t("hub.railTitle")}
                 </div>
-                {GROUPS.map(group => (
+                {groups.map(group => (
                     <div key={group.id} className="mb-3">
                         <div
-                            className="text-ink-3 px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em]"
-                            title={group.blurb}
+                            className="text-ink-3 px-2.5 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                            title={t(`groups.${group.id}.blurb`)}
                         >
-                            {group.label}
+                            {t(`groups.${group.id}.label`)}
                         </div>
-                        {SECTIONS.filter(item => item.group === group.id).map(item => {
+                        {group.sections.map(item => {
                             const isActive = item.id === section;
                             return (
                                 <button
@@ -455,10 +283,15 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                                                 isActive ? "font-semibold" : "font-medium"
                                             )}
                                         >
-                                            {item.label}
+                                            {t(`sections.${item.id}.label`)}
                                         </span>
-                                        <span className="text-ink-3 mt-px block text-[11px] leading-[1.4]">
-                                            {item.blurb}
+                                        <span
+                                            className={cn(
+                                                "mt-px block text-[11px] leading-[1.4]",
+                                                isActive ? "text-ink-2" : "text-ink-3"
+                                            )}
+                                        >
+                                            {t(`sections.${item.id}.blurb`)}
                                         </span>
                                     </span>
                                 </button>
@@ -471,21 +304,23 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             <div className="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div className="border-line bg-panel shrink-0 border-b px-4 py-2.5 [@container(min-width:640px)]:hidden">
                     <Select
-                        value={section}
+                        // A section left out of the picker (a link to one the
+                        // viewer may not see) is named by the placeholder.
+                        value={visible ? section : ""}
                         onValueChange={next => {
                             if (isSettingsSectionId(next)) selectSection(next);
                         }}
                     >
-                        <SelectTrigger aria-label="Settings section" className="w-full">
-                            <SelectValue />
+                        <SelectTrigger aria-label={t("hub.pickerLabel")} className="w-full">
+                            <SelectValue placeholder={t(`sections.${active.id}.label`)} />
                         </SelectTrigger>
                         <SelectContent>
-                            {GROUPS.map(group => (
+                            {groups.map(group => (
                                 <SelectGroup key={group.id}>
-                                    <SelectLabel>{group.label}</SelectLabel>
-                                    {SECTIONS.filter(item => item.group === group.id).map(item => (
+                                    <SelectLabel>{t(`groups.${group.id}.label`)}</SelectLabel>
+                                    {group.sections.map(item => (
                                         <SelectItem key={item.id} value={item.id}>
-                                            {item.label}
+                                            {t(`sections.${item.id}.label`)}
                                         </SelectItem>
                                     ))}
                                 </SelectGroup>
@@ -502,7 +337,16 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                             active.wide ? "max-w-[1200px]" : "max-w-[840px]"
                         )}
                     >
-                        <SectionBody id={active.id} onActions={registerActions} />
+                        {visible ? (
+                            <SectionBody id={active.id} onActions={registerActions} />
+                        ) : (
+                            <SectionWithheld
+                                label={t(`sections.${active.id}.label`)}
+                                loaded={permissionsLoaded}
+                                error={permissionsError}
+                                roleName={roleName}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
@@ -513,7 +357,8 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
 /**
  * The one header and the one action area. Everything a section wants to offer
  * as a primary action arrives here. A section the viewer may not change gets
- * a Read-only badge and no primary button — the body still renders.
+ * a Read-only badge and no primary button — the body still renders, and says
+ * row by row who may change what.
  */
 function SectionHeader({
     definition,
@@ -524,6 +369,7 @@ function SectionHeader({
     actions: SettingsSectionActions | null;
     readOnly: boolean;
 }) {
+    const t = useTranslations("settings");
     const busyLabel = actions?.primaryBusyLabel ?? `${actions?.primaryLabel ?? ""}…`;
 
     return (
@@ -535,22 +381,18 @@ function SectionHeader({
                 )}
             >
                 <div className="min-w-0 flex-1">
-                    <div className="mono text-ink-3 mb-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {definition.eyebrow}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
+                            {t(`sections.${definition.id}.title`)}
+                        </h1>
                         {readOnly && (
-                            <Badge
-                                variant="secondary"
-                                title={`Changing this needs ${definition.permission}. You can see it; you cannot edit it.`}
-                            >
-                                Read-only
+                            <Badge variant="secondary" title={t("hub.readOnlyTitle")}>
+                                {t("hub.readOnly")}
                             </Badge>
                         )}
                     </div>
-                    <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
-                        {definition.title}
-                    </h1>
-                    <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">
-                        {definition.description}
+                    <p className="text-ink-3 m-0 mt-[7px] max-w-[68ch] text-[13px] leading-[1.55]">
+                        {t(`sections.${definition.id}.description`)}
                     </p>
                 </div>
 
@@ -560,7 +402,9 @@ function SectionHeader({
                         {actions?.primaryLabel && (
                             <Button
                                 onClick={() => void actions.onPrimary?.()}
-                                disabled={actions.busy ?? actions.disabled ?? false}
+                                // Either one disables. `busy ?? disabled` let a
+                                // section's `busy: false` hide its `disabled`.
+                                disabled={Boolean(actions.busy) || Boolean(actions.disabled)}
                                 className="px-4 py-[9px]"
                             >
                                 {actions.busy ? busyLabel : actions.primaryLabel}
@@ -591,14 +435,12 @@ function SectionBody({
             return <PeopleAccessSection onActions={onActions} />;
         case "company":
             return <CompanyProfileView variant="settings" onActions={onActions} />;
-        case "processing":
-            return <ProcessingSettings onActions={onActions} />;
+        case "byok":
+            return <KeysSection onActions={onActions} />;
         case "models":
             return <ModelsSection onActions={onActions} />;
         case "agents":
             return <AgentsPanel onActions={onActions} />;
-        case "documents":
-            return <DocumentDefaultsSection onActions={onActions} />;
         case "integrations":
             return <IntegrationsPanel onActions={onActions} />;
         case "usage":
@@ -612,21 +454,34 @@ function SectionBody({
     }
 }
 
-function SectionLoading() {
-    return <StatusNote tone="muted">Loading…</StatusNote>;
+/**
+ * What a link to a section the viewer may not see lands on: the header says
+ * where they are, this says why there is nothing under it. Not "isn't part of
+ * your role" when the roles failed to load — that would tell an owner the
+ * same thing.
+ */
+function SectionWithheld({
+    label,
+    loaded,
+    error,
+    roleName,
+}: {
+    label: string;
+    loaded: boolean;
+    error: string | null;
+    roleName: string | null;
+}) {
+    const t = useTranslations("settings.hub");
+    if (!loaded) return <SectionLoading />;
+    if (error) return <StatusNote tone="danger">{error}</StatusNote>;
+    return (
+        <StatusNote tone="muted">
+            {roleName ? t("withheldWithRole", { label, role: roleName }) : t("withheld", { label })}
+        </StatusNote>
+    );
 }
 
-/**
- * Resolves a URL hash to a section id: a section alias, or a registry key
- * (which lands on its section; the row then scrolls itself into view).
- * Exported for the redirect shims.
- */
-export function settingsSectionFromHash(hash: string): SettingsSectionId | null {
-    const clean = hash.replace("#", "").toLowerCase();
-    const alias = BY_ALIAS.get(clean);
-    if (alias) return alias;
-    // Hashes arrive lower-cased; registry keys are camelCase.
-    const definition = SETTINGS.find(entry => entry.key.toLowerCase() === clean);
-    if (definition) return definition.section;
-    return isSettingsSectionId(clean) ? clean : null;
+function SectionLoading() {
+    const tc = useTranslations("common");
+    return <StatusNote tone="muted">{tc("status.loading")}</StatusNote>;
 }

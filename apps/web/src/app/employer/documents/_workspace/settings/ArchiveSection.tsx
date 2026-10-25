@@ -10,6 +10,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Badge } from "~/components/ui/badge";
@@ -21,7 +22,7 @@ import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
 
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
-import { relativeTime } from "./people/format";
+import { useTimeFormat } from "./people/format";
 import { ConfirmDialog } from "./people/ui";
 import { SettingRow } from "./SettingRow";
 import { StatusNote } from "./ui";
@@ -43,6 +44,7 @@ interface ArchiveOverview {
     purged: number;
 }
 
+/** English, for search; the screen says `settings.archive.kinds.<kind>`. */
 const KIND_LABEL: Record<ArchiveKind, string> = {
     mindmap: "Mindmap",
     artifact: "Artifact",
@@ -57,6 +59,9 @@ function itemKey(item: { kind: ArchiveKind; id: string }): string {
 }
 
 export function ArchiveSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.archive");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
     const { can } = usePermissions();
     const [overview, setOverview] = useState<ArchiveOverview | null>(null);
     const [loading, setLoading] = useState(true);
@@ -77,16 +82,16 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                 error?: string;
             };
             if (!res.ok)
-                throw new Error(body.error ?? `Could not load the archive (${res.status}).`);
+                throw new Error(body.error ?? t("loadFailedStatus", { status: res.status }));
             setOverview(body);
             setError(null);
             setSelected(new Set());
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load the archive.");
+            setError(err instanceof Error ? err.message : t("loadFailed"));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void refresh();
@@ -95,12 +100,12 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Refresh",
-            primaryBusyLabel: "Refreshing…",
+            primaryLabel: tc("actions.refresh"),
+            primaryBusyLabel: t("refreshing"),
             onPrimary: refresh,
             busy: loading,
         },
-        [refresh, loading]
+        [refresh, loading, t, tc]
     );
 
     const items = useMemo(() => {
@@ -112,7 +117,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
         return all
             .map(item => {
                 const hay =
-                    `${item.title} ${item.detail ?? ""} ${KIND_LABEL[item.kind]}`.toLowerCase();
+                    `${item.title} ${item.detail ?? ""} ${KIND_LABEL[item.kind]} ${t(`kinds.${item.kind}`)}`.toLowerCase();
                 if (!terms.every(term => hay.includes(term))) return null;
                 const score = terms.filter(term => item.title.toLowerCase().includes(term)).length;
                 return { item, score };
@@ -120,7 +125,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
             .filter((entry): entry is { item: ArchivedItem; score: number } => entry !== null)
             .sort((a, b) => b.score - a.score)
             .map(entry => entry.item);
-    }, [overview, query]);
+    }, [overview, query, t]);
 
     const grouped = useMemo(
         () =>
@@ -150,20 +155,20 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                 failed?: Array<{ reason: string }>;
                 error?: string;
             };
-            if (!res.ok) throw new Error(body.error ?? `Request failed (${res.status}).`);
+            if (!res.ok) throw new Error(body.error ?? t("requestFailed", { status: res.status }));
             const done = body.done ?? 0;
             const failed = body.failed ?? [];
             if (done > 0) {
                 toast.success(
                     action === "restore"
-                        ? `Restored ${done} ${done === 1 ? "item" : "items"}`
-                        : `Deleted ${done} ${done === 1 ? "item" : "items"} for good`
+                        ? t("restored", { count: done })
+                        : t("deleted", { count: done })
                 );
             }
             if (failed.length > 0) toast.error(failed[0]!.reason);
             await refresh();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "That did not work.");
+            toast.error(err instanceof Error ? err.message : t("failed"));
         } finally {
             setBusy(false);
             setPending(null);
@@ -175,42 +180,37 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
             {error && <StatusNote tone="danger">{error}</StatusNote>}
             {overview && overview.purged > 0 && (
                 <StatusNote tone="warn">
-                    The retention window removed {overview.purged}{" "}
-                    {overview.purged === 1 ? "item" : "items"} older than {overview.trashDays} days
-                    when this page loaded.
+                    {t("purged", { count: overview.purged, days: overview.trashDays ?? 0 })}
                 </StatusNote>
             )}
 
-            <Section
-                title="Retention"
-                description="What the trash empties on its own. Retired agents and archived channels are never removed automatically."
-            >
+            <Section title={t("retention.title")} description={t("retention.description")}>
                 <Card>
                     <SettingRow settingKey="retention.trashDays" />
                 </Card>
             </Section>
 
             <Section
-                title="Put away"
+                title={t("putAway.title")}
                 description={
                     overview
-                        ? `${overview.items.length} ${overview.items.length === 1 ? "item" : "items"}. Restore puts a thing back where it was; delete is for good.`
-                        : "Loading…"
+                        ? t("putAway.description", { count: overview.items.length })
+                        : tc("status.loading")
                 }
             >
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                     <Input
                         value={query}
                         onChange={e => setQuery(e.target.value)}
-                        placeholder="Search the archive"
+                        placeholder={t("search")}
                         className="max-w-[320px]"
-                        aria-label="Search the archive"
+                        aria-label={t("search")}
                     />
                     <div className="flex-1" />
                     {selectedItems.length > 0 && (
                         <>
                             <span className="text-ink-3 text-[12px]">
-                                {selectedItems.length} selected
+                                {t("selected", { count: selectedItems.length })}
                             </span>
                             <Button
                                 size="sm"
@@ -220,7 +220,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                     setPending({ action: "restore", items: selectedItems })
                                 }
                             >
-                                Restore
+                                {tc("actions.restore")}
                             </Button>
                             <Button
                                 size="sm"
@@ -232,35 +232,34 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                 }
                                 title={
                                     !canDelete
-                                        ? "Deleting for good needs documents.delete."
+                                        ? t("needsDelete")
                                         : selectedItems.some(item => !item.deletable)
-                                          ? "Agents and channels cannot be deleted for good."
+                                          ? t("notDeletable")
                                           : undefined
                                 }
                                 onClick={() =>
                                     setPending({ action: "delete", items: selectedItems })
                                 }
                             >
-                                Delete for good
+                                {t("deleteForGood")}
                             </Button>
                         </>
                     )}
                 </div>
 
                 {loading && !overview ? (
-                    <StatusNote tone="muted">Loading the archive…</StatusNote>
+                    <StatusNote tone="muted">{t("loading")}</StatusNote>
                 ) : items.length === 0 ? (
                     <Card>
                         <div className="text-ink-3 py-6 text-center text-[13px]">
-                            {query ? "Nothing matches." : "Nothing is put away."}
+                            {query ? t("noMatch") : t("empty")}
                         </div>
                     </Card>
                 ) : (
                     grouped.map(group => (
                         <Card key={group.kind} padding={0} className="mb-3">
                             <div className="border-line text-ink-3 mono border-b px-5 py-2 text-[10px] font-bold uppercase tracking-[0.08em]">
-                                {KIND_LABEL[group.kind]}
-                                {group.items.length > 1 ? "s" : ""} · {group.items.length}
+                                {t(`groupHeader.${group.kind}`, { count: group.items.length })}
                             </div>
                             {group.items.map((item, index) => {
                                 const key = itemKey(item);
@@ -283,7 +282,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                                     return next;
                                                 });
                                             }}
-                                            aria-label={`Select ${item.title}`}
+                                            aria-label={t("select", { title: item.title })}
                                         />
                                         <div className="min-w-0 flex-1">
                                             <div className="text-ink truncate text-[13px] font-semibold">
@@ -292,12 +291,12 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                             <div className="text-ink-3 text-[12px]">
                                                 {item.detail}
                                                 {item.archivedAt
-                                                    ? ` · ${relativeTime(item.archivedAt)}`
+                                                    ? ` · ${time.relative(item.archivedAt)}`
                                                     : ""}
                                             </div>
                                         </div>
                                         {!item.deletable && (
-                                            <Badge variant="secondary">Keeps its history</Badge>
+                                            <Badge variant="secondary">{t("keepsHistory")}</Badge>
                                         )}
                                         <Button
                                             size="sm"
@@ -305,7 +304,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                             disabled={busy}
                                             onClick={() => void run("restore", [item])}
                                         >
-                                            Restore
+                                            {tc("actions.restore")}
                                         </Button>
                                         {item.deletable && (
                                             <Button
@@ -317,7 +316,7 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                                                     setPending({ action: "delete", items: [item] })
                                                 }
                                             >
-                                                Delete
+                                                {tc("actions.delete")}
                                             </Button>
                                         )}
                                     </div>
@@ -332,16 +331,22 @@ export function ArchiveSection({ onActions }: SettingsSectionProps) {
                 open={pending !== null}
                 title={
                     pending?.action === "delete"
-                        ? `Delete ${pending.items.length === 1 ? `“${pending.items[0]!.title}”` : `${pending.items.length} items`} for good?`
-                        : `Restore ${pending?.items.length === 1 ? `“${pending.items[0]!.title}”` : `${pending?.items.length ?? 0} items`}?`
+                        ? pending.items.length === 1
+                            ? t("confirm.deleteOne", { title: pending.items[0]!.title })
+                            : t("confirm.deleteMany", { count: pending.items.length })
+                        : pending?.items.length === 1
+                          ? t("confirm.restoreOne", { title: pending.items[0]!.title })
+                          : t("confirm.restoreMany", { count: pending?.items.length ?? 0 })
                 }
                 body={
                     pending?.action === "delete"
-                        ? "This removes the item and everything attached to it. There is no undo."
-                        : "Each item goes back to where it was."
+                        ? t("confirm.deleteBody")
+                        : t("confirm.restoreBody")
                 }
-                confirmLabel={pending?.action === "delete" ? "Delete for good" : "Restore"}
-                busyLabel={pending?.action === "delete" ? "Deleting…" : "Restoring…"}
+                confirmLabel={
+                    pending?.action === "delete" ? t("deleteForGood") : tc("actions.restore")
+                }
+                busyLabel={pending?.action === "delete" ? t("deleting") : t("restoring")}
                 danger={pending?.action === "delete"}
                 busy={busy}
                 onClose={() => setPending(null)}

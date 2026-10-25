@@ -18,7 +18,7 @@ import { z } from "zod";
 import { zodToJsonSchema, type JsonSchema7Type } from "zod-to-json-schema";
 import type { ResolvedChatModel } from "./chat-model-factory";
 import { applyMessageBehavior, systemMessageFor } from "./messages";
-import { normalizeModelContent } from "./normalize-content";
+import { modelContentToText } from "./normalize-content";
 import type { NativeStructuredOutputMode } from "./types";
 import type { ChatTokenUsage } from "./usage";
 import { addTokenUsage, normalizeTokenUsage } from "./usage";
@@ -34,8 +34,10 @@ export class StructuredOutputError extends Error {
     readonly modelId: string;
 
     constructor(modelId: string, cause: string) {
+        // The message travels to screens (run histories, answer bubbles), so it
+        // never names the model; `modelId` stays on the error for logs.
         super(
-            `Model "${modelId}" did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
+            `The model did not return a result matching the requested schema after one repair attempt. Last validation error: ${cause}`
         );
         this.modelId = modelId;
     }
@@ -67,7 +69,11 @@ function jsonInstruction(schema: z.ZodType<unknown>, name: string): string {
     ].join("\n");
 }
 
-function extractJson(text: string): unknown {
+/**
+ * Parse a model's JSON answer leniently: Markdown fences and a sentence
+ * before or after are tolerated. Throws when no JSON value can be recovered.
+ */
+export function extractJson(text: string): unknown {
     const withoutFence = text
         .trim()
         .replace(/^```(?:json)?\s*/i, "")
@@ -118,7 +124,7 @@ async function invokeJsonFallback<T>(
     ]);
 
     const first = await resolved.chat.invoke(instructed);
-    const firstText = normalizeModelContent(first.content);
+    const firstText = modelContentToText(first.content);
     let usage = normalizeTokenUsage(first);
 
     try {
@@ -137,7 +143,7 @@ async function invokeJsonFallback<T>(
             const second = await resolved.chat.invoke(repair);
             usage = addTokenUsage(usage, normalizeTokenUsage(second));
             return {
-                result: schema.parse(extractJson(normalizeModelContent(second.content))),
+                result: schema.parse(extractJson(modelContentToText(second.content))),
                 usage,
                 modelId: resolved.modelId,
             };
@@ -359,6 +365,18 @@ function statusOf(error: unknown): number | undefined {
 
 const refusedSchemas = new Set<string>();
 
+const warnedIgnoredStructure = new Set<string>();
+
+function warnStructureIgnoredOnce(modelId: string, name: string): void {
+    const key = `${modelId}:${name}`;
+    if (warnedIgnoredStructure.has(key)) return;
+    warnedIgnoredStructure.add(key);
+    console.warn(
+        `[structured-output] ${modelId} answered "${name}" without the requested structure; ` +
+            "using the prompt-based JSON path for it."
+    );
+}
+
 function warnSchemaRefusedOnce(modelId: string, name: string): void {
     const key = `${modelId}:${name}`;
     if (refusedSchemas.has(key)) return;
@@ -467,13 +485,13 @@ export async function invokeStructuredWithUsage<T>(
     }
     const usage = normalizeTokenUsage(response.raw);
     if (response.parsed === undefined || response.parsed === null) {
-        const detail =
-            response.raw === undefined
-                ? "no raw response"
-                : normalizeModelContent(
-                      (response.raw as { content?: unknown }).content ?? ""
-                  ).slice(0, 300);
-        throw new StructuredOutputError(resolved.modelId, `no parsed value (raw: ${detail})`);
+        // The endpoint accepted the request but answered without the structure
+        // it was asked for: some compatible servers silently ignore
+        // `response_format`. The model never saw the schema then, so ask again
+        // the way models without native support are asked.
+        warnStructureIgnoredOnce(resolved.modelId, options.name);
+        const fallback = await invokeJsonFallback(resolved, schema, messages, options);
+        return { ...fallback, usage: addTokenUsage(usage, fallback.usage) };
     }
     return {
         result:

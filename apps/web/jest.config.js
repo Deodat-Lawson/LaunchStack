@@ -53,6 +53,12 @@ const esmDeps = [
     "rou3",
     "uncrypto",
     "jose",
+    "use-intl",
+    "next-intl",
+    "intl-messageformat",
+    "icu-minify",
+    "@formatjs[\\w+.-]*",
+    "@dicebear[\\w+.-]*",
 ];
 
 /** @type {import('jest').Config} */
@@ -75,6 +81,9 @@ export const config = {
     moduleNameMapper: {
         "^~/(.*)$": "<rootDir>/src/$1",
         "^@schema$": "<rootDir>/src/lib/agents/evals/campaign/contract.ts",
+        // English without a provider, the real thing inside one (src/i18n/testing).
+        "^next-intl$": "<rootDir>/src/i18n/testing/next-intl.tsx",
+        "^next-intl/server$": "<rootDir>/src/i18n/testing/next-intl-server.ts",
         "^@launchstack/engine$": "<rootDir>/../../packages/engine/src/index.ts",
         "^@launchstack/engine/config$": "<rootDir>/../../packages/engine/src/config/index.ts",
         "^@launchstack/engine/(.*)$": "<rootDir>/../../packages/engine/src/$1",
@@ -98,6 +107,7 @@ export const config = {
         "^@launchstack/store/crypto$": "<rootDir>/../../packages/store/src/crypto/index.ts",
         "^@launchstack/store/credits$": "<rootDir>/../../packages/store/src/credits/index.ts",
         "^@launchstack/llm$": "<rootDir>/../../packages/llm/src/index.ts",
+        "^@launchstack/design-tokens/theme$": "<rootDir>/../../packages/design-tokens/theme.ts",
         "^@launchstack/llm/embeddings$": "<rootDir>/../../packages/llm/src/embeddings/index.ts",
         "^@launchstack/llm/guardrails$": "<rootDir>/../../packages/llm/src/guardrails/index.ts",
         "^@launchstack/llm/providers$": "<rootDir>/../../packages/llm/src/providers/index.ts",
@@ -141,6 +151,7 @@ export const config = {
             "<rootDir>/../../packages/orchestration/src/pipeline-events.ts",
         "^@launchstack/orchestration/(.*)$": "<rootDir>/../../packages/orchestration/src/$1",
         "^@launchstack/collab$": "<rootDir>/../../packages/collab/src/index.ts",
+        "^@launchstack/simulation$": "<rootDir>/../../packages/simulation/src/index.ts",
         "^@launchstack/editing$": "<rootDir>/../../packages/editing/src/index.ts",
         "^@launchstack/editing/wire$": "<rootDir>/../../packages/editing/src/wire.ts",
         "^@launchstack/document-conversion-engine$":

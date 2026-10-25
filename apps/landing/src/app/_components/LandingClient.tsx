@@ -45,9 +45,9 @@ const IMPORTS = [
     {
         name: "GitHub",
         asset: "github",
-        method: "Repository import",
+        method: "ZIP upload",
         description:
-            "Put your code in context. Import a repository so its documentation and source can inform your questions and research.",
+            "Put your code in context. Upload a zipped repository so its documentation and source can inform your questions and research.",
     },
     {
         name: "Markdown",
@@ -281,7 +281,7 @@ export function LandingClient() {
                                             <Sparkles size={16} aria-hidden="true" />
                                         </span>
                                         <span>
-                                            Founder weekly review
+                                            Vantage weekly agenda
                                             <small>Your context, distilled.</small>
                                         </span>
                                         <span className={s.readyBadge}>Ready to review</span>
@@ -306,9 +306,9 @@ export function LandingClient() {
                                 </div>
                                 <h3>Know what deserves your attention.</h3>
                                 <p>
-                                    Get a founder review grounded in your workspace. Surface the
-                                    decisions, gaps, and questions that help you choose your next
-                                    move.
+                                    Prepare each week’s founder meeting in Vantage. It drafts a
+                                    cited agenda from the notes, interviews, and metrics you add,
+                                    then checks next week whether you did what you agreed.
                                 </p>
                             </article>
                             <article className={s.featureArticle}>
@@ -357,7 +357,7 @@ export function LandingClient() {
                                 </h2>
                                 <p>
                                     You’ve already done the work. Bring it into Launchstack through
-                                    files, recordings, repository imports, and configured workspace
+                                    files, recordings, zipped repositories, and configured workspace
                                     connections.
                                 </p>
                                 <Link href="/deployment" className={s.inlineLink}>
@@ -572,6 +572,8 @@ export function LandingClient() {
                                 >
                                     Feedback <ArrowUpRight size={12} aria-hidden="true" />
                                 </a>
+                                <Link href="/privacy">Privacy Policy</Link>
+                                <Link href="/terms">Terms of Service</Link>
                             </div>
                         </div>
                     </div>

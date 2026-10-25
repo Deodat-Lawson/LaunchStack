@@ -13,6 +13,7 @@
 import {
     getPublicChatConfig,
     isChatRequestError,
+    isChatScopeUnavailableError,
     resolveChatModel,
     resolveChatRoute,
     selectChatRoute,
@@ -24,7 +25,10 @@ import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "@launchstack/retrieval/search-types";
+import type { Locale } from "~/i18n/locales";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { configureAppChatModels } from "~/server/chat-models";
+import { wordModels } from "~/server/workspace-models/words";
 import { env } from "~/env";
 
 export { selectChatRoute };
@@ -48,16 +52,36 @@ export function resolveConfiguredChatModel(
  * fall through to a generic catch reports an unavailable route as a server
  * fault, which sends whoever is debugging it to the wrong place entirely.
  */
-export function describeChatResolutionFailure(error: unknown): {
+export function describeChatResolutionFailure(
+    error: unknown,
+    locale: Locale = "en"
+): {
     status: number;
     message: string;
 } {
+    // A request error's message was written for the caller and never names a
+    // model. A configuration error quotes the file path, model ids and preset
+    // names, so it goes to the server log and the caller gets a fixed message.
+    // The package writes English; `errors.chatModels` has the reader's words.
+    if (isChatRequestError(error)) {
+        return {
+            status: error.status,
+            message: wordEnglish(error.message, "errors.chatModels", locale),
+        };
+    }
+    // A workspace's own endpoint that can't be used: its message is written for
+    // the workspace's admins and names no model, so it is shown as is.
+    // Its reason is one of the workspace-model checks' sentences.
+    if (isChatScopeUnavailableError(error)) {
+        const message = wordEnglish(error.message, "errors.chatModels", locale, reason =>
+            wordModels(reason, locale)
+        );
+        return { status: error.status, message };
+    }
+    console.error("[chat] chat model configuration cannot serve this request:", error);
     return {
-        status: isChatRequestError(error) ? error.status : 500,
-        message:
-            error instanceof Error
-                ? error.message
-                : "The configured chat models cannot serve this request",
+        status: 500,
+        message: translatorFor(locale, "errors.api")("chatModelsMisconfigured"),
     };
 }
 

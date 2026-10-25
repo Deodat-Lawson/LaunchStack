@@ -15,6 +15,7 @@ import {
     buildChatModelsConfig,
     configureChatModels,
     parseChatModelsYaml,
+    setUnscopedChatResolutionHandler,
     type ChatModelsConfig,
 } from "@launchstack/llm";
 import {
@@ -24,6 +25,7 @@ import {
     trimmed,
     type AppChatModelEnvironment,
 } from "./chat-endpoint";
+import { ASSISTANT_IDENTITY_RULE } from "../lib/ai/assistant-identity";
 
 export {
     findIgnoredModelVariables,
@@ -87,7 +89,12 @@ export function getAppChatModelsConfig(
     server: AppChatModelEnvironment,
     cwd: string = process.cwd()
 ): ChatModelsConfig {
-    const endpoint = resolveChatEndpoint(server);
+    // Every chat this deployment sends carries the identity rule, whichever
+    // helper resolved the model (app routes, pipelines, agent loops).
+    const endpoint = {
+        ...resolveChatEndpoint(server),
+        systemInstructions: ASSISTANT_IDENTITY_RULE,
+    };
     const path = resolveChatModelsConfigPath(server, cwd);
     const key = `${path}::${endpoint.baseUrl}::${endpoint.apiKey ?? ""}`;
     if (cached?.key === key) return cached.config;
@@ -110,6 +117,28 @@ export function getAppChatModelsConfig(
  */
 export function configureAppChatModels(server: AppChatModelEnvironment, cwd?: string): void {
     configureChatModels(getAppChatModelsConfig(server, cwd));
+    reportUnscopedResolutionsInDevelopment();
+}
+
+let unscopedHandlerRegistered = false;
+
+/**
+ * In `next dev`, say so when a chat model is resolved by work that never
+ * entered a workspace scope (`~/server/workspace-models/scope`). That work
+ * would run on the deployment's models even for a workspace that brought its
+ * own, so each warning is an entry point to wrap. Production stays quiet.
+ */
+function reportUnscopedResolutionsInDevelopment(): void {
+    if (unscopedHandlerRegistered || process.env.NODE_ENV !== "development") return;
+    unscopedHandlerRegistered = true;
+    setUnscopedChatResolutionHandler(() => {
+        const caller = new Error().stack
+            ?.split("\n")
+            .slice(3, 7)
+            .map(line => line.trim())
+            .join(" <- ");
+        console.warn(`[chat] model resolved outside a workspace scope: ${caller ?? "(no stack)"}`);
+    });
 }
 
 /** Test helper — drops the parsed-configuration cache. */

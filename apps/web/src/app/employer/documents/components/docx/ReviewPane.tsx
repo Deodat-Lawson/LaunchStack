@@ -11,6 +11,7 @@ import {
     Type,
     X,
 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -30,14 +31,16 @@ interface ReviewPaneProps {
     onReply: (entry: ReviewEntry, text: string) => void;
 }
 
-const KIND_META: Record<ReviewEntry["kind"], { label: string; Icon: typeof Check; tone: string }> =
-    {
-        replacement: { label: "Replacement", Icon: Type, tone: "text-brand" },
-        insert: { label: "Insertion", Icon: PlusCircle, tone: "text-success" },
-        delete: { label: "Deletion", Icon: MinusCircle, tone: "text-danger" },
-        format: { label: "Formatting", Icon: Type, tone: "text-info" },
-        comment: { label: "Comment", Icon: MessageSquare, tone: "text-warn" },
-    };
+/** Labels are `viewers.review.kinds.<kind>`. */
+const KIND_META: Record<ReviewEntry["kind"], { Icon: typeof Check; tone: string }> = {
+    replacement: { Icon: Type, tone: "text-brand" },
+    insert: { Icon: PlusCircle, tone: "text-success-ink" },
+    delete: { Icon: MinusCircle, tone: "text-danger" },
+    format: { Icon: Type, tone: "text-info-ink" },
+    comment: { Icon: MessageSquare, tone: "text-warn-ink" },
+};
+
+type ReviewT = ReturnType<typeof useTranslations<"viewers.review">>;
 
 function initials(name: string): string {
     const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -46,15 +49,19 @@ function initials(name: string): string {
     return `${parts[0]![0]}${parts[parts.length - 1]![0]}`.toUpperCase();
 }
 
-function whenLabel(raw?: string | null): string | null {
+function whenLabel(
+    raw: string | null | undefined,
+    t: ReviewT,
+    format: ReturnType<typeof useFormatter>
+): string | null {
     if (!raw) return null;
     const d = new Date(raw);
     if (Number.isNaN(d.getTime())) return null;
     const diffMin = Math.round((Date.now() - d.getTime()) / 60000);
-    if (diffMin < 1) return "just now";
-    if (diffMin < 60) return `${diffMin}m ago`;
-    if (diffMin < 60 * 24) return `${Math.round(diffMin / 60)}h ago`;
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    if (diffMin < 1) return t("justNow");
+    if (diffMin < 60) return t("minutesAgo", { count: diffMin });
+    if (diffMin < 60 * 24) return t("hoursAgo", { count: Math.round(diffMin / 60) });
+    return format.dateTime(d, { month: "short", day: "numeric" });
 }
 
 function CommentReply({
@@ -66,6 +73,8 @@ function CommentReply({
     disabled: boolean;
     onReply: (entry: ReviewEntry, text: string) => void;
 }) {
+    const t = useTranslations("viewers.review");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
 
@@ -79,7 +88,7 @@ function CommentReply({
                 onClick={() => setOpen(true)}
             >
                 <CornerDownLeft className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                Reply
+                {t("reply")}
             </Button>
         );
     }
@@ -99,7 +108,7 @@ function CommentReply({
                 rows={2}
                 value={text}
                 onChange={e => setText(e.target.value)}
-                placeholder="Write a reply…"
+                placeholder={t("replyPlaceholder")}
                 className="min-h-0 resize-none text-xs"
                 onKeyDown={e => {
                     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
@@ -108,7 +117,7 @@ function CommentReply({
             />
             <div className="flex items-center gap-2">
                 <Button size="sm" className="h-7 text-xs" disabled={!text.trim()} onClick={submit}>
-                    Reply
+                    {t("reply")}
                 </Button>
                 <Button
                     size="sm"
@@ -116,7 +125,7 @@ function CommentReply({
                     className="text-ink-3 h-7 text-xs"
                     onClick={() => setOpen(false)}
                 >
-                    Cancel
+                    {tc("actions.cancel")}
                 </Button>
             </div>
         </div>
@@ -136,8 +145,10 @@ function ReviewCard({
     onResolve: ReviewPaneProps["onResolve"];
     onReply: ReviewPaneProps["onReply"];
 }) {
+    const t = useTranslations("viewers.review");
+    const format = useFormatter();
     const meta = KIND_META[entry.kind];
-    const when = whenLabel(entry.date);
+    const when = whenLabel(entry.date, t, format);
     const disabled = busy || isPending;
 
     return (
@@ -159,7 +170,7 @@ function ReviewCard({
                     <p className="text-ink truncate text-xs font-medium">{entry.author}</p>
                     <div className="text-ink-3 flex items-center gap-1.5 text-[11px]">
                         <meta.Icon className={cn("h-3 w-3", meta.tone)} aria-hidden="true" />
-                        <span>{meta.label}</span>
+                        <span>{t(`kinds.${entry.kind}`)}</span>
                         {when && (
                             <>
                                 <span aria-hidden="true">·</span>
@@ -171,7 +182,7 @@ function ReviewCard({
                 {isPending && (
                     <Loader2
                         className="text-ink-3 h-3.5 w-3.5 shrink-0 animate-spin"
-                        aria-label="Applying"
+                        aria-label={t("applying")}
                     />
                 )}
             </header>
@@ -182,7 +193,7 @@ function ReviewCard({
                         <span className="text-danger bg-danger-soft rounded px-1.5 py-1 line-through decoration-1">
                             {entry.oldText || "—"}
                         </span>
-                        <span className="text-success bg-success-soft rounded px-1.5 py-1">
+                        <span className="text-success-ink bg-success-soft rounded px-1.5 py-1">
                             {entry.newText || "—"}
                         </span>
                     </div>
@@ -191,7 +202,7 @@ function ReviewCard({
                         {entry.text || "—"}
                     </span>
                 ) : entry.kind === "insert" ? (
-                    <span className="text-success bg-success-soft inline-block rounded px-1.5 py-1">
+                    <span className="text-success-ink bg-success-soft inline-block rounded px-1.5 py-1">
                         {entry.text || "—"}
                     </span>
                 ) : entry.kind === "comment" ? (
@@ -199,12 +210,12 @@ function ReviewCard({
                         <p className="text-ink whitespace-pre-wrap">{entry.text}</p>
                         {entry.anchorText && (
                             <p className="text-ink-3 border-line border-l-2 pl-2 italic">
-                                on “{entry.anchorText}”
+                                {t("onAnchor", { text: entry.anchorText })}
                             </p>
                         )}
                     </div>
                 ) : (
-                    <span className="text-ink-2">{entry.text || "Formatting changed"}</span>
+                    <span className="text-ink-2">{entry.text || t("formattingChanged")}</span>
                 )}
             </div>
 
@@ -221,12 +232,12 @@ function ReviewCard({
                     <Button
                         size="sm"
                         variant="ghost"
-                        className="text-success hover:bg-success-soft hover:text-success h-7 px-2 text-xs"
+                        className="text-success-ink hover:bg-success-soft hover:text-success-ink h-7 px-2 text-xs"
                         disabled={disabled}
                         onClick={() => onResolve(entry, "ACCEPT")}
                     >
                         <Check className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
-                        Accept
+                        {t("accept")}
                     </Button>
                     <Button
                         size="sm"
@@ -236,7 +247,7 @@ function ReviewCard({
                         onClick={() => onResolve(entry, "REJECT")}
                     >
                         <X className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
-                        Reject
+                        {t("reject")}
                     </Button>
                 </div>
             )}
@@ -245,6 +256,8 @@ function ReviewCard({
 }
 
 export function ReviewPane({ entries, pending, busy, onResolve, onReply }: ReviewPaneProps) {
+    const t = useTranslations("viewers.review");
+    const tc = useTranslations("common");
     const [filter, setFilter] = useState<Filter>("all");
 
     const changeCount = useMemo(() => entries.filter(e => e.kind !== "comment").length, [entries]);
@@ -257,9 +270,9 @@ export function ReviewPane({ entries, pending, busy, onResolve, onReply }: Revie
     }, [entries, filter]);
 
     const tabs: Array<{ id: Filter; label: string; count: number }> = [
-        { id: "all", label: "All", count: entries.length },
-        { id: "changes", label: "Changes", count: changeCount },
-        { id: "comments", label: "Comments", count: commentCount },
+        { id: "all", label: tc("status.all"), count: entries.length },
+        { id: "changes", label: t("tabs.changes"), count: changeCount },
+        { id: "comments", label: t("tabs.comments"), count: commentCount },
     ];
 
     return (
@@ -295,12 +308,10 @@ export function ReviewPane({ entries, pending, busy, onResolve, onReply }: Revie
                         <Check className="text-ink-3 h-5 w-5" aria-hidden="true" />
                     </div>
                     <p className="text-ink text-sm font-medium">
-                        {entries.length === 0 ? "No tracked changes" : "Nothing in this view"}
+                        {entries.length === 0 ? t("emptyTitle") : t("filteredTitle")}
                     </p>
                     <p className="text-ink-3 max-w-[24ch] text-xs">
-                        {entries.length === 0
-                            ? "This document has no revisions or comments to review."
-                            : "Switch tabs to see the other items."}
+                        {entries.length === 0 ? t("emptyBody") : t("filteredBody")}
                     </p>
                 </div>
             ) : (

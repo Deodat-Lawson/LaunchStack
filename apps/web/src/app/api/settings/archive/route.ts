@@ -14,6 +14,7 @@ import {
 } from "~/lib/require-workspace-context";
 import { applyArchiveAction, archiveOverview } from "~/server/settings/archive";
 import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
+import { localeOfRequest } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -30,13 +31,13 @@ const ActionSchema = z.object({
         .max(200),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
     try {
-        return NextResponse.json(await archiveOverview(ctx.data.companyId));
+        return NextResponse.json(await archiveOverview(ctx.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[settings/archive GET]");
+        return workspaceErrorResponse(error, "[settings/archive GET]", request);
     }
 }
 
@@ -46,11 +47,11 @@ export async function POST(request: Request) {
     const body = await parseJsonBody(request, ActionSchema);
     if (!body.success) return body.response;
     if (body.data.action === "delete" && !ctx.data.can("documents.delete")) {
-        return forbiddenForPermission("documents.delete");
+        return forbiddenForPermission("documents.delete", localeOfRequest(request));
     }
     try {
         return NextResponse.json(await applyArchiveAction(ctx.data, body.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[settings/archive POST]");
+        return workspaceErrorResponse(error, "[settings/archive POST]", request);
     }
 }

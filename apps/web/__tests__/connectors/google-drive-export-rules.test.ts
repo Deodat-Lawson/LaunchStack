@@ -18,8 +18,9 @@ describe("resolveDriveAction", () => {
     it("exports Google-native files to formats the ingestion pipeline parses", () => {
         expect(resolveDriveAction({ mimeType: "application/vnd.google-apps.document" })).toEqual({
             action: "export",
-            exportMime: "text/markdown",
-            extension: ".md",
+            exportMime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            extension: ".docx",
+            fallback: { exportMime: "text/markdown", extension: ".md" },
         });
         expect(
             resolveDriveAction({ mimeType: "application/vnd.google-apps.spreadsheet" })

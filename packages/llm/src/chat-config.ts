@@ -222,11 +222,21 @@ const behaviorOverrideSchema = z
     })
     .strict();
 
+/** US dollars per million tokens. Read by the usage page, never sent to the endpoint. */
+const pricingSchema = z
+    .object({
+        input: z.number().nonnegative(),
+        output: z.number().nonnegative(),
+        cachedInput: z.number().nonnegative().optional(),
+    })
+    .strict();
+
 const modelSchema = z
     .object({
         id: z.string().min(1),
         preset: z.string().min(1).optional(),
         behavior: z.unknown().optional(),
+        pricing: pricingSchema.optional(),
     })
     .strict();
 
@@ -379,7 +389,9 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
 
     if (!input.endpoint.baseUrl || input.endpoint.baseUrl.trim().length === 0) {
         throw new ChatConfigurationError(
-            "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
+            input.endpoint.owner === "workspace"
+                ? "The workspace's model endpoint has no address."
+                : "CHAT_BASE_URL is required: it is the OpenAI-compatible endpoint every route talks to."
         );
     }
 
@@ -399,7 +411,12 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
     const models = new Map<string, ChatModelDefinition>();
     for (const [name, model] of Object.entries(file.models)) {
         const { behavior, preset } = resolveModelBehavior(name, model, label);
-        models.set(name, { id: model.id, behavior, ...(preset ? { preset } : {}) });
+        models.set(name, {
+            id: model.id,
+            behavior,
+            ...(preset ? { preset } : {}),
+            ...(model.pricing ? { pricing: model.pricing } : {}),
+        });
     }
 
     for (const route of ChatRoutes) {
@@ -426,6 +443,10 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
             ...(input.endpoint.apiKey && input.endpoint.apiKey.trim().length > 0
                 ? { apiKey: input.endpoint.apiKey.trim() }
                 : {}),
+            ...(input.endpoint.systemInstructions?.trim()
+                ? { systemInstructions: input.endpoint.systemInstructions.trim() }
+                : {}),
+            ...(input.endpoint.owner ? { owner: input.endpoint.owner } : {}),
         },
         models,
         routes: {

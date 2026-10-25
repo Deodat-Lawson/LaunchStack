@@ -17,10 +17,13 @@ import {
     type RunRecord,
 } from "@launchstack/pipelines/proposals";
 
+import { copy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { createProposalPorts } from "./ports";
 
 export type ProposalsExecutor = "inline" | "worker";
@@ -31,11 +34,13 @@ export function readProposalsExecutor(
     return env.PROPOSALS_EXECUTOR?.trim().toLowerCase() === "worker" ? "worker" : "inline";
 }
 
+/** A 402 the shared route handler answers from its `status`, worded from its `copy`. */
 export class InsufficientCreditsError extends Error {
     readonly code = "insufficient_credits";
     readonly status = 402;
+    readonly copy: Copy = copy("proposals.server.errors.notEnoughCredits");
     constructor(readonly required: number) {
-        super("Not enough credits to start this run");
+        super(englishCopy(copy("proposals.server.errors.notEnoughCredits")));
         this.name = "InsufficientCreditsError";
     }
 }
@@ -79,7 +84,10 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     }
     after(async () => {
         try {
-            await executeProposalRun(ctx, createProposalPorts(args.companyId));
+            // After the response, under the workspace's own models if it brought them.
+            await withWorkspaceChatModels(args.companyId, "proposals", () =>
+                executeProposalRun(ctx, createProposalPorts(args.companyId))
+            );
         } catch (error) {
             console.error("[proposals] run failed:", error);
         }

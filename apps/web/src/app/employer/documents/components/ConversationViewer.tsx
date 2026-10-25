@@ -1,15 +1,17 @@
 "use client";
 
 /**
- * Conversation-shaped rendering for imported agent sessions.
+ * Conversation-shaped rendering for stored conversations: imported agent
+ * sessions (Claude Code / Codex) and conversations an assistant (Claude,
+ * ChatGPT, Gemini) saved over MCP.
  *
- * An imported Claude Code / Codex transcript is stored as Markdown, but it
- * reads as a conversation, not a document — so this viewer parses the
- * connector's fixed grammar back into turns (~/lib/session-transcript) and
- * lays them out as a chat: speaker turns, tool-call chips, collapsible tool
- * output. The stored Markdown stays one toggle away: a transcript that
- * drifted from the grammar degrades to the ordinary markdown view, never to
- * an error page.
+ * Both are stored as Markdown, but they read as conversations, not documents
+ * — so this viewer parses the fixed grammar back into turns
+ * (~/lib/session-transcript) and lays them out as a chat: speaker turns,
+ * tool-call chips, collapsible tool output. A saved conversation is labelled
+ * with the assistant it came from. The stored Markdown stays one toggle
+ * away: a transcript that drifted from the grammar degrades to the ordinary
+ * markdown view, never to an error page.
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -17,6 +19,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useTranslations } from "next-intl";
 import {
     AlertTriangle,
     BookOpen,
@@ -38,6 +41,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/component
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import {
     agentSessionMeta,
+    assistantConversationMeta,
+    isAssistantConversationDocument,
     parseSessionTranscript,
     type ParsedSessionTranscript,
     type TranscriptSegment,
@@ -52,10 +57,13 @@ interface ConversationViewerProps {
     document: DocumentType;
 }
 
+/** Badge for an imported agent session, by the tool that wrote it. */
 const TOOL_LABELS: Record<string, string> = {
     "claude-code": "Claude Code",
     codex: "Codex",
 };
+// A saved assistant conversation is badged by its assistant instead:
+// Claude / ChatGPT / Gemini / Assistant (ASSISTANT_LABELS in ~/lib/session-transcript).
 
 /** Markdown inside a turn: GFM, tight spacing, token colors. */
 function TurnMarkdown({ text }: { text: string }) {
@@ -113,23 +121,28 @@ function TurnMarkdown({ text }: { text: string }) {
 function SpeakerTurn({
     role,
     at,
+    assistantName,
     children,
 }: {
     role: "user" | "assistant";
     at?: string | null;
+    /** What to call the assistant: its name for a saved conversation. */
+    assistantName?: string;
     children: React.ReactNode;
 }) {
+    const t = useTranslations("viewers.conversation");
     const isUser = role === "user";
     const Icon = isUser ? User : Bot;
+    const assistant = assistantName ?? t("assistant");
     const bubble = useRef<HTMLDivElement>(null);
     const ctxTarget = useContextTarget({
         kind: "transcript-turn",
-        label: isUser ? "User turn" : "Assistant turn",
+        label: isUser ? t("userTurn") : t("assistantTurn", { name: assistant }),
         items: () => [
             {
                 type: "item",
                 id: "copy",
-                label: "Copy this turn",
+                label: t("copyTurn"),
                 icon: "copy",
                 onSelect: () => {
                     void copyText(bubble.current?.innerText ?? "");
@@ -149,7 +162,7 @@ function SpeakerTurn({
             <div className="min-w-0 flex-1">
                 <div className="mb-1 flex items-baseline gap-2">
                     <span className="text-ink text-xs font-semibold">
-                        {isUser ? "User" : "Assistant"}
+                        {isUser ? t("user") : assistant}
                     </span>
                     {at && <span className="text-ink-4 font-mono text-[10px]">{at}</span>}
                 </div>
@@ -175,6 +188,7 @@ function ToolCallRow({
     summary: string;
     result: string | null;
 }) {
+    const t = useTranslations("viewers.conversation");
     const [open, setOpen] = useState(false);
     const row = (
         <div className="text-ink-3 flex min-w-0 items-center gap-2 font-mono text-[11.5px]">
@@ -208,7 +222,7 @@ function ToolCallRow({
                     />
                     {row}
                     <span className="text-ink-4 ml-auto flex-shrink-0 font-mono text-[10px]">
-                        {result.length.toLocaleString()} chars
+                        {t("chars", { count: result.length })}
                     </span>
                 </button>
             </CollapsibleTrigger>
@@ -245,8 +259,11 @@ function pairSegments(
 }
 
 export function ConversationViewer({ document }: ConversationViewerProps) {
+    const t = useTranslations("viewers.conversation");
+    const tc = useTranslations("common");
     const router = useRouter();
     const [content, setContent] = useState<string | null>(null);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<"conversation" | "markdown">("conversation");
 
@@ -257,7 +274,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
             if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
             setContent(await res.text());
         } catch (cause) {
-            setError(cause instanceof Error ? cause.message : "Failed to load the transcript.");
+            setError(cause instanceof Error ? cause.message : "");
         }
     }, [document.url]);
 
@@ -266,11 +283,28 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
         void fetchContent();
     }, [fetchContent]);
 
+    const saved = isAssistantConversationDocument(document);
     const parsed: ParsedSessionTranscript | null = useMemo(
-        () => (content === null ? null : parseSessionTranscript(content)),
-        [content]
+        () =>
+            content === null
+                ? null
+                : parseSessionTranscript(content, {
+                      format: saved ? "assistant-conversation" : "agent-session",
+                  }),
+        [content, saved]
     );
     const meta = useMemo(() => agentSessionMeta(document), [document]);
+    const savedMeta = useMemo(() => assistantConversationMeta(document), [document]);
+    // Claude, ChatGPT and Gemini are names; anything else is "the assistant".
+    const assistantName =
+        saved && savedMeta.assistant && savedMeta.assistant !== "other"
+            ? savedMeta.label
+            : t("assistant");
+    const badge = saved
+        ? assistantName
+        : meta.tool
+          ? (TOOL_LABELS[meta.tool] ?? meta.tool)
+          : t("agentSession");
 
     const stats = useMemo(() => {
         if (!parsed) return { turns: 0, toolCalls: 0 };
@@ -289,7 +323,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
         return (
             <div className="bg-surface flex h-full flex-col overflow-hidden">
                 <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between border-b px-4 py-1.5">
-                    <span className="text-ink-3 font-mono text-[10px]">Stored markdown</span>
+                    <span className="text-ink-3 font-mono text-[10px]">{t("storedMarkdown")}</span>
                     <Button
                         variant="ghost"
                         size="sm"
@@ -297,7 +331,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                         onClick={() => setViewMode("conversation")}
                     >
                         <MessagesSquare className="h-3.5 w-3.5" />
-                        Conversation view
+                        {t("conversationView")}
                     </Button>
                 </div>
                 <div className="min-h-0 flex-1">
@@ -313,11 +347,19 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
             <div className="border-line bg-panel flex flex-shrink-0 items-center justify-between gap-3 border-b px-4 py-2">
                 <div className="text-ink-3 flex min-w-0 items-center gap-2 font-mono text-[10px]">
                     <span className="bg-brand-soft text-brand-ink rounded px-1.5 py-0.5 font-semibold">
-                        {meta.tool ? (TOOL_LABELS[meta.tool] ?? meta.tool) : "Agent session"}
+                        {badge}
                     </span>
                     <span>
-                        {stats.turns} turns &middot; {stats.toolCalls} tool calls
+                        {saved
+                            ? t("messageCount", { count: stats.turns })
+                            : t("turnStats", { turns: stats.turns, toolCalls: stats.toolCalls })}
                     </span>
+                    {saved && savedMeta.clientName && savedMeta.clientName !== savedMeta.label && (
+                        <span className="hidden truncate sm:inline">{savedMeta.clientName}</span>
+                    )}
+                    {saved && savedMeta.model && (
+                        <span className="hidden truncate lg:inline">{savedMeta.model}</span>
+                    )}
                     {meta.gitBranch && (
                         <span className="hidden items-center gap-1 sm:inline-flex">
                             <GitBranch className="h-3 w-3" />
@@ -336,7 +378,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                             onClick={() => router.push(continueHref)}
                         >
                             <MessageSquarePlus className="h-3.5 w-3.5" />
-                            Continue this conversation
+                            {t("continue")}
                         </Button>
                     )}
                     <TooltipProvider delayDuration={300}>
@@ -352,7 +394,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">View stored markdown</p>
+                                <p className="text-xs">{t("viewStoredMarkdown")}</p>
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
@@ -361,25 +403,25 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
 
             {/* Body */}
             <div className="min-h-0 flex-1 overflow-y-auto">
-                {content === null && !error && (
+                {content === null && error === null && (
                     <div className="flex h-full flex-col items-center justify-center gap-3">
                         <Loader2 className="text-brand-ink h-7 w-7 animate-spin" />
-                        <p className="text-ink-3 text-sm font-medium">Loading transcript…</p>
+                        <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
                     </div>
                 )}
-                {error && (
+                {error !== null && (
                     <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
                         <div className="bg-danger/10 flex h-12 w-12 items-center justify-center rounded-2xl">
                             <AlertTriangle className="text-danger h-6 w-6" />
                         </div>
                         <div>
-                            <p className="text-ink mb-1 text-sm font-medium">
-                                Could not load the transcript
+                            <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
+                            <p className="text-ink-3 mb-4 text-xs">
+                                {error || t("loadFailedFallback")}
                             </p>
-                            <p className="text-ink-3 mb-4 text-xs">{error}</p>
                             <Button size="sm" variant="outline" onClick={() => void fetchContent()}>
                                 <RotateCw className="mr-1.5 h-3.5 w-3.5" />
-                                Retry
+                                {tc("actions.retry")}
                             </Button>
                         </div>
                     </div>
@@ -406,7 +448,8 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                                     <SpeakerTurn
                                         key={i}
                                         role={segment.kind}
-                                        at={segment.kind === "user" ? segment.at : undefined}
+                                        at={segment.at}
+                                        assistantName={assistantName}
                                     >
                                         <TurnMarkdown text={segment.text} />
                                     </SpeakerTurn>
@@ -435,7 +478,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                             return (
                                 <ToolCallRow
                                     key={i}
-                                    name="output"
+                                    name={t("output")}
                                     summary=""
                                     result={segment.text}
                                 />
@@ -445,7 +488,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
                         {parsed.segments.length === 0 && (
                             <div className="border-line text-ink-3 flex items-center justify-center gap-2 rounded-xl border border-dashed py-16 text-[13px]">
                                 <MessagesSquare className="h-4 w-4" />
-                                This transcript has no conversational turns.
+                                {t("empty")}
                             </div>
                         )}
                     </div>

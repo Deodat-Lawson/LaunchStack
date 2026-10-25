@@ -28,8 +28,16 @@ import {
     createDocumentVersionLifecycle,
     findDocumentByCreationKey,
 } from "../../document-creation";
+import { applyDocumentCreationDefaults, type OwnerRef } from "~/server/workspace/ownership";
 
 export const GOOGLE_DRIVE_CATEGORY = "Google Drive";
+
+/** Where one new file goes and who it belongs to (see ./destinations). */
+export interface SinkPlacement {
+    readonly category: string;
+    /** Set → the file gets ADR-014's defaults for this person and is attributed to them. */
+    readonly owner: OwnerRef | null;
+}
 
 /** Namespace for the document creation key. Keep stable — it is an identity. */
 const CREATION_KEY_PREFIX = "connector:google-drive:";
@@ -37,8 +45,15 @@ const CREATION_KEY_PREFIX = "connector:google-drive:";
 export interface GoogleDriveSinkContext {
     readonly companyId: bigint;
     readonly connectionId: number;
+    /** Auth id uploads are attributed to when a placement names no owner. */
     readonly userId: string;
     readonly category?: string;
+    /**
+     * Placement of a file seen for the first time. Without it every file
+     * goes to `category` as a workspace import. A file already ingested
+     * stays wherever it is now: people move them.
+     */
+    readonly place?: (item: KnowledgeItem) => Promise<SinkPlacement>;
     readonly embeddingIndexKey?: string;
     /** Origin used to absolutize a relative blob URL; APP_PUBLIC_URL otherwise. */
     readonly requestUrl?: string;
@@ -52,6 +67,9 @@ interface StoredMetadata {
     readonly driveFileId: unknown;
     readonly driveMimeType: unknown;
     readonly relativePath: string;
+    /** Where it sat in what was picked; lets a re-picked folder find its old home. */
+    readonly pickedRootId: unknown;
+    readonly folderPath: unknown;
     readonly modifiedAt: string;
     readonly syncedAt: string;
 }
@@ -63,7 +81,8 @@ function creationKeyFor(connectionId: number, item: DiscoveredKnowledgeItem): st
 /**
  * Blob-storage filenames must stay flat, and the extension is load-bearing —
  * the ingestion router picks its adapter from it. Exports carry the export
- * target's extension (a Doc exported as Markdown must land as `.md`).
+ * target's extension (a Doc exported as Word must land as `.docx`, or as
+ * `.md` when it was too big for Drive's export cap and fell back).
  */
 function blobFilenameFor(item: KnowledgeItem): string {
     const flattened = item.title.replace(/[^a-zA-Z0-9._-]+/g, "-");
@@ -130,26 +149,34 @@ export async function createGoogleDriveSink(
                 driveFileId: item.metadata.driveFileId,
                 driveMimeType: item.metadata.driveMimeType,
                 relativePath: item.location.relativePath,
+                pickedRootId: item.metadata.pickedRootId ?? null,
+                folderPath: item.metadata.folderPath ?? [],
                 modifiedAt: item.modifiedAt,
                 syncedAt,
             };
 
             const existing = await findDocumentByCreationKey(context.companyId, baseCreationKey);
+            const placement: SinkPlacement | null =
+                !existing && context.place ? await context.place(item) : null;
+            const userId = placement?.owner?.authUserId ?? context.userId;
 
             const blob = await uploadFile({
                 filename,
                 data: body,
                 contentType: item.mimeType,
-                userId: context.userId,
+                userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 
             if (!existing) {
+                const placedIn = placement?.category ?? category;
                 const lifecycle = await createDocumentLifecycle({
                     companyId: context.companyId,
-                    userId: context.userId,
+                    userId,
                     title: item.title,
-                    category,
+                    category: placedIn,
                     url: blob.url,
                     processingUrl,
                     creationKey: baseCreationKey,
@@ -163,6 +190,15 @@ export async function createGoogleDriveSink(
                     },
                 });
 
+                // Someone imported this folder: the file is theirs the way an
+                // upload would be (it inherits their private folder, and they
+                // can share it on its own).
+                if (placement?.owner && lifecycle.created) {
+                    await applyDocumentCreationDefaults(db, placement.owner, [
+                        { id: lifecycle.documentId, category: placedIn },
+                    ]);
+                }
+
                 return {
                     sourceId: item.sourceId,
                     documentId: lifecycle.documentId,
@@ -175,9 +211,9 @@ export async function createGoogleDriveSink(
             const lifecycle = await createDocumentVersionLifecycle({
                 documentId: existing.id,
                 companyId: context.companyId,
-                userId: context.userId,
+                userId,
                 title: item.title,
-                category,
+                category: existing.category ?? category,
                 url: blob.url,
                 processingUrl,
                 // The fingerprint is part of the key so a re-sync of the same
@@ -208,13 +244,23 @@ export async function createGoogleDriveSink(
     };
 }
 
-/** Source ids (Drive file ids) this connection has already ingested. */
-export async function listKnownSourceIds(
+/** A file this connection has already ingested, and the pick it came through. */
+export interface KnownSource {
+    readonly sourceId: string;
+    /** Null for documents imported before placements were recorded. */
+    readonly pickedRootId: string | null;
+}
+
+/** Everything this connection has already ingested. */
+export async function listKnownSources(
     companyId: bigint,
     connectionId: number
-): Promise<string[]> {
+): Promise<KnownSource[]> {
     const rows = await db
-        .select({ sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'` })
+        .select({
+            sourceId: sql<string>`${document.ocrMetadata} ->> 'sourceId'`,
+            pickedRootId: sql<string | null>`${document.ocrMetadata} ->> 'pickedRootId'`,
+        })
         .from(document)
         .where(
             and(
@@ -223,7 +269,9 @@ export async function listKnownSourceIds(
                 sql`${document.ocrMetadata} ->> 'connectionId' = ${String(connectionId)}`
             )
         );
-    return rows.map(row => row.sourceId).filter((id): id is string => Boolean(id));
+    return rows.flatMap(row =>
+        row.sourceId ? [{ sourceId: row.sourceId, pickedRootId: row.pickedRootId ?? null }] : []
+    );
 }
 
 /**

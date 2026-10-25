@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { readChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import type { SourceReference } from "~/app/api/agents/documentQ&A/services";
 import type { ChatPassagePayload } from "~/lib/chat-passages";
+import type { ChatCreatedSource } from "~/lib/chat-turns";
 
 export type { SourceReference };
 
@@ -69,6 +71,8 @@ export interface WebSource {
 
 export interface WebSearchInfo {
     refinedQuery?: string;
+    /** What the model searched for, in order. */
+    queries?: string[];
     reasoning?: string;
     resultsCount?: number;
 }
@@ -86,9 +90,10 @@ export interface AIChatResponse {
     tokenUsage?: { inputTokens: number; outputTokens: number; totalTokens: number };
     fusionWeights?: number[];
     searchScope?: "document" | "company" | "archive" | "selected" | "none";
-    aiModel?: string;
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
+    /** Documents the answer created in the workspace. */
+    createdSources?: ChatCreatedSource[];
     agent?: AIChatAgentInfo | null;
     message?: string;
     error?: string;
@@ -105,6 +110,7 @@ export interface AIChatSendOptions {
 }
 
 export function useAIChat() {
+    const t = useTranslations("workspace.aiChat");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const activeRequest = useRef<{ id: number; controller: AbortController } | null>(null);
@@ -181,7 +187,7 @@ export function useAIChat() {
                     throw new Error(
                         errorData.message ??
                             errorData.error ??
-                            `Request failed with status ${response.status}`
+                            t("requestFailed", { status: response.status })
                     );
                 }
 
@@ -194,8 +200,7 @@ export function useAIChat() {
                 throwIfChatAborted(controller.signal);
                 if (!options.independent && !isCurrent())
                     throw new DOMException("Response stopped", "AbortError");
-                if (!data.success)
-                    throw new Error(data.message ?? data.error ?? "Failed to get AI response");
+                if (!data.success) throw new Error(data.message ?? data.error ?? t("noResponse"));
                 return data;
             } catch (err) {
                 if (
@@ -203,9 +208,9 @@ export function useAIChat() {
                     (!options.independent && !isCurrent()) ||
                     (err instanceof Error && err.name === "AbortError")
                 ) {
-                    return { success: false, cancelled: true, message: "Response stopped" };
+                    return { success: false, cancelled: true, message: t("stopped") };
                 }
-                const errorMessage = err instanceof Error ? err.message : "Failed to send query";
+                const errorMessage = err instanceof Error ? err.message : t("sendFailed");
                 if (isCurrent()) setError(errorMessage);
                 return { success: false, message: errorMessage };
             } finally {
@@ -217,7 +222,7 @@ export function useAIChat() {
                 }
             }
         },
-        []
+        [t]
     );
 
     return { loading, error, sendQuery, cancelQuery, stop: cancelQuery };

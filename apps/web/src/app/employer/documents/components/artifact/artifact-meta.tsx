@@ -17,6 +17,7 @@ import {
 import type { ArtifactType } from "~/lib/artifact-content";
 
 export interface ArtifactTypeMeta {
+    /** English. Screens show `viewers.artifactTypes.<type>` in the reader's language. */
     label: string;
     Icon: ComponentType<LucideProps>;
     /** Whether the type has a rendered preview (vs. source-only). */

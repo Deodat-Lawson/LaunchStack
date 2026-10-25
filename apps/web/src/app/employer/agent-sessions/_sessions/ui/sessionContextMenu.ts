@@ -1,5 +1,9 @@
+import type { useTranslations } from "next-intl";
+
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import type { AgentSessionItem } from "../lib/api";
+
+export type SessionMenuTranslator = ReturnType<typeof useTranslations<"agents.sessions.menu">>;
 
 /**
  * Declarative items for one row of the sessions browser. What a row can do
@@ -18,16 +22,17 @@ export interface SessionMenuHandlers {
 
 export function buildSessionMenuItems(
     item: AgentSessionItem,
-    handlers: SessionMenuHandlers
+    handlers: SessionMenuHandlers,
+    t: SessionMenuTranslator
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: item.title }];
-    const busyReason = handlers.busy ? "An import is already running." : undefined;
+    const busyReason = handlers.busy ? t("busy") : undefined;
     if (item.imported) {
         if (handlers.onOpen) {
             items.push({
                 type: "item",
                 id: "open",
-                label: "Open the transcript",
+                label: t("openTranscript"),
                 icon: "open",
                 onSelect: () => handlers.onOpen?.(),
             });
@@ -36,7 +41,7 @@ export function buildSessionMenuItems(
             items.push({
                 type: "item",
                 id: "continue",
-                label: "Continue in chat",
+                label: t("continueInChat"),
                 icon: "newChat",
                 onSelect: () => handlers.onContinue?.(),
             });
@@ -44,7 +49,7 @@ export function buildSessionMenuItems(
         items.push({
             type: "item",
             id: "import",
-            label: item.imported.stale ? "Update the import" : "Re-import",
+            label: item.imported.stale ? t("updateImport") : t("reimport"),
             icon: "refresh",
             disabled: handlers.busy,
             disabledReason: busyReason,
@@ -54,7 +59,7 @@ export function buildSessionMenuItems(
         items.push({
             type: "item",
             id: "import",
-            label: "Import",
+            label: t("import"),
             icon: "import",
             disabled: handlers.busy,
             disabledReason: busyReason,
@@ -66,7 +71,7 @@ export function buildSessionMenuItems(
         items.push({
             type: "item",
             id: "copy-path",
-            label: "Copy the project path",
+            label: t("copyPath"),
             icon: "reveal",
             onSelect: () => handlers.onCopyPath?.(),
         });
@@ -74,7 +79,7 @@ export function buildSessionMenuItems(
     items.push({
         type: "item",
         id: "copy-id",
-        label: "Copy the session id",
+        label: t("copyId"),
         icon: "copy",
         onSelect: handlers.onCopyId,
     });
@@ -83,7 +88,7 @@ export function buildSessionMenuItems(
         items.push({
             type: "item",
             id: "remove",
-            label: "Remove the import…",
+            label: t("removeImport"),
             icon: "delete",
             danger: true,
             onSelect: () => handlers.onRemoveImport?.(),

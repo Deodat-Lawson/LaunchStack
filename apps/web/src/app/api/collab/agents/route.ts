@@ -4,16 +4,26 @@
  * GET seeds the starter agents on first read so the Agents pane is never an
  * empty state that the user has to escape from. The same roster serves
  * meetings, the chat composer's agent picker and `@handle` mentions.
+ *
+ * Reading is anyone's; adding an agent is the roster managers' (see
+ * `lib/agents/roster-access.ts`).
  */
 
 import { NextResponse } from "next/server";
+
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 
 import {
     AGENT_AUTONOMY_LEVELS,
     DEFAULT_AGENT_AUTONOMY,
     type AgentAutonomy,
 } from "~/lib/agents/autonomy";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { AGENT_ROSTER_PERMISSION } from "~/lib/agents/roster-access";
+import {
+    requireWorkspaceContext,
+    requireWorkspacePermission,
+} from "~/lib/require-workspace-context";
 import { CreatePersonaSchema } from "~/server/collab/agent-schemas";
 import { createPersona, ensureStarterPersonas, listPersonas } from "~/server/collab/personas";
 import { readWorkspaceSetting } from "~/server/settings/store";
@@ -30,7 +40,10 @@ export async function GET(request: Request) {
     const includeArchived = new URL(request.url).searchParams.get("archived") === "1";
 
     // Seeding returns the live roster; `?archived=1` widens it for the Agents
-    // page, which offers retired agents a way back.
+    // page, which offers retired agents a way back. Any member's first read
+    // seeds, on purpose: it only adds shipped starters that were never there
+    // (a retired one counts as there), so it changes nobody's choices, and a
+    // workspace whose admin has not visited yet still has agents to pick.
     const seeded = await ensureStarterPersonas(companyId);
     const personas = includeArchived ? await listPersonas(companyId, true) : seeded;
     const hub = getHub();
@@ -63,13 +76,18 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspaceContext();
+    const ctx = await requireWorkspacePermission(AGENT_ROSTER_PERMISSION);
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "collab.server.errors");
 
     const parsed = CreatePersonaSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
-            { error: "Invalid request", details: parsed.error.flatten() },
+            {
+                error: translatorFor(locale, "errors.api")("invalidRequest"),
+                details: parsed.error.flatten(),
+            },
             { status: 400 }
         );
     }
@@ -78,15 +96,15 @@ export async function POST(request: Request) {
         const persona = await createPersona(ctx.data.companyId, parsed.data);
         return NextResponse.json({ persona }, { status: 201 });
     } catch (err) {
-        const message = err instanceof Error ? err.message : "Could not create agent";
+        const message = err instanceof Error ? err.message : t("createAgentFailed");
         // The unique index on (company_id, key) is the real guard; report it as a
         // conflict rather than a 500 so the form can point at the field.
         const conflict = /duplicate key|unique/i.test(message);
         return NextResponse.json(
             {
                 error: conflict
-                    ? `An agent with the handle "${parsed.data.key}" already exists`
-                    : message,
+                    ? t("handleTaken", { handle: parsed.data.key })
+                    : wordEnglish(message, "collab.server.errors", locale),
             },
             { status: conflict ? 409 : 500 }
         );

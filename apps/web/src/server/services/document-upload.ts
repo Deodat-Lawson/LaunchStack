@@ -2,9 +2,8 @@ import { normalizeFolderPath } from "~/lib/folders/path";
 import {
     shouldTranscribeFile,
     transcribeAudioFromUrl,
-    isVideoUrl,
-    transcribeVideoFromUrl,
-} from "@launchstack/conversion";
+} from "@launchstack/conversion/audio-transcription";
+import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/video-transcription";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
@@ -13,10 +12,29 @@ import { parseProvider } from "@launchstack/conversion/ocr/trigger";
 import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-storage-type";
 import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
+import { deleteDocumentCore } from "./document-delete";
+import { db } from "~/server/db";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
 import { buildInternalFileUrl } from "@launchstack/store/crypto";
 import { getOcrConfig } from "@launchstack/conversion/ocr/config";
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
+
+/**
+ * An upload refused for a reason the person can act on (out of credits, a
+ * video host we cannot read). `message` is the English; a route words `copy`
+ * in its reader's language.
+ */
+export class UploadRefusedError extends Error {
+    readonly copy: Copy;
+
+    constructor(copy: Copy) {
+        super(englishCopy(copy));
+        this.name = "UploadRefusedError";
+        this.copy = copy;
+    }
+}
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -167,9 +185,7 @@ export async function processDocumentUpload({
         const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
         const sufficient = await hasTokens(user.companyId, estimatedCredits);
         if (!sufficient) {
-            throw new Error(
-                "This workspace has run out of processing credits, so the upload was not started. Contact your workspace owner to top up."
-            );
+            throw new UploadRefusedError({ key: "upload.server.errors.outOfCredits" });
         }
     }
 
@@ -182,13 +198,47 @@ export async function processDocumentUpload({
         embeddingIndexKey ?? (await resolveIngestIndexKey(user.companyId)) ?? undefined;
 
     // ------------------------------------------------------------------
-    // Audio file: save the original audio as a document, then create a
-    // separate transcript document that goes through the embedding pipeline.
+    // Audio file: transcribe first, then save the original audio as a
+    // document and a separate transcript document that goes through the
+    // embedding pipeline. Transcribing before any row exists means a failed
+    // transcription leaves nothing behind: no recording without a transcript,
+    // and a retry starts clean.
     // ------------------------------------------------------------------
     if (shouldTranscribeFile(mimeType, originalFilename)) {
         console.log(`[DocumentUpload] Audio file detected: ${documentName}, transcribing...`);
 
         const baseCreationKey = creationKey ?? `upload:${rawDocumentUrl}`;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
+        const audioFilename = originalFilename || documentName;
+
+        let transcriptionResult: Awaited<ReturnType<typeof transcribeAudioFromUrl>>;
+        try {
+            getEngine();
+            transcriptionResult = await transcribeAudioFromUrl(
+                resolvedDocumentUrl,
+                audioFilename,
+                user.companyId,
+                mimeType
+            );
+        } catch (error) {
+            console.error(
+                `[DocumentUpload] Audio transcription failed for ${documentName}:`,
+                error
+            );
+            throw error;
+        }
+
+        // The transcript text is stored before any row exists, so the only
+        // step left that can fail after the recording row is the transcript
+        // row itself — and that failure removes the recording row below.
+        const textBlob = await uploadFile({
+            filename: `${documentName}-transcription.txt`,
+            data: Buffer.from(transcriptionResult.text, "utf-8"),
+            contentType: "text/plain",
+            userId: user.userId,
+            companyId: user.companyId,
+        });
+
         const audioLifecycle = await createDocumentLifecycle({
             companyId: user.companyId,
             userId: user.userId,
@@ -201,39 +251,27 @@ export async function processDocumentUpload({
             ocrProcessed: true,
         });
 
+        const transcriptionMetadata = {
+            source: "transcription",
+            audioFilename,
+            audioDocumentId: audioLifecycle.document.id,
+            audioUrl: resolvedDocumentUrl,
+            // Tells the viewer whether the recording has a picture.
+            mediaMimeType: mimeType ?? null,
+            language: transcriptionResult.language,
+            ...(transcriptionResult.languages ? { languages: transcriptionResult.languages } : {}),
+            confidence: transcriptionResult.confidence,
+            ...(transcriptionResult.durationSeconds
+                ? { durationSeconds: transcriptionResult.durationSeconds }
+                : {}),
+            segments: transcriptionResult.segments,
+            transcribedAt: new Date().toISOString(),
+        };
+
+        const transcriptName = `${documentName} (Transcription)`;
+        let transcriptLifecycle: CreatedDocumentLifecycle;
         try {
-            getEngine();
-            const transcriptionResult = await transcribeAudioFromUrl(
-                resolvedDocumentUrl,
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
-                originalFilename || documentName,
-                user.companyId
-            );
-
-            const textBlob = await uploadFile({
-                filename: `${documentName}-transcription.txt`,
-                data: Buffer.from(transcriptionResult.text, "utf-8"),
-                contentType: "text/plain",
-                userId: user.userId,
-                companyId: user.companyId,
-            });
-
-            const transcriptionMetadata = {
-                source: "transcription",
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Empty filenames must fall back to the document name.
-                audioFilename: originalFilename || documentName,
-                audioDocumentId: audioLifecycle.document.id,
-                audioUrl: resolvedDocumentUrl,
-                // Tells the viewer whether the recording has a picture.
-                mediaMimeType: mimeType ?? null,
-                language: transcriptionResult.language,
-                confidence: transcriptionResult.confidence,
-                segments: transcriptionResult.segments,
-                transcribedAt: new Date().toISOString(),
-            };
-
-            const transcriptName = `${documentName} (Transcription)`;
-            const transcriptLifecycle = await createDocumentLifecycle({
+            transcriptLifecycle = await createDocumentLifecycle({
                 companyId: user.companyId,
                 userId: user.userId,
                 title: transcriptName,
@@ -252,20 +290,28 @@ export async function processDocumentUpload({
                     embeddingIndexKey: resolvedEmbeddingIndexKey,
                 },
             });
-
-            return {
-                ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),
-                jobId: transcriptLifecycle.jobId ?? "",
-                eventIds: transcriptLifecycle.eventIds,
-                createdDocuments: createdDocumentsOf(audioLifecycle, transcriptLifecycle),
-            };
         } catch (error) {
-            console.error(
-                `[DocumentUpload] Audio transcription failed for ${documentName}:`,
-                error
-            );
+            // A recording row this request created, with no transcript beside
+            // it, is the orphan the reordering above exists to prevent.
+            if (audioLifecycle.created) {
+                await db
+                    .transaction(tx => deleteDocumentCore(tx, audioLifecycle.document.id))
+                    .catch((cleanupError: unknown) =>
+                        console.error(
+                            `[DocumentUpload] Could not remove recording ${audioLifecycle.document.id} after its transcript failed:`,
+                            cleanupError
+                        )
+                    );
+            }
             throw error;
         }
+
+        return {
+            ...toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl),
+            jobId: transcriptLifecycle.jobId ?? "",
+            eventIds: transcriptLifecycle.eventIds,
+            createdDocuments: createdDocumentsOf(audioLifecycle, transcriptLifecycle),
+        };
     }
 
     // ------------------------------------------------------------------
@@ -320,9 +366,7 @@ export async function processVideoUrlUpload({
     embeddingIndexKey,
 }: VideoUrlUploadParams): Promise<DocumentUploadResult> {
     if (!isVideoUrl(videoUrl)) {
-        throw new Error(
-            "Unsupported video URL. Supported platforms include YouTube, Vimeo, TikTok, Twitter/X, and more."
-        );
+        throw new UploadRefusedError({ key: "upload.server.errors.unsupportedVideoUrl" });
     }
 
     const documentCategory = category;

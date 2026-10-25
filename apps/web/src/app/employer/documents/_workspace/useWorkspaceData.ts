@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
 import {
@@ -19,6 +20,8 @@ import {
     transcriptMarkerOf,
 } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
+import type { SourceProcessingView } from "~/lib/source-progress";
+import { nextSourcePollDelay, processingActivity } from "./sourcePolling";
 import type {
     ItemAccessView,
     SourceAddedBy,
@@ -27,6 +30,7 @@ import type {
     SourceTypeId,
     WorkspaceFolder,
     WorkspaceSource,
+    WorkspaceTranslator,
 } from "./types";
 
 /** Stable color picker — hashes a category name into the existing design palette. */
@@ -59,10 +63,21 @@ function mapDocType(doc: DocumentType): SourceTypeId {
         return mediaEmbedFor(marker?.videoUrl)?.provider === "youtube" ? "youtube" : "video";
     }
     if (t === "artifact") return "artifact";
+    if (t === "website") return "web";
     return "doc";
 }
 
-function humanDate(raw: unknown): string {
+/**
+ * What a source row's words are made with: the `workspace` translator and
+ * the formatter, so "2h ago" and "12 shapes" read in the viewer's language.
+ * `useWorkspaceData` passes its own; a test passes English ones.
+ */
+export interface SourceRowLabels {
+    t: WorkspaceTranslator;
+    format: ReturnType<typeof useFormatter>;
+}
+
+function humanDate(raw: unknown, { t, format }: SourceRowLabels): string {
     if (!raw) return "";
     const d =
         raw instanceof Date
@@ -73,15 +88,15 @@ function humanDate(raw: unknown): string {
     if (!d || Number.isNaN(d.getTime())) return "";
     const diffMs = Date.now() - d.getTime();
     const diffHr = Math.floor(diffMs / 3_600_000);
-    if (diffHr < 1) return "just now";
-    if (diffHr < 24) return `${diffHr}h ago`;
+    if (diffHr < 1) return t("relativeTime.justNow");
+    if (diffHr < 24) return t("relativeTime.hoursAgo", { count: diffHr });
     const diffDay = Math.floor(diffHr / 24);
-    if (diffDay === 1) return "Yesterday";
-    if (diffDay < 7) return `${diffDay} days ago`;
+    if (diffDay === 1) return t("relativeTime.yesterday");
+    if (diffDay < 7) return t("relativeTime.daysAgo", { count: diffDay });
     const diffWk = Math.floor(diffDay / 7);
-    if (diffWk === 1) return "Last week";
-    if (diffWk < 5) return `${diffWk} weeks ago`;
-    return d.toLocaleDateString();
+    if (diffWk === 1) return t("relativeTime.lastWeek");
+    if (diffWk < 5) return t("relativeTime.weeksAgo", { count: diffWk });
+    return format.dateTime(d);
 }
 
 /** Additional fields returned by /api/fetchDocument without changing document previews. */
@@ -92,6 +107,8 @@ type IndexedDocument = DocumentType & {
     currentVersionId?: number | null;
     currentVersionOcrProcessed?: boolean | null;
     currentVersionOcrMetadata?: DocumentType["ocrMetadata"];
+    /** Where processing stands, while the current version is not ready. */
+    processing?: SourceProcessingView | null;
 };
 
 /** A row of the documents list: the document, plus what ADR-014 says about it for the caller. */
@@ -123,7 +140,7 @@ function documentIndexError(doc: IndexedDocument): string | undefined {
         : undefined;
 }
 
-export function mapDocument(doc: DocumentRow): WorkspaceSource {
+export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): WorkspaceSource {
     const type = mapDocType(doc);
     // The recording is stored for playback, never embedded. Its separate
     // transcript is the searchable source, with its own current-version status.
@@ -141,7 +158,7 @@ export function mapDocument(doc: DocumentRow): WorkspaceSource {
         title: doc.title,
         type,
         size: doc.aiSummary ? "" : "",
-        added: humanDate(doc.createdAt) || "",
+        added: humanDate(doc.createdAt, labels) || "",
         folder: normalizeFolderPath(doc.category),
         tags: [],
         domain: "General",
@@ -151,6 +168,7 @@ export function mapDocument(doc: DocumentRow): WorkspaceSource {
         citability: mediaOriginal ? "none" : undefined,
         indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
         errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
+        processing: mediaOriginal ? undefined : (doc.processing ?? null),
     };
 }
 
@@ -174,12 +192,15 @@ export function mindmapCitability(
 export function mapMindmap(
     map: MindmapSummary,
     /**
-     * The published copy, when the caller can see it: the map is shared as
-     * that file is, and is searchable once that file is indexed.
+     * The published copy, when the caller can see it: the map is searchable
+     * once that file is indexed. Who can see the map itself is the draft's
+     * own `access` (its folder's audience); the copy's stands in only for a
+     * server that did not describe the draft.
      */
-    publishedDocument?: DocumentRow
+    publishedDocument: DocumentRow | undefined,
+    labels: SourceRowLabels
 ): WorkspaceSource {
-    const shapes = `${map.nodeCount} shape${map.nodeCount === 1 ? "" : "s"}`;
+    const shapes = labels.t("sourceRows.shapes", { count: map.nodeCount });
     return {
         id: `m${map.id}`,
         mindmapId: map.id,
@@ -187,7 +208,7 @@ export function mapMindmap(
         title: map.title,
         type: "mindmap",
         size: shapes,
-        added: humanDate(map.updatedAt) || "",
+        added: humanDate(map.updatedAt, labels) || "",
         // Folders are paths now, and a map is filed like any other source.
         folder: normalizeFolderPath(map.folder),
         tags: [],
@@ -195,10 +216,14 @@ export function mapMindmap(
         searchText: map.searchText ?? undefined,
         thumbnailUrl: map.hasThumbnail ? `/api/mindmaps/${map.id}/thumbnail` : undefined,
         citability: mindmapCitability(map),
-        access: publishedDocument?.access ?? undefined,
+        // The draft's own access: it sits in the rail where its folder puts
+        // it, and its verbs act on the draft. The published copy's is the
+        // fallback for an older server that did not describe the draft.
+        access: map.access ?? publishedDocument?.access ?? undefined,
         addedBy: publishedDocument?.addedBy ?? null,
         indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
         errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
+        processing: publishedDocument?.processing ?? undefined,
     };
 }
 
@@ -218,6 +243,8 @@ export interface UseWorkspaceDataResult {
     can: (permission: Permission | undefined) => boolean;
     /** True once the permission answer has arrived (even if it was "nothing"). */
     permissionsLoaded: boolean;
+    /** Set when that answer was a failure: an empty set then means "unknown", not "none". */
+    permissionsError: string | null;
     refresh: () => Promise<void>;
     /** Optimistically insert a row before the backend confirms it. */
     addOptimistic: (source: WorkspaceSource) => void;
@@ -235,9 +262,6 @@ interface FolderRow {
     access?: ItemAccessView;
 }
 
-// Match the Drive/Gmail sync cadence while source ingestion is still running.
-const SOURCE_POLL_INTERVAL_MS = 3000;
-
 export function useWorkspaceData(userId: string | null | undefined): UseWorkspaceDataResult {
     const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
@@ -246,6 +270,15 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const refreshInFlight = useRef<Promise<void> | null>(null);
+    const t = useTranslations("workspace");
+    const format = useFormatter();
+    const labels = useMemo<SourceRowLabels>(() => ({ t, format }), [t, format]);
+    /** For the fetch, which must not be rebuilt (and re-run) by a language switch. */
+    const tRef = useRef(t);
+    tRef.current = t;
+    // What the last response said about processing, read by the poll loop
+    // to tell a long job that is moving from one that is stuck.
+    const activity = useRef({ signature: "", retryDueAt: 0 });
     // One fetch of /api/fetchUserInfo for the whole app: the workspace id the
     // AskPanel scopes to and the permission set come from the same answer.
     const {
@@ -254,6 +287,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         permissions,
         can,
         loaded: permissionsLoaded,
+        error: permissionsError,
     } = usePermissions();
 
     const fetchSources = useCallback(async () => {
@@ -271,8 +305,10 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 // documents down with it — the list degrades to uploads only.
                 fetch("/api/mindmaps?scope=active").catch(() => null),
             ]);
-            if (!docsRes.ok) throw new Error(`Failed to fetch documents (${docsRes.status})`);
+            if (!docsRes.ok)
+                throw new Error(tRef.current("sourceRows.fetchFailed", { status: docsRes.status }));
             const docs = (await docsRes.json()) as DocumentRow[];
+            activity.current = processingActivity(docs);
             setDocuments(docs);
 
             // Folders that exist while empty only come from here; the rest are
@@ -292,7 +328,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
             // Prune optimistic rows that now exist in the server response (by title).
             setOptimistic(prev => prev.filter(o => !docs.some(d => d.title === o.title)));
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to fetch documents");
+            setError(
+                err instanceof Error ? err.message : tRef.current("sourceRows.fetchFailedGeneric")
+            );
         } finally {
             setLoading(false);
         }
@@ -327,44 +365,81 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         }
         return [
             ...optimistic,
-            ...documents.filter(d => !claimed.has(d.id)).map(mapDocument),
+            ...documents.filter(d => !claimed.has(d.id)).map(doc => mapDocument(doc, labels)),
             ...mindmaps.map(map =>
                 mapMindmap(
                     map,
                     map.publishedDocumentId === null
                         ? undefined
-                        : documentsById.get(map.publishedDocumentId)
+                        : documentsById.get(map.publishedDocumentId),
+                    labels
                 )
             ),
         ];
-    }, [documents, mindmaps, optimistic]);
+    }, [documents, mindmaps, optimistic, labels]);
 
-    const hasProcessingSources = sources.some(source => source.indexStatus === "processing");
+    // Which sources are still processing. The poll schedule restarts whenever
+    // this changes — something finished or started — and backs off otherwise.
+    const processingKey = useMemo(
+        () =>
+            sources
+                .filter(source => source.indexStatus === "processing")
+                .map(source => source.id)
+                .sort()
+                .join("\n"),
+        [sources]
+    );
 
     useEffect(() => {
-        if (!userId || !hasProcessingSources) return;
+        if (!userId || !processingKey) return;
         let timer: number | undefined;
+        let tick = 0;
+        let cancelled = false;
+        // The poll that last saw the worker move something, and what it saw.
+        let movedAtTick = 0;
+        let lastSignature = activity.current.signature;
 
         const stopPolling = () => {
-            window.clearInterval(timer);
+            window.clearTimeout(timer);
             timer = undefined;
         };
-        const updatePolling = () => {
+        // A poll that lands while another refresh is in flight rides on that
+        // one instead of queueing a second round of requests behind it.
+        const poll = () => refreshInFlight.current ?? refresh();
+        const schedule = () => {
+            stopPolling();
+            if (cancelled || document.visibilityState !== "visible") return;
+            // Progress, or a retry the outbox has scheduled, is not stuck:
+            // it refills the give-up budget (but never speeds the pace up).
+            const { signature, retryDueAt } = activity.current;
+            if (signature !== lastSignature || Date.now() < retryDueAt) {
+                movedAtTick = tick;
+                lastSignature = signature;
+            }
+            const delay = nextSourcePollDelay(tick, tick - movedAtTick);
+            if (delay === null) return;
+            timer = window.setTimeout(() => {
+                timer = undefined;
+                tick += 1;
+                void poll().finally(schedule);
+            }, delay);
+        };
+        // Hidden: no polling at all. Visible again: catch up once now, then
+        // carry on with the backoff where it left off (or stay stopped).
+        const onVisibilityChange = () => {
             stopPolling();
             if (document.visibilityState !== "visible") return;
-            timer = window.setInterval(() => {
-                if (document.visibilityState !== "visible" || refreshInFlight.current) return;
-                void refresh();
-            }, SOURCE_POLL_INTERVAL_MS);
+            void poll().finally(schedule);
         };
 
-        updatePolling();
-        document.addEventListener("visibilitychange", updatePolling);
+        schedule();
+        document.addEventListener("visibilitychange", onVisibilityChange);
         return () => {
+            cancelled = true;
             stopPolling();
-            document.removeEventListener("visibilitychange", updatePolling);
+            document.removeEventListener("visibilitychange", onVisibilityChange);
         };
-    }, [userId, hasProcessingSources, refresh]);
+    }, [userId, processingKey, refresh]);
 
     const folders = useMemo<WorkspaceFolder[]>(() => {
         // Every folder a source sits in, every folder that exists while empty,
@@ -401,6 +476,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         permissions,
         can,
         permissionsLoaded,
+        permissionsError,
         refresh,
         addOptimistic,
     };

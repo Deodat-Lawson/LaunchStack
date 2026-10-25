@@ -33,7 +33,11 @@ const answer = (text: string) => ({
 function harness(
     initial: ThreadMessage[] = [],
     sources: WorkspaceSource[] = [],
-    options: { continuation?: { title: string; context: string } | null; scopeKey?: string } = {}
+    options: {
+        continuation?: { title: string; context: string } | null;
+        scopeKey?: string;
+        onSourcesCreated?: () => void;
+    } = {}
 ) {
     return renderHook(
         ({ scopeKey }) => {
@@ -53,6 +57,7 @@ function harness(
                 agents: [],
                 companyId: 1,
                 refreshHistory: jest.fn(),
+                onSourcesCreated: options.onSourcesCreated,
             });
             return { runtime, thread, setContinuation };
         },
@@ -915,4 +920,153 @@ test("auth hydration switches from unknown scope to the persisted user's new-cha
     const second = mount();
     second.rerender({ scope: "user:company" });
     expect(second.result.current.key).toBe("new-authenticated");
+});
+
+test("shows a web search as the answer's stage, then keeps and saves the sources it cited", async () => {
+    let release!: () => void;
+    const searching = new Promise<void>(resolve => (release = resolve));
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({ type: "status", status: "generating" });
+        options.onEvent({ type: "status", status: "Searching the web for “launch news”" });
+        await searching;
+        return {
+            success: true,
+            summarizedAnswer: "It shipped [Source 1].",
+            webSources: [
+                {
+                    title: "Launch recap",
+                    url: "https://news.example.com/launch",
+                    snippet: "It shipped.",
+                },
+                { title: "Not a web page", url: "javascript:alert(1)", snippet: "" },
+            ],
+        };
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("What launched?"));
+    });
+    await waitFor(() =>
+        expect(result.current.thread[1]?.stage).toBe("Searching the web for “launch news”")
+    );
+    await act(async () => {
+        release();
+        await running;
+    });
+
+    expect(result.current.thread[1]).toMatchObject({
+        text: "It shipped [Source 1].",
+        webSources: [{ title: "Launch recap", url: "https://news.example.com/launch" }],
+    });
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata?.webSources).toEqual([
+        { title: "Launch recap", url: "https://news.example.com/launch" },
+    ]);
+});
+
+test("labels the model-call phases instead of showing their keywords", async () => {
+    let release!: () => void;
+    const generating = new Promise<void>(resolve => (release = resolve));
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({ type: "status", status: "generating" });
+        await generating;
+        return answer("Done");
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("Hi"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.stage).toBe("Thinking…"));
+    await act(async () => {
+        release();
+        await running;
+    });
+});
+
+test("hands out a new answer object for every streamed delta, so the row re-renders", async () => {
+    let release!: () => void;
+    const streaming = new Promise<void>(resolve => (release = resolve));
+    let emitEvent!: (event: unknown) => void;
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        emitEvent = options.onEvent;
+        await streaming;
+        return answer("Ten primes.");
+    });
+    const { result } = harness();
+    let running!: Promise<unknown>;
+    act(() => {
+        running = result.current.runtime.submit(send("How many primes below 30?"));
+    });
+    await waitFor(() => expect(emitEvent).toBeDefined());
+
+    act(() => emitEvent({ type: "reasoning", delta: "Count them: " }));
+    const thinking = result.current.thread[1]!;
+    expect(thinking).toMatchObject({ reasoning: "Count them: ", text: "", status: "streaming" });
+    expect(thinking.thoughtMs).toEqual(expect.any(Number));
+
+    act(() => emitEvent({ type: "text", delta: "Ten" }));
+    const writing = result.current.thread[1]!;
+    expect(writing).not.toBe(thinking);
+    expect(writing).toMatchObject({ text: "Ten", stage: "Writing…" });
+    act(() => emitEvent({ type: "text", delta: " primes." }));
+    expect(result.current.thread[1]).not.toBe(writing);
+    expect(result.current.thread[1]!.text).toBe("Ten primes.");
+
+    await act(async () => {
+        release();
+        await running;
+    });
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata).toMatchObject({
+        reasoning: "Count them: ",
+        thoughtMs: thinking.thoughtMs,
+    });
+});
+
+test("keeps the documents an answer created, saves them, and reloads the sources", async () => {
+    const onSourcesCreated = jest.fn();
+    mockRequest.mockResolvedValueOnce({
+        ...answer("I created Scenario Simulator — Business Plan in your Private section."),
+        createdSources: [
+            { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+            { documentId: -1, title: "Not a document", folder: "Unfiled" },
+        ],
+    });
+    const { result } = harness([], [], { onSourcesCreated });
+
+    await act(async () => {
+        await result.current.runtime.submit(send("Write the plan into my private space"));
+    });
+
+    expect(result.current.thread[1]?.createdSources).toEqual([
+        { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+    ]);
+    expect(onSourcesCreated).toHaveBeenCalledTimes(1);
+    const saved = jest
+        .mocked(sessions.appendMessages)
+        .mock.calls.flatMap(call => call[1].messages)
+        .find(message => message.role === "assistant");
+    expect(saved?.metadata?.createdSources).toEqual([
+        { documentId: 90, title: "Scenario Simulator — Business Plan", folder: "Unfiled" },
+    ]);
+});
+
+test("does not reload the sources for an answer that created nothing", async () => {
+    const onSourcesCreated = jest.fn();
+    const { result } = harness([], [], { onSourcesCreated });
+
+    await act(async () => {
+        await result.current.runtime.submit(send("Hi"));
+    });
+
+    expect(result.current.thread[1]?.createdSources).toBeUndefined();
+    expect(onSourcesCreated).not.toHaveBeenCalled();
 });

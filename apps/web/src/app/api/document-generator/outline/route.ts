@@ -13,7 +13,10 @@ import { invokeStructured } from "@launchstack/llm";
 import { z } from "zod";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -159,122 +162,134 @@ const TEMPLATE_HINTS: Record<string, string> = {
 };
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = (await request.json()) as unknown;
-        const validation = OutlineSchema.safeParse(body);
+        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
+            const body = (await request.json()) as unknown;
+            const validation = OutlineSchema.safeParse(body);
 
-        if (!validation.success) {
-            return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
-                { status: 400 }
-            );
-        }
-
-        const { action, topic, description, content, templateId, options } = validation.data;
-        const startTime = Date.now();
-
-        const resolved = resolveConfiguredChatModel({ route: "fast" });
-        const modelId = resolved.modelId;
-        const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
-        if (!compatibility.ok) {
-            return NextResponse.json(
-                { success: false, message: compatibility.message },
-                { status: compatibility.status }
-            );
-        }
-
-        let systemPrompt: string;
-        let userPrompt: string;
-
-        switch (action) {
-            case "generate":
-                systemPrompt = OUTLINE_SYSTEM_PROMPT;
-                userPrompt = `Create a document outline for: ${topic ?? "the document"}`;
-
-                if (description) {
-                    userPrompt += `\n\nDocument description: ${description}`;
-                }
-
-                if (templateId && templateId in TEMPLATE_HINTS) {
-                    userPrompt += `\n\nTemplate type: ${templateId}\nSuggested sections to ${TEMPLATE_HINTS[templateId]}`;
-                }
-
-                if (options?.depth) {
-                    userPrompt += `\n\nMaximum heading depth: ${options.depth} levels`;
-                }
-
-                if (options?.sections) {
-                    userPrompt += `\n\nTarget approximately ${options.sections} main sections`;
-                }
-
-                if (options?.audience) {
-                    userPrompt += `\n\nTarget audience: ${options.audience}`;
-                }
-                break;
-
-            case "restructure":
-                systemPrompt = RESTRUCTURE_SYSTEM_PROMPT;
-                userPrompt = `Analyze and suggest improvements for this document structure:\n\n${content}`;
-
-                if (topic) {
-                    userPrompt += `\n\nDocument topic: ${topic}`;
-                }
-                break;
-
-            case "extract":
-                systemPrompt = EXTRACT_SYSTEM_PROMPT;
-                userPrompt = `Extract the structure from this document:\n\n${content}`;
-                break;
-
-            default:
+            if (!validation.success) {
                 return NextResponse.json(
-                    { success: false, message: "Invalid action" },
+                    {
+                        success: false,
+                        message: tApi("invalidRequest"),
+                        errors: validation.error.errors,
+                    },
                     { status: 400 }
                 );
-        }
+            }
 
-        const extras = await invokeStructured(
-            resolved,
-            OutlineResponseSchema,
-            [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
-            { name: "outline_response" }
-        );
-        const outline = extras.outline ?? extras.suggestedStructure ?? [];
-        const processingTimeMs = Date.now() - startTime;
+            const { action, topic, description, content, templateId, options } = validation.data;
+            const startTime = Date.now();
 
-        console.log(`✅ [Document Generator] Outline ${action} completed in ${processingTimeMs}ms`);
+            const resolved = resolveConfiguredChatModel({ route: "fast" });
+            const compatibility = validateDeprecatedChatSelection(
+                { model: options?.model },
+                locale
+            );
+            if (!compatibility.ok) {
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status }
+                );
+            }
 
-        return NextResponse.json({
-            success: true,
-            action,
-            outline,
-            ...(action === "restructure"
-                ? {
-                      currentStructure: extras.currentStructure,
-                      improvements: extras.improvements,
-                      gaps: extras.gaps,
-                  }
-                : {}),
-            ...(action === "extract"
-                ? {
-                      wordCount: extras.wordCount,
-                      sectionCount: extras.sectionCount,
-                  }
-                : {}),
-            summary: extras.summary,
-            processingTimeMs,
-            model: modelId,
+            let systemPrompt: string;
+            let userPrompt: string;
+
+            switch (action) {
+                case "generate":
+                    systemPrompt = OUTLINE_SYSTEM_PROMPT;
+                    userPrompt = `Create a document outline for: ${topic ?? "the document"}`;
+
+                    if (description) {
+                        userPrompt += `\n\nDocument description: ${description}`;
+                    }
+
+                    if (templateId && templateId in TEMPLATE_HINTS) {
+                        userPrompt += `\n\nTemplate type: ${templateId}\nSuggested sections to ${TEMPLATE_HINTS[templateId]}`;
+                    }
+
+                    if (options?.depth) {
+                        userPrompt += `\n\nMaximum heading depth: ${options.depth} levels`;
+                    }
+
+                    if (options?.sections) {
+                        userPrompt += `\n\nTarget approximately ${options.sections} main sections`;
+                    }
+
+                    if (options?.audience) {
+                        userPrompt += `\n\nTarget audience: ${options.audience}`;
+                    }
+                    break;
+
+                case "restructure":
+                    systemPrompt = RESTRUCTURE_SYSTEM_PROMPT;
+                    userPrompt = `Analyze and suggest improvements for this document structure:\n\n${content}`;
+
+                    if (topic) {
+                        userPrompt += `\n\nDocument topic: ${topic}`;
+                    }
+                    break;
+
+                case "extract":
+                    systemPrompt = EXTRACT_SYSTEM_PROMPT;
+                    userPrompt = `Extract the structure from this document:\n\n${content}`;
+                    break;
+
+                default:
+                    return NextResponse.json(
+                        { success: false, message: t("invalidAction") },
+                        { status: 400 }
+                    );
+            }
+
+            const extras = await invokeStructured(
+                resolved,
+                OutlineResponseSchema,
+                [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+                { name: "outline_response" }
+            );
+            const outline = extras.outline ?? extras.suggestedStructure ?? [];
+            const processingTimeMs = Date.now() - startTime;
+
+            console.log(
+                `✅ [Document Generator] Outline ${action} completed in ${processingTimeMs}ms`
+            );
+
+            return NextResponse.json({
+                success: true,
+                action,
+                outline,
+                ...(action === "restructure"
+                    ? {
+                          currentStructure: extras.currentStructure,
+                          improvements: extras.improvements,
+                          gaps: extras.gaps,
+                      }
+                    : {}),
+                ...(action === "extract"
+                    ? {
+                          wordCount: extras.wordCount,
+                          sectionCount: extras.sectionCount,
+                      }
+                    : {}),
+                summary: extras.summary,
+                processingTimeMs,
+            });
         });
     } catch (error) {
         console.error("❌ [Document Generator] Error generating outline:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to generate outline",
-                error: "Failed to generate outline",
+                message: t("outlineFailed"),
+                error: t("outlineFailed"),
             },
             { status: 500 }
         );

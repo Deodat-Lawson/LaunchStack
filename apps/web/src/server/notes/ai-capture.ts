@@ -12,6 +12,9 @@
  */
 
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import type { Locale } from "~/i18n/locales";
+import { replyLanguageInstruction } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 
@@ -22,6 +25,8 @@ interface CaptureArgs {
     intent: AiCaptureIntent;
     /** Optional surrounding context the LLM can use as a hint. */
     documentTitle?: string | null;
+    /** The reader's language: the note's title and the model's text follow it (English by default). */
+    locale?: Locale;
     page?: number | null;
 }
 
@@ -50,11 +55,10 @@ Format (markdown):
 Output markdown only — no preamble.`,
 };
 
-const SUGGESTED_TITLE: Record<AiCaptureIntent, string> = {
-    summary: "Summary",
-    action: "Action item",
-    decision: "Decision",
-};
+/** The note's title for each intent, in the reader's language (`notes.server.captureTitles`). */
+function suggestedTitle(intent: AiCaptureIntent, locale: Locale): string {
+    return translatorFor(locale, "notes.server.captureTitles")(intent);
+}
 
 export interface CaptureResult {
     markdown: string;
@@ -63,9 +67,10 @@ export interface CaptureResult {
 
 export async function captureFromSelection(args: CaptureArgs): Promise<CaptureResult> {
     const { selection, intent } = args;
+    const locale = args.locale ?? "en";
     const trimmed = selection.trim();
     if (!trimmed) {
-        return { markdown: "", suggestedTitle: SUGGESTED_TITLE[intent] };
+        return { markdown: "", suggestedTitle: suggestedTitle(intent, locale) };
     }
 
     const contextLine =
@@ -78,7 +83,11 @@ export async function captureFromSelection(args: CaptureArgs): Promise<CaptureRe
     const resolved = resolveConfiguredChatModel({ route: "fast" });
     const reply = await resolved.chat.invoke(
         resolved.prepareMessages([
-            new SystemMessage(SYSTEM_PROMPT_BY_INTENT[intent]),
+            new SystemMessage(
+                [SYSTEM_PROMPT_BY_INTENT[intent], replyLanguageInstruction(locale)]
+                    .filter(Boolean)
+                    .join("\n\n")
+            ),
             new HumanMessage(`${contextLine}Passage:\n\n"""\n${trimmed}\n"""`),
         ])
     );
@@ -86,6 +95,6 @@ export async function captureFromSelection(args: CaptureArgs): Promise<CaptureRe
 
     return {
         markdown,
-        suggestedTitle: SUGGESTED_TITLE[intent],
+        suggestedTitle: suggestedTitle(intent, locale),
     };
 }

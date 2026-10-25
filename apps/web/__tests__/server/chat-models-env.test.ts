@@ -13,6 +13,8 @@ import {
     translateLegacyEndpoint,
 } from "~/server/chat-models";
 import { hasConfiguredAiCredential } from "~/server/ai-credentials";
+import { isChatEndpointConfigured } from "~/server/chat-endpoint";
+import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
 
 describe("chat endpoint resolution", () => {
     it("prefers CHAT_BASE_URL and CHAT_API_KEY", () => {
@@ -158,6 +160,44 @@ describe("credential presence checks", () => {
     });
 });
 
+describe("isChatEndpointConfigured", () => {
+    // Resolution warns once per process when nothing names an endpoint.
+    beforeEach(() => {
+        resetChatEndpointWarnings();
+        jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    });
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("counts an endpoint the operator named, keyed or not", () => {
+        expect(isChatEndpointConfigured({ CHAT_BASE_URL: "https://x/v1", CHAT_API_KEY: "k" })).toBe(
+            true
+        );
+        // A local server takes no key.
+        expect(isChatEndpointConfigured({ CHAT_BASE_URL: "http://localhost:11434/v1" })).toBe(true);
+        expect(isChatEndpointConfigured({ AI_BASE_URL: "https://x/v1" })).toBe(true);
+    });
+
+    it("counts the Gemini default only once it has its key", () => {
+        expect(isChatEndpointConfigured({ GOOGLE_AI_API_KEY: "AIza-x" })).toBe(true);
+        expect(isChatEndpointConfigured({})).toBe(false);
+        expect(isChatEndpointConfigured({ GOOGLE_AI_API_KEY: "  " })).toBe(false);
+    });
+
+    it("ignores credentials that name no endpoint", () => {
+        // They leave chat on the Gemini default, without the key it needs.
+        expect(
+            isChatEndpointConfigured({
+                CHAT_API_KEY: "k",
+                AI_API_KEY: "k",
+                OPENAI_API_KEY: "k",
+                OPENROUTER_API_KEY: "k",
+            })
+        ).toBe(false);
+    });
+});
+
 describe("configuration file loading", () => {
     const endpoint = { CHAT_BASE_URL: "https://endpoint.example/v1", CHAT_API_KEY: "k" };
 
@@ -183,6 +223,11 @@ describe("configuration file loading", () => {
         expect(config.routes.default).toBeTruthy();
         expect(config.models.get(config.routes.default)).toBeTruthy();
         expect(config.endpoint.baseUrl).toBe("https://endpoint.example/v1");
+    });
+
+    it("installs the assistant identity rule on the endpoint, so every chat carries it", () => {
+        const config = getAppChatModelsConfig(endpoint, process.cwd());
+        expect(config.endpoint.systemInstructions).toBe(ASSISTANT_IDENTITY_RULE);
     });
 
     it("caches per path and endpoint", () => {

@@ -1,7 +1,7 @@
 /**
  * Every mutating route in the document / folder / settings / connector /
- * analytics / campaign families refuses a membership that lacks the one
- * permission the route names — before it touches the database.
+ * analytics / campaign / agent-roster families refuses a membership that
+ * lacks the one permission the route names — before it touches the database.
  *
  * One table, one context per role, one assertion: 403. The positive paths
  * live with each route's own tests; this file exists so that a route which
@@ -197,6 +197,20 @@ jest.mock("~/server/services/agent-sessions-connector", () => ({
 }));
 // ESM-only; the commit route never reaches it before its gate.
 jest.mock("p-limit", () => () => (fn: () => unknown) => fn());
+// The agent roster routes: the store, the hub and Slack are all past the gate.
+jest.mock("~/server/collab/personas", () => ({
+    archivePersona: jest.fn(),
+    createPersona: jest.fn(),
+    ensureStarterPersonas: jest.fn(),
+    getPersonaById: jest.fn(),
+    getPersonaByKey: jest.fn(),
+    listPersonas: jest.fn(),
+    resetStarterPersona: jest.fn(),
+    updatePersona: jest.fn(),
+}));
+jest.mock("~/server/collab/runtime", () => ({ getHub: jest.fn(), listKnownNodes: jest.fn() }));
+jest.mock("~/server/collab/slack", () => ({ getSlackStatus: jest.fn() }));
+jest.mock("~/server/settings/store", () => ({ readWorkspaceSetting: jest.fn() }));
 
 // ---------------------------------------------------------------------------
 // Handlers
@@ -218,6 +232,7 @@ import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[vers
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
 import { POST as createVersion } from "~/app/api/documents/[id]/versions/route";
+import { POST as retryProcessing } from "~/app/api/documents/[id]/retry/route";
 import { POST as uploadDocument } from "~/app/api/uploadDocument/route";
 import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
@@ -248,6 +263,14 @@ import { GET as documentStats } from "~/app/api/company/documents/[documentId]/s
 import { POST as approveCampaign } from "~/app/api/email-campaigns/[campaignId]/approve/route";
 import { POST as sendCampaign } from "~/app/api/email-campaigns/[campaignId]/send/route";
 import { POST as runCampaign } from "~/app/api/email-campaign-runs/route";
+import { GET as fetchCompany } from "~/app/api/fetchCompany/route";
+import { POST as createAgent } from "~/app/api/collab/agents/route";
+import { POST as importAgent } from "~/app/api/collab/agents/import/route";
+import {
+    DELETE as retireAgent,
+    PATCH as editAgent,
+} from "~/app/api/collab/agents/[personaId]/route";
+import { POST as resetAgent } from "~/app/api/collab/agents/[personaId]/reset/route";
 
 // ---------------------------------------------------------------------------
 // Table
@@ -321,13 +344,14 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/metadata (raw export, excerpts from every folder)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadata(),
+        call: () => getCompanyMetadata(new Request("http://localhost/api/company/metadata")),
     },
     {
         route: "GET /api/company/metadata/history",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadataHistory(),
+        call: () =>
+            getCompanyMetadataHistory(new Request("http://localhost/api/company/metadata/history")),
     },
     {
         route: "PATCH /api/company/profile/facts",
@@ -358,7 +382,63 @@ const GATES: readonly Gate[] = [
         route: "GET /api/employer/upload/bootstrap",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => uploadBootstrap(),
+        call: () => uploadBootstrap(new Request("http://localhost/api/employer/upload/bootstrap")),
+    },
+    {
+        route: "GET /api/fetchCompany (key tails, Ollama endpoint)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () => fetchCompany(new Request("http://localhost/api/fetchCompany")),
+    },
+    // The agent roster: adding, retiring and restoring are the managers', and
+    // so are an agent's policy fields; what an agent says is any editor's.
+    {
+        route: "POST /api/collab/agents",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            createAgent(
+                json("/api/collab/agents", "POST", {
+                    key: "finance",
+                    displayName: "Dana",
+                    role: "Finance partner",
+                    systemPrompt: "Guard the margin.",
+                })
+            ),
+    },
+    {
+        route: "POST /api/collab/agents/import",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            importAgent(json("/api/collab/agents/import", "POST", { file: "---\n---\nHi" })),
+    },
+    {
+        route: "DELETE /api/collab/agents/[personaId]",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            retireAgent(json("/api/collab/agents/p1", "DELETE", {}), params({ personaId: "p1" })),
+    },
+    {
+        route: "POST /api/collab/agents/[personaId]/reset",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            resetAgent(
+                json("/api/collab/agents/p1/reset", "POST", {}),
+                params({ personaId: "p1" })
+            ),
+    },
+    {
+        route: "PATCH /api/collab/agents/[personaId] (autonomy)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            editAgent(
+                json("/api/collab/agents/p1", "PATCH", { autonomy: "full" }),
+                params({ personaId: "p1" })
+            ),
     },
     // documents.delete — deleting a file itself is gated by level, not role
     // (ADR-014: whoever manages a file may delete it); see
@@ -398,6 +478,14 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () =>
             createVersion(json("/api/documents/1/versions", "POST", {}), params({ id: "1" })),
+    },
+    // Retrying re-runs processing for the file, like a new version does.
+    {
+        route: "POST /api/documents/[id]/retry",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            retryProcessing(json("/api/documents/1/retry", "POST", {}), params({ id: "1" })),
     },
     {
         route: "POST /api/uploadDocument",
@@ -552,7 +640,8 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/analysis-dashboard",
         permission: "analytics.view",
         deniedRole: "member",
-        call: () => analysisDashboard(),
+        call: () =>
+            analysisDashboard(new Request("http://localhost/api/company/analysis-dashboard")),
     },
     {
         route: "GET /api/company/documents/[documentId]/stats",
@@ -595,6 +684,16 @@ const GATES: readonly Gate[] = [
                     name: "n",
                     recipients: [{ email: "a@b.c" }],
                 })
+            ),
+    },
+    {
+        route: "PATCH /api/collab/agents/[personaId] (instructions)",
+        permission: "documents.edit",
+        deniedRole: "viewer",
+        call: () =>
+            editAgent(
+                json("/api/collab/agents/p1", "PATCH", { systemPrompt: "Be brief." }),
+                params({ personaId: "p1" })
             ),
     },
 ];
@@ -656,6 +755,31 @@ describe("permission gates", () => {
         const location = response.headers.get("location") ?? "";
         expect(location).toContain("connector=gmail");
         expect(location).toContain("result=error");
+    });
+
+    it("GET /api/connectors/google/oauth/callback returns to the public origin, not the bind address", async () => {
+        signInAs("member");
+        const saved = { auth: process.env.BETTER_AUTH_URL, app: process.env.APP_PUBLIC_URL };
+        process.env.BETTER_AUTH_URL = "https://app.example.com";
+        delete process.env.APP_PUBLIC_URL;
+        try {
+            // Behind Caddy the standalone server hands the route its bind address.
+            const response = await googleOAuthCallback(
+                new Request(
+                    "https://0.0.0.0:3000/api/connectors/google/oauth/callback?code=c&state=s"
+                )
+            );
+
+            expect(response.status).toBe(307);
+            const location = new URL(response.headers.get("location") ?? "");
+            expect(location.origin).toBe("https://app.example.com");
+            expect(location.pathname).toBe("/employer/documents");
+        } finally {
+            if (saved.auth === undefined) delete process.env.BETTER_AUTH_URL;
+            else process.env.BETTER_AUTH_URL = saved.auth;
+            if (saved.app === undefined) delete process.env.APP_PUBLIC_URL;
+            else process.env.APP_PUBLIC_URL = saved.app;
+        }
     });
 
     it("lets an admin through the same gate (the harness is not refusing everyone)", async () => {

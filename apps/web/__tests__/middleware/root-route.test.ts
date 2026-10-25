@@ -66,4 +66,12 @@ describe("middleware after the apps/landing split", () => {
             await expect(run(path, null)).resolves.toBeUndefined();
         }
     );
+
+    // /site/... is how the logo, sign-out and Help reach the public site. A
+    // signed-out visitor (including one who just signed out) must get through
+    // to the redirect, and so must a signed-in one.
+    it.each(["/site", "/site/contact"])("lets anyone through to %s", async path => {
+        await expect(run(path, null)).resolves.toBeUndefined();
+        await expect(run(path, "user_abc")).resolves.toBeUndefined();
+    });
 });

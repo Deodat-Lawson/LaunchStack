@@ -61,8 +61,12 @@ x-shared-env: &shared-env
   TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}
   TRANSCRIPTION_API_BASE_URL: ${TRANSCRIPTION_API_BASE_URL:-}
   TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+  # Minutes of audio per transcription call (default 10): longer means fewer
+  # calls (a free-tier Gemini key gets 20 a day) but rougher timestamps.
+  TRANSCRIPTION_CHUNK_MINUTES: ${TRANSCRIPTION_CHUNK_MINUTES:-}
   # Auth (the worker inherits these transitively through the shared
-  # composition root — see ADR-002 consequences; it never uses them)
+  # composition root — see ADR-002 consequences). BETTER_AUTH_URL is also the
+  # public origin every link and OAuth redirect URI is built on.
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
   BETTER_AUTH_URL: ${BETTER_AUTH_URL:-}
   # Services
@@ -74,6 +78,7 @@ x-shared-env: &shared-env
   DATALAB_API_KEY: ${DATALAB_API_KEY:-}
   AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
   AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
+  AZURE_DOC_INTELLIGENCE_MODEL: ${AZURE_DOC_INTELLIGENCE_MODEL:-}
   LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
   GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
   GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
@@ -120,6 +125,8 @@ x-shared-env: &shared-env
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+  # text-layer-first (unset) | provider-first — see .env.example.
+  OCR_PDF_STRATEGY: ${OCR_PDF_STRATEGY:-}
   # Gotenberg PDF rendering (ADR-009). Basic auth instead of X-API-Key —
   # that is the auth Gotenberg ships — but the same fail-closed local-default
   # contract as the other services: override the password in production.
@@ -151,12 +158,13 @@ x-shared-env: &shared-env
   AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
   AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
   AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
-  # Workspace connectors: Google Drive + Gmail, GitHub, Slack.
+  # Workspace connectors: Google Drive + Gmail, GitHub, Slack, Notion.
   GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
   GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
   GOOGLE_OAUTH_REDIRECT_URL: ${GOOGLE_OAUTH_REDIRECT_URL:-}
   GOOGLE_DOCS_EDITING_ENABLED: ${GOOGLE_DOCS_EDITING_ENABLED:-}
   GMAIL_CONNECTOR_ENABLED: ${GMAIL_CONNECTOR_ENABLED:-}
+  GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: ${GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED:-}
   # Google Picker (Drive connector). Public by design; the app serves them to the
   # browser from its status route at request time, so they need no build arg.
   NEXT_PUBLIC_GOOGLE_API_KEY: ${NEXT_PUBLIC_GOOGLE_API_KEY:-}
@@ -167,6 +175,8 @@ x-shared-env: &shared-env
   SLACK_CLIENT_ID: ${SLACK_CLIENT_ID:-}
   SLACK_CLIENT_SECRET: ${SLACK_CLIENT_SECRET:-}
   SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
+  NOTION_OAUTH_CLIENT_ID: ${NOTION_OAUTH_CLIENT_ID:-}
+  NOTION_OAUTH_CLIENT_SECRET: ${NOTION_OAUTH_CLIENT_SECRET:-}
   # Growth › Brand social accounts. LinkedIn: the app pair and the exact
   # scopes its Auth tab lists. The deployment-wide keys below are the
   # fallback for networks a workspace has not connected itself.
@@ -181,8 +191,12 @@ x-shared-env: &shared-env
   REDDIT_CLIENT_ID: ${REDDIT_CLIENT_ID:-}
   REDDIT_CLIENT_SECRET: ${REDDIT_CLIENT_SECRET:-}
   REDDIT_USER_AGENT: ${REDDIT_USER_AGENT:-}
-  # Public origin of the app; the converter and the OAuth redirect derive from it.
+  # Where the converter, editor and worker reach this app to fetch /api/files.
+  # Never used for a URL a person or OAuth provider opens (BETTER_AUTH_URL is).
   APP_PUBLIC_URL: ${APP_PUBLIC_URL:-}
+  # Public site (apps/landing) origin, read per request by /site, /privacy and
+  # /terms. Unset falls back to the origin baked in at build time.
+  LANDING_PUBLIC_URL: ${LANDING_PUBLIC_URL:-}
   # Campaign email: HMAC key for unsubscribe links, and the send switch
   # (anything but "true" is a dry run).
   EMAIL_UNSUBSCRIBE_SECRET: ${EMAIL_UNSUBSCRIBE_SECRET:-}
@@ -377,7 +391,7 @@ services:
       # First alternative is Gotenberg's own default (block file: outside its
       # /tmp working dir) — overriding the flag replaces it, so it is repeated.
       - >-
-        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|gotenberg)(?::[0-9]+)?(?:/.*)?$$
+        --chromium-deny-list=^file:(?!//\/tmp/).*|^https?://(?:[^/]*@)?(?:localhost|127\.[0-9.]+|0\.0\.0\.0|10\.[0-9.]+|172\.(?:1[6-9]|2[0-9]|3[01])\.[0-9.]+|192\.168\.[0-9.]+|169\.254\.[0-9.]+|\[::1\]|db|seaweedfs|app|worker|transcription|adeu-docs-editing|document-converter|docling-serve|inngest-dev|inngest|inngest-redis|gotenberg)(?::[0-9]+)?(?:/.*)?$$
     environment:
       GOTENBERG_API_BASIC_AUTH_USERNAME: launchstack
       GOTENBERG_API_BASIC_AUTH_PASSWORD: ${GOTENBERG_SERVICE_PASSWORD:-pdr_local_gotenberg_key}

@@ -20,6 +20,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import type { BaseMessage, BaseMessageLike } from "@langchain/core/messages";
 import { createSlot } from "@launchstack/runtime";
 import type { ChatModelsConfig } from "./chat-config";
+import { getChatModelsScope, reportUnscopedChatResolution } from "./chat-scope";
 import { applyMessageBehavior } from "./messages";
 import {
     createOpenAiCompatibleChat,
@@ -47,7 +48,15 @@ export function configureChatModels(config: ChatModelsConfig): void {
     configSlot.set(config);
 }
 
+/**
+ * The configuration resolution should use here: the current scope's when work
+ * runs inside {@link runWithChatModelsScope} (a workspace that brought its own
+ * endpoint), otherwise the deployment's.
+ */
 export function getChatModelsConfig(): ChatModelsConfig {
+    const scope = getChatModelsScope();
+    if (scope?.error) throw scope.error;
+    if (scope?.config) return scope.config;
     const config = configSlot.get();
     if (!config) {
         throw new ChatConfigurationError(
@@ -58,6 +67,10 @@ export function getChatModelsConfig(): ChatModelsConfig {
 }
 
 export function isChatConfigured(): boolean {
+    const scope = getChatModelsScope();
+    // A scope that cannot be used still counts: resolving must reach its error
+    // rather than let a caller skip chat as if nothing were set up.
+    if (scope?.config || scope?.error) return true;
     return configSlot.get() !== undefined;
 }
 
@@ -226,9 +239,11 @@ export function resolveChatRoute(
                 route,
                 reason: "route-not-configured",
                 missingCapabilities: [needed],
+                // Never the model id: this message reaches the browser as a
+                // disabled control's tooltip, and the screen does not name models.
                 message:
                     `No model is configured for the "${route}" route, and the default model ` +
-                    `"${fallback.id}" does not declare ${needed === "vision" ? "image input" : "a reasoning mode"}. ` +
+                    `does not declare ${needed === "vision" ? "image input" : "a reasoning mode"}. ` +
                     `Assign a "${route}" route in the chat model configuration.`,
             });
         }
@@ -259,6 +274,8 @@ export interface ResolveChatModelOptions {
     /** Ignored unless the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /** Retries after a failed attempt; see the transport for the defaults. */
+    maxRetries?: number;
     config?: ChatModelsConfig;
 }
 
@@ -284,6 +301,7 @@ export interface ResolvedChatModel {
  * for something the configuration cannot serve.
  */
 export function resolveChatModel(options: ResolveChatModelOptions = {}): ResolvedChatModel {
+    if (!options.config) reportUnscopedChatResolution();
     const config = options.config ?? getChatModelsConfig();
     const route = options.route ?? "default";
     const resolved = resolveChatRoute(route, config);
@@ -296,7 +314,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             reason: "missing-capability",
             missingCapabilities: missing,
             message:
-                `Model "${resolved.definition.id}" serves the "${route}" route but does not support: ${missing.join(", ")}. ` +
+                `The model serving the "${route}" route does not support: ${missing.join(", ")}. ` +
                 `Assign a capable model to that route in the chat model configuration.`,
         });
     }
@@ -318,7 +336,15 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             maxOutputTokens: options.maxOutputTokens,
             streaming: options.streaming,
             timeoutMs: options.timeoutMs,
+            maxRetries: options.maxRetries,
             requestPatch: reasoning.requestPatch,
+            // Captured now, in the scope that chose this configuration, so the
+            // calls are counted against the same unit of work.
+            usage: {
+                route,
+                pricing: resolved.definition.pricing,
+                recorder: getChatModelsScope()?.usage,
+            },
         }),
         prepareMessages: messages => applyMessageBehavior(behavior, messages),
     };
@@ -353,7 +379,8 @@ export function describeChatError(
     error: unknown,
     modelId: string
 ): { status: number; message: string } | null {
-    const config = configSlot.get();
+    const scope = getChatModelsScope();
+    const config = scope?.config ?? (scope?.error ? undefined : configSlot.get());
     if (!config) return null;
     return describeChatEndpointError(error, config.endpoint, modelId);
 }

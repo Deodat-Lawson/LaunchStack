@@ -21,6 +21,9 @@
 import { NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 
+import type { Locale } from "~/i18n/locales";
+import { requestLocaleOrDefault } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { getServerSession } from "~/server/auth";
 
 import { db } from "~/server/db";
@@ -68,26 +71,20 @@ export type AuthIdentityResult = IdentitySuccess | IdentityFailure;
 // Helpers
 // ---------------------------------------------------------------------------
 
-function unauthorized(): WorkspaceFailure {
-    return {
-        success: false,
-        response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
-    };
+// The guard is not handed the request, so it reads the reader's language
+// from the request scope (English outside one).
+
+async function failure(
+    key: "unauthorized" | "forbidden" | "internal",
+    status: number
+): Promise<WorkspaceFailure> {
+    const t = translatorFor(await requestLocaleOrDefault(), "errors.api");
+    return { success: false, response: NextResponse.json({ error: t(key) }, { status }) };
 }
 
-function forbidden(message = "Forbidden"): WorkspaceFailure {
-    return {
-        success: false,
-        response: NextResponse.json({ error: message }, { status: 403 }),
-    };
-}
-
-function internalError(): WorkspaceFailure {
-    return {
-        success: false,
-        response: NextResponse.json({ error: "Internal server error" }, { status: 500 }),
-    };
-}
+const unauthorized = () => failure("unauthorized", 401);
+const forbidden = () => failure("forbidden", 403);
+const internalError = () => failure("internal", 500);
 
 /**
  * Builds the context object from resolved facts. Exported for tests and for
@@ -229,14 +226,59 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 }
 
 // ---------------------------------------------------------------------------
+// resolveMemberContext
+// ---------------------------------------------------------------------------
+
+/**
+ * The same context for a caller who arrives with a credential instead of a
+ * browser session — an MCP access token or access key names the person and
+ * the workspace outright, so there is no cookie to pick the workspace from.
+ * Null unless the person holds an **active** membership there; a removed or
+ * suspended member's credential stops working on the next request.
+ */
+export async function resolveMemberContext(
+    authUserId: string,
+    companyId: bigint
+): Promise<WorkspaceContext | null> {
+    const [row] = await db
+        .select({
+            userPk: users.id,
+            role: userCompanyMemberships.role,
+            status: userCompanyMemberships.status,
+        })
+        .from(users)
+        .innerJoin(
+            userCompanyMemberships,
+            and(
+                eq(userCompanyMemberships.userId, users.id),
+                eq(userCompanyMemberships.companyId, companyId)
+            )
+        )
+        .where(eq(users.userId, authUserId));
+    if (!row || row.status !== "active") return null;
+    const permissions = await resolvePermissionsForRole(companyId, row.role);
+    return buildWorkspaceContext({
+        authUserId,
+        userPk: BigInt(row.userPk),
+        companyId,
+        role: row.role,
+        status: "active",
+        permissions,
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Permission gates
 // ---------------------------------------------------------------------------
 
 /** 403 response for a caller whose membership lacks a permission. */
-export function forbiddenForPermission(permission?: Permission): NextResponse {
+export function forbiddenForPermission(
+    permission?: Permission,
+    locale: Locale = "en"
+): NextResponse {
     return NextResponse.json(
         {
-            error: "Forbidden",
+            error: translatorFor(locale, "errors.api")("forbidden"),
             ...(permission ? { permission } : {}),
         },
         { status: 403 }
@@ -261,7 +303,10 @@ export async function requireWorkspacePermission(
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx;
     if (!ctx.data.can(permission)) {
-        return { success: false, response: forbiddenForPermission(permission) };
+        return {
+            success: false,
+            response: forbiddenForPermission(permission, await requestLocaleOrDefault()),
+        };
     }
     return ctx;
 }
@@ -279,9 +324,10 @@ export async function requireAuthIdentity(): Promise<AuthIdentityResult> {
     const session = await getServerSession();
     const authUserId = session?.user.id;
     if (!authUserId) {
+        const t = translatorFor(await requestLocaleOrDefault(), "errors.api");
         return {
             success: false,
-            response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+            response: NextResponse.json({ error: t("unauthorized") }, { status: 401 }),
         };
     }
 

@@ -3,6 +3,8 @@ import { refineContent } from "@launchstack/pipelines/marketing";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -20,31 +22,38 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const validation = RefineInputSchema.safeParse(await readJson(request));
-        if (!validation.success) {
-            return fail("Invalid input", 400, { errors: validation.error.flatten() });
-        }
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
+            const validation = RefineInputSchema.safeParse(await readJson(request));
+            if (!validation.success) {
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: validation.error.flatten(),
+                });
+            }
 
-        const companyId = Number(ctx.data.companyId);
-        if (Number.isNaN(companyId)) {
-            return fail("Invalid company ID", 400);
-        }
+            const companyId = Number(ctx.data.companyId);
+            if (Number.isNaN(companyId)) {
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("invalidCompanyId"),
+                    400
+                );
+            }
 
-        const companyContext = await buildCompanyKnowledgeContext({
-            companyId,
-            prompt: validation.data.feedback,
+            const companyContext = await buildCompanyKnowledgeContext({
+                companyId,
+                prompt: validation.data.feedback,
+            });
+
+            const result = await refineContent({
+                platform: validation.data.platform,
+                originalMessage: validation.data.originalMessage,
+                feedback: validation.data.feedback,
+                companyContext,
+                brandVoice: validation.data.brandVoice,
+            });
+
+            return ok(result);
         });
-
-        const result = await refineContent({
-            platform: validation.data.platform,
-            originalMessage: validation.data.originalMessage,
-            feedback: validation.data.feedback,
-            companyContext,
-            brandVoice: validation.data.brandVoice,
-        });
-
-        return ok(result);
     } catch (error) {
-        return handleRouteError("marketing-pipeline/refine", error);
+        return handleRouteError("marketing-pipeline/refine", error, request);
     }
 }

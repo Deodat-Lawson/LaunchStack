@@ -40,23 +40,26 @@ enum HelperError: Error {
     }
 }
 
-private enum AudioSource: String {
+enum AudioSource: String, CodingKey {
     case microphone
     case system
 }
 
-private enum Command {
-    case status
+enum Command: Equatable {
+    case status(source: AudioSource?)
     case requestPermission(AudioSource)
     case capture(source: AudioSource, sampleRate: Int)
 }
 
-private enum CLIArguments {
+enum CLIArguments {
     static func parse(_ arguments: [String]) throws -> Command {
         let arguments = Array(arguments.dropFirst())
 
         if arguments == ["--status"] {
-            return .status
+            return .status(source: nil)
+        }
+        if arguments.count == 3, arguments[0] == "--status", arguments[1] == "--source" {
+            return .status(source: try parseSource(arguments[2]))
         }
         if arguments.first == "--request-permission" {
             guard arguments.count <= 2 else {
@@ -104,7 +107,7 @@ private enum CLIArguments {
 
     private static func usage() -> HelperError {
         .usage(
-            "usage: launchstack-system-audio --status | --request-permission [microphone|system] | [--source microphone|system] --sample-rate <8000-192000>; capture stdout is mono signed-16-bit little-endian PCM, default source is system"
+            "usage: launchstack-system-audio --status [--source microphone|system] | --request-permission [microphone|system] | [--source microphone|system] --sample-rate <8000-192000>; capture stdout is mono signed-16-bit little-endian PCM, default source is system"
         )
     }
 }
@@ -171,29 +174,49 @@ private struct StatusPayload: Encodable {
     }
 }
 
-private final class SourceStatusCompletion {
-    private let lock = NSLock()
-    private var continuation: CheckedContinuation<SourceStatusPayload, Never>?
+private struct SelectedSourceStatusPayload: Encodable {
+    let source: AudioSource
+    let status: SourceStatusPayload
 
-    init(_ continuation: CheckedContinuation<SourceStatusPayload, Never>) {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: AudioSource.self)
+        try container.encode(status, forKey: source)
+    }
+}
+
+// The lock consumes the continuation once across the inventory and timeout queues.
+private final class CaptureContentCompletion: @unchecked Sendable {
+    private let lock = NSLock()
+    private var continuation: CheckedContinuation<SCShareableContent, Error>?
+
+    init(_ continuation: CheckedContinuation<SCShareableContent, Error>) {
         self.continuation = continuation
     }
 
-    func finish(_ payload: SourceStatusPayload) {
+    func finish(_ result: Result<SCShareableContent, Error>) {
         lock.lock()
         let continuation = self.continuation
         self.continuation = nil
         lock.unlock()
-        continuation?.resume(returning: payload)
+        continuation?.resume(with: result)
     }
 }
 
 private enum PermissionProbe {
-    static func status() async -> StatusPayload {
+    static func status() -> StatusPayload {
         StatusPayload(
             microphone: microphoneStatus(),
-            system: await systemStatus()
+            system: systemStatus()
         )
+    }
+
+    static func status(for source: AudioSource) -> SourceStatusPayload {
+        switch source {
+        case .microphone:
+            return microphoneStatus()
+        case .system:
+            return systemStatus()
+        }
     }
 
     private static func microphoneStatus() -> SourceStatusPayload {
@@ -220,7 +243,7 @@ private enum PermissionProbe {
         }
     }
 
-    private static func systemStatus() async -> SourceStatusPayload {
+    private static func systemStatus() -> SourceStatusPayload {
         guard #available(macOS 14.0, *) else {
             return .unsupported("macOS 14.0 or newer is required")
         }
@@ -233,36 +256,24 @@ private enum PermissionProbe {
             )
         }
 
-        // ScreenCaptureKit can stall while the display service is unavailable.
-        // An unstructured task lets the CLI return a bounded status instead of
-        // a task group waiting indefinitely for a non-cancellable OS request.
-        return await withCheckedContinuation { continuation in
-            let completion = SourceStatusCompletion(continuation)
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(5)) {
-                completion.finish(.permissionDenied(
-                    "ScreenCaptureKit status timed out after 5 seconds; unlock a macOS display and try again"
-                ))
-            }
-            Task {
-                do {
-                    let content = try await SCShareableContent.excludingDesktopWindows(
-                        false,
-                        onScreenWindowsOnly: false
-                    )
-                    guard !content.displays.isEmpty else {
-                        completion.finish(.permissionDenied(
-                            "ScreenCaptureKit found no capturable display; connect or unlock a macOS display and try again"
-                        ))
-                        return
-                    }
-                    completion.finish(.ready("ScreenCaptureKit system-audio capture is available"))
-                } catch {
-                    completion.finish(.permissionDenied(
-                        "ScreenCaptureKit could not enumerate shareable content: \(error.localizedDescription)"
-                    ))
-                }
-            }
+        // Status observes permission and display availability, not capture
+        // success. Concurrent ScreenCaptureKit inventories can stall replayd;
+        // only an explicit capture should enumerate its shareable content.
+        var displayCount: UInt32 = 0
+        let error = CGGetActiveDisplayList(0, nil, &displayCount)
+        guard error == .success else {
+            return .permissionDenied(
+                "CoreGraphics could not check active displays (error \(error.rawValue)); unlock a macOS display and try again"
+            )
         }
+        guard displayCount > 0 else {
+            return .permissionDenied(
+                "No macOS display is active; connect or unlock a macOS display and try again"
+            )
+        }
+        return .ready(
+            "Screen Recording permission is granted and a display is active; system-audio capture is checked when started"
+        )
     }
 
     static func requestPermission(_ source: AudioSource) async -> StatusPayload {
@@ -276,11 +287,11 @@ private enum PermissionProbe {
                 _ = CGRequestScreenCaptureAccess()
             }
         }
-        return await status()
+        return status()
     }
 }
 
-private func writeStatus(_ payload: StatusPayload) throws {
+private func writeStatus<Payload: Encodable>(_ payload: Payload) throws {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys]
     var data = try encoder.encode(payload)
@@ -773,16 +784,29 @@ private final class SystemAudioCapture: NSObject, SCStreamOutput, SCStreamDelega
             )
         }
 
-        let content: SCShareableContent
-        do {
-            content = try await SCShareableContent.excludingDesktopWindows(
-                false,
-                onScreenWindowsOnly: false
-            )
-        } catch {
-            throw HelperError.capture(
-                "ScreenCaptureKit could not enumerate shareable content: \(error.localizedDescription)"
-            )
+        // ScreenCaptureKit requests are not cancellable. A one-shot completion
+        // bounds actual capture setup without letting permission checks start
+        // competing inventories or leaving the CLI waiting on a task group.
+        let content: SCShareableContent = try await withCheckedThrowingContinuation { continuation in
+            let completion = CaptureContentCompletion(continuation)
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(5)) {
+                completion.finish(.failure(HelperError.capture(
+                    "ScreenCaptureKit capture setup timed out after 5 seconds; unlock a macOS display and try again"
+                )))
+            }
+            Task {
+                do {
+                    let content = try await SCShareableContent.excludingDesktopWindows(
+                        false,
+                        onScreenWindowsOnly: false
+                    )
+                    completion.finish(.success(content))
+                } catch {
+                    completion.finish(.failure(HelperError.capture(
+                        "ScreenCaptureKit could not enumerate shareable content: \(error.localizedDescription)"
+                    )))
+                }
+            }
         }
         guard let display = content.displays.first else {
             throw HelperError.capture(
@@ -978,9 +1002,13 @@ private struct LaunchStackSystemAudio {
 
             let command = try CLIArguments.parse(CommandLine.arguments)
             switch command {
-            case .status:
-                let payload = await PermissionProbe.status()
-                try writeStatus(payload)
+            case let .status(source):
+                if let source {
+                    let status = PermissionProbe.status(for: source)
+                    try writeStatus(SelectedSourceStatusPayload(source: source, status: status))
+                } else {
+                    try writeStatus(PermissionProbe.status())
+                }
                 // Status is an observation, not a request to capture both
                 // sources. Callers inspect each source independently.
                 exit(0)

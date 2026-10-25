@@ -18,5 +18,10 @@ let package = Package(
             name: "LaunchStackSystemAudio",
             path: "Sources"
         ),
+        .testTarget(
+            name: "LaunchStackSystemAudioTests",
+            dependencies: ["LaunchStackSystemAudio"],
+            path: "Tests"
+        ),
     ]
 )

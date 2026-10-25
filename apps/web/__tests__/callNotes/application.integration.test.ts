@@ -7,11 +7,13 @@ import {
     CALL_NOTES_ENRICHMENT_PROPOSAL,
     CALL_NOTES_FIXTURE_IDS,
     CALL_NOTES_START_COMMAND,
+    CALL_NOTES_SCHEMA_VERSION,
     type CallNotesApplicationError,
     CallNotesCommandSchema,
     CaptureEventSchema,
     CompleteEnrichmentInputSchema,
     DetectedCallCandidateSchema,
+    callNotesCaptureDevices,
     runCallNotesVerticalTracer,
     renderEnrichedNoteProposal,
     type CallListQuery,
@@ -31,6 +33,7 @@ import {
 jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(),
 }));
+jest.mock("~/env", () => ({ env: { server: { CALL_NOTES_MAX_CAPTURE_MINUTES: 240 } } }));
 
 import { createWebCallNotesApplication } from "~/server/call-notes/application";
 import { documentNotes } from "~/server/db/schema";
@@ -45,6 +48,7 @@ const describeIfDatabase =
 
 const RENDERED_ENRICHMENT_PROPOSAL = renderEnrichedNoteProposal(CALL_NOTES_ENRICHMENT_PROPOSAL);
 const FIXED_NOW = new Date("2026-08-15T14:30:00.000Z");
+const FIXTURE_DEVICE_ID = "fixture-device";
 const DOCUMENT_NOTES_TABLE = sql.identifier(getTableName(documentNotes));
 
 type StartCaptureCommand = Extract<CallNotesCommand, { kind: "start_capture" }>;
@@ -164,6 +168,17 @@ async function insertFixtures(testDb: CallNotesTestDatabase): Promise<FixtureIds
     await insertMembership(testDb, teammatePk, alphaCompanyId, "editor");
     await insertMembership(testDb, adminPk, alphaCompanyId, "admin");
     await insertMembership(testDb, outsiderPk, betaCompanyId, "owner");
+    await testDb.db.insert(callNotesCaptureDevices).values({
+        id: FIXTURE_DEVICE_ID,
+        companyId: alphaCompanyId,
+        userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+        name: "Fixture Mac",
+        tokenHash: "a".repeat(64),
+        appVersion: "1.0.0",
+        os: "macOS",
+        arch: "arm64",
+        createdAt: FIXED_NOW,
+    });
 
     return {
         alphaCompanyId,
@@ -199,6 +214,7 @@ interface ApplicationTestOptions {
     ids?: CallNotesIdSource;
     documentNotes?: CallNotesDocumentNoteStore;
     clock?: { now(): Date };
+    maxCaptureMinutes?: number;
 }
 
 function createApplication(
@@ -240,6 +256,7 @@ function createApplication(
         },
         clock: options.clock ?? { now: () => new Date(FIXED_NOW) },
         ids,
+        maxCaptureMinutes: options.maxCaptureMinutes,
     });
 
     return { application, callNoteIndex, detectedQueries };
@@ -250,6 +267,7 @@ async function heartbeatWorker(
     workerId = "fixture-worker"
 ): Promise<void> {
     await application.pollLocalCapture({
+        deviceId: FIXTURE_DEVICE_ID,
         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
         userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
         workerId,
@@ -269,6 +287,7 @@ async function startClaimedLocalCapture(application: CallNotesApplication, worke
     const started = await application.execute(CALL_NOTES_START_COMMAND);
     if (!started) throw new Error("expected start snapshot");
     const poll = await application.pollLocalCapture({
+        deviceId: FIXTURE_DEVICE_ID,
         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
         userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
         workerId,
@@ -1520,6 +1539,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         const { application } = createApplication(testDb);
         await expect(
             application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId: "ready-worker",
@@ -1533,6 +1553,18 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         ).resolves.toEqual({
             available: true,
             lastSeenAt: FIXED_NOW.toISOString(),
+            devices: [
+                {
+                    id: FIXTURE_DEVICE_ID,
+                    name: "Fixture Mac",
+                    appVersion: "1.0.0",
+                    os: "macOS",
+                    arch: "arm64",
+                    online: true,
+                    lastSeenAt: FIXED_NOW.toISOString(),
+                    createdAt: FIXED_NOW.toISOString(),
+                },
+            ],
         });
         const started = await application.execute(CALL_NOTES_START_COMMAND);
         expect(started).toMatchObject({
@@ -1552,6 +1584,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         const started = await application.execute(CALL_NOTES_START_COMMAND);
         if (!started) throw new Error("expected start snapshot");
         const firstPoll = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -1629,6 +1662,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             capture: { desiredMode: "running", pausedReason: null, lifecycle: "connecting" },
         });
         const replacement = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId: "replacement-worker",
@@ -1701,6 +1735,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         if (!started) throw new Error("expected start snapshot");
         const firstKey = (
             await application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId: "crashed-worker",
@@ -1729,6 +1764,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         );
         const resumedKey = (
             await application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId: "restarted-worker",
@@ -1792,6 +1828,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             ]);
             await expect(
                 application.pollLocalCapture({
+                    deviceId: FIXTURE_DEVICE_ID,
                     companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                     userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                     workerId: "another-worker",
@@ -1812,6 +1849,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
 
             if (ingress === "poll") {
                 const returning = await application.pollLocalCapture({
+                    deviceId: FIXTURE_DEVICE_ID,
                     companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                     userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                     workerId,
@@ -1884,6 +1922,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         );
         await expect(
             application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId,
@@ -1928,6 +1967,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         });
         await expect(
             application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId,
@@ -2006,6 +2046,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             if (mode !== "stopped") {
                 await expect(
                     application.pollLocalCapture({
+                        deviceId: FIXTURE_DEVICE_ID,
                         companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                         userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                         workerId: "failing-worker",
@@ -2022,6 +2063,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         const workerId = "lost-audio-worker";
         const { started, session } = await startClaimedLocalCapture(application, workerId);
         const idle = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2055,6 +2097,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             })
         );
         const resumed = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2121,6 +2164,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             })
         );
         const next = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2227,7 +2271,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 callId: started.id,
             })
         );
-        now = new Date(now.getTime() + 16_000);
+        now = new Date(now.getTime() + 60_001);
         await expectApplicationCode(
             application.execute(
                 CallNotesCommandSchema.parse({
@@ -2305,6 +2349,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             if (!started) throw new Error("expected start snapshot");
             if (state === "unconnected") {
                 await application.pollLocalCapture({
+                    deviceId: FIXTURE_DEVICE_ID,
                     companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                     userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                     workerId: "connecting-worker",
@@ -2344,6 +2389,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         const started = await application.execute(CALL_NOTES_START_COMMAND);
         if (!started) throw new Error("expected start snapshot");
         await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2386,7 +2432,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.otherUserId,
             })
-        ).resolves.toEqual({ available: false, lastSeenAt: null });
+        ).resolves.toEqual({ available: false, lastSeenAt: null, devices: [] });
         const teammateStart = CallNotesCommandSchema.parse({
             ...CALL_NOTES_START_COMMAND,
             actorUserId: CALL_NOTES_FIXTURE_IDS.otherUserId,
@@ -2419,6 +2465,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         });
         await expect(
             application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
                 companyId: CALL_NOTES_FIXTURE_IDS.companyId,
                 userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
                 workerId: "worker-arriving-after-stop",
@@ -2470,6 +2517,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
 
         const workerId = "local-worker-1";
         const firstPoll = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2483,12 +2531,14 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             desiredMode: "running",
         });
         const replayedPoll = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
         });
         expect(replayedPoll).toEqual(firstPoll);
         const foreignPoll = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId: "local-worker-2",
@@ -2513,6 +2563,7 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         expect(stopped?.capture.desiredMode).toBe("stopped");
 
         const stoppedPoll = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
             companyId: CALL_NOTES_FIXTURE_IDS.companyId,
             userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
             workerId,
@@ -2662,5 +2713,262 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
             application.getCall({ ...ownerQuery, callId: started.id }),
             "not_found"
         );
+    });
+    it("selects the most recently online device and only lets that device claim the capture", async () => {
+        const fixtures = await insertFixtures(testDb);
+        const { application } = createApplication(testDb);
+        await heartbeatWorker(application);
+        await testDb.db
+            .update(callNotesCaptureDevices)
+            .set({ lastSeenAt: new Date(FIXED_NOW.getTime() - 1_000) })
+            .where(eq(callNotesCaptureDevices.id, FIXTURE_DEVICE_ID));
+        await testDb.db.insert(callNotesCaptureDevices).values({
+            id: "newest-device",
+            companyId: fixtures.alphaCompanyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            name: "Newer Mac",
+            tokenHash: "b".repeat(64),
+            appVersion: "1.0.0",
+            os: "macOS",
+            arch: "arm64",
+            lastSeenAt: FIXED_NOW,
+        });
+        const started = await application.execute(CALL_NOTES_START_COMMAND);
+        expect(started).not.toBeNull();
+        const wrongDevice = await application.pollLocalCapture({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            deviceId: FIXTURE_DEVICE_ID,
+            workerId: "wrong-worker",
+        });
+        expect(wrongDevice).toEqual({ capture: null });
+        const assigned = await application.pollLocalCapture({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            deviceId: "newest-device",
+            workerId: "assigned-worker",
+        });
+        expect(assigned.capture?.callId).toBe(started?.id);
+    });
+
+    it("honors an explicit target device and rejects an offline or foreign target", async () => {
+        await insertFixtures(testDb);
+        const { application } = createApplication(testDb);
+        await heartbeatWorker(application);
+        await expectApplicationCode(
+            application.execute({
+                ...CALL_NOTES_START_COMMAND,
+                requestId: "bad-target",
+                targetDeviceId: "unknown-device",
+            }),
+            "unavailable"
+        );
+        const started = await application.execute({
+            ...CALL_NOTES_START_COMMAND,
+            requestId: "explicit-target",
+            targetDeviceId: FIXTURE_DEVICE_ID,
+        });
+        expect(started?.capture.desiredMode).toBe("running");
+        const rows = await testDb.db.execute(sql`
+            SELECT target_device_id FROM pdr_ai_v2_call_notes_captures WHERE call_id = ${started?.id}
+        `);
+        expect(rows[0]?.target_device_id).toBe(FIXTURE_DEVICE_ID);
+    });
+
+    it("retargets Resume only after the previous device has drained its attempt", async () => {
+        const fixtures = await insertFixtures(testDb);
+        const { application } = createApplication(testDb);
+        const { started, session } = await startClaimedLocalCapture(application, "draining-worker");
+        await testDb.db.insert(callNotesCaptureDevices).values({
+            id: "resume-target",
+            companyId: fixtures.alphaCompanyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            name: "Resume Mac",
+            tokenHash: "c".repeat(64),
+            appVersion: "1.0.0",
+            os: "macOS",
+            arch: "arm64",
+            lastSeenAt: FIXED_NOW,
+        });
+        await application.execute(
+            CallNotesCommandSchema.parse({
+                ...CALL_NOTES_START_COMMAND,
+                kind: "pause_capture",
+                requestId: "pause-before-retarget",
+                callId: started.id,
+            })
+        );
+        await expectApplicationCode(
+            application.execute(
+                CallNotesCommandSchema.parse({
+                    ...CALL_NOTES_START_COMMAND,
+                    kind: "resume_capture",
+                    requestId: "retarget-too-early",
+                    callId: started.id,
+                    targetDeviceId: "resume-target",
+                })
+            ),
+            "conflict"
+        );
+        await application.ingestLocalCaptureEvent(
+            CALL_NOTES_FIXTURE_IDS.companyId,
+            CaptureEventSchema.parse({
+                schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                kind: "attempt_ended",
+                eventId: "retarget-drained",
+                source: "local_audio",
+                sourceOccurrenceKey: session.occurrenceKey,
+                sourceAttemptKey: session.attemptKey,
+                occurredAt: FIXED_NOW.toISOString(),
+                reason: "user_paused",
+            })
+        );
+        await application.execute(
+            CallNotesCommandSchema.parse({
+                ...CALL_NOTES_START_COMMAND,
+                kind: "resume_capture",
+                requestId: "retarget-after-drain",
+                callId: started.id,
+                targetDeviceId: "resume-target",
+            })
+        );
+        expect(
+            (
+                await application.pollLocalCapture({
+                    companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                    userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                    deviceId: FIXTURE_DEVICE_ID,
+                    workerId: "draining-worker",
+                })
+            ).capture
+        ).toBeNull();
+        expect(
+            (
+                await application.pollLocalCapture({
+                    companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                    userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                    deviceId: "resume-target",
+                    workerId: "new-device-worker",
+                })
+            ).capture?.callId
+        ).toBe(started.id);
+    });
+
+    it.each([
+        ["silence_timeout", "silence"],
+        ["source_stopped", "call_ended"],
+    ] as const)(
+        "auto-stops a running capture after %s and retains its reason",
+        async (reason, stopReason) => {
+            await insertFixtures(testDb);
+            const { application } = createApplication(testDb);
+            const { started, session } = await startClaimedLocalCapture(
+                application,
+                "auto-stop-worker"
+            );
+            await application.ingestLocalCaptureEvent(
+                CALL_NOTES_FIXTURE_IDS.companyId,
+                CaptureEventSchema.parse({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    kind: "attempt_ended",
+                    eventId: "auto-stop-ended",
+                    source: "local_audio",
+                    sourceOccurrenceKey: session.occurrenceKey,
+                    sourceAttemptKey: session.attemptKey,
+                    occurredAt: FIXED_NOW.toISOString(),
+                    reason,
+                })
+            );
+            const stopped = await application.getCall({
+                companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                callId: started.id,
+            });
+            expect(stopped).toMatchObject({
+                status: "finalizing",
+                capture: {
+                    desiredMode: "stopped",
+                    stopReason,
+                    lifecycle: "finalizing",
+                    activeAttemptId: null,
+                },
+            });
+            await application.ingestLocalCaptureEvent(
+                CALL_NOTES_FIXTURE_IDS.companyId,
+                CaptureEventSchema.parse({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    kind: "occurrence_ended",
+                    eventId: "auto-stop-occurrence-ended",
+                    source: "local_audio",
+                    sourceOccurrenceKey: session.occurrenceKey,
+                    occurredAt: FIXED_NOW.toISOString(),
+                })
+            );
+            expect(
+                (
+                    await application.getCall({
+                        companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                        actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                        callId: started.id,
+                    })
+                ).capture
+            ).toMatchObject({ desiredMode: "stopped", stopReason });
+        }
+    );
+
+    it.each(["poll", "read"] as const)(
+        "reconciles the configured maximum duration from a %s",
+        async ingress => {
+            await insertFixtures(testDb);
+            let now = new Date(FIXED_NOW);
+            const { application } = createApplication(testDb, {
+                clock: { now: () => new Date(now) },
+                maxCaptureMinutes: 1,
+            });
+            const { started, session } = await startClaimedLocalCapture(
+                application,
+                "max-duration-worker"
+            );
+            now = new Date(now.getTime() + 60_001);
+            await testDb.db.execute(sql`
+            UPDATE pdr_ai_v2_call_notes_capture_attempts
+            SET lease_expires_at = ${new Date(now.getTime() + 60_000).toISOString()}::timestamptz
+            WHERE source_attempt_key = ${session.attemptKey}
+        `);
+            if (ingress === "poll") {
+                const result = await application.pollLocalCapture({
+                    companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                    userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                    deviceId: FIXTURE_DEVICE_ID,
+                    workerId: "max-duration-worker",
+                    activeAttemptKey: session.attemptKey,
+                });
+                expect(result.capture?.desiredMode).toBe("stopped");
+            }
+            const stopped = await application.getCall({
+                companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                callId: started.id,
+            });
+            expect(stopped.capture).toMatchObject({
+                desiredMode: "stopped",
+                stopReason: "max_duration",
+            });
+        }
+    );
+
+    it("records user as the reason for an explicit stop", async () => {
+        await insertFixtures(testDb);
+        const { application } = createApplication(testDb);
+        const { started } = await startClaimedLocalCapture(application, "user-stop-worker");
+        const stopped = await application.execute(
+            CallNotesCommandSchema.parse({
+                ...CALL_NOTES_START_COMMAND,
+                kind: "stop_capture",
+                requestId: "user-stop-reason",
+                callId: started.id,
+            })
+        );
+        expect(stopped?.capture).toMatchObject({ desiredMode: "stopped", stopReason: "user" });
     });
 });

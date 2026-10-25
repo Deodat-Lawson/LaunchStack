@@ -15,12 +15,8 @@ export async function GET(): Promise<Response> {
         if (!workspace.success) return workspace.response;
         const userId = workspace.data.authUserId;
         const companyId = workspace.data.companyId.toString();
-        if (
-            !env.server.CALL_NOTES_CAPTURE_ENABLED ||
-            env.server.CALL_NOTES_LOCAL_COMPANY_ID !== companyId ||
-            env.server.CALL_NOTES_LOCAL_USER_ID !== userId
-        ) {
-            return Response.json({ available: false, lastSeenAt: null });
+        if (!env.server.CALL_NOTES_CAPTURE_ENABLED) {
+            return Response.json({ available: false, lastSeenAt: null, devices: [] });
         }
         const status = await getWebCallNotesApplication().getLocalCaptureWorkerStatus({
             companyId,

@@ -510,11 +510,12 @@ services:
       - ./apps/web/config:/app/apps/web/config:ro
     environment:
       <<: *shared-env
-      # Internal capture ingress; never expose this token to the browser.
-      CALL_NOTES_INTERNAL_TOKEN: ${CALL_NOTES_INTERNAL_TOKEN:-}
+      # Per-device enrollment; release blobs stay private to the web server.
       CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
-      CALL_NOTES_LOCAL_COMPANY_ID: ${CALL_NOTES_LOCAL_COMPANY_ID:-}
-      CALL_NOTES_LOCAL_USER_ID: ${CALL_NOTES_LOCAL_USER_ID:-}
+      CALL_NOTES_MIN_APP_VERSION: ${CALL_NOTES_MIN_APP_VERSION:-}
+      CALL_NOTES_MAX_CAPTURE_MINUTES: ${CALL_NOTES_MAX_CAPTURE_MINUTES:-240}
+      CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING: ${CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING:-}
+      CALL_NOTES_CAPTURE_APP_CONTAINER: ${CALL_NOTES_CAPTURE_APP_CONTAINER:-capture-app}
     ports:
       - "3000:3000"
 

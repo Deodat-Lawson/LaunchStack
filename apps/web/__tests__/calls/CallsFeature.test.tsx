@@ -6,7 +6,8 @@ import "@testing-library/jest-dom";
 
 import { CallsFeature } from "~/app/calls/_components/CallsFeature";
 import { pausedCall, workerErrorPausedCall } from "~/app/calls/_fixtures/callSnapshots";
-import type { CallSnapshot } from "@launchstack/pipelines/call-notes/contracts";
+import type { CallSnapshot, CaptureDeviceSummary } from "@launchstack/pipelines/call-notes";
+import { renderWithLocale } from "~/i18n/testing/render";
 
 const mockRouterPush = jest.fn();
 let mockSearchParams = new URLSearchParams("feature=calls");
@@ -27,18 +28,61 @@ function response(body: unknown, status = 200): MockResponse {
     return { ok: status >= 200 && status < 300, status, json: async () => body };
 }
 let workerAvailable: boolean;
+let captureDevices: CaptureDeviceSummary[];
+const mac: CaptureDeviceSummary = {
+    id: "mac-1",
+    name: "Hank’s MacBook Air",
+    appVersion: "1.2.3",
+    os: "macOS",
+    arch: "arm64",
+    online: true,
+    lastSeenAt: "2026-10-25T12:00:00.000Z",
+    createdAt: "2026-10-25T10:00:00.000Z",
+};
+const mockDownload = jest.fn<Promise<MockResponse>, []>();
+const mockConnect = jest.fn<Promise<MockResponse>, []>();
+const mockRevoke = jest.fn<Promise<MockResponse>, [string]>();
 let snapshots: CallSnapshot[];
 const mockCommand = jest.fn<Promise<MockResponse>, [Record<string, unknown>]>();
+
+beforeAll(() => {
+    // Radix Select uses pointer and layout APIs that jsdom does not implement.
+    Element.prototype.scrollIntoView = jest.fn();
+    Element.prototype.hasPointerCapture = jest.fn(() => false);
+    Element.prototype.releasePointerCapture = jest.fn();
+});
 
 beforeEach(() => {
     jest.clearAllMocks();
     mockCommand.mockReset();
+    mockDownload.mockReset();
+    mockConnect.mockReset();
+    mockRevoke.mockReset();
+    captureDevices = [mac];
+    window.history.replaceState(null, "", "/");
     workerAvailable = true;
     snapshots = [];
     mockSearchParams = new URLSearchParams("feature=calls");
     global.fetch = jest.fn(async (url: string | URL | Request, init?: RequestInit) => {
         if (url === "/api/call-notes/worker")
-            return response({ available: workerAvailable, lastSeenAt: null });
+            return response({
+                available: workerAvailable && captureDevices.some(device => device.online),
+                lastSeenAt: null,
+                devices: captureDevices.map(device => ({
+                    ...device,
+                    online: workerAvailable && device.online,
+                })),
+            });
+        if (url === "/api/call-notes/capture-app/downloads" && init?.method === "POST")
+            return mockDownload();
+        if (url === "/api/call-notes/capture-app/connect-codes" && init?.method === "POST")
+            return mockConnect();
+        if (
+            typeof url === "string" &&
+            url.startsWith("/api/call-notes/devices/") &&
+            init?.method === "DELETE"
+        )
+            return mockRevoke(url);
         if (init?.method === "POST") {
             if (typeof init.body !== "string") throw new Error("Expected a JSON command body");
             return mockCommand(JSON.parse(init.body) as Record<string, unknown>);
@@ -121,12 +165,14 @@ it("resumes the same Call after a worker-error pause and preserves its Transcrip
     }
 });
 
-it("does not start while the worker is offline and enables Start when it returns", async () => {
+it("does not start without an online Mac and enables Start when one connects", async () => {
     jest.useFakeTimers();
     workerAvailable = false;
     const view = render(<CallsFeature />);
     try {
-        expect(await screen.findByText(/worker is offline/i)).toBeInTheDocument();
+        expect(
+            await screen.findByRole("region", { name: "Capture on your Mac" })
+        ).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /start capture/i })).toBeDisabled();
         expect(mockCommand).not.toHaveBeenCalled();
         workerAvailable = true;
@@ -134,7 +180,7 @@ it("does not start while the worker is offline and enables Start when it returns
             jest.advanceTimersByTime(5_000);
         });
         expect(screen.getByRole("button", { name: /start capture/i })).toBeEnabled();
-        expect(screen.queryByText(/worker is offline/i)).not.toBeInTheDocument();
+        expect(screen.getByText(`Connected: ${mac.name}`)).toBeInTheDocument();
     } finally {
         view.unmount();
         jest.useRealTimers();
@@ -158,7 +204,9 @@ it("disables Resume but keeps Stop available when worker availability is lost", 
     expect(stop).toBeEnabled();
     const resume = screen.getByRole("button", { name: "Resume capture" });
     expect(resume).toBeDisabled();
-    await waitFor(() => expect(resume).toHaveAttribute("title", expect.stringMatching(/offline/i)));
+    await waitFor(() =>
+        expect(resume).toHaveAttribute("title", expect.stringMatching(/no mac is online/i))
+    );
     await user.click(resume);
     expect(mockCommand).not.toHaveBeenCalled();
     await user.click(stop);
@@ -242,6 +290,219 @@ it("shows completion when final audio predates the Stop response", async () => {
             )
         );
         expect(screen.queryByRole("button", { name: /stopping/i })).not.toBeInTheDocument();
+    } finally {
+        view.unmount();
+        jest.useRealTimers();
+    }
+});
+
+it("posts a download request, navigates the window to its URL, and waits for the Mac", async () => {
+    workerAvailable = false;
+    const downloadUrl = `${window.location.origin}/#LaunchStack-Capture.dmg`;
+    mockDownload.mockResolvedValue(response({ code: "pairing-download", downloadUrl }, 201));
+    render(<CallsFeature />);
+    await userEvent
+        .setup()
+        .click(await screen.findByRole("button", { name: "Get Call Notes for Mac" }));
+    expect(mockDownload).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith("/api/call-notes/capture-app/downloads", { method: "POST" });
+    expect(window.location.href).toBe(downloadUrl);
+    expect(fetch).not.toHaveBeenCalledWith(downloadUrl, expect.anything());
+    expect(
+        await screen.findByText("Open LaunchStack Capture from your Downloads to finish")
+    ).toBeInTheDocument();
+});
+
+it("changes the download waiting state to connected on the next device poll", async () => {
+    jest.useFakeTimers();
+    workerAvailable = false;
+    captureDevices = [];
+    mockDownload.mockResolvedValue(
+        response(
+            { code: "pairing-download", downloadUrl: `${window.location.origin}/#download` },
+            201
+        )
+    );
+    const view = render(<CallsFeature />);
+    try {
+        await userEvent
+            .setup({ advanceTimers: jest.advanceTimersByTime })
+            .click(await screen.findByRole("button", { name: "Get Call Notes for Mac" }));
+        expect(
+            await screen.findByText("Open LaunchStack Capture from your Downloads to finish")
+        ).toBeInTheDocument();
+        workerAvailable = true;
+        captureDevices = [mac];
+        await act(async () => {
+            jest.advanceTimersByTime(5_000);
+        });
+        expect(screen.getByText(`Connected: ${mac.name}`)).toBeInTheDocument();
+        expect(
+            screen.queryByText("Open LaunchStack Capture from your Downloads to finish")
+        ).not.toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Start capture" })).toBeEnabled();
+    } finally {
+        view.unmount();
+        jest.useRealTimers();
+    }
+});
+
+it("focuses Connect this Mac for setup links and navigates to the returned deep link", async () => {
+    mockSearchParams = new URLSearchParams("feature=calls&captureSetup=1");
+    const deepLink = `${window.location.origin}/#launchstack-capture-pair`;
+    mockConnect.mockResolvedValue(response({ code: "pairing-connect", deepLink }, 201));
+    render(<CallsFeature />);
+    const connect = await screen.findByRole("button", { name: "Connect this Mac" });
+    expect(connect).toHaveFocus();
+    await userEvent.setup().click(connect);
+    expect(fetch).toHaveBeenCalledWith("/api/call-notes/capture-app/connect-codes", {
+        method: "POST",
+    });
+    expect(window.location.href).toBe(deepLink);
+});
+
+it("confirms a device revocation before deleting it and refreshes the devices", async () => {
+    mockRevoke.mockImplementation(async () => {
+        captureDevices = [];
+        return response(null, 204);
+    });
+    render(<CallsFeature />);
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: `Revoke ${mac.name}` }));
+    expect(mockRevoke).not.toHaveBeenCalled();
+    const dialog = screen.getByRole("dialog", { name: `Revoke ${mac.name}?` });
+    await user.click(within(dialog).getByRole("button", { name: "Revoke" }));
+    expect(mockRevoke).toHaveBeenCalledWith(`/api/call-notes/devices/${mac.id}`);
+    await waitFor(() =>
+        expect(screen.queryByRole("button", { name: `Revoke ${mac.name}` })).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole("button", { name: "Start capture" })).toBeDisabled();
+});
+
+it("lets the user cancel revocation without deleting the device", async () => {
+    render(<CallsFeature />);
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: `Revoke ${mac.name}` }));
+    await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" }));
+    expect(mockRevoke).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: `Revoke ${mac.name}` })).toBeInTheDocument();
+});
+
+it("omits targetDeviceId when only one Mac is online", async () => {
+    captureDevices = [mac, { ...mac, id: "offline-mac", name: "Offline Mac", online: false }];
+    mockCommand.mockResolvedValue(response(pausedCall));
+    render(<CallsFeature />);
+    const start = await screen.findByRole("button", { name: "Start capture" });
+    await waitFor(() => expect(start).toBeEnabled());
+    expect(screen.queryByRole("combobox", { name: "Capture device" })).not.toBeInTheDocument();
+    await userEvent.setup().click(start);
+    expect(mockCommand).toHaveBeenCalledTimes(1);
+    expect(mockCommand.mock.calls[0]?.[0]).not.toHaveProperty("targetDeviceId");
+});
+
+it("sends the selected targetDeviceId when multiple Macs are online", async () => {
+    const secondMac = { ...mac, id: "mac-2", name: "Office Mac Studio" };
+    captureDevices = [mac, secondMac];
+    mockCommand.mockResolvedValue(response(pausedCall));
+    render(<CallsFeature />);
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("combobox", { name: "Capture device" }));
+    await user.click(await screen.findByRole("option", { name: secondMac.name }));
+    await user.click(screen.getByRole("button", { name: "Start capture" }));
+    expect(mockCommand).toHaveBeenCalledWith(
+        expect.objectContaining({
+            kind: "start_capture",
+            targetDeviceId: secondMac.id,
+        })
+    );
+});
+
+it("picks up captures started from the Mac and updates their live transcript through polling", async () => {
+    jest.useFakeTimers();
+    const view = render(<CallsFeature />);
+    try {
+        await screen.findByRole("main", { name: "Calls library" });
+        const startedFromMac: CallSnapshot = {
+            ...pausedCall,
+            capture: { ...pausedCall.capture, desiredMode: "running", pausedReason: null },
+        };
+        snapshots = [startedFromMac];
+        await act(async () => {
+            jest.advanceTimersByTime(1_000);
+        });
+        const note = screen.getByRole("button", {
+            name: new RegExp(`${pausedCall.note!.title}.*Live`, "i"),
+        });
+        await userEvent.setup({ advanceTimers: jest.advanceTimersByTime }).click(note);
+        await userEvent
+            .setup({ advanceTimers: jest.advanceTimersByTime })
+            .click(screen.getByRole("button", { name: "Show transcript" }));
+        const nextSegment = {
+            ...pausedCall.transcript[0]!,
+            id: "mac-segment",
+            receiveOrder: 3,
+            text: "This arrived from the Mac.",
+        };
+        snapshots = [
+            { ...startedFromMac, transcript: [...startedFromMac.transcript, nextSegment] },
+        ];
+        await act(async () => {
+            jest.advanceTimersByTime(1_000);
+        });
+        expect(
+            within(screen.getByLabelText("Company transcript")).getByText(nextSegment.text)
+        ).toBeInTheDocument();
+        expect(mockCommand).not.toHaveBeenCalled();
+    } finally {
+        view.unmount();
+        jest.useRealTimers();
+    }
+});
+
+it("uses Chinese setup copy through the shared catalogue", async () => {
+    captureDevices = [];
+    renderWithLocale(<CallsFeature />, "zh-CN");
+    expect(await screen.findByRole("button", { name: "获取 Mac 版通话笔记" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "连接此 Mac" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "开始录制" })).toBeDisabled();
+});
+
+it.each([
+    ["silence", "Stopped automatically — no audio"],
+    ["call_ended", "Stopped automatically — call ended"],
+    [null, "Completed"],
+] as const)("shows an autonomous end from the next call poll (%s)", async (stopReason, label) => {
+    jest.useFakeTimers();
+    mockSearchParams = new URLSearchParams(`feature=calls&call=${pausedCall.id}`);
+    snapshots = [
+        {
+            ...pausedCall,
+            capture: { ...pausedCall.capture, desiredMode: "running", pausedReason: null },
+        },
+    ];
+    const view = render(<CallsFeature />);
+    try {
+        expect(await screen.findByRole("button", { name: "Stop capture" })).toBeInTheDocument();
+        snapshots = [
+            {
+                ...pausedCall,
+                status: "completed",
+                capture: {
+                    ...pausedCall.capture,
+                    desiredMode: "stopped",
+                    lifecycle: "completed",
+                    outcome: "complete",
+                    activeAttemptId: null,
+                    stopReason,
+                },
+            },
+        ];
+        await act(async () => {
+            jest.advanceTimersByTime(1_000);
+        });
+        expect(screen.getByRole("status", { name: "Capture status" })).toHaveTextContent(label);
+        expect(screen.queryByRole("button", { name: "Stop capture" })).not.toBeInTheDocument();
+        expect(mockCommand).not.toHaveBeenCalled();
     } finally {
         view.unmount();
         jest.useRealTimers();

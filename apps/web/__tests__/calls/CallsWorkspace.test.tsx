@@ -97,10 +97,10 @@ describe("CallsWorkspace", () => {
         expect(screen.getByRole("status", { name: /capture status/i })).toHaveTextContent(
             "Paused — capture error"
         );
-        expect(screen.getByRole("alert")).toHaveTextContent(/local capture worker stopped/i);
+        expect(screen.getByRole("alert")).toHaveTextContent(/launchstack capture stopped/i);
         expect(screen.getByRole("alert")).toHaveTextContent(/transcript so far is kept/i);
         expect(screen.getByRole("alert")).toHaveTextContent(/resume continues this call/i);
-        expect(screen.getByRole("alert")).toHaveTextContent(/worker must be running/i);
+        expect(screen.getByRole("alert")).toHaveTextContent(/online mac/i);
         expect(screen.getByRole("button", { name: "Resume capture" })).toBeEnabled();
         expect(screen.getByRole("button", { name: "Stop capture" })).toBeEnabled();
 
@@ -310,3 +310,25 @@ describe("CallsWorkspace", () => {
         );
     });
 });
+
+it.each([
+    ["silence", "Stopped automatically — no audio"],
+    ["call_ended", "Stopped automatically — call ended"],
+    ["max_duration", "Stopped automatically — capture time limit"],
+] as const)(
+    "shows the server-provided %s auto-stop reason in the ended state",
+    (stopReason, label) => {
+        const ended = {
+            ...northstarPricingReviewCall,
+            capture: {
+                ...northstarPricingReviewCall.capture,
+                desiredMode: "stopped" as const,
+                stopReason,
+            },
+        };
+        render(<CallsWorkspace calls={[ended]} initialSelectedId={ended.id} />);
+        expect(screen.getByRole("status", { name: "Capture status" })).toHaveTextContent(label);
+        expect(screen.queryByRole("button", { name: "Stop capture" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Resume capture" })).not.toBeInTheDocument();
+    }
+);

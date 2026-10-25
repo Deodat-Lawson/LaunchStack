@@ -29,6 +29,7 @@ import scenarios from "./scenarios.json";
 import proposals from "./proposals.json";
 import tools from "./tools.json";
 import notes from "./notes.json";
+import calls from "./calls.json";
 
 const messages = {
     common,
@@ -57,6 +58,7 @@ const messages = {
     proposals,
     tools,
     notes,
+    calls,
 };
 
 export default messages;

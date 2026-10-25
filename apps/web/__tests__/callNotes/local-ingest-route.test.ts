@@ -22,19 +22,14 @@ jest.mock("next/server", () => ({
     },
 }));
 
-const DEFAULT_SERVER_ENV = {
-    CALL_NOTES_CAPTURE_ENABLED: true,
-    CALL_NOTES_INTERNAL_TOKEN: "local-worker-secret",
-    CALL_NOTES_LOCAL_COMPANY_ID: "42",
-    CALL_NOTES_LOCAL_USER_ID: "local-capture-user",
-} as const;
-
-const mockServerEnv: Record<string, unknown> = { ...DEFAULT_SERVER_ENV };
-
-jest.mock("~/env", () => ({
-    get env() {
-        return { server: mockServerEnv };
-    },
+const mockRequireCaptureDevice = jest.fn();
+const mockAssertCaptureDeviceCall = jest.fn();
+jest.mock("~/env", () => ({ env: { server: {} } }));
+jest.mock("~/server/call-notes/device-auth", () => ({
+    requireCaptureDevice: (request: Request) => mockRequireCaptureDevice(request),
+}));
+jest.mock("~/server/call-notes/capture-control", () => ({
+    assertCaptureDeviceCall: (...args: unknown[]) => mockAssertCaptureDeviceCall(...args),
 }));
 
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
@@ -56,14 +51,13 @@ jest.mock("~/server/call-notes/enrichment-runner", () => ({
 
 import { POST as ingestLocalCallNotes } from "~/app/api/internal/call-notes/local/route";
 
-const AUTHORIZATION = `Bearer ${DEFAULT_SERVER_ENV.CALL_NOTES_INTERNAL_TOKEN}`;
-const LOCAL_COMPANY_ID = DEFAULT_SERVER_ENV.CALL_NOTES_LOCAL_COMPANY_ID;
-const LOCAL_USER_ID = DEFAULT_SERVER_ENV.CALL_NOTES_LOCAL_USER_ID;
+const AUTHORIZATION = "Bearer lsc_device-secret";
+const LOCAL_COMPANY_ID = "42";
+const LOCAL_USER_ID = "local-capture-user";
+const DEVICE_ID = "fixture-device";
 
 const START_BODY = {
     kind: "start",
-    companyId: LOCAL_COMPANY_ID,
-    userId: LOCAL_USER_ID,
     occurrenceKey: "local-occurrence-1",
     attemptKey: "local-attempt-1",
     startedAt: "2026-08-15T14:00:00.000Z",
@@ -72,8 +66,6 @@ const START_BODY = {
 
 const POLL_BODY = {
     kind: "poll",
-    companyId: LOCAL_COMPANY_ID,
-    userId: LOCAL_USER_ID,
     workerId: START_BODY.attemptKey,
 } as const;
 
@@ -196,8 +188,6 @@ const DISALLOWED_LOCAL_EVENTS: readonly unknown[] = [
 
 const eventBody = (event: unknown, overrides: Record<string, unknown> = {}) => ({
     kind: "event" as const,
-    companyId: LOCAL_COMPANY_ID,
-    userId: LOCAL_USER_ID,
     callId: "call-1",
     event,
     ...overrides,
@@ -207,8 +197,6 @@ const EVENT_BODY = eventBody(CAPTURE_EVENT);
 
 const FINISH_BODY = {
     kind: "finish",
-    companyId: LOCAL_COMPANY_ID,
-    userId: LOCAL_USER_ID,
     callId: "call-1",
     autoEnrich: false,
 } as const;
@@ -232,11 +220,6 @@ function ownedSnapshot(overrides: Record<string, unknown> = {}): CallSnapshot {
     } as unknown as CallSnapshot;
 }
 
-function resetServerEnv(): void {
-    for (const key of Object.keys(mockServerEnv)) delete mockServerEnv[key];
-    Object.assign(mockServerEnv, DEFAULT_SERVER_ENV);
-}
-
 function request(body: unknown, authorization: string | null = AUTHORIZATION): Request {
     const headers = new Headers({ "content-type": "application/json" });
     if (authorization !== null) headers.set("authorization", authorization);
@@ -255,7 +238,18 @@ async function responseBody(response: Response): Promise<unknown> {
 beforeEach(() => {
     jest.resetAllMocks();
     mockAfterTasks.length = 0;
-    resetServerEnv();
+    mockRequireCaptureDevice.mockImplementation(async (incoming: Request) =>
+        incoming.headers.get("authorization") === AUTHORIZATION
+            ? {
+                  success: true,
+                  data: { companyId: LOCAL_COMPANY_ID, userId: LOCAL_USER_ID, deviceId: DEVICE_ID },
+              }
+            : {
+                  success: false,
+                  response: Response.json({ error: "unauthorized" }, { status: 401 }),
+              }
+    );
+    mockAssertCaptureDeviceCall.mockResolvedValue(undefined);
     mockGetApplication.mockReturnValue(APPLICATION);
     mockExecute.mockResolvedValue(null);
     mockPollLocalCapture.mockResolvedValue({ capture: null });
@@ -275,34 +269,22 @@ describe("local Call Notes worker ingress", () => {
             const response = await ingestLocalCallNotes(request(POLL_BODY, authorization));
 
             expect(response.status).toBe(401);
-            expect(await responseBody(response)).toEqual({ error: "Unauthorized" });
+            expect(await responseBody(response)).toEqual({ error: "unauthorized" });
             expect(mockGetApplication).not.toHaveBeenCalled();
             expect(mockExecute).not.toHaveBeenCalled();
         }
     );
 
     it("fails closed when local capture is disabled before parsing or touching production boundaries", async () => {
-        mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = false;
+        mockRequireCaptureDevice.mockResolvedValue({
+            success: false,
+            response: Response.json({ error: "capture_disabled" }, { status: 503 }),
+        });
 
         const response = await ingestLocalCallNotes(request("not-json"));
 
         expect(response.status).toBe(503);
-        expect(await responseBody(response)).toEqual({ error: "Call Notes is unavailable" });
-        expect(mockGetApplication).not.toHaveBeenCalled();
-        expect(mockExecute).not.toHaveBeenCalled();
-    });
-
-    it.each([
-        ["missing company context", { CALL_NOTES_LOCAL_COMPANY_ID: undefined }],
-        ["malformed company context", { CALL_NOTES_LOCAL_COMPANY_ID: "not-a-company" }],
-        ["missing user context", { CALL_NOTES_LOCAL_USER_ID: undefined }],
-    ])("returns unavailable for %s", async (_label, overrides) => {
-        Object.assign(mockServerEnv, overrides);
-
-        const response = await ingestLocalCallNotes(request(POLL_BODY));
-
-        expect(response.status).toBe(503);
-        expect(await responseBody(response)).toEqual({ error: "Call Notes is unavailable" });
+        expect(await responseBody(response)).toEqual({ error: "capture_disabled" });
         expect(mockGetApplication).not.toHaveBeenCalled();
         expect(mockExecute).not.toHaveBeenCalled();
     });
@@ -330,8 +312,8 @@ describe("local Call Notes worker ingress", () => {
     ])("rejects %s scope mismatch", async (_label, body) => {
         const response = await ingestLocalCallNotes(request(body));
 
-        expect(response.status).toBe(403);
-        expect(await responseBody(response)).toEqual({ error: "Forbidden" });
+        expect(response.status).toBe(400);
+        expect(await responseBody(response)).toEqual({ error: "Invalid Call Notes request" });
         expect(mockGetApplication).not.toHaveBeenCalled();
     });
 
@@ -371,6 +353,7 @@ describe("local Call Notes worker ingress", () => {
         expect(mockPollLocalCapture).toHaveBeenCalledWith({
             companyId: LOCAL_COMPANY_ID,
             userId: LOCAL_USER_ID,
+            deviceId: DEVICE_ID,
             workerId: POLL_BODY.workerId,
         });
         expect(mockExecute).not.toHaveBeenCalled();
@@ -460,7 +443,7 @@ describe("local Call Notes worker ingress", () => {
         );
 
         expect(response.status).toBe(403);
-        expect(await responseBody(response)).toEqual({ error: "Forbidden" });
+        expect(await responseBody(response)).toEqual({ error: "forbidden" });
         expect(mockGetCall).toHaveBeenCalledWith({
             companyId: LOCAL_COMPANY_ID,
             actorUserId: LOCAL_USER_ID,
@@ -498,7 +481,7 @@ describe("local Call Notes worker ingress", () => {
         const response = await ingestLocalCallNotes(request(EVENT_BODY));
 
         expect(response.status).toBe(403);
-        expect(await responseBody(response)).toEqual({ error: "Forbidden" });
+        expect(await responseBody(response)).toEqual({ error: "forbidden" });
         expect(mockGetCall).toHaveBeenCalledTimes(1);
         expect(mockIngestCaptureEvent).not.toHaveBeenCalled();
     });
@@ -508,8 +491,8 @@ describe("local Call Notes worker ingress", () => {
             request(eventBody(CAPTURE_EVENT, { userId: "attacker", callId: "call-2" }))
         );
 
-        expect(response.status).toBe(403);
-        expect(await responseBody(response)).toEqual({ error: "Forbidden" });
+        expect(response.status).toBe(400);
+        expect(await responseBody(response)).toEqual({ error: "Invalid Call Notes request" });
         expect(mockGetCall).not.toHaveBeenCalled();
         expect(mockIngestCaptureEvent).not.toHaveBeenCalled();
     });

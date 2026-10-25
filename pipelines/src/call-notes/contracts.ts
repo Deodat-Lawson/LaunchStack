@@ -324,6 +324,7 @@ export const CaptureSnapshotSchema = z.object({
     id: IdSchema,
     desiredMode: CaptureDesiredModeSchema,
     pausedReason: CapturePausedReasonSchema.nullable(),
+    stopReason: z.enum(["user", "silence", "call_ended", "max_duration"]).nullable(),
     lifecycle: CaptureLifecycleSchema,
     outcome: CaptureOutcomeSchema.nullable(),
     activeAttemptId: IdSchema.nullable(),
@@ -335,6 +336,7 @@ export const LocalCapturePollInputSchema = z
     .object({
         companyId: CompanyIdSchema,
         userId: z.string().min(1).max(256),
+        deviceId: IdSchema,
         workerId: IdSchema,
         /**
          * The attempt whose audio pipeline this worker is still running. Lets the
@@ -342,13 +344,29 @@ export const LocalCapturePollInputSchema = z
          * backend outage; omitted when the worker is idle.
          */
         activeAttemptKey: SourceKeySchema.optional(),
+        wait: z.boolean().optional(),
     })
     .strict();
 export type LocalCapturePollInput = z.infer<typeof LocalCapturePollInputSchema>;
+export const CaptureDeviceSummarySchema = z
+    .object({
+        id: IdSchema,
+        name: z.string().min(1).max(128),
+        appVersion: z.string().min(1).max(32),
+        os: z.string().min(1).max(32),
+        arch: z.string().min(1).max(16),
+        online: z.boolean(),
+        lastSeenAt: TimestampSchema.nullable(),
+        createdAt: TimestampSchema,
+    })
+    .strict();
+export type CaptureDeviceSummary = z.infer<typeof CaptureDeviceSummarySchema>;
+
 export const LocalCaptureWorkerStatusSchema = z
     .object({
         available: z.boolean(),
         lastSeenAt: TimestampSchema.nullable(),
+        devices: z.array(CaptureDeviceSummarySchema),
     })
     .strict();
 export type LocalCaptureWorkerStatus = z.infer<typeof LocalCaptureWorkerStatusSchema>;
@@ -424,6 +442,7 @@ export const CallNotesCommandSchema = z.discriminatedUnion("kind", [
         source: CallNotesSourceSchema,
         sourceOccurrenceKey: SourceKeySchema,
         title: z.string().min(1).max(512).optional(),
+        targetDeviceId: IdSchema.optional(),
     }),
     UserCommandBaseSchema.extend({
         kind: z.literal("dismiss_detected_occurrence"),
@@ -431,7 +450,11 @@ export const CallNotesCommandSchema = z.discriminatedUnion("kind", [
         sourceOccurrenceKey: SourceKeySchema,
     }),
     UserCommandBaseSchema.extend({ kind: z.literal("pause_capture"), callId: IdSchema }),
-    UserCommandBaseSchema.extend({ kind: z.literal("resume_capture"), callId: IdSchema }),
+    UserCommandBaseSchema.extend({
+        kind: z.literal("resume_capture"),
+        callId: IdSchema,
+        targetDeviceId: IdSchema.optional(),
+    }),
     UserCommandBaseSchema.extend({ kind: z.literal("stop_capture"), callId: IdSchema }),
     UserCommandBaseSchema.extend({
         kind: z.literal("update_note"),

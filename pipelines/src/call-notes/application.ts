@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, or, sql } from "drizzle-orm";
 import { createHash, randomUUID } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
 
@@ -51,7 +51,7 @@ import {
     callNotesNoteRevisions,
     callNotesParticipants,
     callNotesTranscriptSegments,
-    callNotesLocalCaptureWorkers,
+    callNotesCaptureDevices,
     callNotesWorkItems,
     type CallNotesCallRow,
     type CallNotesCaptureRow,
@@ -141,6 +141,7 @@ export interface CallNotesApplicationOptions {
     detectedCalls: DetectedCallSource;
     clock?: CallNotesClock;
     ids?: CallNotesIdSource;
+    maxCaptureMinutes?: number;
 }
 type ParticipantCaptureEvent = Exclude<
     Extract<CaptureEvent, { participant: ParticipantIdentity }>,
@@ -314,6 +315,7 @@ function isActiveAttemptLifecycle(value: string): boolean {
 }
 
 const LOCAL_CAPTURE_TIMEOUT_MS = 15_000;
+const CAPTURE_DEVICE_ONLINE_MS = 60_000;
 const LOCAL_CAPTURE_FAILURE_CODE = "worker_unavailable";
 const LOCAL_CAPTURE_FAILURE_MESSAGE = "Local capture worker became unavailable";
 const LOCAL_CAPTURE_STOP_DRAIN_TIMEOUT_MS = 30_000;
@@ -441,60 +443,61 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
         }
     }
 
-    private async touchLocalCaptureWorker(
+    private async touchCaptureDevice(
         executor: CallNotesExecutor,
         companyId: string,
         userId: string,
-        workerId: string,
+        deviceId: string,
         now: Date
     ): Promise<void> {
-        const company = companyNumber(companyId);
-        await executor
-            .insert(callNotesLocalCaptureWorkers)
-            .values({
-                id: this.ids.next("local_worker"),
-                companyId: company,
-                userId,
-                workerId,
-                lastSeenAt: now,
-                createdAt: now,
-            })
-            .onConflictDoUpdate({
-                target: [
-                    callNotesLocalCaptureWorkers.companyId,
-                    callNotesLocalCaptureWorkers.userId,
-                    callNotesLocalCaptureWorkers.workerId,
-                ],
-                set: { lastSeenAt: now },
-            });
+        const [device] = await executor
+            .update(callNotesCaptureDevices)
+            .set({ lastSeenAt: now })
+            .where(
+                and(
+                    eq(callNotesCaptureDevices.id, deviceId),
+                    eq(callNotesCaptureDevices.companyId, companyNumber(companyId)),
+                    eq(callNotesCaptureDevices.userId, userId),
+                    isNull(callNotesCaptureDevices.revokedAt)
+                )
+            )
+            .returning({ id: callNotesCaptureDevices.id });
+        if (!device) {
+            throw new CallNotesApplicationError("forbidden", "Capture device is unavailable");
+        }
     }
 
-    private async requireAvailableLocalWorker(
+    private async requireAvailableCaptureDevice(
         executor: CallNotesExecutor,
         company: bigint,
         userId: string,
-        now: Date
-    ): Promise<void> {
-        const [worker] = await executor
-            .select({ lastSeenAt: callNotesLocalCaptureWorkers.lastSeenAt })
-            .from(callNotesLocalCaptureWorkers)
+        now: Date,
+        targetDeviceId?: string
+    ): Promise<string> {
+        const [device] = await executor
+            .select({
+                id: callNotesCaptureDevices.id,
+                lastSeenAt: callNotesCaptureDevices.lastSeenAt,
+            })
+            .from(callNotesCaptureDevices)
             .where(
                 and(
-                    eq(callNotesLocalCaptureWorkers.companyId, company),
-                    eq(callNotesLocalCaptureWorkers.userId, userId)
+                    eq(callNotesCaptureDevices.companyId, company),
+                    eq(callNotesCaptureDevices.userId, userId),
+                    isNull(callNotesCaptureDevices.revokedAt),
+                    sql`${callNotesCaptureDevices.lastSeenAt} > ${new Date(now.getTime() - CAPTURE_DEVICE_ONLINE_MS).toISOString()}::timestamptz`,
+                    targetDeviceId ? eq(callNotesCaptureDevices.id, targetDeviceId) : undefined
                 )
             )
-            .orderBy(desc(callNotesLocalCaptureWorkers.lastSeenAt))
+            .orderBy(desc(callNotesCaptureDevices.lastSeenAt), asc(callNotesCaptureDevices.id))
             .limit(1);
-        if (
-            !worker ||
-            asDate(worker.lastSeenAt).getTime() <= now.getTime() - LOCAL_CAPTURE_TIMEOUT_MS
-        ) {
+        if (!device) {
             throw new CallNotesApplicationError(
                 "unavailable",
-                "Local capture worker is unavailable; start the worker and retry"
+                "Local capture worker is unavailable; open LaunchStack Capture and retry"
             );
         }
+        return device.id;
     }
 
     private async recordWorkerFailure(
@@ -700,6 +703,31 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
             .for("update");
         const finalizedCallIds: string[] = [];
         for (const capture of captures) {
+            if (
+                capture.desiredMode === "running" &&
+                asDate(capture.startedAt).getTime() +
+                    (this.options.maxCaptureMinutes ?? 240) * 60_000 <=
+                    now.getTime()
+            ) {
+                await executor
+                    .update(callNotesCaptures)
+                    .set({
+                        desiredMode: "stopped",
+                        pausedReason: null,
+                        stopReason: "max_duration",
+                        lifecycle: "finalizing",
+                        updatedAt: now,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                await executor
+                    .update(callNotesCalls)
+                    .set({ status: "finalizing", updatedAt: now })
+                    .where(eq(callNotesCalls.id, capture.callId));
+                capture.desiredMode = "stopped";
+                capture.stopReason = "max_duration";
+                capture.lifecycle = "finalizing";
+                capture.updatedAt = now;
+            }
             if (capture.desiredMode === "paused" && capture.activeAttemptId === null) continue;
             const [call] = await executor
                 .select()
@@ -752,21 +780,25 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
 
             const claimedLocalAttempt = attempt?.leaseOwner != null;
             let stale = missingActiveAttempt;
-            const [latestWorker] = await executor
-                .select({ lastSeenAt: callNotesLocalCaptureWorkers.lastSeenAt })
-                .from(callNotesLocalCaptureWorkers)
+            const [latestDevice] = await executor
+                .select({ lastSeenAt: callNotesCaptureDevices.lastSeenAt })
+                .from(callNotesCaptureDevices)
                 .where(
                     and(
-                        eq(callNotesLocalCaptureWorkers.companyId, company),
-                        eq(callNotesLocalCaptureWorkers.userId, capture.captureUserId)
+                        eq(callNotesCaptureDevices.companyId, company),
+                        eq(callNotesCaptureDevices.userId, capture.captureUserId),
+                        isNull(callNotesCaptureDevices.revokedAt),
+                        capture.targetDeviceId
+                            ? eq(callNotesCaptureDevices.id, capture.targetDeviceId)
+                            : undefined
                     )
                 )
-                .orderBy(desc(callNotesLocalCaptureWorkers.lastSeenAt))
+                .orderBy(desc(callNotesCaptureDevices.lastSeenAt))
                 .limit(1);
             const workerAvailable =
-                latestWorker !== undefined &&
-                asDate(latestWorker.lastSeenAt).getTime() >
-                    now.getTime() - LOCAL_CAPTURE_TIMEOUT_MS;
+                latestDevice?.lastSeenAt != null &&
+                asDate(latestDevice.lastSeenAt).getTime() >
+                    now.getTime() - CAPTURE_DEVICE_ONLINE_MS;
             const finalizationTimeout =
                 capture.lifecycle === "finalizing" && capture.desiredMode === "stopped"
                     ? workerAvailable
@@ -858,24 +890,34 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
     }): Promise<LocalCaptureWorkerStatus> {
         await this.requireMembership(input.companyId, input.userId);
         const company = companyNumber(input.companyId);
-        const [worker] = await this.options.db
+        const rows = await this.options.db
             .select()
-            .from(callNotesLocalCaptureWorkers)
+            .from(callNotesCaptureDevices)
             .where(
                 and(
-                    eq(callNotesLocalCaptureWorkers.companyId, company),
-                    eq(callNotesLocalCaptureWorkers.userId, input.userId)
+                    eq(callNotesCaptureDevices.companyId, company),
+                    eq(callNotesCaptureDevices.userId, input.userId),
+                    isNull(callNotesCaptureDevices.revokedAt)
                 )
             )
-            .orderBy(desc(callNotesLocalCaptureWorkers.lastSeenAt))
-            .limit(1);
+            .orderBy(desc(callNotesCaptureDevices.lastSeenAt));
         const now = this.clock.now();
-        const lastSeenAt = worker ? asDate(worker.lastSeenAt) : null;
+        const devices = rows.map(device => ({
+            id: device.id,
+            name: device.name,
+            appVersion: device.appVersion,
+            os: device.os,
+            arch: device.arch,
+            online:
+                device.lastSeenAt !== null &&
+                asDate(device.lastSeenAt).getTime() > now.getTime() - CAPTURE_DEVICE_ONLINE_MS,
+            lastSeenAt: device.lastSeenAt ? iso(device.lastSeenAt) : null,
+            createdAt: iso(device.createdAt),
+        }));
         return LocalCaptureWorkerStatusSchema.parse({
-            available:
-                lastSeenAt !== null &&
-                lastSeenAt.getTime() > now.getTime() - LOCAL_CAPTURE_TIMEOUT_MS,
-            lastSeenAt: lastSeenAt ? iso(lastSeenAt) : null,
+            available: devices.some(device => device.online),
+            lastSeenAt: devices.find(device => device.lastSeenAt !== null)?.lastSeenAt ?? null,
+            devices,
         });
     }
 
@@ -893,11 +935,11 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${parsed.companyId}:${parsed.userId}`}))`
             );
             const executor = tx as unknown as CallNotesExecutor;
-            await this.touchLocalCaptureWorker(
+            await this.touchCaptureDevice(
                 executor,
                 parsed.companyId,
                 parsed.userId,
-                parsed.workerId,
+                parsed.deviceId,
                 now
             );
             finalizedCallIds = await this.reconcileStaleCaptures(
@@ -913,6 +955,10 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     and(
                         eq(callNotesCaptures.companyId, company),
                         eq(callNotesCaptures.captureUserId, parsed.userId),
+                        or(
+                            eq(callNotesCaptures.targetDeviceId, parsed.deviceId),
+                            isNull(callNotesCaptures.targetDeviceId)
+                        ),
                         sql`${callNotesCaptures.lifecycle} not in ('completed', 'failed')`
                     )
                 )
@@ -1065,6 +1111,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .update(callNotesCaptures)
                     .set({
                         activeAttemptId: attempt.id,
+                        targetDeviceId: parsed.deviceId,
                         pausedReason: null,
                         lifecycle: "connecting",
                         updatedAt: now,
@@ -1221,13 +1268,15 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .set({ leaseExpiresAt: new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS) })
                     .where(eq(callNotesCaptureAttempts.id, attempt.id));
             }
-            await this.touchLocalCaptureWorker(
-                executor,
-                companyId,
-                capture.captureUserId,
-                attempt.leaseOwner,
-                now
-            );
+            if (capture.targetDeviceId) {
+                await this.touchCaptureDevice(
+                    executor,
+                    companyId,
+                    capture.captureUserId,
+                    capture.targetDeviceId,
+                    now
+                );
+            }
         });
         await this.ingestCaptureEvent(companyId, parsed);
     }
@@ -1577,7 +1626,13 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     return { callId: existing.id, finalizedCallIds };
                 }
 
-                await this.requireAvailableLocalWorker(executor, company, command.actorUserId, now);
+                const targetDeviceId = await this.requireAvailableCaptureDevice(
+                    executor,
+                    company,
+                    command.actorUserId,
+                    now,
+                    command.targetDeviceId
+                );
 
                 const activeCaptures = await tx
                     .select()
@@ -1661,6 +1716,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     callId: newCallId,
                     companyId: company,
                     captureUserId: command.actorUserId,
+                    targetDeviceId,
                     desiredMode: "running",
                     pausedReason: null,
                     lifecycle: "connecting",
@@ -1780,7 +1836,12 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 if (attempt) {
                     await tx
                         .update(callNotesCaptures)
-                        .set({ desiredMode: "stopped", pausedReason: null, updatedAt: now })
+                        .set({
+                            desiredMode: "stopped",
+                            pausedReason: null,
+                            stopReason: capture.stopReason ?? "user",
+                            updatedAt: now,
+                        })
                         .where(eq(callNotesCaptures.id, capture.id));
                     await this.finalizeOccurrence(
                         call.id,
@@ -1797,6 +1858,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .set({
                         desiredMode: "stopped",
                         pausedReason: null,
+                        stopReason: capture.stopReason ?? "user",
                         lifecycle: "failed",
                         outcome: "failed",
                         activeAttemptId: null,
@@ -1823,6 +1885,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .set({
                     desiredMode: "stopped",
                     pausedReason: null,
+                    stopReason: capture.stopReason ?? "user",
                     lifecycle: "finalizing",
                     updatedAt: now,
                 })
@@ -1873,12 +1936,24 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 );
             }
             const now = this.clock.now();
-            if (desiredMode === "running") {
-                await this.requireAvailableLocalWorker(
-                    tx as unknown as CallNotesExecutor,
-                    company,
-                    capture.captureUserId,
-                    now
+            const targetDeviceId =
+                desiredMode === "running"
+                    ? await this.requireAvailableCaptureDevice(
+                          tx as unknown as CallNotesExecutor,
+                          company,
+                          capture.captureUserId,
+                          now,
+                          command.kind === "resume_capture" ? command.targetDeviceId : undefined
+                      )
+                    : capture.targetDeviceId;
+            if (
+                desiredMode === "running" &&
+                capture.activeAttemptId !== null &&
+                targetDeviceId !== capture.targetDeviceId
+            ) {
+                throw new CallNotesApplicationError(
+                    "conflict",
+                    "Capture is still draining on another device"
                 );
             }
             await tx
@@ -1886,6 +1961,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 .set({
                     desiredMode,
                     pausedReason: desiredMode === "paused" ? "user" : null,
+                    targetDeviceId,
                     ...(capture.activeAttemptId === null
                         ? { lifecycle: desiredMode === "paused" ? "interrupted" : "connecting" }
                         : {}),
@@ -2469,22 +2545,59 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                     .where(eq(callNotesCaptures.id, capture.id));
                 return;
             case "attempt_ended": {
-                const serverNow = this.clock.now();
-                const [ended] = await this.options.db
-                    .update(callNotesCaptureAttempts)
-                    .set({
-                        lifecycle: "ended",
-                        endedAt: occurredAt,
-                    })
-                    .where(
-                        and(
-                            eq(callNotesCaptureAttempts.captureId, capture.id),
-                            eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey),
-                            sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                await this.options.db.transaction(async tx => {
+                    await tx.execute(
+                        sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${company.toString()}:${capture.captureUserId}`}))`
+                    );
+                    const [current] = await tx
+                        .select()
+                        .from(callNotesCaptures)
+                        .where(eq(callNotesCaptures.id, capture.id))
+                        .for("update")
+                        .limit(1);
+                    if (!current) return;
+                    const serverNow = this.clock.now();
+                    const [ended] = await tx
+                        .update(callNotesCaptureAttempts)
+                        .set({ lifecycle: "ended", endedAt: occurredAt })
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.captureId, capture.id),
+                                eq(
+                                    callNotesCaptureAttempts.sourceAttemptKey,
+                                    event.sourceAttemptKey
+                                ),
+                                sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                            )
                         )
-                    )
-                    .returning({ id: callNotesCaptureAttempts.id });
-                if (!ended) return;
+                        .returning({ id: callNotesCaptureAttempts.id });
+                    if (!ended) return;
+                    const autoStop =
+                        current.desiredMode === "running" &&
+                        (event.reason === "silence_timeout" || event.reason === "source_stopped");
+                    const stopped = current.desiredMode === "stopped" || autoStop;
+                    await tx
+                        .update(callNotesCaptures)
+                        .set({
+                            activeAttemptId: null,
+                            desiredMode: stopped ? "stopped" : current.desiredMode,
+                            pausedReason: stopped ? null : current.pausedReason,
+                            stopReason: autoStop
+                                ? event.reason === "silence_timeout"
+                                    ? "silence"
+                                    : "call_ended"
+                                : current.stopReason,
+                            lifecycle: stopped ? "finalizing" : "interrupted",
+                            updatedAt: serverNow,
+                        })
+                        .where(eq(callNotesCaptures.id, capture.id));
+                    if (stopped) {
+                        await tx
+                            .update(callNotesCalls)
+                            .set({ status: "finalizing", updatedAt: serverNow })
+                            .where(eq(callNotesCalls.id, callId));
+                    }
+                });
                 if (event.reason === "user_paused") {
                     await this.openGap(
                         callId,
@@ -2494,26 +2607,6 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                         "user_paused",
                         occurredAt
                     );
-                }
-                await this.options.db
-                    .update(callNotesCaptures)
-                    .set({
-                        activeAttemptId: null,
-                        pausedReason: capture.pausedReason,
-                        lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "interrupted",
-                        updatedAt: serverNow,
-                    })
-                    .where(eq(callNotesCaptures.id, capture.id));
-                if (capture.desiredMode === "stopped") {
-                    await this.options.db
-                        .update(callNotesCalls)
-                        .set({ status: "finalizing", updatedAt: serverNow })
-                        .where(
-                            and(
-                                eq(callNotesCalls.id, callId),
-                                eq(callNotesCalls.companyId, company)
-                            )
-                        );
                 }
                 return;
             }
@@ -3139,6 +3232,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                 id: capture.id,
                 desiredMode: capture.desiredMode,
                 pausedReason: capture.pausedReason,
+                stopReason: capture.stopReason,
                 lifecycle: capture.lifecycle,
                 outcome: capture.outcome,
                 activeAttemptId: capture.activeAttemptId,

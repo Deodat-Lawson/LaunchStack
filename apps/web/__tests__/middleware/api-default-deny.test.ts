@@ -30,6 +30,11 @@ const PUBLIC_API_PATHS = [
     "/api/webhooks/uploadthing",
     "/api/inngest",
     "/api/internal/call-notes/local",
+    "/api/call-notes/devices/pair",
+    "/api/call-notes/devices/commands",
+    "/api/call-notes/devices/transcribe",
+    "/api/call-notes/devices/appcast.xml",
+    "/api/call-notes/devices/updates/LaunchStack-Capture-1.2.3-arm64.zip",
     "/api/workspace/invitations/preview",
     "/api/workspace/join-links/preview",
     "/api/ocr/benchmark",
@@ -57,6 +62,11 @@ const PROTECTED_API_PATHS = [
     "/api/collab/meetings",
     "/api/call-notes",
     "/api/call-notes/worker",
+    "/api/call-notes/devices",
+    "/api/call-notes/devices/device-id",
+    "/api/call-notes/capture-app/downloads",
+    "/api/call-notes/capture-app/connect-codes",
+    "/api/call-notes/capture-app/d/pairing-code/LaunchStack-Capture.dmg",
     "/api/internal/call-notes/local/other",
 ];
 

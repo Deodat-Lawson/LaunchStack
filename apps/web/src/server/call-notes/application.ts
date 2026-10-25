@@ -15,6 +15,9 @@ import {
 } from "@launchstack/pipelines/call-notes";
 
 import { getEngine } from "~/server/engine";
+import { env } from "~/env";
+import { localeOfRequest } from "~/i18n/server";
+import { wordEnglish } from "~/i18n/translate";
 import { documentNotes, userCompanyMemberships, users } from "~/server/db/schema";
 import { LocalDetectedCallSource } from "./detected-calls";
 import { createWebCallNoteIndex } from "./document-index";
@@ -237,6 +240,7 @@ export function getWebCallNotesApplication(): CallNotesApplication {
     const application = createWebCallNotesApplication({
         callNoteIndex: createWebCallNoteIndex(),
         detectedCalls: new LocalDetectedCallSource(),
+        maxCaptureMinutes: env.server.CALL_NOTES_MAX_CAPTURE_MINUTES,
     });
     configuredApplication = application;
     return application;
@@ -262,11 +266,18 @@ export function callNotesErrorStatus(error: unknown): number {
     return 503;
 }
 
-export function callNotesErrorResponse(error: unknown): Response {
+export function callNotesErrorResponse(error: unknown, request?: Request): Response {
     const status = callNotesErrorStatus(error);
+    const locale = request ? localeOfRequest(request) : "en";
     if (error instanceof CallNotesApplicationError) {
-        return Response.json({ error: error.message, code: error.code }, { status });
+        return Response.json(
+            { error: wordEnglish(error.message, "calls.server", locale), code: error.code },
+            { status }
+        );
     }
 
-    return Response.json({ error: "Call Notes is unavailable" }, { status });
+    return Response.json(
+        { error: wordEnglish("Call Notes is unavailable", "calls.server", locale) },
+        { status }
+    );
 }

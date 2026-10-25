@@ -25,7 +25,8 @@ import {
     Users,
     X,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import type {
     CallNote,
     CallSnapshot,
@@ -83,17 +84,21 @@ function dateLabel(iso: string): string {
     });
 }
 
-function captureLabel(snapshot: CallSnapshot): string {
-    const { lifecycle, desiredMode, pausedReason } = snapshot.capture;
-    if (lifecycle === "completed") return "Completed";
-    if (lifecycle === "failed") return "Failed";
-    if (lifecycle === "finalizing") return "Finalizing";
-    if (desiredMode === "stopped") return "Stopping";
-    if (desiredMode === "paused")
-        return pausedReason === "worker_error" ? "Paused — capture error" : "Paused";
-    if (lifecycle === "interrupted") return "Reconnecting";
-    if (lifecycle === "live") return "Live";
-    return "Connecting";
+function captureLabel(snapshot: CallSnapshot) {
+    const { lifecycle, desiredMode, pausedReason, stopReason } = snapshot.capture;
+    if (lifecycle === "failed") return "failed";
+    if (desiredMode === "stopped") {
+        if (stopReason === "silence") return "stoppedSilence";
+        if (stopReason === "call_ended") return "stoppedCallEnded";
+        if (stopReason === "max_duration") return "stoppedLimit";
+    }
+    if (lifecycle === "completed") return "completed";
+    if (lifecycle === "finalizing") return "finalizing";
+    if (desiredMode === "stopped") return "stopping";
+    if (desiredMode === "paused") return pausedReason === "worker_error" ? "pausedError" : "paused";
+    if (lifecycle === "interrupted") return "reconnecting";
+    if (lifecycle === "live") return "live";
+    return "connecting";
 }
 
 function noteTitle(snapshot: CallSnapshot): string {
@@ -140,6 +145,8 @@ export interface CallsWorkspaceProps {
     onStopCapture?: (callId: string) => void;
     pendingCommand?: CaptureCommand | null;
     captureUnavailableReason?: string | null;
+    captureSetup?: ReactNode;
+    captureDevicePicker?: ReactNode;
     commandError?: string | null;
     onRetryCommand?: () => void;
     refreshError?: string | null;
@@ -172,6 +179,8 @@ export function CallsWorkspace({
     pendingCommand = null,
     captureUnavailableReason = null,
     commandError = null,
+    captureSetup,
+    captureDevicePicker,
     onRetryCommand,
     refreshError = null,
     onRetryRefresh,
@@ -189,6 +198,7 @@ export function CallsWorkspace({
     onAcceptEnrichment,
     onDeleteCall,
 }: CallsWorkspaceProps) {
+    const t = useTranslations("calls.capture");
     const [selectedId, setSelectedId] = useState(initialSelectedId);
     useEffect(() => {
         setSelectedId(previous => (previous === initialSelectedId ? previous : initialSelectedId));
@@ -218,6 +228,8 @@ export function CallsWorkspace({
                         captureActive={captureActive}
                         pendingCommand={pendingCommand}
                         captureUnavailableReason={captureUnavailableReason}
+                        captureSetup={captureSetup}
+                        captureDevicePicker={captureDevicePicker}
                         noteDraft={noteDrafts?.[selected.id]}
                         enrichmentPreview={
                             enrichmentPreview?.callId === selected.id
@@ -243,36 +255,31 @@ export function CallsWorkspace({
                         captureActive={captureActive}
                         pendingCommand={pendingCommand}
                         captureUnavailableReason={captureUnavailableReason}
+                        captureSetup={captureSetup}
+                        captureDevicePicker={captureDevicePicker}
                     />
                 )}
                 <PopoverContent
                     className={styles.infoPopover}
                     align="end"
                     sideOffset={12}
-                    aria-label="Local capture"
+                    aria-label={t("infoTitle")}
                     onOpenAutoFocus={event => event.preventDefault()}
                 >
                     <div className={styles.popoverHeading}>
-                        <strong>Local capture</strong>
+                        <strong>{t("infoTitle")}</strong>
                         <Button
                             variant="ghost"
                             size="icon"
                             className={styles.iconButton}
-                            aria-label="Close capture information"
+                            aria-label={t("closeInfo")}
                             onClick={() => setInfoOpen(false)}
                         >
                             <X size={16} className="size-4" />
                         </Button>
                     </div>
-                    <p>
-                        Start a capture when you are ready. A worker on your configured Mac records
-                        microphone and computer audio locally; no bot joins the call.
-                    </p>
-                    <p>
-                        The capture worker owns device permissions and sends only the resulting
-                        transcript evidence to Call Notes. This page never requests browser
-                        microphone access.
-                    </p>
+                    <p>{t("infoDescription")}</p>
+                    <p>{t("infoPrivacy")}</p>
                 </PopoverContent>
                 {refreshError && (
                     <CommandFeedback message={refreshError} onRetry={onRetryRefresh} />
@@ -319,6 +326,8 @@ function CallsHome({
     captureActive,
     pendingCommand,
     captureUnavailableReason,
+    captureSetup,
+    captureDevicePicker,
 }: {
     calls: CallSnapshot[];
     onSelect: (id: string) => void;
@@ -326,7 +335,10 @@ function CallsHome({
     captureActive: boolean;
     pendingCommand: CaptureCommand | null;
     captureUnavailableReason?: string | null;
+    captureSetup?: ReactNode;
+    captureDevicePicker?: ReactNode;
 }) {
+    const t = useTranslations("calls.capture");
     const [searchOpen, setSearchOpen] = useState(false);
     const [query, setQuery] = useState("");
     const [dayOffset, setDayOffset] = useState(0);
@@ -367,6 +379,7 @@ function CallsHome({
                     </Button>
                 </div>
                 <div className={styles.chromeGroup}>
+                    {captureDevicePicker}
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span className="inline-flex">
@@ -375,13 +388,13 @@ function CallsHome({
                                     size="sm"
                                     className={cn(styles.pill, styles.captureButton)}
                                     type="button"
-                                    aria-label="Start capture"
+                                    aria-label={t("start")}
                                     onClick={onStartCapture}
                                     disabled={startDisabled}
                                     title={captureUnavailableReason ?? undefined}
                                 >
                                     <Mic size={14} className="size-3.5" />{" "}
-                                    {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                                    {pendingCommand === "start" ? t("starting") : t("start")}
                                 </Button>
                             </span>
                         </TooltipTrigger>
@@ -391,7 +404,7 @@ function CallsHome({
                     </Tooltip>
                     <PopoverTrigger asChild>
                         <Button variant="outline" size="sm" className={styles.pill} type="button">
-                            <Info size={14} className="size-3.5" /> Capture info
+                            <Info size={14} className="size-3.5" /> {t("info")}
                         </Button>
                     </PopoverTrigger>
                 </div>
@@ -403,11 +416,7 @@ function CallsHome({
                         query && !groups.size && styles.noSearchResults
                     )}
                 >
-                    {captureUnavailableReason && (
-                        <p className={styles.workerNotice} role="status">
-                            {captureUnavailableReason}
-                        </p>
-                    )}
+                    {captureSetup}
                     <div className={styles.sectionHeading}>
                         <h1>Coming up</h1>
                         <div className={styles.chromeGroup}>
@@ -453,7 +462,9 @@ function CallsHome({
                                         onClick={() => onSelect(call.id)}
                                     >
                                         <strong>{noteTitle(call)}</strong>
-                                        <span>{captureLabel(call)} · Open note</span>
+                                        <span>
+                                            {t("openNote", { status: t(captureLabel(call)) })}
+                                        </span>
                                     </Button>
                                 ))
                             ) : (
@@ -520,7 +531,7 @@ function CallsHome({
                                             <strong>{noteTitle(call)}</strong>
                                             <small>
                                                 {isCaptureActive(call)
-                                                    ? captureLabel(call)
+                                                    ? t(captureLabel(call))
                                                     : call.note?.visibility === "company"
                                                       ? "Shared with company"
                                                       : "Private note"}
@@ -573,6 +584,8 @@ function CallPanel({
     captureActive,
     pendingCommand,
     captureUnavailableReason,
+    captureSetup,
+    captureDevicePicker,
     noteDraft,
     enrichmentPreview,
     mutationStatus,
@@ -594,6 +607,8 @@ function CallPanel({
     captureActive: boolean;
     pendingCommand: CaptureCommand | null;
     captureUnavailableReason?: string | null;
+    captureSetup?: ReactNode;
+    captureDevicePicker?: ReactNode;
     noteDraft?: CallNoteDraft;
     enrichmentPreview?: EnrichmentPreviewState;
     mutationStatus?: CallMutationStatus;
@@ -607,6 +622,7 @@ function CallPanel({
     onAcceptEnrichment?: CallsWorkspaceProps["onAcceptEnrichment"];
     onDeleteCall?: CallsWorkspaceProps["onDeleteCall"];
 }) {
+    const t = useTranslations("calls.capture");
     const [noteView, setNoteView] = useState<"notes" | "enhanced">("notes");
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [dockMode, setDockMode] = useState<"collapsed" | "transcript" | "chat">("collapsed");
@@ -716,6 +732,7 @@ function CallPanel({
                     <Home size={16} className="size-4" />
                 </Button>
                 <div className={styles.chromeGroup}>
+                    {captureDevicePicker}
                     {showResume && (
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -725,15 +742,13 @@ function CallPanel({
                                         size="sm"
                                         className={cn(styles.pill, styles.captureButton)}
                                         type="button"
-                                        aria-label="Resume capture"
+                                        aria-label={t("resume")}
                                         onClick={() => onResumeCapture?.(snapshot.id)}
                                         disabled={resumeDisabled}
                                         title={captureUnavailableReason ?? undefined}
                                     >
                                         <Play size={14} className="size-3.5" />{" "}
-                                        {pendingCommand === "resume"
-                                            ? "Resuming…"
-                                            : "Resume capture"}
+                                        {pendingCommand === "resume" ? t("resuming") : t("resume")}
                                     </Button>
                                 </span>
                             </TooltipTrigger>
@@ -752,7 +767,7 @@ function CallPanel({
                             disabled={stopping || pendingCommand !== null}
                         >
                             <Square size={13} className="size-[13px]" />{" "}
-                            {stopping ? "Stopping…" : "Stop capture"}
+                            {stopping ? t("stopping") : t("stop")}
                         </Button>
                     )}
                     <Tooltip>
@@ -763,12 +778,13 @@ function CallPanel({
                                     size="sm"
                                     className={cn(styles.pill, styles.captureButton)}
                                     type="button"
+                                    aria-label={t("start")}
                                     onClick={onStartCapture}
                                     disabled={startDisabled}
                                     title={captureUnavailableReason ?? undefined}
                                 >
                                     <Mic size={14} className="size-3.5" />{" "}
-                                    {pendingCommand === "start" ? "Starting…" : "Start capture"}
+                                    {pendingCommand === "start" ? t("starting") : t("start")}
                                 </Button>
                             </span>
                         </TooltipTrigger>
@@ -781,7 +797,7 @@ function CallPanel({
                             variant="ghost"
                             size="icon"
                             className={styles.iconButton}
-                            aria-label="Capture information"
+                            aria-label={t("info")}
                         >
                             <Info size={16} className="size-4" />
                         </Button>
@@ -879,29 +895,21 @@ function CallPanel({
             </header>
             <div className={styles.scroll}>
                 <article className={styles.noteContent}>
-                    {captureUnavailableReason && !captureActive && (
-                        <p className={styles.workerNotice} role="status">
-                            {captureUnavailableReason}
-                        </p>
-                    )}
+                    {captureUnavailableReason && captureSetup}
                     {snapshot.capture.lifecycle === "finalizing" && (
                         <p className={styles.workerNotice} role="status">
-                            Stopping audio and saving pending Transcript segments…
+                            {t("finalizingDescription")}
                         </p>
                     )}
                     {snapshot.capture.desiredMode === "paused" &&
                         snapshot.capture.pausedReason === "worker_error" && (
                             <p className={styles.workerNotice} role="alert">
-                                The Local Capture Worker stopped. The Transcript so far is kept.
-                                Resume continues this Call. The worker must be running before you
-                                resume.
+                                {t("pausedDescription")}
                             </p>
                         )}
                     {snapshot.capture.lifecycle === "failed" && (
                         <p className={styles.workerNotice} role="alert">
-                            Capture did not finish successfully. Saved evidence is retained. Check
-                            the worker, audio permissions, and transcription service before starting
-                            again.
+                            {t("failedDescription")}
                         </p>
                     )}
                     {snapshot.capture.outcome === "partial" && (
@@ -955,8 +963,9 @@ function CallPanel({
                             data-live={snapshot.capture.lifecycle === "live"}
                         >
                             <i />
-                            {captureLabel(snapshot)}
-                            {snapshot.capture.outcome === "partial" ? " · Partial" : ""}
+                            {snapshot.capture.outcome === "partial"
+                                ? t("partial", { status: t(captureLabel(snapshot)) })
+                                : t(captureLabel(snapshot))}
                         </span>
                     </div>
                     <section className={styles.noteBody} aria-label="Call note">
@@ -1490,6 +1499,7 @@ function TranscriptSection({
     active: boolean;
     onShowChat: () => void;
 }) {
+    const t = useTranslations("calls.capture");
     const [query, setQuery] = useState("");
     const [copyStatus, setCopyStatus] = useState("");
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -1630,8 +1640,8 @@ function TranscriptSection({
                 {!timeline.length && (
                     <p className={styles.transcriptEmpty}>
                         {normalized
-                            ? `No transcript matches “${query.trim()}”.`
-                            : "Transcript appears as the local worker streams microphone and computer audio after you start capture."}
+                            ? t("transcriptNoMatches", { query: query.trim() })
+                            : t("transcriptEmpty")}
                     </p>
                 )}
             </div>

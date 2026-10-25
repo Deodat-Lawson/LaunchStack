@@ -2,17 +2,27 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import {
     CallSnapshotSchema,
     LocalCaptureWorkerStatusSchema,
     type CallNote,
     type CallSnapshot,
-} from "@launchstack/pipelines/call-notes/contracts";
+    type CaptureDeviceSummary,
+} from "@launchstack/pipelines/call-notes";
 
 import { Button } from "~/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 
 import { CallsWorkspace, type CallMutationStatus, type CaptureCommand } from "./CallsWorkspace";
+import { CaptureSetupCard } from "./CaptureSetupCard";
 import { useCallNoteDrafts } from "./useCallNoteDrafts";
 import { useEnrichmentStream } from "./useEnrichmentStream";
 
@@ -27,11 +37,18 @@ type CaptureCommandRequest =
           requestId: string;
           sourceOccurrenceKey: string;
           title?: string;
+          targetDeviceId?: string;
       }
     | {
-          kind: "stop_capture" | "resume_capture";
+          kind: "stop_capture";
           requestId: string;
           callId: string;
+      }
+    | {
+          kind: "resume_capture";
+          requestId: string;
+          callId: string;
+          targetDeviceId?: string;
       };
 
 type CallMutationRequest =
@@ -91,14 +108,14 @@ function requestId(): string {
     return crypto.randomUUID();
 }
 
-function commandErrorMessage(body: unknown, status: number): string {
+function commandErrorMessage(body: unknown, fallback: string): string {
     if (body && typeof body === "object" && "error" in body && typeof body.error === "string") {
         return body.error;
     }
     if (body && typeof body === "object" && "message" in body && typeof body.message === "string") {
         return body.message;
     }
-    return status > 0 ? `Call Notes command failed (${status})` : "Call Notes command failed";
+    return fallback;
 }
 
 function keepLatestNote(incoming: CallSnapshot, previous?: CallSnapshot): CallSnapshot {
@@ -112,14 +129,31 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const t = useTranslations("calls");
+    const tc = useTranslations("common");
     const selectedCallId = searchParams.get("call");
     const [calls, setCalls] = useState<CallSnapshot[]>([]);
     const [status, setStatus] = useState<"loading" | "ready" | "failed">("loading");
     const [refreshError, setRefreshError] = useState<string | null>(null);
     const [command, setCommand] = useState<CaptureCommandState | null>(null);
-    const [captureUnavailableReason, setCaptureUnavailableReason] = useState<string | null>(
-        "Checking the Local Capture Worker…"
-    );
+    const [devices, setDevices] = useState<CaptureDeviceSummary[]>([]);
+    const [deviceStatus, setDeviceStatus] = useState<"checking" | "ready" | "failed">("checking");
+    const [deviceRefresh, setDeviceRefresh] = useState(0);
+    const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
+    const onlineDevices = deviceStatus === "ready" ? devices.filter(device => device.online) : [];
+    const captureUnavailableReason =
+        deviceStatus === "checking"
+            ? t("capture.checking")
+            : deviceStatus === "failed"
+              ? t("capture.statusUnavailable")
+              : onlineDevices.length === 0
+                ? t("capture.unavailable")
+                : null;
+    const targetDeviceId =
+        onlineDevices.length > 1
+            ? (onlineDevices.find(device => device.id === selectedDeviceId)?.id ??
+              onlineDevices[0]?.id)
+            : undefined;
     const [mutations, setMutations] = useState<Record<string, MutationState>>({});
     const callsRef = useRef<CallSnapshot[]>([]);
     const pollSequenceRef = useRef(0);
@@ -197,19 +231,15 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                     cache: "no-store",
                     signal: controller.signal,
                 });
-                if (!response.ok) throw new Error("Worker availability could not be checked");
+                if (!response.ok)
+                    throw new Error("Capture device availability could not be checked");
                 const worker = LocalCaptureWorkerStatusSchema.parse(await response.json());
-                if (active)
-                    setCaptureUnavailableReason(
-                        worker.available
-                            ? null
-                            : "Local Capture Worker is offline. Start it on this Mac before starting or resuming Capture."
-                    );
+                if (active) {
+                    setDevices(worker.devices);
+                    setDeviceStatus("ready");
+                }
             } catch {
-                if (active)
-                    setCaptureUnavailableReason(
-                        "Cannot reach the Local Capture Worker. Check the application and worker connection."
-                    );
+                if (active) setDeviceStatus("failed");
             } finally {
                 window.clearTimeout(timeout);
                 pending = undefined;
@@ -222,7 +252,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             window.clearInterval(interval);
             pending?.abort();
         };
-    }, []);
+    }, [deviceRefresh]);
 
     const loadCalls = useCallback(async (): Promise<void> => {
         if (pollInFlightRef.current) return;
@@ -237,7 +267,12 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             const body: unknown = await callsResponse.json().catch(() => null);
             if (sequence !== pollSequenceRef.current) return;
             if (!callsResponse.ok) {
-                throw new Error(commandErrorMessage(body, callsResponse.status));
+                throw new Error(
+                    commandErrorMessage(
+                        body,
+                        t("feature.commandFailedStatus", { status: callsResponse.status })
+                    )
+                );
             }
             const snapshots = CallSnapshotSchema.array().parse(body);
             if (selectedCallId && !snapshots.some(snapshot => snapshot.id === selectedCallId)) {
@@ -260,8 +295,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             if (!selectedStillMissing) setRefreshError(null);
         } catch (error) {
             if (sequence !== pollSequenceRef.current) return;
-            const message =
-                error instanceof Error ? error.message : "Call Notes could not be loaded";
+            const message = error instanceof Error ? error.message : t("feature.loadFailed");
             if (wasInitialLoad && callsRef.current.length === 0) {
                 setStatus("failed");
             } else {
@@ -270,7 +304,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
         } finally {
             pollInFlightRef.current = false;
         }
-    }, [applySnapshot, selectedCallId]);
+    }, [applySnapshot, selectedCallId, t]);
 
     useEffect(() => {
         void loadCalls();
@@ -359,7 +393,13 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                     signal: controller.signal,
                 });
                 const body: unknown = await response.json().catch(() => null);
-                if (!response.ok) throw new Error(commandErrorMessage(body, response.status));
+                if (!response.ok)
+                    throw new Error(
+                        commandErrorMessage(
+                            body,
+                            t("feature.commandFailedStatus", { status: response.status })
+                        )
+                    );
                 const snapshot = CallSnapshotSchema.parse(body);
                 applySnapshot(snapshot, "mutation");
                 setCommand(current =>
@@ -380,10 +420,10 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                               request,
                               phase: "failed",
                               error: controller.signal.aborted
-                                  ? "Capture command timed out. Retry to check the same request safely."
+                                  ? t("feature.captureTimedOut")
                                   : error instanceof Error
                                     ? error.message
-                                    : "Capture command failed",
+                                    : t("feature.captureFailed"),
                           }
                         : current
                 );
@@ -391,7 +431,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                 window.clearTimeout(timeout);
             }
         },
-        [applySnapshot, selectCall]
+        [applySnapshot, selectCall, t]
     );
 
     const startCapture = useCallback(() => {
@@ -401,15 +441,21 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             kind: "start_capture",
             requestId: nextRequestId,
             sourceOccurrenceKey: `calls-ui-${nextRequestId}`,
+            ...(targetDeviceId ? { targetDeviceId } : {}),
         });
-    }, [command, submitCapture, captureUnavailableReason]);
+    }, [command, submitCapture, captureUnavailableReason, targetDeviceId]);
 
     const resumeCapture = useCallback(
         (callId: string) => {
             if (command?.phase === "pending" || captureUnavailableReason) return;
-            void submitCapture({ kind: "resume_capture", requestId: requestId(), callId });
+            void submitCapture({
+                kind: "resume_capture",
+                requestId: requestId(),
+                callId,
+                ...(targetDeviceId ? { targetDeviceId } : {}),
+            });
         },
-        [command, submitCapture, captureUnavailableReason]
+        [command, submitCapture, captureUnavailableReason, targetDeviceId]
     );
 
     const stopCapture = useCallback(
@@ -437,7 +483,13 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                     body: JSON.stringify({ schemaVersion: "call-notes/v2", ...request }),
                 });
                 const body: unknown = await response.json().catch(() => null);
-                if (!response.ok) throw new Error(commandErrorMessage(body, response.status));
+                if (!response.ok)
+                    throw new Error(
+                        commandErrorMessage(
+                            body,
+                            t("feature.commandFailedStatus", { status: response.status })
+                        )
+                    );
                 if (request.kind === "delete_call" && body === null) {
                     removeCall(callId);
                     setMutations(previous => {
@@ -466,14 +518,13 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                         [callId]: {
                             request,
                             phase: "failed",
-                            error:
-                                error instanceof Error ? error.message : "Call Note command failed",
+                            error: error instanceof Error ? error.message : t("feature.noteFailed"),
                         },
                     };
                 });
             }
         },
-        [applySnapshot, removeCall, selectCall, selectedCallId]
+        [applySnapshot, removeCall, selectCall, selectedCallId, t]
     );
 
     const mutationRequest = useCallback(
@@ -552,10 +603,9 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
         return (
             <div role="status" aria-live="polite" className={CENTERED_STATE_CLASS_NAME}>
                 <div className="max-w-[520px] text-center">
-                    <p className="m-0 text-base font-semibold">Loading Calls…</p>
+                    <p className="m-0 text-base font-semibold">{t("feature.loading")}</p>
                     <p className="text-ink-3 m-0 mt-2.5 leading-[1.6]">
-                        Start a capture when you are ready. Audio is handled by the configured local
-                        worker; this page does not request browser microphone access.
+                        {t("feature.loadingDescription")}
                     </p>
                 </div>
             </div>
@@ -563,24 +613,31 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
     }
     if (status === "failed") {
         return (
-            <section aria-label="Calls unavailable" className={CENTERED_STATE_CLASS_NAME}>
+            <section
+                aria-label={t("feature.unavailableTitle")}
+                className={CENTERED_STATE_CLASS_NAME}
+            >
                 <div className="max-w-[560px]">
-                    <h2 className="m-0 text-lg">Calls are unavailable</h2>
+                    <h2 className="m-0 text-lg">{t("feature.unavailableTitle")}</h2>
                     <p className="text-ink-3 m-0 mt-3 leading-[1.6]">
-                        Capture commands are sent to the configured Local Capture Worker; no browser
-                        microphone access is requested.
+                        {t("feature.unavailableDescription")}
                     </p>
-                    <p className="text-ink-3 m-0 mt-2.5 leading-[1.6]">
-                        The Call Notes service could not be reached. Confirm the app, worker, and
-                        CALL_NOTES_INTERNAL_TOKEN are configured, then retry.
-                    </p>
+                    <CaptureSetupCard
+                        devices={devices}
+                        status={deviceStatus}
+                        autoFocusConnect={searchParams.get("captureSetup") === "1"}
+                        onDevicesChanged={() => {
+                            setDeviceStatus("checking");
+                            setDeviceRefresh(previous => previous + 1);
+                        }}
+                    />
                     <Button
                         type="button"
                         variant="outline"
                         className="bg-panel text-ink hover:bg-panel-2 dark:bg-panel mt-[18px] h-auto rounded-lg px-3.5 py-2"
                         onClick={retryRefresh}
                     >
-                        Retry
+                        {tc("actions.retry")}
                     </Button>
                 </div>
             </section>
@@ -596,7 +653,7 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
                   : "stop"
             : null;
     const commandError =
-        command?.phase === "failed" ? (command.error ?? "Capture command failed") : null;
+        command?.phase === "failed" ? (command.error ?? t("feature.captureFailed")) : null;
 
     return (
         <CallsWorkspace
@@ -604,6 +661,41 @@ export function CallsFeature({ onCallChanged }: CallsFeatureProps) {
             initialSelectedId={selectedCallId}
             pendingCommand={pendingCommand}
             captureUnavailableReason={captureUnavailableReason}
+            captureSetup={
+                <CaptureSetupCard
+                    devices={devices}
+                    status={deviceStatus}
+                    autoFocusConnect={searchParams.get("captureSetup") === "1"}
+                    onDevicesChanged={() => {
+                        setDeviceStatus("checking");
+                        setDeviceRefresh(previous => previous + 1);
+                    }}
+                />
+            }
+            captureDevicePicker={
+                onlineDevices.length > 1 ? (
+                    <Select
+                        value={targetDeviceId}
+                        onValueChange={setSelectedDeviceId}
+                        disabled={pendingCommand !== null}
+                    >
+                        <SelectTrigger
+                            size="sm"
+                            className="max-w-[180px]"
+                            aria-label={t("capture.devicePicker")}
+                        >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {onlineDevices.map(device => (
+                                <SelectItem key={device.id} value={device.id}>
+                                    {device.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                ) : null
+            }
             commandError={commandError}
             onRetryCommand={commandError ? retryCommand : undefined}
             refreshError={refreshError}

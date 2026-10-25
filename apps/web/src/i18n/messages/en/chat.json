@@ -688,7 +688,10 @@
       "readingSource": "Reading “{title}”",
       "readingASource": "Reading a source",
       "writingDocumentTitled": "Writing “{title}”",
-      "writingDocument": "Writing a document"
+      "writingDocument": "Writing a document",
+      "readingSources": "Reading {count, plural, one {# source} other {# sources}}",
+      "readingSourcesProgress": "Reading {count, plural, one {# source} other {# sources}}… {done} done",
+      "readingYourSources": "Reading your sources"
     },
     "aiChat": {
       "chatNotFound": "Chat not found",

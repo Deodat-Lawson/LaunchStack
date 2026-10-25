@@ -688,7 +688,10 @@
       "readingSource": "正在阅读“{title}”",
       "readingASource": "正在阅读一个来源",
       "writingDocumentTitled": "正在撰写“{title}”",
-      "writingDocument": "正在撰写文档"
+      "writingDocument": "正在撰写文档",
+      "readingSources": "正在阅读 {count} 个来源",
+      "readingSourcesProgress": "正在阅读 {count} 个来源…已完成 {done} 个",
+      "readingYourSources": "正在阅读你的来源"
     },
     "aiChat": {
       "chatNotFound": "未找到该对话",

@@ -177,10 +177,13 @@ let mockSourcesOverview: unknown = NO_SOURCES;
 const mockLoadSourcesOverview = jest.fn(async (..._args: unknown[]) => mockSourcesOverview);
 const mockListSources = jest.fn(async (..._args: unknown[]) => "no listing");
 const mockSearchSources = jest.fn(async (..._args: unknown[]) => "no passages");
+/** Tokens the scripted `ask_each` spent, added to the turn's usage. */
+let mockAskUsage: Record<string, number> = {};
 const mockCreateSourceTools = jest.fn((..._args: unknown[]) => {
     const session = {
         passages: [] as unknown[],
         texts: [] as string[],
+        usage: () => mockAskUsage,
         tools: [
             {
                 name: "list_sources",
@@ -219,6 +222,24 @@ const mockCreateSourceTools = jest.fn((..._args: unknown[]) => {
     };
     return session;
 });
+// The attached files: their titles and sizes, and their text for a full
+// read. None by default, so a turn reads as it did before the file list.
+let mockScopeRows: { id: number; title: string; tokens: number; passages: number }[] = [];
+const mockReadWholeFiles = jest.fn(
+    async (ids: readonly number[]) =>
+        new Map(
+            ids.map(id => [
+                id,
+                [{ documentId: id, chunkId: id * 10, page: 1, content: `Resume of person ${id}` }],
+            ])
+        )
+);
+jest.mock("~/server/chat-source-data", () => ({
+    loadScopeFiles: async (ids: readonly number[]) =>
+        mockScopeRows.filter(row => ids.includes(row.id)),
+    readWholeFiles: (ids: readonly number[]) => mockReadWholeFiles(ids),
+}));
+
 jest.mock("~/server/chat-source-tools", () => ({
     citedPassages: (passages: unknown[]) => passages,
     loadSourcesOverview: (...args: unknown[]) => mockLoadSourcesOverview(...args),
@@ -1720,7 +1741,9 @@ describe("selected passages", () => {
         );
         // The passage's section is sent once, not again as a retrieved chunk.
         expect(prompt.split(ANCHOR)).toHaveLength(2);
-        expect(prompt).toContain("=== Chunk #1, Page 7 ===\nThe FY25 forecast assumes 45% margin.");
+        expect(prompt).toContain(
+            "=== Passage #1, page 7 ===\nThe FY25 forecast assumes 45% margin."
+        );
         expect(info).toHaveBeenCalledWith("[AIChat] passages", {
             count: 1,
             anchored: 1,
@@ -2134,7 +2157,8 @@ describe("the workspace's sources as tools the model calls", () => {
         expect(mockCreateSourceTools).toHaveBeenCalledWith(
             expect.objectContaining({ companyId: BigInt(5) }),
             {},
-            "en"
+            "en",
+            { attached: [] }
         );
         expect(systemPrompt()).toContain("## The workspace's sources (attached: false)");
         expect(systemPrompt()).not.toContain("claim access to workspace sources");
@@ -2204,7 +2228,7 @@ describe("the workspace's sources as tools the model calls", () => {
         expect(mockBuildReferences).toHaveBeenCalledWith(
             "Who knows Python?",
             [expect.objectContaining({ metadata: expect.objectContaining({ documentId: 81 }) })],
-            5
+            50
         );
         expect(body).toMatchObject({
             references: [expect.objectContaining({ documentId: 81 })],
@@ -2223,7 +2247,7 @@ describe("the workspace's sources as tools the model calls", () => {
         expect(documentEnsembleSearch).toHaveBeenCalledTimes(1);
         expect(toolNames()).toEqual(["list_sources", "search_sources", "read_source"]);
         expect(systemPrompt()).toContain("## The workspace's sources (attached: true)");
-        expect(mockBuildReferences).toHaveBeenCalledWith("summarize", RETRIEVED, 5);
+        expect(mockBuildReferences).toHaveBeenCalledWith("summarize", RETRIEVED, 50);
     });
 
     it("offers no source tools when the person can open no sources", async () => {
@@ -2464,5 +2488,166 @@ describe("documents the model writes into the workspace", () => {
 
         expect(mockCreateDocumentTools).not.toHaveBeenCalled();
         expect(mockBindTools).not.toHaveBeenCalled();
+    });
+});
+
+describe("a message with files attached", () => {
+    const TOOL_MODEL = {
+        input: ["text"],
+        reasoning: { mode: "none" },
+        nativeStructuredOutput: ["json-schema", "tool-calling"],
+        parameters: { temperature: "supported", systemMessages: "supported" },
+    };
+    /** 37 resumes, as in the question that found the bug. */
+    const RESUMES = Array.from({ length: 37 }, (_, i) => ({
+        id: 100 + i,
+        title: `Resume ${String(i + 1).padStart(2, "0")}.pdf`,
+        tokens: 1_000,
+        passages: 2,
+    }));
+    const IDS = RESUMES.map(row => row.id);
+    /** Ten passages from ten resumes: what retrieval hands over. */
+    const TOP_TEN = IDS.slice(0, 10).map(id => ({
+        pageContent: `Person ${id}`,
+        metadata: { documentId: id, page: 1, documentTitle: `Resume ${id}` },
+    }));
+
+    const ask = (question = "List everyone across these files") =>
+        POST(
+            queryRequest({
+                question,
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+            })
+        );
+    const prompts = (call = 0) => {
+        const [messages] = mockInvoke.mock.calls[call] as [{ content: unknown }[]];
+        return { system: String(messages[0]?.content), user: String(messages[1]?.content) };
+    };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        useContext({ role: "owner" });
+        mockQueuedRows = [IDS.map(id => ({ id }))];
+        mockScopeRows = RESUMES;
+        mockBehavior = TOOL_MODEL;
+        mockSourcesOverview = {
+            inventory: { total: 37, byOrigin: [{ from: "google-drive", count: 37 }] },
+            connected: [],
+        };
+        mockAskUsage = {};
+        mockUsage = { inputTokens: 10, outputTokens: 2, totalTokens: 12 };
+        mockInvoke.mockReset();
+        mockBuildReferences.mockImplementation(() => []);
+        (validateQAResponse as jest.Mock).mockReturnValue({ approved: true, issues: [] });
+        (multiDocEnsembleSearch as jest.Mock).mockResolvedValue(TOP_TEN);
+    });
+
+    afterAll(() => {
+        mockScopeRows = [];
+        mockSourcesOverview = NO_SOURCES;
+        mockBehavior = {};
+        mockAskUsage = {};
+    });
+
+    it("reads every attached file whole when they fit, instead of ranking ten passages", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "Everyone.", response_metadata: {} });
+
+        const response = await ask();
+        const body = (await response.json()) as Record<string, unknown>;
+
+        expect(response.status).toBe(200);
+        expect(multiDocEnsembleSearch).not.toHaveBeenCalled();
+        expect(mockReadWholeFiles).toHaveBeenCalledWith(IDS);
+        const { system, user } = prompts();
+        expect(user).toContain("Attached files (37):\nd100 · Resume 01.pdf");
+        expect(user).toContain("Full text of every attached file:");
+        expect(user).toContain("=== [d136] Resume 37.pdf ===\n(page 1)\n\nResume of person 136");
+        expect(system).toContain("complete text of all 37 files");
+        expect(body).toMatchObject({ retrievalMethod: "selected_full_read", chunksAnalyzed: 37 });
+    });
+
+    it("tells the model it saw ten passages of 37 files, and offers ask_each over the attached set", async () => {
+        mockScopeRows = RESUMES.map(row => ({ ...row, tokens: 5_000 }));
+        mockInvoke.mockResolvedValueOnce({ content: "Some of them.", response_metadata: {} });
+
+        await ask();
+
+        expect(multiDocEnsembleSearch).toHaveBeenCalledWith(
+            "List everyone across these files",
+            expect.objectContaining({ topK: 10, documentIds: IDS }),
+            expect.anything()
+        );
+        expect(mockReadWholeFiles).not.toHaveBeenCalled();
+        const { system, user } = prompts();
+        expect(user).toContain("Attached files (37):");
+        expect(user).toContain("Relevant passages (10 from 10 of 37 attached files):");
+        expect(user).toContain("=== [d100] Resume 01.pdf · page 1 ===\nPerson 100");
+        expect(user).not.toContain("Chunk #");
+        expect(system).toContain("You were given 10 passages from 10 of the 37 files");
+        expect(system).toContain("What you weren't shown is unknown, not absent");
+        expect(system).toContain("call `ask_each`");
+        const [, , , options] = mockCreateSourceTools.mock.calls[0] as [
+            unknown,
+            unknown,
+            string,
+            { attached: { id: number; label: string }[] },
+        ];
+        expect(options.attached.map(file => file.id)).toEqual(IDS);
+        expect(options.attached[0]).toMatchObject({ id: 100, label: "d100" });
+    });
+
+    it("falls back to ranked passages when a file is not indexed yet", async () => {
+        mockScopeRows = RESUMES.map((row, i) => (i === 5 ? { ...row, passages: 0 } : row));
+        mockInvoke.mockResolvedValueOnce({ content: "Some of them.", response_metadata: {} });
+
+        await ask();
+
+        expect(mockReadWholeFiles).not.toHaveBeenCalled();
+        expect(multiDocEnsembleSearch).toHaveBeenCalled();
+    });
+
+    it("turns the answer's [d12] citations into one source each, and takes them out of the text", async () => {
+        mockInvoke.mockResolvedValueOnce({
+            content: "Person 101 [d101] and Person 105 [d105, d999].",
+            response_metadata: {},
+        });
+
+        const response = await ask();
+        const body = (await response.json()) as Record<string, unknown>;
+
+        expect(body).toMatchObject({ summarizedAnswer: "Person 101 and Person 105." });
+        const [, cited, max] = mockBuildReferences.mock.calls[0] as [
+            string,
+            { metadata: { documentId: number } }[],
+            number,
+        ];
+        expect(cited.map(passage => passage.metadata.documentId)).toEqual([101, 105]);
+        expect(max).toBe(50);
+    });
+
+    it("counts the tokens ask_each spent in the turn's usage", async () => {
+        mockScopeRows = RESUMES.map(row => ({ ...row, tokens: 5_000 }));
+        mockAskUsage = { inputTokens: 40_000, outputTokens: 900, totalTokens: 40_900 };
+        mockInvoke.mockResolvedValueOnce({ content: "Everyone.", response_metadata: {} });
+
+        const body = (await (await ask()).json()) as Record<string, unknown>;
+
+        expect(body).toMatchObject({
+            tokenUsage: { inputTokens: 40_010, outputTokens: 902, totalTokens: 40_912 },
+        });
+    });
+
+    it("still answers from ranked passages when the attached files cannot be listed", async () => {
+        mockScopeRows = RESUMES;
+        mockReadWholeFiles.mockRejectedValueOnce(new Error("db down"));
+        jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        mockInvoke.mockResolvedValueOnce({ content: "Some of them.", response_metadata: {} });
+
+        const response = await ask();
+
+        expect(response.status).toBe(200);
+        expect(multiDocEnsembleSearch).toHaveBeenCalled();
+        expect(prompts().user).toContain("Relevant document content:");
     });
 });

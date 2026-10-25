@@ -48,6 +48,7 @@ import { cn } from "~/lib/utils";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
 import type { ChatSendResult } from "~/lib/chat-turns";
+import { stripStreamingSourceLabels } from "~/lib/source-labels";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
@@ -593,6 +594,9 @@ const Message = React.memo(function Message({
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
     const cites = msg.citations ?? [];
+    // The model cites sources by id ("[d12]"); the finished answer arrives
+    // with them taken out, so hide them while it streams too.
+    const shownText = msg.status === "streaming" ? stripStreamingSourceLabels(msg.text) : msg.text;
     const ctxTarget = useContextTarget(
         isUser
             ? {
@@ -868,13 +872,13 @@ const Message = React.memo(function Message({
             >
                 {isPlan ? (
                     <ProposedPlan
-                        text={msg.text}
+                        text={shownText}
                         onRefine={onEdit}
                         onImplement={onImplementPlan}
                         active={active}
                     />
                 ) : (
-                    <ChatMarkdown text={msg.text} />
+                    <ChatMarkdown text={shownText} />
                 )}
             </div>
             {msg.createdSources && (

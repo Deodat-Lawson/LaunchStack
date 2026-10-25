@@ -2,19 +2,23 @@
  * The picked-items list — what an admin selected in the Google Picker or
  * pasted as a Drive link. POST upserts (the same selection must converge)
  * and takes either `{ items }` from the Picker or `{ link }`, which is
- * resolved against Drive here (it needs folder access); either way the
- * changes-feed cursor is reset so the next sync walks the new pick. DELETE
- * removes by file id. Drive-only.
+ * resolved against Drive here (it needs folder access), plus the
+ * `destination` folder Add source picked — checked like an upload into it;
+ * either way the changes-feed cursor is reset so the next sync walks the new
+ * pick. DELETE removes by file id. Drive-only.
  */
 
 import { z } from "zod";
 
 import {
+    createForbiddenError,
     createNotFoundError,
     createSuccessResponse,
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { MAX_FOLDER_PATH_CHARS, normalizeFolderPath } from "~/lib/folders/path";
+import { canEditFolder } from "~/server/services/folder-access";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor, wordCopy } from "~/i18n/translate";
 import { validateRequestBody } from "~/lib/validation";
@@ -36,6 +40,9 @@ import {
 
 export const runtime = "nodejs";
 
+/** The folder chosen in Add source's destination bar; absent → the old placement. */
+const Destination = z.string().trim().min(1).max(MAX_FOLDER_PATH_CHARS).optional();
+
 const AddItemsSchema = z.object({
     items: z
         .array(
@@ -48,10 +55,12 @@ const AddItemsSchema = z.object({
         )
         .min(1)
         .max(200),
+    destination: Destination,
 });
 
 const AddLinkSchema = z.object({
     link: z.string().trim().min(1).max(2048),
+    destination: Destination,
 });
 
 const AddSchema = z.union([AddItemsSchema, AddLinkSchema]);
@@ -132,6 +141,17 @@ export async function POST(
             const body = await validateRequestBody(request, AddSchema);
             if (!body.success) return body.response;
 
+            // Picking into a folder is uploading into it: a restricted folder
+            // takes edit access to it, as /api/uploadDocument checks.
+            const destination = body.data.destination
+                ? normalizeFolderPath(body.data.destination)
+                : null;
+            if (destination && !(await canEditFolder(guard.ctx, destination))) {
+                return createForbiddenError(
+                    translatorFor(locale, "sources.server.errors")("folderEditDenied")
+                );
+            }
+
             let added: {
                 fileId: string;
                 kind: "file" | "folder";
@@ -156,7 +176,7 @@ export async function POST(
                 }));
             }
 
-            await addPickedItems(connection.id, added, Number(guard.ctx.userPk));
+            await addPickedItems(connection.id, added, Number(guard.ctx.userPk), destination);
             await resetSyncCursor(connection.id);
 
             const items = await listPickedItems(connection.id);

@@ -140,10 +140,6 @@
         "label": "Obsidian",
         "desc": "导入仓库，重新导入即可更新"
       },
-      "drive": {
-        "label": "Google Drive",
-        "desc": "文档、表格、PDF，保持同步"
-      },
       "slack": {
         "label": "Slack",
         "desc": "将智能体会议同步到频道"
@@ -162,7 +158,6 @@
       }
     },
     "mindmapAudienceNote": "这适用于已发布的副本，即工作区可以引用的那一份。",
-    "driveFolderNote": "逐个选中的文件会存放在这里。导入的文件夹会成为独立的文件夹，在你共享之前仅你可见。",
     "fixedDestination": {
       "gmail": "Gmail/你的邮箱",
       "notion": "Notion/你的工作区",
@@ -338,7 +333,6 @@
     "tagTitle": "谁可以查看：{label}"
   },
   "driveConnect": {
-    "pickerTitle": "选择要同步的文件和文件夹",
     "destination": {
       "inDrive": "位于 Google Drive",
       "inFolder": "位于“{path}”",
@@ -351,30 +345,11 @@
       "two": "“{first}”和“{second}”",
       "more": "“{first}”、“{second}”及另外 {count} 个"
     },
-    "syncFailedAfterAdd": "已添加，但同步未能开始。请尝试“立即同步”。",
-    "pickedOne": "已添加“{name}”，正在同步",
-    "pickedMany": "已添加 {count} 项，正在同步",
-    "saveSelectionFailed": "无法保存所选内容",
-    "notDriveLink": "这不是 Google Drive 链接。请在 Drive 中使用“共享 › 复制链接”。",
-    "addLinkFailed": "无法添加该链接",
-    "linkAddedWithMessage": "{message}正在同步。",
-    "linkAdded": "已添加，正在同步。",
-    "pickerNotConfigured": "选择器尚未配置，请设置 NEXT_PUBLIC_GOOGLE_API_KEY 和 NEXT_PUBLIC_GOOGLE_APP_ID",
-    "noDriveAccess": "无法获取 Drive 访问权限，请尝试重新连接",
-    "pickerFailed": "Google 选择器未能加载，请检查网络连接后重试",
     "syncRequested": "已请求同步",
     "syncStartFailed": "无法开始同步",
-    "disconnected": "已断开 Google Drive，文档已保留",
-    "disconnectFailed": "断开连接失败",
     "checking": "正在检查 Google Drive…",
-    "checkFailed": "暂时无法检查 Google Drive。",
-    "notConfiguredTitle": "此服务器尚未配置 Google Drive",
-    "notConfiguredBody": "请让运维人员设置 <code>GOOGLE_OAUTH_CLIENT_ID</code>、<code>GOOGLE_OAUTH_CLIENT_SECRET</code> 以及选择器密钥，具体步骤见 <code>.env.example</code> 中的“Workspace connections”部分。",
     "reconnectTitle": "重新连接 Google Drive",
-    "connectTitle": "连接 Google Drive",
     "reconnectBody": "Google 访问权限已被撤销或已过期，重新连接即可恢复同步。",
-    "connectBodyFolders": "在 Google 选择器中挑选文件，只有你选中的内容会被共享。如需导入整个文件夹，请在连接后允许文件夹访问。",
-    "connectBody": "在 Google 选择器中挑选文件，只有你选中的内容会被共享。",
     "allowTitle": "允许文件夹访问以导入文件夹",
     "allowBody": "目前 LaunchStack 只能打开你选中的文件，因此选中文件夹并不会导入其中的内容。允许文件夹访问后，LaunchStack 才能读取你的 Drive，文件夹会被完整导入，包括子文件夹和之后新增的内容。",
     "allowButton": "允许文件夹访问",
@@ -384,21 +359,41 @@
     "emptyReady": "{names} 中没有导入任何内容：Drive 显示{count, plural, =1 {它} other {它们}}是空的。",
     "emptyNoAccess": "{names} 中没有导入任何内容：此连接无法查看文件夹内部。",
     "accessLost": "{count} 个文件已无法打开：可能已被删除、取消共享，或（对于逐个选中的文件）授权已失效。请重新选择它们以刷新访问权限。",
-    "pasteLinkLabel": "粘贴文件夹链接",
-    "adding": "正在添加…",
-    "addFolder": "添加文件夹",
-    "linkHintAccount": "适用于 {account} 能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。",
-    "linkHintThis": "适用于此账号能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。",
     "syncedFromDrive": "从 Drive 同步的内容（{count}）",
-    "nothingYet": "暂无内容。选择文件或文件夹即可开始同步。",
+    "nothingYet": "暂无内容。在“添加来源”中从 Google Drive 选择文件或文件夹即可。",
     "stopSyncingTitle": "停止同步（保留已导入的文档）",
     "stopSyncingAria": "停止同步“{name}”",
-    "openingPicker": "正在打开选择器…",
-    "chooseInDrive": "在 Google Drive 中选择",
     "syncing": "正在同步…",
     "starting": "正在启动…",
     "syncNow": "立即同步",
-    "disconnectConfirm": "要断开连接吗？已导入的文档会保留。"
+    "cardTitle": "从 Google Drive 同步的内容",
+    "notConnected": "目前没有从 Google Drive 同步任何内容。在“添加来源 › 文件”中从 Drive 选择文件，或在“添加来源 › 文件夹”中选择文件夹，它们就会列在这里。"
+  },
+  "driveSource": {
+    "chooseFiles": "从 Google Drive 选择",
+    "chooseFolder": "从 Google Drive 选择",
+    "connect": "连接 Google Drive",
+    "reconnect": "重新连接 Google Drive",
+    "pickerTitleFiles": "从 Google Drive 选择文件",
+    "pickerTitleFolders": "从 Google Drive 选择文件夹",
+    "filesSync": "从 Google Drive 选择的文件会保持同步，在 Drive 中的修改会同步到这里。",
+    "folderSyncs": "Drive 文件夹会被完整导入并保持同步，之后新增的文件也会包含在内。",
+    "folderNeedsAccess": "Google 会请你授权一次，允许 LaunchStack 读取你的 Drive 文件夹，然后即可选择文件夹。",
+    "addedOne": "正在从 Google Drive 添加“{name}”，稍后就会出现，并保持同步。",
+    "addedMany": "正在从 Google Drive 添加 {count} 个文件，稍后就会出现，并保持同步。",
+    "addedFolder": "正在从 Google Drive 添加文件夹“{name}”，内容会在一分钟内陆续出现，并保持同步。",
+    "linkAdded": "正在从 Google Drive 添加该文件夹，内容会在一分钟内陆续出现，并保持同步。",
+    "addFailed": "无法从 Google Drive 添加该内容",
+    "syncLater": "已添加。同步尚未开始，稍后会自动运行。",
+    "pickerNotConfigured": "选择器尚未配置，请设置 NEXT_PUBLIC_GOOGLE_API_KEY 和 NEXT_PUBLIC_GOOGLE_APP_ID",
+    "noDriveAccess": "无法获取 Drive 访问权限，请尝试重新连接",
+    "pickerFailed": "Google 选择器未能加载，请检查网络连接后重试",
+    "notDriveLink": "这不是 Google Drive 链接。请在 Drive 中使用“共享 › 复制链接”。",
+    "pasteLinkLabel": "或粘贴 Drive 文件夹链接",
+    "adding": "正在添加…",
+    "addFolder": "添加文件夹",
+    "linkHintAccount": "适用于 {account} 能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。",
+    "linkHintThis": "适用于此账号能打开的任何文件夹，包括共享给它的文件夹和共享云端硬盘。"
   },
   "gmailConnect": {
     "labelsLoadFailed": "无法加载你的标签，请尝试重新连接 Gmail。",

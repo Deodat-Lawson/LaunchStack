@@ -109,6 +109,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 const path = categoryId == null ? undefined : paths.get(categoryId);
                 return path && scopeAllowsCategory(scope, path) ? path : null;
             };
+            // A picked file: the folder Add source put it in, under the same rule.
+            const visibleDestination = (destination: string | null) =>
+                destination && scopeAllowsCategory(scope, destination) ? destination : null;
             return createSuccessResponse({
                 configured: true,
                 connected: true,
@@ -119,19 +122,34 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                     enabled: folderAccessEnabled,
                     granted: grantsFolderAccess(connection.scopes),
                 },
-                pickedItems: pickedItems.map(item => ({
-                    fileId: item.fileId,
-                    kind: item.kind,
-                    name: item.name,
-                    mimeType: item.mimeType,
-                    // Where a picked folder's files are; null until its first sync,
-                    // and for a folder the caller can't open (folderHidden).
-                    folderPath: visiblePath(item.folderCategoryId),
-                    folderHidden:
-                        item.folderCategoryId != null &&
-                        paths.has(item.folderCategoryId) &&
-                        visiblePath(item.folderCategoryId) === null,
-                })),
+                pickedItems: pickedItems.map(item =>
+                    item.kind === "folder"
+                        ? {
+                              fileId: item.fileId,
+                              kind: item.kind,
+                              name: item.name,
+                              mimeType: item.mimeType,
+                              // Where a picked folder's files are; null until its first
+                              // sync, and for a folder the caller can't open (folderHidden).
+                              folderPath: visiblePath(item.folderCategoryId),
+                              folderHidden:
+                                  item.folderCategoryId != null &&
+                                  paths.has(item.folderCategoryId) &&
+                                  visiblePath(item.folderCategoryId) === null,
+                          }
+                        : {
+                              fileId: item.fileId,
+                              kind: item.kind,
+                              name: item.name,
+                              mimeType: item.mimeType,
+                              // Where it was picked into; null when picked before
+                              // Add source offered Drive (it is in "Google Drive").
+                              folderPath: visibleDestination(item.destination),
+                              folderHidden:
+                                  item.destination != null &&
+                                  visibleDestination(item.destination) === null,
+                          }
+                ),
                 lastSyncAt: syncState?.lastSyncAt?.toISOString() ?? null,
                 lastSyncStatus: syncState?.lastSyncStatus ?? null,
                 lastSyncError: syncState?.lastSyncError ?? null,

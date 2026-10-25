@@ -522,7 +522,7 @@
     "removing": "正在移除…",
     "listSeparator": "、",
     "drive": {
-      "description": "将 PDF 和 Word 文档关联到 Google Drive，以便使用专业工具编辑：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
+      "description": "在“添加来源”中从 Google Drive 选择的文件和文件夹会保持同步，同步的内容列在这里。关联功能还可以让你使用专业工具编辑 PDF 和 Word 文档：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
       "actions": "Google Drive 操作",
       "connectMenu": "连接 Google Drive…",
       "linking": "Drive 关联",

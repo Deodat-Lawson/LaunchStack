@@ -64,15 +64,24 @@ permits local-network connections for this development flow without permitting
 arbitrary insecure network loads.
 
 For an installed release, **Get Call Notes for Mac** downloads a session-bound
-DMG from the website. Its download URL carries the deployment origin and pairing
-code in the app's quarantine metadata. Drag the app to Applications and open it.
-For a translocated launch, the app optionally resolves the original URL through
-the dynamically loaded, read-only Security SPI
-`SecTranslocateCreateOriginalPathForURL` before looking up quarantine metadata.
-If that optional SPI is unavailable or download metadata was removed by another
-transfer tool, use the website's **Connect this Mac** deep link instead. Grant
-microphone and screen/system-audio recording permissions when prompted. Capture
-can then start/stop from either Calls or the menu bar.
+DMG from the website. Drag the app to Applications and open it. The first-launch
+window shows connection and permission state; the same controls remain in the
+menu bar after closing the window.
+
+The app first reads its quarantine download URL. Chrome stores the URL only on
+the DMG, so the app also matches its inherited quarantine event identifier to
+that exact installer's `kMDItemWhereFroms` metadata. It tries Spotlight first,
+then only `LaunchStack-Capture*.dmg` entries in Downloads. macOS may ask for
+Downloads access for this one-time pairing lookup. It reads no downloaded file
+contents and uploads none. If metadata was stripped or access is denied, use
+**Connect this Mac** on the website instead. Other transfers and browser
+combinations need installed-artifact verification; do not assume every browser
+preserves the same provenance.
+
+Grant microphone and screen/system-audio recording permissions when prompted.
+Capture can then start/stop from either Calls or the menu bar. Ad-hoc builds may
+need renewed permissions after an upgrade because they lack a stable Developer
+ID identity; do not treat this as evidence for signed-release permission reuse.
 
 ### Worker and audio-helper contract
 
@@ -101,6 +110,14 @@ and `message`. Reasons are `ready`, `unsupported`, or `permission_denied`;
 0/2/3 for ready/denied-or-unavailable/unsupported. System permission state can be
 `unknown` because the OS preflight API cannot distinguish a first request from a
 prior denial.
+
+The worker uses `--status --source microphone|system`, which reports only the
+selected permission. Plain `--status` reports both for the app's permission UI.
+These checks observe authorization and active displays without querying
+ScreenCaptureKit's window inventory; they are not proof that capture will work.
+Only explicit system-audio Start enumerates capture content, with a five-second
+deadline. This avoids concurrent inventory requests from routine status checks,
+which reproduced one ready response and one stalled response on the test Mac.
 
 ## Signing and notarization
 
@@ -187,25 +204,25 @@ its public request origin. Its authenticated updates route maps that filename to
 there is no deployment origin baked into the app or release. The app supplies the
 paired-origin feed URL through Sparkle's updater delegate and sets the device
 authentication headers on
-[`SPUUpdater.httpHeaders`](https://sparkle-project.org/documentation/api-reference/Classes/SPUUpdater.html#/c:objc(cs)SPUUpdater(py)httpHeaders).
+[`SPUUpdater.httpHeaders`](<https://sparkle-project.org/documentation/api-reference/Classes/SPUUpdater.html#/c:objc(cs)SPUUpdater(py)httpHeaders>).
 Sparkle applies these headers to appcast, release-note, and update-archive
 requests. The initial DMG still requires the website's session-bound pairing
 download route.
 
 ### Environment variables
 
-| Variable | Default / requirement |
-| --- | --- |
-| `CAPTURE_VERSION` | `0.1.0` for individual development steps; explicitly required by `release.sh` and `publish.sh`. Must be numeric `MAJOR.MINOR.PATCH`; used for both bundle versions, filenames, and Azure paths. |
-| `CAPTURE_SIGN_IDENTITY` | `-` for ad-hoc signing. Production distribution requires an installed Developer ID Application identity, e.g. `Developer ID Application: Your Company (TEAMID)`. |
-| `SPARKLE_PUBLIC_ED_KEY` | Base64 32-byte Ed25519 public key, embedded as `SUPublicEDKey`. Required for Developer ID builds and for release/publish; may be omitted only for ad-hoc local development. |
-| `SPARKLE_PRIVATE_KEY` | Contents (not a path) of the exported Sparkle private key; required by release/publish and must match the app's public key. |
-| `CAPTURE_NOTARY_KEY_ID` | App Store Connect notarization API key ID; used only with both remaining notary inputs. |
-| `CAPTURE_NOTARY_ISSUER` | App Store Connect issuer UUID. |
-| `CAPTURE_NOTARY_KEY_PATH` | Local path to the `.p8` API private key; never bundled. |
-| `AZURE_STORAGE_CONNECTION_STRING` | Release-account connection string for Azure CLI; required by release/publish. |
-| `CAPTURE_BUILD_DIR` | `<repo>/dist/capture-mac`; optional packaging-output override. |
-| `CAPTURE_CACHE_DIR` | `<repo>/.cache/capture-mac`; optional verified-download cache override. |
+| Variable                          | Default / requirement                                                                                                                                                                           |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CAPTURE_VERSION`                 | `0.1.0` for individual development steps; explicitly required by `release.sh` and `publish.sh`. Must be numeric `MAJOR.MINOR.PATCH`; used for both bundle versions, filenames, and Azure paths. |
+| `CAPTURE_SIGN_IDENTITY`           | `-` for ad-hoc signing. Production distribution requires an installed Developer ID Application identity, e.g. `Developer ID Application: Your Company (TEAMID)`.                                |
+| `SPARKLE_PUBLIC_ED_KEY`           | Base64 32-byte Ed25519 public key, embedded as `SUPublicEDKey`. Required for Developer ID builds and for release/publish; may be omitted only for ad-hoc local development.                     |
+| `SPARKLE_PRIVATE_KEY`             | Contents (not a path) of the exported Sparkle private key; required by release/publish and must match the app's public key.                                                                     |
+| `CAPTURE_NOTARY_KEY_ID`           | App Store Connect notarization API key ID; used only with both remaining notary inputs.                                                                                                         |
+| `CAPTURE_NOTARY_ISSUER`           | App Store Connect issuer UUID.                                                                                                                                                                  |
+| `CAPTURE_NOTARY_KEY_PATH`         | Local path to the `.p8` API private key; never bundled.                                                                                                                                         |
+| `AZURE_STORAGE_CONNECTION_STRING` | Release-account connection string for Azure CLI; required by release/publish.                                                                                                                   |
+| `CAPTURE_BUILD_DIR`               | `<repo>/dist/capture-mac`; optional packaging-output override.                                                                                                                                  |
+| `CAPTURE_CACHE_DIR`               | `<repo>/.cache/capture-mac`; optional verified-download cache override.                                                                                                                         |
 
 Relative build/cache overrides resolve against the repository root. Use identical
 values across standalone packaging steps. Missing notarization inputs intentionally
@@ -225,9 +242,10 @@ Configure repository secrets `CAPTURE_SIGN_IDENTITY`, `SPARKLE_PUBLIC_ED_KEY`,
 `SPARKLE_PRIVATE_KEY`, `AZURE_STORAGE_CONNECTION_STRING`, `CAPTURE_NOTARY_KEY_ID`,
 and `CAPTURE_NOTARY_ISSUER`. `CAPTURE_NOTARY_KEY_P8` contains the `.p8` file text;
 the workflow materializes it privately and sets `CAPTURE_NOTARY_KEY_PATH`.
-`CAPTURE_CERTIFICATE_P12_BASE64` and `CAPTURE_CERTIFICATE_PASSWORD` optionally import
-the Developer ID certificate/private key into an ephemeral runner keychain when
-present. Temporary certificates, notary keys, and the keychain are removed even
-when release fails. With no configured signing identity, scripts use ad-hoc signing;
-if an identity is configured, its certificate/private key must be available on the
-runner. Ad-hoc signing is not suitable for a production notarized release.
+`CAPTURE_CERTIFICATE_P12_BASE64` imports the Developer ID certificate/private key
+into an ephemeral runner keychain; `CAPTURE_CERTIFICATE_PASSWORD` supplies its
+import password. CI requires the certificate, Sparkle, Azure, and complete notary
+credentials before building or publishing, and rejects an ad-hoc identity.
+Temporary certificates, notary keys, and the keychain are removed even when the
+release fails. Local scripts still support explicitly chosen ad-hoc test builds;
+the release workflow never silently publishes one.

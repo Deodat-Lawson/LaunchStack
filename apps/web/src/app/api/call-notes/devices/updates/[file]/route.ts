@@ -9,7 +9,7 @@ export async function GET(
     context: { params: Promise<{ file: string }> }
 ): Promise<Response> {
     try {
-        const device = await requireCaptureDevice(request);
+        const device = await requireCaptureDevice(request, "update");
         if (!device.success) return device.response;
         const { file } = await context.params;
         const stream = await downloadCaptureUpdate(file);

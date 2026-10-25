@@ -2,11 +2,11 @@ name: Capture Mac release
 
 on:
   push:
-    tags: ['capture-v*']
+    tags: ["capture-v*"]
   workflow_dispatch:
     inputs:
       version:
-        description: 'Capture version (MAJOR.MINOR.PATCH, without capture-v)'
+        description: "Capture version (MAJOR.MINOR.PATCH, without capture-v)"
         required: true
         type: string
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 60
     env:
-      MACOSX_DEPLOYMENT_TARGET: '14.0'
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
       CAPTURE_SIGN_IDENTITY: ${{ secrets.CAPTURE_SIGN_IDENTITY }}
       SPARKLE_PUBLIC_ED_KEY: ${{ secrets.SPARKLE_PUBLIC_ED_KEY }}
       SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
@@ -50,10 +50,26 @@ jobs:
           }
           echo "CAPTURE_VERSION=$version" >> "$GITHUB_ENV"
 
+      - name: Require production signing and notarization credentials
+        env:
+          CAPTURE_CERTIFICATE_P12_BASE64: ${{ secrets.CAPTURE_CERTIFICATE_P12_BASE64 }}
+          CAPTURE_NOTARY_KEY_P8: ${{ secrets.CAPTURE_NOTARY_KEY_P8 }}
+        run: |
+          for name in CAPTURE_SIGN_IDENTITY CAPTURE_CERTIFICATE_P12_BASE64 CAPTURE_NOTARY_KEY_ID CAPTURE_NOTARY_ISSUER CAPTURE_NOTARY_KEY_P8 SPARKLE_PUBLIC_ED_KEY SPARKLE_PRIVATE_KEY AZURE_STORAGE_CONNECTION_STRING; do
+            if [[ -z "${!name}" ]]; then
+              echo "Missing production release credential: $name" >&2
+              exit 1
+            fi
+          done
+          if [[ "$CAPTURE_SIGN_IDENTITY" == - ]]; then
+            echo 'Release workflows require Developer ID signing, not ad-hoc signing.' >&2
+            exit 1
+          fi
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: "24.14.0"
 
       - name: Set up Corepack and pnpm
         run: |
@@ -75,15 +91,11 @@ jobs:
             brew install azure-cli
           fi
 
-      - name: Import signing certificate when present
+      - name: Import signing certificate
         env:
           CAPTURE_CERTIFICATE_P12_BASE64: ${{ secrets.CAPTURE_CERTIFICATE_P12_BASE64 }}
           CAPTURE_CERTIFICATE_PASSWORD: ${{ secrets.CAPTURE_CERTIFICATE_PASSWORD }}
         run: |
-          if [[ -z "$CAPTURE_CERTIFICATE_P12_BASE64" ]]; then
-            echo 'No certificate supplied; scripts default to ad-hoc signing.'
-            exit 0
-          fi
           umask 077
           certificate="$RUNNER_TEMP/capture-signing.p12"
           keychain="$RUNNER_TEMP/capture-signing.keychain-db"
@@ -97,18 +109,14 @@ jobs:
           security list-keychains -d user -s "$keychain" login.keychain-db
           rm -f "$certificate"
 
-      - name: Prepare notary API key when present
+      - name: Prepare notary API key
         env:
           CAPTURE_NOTARY_KEY_P8: ${{ secrets.CAPTURE_NOTARY_KEY_P8 }}
         run: |
-          if [[ -n "$CAPTURE_NOTARY_KEY_P8" ]]; then
-            umask 077
-            key="$RUNNER_TEMP/capture-notary-key.p8"
-            printf '%s' "$CAPTURE_NOTARY_KEY_P8" > "$key"
-            echo "CAPTURE_NOTARY_KEY_PATH=$key" >> "$GITHUB_ENV"
-          else
-            echo 'No notary private key supplied; notarization will skip.'
-          fi
+          umask 077
+          key="$RUNNER_TEMP/capture-notary-key.p8"
+          printf '%s' "$CAPTURE_NOTARY_KEY_P8" > "$key"
+          echo "CAPTURE_NOTARY_KEY_PATH=$key" >> "$GITHUB_ENV"
 
       - name: Build, sign, notarize, package, and publish
         run: apps/capture-mac/scripts/release.sh

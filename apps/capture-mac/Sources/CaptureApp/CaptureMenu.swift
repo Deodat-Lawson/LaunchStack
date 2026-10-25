@@ -106,8 +106,8 @@ struct CaptureMenu: View {
     private func channel(_ title: String, symbol: String, active: Bool) -> some View {
         Label(title, systemImage: symbol).font(.caption)
             .foregroundStyle(active ? Color.primary : Color.secondary)
-            .accessibilityLabel("\(title), \(active ? "active" : "unavailable")")
-            .help(active ? "Capturing \(title.lowercased())" : "\(title) is not capturing")
+            .accessibilityLabel("\(title), \(active ? "speech detected" : "quiet")")
+            .help(active ? "Speech detected on \(title.lowercased())" : "\(title) is open; no speech detected")
     }
 
     private func elapsed(start: Date?, now: Date) -> String {

@@ -26,7 +26,7 @@ function escapeXml(value: string): string {
 
 export async function GET(request: Request): Promise<Response> {
     try {
-        const device = await requireCaptureDevice(request);
+        const device = await requireCaptureDevice(request, "update");
         if (!device.success) return device.response;
         const appcast = await readCaptureAppcast();
         if (appcast === null) {

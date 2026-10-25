@@ -1,3 +1,9 @@
+const mockReadAppcast = jest.fn();
+const mockDownloadUpdate = jest.fn();
+jest.mock("~/server/call-notes/capture-app-storage", () => ({
+    readCaptureAppcast: (): unknown => mockReadAppcast(),
+    downloadCaptureUpdate: (...args: unknown[]): unknown => mockDownloadUpdate(...args),
+}));
 const mockGetEngine = jest.fn();
 const mockFindDevice = jest.fn();
 const mockServerEnv: Record<string, unknown> = { CALL_NOTES_CAPTURE_ENABLED: true };
@@ -13,6 +19,8 @@ jest.mock("~/env", () => ({
 
 import { requireCaptureDevice } from "~/server/call-notes/device-auth";
 import { compareCaptureVersions, isCaptureVersion } from "~/server/call-notes/capture-version";
+import { GET as getAppcast } from "~/app/api/call-notes/devices/appcast.xml/route";
+import { GET as getUpdate } from "~/app/api/call-notes/devices/updates/[file]/route";
 
 describe("Capture application semantic versions", () => {
     it.each([
@@ -174,6 +182,51 @@ describe("Capture device bearer authentication", () => {
         if (result.success) throw new Error("Expected an unknown token to fail");
         expect(result.response.status).toBe(401);
     });
+
+    it("serves update artifacts to an outdated app while its capture requests require upgrade", async () => {
+        mockServerEnv.CALL_NOTES_MIN_APP_VERSION = "2.0.0";
+        const request = deviceRequest("1.0.0");
+        mockReadAppcast.mockResolvedValue("<rss><channel/></rss>");
+        mockDownloadUpdate.mockImplementation(() => new Response("signed update archive").body);
+        const appcast = await getAppcast(request);
+        expect(appcast.status).toBe(200);
+        expect(await appcast.text()).toBe("<rss><channel/></rss>");
+        const archive = await getUpdate(request, {
+            params: Promise.resolve({ file: "LaunchStack-Capture-2.0.0-arm64.zip" }),
+        });
+        expect(archive.status).toBe(200);
+        expect(await archive.text()).toBe("signed update archive");
+        const capture = await requireCaptureDevice(request);
+        if (capture.success) throw new Error("Expected capture to require an upgrade");
+        expect(capture.response.status).toBe(426);
+        mockFindDevice.mockResolvedValue([]);
+        expect((await getAppcast(request)).status).toBe(401);
+        expect(
+            (
+                await getUpdate(request, {
+                    params: Promise.resolve({ file: "LaunchStack-Capture-2.0.0-arm64.zip" }),
+                })
+            ).status
+        ).toBe(401);
+    });
+
+    it("keeps updates available when capture is disabled, but never bypasses device revocation", async () => {
+        mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = false;
+        expect((await requireCaptureDevice(deviceRequest(), "update")).success).toBe(true);
+        mockFindDevice.mockResolvedValue([]);
+        const revoked = await requireCaptureDevice(deviceRequest(), "update");
+        if (revoked.success) throw new Error("Expected a revoked device to fail");
+        expect(revoked.response.status).toBe(401);
+    });
+
+    it.each([null, "not-semver"])(
+        "still rejects malformed update-client versions: %j",
+        async version => {
+            const result = await requireCaptureDevice(deviceRequest(version), "update");
+            if (result.success) throw new Error("Expected an invalid update client to fail");
+            expect(result.response.status).toBe(401);
+        }
+    );
 
     it.each([null, "1.2", "v1.2.3"])(
         "requires the version header even without a configured minimum: %j",

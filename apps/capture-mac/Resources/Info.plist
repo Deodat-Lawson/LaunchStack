@@ -49,6 +49,8 @@
     <string>LaunchStack Capture records your microphone to create notes for calls you start recording.</string>
     <key>NSAudioCaptureUsageDescription</key>
     <string>LaunchStack Capture records call audio from your Mac to create notes for calls you start recording.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>LaunchStack Capture reads only its downloaded installer’s origin metadata to connect this Mac to your LaunchStack account. No downloaded file contents are read or uploaded.</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsLocalNetworking</key>

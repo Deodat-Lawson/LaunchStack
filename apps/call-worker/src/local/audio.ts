@@ -65,7 +65,8 @@ interface ProcessPcmReaderOptions extends FrameLayout {
 const DEFAULT_SAMPLE_RATE = 16_000;
 const DEFAULT_FRAME_DURATION_MS = 20;
 const DEFAULT_STDERR_LIMIT = 4_096;
-const DEFAULT_STATUS_TIMEOUT_MS = 2_000;
+// Includes cold helper startup and macOS permission-service response time.
+const DEFAULT_STATUS_TIMEOUT_MS = 7_000;
 const MAX_STATUS_TIMEOUT_MS = 30_000;
 const STATUS_STDOUT_LIMIT = 16_384;
 const STATUS_SHUTDOWN_GRACE_MS = 250;
@@ -532,7 +533,7 @@ async function probeSystemAudioStatusProcess(options: {
 
     let child: ChildProcess;
     try {
-        child = options.spawn(options.helperPath, ["--status"], {
+        child = options.spawn(options.helperPath, ["--status", "--source", options.source], {
             shell: false,
             stdio: ["ignore", "pipe", "pipe"],
         });

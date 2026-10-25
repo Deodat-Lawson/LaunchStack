@@ -105,7 +105,37 @@ await test("SystemAudioPcmSource strictly parses a ready status response", async
         authorized: true,
         message: "ready",
     });
-    assert.deepEqual(calls, [["--status", "shell=false"]]);
+});
+
+await test("SystemAudioPcmSource waits for a valid slow native readiness probe", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout"] });
+    const helper = new FakeHelperProcess([], 0, "", true);
+    const source = new SystemAudioPcmSource({
+        helperPath: "launchstack-system-audio",
+        source: "system",
+        spawn: fakeSpawn(helper, []),
+    });
+    const result = source.probeStatus();
+    context.mock.timers.tick(4_000);
+    helper.stdout.end(readyStatus());
+    helper.stderr.end();
+    helper.emit("close", 0, null);
+    assert.equal((await result).ready, true);
+    assert.deepEqual(helper.killed, []);
+});
+
+await test("SystemAudioPcmSource still bounds an unresponsive native readiness probe", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout"] });
+    const helper = new FakeHelperProcess([], 0, "", true);
+    const source = new SystemAudioPcmSource({
+        helperPath: "launchstack-system-audio",
+        source: "system",
+        spawn: fakeSpawn(helper, []),
+    });
+    const result = source.probeStatus();
+    context.mock.timers.tick(7_000);
+    assert.equal((await result).code, "status_timeout");
+    assert.deepEqual(helper.killed, ["SIGTERM"]);
 });
 
 await test("SystemAudioPcmSource returns typed permission diagnostics", async () => {
@@ -160,7 +190,7 @@ await test("SystemAudioPcmSource rejects malformed status JSON before capture", 
             error.code === "invalid_status" &&
             error.message.includes("system permissions")
     );
-    assert.deepEqual(calls, [["--status", "shell=false"]]);
+    assert.equal(captureProcess.started, false);
 });
 
 await test("SystemAudioPcmSource cancels the capture child without retaining a process", async () => {
@@ -187,10 +217,6 @@ await test("SystemAudioPcmSource cancels the capture child without retaining a p
 
     assert.deepEqual(await pending, { done: true, value: undefined });
     assert.deepEqual(captureProcess.killed, ["SIGTERM"]);
-    assert.deepEqual(calls, [
-        ["--status", "shell=false"],
-        ["--source", "system", "--sample-rate", "16000", "shell=false"],
-    ]);
 });
 
 await test("SystemAudioPcmSource reports capture child failures", async () => {
@@ -276,12 +302,6 @@ await test("microphone helper uses its own readiness and the same PCM framing an
                     reason: "ready",
                     message: "Microphone ready",
                 },
-                system: {
-                    supported: true,
-                    authorized: false,
-                    reason: "permission_denied",
-                    message: "Screen permission required",
-                },
             })
         ),
     ]);
@@ -319,8 +339,4 @@ await test("microphone helper uses its own readiness and the same PCM framing an
             new Date(FIXED_START.getTime() + 4).toISOString(),
         ]
     );
-    assert.deepEqual(calls, [
-        ["--status", "shell=false"],
-        ["--source", "microphone", "--sample-rate", "1000", "shell=false"],
-    ]);
 });

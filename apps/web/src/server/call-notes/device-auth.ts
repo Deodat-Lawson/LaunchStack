@@ -14,8 +14,11 @@ type CaptureDeviceAuthentication =
     | { success: true; data: CaptureDeviceContext }
     | { success: false; response: Response };
 
-export function captureDeviceVersionFailure(version: string | null): Response | null {
-    const minVersion = env.server.CALL_NOTES_MIN_APP_VERSION;
+export function captureDeviceVersionFailure(
+    version: string | null,
+    enforceMinimum = true
+): Response | null {
+    const minVersion = enforceMinimum ? env.server.CALL_NOTES_MIN_APP_VERSION : undefined;
     if (minVersion) {
         const comparison = version === null ? null : compareCaptureVersions(version, minVersion);
         if (comparison === null || comparison < 0) {
@@ -27,8 +30,11 @@ export function captureDeviceVersionFailure(version: string | null): Response | 
     return null;
 }
 
-export async function requireCaptureDevice(request: Request): Promise<CaptureDeviceAuthentication> {
-    if (!env.server.CALL_NOTES_CAPTURE_ENABLED) {
+export async function requireCaptureDevice(
+    request: Request,
+    purpose: "capture" | "update" = "capture"
+): Promise<CaptureDeviceAuthentication> {
+    if (purpose === "capture" && !env.server.CALL_NOTES_CAPTURE_ENABLED) {
         return {
             success: false,
             response: Response.json({ error: "capture_disabled" }, { status: 503 }),
@@ -76,7 +82,8 @@ export async function requireCaptureDevice(request: Request): Promise<CaptureDev
         };
     }
     const versionFailure = captureDeviceVersionFailure(
-        request.headers.get("X-LaunchStack-Capture-Version")
+        request.headers.get("X-LaunchStack-Capture-Version"),
+        purpose === "capture"
     );
     if (versionFailure) return { success: false, response: versionFailure };
     return {

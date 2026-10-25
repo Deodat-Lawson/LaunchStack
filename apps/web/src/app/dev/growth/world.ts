@@ -54,7 +54,8 @@ export const SOURCES: WorldSource[] = [
         id: "exa-lookalike",
         label: "Lookalikes",
         kind: "api",
-        description: "Companies similar to the customers named in your documents.",
+        description:
+            "Companies like your customers: the ones you list on the segment and your won deals.",
         enabled: true,
         available: true,
         requires: "EXA_API_KEY",
@@ -1871,7 +1872,7 @@ export const SEGMENTS: WorldSegment[] = [
             },
             {
                 key: "seedDomains",
-                label: "Looks like",
+                label: "Customers like these",
                 value: ["deltalogistics.example", "pickpoint.example"],
                 sources: ["customers named in Globex MSA and 2 proposals"],
                 editable: true,
@@ -1937,7 +1938,13 @@ export const SEGMENTS: WorldSegment[] = [
                 sources: ["from company profile · markets"],
                 editable: true,
             },
-            { key: "seedDomains", label: "Looks like", value: [], sources: [], editable: true },
+            {
+                key: "seedDomains",
+                label: "Customers like these",
+                value: [],
+                sources: [],
+                editable: true,
+            },
             {
                 key: "signals",
                 label: "Signals that matter",

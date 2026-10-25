@@ -248,6 +248,9 @@
     },
     "segment": {
       "separateItems": "Separate items with commas.",
+      "separateDomains": "Separate websites with commas or spaces.",
+      "seedDomainsHelp": "Websites of companies that already buy from you. Each run looks for companies like them; these customers are never prospected themselves.",
+      "seedDomainsPlaceholder": "For example acme.com, globex.de",
       "editAria": "Edit {label}",
       "confirmed": "Segment confirmed. Runs will use this version.",
       "confirmFailed": "Could not confirm",
@@ -1099,7 +1102,9 @@
       "insufficientCredits": "Insufficient credits",
       "deriveLater": "Deriving a segment from your documents arrives with the pipeline reframe",
       "newSegmentRequired": "Name, what you sell and at least one country are required",
-      "sourceSettingsLater": "Source settings arrive with the source registry; keys in the environment decide for now"
+      "sourceSettingsLater": "Source settings arrive with the source registry; keys in the environment decide for now",
+      "customerDomainInvalid": "“{value}” is not a website. Use a domain such as acme.com.",
+      "customerDomainsTooMany": "List up to {max} customer websites."
     },
     "stageErrors": {
       "unknownStage": "Unknown stage \"{to}\".",
@@ -1132,6 +1137,7 @@
         "archetype": "Buyer type",
         "industries": "Industries",
         "geographies": "Where",
+        "seedDomains": "Customers like these",
         "disqualifiers": "Not a fit",
         "exclusions": "Already partners"
       },
@@ -1141,6 +1147,7 @@
         "categories": "from the program · categories",
         "territories": "from the program · territories",
         "constraints": "from the program · constraints",
+        "customers": "from the program · customers",
         "imports": "from the program and imports"
       },
       "exclusionsCount": "{count} domains excluded from every run",
@@ -1191,16 +1198,19 @@
       "labels": {
         "live": {
           "web": "Web search",
+          "lookalike": "Lookalikes",
           "place": "Places",
           "trade": "Trade data"
         },
         "keyless": {
           "web": "Public directories (YC)",
+          "lookalike": "Lookalikes",
           "place": "OpenStreetMap",
           "trade": "Trade data"
         },
         "fixture": {
           "web": "Sample web search",
+          "lookalike": "Lookalikes",
           "place": "Sample places",
           "trade": "Sample trade data"
         }
@@ -1215,8 +1225,12 @@
           "description": "Active YC companies in the segment's countries whose blurb matches its words. Free, no key."
         },
         "web": {
-          "label": "Web search",
-          "description": "Exa or Serper search for organisations in each territory; needs a model for the research agent."
+          "label": "Exa company search",
+          "description": "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent."
+        },
+        "lookalike": {
+          "label": "Lookalikes",
+          "description": "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves."
         },
         "place": {
           "label": "Places",
@@ -1249,7 +1263,11 @@
         "placeNotConfigured": "place search not configured",
         "tradeNotConfigured": "trade data not configured",
         "queriesFailed": "{count} queries failed",
-        "territoriesFailed": "{count} territories failed"
+        "territoriesFailed": "{count} territories failed",
+        "lookalikeNeedsExa": "needs EXA_API_KEY",
+        "noCustomersYet": "no customers yet",
+        "fromCustomers": "{count, plural, one {from # customer} other {from # customers}}",
+        "customersFailed": "{failed} of {total} customers failed"
       },
       "status": {
         "degraded": "degraded",

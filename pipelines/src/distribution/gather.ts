@@ -1,18 +1,72 @@
 /**
- * Stage 3 — gather. Executes the plan across the three sources with
- * allSettled semantics: a source that fails contributes nothing and is
- * reported; only all sources failing fails the stage (the caller decides).
- * Output is *mentions* — raw sightings of organisations — for the resolver.
+ * Stage 3 — gather. Executes the plan across the sources with allSettled
+ * semantics: a source that fails contributes nothing and is reported; only
+ * all sources failing fails the stage (the caller decides). Output is
+ * *mentions* — raw sightings of organisations — for the resolver.
+ *
+ * The web source prefers Exa's company index (`searchCompanies`): every hit
+ * is a company's own homepage, so a key finds companies rather than the
+ * publishers that wrote about them. Without it, general web search, and the
+ * host of each result stands for the organisation. Lookalikes — companies
+ * like the program's customers — need the company index too.
  */
 import type { OrgMention } from "@launchstack/tools/org-resolver";
+import { normalizeDomain } from "@launchstack/tools/org-resolver";
 import type { TradeDataProvider } from "@launchstack/tools/trade-data";
-import type { RawSearchResult } from "@launchstack/tools/web-research";
+import type {
+    CompanyDescription,
+    CompanyHit,
+    RawSearchResult,
+} from "@launchstack/tools/web-research";
 
-import type { PartnerKind, PlannedSourceQuery, SourceCount, Territory } from "./types";
+import {
+    MAX_LOOKALIKE_SEEDS,
+    type PartnerKind,
+    type PlannedSourceQuery,
+    type SourceCount,
+    type Territory,
+} from "./types";
+
+export interface CompanySearchPortOptions {
+    /** Two-letter country code the vendor ranks first. */
+    country?: string;
+    /** Hosts never returned: exclusions, customers and lookalike seeds. */
+    excludeDomains: readonly string[];
+    signal?: AbortSignal;
+}
+
+/** One company search; the vendor never returns an excluded host. */
+export type SearchCompaniesPort = (
+    query: string,
+    options: CompanySearchPortOptions
+) => Promise<CompanyHit[]>;
+
+/** What each company sells and to whom, from its homepage. */
+export type DescribeCompaniesPort = (
+    urls: string[],
+    signal?: AbortSignal
+) => Promise<CompanyDescription[]>;
+
+/** The companies a run looks for lookalikes of. */
+export interface LookalikeInput {
+    /** Bare domains, most important first; at most MAX_LOOKALIKE_SEEDS are searched. */
+    seeds: string[];
+    /** The run's one country, when it has exactly one. */
+    country: string | null;
+    /** The role a lookalike gets when its homepage names none. */
+    partnerKind: PartnerKind;
+}
 
 export interface GatherPorts {
     /** Web search over planned queries; null when unavailable. */
     searchWeb: ((queries: PlannedSourceQuery[]) => Promise<RawSearchResult[]>) | null;
+    /** Company search (Exa); when set, web queries go through it instead of `searchWeb`. */
+    searchCompanies?: SearchCompaniesPort | null;
+    /** Seed descriptions for lookalikes (Exa). */
+    describeCompanies?: DescribeCompaniesPort | null;
+    /** Domains company search must never return. */
+    excludeDomains?: readonly string[];
+    lookalikes?: LookalikeInput | null;
     /** Place search for one planned place query; null when unavailable. */
     searchPlaces:
         | ((query: PlannedSourceQuery) => Promise<
@@ -46,10 +100,36 @@ export interface MentionOrigin {
     query: PlannedSourceQuery;
 }
 
+/** The parts of a "Name | Tagline" page title, trimmed, empty ones dropped. */
+function titleSegments(title: string): string[] {
+    return title
+        .split(/\s[|–—-]\s/)
+        .map(part => part.trim())
+        .filter(Boolean);
+}
+
 /** The organisation half of a "Name | Tagline" page title. */
 function firstSegment(title: string): string {
-    const head = title.split(/\s[|–—-]\s/)[0]?.trim();
-    return head?.length ? head : title;
+    return titleSegments(title)[0] ?? title;
+}
+
+/** Title segments that name the page, not the company ("Home | Acme"). */
+const GENERIC_SEGMENT =
+    /^(home(\s?page)?|welcome|start(seite)?|accueil|inicio|início|homepagina|official (web)?site)$/i;
+
+/**
+ * A company's name from its homepage title: the first segment that is not
+ * "Home" or "Welcome", without a "Welcome to" lead-in. A title that is only
+ * a URL leaves the domain, which the resolver replaces with a real name
+ * when another sighting has one.
+ */
+export function companyName(title: string, domain: string): string {
+    const trimmed = title.trim();
+    if (!trimmed || /^https?:\/\//i.test(trimmed)) return domain;
+    const segments = titleSegments(trimmed);
+    const named = segments.find(part => !GENERIC_SEGMENT.test(part)) ?? segments[0] ?? trimmed;
+    const name = named.replace(/^welcome to\s+/i, "").trim();
+    return name || domain;
 }
 
 function hostOf(url: string): string | null {
@@ -100,6 +180,81 @@ export function mentionFromWebResult(
     };
 }
 
+/**
+ * A company-index hit as a mention. The hit is the company's own homepage,
+ * so the hit is the organisation; its homepage text says what it does.
+ */
+export function mentionFromCompanyHit(
+    hit: CompanyHit,
+    origin: { country: string | null; region?: string | null; partnerKind: PartnerKind },
+    source: string
+): OrgMention {
+    const roles = guessRolesFromText(`${hit.title} ${hit.description.slice(0, 400)}`);
+    return {
+        name: companyName(hit.title, hit.domain),
+        url: hit.url,
+        country: origin.country,
+        region: origin.region ?? null,
+        roles: roles.length > 0 ? roles : [origin.partnerKind],
+        categories: [],
+        description: hit.description.slice(0, 280),
+        source,
+    };
+}
+
+/**
+ * The companies a run looks for lookalikes of: the customers the program
+ * names (the newest entry first, since the list is appended to), then its
+ * won deals (most recently won first), each domain once, capped.
+ */
+export function lookalikeSeeds(
+    customerDomains: readonly string[],
+    wonDomains: readonly string[],
+    max = MAX_LOOKALIKE_SEEDS
+): string[] {
+    const seeds: string[] = [];
+    for (const raw of [...[...customerDomains].reverse(), ...wonDomains]) {
+        const domain = normalizeDomain(raw);
+        if (domain && !seeds.includes(domain)) seeds.push(domain);
+    }
+    return seeds.slice(0, max);
+}
+
+const MAX_LOOKALIKE_QUERY = 300;
+
+/** "Companies similar to Acme: what Acme sells and to whom", kept under ~300 characters. */
+export function lookalikeQuery(name: string, description: string | null): string {
+    const query = description?.trim()
+        ? `Companies similar to ${name}: ${description.trim()}`
+        : `Companies similar to ${name}`;
+    if (query.length <= MAX_LOOKALIKE_QUERY) return query;
+    const cut = query.slice(0, MAX_LOOKALIKE_QUERY);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > MAX_LOOKALIKE_QUERY / 2 ? cut.slice(0, lastSpace) : cut).trim();
+}
+
+/** Run `fn` over `items` a few at a time, stopping between batches on abort. */
+async function settleInBatches<T, R>(
+    items: readonly T[],
+    size: number,
+    fn: (item: T) => Promise<R>,
+    signal?: AbortSignal
+): Promise<Array<PromiseSettledResult<R>>> {
+    const settled: Array<PromiseSettledResult<R>> = [];
+    for (let i = 0; i < items.length; i += size) {
+        if (signal?.aborted) break;
+        settled.push(...(await Promise.allSettled(items.slice(i, i + size).map(fn))));
+    }
+    return settled;
+}
+
+/** Concurrent company searches: the vendor rate-limits bursts. */
+const COMPANY_SEARCH_CONCURRENCY = 4;
+
+function errorText(reason: unknown): string {
+    return reason instanceof Error ? reason.message : String(reason);
+}
+
 export async function gather(
     plan: PlannedSourceQuery[],
     ports: GatherPorts
@@ -113,6 +268,9 @@ export async function gather(
     let webResults: RawSearchResult[] = [];
 
     const tasks: Promise<void>[] = [];
+    // Company search is told what to leave out; a hit on an excluded domain
+    // (or a subdomain of one) is still dropped here, whatever the vendor did.
+    const excluded = excludedDomainsOf(ports.excludeDomains ?? []);
 
     // ── web ──
     tasks.push(
@@ -125,6 +283,18 @@ export async function gather(
                     status: "skipped",
                     detail: "no web queries planned",
                 });
+                return;
+            }
+            if (ports.searchCompanies) {
+                const found = await gatherCompanies(
+                    webQueries,
+                    ports.searchCompanies,
+                    excluded,
+                    ports.signal
+                );
+                mentions.push(...found.mentions);
+                webResults = found.webResults;
+                sources.push(found.source);
                 return;
             }
             if (!ports.searchWeb) {
@@ -166,6 +336,42 @@ export async function gather(
                     detail: error instanceof Error ? error.message : String(error),
                 });
             }
+        })()
+    );
+
+    // ── lookalikes ──
+    tasks.push(
+        (async () => {
+            const seeds = (ports.lookalikes?.seeds ?? []).slice(0, MAX_LOOKALIKE_SEEDS);
+            if (!ports.searchCompanies || !ports.describeCompanies) {
+                sources.push({
+                    source: "lookalike",
+                    queries: 0,
+                    results: 0,
+                    status: "skipped",
+                    detail: "needs EXA_API_KEY",
+                });
+                return;
+            }
+            if (!ports.lookalikes || seeds.length === 0) {
+                sources.push({
+                    source: "lookalike",
+                    queries: 0,
+                    results: 0,
+                    status: "skipped",
+                    detail: "no customers yet",
+                });
+                return;
+            }
+            const found = await gatherLookalikes(
+                { ...ports.lookalikes, seeds },
+                ports.searchCompanies,
+                ports.describeCompanies,
+                excluded,
+                ports.signal
+            );
+            mentions.push(...found.mentions);
+            sources.push(found.source);
         })()
     );
 
@@ -303,6 +509,188 @@ export async function gather(
     await Promise.allSettled(tasks);
     sources.sort((a, b) => a.source.localeCompare(b.source));
     return { mentions, sources, webResults };
+}
+
+/** The domains company search must leave out, and a check for a hit's URL. */
+interface ExcludedDomains {
+    list: string[];
+    has: (url: string) => boolean;
+}
+
+function excludedDomainsOf(domains: readonly string[]): ExcludedDomains {
+    const set = new Set(
+        domains.map(d => normalizeDomain(d)).filter((d): d is string => Boolean(d))
+    );
+    return {
+        list: [...set],
+        has: url => {
+            const domain = normalizeDomain(url);
+            return domain !== null && set.has(domain);
+        },
+    };
+}
+
+/** Every planned web query through the company index, exclusions honoured. */
+async function gatherCompanies(
+    queries: PlannedSourceQuery[],
+    searchCompanies: SearchCompaniesPort,
+    excluded: ExcludedDomains,
+    signal: AbortSignal | undefined
+): Promise<{ mentions: OrgMention[]; webResults: RawSearchResult[]; source: SourceCount }> {
+    const found: OrgMention[] = [];
+    const pages: RawSearchResult[] = [];
+    const settled = await settleInBatches(
+        queries,
+        COMPANY_SEARCH_CONCURRENCY,
+        query =>
+            searchCompanies(query.query, {
+                country: query.territory.country,
+                excludeDomains: excluded.list,
+                signal,
+            }),
+        signal
+    );
+    let failures = 0;
+    let firstError: string | null = null;
+    for (const [i, result] of settled.entries()) {
+        const query = queries[i]!;
+        if (result.status === "rejected") {
+            failures += 1;
+            firstError ??= errorText(result.reason);
+            console.warn("[distribution] company query failed:", query.query, result.reason);
+            continue;
+        }
+        for (const hit of result.value) {
+            if (excluded.has(hit.url)) continue;
+            found.push(
+                mentionFromCompanyHit(
+                    hit,
+                    {
+                        country: query.territory.country,
+                        region: query.territory.region ?? null,
+                        partnerKind: query.partnerKind,
+                    },
+                    `web:company:${query.label}`
+                )
+            );
+            pages.push({
+                url: hit.url,
+                title: hit.title,
+                content: hit.description,
+                score: 1,
+            });
+        }
+    }
+    const status =
+        failures === queries.length
+            ? "failed"
+            : failures > 0 || found.length === 0
+              ? "degraded"
+              : "ok";
+    return {
+        mentions: found,
+        webResults: pages,
+        source: {
+            source: "web",
+            queries: queries.length,
+            results: found.length,
+            status,
+            detail:
+                status === "failed"
+                    ? (firstError ?? undefined)
+                    : failures > 0
+                      ? `${failures} queries failed`
+                      : found.length === 0
+                        ? "zero results"
+                        : undefined,
+        },
+    };
+}
+
+/** Companies like each seed: its description, then one company search. */
+async function gatherLookalikes(
+    input: LookalikeInput,
+    searchCompanies: SearchCompaniesPort,
+    describeCompanies: DescribeCompaniesPort,
+    excluded: ExcludedDomains,
+    signal: AbortSignal | undefined
+): Promise<{ mentions: OrgMention[]; source: SourceCount }> {
+    // A seed Exa cannot read is still searched for by its domain.
+    const descriptions = new Map<string, CompanyDescription>();
+    try {
+        const described = await describeCompanies(
+            input.seeds.map(domain => `https://${domain}/`),
+            signal
+        );
+        for (const d of described) {
+            const domain = normalizeDomain(d.url);
+            if (domain && !descriptions.has(domain)) descriptions.set(domain, d);
+        }
+    } catch (error) {
+        console.warn("[distribution] describing lookalike seeds failed:", error);
+    }
+    const settled = await settleInBatches(
+        input.seeds,
+        COMPANY_SEARCH_CONCURRENCY,
+        seed => {
+            const described = descriptions.get(seed);
+            const name = described ? companyName(described.title, seed) : seed;
+            return searchCompanies(lookalikeQuery(name, described?.description ?? null), {
+                country: input.country ?? undefined,
+                excludeDomains: excluded.list,
+                signal,
+            });
+        },
+        signal
+    );
+    const found: OrgMention[] = [];
+    let failures = 0;
+    let firstError: string | null = null;
+    for (const [i, result] of settled.entries()) {
+        const seed = input.seeds[i]!;
+        if (result.status === "rejected") {
+            failures += 1;
+            firstError ??= errorText(result.reason);
+            console.warn("[distribution] lookalike search failed:", seed, result.reason);
+            continue;
+        }
+        for (const hit of result.value) {
+            if (excluded.has(hit.url)) continue;
+            found.push(
+                mentionFromCompanyHit(
+                    hit,
+                    { country: input.country, partnerKind: input.partnerKind },
+                    `lookalike:${seed}`
+                )
+            );
+        }
+    }
+    const searched = input.seeds.length - failures;
+    const status =
+        failures === input.seeds.length
+            ? "failed"
+            : failures > 0 || found.length === 0
+              ? "degraded"
+              : "ok";
+    return {
+        mentions: found,
+        source: {
+            source: "lookalike",
+            queries: input.seeds.length,
+            results: found.length,
+            status,
+            detail:
+                status === "failed"
+                    ? (firstError ?? undefined)
+                    : failures > 0
+                      ? `${failures} of ${input.seeds.length} customers failed`
+                      : found.length === 0
+                        ? "zero results"
+                        : searched === 1
+                          ? "from 1 customer"
+                          : `from ${searched} customers`,
+        },
+    };
 }
 
 function pickQueryForResult(

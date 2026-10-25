@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,15 +23,9 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
+import { useErrorText } from "~/lib/tools/errorText";
 
-import {
-    EVIDENCE_KINDS,
-    EVIDENCE_KIND_HINT,
-    EVIDENCE_KIND_LABEL,
-    vantageApi,
-    type EvidenceDto,
-    type VantageEvidenceKind,
-} from "../api";
+import { EVIDENCE_KINDS, vantageApi, type EvidenceDto, type VantageEvidenceKind } from "../api";
 import { todayIso } from "../_lib/format";
 import { Field, FormError } from "./Primitives";
 
@@ -53,6 +48,10 @@ export function EvidenceDialog({
     defaultKind?: VantageEvidenceKind;
     onSaved: (saved: EvidenceDto) => void;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.evidenceDialog");
+    const tk = useTranslations("vantage.evidenceKind");
+    const tc = useTranslations("common");
     const [kind, setKind] = useState<VantageEvidenceKind>(defaultKind);
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
@@ -78,7 +77,7 @@ export function EvidenceDialog({
 
     const readFile = async (file: File) => {
         if (file.size > 2_000_000) {
-            setError("That file is over 2 MB; paste the part that matters instead.");
+            setError(t("tooBig"));
             return;
         }
         const text = await file.text();
@@ -104,11 +103,11 @@ export function EvidenceDialog({
             const { evidence } = initial
                 ? await vantageApi.patchEvidence(initial.id, input)
                 : await vantageApi.addEvidence(input);
-            toast(initial ? "Evidence updated" : "Added to the evidence inbox");
+            toast(initial ? t("updated") : t("added"));
             onSaved(evidence);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -118,48 +117,45 @@ export function EvidenceDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[560px]">
                 <DialogHeader>
-                    <DialogTitle>{initial ? "Edit evidence" : "Add evidence"}</DialogTitle>
-                    <DialogDescription>
-                        Rough is fine. What matters is the date it is about and where it came from —
-                        that is what lets an agenda cite it.
-                    </DialogDescription>
+                    <DialogTitle>{initial ? t("editTitle") : t("addTitle")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
                     <div className="grid gap-3.5 sm:grid-cols-[160px_minmax(0,1fr)]">
-                        <Field label="Kind" hint={EVIDENCE_KIND_HINT[kind]}>
+                        <Field label={t("kind")} hint={tk(`hint.${kind}`)}>
                             <Select
                                 value={kind}
                                 onValueChange={v => setKind(v as VantageEvidenceKind)}
                             >
-                                <SelectTrigger aria-label="Kind">
+                                <SelectTrigger aria-label={t("kind")}>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {EVIDENCE_KINDS.map(k => (
                                         <SelectItem key={k} value={k}>
-                                            {EVIDENCE_KIND_LABEL[k]}
+                                            {tk(`label.${k}`)}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </Field>
-                        <Field label="Title" htmlFor="ev-title">
+                        <Field label={tc("fields.title")} htmlFor="ev-title">
                             <Input
                                 id="ev-title"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                                 placeholder={
                                     kind === "interview"
-                                        ? "Call with Dana (Acme)"
+                                        ? t("titlePlaceholder.interview")
                                         : kind === "claim"
-                                          ? "Deck: 1,200 users"
-                                          : "What is it?"
+                                          ? t("titlePlaceholder.claim")
+                                          : t("titlePlaceholder.other")
                                 }
                                 autoFocus
                             />
                         </Field>
                     </div>
-                    <Field label="What happened" htmlFor="ev-body">
+                    <Field label={t("body")} htmlFor="ev-body">
                         <Textarea
                             id="ev-body"
                             value={body}
@@ -167,8 +163,8 @@ export function EvidenceDialog({
                             rows={6}
                             placeholder={
                                 kind === "interview"
-                                    ? "What they said, in their words where you can. What they did not say."
-                                    : "Paste notes, a quote, a number with its context…"
+                                    ? t("bodyPlaceholder.interview")
+                                    : t("bodyPlaceholder.other")
                             }
                         />
                         <div className="flex items-center gap-2">
@@ -189,23 +185,21 @@ export function EvidenceDialog({
                                 size="sm"
                                 onClick={() => fileRef.current?.click()}
                             >
-                                Add a text file
+                                {t("addFile")}
                             </Button>
-                            <span className="text-ink-3 text-[11.5px]">
-                                .txt or .md; its contents go in the body
-                            </span>
+                            <span className="text-ink-3 text-[11.5px]">{t("addFileHint")}</span>
                         </div>
                     </Field>
                     <div className="grid gap-3.5 sm:grid-cols-2">
-                        <Field label="Source" htmlFor="ev-source" hint="Person, tool or document">
+                        <Field label={t("source")} htmlFor="ev-source" hint={t("sourceHint")}>
                             <Input
                                 id="ev-source"
                                 value={source}
                                 onChange={e => setSource(e.target.value)}
-                                placeholder="Mixpanel · Dana, Acme · Seed deck v3"
+                                placeholder={t("sourcePlaceholder")}
                             />
                         </Field>
-                        <Field label="Date it is about" htmlFor="ev-date">
+                        <Field label={t("date")} htmlFor="ev-date">
                             <Input
                                 id="ev-date"
                                 type="date"
@@ -214,7 +208,7 @@ export function EvidenceDialog({
                             />
                         </Field>
                     </div>
-                    <Field label="Link" htmlFor="ev-url" hint="Optional">
+                    <Field label={t("link")} htmlFor="ev-url" hint={tc("status.optional")}>
                         <Input
                             id="ev-url"
                             type="url"
@@ -225,27 +219,26 @@ export function EvidenceDialog({
                     </Field>
                     <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
                         <div>
-                            <div className="text-ink text-[13px] font-medium">
-                                Visible to a mentor or administrator
-                            </div>
-                            <div className="text-ink-3 text-[11.5px]">
-                                Private evidence can still inform an agenda; it is never quoted in a
-                                shared topic or update.
-                            </div>
+                            <div className="text-ink text-[13px] font-medium">{t("visible")}</div>
+                            <div className="text-ink-3 text-[11.5px]">{t("visibleHint")}</div>
                         </div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
+                        <Switch
+                            checked={shared}
+                            onCheckedChange={setShared}
+                            aria-label={t("sharedAria")}
+                        />
                     </div>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={() => void save()}
                         disabled={busy || !title.trim() || !body.trim()}
                     >
-                        {initial ? "Save changes" : "Add evidence"}
+                        {initial ? tc("actions.saveChanges") : t("addTitle")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

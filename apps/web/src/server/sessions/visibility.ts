@@ -142,12 +142,11 @@ function citationSourceId(citation: unknown): string | null {
  */
 function readerSteps(steps: readonly ChatTurnStep[]): ChatTurnStep[] {
     return steps.map(({ detail: _detail, ...step }) => {
-        if (step.id === "search" && step.state === "active")
-            return { ...step, label: "Searching your sources" };
-        // A tool call's label is its query or the file it read.
-        if (step.id.startsWith("web-")) return { ...step, label: "Searched the web" };
-        if (step.id.startsWith("source-")) return { ...step, label: "Looked through the sources" };
-        return step;
+        // A search caught mid-way and each tool call name what they looked at
+        // (a file, a query); the reader's chat words them by kind instead.
+        const named =
+            (step.id === "search" && step.state === "active") || /^(web|source|doc)-/.test(step.id);
+        return named ? { ...step, label: "" } : step;
     });
 }
 

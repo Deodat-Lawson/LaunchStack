@@ -17,6 +17,6 @@ export async function POST(request: Request) {
         setActiveWorkspaceCookie(response, BigInt(result.companyId));
         return response;
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/invitations/accept POST]");
+        return workspaceErrorResponse(error, "[workspace/invitations/accept POST]", request);
     }
 }

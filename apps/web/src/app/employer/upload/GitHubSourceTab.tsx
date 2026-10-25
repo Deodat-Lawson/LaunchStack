@@ -5,6 +5,7 @@ import { Loader2, ChevronDown, ChevronUp, Lock, CheckCircle, AlertCircle } from 
 import { IconGithub } from "~/components/icons/brand";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface GitHubSourceTabProps {
@@ -50,6 +51,7 @@ export function GitHubSourceTab({
     categories: _categories,
     defaultCategory,
 }: GitHubSourceTabProps) {
+    const t = useTranslations("upload.github");
     const { userId } = useAuth();
     const router = useRouter();
 
@@ -78,7 +80,7 @@ export function GitHubSourceTab({
     const handleSubmit = async () => {
         if (!userId || !repoUrl.trim()) return;
         if (!isValidGitHubUrl(repoUrl)) {
-            toast.error("Please enter a valid GitHub repository URL");
+            toast.error(t("invalidUrlToast"));
             return;
         }
 
@@ -105,14 +107,14 @@ export function GitHubSourceTab({
                 jobId?: string;
             };
 
-            if (!response.ok) throw new Error(data.error ?? "Failed to index repository");
+            if (!response.ok) throw new Error(data.error ?? t("indexFailed"));
 
             setStatus("success");
-            toast.success(data.message ?? "Repository indexing started!");
+            toast.success(data.message ?? t("indexStarted"));
             setTimeout(() => router.push("/employer/documents"), 2000);
         } catch (err) {
             setStatus("error");
-            const msg = err instanceof Error ? err.message : "Unknown error";
+            const msg = err instanceof Error ? err.message : t("unknownError");
             setErrorMessage(msg);
             toast.error(msg);
         } finally {
@@ -127,7 +129,7 @@ export function GitHubSourceTab({
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>
                     <label htmlFor="github-url" style={labelStyle}>
-                        Repository URL
+                        {t("urlLabel")}
                     </label>
                     <input
                         id="github-url"
@@ -140,19 +142,19 @@ export function GitHubSourceTab({
                     />
                     {repoUrl && !isValidGitHubUrl(repoUrl) && (
                         <div style={{ fontSize: 11.5, color: "var(--danger)", marginTop: 4 }}>
-                            Enter a valid GitHub URL (e.g., https://github.com/owner/repo)
+                            {t("invalidUrl")}
                         </div>
                     )}
                 </div>
 
                 <div>
                     <label htmlFor="github-branch" style={labelStyle}>
-                        Branch (optional)
+                        {t("branchLabel")}
                     </label>
                     <input
                         id="github-branch"
                         type="text"
-                        placeholder="main (default)"
+                        placeholder={t("branchPlaceholder")}
                         value={branch}
                         onChange={e => setBranch(e.target.value)}
                         disabled={isSubmitting}
@@ -178,22 +180,21 @@ export function GitHubSourceTab({
                         }}
                     >
                         <Lock size={12} />
-                        Private repository? Add access token
+                        {t("tokenToggle")}
                         {showToken ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                     </button>
                     {showToken && (
                         <div style={{ marginTop: 8 }}>
                             <input
                                 type="password"
-                                placeholder="<your-github-access-token>"
+                                placeholder={`<${t("tokenPlaceholder")}>`}
                                 value={accessToken}
                                 onChange={e => setAccessToken(e.target.value)}
                                 disabled={isSubmitting}
                                 style={inputStyle}
                             />
                             <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4 }}>
-                                A personal access token with <code>repo</code> scope. Not stored
-                                permanently.
+                                {t.rich("tokenHint", { code: chunks => <code>{chunks}</code> })}
                             </div>
                         </div>
                     )}
@@ -213,7 +214,7 @@ export function GitHubSourceTab({
                         }}
                     >
                         <CheckCircle size={14} />
-                        Repository submitted for indexing! Redirecting…
+                        {t("submitted")}
                     </div>
                 )}
 
@@ -258,12 +259,12 @@ export function GitHubSourceTab({
                     {isSubmitting ? (
                         <>
                             <Loader2 size={14} className="animate-spin" />
-                            Downloading & processing…
+                            {t("submitting")}
                         </>
                     ) : (
                         <>
                             <IconGithub size={14} />
-                            Index repository
+                            {t("submit")}
                         </>
                     )}
                 </button>
@@ -280,7 +281,7 @@ export function GitHubSourceTab({
                 }}
             >
                 <div style={{ fontWeight: 600, color: "var(--ink-2)", marginBottom: 8 }}>
-                    What gets indexed
+                    {t("indexedTitle")}
                 </div>
                 <div
                     style={{
@@ -297,12 +298,9 @@ export function GitHubSourceTab({
                     <span>HTML, CSS, JSON</span>
                     <span>Go, Rust, Java, C++</span>
                     <span>YAML, TOML, .env</span>
-                    <span>README, Dockerfile, etc.</span>
+                    <span>{t("indexedMore")}</span>
                 </div>
-                <div style={{ marginTop: 8, fontSize: 11 }}>
-                    Binary files, node_modules, .git, and other non-text files are automatically
-                    skipped.
-                </div>
+                <div style={{ marginTop: 8, fontSize: 11 }}>{t("skipped")}</div>
             </div>
 
             <div>
@@ -326,10 +324,10 @@ export function GitHubSourceTab({
                 >
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                            Advanced: Import issues & pull requests
+                            {t("advancedTitle")}
                         </div>
                         <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 2 }}>
-                            Use the GitHub CLI to export issues/PRs as JSON, then upload via Files
+                            {t("advancedBody")}
                         </div>
                     </div>
                     {showAdvanced ? (
@@ -353,18 +351,20 @@ export function GitHubSourceTab({
                         }}
                     >
                         <div style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                            Requires the{" "}
-                            <code
-                                style={{
-                                    padding: "1px 5px",
-                                    background: "var(--line)",
-                                    borderRadius: 4,
-                                    fontSize: 10.5,
-                                }}
-                            >
-                                gh
-                            </code>{" "}
-                            CLI. Run these in your terminal:
+                            {t.rich("requiresCli", {
+                                code: chunks => (
+                                    <code
+                                        style={{
+                                            padding: "1px 5px",
+                                            background: "var(--line)",
+                                            borderRadius: 4,
+                                            fontSize: 10.5,
+                                        }}
+                                    >
+                                        {chunks}
+                                    </code>
+                                ),
+                            })}
                         </div>
                         <div>
                             <div
@@ -378,7 +378,7 @@ export function GitHubSourceTab({
                                     marginBottom: 6,
                                 }}
                             >
-                                Issues
+                                {t("issues")}
                             </div>
                             <pre style={codeBlockStyle}>
                                 <code>
@@ -400,7 +400,7 @@ export function GitHubSourceTab({
                                     marginBottom: 6,
                                 }}
                             >
-                                Pull requests
+                                {t("pullRequests")}
                             </div>
                             <pre style={codeBlockStyle}>
                                 <code>
@@ -418,8 +418,7 @@ export function GitHubSourceTab({
                                 borderTop: "1px solid var(--line)",
                             }}
                         >
-                            Then upload the resulting JSON files via the{" "}
-                            <strong>Files & folders</strong> tab.
+                            {t.rich("thenUpload", { strong: chunks => <strong>{chunks}</strong> })}
                         </div>
                     </div>
                 )}

@@ -1,19 +1,59 @@
-import type { ApplicantType, SourceRole } from "~/lib/company-profile/dto";
+import type { useTranslations } from "next-intl";
 
-/** The applicant type in the person's words. There is no "Not stated": an unknown type shows nothing. */
-export const APPLICANT_WORD: Record<ApplicantType, string> = {
-    nonprofit: "Nonprofit",
-    small_business: "Small business",
-    for_profit: "Company",
-    individual: "Individual",
-};
+import type {
+    ApplicantType,
+    CompanyProfileDto,
+    ProfileFactDto,
+    ProfileSourceDto,
+    SourceRole,
+} from "~/lib/company-profile/dto";
 
-/** What reading a source decided, as a quiet label on its row. */
-export const ROLE_WORD: Record<SourceRole, string> = {
-    about_us: "About you",
-    third_party: "Someone else's",
-    no_content: "Nothing to read",
-};
+/** `t` for the `companyProfile.server` words the DTO carries as keys. */
+export type ProfileServerT = ReturnType<typeof useTranslations<"companyProfile.server">>;
+
+/** A fact's label in the reader's language; a label a person typed is shown as typed. */
+export function factLabelText(t: ProfileServerT, fact: Pick<ProfileFactDto, "label" | "labelKey">) {
+    return fact.labelKey ? t(`factLabels.${fact.labelKey}`) : fact.label;
+}
+
+/** Why a source counts or not; the model's own sentence is shown as it wrote it. */
+export function sourceReasonText(
+    t: ProfileServerT,
+    source: Pick<ProfileSourceDto, "reason" | "reasonCopy">
+): string | null {
+    const reason = source.reasonCopy;
+    if (!reason) return source.reason;
+    if (reason.key !== "onlyNoise") return t(`reasons.${reason.key}`);
+    const [first, second] = reason.drops.map(drop => t(`dropWords.${drop}`));
+    const noise = second ? t("reasons.and", { first: first!, second }) : first!;
+    return t("reasons.onlyNoise", { noise });
+}
+
+/** A failure sentence in the reader's language when it is one of the fixed ones. */
+export function failureText(
+    t: ProfileServerT,
+    item: Pick<ProfileSourceDto | CompanyProfileDto, "error" | "errorKey">
+): string | null {
+    return item.errorKey ? t(`failures.${item.errorKey}`) : item.error;
+}
+
+/**
+ * The applicant type in the person's words: `companyProfile.applicant.<key>`.
+ * There is no "Not stated": an unknown type shows nothing.
+ */
+export const APPLICANT_KEY = {
+    nonprofit: "nonprofit",
+    small_business: "smallBusiness",
+    for_profit: "forProfit",
+    individual: "individual",
+} as const satisfies Record<ApplicantType, string>;
+
+/** What reading a source decided, as a quiet label on its row: `companyProfile.sources.roles.<key>`. */
+export const ROLE_KEY = {
+    about_us: "aboutUs",
+    third_party: "thirdParty",
+    no_content: "noContent",
+} as const satisfies Record<SourceRole, string>;
 
 const FACT_PREFIX = "profile.facts.";
 const MAX_KEY = 64;

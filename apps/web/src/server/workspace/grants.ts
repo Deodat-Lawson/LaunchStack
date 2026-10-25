@@ -27,6 +27,7 @@ import {
     type Permission,
     type PrincipalType,
 } from "~/lib/authz/permissions";
+import { copy } from "~/i18n/copy";
 
 import { badRequest } from "./errors";
 import { customRoleNames, permissionsForRoles } from "./roles";
@@ -79,7 +80,12 @@ export async function validatePrincipals(
         const principalId =
             g.principalType === "role" ? normalizeRoleSlug(g.principalId) : g.principalId.trim();
         if (g.principalType !== "role" && !/^\d{1,18}$/.test(principalId)) {
-            throw badRequest(`Invalid ${g.principalType} id "${g.principalId}".`);
+            throw badRequest(
+                copy("team.server.errors.invalidPrincipalId", {
+                    type: g.principalType,
+                    id: g.principalId,
+                })
+            );
         }
         const next: GrantInput = { principalType: g.principalType, principalId, level: g.level };
         byKey.set(grantKey(next), next);
@@ -143,11 +149,14 @@ export async function validatePrincipals(
                   : isBuiltinRole(g.principalId) || knownRoles.has(g.principalId);
         if (!known) {
             throw badRequest(
-                g.principalType === "user"
-                    ? `User ${g.principalId} is not an active member of this workspace.`
-                    : g.principalType === "group"
-                      ? `Group ${g.principalId} does not exist in this workspace.`
-                      : `Role "${g.principalId}" does not exist in this workspace.`
+                copy(
+                    g.principalType === "user"
+                        ? "team.server.errors.userNotActiveMember"
+                        : g.principalType === "group"
+                          ? "team.server.errors.groupDoesNotExist"
+                          : "team.server.errors.roleDoesNotExist",
+                    { id: g.principalId }
+                )
             );
         }
     }

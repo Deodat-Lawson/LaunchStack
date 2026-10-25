@@ -16,6 +16,7 @@ import {
     resolveActor,
 } from "../../_lib/context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -43,13 +44,19 @@ export async function POST(
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        return await withWorkspaceChatModels(actor.actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
             const campaignId = parseCampaignId((await params).campaignId);
-            if (campaignId === null) return fail("Invalid campaign ID", 400);
+            if (campaignId === null)
+                return fail(
+                    requestTranslator(request, "growth.server.email")("invalidCampaignId"),
+                    400
+                );
 
             const parsed = CreateVersionSchema.safeParse((await readJson(request)) ?? {});
             if (!parsed.success) {
-                return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: parsed.error.flatten(),
+                });
             }
 
             const prepared = await prepareEmailCampaign({
@@ -77,13 +84,13 @@ export async function POST(
             );
         });
     } catch (error) {
-        return handleRouteError("email-campaigns/versions/create", error);
+        return handleRouteError("email-campaigns/versions/create", error, request);
     }
 }
 
 /** GET — the campaign's version history, oldest first. */
 export async function GET(
-    _request: Request,
+    request: Request,
     { params }: { params: Promise<{ campaignId: string }> }
 ) {
     try {
@@ -91,14 +98,19 @@ export async function GET(
         if (!actor.ok) return actor.response;
 
         const campaignId = parseCampaignId((await params).campaignId);
-        if (campaignId === null) return fail("Invalid campaign ID", 400);
+        if (campaignId === null)
+            return fail(
+                requestTranslator(request, "growth.server.email")("invalidCampaignId"),
+                400
+            );
 
         // Scope check: listing versions must not leak another workspace's content.
         const campaign = await getCampaign(actor.actor.companyId, campaignId);
-        if (!campaign) return fail("Campaign not found", 404);
+        if (!campaign)
+            return fail(requestTranslator(request, "growth.server.email")("campaignNotFound"), 404);
 
         return ok({ versions: await listTemplateVersions(campaign.id) });
     } catch (error) {
-        return handleRouteError("email-campaigns/versions/list", error);
+        return handleRouteError("email-campaigns/versions/list", error, request);
     }
 }

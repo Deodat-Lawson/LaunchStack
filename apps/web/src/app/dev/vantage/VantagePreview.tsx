@@ -43,7 +43,7 @@ export function VantagePreview({ at }: { at: string }) {
     if (!mounted) return null;
     return (
         <div data-preview="vantage" className="flex h-dvh flex-col">
-            <div className="bg-warn-soft text-warn border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
+            <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data; a reload starts over. Add{" "}
                 <span className="font-mono">?as=member</span> to see it without settings.manage,{" "}
                 <span className="font-mono">?fresh=1</span> to watch Vantage draft the week.

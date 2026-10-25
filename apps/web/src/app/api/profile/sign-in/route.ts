@@ -22,15 +22,21 @@ import { z } from "zod";
 import { auth, getServerSession } from "~/server/auth";
 import { enabledSocialProviders } from "~/server/auth/providers";
 import { parseJsonBody } from "~/server/workspace/http";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
 /** Better Auth's own bounds for a password (minPasswordLength/maxPasswordLength). */
 const SetPasswordSchema = z.object({ newPassword: z.string().min(8).max(128) });
 
-export async function GET() {
+export async function GET(request: Request) {
     const session = await getServerSession();
-    if (!session) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+    if (!session) {
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("notSignedIn") },
+            { status: 401 }
+        );
+    }
     return NextResponse.json({ providers: enabledSocialProviders() });
 }
 
@@ -39,19 +45,22 @@ export async function POST(request: Request) {
     // with it; this refuses the same-site case (a sibling subdomain) too.
     // Browsers always send the header on fetch; a non-browser caller has no
     // ambient cookie to abuse.
+    const t = requestTranslator(request, "settings.server.errors");
     const site = request.headers.get("sec-fetch-site");
     if (site && site !== "same-origin") {
-        return NextResponse.json({ error: "Cross-site request refused" }, { status: 403 });
+        return NextResponse.json({ error: t("crossSiteRefused") }, { status: 403 });
     }
     const session = await getServerSession();
-    if (!session) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+    if (!session) {
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("notSignedIn") },
+            { status: 401 }
+        );
+    }
     const { freshAge } = (await auth.$context).sessionConfig;
     const age = Date.now() - new Date(session.session.createdAt).getTime();
     if (freshAge > 0 && age > freshAge * 1000) {
-        return NextResponse.json(
-            { error: "For your security, sign out and sign in again, then set your password." },
-            { status: 403 }
-        );
+        return NextResponse.json({ error: t("signInAgainForPassword") }, { status: 403 });
     }
     const body = await parseJsonBody(request, SetPasswordSchema);
     if (!body.success) return body.response;
@@ -69,6 +78,6 @@ export async function POST(request: Request) {
             );
         }
         console.error("[profile sign-in POST]", error);
-        return NextResponse.json({ error: "Could not set a password" }, { status: 500 });
+        return NextResponse.json({ error: t("setPasswordFailed") }, { status: 500 });
     }
 }

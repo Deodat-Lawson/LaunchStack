@@ -1,3 +1,7 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import {
     buildBlankRailMenuItems,
     buildFolderMenuItems,
@@ -6,6 +10,12 @@ import {
     isPersistedSource,
 } from "../sourceContextMenu";
 import type { WorkspaceFolder, WorkspaceSource } from "../types";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "sources.contextMenu",
+});
 
 function source(overrides: Partial<WorkspaceSource> = {}): WorkspaceSource {
     return {
@@ -40,7 +50,7 @@ describe("buildSourceMenuItems", () => {
         const onOpen = jest.fn();
         const onRename = jest.fn();
         const onDelete = jest.fn();
-        const items = buildSourceMenuItems(source(), folders, [], {
+        const items = buildSourceMenuItems(t, source(), folders, [], {
             onOpen,
             onRename,
             onDelete,
@@ -68,6 +78,7 @@ describe("buildSourceMenuItems", () => {
 
     it("disables mutations while a source is still indexing", () => {
         const items = buildSourceMenuItems(
+            t,
             source({ documentId: undefined, pending: true }),
             folders,
             [],
@@ -86,7 +97,7 @@ describe("buildSourceMenuItems", () => {
     });
 
     it("labels context toggle based on current selection", () => {
-        const selected = buildSourceMenuItems(source(), folders, ["d1"], {
+        const selected = buildSourceMenuItems(t, source(), folders, ["d1"], {
             onToggleContext: jest.fn(),
         });
         const item = selected.find(entry => entry.id === "context");
@@ -97,7 +108,7 @@ describe("buildSourceMenuItems", () => {
         const onRename = jest.fn();
         const onMoveToFolder = jest.fn();
         const file = source({ folder: "Contracts" });
-        const items = buildSourceMenuItems(file, folders, [], {
+        const items = buildSourceMenuItems(t, file, folders, [], {
             onRename,
             onMoveToFolder,
         });
@@ -119,7 +130,7 @@ describe("buildFolderMenuItems", () => {
     it("offers rename and select-all", () => {
         const onRename = jest.fn();
         const onSelectAll = jest.fn();
-        const items = buildFolderMenuItems("Contracts", {
+        const items = buildFolderMenuItems(t, "Contracts", {
             onRename,
             onSelectAll,
             selectState: "none",
@@ -137,7 +148,7 @@ describe("buildFolderMenuItems for a nested folder", () => {
     it("offers subfolder, rename, move, and delete", () => {
         const onMove = jest.fn();
         const onDelete = jest.fn();
-        const items = buildFolderMenuItems("Contracts/2026", {
+        const items = buildFolderMenuItems(t, "Contracts/2026", {
             onNewSubfolder: jest.fn(),
             onRename: jest.fn(),
             onMove,
@@ -161,7 +172,7 @@ describe("buildFolderMenuItems for a nested folder", () => {
 
     it("moves only to folders that are not itself, its subtree, its parent, or Unfiled", () => {
         const onMove = jest.fn();
-        const items = buildFolderMenuItems("Contracts/2026", { onMove, folders: paths });
+        const items = buildFolderMenuItems(t, "Contracts/2026", { onMove, folders: paths });
         const move = items.find(item => item.id === "move-folder");
         expect(move?.type).toBe("submenu");
         if (move?.type !== "submenu") return;
@@ -175,7 +186,7 @@ describe("buildFolderMenuItems for a nested folder", () => {
     });
 
     it("cannot move a top-level folder to the top level again", () => {
-        const items = buildFolderMenuItems("HR", { onMove: jest.fn(), folders: paths });
+        const items = buildFolderMenuItems(t, "HR", { onMove: jest.fn(), folders: paths });
         const move = items.find(item => item.id === "move-folder");
         if (move?.type !== "submenu") throw new Error("expected submenu");
         expect(move.items[0]).toMatchObject({ id: "move-folder-root", disabled: true });
@@ -188,7 +199,7 @@ describe("source move submenu", () => {
             { id: "f-Contracts", name: "Contracts", color: "x" },
             { id: "f-Contracts/2026", name: "Contracts/2026", color: "x" },
         ];
-        const items = buildSourceMenuItems(source(), nested, [], { onMoveToFolder: jest.fn() });
+        const items = buildSourceMenuItems(t, source(), nested, [], { onMoveToFolder: jest.fn() });
         const move = items.find(item => item.id === "move");
         if (move?.type !== "submenu") throw new Error("expected submenu");
         expect(move.items.map(item => (item.type === "item" ? item.label : ""))).toEqual([
@@ -203,7 +214,7 @@ describe("buildBlankRailMenuItems", () => {
     it("offers add knowledge and new folder", () => {
         const onAddKnowledge = jest.fn();
         const onNewFolder = jest.fn();
-        const items = buildBlankRailMenuItems({ onAddKnowledge, onNewFolder });
+        const items = buildBlankRailMenuItems(t, { onAddKnowledge, onNewFolder });
         expect(items.map(item => item.id)).toEqual(["add", "new-folder"]);
     });
 });
@@ -212,7 +223,7 @@ describe("access items", () => {
     it("offers Share… only when a handler is wired, after copy and before delete", () => {
         const onRestrictAccess = jest.fn();
         const file = source();
-        const items = buildSourceMenuItems(file, folders, [], {
+        const items = buildSourceMenuItems(t, file, folders, [], {
             onCopyTitle: jest.fn(),
             onRestrictAccess,
             onDelete: jest.fn(),
@@ -233,7 +244,7 @@ describe("access items", () => {
     });
 
     it("reads Share… whoever can see it already — one verb for files and folders", () => {
-        const items = buildSourceMenuItems(source({ restricted: true }), folders, [], {
+        const items = buildSourceMenuItems(t, source({ restricted: true }), folders, [], {
             onRestrictAccess: jest.fn(),
         });
         const access = items.find(item => item.id === "access");
@@ -241,7 +252,7 @@ describe("access items", () => {
     });
 
     it("waits for indexing before offering access changes", () => {
-        const items = buildSourceMenuItems(source({ documentId: undefined }), folders, [], {
+        const items = buildSourceMenuItems(t, source({ documentId: undefined }), folders, [], {
             onRestrictAccess: jest.fn(),
         });
         const access = items.find(item => item.id === "access");
@@ -250,7 +261,7 @@ describe("access items", () => {
 
     it("offers Share… on a folder when a handler is wired", () => {
         const onShare = jest.fn();
-        const items = buildFolderMenuItems("Contracts", {
+        const items = buildFolderMenuItems(t, "Contracts", {
             onRename: jest.fn(),
             onShare,
             onSelectAll: jest.fn(),
@@ -283,7 +294,7 @@ describe("view-only files (ADR-014)", () => {
         });
 
     it("keeps rename, move, cut and delete visible but refused, and says why", () => {
-        const items = buildSourceMenuItems(viewOnly(), folders, [], {
+        const items = buildSourceMenuItems(t, viewOnly(), folders, [], {
             onRename: jest.fn(),
             onMoveToFolder: jest.fn(),
             onCut: jest.fn(),
@@ -316,7 +327,7 @@ describe("view-only files (ADR-014)", () => {
                 },
             },
         ];
-        const items = buildSourceMenuItems(source(), withLocked, [], {
+        const items = buildSourceMenuItems(t, source(), withLocked, [], {
             onMoveToFolder: jest.fn(),
         });
         const move = items.find(item => item.id === "move");
@@ -333,6 +344,7 @@ describe("view-only files (ADR-014)", () => {
 
     it("acts on a selection's editable files only, and says how many it skips", () => {
         const items = buildSelectionMenuItems(
+            t,
             [source(), viewOnly({ id: "d2", documentId: 2 })],
             folders,
             { onDelete: jest.fn(), onMoveToFolder: jest.fn() }
@@ -367,7 +379,7 @@ describe("buildSelectionMenuItems", () => {
         const onRemoveFromContext = jest.fn();
         const onMoveToFolder = jest.fn();
         const onDelete = jest.fn();
-        const items = buildSelectionMenuItems([a, b], folders, {
+        const items = buildSelectionMenuItems(t, [a, b], folders, {
             onRemoveFromContext,
             onMoveToFolder,
             onDelete,
@@ -398,7 +410,7 @@ describe("buildSelectionMenuItems", () => {
 
     it("skips sources still being indexed and says so", () => {
         const onDelete = jest.fn();
-        const items = buildSelectionMenuItems([a, indexing], folders, {
+        const items = buildSelectionMenuItems(t, [a, indexing], folders, {
             onDelete,
             onMoveToFolder: jest.fn(),
         });
@@ -408,7 +420,7 @@ describe("buildSelectionMenuItems", () => {
         if (del?.type === "item") del.onSelect();
         expect(onDelete).toHaveBeenCalledWith([a]);
 
-        const none = buildSelectionMenuItems([indexing], folders, { onDelete });
+        const none = buildSelectionMenuItems(t, [indexing], folders, { onDelete });
         expect(none.find(i => i.id === "delete")).toMatchObject({
             disabled: true,
             disabledReason: "These sources are still being indexed.",
@@ -431,7 +443,7 @@ describe("rail additions", () => {
 
     it("adds open-in-tab, show-in-knowledge, cut and copy-link when the rail can do them", () => {
         const onCut = jest.fn();
-        const items = buildSourceMenuItems(source, [], [], {
+        const items = buildSourceMenuItems(t, source, [], [], {
             onOpenInNewTab: jest.fn(),
             onShowInKnowledge: jest.fn(),
             onCut,
@@ -452,7 +464,7 @@ describe("rail additions", () => {
         expect(onCut).toHaveBeenCalledWith(source);
         // A mindmap has no standalone page to open in a tab.
         expect(
-            buildSourceMenuItems({ ...source, type: "mindmap" }, [], [], {
+            buildSourceMenuItems(t, { ...source, type: "mindmap" }, [], [], {
                 onOpenInNewTab: jest.fn(),
             }).find(i => i.id === "open-tab")
         ).toBeUndefined();
@@ -461,7 +473,7 @@ describe("rail additions", () => {
     it("lets a folder take a paste, add a source, and fold its subtree", () => {
         const onPaste = jest.fn();
         const onCollapseAll = jest.fn();
-        const items = buildFolderMenuItems("Plans", {
+        const items = buildFolderMenuItems(t, "Plans", {
             onAddSource: jest.fn(),
             cutCount: 2,
             onPaste,
@@ -476,10 +488,10 @@ describe("rail additions", () => {
         expect(onCollapseAll).toHaveBeenCalledWith(true);
         // Nothing cut: no paste verb at all.
         expect(
-            buildFolderMenuItems("Plans", { onPaste, cutCount: 0 }).find(i => i.id === "paste")
+            buildFolderMenuItems(t, "Plans", { onPaste, cutCount: 0 }).find(i => i.id === "paste")
         ).toBeUndefined();
         expect(
-            buildBlankRailMenuItems({ cutCount: 1, onPaste }).find(i => i.id === "paste")
+            buildBlankRailMenuItems(t, { cutCount: 1, onPaste }).find(i => i.id === "paste")
         ).toMatchObject({ label: "Paste 1 source at the top level" });
     });
 });

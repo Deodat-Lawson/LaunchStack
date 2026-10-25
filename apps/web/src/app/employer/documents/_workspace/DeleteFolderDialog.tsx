@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FolderX } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -32,10 +33,6 @@ export interface DeleteFolderDialogProps {
     onClose: () => void;
 }
 
-function plural(n: number, word: string): string {
-    return `${n} ${word}${n === 1 ? "" : "s"}`;
-}
-
 export function DeleteFolderDialog({
     path,
     documentCount,
@@ -43,6 +40,8 @@ export function DeleteFolderDialog({
     onConfirm,
     onClose,
 }: DeleteFolderDialogProps) {
+    const t = useTranslations("sources.deleteFolderDialog");
+    const tc = useTranslations("common");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -69,13 +68,17 @@ export function DeleteFolderDialog({
     const consequences: string[] = [];
     if (documentCount > 0) {
         consequences.push(
-            `${plural(documentCount, "source")} inside will move to ${displayFolderPath(destination)}.`
+            t("sourcesMove", {
+                count: documentCount,
+                destination:
+                    destination === UNFILED_FOLDER ? t("unfiled") : displayFolderPath(destination),
+            })
         );
     }
     if (subfolderCount > 0) {
-        consequences.push(`${plural(subfolderCount, "subfolder")} will be removed too.`);
+        consequences.push(t("subfoldersRemoved", { count: subfolderCount }));
     }
-    if (consequences.length === 0) consequences.push("The folder is empty.");
+    if (consequences.length === 0) consequences.push(t("empty"));
 
     return (
         <Dialog
@@ -90,10 +93,10 @@ export function DeleteFolderDialog({
                         <span className="bg-danger-soft text-danger flex size-7 items-center justify-center rounded-md">
                             <FolderX className="size-4" aria-hidden />
                         </span>
-                        Delete {path ? `"${displayFolderPath(path)}"` : "folder"}?
+                        {path ? t("title", { name: displayFolderPath(path) }) : t("titleFallback")}
                     </DialogTitle>
                     <DialogDescription>
-                        No source is deleted. {consequences.join(" ")}
+                        {t("description", { consequences: consequences.join(" ") })}
                     </DialogDescription>
                 </DialogHeader>
                 {error && (
@@ -103,7 +106,7 @@ export function DeleteFolderDialog({
                 )}
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         type="button"
@@ -112,7 +115,7 @@ export function DeleteFolderDialog({
                         onClick={() => void confirm()}
                         disabled={busy || !path}
                     >
-                        {busy ? "Deleting…" : "Delete folder"}
+                        {busy ? t("deleting") : t("deleteFolder")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

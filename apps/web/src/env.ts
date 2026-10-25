@@ -130,6 +130,12 @@ const serverSchema = z.object({
     // Azure Document Intelligence (for OCR pipeline)
     AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
     AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
+    // prebuilt-layout (default): text, reading order, tables. prebuilt-read:
+    // text only, roughly a seventh of the per-page price.
+    AZURE_DOC_INTELLIGENCE_MODEL: z.preprocess(
+        normalize,
+        z.enum(["prebuilt-layout", "prebuilt-read"]).optional()
+    ),
     // Landing.AI (fallback OCR for complex documents)
     LANDING_AI_API_KEY: optionalString(),
     // LangSmith configuration (optional, for tracing and monitoring)
@@ -175,7 +181,7 @@ const serverSchema = z.object({
     // provider's Connect button renders "not configured" and its routes
     // decline. Each pair comes from an OAuth app the deployment registers with
     // that provider; the redirect URI to register is
-    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github).
+    // <BETTER_AUTH_URL>/api/connectors/<provider>/oauth/callback (slack, github, notion).
     // Storing a grant also requires EMBEDDING_SECRETS_KEY — without it there
     // is nowhere safe to put a token, so the connector declines to exist.
     // (Google Drive's pair is GOOGLE_OAUTH_CLIENT_ID/SECRET below, shared
@@ -188,6 +194,12 @@ const serverSchema = z.object({
     // the deployment-global PAT fallback used by the repo explainer.
     GITHUB_OAUTH_CLIENT_ID: optionalString(),
     GITHUB_OAUTH_CLIENT_SECRET: optionalString(),
+    // Notion public connection pair, from Notion's developer portal. Its
+    // capabilities should be read content only; Notion's own consent screen
+    // picks the pages. Redirect URI to register:
+    // <BETTER_AUTH_URL>/api/connectors/notion/oauth/callback.
+    NOTION_OAUTH_CLIENT_ID: optionalString(),
+    NOTION_OAUTH_CLIENT_SECRET: optionalString(),
     // LinkedIn app client pair for Growth › Brand: a workspace signs in and
     // posts as its members and the Pages they administer. Redirect URI to
     // register: <BETTER_AUTH_URL>/api/connectors/linkedin/oauth/callback.
@@ -269,6 +281,13 @@ const serverSchema = z.object({
             }),
         })
         .optional(),
+    // How PDFs are read. text-layer-first (the default) uses a PDF's own text
+    // when it has one and sends only scans to OCR. provider-first sends every
+    // PDF to OCR_DEFAULT_PROVIDER and reads the text layer only if that fails.
+    OCR_PDF_STRATEGY: z.preprocess(
+        normalize,
+        z.enum(["text-layer-first", "provider-first"]).optional()
+    ),
     // Where this app's other services (document converter, Word editor,
     // worker) reach it to fetch /api/files URLs; it must be in their
     // ALLOWED_FETCH_ORIGINS. Unset, the converter and file reads use the
@@ -409,8 +428,9 @@ const serverSchema = z.object({
     // app is Internal), so it stays dark until the operator flips this on.
     GMAIL_CONNECTOR_ENABLED: optionalString(),
     // Google Drive folder import. drive.file (the default) only reaches files
-    // picked one by one, so a picked folder arrives empty; this flag adds
-    // drive.readonly, a restricted scope the consent screen must carry (and
+    // picked one by one, so a picked folder arrives empty; this flag lets the
+    // panel's "Allow folder access" ask for drive.readonly (a plain connect
+    // never does), a restricted scope the consent screen must carry (and
     // Google must verify unless the app is Internal), so it ships off.
     GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: optionalString(),
     // Development only: answer for Google (OAuth, Drive, Picker) from the
@@ -546,6 +566,7 @@ function parseServerEnv() {
         BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
         AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
         AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
+        AZURE_DOC_INTELLIGENCE_MODEL: process.env.AZURE_DOC_INTELLIGENCE_MODEL,
         LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,
         LANGCHAIN_TRACING_V2: process.env.LANGCHAIN_TRACING_V2,
         LANGCHAIN_API_KEY: process.env.LANGCHAIN_API_KEY,
@@ -564,6 +585,8 @@ function parseServerEnv() {
         SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
         GITHUB_OAUTH_CLIENT_ID: process.env.GITHUB_OAUTH_CLIENT_ID,
         GITHUB_OAUTH_CLIENT_SECRET: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+        NOTION_OAUTH_CLIENT_ID: process.env.NOTION_OAUTH_CLIENT_ID,
+        NOTION_OAUTH_CLIENT_SECRET: process.env.NOTION_OAUTH_CLIENT_SECRET,
         LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
         LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET,
         LINKEDIN_OAUTH_SCOPES: process.env.LINKEDIN_OAUTH_SCOPES,
@@ -590,6 +613,7 @@ function parseServerEnv() {
             | "LANDING_AI"
             | "DATALAB"
             | undefined,
+        OCR_PDF_STRATEGY: process.env.OCR_PDF_STRATEGY,
         APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
         FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
         MCP_SERVER_ENABLED: process.env.MCP_SERVER_ENABLED,

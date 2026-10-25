@@ -186,17 +186,11 @@ describe("filterMessagesForReader", () => {
                 endMs: 700,
             },
             { id: "attachments", label: "Read 1 attachment", state: "done" },
-            { id: "source-1", label: "Looked through the sources", state: "done" },
-            { id: "web-2", label: "Searched the web", state: "done" },
+            { id: "source-1", label: "", state: "done" },
+            { id: "web-2", label: "", state: "done" },
         ]);
         expect(messages[1]!.metadata?.steps).toEqual([
-            {
-                id: "search",
-                label: "Searching your sources",
-                state: "active",
-                startMs: 40,
-                endMs: 300,
-            },
+            { id: "search", label: "", state: "active", startMs: 40, endMs: 300 },
         ]);
         expect(JSON.stringify(messages)).not.toMatch(/CONFIDENTIAL|layoffs|salaries/);
     });

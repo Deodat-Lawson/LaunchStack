@@ -122,6 +122,7 @@ function buildConfig(): CoreConfig {
 
         ocr: {
             defaultProvider: server.OCR_DEFAULT_PROVIDER,
+            pdfStrategy: server.OCR_PDF_STRATEGY,
             appPublicUrl: server.APP_PUBLIC_URL,
             fileAccessTokenSecret: server.FILE_ACCESS_TOKEN_SECRET,
             visionModel: server.OCR_VISION_MODEL,
@@ -131,6 +132,7 @@ function buildConfig(): CoreConfig {
                     ? {
                           endpoint: server.AZURE_DOC_INTELLIGENCE_ENDPOINT,
                           key: server.AZURE_DOC_INTELLIGENCE_KEY,
+                          model: server.AZURE_DOC_INTELLIGENCE_MODEL,
                       }
                     : undefined,
             landingAi: server.LANDING_AI_API_KEY

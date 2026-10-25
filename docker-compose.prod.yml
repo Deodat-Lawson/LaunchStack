@@ -9,7 +9,8 @@
 #   - No self-hosted Whisper and no Docling: transcription resolves to the
 #     cloud provider (packages/llm registry default) and OCR routes to the
 #     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
-#     containers move behind opt-in profiles.
+#     containers move behind opt-in profiles, and the document converter is
+#     told there is no Docling (DOCLING_SERVE_URL empty) unless you opt in.
 #   - Inngest is self-hosted: the `inngest` service runs `inngest start` (the
 #     production server, not the dev server) with its history in an `inngest`
 #     database on the shared Postgres and its queue in `inngest-redis`. app and
@@ -90,6 +91,14 @@ services:
 
   document-converter:
     ports: !reset []
+    environment:
+      # The base stack points this at docling-serve, which the lean stack does
+      # not run (it is behind `--profile ocr`). Left set, the converter routes
+      # complex PDFs to Docling and fails every Office file it is asked to
+      # convert. Empty means "no Docling": complex PDFs go to the OCR provider
+      # and the worker converts Office files itself (mammoth/SheetJS). With
+      # `--profile ocr`, set DOCLING_SERVE_URL=http://docling-serve:5001.
+      DOCLING_SERVE_URL: ${DOCLING_SERVE_URL:-}
 
   # Added to the base stack by ADR-009; same rule as the others.
   gotenberg:

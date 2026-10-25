@@ -13,8 +13,30 @@
 
 export type TemplateCategory = "Mindmap" | "Flowchart" | "Planning" | "Technical";
 
+/** Every template id — also the key of its name in `mindmap.templates`. */
+export type TemplateId =
+    | "blank"
+    | "mindmap"
+    | "brainstorm"
+    | "concept-map"
+    | "flowchart"
+    | "user-flow"
+    | "swimlane"
+    | "fishbone"
+    | "org-chart"
+    | "kanban"
+    | "timeline"
+    | "swot"
+    | "customer-journey"
+    | "architecture"
+    | "erd";
+
 export interface TemplateMeta {
-    id: string;
+    id: TemplateId;
+    /**
+     * English. Shown through `mindmap.templates.<id>.name` and
+     * `….description`, so the list reads in the viewer's language.
+     */
     name: string;
     description: string;
     category: TemplateCategory;
@@ -133,6 +155,14 @@ export const TEMPLATE_META: readonly TemplateMeta[] = [
 export const TEMPLATE_META_BY_ID: Record<string, TemplateMeta> = Object.fromEntries(
     TEMPLATE_META.map(t => [t.id, t])
 );
+
+/** Each category's key under `mindmap.templateCategories`. */
+export const TEMPLATE_CATEGORY_KEYS = {
+    Mindmap: "mindmap",
+    Flowchart: "flowchart",
+    Planning: "planning",
+    Technical: "technical",
+} as const satisfies Record<TemplateCategory, string>;
 
 export const TEMPLATE_CATEGORIES: readonly TemplateCategory[] = [
     "Mindmap",

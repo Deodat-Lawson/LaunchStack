@@ -4,6 +4,7 @@
  * browser here (single-workspace people skip it). See ~/server/mcp.
  */
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { getServerSession } from "~/server/auth";
 import { activeWorkspaceOptions, loadConnectRequest } from "~/server/mcp/connect-request";
@@ -19,13 +20,14 @@ export default async function OAuthWorkspacePage({
 }) {
     const session = await getServerSession();
     if (!session) redirect("/signin");
+    const t = await getTranslations("auth.oauth");
     const params = await searchParams;
     const [request, workspaces] = await Promise.all([
         loadConnectRequest(params, session.user.id),
         activeWorkspaceOptions(session.user.id),
     ]);
     return (
-        <ConnectShell client={request.client} step="Step 1 of 2 · Workspace">
+        <ConnectShell client={request.client} step={t("stepWorkspace")}>
             {request.client ? (
                 <WorkspaceChoice assistant={request.client.name} workspaces={workspaces} />
             ) : (

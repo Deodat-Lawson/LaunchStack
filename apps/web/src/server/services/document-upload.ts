@@ -18,6 +18,23 @@ import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
 import { buildInternalFileUrl } from "@launchstack/store/crypto";
 import { getOcrConfig } from "@launchstack/conversion/ocr/config";
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
+
+/**
+ * An upload refused for a reason the person can act on (out of credits, a
+ * video host we cannot read). `message` is the English; a route words `copy`
+ * in its reader's language.
+ */
+export class UploadRefusedError extends Error {
+    readonly copy: Copy;
+
+    constructor(copy: Copy) {
+        super(englishCopy(copy));
+        this.name = "UploadRefusedError";
+        this.copy = copy;
+    }
+}
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -168,9 +185,7 @@ export async function processDocumentUpload({
         const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
         const sufficient = await hasTokens(user.companyId, estimatedCredits);
         if (!sufficient) {
-            throw new Error(
-                "This workspace has run out of processing credits, so the upload was not started. Contact your workspace owner to top up."
-            );
+            throw new UploadRefusedError({ key: "upload.server.errors.outOfCredits" });
         }
     }
 
@@ -351,9 +366,7 @@ export async function processVideoUrlUpload({
     embeddingIndexKey,
 }: VideoUrlUploadParams): Promise<DocumentUploadResult> {
     if (!isVideoUrl(videoUrl)) {
-        throw new Error(
-            "Unsupported video URL. Supported platforms include YouTube, Vimeo, TikTok, Twitter/X, and more."
-        );
+        throw new UploadRefusedError({ key: "upload.server.errors.unsupportedVideoUrl" });
     }
 
     const documentCategory = category;

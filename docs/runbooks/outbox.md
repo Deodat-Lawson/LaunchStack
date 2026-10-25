@@ -51,6 +51,27 @@ untouched), so replaying stage N always re-runs stages N+1..end.
 Re-uploading the same file (same creation key) does the same thing through
 the product: the lifecycle revives a dead event automatically.
 
+People can also do it themselves: the **Retry** button on a failed source in
+the Sources rail calls `POST /api/documents/[id]/retry`
+(`retrySourceProcessing` in `@launchstack/orchestration`). It needs the same
+access as uploading a new version, revives the earliest `dead` stage for the
+current version's job (or re-enqueues `source.version.created` when none is
+dead), requeues the job, increments `pdr_ai_v2_ocr_jobs.retry_count`, and
+lifts the document's failure stamp. A source that fails again after a retry
+offers a "Contact us about this error" link carrying the job id — the
+`traceId` to filter the worker logs by.
+
+## Progress and failure messages in the UI
+
+Each ingestion stage writes `pdr_ai_v2_ocr_jobs.progress` (`reading` →
+`chunking` → `embedding` with `done`/`total` texts after every batch →
+`finishing`). The documents list returns it, with any stage row waiting out
+a backoff, so the rail shows "Embedding 120/267 · 61%" or "Retrying in 8 min"
+instead of a static "syncing…". The rail never shows the raw `last_error`
+or `error_message` as the message: `apps/web/src/lib/source-failure.ts` maps
+it to a sentence ("The embedding service is over its usage limit…"), and
+the raw text sits behind the failure card's Details toggle.
+
 ## Stuck `processing` rows
 
 A worker killed mid-handler leaves rows in `processing`. The reclaimer

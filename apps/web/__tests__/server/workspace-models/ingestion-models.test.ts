@@ -8,6 +8,9 @@
  * Both endpoints are real local HTTP servers, so a request the server's
  * client would make by any route is seen — and the first test proves the
  * server's endpoint does see traffic, so "no request" is not vacuous.
+ *
+ * Every one of those calls is also counted against the workspace whose
+ * ingestion made it, whichever endpoint served it.
  */
 
 const mockIsCloud = jest.fn(() => false);
@@ -18,6 +21,14 @@ const mockReadKey = jest.fn();
 jest.mock("~/server/workspace-models/store", () => ({
     getWorkspaceEndpointRow: (...args: unknown[]) => mockRow(...args),
     readWorkspaceEndpointKey: (...args: unknown[]) => mockReadKey(...args),
+}));
+
+const counted: Record<string, unknown>[] = [];
+jest.mock("~/server/ai-usage/record", () => ({
+    aiUsageRecorder: (companyId: unknown, feature: string) => ({
+        record: (event: Record<string, unknown>) =>
+            counted.push({ companyId: Number(companyId), feature, ...event }),
+    }),
 }));
 
 import http from "node:http";
@@ -190,6 +201,7 @@ function systemOf(body: Record<string, unknown>): string {
 
 beforeEach(() => {
     seen.length = 0;
+    counted.length = 0;
     resetWorkspaceChatModelsCache();
     mockIsCloud.mockReturnValue(false);
     mockRow.mockReset();
@@ -235,7 +247,7 @@ describe("document ingestion outside a workspace's own model", () => {
 
     it("still uses the server's in a workspace that connected but chose no model", async () => {
         mockRow.mockResolvedValue(workspaceRow(null));
-        await withWorkspaceChatModels(5, ingestOnce);
+        await withWorkspaceChatModels(5, "ingestion", ingestOnce);
         expect(requestsTo("workspace")).toEqual([]);
         expect(requestsTo("deployment")).toHaveLength(2);
         expect(requestsTo("deployment-ner")).toHaveLength(1);
@@ -246,7 +258,7 @@ describe("document ingestion in a workspace on its own model", () => {
     it("sends every call to the workspace's endpoint and none to the server's", async () => {
         mockRow.mockResolvedValue(workspaceRow(selection()));
 
-        const out = await withWorkspaceChatModels(5, ingestOnce);
+        const out = await withWorkspaceChatModels(5, "ingestion", ingestOnce);
 
         expect(requestsTo("deployment")).toEqual([]);
         expect(requestsTo("deployment-ner")).toEqual([]);
@@ -286,7 +298,7 @@ describe("document ingestion in a workspace on its own model", () => {
         mockRow.mockResolvedValue(
             workspaceRow({ default: { id: "ws-default", vision: true, reasoning: false } })
         );
-        await withWorkspaceChatModels(5, ingestOnce);
+        await withWorkspaceChatModels(5, "ingestion", ingestOnce);
         expect(requestsTo("workspace").map(r => r.body.model)).toEqual([
             "ws-default",
             "ws-default",
@@ -308,7 +320,7 @@ describe("document ingestion in a workspace on its own model", () => {
                 })
             )
         );
-        await withWorkspaceChatModels(5, async () =>
+        await withWorkspaceChatModels(5, "ingestion", async () =>
             (await getNERProvider()).extract(["Acme Corp opened an office."])
         );
         expect(requestsTo("workspace")[0]!.body.response_format).toEqual({ type: "json_object" });
@@ -320,7 +332,7 @@ describe("document ingestion in a workspace on its own model", () => {
         );
         configureVlmEnrichment({ ollamaBaseUrl: `${base}/deployment-ollama` });
 
-        const out = await withWorkspaceChatModels(5, ingestOnce);
+        const out = await withWorkspaceChatModels(5, "ingestion", ingestOnce);
 
         expect(out.vlmConfigured).toBe(false);
         expect(out.imageDescription).toBe("");
@@ -338,7 +350,7 @@ describe("document ingestion in a workspace on its own model", () => {
             throw new Error("unseal failed");
         });
 
-        const out = await withWorkspaceChatModels(5, ingestOnce);
+        const out = await withWorkspaceChatModels(5, "ingestion", ingestOnce);
 
         expect(seen).toEqual([]);
         expect(out.tableDescription).toMatch(/^Table from Page 1 \(Table 1\) containing /);
@@ -356,12 +368,42 @@ describe("document ingestion in a workspace on its own model", () => {
             Number(companyId) === 5 ? workspaceRow(selection()) : null
         );
         await Promise.all([
-            withWorkspaceChatModels(5, ingestOnce),
-            withWorkspaceChatModels(6, ingestOnce),
+            withWorkspaceChatModels(5, "ingestion", ingestOnce),
+            withWorkspaceChatModels(6, "ingestion", ingestOnce),
         ]);
         expect(requestsTo("workspace")).toHaveLength(3);
         expect(requestsTo("deployment")).toHaveLength(2);
         expect(requestsTo("deployment-ner")).toHaveLength(1);
+    });
+
+    it("counts every call against the workspace that made it, on whichever endpoint served it", async () => {
+        mockRow.mockImplementation(async (companyId: number) =>
+            Number(companyId) === 5 ? workspaceRow(selection()) : null
+        );
+        await Promise.all([
+            withWorkspaceChatModels(5, "ingestion", ingestOnce),
+            withWorkspaceChatModels(6, "ingestion", ingestOnce),
+        ]);
+        // A JSON answer's usage is read from a clone, a tick after the caller has it.
+        for (let i = 0; i < 50 && counted.length < 6; i++) {
+            await new Promise(resolve => setTimeout(resolve, 5));
+        }
+
+        const tokens = { inputTokens: 10, outputTokens: 5 };
+        const own = counted.filter(c => c.companyId === 5);
+        expect(own.map(c => c.route).sort()).toEqual(["fast", "fast", "vision"]);
+        expect(own.map(c => c.modelId).sort()).toEqual(["ws-fast", "ws-fast", "ws-vision"]);
+        expect(own.every(c => c.owner === "workspace" && c.feature === "ingestion")).toBe(true);
+        expect(own.every(c => c.inputTokens === 10 && c.outputTokens === 5)).toBe(true);
+
+        const server = counted.filter(c => c.companyId === 6);
+        expect(server).toHaveLength(3);
+        for (const call of server) {
+            expect(call).toMatchObject({ ...tokens, owner: "deployment", route: "auxiliary" });
+        }
+        expect(server.map(c => c.modelId).sort()).toEqual(
+            [GEMINI_DEFAULT_MODEL, GEMINI_FAST_MODEL, GEMINI_FAST_MODEL].sort()
+        );
     });
 });
 

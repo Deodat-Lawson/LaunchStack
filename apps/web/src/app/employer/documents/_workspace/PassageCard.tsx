@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { TextQuote, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import type { ChatPassage } from "~/lib/chat-passages";
@@ -24,6 +25,8 @@ interface PassageCardProps {
  * raw `>` lines and a machine link in the composer and in the transcript.
  */
 export function PassageCard({ passage, onOpen, onRemove, className }: PassageCardProps) {
+    const t = useTranslations("chat.passage");
+    const tc = useTranslations("common");
     const [expanded, setExpanded] = useState(false);
     const [clamped, setClamped] = useState(false);
     const body = useRef<HTMLQuoteElement>(null);
@@ -53,7 +56,7 @@ export function PassageCard({ passage, onOpen, onRemove, className }: PassageCar
                     <Button
                         variant="link"
                         className="text-ink-2 hover:text-brand h-auto min-w-0 justify-start p-0 text-xs font-medium"
-                        title="Show this passage in the document"
+                        title={t("showInDocument")}
                         onClick={onOpen}
                     >
                         <span className="truncate">{passage.title}</span>
@@ -62,14 +65,16 @@ export function PassageCard({ passage, onOpen, onRemove, className }: PassageCar
                     <span className="text-ink-2 min-w-0 truncate font-medium">{passage.title}</span>
                 )}
                 {passage.page ? (
-                    <span className="mono shrink-0 text-[11px]">p. {passage.page}</span>
+                    <span className="mono shrink-0 text-[11px]">
+                        {t("page", { page: passage.page })}
+                    </span>
                 ) : null}
                 {onRemove ? (
                     <Button
                         variant="ghost"
                         size="icon"
                         className="text-ink-3 -my-1 -mr-1.5 ml-auto size-6 shrink-0"
-                        aria-label={`Remove passage from ${passage.title}`}
+                        aria-label={t("remove", { title: passage.title })}
                         onClick={onRemove}
                     >
                         <X className="size-3.5" />
@@ -93,7 +98,7 @@ export function PassageCard({ passage, onOpen, onRemove, className }: PassageCar
                     aria-expanded={expanded}
                     onClick={() => setExpanded(value => !value)}
                 >
-                    {expanded ? "Show less" : "Show all"}
+                    {expanded ? tc("actions.showLess") : t("showAll")}
                 </Button>
             ) : null}
         </figure>

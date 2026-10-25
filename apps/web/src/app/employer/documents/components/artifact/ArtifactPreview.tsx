@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
 
@@ -49,18 +50,19 @@ function SandboxFrame({
     content: string;
     allowScripts?: boolean;
 }) {
+    const t = useTranslations("viewers.artifact");
     const [loading, setLoading] = useState(true);
     return (
         <div className="relative h-full w-full">
             {loading && (
                 <div className="text-ink-3 absolute inset-0 flex items-center justify-center gap-2 text-[13px]">
                     <Loader2 className="size-4 animate-spin" />
-                    Rendering…
+                    {t("rendering")}
                 </div>
             )}
             <iframe
                 srcDoc={content}
-                title="Artifact preview"
+                title={t("frameTitle")}
                 // No allow-same-origin: scripts run in an opaque origin, cut
                 // off from this app's session. Do not add it.
                 sandbox={
@@ -95,6 +97,7 @@ function MermaidPreview({ code }: { code: string }) {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const isDark = useDarkMode();
+    const t = useTranslations("viewers.artifact");
 
     useEffect(() => {
         if (!code.trim()) {
@@ -120,7 +123,7 @@ function MermaidPreview({ code }: { code: string }) {
                 }
             } catch (err) {
                 if (!cancelled) {
-                    setError(err instanceof Error ? err.message : "Couldn't render the diagram");
+                    setError(err instanceof Error ? err.message : "");
                 }
             } finally {
                 if (!cancelled) setLoading(false);
@@ -133,10 +136,10 @@ function MermaidPreview({ code }: { code: string }) {
         };
     }, [code, isDark]);
 
-    if (error) {
+    if (error !== null) {
         return (
             <div className="flex h-full flex-col gap-3 overflow-auto px-6 py-5">
-                <p className="text-danger text-[13px]">{error}</p>
+                <p className="text-danger text-[13px]">{error || t("diagramFailed")}</p>
                 <SourceView content={code} />
             </div>
         );
@@ -146,7 +149,7 @@ function MermaidPreview({ code }: { code: string }) {
             {loading && (
                 <div className="text-ink-3 absolute inset-0 flex items-center justify-center gap-2 text-[13px]">
                     <Loader2 className="size-4 animate-spin" />
-                    Rendering…
+                    {t("rendering")}
                 </div>
             )}
             <div ref={containerRef} className="flex min-h-full items-center justify-center" />

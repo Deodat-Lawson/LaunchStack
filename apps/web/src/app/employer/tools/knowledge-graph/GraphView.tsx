@@ -10,6 +10,7 @@
 
 import { type PointerEvent, useEffect, useMemo, useRef, useState, type WheelEvent } from "react";
 import { Plus, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface GraphNode {
     id: number;
@@ -106,6 +107,9 @@ export interface GraphViewProps {
 }
 
 export function GraphView({ documentId }: GraphViewProps) {
+    const t = useTranslations("tools.knowledgeGraph");
+    const tRef = useRef(t);
+    tRef.current = t;
     const [data, setData] = useState<GraphResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -130,12 +134,12 @@ export function GraphView({ documentId }: GraphViewProps) {
                 params.set("limit", "120");
                 if (documentId != null) params.set("documentId", String(documentId));
                 const res = await fetch(`/api/graph/entities?${params.toString()}`);
-                if (!res.ok) throw new Error(`Failed (${res.status})`);
+                if (!res.ok) throw new Error(tRef.current("requestFailed", { status: res.status }));
                 const json = (await res.json()) as GraphResponse;
                 if (!cancelled) setData(json);
             } catch (err) {
                 if (!cancelled) {
-                    setError(err instanceof Error ? err.message : "Failed to load graph");
+                    setError(err instanceof Error ? err.message : tRef.current("loadFailed"));
                 }
             } finally {
                 if (!cancelled) setLoading(false);
@@ -250,7 +254,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                 <input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Find an entity…"
+                    placeholder={t("searchPlaceholder")}
                     style={{
                         flex: 1,
                         border: "none",
@@ -272,10 +276,10 @@ export function GraphView({ documentId }: GraphViewProps) {
                         }}
                         title={
                             data.source === "neo4j"
-                                ? "Served from Neo4j"
+                                ? t("servedFrom.neo4j")
                                 : data.source === "postgres"
-                                  ? "Served from Postgres fallback"
-                                  : "No graph data yet"
+                                  ? t("servedFrom.postgres")
+                                  : t("servedFrom.none")
                         }
                     >
                         {data.source}
@@ -284,13 +288,10 @@ export function GraphView({ documentId }: GraphViewProps) {
             </div>
 
             {/* Status banners */}
-            {loading && <CenterNote>Loading knowledge graph…</CenterNote>}
+            {loading && <CenterNote>{t("loading")}</CenterNote>}
             {error && !loading && <CenterNote tone="danger">{error}</CenterNote>}
             {!loading && !error && data && data.nodes.length === 0 && (
-                <CenterNote>
-                    No entities extracted. Entity extraction is off by default; set
-                    ENABLE_ENTITY_EXTRACTION=true, upload a document, then come back to this view.
-                </CenterNote>
+                <CenterNote>{t("empty")}</CenterNote>
             )}
 
             {layout && (
@@ -491,8 +492,10 @@ export function GraphView({ documentId }: GraphViewProps) {
                                                 : n.name}
                                         </text>
                                         <text x="12" y="38" fontSize="10.5" fill="var(--ink-3)">
-                                            {n.label} · {n.mentionCount} mention
-                                            {n.mentionCount !== 1 ? "s" : ""}
+                                            {t("mentions", {
+                                                label: n.label,
+                                                count: n.mentionCount,
+                                            })}
                                         </text>
                                         <text
                                             x="12"
@@ -501,8 +504,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                                             fill="var(--accent-ink)"
                                             fontWeight="500"
                                         >
-                                            {edgesForNode.length} relationship
-                                            {edgesForNode.length !== 1 ? "s" : ""}
+                                            {t("relationships", { count: edgesForNode.length })}
                                         </text>
                                     </g>
                                 );
@@ -542,7 +544,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                             marginBottom: 2,
                         }}
                     >
-                        Entity types
+                        {t("entityTypes")}
                     </div>
                     {Object.entries(layout!.byLabel)
                         .sort((a, b) => b[1].count - a[1].count)
@@ -574,8 +576,10 @@ export function GraphView({ documentId }: GraphViewProps) {
                         className="mono"
                         style={{ fontSize: 10, color: "var(--ink-3)", lineHeight: 1.5 }}
                     >
-                        {data.stats.entities} nodes · {data.stats.relationships} edges
-                        {data.stats.truncated && " · truncated"}
+                        {t(data.stats.truncated ? "statsTruncated" : "stats", {
+                            entities: data.stats.entities,
+                            relationships: data.stats.relationships,
+                        })}
                     </div>
                 </div>
             )}
@@ -598,6 +602,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                 >
                     <button
                         onClick={() => setZoom(z => Math.min(3, z + 0.2))}
+                        aria-label={t("zoomIn")}
                         style={{
                             width: 28,
                             height: 28,
@@ -615,7 +620,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                             setZoom(1);
                             setPan({ x: 0, y: 0 });
                         }}
-                        title="Reset view"
+                        title={t("resetView")}
                         style={{
                             width: 28,
                             height: 28,
@@ -632,6 +637,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                     </button>
                     <button
                         onClick={() => setZoom(z => Math.max(0.4, z - 0.2))}
+                        aria-label={t("zoomOut")}
                         style={{
                             width: 28,
                             height: 28,
@@ -664,7 +670,7 @@ export function GraphView({ documentId }: GraphViewProps) {
                     }}
                     className="mono"
                 >
-                    click to select · scroll to zoom · drag to pan
+                    {t("hint")}
                 </div>
             )}
         </div>

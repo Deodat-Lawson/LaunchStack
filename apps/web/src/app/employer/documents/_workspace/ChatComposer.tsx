@@ -25,6 +25,7 @@ import {
     Star,
     X,
 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -47,6 +48,7 @@ import {
     usableAsPrimary,
     usableAsSubagent,
 } from "~/lib/agents/definition";
+import { turnNote } from "~/lib/agents/i18n";
 import { cn } from "~/lib/utils";
 import { useChatRoutes, type ChatRouteName } from "../hooks/useChatRoutes";
 import { SourceChip, type ComposerSeed } from "./AskPanel";
@@ -81,6 +83,7 @@ import {
 import type { ComposerContext, RichChatEditorHandle } from "./RichChatEditor";
 import type { JSONContent } from "@tiptap/react";
 import {
+    ComposerImageError,
     needsComposerImagePreparation,
     normalizeComposerFile,
     resizeComposerImage,
@@ -138,18 +141,20 @@ interface UploadRow {
     progress: number;
     error?: string;
 }
-const ROUTES: ChatRouteName[] = ["default", "fast", "reasoning", "vision"];
-/**
- * What each route is called on screen. The picker chooses a route, never a
- * model: which model serves it is the operator's configuration and the screen
- * does not name it.
+const ROUTES = ["default", "fast"] as const satisfies readonly ChatRouteName[];
+type PickerRoute = (typeof ROUTES)[number];
+const isPickerRoute = (route: unknown): route is PickerRoute =>
+    ROUTES.some(option => option === route);
+/** Old drafts and preferences may name a route the picker no longer offers. */
+const pickerRoute = (route: unknown): PickerRoute => (isPickerRoute(route) ? route : "default");
+/*
+ * What each route is called on screen is `chat.composer.routes.<route>`. The
+ * picker chooses a route, never a model: which model serves it is the
+ * operator's configuration and the screen does not name it. It offers two
+ * tiers only. Images go to a route that reads them on their own, and how hard
+ * the model thinks is the reasoning effort, not a separate tier — so the
+ * `reasoning` and `vision` routes stay server-side and are never picked here.
  */
-const ROUTE_LABELS: Record<ChatRouteName, { label: string; blurb: string }> = {
-    default: { label: "Standard", blurb: "Balanced answers for most questions" },
-    fast: { label: "Fast", blurb: "Quicker, lighter answers" },
-    reasoning: { label: "Reasoning", blurb: "Thinks longer before answering" },
-    vision: { label: "Vision", blurb: "Reads images you attach" },
-};
 function defaultSendKey(): ComposerPreferences["sendKey"] {
     return typeof window !== "undefined" &&
         typeof window.matchMedia === "function" &&
@@ -157,12 +162,13 @@ function defaultSendKey(): ComposerPreferences["sendKey"] {
         ? "mod-enter"
         : "enter";
 }
+/** Slash commands; each one's description is `chat.composer.commands.<id>`. */
 const COMMANDS = [
-    { id: "new", name: "/new", detail: "Start a new conversation" },
-    { id: "model", name: "/model", detail: "Choose a configured model" },
-    { id: "plan", name: "/plan", detail: "Plan before answering" },
-    { id: "default", name: "/default", detail: "Return to normal answers" },
-    { id: "sources", name: "/sources", detail: "Choose source context" },
+    { id: "new", name: "/new" },
+    { id: "model", name: "/model" },
+    { id: "plan", name: "/plan" },
+    { id: "default", name: "/default" },
+    { id: "sources", name: "/sources" },
 ] as const;
 
 export function Composer({
@@ -192,6 +198,13 @@ export function Composer({
     agentKey,
     onChangeAgent,
 }: ComposerProps) {
+    const t = useTranslations("chat.composer");
+    const tc = useTranslations("common");
+    const tMenu = useTranslations("chat.contextMenu");
+    const tAgents = useTranslations("agents");
+    const format = useFormatter();
+    const routeLabel = (route: PickerRoute) => t(`routes.${route}.label`);
+    const routeBlurb = (route: PickerRoute) => t(`routes.${route}.blurb`);
     // Capabilities are automatic; legacy draft flags no longer change them.
     const webSearch = true;
     const thinking = true;
@@ -209,8 +222,8 @@ export function Composer({
     const [attachError, setAttachError] = useState<string | null>(null);
     const [storageError, setStorageError] = useState(false);
     const [failedPromptAvailable, setFailedPromptAvailable] = useState(false);
-    const [modelRoute, setModelRoute] = useState<ChatRouteName>("default");
-    const [modelRoutes, setModelRoutes] = useState<ChatRouteName[]>([]);
+    const [modelRoute, setModelRoute] = useState<PickerRoute>("default");
+    const [modelRoutes, setModelRoutes] = useState<PickerRoute[]>([]);
     const [threadRefs, setThreadRefs] = useState<string[]>([]);
     const [passages, setPassages] = useState<ChatPassage[]>([]);
     const [inspectedThread, setInspectedThread] = useState<string | null>(null);
@@ -353,10 +366,10 @@ export function Composer({
         { webSearch, thinking, hasAttachments: attachments.length > 0 }
     );
     const routeInfo = chatRoutes.config.routes[modelRoute];
-    const effectiveRoute =
-        modelRoute === "default" &&
-        attachments.some(item => item.kind === "image") &&
-        !routeInfo?.vision?.supported
+    // Images are always on: a picked tier that can't read them hands the turn
+    // to the vision route rather than asking the reader to switch.
+    const effectiveRoute: ChatRouteName =
+        attachments.some(item => item.kind === "image") && !routeInfo?.vision?.supported
             ? "vision"
             : modelRoute;
     const effortInfo = chatRoutes.config.routes[effectiveRoute]?.reasoning;
@@ -386,7 +399,7 @@ export function Composer({
                   .map(source => ({
                       key: `source:${source.id}`,
                       label: source.title,
-                      detail: "Source context",
+                      detail: t("mention.source"),
                       agent: null as ChatAgentOption | null,
                       source,
                       sourceIds: null as string[] | null,
@@ -403,7 +416,7 @@ export function Composer({
                   .map(folder => ({
                       key: `folder:${folder.id}`,
                       label: folder.name,
-                      detail: "Folder context",
+                      detail: t("mention.folder"),
                       agent: null as ChatAgentOption | null,
                       source: null as WorkspaceSource | null,
                       sourceIds: sources
@@ -417,7 +430,7 @@ export function Composer({
                   .map(thread => ({
                       key: `thread:${thread.id}`,
                       label: thread.title,
-                      detail: "Conversation context",
+                      detail: t("mention.thread"),
                       agent: null as ChatAgentOption | null,
                       source: null as WorkspaceSource | null,
                       sourceIds: null as string[] | null,
@@ -436,7 +449,7 @@ export function Composer({
                 return {
                     id,
                     kind: "source" as const,
-                    label: source?.title ?? `Unavailable source ${id}`,
+                    label: source?.title ?? t("unavailableSourceLabel", { id }),
                     unavailable: !source,
                     markdown: `[Source: ${(source?.title ?? id).replace(/([\\\[\]])/g, "\\$1")}](#launchstack-source-${encodeURIComponent(id)})`,
                 };
@@ -453,12 +466,12 @@ export function Composer({
                 kind: "thread" as const,
                 label:
                     threadContextOptions.find(thread => thread.id === id)?.title ??
-                    "Referenced conversation",
+                    t("referencedConversation"),
                 markdown: `[Conversation: ${threadContextOptions.find(thread => thread.id === id)?.title ?? id}](#launchstack-thread-${encodeURIComponent(id)})`,
                 unavailable: !threadContextOptions.some(thread => thread.id === id),
             })),
         ],
-        [selected, sources, attachments, threadRefs, threadContextOptions]
+        [selected, sources, attachments, threadRefs, threadContextOptions, t]
     );
 
     const updateAttachments = useCallback((next: EphemeralAttachment[]) => {
@@ -532,8 +545,8 @@ export function Composer({
                     : null
             );
             updateAttachments(draft.attachments);
-            setModelRoute(ROUTES.includes(draft.modelRoute!) ? draft.modelRoute! : "default");
-            setModelRoutes((draft.modelRoutes ?? []).filter(route => ROUTES.includes(route)));
+            setModelRoute(pickerRoute(draft.modelRoute));
+            setModelRoutes((draft.modelRoutes ?? []).filter(isPickerRoute));
             setThreadRefs((draft.threadRefs ?? []).filter(id => typeof id === "string"));
             setPassages((draft.passages ?? []).filter(isChatPassage));
             setMissingFiles(draft.pendingFiles ?? []);
@@ -603,14 +616,12 @@ export function Composer({
                 : defaultSendKey()
         );
         setFavorites(
-            Array.isArray(preferences?.favorites)
-                ? preferences.favorites.filter(value => ROUTES.includes(value as ChatRouteName))
-                : []
+            Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isPickerRoute) : []
         );
         setFollowUp(preferences?.followUp === "interrupt" ? "interrupt" : "queue");
         setEditorMode(preferences?.editorMode === "rich" ? "rich" : "plain");
         if (!isComposerDraft(stored)) {
-            if (ROUTES.includes(preferences.modelRoute!)) setModelRoute(preferences.modelRoute!);
+            if (isPickerRoute(preferences.modelRoute)) setModelRoute(preferences.modelRoute);
             if (typeof preferences?.reasoningEffort === "string")
                 setReasoningEffort(preferences.reasoningEffort);
         }
@@ -793,8 +804,8 @@ export function Composer({
             updateAttachments(seed.attachments);
         }
         if (seed.refs) callbacks.current.setSelected(seed.refs);
-        if (seed.modelRoute) setModelRoute(seed.modelRoute);
-        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes);
+        if (seed.modelRoute) setModelRoute(pickerRoute(seed.modelRoute));
+        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes.filter(isPickerRoute));
         if (seed.threadRefs) setThreadRefs(seed.threadRefs);
         if (seed.reasoningEffort) setReasoningEffort(seed.reasoningEffort);
         if (seed.chatMode) setChatMode(seed.chatMode);
@@ -964,16 +975,12 @@ export function Composer({
                         ]
                     );
                     toast.error(
-                        persisted
-                            ? "Message wasn't sent. The failed prompt was saved in the original conversation; its newer draft is safe."
-                            : "Message wasn't sent and draft storage is unavailable. Copy the original question from its conversation history."
+                        persisted ? t("errors.savedInOriginal") : t("errors.storageUnavailable")
                     );
                 } else {
                     const persisted = writeComposerStorage(originKey, failedDraft);
                     toast.error(
-                        persisted
-                            ? "Message wasn't sent. Its draft was restored in the original conversation."
-                            : "Message wasn't sent and draft storage is unavailable. Copy the original question from its conversation history."
+                        persisted ? t("errors.restoredInOriginal") : t("errors.storageUnavailable")
                     );
                 }
                 return;
@@ -987,7 +994,7 @@ export function Composer({
                 !current?.pendingFiles?.length
             ) {
                 applyDraft(failedDraft);
-                setAttachError("Message wasn't sent. Your draft has been restored.");
+                setAttachError(t("errors.draftRestored"));
             } else {
                 const next = [
                     {
@@ -999,9 +1006,7 @@ export function Composer({
                     ...latestStashes.current,
                 ];
                 saveStashes(next);
-                setAttachError(
-                    "Message wasn't sent. The failed prompt is saved; your current draft is safe."
-                );
+                setAttachError(t("errors.promptSaved"));
                 setFailedPromptAvailable(true);
             }
         };
@@ -1009,11 +1014,11 @@ export function Composer({
         try {
             accepted = onSend(payload);
         } catch {
-            setAttachError("Message wasn't sent. Your draft is still here.");
+            setAttachError(t("errors.notSent"));
             return false;
         }
         if (accepted === false) {
-            setAttachError("Message wasn't sent. Your draft is still here.");
+            setAttachError(t("errors.notSent"));
             return false;
         }
         if (
@@ -1023,9 +1028,7 @@ export function Composer({
             !accepted.success
         ) {
             applyDraft(retryDraft(accepted.failedModelRoutes));
-            setAttachError(
-                "Some model responses failed. Your draft is ready to retry only those models."
-            );
+            setAttachError(t("errors.someModelsFailed"));
             return false;
         }
         setText("");
@@ -1090,7 +1093,9 @@ export function Composer({
             if (request.status < 200 || request.status >= 300 || !data.url) {
                 fail(
                     data.error ??
-                        `Upload failed (${request.status || "network error"}). Retry or remove this file.`
+                        t("errors.uploadFailedStatus", {
+                            status: request.status || t("errors.networkError"),
+                        })
                 );
                 return;
             }
@@ -1110,8 +1115,8 @@ export function Composer({
             ]);
             updateUploads(uploadsRef.current.filter(item => item.id !== row.id));
         };
-        request.onerror = () => fail("Upload failed. Check your connection, then retry.");
-        request.onabort = () => fail("Upload canceled. Retry or remove this file.", "canceled");
+        request.onerror = () => fail(t("errors.uploadFailed"));
+        request.onabort = () => fail(t("errors.uploadCanceled"), "canceled");
         const form = new FormData();
         form.append("file", row.file);
         form.append("purpose", "chat");
@@ -1134,9 +1139,7 @@ export function Composer({
                 files.length >
             ATTACH_MAX_COUNT
         ) {
-            setAttachError(
-                `Attach up to ${ATTACH_MAX_COUNT} files per message. Remove files before adding more.`
-            );
+            setAttachError(t("errors.tooManyFiles", { max: ATTACH_MAX_COUNT }));
             return;
         }
         if (!prepared && files.some(needsComposerImagePreparation)) {
@@ -1156,9 +1159,11 @@ export function Composer({
                         return {
                             file: null,
                             error:
-                                error instanceof Error
-                                    ? error.message
-                                    : `“${file.name}” exceeds 10 MiB. Resize it before attaching.`,
+                                error instanceof ComposerImageError
+                                    ? t(`imageErrors.${error.code}`, { name: error.fileName })
+                                    : error instanceof Error
+                                      ? error.message
+                                      : t("errors.imageTooLargeResize", { name: file.name }),
                         };
                     }
                 })
@@ -1185,7 +1190,7 @@ export function Composer({
                         preparingBatches.current.values()
                     ).flat();
                     setPreparingFiles(preparingBatches.current.size > 0);
-                    setAttachError("Images could not be prepared. Attach them again.");
+                    setAttachError(t("errors.imagesNotPrepared"));
                 });
             return;
         }
@@ -1194,9 +1199,7 @@ export function Composer({
             retainedAttachments.length + uploadsRef.current.length + files.length >
             ATTACH_MAX_COUNT
         ) {
-            setAttachError(
-                `Attach up to ${ATTACH_MAX_COUNT} files per message. Remove files before adding more.`
-            );
+            setAttachError(t("errors.tooManyFiles", { max: ATTACH_MAX_COUNT }));
             return;
         }
         const next: UploadRow[] = [];
@@ -1210,40 +1213,38 @@ export function Composer({
         for (const file of files) {
             const kind = kindForFile(file);
             if (!kind) {
-                errors.push(
-                    `“${file.name}” is unsupported. Attach images, PDF, DOCX, or text. Add audio and video through Sources.`
-                );
+                errors.push(t("errors.unsupported", { name: file.name }));
                 continue;
             }
             if (file.size > (kind === "image" ? IMAGE_MAX_BYTES : FILE_MAX_BYTES)) {
                 errors.push(
-                    `“${file.name}” is too large. ${kind === "image" ? "Images: 10 MiB" : "Documents: 50 MiB"} per file.`
+                    kind === "image"
+                        ? t("errors.imageTooLarge", { name: file.name })
+                        : t("errors.documentTooLarge", { name: file.name })
                 );
                 continue;
             }
             if (kind === "image") {
                 if (!chatRoutes.visionEnabled) {
-                    errors.push(
-                        chatRoutes.visionDisabledReason ??
-                            "Images need an image-capable model on the vision route."
-                    );
+                    errors.push(chatRoutes.visionDisabledReason ?? t("errors.visionUnavailable"));
                     continue;
                 }
                 const vision = chatRoutes.config.routes.vision.vision;
                 if (vision?.mimeTypes?.length && !vision.mimeTypes.includes(file.type)) {
                     errors.push(
-                        `“${file.name}” is not supported by the configured image model. Convert it to ${vision.mimeTypes.join(", ")}.`
+                        t("errors.imageTypeUnsupported", {
+                            name: file.name,
+                            types: vision.mimeTypes.join(", "),
+                        })
                     );
                     continue;
                 }
                 if (vision?.maxImages !== undefined && imageCount >= vision.maxImages) {
-                    errors.push(
-                        `This image model accepts at most ${vision.maxImages} image(s) per message.`
-                    );
+                    errors.push(t("errors.tooManyImages", { max: vision.maxImages }));
                     continue;
                 }
                 if (imageBytes + file.size > TOTAL_IMAGE_MAX_BYTES) {
-                    errors.push("Images in one message must total 80 MiB or less.");
+                    errors.push(t("errors.imagesTotal"));
                     continue;
                 }
                 imageCount++;
@@ -1326,7 +1327,7 @@ export function Composer({
     };
     const handleStash = () => {
         if (uploadBlocked) {
-            setAttachError("Finish, retry, or remove uploads before saving a prompt.");
+            setAttachError(t("errors.finishUploads"));
             return;
         }
         if (hasContent) {
@@ -1359,10 +1360,10 @@ export function Composer({
             setThreadRefs([]);
             setPassages([]);
             richChipIds.current = [];
-            toast.success("Prompt saved. Press ⌘/Ctrl+S in an empty composer to restore it.");
+            toast.success(t("promptSaved"));
         } else if (stashes.length === 1) restoreStash(stashes[0]!);
         else if (stashes.length > 1) setStashOpen(true);
-        else toast.info("No saved prompts yet.");
+        else toast.info(t("noSavedPrompts"));
     };
     const onComposerKeyDown = (event: KeyboardEvent | React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (
@@ -1505,7 +1506,7 @@ export function Composer({
             : "";
     const composerTarget = useContextTarget({
         kind: "composer",
-        label: "Composer actions",
+        label: t("menuLabel"),
         editable: true,
         items: () =>
             buildComposerMenuItems(
@@ -1519,7 +1520,7 @@ export function Composer({
                     onCut: () => {
                         void copyText(selectedText()).then(ok => {
                             if (ok) replaceSelection("");
-                            else toast.error("Couldn't cut");
+                            else toast.error(t("cutFailed"));
                         });
                     },
                     onCopy: () => {
@@ -1527,10 +1528,7 @@ export function Composer({
                     },
                     onPaste: () => {
                         void readClipboardText().then(value => {
-                            if (value === null)
-                                toast.info(
-                                    "Clipboard access was refused. Paste with your keyboard."
-                                );
+                            if (value === null) toast.info(t("pasteRefused"));
                             else if (shouldAttachPaste(value, text, selectedText().length))
                                 addFiles([
                                     new File([value], `pasted-text-${Date.now()}.txt`, {
@@ -1555,7 +1553,8 @@ export function Composer({
                         setAttachError(null);
                         setRecallIndex(null);
                     },
-                }
+                },
+                tMenu
             ),
     });
 
@@ -1585,12 +1584,12 @@ export function Composer({
                 }
             }}
         >
-            {dragging && (
-                <p className="text-brand mb-2 text-sm">Drop files to attach them to this message</p>
-            )}
+            {dragging && <p className="text-brand mb-2 text-sm">{t("dropHint")}</p>}
             {selected.length > 0 && (
                 <div className="border-line mb-2.5 flex flex-wrap items-center gap-1.5 border-b border-dashed pb-2.5">
-                    <span className="mono text-ink-3 text-[10px] uppercase">Context</span>
+                    <span className="mono text-ink-3 text-[11px] uppercase">
+                        {t("contextLabel")}
+                    </span>
                     {selSources.map(source => (
                         <SourceChip
                             key={source.id}
@@ -1606,16 +1605,16 @@ export function Composer({
                         <span
                             key={id}
                             className="border-line text-ink-3 inline-flex max-w-full items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs"
-                            title="This source was removed or is no longer accessible. Restore access or remove this context before sending."
+                            title={t("unavailableSourceTitle")}
                         >
                             <span className="max-w-[240px] truncate">
-                                Unavailable source · {id}
+                                {t("unavailableSourceChip", { id })}
                             </span>
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="size-6"
-                                aria-label={`Remove unavailable source ${id}`}
+                                aria-label={t("removeUnavailableSource", { id })}
                                 onClick={() =>
                                     setSelected(previous => previous.filter(item => item !== id))
                                 }
@@ -1629,9 +1628,7 @@ export function Composer({
             {passages.length > 0 && (
                 <div
                     role="group"
-                    aria-label={
-                        passages.length === 1 ? "Passage to ask about" : "Passages to ask about"
-                    }
+                    aria-label={t("passagesLabel", { count: passages.length })}
                     className="mb-2.5 flex max-h-[min(16rem,30vh)] flex-col gap-1.5 overflow-y-auto"
                 >
                     {passages.map(passage => (
@@ -1687,7 +1684,7 @@ export function Composer({
                                     <progress
                                         max={100}
                                         value={row.progress}
-                                        aria-label={`Uploading ${row.file.name}`}
+                                        aria-label={t("uploading", { name: row.file.name })}
                                         className="h-1.5 w-16 accent-[var(--accent)]"
                                     />
                                     <span>{row.progress}%</span>
@@ -1696,9 +1693,9 @@ export function Composer({
                                         size="sm"
                                         className="h-6 px-1.5 text-xs"
                                         onClick={() => requests.current.get(row.id)?.abort()}
-                                        aria-label={`Cancel upload ${row.file.name}`}
+                                        aria-label={t("cancelUpload", { name: row.file.name })}
                                     >
-                                        Cancel
+                                        {tc("actions.cancel")}
                                     </Button>
                                 </>
                             ) : (
@@ -1711,9 +1708,9 @@ export function Composer({
                                         size="sm"
                                         className="h-6 px-1.5 text-xs"
                                         onClick={() => uploadFile(row)}
-                                        aria-label={`Retry upload ${row.file.name}`}
+                                        aria-label={t("retryUpload", { name: row.file.name })}
                                     >
-                                        Retry
+                                        {tc("actions.retry")}
                                     </Button>
                                 </>
                             )}
@@ -1721,7 +1718,7 @@ export function Composer({
                                 variant="ghost"
                                 size="icon"
                                 className="size-6"
-                                aria-label={`Remove upload ${row.file.name}`}
+                                aria-label={t("removeUpload", { name: row.file.name })}
                                 onClick={() => removeUpload(row.id)}
                             >
                                 <X className="size-3" />
@@ -1741,7 +1738,7 @@ export function Composer({
                             )}
                             title={
                                 unavailableThreads.includes(id)
-                                    ? "This conversation was removed or is no longer accessible. Restore access or remove its context before sending."
+                                    ? t("unavailableThreadTitle")
                                     : undefined
                             }
                         >
@@ -1753,14 +1750,18 @@ export function Composer({
                             >
                                 <span className="truncate">
                                     {threadContextOptions.find(thread => thread.id === id)?.title ??
-                                        `Unavailable conversation · ${id}`}
+                                        t("unavailableThreadChip", { id })}
                                 </span>
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="size-6"
-                                aria-label={`Remove conversation context ${threadContextOptions.find(thread => thread.id === id)?.title ?? id}`}
+                                aria-label={t("removeThread", {
+                                    title:
+                                        threadContextOptions.find(thread => thread.id === id)
+                                            ?.title ?? id,
+                                })}
                                 onClick={() =>
                                     setThreadRefs(previous => previous.filter(item => item !== id))
                                 }
@@ -1779,8 +1780,7 @@ export function Composer({
                             className="text-ink-2 flex flex-wrap items-center gap-2 text-xs"
                         >
                             <span className="min-w-0 flex-1 break-all">
-                                {name}: upload did not finish. Attach this file again before
-                                sending.
+                                {t("missingFile", { name })}
                             </span>
                             <Button
                                 variant="outline"
@@ -1788,13 +1788,13 @@ export function Composer({
                                 className="h-6 text-xs"
                                 onClick={() => fileInputRef.current?.click()}
                             >
-                                Attach again
+                                {t("attachAgain")}
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="size-6"
-                                aria-label={`Remove missing file ${name}`}
+                                aria-label={t("removeMissing", { name })}
                                 onClick={() =>
                                     setMissingFiles(previous =>
                                         previous.filter((_, itemIndex) => itemIndex !== index)
@@ -1809,14 +1809,13 @@ export function Composer({
             )}
             {unavailableContext && (
                 <p role="status" className="text-ink-3 mb-2 text-xs">
-                    Some selected context is unavailable. Restore access or remove its chips before
-                    sending.
+                    {t("contextUnavailable")}
                 </p>
             )}
             {preparingFiles && (
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                     <p role="status" className="text-ink-3 text-xs">
-                        Preparing images for upload…
+                        {t("preparingImages")}
                     </p>
                     <Button
                         variant="ghost"
@@ -1824,14 +1823,13 @@ export function Composer({
                         className="h-6 text-xs"
                         onClick={cancelPreparation}
                     >
-                        Cancel image preparation
+                        {t("cancelPreparation")}
                     </Button>
                 </div>
             )}
             {unavailableAttachments.length > 0 && (
                 <p role="status" className="text-ink-3 mb-2 text-xs">
-                    Some attached files are unavailable. Attach them again or remove them before
-                    sending.
+                    {t("attachmentsUnavailable")}
                 </p>
             )}
             {failedPromptAvailable && (
@@ -1841,7 +1839,7 @@ export function Composer({
                     className="mb-2 text-xs"
                     onClick={() => setStashOpen(true)}
                 >
-                    Restore failed prompt
+                    {t("restoreFailed")}
                 </Button>
             )}
             {attachError && (
@@ -1854,7 +1852,11 @@ export function Composer({
                     id="composer-completions"
                     role="listbox"
                     aria-label={
-                        slash ? "Commands" : sources.length ? "Agents and sources" : "Agents"
+                        slash
+                            ? t("completions.commands")
+                            : sources.length
+                              ? t("completions.agentsAndSources")
+                              : t("completions.agents")
                     }
                     className="border-line bg-panel mb-2 max-h-56 overflow-y-auto rounded-lg border shadow-sm"
                 >
@@ -1862,7 +1864,7 @@ export function Composer({
                         ? slashMatches.map(command => ({
                               key: command.id,
                               label: command.name,
-                              detail: command.detail,
+                              detail: t(`commands.${command.id}`),
                           }))
                         : mentionMatches
                     ).map((option, index) => (
@@ -1893,20 +1895,22 @@ export function Composer({
                         <span className="inline-flex items-center gap-1.5">
                             <AgentAvatar agent={turnAgent} size={16} />
                             {turnAgent.displayName}
-                            {mentionedKey && <span className="text-ink-3">· this turn</span>}
+                            {mentionedKey && (
+                                <span className="text-ink-3">{t("thisTurnSuffix")}</span>
+                            )}
                         </span>
                     )}
                     {chatMode === "plan" && (
                         <span className="text-brand inline-flex items-center gap-1">
                             <FileText className="size-3" />
-                            Plan first
+                            {t("planFirst")}
                         </span>
                     )}
                 </div>
             )}
             {editorMode === "rich" ? (
                 <Suspense
-                    fallback={<p className="text-ink-3 py-3 text-sm">Loading rich editor…</p>}
+                    fallback={<p className="text-ink-3 py-3 text-sm">{t("loadingRichEditor")}</p>}
                 >
                     <RichChatEditor
                         ref={richRef}
@@ -1915,8 +1919,8 @@ export function Composer({
                         contexts={richContexts}
                         placeholder={
                             passages.length > 0
-                                ? `Ask about ${passages.length === 1 ? "this passage" : "these passages"}…`
-                                : "Write a message…"
+                                ? t("richPlaceholderPassages", { count: passages.length })
+                                : t("richPlaceholder")
                         }
                         onChange={(value, content, contexts) => {
                             const removedSources = richChipIds.current
@@ -2021,7 +2025,7 @@ export function Composer({
                             if (context.kind === "attachment")
                                 document
                                     .querySelector<HTMLButtonElement>(
-                                        `[aria-label="Preview ${CSS.escape(context.label)}"]`
+                                        `[data-attachment-preview="${CSS.escape(context.id)}"]`
                                     )
                                     ?.click();
                         }}
@@ -2031,7 +2035,7 @@ export function Composer({
                 <textarea
                     ref={ref}
                     value={text}
-                    aria-label="Chat message"
+                    aria-label={t("messageLabel")}
                     aria-describedby="composer-hint"
                     aria-invalid={overLimit}
                     aria-controls={completionCount ? "composer-completions" : undefined}
@@ -2041,14 +2045,17 @@ export function Composer({
                     className="text-ink placeholder:text-ink-3 min-h-[64px] w-full resize-none border-0 bg-transparent px-1 py-1 text-[15px] leading-6 outline-none"
                     placeholder={
                         agent
-                            ? `Ask ${agent.displayName}, your ${agent.role.toLowerCase()}… or @mention another agent`
+                            ? t("placeholderAgent", {
+                                  name: agent.displayName,
+                                  role: agent.role.toLowerCase(),
+                              })
                             : passages.length > 0
                               ? passages.length === 1
-                                  ? "Ask about this passage… or send to have it explained"
-                                  : "Ask about these passages… or send to have them explained"
+                                  ? t("placeholderPassage")
+                                  : t("placeholderPassages")
                               : selSources.length > 0
-                                ? `Ask anything about ${selSources.length === 1 ? "this source" : `these ${selSources.length} sources`}…`
-                                : "Ask anything…"
+                                ? t("placeholderSources", { count: selSources.length })
+                                : t("placeholder")
                     }
                     onChange={event => {
                         setText(event.target.value);
@@ -2094,7 +2101,7 @@ export function Composer({
             )}
             <input
                 ref={fileInputRef}
-                aria-label="Upload attachments"
+                aria-label={t("uploadAttachments")}
                 type="file"
                 multiple
                 accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/*,.pdf,.doc,.docx,.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.rtf,.log,.html,.htm"
@@ -2105,7 +2112,7 @@ export function Composer({
                 ref={reattachInputRef}
                 className="hidden"
                 type="file"
-                aria-label="Reattach unavailable file"
+                aria-label={t("reattachFile")}
                 accept="image/*,.pdf,.doc,.docx,.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.rtf,.log,.html,.htm"
                 onChange={event => {
                     const files = Array.from(event.target.files ?? []);
@@ -2117,7 +2124,7 @@ export function Composer({
             />
             <div
                 role="group"
-                aria-label="Message tools"
+                aria-label={t("toolsLabel")}
                 className="mt-2 flex min-w-0 items-center gap-1"
             >
                 <Popover open={modelOpen} onOpenChange={setModelOpen}>
@@ -2125,13 +2132,13 @@ export function Composer({
                         <Button
                             variant="ghost"
                             size="sm"
-                            aria-label="Choose model"
+                            aria-label={t("chooseModel")}
                             className="text-ink-2 @max-sm:max-w-[130px] h-9 min-w-0 max-w-[200px] shrink gap-1.5 rounded-lg px-2 text-xs"
                         >
                             <span className="truncate">
                                 {modelRoutes.length >= 2
-                                    ? `${modelRoutes.length} models`
-                                    : ROUTE_LABELS[modelRoute].label}
+                                    ? t("modelCount", { count: modelRoutes.length })
+                                    : routeLabel(modelRoute)}
                             </span>
                             <ChevronDown className="size-3 shrink-0" />
                         </Button>
@@ -2167,7 +2174,7 @@ export function Composer({
                             const number = Number(
                                 event.code?.startsWith("Digit") ? event.code.slice(5) : event.key
                             );
-                            if (event.altKey && number >= 1 && number <= 4) {
+                            if (event.altKey && number >= 1 && number <= ROUTES.length) {
                                 const route = ROUTES[number - 1]!;
                                 if (chatRoutes.config.routes[route]?.available) {
                                     event.preventDefault();
@@ -2179,13 +2186,13 @@ export function Composer({
                         }}
                     >
                         <Input
-                            aria-label="Search models"
-                            placeholder="Search configured models…"
+                            aria-label={t("searchModels")}
+                            placeholder={t("searchModelsPlaceholder")}
                             value={modelSearch}
                             onChange={event => setModelSearch(event.target.value)}
                             className="mb-2 text-xs"
                         />
-                        <div role="listbox" aria-label="Configured models">
+                        <div role="listbox" aria-label={t("configuredModels")}>
                             {[...ROUTES]
                                 .sort(
                                     (a, b) =>
@@ -2194,7 +2201,7 @@ export function Composer({
                                 )
                                 .filter(route =>
                                     modelSearchMatches(
-                                        `${route} ${ROUTE_LABELS[route].label} ${ROUTE_LABELS[route].blurb}`,
+                                        `${route} ${routeLabel(route)} ${routeBlurb(route)}`,
                                         modelSearch
                                     )
                                 )
@@ -2217,11 +2224,13 @@ export function Composer({
                                             >
                                                 <span className="min-w-0 flex-1">
                                                     <span className="block truncate font-medium">
-                                                        {ROUTE_LABELS[route].label}
+                                                        {routeLabel(route)}
                                                     </span>
                                                     <span className="text-ink-3 block">
-                                                        {ROUTE_LABELS[route].blurb}
-                                                        {!info?.available ? " · unavailable" : ""}
+                                                        {routeBlurb(route)}
+                                                        {!info?.available
+                                                            ? ` · ${t("unavailable")}`
+                                                            : ""}
                                                     </span>
                                                 </span>
                                                 {modelRoute === route && (
@@ -2232,7 +2241,11 @@ export function Composer({
                                                 variant="ghost"
                                                 size="icon"
                                                 className="size-7"
-                                                aria-label={`${favorites.includes(route) ? "Unfavorite" : "Favorite"} ${route} model`}
+                                                aria-label={
+                                                    favorites.includes(route)
+                                                        ? t("unfavorite", { route })
+                                                        : t("favorite", { route })
+                                                }
                                                 onClick={() =>
                                                     setFavorites(previous =>
                                                         previous.includes(route)
@@ -2257,7 +2270,7 @@ export function Composer({
                         </div>
                         <fieldset className="border-line mt-2 border-t pt-2">
                             <legend className="text-ink-2 px-1 text-xs">
-                                Compare independent model responses
+                                {t("compareLegend")}
                             </legend>
                             {ROUTES.filter(route => chatRoutes.config.routes[route]?.available).map(
                                 route => (
@@ -2267,7 +2280,7 @@ export function Composer({
                                     >
                                         <input
                                             type="checkbox"
-                                            aria-label={`Compare ${route} model`}
+                                            aria-label={t("compareRoute", { route })}
                                             checked={modelRoutes.includes(route)}
                                             onChange={event =>
                                                 setModelRoutes(previous =>
@@ -2277,22 +2290,20 @@ export function Composer({
                                                 )
                                             }
                                         />
-                                        <span>{ROUTE_LABELS[route].label}</span>
+                                        <span>{routeLabel(route)}</span>
                                     </label>
                                 )
                             )}
-                            <p className="text-ink-3 px-2 py-1 text-[10px]">
-                                Select two or more. Each response is saved in its own conversation.
-                            </p>
+                            <p className="text-ink-3 px-2 py-1 text-[11px]">{t("compareHint")}</p>
                         </fieldset>
                         {chatRoutes.loading && (
-                            <p className="text-ink-3 px-2 text-xs">Loading model configuration…</p>
+                            <p className="text-ink-3 px-2 text-xs">{t("loadingModels")}</p>
                         )}
                         {effortOptions.length > 0 && (
                             <label className="text-ink-2 mt-2 block border-t pt-2 text-xs">
-                                Reasoning effort
+                                {t("reasoningEffort")}
                                 <select
-                                    aria-label="Reasoning effort"
+                                    aria-label={t("reasoningEffort")}
                                     value={reasoningEffort ?? ""}
                                     className="border-line bg-panel mt-1 h-8 w-full rounded-md border px-2"
                                     onChange={event =>
@@ -2301,8 +2312,10 @@ export function Composer({
                                 >
                                     <option value="">
                                         {effortInfo?.defaultEffort
-                                            ? `Provider default (${effortInfo.defaultEffort})`
-                                            : "Provider default"}
+                                            ? t("providerDefaultWith", {
+                                                  effort: effortInfo.defaultEffort,
+                                              })
+                                            : t("providerDefault")}
                                     </option>
                                     {effortOptions.map(effort => (
                                         <option key={effort} value={effort}>
@@ -2318,14 +2331,14 @@ export function Composer({
                     variant="ghost"
                     size="icon"
                     className="text-ink-2 relative size-9 shrink-0 rounded-lg"
-                    aria-label="Attach files"
-                    title={`Attach up to ${ATTACH_MAX_COUNT} files`}
+                    aria-label={t("attachFiles")}
+                    title={t("attachUpTo", { max: ATTACH_MAX_COUNT })}
                     disabled={disabled}
                     onClick={() => fileInputRef.current?.click()}
                 >
                     <Paperclip className="size-4" />
                     {attachments.length + uploads.length > 0 && (
-                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[10px]">
+                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[11px] tabular-nums leading-4">
                             {attachments.length + uploads.length}
                         </span>
                     )}
@@ -2336,18 +2349,18 @@ export function Composer({
                             variant="ghost"
                             size="sm"
                             className="text-ink-2 @max-sm:px-2 h-9 shrink-0 gap-1.5 rounded-lg px-2 text-xs"
-                            aria-label="Choose sources"
-                            title="Choose sources"
+                            aria-label={t("chooseSources")}
+                            title={t("chooseSources")}
                         >
                             <Search className="size-4" />
-                            <span className="@max-sm:sr-only">Sources</span>
+                            <span className="@max-sm:sr-only">{t("sources")}</span>
                             {selected.length > 0 && <span>{selected.length}</span>}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-[min(320px,calc(100vw-2rem))] p-2">
                         <Input
-                            aria-label="Search sources"
-                            placeholder="Search source context…"
+                            aria-label={t("searchSources")}
+                            placeholder={t("searchSourcesPlaceholder")}
                             value={sourceSearch}
                             onChange={event => setSourceSearch(event.target.value)}
                             className="mb-2 text-xs"
@@ -2381,9 +2394,7 @@ export function Composer({
                                     </Button>
                                 ))}
                             {sources.length === 0 && (
-                                <p className="text-ink-3 p-2 text-xs">
-                                    Add sources to choose context.
-                                </p>
+                                <p className="text-ink-3 p-2 text-xs">{t("noSources")}</p>
                             )}
                         </div>
                         {selected.length > 0 && (
@@ -2393,7 +2404,7 @@ export function Composer({
                                 className="mt-1 w-full text-xs"
                                 onClick={() => setSelected([])}
                             >
-                                Clear source context
+                                {t("clearSources")}
                             </Button>
                         )}
                     </PopoverContent>
@@ -2404,8 +2415,8 @@ export function Composer({
                             variant="ghost"
                             size="icon"
                             className="text-ink-2 size-9 shrink-0 rounded-lg"
-                            aria-label="More message options"
-                            title="More message options"
+                            aria-label={t("moreOptions")}
+                            title={t("moreOptions")}
                         >
                             <MoreHorizontal className="size-4" />
                         </Button>
@@ -2414,7 +2425,9 @@ export function Composer({
                         align="end"
                         className="max-h-[min(560px,70dvh)] w-[min(320px,calc(100vw-2rem))] overflow-y-auto p-3"
                     >
-                        <p className="text-ink mb-2 text-sm font-medium">Assistant</p>
+                        <p className="text-ink mb-2 text-sm font-medium">
+                            {t("options.assistant")}
+                        </p>
                         <AgentPicker
                             agents={agents}
                             agent={agent}
@@ -2425,7 +2438,9 @@ export function Composer({
                             }
                             onChange={onChangeAgent}
                         />
-                        <p className="text-ink mb-2 mt-3 text-sm font-medium">Response</p>
+                        <p className="text-ink mb-2 mt-3 text-sm font-medium">
+                            {t("options.response")}
+                        </p>
                         <div className="flex gap-1">
                             <Button
                                 variant={chatMode === "default" ? "default" : "outline"}
@@ -2433,7 +2448,7 @@ export function Composer({
                                 aria-pressed={chatMode === "default"}
                                 onClick={() => setChatMode("default")}
                             >
-                                Answer
+                                {t("options.answer")}
                             </Button>
                             <Button
                                 variant={chatMode === "plan" ? "default" : "outline"}
@@ -2442,7 +2457,7 @@ export function Composer({
                                 onClick={() => setChatMode("plan")}
                             >
                                 <FileText className="size-3.5" />
-                                Plan first
+                                {t("planFirst")}
                             </Button>
                         </div>
                         <Button
@@ -2455,27 +2470,27 @@ export function Composer({
                             }}
                         >
                             <Save className="size-3.5" />
-                            {hasContent ? "Save prompt" : "Restore saved prompts"}
-                            <span className="text-ink-3 ml-auto text-[10px]">⌘/Ctrl+S</span>
+                            {hasContent ? t("options.savePrompt") : t("options.restorePrompts")}
+                            <span className="text-ink-3 ml-auto text-[11px]">⌘/Ctrl+S</span>
                         </Button>
-                        <p className="text-ink mb-2 text-sm font-medium">Editor</p>
+                        <p className="text-ink mb-2 text-sm font-medium">{t("options.editor")}</p>
                         <div className="mb-3 flex gap-1">
                             <Button
                                 variant={editorMode === "plain" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setEditorMode("plain")}
                             >
-                                Plain Markdown
+                                {t("options.plainMarkdown")}
                             </Button>
                             <Button
                                 variant={editorMode === "rich" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setEditorMode("rich")}
                             >
-                                Rich text
+                                {t("options.richText")}
                             </Button>
                         </div>
-                        <p className="text-ink mb-2 text-sm font-medium">Send message with</p>
+                        <p className="text-ink mb-2 text-sm font-medium">{t("options.sendWith")}</p>
                         <div className="flex gap-1">
                             <Button
                                 variant={sendKey === "enter" ? "default" : "outline"}
@@ -2493,7 +2508,7 @@ export function Composer({
                             </Button>
                         </div>
                         <p className="text-ink mt-3 text-sm font-medium">
-                            While a response is running
+                            {t("options.whileRunning")}
                         </p>
                         <div className="mt-1 flex gap-1">
                             <Button
@@ -2501,55 +2516,51 @@ export function Composer({
                                 size="sm"
                                 onClick={() => setFollowUp("queue")}
                             >
-                                Queue
+                                {t("options.queue")}
                             </Button>
                             <Button
                                 variant={followUp === "interrupt" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setFollowUp("interrupt")}
                             >
-                                Interrupt
+                                {t("options.interrupt")}
                             </Button>
                         </div>
-                        <p className="text-ink-3 mt-2 text-xs">
-                            Interrupt stops the current response and starts your follow-up with the
-                            conversation context. ⌘/Ctrl+Enter uses the other action.
-                        </p>
-                        <p className="text-ink-3 mt-3 text-xs">
-                            Shift+Enter adds a line. ⌘/Ctrl+Shift+L focuses the composer. ⌘/Ctrl+S
-                            saves or restores a prompt. ↑ recalls sent prompts in an empty composer.
-                        </p>
+                        <p className="text-ink-3 mt-2 text-xs">{t("options.interruptHint")}</p>
+                        <p className="text-ink-3 mt-3 text-xs">{t("options.shortcutsHint")}</p>
                     </PopoverContent>
                 </Popover>
                 <div className="ml-auto flex shrink-0 items-center gap-2">
-                    <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
-                        {sendKey === "enter" ? "↵" : "⌘/Ctrl+↵"} to{" "}
-                        {editingQueued ? "save" : active ? followUp : "send"}
+                    <span className="mono text-ink-3 @max-sm:hidden text-[11px]">
+                        {t("sendHint", {
+                            key: sendKey === "enter" ? "↵" : "⌘/Ctrl+↵",
+                            action: editingQueued ? "save" : active ? followUp : "send",
+                        })}
                     </span>
                     <Button
                         size="icon"
                         className="size-9 rounded-xl"
                         aria-label={
                             editingQueued
-                                ? "Save queued message"
+                                ? t("send.saveQueued")
                                 : !hasContent && active
-                                  ? "Stop response"
+                                  ? t("send.stop")
                                   : active
                                     ? followUp === "queue"
-                                        ? "Queue message"
-                                        : "Interrupt with message"
-                                    : "Send message"
+                                        ? t("send.queue")
+                                        : t("send.interrupt")
+                                    : t("send.send")
                         }
                         title={
                             editingQueued
-                                ? "Save queued message"
+                                ? t("send.saveQueued")
                                 : !hasContent && active
-                                  ? "Stop response"
+                                  ? t("send.stop")
                                   : active
                                     ? followUp === "queue"
-                                        ? "Queue message for the next turn"
-                                        : "Stop the current response and send this follow-up"
-                                    : "Send message"
+                                        ? t("send.queueTitle")
+                                        : t("send.interruptTitle")
+                                    : t("send.send")
                         }
                         disabled={!hasContent && active ? !onStop : !canSend}
                         onClick={event => {
@@ -2569,26 +2580,31 @@ export function Composer({
             </div>
             {turnEffects.notes.length > 0 && (
                 <div className="text-ink-3 mt-2 text-[11px]" role="status">
-                    {turnAgent?.displayName ?? "This agent"}: {turnEffects.notes.join("; ")}.
+                    {t("agentNotes", {
+                        agent: turnAgent?.displayName ?? t("thisAgent"),
+                        notes: turnEffects.notes
+                            .map(note => turnNote(tAgents, note))
+                            .join(t("noteSeparator")),
+                    })}
                 </div>
             )}
             {editingQueued && (
                 <div className="text-ink-3 mt-2 flex items-center justify-between text-xs">
-                    <span>Editing queued message · your unsent draft will return afterwards.</span>
+                    <span>{t("editingQueued")}</span>
                     <Button
                         variant="ghost"
                         size="sm"
                         className="h-6 text-xs"
                         onClick={onCancelQueueEdit}
                     >
-                        Cancel edit
+                        {t("cancelEdit")}
                     </Button>
                 </div>
             )}
             {editingQueued && queuedEditUnavailable && (
                 <div className="border-line mt-2 flex flex-wrap items-center gap-2 rounded-md border p-2 text-xs">
                     <span role="status" className="text-ink-2">
-                        Queued message already sent or removed. Your edits are still here.
+                        {t("queuedGone")}
                     </span>
                     <Button
                         variant="outline"
@@ -2596,31 +2612,28 @@ export function Composer({
                         className="h-7 text-xs"
                         onClick={detachQueuedEdit}
                     >
-                        Use edits in a new message
+                        {t("useEditsInNew")}
                     </Button>
-                    <span className="text-ink-3">
-                        Your earlier unsent draft will be saved with your prompts.
-                    </span>
+                    <span className="text-ink-3">{t("earlierDraftSaved")}</span>
                 </div>
             )}
-            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[10px]">
+            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[11px]">
                 {overLimit ? (
                     <span role="alert" className="text-danger">
-                        {text.length.toLocaleString()} / {COMPOSER_MAX_CHARACTERS.toLocaleString()}{" "}
-                        characters. Shorten this draft or attach it as a text file before sending.
+                        {t("overLimit", { length: text.length, max: COMPOSER_MAX_CHARACTERS })}
                     </span>
                 ) : uploadBlocked ? (
-                    "All uploads must finish before sending. Retry or remove failed uploads."
+                    t("uploadsPending")
                 ) : chatMode === "plan" ? (
-                    "Planning mode · asks for an actionable plan before execution."
+                    t("planningMode")
                 ) : text.length > 10_000 ? (
-                    `${text.length.toLocaleString()} / ${COMPOSER_MAX_CHARACTERS.toLocaleString()} characters`
+                    t("charCount", { length: text.length, max: COMPOSER_MAX_CHARACTERS })
                 ) : (
-                    "Type / for commands · @ for agents and sources"
+                    t("hint")
                 )}
                 {storageError && (
                     <span className="ml-1" role="alert">
-                        Draft storage is unavailable. Keep this page open or copy your draft.
+                        {t("storageUnavailable")}
                     </span>
                 )}
             </div>
@@ -2633,12 +2646,9 @@ export function Composer({
                 <DialogContent className="border-line bg-panel">
                     <DialogTitle>
                         {threadContextOptions.find(thread => thread.id === inspectedThread)
-                            ?.title ?? "Referenced conversation"}
+                            ?.title ?? t("referencedConversation")}
                     </DialogTitle>
-                    <DialogDescription>
-                        This conversation is included as context when you send. Access is checked by
-                        the server; the original conversation remains available in your history.
-                    </DialogDescription>
+                    <DialogDescription>{t("threadDialog.description")}</DialogDescription>
                     {onOpenThreadContext && inspectedThread && (
                         <Button
                             variant="outline"
@@ -2647,17 +2657,15 @@ export function Composer({
                                 setInspectedThread(null);
                             }}
                         >
-                            Open conversation
+                            {t("threadDialog.open")}
                         </Button>
                     )}
                 </DialogContent>
             </Dialog>
             <Dialog open={stashOpen} onOpenChange={setStashOpen}>
                 <DialogContent className="border-line bg-panel">
-                    <DialogTitle>Saved prompts</DialogTitle>
-                    <DialogDescription>
-                        Restore a prompt and its completed attachments in this conversation.
-                    </DialogDescription>
+                    <DialogTitle>{t("stash.title")}</DialogTitle>
+                    <DialogDescription>{t("stash.description")}</DialogDescription>
                     <div className="max-h-80 space-y-2 overflow-auto">
                         {stashes.map(stash => (
                             <div
@@ -2670,11 +2678,16 @@ export function Composer({
                                     onClick={() => restoreStash(stash)}
                                 >
                                     <span className="line-clamp-3">
-                                        {stash.text || "Attached files"}
+                                        {stash.text || t("stash.attachedFiles")}
                                     </span>
                                     <span className="text-ink-3">
-                                        {new Date(stash.savedAt).toLocaleString()} ·{" "}
-                                        {stash.attachments.length} attachment(s)
+                                        {t("stash.meta", {
+                                            date: format.dateTime(new Date(stash.savedAt), {
+                                                dateStyle: "medium",
+                                                timeStyle: "short",
+                                            }),
+                                            count: stash.attachments.length,
+                                        })}
                                     </span>
                                     {stash.attachments.some(
                                         attachment => attachment.kind === "image"
@@ -2691,7 +2704,9 @@ export function Composer({
                                                         <img
                                                             key={attachment.id}
                                                             src={url}
-                                                            alt={`${attachment.name} thumbnail`}
+                                                            alt={t("stash.thumbnail", {
+                                                                name: attachment.name,
+                                                            })}
                                                             width={36}
                                                             height={36}
                                                             loading="lazy"
@@ -2702,7 +2717,9 @@ export function Composer({
                                                             key={attachment.id}
                                                             className="text-ink-3 text-xs"
                                                         >
-                                                            {attachment.name} unavailable
+                                                            {t("stash.imageUnavailable", {
+                                                                name: attachment.name,
+                                                            })}
                                                         </span>
                                                     );
                                                 })}
@@ -2713,7 +2730,9 @@ export function Composer({
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Delete saved prompt ${stash.text.slice(0, 30)}`}
+                                    aria-label={t("stash.delete", {
+                                        text: stash.text.slice(0, 30),
+                                    })}
                                     onClick={() =>
                                         saveStashes(stashes.filter(item => item.id !== stash.id))
                                     }
@@ -2740,6 +2759,8 @@ function AgentPicker({
     mentioned: ChatAgentOption | null;
     onChange: (key: string | null) => void;
 }) {
+    const t = useTranslations("chat.composer.agentPicker");
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const shown = mentioned ?? agent;
     return (
@@ -2748,28 +2769,28 @@ function AgentPicker({
                 <Button
                     variant="outline"
                     size="sm"
-                    aria-label="Agent"
+                    aria-label={t("label")}
                     className="text-ink-2 h-8 max-w-[180px] text-xs"
                 >
                     {shown ? (
                         <>
                             <AgentAvatar agent={shown} size={18} />
                             <span className="truncate">{shown.displayName}</span>
-                            {mentioned && <span className="text-ink-3 text-[10px]">this turn</span>}
+                            {mentioned && (
+                                <span className="text-ink-3 text-[11px]">{t("thisTurn")}</span>
+                            )}
                         </>
                     ) : (
                         <>
                             <Bot className="size-3" />
-                            <span className="@max-sm:sr-only">Agent</span>
+                            <span className="@max-sm:sr-only">{t("label")}</span>
                         </>
                     )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[min(320px,calc(100vw-2rem))] p-1.5">
-                <p className="text-ink-3 px-2 pb-1.5 pt-1 text-[11px]">
-                    Who holds this chat. Type @handle to bring another agent in for one turn.
-                </p>
-                <div role="listbox" aria-label="Chat agent">
+                <p className="text-ink-3 px-2 pb-1.5 pt-1 text-[11px]">{t("hint")}</p>
+                <div role="listbox" aria-label={t("listLabel")}>
                     <Button
                         role="option"
                         aria-selected={!agent}
@@ -2781,7 +2802,7 @@ function AgentPicker({
                         }}
                     >
                         <Bot className="size-4" />
-                        <span className="flex-1 text-left">Launchstack</span>
+                        <span className="flex-1 text-left">{tc("brand.name")}</span>
                         {!agent && <Check className="size-3" />}
                     </Button>
                     {agents.filter(usableAsPrimary).map(option => (
@@ -2800,7 +2821,7 @@ function AgentPicker({
                             <span className="min-w-0 flex-1 text-left">
                                 <span className="block font-medium">
                                     {option.displayName}{" "}
-                                    <span className="mono text-ink-3 text-[10px]">
+                                    <span className="mono text-ink-3 text-[11px]">
                                         @{option.id}
                                     </span>
                                 </span>

@@ -509,6 +509,8 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
             data: fileBuffer,
             contentType: fileMime,
             userId: input.userId,
+            // Stamps the workspace, so a member opening the source can read the file.
+            companyId: BigInt(input.companyId),
         });
         await createDocumentLifecycle({
             companyId: BigInt(input.companyId),
@@ -554,6 +556,8 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
             data: Buffer.from(summaryText, "utf-8"),
             contentType: "text/markdown",
             userId: input.userId,
+            // Stamps the workspace, so a member opening the source can read the file.
+            companyId: BigInt(input.companyId),
         });
 
         await createDocumentLifecycle({

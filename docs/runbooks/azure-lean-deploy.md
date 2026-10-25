@@ -31,7 +31,7 @@ below use these names.
 | SSH | `ssh <ADMIN_USER>@<PUBLIC_IP>` |
 | Open ports | 22, 80, 443 (Azure NSG) — nothing else is reachable from outside |
 | Stack location | `/home/<ADMIN_USER>/LaunchStack` |
-| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, F0 free tier (500 pages/month) |
+| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, S0 (pay per page), see [OCR](#ocr-azure-document-intelligence) |
 | Secrets | Key Vault `<VAULT_NAME>` |
 | Backups | Storage account `<BACKUP_ACCOUNT>`, container `db-backups`, 30-day retention |
 
@@ -94,14 +94,17 @@ az vm list-skus -l eastus2 --resource-type virtualMachines --query \
   "[?!restrictions[0]].name" -o tsv | sort -u
 ```
 
-Then provision OCR (free tier) and the backup storage account:
+Then provision OCR (S0) and the backup storage account. Use S0, not the free
+F0 tier: F0 analyzes only the **first two pages** of each document, so a
+scanned book (or, with `OCR_PDF_STRATEGY=provider-first`, any book) would be
+indexed as two pages.
 
 ```bash
 az provider register --namespace Microsoft.CognitiveServices   # once per subscription
 
 az cognitiveservices account create \
   -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> \
-  --kind FormRecognizer --sku F0 -l eastus2 --yes
+  --kind FormRecognizer --sku S0 -l eastus2 --yes
 
 az storage account create -n <unique-name> -g <RESOURCE_GROUP> -l eastus2 \
   --sku Standard_LRS --kind StorageV2 --access-tier Cool --allow-blob-public-access false
@@ -163,6 +166,9 @@ three):
 OCR_DEFAULT_PROVIDER=AZURE
 AZURE_DOC_INTELLIGENCE_ENDPOINT=https://<name>.cognitiveservices.azure.com/
 AZURE_DOC_INTELLIGENCE_KEY=<key>          # az cognitiveservices account keys list
+# Optional, see "OCR: Azure Document Intelligence" below:
+# OCR_PDF_STRATEGY=provider-first           # every PDF through Azure (default: text layer first)
+# AZURE_DOC_INTELLIGENCE_MODEL=prebuilt-read  # text-only, ~1/7 the price (default: prebuilt-layout)
 
 # SSRF allowlists must include the public files origin, or the document
 # services refuse to fetch objects by reference.
@@ -321,6 +327,153 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env 
 Key Vault secret names allow `[0-9a-zA-Z-]` only, so `FOO_BAR` is stored as
 `FOO-BAR` and mapped back on read. Environment variable names cannot contain
 dashes, so the reverse mapping is unambiguous.
+
+## OCR: Azure Document Intelligence
+
+Three settings decide how documents are read. All three are plain `.env`
+values (stored in Key Vault like the rest, see
+[Secrets](#secrets-azure-key-vault)); none is a default baked into the
+repository, so a self-hosted install keeps the free text-layer path unless
+its operator opts in.
+
+| Variable | Values | Effect |
+|---|---|---|
+| `OCR_DEFAULT_PROVIDER` | `AZURE` (lean stack), `DOCLING`, `LANDING_AI`, `DATALAB`, `NATIVE_PDF` | Which OCR service reads documents that need OCR. |
+| `OCR_PDF_STRATEGY` | `text-layer-first` (default), `provider-first` | `text-layer-first` reads a PDF's own text when it has one, free and in seconds, and sends only scans to OCR. `provider-first` sends **every** PDF to the provider. |
+| `AZURE_DOC_INTELLIGENCE_MODEL` | `prebuilt-layout` (default), `prebuilt-read` | Layout adds tables and reading order. Read is text only and costs about a seventh as much. |
+
+Choose `provider-first` when documents carry tables or multi-column layouts,
+or scanned pages inside otherwise digital PDFs, that a text layer reads
+poorly. Each PDF then costs Azure pages and takes a minute or two instead of
+seconds.
+
+**Fallback (`provider-first`).** If Azure fails, the worker reads the PDF's own text layer
+instead (`NATIVE_PDF`), so the document still indexes. A scanned PDF has no
+text layer, so for a scan the Azure error stands and the outbox retries it
+(see [`docs/runbooks/outbox.md`](./outbox.md)). The worker logs
+`[Normalize] AZURE failed, reading the PDF's text layer instead: …` whenever it
+falls back.
+
+**Before falling back, the adapter retries.** A 429 or 5xx on submit is retried
+up to four times, waiting as long as Azure's `Retry-After` asks (otherwise 2, 5,
+13, then 34 s). Result polling never runs more often than every 2 s and keeps
+going through 429s, 5xx, and network errors, because giving up would make the
+outbox resubmit and Azure bills every submission. One analysis may run for up
+to 15 minutes before it is abandoned.
+
+**Limits (S0, per resource).** Microsoft's published quotas:
+
+| Quota | S0 | F0 (don't use) |
+|---|---|---|
+| Analyze (submit) requests | 15 per second, can be raised by support request | 1 per second |
+| Result polls | 50 per second, can be raised | 1 per second |
+| Max file size | 500 MB | 4 MB |
+| Pages analyzed per document | 2,000 | 2 |
+
+The worker submits one document at a time per outbox slot (at most 10 at
+once), so it cannot reach 15 submits per second. Azure reads at most 2,000
+pages per request, so the adapter sends a longer PDF as consecutive page
+ranges (`1-2000`, `2001-4000`, …) side by side and joins the pages back in
+order; each range is billed only for its own pages. The 500 MB limit still
+applies to the whole file, because every range uploads it.
+
+**Cost.** Billed per page analyzed, pay-as-you-go, no monthly minimum:
+
+| Model | Per 1,000 pages | A 260-page book |
+|---|---|---|
+| `prebuilt-layout` | $10 | ≈ $2.60 |
+| `prebuilt-read` | $1.50 | ≈ $0.39 |
+
+Usage is under the resource's **Metrics** blade in the portal ("Processed
+Pages").
+
+**Changing a setting.** Store it in Key Vault (`OCR-PDF-STRATEGY`,
+`AZURE-DOC-INTELLIGENCE-MODEL`), re-sync `.env`, and recreate app and worker.
+New uploads use it; documents already indexed keep the text they were read
+with until they are re-uploaded.
+
+```bash
+# Which provider read recent documents (NATIVE_PDF = text layer, AZURE = OCR)
+docker exec pdr_ai_v2-postgres psql -U postgres -d pdr_ai_v2 -c \
+  "SELECT created_at::date, payload->'payload'->>'provider' AS provider, count(*),
+          sum((payload->'payload'->>'pageCount')::int) AS pages
+   FROM pdr_ai_v2_event_outbox WHERE event_type = 'evidence.version.extracted'
+   GROUP BY 1, 2 ORDER BY 1 DESC LIMIT 20"
+```
+
+---
+
+## Connecting Notion
+
+Members connect Notion from **Add source › Notion**: one click, Notion's own
+consent screen (with Notion's page picker), and the picked pages sync into
+`Notion/<workspace>` every 15 minutes. For that button to work, the
+deployment needs one **public** Notion connection. This is a one-time setup.
+Design notes: [`docs/design/notion-connector.md`](../design/notion-connector.md).
+
+1. **Create the connection.** At
+   [notion.so/profile/integrations](https://www.notion.so/profile/integrations),
+   create a new connection of type **Public**.
+   - **Redirect URI:** `<BETTER_AUTH_URL>/api/connectors/notion/oauth/callback`,
+     for example `https://app.example.com/api/connectors/notion/oauth/callback`.
+     It must match the public origin exactly, scheme and host included.
+   - **Capabilities:** *Read content* only. Leave insert and update content
+     off; the connector never writes to Notion. User information is not
+     needed.
+   - **Installation scope:** *Any workspace* for customers' workspaces;
+     *Selected workspaces* if only your own will connect. Notion does not let
+     you change this later.
+   - **Company details:** name, website, and the privacy policy and terms
+     URLs (the landing site's `/privacy` and `/terms`).
+   - Notion shows the **authorization URL only after a public connection is
+     submitted for review.** If it is not shown yet, submit it and wait for
+     approval before going further; nobody can connect until then.
+
+2. **Store the pair in Key Vault**, from your own `az login` (the VM's
+   identity is read-only):
+
+   ```bash
+   az keyvault secret set --vault-name <VAULT_NAME> --name NOTION-OAUTH-CLIENT-ID --value '<client id>'
+   az keyvault secret set --vault-name <VAULT_NAME> --name NOTION-OAUTH-CLIENT-SECRET --value '<client secret>'
+   ```
+
+3. **Deploy and load it on the VM.** The code ships in the images, and the
+   `notion_connector` migration applies through the one-shot `migrate`
+   service as usual:
+
+   ```bash
+   cd LaunchStack && git pull
+   python3 ~/sync-env-from-keyvault.py <VAULT_NAME>
+   grep -c -E '^NOTION_OAUTH_CLIENT_(ID|SECRET)=.+' .env      # 2
+   C="docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env"
+   $C pull app worker && $C up -d --build --force-recreate app worker
+   ```
+
+   Both containers need the pair: the app runs the OAuth handshake, and the
+   worker refreshes tokens during a sync. `docker-compose.yml` passes them
+   through its `x-shared-env` allowlist.
+
+4. **Check it.**
+   - Add source › Notion shows **Connect Notion**. If it says "not configured
+     on this server", the container did not get the pair; re-check step 3.
+   - Connect, pick a page, and approve. You land back on the Notion tab with
+     "Notion connected", and the workspace card moves from "Starting sync…"
+     to a page count within a minute.
+   - `$C logs worker | grep notion-sync` shows the run, and the page appears
+     under `Notion/<workspace>` in Sources.
+   - Disconnecting the card removes it and revokes the token at Notion.
+
+**If it goes wrong:**
+
+| Symptom | Fix |
+| --- | --- |
+| Notion says the redirect URI is invalid | The registered URI and `BETTER_AUTH_URL` differ (scheme, host, trailing path). |
+| "The sync was requested … still hasn't started" | The worker or Inngest is down; see [Background jobs](#background-jobs-self-hosted-inngest). |
+| Card says access was revoked | The member removed LaunchStack in Notion, or the grant expired. **Reconnect** on the card. |
+| Some pages are missing | Only pages shared with the connection sync. **Choose pages** on the card reopens Notion's picker. |
+
+Obsidian needs no setup: **Add source › Obsidian** imports a vault in the
+browser, and nothing leaves the deployment.
 
 ## Backups and restore
 
@@ -655,12 +808,20 @@ alive, or rewrite `document_versions.url` if you migrate before real traffic.
 
 - **Whisper back on-box:** `--profile whisper` plus
   `TRANSCRIPTION_PROVIDER=sidecar`. Budget ~1.5 GB.
-- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`.
-  Budget ~1.2 GB.
+- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`
+  and `DOCLING_SERVE_URL=http://docling-serve:5001`. Budget ~1.2 GB. Without
+  Docling (the lean default, `DOCLING_SERVE_URL` empty), complex PDFs go to the
+  OCR provider and the worker converts Word, PowerPoint, and Excel files itself
+  with mammoth/SheetJS. Before this was the default, the converter pointed at a
+  `docling-serve` that was not running, and every Office upload failed with
+  `docling-serve request failed: fetch failed`.
 - Either one needs a bigger VM first: stop it, `az vm resize -g <RESOURCE_GROUP>
   -n <VM_NAME> --size Standard_D4as_v7` (16 GB), start it.
-- **Document Intelligence** F0 caps at 500 pages/month. Upgrade in place:
+- **Document Intelligence** on F0 (only an older install would still be on it)
+  analyzes two pages per document. Upgrade in place:
   `az cognitiveservices account update -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> --sku S0`.
+  On S0, a sustained burst of 429s means the 15-per-second submit limit; raise
+  it with a support request ("Quota or usage validation").
 - **Managed Postgres** (Azure Flexible Server, ~$15/mo and up) is the first
   upgrade worth buying once you have users whose data you cannot lose — it
   brings real backups and point-in-time restore.
@@ -728,8 +889,8 @@ to that error at call time.
 | Managed disk (64 GB StandardSSD) | ~$5 |
 | Static public IP | ~$4 |
 | Backup storage (Cool, small) | ~$1 |
-| Document Intelligence F0 | $0 (500 pages/mo) |
-| **Total** | **~$72** |
+| Document Intelligence S0 | per page OCR'd: $10 per 1,000 (layout) or $1.50 per 1,000 (read) |
+| **Total** | **~$72 + OCR pages** |
 
 After a month of stable running, a 1-year reservation or savings plan takes the
 VM down by roughly a third (~$51/mo all-in). Microsoft for Startups Founders Hub

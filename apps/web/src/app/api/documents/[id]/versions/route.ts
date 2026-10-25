@@ -43,7 +43,9 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import {
@@ -71,13 +73,17 @@ const CreateVersionSchema = z.object({
  * Returns the numeric document id or an error response.
  */
 function parseDocumentId(
-    rawId: string
+    rawId: string,
+    locale: Locale
 ): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
     const documentId = Number(rawId);
     if (!Number.isInteger(documentId) || documentId <= 0) {
         return {
             ok: false,
-            response: NextResponse.json({ error: "Invalid document id" }, { status: 400 }),
+            response: NextResponse.json(
+                { error: translatorFor(locale, "sources.server.errors")("invalidDocumentId") },
+                { status: 400 }
+            ),
         };
     }
     return { ok: true, documentId };
@@ -91,7 +97,8 @@ function parseDocumentId(
  */
 async function authorizeDocumentAccess(
     documentId: number,
-    permission: Permission
+    permission: Permission,
+    locale: Locale
 ): Promise<
     | {
           ok: true;
@@ -121,7 +128,10 @@ async function authorizeDocumentAccess(
     if (!doc) {
         return {
             ok: false,
-            response: NextResponse.json({ error: "Document not found" }, { status: 404 }),
+            response: NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                { status: 404 }
+            ),
         };
     }
 
@@ -135,13 +145,19 @@ async function authorizeDocumentAccess(
 }
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.versions");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { id: rawId } = await context.params;
-            const parsed = parseDocumentId(rawId);
+            const parsed = parseDocumentId(rawId, locale);
             if (!parsed.ok) return parsed.response;
 
-            const authResult = await authorizeDocumentAccess(parsed.documentId, "documents.upload");
+            const authResult = await authorizeDocumentAccess(
+                parsed.documentId,
+                "documents.upload",
+                locale
+            );
             if (!authResult.ok) return authResult.response;
 
             const { userId, doc } = authResult;
@@ -149,7 +165,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             // A new version replaces the file: it takes edit access to the
             // document (its own grant, or its folder's level).
             if (!(await authResult.canEditDocument())) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "sources.server.errors")("documentEditDenied") },
+                    { status: 403 }
+                );
             }
 
             // Phase 1 of Drive-linked files: a linked document's editing
@@ -161,9 +180,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 return NextResponse.json(
                     {
                         error: "linked_to_google_drive",
-                        details:
-                            "This document is linked to Google Drive and edited there. " +
-                            "Sync or unlink it before uploading a version in-app.",
+                        details: translatorFor(locale, "sources.server.drive")("linkedUpload"),
                         driveUrl: driveLink.driveWebViewLink,
                     },
                     { status: 409 }
@@ -188,8 +205,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             // before defaultProvider / authorizeInternalFileRef.
             getEngine();
 
-            const effectiveProvider =
-                parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+            // The default only decides how the file is authorized below. The
+            // version persists the caller's own choice, as a first upload does,
+            // so with none it is routed like one (text layer or OCR_PDF_STRATEGY)
+            // instead of being pinned to the default provider.
+            const explicitProvider = parseProvider(preferredProvider);
+            const effectiveProvider = explicitProvider ?? getOcrConfig().defaultProvider;
 
             // A new version can point at an internal file row, which the OCR worker
             // will later fetch with a signed token. Prove the workspace owns it
@@ -209,7 +230,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 }
             } catch (error) {
                 if (error instanceof UploadAuthorizationError) {
-                    return NextResponse.json({ error: error.message }, { status: error.status });
+                    return NextResponse.json(
+                        { error: wordOr(error.copy, error.message, locale) },
+                        { status: error.status }
+                    );
                 }
                 throw error;
             }
@@ -225,9 +249,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 // rows. Refuse rather than locking in the wrong type here.
                 return NextResponse.json(
                     {
-                        error:
-                            "Document file type not yet initialized. Run the versioning backfill first: " +
-                            "pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
+                        error: t("fileTypeNotInitialized"),
                     },
                     { status: 409 }
                 );
@@ -236,8 +258,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             if (mimeType.toLowerCase() !== expectedFileType.toLowerCase()) {
                 return NextResponse.json(
                     {
-                        error: "File type mismatch",
-                        details: `Document is locked to ${expectedFileType}; received ${mimeType}. New versions must be the same file type as the original.`,
+                        error: t("fileTypeMismatch"),
+                        details: t("fileTypeMismatchDetail", {
+                            expected: expectedFileType,
+                            received: mimeType,
+                        }),
                         expected: expectedFileType,
                         received: mimeType,
                     },
@@ -258,7 +283,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 mimeType,
                 fileSize,
                 changelog,
-                preferredProvider: effectiveProvider,
+                preferredProvider: explicitProvider,
                 originalFilename,
             });
 
@@ -275,7 +300,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                     documentId: parsed.documentId,
                     jobId: lifecycle.job.id,
                     eventIds: lifecycle.eventIds,
-                    message: "New version uploaded, processing started",
+                    message: t("uploaded"),
                 },
                 { status: 202 }
             );
@@ -289,9 +314,8 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             if (message.includes("doc_versions_document_version_unique")) {
                 return NextResponse.json(
                     {
-                        error: "Version number conflict",
-                        details:
-                            "Another version upload completed first. Please retry this request.",
+                        error: t("numberConflict"),
+                        details: t("numberConflictDetail"),
                     },
                     { status: 409 }
                 );
@@ -299,7 +323,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
             return NextResponse.json(
                 {
-                    error: "Failed to create new document version",
+                    error: t("createFailed"),
                     details: message,
                 },
                 { status: 500 }
@@ -309,12 +333,17 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 }
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
     try {
         const { id: rawId } = await context.params;
-        const parsed = parseDocumentId(rawId);
+        const parsed = parseDocumentId(rawId, locale);
         if (!parsed.ok) return parsed.response;
 
-        const authResult = await authorizeDocumentAccess(parsed.documentId, "documents.read");
+        const authResult = await authorizeDocumentAccess(
+            parsed.documentId,
+            "documents.read",
+            locale
+        );
         if (!authResult.ok) return authResult.response;
 
         const { doc } = authResult;
@@ -366,7 +395,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         console.error("[Versions] GET failed:", error);
         return NextResponse.json(
             {
-                error: "Failed to list document versions",
+                error: translatorFor(locale, "sources.server.versions")("listFailed"),
                 details: error instanceof Error ? error.message : String(error),
             },
             { status: 500 }

@@ -7,11 +7,12 @@ import {
     validateRequestBody,
 } from "~/lib/validation";
 import { changeQueue, getSession } from "~/server/sessions/repository";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 type Params = { params: Promise<{ sessionId: string }> };
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     try {
@@ -21,9 +22,16 @@ export async function GET(_request: Request, { params }: Params) {
         );
         return session
             ? NextResponse.json({ items: session.queuedMessages, revision: session.queueRevision })
-            : NextResponse.json({ error: "Session not found" }, { status: 404 });
+            : NextResponse.json(
+                  {
+                      error: requestTranslator(request, "chat.server.sessions")("notFound"),
+                  },
+                  { status: 404 }
+              );
     } catch {
-        return serverError("Failed to load queued messages");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("loadQueueFailed")
+        );
     }
 }
 
@@ -44,9 +52,16 @@ async function update(request: Request, { params }: Params, claim: boolean) {
         );
         return result
             ? NextResponse.json(result, { status: result.conflict ? 409 : 200 })
-            : NextResponse.json({ error: "Session not found" }, { status: 404 });
+            : NextResponse.json(
+                  {
+                      error: requestTranslator(request, "chat.server.sessions")("notFound"),
+                  },
+                  { status: 404 }
+              );
     } catch {
-        return serverError("Failed to update queued messages");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("updateQueueFailed")
+        );
     }
 }
 export async function PUT(request: Request, params: Params) {

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { DocumentNote } from "~/server/db/schema";
 import {
     buildAnchorFromDraft,
@@ -92,6 +93,7 @@ export function DocumentNotesPanel({
     onDeleted,
     activeNoteId = null,
 }: Props) {
+    const t = useTranslations("notes.panel");
     const [notes, setNotes] = useState<DocumentNote[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [draft, setDraft] = useState<DraftState>(EMPTY_DRAFT);
@@ -119,15 +121,15 @@ export function DocumentNotesPanel({
         }
         try {
             const res = await fetch(`/api/notes?documentId=${encodeURIComponent(documentId)}`);
-            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            if (!res.ok) throw new Error(t("requestFailed", { status: res.status }));
             const data = (await res.json()) as { notes: DocumentNote[] };
             setNotes(data.notes ?? []);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to fetch notes");
+            setError(err instanceof Error ? err.message : t("fetchFailed"));
         } finally {
             setIsLoading(false);
         }
-    }, [documentId]);
+    }, [documentId, t]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -202,7 +204,7 @@ export function DocumentNotesPanel({
     const saveDraft = async () => {
         if (!draft.id) return;
         if (!draft.title.trim() && !draft.text.trim() && !draft.rich) {
-            setError("Add a title or body first.");
+            setError(t("emptyDraft"));
             return;
         }
         setSaving(true);
@@ -228,7 +230,7 @@ export function DocumentNotesPanel({
                 });
                 if (!res.ok) {
                     const body = (await res.json().catch(() => ({}))) as { error?: string };
-                    throw new Error(body.error ?? `Failed (${res.status})`);
+                    throw new Error(body.error ?? t("requestFailed", { status: res.status }));
                 }
             } else {
                 const res = await fetch(`/api/notes/${draft.id}`, {
@@ -238,7 +240,7 @@ export function DocumentNotesPanel({
                 });
                 if (!res.ok) {
                     const body = (await res.json().catch(() => ({}))) as { error?: string };
-                    throw new Error(body.error ?? `Failed (${res.status})`);
+                    throw new Error(body.error ?? t("requestFailed", { status: res.status }));
                 }
             }
 
@@ -246,7 +248,7 @@ export function DocumentNotesPanel({
             await fetchNotes();
             onChanged?.();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Save failed");
+            setError(err instanceof Error ? err.message : t("saveFailed"));
         } finally {
             setSaving(false);
         }
@@ -255,12 +257,12 @@ export function DocumentNotesPanel({
     const deleteNote = async (id: number) => {
         try {
             const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error(`Failed (${res.status})`);
+            if (!res.ok) throw new Error(t("requestFailed", { status: res.status }));
             setNotes(prev => prev.filter(n => n.id !== id));
             onDeleted?.(id);
             onChanged?.();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Delete failed");
+            setError(err instanceof Error ? err.message : t("deleteFailed"));
         }
     };
 
@@ -298,7 +300,7 @@ export function DocumentNotesPanel({
                             textTransform: "uppercase",
                         }}
                     >
-                        Notes
+                        {t("title")}
                     </div>
                     <span
                         className="mono"
@@ -314,7 +316,7 @@ export function DocumentNotesPanel({
                     </span>
                 </div>
                 <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
-                    Sticky annotations on this source.
+                    {t("subtitle")}
                 </div>
                 <button
                     type="button"
@@ -337,7 +339,7 @@ export function DocumentNotesPanel({
                         cursor: draft.id !== null || !documentId ? "not-allowed" : "pointer",
                     }}
                 >
-                    <Plus size={13} /> New note
+                    <Plus size={13} /> {t("newNote")}
                 </button>
             </div>
 
@@ -386,7 +388,7 @@ export function DocumentNotesPanel({
                             fontSize: 11,
                         }}
                     >
-                        Loading notes…
+                        {t("loading")}
                     </div>
                 ) : notes.length === 0 && draft.id === null ? (
                     <div
@@ -398,9 +400,9 @@ export function DocumentNotesPanel({
                         }}
                     >
                         <FileText size={28} style={{ margin: "0 auto 8px", opacity: 0.3 }} />
-                        <div>No notes on this source yet.</div>
+                        <div>{t("empty")}</div>
                         <div style={{ fontSize: 11, opacity: 0.7, marginTop: 4 }}>
-                            Click &ldquo;New note&rdquo; to start.
+                            {t("emptyHint")}
                         </div>
                     </div>
                 ) : (
@@ -445,11 +447,11 @@ export function DocumentNotesPanel({
                     onOpenChange={next => {
                         if (!next) setPendingDelete(null);
                     }}
-                    title="Delete this note?"
+                    title={t("deleteTitle")}
                     description={
                         pendingDelete?.title
-                            ? `“${pendingDelete.title}” will be removed. This cannot be undone.`
-                            : "This note will be removed. This cannot be undone."
+                            ? t("deleteDescriptionNamed", { title: pendingDelete.title })
+                            : t("deleteDescription")
                     }
                     onConfirm={() => {
                         const target = pendingDelete;

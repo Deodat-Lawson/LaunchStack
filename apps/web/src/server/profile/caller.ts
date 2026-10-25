@@ -11,6 +11,8 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
+import { requestLocaleOrDefault } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireAuthIdentity, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
@@ -45,7 +47,15 @@ export async function resolveProfileCaller(): Promise<ProfileCallerResult> {
     if (!row) {
         return {
             success: false,
-            response: NextResponse.json({ error: "No profile yet." }, { status: 404 }),
+            response: NextResponse.json(
+                {
+                    error: translatorFor(
+                        await requestLocaleOrDefault(),
+                        "settings.server.errors"
+                    )("noProfileYet"),
+                },
+                { status: 404 }
+            ),
         };
     }
     return {

@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     try {
         return NextResponse.json({ links: await listJoinLinks(ctx.data, requestOrigin(request)) });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/join-links GET]");
+        return workspaceErrorResponse(error, "[workspace/join-links GET]", request);
     }
 }
 
@@ -24,6 +24,6 @@ export async function POST(request: Request) {
         const link = await createJoinLink(ctx.data, body.data, requestOrigin(request));
         return NextResponse.json({ link }, { status: 201 });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/join-links POST]");
+        return workspaceErrorResponse(error, "[workspace/join-links POST]", request);
     }
 }

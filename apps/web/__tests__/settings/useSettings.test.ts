@@ -4,6 +4,8 @@
  * answer style from posing as the workspace default.
  */
 
+import { z } from "zod";
+
 import { getSetting, type SettingDefinition } from "~/lib/settings/registry";
 import type { ResolvedSetting } from "~/lib/settings/types";
 import {
@@ -14,6 +16,20 @@ import {
 } from "~/lib/settings/useSettings";
 
 const style = getSetting("chat.responseStyle") as SettingDefinition<string>;
+
+// No registry setting is folder-scoped today; the ladder still is.
+const processing: SettingDefinition<string> = {
+    key: "test.processing",
+    section: "labs",
+    label: "Processing",
+    description: "",
+    aliases: [],
+    scopes: ["workspace", "folder"],
+    permission: "settings.manage",
+    schema: z.enum(["standard", "azure", "docling"]),
+    default: "standard",
+    control: { kind: "text" },
+};
 
 function resolved(
     partial: Partial<ResolvedSetting<string>> & Pick<ResolvedSetting<string>, "value" | "source">
@@ -37,7 +53,6 @@ describe("defaultWriteScope", () => {
     });
 
     it("writes a folder-scoped setting on the folder in view, else the workspace", () => {
-        const processing = getSetting("documents.defaultProcessingMethod")!;
         expect(defaultWriteScope(processing, "Legal")).toBe("folder");
         expect(defaultWriteScope(processing, null)).toBe("workspace");
     });
@@ -46,7 +61,7 @@ describe("defaultWriteScope", () => {
 describe("settingAtScope", () => {
     it("shows the default before the server answers", () => {
         expect(settingAtScope(style, null, "workspace")).toEqual({
-            value: "concise",
+            value: "balanced",
             source: "default",
         });
     });
@@ -75,7 +90,7 @@ describe("settingAtScope", () => {
             stored: { member: "academic" },
         });
         expect(settingAtScope(style, own, "workspace")).toEqual({
-            value: "concise",
+            value: "balanced",
             source: "default",
         });
     });
@@ -98,7 +113,6 @@ describe("settingAtScope", () => {
     });
 
     it("walks folder before workspace when the row writes at folder scope", () => {
-        const processing = getSetting("documents.defaultProcessingMethod")!;
         const ladder: ResolvedSetting = {
             key: processing.key,
             value: "azure",

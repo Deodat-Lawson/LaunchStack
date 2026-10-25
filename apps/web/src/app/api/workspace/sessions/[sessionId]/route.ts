@@ -18,23 +18,28 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, UpdateSessionSchema, validateRequestBody } from "~/lib/validation";
 import { readSession } from "~/server/sessions/reader";
 import { deleteSession, updateSession } from "~/server/sessions/repository";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
 type Params = { params: Promise<{ sessionId: string }> };
 
-const notFound = () => NextResponse.json({ error: "Session not found" }, { status: 404 });
+const notFound = (request: Request) =>
+    NextResponse.json(
+        { error: requestTranslator(request, "chat.server.sessions")("notFound") },
+        { status: 404 }
+    );
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
     try {
         const session = await readSession(ctx.data, (await params).sessionId);
-        return session ? NextResponse.json({ session }) : notFound();
+        return session ? NextResponse.json({ session }) : notFound(request);
     } catch (error) {
         console.error("[workspace/sessions] read failed:", error);
-        return serverError("Failed to load this chat");
+        return serverError(requestTranslator(request, "workspace.server.errors")("loadChatFailed"));
     }
 }
 
@@ -51,14 +56,16 @@ export async function PATCH(request: Request, { params }: Params) {
             (await params).sessionId,
             validation.data
         );
-        return session ? NextResponse.json({ session }) : notFound();
+        return session ? NextResponse.json({ session }) : notFound(request);
     } catch (error) {
         console.error("[workspace/sessions] update failed:", error);
-        return serverError("Failed to update this chat");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("updateChatFailed")
+        );
     }
 }
 
-export async function DELETE(_request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
@@ -67,9 +74,11 @@ export async function DELETE(_request: Request, { params }: Params) {
             { companyId: ctx.data.companyId, userId: ctx.data.authUserId },
             (await params).sessionId
         );
-        return deleted ? NextResponse.json({ deleted: true }) : notFound();
+        return deleted ? NextResponse.json({ deleted: true }) : notFound(request);
     } catch (error) {
         console.error("[workspace/sessions] delete failed:", error);
-        return serverError("Failed to delete this chat");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("deleteChatFailed")
+        );
     }
 }

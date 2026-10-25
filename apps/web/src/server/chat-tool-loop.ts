@@ -39,8 +39,12 @@ export interface ChatTool {
     parameters: Record<string, unknown>;
     /** What the chat shows while this call runs, e.g. `Searching the web for "…"`. */
     describe(args: unknown): string;
-    /** The result text handed back to the model. A throw becomes an error result. */
-    run(args: unknown, signal: AbortSignal): Promise<string>;
+    /**
+     * The result text handed back to the model. A throw becomes an error
+     * result. A long call may report progress ("Reading 37 sources… 12
+     * done"), which replaces the `describe` text in the chat.
+     */
+    run(args: unknown, signal: AbortSignal, progress?: (status: string) => void): Promise<string>;
 }
 
 export interface ToolCallRecord {
@@ -148,6 +152,48 @@ function readToolCalls(message: unknown, round: number): RoundCall[] {
         });
     }
     return calls;
+}
+
+/** A tool call as the endpoint sent it, provider fields included. */
+type WireToolCall = Record<string, unknown> & { id?: unknown; extra_content?: unknown };
+
+/**
+ * The model's tool-calling turn, as it goes back to the model next round.
+ *
+ * Gemini 3 on Google's own OpenAI-compatible endpoint signs every call
+ * (`extra_content.google.thought_signature`) and refuses the next request
+ * with a 400 when a call comes back unsigned. LangChain rebuilds the wire
+ * calls from the parsed ones and drops the field, so when the endpoint's own
+ * records carry one they go back as they came: with no parsed `tool_calls`,
+ * LangChain sends `additional_kwargs.tool_calls` verbatim.
+ */
+function toolCallTurn(content: string, calls: RoundCall[], message: unknown): AIMessage {
+    const parsed = calls.map(call => ({
+        id: call.id,
+        name: call.name,
+        args: (call.args ?? {}) as Record<string, unknown>,
+    }));
+    const wire: unknown = (message as { additional_kwargs?: { tool_calls?: unknown } })
+        .additional_kwargs?.tool_calls;
+    const records = Array.isArray(wire) ? (wire as WireToolCall[]) : [];
+    const sent = calls.map(call => records.find(record => record?.id === call.id));
+    if (sent.some(record => !record) || !sent.some(record => record?.extra_content)) {
+        return new AIMessage({ content, tool_calls: parsed });
+    }
+    const turn = new AIMessage({
+        content,
+        tool_calls: parsed,
+        additional_kwargs: {
+            // A streamed call's `index` places its chunks; it is not part of the call.
+            tool_calls: sent.map(record =>
+                Object.fromEntries(Object.entries(record!).filter(([key]) => key !== "index"))
+            ) as unknown as NonNullable<AIMessage["additional_kwargs"]["tool_calls"]>,
+        },
+    });
+    // Built with the parsed calls (else LangChain re-parses the records and
+    // warns), then cleared so the records go out as sent.
+    turn.tool_calls = [];
+    return turn;
 }
 
 export async function answerWithTools(
@@ -269,16 +315,7 @@ export async function answerWithTools(
             };
         }
 
-        conversation.push(
-            new AIMessage({
-                content: roundText,
-                tool_calls: calls.map(call => ({
-                    id: call.id,
-                    name: call.name,
-                    args: (call.args ?? {}) as Record<string, unknown>,
-                })),
-            })
-        );
+        conversation.push(toolCallTurn(roundText, calls, message));
         for (const call of calls) {
             throwIfChatAborted(signal);
             const tool = byName.get(call.name);
@@ -292,7 +329,7 @@ export async function answerWithTools(
             } else {
                 onStatus?.(tool.describe(call.args));
                 try {
-                    content = await tool.run(call.args, signal);
+                    content = await tool.run(call.args, signal, status => onStatus?.(status));
                     ok = true;
                 } catch (error) {
                     throwIfChatAborted(signal);

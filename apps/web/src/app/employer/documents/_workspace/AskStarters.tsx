@@ -1,6 +1,7 @@
 "use client";
 
 import { Building2, FileText, Layers, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -32,52 +33,38 @@ export interface AskStartersProps {
     onOpenProfile?: () => void;
 }
 
-/** Shown when the route itself is unreachable. Generic by necessity, but they still send. */
-const OFFLINE_STARTERS: AskStarter[] = [
-    {
-        id: "o1",
-        question: "Summarize what my sources cover",
-        hint: "across every source",
-        documentIds: [],
-    },
-    {
-        id: "o2",
-        question: "What are the key dates and deadlines across my documents?",
-        hint: "dates in every source",
-        documentIds: [],
-    },
-    {
-        id: "o3",
-        question: "Who are the people and organizations mentioned most?",
-        hint: "names across every source",
-        documentIds: [],
-    },
-    {
-        id: "o4",
-        question: "Which decisions, risks, or open questions come up most often?",
-        hint: "themes across every source",
-        documentIds: [],
-    },
-];
+type StartersTranslator = ReturnType<typeof useTranslations<"chat.starters">>;
 
-function basisLine(data: AskStartersPayload | null, error: string | null): string {
-    if (!data) {
-        return error
-            ? "Suggestions are offline — these still work"
-            : "Finding questions worth asking…";
-    }
+/**
+ * Shown when the route itself is unreachable. Generic by necessity, but they
+ * still send — in the interface language, which the model answers in.
+ */
+const OFFLINE_STARTER_IDS = ["o1", "o2", "o3", "o4"] as const;
+
+function offlineStarters(t: StartersTranslator): AskStarter[] {
+    return OFFLINE_STARTER_IDS.map(id => ({
+        id,
+        question: t(`offline.${id}.question`),
+        hint: t(`offline.${id}.hint`),
+        documentIds: [],
+    }));
+}
+
+function basisLine(
+    data: AskStartersPayload | null,
+    error: string | null,
+    t: StartersTranslator
+): string {
+    if (!data) return error ? t("offlineLine") : t("loadingLine");
     const { basis } = data;
-    const n = basis.sourceCount;
-    const sources = `${n} source${n === 1 ? "" : "s"}`;
+    const count = basis.sourceCount;
     if (basis.mode === "fallback") {
-        return n > 0
-            ? `Starter questions · ${sources} indexed`
-            : "Starter questions · add a source for grounded answers";
+        return count > 0 ? t("fallbackIndexed", { count }) : t("fallbackEmpty");
     }
-    const who = basis.companyName ?? "your workspace";
+    const company = basis.companyName ?? t("yourWorkspace");
     return basis.hasProfile
-        ? `Suggested from the ${who} profile and ${sources}`
-        : `Suggested from ${sources} in ${who}`;
+        ? t("fromProfile", { company, count })
+        : t("fromSources", { company, count });
 }
 
 function StarterSkeleton() {
@@ -101,6 +88,7 @@ interface StarterCardProps {
 }
 
 function StarterCard({ starter, pinned, disabled, dimmed, onClick }: StarterCardProps) {
+    const t = useTranslations("chat.starters");
     return (
         <Button
             type="button"
@@ -108,7 +96,7 @@ function StarterCard({ starter, pinned, disabled, dimmed, onClick }: StarterCard
             disabled={disabled}
             onClick={onClick}
             data-testid={`ask-starter-${starter.id}`}
-            title={pinned ? "Asks over the document this is about" : "Asks across your sources"}
+            title={pinned ? t("cardPinned") : t("cardAcross")}
             className={cn(
                 "bg-panel border-line hover:border-brand hover:bg-panel h-auto w-full flex-col items-start gap-1 whitespace-normal rounded-[10px] px-3.5 py-3 text-left font-normal shadow-none transition-[border-color,opacity]",
                 dimmed && "opacity-70"
@@ -136,18 +124,19 @@ export function AskStarters({
     onAsk,
     onOpenProfile,
 }: AskStartersProps) {
+    const t = useTranslations("chat.starters");
     const { data, loading, refreshing, error, refresh } = useAskStarters(revisionKey);
-    const starters = data?.starters ?? (error ? OFFLINE_STARTERS : null);
+    const starters = data?.starters ?? (error ? offlineStarters(t) : null);
     const sourceIds = new Set(sources.map(s => s.id));
     const refsFor = (starter: AskStarter) =>
         starter.documentIds.map(id => `d${id}`).filter(id => sourceIds.has(id));
     const showProfileNudge = Boolean(data && !data.basis.hasProfile && onOpenProfile);
 
     return (
-        <section aria-label="Starter questions" className="mb-6">
+        <section aria-label={t("sectionLabel")} className="mb-6">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <p className="text-ink-3 min-w-0 truncate text-xs" aria-live="polite">
-                    {basisLine(data, error)}
+                    {basisLine(data, error, t)}
                 </p>
                 <div className="flex shrink-0 items-center gap-1">
                     {showProfileNudge && (
@@ -157,10 +146,10 @@ export function AskStarters({
                             size="sm"
                             className="text-ink-3 hover:text-brand-ink h-7 px-2 text-xs"
                             onClick={onOpenProfile}
-                            title="Extract a company profile from your documents to sharpen these"
+                            title={t("profileTitle")}
                         >
                             <Building2 className="size-3.5" aria-hidden />
-                            <span className="@max-sm:sr-only">Add company profile</span>
+                            <span className="@max-sm:sr-only">{t("addProfile")}</span>
                         </Button>
                     )}
                     <Button
@@ -170,13 +159,13 @@ export function AskStarters({
                         className="text-ink-2 h-7 px-2 text-xs"
                         onClick={refresh}
                         disabled={disabled || loading || refreshing}
-                        title="Suggest different questions"
+                        title={t("shuffleTitle")}
                     >
                         <RefreshCw
                             className={cn("size-3.5", refreshing && "animate-spin")}
                             aria-hidden
                         />
-                        Shuffle
+                        {t("shuffle")}
                     </Button>
                 </div>
             </div>
@@ -184,7 +173,7 @@ export function AskStarters({
             {/* Two columns when the pane has room for them, by the pane's
                 width rather than the window's: a chat in a third of a wide
                 screen is still narrow. */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5">
+            <div className="@max-sm:grid-cols-1 grid grid-cols-2 gap-2.5">
                 {starters === null
                     ? Array.from({ length: ASK_STARTER_COUNT }, (_, i) => (
                           <StarterSkeleton key={i} />

@@ -28,7 +28,8 @@ export const iconBtnStyle: CSSProperties = {
 };
 
 export interface StatusBadge {
-    label: string;
+    /** Which badge — the label is `notes.card.status.<status>`. */
+    status: "drifted" | "orphaned";
     color: string;
     bg: string;
     icon: ReactNode;
@@ -37,14 +38,14 @@ export interface StatusBadge {
 export function statusBadge(status: string | null | undefined): StatusBadge | null {
     if (status === "drifted")
         return {
-            label: "Anchor moved",
+            status: "drifted",
             color: "oklch(0.5 0.18 70)",
             bg: "oklch(0.96 0.06 70)",
             icon: createElement(AlertTriangle, { size: 10 }),
         };
     if (status === "orphaned")
         return {
-            label: "Unanchored",
+            status: "orphaned",
             color: "oklch(0.5 0.2 30)",
             bg: "oklch(0.96 0.04 30)",
             icon: createElement(AlertTriangle, { size: 10 }),

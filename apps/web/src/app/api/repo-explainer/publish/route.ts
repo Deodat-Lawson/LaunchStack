@@ -34,9 +34,11 @@ import {
     handleApiError,
 } from "~/lib/api-utils";
 import { processDocumentUpload } from "~/server/services/document-upload";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { serializeExplainerJob } from "~/server/services/repo-explainer-jobs";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -48,6 +50,7 @@ const PublishSchema = z.object({
 });
 
 export async function POST(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "agents.server.repoExplainer");
     try {
         const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
@@ -57,18 +60,19 @@ export async function POST(request: Request) {
         const { jobId, category } = validation.data;
 
         if (!(await canEditFolder(ctx.data, category ?? ""))) {
-            return createForbiddenError(FOLDER_EDIT_DENIED);
+            // FOLDER_EDIT_DENIED (~/server/services/folder-access), in the reader's language.
+            return createForbiddenError(t("folderEditDenied"));
         }
 
         const companyId = BigInt(ctx.data.companyId);
         const job = await getExplainerJob(jobId, companyId);
-        if (!job) return createNotFoundError("Repo explainer job");
+        if (!job) return createNotFoundError(t("jobNotFound"));
         if (job.status !== "completed" || !job.result || !job.sha) {
-            return createValidationError("Only completed explanations can be published");
+            return createValidationError(t("onlyCompletedPublish"));
         }
 
         const workspace = await getRepoWorkspace(job.workspaceId, companyId);
-        if (!workspace) return createNotFoundError("Repository workspace");
+        if (!workspace) return createNotFoundError(t("workspaceNotFound"));
 
         const markdown = renderExplanationMarkdown({
             owner: workspace.owner,
@@ -118,6 +122,6 @@ export async function POST(request: Request) {
             201
         );
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

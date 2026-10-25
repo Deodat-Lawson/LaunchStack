@@ -6,6 +6,7 @@
 
 import type { RoutingDecision } from "./complexity";
 import { renderPagesToImages } from "./complexity";
+import { getOcrConfig } from "./config";
 import { enrichPageWithVlm, isVlmEnrichmentConfigured } from "./enrichment";
 import { createAzureAdapter } from "./adapters/azureAdapter";
 import { createLandingAIAdapter } from "./adapters/landingAdapter";
@@ -111,6 +112,11 @@ export interface RouterDecisionResult {
     reason: string;
     visionLabel?: string;
     visionScore?: number;
+    /**
+     * When the selected provider fails, read the PDF's own text layer instead
+     * of failing the stage. Set by OCR_PDF_STRATEGY=provider-first.
+     */
+    nativeFallback?: boolean;
 }
 
 /**
@@ -145,6 +151,46 @@ function isValidOCRProvider(p: string): p is (typeof OCR_ONLY_PROVIDERS)[number]
     return OCR_ONLY_PROVIDERS.includes(p as (typeof OCR_ONLY_PROVIDERS)[number]);
 }
 
+/** True when the provider's credentials (or, for Docling, the converter) are configured. */
+function isOcrProviderConfigured(provider: (typeof OCR_ONLY_PROVIDERS)[number]): boolean {
+    const cfg = getOcrConfig();
+    switch (provider) {
+        case "AZURE":
+            return Boolean(cfg.azure?.endpoint && cfg.azure.key);
+        case "LANDING_AI":
+            return Boolean(cfg.landingAi?.apiKey);
+        case "DATALAB":
+            return Boolean(cfg.datalabApiKey);
+        case "DOCLING":
+            return Boolean(cfg.converter?.url);
+    }
+}
+
+/**
+ * The provider every PDF goes to under OCR_PDF_STRATEGY=provider-first, or
+ * undefined when the strategy is text-layer-first or the default provider
+ * cannot run (then the converter's text-layer-first routing applies).
+ */
+function getProviderFirstOcrProvider(): OCRProvider | undefined {
+    const cfg = getOcrConfig();
+    if (cfg.pdfStrategy !== "provider-first") return undefined;
+
+    const provider = cfg.defaultProvider;
+    if (!provider || !isValidOCRProvider(provider)) {
+        console.warn(
+            `[Router] OCR_PDF_STRATEGY=provider-first needs OCR_DEFAULT_PROVIDER set to an OCR provider (got ${provider ?? "nothing"}); reading the text layer first`
+        );
+        return undefined;
+    }
+    if (!isOcrProviderConfigured(provider)) {
+        console.warn(
+            `[Router] OCR_PDF_STRATEGY=provider-first but ${provider} is not configured; reading the text layer first`
+        );
+        return undefined;
+    }
+    return provider;
+}
+
 /**
  * Determine how to route the document for processing
  */
@@ -162,6 +208,25 @@ export async function routeDocument(
             pageCount,
             selectedProvider: preferred,
             reason: "preferred-provider",
+            // A pinned provider keeps provider-first's text-layer fallback, so
+            // an upload that names its provider fails no more often than one
+            // that leaves it to OCR_DEFAULT_PROVIDER.
+            ...(preferred !== "NATIVE_PDF" && getOcrConfig().pdfStrategy === "provider-first"
+                ? { nativeFallback: true }
+                : {}),
+        };
+    }
+
+    // No converter round trip: the text-layer check it runs is exactly what
+    // this strategy skips. The text layer is read only if the provider fails.
+    const providerFirst = getProviderFirstOcrProvider();
+    if (providerFirst) {
+        return {
+            isNativePDF: false,
+            pageCount: await getPageCount(documentUrl),
+            selectedProvider: providerFirst,
+            reason: "provider-first",
+            nativeFallback: true,
         };
     }
 
@@ -230,27 +295,15 @@ export async function normalizeDocument(
     if (routerDecision.isNativePDF) {
         normalizedDoc = await processNativePDF(documentUrl);
     } else {
-        switch (routerDecision.selectedProvider) {
-            case "AZURE":
-                normalizedDoc = await processWithAzure(documentUrl);
-                break;
-            case "LANDING_AI":
-                normalizedDoc = await processWithLandingAI(documentUrl);
-                break;
-            case "DATALAB":
-                normalizedDoc = await processWithDatalab(documentUrl);
-                break;
-            case "DOCLING":
-                normalizedDoc = await processWithDocling(documentUrl);
-                break;
-            case "NATIVE_PDF":
-                normalizedDoc = await processNativePDF(documentUrl);
-                break;
-            default:
-                console.warn(
-                    `[Normalize] Unknown provider "${routerDecision.selectedProvider}", falling back to native PDF extraction`
-                );
-                normalizedDoc = await processNativePDF(documentUrl);
+        try {
+            normalizedDoc = await processWithProvider(documentUrl, routerDecision.selectedProvider);
+        } catch (error) {
+            if (!routerDecision.nativeFallback) throw error;
+            normalizedDoc = await fallBackToTextLayer(
+                documentUrl,
+                routerDecision.selectedProvider,
+                error
+            );
         }
     }
 
@@ -811,6 +864,9 @@ function toStoredConfidencePercent(confidence: number | undefined): number | und
  * record, and mark the OCR job as completed.  Needs only counts and metadata,
  * not vectors or chunk content.
  */
+/** The keys apps/worker's dead-event handler stamps on a failed source. */
+const FAILURE_STAMP_KEYS = new Set(["error", "errorMessage", "failedAt"]);
+
 export async function finalizeStorage(
     documentId: number,
     jobId: string,
@@ -874,12 +930,18 @@ export async function finalizeStorage(
             .from(documentTable)
             .where(eq(documentTable.id, documentId))
             .limit(1);
-        const preserved =
-            existing?.ocrMetadata &&
-            typeof existing.ocrMetadata === "object" &&
-            !Array.isArray(existing.ocrMetadata)
-                ? (existing.ocrMetadata as Record<string, unknown>)
-                : {};
+        // ...except the dead-event handler's failure stamp: a run that
+        // succeeds after it (an operator replay, a re-upload, Retry) must not
+        // carry a stale "processing_failed" and its error message forward.
+        const preserved = Object.fromEntries(
+            Object.entries(
+                existing?.ocrMetadata &&
+                    typeof existing.ocrMetadata === "object" &&
+                    !Array.isArray(existing.ocrMetadata)
+                    ? (existing.ocrMetadata as Record<string, unknown>)
+                    : {}
+            ).filter(([key]) => !FAILURE_STAMP_KEYS.has(key))
+        );
         const ocrMetadataPayload = {
             ...preserved,
             totalPages: meta.totalPages,
@@ -928,6 +990,8 @@ export async function finalizeStorage(
             .set({
                 status: "completed",
                 completedAt: new Date(),
+                // A replayed job that failed before still holds that error.
+                errorMessage: null,
                 processingDurationMs: Date.now() - pipelineStartTime,
                 pageCount: meta.totalPages,
                 actualProvider: meta.provider,
@@ -1171,9 +1235,36 @@ export async function markJobFailed(jobId: string, error: Error): Promise<void> 
  * Uses pdfjs-serverless for Node.js/serverless (no DOMMatrix) - compatible with Inngest, Vercel, etc.
  */
 export async function processNativePDF(documentUrl: string): Promise<NormalizedDocument> {
+    const { document } = await readTextLayer(documentUrl, { findImageOnlyPages: false });
+    return document;
+}
+
+/** pdf.js operators that paint an image onto the page. */
+const IMAGE_PAINT_OPS = [
+    "paintImageXObject",
+    "paintImageXObjectRepeat",
+    "paintInlineImageXObject",
+    "paintInlineImageXObjectGroup",
+    "paintImageMaskXObject",
+    "paintImageMaskXObjectGroup",
+    "paintImageMaskXObjectRepeat",
+] as const;
+
+/**
+ * Reads a PDF's own text layer, page by page. With `findImageOnlyPages`, it
+ * also reports the pages that have no text but paint an image — most likely
+ * scanned, so the text layer reads them as empty. A blank page paints
+ * nothing and is not reported.
+ */
+async function readTextLayer(
+    documentUrl: string,
+    { findImageOnlyPages }: { findImageOnlyPages: boolean }
+): Promise<{ document: NormalizedDocument; imageOnlyPages: number[] }> {
     const startTime = Date.now();
 
-    const { getDocument } = await import("pdfjs-serverless");
+    const { getDocument, OPS } = await import("pdfjs-serverless");
+    const imagePaintOps = new Set<number>(IMAGE_PAINT_OPS.map(name => OPS[name]));
+    const imageOnlyPages: number[] = [];
 
     // 1. Fetch PDF data
     const response = await getStoragePort().download(documentUrl);
@@ -1204,19 +1295,27 @@ export async function processNativePDF(documentUrl: string): Promise<NormalizedD
             textBlocks: text.length > 0 ? [text] : [],
             tables: [],
         });
+
+        if (findImageOnlyPages && text.length === 0) {
+            const { fnArray } = await page.getOperatorList();
+            if (fnArray.some(op => imagePaintOps.has(op))) imageOnlyPages.push(i);
+        }
     }
 
     await pdfDoc.destroy();
 
     return {
-        pages,
-        metadata: {
-            totalPages: numPages,
-            provider: "NATIVE_PDF",
-            processingTimeMs: Date.now() - startTime,
-            // No confidenceScore: native text extraction reports none, and
-            // fabricated constants are gone (ADR-004).
+        document: {
+            pages,
+            metadata: {
+                totalPages: numPages,
+                provider: "NATIVE_PDF",
+                processingTimeMs: Date.now() - startTime,
+                // No confidenceScore: native text extraction reports none, and
+                // fabricated constants are gone (ADR-004).
+            },
         },
+        imageOnlyPages,
     };
 }
 
@@ -1251,4 +1350,86 @@ export async function processWithDatalab(documentUrl: string): Promise<Normalize
 export async function processWithDocling(documentUrl: string): Promise<NormalizedDocument> {
     const adapter = createDoclingAdapter();
     return adapter.uploadDocument(documentUrl);
+}
+
+async function processWithProvider(
+    documentUrl: string,
+    provider: OCRProvider
+): Promise<NormalizedDocument> {
+    switch (provider) {
+        case "AZURE":
+            return processWithAzure(documentUrl);
+        case "LANDING_AI":
+            return processWithLandingAI(documentUrl);
+        case "DATALAB":
+            return processWithDatalab(documentUrl);
+        case "DOCLING":
+            return processWithDocling(documentUrl);
+        case "NATIVE_PDF":
+            return processNativePDF(documentUrl);
+        default:
+            console.warn(
+                `[Normalize] Unknown provider "${provider}", falling back to native PDF extraction`
+            );
+            return processNativePDF(documentUrl);
+    }
+}
+
+/**
+ * True when the provider refused the file itself (bad, unsupported, or
+ * oversized content), so retrying it would be refused the same way. Adapters
+ * mark such errors with `fileRejected: true`.
+ */
+function providerRejectedFile(error: unknown): boolean {
+    return (
+        typeof error === "object" &&
+        error !== null &&
+        (error as { fileRejected?: unknown }).fileRejected === true
+    );
+}
+
+/**
+ * OCR_PDF_STRATEGY=provider-first: the provider failed, so read the PDF's own
+ * text layer instead — but never index a document with holes the provider
+ * could still fill. A scan has no text layer at all, so its provider error
+ * stands and the outbox retries the provider. A mixed PDF with some scanned
+ * pages (no text, an image) is retried too, unless the provider refused the
+ * file outright; then the text layer is all there will ever be.
+ */
+async function fallBackToTextLayer(
+    documentUrl: string,
+    provider: OCRProvider,
+    providerError: unknown
+): Promise<NormalizedDocument> {
+    const reason = providerError instanceof Error ? providerError.message : "unknown error";
+    console.warn(`[Normalize] ${provider} failed, reading the PDF's text layer instead: ${reason}`);
+
+    let textLayer: { document: NormalizedDocument; imageOnlyPages: number[] };
+    try {
+        textLayer = await readTextLayer(documentUrl, { findImageOnlyPages: true });
+    } catch (nativeError) {
+        const nativeReason = nativeError instanceof Error ? nativeError.message : "unknown error";
+        console.warn(`[Normalize] Text-layer fallback failed too: ${nativeReason}`);
+        throw providerError;
+    }
+    const { document, imageOnlyPages } = textLayer;
+
+    if (!document.pages.some(page => page.textBlocks.length > 0)) {
+        console.warn("[Normalize] PDF has no text layer; keeping the provider error");
+        throw providerError;
+    }
+
+    if (imageOnlyPages.length > 0) {
+        const pageList = imageOnlyPages.join(", ");
+        if (!providerRejectedFile(providerError)) {
+            console.warn(
+                `[Normalize] Text layer cannot read page(s) ${pageList} (image, no text); keeping the provider error so ${provider} is retried`
+            );
+            throw providerError;
+        }
+        console.warn(
+            `[Normalize] ${provider} refused this file; indexing the text layer without page(s) ${pageList} (image, no text)`
+        );
+    }
+    return document;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Copy,
     Download,
@@ -24,7 +25,7 @@ import {
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
 
-import { copyPageAsImage, runExport, type ExportFormat } from "../lib/export";
+import { copyPageAsImage, ExportError, runExport, type ExportFormat } from "../lib/export";
 import { activePage, pageBounds, selectionBounds } from "../model/doc";
 import { toMarkdownOutline, toMermaid } from "../model/serialize";
 import type { EditorState } from "../model/store";
@@ -39,18 +40,18 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  * are the lossy-but-useful text formats people paste into docs and READMEs.
  */
 
+/** Format names are the formats' own; the hint is `mindmap.export.hints.<id>`. */
 const FORMATS: {
     id: ExportFormat;
     label: string;
-    hint: string;
     Icon: typeof ImageIcon;
 }[] = [
-    { id: "png", label: "PNG", hint: "Raster image for slides and chat", Icon: ImageIcon },
-    { id: "svg", label: "SVG", hint: "Vector — scales and stays editable", Icon: FileCode },
-    { id: "pdf", label: "PDF", hint: "One page, sized to the diagram", Icon: FileText },
-    { id: "json", label: "JSON", hint: "Lossless — re-imports into Mindmap", Icon: FileJson },
-    { id: "markdown", label: "Markdown", hint: "Indented outline of every topic", Icon: FileText },
-    { id: "mermaid", label: "Mermaid", hint: "Flowchart code for READMEs", Icon: FileCode },
+    { id: "png", label: "PNG", Icon: ImageIcon },
+    { id: "svg", label: "SVG", Icon: FileCode },
+    { id: "pdf", label: "PDF", Icon: FileText },
+    { id: "json", label: "JSON", Icon: FileJson },
+    { id: "markdown", label: "Markdown", Icon: FileText },
+    { id: "mermaid", label: "Mermaid", Icon: FileCode },
 ];
 
 const selectSelection = (s: EditorState) => s.selection;
@@ -64,6 +65,8 @@ export function ExportDialog({
     onOpenChange: (open: boolean) => void;
     getSvgElement: () => SVGSVGElement | null;
 }) {
+    const t = useTranslations("mindmap");
+    const tc = useTranslations("common");
     const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
     const [format, setFormat] = useState<ExportFormat>("png");
@@ -94,10 +97,14 @@ export function ExportDialog({
                 scale: Number(scale),
                 transparent,
             });
-            toast.success(`Exported as ${format.toUpperCase()}`);
+            toast.success(t("export.exported", { format: format.toUpperCase() }));
             onOpenChange(false);
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Export failed");
+            if (error instanceof ExportError) toast.error(t(`errors.${error.code}`));
+            else
+                toast.error(t("export.failed"), {
+                    description: error instanceof Error ? error.message : undefined,
+                });
         } finally {
             setBusy(false);
         }
@@ -112,9 +119,9 @@ export function ExportDialog({
                   : JSON.stringify(doc, null, 2);
         try {
             await navigator.clipboard.writeText(text);
-            toast.success("Copied to clipboard");
+            toast.success(t("export.copied"));
         } catch {
-            toast.error("Clipboard access was denied");
+            toast.error(t("export.clipboardDenied"));
         }
     };
 
@@ -123,9 +130,13 @@ export function ExportDialog({
         if (!el) return;
         try {
             await copyPageAsImage(el, page);
-            toast.success("Copied image to clipboard");
+            toast.success(t("export.copiedImage"));
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Copy failed");
+            if (error instanceof ExportError) toast.error(t(`errors.${error.code}`));
+            else
+                toast.error(t("export.copyFailed"), {
+                    description: error instanceof Error ? error.message : undefined,
+                });
         }
     };
 
@@ -133,10 +144,8 @@ export function ExportDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>Export “{doc.title}”</DialogTitle>
-                    <DialogDescription>
-                        Images capture the current page; text formats cover the whole document.
-                    </DialogDescription>
+                    <DialogTitle>{t("export.title", { title: doc.title })}</DialogTitle>
+                    <DialogDescription>{t("export.description")}</DialogDescription>
                 </DialogHeader>
 
                 <div className="grid grid-cols-1 gap-1.5">
@@ -162,7 +171,9 @@ export function ExportDialog({
                                 <span className="text-ink block text-[13px] font-medium">
                                     {option.label}
                                 </span>
-                                <span className="text-ink-3 block text-[12px]">{option.hint}</span>
+                                <span className="text-ink-3 block text-[12px]">
+                                    {t(`export.hints.${option.id}`)}
+                                </span>
                             </span>
                         </button>
                     ))}
@@ -172,7 +183,9 @@ export function ExportDialog({
                     <div className="border-line space-y-2.5 rounded-lg border p-3">
                         {(format === "png" || format === "pdf") && (
                             <div className="flex items-center gap-3">
-                                <span className="text-ink-2 w-24 text-[12px]">Resolution</span>
+                                <span className="text-ink-2 w-24 text-[12px]">
+                                    {t("export.resolution")}
+                                </span>
                                 <Segmented
                                     value={scale}
                                     onChange={setScale}
@@ -185,23 +198,29 @@ export function ExportDialog({
                             </div>
                         )}
                         <div className="flex items-center gap-3">
-                            <span className="text-ink-2 w-24 text-[12px]">Transparent</span>
+                            <span className="text-ink-2 w-24 text-[12px]">
+                                {t("export.transparent")}
+                            </span>
                             <Switch
                                 checked={transparent}
                                 onCheckedChange={setTransparent}
-                                aria-label="Transparent background"
+                                aria-label={t("export.transparentLabel")}
                             />
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-ink-2 w-24 text-[12px]">Selection only</span>
+                            <span className="text-ink-2 w-24 text-[12px]">
+                                {t("export.selectionOnly")}
+                            </span>
                             <Switch
                                 checked={selectionOnly}
                                 disabled={!hasSelection}
                                 onCheckedChange={setSelectionOnly}
-                                aria-label="Export selection only"
+                                aria-label={t("export.selectionOnlyLabel")}
                             />
                             {!hasSelection && (
-                                <span className="text-ink-3 text-[11px]">Nothing selected</span>
+                                <span className="text-ink-3 text-[11px]">
+                                    {t("export.nothingSelected")}
+                                </span>
                             )}
                         </div>
                     </div>
@@ -214,11 +233,11 @@ export function ExportDialog({
                         disabled={busy}
                     >
                         <Copy className="size-4" />
-                        Copy {isImage ? "image" : "text"}
+                        {isImage ? t("export.copyImage") : t("export.copyText")}
                     </Button>
                     <div className="flex gap-2">
                         <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button onClick={() => void run()} disabled={busy}>
                             {busy ? (
@@ -226,7 +245,7 @@ export function ExportDialog({
                             ) : (
                                 <Download className="size-4" />
                             )}
-                            Download
+                            {tc("actions.download")}
                         </Button>
                     </div>
                 </DialogFooter>
@@ -243,6 +262,9 @@ export function ImportDialog({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) {
+    const t = useTranslations("mindmap.import");
+    const tm = useTranslations("mindmap");
+    const tc = useTranslations("common");
     const store = useStore();
     const [text, setText] = useState("");
     const [mode, setMode] = useState<"outline" | "mermaid" | "json" | "csv">("outline");
@@ -253,15 +275,16 @@ export function ImportDialog({
         );
         const { applyThemeToDoc } = await import("../model/theme");
         const { title, settings } = store.getState().doc;
+        const pageName = tm("pages.numbered", { number: 1 });
         try {
             const parsed =
                 mode === "json"
                     ? parseDoc(JSON.parse(text) as unknown, title)
                     : mode === "mermaid"
-                      ? fromMermaid(text, title)
+                      ? fromMermaid(text, title, pageName)
                       : mode === "csv"
-                        ? fromEdgeList(text, title)
-                        : fromMarkdownOutline(text, title);
+                        ? fromEdgeList(text, title, pageName)
+                        : fromMarkdownOutline(text, title, pageName);
             // A text format carries no colours of its own, so it lands in
             // this board's theme — pasting an outline onto a dark board must
             // not hand back a white one. A JSON document brings its own.
@@ -269,11 +292,11 @@ export function ImportDialog({
                 mode === "json" ? parsed : applyThemeToDoc(parsed, settings.paletteId ?? "default");
             // Keep the current title: the user named this document already.
             store.replaceDoc({ ...next, title }, { label: "Import" });
-            toast.success("Imported");
+            toast.success(t("imported"));
             setText("");
             onOpenChange(false);
         } catch {
-            toast.error("Couldn't parse that — check the format and try again");
+            toast.error(t("parseFailed"));
         }
     };
 
@@ -281,17 +304,15 @@ export function ImportDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[560px]">
                 <DialogHeader>
-                    <DialogTitle>Import</DialogTitle>
-                    <DialogDescription>
-                        Replaces the current document. Undo (⌘Z) brings it back.
-                    </DialogDescription>
+                    <DialogTitle>{tc("actions.import")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
 
                 <Segmented
                     value={mode}
                     onChange={setMode}
                     options={[
-                        { value: "outline" as const, label: "Outline" },
+                        { value: "outline" as const, label: t("outline") },
                         { value: "mermaid" as const, label: "Mermaid" },
                         { value: "csv" as const, label: "CSV" },
                         { value: "json" as const, label: "JSON" },
@@ -301,17 +322,17 @@ export function ImportDialog({
                 <textarea
                     value={text}
                     onChange={e => setText(e.target.value)}
-                    placeholder={PLACEHOLDERS[mode]}
+                    placeholder={mode === "json" ? JSON_PLACEHOLDER : t(`placeholders.${mode}`)}
                     spellCheck={false}
                     className="border-line bg-panel text-ink focus:border-brand h-56 w-full resize-none rounded-lg border p-3 font-mono text-[12px] leading-relaxed outline-none"
                 />
 
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void runImport()} disabled={!text.trim()}>
-                        Import
+                        {tc("actions.import")}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -319,9 +340,8 @@ export function ImportDialog({
     );
 }
 
-const PLACEHOLDERS: Record<"outline" | "mermaid" | "json" | "csv", string> = {
-    outline: "# Product plan\n- Discovery\n  - Interviews\n  - Survey\n- Build\n  - MVP",
-    mermaid: 'flowchart LR\n  A["Start"] --> B{"Ready?"}\n  B -->|Yes| C["Ship"]',
-    csv: "parent,child\nCEO,Engineering\nCEO,Product\nEngineering,Platform",
-    json: '{"schemaVersion":1,"title":"…","pages":[…]}',
-};
+/**
+ * The JSON example is code with nothing to translate; the outline, Mermaid
+ * and CSV examples are `mindmap.import.placeholders.<mode>`.
+ */
+const JSON_PLACEHOLDER = '{"schemaVersion":1,"title":"…","pages":[…]}';

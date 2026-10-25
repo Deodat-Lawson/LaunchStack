@@ -11,6 +11,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 
 export interface SyncStatusFields {
     readonly lastSyncAt?: string | null;
@@ -88,10 +89,35 @@ export function useConnectorSync(
     return { phase, requestSync };
 }
 
+/** `useTranslations("sources.connectorSync")`. */
+export type ConnectorSyncTranslator = ReturnType<typeof useTranslations<"sources.connectorSync">>;
+
 /** The one-line sync state shown beside the account name. */
-export function syncStatusLabel(phase: SyncPhase, lastSyncAt: string | null | undefined): string {
-    if (phase === "running") return "Syncing…";
-    if (phase === "starting") return "Starting sync…";
-    if (lastSyncAt) return `Last sync ${new Date(lastSyncAt).toLocaleString()}`;
-    return "Not synced yet";
+export function syncStatusLabel(
+    t: ConnectorSyncTranslator,
+    format: Pick<ReturnType<typeof useFormatter>, "dateTime">,
+    phase: SyncPhase,
+    lastSyncAt: string | null | undefined
+): string {
+    if (phase === "running") return t("syncing");
+    if (phase === "starting") return t("starting");
+    if (lastSyncAt) {
+        return t("lastSync", {
+            at: format.dateTime(new Date(lastSyncAt), { dateStyle: "medium", timeStyle: "short" }),
+        });
+    }
+    return t("notSynced");
+}
+
+/** `syncStatusLabel` in the reader's language and date format. */
+export function useSyncStatusLabel(): (
+    phase: SyncPhase,
+    lastSyncAt: string | null | undefined
+) => string {
+    const t = useTranslations("sources.connectorSync");
+    const format = useFormatter();
+    return useCallback(
+        (phase, lastSyncAt) => syncStatusLabel(t, format, phase, lastSyncAt),
+        [t, format]
+    );
 }

@@ -3,7 +3,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ThinkingTrace } from "../ThinkingTrace";
-import { applyStep, currentStep, formatDuration, formatThought, settleSteps } from "../turnTrace";
+import { applyStep, currentStep, durationParts, settleSteps, thoughtParts } from "../turnTrace";
 import type { ThreadMessage } from "../types";
 
 const working: ThreadMessage = {
@@ -110,6 +110,28 @@ describe("ThinkingTrace", () => {
         );
     });
 
+    it("words a step a shared chat left unnamed by its kind", () => {
+        render(
+            <ThinkingTrace
+                msg={{
+                    role: "assistant",
+                    text: "Answer.",
+                    status: "complete",
+                    thoughtMs: 2000,
+                    steps: [
+                        { id: "source-1", label: "", state: "done" },
+                        { id: "web-2", label: "", state: "done" },
+                        { id: "doc-3", label: "", state: "done" },
+                    ],
+                }}
+            />
+        );
+        fireEvent.click(screen.getByRole("button", { name: /Thought for 2s/ }));
+        expect(screen.getByText("Looked through the sources")).toBeInTheDocument();
+        expect(screen.getByText("Searched the web")).toBeInTheDocument();
+        expect(screen.getByText("Made a document")).toBeInTheDocument();
+    });
+
     it("shows nothing for an older answer with no trace, and says when one stopped", () => {
         const { container, rerender } = render(
             <ThinkingTrace
@@ -182,12 +204,12 @@ describe("turn trace helpers", () => {
         ).toEqual([{ id: "think", label: "Thinking", state: "active", startMs: 5, endMs: 700 }]);
     });
 
-    it("formats durations for steps and the headline", () => {
-        expect(formatDuration(850)).toBe("0.9s");
-        expect(formatDuration(12_400)).toBe("12s");
-        expect(formatDuration(65_000)).toBe("1m 05s");
-        expect(formatThought(200)).toBe("1s");
-        expect(formatThought(4_200)).toBe("4s");
-        expect(formatThought(75_000)).toBe("1m 15s");
+    it("splits durations for steps and the headline", () => {
+        expect(durationParts(850)).toEqual({ seconds: "0.9" });
+        expect(durationParts(12_400)).toEqual({ seconds: "12" });
+        expect(durationParts(65_000)).toEqual({ minutes: 1, seconds: "05" });
+        expect(thoughtParts(200)).toEqual({ seconds: "1" });
+        expect(thoughtParts(4_200)).toEqual({ seconds: "4" });
+        expect(thoughtParts(75_000)).toEqual({ minutes: 1, seconds: "15" });
     });
 });

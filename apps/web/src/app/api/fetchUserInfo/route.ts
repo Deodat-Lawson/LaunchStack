@@ -8,7 +8,8 @@ import { and, eq } from "drizzle-orm";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { resolveRole } from "~/lib/authz/resolve";
-import { isMembershipStatus, roleLabel } from "~/lib/authz/permissions";
+import { isBuiltinRole, isMembershipStatus, roleLabel } from "~/lib/authz/permissions";
+import { requestTranslator } from "~/i18n/server";
 
 /**
  * Profile lookup for the signed-in user — including pending-approval
@@ -20,7 +21,8 @@ import { isMembershipStatus, roleLabel } from "~/lib/authz/permissions";
  * permission set and the membership status, which is what the client's
  * `usePermissions()` hook consumes.
  */
-export async function POST() {
+export async function POST(request: Request) {
+    const t = requestTranslator(request, "auth.server.errors");
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -39,13 +41,13 @@ export async function POST() {
             .where(eq(users.userId, identity.data.authUserId));
 
         if (!userInfo) {
-            return NextResponse.json({ error: "Invalid user." }, { status: 401 });
+            return NextResponse.json({ error: t("invalidUser") }, { status: 401 });
         }
 
         const companyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
 
         if (companyId === null) {
-            return NextResponse.json({ error: "No active workspace" }, { status: 403 });
+            return NextResponse.json({ error: t("noActiveWorkspace") }, { status: 403 });
         }
 
         const [membership] = await db
@@ -59,7 +61,7 @@ export async function POST() {
             );
 
         if (!membership) {
-            return NextResponse.json({ error: "No active workspace membership" }, { status: 403 });
+            return NextResponse.json({ error: t("noActiveMembership") }, { status: 403 });
         }
 
         const [companyRecord] = await db
@@ -68,7 +70,10 @@ export async function POST() {
             .where(and(eq(company.id, Number(companyId))));
 
         if (!companyRecord) {
-            return NextResponse.json({ error: "Company not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("companyNotFound") },
+                { status: 404 }
+            );
         }
 
         const resolved = await resolveRole(companyId, membership.role);
@@ -86,7 +91,10 @@ export async function POST() {
                 ...userInfo,
                 companyId: Number(companyId),
                 role: resolved.slug,
-                roleName: roleLabel(resolved.slug, resolved.name),
+                // A built-in role in the reader's words (screens quote it); a custom one as named.
+                roleName: isBuiltinRole(resolved.slug)
+                    ? requestTranslator(request, "team.roles")(`${resolved.slug}.label`)
+                    : roleLabel(resolved.slug, resolved.name),
                 membershipStatus,
                 // Suspended and pending members hold no permissions until reinstated.
                 permissions: membershipStatus === "active" ? [...resolved.permissions] : [],
@@ -97,9 +105,6 @@ export async function POST() {
         );
     } catch (error: unknown) {
         console.error("Error fetching user and company info:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch user and company info" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: t("fetchUserFailed") }, { status: 500 });
     }
 }

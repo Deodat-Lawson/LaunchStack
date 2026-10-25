@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "~/lib/auth-client";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface YouTubeSourceTabProps {
@@ -42,6 +43,7 @@ export function YouTubeSourceTab({
     defaultCategory,
     onSuccess,
 }: YouTubeSourceTabProps) {
+    const t = useTranslations("upload.youtube");
     const { userId } = useAuth();
     const router = useRouter();
 
@@ -67,17 +69,17 @@ export function YouTubeSourceTab({
                 const err = (await res
                     .json()
                     .catch(() => ({ details: res.statusText }))) as TranscribeResponse;
-                throw new Error(err.details ?? "Failed to process video");
+                throw new Error(err.details ?? t("processFailed"));
             }
             const data = (await res.json()) as TranscribeResponse;
-            toast.success(`Video transcribed successfully: "${data.document?.title ?? "Video"}"`);
+            toast.success(t("transcribed", { title: data.document?.title ?? t("fallbackTitle") }));
             setVideoUrl("");
             setVideoTitle("");
             setVideoCategory(defaultCategory ?? "");
             router.refresh();
             onSuccess?.();
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Failed to process video URL");
+            toast.error(error instanceof Error ? error.message : t("processUrlFailed"));
         } finally {
             setIsSubmitting(false);
         }
@@ -89,7 +91,7 @@ export function YouTubeSourceTab({
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
                 <label htmlFor="video-url" style={labelStyle}>
-                    Video URL
+                    {t("urlLabel")}
                 </label>
                 <input
                     id="video-url"
@@ -104,15 +106,13 @@ export function YouTubeSourceTab({
 
             <div>
                 <label htmlFor="video-title" style={labelStyle}>
-                    Document title{" "}
-                    <span style={{ color: "var(--ink-3)", fontWeight: 400 }}>
-                        (optional — defaults to video title)
-                    </span>
+                    {t("titleLabel")}{" "}
+                    <span style={{ color: "var(--ink-3)", fontWeight: 400 }}>{t("titleHint")}</span>
                 </label>
                 <input
                     id="video-title"
                     type="text"
-                    placeholder="e.g. Q1 All-Hands recording"
+                    placeholder={t("titlePlaceholder")}
                     value={videoTitle}
                     onChange={e => setVideoTitle(e.target.value)}
                     disabled={isSubmitting}
@@ -122,7 +122,7 @@ export function YouTubeSourceTab({
 
             <div>
                 <label htmlFor="video-category" style={labelStyle}>
-                    Category
+                    {t("categoryLabel")}
                 </label>
                 <select
                     id="video-category"
@@ -130,7 +130,7 @@ export function YouTubeSourceTab({
                     onChange={e => setVideoCategory(e.target.value)}
                     style={inputStyle}
                 >
-                    <option value="">Select a category</option>
+                    <option value="">{t("categoryPlaceholder")}</option>
                     {categories.map(c => (
                         <option key={c.id} value={c.name}>
                             {c.name}
@@ -162,10 +162,10 @@ export function YouTubeSourceTab({
                 {isSubmitting ? (
                     <>
                         <Loader2 size={14} className="animate-spin" />
-                        Transcribing…
+                        {t("submitting")}
                     </>
                 ) : (
-                    "Transcribe & upload"
+                    t("submit")
                 )}
             </button>
 
@@ -177,8 +177,7 @@ export function YouTubeSourceTab({
                         textAlign: "center",
                     }}
                 >
-                    This may take a few minutes depending on video length. Please don&apos;t close
-                    this page.
+                    {t("wait")}
                 </div>
             )}
 
@@ -189,7 +188,7 @@ export function YouTubeSourceTab({
                     textAlign: "center",
                 }}
             >
-                Supported: YouTube, Vimeo, TikTok, Twitter/X, Twitch, Dailymotion, and more
+                {t("supported")}
             </div>
         </div>
     );

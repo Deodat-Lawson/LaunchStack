@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, CircleDashed, Loader2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,10 +16,13 @@ import {
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type RunStep } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
+import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
-import { money } from "~/lib/tools/format";
 
 function StepIcon({ status }: { status: RunStep["status"] }) {
+    const t = useTranslations("growth.prospects.runSheet");
     const base = "size-3.5 shrink-0";
     switch (status) {
         case "done":
@@ -36,7 +40,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
             return (
                 <Loader2
                     className={cn(base, "text-brand animate-spin motion-reduce:animate-none")}
-                    aria-label="Running"
+                    aria-label={t("running")}
                 />
             );
         case "failed":
@@ -44,7 +48,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
                 <span
                     className={cn(
                         base,
-                        "bg-danger flex items-center justify-center rounded-full text-white"
+                        "bg-danger text-danger-fg flex items-center justify-center rounded-full"
                     )}
                 >
                     <X className="size-2.5" strokeWidth={3} />
@@ -58,6 +62,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
 }
 
 function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
+    const word = useCopyText();
     return (
         <>
             <div
@@ -70,10 +75,14 @@ function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
             >
                 <StepIcon status={step.status} />
                 <span className="min-w-0 truncate">
-                    {step.label}
-                    {step.detail && <span className="text-ink-3"> · {step.detail}</span>}
+                    {word(step.labelCopy, step.label)}
+                    {step.detail && (
+                        <span className="text-ink-3"> · {word(step.detailCopy, step.detail)}</span>
+                    )}
                 </span>
-                <span className="text-ink-3 text-right text-xs tabular-nums">{step.right}</span>
+                <span className="text-ink-3 text-right text-xs tabular-nums">
+                    {step.right && word(step.rightCopy, step.right)}
+                </span>
             </div>
             {step.children?.map(c => (
                 <StepRow key={c.id} step={c} child />
@@ -92,6 +101,11 @@ export function runIsLive(run: RunDto | null): boolean {
  * sheet leaves the run going; the bar keeps a count ticking.
  */
 export function RunSheet() {
+    const t = useTranslations("growth.prospects.runSheet");
+    const tc = useTranslations("common.actions");
+    const { money } = useGrowthFormat();
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { activeRun, runSheetOpen, closeRunSheet, noteRunFinished, segment } = useProspects();
     const [stopping, setStopping] = useState(false);
     const run = activeRun;
@@ -102,9 +116,9 @@ export function RunSheet() {
         setStopping(true);
         try {
             await prospectsApi.stopRun(run.id);
-            toast("Run stopped. Companies found so far are kept.");
+            toast(t("stopped"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not stop the run");
+            toast.error(errorText(e, t("stopFailed")));
         } finally {
             setStopping(false);
         }
@@ -116,21 +130,20 @@ export function RunSheet() {
                 <SheetHeader className="px-6 pb-2 pt-6">
                     <SheetTitle className="text-ink text-lg font-semibold tracking-[-0.02em]">
                         {run?.status === "completed"
-                            ? "Companies found"
+                            ? t("titleCompleted")
                             : run?.status === "stopped"
-                              ? "Run stopped"
+                              ? t("titleStopped")
                               : run?.status === "failed"
-                                ? "Run failed"
-                                : "Finding companies"}
+                                ? t("titleFailed")
+                                : t("titleRunning")}
                     </SheetTitle>
                     <SheetDescription className="text-ink-2 text-[13px]">
-                        {segment?.name ?? "Segment"}. Searching the sources this segment has on,
-                        then profiling the best matches and finding people for the top ten.
+                        {t("description", { segment: segment?.name ?? t("segmentFallback") })}
                     </SheetDescription>
                 </SheetHeader>
                 <div className="px-6 pb-6">
                     {!run ? (
-                        <p className="text-ink-3 py-6 text-sm">Starting…</p>
+                        <p className="text-ink-3 py-6 text-sm">{t("starting")}</p>
                     ) : (
                         <>
                             <div className="mt-2">
@@ -143,16 +156,19 @@ export function RunSheet() {
                             )}
                             <div className="border-line text-ink-3 mt-4 flex items-center justify-between border-t pt-3 text-xs tabular-nums">
                                 <span>
-                                    {money(run.spend.usd)} of {money(run.spend.usdCap)} spent ·{" "}
-                                    {run.spend.credits} credits
+                                    {t("spend", {
+                                        spent: money(run.spend.usd),
+                                        cap: money(run.spend.usdCap),
+                                        credits: run.spend.credits,
+                                    })}
                                 </span>
-                                <span>{run.caps}</span>
+                                <span>{word(run.capsCopy, run.caps)}</span>
                             </div>
                             <div className="mt-5 flex justify-end gap-2">
                                 {live ? (
                                     <>
                                         <Button variant="outline" size="sm" onClick={closeRunSheet}>
-                                            Run in background
+                                            {t("background")}
                                         </Button>
                                         <Button
                                             variant="outline"
@@ -161,12 +177,12 @@ export function RunSheet() {
                                             disabled={stopping}
                                             onClick={() => void stop()}
                                         >
-                                            Stop
+                                            {tc("stop")}
                                         </Button>
                                     </>
                                 ) : (
                                     <Button size="sm" onClick={noteRunFinished}>
-                                        Done
+                                        {tc("done")}
                                     </Button>
                                 )}
                             </div>

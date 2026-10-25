@@ -41,18 +41,29 @@ export function currentStep(steps: readonly ChatTurnStep[] | undefined): ChatTur
     return [...(steps ?? [])].reverse().find(step => step.state === "active");
 }
 
-/** "0.4s", "3.2s", "12s", "1m 05s". */
-export function formatDuration(ms: number): string {
-    const tenths = Math.round(Math.max(0, ms) / 100);
-    if (tenths < 100) return `${(tenths / 10).toFixed(1)}s`;
-    const whole = Math.round(ms / 1000);
-    if (whole < 60) return `${whole}s`;
-    return `${Math.floor(whole / 60)}m ${String(whole % 60).padStart(2, "0")}s`;
+/** A duration as a catalogue spells it: seconds alone, or minutes and seconds. */
+export interface DurationParts {
+    minutes?: number;
+    seconds: string;
 }
 
-/** "Thought for 4s": whole seconds, never "0s". */
-export function formatThought(ms: number): string {
-    const seconds = Math.max(1, Math.round(ms / 1000));
-    if (seconds < 60) return `${seconds}s`;
-    return `${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, "0")}s`;
+function split(wholeSeconds: number): DurationParts {
+    return wholeSeconds < 60
+        ? { seconds: String(wholeSeconds) }
+        : {
+              minutes: Math.floor(wholeSeconds / 60),
+              seconds: String(wholeSeconds % 60).padStart(2, "0"),
+          };
+}
+
+/** A step's time: tenths under ten seconds ("0.9"), whole seconds after, then minutes. */
+export function durationParts(ms: number): DurationParts {
+    const tenths = Math.round(Math.max(0, ms) / 100);
+    if (tenths < 100) return { seconds: (tenths / 10).toFixed(1) };
+    return split(Math.round(ms / 1000));
+}
+
+/** The headline's time ("Thought for 4s"): whole seconds, never "0". */
+export function thoughtParts(ms: number): DurationParts {
+    return split(Math.max(1, Math.round(ms / 1000)));
 }

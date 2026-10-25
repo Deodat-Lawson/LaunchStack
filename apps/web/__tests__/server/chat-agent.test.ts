@@ -3,6 +3,7 @@
  * mode mismatches are 400s, and the agent's policy shapes the turn.
  */
 
+import { wordCopy } from "~/i18n/translate";
 import type { PersonaRecord } from "~/server/collab/personas";
 
 const roster: Record<string, PersonaRecord> = {};
@@ -68,6 +69,18 @@ describe("resolveChatAgent", () => {
         await expect(resolveChatAgent(7n, "finance", request)).rejects.toBeInstanceOf(
             ChatAgentError
         );
+    });
+
+    it("carries its refusal as a sentence the route words in the reader's language", async () => {
+        const error = (await resolveChatAgent(7n, "ghost", request).catch(
+            (err: unknown) => err
+        )) as ChatAgentError;
+        expect(error.message).toBe('No agent with the handle "@ghost" in this workspace');
+        expect(error.copy).toEqual({
+            key: "agents.server.chatAgent.notFound",
+            values: { handle: "ghost" },
+        });
+        expect(wordCopy(error.copy!, "zh-CN")).toBe("此工作区中没有标识名为“@ghost”的智能体");
     });
 
     it("refuses a subagent as the chat's voice but not when mentioned", async () => {

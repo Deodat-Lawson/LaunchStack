@@ -46,35 +46,32 @@ export function PageShell({
     );
 }
 
+/**
+ * The page's title block. No kicker above the title: the heading carries its
+ * own weight, and the breadcrumb already says where you are.
+ */
 export function PageHeader({
-    eyebrow,
     title,
     description,
     actions,
 }: {
-    eyebrow?: string;
     title: string;
     description?: string;
     actions?: ReactNode;
 }) {
     return (
-        <div className="mb-7 flex items-start gap-4">
-            <div className="min-w-0 flex-1">
-                {eyebrow && (
-                    <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {eyebrow}
-                    </div>
-                )}
-                <h1 className="display text-ink m-0 text-[34px] leading-[1.1] tracking-tight">
+        <div className="mb-7 flex flex-wrap items-start gap-x-4 gap-y-3">
+            <div className="min-w-[min(100%,280px)] flex-1">
+                <h1 className="display text-ink @max-sm:text-[28px] m-0 text-[34px] leading-[1.1] tracking-tight">
                     {title}
                 </h1>
                 {description && (
-                    <div className="text-ink-3 mt-1.5 max-w-[640px] text-sm leading-relaxed">
+                    <div className="text-ink-3 mt-1.5 max-w-[68ch] text-sm leading-relaxed">
                         {description}
                     </div>
                 )}
             </div>
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
+            {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
         </div>
     );
 }

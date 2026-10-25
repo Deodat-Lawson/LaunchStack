@@ -6,6 +6,8 @@
 
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+import { V } from "~/i18n/validation";
 import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
@@ -29,7 +31,7 @@ const AddItemsSchema = z.object({
                         .trim()
                         .min(1)
                         .max(128)
-                        .regex(/^[A-Za-z0-9_\-]+$/, "Not a Gmail label id"),
+                        .regex(/^[A-Za-z0-9_\-]+$/, V.notGmailLabel),
                     name: z.string().trim().min(1).max(512),
                 }),
                 z.object({
@@ -68,7 +70,7 @@ export async function GET(request: Request) {
                 scope: serializeScope(await listScope(own.connection.id)),
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
@@ -99,10 +101,12 @@ export async function POST(request: Request) {
             const scope = await listScope(own.connection.id);
             return createSuccessResponse(
                 { scope: serializeScope(scope) },
-                `${body.data.items.length} item(s) added.`
+                requestTranslator(request, "sources.server.gmail")("itemsAdded", {
+                    count: body.data.items.length,
+                })
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
@@ -125,10 +129,10 @@ export async function DELETE(request: Request) {
             const scope = await listScope(own.connection.id);
             return createSuccessResponse(
                 { removed, scope: serializeScope(scope) },
-                "Selection updated. Already-imported emails were kept."
+                requestTranslator(request, "sources.server.gmail")("selectionUpdated")
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

@@ -7,7 +7,7 @@ import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import type { retryRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
-import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
+import { failIn, handleWeeklyReviewError, ok, safeRun } from "~/server/founder-weekly-review/http";
 import { logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
 
 const RetrySchema = z.object({ requestKey: z.string().min(1).max(128) });
@@ -28,9 +28,9 @@ export function createFounderWeeklyReviewRetryPostHandler(
     ) {
         const session = await getServerSession();
         const userId = session?.user.id;
-        if (!userId) return fail("Unauthorized", 401);
+        if (!userId) return failIn(request, "unauthorized", 401);
         const parsed = RetrySchema.safeParse(await request.json().catch(() => null));
-        if (!parsed.success) return fail("Invalid request", 400);
+        if (!parsed.success) return failIn(request, "invalidRequest", 400);
         try {
             const actor = await deps.actorResolver.resolve(userId);
             const { runId } = await params;
@@ -58,7 +58,7 @@ export function createFounderWeeklyReviewRetryPostHandler(
             await deps.sendDispatchRequested();
             return ok({ run: safeRun(run) }, 202);
         } catch (error) {
-            return handleRouteError("founder-weekly-review", error);
+            return handleWeeklyReviewError(error, request);
         }
     };
 }

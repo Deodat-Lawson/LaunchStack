@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import type { ArtifactType } from "~/lib/artifact-content";
 
 /**
@@ -6,6 +8,53 @@ import type { ArtifactType } from "~/lib/artifact-content";
  * which starts ingestion. Paste text, Files, Folder and Claude artifact all
  * go through here.
  */
+
+/**
+ * A file that did not make it in. `message` reads "<file>: <why>" in the
+ * server's words, or English; `sourceUploadErrorMessage` says it in the
+ * reader's language.
+ */
+export class SourceUploadError extends Error {
+    constructor(
+        readonly fileName: string,
+        /** Storing the bytes, or registering the document. */
+        readonly step: "upload" | "register",
+        readonly status: number,
+        /** The route's own sentence, shown as is; null when it gave none. */
+        readonly serverMessage: string | null
+    ) {
+        super(
+            `${fileName}: ${
+                serverMessage ??
+                (step === "upload"
+                    ? `upload failed (HTTP ${status})`
+                    : `couldn't be added (HTTP ${status})`)
+            }`
+        );
+        this.name = "SourceUploadError";
+    }
+}
+
+/** `useTranslations("sources.sourceUpload")`. */
+export type SourceUploadTranslator = ReturnType<typeof useTranslations<"sources.sourceUpload">>;
+
+/** What to show for an error from this module; `otherwise` for anything else thrown. */
+export function sourceUploadErrorMessage(
+    error: unknown,
+    t: SourceUploadTranslator,
+    otherwise: string
+): string {
+    if (error instanceof SourceUploadError) {
+        if (error.serverMessage !== null) {
+            return t("withReason", { name: error.fileName, reason: error.serverMessage });
+        }
+        return t(error.step === "upload" ? "uploadFailed" : "registerFailed", {
+            name: error.fileName,
+            status: error.status,
+        });
+    }
+    return error instanceof Error ? error.message : otherwise;
+}
 
 export interface UploadResult {
     url: string;
@@ -21,7 +70,7 @@ export async function uploadFileToStorage(file: File): Promise<UploadResult> {
     const res = await fetch("/api/upload-local", { method: "POST", body: form });
     if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(`${file.name}: ${body.error ?? `upload failed (HTTP ${res.status})`}`);
+        throw new SourceUploadError(file.name, "upload", res.status, body.error ?? null);
     }
     const data = (await res.json()) as {
         url: string;
@@ -31,6 +80,11 @@ export async function uploadFileToStorage(file: File): Promise<UploadResult> {
         url: data.url,
         provider: data.provider === "s3" ? "s3" : "database",
     };
+}
+
+/** The document the upload created; null when an older server did not say. */
+export interface RegisteredDocument {
+    documentId: number | null;
 }
 
 export async function registerDocument(params: {
@@ -47,7 +101,7 @@ export async function registerDocument(params: {
     mimeType?: string;
     /** Marks the document as an imported Claude artifact (see ~/lib/artifact-document). */
     artifact?: { artifactType: ArtifactType; sourceUrl?: string | null };
-}): Promise<void> {
+}): Promise<RegisteredDocument> {
     const body: Record<string, unknown> = {
         documentName: params.documentName ?? params.file.name,
         category: params.category,
@@ -72,8 +126,9 @@ export async function registerDocument(params: {
         } catch {
             // not JSON: keep the text
         }
-        throw new Error(
-            `${params.file.name}: ${message || `couldn't be added (HTTP ${res.status})`}`
-        );
+        throw new SourceUploadError(params.file.name, "register", res.status, message || null);
     }
+    const data = (await res.json().catch(() => null)) as { document?: { id?: unknown } } | null;
+    const id = data?.document?.id;
+    return { documentId: typeof id === "number" ? id : null };
 }

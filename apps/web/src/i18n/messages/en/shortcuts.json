@@ -1,0 +1,68 @@
+{
+  "commands": {
+    "paletteToggle": {
+      "label": "Jump to anything",
+      "description": "Open the command palette: sources, features, settings."
+    },
+    "sourceAdd": {
+      "label": "Add a source",
+      "description": "Open the Add source dialog."
+    },
+    "studioToggle": {
+      "label": "Open or close the Studio",
+      "description": "The drawer of features on the right."
+    },
+    "railToggle": {
+      "label": "Show or hide the sidebar",
+      "description": "The sources and history rail."
+    },
+    "searchFocus": {
+      "label": "Filter the sidebar",
+      "description": "Put the cursor in the sidebar's filter, on Sources or History."
+    },
+    "featureDraft": {
+      "label": "Open Draft",
+      "description": "Generate a new document with AI."
+    },
+    "featureRewrite": {
+      "label": "Open Rewrite",
+      "description": "Improve existing content."
+    },
+    "featureWorkflows": {
+      "label": "Open Workflows",
+      "description": "Automate recurring tasks across your sources."
+    },
+    "featureMeetings": {
+      "label": "Open Meetings",
+      "description": "Agents working an objective in a channel you can join."
+    },
+    "settingsOpen": {
+      "label": "Open Settings",
+      "description": "The config panel."
+    },
+    "paneSplit": {
+      "label": "Split right",
+      "description": "Open a new pane to the right of the focused one."
+    },
+    "paneSplitDown": {
+      "label": "Split down",
+      "description": "Open a new pane below the focused one."
+    },
+    "paneZoom": {
+      "label": "Maximize the focused pane",
+      "description": "Fill the workspace with it; again to bring the other panes back."
+    },
+    "paneFocusNext": {
+      "label": "Focus the next pane",
+      "description": "Move between the panes of a split workspace."
+    },
+    "paneFocusPrevious": {
+      "label": "Focus the previous pane",
+      "description": "Move between the panes of a split workspace."
+    },
+    "paneClose": {
+      "label": "Close this app",
+      "description": "Close the tab the focused pane is showing."
+    }
+  }
+}

@@ -62,7 +62,10 @@ export function CaptureSetupCard({
                 deepLink?: string;
                 error?: string;
             };
-            if (!response.ok) throw new Error(body.error || t("connectionFailed"));
+            if (!response.ok) {
+                const message = body.error?.trim();
+                throw new Error(message ? message : t("connectionFailed"));
+            }
             const destination = action === "download" ? body.downloadUrl : body.deepLink;
             if (!destination) throw new Error(t("connectionFailed"));
             setWaiting(true);

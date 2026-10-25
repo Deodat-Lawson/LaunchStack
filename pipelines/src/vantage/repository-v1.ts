@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { and, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, lt, lte, or, sql } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
 import {
     VantageError,
@@ -33,7 +33,23 @@ import type {
     TopicV1Dto,
 } from "./contract-v1";
 import type { CommitmentDto, MetricObservationDto, WeeklySignals } from "./types";
-import { calendarAdd, reportingDate, validDate } from "./period-v1";
+import { calendarAdd, reportingDate, reportPeriod, validDate } from "./period-v1";
+import {
+    emptyPendingHistoricalState,
+    pendingHistoricalState,
+    mergePendingHistoricalState,
+    projectPendingHistoricalQuestions,
+    PENDING_VALIDATION_BATCH_SIZE,
+    PENDING_QUESTIONS_CONTRACT,
+    type PendingHistoricalStateV1,
+    type PendingHistoricalQuestionsViewV1,
+    type PendingOriginAvailability,
+} from "./pending-questions-v1";
+export type {
+    PendingHistoricalQuestionV1,
+    PendingHistoricalQuestionsContextV1,
+    PendingHistoricalQuestionsViewV1,
+} from "./pending-questions-v1";
 import {
     assemblePreviousVantageContext,
     MAX_PREVIOUS_VANTAGE_REFS,
@@ -52,6 +68,7 @@ interface State {
     topicVersions: Record<string, number>;
     enhancements: EnhancementDto[];
     submissions: Record<string, { hash: string; topicId: string }>;
+    pendingHistoricalQuestions?: PendingHistoricalStateV1;
 }
 const fresh = (): State => ({ topicVersions: {}, enhancements: [], submissions: {} });
 export function fingerprint(value: unknown): string {
@@ -188,10 +205,17 @@ async function previousVantageSnapshot(
     const [row] = await db
         .select()
         .from(agendas)
-        .where(and(eq(agendas.companyId, companyId), eq(agendas.weekStart, weekStart)));
+        // Exactly one predecessor: skipped calendar weeks must not erase saved lineage.
+        // The AI-history assembler independently requires the immediately prior calendar week.
+        .where(and(eq(agendas.companyId, companyId), lt(agendas.weekStart, period.weekStart)))
+        .orderBy(desc(agendas.weekStart))
+        .limit(1);
     if (!row)
         return {
             context: null,
+            report: null,
+            reportAfterCutoff: false,
+            pendingHistoricalState: emptyPendingHistoricalState(),
             fingerprint: previousVantageFingerprint({
                 actorId: actorId ?? null,
                 weekStart,
@@ -366,6 +390,9 @@ async function previousVantageSnapshot(
             .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
     });
     return {
+        report,
+        reportAfterCutoff: afterCutoff(row) || (row.generatedAt?.getTime() ?? 0) > cutoff,
+        pendingHistoricalState: pendingHistoricalState(priorState.data.pendingHistoricalQuestions),
         // Legacy three-argument readers remain valid, but cannot introduce actor-bound history.
         context: actorId
             ? assemblePreviousVantageContext({
@@ -397,6 +424,224 @@ async function previousVantageSnapshot(
         fingerprint,
     };
 }
+/** Exact-origin reads validate permissions/state only; question prose comes from the previous ledger. */
+async function pendingHistoricalSnapshot(
+    db: ReadDb,
+    companyId: bigint,
+    period: ReportPeriod,
+    actorId: string | undefined,
+    agenda: AgendaV1Dto | null,
+    previous: Awaited<ReturnType<typeof previousVantageSnapshot>>
+) {
+    const current = agenda ? await state(db, companyId, agenda.id) : { version: 0, data: fresh() };
+    const ledger = mergePendingHistoricalState({
+        previous: previous.pendingHistoricalState,
+        current: pendingHistoricalState(current.data.pendingHistoricalQuestions),
+        previousReport: previous.report,
+    });
+    const candidates = ledger.questions.filter(question => !ledger.reviews[question.questionId]);
+    async function batches<T>(
+        values: string[],
+        query: (batch: string[]) => PromiseLike<T[]>
+    ): Promise<T[]> {
+        const rows: T[] = [];
+        for (let i = 0; i < values.length; i += PENDING_VALIDATION_BATCH_SIZE)
+            rows.push(...(await query(values.slice(i, i + PENDING_VALIDATION_BATCH_SIZE))));
+        return rows;
+    }
+    const reportIds = [...new Set(candidates.map(question => question.originReportId))];
+    const topicIds = [...new Set(candidates.map(question => question.originTopicId))];
+    const refs = [
+        ...new Set(candidates.flatMap(question => question.sourceRefs.map(ref => ref.ref))),
+    ].sort();
+    const ids = (kind: string) =>
+        refs.flatMap(ref => {
+            const match = /^(ev|obs|cm):([^\s]{1,64})$/.exec(ref);
+            return match?.[1] === kind ? [match[2]!] : [];
+        });
+    const [
+        originReports,
+        originTopics,
+        originVersions,
+        sourceEvidence,
+        sourceObservations,
+        sourceActions,
+        sourceDefinitions,
+    ] = await Promise.all([
+        batches(reportIds, batch =>
+            db
+                .select({
+                    id: agendas.id,
+                    companyId: agendas.companyId,
+                    weekStart: agendas.weekStart,
+                    generatedAt: agendas.generatedAt,
+                    createdAt: agendas.createdAt,
+                    updatedAt: agendas.updatedAt,
+                })
+                .from(agendas)
+                .where(and(eq(agendas.companyId, companyId), inArray(agendas.id, batch)))
+                .orderBy(asc(agendas.id))
+        ),
+        batches(topicIds, batch =>
+            db
+                .select({
+                    id: topics.id,
+                    agendaId: topics.agendaId,
+                    companyId: topics.companyId,
+                    status: topics.status,
+                    decidedAt: topics.decidedAt,
+                    createdAt: topics.createdAt,
+                    updatedAt: topics.updatedAt,
+                })
+                .from(topics)
+                .where(and(eq(topics.companyId, companyId), inArray(topics.id, batch)))
+                .orderBy(asc(topics.id))
+        ),
+        batches(reportIds, batch =>
+            db
+                .select({ agendaId: states.agendaId, version: states.version })
+                .from(states)
+                .where(and(eq(states.companyId, companyId), inArray(states.agendaId, batch)))
+                .orderBy(asc(states.agendaId))
+        ),
+        batches(ids("ev"), batch =>
+            db
+                .select()
+                .from(evidence)
+                .where(and(eq(evidence.companyId, companyId), inArray(evidence.id, batch)))
+                .orderBy(asc(evidence.id))
+        ),
+        batches(ids("obs"), batch =>
+            db
+                .select()
+                .from(observations)
+                .where(and(eq(observations.companyId, companyId), inArray(observations.id, batch)))
+                .orderBy(asc(observations.id))
+        ),
+        batches(ids("cm"), batch =>
+            db
+                .select()
+                .from(commitments)
+                .where(and(eq(commitments.companyId, companyId), inArray(commitments.id, batch)))
+                .orderBy(asc(commitments.id))
+        ),
+        ids("obs").length
+            ? db
+                  .select()
+                  .from(definitions)
+                  .where(eq(definitions.companyId, companyId))
+                  .orderBy(asc(definitions.id))
+            : Promise.resolve([]),
+    ]);
+    const cutoff = Date.parse(period.asOf),
+        cutoffDay = reportingDate(new Date(period.asOf));
+    const late = (value: Date | null | undefined) => !!value && value.getTime() > cutoff;
+    const originAvailability: Record<string, PendingOriginAvailability> = {};
+    for (const question of candidates) {
+        const report = originReports.find(row => row.id === question.originReportId);
+        const topic = originTopics.find(
+            row => row.id === question.originTopicId && row.agendaId === question.originReportId
+        );
+        originAvailability[question.questionId] = previous.reportAfterCutoff
+            ? "after-cutoff"
+            : !report || !topic || report.weekStart !== question.originWeekStart
+              ? "missing-or-unauthorized"
+              : [
+                      report.createdAt,
+                      report.generatedAt,
+                      report.updatedAt,
+                      topic.createdAt,
+                      topic.updatedAt,
+                      topic.decidedAt,
+                  ].some(late)
+                ? "after-cutoff"
+                : topic.status === "dismissed"
+                  ? "dismissed"
+                  : "available";
+        if (originAvailability[question.questionId] === "dismissed")
+            ledger.reviews[question.questionId] = {
+                status: "dismissed",
+                reviewedAt: (
+                    topic!.updatedAt ??
+                    topic!.decidedAt ??
+                    new Date(period.asOf)
+                ).toISOString(),
+                reviewedBy: null,
+                reason: "Explicit dismissal recorded on the original topic; original actor is not stored.",
+            };
+    }
+    const sourceStates: PreviousVantageSource[] = refs.map(ref => {
+        const match = /^(ev|obs|cm):([^\s]{1,64})$/.exec(ref);
+        if (!match)
+            return {
+                ref: "unsupported",
+                status: "unsupported-ref",
+                documentVerification: "unavailable",
+            };
+        const source =
+            match[1] === "ev"
+                ? sourceEvidence.find(row => row.id === match[2])
+                : match[1] === "obs"
+                  ? sourceObservations.find(row => row.id === match[2])
+                  : sourceActions.find(row => row.id === match[2]);
+        const definition =
+            source && "metricId" in source
+                ? sourceDefinitions.find(row => row.id === source.metricId)
+                : null;
+        if (!source || ("metricId" in source && !definition))
+            return {
+                ref,
+                status: "missing-or-unauthorized",
+                documentVerification: "not-applicable",
+            };
+        const document = "kind" in source && source.kind === "document";
+        const afterCutoff =
+            late(source.createdAt) ||
+            ("updatedAt" in source && late(source.updatedAt)) ||
+            ("resolvedAt" in source && late(source.resolvedAt)) ||
+            ("observedAt" in source && source.observedAt > cutoffDay) ||
+            ("periodEnd" in source &&
+                (source.periodEnd > cutoffDay || source.periodStart > source.periodEnd)) ||
+            !!(definition && (late(definition.createdAt) || late(definition.updatedAt)));
+        return {
+            ref,
+            status: afterCutoff
+                ? "after-cutoff"
+                : document
+                  ? "document-verification-unavailable"
+                  : "available",
+            documentVerification: document ? "unavailable" : "not-applicable",
+        };
+    });
+    const fingerprintState = {
+        actorId: actorId ?? null,
+        previousLedger: previous.pendingHistoricalState,
+        currentLedger: current.data.pendingHistoricalQuestions ?? null,
+        ledger,
+        originReports,
+        originTopics,
+        originVersions,
+        sourceEvidence,
+        sourceObservations,
+        sourceActions,
+        sourceDefinitions,
+    };
+    const context = projectPendingHistoricalQuestions({
+        state: ledger,
+        originAvailability,
+        sourceStates,
+        asOf: period.asOf,
+        currentWeekStart: period.weekStart,
+        fingerprintState,
+    });
+    return {
+        ledger,
+        context: actorId ? context : null,
+        fingerprint: context.snapshotVersion,
+        currentVersion: current.version,
+    };
+}
+
 async function generationSnapshotFromDb(
     companyId: bigint,
     period: ReportPeriod,
@@ -451,6 +696,14 @@ async function generationSnapshotFromDb(
     ]);
     const names = new Map(defs.map(d => [d.id, d]));
     const previous = await previousVantageSnapshot(db, companyId, period, actorId, defs);
+    const pending = await pendingHistoricalSnapshot(
+        db,
+        companyId,
+        period,
+        actorId,
+        agenda,
+        previous
+    );
     const mapObs = (o: (typeof obs)[number]): MetricObservationDto => ({
         id: o.id,
         metricId: o.metricId,
@@ -507,6 +760,7 @@ async function generationSnapshotFromDb(
             )
             .map(topic => ({ topic, contentVersion: topic.contentVersion })),
         previousVantageContext: previous.context,
+        pendingHistoricalQuestions: pending.context,
     };
     input.inputVersion = fingerprint({
         period: input.reportPeriod,
@@ -514,9 +768,20 @@ async function generationSnapshotFromDb(
         reviewedTopics: input.reviewedTopics,
         previousVantageContext: input.previousVantageContext,
         previousVantageStateFingerprint: previous.fingerprint,
+        ...(actorId
+            ? {
+                  pendingHistoricalQuestions: input.pendingHistoricalQuestions,
+                  pendingHistoricalStateFingerprint: pending.fingerprint,
+              }
+            : {}),
         actorId: actorId ?? null,
     });
-    return { input, expectedReportFingerprint: fingerprint(agenda), actorId };
+    return {
+        input,
+        expectedReportFingerprint: fingerprint(agenda),
+        actorId,
+        pendingHistoricalState: pending.ledger,
+    };
 }
 export async function generationSnapshot(
     companyId: bigint,
@@ -526,6 +791,113 @@ export async function generationSnapshot(
 ) {
     return generationSnapshotFromDb(companyId, period, mode, getDb(), options.actorId);
 }
+
+async function pendingViewFromDb(
+    db: ReadDb,
+    args: { companyId: bigint; agendaId: string; actorId: string }
+) {
+    if (!args.actorId) throw new VantageError("An authorized actor is required.", 403, "forbidden");
+    const agenda = await read(db, args.companyId, { id: args.agendaId });
+    if (!agenda) throw new VantageError("That report is not here.", 404, "not_found");
+    const savedPeriod = agenda.reportPeriod ?? reportPeriod(new Date(), agenda.weekStart);
+    // A later human review is visible immediately; the source/content cutoff still fails closed.
+    const period = {
+        ...savedPeriod,
+        asOf: new Date(Math.max(Date.now(), Date.parse(savedPeriod.asOf))).toISOString(),
+    };
+    const defs = await db
+        .select()
+        .from(definitions)
+        .where(
+            and(
+                eq(definitions.companyId, args.companyId),
+                lte(definitions.createdAt, new Date(period.asOf))
+            )
+        );
+    const previous = await previousVantageSnapshot(db, args.companyId, period, args.actorId, defs);
+    const pending = await pendingHistoricalSnapshot(
+        db,
+        args.companyId,
+        period,
+        args.actorId,
+        agenda,
+        previous
+    );
+    const view: PendingHistoricalQuestionsViewV1 = {
+        contractVersion: PENDING_QUESTIONS_CONTRACT,
+        agendaId: agenda.id,
+        version: pending.currentVersion,
+        questions: pending.context!.questions,
+        unavailableCount: pending.context!.unavailableCount,
+    };
+    return { view, pending, agenda };
+}
+
+/** Additive, actor-bound section; existing report/overview DTOs are unchanged. */
+export async function getPendingHistoricalQuestionsV1(args: {
+    companyId: bigint;
+    agendaId: string;
+    actorId: string;
+}): Promise<PendingHistoricalQuestionsViewV1> {
+    return (await pendingViewFromDb(getDb(), args)).view;
+}
+
+/** Human-only terminal review updates this report's lineage, never an older topic or action. */
+export async function reviewPendingHistoricalQuestionV1(args: {
+    companyId: bigint;
+    userId: string;
+    agendaId: string;
+    questionId: string;
+    expectedVersion: number;
+    status: "dismissed" | "addressed";
+    reason?: string | null;
+}): Promise<PendingHistoricalQuestionsViewV1> {
+    if (
+        !args.userId ||
+        !Number.isInteger(args.expectedVersion) ||
+        args.expectedVersion < 0 ||
+        !["dismissed", "addressed"].includes(args.status)
+    )
+        throw new VantageError(
+            "Provide an actor, report version and human review status.",
+            400,
+            "validation_error"
+        );
+    return getDb().transaction(async tx => {
+        await lock(tx);
+        const current = await pendingViewFromDb(tx, {
+            companyId: args.companyId,
+            agendaId: args.agendaId,
+            actorId: args.userId,
+        });
+        if (current.view.version !== args.expectedVersion)
+            throw new VantageError(
+                "Pending questions changed. Reload before reviewing.",
+                409,
+                "stale_agenda"
+            );
+        if (!current.view.questions.some(question => question.questionId === args.questionId))
+            throw new VantageError("That pending question is unavailable.", 404, "not_found");
+        const s = await state(tx, args.companyId, args.agendaId);
+        const pending = current.pending.ledger;
+        pending.reviews[args.questionId] = {
+            status: args.status,
+            reviewedAt: new Date().toISOString(),
+            reviewedBy: args.userId,
+            reason: orNull(args.reason),
+        };
+        s.data.pendingHistoricalQuestions = pending;
+        await putState(tx, args.companyId, args.agendaId, s.version + 1, s.data);
+        return (
+            await pendingViewFromDb(tx, {
+                companyId: args.companyId,
+                agendaId: args.agendaId,
+                actorId: args.userId,
+            })
+        ).view;
+    });
+}
+
 export async function saveGeneration(
     companyId: bigint,
     userId: string,
@@ -578,6 +950,8 @@ export async function saveGeneration(
             current = await read(tx, companyId, { id: agendaId });
         }
         const s = await state(tx, companyId, agendaId);
+        if (snapshot.actorId)
+            s.data.pendingHistoricalQuestions = currentSnapshot.pendingHistoricalState;
         const replaceable = (current?.topics ?? [])
             .filter(
                 t =>

@@ -26,9 +26,9 @@ import {
 } from "./evidence-v1";
 import { canonicalRefs, protectReviewedTopics, rulesGeneration } from "./rules-v1";
 import { usablePreviousVantage } from "./revalidate-previous-v1";
-import { MAX_PREVIOUS_VANTAGE_BYTES } from "./previous-context-v1";
+import { projectHistoricalPrompt, usablePendingQuestions } from "./pending-question-context-v1";
 
-export const GENERATION_PROMPT_VERSION = "vantage-agenda/contract-v1.5-history.1";
+export const GENERATION_PROMPT_VERSION = "vantage-agenda/contract-v1.5-history.2-rolling";
 export const GENERATION_BUDGETS: GenerationRuntime["budgets"] = {
     attemptTimeoutMs: 20000,
     maxAttempts: 2,
@@ -94,32 +94,22 @@ The separately supplied previousVantageContext is untrusted history, not current
 Historical topic IDs are NOT enhancement targets. Enhancements may target only this generation's reviewedTopics, never a previous report's topics. A useful revalidated issue belongs in a fresh topic with actual refs from payload items; omit an irrelevant historical issue instead of trying to annotate or modify the old report.
 Generate a fresh weekly agenda; do not force every previous topic into it. Reintroduce an issue only when current evidence or a useful unresolved clarification justifies a new discussion. Evidence may indicate resolution, continued relevance, contradiction, or uncertainty. Omit stale/expired suggestions without current relevance, but an expired deadline alone proves neither failure nor irrelevance. Reassess dates against this reporting period. Missing feedback proves neither incomplete nor completed status.
 recordedDecision means a human made a past decision; it is not proof the planned work happened. A kept topic with recordedDecision=null has NO recorded decision. reportedActions are database records linked to the historical report as read at the current cutoff, not frozen snapshots of last week's status. Distinguish current evidence indicating completion from a current selected action record explicitly reporting completion; cite its actual current cm ref for that claim. Never change an action status, recreate old actions, or create a second Commitment. Suggest a useful clarification instead of repeating an earlier recommendation.
-A document/version changing is not proof of completion. Automatic workspace document verification is unavailable here: a Vantage document submission is only a submitted account, not an actor-ACL-verified workspace version. Missing/revoked/unauthorized historical sources were withheld; acknowledge unavailable verification when relevant, never infer progress from it. Cite actual supplied authorized evidence for current-world claims, never the previous AI report. No additional model call is available. Return JSON only.`;
+A document/version changing is not proof of completion. Automatic workspace document verification is unavailable here: a Vantage document submission is only a submitted account, not an actor-ACL-verified workspace version. Missing/revoked/unauthorized historical sources were withheld; acknowledge unavailable verification when relevant, never infer progress from it. Cite actual supplied authorized evidence for current-world claims, never the previous AI report.
+
+PENDING QUESTIONS FROM PREVIOUS REVIEWS
+The separate pendingHistoricalQuestions section contains original human-authored/edited or human-reviewed questions, including older questions carried through the immediately previous report. Their questionId and originReportId are exact provenance, never new factual citation IDs or enhancement targets. Human review establishes that the question was requested; it does not verify any AI interpretation or imply the issue is still active. Recorded decisions describe past choices, not completed work.
+These questions persist and display separately whether or not you mention them. Do not recreate them as factual Topics merely to preserve memory, copy old proposed actions, create a Commitment, or issue any closure/disposition. Only an explicit human review can stop carry-forward. A linked action's status, expired date, silence, document edit, or your own conclusion cannot close a pending question. Current evidence may indicate resolution; distinguish that indication from human confirmation that the historical question is addressed.
+Review available current items for useful clarification, using the original question and decision as historical context. If no relevant evidence exists, progress is unknown; a concise historical uncertainty in the summary is permitted without inventing a current fact or an unrelated citation. A fresh factual Topic still requires relevant current item refs. Omitted pending questions remain stored and visible outside this prompt. No additional model call is available. Return JSON only.`;
 
 const schemaInstruction = structuredSchemaInstruction(GenerationOutputSchema);
 
 /** Bounds every field sent to the model, including reviewed content and computed signals. */
 export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
     const previous = usablePreviousVantage(input);
-    const previousVantageContext = previous ? structuredClone(previous) : null;
-    if (previousVantageContext) {
-        while (
-            Buffer.byteLength(JSON.stringify(previousVantageContext)) >
-                MAX_PREVIOUS_VANTAGE_BYTES &&
-            previousVantageContext.topics.length
-        ) {
-            previousVantageContext.topics.pop();
-            previousVantageContext.omissions.topics++;
-        }
-        if (
-            Buffer.byteLength(JSON.stringify(previousVantageContext)) > MAX_PREVIOUS_VANTAGE_BYTES
-        ) {
-            previousVantageContext.summary = null;
-            previousVantageContext.omissions.summary = true;
-            previousVantageContext.unavailableSources =
-                previousVantageContext.unavailableSources.slice(0, 8);
-        }
-    }
+    const { previousVantageContext, pendingHistoricalQuestions } = projectHistoricalPrompt(
+        input,
+        previous
+    );
     const reviewed: unknown[] = [];
     let reviewedBytes = 0;
     for (const { topic: t, contentVersion } of input.reviewedTopics) {
@@ -162,6 +152,7 @@ export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
         items: pack.items,
         reviewedTopics: reviewed,
         previousVantageContext,
+        pendingHistoricalQuestions,
         metricChanges,
         missingMetricNames: pack.signals.metricsWithoutData
             .slice(0, 10)
@@ -171,7 +162,8 @@ export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
             items: 0,
             metricChanges: 0,
             previousVantageTopics: previousVantageContext?.omissions.topics ?? 0,
-            previousVantageContext: false,
+            previousVantageContext: Boolean(previous && !previousVantageContext),
+            pendingHistoricalQuestions: pendingHistoricalQuestions?.omittedCount ?? 0,
         },
     };
     // Include the shared schema instruction and JSON-string escaping, and leave
@@ -182,7 +174,7 @@ export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
             JSON.stringify([schemaInstruction, GENERATION_SYSTEM_PROMPT, JSON.stringify(payload)])
         ) > 23500;
     // Current authorized evidence wins when history competes for the same envelope.
-    // Historical questions already helped search/rank that evidence before this point.
+    // Pending questions remain persisted even when no historical text fits this prompt.
     if (overBudget() && payload.previousVantageContext?.summary) {
         payload.previousVantageContext.summary = null;
         payload.previousVantageContext.omissions.summary = true;
@@ -194,6 +186,14 @@ export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
     if (overBudget() && payload.previousVantageContext) {
         payload.previousVantageContext = null;
         payload.omissions.previousVantageContext = true;
+    }
+    while (overBudget() && payload.pendingHistoricalQuestions?.questions.length) {
+        payload.pendingHistoricalQuestions.questions.pop();
+        payload.pendingHistoricalQuestions.omittedCount++;
+        payload.omissions.pendingHistoricalQuestions++;
+    }
+    if (overBudget() && payload.pendingHistoricalQuestions) {
+        payload.pendingHistoricalQuestions = null;
     }
     // Byte count is a conservative input proxy, not a measured tokenizer count.
     while (overBudget() && payload.metricChanges.length) {
@@ -449,6 +449,17 @@ export function createGenerationPort(invoke: Invoke = invokeStructuredAttempt): 
                       topicsSent: prompt.payload.previousVantageContext?.topics.length ?? 0,
                       documentVerification: "unavailable",
                       authority: "Historical clues only; current facts require current evidence.",
+                  }
+                : null,
+            pendingHistoricalQuestions: usablePendingQuestions(input)
+                ? {
+                      availableCount: usablePendingQuestions(input)!.questions.length,
+                      unavailableCount: usablePendingQuestions(input)!.unavailableCount,
+                      promptIncludedCount:
+                          prompt.payload.pendingHistoricalQuestions?.questions.length ?? 0,
+                      promptOmittedCount: prompt.payload.omissions.pendingHistoricalQuestions,
+                      modelInvoked: attempts > 0,
+                      progress: "Unverified; only explicit human review closes a carried question.",
                   }
                 : null,
             grounding: "Citation IDs validated; semantic source support requires human review.",

@@ -24,11 +24,13 @@ import {
     deleteTopicV1,
     fingerprint,
     generationSnapshot,
+    getPendingHistoricalQuestionsV1,
     getAgendaV1,
     listCommitmentsV1,
     patchTopicV1,
     reorderTopicsV1,
     reviewEnhancement,
+    reviewPendingHistoricalQuestionV1,
     saveGeneration,
     setAgendaStatusV1,
     updateCommitmentV1,
@@ -997,4 +999,303 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         expect(stored).toHaveLength(1);
         expect((await connection.db.execute(sql`SELECT 1 AS ok`))[0]).toMatchObject({ ok: 1 });
     });
+
+    const rollingPeriod = (week = "2026-10-12") =>
+        reportPeriod(new Date("2026-11-16T17:00:00Z"), week);
+    async function pendingPrior() {
+        const prior = await previousReport();
+        await connection.db
+            .update(agendaTopics)
+            .set({
+                decisionQuestion: "Should pilot access wait for the deletion dry-run result?",
+                decision: "Keep the go/no-go question until the result is reviewed.",
+                decidedAt: new Date("2026-10-09T15:00:00Z"),
+                updatedAt: null,
+            })
+            .where(eq(agendaTopics.id, prior.topicId));
+        return prior;
+    }
+    async function saveNoTopics(week = "2026-10-12") {
+        const s = await generationSnapshot(ours, rollingPeriod(week), "rules", { actorId: userId });
+        const r = result(s);
+        r.draft.topics = [];
+        r.signals = {
+            ...r.signals,
+            weekStart: s.input.reportPeriod.weekStart,
+            since: s.input.reportPeriod.weekStart,
+            computedAt: s.input.reportPeriod.asOf,
+        };
+        const agenda = await saveGeneration(ours, userId, s, r);
+        return { s, agenda };
+    }
+    it("rolls the exact original question through a saved zero-topic second week into the third week", async () => {
+        const prior = await pendingPrior();
+        const old = await getAgendaV1(ours, { id: prior.id });
+        const second = await saveNoTopics();
+        expect(second.agenda.topics).toEqual([]);
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.input.pendingHistoricalQuestions!.questions).toMatchObject([
+            {
+                questionId: prior.topicId,
+                originReportId: prior.id,
+                originTopicId: prior.topicId,
+                originWeekStart: "2026-10-05",
+                question: "Should pilot access wait for the deletion dry-run result?",
+            },
+        ]);
+        expect(third.pendingHistoricalState.questions).toHaveLength(1);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(old);
+    });
+    it("persists and exposes more than one validation batch even when the model outputs no topics", async () => {
+        const prior = await previousReport({ extraTopics: 104 });
+        await connection.db
+            .update(agendaTopics)
+            .set({
+                decisionQuestion: "What evidence will justify the requested go/no-go decision?",
+                updatedAt: null,
+            })
+            .where(eq(agendaTopics.agendaId, prior.id));
+        const second = await saveNoTopics();
+        expect(second.s.pendingHistoricalState.questions).toHaveLength(105);
+        expect(second.s.input.pendingHistoricalQuestions!.questions).toHaveLength(105);
+        const view = await getPendingHistoricalQuestionsV1({
+            companyId: ours,
+            agendaId: second.agenda.id,
+            actorId: userId,
+        });
+        expect(view.questions).toHaveLength(105);
+        const last = view.questions.at(-1)!;
+        const reviewed = await reviewPendingHistoricalQuestionV1({
+            companyId: ours,
+            userId,
+            agendaId: second.agenda.id,
+            questionId: last.questionId,
+            expectedVersion: view.version,
+            status: "dismissed",
+        });
+        expect(reviewed.questions).toHaveLength(104);
+        expect(second.s.pendingHistoricalState.questions).toHaveLength(105);
+    });
+    it("rolls the latest saved predecessor across a skipped week and never seeds same-week topics as history", async () => {
+        const prior = await pendingPrior();
+        const second = await saveNoTopics();
+        const skippedPeriod = rollingPeriod("2026-10-26");
+        const skipped = await generationSnapshot(ours, skippedPeriod, "rules", { actorId: userId });
+        // No report exists for October 19. Older AI prose stays out, but saved human lineage survives.
+        expect(skipped.input.previousVantageContext).toBeNull();
+        expect(skipped.input.pendingHistoricalQuestions!.questions).toMatchObject([
+            { questionId: prior.topicId, originReportId: prior.id, originWeekStart: "2026-10-05" },
+        ]);
+        const current = await saveGeneration(ours, userId, skipped, result(skipped));
+        await decideV1({
+            companyId: ours,
+            userId,
+            topicId: current.topics[0]!.id,
+            key: "same-week-not-history",
+            decision: "A current-week decision must not self-seed its own pending history.",
+            commitment: null,
+        });
+        const regenerated = await generationSnapshot(ours, skippedPeriod, "rules", {
+            actorId: userId,
+        });
+        expect(
+            regenerated.input.pendingHistoricalQuestions!.questions.map(
+                question => question.questionId
+            )
+        ).toEqual([prior.topicId]);
+        expect(regenerated.input.previousVantageContext).toBeNull();
+        expect(regenerated.input.reviewedTopics.map(topic => topic.topic.id)).toContain(
+            current.topics[0]!.id
+        );
+        expect(await getAgendaV1(ours, { id: second.agenda.id })).toEqual(second.agenda);
+    });
+    it.each(["dismissed", "addressed"] as const)(
+        "human %s persists across same-week and next-week generation without changing the original report or action",
+        async status => {
+            const prior = await pendingPrior();
+            const old = await getAgendaV1(ours, { id: prior.id });
+            const oldActions = await listCommitmentsV1({ companyId: ours });
+            const second = await saveNoTopics();
+            const view = await getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            });
+            const dismissed = await reviewPendingHistoricalQuestionV1({
+                companyId: ours,
+                userId,
+                agendaId: second.agenda.id,
+                questionId: prior.topicId,
+                expectedVersion: view.version,
+                status,
+                reason: "Synthetic human review",
+            });
+            expect(dismissed.questions).toEqual([]);
+            await saveNoTopics();
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+            expect(third.pendingHistoricalState.reviews[prior.topicId]!.status).toBe(status);
+            expect(await getAgendaV1(ours, { id: prior.id })).toEqual(old);
+            expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+        }
+    );
+    it("checks review CAS, actor/company scope, and exact original identity", async () => {
+        const prior = await pendingPrior();
+        const second = await saveNoTopics();
+        const base = {
+            companyId: ours,
+            userId,
+            agendaId: second.agenda.id,
+            questionId: prior.topicId,
+            expectedVersion: second.agenda.version,
+            status: "dismissed" as const,
+        };
+        await expect(
+            getPendingHistoricalQuestionsV1({
+                companyId: other,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            })
+        ).rejects.toMatchObject({ code: "not_found" });
+        await expect(
+            getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: "",
+            })
+        ).rejects.toMatchObject({ status: 403 });
+        await expect(
+            reviewPendingHistoricalQuestionV1({ ...base, questionId: randomUUID() })
+        ).rejects.toMatchObject({ code: "not_found" });
+        await reviewPendingHistoricalQuestionV1(base);
+        await expect(reviewPendingHistoricalQuestionV1(base)).rejects.toMatchObject({
+            code: "stale_agenda",
+        });
+    });
+    it("does not infer closure from an expired due date or a done commitment", async () => {
+        const prior = await pendingPrior();
+        await updateCommitmentV1({
+            companyId: ours,
+            id: prior.actionId,
+            patch: {
+                status: "done",
+                outcome: "An action result was reported; the decision still needs review.",
+            },
+        });
+        const second = await saveNoTopics();
+        expect(second.s.input.pendingHistoricalQuestions!.questions).toHaveLength(1);
+        expect(second.s.input.pendingHistoricalQuestions!.questions[0]!.suggestedDue).toBe(
+            "2026-10-10"
+        );
+        expect(second.s.pendingHistoricalState.reviews).toEqual({});
+    });
+    it.each(["deleted-source", "document", "foreign-origin", "future-origin", "future-source"])(
+        "withholds %s question content while retaining the full persisted lineage",
+        async change => {
+            const prior = await pendingPrior();
+            const second = await saveNoTopics();
+            if (change === "deleted-source")
+                await connection.db.delete(evidence).where(eq(evidence.id, prior.sourceId));
+            if (change === "document")
+                await connection.db
+                    .update(evidence)
+                    .set({ kind: "document" })
+                    .where(eq(evidence.id, prior.sourceId));
+            if (change === "foreign-origin")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ companyId: other })
+                    .where(eq(agendaTopics.id, prior.topicId));
+            if (change === "future-origin")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ updatedAt: new Date("2026-12-01T00:00:00Z") })
+                    .where(eq(agendaTopics.id, prior.topicId));
+            if (change === "future-source")
+                await connection.db
+                    .update(evidence)
+                    .set({ observedAt: "2026-12-01" })
+                    .where(eq(evidence.id, prior.sourceId));
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            expect(third.pendingHistoricalState.questions).toHaveLength(1);
+            expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+            expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(1);
+            const view = await getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            });
+            expect(view.questions).toEqual([]);
+            expect(view.unavailableCount).toBe(1);
+            expect(JSON.stringify(view)).not.toContain(prior.topicId);
+            expect(JSON.stringify(view)).not.toContain("PRIVATE");
+        }
+    );
+    it("treats an explicit original-topic dismissal as a human tombstone without rewriting it", async () => {
+        const prior = await pendingPrior();
+        await saveNoTopics();
+        await connection.db
+            .update(agendaTopics)
+            .set({ status: "dismissed" })
+            .where(eq(agendaTopics.id, prior.topicId));
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+        expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(0);
+        expect(third.pendingHistoricalState.reviews[prior.topicId]!.status).toBe("dismissed");
+    });
+    it("withholds lineage from a previous carrier report generated after the reporting cutoff", async () => {
+        await pendingPrior();
+        const second = await saveNoTopics();
+        await connection.db
+            .update(agendas)
+            .set({ generatedAt: new Date("2026-12-01T00:00:00Z"), updatedAt: null })
+            .where(eq(agendas.id, second.agenda.id));
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.pendingHistoricalState.questions).toHaveLength(1);
+        expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+        expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(1);
+        expect(JSON.stringify(third.input.pendingHistoricalQuestions)).not.toContain("PRIVATE");
+    });
+    it.each(["old-origin", "old-source", "carried-review"])(
+        "rejects generation if %s changes after its rolling snapshot",
+        async change => {
+            const prior = await pendingPrior();
+            const second = await saveNoTopics();
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            if (change === "old-origin")
+                await patchTopicV1(ours, prior.topicId, {
+                    decisionQuestion: "Edited original question",
+                    expectedContentVersion: 2,
+                });
+            if (change === "old-source")
+                await connection.db
+                    .update(evidence)
+                    .set({ body: "Changed content far beyond any prompt projection" })
+                    .where(eq(evidence.id, prior.sourceId));
+            if (change === "carried-review")
+                await reviewPendingHistoricalQuestionV1({
+                    companyId: ours,
+                    userId,
+                    agendaId: second.agenda.id,
+                    questionId: prior.topicId,
+                    expectedVersion: second.agenda.version,
+                    status: "addressed",
+                });
+            await expect(saveGeneration(ours, userId, third, result(third))).rejects.toMatchObject({
+                code: "stale_context",
+            });
+        }
+    );
 });

@@ -25,6 +25,7 @@ import type {
     VantageFact,
     VantageVisibility,
     WeeklySignals,
+    PendingHistoricalQuestionsViewV1,
 } from "@launchstack/pipelines/vantage";
 import { decisionKey, normalizeDecision, completeDecision } from "./_lib/submission";
 import type { OverviewDto, TriageDto } from "~/server/vantage/service";
@@ -53,6 +54,7 @@ export type {
     VantageFact,
     VantageVisibility,
     WeeklySignals,
+    PendingHistoricalQuestionsViewV1,
 };
 
 export const EVIDENCE_KINDS: readonly VantageEvidenceKind[] = [
@@ -268,6 +270,22 @@ export const vantageApi = {
         }),
     agenda: (id: string) =>
         call<{ agenda: AgendaV1Dto }>(`/api/vantage/agendas/${encodeURIComponent(id)}`),
+    pendingQuestions: (agendaId: string) =>
+        call<PendingHistoricalQuestionsViewV1>(
+            `/api/vantage/agendas/${encodeURIComponent(agendaId)}/pending-questions`,
+            { cache: "no-store" }
+        ),
+    reviewPendingQuestion: (
+        agendaId: string,
+        questionId: string,
+        status: "dismissed" | "addressed",
+        expectedVersion: number
+    ) =>
+        post<PendingHistoricalQuestionsViewV1>(
+            `/api/vantage/agendas/${encodeURIComponent(agendaId)}/pending-questions`,
+            { questionId, status, expectedVersion },
+            "PATCH"
+        ),
     setAgendaStatus: (id: string, status: VantageAgendaStatus) =>
         post<{ agenda: AgendaDto }>(
             `/api/vantage/agendas/${encodeURIComponent(id)}`,

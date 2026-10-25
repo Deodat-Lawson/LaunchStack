@@ -3,8 +3,9 @@ import type { GenerationInput } from "./contract-v1";
 import type { PreviousVantageContext, PreviousVantageTopic } from "./previous-context-v1";
 import { previousActionStateFingerprint } from "./previous-context-v1";
 import type { CommitmentDto } from "./types";
+import { historicalContextForGeneration } from "./pending-question-context-v1";
 
-export function usablePreviousVantage(input: GenerationInput): PreviousVantageContext | null {
+function validatedPreviousVantage(input: GenerationInput): PreviousVantageContext | null {
     const history = input.previousVantageContext;
     const start = Date.parse(input.reportPeriod.weekStart + "T12:00:00Z");
     if (
@@ -19,6 +20,14 @@ export function usablePreviousVantage(input: GenerationInput): PreviousVantageCo
     )
         return null;
     return history;
+}
+
+/** Human closure/source withdrawal suppresses historical prose, never action identity checks. */
+export function usablePreviousVantage(input: GenerationInput): PreviousVantageContext | null {
+    return validatedPreviousVantage({
+        ...input,
+        previousVantageContext: historicalContextForGeneration(input),
+    });
 }
 
 const generic = new Set(
@@ -62,7 +71,9 @@ export function unchangedHistoricalAction(input: GenerationInput, current: Commi
     // A resolution inside the current reporting period is a current record event,
     // even when history assembly has already read that latest linked action state.
     if (current.status !== "open" || current.resolvedAt !== null) return false;
-    const history = usablePreviousVantage(input);
+    // Read original authorized metadata only to suppress repeated work. Never copy
+    // this prose into model input or a new topic after a human review/withdrawal.
+    const history = validatedPreviousVantage(input);
     const previous = history?.topics
         .flatMap(topic => topic.reportedActions)
         .find(action => action.id === current.id);

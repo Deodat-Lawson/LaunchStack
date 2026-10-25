@@ -41,12 +41,14 @@ jest.mock("~/components/tool-app/ToolLink", () => {
 const mockOverview = jest.fn<Promise<OverviewDto>, []>();
 const mockPrepare = jest.fn<Promise<{ agenda: AgendaDto }>, [string | undefined]>();
 const mockPatchTopic = jest.fn();
+const mockPendingQuestions = jest.fn();
 jest.mock("~/app/employer/tools/vantage/api", () => ({
     ...jest.requireActual<typeof VantageApi>("~/app/employer/tools/vantage/api"),
     vantageApi: {
         overview: () => mockOverview(),
         prepare: (week?: string) => mockPrepare(week),
         patchTopic: (...args: unknown[]) => mockPatchTopic(...args),
+        pendingQuestions: (...args: unknown[]) => mockPendingQuestions(...args),
     },
 }));
 
@@ -95,6 +97,15 @@ beforeEach(() => {
     mockOverview.mockImplementation(() => Promise.resolve(current));
     mockPrepare.mockImplementation(() => Promise.resolve({ agenda: drafted }));
     mockPatchTopic.mockImplementation((id: string) => Promise.resolve({ topic: topic({ id }) }));
+    mockPendingQuestions.mockImplementation((agendaId: string) =>
+        Promise.resolve({
+            contractVersion: "pending-historical-questions/v1",
+            agendaId,
+            version: 1,
+            questions: [],
+            unavailableCount: 0,
+        })
+    );
 });
 
 describe("OverviewScreen", () => {
@@ -241,5 +252,105 @@ describe("OverviewScreen", () => {
         expect(mockPrepare).toHaveBeenCalledTimes(2);
         expect(await screen.findByRole("article", { name: pricing.title })).toBeInTheDocument();
         expect(screen.queryByText("Vantage could not draft the week")).toBeNull();
+    });
+
+    it("keeps historical questions visible separately when all current topics are answered", async () => {
+        current = {
+            ...withMaterial(),
+            agenda: agenda({ status: "ready", topics: [topic({ status: "kept" })] }),
+        };
+        mockPendingQuestions.mockResolvedValue({
+            contractVersion: "pending-historical-questions/v1",
+            agendaId: current.agenda!.id,
+            version: 3,
+            unavailableCount: 0,
+            questions: [
+                {
+                    questionId: "original-topic",
+                    originReportId: "original-report",
+                    originTopicId: "original-topic",
+                    originWeekStart: "2026-09-28",
+                    question: "Is the deletion acceptance result available?",
+                    humanReview: { decision: "Review the result before access." },
+                    suggestedDue: null,
+                },
+            ],
+        });
+        render(<OverviewScreen />);
+        expect(
+            await screen.findByRole("region", {
+                name: "Pending Questions from Previous Reviews",
+            })
+        ).toBeVisible();
+        expect(
+            await screen.findByRole("article", {
+                name: "Is the deletion acceptance result available?",
+            })
+        ).toBeVisible();
+        expect(screen.queryByText("You're all caught up")).toBeNull();
+        expect(mockPrepare).not.toHaveBeenCalled();
+        expect(mockPatchTopic).not.toHaveBeenCalled();
+    });
+
+    it("can explicitly draft with prior context when there is no current evidence", async () => {
+        current = overview({
+            previousAgenda: agenda({ id: "previous-report", weekStart: "2026-09-28" }),
+            lastEntryAt: null,
+            daysSinceLastEntry: null,
+        });
+        const blank = agenda({ id: "new-empty-report", topics: [] });
+        mockPrepare.mockImplementation(async () => {
+            current = { ...current, agenda: blank };
+            return { agenda: blank };
+        });
+        mockPendingQuestions.mockResolvedValue({
+            contractVersion: "pending-historical-questions/v1",
+            agendaId: blank.id,
+            version: 1,
+            unavailableCount: 0,
+            questions: [
+                {
+                    questionId: "original-topic",
+                    originReportId: "previous-report",
+                    originTopicId: "original-topic",
+                    originWeekStart: "2026-09-28",
+                    question: "Is the deletion acceptance result available?",
+                    humanReview: { decision: null },
+                    suggestedDue: null,
+                },
+            ],
+        });
+        render(<OverviewScreen />);
+        const draft = await screen.findByRole("button", {
+            name: "Draft this week with previous review context",
+        });
+        expect(mockPrepare).not.toHaveBeenCalled();
+        fireEvent.click(draft);
+        expect(
+            await screen.findByRole("article", {
+                name: "Is the deletion acceptance result available?",
+            })
+        ).toBeVisible();
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+        expect(mockPrepare).toHaveBeenCalledWith(WEEK);
+        expect(mockPendingQuestions).toHaveBeenCalledWith(blank.id);
+        expect(mockPatchTopic).not.toHaveBeenCalled();
+    });
+
+    it("can explicitly draft without a calendar-prior report after skipped weeks", async () => {
+        current = overview({ previousAgenda: null, lastEntryAt: null, daysSinceLastEntry: null });
+        const blank = agenda({ id: "after-skipped-weeks", topics: [] });
+        mockPrepare.mockImplementation(async () => {
+            current = { ...current, agenda: blank };
+            return { agenda: blank };
+        });
+        render(<OverviewScreen />);
+        const draft = await screen.findByRole("button", { name: "Draft this week" });
+        expect(mockPrepare).not.toHaveBeenCalled();
+        fireEvent.click(draft);
+        await waitFor(() => expect(mockPendingQuestions).toHaveBeenCalledWith(blank.id));
+        expect(mockPrepare).toHaveBeenCalledTimes(1);
+        expect(mockPrepare).toHaveBeenCalledWith(WEEK);
+        expect(mockPatchTopic).not.toHaveBeenCalled();
     });
 });

@@ -1,5 +1,6 @@
 import type { EnhancementCandidate, GenerationInput } from "./contract-v1";
 import type { AgendaDraft, DraftTopic, EvidencePack, VantageEvidenceRef } from "./types";
+import { usablePendingQuestions } from "./pending-question-context-v1";
 import { dayAdd, localDate } from "./evidence-v1";
 import {
     matchingPreviousTopic,
@@ -354,7 +355,9 @@ export function rulesGeneration(
     if (focus && !topics.slice(0, 2).includes(focus)) highlights.push(highlight(focus, 110));
     const summary = focus
         ? `${highlights.join(" ")}\n\nSuggested weekly focus: ${short((focus.proposedNextStep || focus.decisionQuestion).replace(/^Suggested check for /, "Investigate "), 310)} Why this focus: ${short(focus.rationale, 130)}\n\nUncertainty: ${short(focus.unknowns[0]!, 125)}${hasMetricChange && focus.facts.some(f => f.refs.some(r => r.ref.startsWith("ev:"))) ? " Monitor the metric separately; the evidence does not establish a link or explain its change." : ""}${reviewedMatch(focus, input) ? " Consider this separately without changing the existing decision." : ""}`
-        : usablePreviousVantage(input)
+        : usablePendingQuestions(input)?.questions.length
+          ? `No current eligible evidence establishes progress on ${usablePendingQuestions(input)!.questions.length} pending question(s) from previous reviews. Their progress is unverified; they remain listed separately for human review. Missing feedback proves neither completion nor failure, and no new action is proposed.`
+          : usablePreviousVantage(input)
           ? "No current eligible evidence establishes progress on the previous report's questions. Historical suggestions are not renewed, and missing feedback proves neither completion nor failure. Automatic workspace document verification is unavailable."
           : pack.items.length
             ? "Only prior context is available in the selected sources. It does not establish a current-week change. Suggested weekly focus: collect a current observation with matching coverage before interpreting a trend."

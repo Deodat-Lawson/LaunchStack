@@ -69,5 +69,14 @@
     "captureTimedOut": "Capture command timed out. Retry to check the same request safely.",
     "captureFailed": "Capture command failed",
     "noteFailed": "Call Note command failed"
+  },
+  "server": {
+    "deviceUnavailable": "Capture device is unavailable",
+    "workerUnavailable": "Local capture worker is unavailable; open LaunchStack Capture and retry",
+    "deviceDraining": "Capture is still draining on another device",
+    "foreignDevice": "Capture belongs to another device",
+    "captureDisabled": "Local capture is disabled",
+    "unavailable": "Call Notes is unavailable",
+    "invalidRequest": "Invalid Call Notes request"
   }
 }

@@ -69,5 +69,14 @@
     "captureTimedOut": "录制命令超时。重试可安全地检查同一请求。",
     "captureFailed": "录制命令失败",
     "noteFailed": "通话笔记命令失败"
+  },
+  "server": {
+    "deviceUnavailable": "录制设备不可用",
+    "workerUnavailable": "本地录制服务不可用，请打开 LaunchStack Capture 后重试",
+    "deviceDraining": "另一台设备仍在完成录制",
+    "foreignDevice": "此录制属于另一台设备",
+    "captureDisabled": "本地录制已停用",
+    "unavailable": "通话笔记不可用",
+    "invalidRequest": "无效的通话笔记请求"
   }
 }

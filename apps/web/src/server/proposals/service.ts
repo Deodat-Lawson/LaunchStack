@@ -13,6 +13,7 @@ import {
     blankToNull,
     makeApplicationFilename,
     renderApplicationMarkdown,
+    sectionSourceProvenance,
     slugKey,
     syncSectionRequirements,
     toggleRequirement,
@@ -41,7 +42,6 @@ import {
     listOpportunities,
     listRuns,
     listSections,
-    loadOrgProfile,
     setOpportunityStatus,
     updateApplication,
     updateLibraryItem,
@@ -84,6 +84,7 @@ import {
     toSectionDto,
 } from "./adapter";
 import { startProposalRun } from "./executor";
+import { canExportApplication, PROPOSALS_EXPORT_CATEGORY } from "./export-audience";
 
 export interface ProposalsCtx {
     companyId: bigint;
@@ -205,8 +206,8 @@ export async function findFundersRun(
         includeWeb?: boolean;
     }
 ): Promise<RunDto> {
-    const profile = await loadOrgProfile(ctx.companyId);
-    if (!profile && !(input.keywords && input.keywords.length > 0))
+    const profile = await getProfileRow(ctx.companyId);
+    if ((!profile?.builtAt || !profile.metadata) && !(input.keywords && input.keywords.length > 0))
         throw fail("profileOrKeywords", 409, { code: "profile_required" });
     const run = await startProposalRun({
         companyId: ctx.companyId,
@@ -502,6 +503,13 @@ export async function exportApplication(
     if (sections.every(s => !s.draft?.trim()))
         throw fail("nothingWritten", 409, { code: "nothing_written" });
     const exportedAt = new Date();
+    const creationKey = makeApplicationCreationKey(record.id, exportedAt);
+    if (!(await canExportApplication({ ...ctx, creationKey, sections })))
+        throw new ProposalsError(
+            "This application cannot be exported safely with its current citations and access settings",
+            403,
+            { code: "export_audience_denied" }
+        );
     const markdown = renderApplicationMarkdown({ application: record, sections, exportedAt });
     const filename = makeApplicationFilename(record);
     const stored = await uploadFile({
@@ -515,8 +523,8 @@ export async function exportApplication(
         user: { userId: ctx.userId, companyId: ctx.companyId },
         documentName: `${record.title} — proposal`,
         rawDocumentUrl: stored.url,
-        creationKey: makeApplicationCreationKey(record.id, exportedAt),
-        category: "Proposals",
+        creationKey,
+        category: PROPOSALS_EXPORT_CATEGORY,
         explicitStorageType: stored.provider,
         mimeType: "text/markdown",
         originalFilename: filename,
@@ -594,9 +602,9 @@ export async function patchSection(
     if (input.status && !SECTION_STATUSES.includes(input.status)) throw fail("unknownStatus", 400);
     let status = input.status;
     if (input.draft !== undefined && status === undefined) {
-        // Typing into a draft makes it "edited"; clearing it makes it empty.
+        // Approval belongs to the exact saved text, not a later edit.
         status = input.draft?.trim()
-            ? current.status === "approved"
+            ? current.status === "approved" && input.draft === current.draft
                 ? "approved"
                 : "edited"
             : "empty";
@@ -605,11 +613,14 @@ export async function patchSection(
         throw fail("approveEmpty", 409);
     const updated = await updateSection(ctx.companyId, sectionId, {
         draft: input.draft,
+        draftMeta:
+            input.draft !== undefined && !input.draft?.trim() && current.draftMeta
+                ? { ...current.draftMeta, cites: [], gaps: [] }
+                : undefined,
         status,
         question: blankToNull(input.question) ?? undefined,
         guidance: input.guidance,
         wordLimit: input.wordLimit,
-        draftMeta: input.draft !== undefined && !input.draft?.trim() ? null : undefined,
     });
     if (!updated) throw fail("sectionNotFound", 404);
     await refreshReadiness(ctx, applicationId);
@@ -657,6 +668,14 @@ export async function saveSectionToLibrary(
     const section = await getSection(ctx.companyId, sectionId);
     if (!section || section.applicationId !== applicationId) throw fail("sectionNotFound", 404);
     if (!section.draft?.trim()) throw fail("saveEmpty", 409);
+    const application = await getApplication(applicationId, ctx.companyId);
+    if (!application) throw fail("applicationNotFound", 404);
+    let provenance = sectionSourceProvenance(section);
+    if (provenance.kind !== "unknown" && application.requestDocumentId !== null) {
+        const ids = new Set(provenance.kind === "sources" ? provenance.sourceDocumentIds : []);
+        ids.add(application.requestDocumentId);
+        provenance = { kind: "sources", sourceDocumentIds: [...ids] };
+    }
     const cited = new Set(section.draftMeta?.cites ?? []);
     const item = await createLibraryItem({
         companyId: ctx.companyId,
@@ -668,6 +687,7 @@ export async function saveSectionToLibrary(
             .filter(Boolean)
             .slice(0, 10),
         evidence: (section.draftMeta?.evidence ?? []).filter(e => cited.has(e.n)),
+        provenance,
         sourceApplicationId: applicationId,
         sourceSectionKey: section.key,
     });
@@ -688,6 +708,7 @@ export async function newLibraryItem(
             .filter(Boolean)
             .slice(0, 10),
         evidence: [],
+        provenance: { kind: "manual" },
         sourceApplicationId: null,
         sourceSectionKey: null,
     });

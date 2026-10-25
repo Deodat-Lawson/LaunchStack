@@ -4,13 +4,9 @@
  * after a response; here it runs under Inngest's retries, and a run that
  * fails for good is marked failed so the run sheet never spins forever.
  */
-import {
-    ProposalRunEventDataSchema,
-    executeProposalRun,
-    failProposalRun,
-} from "@launchstack/pipelines/proposals";
+import { ProposalRunEventDataSchema, failProposalRun } from "@launchstack/pipelines/proposals";
 
-import { createProposalPorts } from "~/server/proposals/ports";
+import { executeProposalRunForMember } from "~/server/proposals/executor";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { inngest } from "../client";
@@ -38,7 +34,6 @@ export const proposalsRunJob = inngest.createFunction(
                     {
                         runId: parsed.data.runId,
                         companyId: BigInt(parsed.data.companyId),
-                        userId: parsed.data.userId,
                     },
                     toErrorMessage(error)
                 );
@@ -52,13 +47,9 @@ export const proposalsRunJob = inngest.createFunction(
         const data = ProposalRunEventDataSchema.parse(event.data);
         const companyId = BigInt(data.companyId);
         const result = await step.run("execute", async () => {
-            // A step body runs outside the handler's async context, so the
-            // workspace's models are entered here rather than around the handler.
+            // Membership and model scopes must both be entered inside the step.
             const run = await withWorkspaceChatModels(companyId, "proposals", () =>
-                executeProposalRun(
-                    { runId: data.runId, companyId, userId: data.userId },
-                    createProposalPorts(companyId)
-                )
+                executeProposalRunForMember(data.runId, companyId)
             );
             return { status: run.status, headline: run.summary?.headline ?? null };
         });

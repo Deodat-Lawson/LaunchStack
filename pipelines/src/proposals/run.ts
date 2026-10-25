@@ -4,21 +4,29 @@
  * or the worker); `executeProposalRun` does the reading and writing around the
  * stages and records each step so the run sheet can show progress.
  */
+import type { DocumentScope } from "@launchstack/retrieval";
+
 import {
+    claimRun,
+    completeRun,
     createRun,
+    failRun,
     getApplication,
     getRun,
+    isRunActive,
     listLibraryItems,
     listSections,
     noteLibraryUses,
     loadOrgProfile,
+    loadReadableDocumentIds,
     replaceSections,
     updateApplication,
-    updateRun,
+    updateRunSteps,
     updateSection,
     upsertOpportunity,
 } from "./db";
-import { PROPOSAL_CREDITS, type ProposalPorts } from "./ports";
+import { sectionSourceProvenance } from "./evidence";
+import { PROPOSAL_CREDITS, type ProposalDebitExecutor, type ProposalPorts } from "./ports";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
 import {
@@ -30,12 +38,21 @@ import {
     MAX_REQUEST_CHARS,
 } from "./stages";
 import { wordCount } from "./text";
-import type { RunInput, RunKind, RunRecord, RunStep, RunSummary } from "./types";
+import type {
+    LibraryItemRecord,
+    RunInput,
+    RunKind,
+    RunRecord,
+    RunStep,
+    RunSummary,
+    SectionRecord,
+} from "./types";
 
 export interface ProposalRunContext {
     runId: string;
     companyId: bigint;
     userId: string;
+    scope: DocumentScope;
 }
 
 /** The steps a run of each kind will show before it starts. */
@@ -104,7 +121,9 @@ class StepLog {
     ) {}
 
     private async flush(): Promise<void> {
-        await updateRun(this.ctx.companyId, this.ctx.runId, { steps: this.steps });
+        if (!(await updateRunSteps(this.ctx.companyId, this.ctx.runId, this.steps))) {
+            throw new Error("The run is no longer active");
+        }
     }
 
     async start(id: string, detail: string | null = null): Promise<void> {
@@ -130,19 +149,20 @@ class StepLog {
         await this.flush();
     }
 
-    async fail(id: string, detail: string): Promise<void> {
-        this.steps = this.steps.map(s =>
-            s.id === id
+    failedSteps(detail: string): RunStep[] {
+        return this.steps.map(s =>
+            s.status === "running"
                 ? { ...s, status: "failed", detail, completedAt: new Date().toISOString() }
                 : s.status === "waiting"
                   ? { ...s, status: "skipped" }
                   : s
         );
-        await this.flush();
     }
 
-    current(): string | null {
-        return this.steps.find(s => s.status === "running")?.id ?? null;
+    async assertActive(): Promise<void> {
+        if (!(await isRunActive(this.ctx.companyId, this.ctx.runId))) {
+            throw new Error("The run is no longer active");
+        }
     }
 }
 
@@ -156,103 +176,89 @@ async function debit(
     ports: ProposalPorts,
     ctx: ProposalRunContext,
     amount: number,
-    description: string
+    description: string,
+    executor: ProposalDebitExecutor
 ) {
     if (!ports.debitCredits) return 0;
-    await ports.debitCredits({ amount, description, referenceId: ctx.runId });
+    await ports.debitCredits({ amount, description, referenceId: ctx.runId }, executor);
     return amount;
 }
 
 /**
- * Execute a queued run to completion, or mark it failed. Idempotent on a
- * finished run (a second call does nothing), so a retried worker job or a
- * duplicated `after()` cannot run the same work twice.
+ * Execute only the delivery that atomically claims a queued run. A running
+ * run is never reclaimed: redelivery observes its current state or expiry.
  */
 export async function executeProposalRun(
     ctx: ProposalRunContext,
     ports: ProposalPorts
 ): Promise<RunRecord> {
-    const run = await getRun(ctx.runId, ctx.companyId);
-    if (!run) throw new Error("Run not found");
-    if (run.status === "completed" || run.status === "failed") return run;
-    if (run.status === "running") return run;
+    const run = await claimRun(ctx.companyId, ctx.runId);
+    if (!run) {
+        const existing = await getRun(ctx.runId, ctx.companyId);
+        if (!existing) throw new Error("Run not found");
+        return existing;
+    }
 
-    const startedAt = new Date();
-    await updateRun(ctx.companyId, ctx.runId, { status: "running", startedAt });
     const log = new StepLog(ctx, run.steps);
-    let credits = 0;
     try {
         let summary: RunSummary;
+        let amount: number;
+        let description: string;
         switch (run.kind) {
             case "funders":
                 summary = await runFunders(ctx, ports, log, run);
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.funders,
-                    "Proposals: funder search"
-                );
+                amount = PROPOSAL_CREDITS.funders;
+                description = "Proposals: funder search";
                 break;
             case "extract":
                 summary = await runExtract(ctx, ports, log, run);
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.extract,
-                    "Proposals: requirements"
-                );
+                amount = PROPOSAL_CREDITS.extract;
+                description = "Proposals: requirements";
                 break;
             case "draft": {
                 const result = await runDraft(ctx, ports, log, run);
                 summary = result.summary;
-                credits += await debit(
-                    ports,
-                    ctx,
-                    PROPOSAL_CREDITS.draft * result.drafted,
-                    `Proposals: ${result.drafted} section draft${result.drafted === 1 ? "" : "s"}`
-                );
+                amount = PROPOSAL_CREDITS.draft * result.drafted;
+                description = `Proposals: ${result.drafted} section draft${result.drafted === 1 ? "" : "s"}`;
                 break;
             }
             case "rewrite":
                 summary = await runRewrite(ctx, ports, log, run);
-                credits += await debit(ports, ctx, PROPOSAL_CREDITS.rewrite, "Proposals: rewrite");
+                amount = PROPOSAL_CREDITS.rewrite;
+                description = "Proposals: rewrite";
                 break;
             case "review":
                 summary = await runReview(ctx, ports, log, run);
-                credits += await debit(ports, ctx, PROPOSAL_CREDITS.review, "Proposals: review");
+                amount = PROPOSAL_CREDITS.review;
+                description = "Proposals: review";
                 break;
         }
-        summary.durationMs = Date.now() - startedAt.getTime();
-        const finished = await updateRun(ctx.companyId, ctx.runId, {
-            status: "completed",
-            summary,
-            creditsUsed: credits,
-            completedAt: new Date(),
-        });
-        return finished ?? run;
+        summary.durationMs = Date.now() - run.startedAt!.getTime();
+        const finished = await completeRun(ctx.companyId, ctx.runId, summary, executor =>
+            debit(ports, ctx, amount, description, executor)
+        );
+        if (!finished) throw new Error("Run not found");
+        return finished;
     } catch (error) {
         const message = errorMessage(error);
-        const current = log.current();
-        if (current) await log.fail(current, message);
-        const failed = await updateRun(ctx.companyId, ctx.runId, {
-            status: "failed",
-            error: message,
-            creditsUsed: credits,
-            completedAt: new Date(),
-        });
-        return failed ?? run;
+        const failed = await failRun(
+            ctx.companyId,
+            ctx.runId,
+            message,
+            log.failedSteps(message),
+            "running"
+        );
+        if (!failed) throw new Error("Run not found");
+        return failed;
     }
 }
 
-/** Mark a run failed from outside the executor (a worker's onFailure hook). */
-export async function failProposalRun(ctx: ProposalRunContext, message: string): Promise<void> {
-    const run = await getRun(ctx.runId, ctx.companyId);
-    if (!run || run.status === "completed" || run.status === "failed") return;
-    await updateRun(ctx.companyId, ctx.runId, {
-        status: "failed",
-        error: message,
-        completedAt: new Date(),
-    });
+/** An external hook can fail an unclaimed run, but cannot cancel another delivery's claim. */
+export async function failProposalRun(
+    ctx: Pick<ProposalRunContext, "runId" | "companyId">,
+    message: string
+): Promise<void> {
+    await failRun(ctx.companyId, ctx.runId, message, undefined, "queued");
 }
 
 // ─── Per kind ────────────────────────────────────────────────────────────────
@@ -263,7 +269,7 @@ async function runFunders(
     log: StepLog,
     run: RunRecord
 ): Promise<RunSummary> {
-    const profile = await loadOrgProfile(ctx.companyId);
+    const profile = await loadOrgProfile(ctx.companyId, ctx.scope);
     await log.start("plan");
     const details: Record<string, string> = {};
     const result = await findFunders(ports, {
@@ -289,6 +295,7 @@ async function runFunders(
     await log.start("save");
     let saved = 0;
     for (const { opportunity, fit } of result.scored) {
+        await log.assertActive();
         await upsertOpportunity({
             companyId: ctx.companyId,
             source: opportunity.source,
@@ -322,6 +329,13 @@ async function loadApplication(ctx: ProposalRunContext, run: RunRecord) {
     if (!applicationId) throw new Error("This run names no application");
     const application = await getApplication(applicationId, ctx.companyId);
     if (!application) throw new Error("Application not found");
+    if (application.requestDocumentId !== null) {
+        const readable = await loadReadableDocumentIds(ctx.companyId, ctx.scope, [
+            application.requestDocumentId,
+        ]);
+        if (!readable.has(application.requestDocumentId))
+            throw new Error("The application's request source is no longer readable.");
+    }
     return application;
 }
 
@@ -341,6 +355,7 @@ async function runExtract(
         const page = await ports.fetchPage(application.requestUrl);
         text = page.text;
         label = page.title ? `${page.title} (${application.requestUrl})` : application.requestUrl;
+        await log.assertActive();
         await updateApplication(ctx.companyId, application.id, {
             requestText: text.slice(0, MAX_REQUEST_CHARS),
         });
@@ -377,6 +392,29 @@ async function runExtract(
     };
 }
 
+/** A saved answer's wording can carry any of the evidence it was written from. */
+async function loadReadableLibrary(ctx: ProposalRunContext): Promise<LibraryItemRecord[]> {
+    // An old evidence array cannot prove that a saved answer was manually
+    // authored or that its now-mutable/deleted origin was the only input.
+    const items = (await listLibraryItems(ctx.companyId)).filter(
+        item => item.provenance.kind !== "unknown"
+    );
+    const readable = await loadReadableDocumentIds(
+        ctx.companyId,
+        ctx.scope,
+        items.flatMap(item => [
+            ...item.evidence.flatMap(e => (e.documentId === null ? [] : [e.documentId])),
+            ...(item.provenance.kind === "sources" ? item.provenance.sourceDocumentIds : []),
+        ])
+    );
+    return items.filter(
+        item =>
+            item.evidence.every(e => e.documentId !== null && readable.has(e.documentId)) &&
+            (item.provenance.kind !== "sources" ||
+                item.provenance.sourceDocumentIds.every(id => readable.has(id)))
+    );
+}
+
 async function runDraft(
     ctx: ProposalRunContext,
     ports: ProposalPorts,
@@ -385,8 +423,8 @@ async function runDraft(
 ): Promise<{ summary: RunSummary; drafted: number }> {
     const application = await loadApplication(ctx, run);
     const [profile, library, all] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
-        listLibraryItems(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
+        loadReadableLibrary(ctx),
         listSections(ctx.companyId, application.id),
     ]);
     const wanted = run.input.sectionIds?.length ? new Set(run.input.sectionIds) : null;
@@ -398,11 +436,13 @@ async function runDraft(
         await log.start(stepId, section.question.slice(0, 80));
         const result = await draftSection(ports, {
             companyId: Number(ctx.companyId),
+            scope: ctx.scope,
             application,
             section,
             profile,
             library,
         });
+        await log.assertActive();
         await updateSection(ctx.companyId, section.id, {
             draft: result.draft,
             draftMeta: result.meta,
@@ -417,6 +457,7 @@ async function runDraft(
     }
     const sections = await listSections(ctx.companyId, application.id);
     const requirements = syncSectionRequirements(application.requirements, sections);
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         readiness: computeReadiness({ sections, requirements }),
@@ -431,6 +472,53 @@ async function runDraft(
     };
 }
 
+/**
+ * Existing prose may itself quote old evidence or a saved answer. Refuse reuse
+ * instead of merely removing citations while still sending that prose.
+ */
+async function assertReadableDraftEvidence(
+    ctx: ProposalRunContext,
+    sections: SectionRecord[]
+): Promise<void> {
+    const evidence = sections.flatMap(section => section.draftMeta?.evidence ?? []);
+    const sourceIds: number[] = [];
+    const legacyLibraryIds: string[] = [];
+    for (const section of sections) {
+        const provenance = sectionSourceProvenance(section);
+        if (provenance.kind === "unknown") {
+            if (ctx.scope.kind !== "everything")
+                throw new Error(
+                    "This draft has unknown source evidence provenance. Redraft from readable sources first."
+                );
+            legacyLibraryIds.push(...(section.draftMeta?.libraryItemIds ?? []));
+        } else if (provenance.kind === "sources") sourceIds.push(...provenance.sourceDocumentIds);
+    }
+    // Admission to a new prompt and reuse of old prose are different checks.
+    // Broad legacy reuse may retain unknown proof, but its referenced records
+    // and all known source dependencies must still exist in this workspace.
+    const libraryIds = [...new Set(legacyLibraryIds)];
+    const library =
+        libraryIds.length > 0
+            ? await listLibraryItems(ctx.companyId, { ids: libraryIds, limit: libraryIds.length })
+            : [];
+    for (const item of library) {
+        evidence.push(...item.evidence);
+        if (item.provenance.kind === "sources")
+            sourceIds.push(...item.provenance.sourceDocumentIds);
+    }
+    for (const item of evidence) if (item.documentId !== null) sourceIds.push(item.documentId);
+    const readable = await loadReadableDocumentIds(ctx.companyId, ctx.scope, sourceIds);
+    const readableLibraryIds = new Set(library.map(item => item.id));
+    if (
+        evidence.some(e => e.documentId === null || !readable.has(e.documentId)) ||
+        sourceIds.some(id => !readable.has(id)) ||
+        legacyLibraryIds.some(id => !readableLibraryIds.has(id))
+    )
+        throw new Error(
+            "This draft uses evidence you can no longer read. Redraft from readable sources first."
+        );
+}
+
 async function runRewrite(
     ctx: ProposalRunContext,
     ports: ProposalPorts,
@@ -441,12 +529,13 @@ async function runRewrite(
     const sectionId = run.input.sectionIds?.[0];
     if (!sectionId) throw new Error("This run names no section");
     const [profile, all] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
         listSections(ctx.companyId, application.id),
     ]);
     const section = all.find(s => s.id === sectionId);
     if (!section) throw new Error("Section not found");
     await log.start("rewrite", section.question.slice(0, 80));
+    await assertReadableDraftEvidence(ctx, [section]);
     const result = await rewriteSection(ports, {
         application,
         section,
@@ -454,6 +543,7 @@ async function runRewrite(
         preset: run.input.rewrite?.preset ?? "custom",
         instruction: run.input.rewrite?.instruction,
     });
+    await log.assertActive();
     await updateSection(ctx.companyId, section.id, {
         draft: result.draft,
         draftMeta: result.meta,
@@ -462,6 +552,7 @@ async function runRewrite(
     });
     const sections = await listSections(ctx.companyId, application.id);
     const requirements = syncSectionRequirements(application.requirements, sections);
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         readiness: computeReadiness({ sections, requirements }),
@@ -483,7 +574,7 @@ async function runReview(
 ): Promise<RunSummary> {
     const application = await loadApplication(ctx, run);
     const [profile, sections] = await Promise.all([
-        loadOrgProfile(ctx.companyId),
+        loadOrgProfile(ctx.companyId, ctx.scope),
         listSections(ctx.companyId, application.id),
     ]);
     await log.start("check");
@@ -493,11 +584,16 @@ async function runReview(
         `${requirements.filter(r => r.done).length} of ${requirements.length} done`
     );
     await log.start("review");
+    await assertReadableDraftEvidence(
+        ctx,
+        sections.filter(section => section.draft?.trim())
+    );
     const review = await reviewApplication(ports, {
         application: { ...application, requirements },
         sections,
         profile,
     });
+    await log.assertActive();
     await updateApplication(ctx.companyId, application.id, {
         requirements,
         review,

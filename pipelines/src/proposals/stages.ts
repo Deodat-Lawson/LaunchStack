@@ -9,7 +9,13 @@ import type { DocumentScope } from "@launchstack/retrieval";
 import type { GrantOpportunity } from "@launchstack/tools/grant-search";
 import type { SnippetPolicy } from "@launchstack/tools/grounded-retrieval";
 
-import { formatEvidenceBlock, numberEvidence, validCites } from "./evidence";
+import {
+    formatEvidenceBlock,
+    generationSourceDocumentIds,
+    numberEvidence,
+    sectionSourceProvenance,
+    validCites,
+} from "./evidence";
 import { formatLibraryBlock, matchLibrary } from "./library";
 import type { ProposalPorts } from "./ports";
 import {
@@ -227,11 +233,11 @@ export async function extractRequest(
 
 export interface DraftSectionInput {
     companyId: number;
-    application: Pick<ApplicationRecord, "title" | "funder" | "extracted">;
+    application: Pick<ApplicationRecord, "title" | "funder" | "extracted" | "requestDocumentId">;
     section: Pick<SectionRecord, "key" | "question" | "guidance" | "wordLimit">;
     profile: OrgProfile | null;
     library: LibraryItemRecord[];
-    scope?: DocumentScope;
+    scope: DocumentScope;
 }
 
 export interface DraftSectionResult {
@@ -297,6 +303,12 @@ export async function draftSection(
                 .slice(0, 8),
             evidence,
             libraryItemIds: matches.map(m => m.item.id),
+            sourceDocumentIds: generationSourceDocumentIds({
+                profile: input.profile,
+                evidence,
+                library: matches.map(match => match.item),
+                requestDocumentId: input.application.requestDocumentId,
+            }),
             modelId,
             promptVersion: PROPOSALS_PROMPT_VERSION,
             draftedAt: ports.now().toISOString(),
@@ -329,10 +341,10 @@ export function rewriteInstruction(
 }
 
 export interface RewriteSectionInput {
-    application: Pick<ApplicationRecord, "title" | "funder" | "extracted">;
+    application: Pick<ApplicationRecord, "title" | "funder" | "extracted" | "requestDocumentId">;
     section: Pick<
         SectionRecord,
-        "key" | "question" | "guidance" | "wordLimit" | "draft" | "draftMeta"
+        "key" | "question" | "guidance" | "wordLimit" | "draft" | "draftMeta" | "status"
     >;
     profile: OrgProfile | null;
     preset: RewritePreset;
@@ -399,6 +411,13 @@ export async function rewriteSection(
             ].slice(0, 8),
             evidence,
             libraryItemIds: input.section.draftMeta?.libraryItemIds ?? [],
+            sourceDocumentIds: generationSourceDocumentIds({
+                profile: input.profile,
+                evidence,
+                library: [],
+                requestDocumentId: input.application.requestDocumentId,
+                previous: sectionSourceProvenance(input.section),
+            }),
             modelId,
             promptVersion: PROPOSALS_PROMPT_VERSION,
             draftedAt: ports.now().toISOString(),

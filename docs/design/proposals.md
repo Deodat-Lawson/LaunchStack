@@ -65,10 +65,13 @@ difference from a "write my application" button.
   builder in `pipelines/src/company-metadata` reads only sources about the
   company, drops reference lists, tables and other noise, and keeps a fact
   only with a quote found verbatim in its source. The stages read it through
-  `loadOrgProfile` → `orgProfileFromView`, so excerpt numbers match the page.
-- **Sources** — every draft retrieves from the workspace's indexed sources; a citation opens the source in the Studio; a request can
-  be read straight from a Source; a finished proposal is exported into
-  Sources under "Proposals" and becomes citable.
+  `loadOrgProfile` → `profileView` → `orgProfileFromView`, filtered to the run
+  writer's readable source documents while retaining the shared view's
+  fact and derived-summary rules.
+- **Sources** — every draft retrieves from the writer's readable indexed
+  sources; a citation opens the source in the Studio; a request can be read
+  straight from a Source; a finished proposal is exported into Sources under
+  "Proposals" and becomes citable.
 - **Chat** — "Ask in chat" on any section opens the Studio with a question
   about that section in the composer (`/employer/documents?ask=…`, a new
   parameter the workspace shell honours like `?feature=`).
@@ -98,17 +101,103 @@ Every model-backed action is a run: `funders`, `extract`, `draft`
 (one or many sections), `rewrite` (one section under an instruction),
 `review`. The route creates the row and returns it with 202; the UI polls
 `/api/proposals/runs/[id]` at 1.5 s while it is live and reloads its screen
-when it settles. The executor is `executeProposalRun` in the vertical,
-idempotent on a finished row.
+when it settles. Both execution modes use `executeProposalRun` in the vertical.
 
 - **inline (default)** — the web process runs it in `after()`, the way
   keyless Prospects runs do.
 - **worker** — `PROPOSALS_EXECUTOR=worker` sends `proposals/run.requested`;
   the worker's `proposalsRunJob` executes the same function under Inngest
-  retries and marks the run failed on final failure.
+  retries; its final-failure hook can fail only a still-queued run.
 
-Credits: a pre-check when metering is enforced, a debit per completed run
-(`proposal_writing`, 1k–3k per stage) through the host's ledger port.
+A tenant-scoped conditional `UPDATE … RETURNING` claims `queued → running`.
+Only the winning delivery executes stages or becomes eligible to debit;
+concurrent deliveries and retries return the persisted running or terminal
+state. A running row is never reclaimed for another execution.
+
+Admission/preparation failures and generic worker failure hooks do not own
+a running delivery. Their `failProposalRun` update is atomically restricted
+to `queued`, so a stale admission read cannot cancel a different delivery
+that has since claimed the run. The owning executor's catch path may fail
+its `running` row. If that executor disappears without recording failure,
+the orphaned row follows the normal 15-minute lazy-expiry path instead of
+being cancelled by an unowned hook.
+
+The running deadline is **15 minutes from `startedAt`**, not from the last
+step or `updatedAt`. Expiry is lazy: detail, list, and live-run reads
+(including the home screen), progress writes, and execution delivery mark
+overdue running rows failed with an error and completion time. The same
+atomic update marks running steps failed with the timeout detail and a
+completion timestamp, skips waiting steps, and preserves completed metadata
+and step order. There is no queued-run expiry policy. The failed row stays
+terminal, and the person can start a fresh run with a new id. An executor
+resuming after expiry cannot
+revive that row or initiate its debit; post-model checks also stop it from
+persisting a late result once it observes expiry.
+
+Credits use a pre-check when metering is enforced and the host's
+`proposal_writing` ledger port at the rates in `PROPOSAL_CREDITS`; drafts
+charge per generated section. Finalization takes a row lock, rechecks running
+status and the deadline after acquiring it, then supplies that transaction
+as the required second argument to `ProposalPorts.debitCredits`.
+
+The app adapter forwards this executor to `debitTokens`. Balance reads,
+missing-account creation, any signup grant, account debits, ledger entries,
+and daily usage all use the **same connection and transaction as run
+completion**. They commit or roll back together, including when metering
+throws. No second pool connection is needed while holding the run lock, so
+finalization works even with a one-connection pool. Guarded failure writes
+cannot replace an existing terminal result, and rolled-back metering is not
+reported as credits used.
+
+A custom host's genuinely external meter cannot participate in the
+Postgres transaction. Its acknowledged charge can still survive a process
+crash or database rollback before completion commits. The run is never
+reexecuted or automatically charged again, but this is not a cross-system
+exactly-once guarantee. Eligibility is checked immediately before
+dispatching the debit; an already-dispatched external operation cannot be
+recalled if its response crosses the deadline.
+
+### Generation scope
+
+Both executors resolve the stored run writer's current active workspace
+membership and document scope inside their deferred body: `after()` for
+inline execution, `step.run("execute", …)` for the worker. The event's
+`userId` is not authority to substitute another writer. Missing or inactive
+membership, or failed scope resolution, fails the run without falling back
+to workspace-wide access. Workspace model selection remains scoped inside
+the same callback or step.
+
+Execution and draft retrieval require an explicit document scope. Retrieval
+uses the real document-scope SQL; profile facts are filtered by readable
+source provenance. A library answer is excluded from generation if any of
+its stored evidence is unreadable, missing, or belongs to another workspace.
+An application's stored request source must also remain readable before its
+content or extracted requirements can be used.
+
+New drafts record complete `sourceDocumentIds` for their document inputs:
+retrieved excerpts whether cited or not, profile dependencies even without
+quotes, the request source, and reused library snapshots. Rewrite carries
+these dependencies forward. Rewrite and review do not retrieve new sources;
+before sending existing prose, all its dependencies, saved evidence, and
+referenced library answers must remain readable. Otherwise the run fails and
+asks for a redraft. Dropping citations alone would leave private prose in
+the prompt. Legacy generated prose without complete proof requires a redraft
+under a constrained scope; a broad-scope rewrite does not manufacture proof.
+
+Clearing a draft keeps its source dependencies and generation history, but
+clears citation and gap annotations. Later prose cannot inherit those old
+annotations; undoing the text alone does not restore citations.
+
+New library answers store explicit manual provenance or an immutable source
+snapshot in a version-1 envelope inside the existing `evidence` JSONB. The
+API still returns an evidence array. Saved source dependencies survive edits
+and deletion of the originating application. Legacy evidence arrays have
+unknown provenance: they remain readable and editable but are not reused
+automatically. Replace them with a proven snapshot or an explicitly new
+manual answer. No SQL migration is needed.
+
+These are generation checks, not a change to read-side access policy for
+shared application and library screens.
 
 ## Stages, briefly
 
@@ -134,6 +223,14 @@ Credits: a pre-check when metering is enforced, a debit per completed run
 - **Review** — deterministic findings merged with the model's, blockers
   first; readiness = 70% required sections + 30% checklist.
 
+Approval belongs to the exact saved answer: changing approved text, including
+whitespace-only changes, returns it to _edited_; clearing it returns it to
+_empty_. Saving identical text preserves approval, and an explicit Approve
+request can save and approve new text together. After a section save, the
+editor refreshes the application so readiness and section checklist rows
+immediately reflect the current approval. A saved review remains available
+but does not freeze the current readiness score.
+
 ## Tests
 
 - `packages/tools` — Grants.gov parsing, query building, web listing filter,
@@ -143,3 +240,8 @@ Credits: a pre-check when metering is enforced, a debit per completed run
 - `apps/web` — the adapter's words and to-do order, the preview simulator's
   contract (runs that finish and change the world, rewrite, section status
   rules, checklist ticking, apply-from-funder), back targets.
+  `run-scope.integration.test.ts` also runs the actual inline callback and
+  worker handler against migrated Postgres and production retrieval, with
+  stand-in model/embedding outputs: granted-writer controls, restricted
+  sources/profile/library exclusions, nonretrieving rewrite/review provenance,
+  event-actor substitution, and membership removal before execution.

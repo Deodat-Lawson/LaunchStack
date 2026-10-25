@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { configuredWebSearchProvider, searchWeb } from "./web-search";
+import {
+    companySearchAvailable,
+    configuredWebSearchProvider,
+    describeCompanies,
+    searchCompanies,
+    searchWeb,
+} from "./web-search";
 
 function jsonResponse(body: unknown, status = 200): Response {
     return new Response(JSON.stringify(body), {
@@ -122,5 +128,154 @@ describe("searchWeb", () => {
         await expect(searchWeb("q", { fetchImpl: vi.fn() })).rejects.toThrow(
             /No web search provider is configured/
         );
+    });
+});
+
+describe("searchCompanies", () => {
+    beforeEach(() => {
+        vi.stubEnv("EXA_API_KEY", "");
+        vi.stubEnv("SERPER_API_KEY", "");
+    });
+    afterEach(() => vi.unstubAllEnvs());
+
+    it("needs an Exa key; Serper alone does not do company search", async () => {
+        vi.stubEnv("SERPER_API_KEY", "serper-test");
+        expect(companySearchAvailable()).toBe(false);
+        await expect(searchCompanies("produce wholesalers in Houston")).rejects.toThrow(
+            "Company search needs an Exa key"
+        );
+    });
+
+    it("asks Exa's company index in the country, never for excluded hosts", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        expect(companySearchAvailable()).toBe(true);
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({
+                results: [
+                    {
+                        title: "Brothers Produce | Houston Produce Distributor",
+                        url: "https://www.brothersproduce.com/",
+                        text: "Fresh fruit and vegetables for Houston restaurants since 1980.",
+                    },
+                    // The same company again, and a host on the exclusion list.
+                    { title: "Brothers Produce — About", url: "https://brothersproduce.com/about" },
+                    { title: "Existing customer", url: "https://customer.example/" },
+                    { title: "No URL" },
+                ],
+            })
+        );
+
+        const hits = await searchCompanies("produce wholesalers in Houston", {
+            country: "us",
+            excludeDomains: ["www.Customer.example", "customer.example", " "],
+            fetchImpl,
+        });
+
+        const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+        expect(url).toBe("https://api.exa.ai/search");
+        expect((init.headers as Record<string, string>)["x-api-key"]).toBe("exa-test");
+        expect(JSON.parse(init.body as string)).toEqual({
+            query: "produce wholesalers in Houston",
+            type: "auto",
+            category: "company",
+            numResults: 10,
+            userLocation: "US",
+            excludeDomains: ["customer.example"],
+            contents: { text: { maxCharacters: 600 } },
+        });
+        expect(hits).toEqual([
+            {
+                title: "Brothers Produce | Houston Produce Distributor",
+                url: "https://www.brothersproduce.com/",
+                domain: "brothersproduce.com",
+                description: "Fresh fruit and vegetables for Houston restaurants since 1980.",
+            },
+        ]);
+    });
+
+    it("caps the count at 25 and leaves out a malformed country", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        const fetchImpl = vi.fn(async () => jsonResponse({ results: [] }));
+        await searchCompanies("roasters", { maxResults: 80, country: "Netherlands", fetchImpl });
+        const body = JSON.parse(
+            (fetchImpl.mock.calls[0] as unknown as [string, RequestInit])[1].body as string
+        );
+        expect(body.numResults).toBe(25);
+        expect(body).not.toHaveProperty("userLocation");
+        expect(body).not.toHaveProperty("excludeDomains");
+    });
+
+    it("throws on a vendor error, naming only the status", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        const fetchImpl = vi.fn(async () => jsonResponse({ error: "secret detail" }, 402));
+        await expect(searchCompanies("roasters", { fetchImpl })).rejects.toThrow(
+            "Exa company search failed (HTTP 402)"
+        );
+    });
+});
+
+describe("describeCompanies", () => {
+    beforeEach(() => vi.stubEnv("EXA_API_KEY", "exa-test"));
+    afterEach(() => vi.unstubAllEnvs());
+
+    it("reads each homepage once and keeps Exa's summary, or the page start", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({
+                results: [
+                    {
+                        url: "https://acme.example/",
+                        title: "Acme",
+                        summary: "Acme sells point-of-sale software to independent cafés.",
+                        text: "Welcome to Acme.",
+                    },
+                    {
+                        url: "https://beta.example/",
+                        title: "Beta",
+                        text: "Beta roasts coffee for offices.",
+                    },
+                    { url: "https://empty.example/", title: "Empty" },
+                ],
+            })
+        );
+
+        const described = await describeCompanies(
+            [
+                "https://acme.example/",
+                "https://acme.example/",
+                "https://beta.example/",
+                "https://empty.example/",
+            ],
+            { fetchImpl }
+        );
+
+        const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+        expect(url).toBe("https://api.exa.ai/contents");
+        const body = JSON.parse(init.body as string);
+        expect(body.urls).toEqual([
+            "https://acme.example/",
+            "https://beta.example/",
+            "https://empty.example/",
+        ]);
+        expect(body.summary.query).toContain("what does this company sell");
+        expect(described).toEqual([
+            {
+                url: "https://acme.example/",
+                domain: "acme.example",
+                title: "Acme",
+                description: "Acme sells point-of-sale software to independent cafés.",
+            },
+            {
+                url: "https://beta.example/",
+                domain: "beta.example",
+                title: "Beta",
+                description: "Beta roasts coffee for offices.",
+            },
+        ]);
+    });
+
+    it("makes no request for an empty list", async () => {
+        const fetchImpl = vi.fn();
+        expect(await describeCompanies([], { fetchImpl })).toEqual([]);
+        expect(fetchImpl).not.toHaveBeenCalled();
     });
 });

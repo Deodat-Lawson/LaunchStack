@@ -54,6 +54,9 @@ function mapResult(r: AppSearchResult): RagSearchResult {
         retrievalMethod: r.retrievalMethod,
         metadata: {
             chunkId: r.metadata.chunkId,
+            versionId: r.metadata.versionId,
+            parentChunkId: r.metadata.parentChunkId,
+            mergedSiblings: r.metadata.mergedSiblings,
             page: r.metadata.page,
             documentId: r.metadata.documentId,
             documentTitle: r.metadata.documentTitle,

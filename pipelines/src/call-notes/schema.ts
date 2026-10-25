@@ -63,31 +63,50 @@ export const callNotesWorkItemKindEnum = [
 ] as const;
 export const callNotesWorkItemStatusEnum = ["pending", "claimed", "completed", "failed"] as const;
 
-export const callNotesLocalCaptureWorkers = pgTable(
-    "call_notes_local_capture_workers",
+export const callNotesCaptureDevices = pgTable(
+    "call_notes_capture_devices",
     {
         id: varchar("id", { length: 64 }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
         userId: varchar("user_id", { length: 256 }).notNull(),
-        workerId: varchar("worker_id", { length: 64 }).notNull(),
-        lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
+        name: varchar("name", { length: 128 }).notNull(),
+        tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+        appVersion: varchar("app_version", { length: 32 }).notNull(),
+        os: varchar("os", { length: 32 }).notNull(),
+        arch: varchar("arch", { length: 16 }).notNull(),
+        lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
+        revokedAt: timestamp("revoked_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
     table => ({
-        scopeWorkerUnique: uniqueIndex(
-            "call_notes_local_capture_workers_company_user_worker_unique"
-        ).on(table.companyId, table.userId, table.workerId),
-        scopeLastSeenIdx: index("call_notes_local_capture_workers_company_user_last_seen_idx").on(
+        tokenHashUnique: uniqueIndex("call_notes_capture_devices_token_hash_unique").on(
+            table.tokenHash
+        ),
+        scopeLastSeenIdx: index("call_notes_capture_devices_company_user_last_seen_idx").on(
             table.companyId,
             table.userId,
             table.lastSeenAt
         ),
     })
 );
+
+export const callNotesCapturePairingCodes = pgTable("call_notes_capture_pairing_codes", {
+    codeHash: varchar("code_hash", { length: 64 }).primaryKey(),
+    companyId: bigint("company_id", { mode: "bigint" })
+        .notNull()
+        .references(() => company.id, { onDelete: "cascade" }),
+    userId: varchar("user_id", { length: 256 }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    consumedAt: timestamp("consumed_at", { withTimezone: true }),
+    consumedDeviceId: varchar("consumed_device_id", { length: 64 }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull(),
+});
 
 export const callNotesCalls = pgTable(
     "call_notes_calls",
@@ -170,6 +189,10 @@ export const callNotesCaptures = pgTable(
             length: 16,
             enum: callNotesCapturePausedReasonEnum,
         }),
+        stopReason: varchar("stop_reason", {
+            length: 16,
+            enum: ["user", "silence", "call_ended", "max_duration"],
+        }),
         lifecycle: varchar("lifecycle", {
             length: 32,
             enum: callNotesCaptureLifecycleEnum,
@@ -184,6 +207,10 @@ export const callNotesCaptures = pgTable(
         endedAt: timestamp("ended_at", { withTimezone: true }),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
         captureUserId: varchar("capture_user_id", { length: 256 }).notNull(),
+        targetDeviceId: varchar("target_device_id", { length: 64 }).references(
+            () => callNotesCaptureDevices.id,
+            { onDelete: "set null" }
+        ),
     },
     table => ({
         callUnique: uniqueIndex("call_notes_captures_call_unique").on(table.callId),
@@ -496,6 +523,7 @@ export const callNotesWorkItems = pgTable(
 );
 
 export type CallNotesCallRow = InferSelectModel<typeof callNotesCalls>;
+export type CallNotesCaptureDeviceRow = InferSelectModel<typeof callNotesCaptureDevices>;
 export type CallNotesCaptureRow = InferSelectModel<typeof callNotesCaptures>;
 export type CallNotesCaptureAttemptRow = InferSelectModel<typeof callNotesCaptureAttempts>;
 export type CallNotesParticipantRow = InferSelectModel<typeof callNotesParticipants>;

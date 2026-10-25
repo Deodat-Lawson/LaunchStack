@@ -344,6 +344,82 @@ await test("CallWorkerRuntime survives a pipeline rejection and omits its dead A
     }
 });
 
+await test("CallWorkerRuntime never reopens a failed Attempt when its failure report is lost and waits for explicit Resume", async () => {
+    class FailingSource extends QuietSource {
+        async *frames(_signal: AbortSignal): AsyncIterable<PcmFrame> {
+            this.starts += 1;
+            throw new Error("system audio status probe timed out");
+        }
+    }
+    const first = session(13);
+    const resumed = { ...first, attemptKey: "worker-fixed:resumed-after-source-failure" };
+    const backend = new PollBackend([]);
+    const failures: Record<string, unknown>[] = [];
+    const sources: QuietSource[] = [];
+    const staleOffersObserved = Promise.withResolvers<void>();
+    const resumedConnected = Promise.withResolvers<void>();
+    let staleOffers = 0;
+    let resumeRequested = false;
+    backend.poll = async input => {
+        backend.polls.push(input);
+        if (resumeRequested) return { capture: resumed };
+        if (failures.length === 0) return { capture: first };
+        staleOffers += 1;
+        if (staleOffers === 3) staleOffersObserved.resolve();
+        return { capture: staleOffers <= 3 ? first : null };
+    };
+    backend.event = async input => {
+        backend.events.push(input.event);
+        if (input.event.kind === "attempt_failed") {
+            throw new LocalBackendError("failure report unavailable", { retryable: true });
+        }
+        if (
+            input.event.kind === "attempt_connected" &&
+            input.event.sourceAttemptKey === resumed.attemptKey
+        ) {
+            resumedConnected.resolve();
+        }
+    };
+    const runtime = new CallWorkerRuntime(CONFIG, {
+        backend,
+        sleep: async () => nextTurn(),
+        emit: () => undefined,
+        log: (event, fields) => {
+            if (event === "call_worker_pipeline_failed") failures.push(fields);
+        },
+        pipelineDependenciesFactory: () => {
+            const microphone = sources.length === 0 ? new FailingSource() : new QuietSource();
+            sources.push(microphone);
+            return {
+                sources: { microphone, system: new QuietSource() },
+                transcription: new NoopTranscription(),
+            };
+        },
+    });
+    const running = runtime.run();
+    void running.catch(() => undefined);
+    try {
+        await Promise.race([staleOffersObserved.promise, running]);
+        await nextTurn();
+        assert.equal(staleOffers >= 3, true);
+        assert.equal(sources.length, 1, "stale offers must not open another audio pipeline");
+        assert.equal(sources[0]?.starts, 1);
+        assert.equal(failures.length, 1);
+        assert.equal(backend.events.filter(event => event.kind === "attempt_failed").length, 1);
+        assert.equal(backend.finishes.length, 0);
+        assert.equal(backend.polls.at(-1)?.activeAttemptKey, undefined);
+
+        resumeRequested = true;
+        await Promise.race([resumedConnected.promise, running]);
+        assert.equal(sources.length, 2, "an explicit Resume's fresh Attempt may open audio");
+        assert.equal(sources[1]?.starts, 1);
+        assert.equal(failures.length, 1);
+    } finally {
+        await runtime.close();
+        await running.catch(() => undefined);
+    }
+});
+
 await test("CallWorkerRuntime stops retrying a stale active Attempt poll when its pipeline settles", async () => {
     const sourceFailure = Promise.withResolvers<void>();
     class GatedFailureSource extends QuietSource {

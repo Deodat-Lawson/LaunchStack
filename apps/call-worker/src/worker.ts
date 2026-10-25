@@ -120,6 +120,7 @@ export class CallWorkerRuntime {
     private state: WorkerState = "idle";
     private progressTimer?: NodeJS.Timeout;
     private fatalPipelineError?: LocalBackendError;
+    private lastFailedAttemptKey?: string;
 
     constructor(
         private readonly config: CallWorkerConfig,
@@ -280,9 +281,15 @@ export class CallWorkerRuntime {
         }
         if (active && !sameSession(active.session, session)) return;
 
-        // A stopped/paused assignment is not work. In particular, do not
-        // create a fresh native capture process for a stale terminal poll.
-        if (!active && session.desiredMode !== "running") return;
+        // Failure reporting is best effort: a connecting assignment may still
+        // be offered after its pipeline rejects. Only a fresh Attempt from an
+        // explicit Resume may reopen audio; never restart the failed Attempt.
+        if (
+            !active &&
+            (session.desiredMode !== "running" || session.attemptKey === this.lastFailedAttemptKey)
+        ) {
+            return;
+        }
 
         if (!active) {
             const dependencies = this.pipelineDependenciesFactory();
@@ -339,6 +346,7 @@ export class CallWorkerRuntime {
     }
 
     private settlePipeline(active: ActivePipeline, error?: unknown): void {
+        if (error) this.lastFailedAttemptKey = active.session.attemptKey;
         if (this.active === active) {
             this.active = undefined;
             this.publishState(

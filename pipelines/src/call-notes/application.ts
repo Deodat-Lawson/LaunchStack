@@ -1019,6 +1019,9 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                             ? attempt.lifecycle !== "connecting"
                             : parsed.activeAttemptKey !== attempt.sourceAttemptKey;
                     if (streamLost) {
+                        // Unlike an expired lease, an idle/mismatched worker
+                        // confirms its stream is gone. A stale active poll or
+                        // queued event must not reinstate this failed Attempt.
                         const message = "Local capture worker lost its capture stream";
                         if (candidate.desiredMode === "stopped") {
                             await this.recordWorkerFailure(
@@ -1026,7 +1029,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                                 candidate,
                                 attempt,
                                 now,
-                                LOCAL_CAPTURE_FAILURE_CODE,
+                                "capture_stream_lost",
                                 message
                             );
                             await this.finalizeOccurrence(
@@ -1043,7 +1046,7 @@ export class PostgresCallNotesApplication implements CallNotesApplication {
                                 candidate,
                                 attempt,
                                 now,
-                                LOCAL_CAPTURE_FAILURE_CODE,
+                                "capture_stream_lost",
                                 message
                             );
                         }

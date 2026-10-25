@@ -2057,6 +2057,95 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         }
     );
 
+    it("keeps a failed connecting Attempt paused across stale polls until explicit Resume", async () => {
+        await insertFixtures(testDb);
+        const { application } = createApplication(testDb);
+        const workerId = "not-ready-worker";
+        const started = await startWithWorker(application);
+        if (!started) throw new Error("expected start snapshot");
+        const { capture: session } = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            workerId,
+        });
+        if (!session) throw new Error("expected connecting attempt");
+        await application.ingestLocalCaptureEvent(
+            CALL_NOTES_FIXTURE_IDS.companyId,
+            CaptureEventSchema.parse({
+                ...CALL_NOTES_CAPTURE_EVENTS[0]!,
+                eventId: "source-not-ready",
+                kind: "attempt_failed",
+                sourceAttemptKey: session.attemptKey,
+                occurredAt: FIXED_NOW.toISOString(),
+                code: "capture_not_ready",
+                message: "System audio status probe timed out.",
+            })
+        );
+        for (let poll = 0; poll < 3; poll += 1) {
+            for (const activeAttemptKey of [undefined, session.attemptKey]) {
+                await expect(
+                    application.pollLocalCapture({
+                        deviceId: FIXTURE_DEVICE_ID,
+                        companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                        userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                        workerId,
+                        activeAttemptKey,
+                    })
+                ).resolves.toEqual({ capture: null });
+            }
+        }
+        const paused = await application.getCall({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            callId: started.id,
+        });
+        expect(paused).toMatchObject({
+            status: "active",
+            capture: {
+                desiredMode: "paused",
+                pausedReason: "worker_error",
+                lifecycle: "interrupted",
+                activeAttemptId: null,
+                attemptCount: 1,
+            },
+            transcript: [],
+        });
+        expect(paused.gaps).toEqual([
+            expect.objectContaining({ kind: "worker_unavailable", endedAt: null }),
+        ]);
+        await application.execute(
+            CallNotesCommandSchema.parse({
+                ...CALL_NOTES_START_COMMAND,
+                kind: "resume_capture",
+                requestId: "resume-source-not-ready",
+                callId: started.id,
+            })
+        );
+        const resumed = await application.pollLocalCapture({
+            deviceId: FIXTURE_DEVICE_ID,
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            workerId,
+        });
+        expect(resumed.capture).toMatchObject({
+            callId: started.id,
+            desiredMode: "running",
+        });
+        expect(resumed.capture?.attemptKey).not.toBe(session.attemptKey);
+        const connecting = await application.getCall({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            callId: started.id,
+        });
+        expect(connecting.capture).toMatchObject({
+            desiredMode: "running",
+            pausedReason: null,
+            lifecycle: "connecting",
+            attemptCount: 2,
+        });
+    });
+
     it("pauses an owned live Attempt when its worker polls idle after losing the audio stream", async () => {
         await insertFixtures(testDb);
         const { application } = createApplication(testDb);
@@ -2088,6 +2177,38 @@ describeIfDatabase("Call Notes PostgreSQL application integration", () => {
         expect(paused.gaps).toEqual([
             expect.objectContaining({ kind: "worker_unavailable", endedAt: null }),
         ]);
+        await expect(
+            application.pollLocalCapture({
+                deviceId: FIXTURE_DEVICE_ID,
+                companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+                userId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+                workerId,
+                activeAttemptKey: session.attemptKey,
+            })
+        ).resolves.toEqual({ capture: null });
+        await expectApplicationCode(
+            application.ingestLocalCaptureEvent(
+                CALL_NOTES_FIXTURE_IDS.companyId,
+                CaptureEventSchema.parse({
+                    ...CALL_NOTES_CAPTURE_EVENTS[3]!,
+                    eventId: "lost-stream-late-transcript",
+                    sourceAttemptKey: session.attemptKey,
+                })
+            ),
+            "forbidden"
+        );
+        const stillPaused = await application.getCall({
+            companyId: CALL_NOTES_FIXTURE_IDS.companyId,
+            actorUserId: CALL_NOTES_FIXTURE_IDS.ownerUserId,
+            callId: started.id,
+        });
+        expect(stillPaused.capture).toMatchObject({
+            desiredMode: "paused",
+            pausedReason: "worker_error",
+            activeAttemptId: null,
+            attemptCount: 1,
+        });
+        expect(stillPaused.transcript).toEqual([]);
         await application.execute(
             CallNotesCommandSchema.parse({
                 ...CALL_NOTES_START_COMMAND,

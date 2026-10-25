@@ -142,7 +142,37 @@
     "round": "Round {round, number}",
     "repliedTo": "Replied to {handle}",
     "reposted": "Reposted {handle}",
-    "quoted": "Quoted {handle}"
+    "quoted": "Quoted {handle}",
+    "wallet": {
+      "title": "Money and switching",
+      "usesToday": "Uses today",
+      "usesNothing": "Nothing like this",
+      "budget": "Budget",
+      "buyingRole": "In buying",
+      "switchingCost": "Switching",
+      "budgets": {
+        "none": "None set aside",
+        "tight": "Tight",
+        "funded": "Has budget"
+      },
+      "roles": {
+        "decides": "Decides",
+        "influences": "Has a say",
+        "uses": "Uses it, doesn't decide"
+      },
+      "switching": {
+        "low": "Easy",
+        "medium": "Real effort",
+        "high": "Costly"
+      },
+      "wouldPay": {
+        "yes": "Would pay",
+        "maybe": "Might pay",
+        "no": "Wouldn't pay"
+      },
+      "holdingBack": "What held them back last",
+      "firstDoubt": "Their first doubt"
+    }
   },
   "report": {
     "narrator": "the narrator",

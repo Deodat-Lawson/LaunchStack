@@ -2,9 +2,10 @@
 
 import { CornerDownRight, FileText, Lock, Repeat2, Sparkles } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useMemo, type ReactNode } from "react";
+import { Fragment, useMemo, type ReactNode } from "react";
 
 import { SectionHeading } from "~/components/tools/PageHeader";
+import { Badge } from "~/components/ui/badge";
 import {
     Sheet,
     SheetContent,
@@ -12,7 +13,12 @@ import {
     SheetHeader,
     SheetTitle,
 } from "~/components/ui/sheet";
-import type { ScenarioDetail, ScenarioInterview, ScenarioPerson } from "~/lib/scenarios/types";
+import type {
+    ScenarioDetail,
+    ScenarioInterview,
+    ScenarioPerson,
+    ScenarioWouldPay,
+} from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
 import { STANCE_BG, atHandle, sourceKindLabel, stanceLabel } from "~/lib/scenarios/words";
@@ -23,9 +29,10 @@ import { PERSONA_TINT, Portrait, personaStyle } from "./Portrait";
 
 /**
  * One person as a profile: a face on a cover in their colour, who they are
- * and their following, what is on their mind now, what they were built from
- * (each source opens in Sources), how they moved round by round with what
- * they said at each turn, and a box to ask them something.
+ * and their following, what is on their mind now, what they would spend and
+ * what holds them back, what they were built from (each source opens in
+ * Sources), how they moved round by round with what they said at each turn,
+ * and a box to ask them something.
  */
 export function PersonSheet({
     run,
@@ -154,6 +161,8 @@ function Profile({
                     </figure>
                 )}
 
+                <Wallet person={person} />
+
                 <section>
                     <SectionHeading title={t("builtFrom")} />
                     {invented ? (
@@ -263,6 +272,70 @@ function Profile({
                 </section>
             </div>
         </>
+    );
+}
+
+/** The same sides as the stance scale: info for yes, danger for no. */
+const PAY_BADGE: Record<ScenarioWouldPay, "info" | "secondary" | "danger"> = {
+    yes: "info",
+    maybe: "secondary",
+    no: "danger",
+};
+
+/**
+ * What they use today, what they can spend, their part in buying, what
+ * switching would cost them, whether they'd pay now and what holds them
+ * back. Runs cast before people had a wallet show nothing here.
+ */
+function Wallet({ person }: { person: ScenarioPerson }) {
+    const t = useTranslations("scenarios.personSheet.wallet");
+    const doubt = person.objection ?? person.firstObjection;
+    const today = person.currentSolution?.trim();
+    const rows: Array<[string, string]> = [];
+    if (today)
+        rows.push([
+            t("usesToday"),
+            /^(nothing|none|n\/a)\.?$/i.test(today) ? t("usesNothing") : today,
+        ]);
+    if (person.budget) rows.push([t("budget"), t(`budgets.${person.budget}`)]);
+    if (person.buyingRole) rows.push([t("buyingRole"), t(`roles.${person.buyingRole}`)]);
+    if (person.switchingCost)
+        rows.push([t("switchingCost"), t(`switching.${person.switchingCost}`)]);
+    if (rows.length === 0 && !person.wouldPay && !doubt) return null;
+    return (
+        <section className="flex flex-col gap-3">
+            <SectionHeading
+                className="mb-0"
+                title={t("title")}
+                aside={
+                    person.wouldPay && (
+                        <Badge variant={PAY_BADGE[person.wouldPay]}>
+                            {t(`wouldPay.${person.wouldPay}`)}
+                        </Badge>
+                    )
+                }
+            />
+            {rows.length > 0 && (
+                <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-[13px]">
+                    {rows.map(([label, value]) => (
+                        <Fragment key={label}>
+                            <dt className="text-ink-3">{label}</dt>
+                            <dd className="text-ink min-w-0">{value}</dd>
+                        </Fragment>
+                    ))}
+                </dl>
+            )}
+            {doubt && (
+                <figure className="border-line border-l-2 pl-3">
+                    <figcaption className="text-ink-3 text-xs">
+                        {person.objection ? t("holdingBack") : t("firstDoubt")}
+                    </figcaption>
+                    <blockquote className="text-ink mt-1 text-[13.5px] leading-snug">
+                        {doubt}
+                    </blockquote>
+                </figure>
+            )}
+        </section>
     );
 }
 

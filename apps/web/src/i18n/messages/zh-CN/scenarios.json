@@ -142,7 +142,37 @@
     "round": "第 {round, number} 轮",
     "repliedTo": "回复了 {handle}",
     "reposted": "转发了 {handle}",
-    "quoted": "引用了 {handle}"
+    "quoted": "引用了 {handle}",
+    "wallet": {
+      "title": "预算与转换",
+      "usesToday": "目前在用",
+      "usesNothing": "没有用类似的东西",
+      "budget": "预算",
+      "buyingRole": "采购角色",
+      "switchingCost": "转换成本",
+      "budgets": {
+        "none": "没有预算",
+        "tight": "紧张",
+        "funded": "有预算"
+      },
+      "roles": {
+        "decides": "拍板",
+        "influences": "有发言权",
+        "uses": "使用但不决定"
+      },
+      "switching": {
+        "low": "容易",
+        "medium": "要花些功夫",
+        "high": "代价高"
+      },
+      "wouldPay": {
+        "yes": "愿意付费",
+        "maybe": "可能付费",
+        "no": "不愿付费"
+      },
+      "holdingBack": "上一轮的顾虑",
+      "firstDoubt": "最初的疑虑"
+    }
   },
   "report": {
     "narrator": "旁白",

@@ -224,6 +224,13 @@ export function toPeople(world: World): ScenarioPerson[] {
             posts: world.posts.filter(p => p.authorId === id && p.kind !== "repost").length,
             comments: world.comments.filter(c => c.authorId === id).length,
             lastThought: a.lastThought ?? null,
+            currentSolution: a.persona.currentSolution ?? null,
+            budget: a.persona.budget ?? null,
+            buyingRole: a.persona.buyingRole ?? null,
+            switchingCost: a.persona.switchingCost ?? null,
+            firstObjection: a.persona.objection ?? null,
+            wouldPay: a.wouldPay ?? null,
+            objection: a.objection ?? null,
         };
     });
 }

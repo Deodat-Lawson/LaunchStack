@@ -31,6 +31,13 @@ function person(id: string, history: Stance[], more: Partial<ScenarioPerson> = {
         posts: 0,
         comments: 0,
         lastThought: null,
+        currentSolution: null,
+        budget: null,
+        buyingRole: null,
+        switchingCost: null,
+        firstObjection: null,
+        wouldPay: null,
+        objection: null,
         ...more,
     };
 }

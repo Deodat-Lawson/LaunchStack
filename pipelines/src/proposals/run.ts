@@ -5,6 +5,7 @@
  * stages and records each step so the run sheet can show progress.
  */
 import type { DocumentScope } from "@launchstack/retrieval";
+import { and, eq } from "drizzle-orm";
 
 import {
     claimRun,
@@ -26,7 +27,13 @@ import {
     upsertOpportunity,
 } from "./db";
 import { sectionSourceProvenance } from "./evidence";
-import { PROPOSAL_CREDITS, type ProposalDebitExecutor, type ProposalPorts } from "./ports";
+import {
+    PROPOSAL_CREDITS,
+    type PreparedProposalRun,
+    type ProposalDebitExecutor,
+    type ProposalPorts,
+} from "./ports";
+import { proposalRuns } from "./schema";
 import { requirementsFromExtracted } from "./requirements";
 import { computeReadiness, syncSectionRequirements } from "./review";
 import {
@@ -64,6 +71,9 @@ export function stepsFor(kind: RunKind, input: RunInput, sectionLabels: string[]
         detail: null,
     });
     switch (kind) {
+        case "programs":
+        case "accel_draft":
+            return [step("generate", "Generating"), step("save", "Saving")];
         case "funders":
             return [
                 step(
@@ -194,7 +204,7 @@ export async function executeProposalRun(
 ): Promise<RunRecord> {
     const run = await claimRun(ctx.companyId, ctx.runId);
     if (!run) {
-        const existing = await getRun(ctx.runId, ctx.companyId);
+        const existing = await getRun(ctx.runId, ctx.companyId, { includeAccelerators: true });
         if (!existing) throw new Error("Run not found");
         return existing;
     }
@@ -204,7 +214,22 @@ export async function executeProposalRun(
         let summary: RunSummary;
         let amount: number;
         let description: string;
+        let prepared: PreparedProposalRun | undefined;
         switch (run.kind) {
+            case "programs":
+            case "accel_draft":
+                if (!ports.prepareAcceleratorRun || !ports.assertAcceleratorAccess)
+                    throw new Error("Accelerators execution is not configured");
+                await ports.assertAcceleratorAccess();
+                await log.start("generate");
+                prepared = await ports.prepareAcceleratorRun(ctx, run);
+                await log.assertActive();
+                await log.done("generate");
+                await log.start("save");
+                summary = prepared.summary;
+                amount = prepared.amount;
+                description = prepared.description;
+                break;
             case "funders":
                 summary = await runFunders(ctx, ports, log, run);
                 amount = PROPOSAL_CREDITS.funders;
@@ -234,9 +259,29 @@ export async function executeProposalRun(
                 break;
         }
         summary.durationMs = Date.now() - run.startedAt!.getTime();
-        const finished = await completeRun(ctx.companyId, ctx.runId, summary, executor =>
-            debit(ports, ctx, amount, description, executor)
-        );
+        const finished = await completeRun(ctx.companyId, ctx.runId, summary, async executor => {
+            if (prepared) {
+                // Gate the final write as well as generation, using current membership.
+                await ports.assertAcceleratorAccess!();
+                await prepared.commit(executor);
+                await executor
+                    .update(proposalRuns)
+                    .set({
+                        steps: run.steps.map(step => ({
+                            ...step,
+                            status: "done" as const,
+                            completedAt: new Date().toISOString(),
+                        })),
+                    })
+                    .where(
+                        and(
+                            eq(proposalRuns.id, ctx.runId),
+                            eq(proposalRuns.companyId, ctx.companyId)
+                        )
+                    );
+            }
+            return debit(ports, ctx, amount, description, executor);
+        });
         if (!finished) throw new Error("Run not found");
         return finished;
     } catch (error) {

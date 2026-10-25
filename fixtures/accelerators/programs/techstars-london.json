@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "techstars-london",
+  "name": "Techstars London Accelerator",
+  "websiteUrl": "https://www.techstars.com/accelerators/london",
+  "applyUrl": "https://apply.techstars.com/",
+  "description": {
+    "text": "AI-written synthesis of the cited official Program page: Techstars London offers emerging startups three months of intensive, mentorship-driven support, connecting them with expertise, community, and capital. The London Program describes helping founders use the city's capital, talent, and markets to grow. The published schedule opens applications on 24 August 2026, gives a final deadline of 18 November 2026, starts the accelerator on 8 March 2027, and lists Demo Day on 3 June 2027. The page does not establish an exact deadline time or timezone, so the record preserves a date-only deadline rather than inventing an instant.",
+    "sourceIds": ["london-overview", "london-schedule", "accelerator-support"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official Program page: The stated audience is early-stage founders from anywhere in the world and across all verticals. The Program emphasizes a bold vision and access to London's startup ecosystem. These are descriptive matching inputs, not a complete eligibility checklist. The checked page does not establish exact revenue, funding, incorporation, team-size, relocation, or visa requirements; those remain unknown rather than inferred restrictions.",
+    "sourceIds": ["london-overview"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "london-overview",
+      "url": "https://www.techstars.com/accelerators/london",
+      "title": "Techstars London — Official Program and target founders",
+      "quote": "This program welcomes early-stage founders from all over the world across all verticals, leveraging the city's strengths in diversity, global outlook, and talent. Techstars London backs founders with bold vision, helping them navigate London's unique mix of capital, talent, and markets to scale faster and smarter.",
+      "checkedAt": "2026-10-25T08:25:22.181Z"
+    },
+    {
+      "id": "london-schedule",
+      "url": "https://www.techstars.com/accelerators/london",
+      "title": "Techstars London — Published 2026–2027 schedule",
+      "quote": "Aug 24 2026 — Applications Open\nNov 18 2026 — Final Deadline\nMar 08 2027 — Accelerator Starts\nJun 03 2027 — Demo Day",
+      "checkedAt": "2026-10-25T08:25:22.181Z"
+    },
+    {
+      "id": "accelerator-support",
+      "url": "https://www.techstars.com/accelerators/london",
+      "title": "Techstars London — Official description of accelerator support",
+      "quote": "Techstars Accelerators give early-stage startups three months of intensive, mentorship-driven support, connecting you with the specialized expertise, global community, and capital you need to grow faster.",
+      "checkedAt": "2026-10-25T08:25:22.181Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "london-march-2027",
+      "label": "London — March 2027",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "dateOnly": "2026-11-18",
+      "rolling": false,
+      "sourceIds": ["london-schedule"],
+      "form": {
+        "id": "techstars-london-march-2027-unconfirmed",
+        "status": "unconfirmed",
+        "sourceUrl": "https://apply.techstars.com/",
+        "checkedAt": null,
+        "supported": false,
+        "limitations": [
+          "The official Program page links to apply.techstars.com. The automated public read exposed cookie/privacy controls, not a complete current London application Form. No applicant account was created and no consent, application, or external agreement was submitted.",
+          "The current questions, order, required flags, options, limits, and conditional or repeated structure have not been checked. Fields remain empty and Start Application stays blocked until a permitted, complete current Form review or blank official export is available."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

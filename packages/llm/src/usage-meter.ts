@@ -15,6 +15,8 @@
  * simply not counted.
  */
 
+import type { ReadableStreamReadResult } from "node:stream/web";
+
 import { getChatModelsScope } from "./chat-scope";
 import type { ChatModelPricing } from "./types";
 

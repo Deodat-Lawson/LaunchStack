@@ -397,6 +397,7 @@ export function useToolActive(): boolean {
 const TOOL_REGISTRY_KEYS = {
     growth: "growth",
     proposals: "proposals",
+    accelerators: "accelerators",
     vantage: "vantage",
     scenarios: "scenarios",
     "knowledge-graph": "knowledgeGraph",

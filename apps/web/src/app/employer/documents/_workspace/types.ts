@@ -20,6 +20,7 @@ import {
     Globe as IconGlobe,
     HandCoins as IconInvestors,
     PenLine as IconProposals,
+    Rocket as IconAccelerators,
     Link as IconLink,
     Megaphone as IconMegaphone,
     ClipboardList as IconPaste,
@@ -476,6 +477,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=proposals",
     },
     {
+        id: "accelerators",
+        label: "Accelerators",
+        Icon: IconAccelerators,
+        desc: "Match accelerator Programs to your company and save answers from checked application Forms",
+        href: "/employer/documents?feature=accelerators",
+    },
+    {
         id: "investors",
         label: "Investor relations",
         Icon: IconInvestors,
@@ -637,6 +645,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 Icon: IconProposals,
                 desc: "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit",
                 href: "/employer/documents?feature=proposals",
+            },
+            {
+                id: "accelerators",
+                label: "Accelerators",
+                Icon: IconAccelerators,
+                desc: "Match accelerator Programs to your company and save answers from checked application Forms, with explicit AI drafting and sourced fit results",
+                href: "/employer/documents?feature=accelerators",
+                requires: "documents.read",
             },
             {
                 // Second only to Growth: being known, then being funded. The
@@ -938,6 +954,7 @@ export function studioGroupLabel(
 const TOOL_REGISTRY_KEYS = {
     growth: "growth",
     proposals: "proposals",
+    accelerators: "accelerators",
     vantage: "vantage",
     scenarios: "scenarios",
 } as const;
@@ -1029,6 +1046,7 @@ const PALETTE_LINK_DESCRIPTION_KEYS = {
     ...PALETTE_LINK_LABEL_KEYS,
     growth: "growth",
     proposals: "proposals",
+    accelerators: "accelerators",
     vantage: "vantage",
     scenarios: "scenarios",
 } as const;

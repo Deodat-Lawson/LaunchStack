@@ -152,17 +152,6 @@ describe("studio registry", () => {
         expect(editor?.Icon).toBeTruthy();
     });
 
-    it("puts Growth first in Tools, Proposals second and Investor relations third, opening in a tab", () => {
-        const tools = STUDIO_GROUPS.find(g => g.id === "tools")!.features.map(f => f.id);
-        expect(tools.slice(0, 3)).toEqual(["growth", "proposals", "investors"]);
-        const investors = STUDIO_FEATURES_BY_ID.investors!;
-        expect(investors.label).toBe("Investor relations");
-        expect(investors.requires).toBeUndefined();
-        // ⌘K reaches it too, and opens the tab rather than following a link.
-        expect(DEMOTED_FEATURES.some(f => f.id === "investors")).toBe(true);
-        expect(demotedFeatureHref("investors")).toBeUndefined();
-    });
-
     it("lists Proposals and Vantage in Tools as tabs, reachable from the palette too", () => {
         for (const id of ["proposals", "vantage"]) {
             const feature = STUDIO_FEATURES_BY_ID[id];

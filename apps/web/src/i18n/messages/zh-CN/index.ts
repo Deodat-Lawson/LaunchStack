@@ -29,6 +29,7 @@ import growth from "./growth.json";
 import vantage from "./vantage.json";
 import scenarios from "./scenarios.json";
 import proposals from "./proposals.json";
+import accelerators from "./accelerators.json";
 import tools from "./tools.json";
 import notes from "./notes.json";
 
@@ -57,6 +58,7 @@ const messages = {
     vantage,
     scenarios,
     proposals,
+    accelerators,
     tools,
     notes,
 } satisfies Messages;

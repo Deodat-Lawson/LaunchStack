@@ -171,6 +171,9 @@
     "proposals": {
       "description": "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations"
     },
+    "accelerators": {
+      "description": "Match accelerator Programs to your company and save answers from checked application Forms"
+    },
     "investors": {
       "label": "Investor relations",
       "description": "Find venture funds raising now, and draft the pitch from your sources"

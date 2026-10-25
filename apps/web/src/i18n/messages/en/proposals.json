@@ -40,6 +40,8 @@
     "note": "Note"
   },
   "runKind": {
+    "programs": "Matching Programs",
+    "accel_draft": "Drafting an accelerator Field",
     "funders": "Finding funders",
     "extract": "Reading the request",
     "draft": "Drafting",
@@ -103,6 +105,8 @@
   "runSheet": {
     "noRun": "No run",
     "doneTitle": {
+      "programs": "Programs matched",
+      "accel_draft": "Accelerator Field drafted",
       "funders": "Funders found",
       "extract": "Requirements read",
       "draft": "Drafts written",

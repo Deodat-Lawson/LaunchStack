@@ -94,6 +94,12 @@ const ProposalsTool = dynamic(
     { loading: () => <LoadingPage variant="pane" /> }
 );
 
+const AcceleratorsTool = dynamic(
+    () =>
+        import("~/app/employer/tools/accelerators/AcceleratorsTool").then(m => m.AcceleratorsTool),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+
 const VantageTool = dynamic(
     () => import("~/app/employer/tools/vantage/VantageTool").then(m => m.VantageTool),
     { loading: () => <LoadingPage variant="pane" /> }
@@ -518,6 +524,8 @@ export function renderStudioPane(
             return <GrowthTool host={context?.tool} />;
         case "proposals":
             return <ProposalsTool host={context?.tool} />;
+        case "accelerators":
+            return <AcceleratorsTool host={context?.tool} />;
         case "vantage":
             return <VantageTool host={context?.tool} />;
         case "scenarios":

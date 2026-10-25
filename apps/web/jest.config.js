@@ -65,6 +65,8 @@ const esmDeps = [
 export const config = {
     testEnvironment: "node",
     setupFiles: ["<rootDir>/jest.setup.ts"],
+    // The standalone build contains another package.json, not another source workspace.
+    modulePathIgnorePatterns: ["<rootDir>/.next/"],
     transform: {
         "^.+\\.(ts|tsx|js|jsx|mjs)$": ["babel-jest", { configFile: "./jest.babel.config.cjs" }],
     },
@@ -160,6 +162,10 @@ export const config = {
         "^@launchstack/tools$": "<rootDir>/../../packages/tools/src/index.ts",
         "^@launchstack/tools/(.*)$": "<rootDir>/../../packages/tools/src/$1",
         "^@launchstack/pipelines$": "<rootDir>/../../pipelines/src/index.ts",
+        "^@launchstack/pipelines/accelerators$":
+            "<rootDir>/../../pipelines/src/proposals/accelerators/index.ts",
+        "^@launchstack/pipelines/accelerators/(.*)$":
+            "<rootDir>/../../pipelines/src/proposals/accelerators/$1",
         "^@launchstack/pipelines/(.*)$": "<rootDir>/../../pipelines/src/$1",
         "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
     },

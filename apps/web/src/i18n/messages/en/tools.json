@@ -8,6 +8,10 @@
       "name": "Proposals",
       "description": "Write grant and funding proposals from what your sources prove: profile the organisation once, find the funders that fit, turn a call into a checklist, draft every answer with citations, review before you submit"
     },
+    "accelerators": {
+      "name": "Accelerators",
+      "description": "Match accelerator Programs to your company and save answers from checked application Forms, with explicit AI drafting and sourced fit results"
+    },
     "vantage": {
       "name": "Vantage",
       "description": "Every week: the decisions that matter, an agenda where every claim cites its source, and follow-through on what was agreed — with a triage view for the program"

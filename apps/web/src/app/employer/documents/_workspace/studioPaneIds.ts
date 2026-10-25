@@ -16,6 +16,7 @@ export const STUDIO_PANE_IDS = [
     "team",
     "growth",
     "proposals",
+    "accelerators",
     "investors",
     "vantage",
     "scenarios",

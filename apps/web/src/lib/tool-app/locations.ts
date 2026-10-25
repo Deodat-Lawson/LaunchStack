@@ -82,6 +82,11 @@ const LEGACY_TOOL_ROUTES: readonly {
         at: () => "/brand/campaigns",
     },
     { prefix: "/employer/tools/proposals", toolId: "proposals", at: rest => rest || "/" },
+    {
+        prefix: "/employer/tools/accelerators",
+        toolId: "accelerators",
+        at: rest => rest || "/programs",
+    },
     { prefix: "/employer/tools/vantage", toolId: "vantage", at: rest => rest || "/" },
 ];
 

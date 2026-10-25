@@ -152,6 +152,9 @@ export function toLibraryItemDto(
 }
 
 export function toRunDto(record: RunRecord): RunDto {
+    if (record.kind === "programs" || record.kind === "accel_draft") {
+        throw new Error("Accelerator runs must use the full-access-gated Accelerator adapter");
+    }
     const headline = record.summary?.headline ?? null;
     return {
         id: record.id,

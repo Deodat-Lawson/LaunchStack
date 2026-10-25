@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "id": "abovea-startup-accelerator",
+  "name": "aboveA Startup Accelerator",
+  "websiteUrl": "https://abovea.tech/academy/main/",
+  "applyUrl": "https://abovea.tech/academy/accelerator-application-form/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: aboveA Startup Accelerator pairs founders with hands-on strategy, growth systems, and execution support toward an investable, market-ready business. It describes an Idea to launch route for structuring and launching an idea and a Business acceleration route for developing an existing foundation or MVP. The activities are designed for about 12 weeks with flexible pacing and around 10 focused hours of work each week. The application process includes submission review, a conversation for selected applicants, panel review, and onboarding after acceptance. The checked public pages do not establish a particular cohort schedule, application deadline, investment amount, equity offer, or Program price; this record makes no such commitment.",
+    "sourceIds": [
+      "abovea-program-overview",
+      "abovea-program-routes",
+      "abovea-program-pace",
+      "abovea-application-process"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official Program page, prepared by the collecting assistant: aboveA addresses both aspiring entrepreneurs and early-stage founders turning an idea into a structured business, and developers or founders with a foundation or MVP who want help with growth bottlenecks, investment readiness, and scaling. Its FAQ says no prior experience is required, but applicants should be willing to learn, test ideas, and build a business. The published expectations include at least 10 focused hours per week, clear reasons for joining, English at B2 level or higher, a functioning computer, and stable internet. These are narrative expectations rather than a closed startup-stage classification. The public Form also asks founders to describe their actual stage and traction in their own words.",
+    "sourceIds": [
+      "abovea-program-routes",
+      "abovea-participation-expectations",
+      "abovea-program-faq",
+      "abovea-public-form-questions"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "abovea-program-overview",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — Official Program overview",
+      "quote": "aboveA Startup Accelerator\n\nPairing founders with hands-on strategy, growth systems, and execution support to move from idea to an investable and market-ready company.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-program-routes",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — The two described routes and their audiences",
+      "quote": "Idea to launch route\n\nFor aspiring entrepreneurs and early-stage founders ready to turn an idea into a structured business. This program covers concept development, planning, core processes, and launch execution - leaving you with a clear roadmap and the tools to start on solid ground.\n\n[…]\n\nBusiness acceleration route\n\nFor established developers and founders with a foundation or an MVP in place. This route is for those who are ready to grow faster and smarter. This program addresses growth bottlenecks, investment readiness, and stronger methods for scale - building on what already works, without starting over.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-program-pace",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — Stated duration and flexible pacing",
+      "quote": "Accelerator is flexible by design\n\nThese incubator activities are designed to be finished in 12 weeks. Want to go faster? You can. Prefer to take your time? That’s okay too. With around 10 hours of weekly focus, you’ll build real progress. You control the pace; we guide the path.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-participation-expectations",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — Time, motivation, English, and equipment expectations",
+      "quote": "Dedication of at least 10 focused hours per week\n\n[…]\n\nThis means you should plan 10 hours each week just for learning and doing your work. These hours should be quiet, focused time.\n\n[…]\n\nYou must know why you want to join\n\n[…]\n\nYou need to have strong reasons for joining this program. Think about your goals. Why do you want to get better? What skills do you want to learn?\n\nYou must speak and understand English well\n\n[…]\n\nYou should be able to read, write, and talk in English at a B2 level or higher. That means you understand most things and can share your ideas clearly.\n\nWell-functioning computer and stable internet connection\n\nYour computer should let you download and install new programs. A stable internet connection will ensure you do not experience any issues.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-program-faq",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — Public FAQ on prior experience",
+      "quote": "Who should join aboveA accelerator?\n\nAnyone ready to build a business. No prior experience is required — just a willingness to learn, test ideas, and start something new.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-application-process",
+      "url": "https://abovea.tech/academy/main/",
+      "title": "aboveA Startup Accelerator — Published application process",
+      "quote": "Application Process\n\nPitch & Idea Review – We evaluate your submission for fit.\nConversation – If selected, a 30/60 minute discussion follows.\nPanel Review – Recording and notes go to our panel for final decision.\nDecision Window – You have one week to accept.\nPaperwork – One week to complete onboarding documentation.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-public-form-questions",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "title": "aboveA application — All public applicant questions and guidance in DOM order, WPForms 20447",
+      "quote": "Name *\nFirst\nLast\n\nEmail *\n\nWhat are you building, and who is it for? *\nBriefly describe your product, service, or startup idea. Include the main audience, customer, or market you want to serve.\n\nWhat problem are you solving, and why does it matter now? *\nExplain the specific pain point, gap, or opportunity you are addressing. Try to be clear about why this is worth solving.\n\nWhat stage are you currently at? *\nTell us whether you are at the idea stage, MVP stage, early revenue stage, growth stage, or another stage. Include any traction, users, revenue, pilots, partnerships, or early validation if available.\n\nWhat are your biggest priorities or challenges right now? *\nShare the main areas where you need support. This could include strategy, positioning, sales, marketing, fundraising, product direction, market entry, or team building.\n\nWhat do you hope to gain from joining the accelerator? *\nExplain what kind of support would make this program valuable for you, and what outcome you would like to reach by the end of it.\n\nAdditional sources\nThese can be pitch deck, materials, resources, etc. Please leave an active sharable link to to the materials you wish to share with us.\n\nGDPR Agreement *\nWhen you submit a the application form, we collect your name, email, phone number, and any other details you provide. This information is used solely to respond to your inquiry and will not be shared with third parties without your consent, except as necessary to respond to your request or as required by applicable law. We implement security measures to protect your data.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-public-form-input-markup",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "title": "aboveA application — Exact public input markup establishing types, order, required flags, and checkbox value",
+      "quote": "<input type=\"text\" id=\"wpforms-20447-field_1\" class=\"wpforms-field-name-first wpforms-field-required\" name=\"wpforms[fields][1][first]\" aria-errormessage=\"wpforms-20447-field_1-error\" required=\"\">\n<input type=\"text\" id=\"wpforms-20447-field_1-last\" class=\"wpforms-field-name-last wpforms-field-required\" name=\"wpforms[fields][1][last]\" aria-errormessage=\"wpforms-20447-field_1-last-error\" required=\"\">\n<input type=\"email\" id=\"wpforms-20447-field_2\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][2]\" spellcheck=\"false\" aria-errormessage=\"wpforms-20447-field_2-error\" required=\"\">\n<textarea id=\"wpforms-20447-field_3\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][3]\" aria-errormessage=\"wpforms-20447-field_3-error\" aria-describedby=\"wpforms-20447-field_3-description\" required=\"\"></textarea>\n<textarea id=\"wpforms-20447-field_5\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][5]\" aria-errormessage=\"wpforms-20447-field_5-error\" aria-describedby=\"wpforms-20447-field_5-description\" required=\"\"></textarea>\n<textarea id=\"wpforms-20447-field_6\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][6]\" aria-errormessage=\"wpforms-20447-field_6-error\" aria-describedby=\"wpforms-20447-field_6-description\" required=\"\"></textarea>\n<textarea id=\"wpforms-20447-field_7\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][7]\" aria-errormessage=\"wpforms-20447-field_7-error\" aria-describedby=\"wpforms-20447-field_7-description\" required=\"\"></textarea>\n<textarea id=\"wpforms-20447-field_8\" class=\"wpforms-field-medium wpforms-field-required\" name=\"wpforms[fields][8]\" aria-errormessage=\"wpforms-20447-field_8-error\" aria-describedby=\"wpforms-20447-field_8-description\" required=\"\"></textarea>\n<textarea id=\"wpforms-20447-field_9\" class=\"wpforms-field-medium\" name=\"wpforms[fields][9]\" aria-errormessage=\"wpforms-20447-field_9-error\" aria-describedby=\"wpforms-20447-field_9-description\"></textarea>\n<input type=\"checkbox\" id=\"wpforms-20447-field_4_1\" name=\"wpforms[fields][4][]\" value=\"When you submit a the application form, we collect your name, email, phone number, and any other details you provide. This information is used solely to respond to your inquiry and will not be shared with third parties without your consent, except as necessary to respond to your request or as required by applicable law. We implement security measures to protect your data.\" aria-errormessage=\"wpforms-20447-field_4_1-error\" required=\"\">",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "abovea-hidden-infrastructure",
+      "url": "https://abovea.tech/academy/accelerator-application-form/",
+      "title": "aboveA application — Public anti-spam configuration and non-applicant hidden control",
+      "quote": "\"hn_data\":{\"20447\":10}\n\n[…]\n\n<input type=\"text\" id=\"wpforms-20447-field_11\" class=\"wpforms-field-medium\" name=\"wpforms[fields][11]\" aria-hidden=\"true\" style=\"visibility: hidden;\" tabindex=\"-1\">",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-application",
+      "label": "Public application — intake timing unconfirmed",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "abovea-program-overview",
+        "abovea-application-process",
+        "abovea-public-form-questions",
+        "abovea-public-form-input-markup"
+      ],
+      "form": {
+        "id": "abovea-wpforms-20447",
+        "status": "checked",
+        "sourceUrl": "https://abovea.tech/academy/accelerator-application-form/",
+        "checkedAt": "2026-10-25T07:43:02.304Z",
+        "supported": true,
+        "limitations": [
+          "Checked against the actual anonymous, single-page public application and its input markup (WPForms 20447). Coverage is every applicant input in source order: the fixed First and Last inputs under Name, Email, five required narrative questions, optional Additional sources, and the required GDPR Agreement checkbox. No conditional or repeated applicant questions were present in the checked public Form. No applicant values were entered and nothing was submitted.",
+          "The fixed two-part Name question is represented as two ordered short_text Fields with the exact question label Name and the exact sublabels First and Last as guidance. This does not flatten a dynamic or repeated founder structure. The single required consent checkbox is represented as a one-option multi_select using its exact published value and label; storing a draft selection is not external consent or acceptance of terms.",
+          "No character or word limits were published in the checked instructions or input markup. charLimit and wordLimit are null and limitConfirmed is false, not invented defaults or a promise that the receiving server has no additional constraints. Server-only validation and successful external submission were not exercised.",
+          "The source does not publish a named cohort, deadline, or explicit rolling-intake statement. The Cycle label identifies the public application, not an announced batch. deadlineAt and deadlineTimezone remain null; rolling false means no verified rolling claim, not that intake is closed. Applicants must confirm availability, commercial terms, and any later onboarding requirements directly with aboveA.",
+          "Hidden metadata, the configured honeypot Field 10, the aria-hidden non-applicant Field 11, and the Submit control are not application questions and are excluded. The source excerpts retain the public anti-spam configuration as evidence. The Form is a local preparation reference, not portal automation or a submission integration."
+        ],
+        "fields": [
+          {
+            "key": "name-first",
+            "position": 0,
+            "question": "Name",
+            "guidance": "First",
+            "fieldType": "short_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "name-last",
+            "position": 1,
+            "question": "Name",
+            "guidance": "Last",
+            "fieldType": "short_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "email",
+            "position": 2,
+            "question": "Email",
+            "guidance": null,
+            "fieldType": "email",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "product-and-audience",
+            "position": 3,
+            "question": "What are you building, and who is it for?",
+            "guidance": "Briefly describe your product, service, or startup idea. Include the main audience, customer, or market you want to serve.",
+            "fieldType": "long_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "problem-and-timing",
+            "position": 4,
+            "question": "What problem are you solving, and why does it matter now?",
+            "guidance": "Explain the specific pain point, gap, or opportunity you are addressing. Try to be clear about why this is worth solving.",
+            "fieldType": "long_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "current-stage",
+            "position": 5,
+            "question": "What stage are you currently at?",
+            "guidance": "Tell us whether you are at the idea stage, MVP stage, early revenue stage, growth stage, or another stage. Include any traction, users, revenue, pilots, partnerships, or early validation if available.",
+            "fieldType": "long_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "priorities-and-challenges",
+            "position": 6,
+            "question": "What are your biggest priorities or challenges right now?",
+            "guidance": "Share the main areas where you need support. This could include strategy, positioning, sales, marketing, fundraising, product direction, market entry, or team building.",
+            "fieldType": "long_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "accelerator-outcomes",
+            "position": 7,
+            "question": "What do you hope to gain from joining the accelerator?",
+            "guidance": "Explain what kind of support would make this program valuable for you, and what outcome you would like to reach by the end of it.",
+            "fieldType": "long_text",
+            "required": true,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "additional-sources",
+            "position": 8,
+            "question": "Additional sources",
+            "guidance": "These can be pitch deck, materials, resources, etc. Please leave an active sharable link to to the materials you wish to share with us.",
+            "fieldType": "long_text",
+            "required": false,
+            "options": [],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          },
+          {
+            "key": "gdpr-agreement",
+            "position": 9,
+            "question": "GDPR Agreement",
+            "guidance": null,
+            "fieldType": "multi_select",
+            "required": true,
+            "options": [
+              {
+                "value": "When you submit a the application form, we collect your name, email, phone number, and any other details you provide. This information is used solely to respond to your inquiry and will not be shared with third parties without your consent, except as necessary to respond to your request or as required by applicable law. We implement security measures to protect your data.",
+                "label": "When you submit a the application form, we collect your name, email, phone number, and any other details you provide. This information is used solely to respond to your inquiry and will not be shared with third parties without your consent, except as necessary to respond to your request or as required by applicable law. We implement security measures to protect your data."
+              }
+            ],
+            "charLimit": null,
+            "wordLimit": null,
+            "limitConfirmed": false,
+            "limitSource": null
+          }
+        ]
+      }
+    }
+  ]
+}

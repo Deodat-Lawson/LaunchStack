@@ -10,6 +10,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     boolean,
+    check,
     date,
     index,
     integer,
@@ -22,6 +23,9 @@ import {
 
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
+
+import { acceleratorPrograms } from "./accelerators/schema";
+import type { FormField } from "./accelerators/types";
 
 import type {
     DraftMeta,
@@ -123,10 +127,29 @@ export const proposalApplications = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        kind: varchar("kind", { length: 16, enum: ["grant", "accelerator"] })
+            .notNull()
+            .default("grant"),
+        programId: text("program_id").references(() => acceleratorPrograms.id, {
+            onDelete: "restrict",
+        }),
+        cycleId: text("cycle_id"),
+        formHash: text("form_hash"),
     },
     table => [
         index("proposal_applications_company_status_idx").on(table.companyId, table.status),
         index("proposal_applications_company_deadline_idx").on(table.companyId, table.deadline),
+        uniqueIndex("proposal_applications_accelerator_company_cycle_unique")
+            .on(table.companyId, table.programId, table.cycleId)
+            .where(sql`${table.kind} = 'accelerator'`),
+        check("proposal_applications_kind_check", sql`${table.kind} in ('grant', 'accelerator')`),
+        check(
+            "proposal_applications_program_check",
+            sql`(
+            (${table.kind} = 'grant' and ${table.programId} is null and ${table.cycleId} is null and ${table.formHash} is null)
+            or (${table.kind} = 'accelerator' and ${table.programId} is not null and ${table.cycleId} is not null and ${table.formHash} is not null)
+        )`
+        ),
     ]
 );
 export type ProposalApplicationRow = InferSelectModel<typeof proposalApplications>;
@@ -158,10 +181,13 @@ export const proposalSections = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        formField: jsonb("form_field").$type<FormField>(),
+        revision: integer("revision").notNull().default(0),
     },
     table => [
         index("proposal_sections_application_position_idx").on(table.applicationId, table.position),
         index("proposal_sections_company_idx").on(table.companyId),
+        check("proposal_sections_revision_check", sql`${table.revision} >= 0`),
     ]
 );
 export type ProposalSectionRow = InferSelectModel<typeof proposalSections>;

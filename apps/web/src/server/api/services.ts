@@ -209,6 +209,16 @@ export const TOOL_SERVICES: readonly ServiceDefinition[] = [
         notes: "Runs are the unit of background work (profile, funders, extract, draft, rewrite, review) and list in the History feed. Claimed here when Vantage landed beside it; the Proposals PR had left its routes unclaimed.",
     },
     {
+        id: "accelerators",
+        tier: "tool",
+        summary:
+            "Compare sourced accelerator Programs with the Core profile and save answers from checked application Forms, with explicit matching and empty-Field AI drafting.",
+        scope: "workspace",
+        feature: "@launchstack/pipelines/accelerators",
+        routes: ["accelerators"],
+        notes: "Requires unrestricted company-document access. Shares revision-aware Application storage and claimed execution with Proposals, without exposing accelerator records to grants actions.",
+    },
+    {
         id: "vantage",
         tier: "tool",
         summary:

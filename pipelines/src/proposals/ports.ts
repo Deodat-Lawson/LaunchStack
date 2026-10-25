@@ -19,6 +19,8 @@ import {
 } from "@launchstack/tools/grant-search";
 import { retrieveCompanySnippets, type SnippetPolicy } from "@launchstack/tools/grounded-retrieval";
 import { fetchReadable } from "@launchstack/tools/web-research";
+import type { ProposalRunContext } from "./run";
+import type { RunRecord, RunSummary } from "./types";
 
 /** One model policy per stage; a route or temperature change is an explicit edit here. */
 export const PROPOSALS_MODELS = {
@@ -39,6 +41,8 @@ export const PROPOSAL_CREDITS = {
     draft: 1_500,
     rewrite: 1_000,
     review: 2_000,
+    programs: 2_000,
+    accel_draft: 1_500,
 } as const;
 
 export interface RetrieveArgs {
@@ -50,6 +54,14 @@ export interface RetrieveArgs {
 
 /** The locked finalization transaction; metering SQL must not acquire another connection. */
 export type ProposalDebitExecutor = Pick<DbClient, "select" | "insert" | "update">;
+
+/** Prepared output commits beside the credit debit under the claimed run's lock. */
+export interface PreparedProposalRun {
+    summary: RunSummary;
+    amount: number;
+    description: string;
+    commit(executor: ProposalDebitExecutor): Promise<void>;
+}
 
 export interface ProposalPorts {
     identity(companyId: number): Promise<CompanyIdentity>;
@@ -71,6 +83,12 @@ export interface ProposalPorts {
               executor: ProposalDebitExecutor
           ) => Promise<void>)
         | null;
+    /** Hosts implementing Accelerators must re-resolve current full-document access. */
+    assertAcceleratorAccess?: () => Promise<void>;
+    prepareAcceleratorRun?: (
+        ctx: ProposalRunContext,
+        run: RunRecord
+    ) => Promise<PreparedProposalRun>;
     now(): Date;
 }
 

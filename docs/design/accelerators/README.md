@@ -1,10 +1,10 @@
 # Accelerators — feature delivery and delegation
 
-**Status: delegation and review decisions approved. C's bounded implementation scope still needs approval. This update is documentation only; implementation is not yet authorised.**
+**Status: C's implementation was authorised and the working base is implemented on `grants-pipeline`. Section 12 records the concrete contracts, setup, evidence, and data limitations. A's remaining Catalogue coverage and B's selected-text feature are separate deliveries.**
 
 This README records the new scope and responsibilities agreed in the current conversation. It replaces the previous A/B/C assignments and weekly dependency plan in [issue #510](https://github.com/Deodat-Lawson/LaunchStack/issues/510), [the technical design](technical-design.md), and [the condensed review](technical-design-review.md) for this delivery. Those documents remain historical context, not an additional backlog for this week.
 
-The user is **Person C**, the product lead and integration owner. Product has reviewed the delegation and answered the pre-implementation questions below. The next step is to agree C's bounded implementation scope, then integrate current main and the required trust fixes into the current `grants-pipeline` branch before feature work. The working spike must be checked and pushed before the formal handoff to A and B. This document does not claim that integration, implementation, checks, or a push have happened.
+The user is **Person C**, the product lead and integration owner. Product approved the delegation, answered the pre-implementation questions, and then authorised C's implementation with YC as the first example. Current main and the required trust fixes were integrated before feature work. The formal A/B handoff uses the checked and pushed implementation commit reported with this delivery, not the earlier documentation-only commit.
 
 ## 1. The feature we want this week
 
@@ -62,7 +62,7 @@ C's base is not the full team delivery: the remaining Catalogue coverage belongs
 | Catalogue delivery  | A supplies versioned data files. A trusted operator uses C's validated import command in a named installation; no company-user Catalogue mutation endpoint.                                                               |
 | Implementation base | Integrate current main and the required trust fixes into this branch before feature work. Do not wait for the trust-fix PRs to merge into main.                                                                           |
 
-Two engineering rules support these decisions: all answer writers use one stale-write protection contract, and Accelerator Applications stay out of grants screens and actions. These are requirements to implement, not claims about the current code.
+Two engineering rules support these decisions: all answer writers use one stale-write protection contract, and Accelerator Applications stay out of grants screens and actions. Section 12 identifies the implementation and exercised checks.
 
 ## 2. Scope boundaries
 
@@ -103,9 +103,9 @@ Existing access controls, safe run execution, credit handling, and approval inva
 
 The previous lane restrictions do not apply to this new split: C now owns the shared Program and Form schemas as well as their integration. A and B retain real feature responsibilities, not checker roles.
 
-## 4. C's proposed implementation spike
+## 4. C's approved implementation slice
 
-The spike must be a working path with real data, storage, and AI calls. It is not a collection of types, mocked endpoints, or a simulator-only demonstration. Its exact implementation scope needs product approval after this README review.
+The slice uses real data, storage, and configured model calls. C implements the common product path, not B's selected-text generation and preview feature. The following requirements remain the acceptance contract; section 12 names the delivered modules.
 
 ### Spike step 1. Define and validate the shared contracts
 
@@ -123,7 +123,7 @@ Define the output A must produce and the interfaces B must use. Publish runtime 
 
 Program target applicants are **not** restricted to a stage enum such as `pre_idea` or `early_stage`. The descriptive narrative is a first-class matching input. C can add useful structured facts, but must not discard the richer source description or turn an interpretation into a hard requirement.
 
-Exact type names, endpoint names, schema versioning, score scale, supported Field set, and range/revision representation are implementation choices to settle in the C scope review. The access gate, explicit matching trigger, existing credit policy, checked/supported-Form gate, empty-only drafting, operator import, and shared company version are already decided. This README defines required behavior, not an already implemented API.
+The implementation uses schema version 1, a nullable 0–100 fit score, ten Field types, UTF-16 selection offsets, and atomic integer answer revisions. See section 12 for the exported contracts. The access gate, explicit matching trigger, existing credit policy, checked/supported-Form gate, empty-only drafting, operator import, and shared company version remain the approved product rules.
 
 ### Spike step 2. Build storage, import, and company boundaries
 
@@ -169,33 +169,33 @@ Reuse the current Proposals drafting path and company-profile mapping rather tha
 
 ### Spike step 6. Produce real reference records
 
-Proposed reference set: about three real Programs, following the same collection, AI processing, validation, and import steps A will use. At least one must include a Form checked against the actual portal and must exercise the complete user path.
+The reference set contains three real Programs: YC, aboveA Startup Accelerator, and Techstars London. aboveA has a checked public Form and supplies the complete editor/drafting demonstration. YC and Techstars remain visible with honest Form access limitations; neither can start an Application.
 
 Reference records must be real product records, kept as versioned files and loaded by the same operator command A will use. Record source/access limitations honestly. A Program without a checked current Form, or with a structure the editor cannot represent, cannot start an Application or count as proof of the exact-Form flow.
 
-The final reference count is part of C's scope approval. It is not a claim that three Programs have already been collected.
+These three versioned records are C's reference set, not completion of A's remaining Catalogue coverage.
 
 ## 5. What C must deliver before formal handoff
 
 A or B can inspect early contracts and work independently, but the formal handoff happens only after the approved C spike is implemented, checked, and pushed on this branch.
 
-- [ ] The Program/profile/Form/import and editing contracts are available in code, with runtime validation.
-- [ ] Current main and the required trust fixes are integrated into this branch before feature work; the base and fix commits are recorded.
-- [ ] App, direct API, and background access checks deny users without full company-document access, including after access is revoked.
-- [ ] Catalogue storage, company-private Applications, and the migration path work.
-- [ ] The reference records use the same format and import path A will use.
-- [ ] A checked, supported Form can be opened, edited, saved, and restored after reload; unconfirmed or unsupported Forms cannot start an Application.
-- [ ] Match Programs produces a shared company result; page opening does not trigger paid work, and changed inputs mark results as out of date.
-- [ ] Basic AI drafting into empty Fields works through a real configured model with company inputs; existing credit rules and failure behavior apply.
-- [ ] B has an editor integration point, AI interface, and stale-safe save/apply contract.
-- [ ] A can supply a versioned record, correct a validation error, and prove an operator import into the named installation without duplicates.
-- [ ] Two-company isolation, the full-document-access gate, access revocation, and shared visibility among eligible colleagues have been exercised.
-- [ ] Manual saves, late draft completion, and B's Apply share stale-write protection and preserve newer saved or unsaved user edits.
-- [ ] Existing grants still work through the affected shared paths.
+- [x] The Program/profile/Form/import and editing contracts are available in code, with runtime validation.
+- [x] Current main and the required trust fixes were integrated before feature work; the commits are recorded below.
+- [x] App, direct API, and background checks reject restricted or revoked access.
+- [x] Catalogue storage, company-private Applications, and the migration path work.
+- [x] The reference records use the same format and import path A will use.
+- [x] A checked Form supports edit/save/reload; unconfirmed Forms remain blocked.
+- [x] Explicit matching saves company results; page opening is read-only and changed inputs mark results out of date.
+- [x] Empty-Field drafting works through the configured model with company inputs and existing credit handling.
+- [x] B has an editor integration point, production AI ports, and validated Suggestion/Apply contracts.
+- [x] The operator importer rejects duplicate identities; a corrected input imports without duplicate records.
+- [x] Two-company isolation, colleague sharing, restricted access, and live access revocation were exercised.
+- [x] Revision checks and the editor buffer preserve newer saved and unsaved text during late generation.
+- [x] The affected shared grant storage, run, scope, and approval paths have regression coverage.
 - [ ] The approved spike is pushed; the handoff names its branch, commit, setup/import/run commands, checks, and known data limitations.
 - [ ] A and B receive their bounded assignments below and a clear list of files/modules they own.
 
-These are evidence gates, not work already completed. A type-only PR or a pushed but unusable scaffold does not satisfy this handoff.
+The final task report supplies push confirmation and the exact handoff commit. The two remaining checklist items are complete only after that push and handoff. Neither the reference data nor C's working base means A's or B's assignment is complete.
 
 ## 6. Person A — collect, process, and deliver Program data
 
@@ -325,11 +325,131 @@ Reuse shared modules or extract shared components as needed. Keep grants' behavi
 
 ## 11. Review and execution order
 
-1. **Completed: delegation review and product Q&A.** The decisions recorded above replace the open alternatives raised in that review. This documentation update does not authorise implementation or a push.
-2. **Next: agree C's bounded implementation scope.** Confirm the reference set, supported Field set and real Form structures, score scale, and editing interfaces. Do not reopen the decided access, matching, credit, Form gate, import, or ownership rules.
-3. **Then: integrate the base before feature work.** Bring current main and the required trust fixes into this branch without waiting for their PRs to merge into main. Record the commits, resolve conflicts, and verify the required safety behavior; do not treat the old branch as if those fixes were already present.
-4. **Then: implement, check, and push C's working spike.** Demonstrate the complete base path and satisfy the handoff checklist. Give A and B the same base commit, versioned examples, setup/import/run commands, contracts, file ownership, and their assignments.
-5. **Then: A and B work in parallel.** A extends the real Catalogue; B adds selected-text AI editing. C reviews contract changes and integrates completed slices.
-6. **Finally: prove and report the team delivery.** Check the approved Catalogue coverage and B's feature separately from the base, and name anything product explicitly excludes.
+1. **Completed: delegation review and product Q&A.** The decisions above replace the previous delegation.
+2. **Completed: C scope authorised.** Product asked for implementation and YC as the first example.
+3. **Completed: integrate the base before feature work.** Main and the required trust fixes were merged before the feature.
+4. **C handoff: check and push the working base.** Use section 12 and the final delivery's exact branch/commit.
+5. **Then: A and B work in parallel.** A extends the Catalogue; B implements selected-text AI editing. C owns shared contract and executor integration.
+6. **Finally: prove the team delivery.** Report A's coverage and B's feature separately from C's base.
 
-The delegation and product decisions are approved. C's bounded implementation scope is the next approval; it does not revive the old multi-week programme or authorise coding merely because this README has been updated.
+## 12. Implementation and handoff
+
+### Integrated base
+
+- Branch: `grants-pipeline`.
+- Main integrated at `a869cd9f`.
+- Required prior C trust fixes: `510-person-c-integration` at `9626c11d`.
+- Merge commit before feature work: `7c3bf9c7`.
+- The exact feature commit and successful remote push are supplied in the final handoff report. Do not use the old documentation branch as the feature base.
+
+### Concrete contracts and storage
+
+| Contract                                      | Implementation                                                                                                  |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Versioned data, runtime validation, DTOs      | `pipelines/src/proposals/accelerators/types.ts`; client-safe export `@launchstack/pipelines/accelerators/types` |
+| Public Catalogue and company fit storage      | `pipelines/src/proposals/accelerators/schema.ts` and `db.ts`                                                    |
+| Form snapshots and answers                    | Existing Proposals Application/Section storage, discriminated by `kind`; no parallel answer column              |
+| Migration                                     | `apps/web/drizzle/20261025074424_accelerators_base.sql`, generated snapshot and journal                         |
+| Operator importer                             | `apps/web/scripts/import-accelerators.ts`                                                                       |
+| Access and company matching/drafting          | `apps/web/src/server/accelerators/{access,service,run}.ts`                                                      |
+| Common safe execution and charging            | `pipelines/src/proposals/run.ts`, web Proposals ports/executor                                                  |
+| Workspace UI and separate local/saved buffers | `apps/web/src/app/employer/tools/accelerators/`                                                                 |
+
+The shared implementation lives inside Proposals because both product surfaces use the same Application/Section storage and executor. The public Accelerators exports and API remain separate. This preserves the repository's rule against relative imports between feature verticals.
+
+The supported Field types are `short_text`, `long_text`, `url`, `email`, `number`, `date`, `select`, `multi_select`, `file`, and `video`. File/video requirements are visible manual actions, not uploads. Only empty prose Fields have basic Draft. A required Field may be saved unfinished. Numeric length limits need source evidence; unknown limits remain unknown.
+
+Manual saves use `{ expectedRevision, draft }`. `draft` is the only saved answer; `multi_select` stores a JSON array string. Revisions increase for every accepted save. Application creation snapshots the Form, so later Catalogue imports cannot change existing questions or answers.
+
+The selected-text contracts are `EditSuggestionRequestSchema`, `EditSuggestionSchema`, and `ApplyEditSchema`. Offsets are JavaScript UTF-16 code units: start inclusive, end exclusive. A generation request contains the original revision/range and the instruction. A Suggestion contains that revision/range, exact original text, proposed replacement, and gaps. B must validate the selection against the saved answer before generation. Apply validates the revision and replaces that range only; it does not find-and-replace matching words.
+
+### API available to B
+
+All endpoints resolve the authenticated company; callers cannot supply tenancy. Reads require `documents.read`; mutations require `documents.edit`; both also require current unrestricted document access.
+
+| Method and path                                                | Input/result                                                                     |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `GET /api/accelerators`                                        | Saved Programs, matches, Applications, profile readiness, edit permission, costs |
+| `GET /api/accelerators/programs/:id`                           | Program detail                                                                   |
+| `POST /api/accelerators/match`                                 | Starts a shared matching run; returns `{ run }`                                  |
+| `POST /api/accelerators/applications`                          | `{ programId, cycleId }` → `{ application }`                                     |
+| `GET /api/accelerators/applications/:id`                       | `{ application }`                                                                |
+| `PATCH /api/accelerators/applications/:id/sections/:sectionId` | `{ expectedRevision, draft }` → `{ section }`                                    |
+| `POST …/sections/:sectionId/draft`                             | `{ expectedRevision }` → `{ run }`                                               |
+| `POST …/sections/:sectionId/apply`                             | `{ expectedRevision, start, end, replacement }` → `{ section }`                  |
+| `GET /api/accelerators/runs/:id`                               | `{ run }` within the authenticated company                                       |
+
+There is deliberately no Catalogue mutation endpoint for company users. There is no selected-text generation endpoint or preview control yet: those are B's feature, not an unfinished action exposed by C.
+
+For B's handler, reuse `acceleratorRequest`, `parseBody`, `resolveAcceleratorMember`, `loadOrgProfile`, and `createProposalPorts(companyId, authUserId)`. Enter `withWorkspaceChatModels(companyId, "proposals", …)` after authentication, as the existing Accelerators AI routes do. The ports expose the configured structured model, current-access check, and existing debit adapter; B owns the selected-text prompt and handler. Recheck access before returning a generated Suggestion. Integrate its execution/charging with C's shared run owner; do not add an unmetered model call or charge again on Apply.
+
+`FieldEditor.tsx`, `AnswerBuffer`, and `useAccelerators()` are the editor integration points. Keep `value`, `baseline`, and `baseRevision` separate. Save pending text before selecting a saved revision, serialize Apply with pending saves, and refresh the Application after Apply without discarding local text. A `409` is a conflict, not permission to retry an old answer against a new revision automatically.
+
+The displayed costs are 2,000 credits for matching, 1,500 for basic Draft, and 1,000 reserved for B's successful selected-text generation. Matching and Draft use shared claimed runs. Accelerator output, debit, and run completion commit atomically; failed final access/revision/debit checks publish no output and charge no credits.
+
+### Setup and operator commands
+
+Run from the repository root. Set `DATABASE_URL` to the intended installation first; do not point a demonstration at production.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm --filter @launchstack/web db:migrate
+
+# Validation does not write a database.
+pnpm --filter @launchstack/web accelerators:import -- --validate \
+  ../../fixtures/accelerators/programs/y-combinator.json \
+  ../../fixtures/accelerators/programs/abovea-startup-accelerator.json \
+  ../../fixtures/accelerators/programs/techstars-london.json
+
+# Trusted operator only. DATABASE_URL, not this label, selects the database.
+pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators \
+  ../../fixtures/accelerators/programs/y-combinator.json \
+  ../../fixtures/accelerators/programs/abovea-startup-accelerator.json \
+  ../../fixtures/accelerators/programs/techstars-london.json
+```
+
+For a local-only synthetic demonstration, set `DEV_SEED_PASSWORD` yourself, then run:
+
+```sh
+DEV_SEED_WORKSPACE='Accelerators Demo — Northwind fixture' pnpm --filter @launchstack/web db:seed
+DEV_SEED_WORKSPACE='Accelerators Demo — Northwind fixture' pnpm --filter @launchstack/web accelerators:demo
+pnpm --filter @launchstack/web dev
+```
+
+The demo seeder requires a named workspace and loopback database, and refuses to overwrite an existing Core profile. It uses the repository's synthetic Northwind facts with an explicit demonstration label. It does not save fabricated fit scores. Configure the existing model provider, open `/employer/documents?feature=accelerators&at=/programs`, and click **Match Programs** to generate actual results.
+
+### Reference records and known limitations
+
+| Record                     | Verified use and limitation                                                                                                                                                                                                                                                                           |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| YC                         | Sourced Program and target-applicant narratives, sources, and company fit. The current official application portal redirects to login. Exact current questions are not invented; Start Application is blocked. A permitted current blank export/review is needed, not credentials or private answers. |
+| aboveA Startup Accelerator | Checked public Form with ten ordered applicant Fields, including a required single-option consent Field. Unknown dates and length limits stay unknown. Demonstrates local answers only; nothing is submitted externally.                                                                              |
+| Techstars London           | Sourced description and target applicants, March 2027 Cycle, and date-only 18 November 2026 deadline. The complete current Form is unconfirmed; Start Application is blocked.                                                                                                                         |
+
+Fit is an assessment, not an admission probability. The local Core profile is synthetic, so these demonstration scores are not evidence of production accuracy.
+
+### Exercised evidence
+
+- Applied all 6 engine and 38 product migrations to an isolated Postgres instance; migration verification reports up to date. Journal checks and `drizzle-kit check` pass. Wire schema drift check passes for 22 existing contracts.
+- Imported the three reference records through the operator command. A repeated import reported `inserted: 0`, `updated: 0`, `unchanged: 3`. Duplicate input identities were rejected before database writes, then the corrected input succeeded.
+- In the real workspace UI: opened Program list/detail, ran matching through the configured model, started aboveA's checked Form, saved typed answers, reloaded, and restored the same answers. Real AI drafting saved an answer from the Core profile and showed missing information.
+- Verified that owner and admin read the same Application and fit results. A second company could not read the first company's Application or run and had no shared matches. Its deliberately unknown synthetic profile produced null scores with explicit unknowns, not invented company facts.
+- Changing the profile version marked existing matches out of date without starting another run. A live match whose writer lost full access failed with zero credits and no new fit output. Catalogue/detail/Application/run reads and an answer write returned `403` after revocation; the actual app showed only its full-access error.
+- Typed into a Field while real generation was in flight. The local text survived; the returned saved draft appeared as a conflict for an explicit keep-local/use-saved choice. Saved the local choice through the new revision.
+- Database regressions cover unique shared Applications, two-company and grants isolation, concurrent saves, saved-and-cleared revision races, exact Unicode Apply, duplicate run admission, revoked final access, debit rollback, unavailable Forms, and immutable Form snapshots. Existing shared run/scope/approval tests were also exercised.
+- Workspace typechecks pass. All 55 pipeline test files pass: 628 tests. All 118 LLM package tests pass. The five affected database/run/scope/approval suites pass: 108 tests. The model-scope, API service-map, Studio registry, and vertical-seam suites pass: 37 tests.
+- Repository lint passes with zero errors and 36 existing warnings. The final production build passes; its standalone server restores the saved fit results and answers. All three published Accelerators entry points load in plain Node ESM.
+- The full web run reports 578 passed suites and 2 skipped suites: 6,500 passed tests, 4 skipped, no failed assertions. The runner nevertheless remains alive after its summary, including with `--detectOpenHandles`, and was terminated at the command deadline. This is not a clean full-suite command pass; no `--forceExit` or test exclusions were added to hide it.
+- Repaired the LLM package's build-only ambient DOM type dependency with an explicit Node web-stream type import. No runtime metering behavior changed.
+
+### Broader repository gate
+
+The installation-wide publish-export check still reports an unrelated missing `@launchstack/conversion/heading-chunker` artifact. Its source export also points to a missing file. This slice does not remove or replace that pre-existing public export. Do not report the whole repository's publish gate as green because the Accelerators path works.
+
+### File ownership for parallel work
+
+- **A:** further files under `fixtures/accelerators/programs/` and its own collection scripts. Do not change the public schema, importer, migration, or company-specific scores without C's agreement.
+- **B:** selected-text UI/handler modules under the Accelerators feature, integration in `FieldEditor.tsx`, its API client/editor context, and the matching `en`/`zh-CN` messages. Own the complete feature and its behavioral proof, not checks of C's drafting.
+- **C:** shared contracts, database/migrations, access, workspace host, run/executor/credit integration, grants separation, and final integration. Coordinate changes here before B merges the selected-text execution extension.
+
+A uses the reference format and operator command immediately. B can build the selection/prompt/preview flow against the published schemas and existing production model ports immediately. Neither must wait for the other person's work.

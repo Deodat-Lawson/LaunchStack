@@ -21,7 +21,7 @@
  * page for it — they just do not pretend to be links.
  */
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 
 import type { Locale } from "~/i18n/locales";
 import { translatorFor } from "~/i18n/translate";
@@ -445,7 +445,12 @@ const proposalsLoader: HistoryLoader = {
             })
             .from(proposalRuns)
             .leftJoin(proposalApplications, eq(proposalRuns.applicationId, proposalApplications.id))
-            .where(eq(proposalRuns.companyId, companyId))
+            .where(
+                and(
+                    eq(proposalRuns.companyId, companyId),
+                    inArray(proposalRuns.kind, ["funders", "extract", "draft", "rewrite", "review"])
+                )
+            )
             .orderBy(desc(proposalRuns.createdAt))
             .limit(limit);
 
@@ -469,7 +474,13 @@ const proposalsLoader: HistoryLoader = {
     async remove({ companyId }, refId) {
         const deleted = await db
             .delete(proposalRuns)
-            .where(and(eq(proposalRuns.id, refId), eq(proposalRuns.companyId, companyId)))
+            .where(
+                and(
+                    eq(proposalRuns.id, refId),
+                    eq(proposalRuns.companyId, companyId),
+                    inArray(proposalRuns.kind, ["funders", "extract", "draft", "rewrite", "review"])
+                )
+            )
             .returning({ id: proposalRuns.id });
         return deleted.length > 0;
     },

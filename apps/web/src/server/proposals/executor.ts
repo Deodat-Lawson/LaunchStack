@@ -26,6 +26,7 @@ import { resolveMemberContext } from "~/lib/require-workspace-context";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
+import { assertAcceleratorAccess } from "~/server/accelerators/access";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { createProposalPorts } from "./ports";
 
@@ -71,14 +72,17 @@ export async function executeProposalRunForMember(
     runId: string,
     companyId: bigint
 ): Promise<RunRecord> {
-    const run = await getRun(runId, companyId);
+    const run = await getRun(runId, companyId, { includeAccelerators: true });
     if (!run) throw new Error("Run not found");
     if (run.status !== "queued") return run;
     const ctx = { runId, companyId, userId: run.userId };
     const member = await resolveMemberContext(run.userId, companyId);
     if (!member) throw new Error("The run's writer is no longer an active workspace member.");
     const scope = await member.documentScope();
-    return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId));
+    if (run.kind === "programs" || run.kind === "accel_draft") {
+        await assertAcceleratorAccess(member, "documents.edit");
+    }
+    return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId, run.userId));
 }
 
 /** Queue a run and hand it to the executor. Returns the queued row at once. */

@@ -40,6 +40,8 @@
     "note": "提示"
   },
   "runKind": {
+    "programs": "正在匹配加速器项目",
+    "accel_draft": "正在起草加速器申请字段",
     "funders": "正在寻找资助方",
     "extract": "正在读取征集要求",
     "draft": "正在起草",
@@ -103,6 +105,8 @@
   "runSheet": {
     "noRun": "没有运行",
     "doneTitle": {
+      "programs": "已匹配加速器项目",
+      "accel_draft": "加速器申请字段已起草",
       "funders": "已找到资助方",
       "extract": "已读取要求",
       "draft": "草稿已写好",

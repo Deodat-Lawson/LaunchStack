@@ -10,6 +10,7 @@
  */
 import { z } from "zod";
 
+import type { FormField } from "./accelerators/types";
 // ─── Vocabulary ──────────────────────────────────────────────────────────────
 
 export const APPLICATION_STATUSES = [
@@ -42,7 +43,15 @@ export const OpportunityStatusSchema = z.enum(OPPORTUNITY_STATUSES);
 export type OpportunityStatus = z.infer<typeof OpportunityStatusSchema>;
 
 /** The profile is built by the company profile (Settings › Company), not by a proposals run. */
-export const RUN_KINDS = ["funders", "extract", "draft", "rewrite", "review"] as const;
+export const RUN_KINDS = [
+    "funders",
+    "extract",
+    "draft",
+    "rewrite",
+    "review",
+    "programs",
+    "accel_draft",
+] as const;
 export const RunKindSchema = z.enum(RUN_KINDS);
 export type RunKind = z.infer<typeof RunKindSchema>;
 
@@ -314,6 +323,13 @@ export const RunInputSchema = z.object({
     rewrite: z
         .object({ preset: RewritePresetSchema, instruction: z.string().max(600).optional() })
         .optional(),
+    acceleratorDraft: z
+        .object({
+            sectionId: z.string().min(1),
+            expectedRevision: z.number().int().nonnegative(),
+        })
+        .strict()
+        .optional(),
 });
 export type RunInput = z.infer<typeof RunInputSchema>;
 
@@ -372,6 +388,10 @@ export interface ApplicationRecord {
     createdByUserId: string;
     createdAt: Date;
     updatedAt: Date | null;
+    kind?: "grant" | "accelerator";
+    programId?: string | null;
+    cycleId?: string | null;
+    formHash?: string | null;
 }
 
 export interface SectionRecord {
@@ -389,6 +409,8 @@ export interface SectionRecord {
     draftMeta: DraftMeta | null;
     createdAt: Date;
     updatedAt: Date | null;
+    formField?: FormField | null;
+    revision?: number;
 }
 
 export interface LibraryItemRecord {

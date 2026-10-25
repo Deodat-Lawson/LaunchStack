@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "id": "y-combinator",
+  "name": "Y Combinator",
+  "websiteUrl": "https://www.ycombinator.com/",
+  "applyUrl": "https://apply.ycombinator.com/home",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Y Combinator is a three-month startup funding and advisory Program. The advertised Winter 2027 batch runs from January to March in San Francisco, with an in-person kickoff, regular meetups, dedicated partner support, and an alumni community that continues beyond the batch. YC's standard investment is $500,000 through two SAFEs: $125,000 for a fixed 7% and $375,000 on an uncapped SAFE with a Most Favored Nation provision. The latter creates additional equity ownership; the entire $500,000 is not simply exchanged for 7%. The public application page reports an on-time deadline of November 2 at 8pm PT and says late applications are still considered without a promised response date. The deadline's calendar year is not explicitly stated in the checked page, so this record does not infer an exact deadline instant.",
+    "sourceIds": ["yc-program-overview", "yc-apply-cycle", "yc-apply-support", "yc-standard-deal"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official FAQ and investment terms, prepared by the collecting assistant: YC invites startups from anywhere in the world and considers businesses in any field, not only software. Its FAQ encourages applications as soon as founders have a team and an idea they are excited about; it also describes accepted companies with revenue or prior funding, so those examples are not exclusive stage categories. Solo founders can apply. YC says the founding team should have the skills to build the product itself rather than outsource it, which usually means a technical co-founder for most businesses. Students and employees may apply, but accepted founders are expected to work full-time on the company during and after the batch. The batch is in person in San Francisco. Incorporation is not required before applying; participation may require a parent corporation in the United States, Canada, Singapore, or the Cayman Islands. These are sourced expectations and practical considerations, not a company-specific fit assessment or a guarantee of eligibility.",
+    "sourceIds": [
+      "yc-faq-global",
+      "yc-faq-fields",
+      "yc-faq-stage",
+      "yc-faq-prior-funding",
+      "yc-faq-solo",
+      "yc-faq-build-team",
+      "yc-faq-commitment",
+      "yc-faq-location",
+      "yc-incorporation"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "yc-program-overview",
+      "url": "https://www.ycombinator.com/about",
+      "title": "What Happens at YC — Program length and range of starting points",
+      "quote": "YC is a three month program. We now run YC four times a year, in the winter, spring, summer, and fall. Here's what happens during the three months of YC:\n\n[…]\n\nThe overall goal of YC is to help startups really take off. They arrive at YC at all different stages. Some haven't even started working yet, and others have been launched for a year or more. But whatever stage a startup is at when they arrive, our goal is to help them to be in dramatically better shape 3 months later.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-apply-cycle",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Apply to Y Combinator — Winter 2027 and published on-time deadline",
+      "quote": "Y Combinator is accepting applications for the Winter 2027 Batch funding cycle. The batch will take place from January to March in San Francisco.\n\nYou can also apply to future batches (Spring, Summer, and Fall) now - see more at Early Decision.\n\nThe deadline to apply on-time is November 2 at 8pm PT; if you apply before the deadline, you will get a decision by December 11. If you apply after the deadline, we will still consider the application but can't promise exactly when we'll get back to you.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-apply-support",
+      "url": "https://www.ycombinator.com/apply",
+      "title": "Apply to Y Combinator — In-person batch, partners, and continuing support",
+      "quote": "The batch will take place in-person at YC's campus in San Francisco. It starts with a 3-day, in-person kick-off and features regular meetups in San Francisco. For more information, please read our FAQs.\n\n[…]\n\nEvery company works with a dedicated YC General Partner, who gets to know them well and can help with a wide range of issues.\n\n[…]\n\nYC doesn't end after 3 months. We continue to help founders for the life of their company, and beyond — and so does the YC alumni community.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-standard-deal",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "The Y Combinator Deal — Official standard investment terms",
+      "quote": "We have a standard deal for every company that is accepted to Y Combinator. We invest $500,000, and our investment gives YC 7% of your company plus an incremental equity amount that will be fixed when you raise money from other investors.\n\n[…]\n\nThe way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other $375,000 is invested on an uncapped MFN SAFE.\n\n[…]\n\nWe invest $125,000 on a post-money SAFE in return for 7% of your company (the \"$125k SAFE\")\nWe invest $375,000 on an uncapped SAFE with a Most Favored Nation (\"MFN\") provision (the \"MFN SAFE\")",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-global",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Global applications",
+      "quote": "How do we choose which startups to fund?\n\nWe have an application process that's open to any startup, anywhere in the world. You can apply here.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-fields",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Fields beyond software",
+      "quote": "Do you only fund startups that write software?\n\nNo, we'll consider startups in any field. We've funded companies that make everything from microbes to fusion reactors to coffee carts. You can see all the companies we've funded in the YC Startup Directory.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-stage",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Idea-stage and later applicants",
+      "quote": "Am I too early to apply to YC? Should I wait until I have more traction?\n\nNo, it would be a mistake to wait to apply. On average, 40% of the companies we fund in each batch are just an idea. Most don't have any revenue.\n\nWhile YC does also fund companies that are far along, the majority of the companies we fund will always be companies at the very earliest stage. We recommend applying for YC as soon as you have a founding team and an idea you are excited about.\n\nWe've already been working on our startup for a while. Is YC appropriate for us?\n\nIt likely still is. While the majority of the YC batch is pre-revenue companies, a significant percentage these days is also companies that are much further along.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-prior-funding",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Already-funded applicants",
+      "quote": "We've already raised funding. Can we still apply?\n\nSure. Each YC batch has many companies who have already raised over $1M.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-solo",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Solo founders",
+      "quote": "Can a single person apply for funding?\n\nYes. We regularly accept solo founders. That said, our advice remains that one-person startups are tough and you're more likely to succeed with a co-founder.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-build-team",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Product-building skills",
+      "quote": "I have a great idea for a startup, but I'm not technical. Will you still fund me?\n\nIt's important for the founding team to have the skills to build their product themselves, rather than outsourcing it to someone else. For most businesses, that usually means you need a technical co-founder.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-commitment",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — Applying while studying or employed",
+      "quote": "Can I participate in YC while I'm a full-time student or working full-time at a job?\n\nYou can certainly apply when you are a full-time student or employee, but we expect the founders to commit to working full-time on their company during the batch and afterwards if accepted.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-faq-location",
+      "url": "https://www.ycombinator.com/faq",
+      "title": "Frequently Asked Questions — In-person San Francisco location",
+      "quote": "Where does the YC program happen? Do I need to move to San Francisco?\n\nThe batch takes place in-person in San Francisco. It kicks off with a 3-day, in-person retreat and features weekly meetups in San Francisco.\n\nWe briefly did run YC remotely during Covid, but since 2022 it has been back in person. We've found that YC works much better in person.\n\nOf course, after the 3 month program, you can go wherever you want.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-incorporation",
+      "url": "https://www.ycombinator.com/deal",
+      "title": "The Y Combinator Deal — Incorporation and non-US applicants",
+      "quote": "We invest in US, Canada, Cayman, and Singapore corporations. If you haven't incorporated a company yet, don't worry about it; we will help you do that if you are accepted to YC.\n\nWe have startups that apply to YC from all around the world and many have already incorporated in their home countries. If you've already incorporated your startup in another country that is not one of the four above, you will need to \"flip\" your corporate structure to have a parent company in one of those four countries.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-portal-login",
+      "url": "https://account.ycombinator.com/?continue=https%3A%2F%2Fapply.ycombinator.com%2Fhome",
+      "title": "YC Application portal — Anonymous request to /home redirects to account access",
+      "quote": "Log in or sign up to access the YC Application\nEmail or username\nContinue\nTerms of Use\nPrivacy",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-guidance-not-current-form",
+      "url": "https://www.ycombinator.com/howtoapply.html",
+      "title": "How to Apply to Y Combinator — Guidance and historical example, not a current complete Form",
+      "quote": "Four times a year Y Combinator takes applications for funding. I thought it might help applicants if I explained what we look for when we read them.\n\n[…]\n\nExample Application\n\nHere’s an example of a successful application: Dropbox’s Summer 2007 application",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    },
+    {
+      "id": "yc-public-video-guidance",
+      "url": "https://www.ycombinator.com/video/",
+      "title": "The Application Video — Public instructions, not a complete current Form",
+      "quote": "In the video please introduce yourselves, explain what you’re doing and why, and tell us anything else you want to about the founders or the project.\n\nThe video should be 1 minute long and should contain nothing except the founders talking.\n\nThis is not the place to submit a demo or promotional video. If you have a demo for your product, there is a separate place in the application for that. For this video, we want to hear how the founders communicate.",
+      "checkedAt": "2026-10-25T07:43:02.304Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "w2027",
+      "label": "Winter 2027",
+      "deadlineAt": null,
+      "deadlineTimezone": "America/Los_Angeles",
+      "rolling": false,
+      "sourceIds": ["yc-apply-cycle"],
+      "form": {
+        "id": "yc-w2027-application",
+        "status": "unavailable",
+        "sourceUrl": "https://apply.ycombinator.com/home",
+        "checkedAt": "2026-10-25T07:43:02.304Z",
+        "supported": false,
+        "limitations": [
+          "Anonymous access to https://apply.ycombinator.com/home redirected to https://account.ycombinator.com/?continue=https%3A%2F%2Fapply.ycombinator.com%2Fhome. The page says 'Log in or sign up to access the YC Application'. The timestamp records this access check, not a review of the live Form behind login. No account was created, no sign-in was attempted, and no application or external agreement was submitted.",
+          "The complete current Winter 2027 Form could not be checked publicly. Its exact questions, order, required flags, choice options, limits, founder subforms, and conditional structure remain unconfirmed. Fields are intentionally empty; Start Application must remain blocked. A current official public blank Form/export or an authorized user-supplied blank export with constraints is needed, not credentials or private applicant answers.",
+          "The official howtoapply page is narrative guidance and links a Summer 2007 example. The official video page publishes only part of the application requirements. Neither establishes the complete current Winter 2027 Form, so neither was converted into an approximate checked Form.",
+          "The official application page states Winter 2027 and November 2 at 8pm PT but does not explicitly state the deadline's calendar year. deadlineAt stays null; America/Los_Angeles records the stated Pacific Time context without inventing an instant. This is an on-time deadline, not evidence that applications close afterward: the page says late applications are still considered without a promised response date."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -5,10 +5,10 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, notInArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
-import { document } from "@launchstack/store/schema";
+import { company, document } from "@launchstack/store/schema";
 import { documentScopeSql, type DocumentScope } from "@launchstack/retrieval";
 
 import { flattenFacts, getProfileRow, profileView } from "../company-metadata";
@@ -102,6 +102,10 @@ function toApplication(row: ProposalApplicationRow): ApplicationRecord {
         createdByUserId: row.createdByUserId,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
+        kind: row.kind,
+        programId: row.programId,
+        cycleId: row.cycleId,
+        formHash: row.formHash,
     };
 }
 
@@ -121,6 +125,8 @@ function toSection(row: ProposalSectionRow): SectionRecord {
         draftMeta: row.draftMeta ?? null,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
+        formField: row.formField,
+        revision: row.revision,
     };
 }
 
@@ -168,6 +174,25 @@ function toRun(row: ProposalRunRow): RunRecord {
 }
 
 const newId = () => randomUUID();
+
+/** Child IDs never bypass the grant parent's company and vertical boundary. */
+function grantSectionCondition(companyId: bigint) {
+    return sql`exists (select 1 from ${proposalApplications}
+        where ${proposalApplications.id} = ${proposalSections.applicationId}
+        and ${proposalApplications.companyId} = ${companyId}
+        and ${proposalApplications.kind} = 'grant')`;
+}
+
+/** Runs without a parent are grant searches only when their kind is also a grant kind. */
+function grantRunCondition(companyId: bigint) {
+    return and(
+        notInArray(proposalRuns.kind, ["programs", "accel_draft"]),
+        sql`(${proposalRuns.applicationId} is null or exists (select 1 from ${proposalApplications}
+            where ${proposalApplications.id} = ${proposalRuns.applicationId}
+            and ${proposalApplications.companyId} = ${companyId}
+            and ${proposalApplications.kind} = 'grant'))`
+    );
+}
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
@@ -419,6 +444,7 @@ export async function createApplication(input: CreateApplicationInput): Promise<
     await db.insert(proposalApplications).values({
         id,
         companyId: input.companyId,
+        kind: "grant",
         opportunityId: input.opportunityId,
         title: input.title.slice(0, 512),
         funder: input.funder?.slice(0, 256) ?? null,
@@ -444,7 +470,13 @@ export async function getApplication(
     const [row] = await getDb()
         .select()
         .from(proposalApplications)
-        .where(and(eq(proposalApplications.id, id), eq(proposalApplications.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalApplications.id, id),
+                eq(proposalApplications.companyId, companyId),
+                eq(proposalApplications.kind, "grant")
+            )
+        )
         .limit(1);
     return row ? toApplication(row) : null;
 }
@@ -456,7 +488,12 @@ export async function listApplications(
     const rows = await getDb()
         .select()
         .from(proposalApplications)
-        .where(eq(proposalApplications.companyId, companyId))
+        .where(
+            and(
+                eq(proposalApplications.companyId, companyId),
+                eq(proposalApplications.kind, "grant")
+            )
+        )
         .orderBy(desc(proposalApplications.updatedAt), desc(proposalApplications.createdAt))
         .limit(options.limit ?? 200);
     return rows.map(toApplication);
@@ -509,7 +546,11 @@ export async function updateApplication(
             .update(proposalApplications)
             .set(set)
             .where(
-                and(eq(proposalApplications.id, id), eq(proposalApplications.companyId, companyId))
+                and(
+                    eq(proposalApplications.id, id),
+                    eq(proposalApplications.companyId, companyId),
+                    eq(proposalApplications.kind, "grant")
+                )
             );
     }
     return getApplication(id, companyId);
@@ -518,7 +559,13 @@ export async function updateApplication(
 export async function deleteApplication(companyId: bigint, id: string): Promise<boolean> {
     const deleted = await getDb()
         .delete(proposalApplications)
-        .where(and(eq(proposalApplications.id, id), eq(proposalApplications.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalApplications.id, id),
+                eq(proposalApplications.companyId, companyId),
+                eq(proposalApplications.kind, "grant")
+            )
+        )
         .returning({ id: proposalApplications.id });
     return deleted.length > 0;
 }
@@ -535,7 +582,8 @@ export async function listSections(
         .where(
             and(
                 eq(proposalSections.companyId, companyId),
-                eq(proposalSections.applicationId, applicationId)
+                eq(proposalSections.applicationId, applicationId),
+                grantSectionCondition(companyId)
             )
         )
         .orderBy(asc(proposalSections.position));
@@ -546,7 +594,13 @@ export async function getSection(companyId: bigint, id: string): Promise<Section
     const [row] = await getDb()
         .select()
         .from(proposalSections)
-        .where(and(eq(proposalSections.id, id), eq(proposalSections.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalSections.id, id),
+                eq(proposalSections.companyId, companyId),
+                grantSectionCondition(companyId)
+            )
+        )
         .limit(1);
     return row ? toSection(row) : null;
 }
@@ -563,6 +617,12 @@ export async function replaceSections(
     sections: ExtractedSection[]
 ): Promise<SectionRecord[]> {
     const db = getDb();
+    if (!(await getApplication(applicationId, companyId))) {
+        throw Object.assign(new Error("Application not found"), {
+            status: 404,
+            code: "application_not_found",
+        });
+    }
     const existing = await listSections(companyId, applicationId);
     const byKey = new Map(existing.map(s => [s.key, s]));
     const keep = new Set(sections.map(s => s.key));
@@ -629,7 +689,13 @@ export async function updateSection(
         await getDb()
             .update(proposalSections)
             .set(set)
-            .where(and(eq(proposalSections.id, id), eq(proposalSections.companyId, companyId)));
+            .where(
+                and(
+                    eq(proposalSections.id, id),
+                    eq(proposalSections.companyId, companyId),
+                    grantSectionCondition(companyId)
+                )
+            );
     }
     return getSection(companyId, id);
 }
@@ -640,6 +706,12 @@ export async function addSection(
     applicationId: string,
     section: ExtractedSection
 ): Promise<SectionRecord> {
+    if (!(await getApplication(applicationId, companyId))) {
+        throw Object.assign(new Error("Application not found"), {
+            status: 404,
+            code: "application_not_found",
+        });
+    }
     const existing = await listSections(companyId, applicationId);
     const id = newId();
     await getDb().insert(proposalSections).values({
@@ -662,7 +734,13 @@ export async function addSection(
 export async function deleteSection(companyId: bigint, id: string): Promise<boolean> {
     const deleted = await getDb()
         .delete(proposalSections)
-        .where(and(eq(proposalSections.id, id), eq(proposalSections.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalSections.id, id),
+                eq(proposalSections.companyId, companyId),
+                grantSectionCondition(companyId)
+            )
+        )
         .returning({ id: proposalSections.id });
     return deleted.length > 0;
 }
@@ -711,6 +789,15 @@ export async function createLibraryItem(input: {
     sourceApplicationId: string | null;
     sourceSectionKey: string | null;
 }): Promise<LibraryItemRecord> {
+    if (
+        input.sourceApplicationId &&
+        !(await getApplication(input.sourceApplicationId, input.companyId))
+    ) {
+        throw Object.assign(new Error("Application not found"), {
+            status: 404,
+            code: "application_not_found",
+        });
+    }
     const id = newId();
     await getDb()
         .insert(proposalLibraryItems)
@@ -802,7 +889,11 @@ const expiredRunPatch = {
 };
 
 /** Expiry is absolute from startedAt; queued work and recent step writes do not affect it. */
-async function expireRuns(companyId: bigint, id?: string): Promise<void> {
+async function expireRuns(
+    companyId: bigint,
+    id?: string,
+    includeAccelerators = false
+): Promise<void> {
     await getDb()
         .update(proposalRuns)
         .set(expiredRunPatch)
@@ -811,7 +902,8 @@ async function expireRuns(companyId: bigint, id?: string): Promise<void> {
                 eq(proposalRuns.companyId, companyId),
                 id !== undefined ? eq(proposalRuns.id, id) : undefined,
                 eq(proposalRuns.status, "running"),
-                expiredRunCondition
+                expiredRunCondition,
+                includeAccelerators ? undefined : grantRunCondition(companyId)
             )
         );
 }
@@ -824,8 +916,39 @@ export async function createRun(input: {
     input: RunInput;
     steps: RunStep[];
 }): Promise<RunRecord> {
+    const accelerator = input.kind === "programs" || input.kind === "accel_draft";
+    if (
+        (input.kind === "programs" && input.applicationId !== null) ||
+        (input.kind === "accel_draft" && (!input.applicationId || !input.input.acceleratorDraft)) ||
+        (!accelerator && input.input.acceleratorDraft) ||
+        (input.input.applicationId !== undefined &&
+            input.input.applicationId !== input.applicationId)
+    ) {
+        throw Object.assign(new Error("Run input does not match its kind and Application"), {
+            status: 400,
+            code: "invalid_run_input",
+        });
+    }
+    if (input.applicationId) {
+        const [parent] = await getDb()
+            .select({ id: proposalApplications.id })
+            .from(proposalApplications)
+            .where(
+                and(
+                    eq(proposalApplications.id, input.applicationId),
+                    eq(proposalApplications.companyId, input.companyId),
+                    eq(proposalApplications.kind, accelerator ? "accelerator" : "grant")
+                )
+            )
+            .limit(1);
+        if (!parent)
+            throw Object.assign(new Error("Application not found"), {
+                status: 404,
+                code: "application_not_found",
+            });
+    }
     const id = newId();
-    await getDb().insert(proposalRuns).values({
+    const values: typeof proposalRuns.$inferInsert = {
         id,
         companyId: input.companyId,
         kind: input.kind,
@@ -835,33 +958,74 @@ export async function createRun(input: {
         input: input.input,
         steps: input.steps,
         creditsUsed: 0,
-    });
-    const created = await getRun(id, input.companyId);
+    };
+    if (accelerator) {
+        await expireRuns(input.companyId, undefined, true);
+        return getDb().transaction(async tx => {
+            // Serialize queue decisions, not just duplicate deliveries of one run.
+            const [workspace] = await tx
+                .select({ id: company.id })
+                .from(company)
+                .where(eq(company.id, Number(input.companyId)))
+                .for("update");
+            if (!workspace) throw new Error("Company not found");
+            const [live] = await tx
+                .select({ id: proposalRuns.id })
+                .from(proposalRuns)
+                .where(
+                    and(
+                        eq(proposalRuns.companyId, input.companyId),
+                        inArray(proposalRuns.status, ["queued", "running"])
+                    )
+                )
+                .limit(1);
+            if (live) {
+                throw Object.assign(new Error("A company run is already in progress"), {
+                    status: 409,
+                    code: "run_in_progress",
+                });
+            }
+            const [created] = await tx.insert(proposalRuns).values(values).returning();
+            if (!created) throw new Error("Run vanished after insert");
+            return toRun(created);
+        });
+    }
+    await getDb().insert(proposalRuns).values(values);
+    const created = await getRun(id, input.companyId, { includeAccelerators: true });
     if (!created) throw new Error("Run vanished after insert");
     return created;
 }
 
-export async function getRun(id: string, companyId: bigint): Promise<RunRecord | null> {
-    await expireRuns(companyId, id);
+export async function getRun(
+    id: string,
+    companyId: bigint,
+    options: { includeAccelerators?: boolean } = {}
+): Promise<RunRecord | null> {
+    await expireRuns(companyId, id, options.includeAccelerators);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
-        .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                options.includeAccelerators ? undefined : grantRunCondition(companyId)
+            )
+        )
         .limit(1);
     return row ? toRun(row) : null;
 }
 
 export async function listRuns(
     companyId: bigint,
-    options: { applicationId?: string; limit?: number } = {}
+    options: { applicationId?: string; limit?: number; includeAccelerators?: boolean } = {}
 ): Promise<RunRecord[]> {
-    await expireRuns(companyId);
-    const where = options.applicationId
-        ? and(
-              eq(proposalRuns.companyId, companyId),
-              eq(proposalRuns.applicationId, options.applicationId)
-          )
-        : eq(proposalRuns.companyId, companyId);
+    await expireRuns(companyId, undefined, options.includeAccelerators);
+    const where = and(
+        eq(proposalRuns.companyId, companyId),
+        options.applicationId ? eq(proposalRuns.applicationId, options.applicationId) : undefined,
+        options.includeAccelerators ? undefined : grantRunCondition(companyId)
+    );
     const rows = await getDb()
         .select()
         .from(proposalRuns)
@@ -872,15 +1036,19 @@ export async function listRuns(
 }
 
 /** The run in progress, if any: one at a time per workspace keeps the credits story simple. */
-export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> {
-    await expireRuns(companyId);
+export async function findLiveRun(
+    companyId: bigint,
+    options: { includeAccelerators?: boolean } = {}
+): Promise<RunRecord | null> {
+    await expireRuns(companyId, undefined, options.includeAccelerators);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
         .where(
             and(
                 eq(proposalRuns.companyId, companyId),
-                inArray(proposalRuns.status, ["queued", "running"])
+                inArray(proposalRuns.status, ["queued", "running"]),
+                options.includeAccelerators ? undefined : grantRunCondition(companyId)
             )
         )
         .orderBy(desc(proposalRuns.createdAt))
@@ -890,7 +1058,7 @@ export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> 
 
 /** Only the delivery that changes queued to running may execute or debit this run. */
 export async function claimRun(companyId: bigint, id: string): Promise<RunRecord | null> {
-    await expireRuns(companyId, id);
+    await expireRuns(companyId, id, true);
     const [row] = await getDb()
         .update(proposalRuns)
         .set({ status: "running", startedAt: new Date(), updatedAt: new Date() })
@@ -906,7 +1074,7 @@ export async function claimRun(companyId: bigint, id: string): Promise<RunRecord
 }
 
 export async function isRunActive(companyId: bigint, id: string): Promise<boolean> {
-    await expireRuns(companyId, id);
+    await expireRuns(companyId, id, true);
     const [row] = await getDb()
         .select({ id: proposalRuns.id })
         .from(proposalRuns)
@@ -927,7 +1095,7 @@ export async function updateRunSteps(
     id: string,
     steps: RunStep[]
 ): Promise<boolean> {
-    await expireRuns(companyId, id);
+    await expireRuns(companyId, id, true);
     const rows = await getDb()
         .update(proposalRuns)
         .set({ steps, updatedAt: new Date() })
@@ -1009,7 +1177,7 @@ export async function failRun(
     steps: RunStep[] | undefined,
     expectedStatus: "queued" | "running"
 ): Promise<RunRecord | null> {
-    await expireRuns(companyId, id);
+    await expireRuns(companyId, id, true);
     const set: Partial<typeof proposalRuns.$inferInsert> = {
         status: "failed",
         error,
@@ -1028,13 +1196,23 @@ export async function failRun(
             )
         )
         .returning();
-    return row ? toRun(row) : getRun(id, companyId);
+    return row ? toRun(row) : getRun(id, companyId, { includeAccelerators: true });
 }
 
-export async function deleteRun(companyId: bigint, id: string): Promise<boolean> {
+export async function deleteRun(
+    companyId: bigint,
+    id: string,
+    options: { includeAccelerators?: boolean } = {}
+): Promise<boolean> {
     const deleted = await getDb()
         .delete(proposalRuns)
-        .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)))
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                options.includeAccelerators ? undefined : grantRunCondition(companyId)
+            )
+        )
         .returning({ id: proposalRuns.id });
     return deleted.length > 0;
 }

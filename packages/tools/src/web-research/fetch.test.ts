@@ -1,4 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
+
+import { Agent, fetch as undiciFetch } from "undici";
+import { describe, expect, it, vi } from "vitest";
 
 import {
     UnsafeUrlError,
@@ -6,6 +10,7 @@ import {
     fetchReadable,
     htmlToReadableText,
     isPrivateAddress,
+    pinnedLookup,
 } from "./fetch";
 
 const publicLookup = async () => ["93.184.216.34"];
@@ -163,5 +168,53 @@ describe("fetchReadable", () => {
                 maxRedirects: 2,
             })
         ).rejects.toMatchObject({ code: "too_many_redirects" });
+    });
+});
+
+describe("DNS rebinding", () => {
+    it("resolves each hop once, so a second, private answer is never asked for", async () => {
+        const asked: string[] = [];
+        // Public on the check, private on any later lookup: a rebinding host.
+        const rebinding = async (host: string) => {
+            asked.push(host);
+            return asked.length === 1 ? ["93.184.216.34"] : ["127.0.0.1"];
+        };
+        const fetchImpl = (async () =>
+            new Response("<p>ok</p>", {
+                status: 200,
+                headers: { "content-type": "text/html" },
+            })) as typeof fetch;
+        await fetchReadable("https://rebind.example/", { fetchImpl, lookup: rebinding });
+        expect(asked).toEqual(["rebind.example"]);
+    });
+
+    it("connects to the pinned address, not to what DNS says", async () => {
+        const server = createServer((_req, res) => res.end("pinned"));
+        await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
+        const { port } = server.address() as AddressInfo;
+        const agent = new Agent({ connect: { lookup: pinnedLookup(["127.0.0.1"]) } });
+        try {
+            // `.invalid` never resolves (RFC 6761): only the pinned lookup can answer.
+            const response = await undiciFetch(`http://pinned.invalid:${port}/`, {
+                dispatcher: agent,
+            });
+            expect(await response.text()).toBe("pinned");
+        } finally {
+            await agent.close();
+            server.close();
+        }
+    });
+
+    it("answers in the shape the socket asked for", () => {
+        const lookup = pinnedLookup(["2606:4700::1111", "93.184.216.34"]);
+        const one = vi.fn();
+        lookup("host.example", { family: 4 }, one);
+        expect(one).toHaveBeenCalledWith(null, "93.184.216.34", 4);
+        const all = vi.fn();
+        lookup("host.example", { all: true }, all);
+        expect(all).toHaveBeenCalledWith(null, [
+            { address: "2606:4700::1111", family: 6 },
+            { address: "93.184.216.34", family: 4 },
+        ]);
     });
 });

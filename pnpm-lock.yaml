@@ -73,7 +73,7 @@ importers:
         version: link:../../packages/design-tokens
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -314,7 +314,7 @@ importers:
         version: 7.3.3(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(uploadthing@7.7.4(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwindcss@3.4.17))
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@vercel/blob':
         specifier: ^2.3.0
         version: 2.3.0
@@ -1076,6 +1076,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
+      undici:
+        specifier: ^7.29.1
+        version: 7.29.1
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -2150,7 +2153,6 @@ packages:
 
   '@browserbasehq/stagehand@1.9.0':
     resolution: {integrity: sha512-0wIFnwOVnUEgVkPKW0RX7NoOt98qaRJ8+l1m9ppk1f5E03GtefDQTMiQwwT9WQn163bpZT5cOhyA1I3jZNfFeA==}
-    deprecated: This version is no longer maintained. Please upgrade to the latest version of @browserbasehq/stagehand.
     peerDependencies:
       '@playwright/test': ^1.42.1
       deepmerge: ^4.3.1
@@ -11630,10 +11632,6 @@ packages:
     resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
     engines: {node: '>=18.17'}
 
-  undici@7.25.0:
-    resolution: {integrity: sha512-xXnp4kTyor2Zq+J1FfPI6Eq3ew5h6Vl0F/8d9XU5zZQf1tX9s2Su1/3PiMmUANFULpmksxkClamIZcaUqryHsQ==}
-    engines: {node: '>=20.18.1'}
-
   undici@7.29.1:
     resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
     engines: {node: '>=20.18.1'}
@@ -17899,7 +17897,7 @@ snapshots:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
-  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     optionalDependencies:
       next: 15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
@@ -18482,7 +18480,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.25.0
+      undici: 7.29.1
       whatwg-mimetype: 4.0.0
 
   chevrotain-allstar@0.3.1(chevrotain@11.1.2):
@@ -20128,7 +20126,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4(debug@4.4.3))
+      retry-axios: 2.6.0(axios@1.7.4)
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -20855,7 +20853,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.25.0
+      undici: 7.29.1
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -22807,7 +22805,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  retry-axios@2.6.0(axios@1.7.4(debug@4.4.3)):
+  retry-axios@2.6.0(axios@1.7.4):
     dependencies:
       axios: 1.7.4(debug@4.4.3)
 
@@ -23588,8 +23586,6 @@ snapshots:
     optional: true
 
   undici@6.23.0: {}
-
-  undici@7.25.0: {}
 
   undici@7.29.1: {}
 

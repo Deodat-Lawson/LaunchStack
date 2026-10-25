@@ -314,7 +314,10 @@ export async function describeCompanies(
     for (const item of data.results ?? []) {
         if (typeof item.url !== "string" || !item.url) continue;
         const domain = domainOf(item.url);
-        const description = clip(item.summary?.trim() || item.text || "", 400);
+        // An empty summary falls back to the page text too, which `??` would not do.
+        let text = item.summary?.trim() ?? "";
+        if (!text) text = item.text ?? "";
+        const description = clip(text, 400);
         if (!domain || !description) continue;
         described.push({
             url: item.url,

@@ -5,7 +5,7 @@
 import { error, handleVantageError, json, vantageContext, say } from "../_http";
 import { loadTriage } from "~/server/vantage/service";
 
-export async function GET(request?: Request) {
+export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     if (!auth.ctx.can("settings.manage"))

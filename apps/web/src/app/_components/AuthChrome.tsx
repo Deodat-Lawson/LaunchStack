@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
+import { LanguageToggle } from "~/components/i18n/LanguageMenu";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
@@ -16,6 +18,7 @@ import { LANDING_HREF } from "~/config/landing";
  * entry-point design is consistent with the product.
  */
 export function AuthChrome() {
+    const t = useTranslations("auth.chrome");
     const { isLoaded, isSignedIn } = useAuth();
     const { user } = useUser();
 
@@ -43,6 +46,7 @@ export function AuthChrome() {
                 <span className="text-sm font-bold tracking-[-0.01em]">Launchstack</span>
             </LandingLogoLink>
             <div style={{ flex: 1 }} />
+            <LanguageToggle />
             <ThemeToggle />
             {isLoaded && isSignedIn && user && (
                 <>
@@ -50,7 +54,7 @@ export function AuthChrome() {
                         would push it off-screen (the OAuth connect screens are
                         reached signed in, unlike /signin). */}
                     <span className="text-ink-3 ml-1 min-w-0 truncate text-xs max-sm:hidden">
-                        {user.email || "Signed in"}
+                        {user.email || t("signedIn")}
                     </span>
                     {/* A just-signed-out user is a public-site audience. */}
                     <UserMenu afterSignOutUrl={LANDING_HREF} />

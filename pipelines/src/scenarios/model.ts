@@ -14,7 +14,15 @@ import {
     resolveChatModel,
     type ResolveChatModelOptions,
 } from "@launchstack/llm";
-import { ACTION_TYPES, type ModelRequest, type SimulationModel } from "@launchstack/simulation";
+import {
+    ACTION_TYPES,
+    BUDGETS,
+    BUYING_ROLES,
+    SWITCHING_COSTS,
+    WOULD_PAY,
+    type ModelRequest,
+    type SimulationModel,
+} from "@launchstack/simulation";
 
 /**
  * One model policy per purpose; turns run on the fast route because there are
@@ -33,6 +41,9 @@ export const SCENARIO_MODELS = {
 const decisionSchema = z.object({
     thought: z.string(),
     stance: z.number(),
+    convincedBy: z.string().nullable(),
+    wouldPay: z.enum(WOULD_PAY as [string, ...string[]]),
+    objection: z.string().nullable(),
     actions: z.array(
         z.object({
             type: z.enum(ACTION_TYPES as [string, ...string[]]),
@@ -56,6 +67,11 @@ const castSchema = z.object({
             influence: z.number(),
             sourceIds: z.array(z.string()),
             invented: z.boolean(),
+            currentSolution: z.string(),
+            budget: z.enum(BUDGETS as [string, ...string[]]),
+            buyingRole: z.enum(BUYING_ROLES as [string, ...string[]]),
+            switchingCost: z.enum(SWITCHING_COSTS as [string, ...string[]]),
+            objection: z.string(),
         })
     ),
 });
@@ -63,6 +79,7 @@ const castSchema = z.object({
 const briefSchema = z.object({
     brief: z.string(),
     openingPost: z.string(),
+    situation: z.string(),
     evidenceIds: z.array(z.string()),
 });
 
@@ -85,7 +102,8 @@ const reportSchema = z.object({
 
 const answerSchema = z.object({ answer: z.string() });
 
-const SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown>> = {
+/** The zod mirror of each engine reply shape; a field missing here is stripped from every reply. */
+export const SCENARIO_SCHEMAS: Record<ModelRequest["purpose"], z.ZodType<unknown>> = {
     decide: decisionSchema,
     cast: castSchema,
     brief: briefSchema,
@@ -104,7 +122,7 @@ export function createLlmSimulationModel(): SimulationModel {
             const messages = [new SystemMessage(request.system), new HumanMessage(request.prompt)];
             const { result, usage } = await invokeStructuredWithUsage(
                 resolved,
-                SCHEMAS[request.purpose],
+                SCENARIO_SCHEMAS[request.purpose],
                 messages,
                 { name: `scenario_${request.purpose}` }
             );

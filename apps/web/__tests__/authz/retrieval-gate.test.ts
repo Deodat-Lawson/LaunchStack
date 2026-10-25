@@ -17,7 +17,7 @@ import { makeWorkspaceContext } from "../helpers/workspace-context";
 
 // Runs the work as-is: which workspace's models it gets is not this test's concern.
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+    withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));
 
 jest.mock("~/lib/require-workspace-context", () => {

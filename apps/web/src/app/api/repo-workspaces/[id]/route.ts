@@ -14,25 +14,28 @@ import {
     handleApiError,
 } from "~/lib/api-utils";
 import { removeWorkspaceDiskState } from "~/server/services/repo-workspace";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = translatorFor(localeOfRequest(request), "agents.server.repoExplainer");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("connectors.manage")) {
-            return createForbiddenError("Only management roles can disconnect repositories");
+            return createForbiddenError(t("managersOnlyDisconnect"));
         }
 
         const { id } = await params;
         const companyId = BigInt(ctx.data.companyId);
         const deleted = await deleteRepoWorkspace(id, companyId);
-        if (!deleted) return createNotFoundError("Repository workspace");
+        if (!deleted) return createNotFoundError(t("workspaceNotFound"));
 
         await removeWorkspaceDiskState({ id: deleted.id, companyId: deleted.companyId });
         return createSuccessResponse({ disconnected: true });
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

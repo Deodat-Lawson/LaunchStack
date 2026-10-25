@@ -8,6 +8,7 @@ import React, {
     useState,
     useSyncExternalStore,
 } from "react";
+import { useTranslations } from "next-intl";
 import {
     ChevronLeft,
     ChevronRight,
@@ -49,7 +50,7 @@ import { CommentsPanel } from "./CommentsPanel";
 import { EditorProvider, useCommittedDoc, useEditor } from "./EditorContext";
 import { ExportDialog, ImportDialog } from "./ExportDialog";
 import { FindBar } from "./FindBar";
-import { HistoryPanel } from "./HistoryPanel";
+import { HistoryPanel, SEED_SNAPSHOT_LABEL } from "./HistoryPanel";
 import { Inspector } from "./Inspector";
 import { OutlinePanel } from "./OutlinePanel";
 import { StaleBanner } from "./PresenceLayer";
@@ -121,6 +122,8 @@ export interface MindmapEditorProps {
 type LeftTab = "shapes" | "outline" | "comments" | "history";
 
 export function MindmapEditor(props: MindmapEditorProps) {
+    const t = useTranslations("mindmap");
+    const tc = useTranslations("common");
     // One store per mounted document. `useState` with an initialiser rather
     // than `useMemo`, because a store is state, not a derived value.
     const [store] = useState(() => {
@@ -218,7 +221,8 @@ export function MindmapEditor(props: MindmapEditorProps) {
     useEffect(() => {
         if (!props.needsInitialSave || seeded.current) return;
         seeded.current = true;
-        void autosave.saveNow({ snapshot: true, label: "Created from template" });
+        // Stored in English and shown in the reader's language (HistoryPanel).
+        void autosave.saveNow({ snapshot: true, label: SEED_SNAPSHOT_LABEL });
     }, [autosave, props.needsInitialSave]);
 
     // Leaving is a save first: the preview the workspace returns to reads the
@@ -311,8 +315,8 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const onAskAboutNode = props.onAskAboutNode;
     const canvasTarget = useContextTarget({
         kind: "mindmap-canvas",
-        label: "Canvas actions",
-        items: () => buildCanvasMenuItems(store, { onAskAboutNode }),
+        label: t("contextMenu.label"),
+        items: () => buildCanvasMenuItems(store, t, { onAskAboutNode }),
     });
 
     const canvasCallbacks = useMemo(
@@ -330,27 +334,34 @@ export function MindmapEditor(props: MindmapEditorProps) {
                 if (label !== "Move" && label !== "Resize") return;
                 const paused = pauseAutoArrangeAfterManualMove(store);
                 if (!paused) return;
-                toast("Auto-arrange paused", {
-                    description: "You placed something by hand, so the map stays as you left it.",
-                    action: { label: "Resume", onClick: () => setAutoLayout(store, paused) },
+                toast(t("editor.autoArrangePaused"), {
+                    description: t("editor.autoArrangePausedBody"),
+                    action: {
+                        label: tc("actions.resume"),
+                        onClick: () => setAutoLayout(store, paused),
+                    },
                 });
             },
         }),
-        [store]
+        [store, t, tc]
     );
 
     const commands = useMemo(
         () =>
-            buildCommands(store, {
-                onSave: () => void autosave.saveNow({ snapshot: true }),
-                onExport: () => setExportOpen(true),
-                onImport: () => setImportOpen(true),
-                onPublish: () => setPublishOpen(true),
-                onPresent: togglePresent,
-                onShortcuts: () => setShortcutsOpen(true),
-                onFit: () => frame(stageSize),
-            }),
-        [autosave, frame, stageSize, store, togglePresent]
+            buildCommands(
+                store,
+                {
+                    onSave: () => void autosave.saveNow({ snapshot: true }),
+                    onExport: () => setExportOpen(true),
+                    onImport: () => setImportOpen(true),
+                    onPublish: () => setPublishOpen(true),
+                    onPresent: togglePresent,
+                    onShortcuts: () => setShortcutsOpen(true),
+                    onFit: () => frame(stageSize),
+                },
+                t
+            ),
+        [autosave, frame, stageSize, store, togglePresent, t]
     );
 
     /** Screen point → world, for drops. Falls back to the viewport centre. */
@@ -370,7 +381,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
         [getSvgElement, stageSize, store]
     );
 
-    useClipboardPaste(store, () => worldPointAt(), isActive);
+    useClipboardPaste(store, () => worldPointAt(), isActive, t);
 
     /**
      * Drops land at the pointer: a shape dragged from the palette, image files
@@ -398,12 +409,12 @@ export function MindmapEditor(props: MindmapEditorProps) {
             }
 
             const images = files.filter(isImageFile);
-            if (images.length > 0) void insertImages(store, images, world);
+            if (images.length > 0) void insertImages(store, images, world, t);
 
             const document = files.find(f => f.name.endsWith(".json"));
-            if (document) void importDocumentFile(store, document);
+            if (document) void importDocumentFile(store, document, t);
         },
-        [store, worldPointAt]
+        [store, worldPointAt, t]
     );
 
     return (
@@ -438,12 +449,13 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                 const url = `${window.location.origin}/employer/documents?source=m${props.mindmapId}&present=1`;
                                 void navigator.clipboard.writeText(url).then(
                                     () =>
-                                        toast("Presentation link copied", {
-                                            description:
-                                                "Opens the map straight into Present for anyone in the workspace.",
+                                        toast(t("editor.presentLinkCopied"), {
+                                            description: t("editor.presentLinkBody"),
                                         }),
                                     () =>
-                                        toast.error("Couldn't copy the link", { description: url })
+                                        toast.error(t("editor.copyLinkFailed"), {
+                                            description: url,
+                                        })
                                 );
                             }}
                             onToggleLeft={() => setLeftOpen(v => !v)}
@@ -488,25 +500,25 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                                     active={leftTab === "shapes"}
                                                     onClick={() => setLeftTab("shapes")}
                                                     icon={<Shapes className="size-3.5" />}
-                                                    label="Shapes"
+                                                    label={t("editor.tabs.shapes")}
                                                 />
                                                 <PanelTab
                                                     active={leftTab === "outline"}
                                                     onClick={() => setLeftTab("outline")}
                                                     icon={<Layers className="size-3.5" />}
-                                                    label="Outline"
+                                                    label={t("editor.tabs.outline")}
                                                 />
                                                 <PanelTab
                                                     active={leftTab === "comments"}
                                                     onClick={() => setLeftTab("comments")}
                                                     icon={<MessageSquare className="size-3.5" />}
-                                                    label="Comments"
+                                                    label={t("editor.tabs.comments")}
                                                 />
                                                 <PanelTab
                                                     active={leftTab === "history"}
                                                     onClick={() => setLeftTab("history")}
                                                     icon={<HistoryIcon className="size-3.5" />}
-                                                    label="History"
+                                                    label={t("editor.tabs.history")}
                                                 />
                                             </nav>
                                             <div className="min-h-0 flex-1">
@@ -667,6 +679,7 @@ function PresentationControls({
     onExit: () => void;
     onStep: (delta: number) => void;
 }) {
+    const t = useTranslations("mindmap.editor");
     const doc = useCommittedDoc();
     const pages = doc.pages;
     const index = pages.findIndex(p => p.id === doc.activePageId);
@@ -677,7 +690,7 @@ function PresentationControls({
                 type="button"
                 onClick={() => onStep(-1)}
                 disabled={index <= 0}
-                aria-label="Previous page"
+                aria-label={t("previousPage")}
                 className="text-ink-2 hover:bg-panel-2 flex size-7 items-center justify-center rounded-full disabled:opacity-35"
             >
                 <ChevronLeft className="size-4" />
@@ -689,7 +702,7 @@ function PresentationControls({
                 type="button"
                 onClick={() => onStep(1)}
                 disabled={index >= pages.length - 1}
-                aria-label="Next page"
+                aria-label={t("nextPage")}
                 className="text-ink-2 hover:bg-panel-2 flex size-7 items-center justify-center rounded-full disabled:opacity-35"
             >
                 <ChevronRight className="size-4" />
@@ -701,7 +714,7 @@ function PresentationControls({
                 className="text-ink-2 hover:bg-panel-2 flex items-center gap-1.5 rounded-full px-2 py-1 text-[12px]"
             >
                 <X className="size-3.5" />
-                Exit · Esc
+                {t("exitPresent")}
             </button>
         </div>
     );

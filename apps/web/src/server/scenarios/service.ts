@@ -13,7 +13,7 @@
  */
 import { randomInt } from "node:crypto";
 
-import { and, asc, count, eq, isNotNull } from "drizzle-orm";
+import { and, count, desc, eq, isNotNull, not } from "drizzle-orm";
 
 import {
     buildTrackRecord,
@@ -38,6 +38,7 @@ import {
     requestCancel,
     updateRunMeta,
 } from "@launchstack/pipelines/scenarios/db";
+import { isCounted } from "@launchstack/pipelines/company-metadata";
 import { partnerRelationships } from "@launchstack/pipelines/schema";
 import {
     buildAnalystRequest,
@@ -48,9 +49,13 @@ import {
     MAX_AGENTS,
     MAX_ROUNDS,
 } from "@launchstack/simulation";
-import { document } from "@launchstack/store/schema";
+import { document, documentVersions } from "@launchstack/store/schema";
 import { llmChatTokens } from "@launchstack/store/credits";
 
+import { copy, type Copy, type CopyValues, type MessageKey } from "~/i18n/copy";
+import type { Locale } from "~/i18n/locales";
+import type { Messages } from "~/i18n/messages";
+import { englishCopy } from "~/i18n/translate";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { debitTokens, getBalance } from "~/lib/credits";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
@@ -62,6 +67,7 @@ import {
     type PostTestResult,
     type ScenarioDetail,
     type ScenarioEstimate,
+    type ScenarioFileStatus,
     type ScenarioInjection,
     type ScenarioInterview,
     type ScenarioSourceOptions,
@@ -69,38 +75,65 @@ import {
     type TrackRecord,
 } from "~/lib/scenarios/types";
 import { db } from "~/server/db";
-import { brandComments, companyMetadata } from "~/server/db/schema";
+import { brandComments, companyMetadata, companyProfileSources } from "~/server/db/schema";
 import { isMeteringEnforced } from "~/server/deployment";
 import { workspaceLooks } from "~/server/profile/store";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { originalMediaDocument } from "~/server/workspace-sources";
 
 import { brandIdentity, visibleDocumentIds } from "./evidence";
 import { listLinkedPostTests } from "./track-record";
 import { dispatchRun, readScenariosExecutor, resumeIfStalled } from "./executor";
-import { LEFT_WORKSPACE, recordSummary, toDetail, toPostTest, toSummary } from "./views";
+import { leftWorkspaceName, recordSummary, toDetail, toPostTest, toSummary } from "./views";
 
+/**
+ * An expected failure with its status and machine `code`. The sentence is a
+ * `Copy` where a screen shows it: `message` is its English, and the route
+ * words it in the reader's language (`handleScenarioError`).
+ */
 export class ScenarioError extends Error {
+    readonly copy: Copy | null;
+
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number,
         readonly code: string,
         readonly extra: Record<string, unknown> = {}
     ) {
-        super(message);
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "ScenarioError";
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
-const notFound = () => new ScenarioError("Scenario not found", 404, "not_found");
-const notCreator = () =>
-    new ScenarioError("Only the person who started this run can do that.", 403, "forbidden");
+type ErrorName = keyof Messages["scenarios"]["server"]["errors"];
+
+/** One of `scenarios.server.errors`, as a Copy. */
+export const scenarioErrorCopy = (name: ErrorName, values?: CopyValues): Copy =>
+    copy(`scenarios.server.errors.${name}` as MessageKey, values);
+
+const fail = (
+    name: ErrorName,
+    status: number,
+    code: string,
+    values?: CopyValues,
+    extra?: Record<string, unknown>
+) => new ScenarioError(scenarioErrorCopy(name, values), status, code, extra);
+
+const notFound = () => fail("notFound", 404, "not_found");
+const notCreator = () => fail("notCreator", 403, "forbidden");
 
 type Ctx = Pick<WorkspaceContext, "authUserId" | "companyId" | "can" | "documentScope">;
 
-async function namesFor(companyId: bigint, ids: Iterable<string>): Promise<Map<string, string>> {
+async function namesFor(
+    companyId: bigint,
+    ids: Iterable<string>,
+    locale: Locale = "en"
+): Promise<Map<string, string>> {
     const looks = await workspaceLooks(companyId, ids);
     const out = new Map<string, string>();
-    for (const [id, look] of looks) out.set(id, look.member ? look.displayName : LEFT_WORKSPACE);
+    for (const [id, look] of looks)
+        out.set(id, look.member ? look.displayName : leftWorkspaceName(locale));
     return out;
 }
 
@@ -120,11 +153,7 @@ async function ownRun(ctx: Ctx, id: number): Promise<ScenarioRunRecord> {
 
 function requireRead(ctx: Ctx): void {
     if (!ctx.can("documents.read")) {
-        throw new ScenarioError(
-            "Your role can't run scenarios in this workspace.",
-            403,
-            "forbidden"
-        );
+        throw fail("roleCantRun", 403, "forbidden");
     }
 }
 
@@ -133,6 +162,15 @@ function requireRead(ctx: Ctx): void {
 function clampInt(value: unknown, min: number, max: number, fallback: number): number {
     const n = typeof value === "number" && Number.isFinite(value) ? Math.round(value) : fallback;
     return Math.max(min, Math.min(max, n));
+}
+
+/** A situation's first line, cut at a word: a plan pasted in still gets a readable title. */
+export function titleFromSubject(subject: string): string {
+    const line = subject.split(/\n/, 1)[0]!.trim();
+    if (line.length <= 120) return line;
+    const cut = line.slice(0, 119);
+    const space = cut.lastIndexOf(" ");
+    return `${(space > 60 ? cut.slice(0, space) : cut).replace(/[\s,;:.–—-]+$/, "")}…`;
 }
 
 export function creditsForEstimate(
@@ -177,12 +215,9 @@ async function requireCredits(ctx: Ctx, credits: number): Promise<void> {
     if (!isMeteringEnforced()) return;
     const balance = await getBalance(ctx.companyId);
     if (balance < credits) {
-        throw new ScenarioError(
-            "Not enough credits to start this run.",
-            402,
-            "insufficient_credits",
-            { required: credits }
-        );
+        throw fail("notEnoughCredits", 402, "insufficient_credits", undefined, {
+            required: credits,
+        });
     }
 }
 
@@ -207,32 +242,21 @@ function cleanSources(raw: Partial<ScenarioSourcesInput> | undefined): ScenarioS
 
 export async function createScenario(
     ctx: Ctx,
-    input: Partial<CreateScenarioInput>
+    input: Partial<CreateScenarioInput>,
+    locale: Locale = "en"
 ): Promise<ScenarioSummary> {
     requireRead(ctx);
     const subject = typeof input.subject === "string" ? input.subject.trim() : "";
-    if (!subject) throw new ScenarioError("Describe the situation to simulate.", 400, "invalid");
+    if (!subject) throw fail("describeSituation", 400, "invalid");
     if (subject.length > SCENARIO_LIMITS.subjectMax) {
-        throw new ScenarioError(
-            `Keep the situation under ${SCENARIO_LIMITS.subjectMax} characters.`,
-            400,
-            "invalid"
-        );
+        throw fail("situationTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.subjectMax) });
     }
     const sources = cleanSources(input.sources);
     if (sources.documentIds.length > SCENARIO_LIMITS.documentsMax) {
-        throw new ScenarioError(
-            `Pick at most ${SCENARIO_LIMITS.documentsMax} files.`,
-            400,
-            "invalid"
-        );
+        throw fail("tooManyFiles", 400, "invalid", { max: String(SCENARIO_LIMITS.documentsMax) });
     }
     if (sources.notes.length > SCENARIO_LIMITS.notesMax) {
-        throw new ScenarioError(
-            `Keep pasted material under ${SCENARIO_LIMITS.notesMax} characters.`,
-            400,
-            "invalid"
-        );
+        throw fail("notesTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.notesMax) });
     }
     // Files the creator can't open are dropped here and again when evidence is gathered.
     const visible = await visibleDocumentIds(
@@ -259,7 +283,7 @@ export async function createScenario(
     await requireCredits(ctx, credits);
 
     const titleRaw = typeof input.title === "string" ? input.title.trim() : "";
-    const title = (titleRaw || subject).slice(0, 120);
+    const title = titleRaw ? titleRaw.slice(0, 120) : titleFromSubject(subject);
     const run = await createScenarioRun({
         companyId: ctx.companyId,
         createdByUserId: ctx.authUserId,
@@ -278,12 +302,16 @@ export async function createScenario(
         },
     });
     await dispatchRun(run);
-    return recordSummary(run, ctx.authUserId, await namesFor(ctx.companyId, [run.createdByUserId]));
+    return recordSummary(
+        run,
+        ctx.authUserId,
+        await namesFor(ctx.companyId, [run.createdByUserId], locale)
+    );
 }
 
 // ─── Read ────────────────────────────────────────────────────────────────────
 
-export async function listScenarios(ctx: Ctx): Promise<ScenarioSummary[]> {
+export async function listScenarios(ctx: Ctx, locale: Locale = "en"): Promise<ScenarioSummary[]> {
     const rows = await listVisibleRuns({
         companyId: ctx.companyId,
         viewerUserId: ctx.authUserId,
@@ -291,19 +319,70 @@ export async function listScenarios(ctx: Ctx): Promise<ScenarioSummary[]> {
     });
     const names = await namesFor(
         ctx.companyId,
-        rows.map(r => r.createdByUserId)
+        rows.map(r => r.createdByUserId),
+        locale
     );
     return rows.map(r => toSummary(r, ctx.authUserId, names));
+}
+
+/**
+ * Readiness follows the current version, as the Sources rail's does: a
+ * missing or queued current version must not inherit an older success.
+ */
+function fileStatus(row: {
+    currentVersionId: bigint | null;
+    ocrProcessed: boolean | null;
+    ocrMetadata: unknown;
+    versionProcessed: boolean | null;
+    versionMetadata: unknown;
+}): ScenarioFileStatus {
+    const versioned = row.currentVersionId !== null;
+    const processed = versioned ? row.versionProcessed : row.ocrProcessed;
+    if (processed === true) return "ready";
+    const metadata = versioned ? row.versionMetadata : row.ocrMetadata;
+    const failed =
+        typeof metadata === "object" &&
+        metadata !== null &&
+        (metadata as { error?: unknown }).error === "processing_failed";
+    return failed ? "failed" : "processing";
 }
 
 export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOptions> {
     const scope = await ctx.documentScope();
     const [docs, [prospects], [comments], [profile]] = await Promise.all([
         db
-            .select({ id: document.id, title: document.title, folder: document.category })
+            .select({
+                id: document.id,
+                title: document.title,
+                folder: document.category,
+                mimeType: document.mimeType,
+                createdAt: document.createdAt,
+                currentVersionId: document.currentVersionId,
+                ocrProcessed: document.ocrProcessed,
+                ocrMetadata: document.ocrMetadata,
+                versionProcessed: documentVersions.ocrProcessed,
+                versionMetadata: documentVersions.ocrMetadata,
+                role: companyProfileSources.role,
+                override: companyProfileSources.override,
+            })
             .from(document)
-            .where(scopedDocumentWhere(ctx.companyId, scope))
-            .orderBy(asc(document.title))
+            .leftJoin(
+                documentVersions,
+                and(
+                    eq(documentVersions.id, document.currentVersionId),
+                    eq(documentVersions.documentId, document.id)
+                )
+            )
+            .leftJoin(
+                companyProfileSources,
+                and(
+                    eq(companyProfileSources.companyId, document.companyId),
+                    eq(companyProfileSources.documentId, document.id)
+                )
+            )
+            // A recording gives a run nothing; its transcript is the file to pick.
+            .where(and(scopedDocumentWhere(ctx.companyId, scope), not(originalMediaDocument())))
+            .orderBy(desc(document.createdAt), desc(document.id))
             .limit(500),
         db
             .select({ n: count() })
@@ -324,10 +403,19 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
             ),
     ]);
     return {
-        documents: docs.map(d => ({ id: Number(d.id), title: d.title, folder: d.folder || null })),
+        documents: docs.map(d => ({
+            id: Number(d.id),
+            title: d.title,
+            folder: d.folder || null,
+            mimeType: d.mimeType,
+            addedAt: d.createdAt.toISOString(),
+            status: fileStatus(d),
+            aboutCompany: isCounted(d),
+        })),
         prospects: prospects?.n ?? 0,
         brandComments: comments?.n ?? 0,
         companyProfile: (profile?.n ?? 0) > 0,
+        canUpload: ctx.can("documents.upload"),
     };
 }
 
@@ -345,7 +433,11 @@ function toInjection(row: {
     };
 }
 
-export async function getScenarioDetail(ctx: Ctx, id: number): Promise<ScenarioDetail> {
+export async function getScenarioDetail(
+    ctx: Ctx,
+    id: number,
+    locale: Locale = "en"
+): Promise<ScenarioDetail> {
     const run = await readableRun(ctx, id);
     resumeIfStalled(run);
     const isCreator = run.createdByUserId === ctx.authUserId;
@@ -355,13 +447,14 @@ export async function getScenarioDetail(ctx: Ctx, id: number): Promise<ScenarioD
         : await visibleDocumentIds(ctx.companyId, await ctx.documentScope(), cited);
     const [injections, names] = await Promise.all([
         listInjections(run.id),
-        namesFor(ctx.companyId, [run.createdByUserId]),
+        namesFor(ctx.companyId, [run.createdByUserId], locale),
     ]);
     return toDetail(run, {
         viewerUserId: ctx.authUserId,
         names,
         visibleDocIds,
         injections: injections.map(toInjection),
+        locale,
     });
 }
 
@@ -370,16 +463,20 @@ export async function getScenarioDetail(ctx: Ctx, id: number): Promise<ScenarioD
 export async function updateScenario(
     ctx: Ctx,
     id: number,
-    patch: { title?: unknown; shared?: unknown }
+    patch: { title?: unknown; shared?: unknown },
+    locale: Locale = "en"
 ): Promise<ScenarioSummary> {
     await ownRun(ctx, id);
     const title = typeof patch.title === "string" ? patch.title.trim().slice(0, 120) : undefined;
-    if (title !== undefined && !title)
-        throw new ScenarioError("A title can't be empty.", 400, "invalid");
+    if (title !== undefined && !title) throw fail("titleEmpty", 400, "invalid");
     const shared = typeof patch.shared === "boolean" ? patch.shared : undefined;
     await updateRunMeta(ctx.companyId, id, { title, shared }, new Date());
     const run = (await getCompanyRun(ctx.companyId, id))!;
-    return recordSummary(run, ctx.authUserId, await namesFor(ctx.companyId, [run.createdByUserId]));
+    return recordSummary(
+        run,
+        ctx.authUserId,
+        await namesFor(ctx.companyId, [run.createdByUserId], locale)
+    );
 }
 
 export async function deleteScenario(ctx: Ctx, id: number): Promise<void> {
@@ -387,7 +484,11 @@ export async function deleteScenario(ctx: Ctx, id: number): Promise<void> {
     await deleteRun(ctx.companyId, id);
 }
 
-export async function cancelScenario(ctx: Ctx, id: number): Promise<ScenarioSummary> {
+export async function cancelScenario(
+    ctx: Ctx,
+    id: number,
+    locale: Locale = "en"
+): Promise<ScenarioSummary> {
     const run = await ownRun(ctx, id);
     if (run.status === "queued" || run.status === "running") {
         const now = new Date();
@@ -402,7 +503,7 @@ export async function cancelScenario(ctx: Ctx, id: number): Promise<ScenarioSumm
     return recordSummary(
         fresh,
         ctx.authUserId,
-        await namesFor(ctx.companyId, [fresh.createdByUserId])
+        await namesFor(ctx.companyId, [fresh.createdByUserId], locale)
     );
 }
 
@@ -413,27 +514,15 @@ export async function addScenarioEvent(
 ): Promise<ScenarioInjection> {
     const run = await ownRun(ctx, id);
     if (run.status !== "running" && run.status !== "queued") {
-        throw new ScenarioError(
-            "Events can only be added while the run is going.",
-            409,
-            "not_running"
-        );
+        throw fail("eventsClosed", 409, "not_running");
     }
     if (run.step >= 2 + run.roundCount || run.eventsClosedAt) {
-        throw new ScenarioError(
-            "The last round has finished; this event would never appear.",
-            409,
-            "not_running"
-        );
+        throw fail("lastRoundFinished", 409, "not_running");
     }
     const text = typeof textRaw === "string" ? textRaw.trim() : "";
-    if (!text) throw new ScenarioError("Describe the event.", 400, "invalid");
+    if (!text) throw fail("describeEvent", 400, "invalid");
     if (text.length > SCENARIO_LIMITS.eventMax) {
-        throw new ScenarioError(
-            `Keep events under ${SCENARIO_LIMITS.eventMax} characters.`,
-            400,
-            "invalid"
-        );
+        throw fail("eventTooLong", 400, "invalid", { max: String(SCENARIO_LIMITS.eventMax) });
     }
     // Atomic with the final round closing the window: accepted means applied.
     const row = await addInjectionIfOpen({
@@ -443,11 +532,7 @@ export async function addScenarioEvent(
         text,
     });
     if (!row) {
-        throw new ScenarioError(
-            "The last round has started; this event would never appear.",
-            409,
-            "not_running"
-        );
+        throw fail("lastRoundStarted", 409, "not_running");
     }
     return toInjection(row);
 }
@@ -485,23 +570,17 @@ export async function askScenario(
     const run = await readableRun(ctx, id);
     const world = run.world;
     if (!world || world.round < 1) {
-        throw new ScenarioError(
-            "Interviews open once the first round has finished.",
-            409,
-            "not_ready"
-        );
+        throw fail("interviewsNotOpen", 409, "not_ready");
     }
     const agentId = typeof agentIdRaw === "string" ? agentIdRaw : "";
     if (agentId !== "analyst" && !findAgent(world, agentId))
-        throw new ScenarioError("No such person in this run.", 400, "invalid");
+        throw fail("noSuchPerson", 400, "invalid");
     const question = typeof questionRaw === "string" ? questionRaw.trim() : "";
-    if (!question) throw new ScenarioError("Ask a question.", 400, "invalid");
+    if (!question) throw fail("askQuestion", 400, "invalid");
     if (question.length > SCENARIO_LIMITS.questionMax) {
-        throw new ScenarioError(
-            `Keep questions under ${SCENARIO_LIMITS.questionMax} characters.`,
-            400,
-            "invalid"
-        );
+        throw fail("questionTooLong", 400, "invalid", {
+            max: String(SCENARIO_LIMITS.questionMax),
+        });
     }
     const history = (await listInterviews(id, ctx.authUserId))
         .filter(r => r.agentId === agentId)
@@ -512,7 +591,7 @@ export async function askScenario(
             ? buildAnalystRequest(world, run.report?.summary ?? "", question, history)
             : buildInterviewRequest(world, agentId, question, history);
     await requireCredits(ctx, 4_000);
-    const reply = await withWorkspaceChatModels(ctx.companyId, () =>
+    const reply = await withWorkspaceChatModels(ctx.companyId, "scenarios", () =>
         createLlmSimulationModel().complete(request)
     );
     const credits = llmChatTokens(reply.usage?.inputTokens ?? 0, reply.usage?.outputTokens ?? 0);
@@ -526,7 +605,7 @@ export async function askScenario(
         });
     }
     const answer = cleanAnswer(reply.text);
-    if (!answer) throw new ScenarioError("No answer came back; try again.", 502, "empty_answer");
+    if (!answer) throw fail("noAnswer", 502, "empty_answer");
     const row = await addInterview({
         companyId: ctx.companyId,
         runId: id,
@@ -552,15 +631,15 @@ const NETWORKS = new Set([
 
 export async function createPostTest(
     ctx: Ctx,
-    input: Partial<CreatePostTestInput>
+    input: Partial<CreatePostTestInput>,
+    locale: Locale = "en"
 ): Promise<PostTestResult> {
     if (!ctx.can("social.publish")) {
-        throw new ScenarioError("Your role can read Brand but not test posts.", 403, "forbidden");
+        throw fail("roleCantTestPosts", 403, "forbidden");
     }
     const text = typeof input.text === "string" ? input.text.trim() : "";
-    if (!text) throw new ScenarioError("Write the post first.", 400, "invalid");
-    if (text.length > 3000)
-        throw new ScenarioError("Posts over 3,000 characters can't be tested.", 400, "invalid");
+    if (!text) throw fail("writePostFirst", 400, "invalid");
+    if (text.length > 3000) throw fail("postTooLong", 400, "invalid");
     const networks = (Array.isArray(input.networks) ? input.networks : [])
         .filter((n): n is string => typeof n === "string")
         .map(n => n.toLowerCase())
@@ -597,14 +676,18 @@ export async function createPostTest(
         draftHash: hashDraft(text),
     });
     await dispatchRun(run);
-    return toPostTest(run);
+    return toPostTest(run, locale);
 }
 
-export async function getPostTest(ctx: Ctx, id: number): Promise<PostTestResult> {
+export async function getPostTest(
+    ctx: Ctx,
+    id: number,
+    locale: Locale = "en"
+): Promise<PostTestResult> {
     const run = await readableRun(ctx, id);
     if (run.kind !== "post_test") throw notFound();
     resumeIfStalled(run);
-    return toPostTest(run);
+    return toPostTest(run, locale);
 }
 
 export async function brandTrackRecord(ctx: Ctx): Promise<TrackRecord> {

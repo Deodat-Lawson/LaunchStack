@@ -163,6 +163,17 @@ describe("createAgentKnowledgeSink — first sync", () => {
         expect(uploaded.filename).toBe("claude-code-global-agents-code-reviewer.md");
     });
 
+    it("stamps the workspace on the uploaded file, so members can open it", async () => {
+        // An unstamped file_uploads row is denied to every session by
+        // /api/files/[id]; only the OCR worker's signed token could read it.
+        const sink = await createAgentKnowledgeSink(context);
+        await sink.store(knowledgeItem());
+
+        expect(mockUploadFile).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: "user_abc", companyId: 7n })
+        );
+    });
+
     it("records the content hash so the next sync can detect a change", async () => {
         const sink = await createAgentKnowledgeSink(context);
         await sink.store(knowledgeItem());
@@ -289,6 +300,7 @@ describe("createAgentKnowledgeSink — re-sync", () => {
         );
         expect(result.revised).toBe(true);
         expect(result.versionId).toBe(22);
+        expect(mockUploadFile).toHaveBeenCalledWith(expect.objectContaining({ companyId: 7n }));
     });
 
     it("reports the last synced hash from the stored document", async () => {

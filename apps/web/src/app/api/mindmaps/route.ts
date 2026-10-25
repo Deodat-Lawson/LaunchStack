@@ -9,14 +9,16 @@
 
 import { NextResponse } from "next/server";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
-import { isUnfiledFolder, normalizeFolderPath, validateFolderPath } from "~/lib/folders/path";
+import { isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { CreateMindmapSchema, serverError, validateRequestBody } from "~/lib/validation";
+import { describeFolderPathProblem } from "~/server/folders/words";
 import { describeDraftAccess, draftReader } from "~/server/mindmap/access";
 import { listFolders, listMindmaps, summariseDoc, toDetail } from "~/server/mindmap/repository";
-import { FOLDER_EDIT_DENIED } from "~/server/services/folder-access";
 import { canEditFolderPath } from "~/server/workspace/item-access";
 import { claimFolderPathForDraft } from "~/server/workspace/ownership";
 
@@ -28,6 +30,7 @@ function nonEmpty(value: string | null | undefined): string | undefined {
 }
 
 export async function GET(request: Request) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -61,11 +64,12 @@ export async function GET(request: Request) {
         return NextResponse.json({ mindmaps: items, folders }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] list failed:", error);
-        return serverError("Failed to load mindmaps");
+        return serverError(t("listFailed"));
     }
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -89,10 +93,18 @@ export async function POST(request: Request) {
 
         const folder = normalizeFolderPath(body.folder);
         if (!isUnfiledFolder(folder)) {
-            const invalid = validateFolderPath(folder);
+            const invalid = describeFolderPathProblem(folder, request);
             if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
             if (!(await canEditFolderPath(ctx.data, folder))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    {
+                        error: requestTranslator(
+                            request,
+                            "sources.server.errors"
+                        )("folderEditDenied"),
+                    },
+                    { status: 403 }
+                );
             }
         }
 
@@ -123,11 +135,11 @@ export async function POST(request: Request) {
             return inserted;
         });
 
-        if (!row) return serverError("Failed to create mindmap");
+        if (!row) return serverError(t("createFailed"));
         const [access] = (await describeDraftAccess(ctx.data, [row])).values();
         return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 201 });
     } catch (error) {
         console.error("[mindmaps] create failed:", error);
-        return serverError("Failed to create mindmap");
+        return serverError(t("createFailed"));
     }
 }

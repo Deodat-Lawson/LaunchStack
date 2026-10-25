@@ -1,13 +1,15 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useSetBreadcrumbs } from "../_chrome/BreadcrumbContext";
 import { WorkspaceShell } from "./_workspace/WorkspaceShell";
 
-const DOCUMENTS_CRUMBS = ["Drift", "Documents"];
-
 export default function DocumentsPage() {
-    useSetBreadcrumbs(DOCUMENTS_CRUMBS);
+    const t = useTranslations("workspace.page");
+    // The first crumb is the app's name, which the bar never shows.
+    const crumbs = useMemo(() => ["Drift", t("documentsCrumb")], [t]);
+    useSetBreadcrumbs(crumbs);
     return (
         <Suspense>
             <WorkspaceShell />

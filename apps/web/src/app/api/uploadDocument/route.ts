@@ -10,6 +10,9 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish, wordOr } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/store/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
@@ -21,14 +24,14 @@ import {
     requireWorkspacePermission,
 } from "~/lib/require-workspace-context";
 import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { ARTIFACT_TYPES } from "~/lib/artifact-content";
 import { artifactDocumentMarker } from "~/lib/artifact-document";
 
 const UploadDocumentSchema = z.object({
-    documentUrl: z.string().min(1, "Document URL or path is required"),
-    documentName: z.string().min(1, "Document name is required"),
+    documentUrl: z.string().min(1, V.documentUrlOrPathRequired),
+    documentName: z.string().min(1, V.documentNameRequired),
     category: z.string().optional(),
     preferredProvider: z.string().optional(),
     storageType: z.enum(["s3", "database"]).optional(),
@@ -51,13 +54,15 @@ const UploadDocumentSchema = z.object({
                 .string()
                 .url()
                 .max(2048)
-                .refine(url => /^https?:\/\//i.test(url), "The link must be an http(s) address")
+                .refine(url => /^https?:\/\//i.test(url), V.linkMustBeHttp)
                 .nullish(),
         })
         .optional(),
 });
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "upload.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         const ctx = await requireWorkspacePermission("documents.upload");
         if (!ctx.success) return ctx.response;
@@ -83,7 +88,10 @@ export async function POST(request: Request) {
             // A restricted folder takes edit access to it, not just the
             // permission to upload somewhere.
             if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "sources.server.errors")("folderEditDenied") },
+                    { status: 403 }
+                );
             }
 
             const uploadResult = await processDocumentUpload({
@@ -119,7 +127,7 @@ export async function POST(request: Request) {
                     success: true,
                     jobId: uploadResult.jobId,
                     eventIds: uploadResult.eventIds,
-                    message: "Document processing started",
+                    message: t("processingStarted"),
                     storageType: uploadResult.storageType,
                     document: uploadResult.document,
                 },
@@ -127,27 +135,36 @@ export async function POST(request: Request) {
             );
         } catch (error) {
             if (error instanceof UploadAuthorizationError) {
-                return NextResponse.json({ error: error.message }, { status: error.status });
+                return NextResponse.json(
+                    { error: wordOr(error.copy, error.message, locale) },
+                    { status: error.status }
+                );
             }
             // A recording that could not be transcribed: say why, in words the
             // uploader can act on, rather than "failed to start processing".
             if (isTranscriptionError(error)) {
                 console.error(`[UploadDocument] Transcription failed: ${error.message}`);
                 return NextResponse.json(
-                    { error: error.userMessage, code: "transcription_failed" },
+                    {
+                        // The provider's English, worded from the catalogue when it is one we know.
+                        error: wordEnglish(
+                            error.userMessage,
+                            "chat.server.voice.transcription",
+                            locale
+                        ),
+                        code: "transcription_failed",
+                    },
                     { status: error.status }
                 );
             }
             console.error("[UploadDocument] Error triggering document processing:", error);
-            return NextResponse.json(
-                { error: "Failed to start document processing" },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: t("startProcessingFailed") }, { status: 500 });
         }
     });
 }
 
 export async function GET(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "upload.server.errors");
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
@@ -156,7 +173,7 @@ export async function GET(request: Request) {
         const jobId = searchParams.get("jobId");
 
         if (!jobId) {
-            return NextResponse.json({ error: "Job ID is required" }, { status: 400 });
+            return NextResponse.json({ error: t("jobIdRequired") }, { status: 400 });
         }
 
         const [job] = await db
@@ -165,7 +182,7 @@ export async function GET(request: Request) {
             .where(and(eq(ocrJobs.id, jobId), eq(ocrJobs.companyId, ctx.data.companyId)));
 
         if (!job) {
-            return NextResponse.json({ error: "Job not found" }, { status: 404 });
+            return NextResponse.json({ error: t("jobNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -182,6 +199,6 @@ export async function GET(request: Request) {
         });
     } catch (error) {
         console.error("Error fetching job status:", error);
-        return NextResponse.json({ error: "Failed to fetch job status" }, { status: 500 });
+        return NextResponse.json({ error: t("jobStatusFailed") }, { status: 500 });
     }
 }

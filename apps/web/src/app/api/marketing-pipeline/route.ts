@@ -5,6 +5,8 @@ import {
 import type { PipelineSSEEvent } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { fail, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -24,19 +26,23 @@ class ClientDisconnectedError extends Error {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "growth.server.marketing");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
             const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
             if (!validation.success) {
-                return fail("Invalid input", 400, { errors: validation.error.flatten() });
+                return fail(translatorFor(locale, "errors.api")("invalidInput"), 400, {
+                    errors: validation.error.flatten(),
+                });
             }
 
             const companyId = Number(ctx.data.companyId);
             if (Number.isNaN(companyId)) {
-                return fail("Invalid company ID", 400);
+                return fail(t("invalidCompanyId"), 400);
             }
 
             const url = new URL(request.url);
@@ -107,16 +113,12 @@ export async function POST(request: Request) {
                             normalizedError.includes("chat model") ||
                             normalizedError.includes("route") ||
                             normalizedError.includes("api_key")
-                                ? " Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid."
+                                ? "runFailedChat"
                                 : normalizedError.includes("company")
-                                  ? " Ensure your user has a valid company profile."
-                                  : "";
+                                  ? "runFailedCompany"
+                                  : "runFailed";
 
-                        send({
-                            type: "error",
-                            success: false,
-                            message: "Failed to run marketing pipeline" + hint,
-                        });
+                        send({ type: "error", success: false, message: t(hint) });
                     } finally {
                         request.signal.removeEventListener("abort", onAbort);
                         if (!closed) {
@@ -146,6 +148,6 @@ export async function POST(request: Request) {
         });
     } catch (error) {
         console.error("[marketing-pipeline] POST error:", error);
-        return fail("Failed to run marketing pipeline", 500);
+        return fail(t("runFailed"), 500);
     }
 }

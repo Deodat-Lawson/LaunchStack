@@ -25,6 +25,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import { slugifyName } from "~/lib/workspace-slug";
+import { copy } from "~/i18n/copy";
 
 import { recordActivity } from "./activity";
 import { badRequest, forbidden, notFound } from "./errors";
@@ -70,7 +71,7 @@ export function canManageGroup(ctx: GroupActor, group: { createdBy: string }): b
 
 function assertCanManage(ctx: GroupActor, group: GroupRow): void {
     if (!canManageGroup(ctx, group)) {
-        throw forbidden("Only the person who created this group, or an admin, can change it.");
+        throw forbidden(copy("team.server.errors.groupCreatorOrAdmin"));
     }
 }
 
@@ -148,7 +149,7 @@ async function loadGroup(companyId: bigint, id: number): Promise<GroupRow> {
         .from(workspaceGroups)
         .where(and(eq(workspaceGroups.companyId, companyId), eq(workspaceGroups.id, id)))
         .limit(1);
-    if (!row) throw notFound("Group not found.");
+    if (!row) throw notFound(copy("team.server.errors.groupNotFound"));
     return row;
 }
 
@@ -161,7 +162,7 @@ async function loadManagedGroup(ctx: WorkspaceContext, id: number): Promise<Grou
 
 async function getGroup(ctx: WorkspaceContext, id: number): Promise<GroupView> {
     const [view] = await toViews(ctx, [await loadGroup(ctx.companyId, id)]);
-    if (!view) throw notFound("Group not found.");
+    if (!view) throw notFound(copy("team.server.errors.groupNotFound"));
     return view;
 }
 
@@ -188,7 +189,7 @@ export async function createGroup(
     ctx: WorkspaceContext,
     input: { name: string; description?: string | null }
 ): Promise<GroupView> {
-    if (!canCreateGroups(ctx)) throw forbidden("Your role can't create groups.");
+    if (!canCreateGroups(ctx)) throw forbidden(copy("team.server.errors.cannotCreateGroups"));
     const slug = await uniqueGroupSlug(ctx.companyId, input.name);
     const id = await db.transaction(async tx => {
         const [row] = await tx
@@ -339,7 +340,9 @@ export async function addGroupMembers(
     const activeIds = new Set(active.map(r => r.userId.toString()));
     const missing = unique.filter(u => !activeIds.has(String(u)));
     if (missing.length > 0) {
-        throw badRequest(`User ${missing[0]} is not an active member of this workspace.`);
+        throw badRequest(
+            copy("team.server.errors.userNotActiveMember", { id: String(missing[0]) })
+        );
     }
 
     const current = await db

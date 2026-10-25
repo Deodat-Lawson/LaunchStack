@@ -24,6 +24,20 @@ export interface LoadedImage {
     height: number;
 }
 
+/**
+ * Why an image could not be brought in. `code` is what the editor shows, in
+ * the reader's language (`mindmap.errors`); `message` stays English for logs.
+ */
+export class ImageReadError extends Error {
+    constructor(
+        readonly code: "unreadable" | "notImage",
+        message: string
+    ) {
+        super(message);
+        this.name = "ImageReadError";
+    }
+}
+
 export function isImageFile(file: File): boolean {
     return file.type.startsWith("image/");
 }
@@ -90,9 +104,10 @@ function readAsDataUrl(file: File): Promise<string> {
             // exists for the other read modes.
             const result = reader.result;
             if (typeof result === "string") resolve(result);
-            else reject(new Error(`Could not read ${file.name}`));
+            else reject(new ImageReadError("unreadable", `Could not read ${file.name}`));
         };
-        reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
+        reader.onerror = () =>
+            reject(new ImageReadError("unreadable", `Could not read ${file.name}`));
         reader.readAsDataURL(file);
     });
 }
@@ -101,7 +116,8 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.onload = () => resolve(image);
-        image.onerror = () => reject(new Error("That file is not a readable image"));
+        image.onerror = () =>
+            reject(new ImageReadError("notImage", "That file is not a readable image"));
         image.src = src;
     });
 }

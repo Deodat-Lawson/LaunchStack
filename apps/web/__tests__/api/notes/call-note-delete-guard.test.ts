@@ -83,12 +83,12 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-function request(method: "DELETE" | "PUT") {
+function request(method: "DELETE" | "PUT", locale = "en") {
     return new Request("http://localhost/api/notes/41", {
         method,
+        headers: { "Content-Type": "application/json", "Accept-Language": locale },
         ...(method === "PUT"
             ? {
-                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ contentMarkdown: "# Updated content" }),
               }
             : {}),
@@ -110,15 +110,27 @@ describe("canonical Call Notes through the generic notes API", () => {
         });
     });
 
-    it.each(["DELETE", "PUT"] as const)(
-        "refuses %s of a Call's canonical note without changing the note or its derived data",
-        async method => {
+    it.each(
+        (["DELETE", "PUT"] as const).flatMap(method =>
+            ["en", "zh-CN"].map(locale => ({ method, locale }))
+        )
+    )(
+        "refuses $method of a Call's canonical note without changing the note or its derived data ($locale)",
+        async ({ method, locale }) => {
             mockCanonicalCallId = "canonical-call";
 
-            const response = await (method === "DELETE" ? DELETE : PUT)(request(method), params);
+            const response = await (method === "DELETE" ? DELETE : PUT)(
+                request(method, locale),
+                params
+            );
 
             expect(response.status).toBe(409);
-            expect(await response.json()).toEqual({ error: "Call Notes are managed from Calls" });
+            expect(await response.json()).toEqual({
+                error:
+                    locale === "zh-CN"
+                        ? "通话笔记请在「通话」中管理"
+                        : "Call Notes are managed from Calls",
+            });
             expect(mockNote).toEqual(initialNote);
             expect(mockHasEmbedding).toBe(true);
             expect(mockHasOutgoingLink).toBe(true);

@@ -24,6 +24,8 @@ import type {
     TodoItem,
 } from "~/app/employer/tools/proposals/api";
 
+import { findingCopy, requirementCopy, reviewSummaryCopy, runCopy, stepCopy } from "./copy";
+
 export function sourceHref(documentId: number | null): string | null {
     return documentId === null ? null : `/employer/documents?source=d${documentId}`;
 }
@@ -113,14 +115,15 @@ export function toApplicationDetail(
         requestSummary: record.extracted?.summary ?? null,
         amountMin: record.extracted?.amountMin ?? null,
         amountMax: record.extracted?.amountMax ?? null,
-        requirements: record.requirements,
+        requirements: record.requirements.map(r => ({ ...r, textCopy: requirementCopy(r) })),
         sectionList: sections.map(toSectionDto),
         review: record.review
             ? {
                   readiness: record.review.readiness,
                   summary: record.review.summary,
-                  findings: record.review.findings,
+                  findings: record.review.findings.map(f => ({ ...f, ...findingCopy(f) })),
                   reviewedAt: record.review.reviewedAt,
+                  summaryCopy: reviewSummaryCopy(record.review.summary),
               }
             : null,
         notes: record.notes,
@@ -149,6 +152,7 @@ export function toLibraryItemDto(
 }
 
 export function toRunDto(record: RunRecord): RunDto {
+    const headline = record.summary?.headline ?? null;
     return {
         id: record.id,
         kind: record.kind,
@@ -161,10 +165,12 @@ export function toRunDto(record: RunRecord): RunDto {
             label: s.label,
             status: s.status,
             detail: s.detail,
+            ...stepCopy(s),
         })),
-        headline: record.summary?.headline ?? null,
+        headline,
         error: record.error,
         credits: record.creditsUsed,
+        ...runCopy({ headline, error: record.error }),
     };
 }
 
@@ -202,6 +208,7 @@ export function buildTodo(input: {
                     ? `Reads your ${input.sources} sources once; every draft starts from it.`
                     : "Add a few sources first — past proposals, reports, your website — then build it.",
             action: { label: "Profile", href: input.href("/profile") },
+            copy: { key: "profile", sources: input.sources },
         });
     }
     for (const app of byDeadline(input.applications.filter(a => OPEN_STATUSES.has(a.status)))) {
@@ -216,6 +223,15 @@ export function buildTodo(input: {
                           : `${app.title} is due in ${app.daysLeft} day${app.daysLeft === 1 ? "" : "s"}`,
                 detail: `${app.readiness}% ready · ${app.sections.written} of ${app.sections.total} sections written${app.blockers ? ` · ${app.blockers} blocker${app.blockers === 1 ? "" : "s"}` : ""}`,
                 action: { label: "Open", href: input.href(`/write/${app.id}`) },
+                copy: {
+                    key: "deadline",
+                    application: app.title,
+                    daysLeft: app.daysLeft,
+                    readiness: app.readiness,
+                    written: app.sections.written,
+                    total: app.sections.total,
+                    blockers: app.blockers,
+                },
             });
         }
     }
@@ -229,6 +245,7 @@ export function buildTodo(input: {
                 .map(f => f.funder)
                 .join(", "),
             action: { label: "Funders", href: input.href("/funders") },
+            copy: { key: "funders", count: strong.length },
         });
     }
     for (const app of input.applications.filter(
@@ -240,6 +257,12 @@ export function buildTodo(input: {
             title: `${app.sections.total - app.sections.written} section${app.sections.total - app.sections.written === 1 ? "" : "s"} to write for ${app.title}`,
             detail: app.funder ?? "Funder not set",
             action: { label: "Draft", href: input.href(`/write/${app.id}`) },
+            copy: {
+                key: "sections",
+                application: app.title,
+                count: app.sections.total - app.sections.written,
+                funder: app.funder,
+            },
         });
     }
     return todo.slice(0, 6);

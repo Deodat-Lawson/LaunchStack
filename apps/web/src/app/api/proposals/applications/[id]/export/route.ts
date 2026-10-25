@@ -14,6 +14,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         const { id } = await params;
         return json({ application: await exportApplication(auth.ctx, id, request.url) });
     } catch (err) {
-        return handleProposalsError("POST export", err);
+        return handleProposalsError("POST export", err, request);
     }
 }

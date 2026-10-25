@@ -3,7 +3,7 @@
 import type { MindmapDetail } from "./api";
 import type { ThemeMode } from "../model/palette";
 import { parseDoc } from "../model/serialize";
-import { buildTemplate, TEMPLATE_BY_ID } from "../model/templates";
+import { buildTemplate, TEMPLATE_BY_ID, type StarterText } from "../model/templates";
 import type { MindmapDoc } from "../model/types";
 
 /**
@@ -14,8 +14,15 @@ import type { MindmapDoc } from "../model/types";
  * open, for the editor and the preview alike. `seeded` tells the editor to
  * persist the result immediately, so closing the tab without touching
  * anything still leaves a real document behind.
+ *
+ * `text` — `useTranslations("mindmap.starter")` — writes a seeded template in
+ * the creator's language; without it the starter text is English. A document
+ * that already has content opens exactly as saved, whatever the language.
  */
-export function openMindmapDocument(mindmap: MindmapDetail): { doc: MindmapDoc; seeded: boolean } {
+export function openMindmapDocument(
+    mindmap: MindmapDetail,
+    text?: StarterText
+): { doc: MindmapDoc; seeded: boolean } {
     const doc = parseDoc(mindmap.doc, mindmap.title);
     const empty = doc.pages.every(page => page.nodes.length === 0);
     const template = mindmap.templateId ? TEMPLATE_BY_ID[mindmap.templateId] : undefined;
@@ -33,7 +40,7 @@ export function openMindmapDocument(mindmap: MindmapDetail): { doc: MindmapDoc; 
             ? "dark"
             : "light";
     return {
-        doc: { ...buildTemplate(template.id, mindmap.title, mode), title: mindmap.title },
+        doc: { ...buildTemplate(template.id, mindmap.title, mode, text), title: mindmap.title },
         seeded: true,
     };
 }

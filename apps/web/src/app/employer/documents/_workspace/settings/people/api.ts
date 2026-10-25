@@ -195,15 +195,28 @@ export interface Principals {
     roles: { slug: string; name: string }[];
 }
 
+/**
+ * Set when the sentence is `request`'s own rather than the server's, so the
+ * screen can say it in the reader's language (`useErrorText` in ./ui).
+ */
+export type ApiErrorGenerated = "signedOut" | "forbidden" | "status";
+
 export class ApiError extends Error {
     readonly status: number;
     readonly body: Record<string, unknown>;
+    readonly generated: ApiErrorGenerated | null;
 
-    constructor(status: number, message: string, body: Record<string, unknown> = {}) {
+    constructor(
+        status: number,
+        message: string,
+        body: Record<string, unknown> = {},
+        generated: ApiErrorGenerated | null = null
+    ) {
         super(message);
         this.name = "ApiError";
         this.status = status;
         this.body = body;
+        this.generated = generated;
     }
 }
 
@@ -235,17 +248,28 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
     }
     if (!res.ok) {
         const record = (body ?? {}) as Record<string, unknown>;
-        const message =
+        const server =
             typeof record.error === "string"
                 ? record.error
                 : typeof record.message === "string"
                   ? record.message
-                  : res.status === 401
-                    ? "You are signed out."
-                    : res.status === 403
-                      ? "You don't have permission to do that."
-                      : `Request failed (${res.status}).`;
-        throw new ApiError(res.status, message, record);
+                  : null;
+        const generated: ApiErrorGenerated | null =
+            server !== null
+                ? null
+                : res.status === 401
+                  ? "signedOut"
+                  : res.status === 403
+                    ? "forbidden"
+                    : "status";
+        const message =
+            server ??
+            (generated === "signedOut"
+                ? "You are signed out."
+                : generated === "forbidden"
+                  ? "You don't have permission to do that."
+                  : `Request failed (${res.status}).`);
+        throw new ApiError(res.status, message, record, generated);
     }
     return body as T;
 }

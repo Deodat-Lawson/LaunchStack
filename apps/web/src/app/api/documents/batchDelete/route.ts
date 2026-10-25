@@ -16,6 +16,9 @@ import { NextResponse } from "next/server";
 import { and, inArray } from "drizzle-orm";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
@@ -30,13 +33,8 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { callNotesCalls } from "@launchstack/pipelines/call-notes";
-import {
-    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
-    callNoteDocumentReference,
-    isCallNoteDocument,
-} from "~/lib/call-note-document";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import { reassembleAfterDelete } from "~/server/company-profile/service";
-import { DOCUMENT_DELETE_DENIED } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
 import {
     accessSubject,
@@ -46,13 +44,11 @@ import {
 } from "~/server/workspace/item-access";
 
 const BatchDeleteSchema = z.object({
-    docIds: z
-        .array(z.number().int().positive())
-        .min(1, "docIds cannot be empty")
-        .max(100, "Cannot delete more than 100 documents at a time"),
+    docIds: z.array(z.number().int().positive()).min(1, V.docIdsEmpty).max(100, V.tooManyToDelete),
 });
 
 export async function DELETE(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "sources.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const validation = await validateRequestBody(request, BatchDeleteSchema);
@@ -86,7 +82,7 @@ export async function DELETE(request: Request) {
 
             if (rows.length !== uniqueIds.length) {
                 return NextResponse.json(
-                    { success: false, error: "One or more documents not found" },
+                    { success: false, error: t("someDocumentsNotFound") },
                     { status: 404 }
                 );
             }
@@ -98,7 +94,7 @@ export async function DELETE(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
+                        error: t("callNoteManaged"),
                         documentIds: managedDocumentIds,
                     },
                     { status: 409 }
@@ -117,7 +113,7 @@ export async function DELETE(request: Request) {
                 );
                 if (!canDeleteAtLevel(item.level, ctx.data.permissions)) {
                     return NextResponse.json(
-                        { success: false, error: DOCUMENT_DELETE_DENIED },
+                        { success: false, error: t("documentDeleteDenied") },
                         { status: 403 }
                     );
                 }
@@ -158,12 +154,12 @@ export async function DELETE(request: Request) {
             return NextResponse.json({
                 success: true,
                 deleted: uniqueIds.length,
-                message: `Deleted ${uniqueIds.length} document${uniqueIds.length === 1 ? "" : "s"}`,
+                message: t("deletedDocuments", { count: uniqueIds.length }),
             });
         } catch (error) {
             console.error("[DELETE /api/documents/batchDelete] error:", error);
             return NextResponse.json(
-                { success: false, error: "Failed to delete documents" },
+                { success: false, error: t("deleteDocumentsFailed") },
                 { status: 500 }
             );
         }

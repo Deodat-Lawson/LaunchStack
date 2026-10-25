@@ -161,8 +161,16 @@ describe("profiles and people", () => {
         const claims = profileClaims(withDossier, evidence);
         expect(claims.evidence.map(e => e.n)).toEqual([1, 2]);
         expect(claims.evidence[0]!.url).toBe("https://example.test/delivery");
-        expect(claims.about[1]).toEqual({ text: "Carries Brand A.", cites: [2] });
-        expect(claims.about[2]).toEqual({ text: "Active in Netherlands.", cites: [1] });
+        expect(claims.about[1]).toEqual({
+            text: "Carries Brand A.",
+            cites: [2],
+            copy: { key: "growth.server.claims.carries", values: { list: "Brand A" } },
+        });
+        expect(claims.about[2]).toEqual({
+            text: "Active in Netherlands.",
+            cites: [1],
+            copy: { key: "growth.server.claims.activeIn", values: { list: "Netherlands" } },
+        });
         expect(claims.openQuestions).toEqual(["Minimum order quantity."]);
 
         const people = contactPeople(

@@ -5,6 +5,8 @@
  */
 import { NextResponse } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
 import { isStatusCarryingError } from "~/server/api/responses";
 
 export function json(data: unknown, status = 200): NextResponse {
@@ -19,12 +21,17 @@ export function error(
     return NextResponse.json({ error: message, ...extra }, { status });
 }
 
-export function handleRouteError(scope: string, err: unknown): NextResponse {
+/**
+ * A thrown error as a response. With the request, a status-carrying error
+ * that carries a `copy` and the generic 500 are in the reader's language.
+ */
+export function handleRouteError(scope: string, err: unknown, request?: Request): NextResponse {
+    const locale = request ? localeOfRequest(request) : "en";
     if (isStatusCarryingError(err)) {
-        return error(err.message, err.status, { code: err.code });
+        return error(wordOr(err.copy, err.message, locale), err.status, { code: err.code });
     }
     console.error(`[distribution] ${scope} error:`, err);
-    return error("Internal server error", 500);
+    return error(translatorFor(locale, "errors.api")("internal"), 500);
 }
 
 /** bigint → string, Date → ISO; everything else passes through. */

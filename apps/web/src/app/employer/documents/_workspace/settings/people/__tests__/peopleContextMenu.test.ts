@@ -1,5 +1,15 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import { buildInvitationMenuItems, buildMemberMenuItems } from "../peopleContextMenu";
 import type { Invitation, Member } from "../api";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "settings.people.menu",
+});
 
 const member: Member = {
     id: 1,
@@ -45,7 +55,8 @@ describe("member menu builder", () => {
                 owner: false,
                 busy: false,
             },
-            h
+            h,
+            t
         );
         expect(items.map(i => i.id)).toEqual([
             "title",
@@ -78,7 +89,12 @@ describe("member menu builder", () => {
             owner: false,
             busy: false,
         };
-        const pending = buildMemberMenuItems({ ...member, status: "pending" }, state, handlers());
+        const pending = buildMemberMenuItems(
+            { ...member, status: "pending" },
+            state,
+            handlers(),
+            t
+        );
         expect(pending.map(i => i.id)).toEqual([
             "title",
             "copy-email",
@@ -90,7 +106,8 @@ describe("member menu builder", () => {
         const suspended = buildMemberMenuItems(
             { ...member, status: "suspended" },
             state,
-            handlers()
+            handlers(),
+            t
         );
         expect(suspended.find(i => i.id === "reinstate")).toBeDefined();
     });
@@ -105,10 +122,10 @@ describe("member menu builder", () => {
             busy: false,
         };
         expect(
-            buildMemberMenuItems({ ...member, isSelf: true }, state, handlers()).map(i => i.id)
+            buildMemberMenuItems({ ...member, isSelf: true }, state, handlers(), t).map(i => i.id)
         ).toEqual(["title", "copy-email"]);
         expect(
-            buildMemberMenuItems(member, { ...state, owner: true }, handlers()).map(i => i.id)
+            buildMemberMenuItems(member, { ...state, owner: true }, handlers(), t).map(i => i.id)
         ).toEqual(["title", "copy-email"]);
     });
 });
@@ -134,7 +151,8 @@ describe("invitation menu builder", () => {
                 onResend: jest.fn(),
                 onCopyEmail: jest.fn(),
                 onRevoke: jest.fn(),
-            }
+            },
+            t
         );
         expect(open.map(i => i.id)).toEqual([
             "title",
@@ -146,7 +164,8 @@ describe("invitation menu builder", () => {
         const closed = buildInvitationMenuItems(
             { ...invitation, status: "accepted" },
             { open: false, busy: false },
-            { onResend: jest.fn(), onCopyEmail: jest.fn(), onRevoke: jest.fn() }
+            { onResend: jest.fn(), onCopyEmail: jest.fn(), onRevoke: jest.fn() },
+            t
         );
         expect(closed.map(i => i.id)).toEqual(["title", "copy-email"]);
     });

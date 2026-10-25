@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Plus, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,25 +26,32 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
-import {
-    PERMISSION_DESCRIPTIONS,
-    ROLE_DESCRIPTIONS,
-    isBuiltinRole,
-    isPermission,
-    roleRank,
-    type Permission,
-} from "~/lib/authz/permissions";
+import { isBuiltinRole, isPermission, roleRank, type Permission } from "~/lib/authz/permissions";
 import { invalidatePermissions } from "~/lib/use-permissions";
 
-import { errorMessage, isApiError, peopleApi, type PermissionInfo, type Role } from "./api";
-import { plural } from "./format";
-import { ConfirmDialog, EmptyState, ErrorNote, LoadingNote, Panel, TabIntro } from "./ui";
+import { isApiError, peopleApi, type PermissionInfo, type Role } from "./api";
+import {
+    ConfirmDialog,
+    EmptyState,
+    ErrorNote,
+    LoadingNote,
+    Panel,
+    TabIntro,
+    useErrorText,
+    usePermissionText,
+    useRoleDescription,
+    useRoleLabel,
+} from "./ui";
 
 interface RolesTabProps {
     can: (permission: Permission | undefined) => boolean;
 }
 
 export function RolesTab({ can }: RolesTabProps) {
+    const t = useTranslations("settings.people.roles");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
+    const roleLabel = useRoleLabel();
     const canManage = can("roles.manage");
 
     const [roles, setRoles] = useState<Role[]>([]);
@@ -67,11 +75,11 @@ export function RolesTab({ can }: RolesTabProps) {
             setRoles(res.roles);
             setPermissions(res.permissions);
         } catch (err) {
-            setError(errorMessage(err, "Could not load roles."));
+            setError(errorText(err, t("loadFailed")));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [errorText, t]);
 
     useEffect(() => {
         void load();
@@ -94,8 +102,8 @@ export function RolesTab({ can }: RolesTabProps) {
             const res = await peopleApi.roles.remove(role.id, reassignTo);
             toast.success(
                 res.reassigned > 0
-                    ? `${role.name} deleted. ${plural(res.reassigned, "member")} moved to another role.`
-                    : `${role.name} deleted.`
+                    ? t("deletedMoved", { name: role.name, count: res.reassigned })
+                    : t("deleted", { name: role.name })
             );
             setDeleting(null);
             setReassign(null);
@@ -107,7 +115,7 @@ export function RolesTab({ can }: RolesTabProps) {
                 setDeleting(null);
                 setReassign({ role, memberCount, to: "" });
             } else {
-                setDeleteError(errorMessage(err, "The role wasn't deleted."));
+                setDeleteError(errorText(err, t("deleteFailed")));
             }
         } finally {
             setDeleteBusy(false);
@@ -122,12 +130,12 @@ export function RolesTab({ can }: RolesTabProps) {
     return (
         <div className="flex flex-col gap-6">
             <TabIntro
-                title="Roles"
-                description="A role is a named set of permissions. The built-in ones cover most workspaces; add a custom role when a job needs a different mix — reviewers who can read and upload but never delete, say."
+                title={t("intro.title")}
+                description={t("intro.description")}
                 actions={
                     canManage ? (
                         <Button size="sm" onClick={() => setEditing("new")}>
-                            <Plus /> New role
+                            <Plus /> {t("newRole")}
                         </Button>
                     ) : undefined
                 }
@@ -137,13 +145,13 @@ export function RolesTab({ can }: RolesTabProps) {
 
             {loading ? (
                 <Panel>
-                    <LoadingNote label="Loading roles…" />
+                    <LoadingNote label={t("loading")} />
                 </Panel>
             ) : (
                 <>
                     <section>
                         <h3 className="text-ink-3 mono m-0 mb-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                            Built-in roles
+                            {t("builtinRoles")}
                         </h3>
                         <div className="grid gap-3 md:grid-cols-2">
                             {builtins.map(role => (
@@ -154,17 +162,13 @@ export function RolesTab({ can }: RolesTabProps) {
 
                     <section>
                         <h3 className="text-ink-3 mono m-0 mb-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                            Custom roles
+                            {t("customRoles")}
                         </h3>
                         {customs.length === 0 ? (
                             <Panel>
                                 <EmptyState
-                                    title="No custom roles"
-                                    body={
-                                        canManage
-                                            ? "Create one when none of the built-in roles fits a job exactly."
-                                            : "An admin can create a role when none of the built-in ones fits."
-                                    }
+                                    title={t("empty.title")}
+                                    body={canManage ? t("empty.bodyManage") : t("empty.bodyView")}
                                     action={
                                         canManage ? (
                                             <Button
@@ -172,7 +176,7 @@ export function RolesTab({ can }: RolesTabProps) {
                                                 variant="outline"
                                                 onClick={() => setEditing("new")}
                                             >
-                                                <Plus /> New role
+                                                <Plus /> {t("newRole")}
                                             </Button>
                                         ) : undefined
                                     }
@@ -193,7 +197,7 @@ export function RolesTab({ can }: RolesTabProps) {
                                                         size="sm"
                                                         onClick={() => setEditing(role)}
                                                     >
-                                                        Edit
+                                                        {tc("actions.edit")}
                                                     </Button>
                                                     <Button
                                                         variant="ghost"
@@ -204,7 +208,7 @@ export function RolesTab({ can }: RolesTabProps) {
                                                             setDeleting(role);
                                                         }}
                                                     >
-                                                        Delete
+                                                        {tc("actions.delete")}
                                                     </Button>
                                                 </>
                                             ) : undefined
@@ -231,13 +235,13 @@ export function RolesTab({ can }: RolesTabProps) {
 
             <ConfirmDialog
                 open={deleting !== null}
-                title={`Delete the ${deleting?.name ?? ""} role?`}
+                title={t("confirmDelete.title", { name: deleting?.name ?? "" })}
                 body={
                     deleting && deleting.memberCount > 0
-                        ? `${plural(deleting.memberCount, "member")} currently ${deleting.memberCount === 1 ? "has" : "have"} this role. You'll be asked which role to move them to.`
-                        : "Nobody has this role right now, so removing it changes no one's access."
+                        ? t("confirmDelete.bodyHas", { count: deleting.memberCount })
+                        : t("confirmDelete.bodyNone")
                 }
-                confirmLabel="Delete role"
+                confirmLabel={t("confirmDelete.confirm")}
                 danger
                 busy={deleteBusy}
                 error={deleteError}
@@ -249,9 +253,9 @@ export function RolesTab({ can }: RolesTabProps) {
 
             <ConfirmDialog
                 open={reassign !== null}
-                title={`Move ${plural(reassign?.memberCount ?? 0, "member")} to another role`}
-                body={`${reassign?.role.name ?? "This role"} is still assigned. Pick the role those people should have once it is gone.`}
-                confirmLabel="Move members and delete"
+                title={t("reassign.title", { count: reassign?.memberCount ?? 0 })}
+                body={t("reassign.body", { name: reassign?.role.name ?? t("reassign.thisRole") })}
+                confirmLabel={t("reassign.confirm")}
                 danger
                 busy={deleteBusy}
                 error={deleteError}
@@ -262,7 +266,7 @@ export function RolesTab({ can }: RolesTabProps) {
                 onClose={() => setReassign(null)}
             >
                 <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="reassign-role">New role</Label>
+                    <Label htmlFor="reassign-role">{t("reassign.newRole")}</Label>
                     <Select
                         value={reassign?.to ?? ""}
                         onValueChange={value =>
@@ -270,12 +274,12 @@ export function RolesTab({ can }: RolesTabProps) {
                         }
                     >
                         <SelectTrigger id="reassign-role">
-                            <SelectValue placeholder="Choose a role" />
+                            <SelectValue placeholder={t("reassign.chooseRole")} />
                         </SelectTrigger>
                         <SelectContent>
                             {reassignTargets.map(r => (
                                 <SelectItem key={r.slug} value={r.slug}>
-                                    {r.name}
+                                    {roleLabel(r.slug, r.name)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -284,11 +288,6 @@ export function RolesTab({ can }: RolesTabProps) {
             </ConfirmDialog>
         </div>
     );
-}
-
-function describe(role: Role): string {
-    if (isBuiltinRole(role.slug)) return ROLE_DESCRIPTIONS[role.slug];
-    return role.description ?? "";
 }
 
 function RoleCard({
@@ -300,14 +299,19 @@ function RoleCard({
     permissions: PermissionInfo[];
     actions?: React.ReactNode;
 }) {
+    const t = useTranslations("settings.people.roles.card");
+    const roleLabel = useRoleLabel();
+    const permissionText = usePermissionText();
+    const roleDescription = useRoleDescription();
     const [showAll, setShowAll] = useState(false);
     const byKey = useMemo(() => new Map(permissions.map(p => [p.key, p])), [permissions]);
     const lines = role.permissions.map(key => ({
         key,
-        text: isPermission(key)
-            ? PERMISSION_DESCRIPTIONS[key]
-            : (byKey.get(key)?.description ?? key),
+        text: isPermission(key) ? permissionText(key) : (byKey.get(key)?.description ?? key),
     }));
+    const description = isBuiltinRole(role.slug)
+        ? roleDescription(role.slug)
+        : (role.description ?? "");
     const visible = showAll ? lines : lines.slice(0, 4);
 
     return (
@@ -318,20 +322,24 @@ function RoleCard({
                 </span>
                 <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-ink text-sm font-semibold">{role.name}</span>
-                        {role.builtin && <Badge variant="outline">Built-in</Badge>}
-                        <Badge variant="secondary">{plural(role.memberCount, "member")}</Badge>
+                        <span className="text-ink text-sm font-semibold">
+                            {roleLabel(role.slug, role.name)}
+                        </span>
+                        {role.builtin && <Badge variant="outline">{t("builtin")}</Badge>}
+                        <Badge variant="secondary">
+                            {t("members", { count: role.memberCount })}
+                        </Badge>
                     </div>
-                    {describe(role) && (
+                    {description && (
                         <p className="text-ink-3 m-0 mt-0.5 text-[12.5px] leading-normal">
-                            {describe(role)}
+                            {description}
                         </p>
                     )}
                 </div>
                 {actions && <div className="flex shrink-0 gap-1">{actions}</div>}
             </div>
             <ul className="text-ink-2 m-0 mt-3 list-none p-0 text-[12.5px] leading-relaxed">
-                {lines.length === 0 && <li className="text-ink-3">No permissions.</li>}
+                {lines.length === 0 && <li className="text-ink-3">{t("noPermissions")}</li>}
                 {visible.map(line => (
                     <li key={line.key} className="flex gap-2">
                         <span className="text-ink-4" aria-hidden>
@@ -348,7 +356,7 @@ function RoleCard({
                     onClick={() => setShowAll(v => !v)}
                     aria-expanded={showAll}
                 >
-                    {showAll ? "Show fewer" : `Show all ${lines.length} permissions`}
+                    {showAll ? t("showFewer") : t("showAll", { count: lines.length })}
                 </button>
             )}
         </Panel>
@@ -368,6 +376,10 @@ function RoleDialog({
     onClose: () => void;
     onSaved: () => void;
 }) {
+    const t = useTranslations("settings.people.roles.dialog");
+    const tc = useTranslations("common");
+    const errorText = useErrorText();
+    const permissionText = usePermissionText();
     const open = role !== null;
     const isNew = role === "new";
     const [name, setName] = useState("");
@@ -388,11 +400,11 @@ function RoleDialog({
         e.preventDefault();
         const trimmed = name.trim();
         if (!trimmed) {
-            setError("Give the role a name people will recognise.");
+            setError(t("nameRequired"));
             return;
         }
         if (selected.size === 0) {
-            setError("Pick at least one permission — a role that allows nothing can't be used.");
+            setError(t("pickPermission"));
             return;
         }
         setBusy(true);
@@ -405,10 +417,12 @@ function RoleDialog({
             };
             if (isNew) await peopleApi.roles.create(body);
             else if (role && role.id !== null) await peopleApi.roles.update(role.id, body);
-            toast.success(isNew ? `Role ${trimmed} created` : `Role ${trimmed} saved`);
+            toast.success(
+                isNew ? t("createdToast", { name: trimmed }) : t("savedToast", { name: trimmed })
+            );
             onSaved();
         } catch (err) {
-            setError(errorMessage(err, "The role wasn't saved."));
+            setError(errorText(err, t("saveFailed")));
         } finally {
             setBusy(false);
         }
@@ -425,36 +439,38 @@ function RoleDialog({
                 <form onSubmit={e => void save(e)} className="flex flex-col gap-4">
                     <DialogHeader>
                         <DialogTitle>
-                            {isNew ? "New role" : `Edit ${role?.name ?? "role"}`}
+                            {isNew
+                                ? t("newTitle")
+                                : t("editTitle", { name: role?.name ?? t("roleFallback") })}
                         </DialogTitle>
-                        <DialogDescription>
-                            Tick what people with this role may do. You can only hand out
-                            permissions you hold yourself; owner-only ones stay with the Owner.
-                        </DialogDescription>
+                        <DialogDescription>{t("description")}</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="role-name">Name</Label>
+                            <Label htmlFor="role-name">{tc("fields.name")}</Label>
                             <Input
                                 id="role-name"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
-                                placeholder="Legal reviewer"
+                                placeholder={t("namePlaceholder")}
                                 autoFocus
                                 disabled={busy}
                             />
                         </div>
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="role-description">
-                                Description{" "}
-                                <span className="text-ink-3 font-normal">(optional)</span>
+                                {t.rich("descriptionLabel", {
+                                    optional: chunks => (
+                                        <span className="text-ink-3 font-normal">{chunks}</span>
+                                    ),
+                                })}
                             </Label>
                             <Textarea
                                 id="role-description"
                                 rows={1}
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
-                                placeholder="Reads and comments, never deletes"
+                                placeholder={t("descriptionPlaceholder")}
                                 disabled={busy}
                             />
                         </div>
@@ -462,7 +478,7 @@ function RoleDialog({
 
                     <fieldset className="m-0 border-0 p-0">
                         <legend className="text-ink-2 mb-2 text-xs font-semibold">
-                            Permissions
+                            {t("permissions")}
                         </legend>
                         <ul className="border-line m-0 list-none divide-y rounded-lg border p-0">
                             {permissions.map(p => {
@@ -495,18 +511,18 @@ function RoleDialog({
                                                 {key}
                                                 {p.ownerOnly && (
                                                     <span className="text-ink-3 ml-2 font-normal">
-                                                        Owner only
+                                                        {t("ownerOnly")}
                                                     </span>
                                                 )}
                                                 {!p.ownerOnly && !heldByViewer && (
                                                     <span className="text-ink-3 ml-2 font-normal">
-                                                        Not yours to give
+                                                        {t("notYours")}
                                                     </span>
                                                 )}
                                             </span>
                                             <span className="text-ink-3 block text-[12.5px] leading-normal">
                                                 {isPermission(key)
-                                                    ? PERMISSION_DESCRIPTIONS[key]
+                                                    ? permissionText(key)
                                                     : p.description}
                                             </span>
                                         </label>
@@ -519,10 +535,10 @@ function RoleDialog({
                     {error && <ErrorNote message={error} />}
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose} disabled={busy}>
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={busy}>
-                            {busy ? "Saving…" : isNew ? "Create role" : "Save role"}
+                            {busy ? tc("status.saving") : isNew ? t("create") : t("save")}
                         </Button>
                     </DialogFooter>
                 </form>

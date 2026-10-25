@@ -15,7 +15,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = CommitmentPatchSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const commitment = await updateCommitment({
             companyId: auth.ctx.companyId,
             id,
@@ -23,11 +23,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         });
         return json({ commitment });
     } catch (err) {
-        return handleVantageError("PATCH commitment", err);
+        return handleVantageError("PATCH commitment", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -35,6 +35,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await deleteCommitment({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
-        return handleVantageError("DELETE commitment", err);
+        return handleVantageError("DELETE commitment", err, request);
     }
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Card } from "~/components/ui/card";
 import {
     ChartContainer,
@@ -9,149 +10,97 @@ import {
     type ChartConfig,
 } from "~/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
-import { Users, MousePointerClick } from "lucide-react";
-import type { DashboardData } from "../types";
+import type { DashboardData, TrendDataPoint } from "../types";
 
 interface ChartsSectionProps {
     data: DashboardData;
 }
 
-const employeeChartConfig: ChartConfig = {
-    count: {
-        label: "Employees",
-        color: "hsl(262, 83%, 58%)",
-    },
-};
+/** Axis text in muted ink, never the series colour. */
+const TICK = { fontSize: 11, fill: "var(--ink-3)" };
 
-const viewsChartConfig: ChartConfig = {
-    count: {
-        label: "Views",
-        color: "hsl(221, 83%, 53%)",
-    },
-};
+interface TrendChartProps {
+    title: string;
+    points: TrendDataPoint[];
+    config: ChartConfig;
+    integerTicks?: boolean;
+}
 
-function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+function TrendChart({ title, points, config, integerTicks = false }: TrendChartProps) {
+    const format = useFormatter();
+    const formatDate = (dateString: string): string =>
+        format.dateTime(new Date(dateString), { month: "short", day: "numeric" });
+
+    return (
+        <Card className="border-line @max-sm:p-4 min-w-0 gap-4 rounded-[14px] p-5 shadow-none">
+            <h3 className="text-ink m-0 text-sm font-semibold">{title}</h3>
+            <ChartContainer config={config} className="@max-sm:h-[200px] h-[240px] w-full">
+                <AreaChart data={points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                    <CartesianGrid vertical={false} stroke="var(--line)" />
+                    <XAxis
+                        dataKey="date"
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={formatDate}
+                        tick={TICK}
+                        minTickGap={16}
+                    />
+                    <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        tick={TICK}
+                        tickFormatter={(value: number) => format.number(value)}
+                        width={30}
+                        allowDecimals={!integerTicks}
+                    />
+                    <ChartTooltip
+                        cursor={{ stroke: "var(--line)" }}
+                        content={
+                            <ChartTooltipContent
+                                labelFormatter={value => formatDate(value as string)}
+                            />
+                        }
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey="count"
+                        stroke="var(--color-count)"
+                        strokeWidth={2}
+                        fill="var(--color-count)"
+                        fillOpacity={0.12}
+                    />
+                </AreaChart>
+            </ChartContainer>
+        </Card>
+    );
 }
 
 export function ChartsSection({ data }: ChartsSectionProps) {
-    return (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* Employee Trend Chart */}
-            <Card className="border-none p-6 shadow-sm">
-                <div className="mb-6 flex items-center gap-3">
-                    <div className="bg-brand-soft text-brand-ink rounded-lg p-1.5">
-                        <Users className="h-4 w-4" />
-                    </div>
-                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                        Employee Growth
-                    </h2>
-                </div>
-                <ChartContainer config={employeeChartConfig} className="h-[250px] w-full">
-                    <AreaChart
-                        data={data.employeeTrend}
-                        margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-                    >
-                        <defs>
-                            <linearGradient id="employeeGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="hsl(262, 83%, 58%)"
-                                    stopOpacity={0.3}
-                                />
-                                <stop offset="95%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0} />
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-panel-2" />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickFormatter={formatDate}
-                            tick={{ fontSize: 10 }}
-                        />
-                        <YAxis
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{ fontSize: 10 }}
-                            width={30}
-                            allowDecimals={false}
-                        />
-                        <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    labelFormatter={value => formatDate(value as string)}
-                                />
-                            }
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="count"
-                            stroke="hsl(262, 83%, 58%)"
-                            strokeWidth={2}
-                            fill="url(#employeeGradient)"
-                        />
-                    </AreaChart>
-                </ChartContainer>
-            </Card>
+    const t = useTranslations("statistics.charts");
 
-            {/* Document Views Trend Chart */}
-            <Card className="border-none p-6 shadow-sm">
-                <div className="mb-6 flex items-center gap-3">
-                    <div className="rounded-lg bg-blue-100 p-1.5 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                        <MousePointerClick className="h-4 w-4" />
-                    </div>
-                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
-                        Document Views
-                    </h2>
-                </div>
-                <ChartContainer config={viewsChartConfig} className="h-[250px] w-full">
-                    <AreaChart
-                        data={data.documentViewsTrend}
-                        margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-                    >
-                        <defs>
-                            <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="hsl(221, 83%, 53%)"
-                                    stopOpacity={0.3}
-                                />
-                                <stop offset="95%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0} />
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-panel-2" />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickFormatter={formatDate}
-                            tick={{ fontSize: 10 }}
-                        />
-                        <YAxis
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{ fontSize: 10 }}
-                            width={30}
-                        />
-                        <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    labelFormatter={value => formatDate(value as string)}
-                                />
-                            }
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="count"
-                            stroke="hsl(221, 83%, 53%)"
-                            strokeWidth={2}
-                            fill="url(#viewsGradient)"
-                        />
-                    </AreaChart>
-                </ChartContainer>
-            </Card>
+    // Views wear the info hue wherever they are charted (the document sheet too).
+    const employeeChartConfig: ChartConfig = useMemo(
+        () => ({ count: { label: t("employeesSeries"), color: "var(--accent)" } }),
+        [t]
+    );
+    const viewsChartConfig: ChartConfig = useMemo(
+        () => ({ count: { label: t("viewsSeries"), color: "var(--info)" } }),
+        [t]
+    );
+
+    return (
+        <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-3">
+            <TrendChart
+                title={t("employeeGrowth")}
+                points={data.employeeTrend}
+                config={employeeChartConfig}
+                integerTicks
+            />
+            <TrendChart
+                title={t("documentViews")}
+                points={data.documentViewsTrend}
+                config={viewsChartConfig}
+            />
         </div>
     );
 }

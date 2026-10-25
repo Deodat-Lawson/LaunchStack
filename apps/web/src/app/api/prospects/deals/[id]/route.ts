@@ -5,6 +5,8 @@ import { z } from "zod";
 
 import { patchDeal } from "~/server/prospects/service";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { error, handleProspectsError, json, prospectsContext, readBody } from "../../_http";
 
 const Schema = z.object({
@@ -33,9 +35,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         const { id } = await params;
         const parsed = Schema.safeParse(await readBody(request));
         if (!parsed.success)
-            return error("Validation failed", 400, { details: parsed.error.flatten() });
+            return error(requestTranslator(request, "errors.api")("validationFailed"), 400, {
+                details: parsed.error.flatten(),
+            });
         return json({ deal: await patchDeal(auth.ctx, id, parsed.data) });
     } catch (err) {
-        return handleProspectsError("PATCH deal", err);
+        return handleProspectsError("PATCH deal", err, request);
     }
 }

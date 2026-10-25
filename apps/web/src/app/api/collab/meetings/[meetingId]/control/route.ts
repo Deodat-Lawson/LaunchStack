@@ -10,6 +10,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "~/server/auth";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish, wordOr } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertRoomMayRun } from "~/server/collab/autonomy";
 import { getMeetingRuntime } from "~/server/collab/runtime";
@@ -33,18 +35,23 @@ export async function POST(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "collab.server.errors");
 
     const parsed = ControlSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
-            { error: "Invalid request", details: parsed.error.flatten() },
+            {
+                error: translatorFor(locale, "errors.api")("invalidRequest"),
+                details: parsed.error.flatten(),
+            },
             { status: 400 }
         );
     }
 
     const { meetingId } = await params;
     const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
-    if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
+    if (!runtime) return NextResponse.json({ error: t("meetingNotFound") }, { status: 404 });
 
     const { orchestrator } = runtime;
     // Display name is cosmetic for takeover; keep the session profile as a
@@ -90,10 +97,13 @@ export async function POST(
                 break;
         }
     } catch (err) {
-        return NextResponse.json(
-            { error: err instanceof Error ? err.message : "Control action failed" },
-            { status: isWorkspaceError(err) ? err.status : 400 }
-        );
+        // A refusal of ours carries its words; the engine's own errors are English.
+        const error = isWorkspaceError(err)
+            ? wordOr(err.copy, err.message, locale)
+            : err instanceof Error
+              ? wordEnglish(err.message, "collab.server.engine", locale)
+              : t("controlFailed");
+        return NextResponse.json({ error }, { status: isWorkspaceError(err) ? err.status : 400 });
     }
 
     return NextResponse.json({ state: orchestrator.getState() });

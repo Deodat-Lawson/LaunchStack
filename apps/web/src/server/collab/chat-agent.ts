@@ -17,6 +17,9 @@ import {
     type ResolvedChatTurn,
 } from "~/lib/agents/definition";
 
+import { copy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
+
 import { getPersonaByKey, personaToDefinition, type PersonaRecord } from "./personas";
 
 export interface ChatAgentResolution {
@@ -24,13 +27,20 @@ export interface ChatAgentResolution {
     turn: ResolvedChatTurn;
 }
 
+/**
+ * Why a turn's agent was refused. `message` is the English; `copy` is the
+ * sentence the route words in the reader's language (`agents.server.chatAgent`).
+ */
 export class ChatAgentError extends Error {
+    readonly copy: Copy | null;
+
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number
     ) {
-        super(message);
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "ChatAgentError";
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -48,14 +58,20 @@ export async function resolveChatAgent(
     if (!agentKey) return null;
     const persona = await getPersonaByKey(companyId, agentKey);
     if (!persona || persona.archived) {
-        throw new ChatAgentError(`No agent with the handle "@${agentKey}" in this workspace`, 404);
+        throw new ChatAgentError(
+            copy("agents.server.chatAgent.notFound", { handle: agentKey }),
+            404
+        );
     }
     const allowed = request.mentioned ? usableAsSubagent(persona) : usableAsPrimary(persona);
     if (!allowed) {
         throw new ChatAgentError(
-            request.mentioned
-                ? `@${persona.id} is a primary-only agent — pick it in the composer instead of mentioning it`
-                : `@${persona.id} is a subagent — summon it with @${persona.id} in a message`,
+            copy(
+                request.mentioned
+                    ? "agents.server.chatAgent.primaryOnly"
+                    : "agents.server.chatAgent.subagentOnly",
+                { handle: persona.id }
+            ),
             400
         );
     }

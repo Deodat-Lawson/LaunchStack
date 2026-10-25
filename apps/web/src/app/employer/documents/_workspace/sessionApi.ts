@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import type { HistoryEntry, HistoryKind } from "~/lib/workspace-history";
 import type { ChatQueueItem, ChatTurnMetadata } from "~/lib/chat-turns";
 
@@ -69,9 +70,78 @@ export interface SessionState {
     lastSeenAt: string | null;
 }
 
-async function readError(res: Response, fallback: string): Promise<Error> {
+/**
+ * What each call says when the server gave no reason of its own. The English
+ * is the error's message, for callers without a translator; a screen shows
+ * `chat.sessionErrors.<key>` through `sessionErrorMessage`.
+ */
+const FALLBACKS = {
+    loadHistory: "Failed to load history",
+    saveChat: "Failed to save this chat",
+    saveMessage: "Failed to save this message",
+    loadChat: "Failed to load this chat",
+    renameChat: "Failed to rename this chat",
+    continueChat: "Couldn't continue this chat",
+    updateChat: "Couldn't update this chat",
+    reorderPins: "Couldn't reorder pinned chats",
+    deleteChat: "Failed to delete this chat",
+    rewindChat: "Failed to rewind this chat",
+    saveQueue: "Failed to save queued messages",
+    sendQueued: "Failed to send queued message",
+} as const;
+
+export type SessionErrorKey = keyof typeof FALLBACKS;
+
+/** `useTranslations("chat.sessionErrors")`. */
+export type SessionErrorTranslator = ReturnType<typeof useTranslations<"chat.sessionErrors">>;
+
+/**
+ * A failed session call. `fallbackKey` is set when the server said nothing
+ * usable, so the message is this module's own words rather than the server's.
+ */
+export class SessionApiError extends Error {
+    constructor(
+        message: string,
+        readonly status: number,
+        readonly fallbackKey: SessionErrorKey | null
+    ) {
+        super(message);
+        this.name = "SessionApiError";
+    }
+}
+
+/**
+ * The fallback key a failed call carries, if it carries one. Read by shape
+ * rather than `instanceof`, so callers keep working where this module is
+ * replaced by a test double (copy it rather than import it there).
+ */
+export function sessionErrorKey(error: unknown): SessionErrorKey | null {
+    const key = error instanceof Error ? (error as { fallbackKey?: unknown }).fallbackKey : null;
+    return typeof key === "string" && Object.hasOwn(FALLBACKS, key)
+        ? (key as SessionErrorKey)
+        : null;
+}
+
+/**
+ * The words to show for an error from this module: the server's reason
+ * as given, this module's own fallback in the reader's language, or — for
+ * anything else — the error's message, then `fallback`.
+ */
+export function sessionErrorMessage(
+    error: unknown,
+    t: SessionErrorTranslator,
+    fallback?: string
+): string {
+    const key = sessionErrorKey(error);
+    if (key) return t(key);
+    if (error instanceof Error && error.message) return error.message;
+    return fallback ?? "";
+}
+
+async function readError(res: Response, fallback: SessionErrorKey): Promise<SessionApiError> {
     const body = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
-    return new Error(body.message ?? body.error ?? fallback);
+    const reason = body.message ?? body.error;
+    return new SessionApiError(reason ?? FALLBACKS[fallback], res.status, reason ? null : fallback);
 }
 
 export async function fetchHistory(
@@ -82,7 +152,7 @@ export async function fetchHistory(
     if (options.archived) params.set("archived", "1");
     const query = params.toString();
     const res = await fetch(`/api/workspace/history${query ? `?${query}` : ""}`);
-    if (!res.ok) throw await readError(res, "Failed to load history");
+    if (!res.ok) throw await readError(res, "loadHistory");
     return (await res.json()) as HistoryPage;
 }
 
@@ -98,7 +168,7 @@ export async function createSession(input: {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
     });
-    if (!res.ok) throw await readError(res, "Failed to save this chat");
+    if (!res.ok) throw await readError(res, "saveChat");
     return ((await res.json()) as { session: StoredSession }).session;
 }
 
@@ -116,7 +186,7 @@ export async function appendMessages(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
     });
-    if (!res.ok) throw await readError(res, "Failed to save this message");
+    if (!res.ok) throw await readError(res, "saveMessage");
     return ((await res.json()) as { session: StoredSession }).session;
 }
 
@@ -124,7 +194,7 @@ export async function appendMessages(
 export async function fetchSession(sessionId: string): Promise<StoredSession | null> {
     const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}`);
     if (res.status === 404) return null;
-    if (!res.ok) throw await readError(res, "Failed to load this chat");
+    if (!res.ok) throw await readError(res, "loadChat");
     return ((await res.json()) as { session: StoredSession }).session;
 }
 
@@ -134,7 +204,7 @@ export async function renameSession(sessionId: string, title: string): Promise<v
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title }),
     });
-    if (!res.ok) throw await readError(res, "Failed to rename this chat");
+    if (!res.ok) throw await readError(res, "renameChat");
 }
 
 /**
@@ -145,7 +215,7 @@ export async function forkSession(sessionId: string): Promise<{ id: string; titl
     const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}/fork`, {
         method: "POST",
     });
-    if (!res.ok) throw await readError(res, "Couldn't continue this chat");
+    if (!res.ok) throw await readError(res, "continueChat");
     return (await res.json()) as { id: string; title: string };
 }
 
@@ -159,7 +229,7 @@ export async function updateSessionState(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patch),
     });
-    if (!res.ok) throw await readError(res, "Couldn't update this chat");
+    if (!res.ok) throw await readError(res, "updateChat");
     return ((await res.json()) as { state: SessionState }).state;
 }
 
@@ -170,7 +240,7 @@ export async function orderPins(ids: readonly string[]): Promise<string[]> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids }),
     });
-    if (!res.ok) throw await readError(res, "Couldn't reorder pinned chats");
+    if (!res.ok) throw await readError(res, "reorderPins");
     return ((await res.json()) as { ids: string[] }).ids;
 }
 
@@ -178,7 +248,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
     const res = await fetch(`/api/workspace/sessions/${encodeURIComponent(sessionId)}`, {
         method: "DELETE",
     });
-    if (!res.ok) throw await readError(res, "Failed to delete this chat");
+    if (!res.ok) throw await readError(res, "deleteChat");
 }
 
 export async function truncateMessages(
@@ -191,7 +261,7 @@ export async function truncateMessages(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ keepCount, expectedCount }),
     });
-    if (!res.ok) throw await readError(res, "Failed to rewind this chat");
+    if (!res.ok) throw await readError(res, "rewindChat");
 }
 
 export interface QueueState {
@@ -211,7 +281,7 @@ export async function updateQueue(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ revision, items }),
     });
-    if (!res.ok && res.status !== 409) throw await readError(res, "Failed to save queued messages");
+    if (!res.ok && res.status !== 409) throw await readError(res, "saveQueue");
     return (await res.json()) as QueueState;
 }
 export async function claimQueuedMessage(
@@ -224,6 +294,6 @@ export async function claimQueuedMessage(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ revision, id }),
     });
-    if (!res.ok && res.status !== 409) throw await readError(res, "Failed to send queued message");
+    if (!res.ok && res.status !== 409) throw await readError(res, "sendQueued");
     return (await res.json()) as QueueState;
 }

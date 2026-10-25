@@ -33,7 +33,8 @@ import { DoclingIngestionAdapter } from "./docling-adapter";
 // DoclingIngestionAdapter is first so it preempts mammoth/sheetjs for Office
 // formats when the document-converter is configured (DOCUMENT_CONVERTER_URL).
 // Its canHandle() returns false when the converter is not configured, so the
-// legacy adapters take over.
+// legacy adapters take over; when the converter has no Docling behind it,
+// its process() hands the file to them itself.
 const ADAPTERS: SourceAdapter[] = [
     new DoclingIngestionAdapter(),
     new PdfAdapter(),

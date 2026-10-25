@@ -33,15 +33,22 @@
     {
       "idx": 4,
       "version": "7",
-      "when": 1790730649291,
-      "tag": "20260930011049_call_note_document_scope_index",
+      "when": 1792254326046,
+      "tag": "20261017162525_company_embedding_base_url",
       "breakpoints": true
     },
     {
       "idx": 5,
       "version": "7",
-      "when": 1792254326046,
-      "tag": "20261017162525_company_embedding_base_url",
+      "when": 1792730143499,
+      "tag": "20261023043543_ocr_job_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792886400000,
+      "tag": "20261025000000_call_note_document_scope_index",
       "breakpoints": true
     }
   ]

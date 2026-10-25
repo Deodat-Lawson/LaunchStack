@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Folder as IconFolder,
     PanelRightClose,
@@ -16,14 +17,22 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
-import { GoogleDriveBanner } from "./GoogleDriveBanner";
+import { IconDrive } from "~/components/icons/brand";
+import {
+    GoogleDriveBanner,
+    setDriveBarHidden,
+    useDriveLinkSummary,
+    useDriveBarHidden,
+    useDriveLinkStatus,
+} from "./GoogleDriveBanner";
+import { useDriveFreshness } from "./useDriveFreshness";
 import type { DocumentType } from "../types/document";
-import { getMindmap } from "../_mindmap/lib/api";
+import { getMindmap, MindmapRequestError } from "../_mindmap/lib/api";
 import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import type { RevisionRow } from "../_mindmap/ui/HistoryPanel";
 import { isMindmapSource } from "./sourceApi";
-import { canChangeSource, canDeleteSource, DELETE_RESERVED_REASON } from "./sourceContextMenu";
+import { canChangeSource, canDeleteSource } from "./sourceContextMenu";
 import { audienceLabel } from "./railSections";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
@@ -34,9 +43,11 @@ import {
 } from "./documentContextMenu";
 import {
     SOURCE_META,
+    sourceTypeLabel,
     type CitationHighlight,
     type PassageSelection,
     type WorkspaceSource,
+    type WorkspaceTranslator,
 } from "./types";
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
@@ -124,6 +135,18 @@ const NARROW_BELOW_PX = 760;
 /** Remembers a reader's choice to hide the docked rail. Per browser, on purpose. */
 const DETAILS_HIDDEN_KEY = "documentViewer.detailsHidden.v1";
 
+/**
+ * The server's sentence for a failed version write. A Drive-linked document
+ * answers with a code in `error` (`linked_to_google_drive`) and the sentence,
+ * in the reader's language, in `details`; elsewhere `details` is diagnostic.
+ */
+async function failureSentence(res: Response): Promise<string | undefined> {
+    const body = (await res.json().catch(() => ({}))) as { error?: unknown; details?: unknown };
+    if (typeof body.error !== "string") return undefined;
+    const isCode = /^[a-z_]+$/.test(body.error);
+    return isCode && typeof body.details === "string" ? body.details : body.error;
+}
+
 /** Gives one version row its own right-click target without touching its markup. */
 function VersionTarget({
     version,
@@ -138,10 +161,11 @@ function VersionTarget({
     onRestore: () => void;
     children: ReactNode;
 }) {
+    const t = useTranslations("workspace");
     const ctxTarget = useContextTarget({
         kind: "document-version",
         id: String(version.id),
-        label: `Actions for version ${version.versionNumber}`,
+        label: t("documentViewer.versionActions", { number: version.versionNumber }),
         data: version,
         items: () =>
             buildVersionMenuItems(
@@ -151,7 +175,8 @@ function VersionTarget({
                     onPreview,
                     onRestore,
                     onDownload: () => window.open(version.url, "_blank", "noopener,noreferrer"),
-                }
+                },
+                t
             ),
     });
     return (
@@ -161,18 +186,26 @@ function VersionTarget({
     );
 }
 
-function humanDate(raw: string): string {
-    if (!raw) return "";
-    const d = new Date(raw);
-    if (Number.isNaN(d.getTime())) return raw;
-    const diffMs = Date.now() - d.getTime();
-    const diffHr = Math.floor(diffMs / 3_600_000);
-    if (diffHr < 1) return "just now";
-    if (diffHr < 24) return `${diffHr}h ago`;
-    const diffDay = Math.floor(diffHr / 24);
-    if (diffDay === 1) return "Yesterday";
-    if (diffDay < 14) return `${diffDay} days ago`;
-    return d.toLocaleDateString();
+/** "2h ago", "Yesterday", "5 days ago", then a date — in the reader's language. */
+function useHumanDate(): (raw: string) => string {
+    const t = useTranslations("workspace.relativeTime");
+    const format = useFormatter();
+    return useCallback(
+        (raw: string) => {
+            if (!raw) return "";
+            const d = new Date(raw);
+            if (Number.isNaN(d.getTime())) return raw;
+            const diffMs = Date.now() - d.getTime();
+            const diffHr = Math.floor(diffMs / 3_600_000);
+            if (diffHr < 1) return t("justNow");
+            if (diffHr < 24) return t("hoursAgo", { count: diffHr });
+            const diffDay = Math.floor(diffHr / 24);
+            if (diffDay === 1) return t("yesterday");
+            if (diffDay < 14) return t("daysAgo", { count: diffDay });
+            return format.dateTime(d);
+        },
+        [t, format]
+    );
 }
 
 function TabButton({
@@ -258,8 +291,22 @@ export function DocumentViewer({
     onPublished,
 }: DocumentViewerProps) {
     const router = useRouter();
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
+    const tSourceTypes = useTranslations("sources.sourceTypes");
+    const tAudience = useTranslations("sources.audience");
+    const tSourceMenu = useTranslations("sources.contextMenu");
+    const tMindmapErrors = useTranslations("mindmap.errors");
+    const tDrive = useTranslations("sources.googleDriveBanner");
+    const driveLinkSummary = useDriveLinkSummary();
+    /** A new map's starter text, read by the fetch without making it re-run. */
+    const starter = useTranslations("mindmap.starter");
+    const starterRef = useRef(starter);
+    starterRef.current = starter;
+    const humanDate = useHumanDate();
     const { userId } = useAuth();
-    const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
+    const sourceType = SOURCE_META[source.type] ? source.type : "doc";
+    const meta = SOURCE_META[sourceType];
     const Icon = meta.Icon;
     // A mindmap is its own row: no document to fetch, no file versions, and
     // notes only once it has a published copy to hang them on.
@@ -275,13 +322,17 @@ export function DocumentViewer({
     // published it, not whoever drew it, so maps say nothing here.
     const adder = !isMindmap ? (source.addedBy ?? null) : null;
     const adderLook = usePeople(adder && adder.authUserId !== userId ? [adder.authUserId] : []);
-    const addedLine = adder
-        ? `Added by ${
-              adder.authUserId === userId
-                  ? "you"
-                  : (adderLook[adder.authUserId]?.displayName ?? adder.name)
-          }${source.added ? ` · ${source.added}` : ""}`
+    const adderName = adder
+        ? adder.authUserId === userId
+            ? t("documentViewer.you")
+            : (adderLook[adder.authUserId]?.displayName ?? adder.name)
         : null;
+    const addedLine =
+        adderName === null
+            ? null
+            : source.added
+              ? t("documentViewer.addedByWithTime", { name: adderName, time: source.added })
+              : t("documentViewer.addedBy", { name: adderName });
     const [mindmapDoc, setMindmapDoc] = useState<{ doc: MindmapDoc; key: string } | null>(null);
     const [mindmapError, setMindmapError] = useState<string | null>(null);
     const [revisions, setRevisions] = useState<RevisionRow[]>([]);
@@ -299,7 +350,15 @@ export function DocumentViewer({
         { action: "restore"; versionId: number } | { action: "delete" } | null
     >(null);
     const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
+    /** A `failureText`, worded in the reader's language where it is shown. */
     const [fullDocError, setFullDocError] = useState<string | null>(null);
+    /**
+     * Bumped when the document's current version moves under an open viewer
+     * — a Drive sync, an uploaded version, a restore — so the preview loads
+     * the file that is now current instead of keeping the one it opened with.
+     */
+    const [previewNonce, setPreviewNonce] = useState(0);
+    const shownVersionRef = useRef<number | null>(null);
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
@@ -359,6 +418,19 @@ export function DocumentViewer({
         },
         [narrow]
     );
+
+    /**
+     * The Google Drive line over a linkable document. It can be hidden — a
+     * choice remembered across documents, like the rail — and the header's
+     * Drive button brings it back, so nothing it offers is lost with it.
+     */
+    const driveDocumentId =
+        !isMindmap && typeof source.documentId === "number" && source.documentId > 0
+            ? source.documentId
+            : null;
+    const drive = useDriveLinkStatus(driveDocumentId);
+    const driveBarHidden = useDriveBarHidden();
+    const driveLink = drive.status?.link ?? null;
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
@@ -408,20 +480,18 @@ export function DocumentViewer({
                     headers: { "Content-Type": "application/json" },
                     body: "{}",
                 });
-                if (!res.ok) throw new Error(`Failed (${res.status})`);
+                if (!res.ok) throw new StatusError(res.status);
                 const data = (await res.json()) as DocumentType[];
                 if (cancelled) return;
                 setFullDoc(data.find(d => d.id === source.documentId) ?? null);
             } catch (err) {
-                if (!cancelled) {
-                    setFullDocError(err instanceof Error ? err.message : "Failed to load preview");
-                }
+                if (!cancelled) setFullDocError(failureText(err));
             }
         })();
         return () => {
             cancelled = true;
         };
-    }, [isMindmap, source.documentId, source.pending, userId]);
+    }, [isMindmap, source.documentId, source.pending, userId, previewNonce]);
 
     // The map itself, plus its snapshot history for the sidebar.
     useEffect(() => {
@@ -435,14 +505,10 @@ export function DocumentViewer({
             try {
                 const detail = await getMindmap(mindmapId);
                 if (cancelled) return;
-                const { doc } = openMindmapDocument(detail);
+                const { doc } = openMindmapDocument(detail, starterRef.current);
                 setMindmapDoc({ doc, key: `${detail.id}:${detail.revision}` });
             } catch (err) {
-                if (!cancelled) {
-                    setMindmapError(
-                        err instanceof Error ? err.message : "Couldn't open this mindmap"
-                    );
-                }
+                if (!cancelled) setMindmapError(failureText(err));
             }
         })();
         void (async () => {
@@ -475,16 +541,16 @@ export function DocumentViewer({
             }
             toast.success(
                 source.citability === "none"
-                    ? "Added to your sources — it will finish indexing shortly"
-                    : "Citable copy updated — it will finish indexing shortly"
+                    ? t("documentViewer.publishedNew")
+                    : t("documentViewer.publishedUpdate")
             );
             onPublished?.();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Couldn't publish this mindmap");
+            toast.error(err instanceof Error ? err.message : t("documentViewer.publishFailed"));
         } finally {
             setPublishing(false);
         }
-    }, [onPublished, source.citability, source.folder, source.mindmapId]);
+    }, [onPublished, source.citability, source.folder, source.mindmapId, t]);
 
     useEffect(() => {
         setTitle(source.title);
@@ -530,6 +596,7 @@ export function DocumentViewer({
     // Fetch version history on mount
     useEffect(() => {
         if (isMindmap || !source.documentId) return;
+        shownVersionRef.current = null;
         let cancelled = false;
         setVersionsError(null);
         void (async () => {
@@ -537,7 +604,7 @@ export function DocumentViewer({
                 const res = await fetch(`/api/documents/${source.documentId}/versions`);
                 if (!res.ok) {
                     if (res.status === 403 || res.status === 401) return;
-                    throw new Error(`Failed (${res.status})`);
+                    throw new StatusError(res.status);
                 }
                 const data = (await res.json()) as VersionsResponse;
                 if (cancelled) return;
@@ -545,11 +612,7 @@ export function DocumentViewer({
                 setActiveVersionId(data.currentVersionId);
                 setExpectedMime(data.fileType);
             } catch (err) {
-                if (!cancelled) {
-                    setVersionsError(
-                        err instanceof Error ? err.message : "Failed to load versions"
-                    );
-                }
+                if (!cancelled) setVersionsError(failureText(err));
             }
         })();
         return () => {
@@ -593,6 +656,24 @@ export function DocumentViewer({
         setExpectedMime(data.fileType);
     }, [source.documentId]);
 
+    // The first current version is the one the preview opened with; a later
+    // one means the file changed underneath it.
+    useEffect(() => {
+        if (activeVersionId === null) return;
+        const shown = shownVersionRef.current;
+        shownVersionRef.current = activeVersionId;
+        if (shown !== null && shown !== activeVersionId) setPreviewNonce(n => n + 1);
+    }, [activeVersionId]);
+
+    const driveLinked = driveLink?.status === "linked";
+    useDriveFreshness({
+        documentId: driveDocumentId,
+        linked: driveLinked,
+        watch: driveLinked || fullDoc?.ocrMetadata?.connector === "google-drive",
+        onPulled: drive.refresh,
+        onCheck: refreshVersions,
+    });
+
     const uploadNewVersion = useCallback(
         (file: File) => {
             if (!source.documentId) return;
@@ -601,7 +682,10 @@ export function DocumentViewer({
             if (expectedMime && file.type && file.type !== expectedMime) {
                 setUploadState({
                     phase: "error",
-                    message: `File type must match the current version (${expectedMime}). Got ${file.type || "unknown"}.`,
+                    message: t("documentViewer.upload.typeMismatch", {
+                        expected: expectedMime,
+                        actual: file.type || t("documentViewer.upload.unknownType"),
+                    }),
                 });
                 return;
             }
@@ -631,8 +715,8 @@ export function DocumentViewer({
                         phase: "error",
                         message:
                             xhr.status === 401
-                                ? "Please sign in and try again."
-                                : `Storage upload failed (HTTP ${xhr.status}).`,
+                                ? t("documentViewer.upload.signIn")
+                                : t("documentViewer.upload.storageFailed", { status: xhr.status }),
                     });
                     return;
                 }
@@ -641,11 +725,14 @@ export function DocumentViewer({
                 try {
                     storage = JSON.parse(xhr.responseText) as { url: string };
                 } catch {
-                    setUploadState({ phase: "error", message: "Invalid storage response." });
+                    setUploadState({
+                        phase: "error",
+                        message: t("documentViewer.upload.invalidStorage"),
+                    });
                     return;
                 }
                 if (!storage?.url) {
-                    setUploadState({ phase: "error", message: "Storage did not return a URL." });
+                    setUploadState({ phase: "error", message: t("documentViewer.upload.noUrl") });
                     return;
                 }
 
@@ -665,8 +752,10 @@ export function DocumentViewer({
                             }),
                         });
                         if (!res.ok) {
-                            const body = (await res.json().catch(() => ({}))) as { error?: string };
-                            throw new Error(body.error ?? `Failed (${res.status})`);
+                            throw new Error(
+                                (await failureSentence(res)) ??
+                                    t("documentViewer.failedStatus", { status: res.status })
+                            );
                         }
                         setUploadState({ phase: "idle" });
                         await refreshVersions();
@@ -674,17 +763,21 @@ export function DocumentViewer({
                     } catch (err) {
                         setUploadState({
                             phase: "error",
-                            message: err instanceof Error ? err.message : "Version upload failed",
+                            message:
+                                err instanceof Error
+                                    ? err.message
+                                    : t("documentViewer.upload.versionFailed"),
                         });
                     }
                 })();
             };
-            xhr.ontimeout = () => setUploadState({ phase: "error", message: "Upload timed out." });
+            xhr.ontimeout = () =>
+                setUploadState({ phase: "error", message: t("documentViewer.upload.timedOut") });
             xhr.onerror = () =>
-                setUploadState({ phase: "error", message: "Storage service unavailable." });
+                setUploadState({ phase: "error", message: t("documentViewer.upload.unavailable") });
             xhr.send(storageForm);
         },
-        [source.documentId, expectedMime, uploadState.phase, refreshVersions, onVersionChanged]
+        [source.documentId, expectedMime, uploadState.phase, refreshVersions, onVersionChanged, t]
     );
 
     const handlePickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -707,13 +800,15 @@ export function DocumentViewer({
                 { method: "POST" }
             );
             if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
-                throw new Error(body.error ?? `Failed (${res.status})`);
+                throw new Error(
+                    (await failureSentence(res)) ??
+                        t("documentViewer.failedStatus", { status: res.status })
+                );
             }
             await refreshVersions();
             onVersionChanged?.();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Failed to restore version");
+            toast.error(err instanceof Error ? err.message : t("documentViewer.restoreFailed"));
         } finally {
             setReverting(false);
         }
@@ -757,7 +852,7 @@ export function DocumentViewer({
     const documentTarget = useContextTarget<DocumentTargetData>({
         kind: "document",
         id: source.id,
-        label: `Actions for ${source.title}`,
+        label: t("common.actionsFor", { name: source.title }),
         data: { source, addNote: persisted && notesAvailable ? addNote : undefined },
         items: () =>
             buildDocumentMenuItems(
@@ -789,27 +884,28 @@ export function DocumentViewer({
                     onCopyLink: () => {
                         const link = `${window.location.origin}/employer/documents?source=${encodeURIComponent(source.id)}`;
                         void copyText(link).then(ok => {
-                            if (ok) toast.success("Link copied");
+                            if (ok) toast.success(t("common.linkCopied"));
                         });
                     },
                     onShowVersions: () => setSidebarTab("versions"),
                     onShowNotes: notesAvailable ? () => setSidebarTab("notes") : undefined,
                     onRestrictAccess: onRestrictAccess ? () => onRestrictAccess(source) : undefined,
                     onDelete: deleteDocument,
-                }
+                },
+                t
             ),
     });
 
     const statusText =
         saveStatus === "saving"
-            ? "Saving…"
+            ? tc("status.saving")
             : saveStatus === "saved"
-              ? "Saved"
+              ? tc("status.saved")
               : saveStatus === "error"
-                ? "Save failed"
+                ? t("documentViewer.saveFailed")
                 : dirty
-                  ? "Unsaved"
-                  : "Saved";
+                  ? t("documentViewer.unsaved")
+                  : tc("status.saved");
     const statusColor =
         saveStatus === "error"
             ? "var(--danger)"
@@ -825,7 +921,7 @@ export function DocumentViewer({
             ? [
                   {
                       id: "edit",
-                      label: "Edit",
+                      label: tc("actions.edit"),
                       icon: <Pencil className="size-3.5" />,
                       onSelect: () => onEdit(source),
                       tone: "primary" as const,
@@ -838,17 +934,17 @@ export function DocumentViewer({
                   {
                       id: "publish",
                       label: publishing
-                          ? "Publishing…"
+                          ? t("documentViewer.publishing")
                           : source.citability === "stale"
-                            ? "Update citable copy"
-                            : "Make citable",
+                            ? t("documentViewer.updateCitable")
+                            : t("documentViewer.makeCitable"),
                       icon: <Upload className="size-3.5" />,
                       onSelect: () => void publishMindmap(),
                       disabled: publishing || !persisted,
                       hint:
                           source.citability === "stale"
-                              ? "The citable copy is older than this map"
-                              : "Index this map so answers can cite it",
+                              ? t("documentViewer.staleHint")
+                              : t("documentViewer.indexHint"),
                   },
               ]
             : []),
@@ -856,7 +952,7 @@ export function DocumentViewer({
             ? [
                   {
                       id: "ask",
-                      label: "Ask about this",
+                      label: t("documentViewer.askAbout"),
                       icon: <Sparkles className="size-3.5" />,
                       onSelect: () => onAskAbout(source),
                       testId: "viewer-ask",
@@ -867,31 +963,53 @@ export function DocumentViewer({
             ? [
                   {
                       id: "share",
-                      label: "Share",
+                      label: tc("actions.share"),
                       icon: <Users className="size-3.5" />,
                       onSelect: () => onRestrictAccess(source),
                       disabled: !persisted,
                       // Who can open it now, on hover: "Only you", "Shared with 3"…
                       hint: source.access
-                          ? `Share · ${audienceLabel(source.access, null)}`
-                          : "Share",
+                          ? t("documentViewer.shareHint", {
+                                audience: audienceLabel(source.access, null, tAudience),
+                            })
+                          : tc("actions.share"),
                       testId: "viewer-share",
+                  },
+              ]
+            : []),
+        ...(drive.status?.linkable
+            ? [
+                  {
+                      id: "drive",
+                      label: driveBarHidden ? tDrive("show") : tDrive("hide"),
+                      icon: <IconDrive size={14} />,
+                      onSelect: () => setDriveBarHidden(!driveBarHidden),
+                      iconOnly: true,
+                      tone: driveBarHidden ? undefined : ("on" as const),
+                      // Hidden, the line's one essential fact — how fresh this
+                      // copy is — still answers a hover.
+                      hint: driveBarHidden
+                          ? driveLink
+                              ? tDrive("summaryShowHint", { summary: driveLinkSummary(driveLink) })
+                              : tDrive("showHint")
+                          : tDrive("hideToggleHint"),
+                      testId: "viewer-drive-toggle",
                   },
               ]
             : []),
         {
             id: "delete",
-            label: "Delete document",
+            label: t("documentViewer.deleteDocument"),
             icon: <Trash2 className="size-3.5" />,
             onSelect: deleteDocument,
             iconOnly: true,
             tone: "danger",
             disabled: !deletable,
             hint: !editable
-                ? "You can view this file but not change it."
+                ? t("common.viewOnly")
                 : deletable
                   ? undefined
-                  : DELETE_RESERVED_REASON,
+                  : tSourceMenu("deleteReserved"),
             testId: "viewer-delete",
         },
     ];
@@ -934,14 +1052,14 @@ export function DocumentViewer({
                     <input
                         ref={titleInputRef}
                         value={title}
-                        aria-label="Title"
+                        aria-label={tc("fields.title")}
                         onChange={e => {
                             setTitle(e.target.value);
                             setDirty(true);
                         }}
                         onBlur={() => void saveTitle()}
                         readOnly={!editable}
-                        title={editable ? undefined : "You can view this file but not change it."}
+                        title={editable ? undefined : t("common.viewOnly")}
                         // A class, not an imperative style: the old onFocus
                         // painted the field grey and nothing painted it back.
                         className="text-ink focus:bg-line-2 block w-full rounded bg-transparent px-1 text-sm font-semibold leading-[18px] outline-none read-only:focus:bg-transparent"
@@ -949,7 +1067,7 @@ export function DocumentViewer({
                 }
                 meta={
                     <>
-                        <span>{meta.label}</span>
+                        <span>{sourceTypeLabel(tSourceTypes, sourceType)}</span>
                         <span>·</span>
                         {addedLine ? (
                             <span className="truncate" data-testid="viewer-added-by">
@@ -978,11 +1096,20 @@ export function DocumentViewer({
                         overflow: "hidden",
                     }}
                 >
-                    {!isMindmap &&
-                        typeof source.documentId === "number" &&
-                        source.documentId > 0 && (
-                            <GoogleDriveBanner documentId={source.documentId} />
-                        )}
+                    {driveDocumentId !== null && !driveBarHidden && (
+                        <GoogleDriveBanner
+                            documentId={driveDocumentId}
+                            status={drive.status}
+                            refresh={drive.refresh}
+                            onSynced={() => void refreshVersions()}
+                            onHide={() => {
+                                setDriveBarHidden(true);
+                                toast(tDrive("hidden"), {
+                                    description: tDrive("hiddenBody"),
+                                });
+                            }}
+                        />
+                    )}
                     {viewingOld && (
                         <div
                             style={{
@@ -996,8 +1123,9 @@ export function DocumentViewer({
                                 flexShrink: 0,
                             }}
                         >
-                            Previewing v{currentVersion?.versionNumber}. Search still uses the
-                            current version.
+                            {t("documentViewer.previewingBanner", {
+                                number: currentVersion?.versionNumber ?? 0,
+                            })}
                         </div>
                     )}
                     {isMindmap ? (
@@ -1032,7 +1160,14 @@ export function DocumentViewer({
                                     fontSize: 14,
                                 }}
                             >
-                                Couldn&apos;t open this mindmap: {mindmapError}
+                                {t("documentViewer.mindmapError", {
+                                    error: wordFailure(
+                                        t,
+                                        mindmapError,
+                                        t("documentViewer.openMindmapFailed"),
+                                        tMindmapErrors
+                                    ),
+                                })}
                             </div>
                         ) : (
                             <div
@@ -1045,7 +1180,7 @@ export function DocumentViewer({
                                     fontSize: 13,
                                 }}
                             >
-                                Opening…
+                                {t("common.opening")}
                             </div>
                         )
                     ) : source.pending ? (
@@ -1061,8 +1196,7 @@ export function DocumentViewer({
                                 fontSize: 14,
                             }}
                         >
-                            This source is still processing — content will appear once indexing
-                            finishes.
+                            {t("documentViewer.processing")}
                         </div>
                     ) : fullDoc ? (
                         <div
@@ -1135,7 +1269,15 @@ export function DocumentViewer({
                                 fontSize: 14,
                             }}
                         >
-                            <div>Couldn&apos;t load preview: {fullDocError}</div>
+                            <div>
+                                {t("documentViewer.previewError", {
+                                    error: wordFailure(
+                                        t,
+                                        fullDocError,
+                                        t("documentViewer.loadPreviewFailed")
+                                    ),
+                                })}
+                            </div>
                             <button
                                 onClick={openOriginal}
                                 style={{
@@ -1147,7 +1289,7 @@ export function DocumentViewer({
                                     color: "white",
                                 }}
                             >
-                                Open standalone viewer
+                                {t("documentViewer.openStandalone")}
                             </button>
                         </div>
                     ) : (
@@ -1161,7 +1303,7 @@ export function DocumentViewer({
                                 fontSize: 13,
                             }}
                         >
-                            Loading preview…
+                            {t("documentViewer.loadingPreview")}
                         </div>
                     )}
                 </div>
@@ -1201,7 +1343,7 @@ export function DocumentViewer({
                         }}
                     >
                         <TabButton
-                            label="Versions"
+                            label={t("documentViewer.versionsTab")}
                             count={isMindmap ? revisions.length : versions.length}
                             active={sidebarTab === "versions"}
                             onClick={() => setSidebarTab("versions")}
@@ -1209,7 +1351,7 @@ export function DocumentViewer({
                         {/* Notes hang off a document id; an unpublished map has none yet. */}
                         {(!isMindmap || Boolean(source.documentId)) && (
                             <TabButton
-                                label="Notes"
+                                label={t("documentViewer.notesTab")}
                                 active={sidebarTab === "notes"}
                                 onClick={() => setSidebarTab("notes")}
                             />
@@ -1219,8 +1361,8 @@ export function DocumentViewer({
                         <button
                             type="button"
                             onClick={() => setDetailsVisible(false)}
-                            aria-label="Hide versions and notes"
-                            title="Hide versions and notes"
+                            aria-label={t("documentViewerHeader.hideDetails")}
+                            title={t("documentViewerHeader.hideDetails")}
                             data-testid="viewer-details-hide"
                             style={{
                                 marginLeft: "auto",
@@ -1290,7 +1432,7 @@ export function DocumentViewer({
                             />
                         </div>
                     ) : isMindmap ? (
-                        <MindmapHistory source={source} rows={revisions} />
+                        <MindmapHistory source={source} rows={revisions} humanDate={humanDate} />
                     ) : (
                         <div style={{ flex: 1, overflowY: "auto" }}>
                             <div style={{ padding: "16px 16px 10px" }}>
@@ -1304,7 +1446,7 @@ export function DocumentViewer({
                                         textTransform: "uppercase",
                                     }}
                                 >
-                                    Version history
+                                    {t("documentViewer.versionHistory")}
                                 </div>
                                 <div
                                     style={{
@@ -1314,7 +1456,7 @@ export function DocumentViewer({
                                         marginBottom: 10,
                                     }}
                                 >
-                                    Uploaded revisions of this source.
+                                    {t("documentViewer.uploadedRevisions")}
                                 </div>
 
                                 <input
@@ -1359,10 +1501,12 @@ export function DocumentViewer({
                                     }}
                                 >
                                     {uploadState.phase === "uploading"
-                                        ? `Uploading ${uploadState.percent}%…`
+                                        ? t("documentViewer.uploadingPercent", {
+                                              percent: uploadState.percent,
+                                          })
                                         : uploadState.phase === "finalizing"
-                                          ? "Indexing new version…"
-                                          : "Upload new version"}
+                                          ? t("documentViewer.indexingVersion")
+                                          : t("documentViewer.uploadNewVersion")}
                                 </button>
                                 {expectedMime && (
                                     <div
@@ -1374,7 +1518,7 @@ export function DocumentViewer({
                                             textAlign: "center",
                                         }}
                                     >
-                                        Must match: {expectedMime}
+                                        {t("documentViewer.mustMatch", { mime: expectedMime })}
                                     </div>
                                 )}
                                 {uploadState.phase === "error" && (
@@ -1404,7 +1548,11 @@ export function DocumentViewer({
                                             color: "var(--ink-3)",
                                         }}
                                     >
-                                        {versionsError}
+                                        {wordFailure(
+                                            t,
+                                            versionsError,
+                                            t("documentViewer.loadVersionsFailed")
+                                        )}
                                     </div>
                                 )}
                                 {!versionsError && versions.length === 0 && (
@@ -1415,7 +1563,7 @@ export function DocumentViewer({
                                             color: "var(--ink-3)",
                                         }}
                                     >
-                                        No version history available for this source.
+                                        {t("documentViewer.noVersions")}
                                     </div>
                                 )}
                                 {versions.map(v => {
@@ -1489,8 +1637,13 @@ export function DocumentViewer({
                                                                 : "var(--ink)",
                                                         }}
                                                     >
-                                                        v{v.versionNumber}
-                                                        {v.isCurrent ? " (current)" : ""}
+                                                        {v.isCurrent
+                                                            ? t("documentViewer.versionCurrent", {
+                                                                  number: v.versionNumber,
+                                                              })
+                                                            : t("documentViewer.versionLabel", {
+                                                                  number: v.versionNumber,
+                                                              })}
                                                     </span>
                                                     <span
                                                         className="mono"
@@ -1534,7 +1687,9 @@ export function DocumentViewer({
                                                 marginBottom: 8,
                                             }}
                                         >
-                                            Previewing v{currentVersion.versionNumber}.
+                                            {t("documentViewer.previewingShort", {
+                                                number: currentVersion.versionNumber,
+                                            })}
                                         </div>
                                         <button
                                             disabled={reverting}
@@ -1552,7 +1707,9 @@ export function DocumentViewer({
                                                 cursor: reverting ? "not-allowed" : "pointer",
                                             }}
                                         >
-                                            {reverting ? "Restoring…" : "Restore this version"}
+                                            {reverting
+                                                ? t("documentViewer.restoring")
+                                                : t("documentViewer.restoreThis")}
                                         </button>
                                     </div>
                                 )}
@@ -1572,12 +1729,22 @@ export function DocumentViewer({
                                         marginBottom: 8,
                                     }}
                                 >
-                                    Details
+                                    {t("documentViewer.details")}
                                 </div>
-                                {source.added && <MetaRow label="Added" value={source.added} />}
-                                {source.size && <MetaRow label="Size" value={source.size} />}
+                                {source.added && (
+                                    <MetaRow
+                                        label={t("documentViewer.metaAdded")}
+                                        value={source.added}
+                                    />
+                                )}
+                                {source.size && (
+                                    <MetaRow
+                                        label={t("documentViewer.metaSize")}
+                                        value={source.size}
+                                    />
+                                )}
                                 <MetaRow
-                                    label="Folder"
+                                    label={t("documentViewer.metaFolder")}
                                     value={
                                         <span
                                             style={{
@@ -1587,14 +1754,16 @@ export function DocumentViewer({
                                             }}
                                         >
                                             <IconFolder size={10} />
-                                            {source.folder || "Unfiled"}
+                                            {source.folder || t("documentViewer.unfiled")}
                                         </span>
                                     }
                                 />
                                 <MetaRow
-                                    label="Indexed"
+                                    label={t("documentViewer.metaIndexed")}
                                     value={
-                                        <span style={{ color: "var(--ok)" }}>✓ ready to query</span>
+                                        <span style={{ color: "var(--ok)" }}>
+                                            {t("documentViewer.readyToQuery")}
+                                        </span>
                                     }
                                 />
                             </div>
@@ -1612,19 +1781,25 @@ export function DocumentViewer({
                 layerClassName="z-[90]"
                 title={
                     restoring
-                        ? "Restore this version?"
+                        ? t("documentViewer.confirmRestoreTitle")
                         : isMindmap
-                          ? `Move “${source.title}” to the trash?`
-                          : `Delete “${source.title}”?`
+                          ? t("documentViewer.confirmTrashTitle", { title: source.title })
+                          : t("documentViewer.confirmDeleteTitle", { title: source.title })
                 }
                 description={
                     restoring
-                        ? "It becomes the current version, and answers cite it from now on. The other versions stay in the history."
+                        ? t("documentViewer.confirmRestoreBody")
                         : isMindmap
-                          ? "You can undo it right after."
-                          : "This cannot be undone."
+                          ? t("documentViewer.confirmTrashBody")
+                          : t("documentViewer.confirmDeleteBody")
                 }
-                confirmLabel={restoring ? "Restore" : isMindmap ? "Move to trash" : "Delete"}
+                confirmLabel={
+                    restoring
+                        ? tc("actions.restore")
+                        : isMindmap
+                          ? t("documentViewer.moveToTrash")
+                          : tc("actions.delete")
+                }
                 destructive={!restoring}
                 onConfirm={() => {
                     const asked = confirming;
@@ -1642,7 +1817,16 @@ export function DocumentViewer({
  * saves, and the same Details block every source gets — with "Indexed"
  * replaced by whether answers can cite this map right now.
  */
-function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: RevisionRow[] }) {
+function MindmapHistory({
+    source,
+    rows,
+    humanDate,
+}: {
+    source: WorkspaceSource;
+    rows: RevisionRow[];
+    humanDate: (raw: string) => string;
+}) {
+    const t = useTranslations("workspace");
     const citability = source.citability ?? "citable";
     return (
         <div style={{ flex: 1, overflowY: "auto" }}>
@@ -1657,16 +1841,16 @@ function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: Revis
                         textTransform: "uppercase",
                     }}
                 >
-                    Version history
+                    {t("documentViewer.versionHistory")}
                 </div>
                 <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
-                    Snapshots saved from the editor. Restore one from its History panel.
+                    {t("documentViewer.mindmapHistoryHint")}
                 </div>
             </div>
             <div style={{ padding: "0 10px 16px" }}>
                 {rows.length === 0 && (
                     <div style={{ padding: "10px 12px", fontSize: 11, color: "var(--ink-3)" }}>
-                        No snapshots yet — ⌘S in the editor writes one.
+                        {t("documentViewer.noSnapshots")}
                     </div>
                 )}
                 {rows.map((row, index) => (
@@ -1694,15 +1878,16 @@ function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: Revis
                                     color: index === 0 ? "var(--accent-ink)" : "var(--ink)",
                                 }}
                             >
-                                r{row.revision}
-                                {index === 0 ? " (latest)" : ""}
+                                {index === 0
+                                    ? t("documentViewer.revisionLatest", { number: row.revision })
+                                    : t("documentViewer.revisionLabel", { number: row.revision })}
                             </span>
                             <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
                                 {humanDate(row.createdAt)}
                             </span>
                         </div>
                         <div style={{ fontSize: 11, color: "var(--ink-3)", lineHeight: 1.4 }}>
-                            {row.label ?? `${row.nodeCount} shape${row.nodeCount === 1 ? "" : "s"}`}
+                            {row.label ?? t("sourceRows.shapes", { count: row.nodeCount })}
                         </div>
                     </div>
                 ))}
@@ -1720,28 +1905,38 @@ function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: Revis
                         marginBottom: 8,
                     }}
                 >
-                    Details
+                    {t("documentViewer.details")}
                 </div>
-                {source.added && <MetaRow label="Edited" value={source.added} />}
-                {source.size && <MetaRow label="Size" value={source.size} />}
+                {source.added && (
+                    <MetaRow label={t("documentViewer.metaEdited")} value={source.added} />
+                )}
+                {source.size && (
+                    <MetaRow label={t("documentViewer.metaSize")} value={source.size} />
+                )}
                 <MetaRow
-                    label="Folder"
+                    label={t("documentViewer.metaFolder")}
                     value={
                         <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
                             <IconFolder size={10} />
-                            {source.folder || "Unfiled"}
+                            {source.folder || t("documentViewer.unfiled")}
                         </span>
                     }
                 />
                 <MetaRow
-                    label="Citable"
+                    label={t("documentViewer.metaCitable")}
                     value={
                         citability === "citable" ? (
-                            <span style={{ color: "var(--ok)" }}>✓ answers can cite it</span>
+                            <span style={{ color: "var(--ok)" }}>
+                                {t("documentViewer.citableYes")}
+                            </span>
                         ) : citability === "stale" ? (
-                            <span style={{ color: "var(--warn)" }}>changes not yet citable</span>
+                            <span style={{ color: "var(--warn)" }}>
+                                {t("documentViewer.citableStale")}
+                            </span>
                         ) : (
-                            <span style={{ color: "var(--ink-3)" }}>not yet</span>
+                            <span style={{ color: "var(--ink-3)" }}>
+                                {t("documentViewer.citableNo")}
+                            </span>
                         )
                     }
                 />
@@ -1749,6 +1944,43 @@ function MindmapHistory({ source, rows }: { source: WorkspaceSource; rows: Revis
         </div>
     );
 }
+
+/** A failed fetch's HTTP status, worded where it is shown. */
+class StatusError extends Error {
+    constructor(readonly status: number) {
+        super(`HTTP ${status}`);
+    }
+}
+
+/**
+ * What a failed load says, kept out of the reader's language in state so a
+ * language switch rewords it: the error's own message, `failed:<status>`
+ * for a bare HTTP status, or `failed:` when there is nothing usable.
+ */
+function failureText(err: unknown): string {
+    if (err instanceof StatusError) return `failed:${err.status}`;
+    // The mindmap API's own failure, when the server gave no reason.
+    if (err instanceof MindmapRequestError && !err.serverMessage)
+        return `failed:mindmap:${err.status}`;
+    return err instanceof Error && err.message ? err.message : "failed:";
+}
+
+/** A `failureText` as the reader sees it, with `fallback` for one that says nothing. */
+function wordFailure(
+    t: WorkspaceTranslator,
+    text: string,
+    fallback: string,
+    mindmapErrors?: MindmapErrorTranslator
+): string {
+    if (text === "failed:") return fallback;
+    const mindmapStatus = /^failed:mindmap:(\d+)$/.exec(text)?.[1];
+    if (mindmapStatus && mindmapErrors)
+        return mindmapErrors("requestFailed", { status: mindmapStatus });
+    const status = /^failed:(?:mindmap:)?(\d+)$/.exec(text)?.[1];
+    return status ? t("documentViewer.failedStatus", { status }) : text;
+}
+
+type MindmapErrorTranslator = ReturnType<typeof useTranslations<"mindmap.errors">>;
 
 /**
  * Project a list of server-side `documentNotes` rows down to the minimal

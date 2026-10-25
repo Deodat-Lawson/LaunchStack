@@ -9,8 +9,12 @@ import {
     type RelationshipStage,
 } from "@launchstack/pipelines/distribution/types";
 import { listPartners } from "@launchstack/pipelines/distribution/db";
+import { requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { error, handleRouteError, json } from "~/server/distribution/http";
+import { error, json } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
+
+const growth = (request: Request) => requestTranslator(request, "growth.server.errors");
 
 export async function GET(request: NextRequest) {
     try {
@@ -25,12 +29,13 @@ export async function GET(request: NextRequest) {
             );
         const kind = q.get("kind");
         if (kind && !(PARTNER_KINDS as readonly string[]).includes(kind))
-            return error("Invalid kind", 400);
+            return error(growth(request)("invalidKind"), 400);
         const limit = q.get("limit") ? Number.parseInt(q.get("limit")!, 10) : 100;
         const offset = q.get("offset") ? Number.parseInt(q.get("offset")!, 10) : 0;
         if (!Number.isInteger(limit) || limit < 1 || limit > 500)
-            return error("Invalid limit", 400);
-        if (!Number.isInteger(offset) || offset < 0) return error("Invalid offset", 400);
+            return error(growth(request)("invalidLimit"), 400);
+        if (!Number.isInteger(offset) || offset < 0)
+            return error(growth(request)("invalidOffset"), 400);
         const minFit = q.get("minFit") ? Number.parseInt(q.get("minFit")!, 10) : undefined;
         const order = q.get("order");
         const items = await listPartners(ctx.data.companyId, {
@@ -49,6 +54,6 @@ export async function GET(request: NextRequest) {
         });
         return json({ partners: items, pagination: { limit, offset } });
     } catch (err) {
-        return handleRouteError("GET partners", err);
+        return distributionRouteError("GET partners", err, request);
     }
 }

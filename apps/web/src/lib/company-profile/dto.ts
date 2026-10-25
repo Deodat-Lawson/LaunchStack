@@ -16,6 +16,65 @@ export type SourceOverride = "about_us" | "set_aside";
 
 export type ApplicantType = "nonprofit" | "small_business" | "for_profit" | "individual";
 
+/**
+ * A fact label the company-metadata view gives a known key, as its message
+ * key under `companyProfile.server.factLabels`. A label a person typed has none.
+ */
+export type FactLabelKey =
+    | `company.${"name" | "description" | "industry" | "foundedYear" | "headquarters" | "website" | "size"}`
+    | `profile.${
+          | "mission"
+          | "programs"
+          | "beneficiaries"
+          | "outcomes"
+          | "need"
+          | "legalStatus"
+          | "annualBudget"
+          | "fundingSources"
+          | "fundingRaised"
+          | "customers"
+          | "traction"
+          | "businessModel"
+          | "pricing"
+          | "leadership"
+          | "board"
+          | "partners"
+          | "awards"
+          | "theoryOfChange"
+          | "evaluation"
+          | "plans"
+          | "idea"}`;
+
+/** Kinds of text reading drops, as `companyProfile.server.dropWords.<key>`. */
+export type DropWordKey =
+    | "references"
+    | "table"
+    | "figure"
+    | "boilerplate"
+    | "placeholder"
+    | "tooShort"
+    | "duplicate";
+
+/**
+ * A source's `reason` as message data, when the rules wrote it rather than
+ * the model: `companyProfile.server.reasons.<key>`.
+ */
+export type SourceReasonCopy =
+    | {
+          key:
+              | "noReadableText"
+              | "sparseMindmap"
+              | "tooLittleText"
+              | "aboutUs"
+              | "thirdParty"
+              | "nothingToRead"
+              | "stillProcessing";
+      }
+    | { key: "onlyNoise"; drops: DropWordKey[] };
+
+/** A fixed failure sentence, as `companyProfile.server.failures.<key>`. */
+export type ProfileFailureKey = "readingFailed" | "readingFactsFailed" | "buildFailed";
+
 /** One numbered excerpt a fact cites. Only cited excerpts are listed. */
 export interface ProfileEvidenceDto {
     n: number;
@@ -32,6 +91,8 @@ export interface ProfileFactDto {
     /** The path PATCH /api/company/profile/facts takes, e.g. "company.headquarters", "profile.facts.mission". */
     path: string;
     label: string;
+    /** `label` as a message key, for the screen to word; absent for a typed label. */
+    labelKey?: FactLabelKey | null;
     value: string;
     cites: number[];
     source: "documents" | "manual";
@@ -61,6 +122,8 @@ export interface ProfileSourceDto {
     roleBy: "rules" | "model" | null;
     /** One sentence for the person: "A research paper by authors at UW and Tencent AI Lab." */
     reason: string | null;
+    /** `reason` as message data when the rules wrote it; absent for the model's own words. */
+    reasonCopy?: SourceReasonCopy | null;
     override: SourceOverride | null;
     /** Whether its facts count: the override if any, else role === "about_us". */
     counted: boolean;
@@ -69,6 +132,8 @@ export interface ProfileSourceDto {
     status: "pending" | "done" | "failed";
     /** Why reading it failed, when it did. */
     error: string | null;
+    /** `error` as a message key when it is one of the fixed sentences. */
+    errorKey?: ProfileFailureKey | null;
     /** Where the source opens in the Studio. */
     href: string;
 }
@@ -76,6 +141,8 @@ export interface ProfileSourceDto {
 export interface CompanyProfileDto {
     status: CompanyProfileStatus;
     error: string | null;
+    /** `error` as a message key when it is the fixed "last build failed". */
+    errorKey?: ProfileFailureKey | null;
     builtAt: string | null;
     /** Built under older rules, or a source changed since: a rebuild would differ. */
     stale: boolean;

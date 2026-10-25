@@ -28,6 +28,33 @@ const SCHEMA_VERSION = 1;
 const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
 
 /**
+ * A /convert call that failed. `code` is the converter's typed error code
+ * (`docling-not-configured`, `docling-failed`, `fetch-failed`, …), or
+ * `converter-unreachable` when the service did not answer at all, so callers
+ * can tell "this deployment has no Docling" from "this file is bad".
+ */
+export class DocumentConverterError extends Error {
+    constructor(
+        message: string,
+        readonly status: number,
+        readonly code: string
+    ) {
+        super(message);
+        this.name = "DocumentConverterError";
+    }
+}
+
+/** The `error.code` of the converter's typed error envelope, if the body is one. */
+function converterErrorCode(body: string): string {
+    try {
+        const code = (JSON.parse(body) as { error?: { code?: unknown } }).error?.code;
+        return typeof code === "string" ? code : "unknown";
+    } catch {
+        return "unknown";
+    }
+}
+
+/**
  * Local mirror of the frozen EvidenceDocument wire schema
  * (packages/protocol/src/evidence-document.ts), validated on receipt.
  */
@@ -199,16 +226,20 @@ class OssOCRAdapter implements OCRAdapter {
             });
         } catch (err) {
             clearTimeout(timer);
-            throw new Error(
-                `Document converter unreachable at ${this.converterUrl}: ${(err as Error).message}`
+            throw new DocumentConverterError(
+                `Document converter unreachable at ${this.converterUrl}: ${(err as Error).message}`,
+                0,
+                "converter-unreachable"
             );
         }
         clearTimeout(timer);
 
         if (!response.ok) {
             const body = await response.text().catch(() => "");
-            throw new Error(
-                `Document converter /convert failed: ${response.status} ${response.statusText} — ${body.slice(0, 500)}`
+            throw new DocumentConverterError(
+                `Document converter /convert failed: ${response.status} ${response.statusText} — ${body.slice(0, 500)}`,
+                response.status,
+                converterErrorCode(body)
             );
         }
 

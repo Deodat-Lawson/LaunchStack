@@ -10,6 +10,9 @@ import { and, eq } from "drizzle-orm";
 import { GoogleAuthError, GoogleDriveError } from "@launchstack/google-drive";
 import { document } from "@launchstack/store/schema";
 
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
 import { db } from "~/server/db";
 import {
     requireWorkspaceContext,
@@ -17,11 +20,7 @@ import {
 } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { callNotesCalls } from "@launchstack/pipelines/call-notes";
-import {
-    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
-    callNoteDocumentReference,
-    isCallNoteDocument,
-} from "~/lib/call-note-document";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import {
     GoogleDriveConfigError,
     isDriveLinkingEnabled,
@@ -33,12 +32,23 @@ export function fail(status: number, error: string, message?: string): NextRespo
     return NextResponse.json({ success: false, error, message }, { status });
 }
 
+/** English without a request (a test, a script). */
+function localeOf(request: Request | undefined): Locale {
+    return request ? localeOfRequest(request) : "en";
+}
+
 export interface DriveRouteContext {
     documentId: number;
     companyId: bigint;
     authUserId: string;
     userPk: bigint | null;
-    doc: { id: number; title: string; fileType: string | null; mimeType: string | null };
+    doc: {
+        id: number;
+        title: string;
+        fileType: string | null;
+        mimeType: string | null;
+        ocrMetadata: unknown;
+    };
 }
 
 /**
@@ -49,22 +59,31 @@ export interface DriveRouteContext {
  */
 export async function authorizeDriveRoute(
     rawId: string,
-    options?: { requirePermission?: boolean }
+    /** `request` words the refusals in its reader's language. */
+    options?: { requirePermission?: boolean; request?: Request }
 ): Promise<{ ok: true; data: DriveRouteContext } | { ok: false; response: NextResponse }> {
+    const locale = localeOf(options?.request);
     if (!isDriveLinkingEnabled()) {
         return {
             ok: false,
             response: fail(
                 404,
                 "feature_disabled",
-                "Google Drive linking is not enabled on this deployment."
+                translatorFor(locale, "sources.server.drive")("notEnabled")
             ),
         };
     }
 
     const documentId = Number(rawId);
     if (!Number.isInteger(documentId) || documentId <= 0) {
-        return { ok: false, response: fail(400, "invalid_id", "Invalid document id") };
+        return {
+            ok: false,
+            response: fail(
+                400,
+                "invalid_id",
+                translatorFor(locale, "sources.server.errors")("invalidDocumentId")
+            ),
+        };
     }
 
     const ctx =
@@ -92,7 +111,14 @@ export async function authorizeDriveRoute(
         );
 
     if (!doc) {
-        return { ok: false, response: fail(404, "not_found", "Document not found") };
+        return {
+            ok: false,
+            response: fail(
+                404,
+                "not_found",
+                translatorFor(locale, "errors.api")("documentNotFound")
+            ),
+        };
     }
 
     if (options?.requirePermission !== false && isCallNoteDocument(doc)) {
@@ -100,8 +126,8 @@ export async function authorizeDriveRoute(
             ok: false,
             response: fail(
                 409,
-                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
-                CALL_NOTE_DOCUMENT_MANAGED_MESSAGE
+                translatorFor(locale, "sources.server.errors")("callNoteManaged"),
+                translatorFor(locale, "sources.server.errors")("callNoteManaged")
             ),
         };
     }
@@ -118,32 +144,36 @@ export async function authorizeDriveRoute(
     };
 }
 
-/** Map service-layer errors onto responses the UI can act on. */
-export function driveErrorResponse(err: unknown): NextResponse {
+/**
+ * Map service-layer errors onto responses the UI can act on — in the
+ * language of the person behind `request`. Provider details pass through.
+ */
+export function driveErrorResponse(err: unknown, request?: Request): NextResponse {
+    const locale = localeOf(request);
+    const t = translatorFor(locale, "sources.server.drive");
     if (err instanceof GoogleNotConnectedError) {
         return NextResponse.json(
             {
                 success: false,
                 error: "not_connected",
-                message: "Connect a Google account for this workspace first.",
+                message: t("connectFirst"),
                 connectUrl: "/api/connectors/google/oauth/start",
             },
             { status: 409 }
         );
     }
     if (err instanceof DriveLinkError) {
-        return fail(err.status, err.code, err.message);
+        return fail(err.status, err.code, wordOr(err.copy, err.message, locale));
     }
     if (err instanceof GoogleDriveConfigError) {
-        return fail(503, "not_configured", err.message);
+        return fail(503, "not_configured", wordOr(err.copy, err.message, locale));
     }
     if (err instanceof GoogleAuthError && err.invalidGrant) {
         return NextResponse.json(
             {
                 success: false,
                 error: "reconnect_required",
-                message:
-                    "Google revoked this workspace's access. Reconnect the Google account to resume syncing.",
+                message: t("accessRevoked"),
                 connectUrl: "/api/connectors/google/oauth/start",
             },
             { status: 409 }
@@ -156,5 +186,9 @@ export function driveErrorResponse(err: unknown): NextResponse {
             err.detail
         );
     }
-    return fail(500, "internal_error", err instanceof Error ? err.message : "Unknown error");
+    return fail(
+        500,
+        "internal_error",
+        err instanceof Error ? err.message : translatorFor(locale, "errors.api")("unknownError")
+    );
 }

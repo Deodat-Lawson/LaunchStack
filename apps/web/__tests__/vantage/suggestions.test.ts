@@ -23,6 +23,7 @@ import {
     WEEK,
     agenda,
     commitment,
+    englishFormat,
     overview,
     ref,
     signals,
@@ -409,27 +410,42 @@ describe("draftedWords and originWords", () => {
     const nextDay = new Date("2026-10-03T12:00:00.000Z");
 
     it("says who drafted the agenda and when", () => {
-        expect(draftedWords(agenda({ generatedAt, modelMetadata: { mode: "ai" } }), nextDay)).toBe(
-            "drafted by AI yesterday"
-        );
         expect(
-            draftedWords(agenda({ generatedAt, modelMetadata: { mode: "rules" } }), nextDay)
+            draftedWords(
+                englishFormat,
+                agenda({ generatedAt, modelMetadata: { mode: "ai" } }),
+                nextDay
+            )
+        ).toBe("drafted by AI yesterday");
+        expect(
+            draftedWords(
+                englishFormat,
+                agenda({ generatedAt, modelMetadata: { mode: "rules" } }),
+                nextDay
+            )
         ).toBe("drafted from your records yesterday");
-        expect(draftedWords(agenda({ generatedAt }), new Date("2026-10-02T15:00:00.000Z"))).toBe(
-            "drafted 3 hours ago"
-        );
+        expect(
+            draftedWords(
+                englishFormat,
+                agenda({ generatedAt }),
+                new Date("2026-10-02T15:00:00.000Z")
+            )
+        ).toBe("drafted 3 hours ago");
     });
 
     it("says nothing for an agenda that was never generated", () => {
-        expect(draftedWords(agenda({ generatedAt: null, modelMetadata: { mode: "ai" } }))).toBe(
-            null
-        );
+        expect(
+            draftedWords(
+                englishFormat,
+                agenda({ generatedAt: null, modelMetadata: { mode: "ai" } })
+            )
+        ).toBe(null);
     });
 
     it("names each origin in words that stay true", () => {
-        expect(originWords("ai")).toBe("AI draft");
-        expect(originWords("rules")).toBe("From your records");
-        expect(originWords("founder")).toBe("Yours");
+        expect(originWords(englishFormat, "ai")).toBe("AI draft");
+        expect(originWords(englishFormat, "rules")).toBe("From your records");
+        expect(originWords(englishFormat, "founder")).toBe("Yours");
     });
 });
 

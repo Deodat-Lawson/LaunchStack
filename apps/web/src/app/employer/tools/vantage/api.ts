@@ -44,6 +44,7 @@ export type {
     WeeklySignals,
 };
 
+/** Each kind is named and explained by `vantage.evidenceKind.label.<kind>` / `.hint.<kind>`. */
 export const EVIDENCE_KINDS: readonly VantageEvidenceKind[] = [
     "note",
     "interview",
@@ -52,24 +53,6 @@ export const EVIDENCE_KINDS: readonly VantageEvidenceKind[] = [
     "claim",
     "document",
 ];
-
-export const EVIDENCE_KIND_LABEL: Record<VantageEvidenceKind, string> = {
-    note: "Note",
-    interview: "Interview",
-    link: "Link",
-    task: "Task",
-    claim: "Claim",
-    document: "Document",
-};
-
-export const EVIDENCE_KIND_HINT: Record<VantageEvidenceKind, string> = {
-    note: "A short update or observation",
-    interview: "What a customer or user said",
-    link: "A page, thread or dashboard worth keeping",
-    task: "Something that got done, or did not",
-    claim: "A number or statement from a deck, application or update",
-    document: "A file or report; paste the part that matters",
-};
 
 export interface EvidenceInput {
     kind: VantageEvidenceKind;
@@ -148,7 +131,13 @@ export class VantageApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "VantageApiError";
@@ -170,11 +159,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new VantageApiError(message, response.status, body);
+                : null;
+        throw new VantageApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }

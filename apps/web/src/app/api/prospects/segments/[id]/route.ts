@@ -8,14 +8,14 @@ import { handleProspectsError, json, prospectsContext, readBody } from "../../_h
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         return json({ segment: await getSegment(auth.ctx, id) });
     } catch (err) {
-        return handleProspectsError("GET segment", err);
+        return handleProspectsError("GET segment", err, request);
     }
 }
 
@@ -28,6 +28,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const fields = (body.fields ?? {}) as Record<string, string | string[]>;
         return json({ segment: await patchSegment(auth.ctx, id, fields) });
     } catch (err) {
-        return handleProspectsError("PATCH segment", err);
+        return handleProspectsError("PATCH segment", err, request);
     }
 }

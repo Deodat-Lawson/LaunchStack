@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Bold,
     Italic,
@@ -48,33 +49,51 @@ interface LegalDocumentEditorProps {
     onSave: (title: string, content: string, sections: EditorSection[]) => void;
 }
 
-function getFieldFormatHint(field: TemplateField): string {
-    if (field.type === "date") return "date";
+type EditorT = ReturnType<typeof useTranslations<"generator.legalEditor">>;
+
+function getFieldFormatHint(field: TemplateField, t: EditorT): string {
+    if (field.type === "date") return t("hints.date");
     if (field.type === "number") {
         const k = field.key;
-        if (k.endsWith("_pct") || k === "discount_rate") return "0–100%";
-        if (
-            k.endsWith("_months") ||
-            k.endsWith("_years") ||
-            k.endsWith("_days") ||
-            k === "total_shares" ||
-            k === "eligibility_age" ||
-            k === "vacation_days"
-        )
-            return "number";
-        return "number";
+        if (k.endsWith("_pct") || k === "discount_rate") return t("hints.percent");
+        return t("hints.number");
     }
     if (field.type === "select" && field.options) return field.options.join(" / ");
-    if (field.type === "textarea") return "free text";
+    if (field.type === "textarea") return t("hints.freeText");
     return "";
 }
 
-function buildFieldTooltip(field: TemplateField): string {
+function buildFieldTooltip(field: TemplateField, t: EditorT): string {
     const parts: string[] = [field.label];
-    const hint = getFieldFormatHint(field);
+    const hint = getFieldFormatHint(field, t);
     if (hint) parts.push(hint);
-    if (field.required) parts.push("required");
+    if (field.required) parts.push(t("required"));
     return parts.join(" · ");
+}
+
+/**
+ * `validateDocument` (pipelines) words its errors in English around the
+ * field's label; say the same thing in the reader's language. A message it
+ * learns later falls through as written.
+ */
+function validationMessage(error: FieldValidationError, t: EditorT): string {
+    const label = error.label;
+    switch (error.message) {
+        case `${label} is required`:
+            return t("validation.required", { label });
+        case `${label} must be a valid number`:
+            return t("validation.number", { label });
+        case `${label} cannot be negative`:
+            return t("validation.negative", { label });
+        case `${label} must be between 0% and 100%`:
+            return t("validation.percent", { label });
+        case `${label} must be greater than 0`:
+            return t("validation.positive", { label });
+        case `Invalid value for ${label}`:
+            return t("validation.invalid", { label });
+        default:
+            return error.message;
+    }
 }
 
 function extractFieldKeysFromHtml(html: string): string[] {
@@ -544,12 +563,15 @@ function applyFieldUpdatesToHtml(html: string, updates: Record<string, string>):
     return nextHtml;
 }
 
+/** A field group's heading: `generator.legalEditor.groups.<group>`. */
+type FieldGroup = "parties" | "signatures" | "governingLaw" | "termsDates" | "details";
+
 function groupFields(fields: TemplateField[]): {
-    group: string;
+    group: FieldGroup;
     fields: TemplateField[];
 }[] {
-    const groups = new Map<string, TemplateField[]>();
-    const groupOrder: string[] = [];
+    const groups = new Map<FieldGroup, TemplateField[]>();
+    const groupOrder: FieldGroup[] = [];
     for (const f of fields) {
         const g = inferFieldGroup(f);
         if (!groups.has(g)) {
@@ -561,7 +583,7 @@ function groupFields(fields: TemplateField[]): {
     return groupOrder.map(g => ({ group: g, fields: groups.get(g)! }));
 }
 
-function inferFieldGroup(field: TemplateField): string {
+function inferFieldGroup(field: TemplateField): FieldGroup {
     const k = field.key;
     if (
         k.includes("party") ||
@@ -572,13 +594,13 @@ function inferFieldGroup(field: TemplateField): string {
         k.includes("founder") ||
         k.includes("company")
     ) {
-        return "Parties";
+        return "parties";
     }
     if (k.includes("signat") || k.includes("witness")) {
-        return "Signatures";
+        return "signatures";
     }
     if (k.includes("governing_law") || k.includes("dispute") || k.includes("jurisdiction")) {
-        return "Governing law";
+        return "governingLaw";
     }
     if (
         k.includes("term") ||
@@ -591,9 +613,9 @@ function inferFieldGroup(field: TemplateField): string {
         k.includes("years") ||
         k.includes("days")
     ) {
-        return "Terms & dates";
+        return "termsDates";
     }
-    return "Details";
+    return "details";
 }
 
 function EditableSection({
@@ -617,6 +639,7 @@ function EditableSection({
     showErrors: boolean;
     fieldMap: Record<string, TemplateField>;
 }) {
+    const t = useTranslations("generator.legalEditor");
     const ref = useRef<HTMLDivElement>(null);
     const isInternalEdit = useRef(false);
     const lastSetContent = useRef(section.content);
@@ -867,7 +890,7 @@ function EditableSection({
             if (!key) return;
             const field = fieldMap[key];
             if (field) {
-                mark.setAttribute("title", buildFieldTooltip(field));
+                mark.setAttribute("title", buildFieldTooltip(field, t));
             }
             if (showErrors && invalidFields.has(key)) {
                 mark.classList.add("field-invalid");
@@ -876,7 +899,7 @@ function EditableSection({
             }
         });
         syncLegalMarkEmptyClass(el);
-    }, [invalidFields, showErrors, section.content, fieldMap]);
+    }, [invalidFields, showErrors, section.content, fieldMap, t]);
 
     if (section.type === "title") {
         return <h1>{section.content}</h1>;
@@ -906,6 +929,9 @@ export function LegalDocumentEditor({
     onBack,
     onSave,
 }: LegalDocumentEditorProps) {
+    const t = useTranslations("generator.legalEditor");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const [title, setTitle] = useState(initialTitle);
     const [sections, setSections] = useState<EditorSection[]>(initialSections);
     const sectionsRef = useRef(sections);
@@ -1095,14 +1121,14 @@ export function LegalDocumentEditor({
 
     const downloadDocx = async () => {
         if (!templateId || !TEMPLATE_REGISTRY[templateId]) {
-            toast.error("Template not configured", {
-                description: "Unable to export document.",
+            toast.error(t("toast.templateMissing"), {
+                description: t("toast.exportUnavailable"),
             });
             return;
         }
 
         setIsDownloadingDocx(true);
-        const loadingToast = toast.loading("Generating DOCX...");
+        const loadingToast = toast.loading(t("toast.generatingDocx"));
 
         try {
             const { html } = getLiveExportSnapshot();
@@ -1114,7 +1140,7 @@ export function LegalDocumentEditor({
             });
 
             if (!res.ok) {
-                throw new Error(`Export failed: HTTP ${res.status}`);
+                throw new Error(t("errors.exportHttp", { status: res.status }));
             }
 
             const json = (await res.json()) as {
@@ -1124,7 +1150,7 @@ export function LegalDocumentEditor({
             };
 
             if (!json.success || !json.docxBase64) {
-                throw new Error((json.error ?? "") || "Failed to generate DOCX");
+                throw new Error((json.error ?? "") || t("errors.generateDocx"));
             }
 
             const byteChars = atob(json.docxBase64);
@@ -1136,20 +1162,20 @@ export function LegalDocumentEditor({
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${title || "document"}.docx`;
+            a.download = `${title || t("documentFallback")}.docx`;
             a.click();
             URL.revokeObjectURL(url);
 
-            toast.success("Document downloaded!", {
-                description: `${title || "Document"}.docx`,
+            toast.success(t("toast.downloaded"), {
+                description: `${title || t("documentFallback")}.docx`,
                 id: loadingToast,
             });
             setStatus("saved");
         } catch (error) {
             console.error("DOCX export error:", error);
-            toast.error("Export failed", {
+            toast.error(t("toast.exportFailed"), {
                 description:
-                    error instanceof Error ? error.message : "Could not generate DOCX file",
+                    error instanceof Error ? error.message : t("toast.exportFailedFallback"),
                 id: loadingToast,
                 duration: 5000,
             });
@@ -1160,16 +1186,18 @@ export function LegalDocumentEditor({
 
     const applyEditsWithTrackChanges = async () => {
         if (!templateId || !TEMPLATE_REGISTRY[templateId]) {
-            toast.error("Template not configured", {
-                description: "Unable to generate document. Please contact support.",
+            toast.error(t("toast.templateMissing"), {
+                description: t("toast.generateUnavailable"),
             });
             return;
         }
 
         const validation = runValidation();
         if (!validation.valid) {
-            toast.error("Document has validation errors", {
-                description: `Please fix ${validation.errors.length} field error${validation.errors.length > 1 ? "s" : ""} before applying track changes.`,
+            toast.error(t("toast.validationErrors"), {
+                description: t("toast.validationErrorsBody", {
+                    count: validation.errors.length,
+                }),
             });
             setPaneTab("validate");
             setSaveAttempted(true);
@@ -1177,14 +1205,14 @@ export function LegalDocumentEditor({
         }
 
         setIsApplyingEdits(true);
-        const loadingToast = toast.loading("Generating document with track changes...");
+        const loadingToast = toast.loading(t("toast.generatingTracked"));
 
         try {
             const { html } = getLiveExportSnapshot();
             const values = extractFieldValuesFromSections([html]);
 
             const template = TEMPLATE_REGISTRY[templateId];
-            if (!template) throw new Error("Template not found");
+            if (!template) throw new Error(t("errors.templateNotFound"));
 
             const placeholderData: Record<string, string> = {};
             const tokenMap: Record<string, string> = {};
@@ -1209,7 +1237,7 @@ export function LegalDocumentEditor({
                     error?: string;
                 } | null;
                 throw new Error(
-                    (errBody?.error ?? "") || `Document generation failed: HTTP ${res.status}`
+                    (errBody?.error ?? "") || t("errors.generationHttp", { status: res.status })
                 );
             }
 
@@ -1220,7 +1248,7 @@ export function LegalDocumentEditor({
             };
 
             if (!json.success || !json.docxBase64) {
-                throw new Error((json.error ?? "") || "Failed to generate DOCX");
+                throw new Error((json.error ?? "") || t("errors.generateDocx"));
             }
 
             const edits: Array<{ target_text: string; new_text: string; comment?: string }> = [];
@@ -1243,8 +1271,8 @@ export function LegalDocumentEditor({
             }
 
             if (edits.length === 0) {
-                toast.warning("No edits to apply", {
-                    description: "All fields are using default placeholders",
+                toast.warning(t("toast.noEdits"), {
+                    description: t("toast.noEditsBody"),
                     id: loadingToast,
                 });
                 setIsApplyingEdits(false);
@@ -1271,7 +1299,7 @@ export function LegalDocumentEditor({
 
             if (!applyRes.ok || !applyJson.success || !applyJson.modifiedDocxBase64) {
                 const err = new Error(
-                    (applyJson.message ?? "") || (applyJson.error ?? "") || "Failed to apply edits"
+                    (applyJson.message ?? "") || (applyJson.error ?? "") || t("errors.applyEdits")
                 );
                 (err as Error & { serverError?: string }).serverError = applyJson.error;
                 throw err;
@@ -1291,8 +1319,14 @@ export function LegalDocumentEditor({
             URL.revokeObjectURL(url);
 
             const { applied_edits = 0, skipped_edits = 0 } = applyJson.summary ?? {};
-            toast.success("Document ready with track changes!", {
-                description: `${applied_edits} edit${applied_edits > 1 ? "s" : ""} applied${skipped_edits > 0 ? `, ${skipped_edits} skipped` : ""}. Download started.`,
+            toast.success(t("toast.trackedReady"), {
+                description:
+                    skipped_edits > 0
+                        ? t("toast.trackedReadySkippedBody", {
+                              applied: applied_edits,
+                              skipped: skipped_edits,
+                          })
+                        : t("toast.trackedReadyBody", { applied: applied_edits }),
                 id: loadingToast,
                 duration: 5000,
             });
@@ -1301,9 +1335,9 @@ export function LegalDocumentEditor({
         } catch (error) {
             console.error("Track changes error:", error);
             const serverError = (error as Error & { serverError?: string }).serverError ?? "";
-            const errMsg = error instanceof Error ? error.message : "Unknown error occurred";
+            const errMsg = error instanceof Error ? error.message : t("toast.unknownError");
 
-            let errorMessage = "Failed to apply track changes";
+            let errorMessage = t("toast.trackFailed");
             let errorDescription = errMsg;
 
             if (
@@ -1311,22 +1345,19 @@ export function LegalDocumentEditor({
                 errMsg.includes("not configured") ||
                 errMsg.includes("ADEU_SERVICE_URL")
             ) {
-                errorMessage = "Track Changes not configured";
-                errorDescription =
-                    "The redlining service (Adeu) is not set up. Ask your admin to configure ADEU_SERVICE_URL.";
+                errorMessage = t("toast.trackNotConfigured");
+                errorDescription = t("toast.trackNotConfiguredBody");
             } else if (
                 errMsg.includes("ECONNREFUSED") ||
                 errMsg.includes("ENOTFOUND") ||
                 errMsg.includes("fetch failed") ||
                 errMsg.includes("Failed to fetch")
             ) {
-                errorMessage = "Redlining service unreachable";
-                errorDescription =
-                    "The Adeu service is not running. Start it with Docker Compose or check ADEU_SERVICE_URL in your .env.";
+                errorMessage = t("toast.trackUnreachable");
+                errorDescription = t("toast.trackUnreachableBody");
             } else if (errMsg.includes("Batch rejected") || errMsg.includes("Ambiguous match")) {
-                errorMessage = "Track Changes failed";
-                errorDescription =
-                    "Some field edits could not be applied. The document may have duplicate field references.";
+                errorMessage = t("toast.trackBatchFailed");
+                errorDescription = t("toast.trackBatchFailedBody");
             }
 
             toast.error(errorMessage, {
@@ -1367,7 +1398,7 @@ export function LegalDocumentEditor({
                 ...prev,
                 {
                     role: "assistant",
-                    content: "This document does not have editable highlighted fields.",
+                    content: t("chat.noFields"),
                 },
             ]);
             setIsProcessing(false);
@@ -1427,8 +1458,7 @@ export function LegalDocumentEditor({
                         ...prev,
                         {
                             role: "assistant",
-                            content:
-                                'I couldn\'t parse a field change from that. Try naming the exact field, e.g. "set Effective Date to March 4, 2026".',
+                            content: t("chat.parseFailed"),
                         },
                     ]);
                     return;
@@ -1453,8 +1483,7 @@ export function LegalDocumentEditor({
                         ...prev,
                         {
                             role: "assistant",
-                            content:
-                                'No matching fields were updated. Try naming the exact field, like "Effective Date".',
+                            content: t("chat.noMatch"),
                         },
                     ]);
                     return;
@@ -1471,7 +1500,7 @@ export function LegalDocumentEditor({
                         ...prev,
                         {
                             role: "assistant",
-                            content: `Updated: ${changedLabels}.`,
+                            content: t("chat.updated", { fields: changedLabels }),
                         },
                     ]);
                     setStatus("editing");
@@ -1482,23 +1511,19 @@ export function LegalDocumentEditor({
                         ...prev,
                         {
                             role: "assistant",
-                            content:
-                                "No visible changes. Try naming the exact field and new value.",
+                            content: t("chat.noChange"),
                         },
                     ]);
                 }
             }
         } catch {
-            setChatMessages(prev => [
-                ...prev,
-                { role: "assistant", content: "Sorry, there was an error. Please try again." },
-            ]);
+            setChatMessages(prev => [...prev, { role: "assistant", content: t("chat.error") }]);
         } finally {
             setIsProcessing(false);
         }
     };
 
-    const activeTemplateName = TEMPLATE_REGISTRY[templateId]?.name ?? "Document";
+    const activeTemplateName = TEMPLATE_REGISTRY[templateId]?.name ?? t("documentFallback");
 
     const statusBadgeClass =
         status === "saved"
@@ -1508,10 +1533,10 @@ export function LegalDocumentEditor({
               : lt.rdDocBadge;
     const statusLabel =
         status === "saved"
-            ? "SAVED"
+            ? t("status.saved")
             : status === "editing"
-              ? "DRAFT · UNSAVED"
-              : "DRAFT · AUTOSAVED";
+              ? t("status.unsaved")
+              : t("status.autosaved");
 
     return (
         <div className="flex h-full flex-col">
@@ -1523,12 +1548,12 @@ export function LegalDocumentEditor({
                         onClick={onBack}
                         className={lt.rdBtnGhost}
                         style={{ padding: "4px 8px" }}
-                        aria-label="Back to My documents"
+                        aria-label={t("backToDocuments")}
                     >
-                        My documents
+                        {t("myDocuments")}
                     </button>
                     <span className={lt.rdCrumbsSep}>/</span>
-                    <span style={{ color: "var(--ink-2)" }}>Legal</span>
+                    <span style={{ color: "var(--ink-2)" }}>{t("crumbLegal")}</span>
                     <span className={lt.rdCrumbsSep}>/</span>
                     <span className={lt.rdCrumbsLast} title={title || activeTemplateName}>
                         {title || activeTemplateName}
@@ -1541,8 +1566,12 @@ export function LegalDocumentEditor({
                         style={{ fontSize: 11, color: "var(--ink-3)" }}
                     >
                         <CheckCircle className="h-3 w-3" style={{ color: "var(--success)" }} />
-                        Saved{" "}
-                        {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        {t("savedAt", {
+                            time: format.dateTime(lastSaved, {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            }),
+                        })}
                     </span>
                 )}
                 <button
@@ -1557,7 +1586,7 @@ export function LegalDocumentEditor({
                     ) : (
                         <Save className="h-3 w-3" />
                     )}
-                    Save
+                    {tc("actions.save")}
                 </button>
             </div>
 
@@ -1572,7 +1601,7 @@ export function LegalDocumentEditor({
                                     className={lt.rdDocTitle}
                                     value={title}
                                     onChange={e => setTitle(e.target.value)}
-                                    placeholder="Document title"
+                                    placeholder={t("titlePlaceholder")}
                                 />
                                 <span className={statusBadgeClass}>{statusLabel}</span>
                             </div>
@@ -1582,11 +1611,16 @@ export function LegalDocumentEditor({
                                     {activeTemplateName}
                                 </span>
                                 {editCount > 0 && (
-                                    <span className={lt.rdDocMetaItem}>{editCount} edits</span>
+                                    <span className={lt.rdDocMetaItem}>
+                                        {t("editCount", { count: editCount })}
+                                    </span>
                                 )}
                                 <span className={lt.rdDocProgress}>
                                     <span>
-                                        {filledCount} of {totalFields} fields
+                                        {t("fieldsProgress", {
+                                            filled: filledCount,
+                                            total: totalFields,
+                                        })}
                                     </span>
                                     <span className={lt.rdDocProgressBar}>
                                         <span
@@ -1603,14 +1637,10 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdBtnGhost}
                                 onClick={() => setShowHighlights(v => !v)}
-                                title={
-                                    showHighlights
-                                        ? "Hide field highlights"
-                                        : "Show field highlights"
-                                }
+                                title={showHighlights ? t("hideHighlights") : t("showHighlights")}
                             >
                                 <Eye />
-                                {showHighlights ? "Hide fields" : "Show fields"}
+                                {showHighlights ? t("hideFields") : t("showFields")}
                             </button>
                             {templateId && TEMPLATE_REGISTRY[templateId] && (
                                 <>
@@ -1625,7 +1655,7 @@ export function LegalDocumentEditor({
                                         ) : (
                                             <Download />
                                         )}
-                                        Export DOCX
+                                        {t("exportDocx")}
                                     </button>
                                     <button
                                         type="button"
@@ -1638,7 +1668,7 @@ export function LegalDocumentEditor({
                                         ) : (
                                             <Send />
                                         )}
-                                        Send for review
+                                        {t("sendForReview")}
                                     </button>
                                 </>
                             )}
@@ -1651,8 +1681,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("undo")}
-                                title="Undo"
-                                aria-label="Undo"
+                                title={tc("actions.undo")}
+                                aria-label={tc("actions.undo")}
                             >
                                 <UndoIcon />
                             </button>
@@ -1660,8 +1690,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("redo")}
-                                title="Redo"
-                                aria-label="Redo"
+                                title={t("toolbar.redo")}
+                                aria-label={t("toolbar.redo")}
                             >
                                 <RedoIcon />
                             </button>
@@ -1671,8 +1701,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("bold")}
-                                title="Bold"
-                                aria-label="Bold"
+                                title={t("toolbar.bold")}
+                                aria-label={t("toolbar.bold")}
                             >
                                 <Bold />
                             </button>
@@ -1680,8 +1710,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("italic")}
-                                title="Italic"
-                                aria-label="Italic"
+                                title={t("toolbar.italic")}
+                                aria-label={t("toolbar.italic")}
                             >
                                 <Italic />
                             </button>
@@ -1689,8 +1719,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("underline")}
-                                title="Underline"
-                                aria-label="Underline"
+                                title={t("toolbar.underline")}
+                                aria-label={t("toolbar.underline")}
                             >
                                 <Underline />
                             </button>
@@ -1700,8 +1730,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("justifyLeft")}
-                                title="Align left"
-                                aria-label="Align left"
+                                title={t("toolbar.alignLeft")}
+                                aria-label={t("toolbar.alignLeft")}
                             >
                                 <AlignLeft />
                             </button>
@@ -1709,8 +1739,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("justifyCenter")}
-                                title="Align center"
-                                aria-label="Align center"
+                                title={t("toolbar.alignCenter")}
+                                aria-label={t("toolbar.alignCenter")}
                             >
                                 <AlignCenter />
                             </button>
@@ -1718,8 +1748,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("insertUnorderedList")}
-                                title="List"
-                                aria-label="List"
+                                title={t("toolbar.list")}
+                                aria-label={t("toolbar.list")}
                             >
                                 <ListIcon />
                             </button>
@@ -1727,8 +1757,8 @@ export function LegalDocumentEditor({
                                 type="button"
                                 className={lt.rdToolBtn}
                                 onClick={() => handleFormat("highlight")}
-                                title="Highlight"
-                                aria-label="Highlight"
+                                title={t("toolbar.highlight")}
+                                aria-label={t("toolbar.highlight")}
                             >
                                 <LinkIcon />
                             </button>
@@ -1737,29 +1767,29 @@ export function LegalDocumentEditor({
                             {focusedField ? (
                                 <span
                                     className={lt.rdToolFieldChip}
-                                    title={buildFieldTooltip(focusedField)}
+                                    title={buildFieldTooltip(focusedField, t)}
                                 >
                                     <Pencil />
                                     <span className={lt.rdToolFieldChipLabel}>
                                         {focusedField.label}
                                     </span>
-                                    {getFieldFormatHint(focusedField) && (
+                                    {getFieldFormatHint(focusedField, t) && (
                                         <span className={lt.rdToolFieldChipHint}>
-                                            · {getFieldFormatHint(focusedField)}
+                                            · {getFieldFormatHint(focusedField, t)}
                                         </span>
                                     )}
                                     {focusedField.required && (
-                                        <span className={lt.rdToolFieldChipReq}>REQ</span>
+                                        <span className={lt.rdToolFieldChipReq}>{t("req")}</span>
                                     )}
                                     {saveAttempted && focusedFieldError && (
                                         <span style={{ color: "var(--danger)", fontSize: 10 }}>
-                                            · {focusedFieldError.message}
+                                            · {validationMessage(focusedFieldError, t)}
                                         </span>
                                     )}
                                 </span>
                             ) : (
                                 <span style={{ color: "var(--ink-4)", fontStyle: "italic" }}>
-                                    Click a highlighted field to edit
+                                    {t("clickField")}
                                 </span>
                             )}
                         </div>
@@ -1769,23 +1799,27 @@ export function LegalDocumentEditor({
                         <div className={lt.rdValBanner}>
                             <AlertTriangle />
                             <div>
-                                <strong>{validationErrors.length}</strong> issue
-                                {validationErrors.length > 1 ? "s" : ""} blocking save —{" "}
-                                <button
-                                    type="button"
-                                    onClick={() => setPaneTab("validate")}
-                                    style={{
-                                        background: "transparent",
-                                        border: 0,
-                                        color: "var(--danger)",
-                                        fontWeight: 600,
-                                        cursor: "pointer",
-                                        textDecoration: "underline",
-                                        padding: 0,
-                                    }}
-                                >
-                                    view in validate tab
-                                </button>
+                                {t.rich("blocking", {
+                                    count: validationErrors.length,
+                                    strong: chunks => <strong>{chunks}</strong>,
+                                    link: chunks => (
+                                        <button
+                                            type="button"
+                                            onClick={() => setPaneTab("validate")}
+                                            style={{
+                                                background: "transparent",
+                                                border: 0,
+                                                color: "var(--danger)",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                                textDecoration: "underline",
+                                                padding: 0,
+                                            }}
+                                        >
+                                            {chunks}
+                                        </button>
+                                    ),
+                                })}
                             </div>
                         </div>
                     )}
@@ -1822,7 +1856,7 @@ export function LegalDocumentEditor({
                             onClick={() => setPaneTab("fields")}
                         >
                             <ListIcon />
-                            Fields
+                            {t("tabs.fields")}
                             <span className={lt.rdPaneTabCount}>
                                 {filledCount}/{totalFields}
                             </span>
@@ -1833,7 +1867,7 @@ export function LegalDocumentEditor({
                             onClick={() => setPaneTab("ai")}
                         >
                             <Sparkles />
-                            AI Assist
+                            {t("tabs.ai")}
                         </button>
                         <button
                             type="button"
@@ -1844,7 +1878,7 @@ export function LegalDocumentEditor({
                             onClick={() => setPaneTab("validate")}
                         >
                             <Shield />
-                            Validate
+                            {t("tabs.validate")}
                             {validationErrors.length > 0 && (
                                 <span className={cn(lt.rdPaneTabCount, lt.rdPaneTabCountWarn)}>
                                     {validationErrors.length}
@@ -1864,10 +1898,13 @@ export function LegalDocumentEditor({
                                     <div key={group.group} className={lt.rdFieldGroup}>
                                         <div className={lt.rdFieldGroupHead}>
                                             <span className={lt.rdFieldGroupTitle}>
-                                                {group.group}
+                                                {t(`groups.${group.group}`)}
                                             </span>
                                             <span className={lt.rdFieldGroupCount}>
-                                                {groupFilled} of {group.fields.length}
+                                                {t("groupProgress", {
+                                                    filled: groupFilled,
+                                                    total: group.fields.length,
+                                                })}
                                             </span>
                                         </div>
                                         {group.fields.map(field => {
@@ -1877,10 +1914,14 @@ export function LegalDocumentEditor({
                                             const err = saveAttempted
                                                 ? validationErrors.find(e => e.key === field.key)
                                                 : null;
-                                            const hint = getFieldFormatHint(field);
+                                            const hint = getFieldFormatHint(field, t);
                                             const placeholder = field.required
-                                                ? `e.g. ${field.label.toLowerCase()}`
-                                                : `Optional · ${field.label.toLowerCase()}`;
+                                                ? t("placeholderRequired", {
+                                                      label: field.label.toLowerCase(),
+                                                  })
+                                                : t("placeholderOptional", {
+                                                      label: field.label.toLowerCase(),
+                                                  });
                                             const id = `legal-field-${field.key}`;
                                             return (
                                                 <div key={field.key} className={lt.rdField}>
@@ -1939,7 +1980,9 @@ export function LegalDocumentEditor({
                                                                 setFocusedFieldKey(field.key)
                                                             }
                                                         >
-                                                            <option value="">Select…</option>
+                                                            <option value="">
+                                                                {t("selectPlaceholder")}
+                                                            </option>
                                                             {field.options.map(opt => (
                                                                 <option key={opt} value={opt}>
                                                                     {opt}
@@ -1974,7 +2017,7 @@ export function LegalDocumentEditor({
                                                     )}
                                                     {err && (
                                                         <div className={lt.rdFieldErrorMsg}>
-                                                            {err.message}
+                                                            {validationMessage(err, t)}
                                                         </div>
                                                     )}
                                                 </div>
@@ -1991,14 +2034,12 @@ export function LegalDocumentEditor({
                                         className={lt.rdFieldGroupTitle}
                                         style={{ marginBottom: 10 }}
                                     >
-                                        Ask Drift
+                                        {t("askDrift")}
                                     </div>
                                     <textarea
                                         className={lt.rdTextarea}
                                         placeholder={
-                                            activeSection
-                                                ? "Ask AI to update highlighted fields…"
-                                                : "Click a section in the document, or describe a field change…"
+                                            activeSection ? t("promptSection") : t("prompt")
                                         }
                                         value={aiPrompt}
                                         onChange={e => setAiPrompt(e.target.value)}
@@ -2011,10 +2052,10 @@ export function LegalDocumentEditor({
                                     />
                                     <div className={lt.rdPresets}>
                                         {[
-                                            "Set effective date to today",
-                                            "Use Delaware as governing law",
-                                            "Tighten the term to 18 months",
-                                            "Fill remaining required fields with placeholders",
+                                            t("presets.today"),
+                                            t("presets.delaware"),
+                                            t("presets.term"),
+                                            t("presets.placeholders"),
                                         ].map(preset => (
                                             <button
                                                 key={preset}
@@ -2045,7 +2086,7 @@ export function LegalDocumentEditor({
                                             ) : (
                                                 <Send />
                                             )}
-                                            {isProcessing ? "Sending…" : "Send"}
+                                            {isProcessing ? t("sending") : tc("actions.send")}
                                         </button>
                                     </div>
                                 </div>
@@ -2056,7 +2097,7 @@ export function LegalDocumentEditor({
                                             className={lt.rdFieldGroupTitle}
                                             style={{ marginBottom: 10 }}
                                         >
-                                            Recent
+                                            {t("recent")}
                                         </div>
                                         <div className={lt.rdChatList}>
                                             {chatMessages.slice(-6).map((m, i) => (
@@ -2079,13 +2120,9 @@ export function LegalDocumentEditor({
                                 <div className={lt.rdAiCard}>
                                     <div className={lt.rdAiCardHead}>
                                         <Wand2 />
-                                        <span className={lt.rdAiCardTitle}>Tip</span>
+                                        <span className={lt.rdAiCardTitle}>{t("tip")}</span>
                                     </div>
-                                    <div className={lt.rdAiCardBody}>
-                                        Drift only edits highlighted fields — it won&apos;t rewrite
-                                        contract clauses. Reference fields by their exact label
-                                        (e.g. &quot;Effective Date&quot;) for the cleanest results.
-                                    </div>
+                                    <div className={lt.rdAiCardBody}>{t("tipBody")}</div>
                                 </div>
                             </>
                         )}
@@ -2097,7 +2134,7 @@ export function LegalDocumentEditor({
                                         className={lt.rdFieldGroupTitle}
                                         style={{ marginBottom: 10 }}
                                     >
-                                        Open issues · {validationErrors.length}
+                                        {t("openIssues", { count: validationErrors.length })}
                                     </div>
                                     {validationErrors.length === 0 ? (
                                         <div className={cn(lt.rdIssue, lt.rdIssueOk)}>
@@ -2106,10 +2143,10 @@ export function LegalDocumentEditor({
                                             </span>
                                             <div>
                                                 <div className={lt.rdIssueTitle}>
-                                                    All required fields complete
+                                                    {t("allComplete")}
                                                 </div>
                                                 <div className={lt.rdIssueBody}>
-                                                    You can save or send this document for review.
+                                                    {t("allCompleteBody")}
                                                 </div>
                                             </div>
                                         </div>
@@ -2127,7 +2164,7 @@ export function LegalDocumentEditor({
                                                         {fieldMap[err.key]?.label ?? err.key}
                                                     </div>
                                                     <div className={lt.rdIssueBody}>
-                                                        {err.message}
+                                                        {validationMessage(err, t)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -2140,20 +2177,25 @@ export function LegalDocumentEditor({
                                         className={lt.rdFieldGroupTitle}
                                         style={{ marginBottom: 10 }}
                                     >
-                                        Passed checks · {totalFields - validationErrors.length}
+                                        {t("passedChecks", {
+                                            count: totalFields - validationErrors.length,
+                                        })}
                                     </div>
                                     {[
-                                        `${filledCount} of ${totalFields} fields filled`,
-                                        progressPct >= 100 ? "All required values present" : null,
-                                        "Field placeholders preserved in source HTML",
+                                        t("checks.filled", {
+                                            filled: filledCount,
+                                            total: totalFields,
+                                        }),
+                                        progressPct >= 100 ? t("checks.allRequired") : null,
+                                        t("checks.placeholders"),
                                     ]
                                         .filter(Boolean)
-                                        .map((t, i) => (
+                                        .map((check, i) => (
                                             <div key={i} className={cn(lt.rdIssue, lt.rdIssueOk)}>
                                                 <span className={lt.rdIssueIcon}>
                                                     <CheckCircle />
                                                 </span>
-                                                <div>{t}</div>
+                                                <div>{check}</div>
                                             </div>
                                         ))}
                                 </div>

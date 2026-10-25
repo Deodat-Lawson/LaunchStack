@@ -13,12 +13,12 @@ import { listShareable } from "~/server/workspace/team/shareable";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("documents.read");
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json({ items: await listShareable(ctx.data) });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/team/shareable GET]");
+        return workspaceErrorResponse(error, "[workspace/team/shareable GET]", request);
     }
 }

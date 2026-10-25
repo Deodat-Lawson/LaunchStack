@@ -7,6 +7,7 @@
  * that says who is asking and where the browser goes back to.
  */
 import { BadgeCheck, ShieldAlert } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import type { ConnectingClient } from "~/server/mcp/connect-request";
@@ -20,7 +21,7 @@ export function ConnectShell({
     step: string;
     children: React.ReactNode;
 }) {
-    const name = client?.name ?? "an assistant";
+    const t = useTranslations("auth.oauth");
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col">
             <AuthChrome />
@@ -32,7 +33,7 @@ export function ConnectShell({
                         </div>
                     ) : null}
                     <h1 className="display text-ink mb-5 text-[28px] leading-[1.15] tracking-[-0.02em]">
-                        Connect {name} to LaunchStack
+                        {client ? t("title", { name: client.name }) : t("titleUnknown")}
                     </h1>
                     {client ? <ClientIdentity client={client} /> : null}
                     {children}
@@ -43,6 +44,7 @@ export function ConnectShell({
 }
 
 function ClientIdentity({ client }: { client: ConnectingClient }) {
+    const t = useTranslations("auth.oauth");
     const initial = client.name.trim().charAt(0).toUpperCase() || "?";
     return (
         <div className="border-line bg-panel mb-6 flex items-start gap-3 rounded-xl border p-4">
@@ -63,27 +65,28 @@ function ClientIdentity({ client }: { client: ConnectingClient }) {
                 <div className="text-ink truncate text-sm font-semibold">{client.name}</div>
                 {client.redirectHost ? (
                     <div className="text-ink-3 mt-0.5 text-[12.5px] leading-normal">
-                        Sends you back to{" "}
-                        <span className="text-ink-2 font-mono text-[12px]">
-                            {client.redirectHost}
-                        </span>
+                        {t.rich("sendsBackTo", {
+                            host: client.redirectHost,
+                            mono: chunks => (
+                                <span className="text-ink-2 font-mono text-[12px]">{chunks}</span>
+                            ),
+                        })}
                     </div>
                 ) : null}
                 {client.addedByWorkspace ? (
-                    <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
+                    <div className="text-success-ink mt-1.5 flex items-center gap-1.5 text-[12px]">
                         <BadgeCheck className="size-3.5" aria-hidden />
-                        Added by an admin of {client.addedByWorkspace}
+                        {t("addedByAdmin", { workspace: client.addedByWorkspace })}
                     </div>
                 ) : client.verifiedDomain ? (
-                    <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
+                    <div className="text-success-ink mt-1.5 flex items-center gap-1.5 text-[12px]">
                         <BadgeCheck className="size-3.5" aria-hidden />
-                        Identity published at {client.verifiedDomain}
+                        {t("identityPublished", { domain: client.verifiedDomain })}
                     </div>
                 ) : (
                     <div className="text-ink-3 mt-1.5 flex items-start gap-1.5 text-[12px] leading-normal">
                         <ShieldAlert className="mt-px size-3.5 shrink-0" aria-hidden />
-                        This assistant named itself. Continue only if you just started connecting
-                        it.
+                        {t("selfNamed")}
                     </div>
                 )}
             </div>
@@ -93,12 +96,10 @@ function ClientIdentity({ client }: { client: ConnectingClient }) {
 
 /** Shown when the page is opened without an assistant's authorization request. */
 export function NoConnectionRequest() {
+    const t = useTranslations("auth.oauth");
     return (
         <div className="border-line rounded-xl border p-5">
-            <p className="text-ink-2 m-0 text-[13.5px] leading-[1.55]">
-                There is nothing to approve here. This page is a step in connecting an assistant to
-                LaunchStack; start the connection from the assistant itself.
-            </p>
+            <p className="text-ink-2 m-0 text-[13.5px] leading-[1.55]">{t("nothingToApprove")}</p>
         </div>
     );
 }

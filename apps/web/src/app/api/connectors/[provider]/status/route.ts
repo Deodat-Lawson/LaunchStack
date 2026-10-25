@@ -1,15 +1,17 @@
 /**
- * Google Drive connector status — the Drive panel's single source of truth:
- * configured / connected / account / picked items / last sync, plus the
- * public Picker config. Other providers have no per-provider detail yet and
- * are served by GET /api/connectors; this route is Drive-only.
+ * Connector status for the providers with their own panel — the panel's
+ * single source of truth. Google Drive: configured / connected / account /
+ * picked items / last sync, plus the public Picker config. Notion: every
+ * connected Notion workspace with its folder and last sync
+ * (`loadNotionStatus`). Other providers have no per-provider detail and are
+ * served by GET /api/connectors.
  *
  * With several Drive accounts connected, the panel manages the primary
  * (oldest) connection; the rest appear in the generic connections list.
  *
  * `folderAccess` says whether a picked folder can be imported at all: the
  * operator must have turned it on, and this connection must hold the grant
- * (a connection made before it was turned on needs one reconnect).
+ * (connecting asks only for drive.file; "Allow folder access" adds it).
  */
 
 import { and, eq, inArray } from "drizzle-orm";
@@ -17,11 +19,13 @@ import { and, eq, inArray } from "drizzle-orm";
 import { category } from "@launchstack/store/schema";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
+import { requestTranslator } from "~/i18n/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/connectors/config";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState, listPickedItems } from "~/server/services/connectors/google-drive/store";
+import { loadNotionStatus } from "~/server/services/connectors/notion/status";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import { db } from "~/server/db";
 import {
@@ -48,12 +52,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
     return withRateLimit(request, RateLimitPresets.permissive, async () => {
         try {
             const { provider } = await params;
-            if (provider !== "google-drive") {
-                return createValidationError("Status detail exists only for google-drive.");
+            if (provider !== "google-drive" && provider !== "notion") {
+                return createValidationError(
+                    requestTranslator(request, "sources.server.connectors")("statusDriveNotionOnly")
+                );
             }
 
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
+
+            if (provider === "notion") {
+                return createSuccessResponse(await loadNotionStatus(guard.ctx));
+            }
 
             const configured = isConnectorConfigured("google-drive");
             const picker = getPickerPublicConfig();
@@ -99,6 +109,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 const path = categoryId == null ? undefined : paths.get(categoryId);
                 return path && scopeAllowsCategory(scope, path) ? path : null;
             };
+            // A picked file: the folder Add source put it in, under the same rule.
+            const visibleDestination = (destination: string | null) =>
+                destination && scopeAllowsCategory(scope, destination) ? destination : null;
             return createSuccessResponse({
                 configured: true,
                 connected: true,
@@ -109,19 +122,34 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                     enabled: folderAccessEnabled,
                     granted: grantsFolderAccess(connection.scopes),
                 },
-                pickedItems: pickedItems.map(item => ({
-                    fileId: item.fileId,
-                    kind: item.kind,
-                    name: item.name,
-                    mimeType: item.mimeType,
-                    // Where a picked folder's files are; null until its first sync,
-                    // and for a folder the caller can't open (folderHidden).
-                    folderPath: visiblePath(item.folderCategoryId),
-                    folderHidden:
-                        item.folderCategoryId != null &&
-                        paths.has(item.folderCategoryId) &&
-                        visiblePath(item.folderCategoryId) === null,
-                })),
+                pickedItems: pickedItems.map(item =>
+                    item.kind === "folder"
+                        ? {
+                              fileId: item.fileId,
+                              kind: item.kind,
+                              name: item.name,
+                              mimeType: item.mimeType,
+                              // Where a picked folder's files are; null until its first
+                              // sync, and for a folder the caller can't open (folderHidden).
+                              folderPath: visiblePath(item.folderCategoryId),
+                              folderHidden:
+                                  item.folderCategoryId != null &&
+                                  paths.has(item.folderCategoryId) &&
+                                  visiblePath(item.folderCategoryId) === null,
+                          }
+                        : {
+                              fileId: item.fileId,
+                              kind: item.kind,
+                              name: item.name,
+                              mimeType: item.mimeType,
+                              // Where it was picked into; null when picked before
+                              // Add source offered Drive (it is in "Google Drive").
+                              folderPath: visibleDestination(item.destination),
+                              folderHidden:
+                                  item.destination != null &&
+                                  visibleDestination(item.destination) === null,
+                          }
+                ),
                 lastSyncAt: syncState?.lastSyncAt?.toISOString() ?? null,
                 lastSyncStatus: syncState?.lastSyncStatus ?? null,
                 lastSyncError: syncState?.lastSyncError ?? null,
@@ -129,7 +157,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 picker,
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

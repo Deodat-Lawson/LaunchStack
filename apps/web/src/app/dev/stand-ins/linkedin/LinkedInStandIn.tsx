@@ -294,7 +294,7 @@ function PostCard({
             </p>
 
             {post.issues.length > 0 ? (
-                <div className="border-warn/40 bg-warn-soft text-warn mx-5 flex flex-col gap-1 rounded-md border p-3 text-xs">
+                <div className="border-warn/40 bg-warn-soft text-warn-ink mx-5 flex flex-col gap-1 rounded-md border p-3 text-xs">
                     <p className="flex items-center gap-1.5 font-semibold">
                         <TriangleAlert className="size-3.5" aria-hidden /> Little-text escaping
                     </p>

@@ -10,6 +10,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { usePermissions } from "~/lib/use-permissions";
@@ -46,6 +47,8 @@ function tabFromHash(): TabId {
 }
 
 export function PeopleAccessSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.people.section");
+    const tc = useTranslations("common");
     const { loaded, can, error } = usePermissions();
     const [tab, setTab] = useState<TabId>("members");
 
@@ -61,22 +64,17 @@ export function PeopleAccessSection({ onActions }: SettingsSectionProps) {
         onActions,
         canInvite
             ? {
-                  primaryLabel: "Invite people",
+                  primaryLabel: t("invite"),
                   onPrimary: () => setTab("invitations"),
               }
             : {},
-        [canInvite]
+        [canInvite, t]
     );
 
-    if (!loaded) return <StatusNote tone="muted">Loading…</StatusNote>;
+    if (!loaded) return <StatusNote tone="muted">{tc("status.loading")}</StatusNote>;
     if (error) return <StatusNote tone="danger">{error}</StatusNote>;
     if (!can("members.view")) {
-        return (
-            <StatusNote tone="muted">
-                Seeing who is in the workspace isn&apos;t part of your role. Ask an admin if you
-                need it.
-            </StatusNote>
-        );
+        return <StatusNote tone="muted">{t("notInRole")}</StatusNote>;
     }
 
     return (
@@ -84,12 +82,12 @@ export function PeopleAccessSection({ onActions }: SettingsSectionProps) {
             <WorkspaceSettingsCard />
 
             <Tabs value={tab} onValueChange={value => setTab(value as TabId)}>
-                <TabsList aria-label="People and access">
-                    <TabsTrigger value="members">Members</TabsTrigger>
-                    <TabsTrigger value="invitations">Invitations</TabsTrigger>
-                    <TabsTrigger value="groups">Groups</TabsTrigger>
-                    <TabsTrigger value="roles">Roles</TabsTrigger>
-                    <TabsTrigger value="audit">Audit</TabsTrigger>
+                <TabsList aria-label={t("tabsLabel")}>
+                    <TabsTrigger value="members">{t("tabs.members")}</TabsTrigger>
+                    <TabsTrigger value="invitations">{t("tabs.invitations")}</TabsTrigger>
+                    <TabsTrigger value="groups">{t("tabs.groups")}</TabsTrigger>
+                    <TabsTrigger value="roles">{t("tabs.roles")}</TabsTrigger>
+                    <TabsTrigger value="audit">{t("tabs.audit")}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="members" className="pt-3">
                     <MembersTab can={can} />

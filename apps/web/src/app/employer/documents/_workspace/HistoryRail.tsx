@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState, type DragEvent } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
     CalendarDays,
     ChevronLeft,
@@ -20,13 +21,15 @@ import {
 
 import {
     byPinOrder,
-    filterHistory,
+    historyGroupLabel,
+    historyKindLabel,
+    historyStatusLabel,
+    localizedRelativeTime,
+    matchesHistoryQuery,
     movePin,
     placePin,
-    relativeTime,
     sectionHistory,
     HISTORY_KIND_META,
-    HISTORY_STATUS_LABEL,
     type HistoryEntry,
     type HistoryKind,
     type HistoryKindMeta,
@@ -145,11 +148,6 @@ interface RowProps {
     onCancelRename: () => void;
 }
 
-function turns(count: number | undefined): string {
-    const n = count ?? 0;
-    return `${n} ${n === 1 ? "turn" : "turns"}`;
-}
-
 function HistoryRow({
     entry,
     active,
@@ -162,8 +160,11 @@ function HistoryRow({
     onCommitRename,
     onCancelRename,
 }: RowProps) {
+    const t = useTranslations("chat.history");
+    const tHistory = useTranslations("workspace.history");
+    const locale = useLocale();
     const menu = useActionMenu();
-    const menuLabel = `Actions for ${entry.title}`;
+    const menuLabel = t("actionsFor", { title: entry.title });
     const ctxTarget = useContextTarget({
         kind: "history-entry",
         id: entry.id,
@@ -179,12 +180,13 @@ function HistoryRow({
     const sharedWithMe = Boolean(entry.sharedBy);
     const sharerName = sharer?.displayName ?? null;
 
+    const turns = t("turns", { count: entry.messageCount ?? 0 });
     const subtitle =
         entry.kind === "chat"
             ? sharedWithMe
-                ? `${sharerName ?? "Shared with you"} · ${turns(entry.messageCount)}`
-                : `${meta.label} · ${turns(entry.messageCount)}`
-            : (entry.subtitle ?? meta.label);
+                ? `${sharerName ?? t("sharedWithYou")} · ${turns}`
+                : `${historyKindLabel(tHistory, entry.kind)} · ${turns}`
+            : (entry.subtitle ?? historyKindLabel(tHistory, entry.kind));
 
     if (renaming) {
         return (
@@ -193,7 +195,7 @@ function HistoryRow({
                 <Input
                     defaultValue={entry.title}
                     autoFocus
-                    aria-label="Chat title"
+                    aria-label={t("titleInput")}
                     data-testid="history-rename-input"
                     maxLength={300}
                     onBlur={e => onCommitRename(e.currentTarget.value)}
@@ -265,8 +267,8 @@ function HistoryRow({
                 )}
                 {entry.status !== "done" && (
                     <span
-                        title={HISTORY_STATUS_LABEL[entry.status]}
-                        aria-label={HISTORY_STATUS_LABEL[entry.status]}
+                        title={historyStatusLabel(tHistory, entry.status)}
+                        aria-label={historyStatusLabel(tHistory, entry.status)}
                         className={cn(
                             "ring-panel absolute -bottom-0.5 -right-[3px] size-1.5 rounded-full ring-[1.5px]",
                             STATUS_DOT[entry.status]
@@ -289,7 +291,7 @@ function HistoryRow({
                     {entry.shared && (
                         <Users
                             role="img"
-                            aria-label="Shared"
+                            aria-label={t("shared")}
                             className="text-ink-3 size-3 shrink-0"
                         />
                     )}
@@ -305,8 +307,8 @@ function HistoryRow({
             <span className="relative mt-px flex h-[18px] min-w-[18px] shrink-0 items-center justify-end gap-1.5">
                 {entry.unread && (
                     <span
-                        aria-label="Unread"
-                        title="New since you last opened it"
+                        aria-label={t("unread")}
+                        title={t("unreadTitle")}
                         className="bg-brand size-2 shrink-0 rounded-full"
                     />
                 )}
@@ -317,7 +319,7 @@ function HistoryRow({
                         meta.resumable && active && "opacity-0"
                     )}
                 >
-                    {relativeTime(entry.at, now)}
+                    {localizedRelativeTime(tHistory, locale, entry.at, now)}
                 </span>
                 {meta.resumable && (
                     <Button
@@ -335,7 +337,7 @@ function HistoryRow({
                                 kind: "history-entry",
                             });
                         }}
-                        title="Chat actions"
+                        title={t("chatActions")}
                         aria-label={menuLabel}
                         className={cn(
                             "text-ink-3 absolute right-0 top-0 size-[18px] rounded opacity-0 transition-opacity",
@@ -384,6 +386,9 @@ export function HistoryRail({
     archived,
     onArchivedOpenChange,
 }: HistoryRailProps) {
+    const t = useTranslations("chat.history");
+    const tc = useTranslations("common");
+    const tHistory = useTranslations("workspace.history");
     const [renamingId, setRenamingId] = useState<string | null>(null);
     /** The chat or run a delete has been asked for, pending the confirm dialog. */
     const [pendingDelete, setPendingDelete] = useState<HistoryEntry | null>(null);
@@ -398,16 +403,21 @@ export function HistoryRail({
 
     const showArchived = Boolean(archived?.open);
 
+    /** The search matches a kind by the name the reader sees, as well as its English one. */
+    const filtered = useCallback(
+        (list: HistoryEntry[]) =>
+            list.filter(entry =>
+                matchesHistoryQuery(entry, query, historyKindLabel(tHistory, entry.kind))
+            ),
+        [query, tHistory]
+    );
     const sections = useMemo(
-        () => sectionHistory(filterHistory(entries, query), now.current),
-        [entries, query]
+        () => sectionHistory(filtered(entries), now.current),
+        [entries, filtered]
     );
     const archivedRows = useMemo(
-        () =>
-            filterHistory(archived?.entries ?? [], query).sort(
-                (a, b) => Date.parse(b.at) - Date.parse(a.at)
-            ),
-        [archived?.entries, query]
+        () => filtered(archived?.entries ?? []).sort((a, b) => Date.parse(b.at) - Date.parse(a.at)),
+        [archived?.entries, filtered]
     );
 
     /** The full pinned order — unfiltered, so a move under a search never reshuffles hidden pins. */
@@ -460,7 +470,7 @@ export function HistoryRail({
                     items.push({
                         type: "item",
                         id: "open",
-                        label: "Open",
+                        label: tc("actions.open"),
                         icon: "open",
                         onSelect: () => onOpenRun(entry),
                     });
@@ -471,7 +481,7 @@ export function HistoryRail({
                     id: "delete",
                     // The ellipsis promises the confirm that follows, matching
                     // how the source rail labels its own destructive items.
-                    label: "Delete…",
+                    label: t("menu.delete"),
                     icon: "delete",
                     danger: true,
                     onSelect: () => setPendingDelete(entry),
@@ -485,7 +495,7 @@ export function HistoryRail({
                 {
                     type: "item",
                     id: "open",
-                    label: "Open",
+                    label: tc("actions.open"),
                     icon: "open",
                     onSelect: () => onResumeSession(entry.refId),
                 },
@@ -494,7 +504,7 @@ export function HistoryRail({
                 items.push({
                     type: "item",
                     id: "pin",
-                    label: entry.pinned ? "Unpin" : "Pin",
+                    label: entry.pinned ? t("menu.unpin") : t("menu.pin"),
                     icon: "pin",
                     onSelect: () => onSetPinned(entry, !entry.pinned),
                 });
@@ -505,7 +515,7 @@ export function HistoryRail({
                     {
                         type: "item",
                         id: "move-up",
-                        label: "Move up",
+                        label: t("menu.moveUp"),
                         icon: "sortAsc",
                         shortcut: "⌥↑",
                         disabled: at <= 0,
@@ -514,7 +524,7 @@ export function HistoryRail({
                     {
                         type: "item",
                         id: "move-down",
-                        label: "Move down",
+                        label: t("menu.moveDown"),
                         icon: "sortDesc",
                         shortcut: "⌥↓",
                         disabled: at < 0 || at >= pinOrder.length - 1,
@@ -526,7 +536,7 @@ export function HistoryRail({
                 items.push({
                     type: "item",
                     id: "share",
-                    label: "Share…",
+                    label: t("menu.share"),
                     icon: "share",
                     onSelect: () => onShareSession(entry),
                 });
@@ -535,7 +545,7 @@ export function HistoryRail({
                 items.push({
                     type: "item",
                     id: "continue",
-                    label: "Continue in a new chat",
+                    label: t("menu.continue"),
                     icon: "branch",
                     onSelect: () => onContinueSession(entry),
                 });
@@ -544,7 +554,7 @@ export function HistoryRail({
                 items.push({
                     type: "item",
                     id: "rename",
-                    label: "Rename…",
+                    label: t("menu.rename"),
                     icon: "rename",
                     onSelect: () => setRenamingId(entry.id),
                 });
@@ -556,14 +566,14 @@ export function HistoryRail({
                         ? {
                               type: "item",
                               id: "unarchive",
-                              label: "Unarchive",
+                              label: t("menu.unarchive"),
                               icon: "restore",
                               onSelect: () => onSetArchived(entry, false),
                           }
                         : {
                               type: "item",
                               id: "archive",
-                              label: "Archive",
+                              label: tc("actions.archive"),
                               icon: "archive",
                               onSelect: () => onSetArchived(entry, true),
                           }
@@ -573,7 +583,7 @@ export function HistoryRail({
                 items.push({
                     type: "item",
                     id: "delete",
-                    label: "Delete chat…",
+                    label: t("menu.deleteChat"),
                     icon: "delete",
                     danger: true,
                     onSelect: () => setPendingDelete(entry),
@@ -591,6 +601,8 @@ export function HistoryRail({
             onContinueSession,
             pinOrder,
             movePinned,
+            t,
+            tc,
         ]
     );
 
@@ -684,10 +696,10 @@ export function HistoryRail({
                             data-testid="history-archived-back"
                         >
                             <ChevronLeft className="size-3.5" />
-                            History
+                            {t("history")}
                         </Button>
                         <span className="text-ink-2 flex-1 truncate text-xs font-semibold">
-                            Archived
+                            {t("archived")}
                         </span>
                     </>
                 ) : (
@@ -699,15 +711,15 @@ export function HistoryRail({
                         className="text-ink-2 hover:border-brand hover:text-brand h-7 flex-1 gap-1.5 text-xs font-semibold"
                     >
                         <Plus className="size-3" />
-                        New chat
+                        {t("newChat")}
                     </Button>
                 )}
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={onRefresh}
-                    title="Refresh history"
-                    aria-label="Refresh history"
+                    title={t("refresh")}
+                    aria-label={t("refresh")}
                     data-testid="history-refresh"
                     className="text-ink-3 size-[26px] shrink-0"
                 >
@@ -729,20 +741,23 @@ export function HistoryRail({
                             className="text-danger h-auto p-0 text-[11px] font-semibold underline"
                             onClick={onRefresh}
                         >
-                            Retry
+                            {tc("actions.retry")}
                         </Button>
                     </div>
                 )}
 
                 {degraded.length > 0 && !error && !showArchived && (
                     <div className="bg-warn-soft text-ink-2 mx-1.5 mb-2 mt-1 rounded-md px-2.5 py-1.5 text-[11px] leading-snug">
-                        Some activity couldn’t be loaded (
-                        {degraded.map(kind => HISTORY_KIND_META[kind].label).join(", ")}).
+                        {t("degraded", {
+                            kinds: degraded
+                                .map(kind => historyKindLabel(tHistory, kind))
+                                .join(", "),
+                        })}
                     </div>
                 )}
 
                 {showArchived ? (
-                    <section aria-label="Archived chats" data-testid="history-archived">
+                    <section aria-label={t("archivedLabel")} data-testid="history-archived">
                         {archived?.error && (
                             <div className="bg-danger-soft text-danger mx-1.5 mb-2 mt-1 rounded-md px-2.5 py-2 text-[11px]">
                                 {archived.error}
@@ -751,9 +766,7 @@ export function HistoryRail({
                         {archivedRows.map(entry => renderRow(entry))}
                         {archivedRows.length === 0 && !archived?.loading && !archived?.error && (
                             <p className="text-ink-3 m-0 px-3.5 py-8 text-center text-[13px] leading-normal">
-                                {query.trim()
-                                    ? "No archived chat matches that."
-                                    : "Nothing archived. Archive a chat from its menu to tuck it away here."}
+                                {query.trim() ? t("archivedNoMatch") : t("archivedEmpty")}
                             </p>
                         )}
                     </section>
@@ -765,7 +778,7 @@ export function HistoryRail({
                                 className="mb-1.5"
                                 data-testid="history-section-pinned"
                             >
-                                <SectionHeading id="history-pinned">Pinned</SectionHeading>
+                                <SectionHeading id="history-pinned">{t("pinned")}</SectionHeading>
                                 {sections.pinned.map(entry => renderRow(entry, true))}
                             </section>
                         )}
@@ -776,7 +789,9 @@ export function HistoryRail({
                                 className="mb-1.5"
                                 data-testid="history-section-shared"
                             >
-                                <SectionHeading id="history-shared">Shared with you</SectionHeading>
+                                <SectionHeading id="history-shared">
+                                    {t("sharedWithYou")}
+                                </SectionHeading>
                                 {sections.shared.map(entry => renderRow(entry))}
                             </section>
                         )}
@@ -788,7 +803,7 @@ export function HistoryRail({
                                 className="mb-1.5"
                             >
                                 <SectionHeading id={`history-${group.id}`}>
-                                    {group.label}
+                                    {historyGroupLabel(tHistory, group)}
                                 </SectionHeading>
                                 {group.entries.map(entry => renderRow(entry))}
                             </section>
@@ -796,9 +811,7 @@ export function HistoryRail({
 
                         {totalShown === 0 && !loading && !error && (
                             <p className="text-ink-3 m-0 px-3.5 py-8 text-center text-[13px] leading-normal">
-                                {query.trim()
-                                    ? "Nothing in history matches that."
-                                    : "Nothing here yet. Ask a question, or run a pipeline, and it shows up here."}
+                                {query.trim() ? t("noMatch") : t("empty")}
                             </p>
                         )}
                     </>
@@ -826,7 +839,7 @@ export function HistoryRail({
                         onClick={() => onArchivedOpenChange(true)}
                         data-testid="history-archived-link"
                     >
-                        Archived
+                        {t("archived")}
                         {archivedCount ? (
                             <span className="text-ink-4 tabular-nums">· {archivedCount}</span>
                         ) : null}
@@ -839,12 +852,14 @@ export function HistoryRail({
                 onOpenChange={next => {
                     if (!next) setPendingDelete(null);
                 }}
-                title={deletingChat ? "Delete this chat?" : "Delete this run?"}
+                title={deletingChat ? t("confirm.chatTitle") : t("confirm.runTitle")}
                 description={
                     pendingDelete
                         ? deletingChat
-                            ? `“${pendingDelete.title}” and all its messages will be deleted${pendingDelete.shared ? ", including for the people you shared it with" : ""}. This cannot be undone.`
-                            : `“${pendingDelete.title}” will be removed from history. This cannot be undone.`
+                            ? pendingDelete.shared
+                                ? t("confirm.chatDescriptionShared", { title: pendingDelete.title })
+                                : t("confirm.chatDescription", { title: pendingDelete.title })
+                            : t("confirm.runDescription", { title: pendingDelete.title })
                         : undefined
                 }
                 onConfirm={() => {

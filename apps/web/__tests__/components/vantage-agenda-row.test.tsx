@@ -35,7 +35,7 @@ import {
     setAside,
     useOneClick,
 } from "~/app/employer/tools/vantage/_lib/actions";
-import { addDaysIso, todayIso } from "~/app/employer/tools/vantage/_lib/format";
+import { addDaysIso, todayIso, useVantageFormat } from "~/app/employer/tools/vantage/_lib/format";
 import { unhideSuggestion, useHiddenSuggestions } from "~/app/employer/tools/vantage/_lib/hidden";
 
 import { topic } from "../vantage/factories";
@@ -77,6 +77,7 @@ function Row({ busyWhileAnswering = false }: { busyWhileAnswering?: boolean }) {
         setT(stored);
     }, []);
     const { act: answer, gone } = useOneClick(refresh);
+    const fmt = useVantageFormat();
     const hidden = useHiddenSuggestions();
     const id = `commit:${t.id}`;
     return (
@@ -84,7 +85,7 @@ function Row({ busyWhileAnswering = false }: { busyWhileAnswering?: boolean }) {
             topic={t}
             index={0}
             busy={busyWhileAnswering && gone.has(id)}
-            onCommit={() => void answer(id, () => commitToNextStep(t))}
+            onCommit={() => void answer(id, () => commitToNextStep(fmt, t))}
             nextStepHidden={hidden.has(id)}
             onIgnoreNextStep={() =>
                 void answer(id, () =>

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { PanelLeftOpen, Plus, Search } from "lucide-react";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
@@ -37,11 +38,12 @@ export function CollapsedRail({
     accountSlot,
     shortcuts,
 }: CollapsedRailProps) {
+    const t = useTranslations("sources.railCommands");
     const iconButton =
         "text-ink-3 hover:bg-line-2 hover:text-ink dark:hover:bg-line-2 size-8 rounded-md";
     return (
         <nav
-            aria-label="Workspace"
+            aria-label={t("workspaceNav")}
             data-testid="collapsed-rail"
             className="border-line bg-panel flex h-full w-12 shrink-0 flex-col items-center gap-1 border-r py-3"
         >
@@ -52,8 +54,8 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onExpand}
-                title={withShortcut("Show sidebar", shortcuts?.rail)}
-                aria-label="Show sidebar"
+                title={withShortcut(t("showSidebar"), shortcuts?.rail)}
+                aria-label={t("showSidebar")}
                 className={`${iconButton} mt-2`}
             >
                 <PanelLeftOpen className="size-4" />
@@ -62,8 +64,8 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onOpenPalette}
-                title={withShortcut("Jump to anything", shortcuts?.palette)}
-                aria-label="Jump to anything"
+                title={withShortcut(t("jumpToAnything"), shortcuts?.palette)}
+                aria-label={t("jumpToAnything")}
                 className={iconButton}
             >
                 <Search className="size-4" />
@@ -72,8 +74,8 @@ export function CollapsedRail({
                 variant="ghost"
                 size="icon"
                 onClick={onOpenAdd}
-                title={withShortcut("Add knowledge", shortcuts?.add)}
-                aria-label="Add knowledge"
+                title={withShortcut(t("addKnowledge"), shortcuts?.add)}
+                aria-label={t("addKnowledge")}
                 className="bg-brand text-brand-fg hover:bg-brand/90 hover:text-brand-fg mt-1 size-[26px] rounded-md"
             >
                 <Plus className="size-[13px]" />

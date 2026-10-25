@@ -1,6 +1,7 @@
 "use client";
 
 import { FilePlus, Files, Pen, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ToolFrame, ToolMark, type ToolNavGroup } from "~/components/tool-app/ToolFrame";
 import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/tool-app/nav";
@@ -28,30 +29,33 @@ export function DraftsTool({ host }: { host?: ToolHost }) {
     );
 }
 
+type DraftsT = ReturnType<typeof useTranslations<"viewers.drafts">>;
+
 /** The screens: one unlabelled group. The count waits for the list rather than showing 0. */
-export function draftsScreens(documentCount: number | null): ToolNavGroup[] {
+export function draftsScreens(documentCount: number | null, t: DraftsT): ToolNavGroup[] {
     return [
         {
             id: "drafts",
             items: [
-                { to: "/", label: "New document", icon: FilePlus, exact: true },
-                { to: "/documents", label: "My documents", icon: Files, count: documentCount },
-                { to: "/assistant", label: "Assistant", icon: Sparkles },
+                { to: "/", label: t("newDocument"), icon: FilePlus, exact: true },
+                { to: "/documents", label: t("myDocuments"), icon: Files, count: documentCount },
+                { to: "/assistant", label: t("assistant"), icon: Sparkles },
             ],
         },
     ];
 }
 
 function DraftsFrame() {
+    const t = useTranslations("viewers.drafts");
     const path = useToolPathname();
     // Above the screens, so the bar can count the drafts and a trip between
     // screens never fetches the list again.
     const drafts = useDraftDocuments();
     return (
         <ToolFrame
-            title="Templated Drafts"
+            title={t("title")}
             mark={<ToolMark icon={Pen} />}
-            groups={draftsScreens(drafts.loaded ? drafts.documents.length : null)}
+            groups={draftsScreens(drafts.loaded ? drafts.documents.length : null, t)}
             // Every screen brings its own padding, and the editors and the
             // assistant lay themselves out to the full height of the tab.
             fill

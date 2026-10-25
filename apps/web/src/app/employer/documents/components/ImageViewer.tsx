@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { Loader2, AlertTriangle, RotateCw, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import {
     DropdownMenu,
@@ -11,6 +12,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
+import { ViewerNotice } from "./ViewerNotice";
 
 export type ImageFitMode = "fit-view" | "fit-width" | "fit-height" | "actual";
 
@@ -23,6 +25,9 @@ export interface ImageViewerProps {
 }
 
 export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
+    const t = useTranslations("viewers.image");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [fitMode, setFitMode] = useState<ImageFitMode>("fit-view");
@@ -182,21 +187,16 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
 
     if (error) {
         return (
-            <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">Failed to load image</p>
-                    <Button
-                        onClick={handleRetry}
-                        className="bg-brand hover:bg-brand-hi mt-3 inline-flex gap-2 text-white"
-                    >
-                        <RotateCw className="h-4 w-4" />
-                        Retry
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("loadFailed")}
+                action={
+                    <Button onClick={handleRetry}>
+                        <RotateCw />
+                        {tc("actions.retry")}
                     </Button>
-                </div>
-            </div>
+                }
+            />
         );
     }
 
@@ -204,7 +204,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
         <div
             className="bg-panel-2/30 flex h-full flex-col"
             role="img"
-            aria-label={alt ? `Image: ${alt}` : "Image viewer"}
+            aria-label={alt ? t("imageLabel", { alt }) : t("viewerLabel")}
         >
             {/* Toolbar - hidden in minimal mode */}
             {!minimal && (
@@ -213,22 +213,19 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm" className="h-7 gap-1 text-xs">
-                                    {fitMode === "fit-view" && "Fit to view"}
-                                    {fitMode === "fit-width" && "Fit to width"}
-                                    {fitMode === "fit-height" && "Fit to height"}
-                                    {fitMode === "actual" && "Actual size"}
+                                    {t(`fitModes.${fitMode}`)}
                                     <span className="opacity-60">▾</span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
                                 <DropdownMenuItem onClick={() => setFitMode("fit-view")}>
-                                    Fit to view
+                                    {t("fitModes.fit-view")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => setFitMode("fit-width")}>
-                                    Fit to width
+                                    {t("fitModes.fit-width")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => setFitMode("fit-height")}>
-                                    Fit to height
+                                    {t("fitModes.fit-height")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={() => {
@@ -236,7 +233,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                                         setZoomLevel(1);
                                     }}
                                 >
-                                    Actual size (1:1)
+                                    {t("actualSizeOneToOne")}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -249,12 +246,15 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                             className="h-7 w-7"
                             onClick={zoomOut}
                             disabled={zoomLevel <= ZOOM_STEPS[0]}
-                            aria-label="Zoom out"
+                            aria-label={t("zoomOut")}
                         >
                             <ZoomOut className="h-3.5 w-3.5" />
                         </Button>
                         <span className="text-ink-3 min-w-[3rem] text-center text-xs tabular-nums">
-                            {Math.round(zoomLevel * 100)}%
+                            {format.number(zoomLevel, {
+                                style: "percent",
+                                maximumFractionDigits: 0,
+                            })}
                         </span>
                         <Button
                             variant="ghost"
@@ -262,7 +262,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                             className="h-7 w-7"
                             onClick={zoomIn}
                             disabled={zoomLevel >= (ZOOM_STEPS.at(-1) ?? 3)}
-                            aria-label="Zoom in"
+                            aria-label={t("zoomIn")}
                         >
                             <ZoomIn className="h-3.5 w-3.5" />
                         </Button>
@@ -272,7 +272,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                             size="sm"
                             className="h-7 px-2 text-xs"
                             onClick={resetView}
-                            aria-label="Reset view"
+                            aria-label={t("resetView")}
                         >
                             <RotateCcw className="h-3.5 w-3.5" />
                         </Button>
@@ -286,7 +286,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                                         {dimensions.width} × {dimensions.height}
                                     </span>
                                 </TooltipTrigger>
-                                <TooltipContent>Image is smaller than viewport</TooltipContent>
+                                <TooltipContent>{t("smallerThanViewport")}</TooltipContent>
                             </Tooltip>
                         ) : (
                             <span className="text-ink-3 text-xs tabular-nums">
@@ -351,9 +351,9 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                         {loading && (
                             <div
                                 className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg"
-                                aria-label="Loading image"
+                                aria-label={t("loading")}
                             >
-                                <div className="bg-panel-2-foreground/10 h-32 w-48 animate-pulse rounded-xl" />
+                                <div className="bg-panel-2 h-32 w-48 animate-pulse rounded-xl" />
                                 <Loader2 className="text-brand-ink h-6 w-6 animate-spin" />
                             </div>
                         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Sparkles } from "lucide-react";
 
 import { ContextTarget } from "~/components/context-menu";
@@ -14,7 +15,7 @@ import {
 } from "~/components/ui/dialog";
 import { cn } from "~/lib/utils";
 import { usePermissions } from "~/lib/use-permissions";
-import { STUDIO_GROUPS } from "./types";
+import { STUDIO_GROUPS, localizedStudioFeature, studioGroupLabel, useStudioText } from "./types";
 
 export interface StudioDrawerProps {
     open: boolean;
@@ -39,13 +40,19 @@ export interface StudioDrawerProps {
 export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: StudioDrawerProps) {
     // Fails closed: until permissions have loaded, gated entries are absent.
     const { can } = usePermissions();
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
+    const studio = useStudioText();
     const visibleGroups = useMemo(
         () =>
             STUDIO_GROUPS.map(group => ({
                 ...group,
-                features: group.features.filter(feature => can(feature.requires)),
+                label: studioGroupLabel(studio, group),
+                features: group.features
+                    .filter(feature => can(feature.requires))
+                    .map(feature => localizedStudioFeature(studio, feature)),
             })).filter(group => group.features.length > 0),
-        [can]
+        [can, studio]
     );
 
     const pickFeature = (featureId: string, beside = false) => {
@@ -66,12 +73,9 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                         <span className="bg-brand-soft text-brand flex size-8 items-center justify-center rounded-lg">
                             <Sparkles className="size-4" aria-hidden />
                         </span>
-                        Studio apps
+                        {t("studioDrawer.title")}
                     </DialogTitle>
-                    <DialogDescription>
-                        Open a workspace app — ⌘-click to open it beside what is showing. Your
-                        access decides which apps are listed.
-                    </DialogDescription>
+                    <DialogDescription>{t("studioDrawer.description")}</DialogDescription>
                 </DialogHeader>
 
                 <div className="max-h-[70vh] overflow-y-auto px-5 pb-5">
@@ -92,28 +96,30 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                             target={{
                                                 kind: "studio-feature",
                                                 id: feature.id,
-                                                label: `Actions for ${feature.label}`,
+                                                label: t("common.actionsFor", {
+                                                    name: feature.label,
+                                                }),
                                                 data: feature,
                                                 items: () => [
                                                     {
                                                         type: "item",
                                                         id: "open",
-                                                        label: "Open",
+                                                        label: tc("actions.open"),
                                                         icon: "open",
                                                         disabled: isComing,
                                                         disabledReason: isComing
-                                                            ? "Coming soon."
+                                                            ? t("studioDrawer.comingSoonReason")
                                                             : undefined,
                                                         onSelect: () => pickFeature(feature.id),
                                                     },
                                                     {
                                                         type: "item",
                                                         id: "open-beside",
-                                                        label: "Open beside",
+                                                        label: t("studioDrawer.openBeside"),
                                                         icon: "split",
                                                         disabled: isComing,
                                                         disabledReason: isComing
-                                                            ? "Coming soon."
+                                                            ? t("studioDrawer.comingSoonReason")
                                                             : undefined,
                                                         onSelect: () =>
                                                             pickFeature(feature.id, true),
@@ -123,7 +129,7 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                               {
                                                                   type: "item" as const,
                                                                   id: "open-tab",
-                                                                  label: "Open in a new tab",
+                                                                  label: t("common.openInANewTab"),
                                                                   icon: "external" as const,
                                                                   onSelect: () =>
                                                                       window.open(
@@ -168,10 +174,10 @@ export function StudioDrawer({ open, onClose, onPickFeature, activeFeatureId }: 
                                                         </span>
                                                         {isComing && (
                                                             <span
-                                                                title="Coming soon"
+                                                                title={t("studioDrawer.comingSoon")}
                                                                 className="bg-panel-2 text-ink-3 shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wide"
                                                             >
-                                                                SOON
+                                                                {t("studioDrawer.soon")}
                                                             </span>
                                                         )}
                                                     </span>

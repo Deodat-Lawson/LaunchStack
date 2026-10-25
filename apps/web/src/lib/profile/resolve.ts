@@ -130,11 +130,18 @@ export function resolveProfile(
     };
 }
 
-/** "3:42 PM" in the person's zone, or null when unknown/invalid. */
-export function localTimeIn(timeZone: string | null, now: Date = new Date()): string | null {
+/**
+ * "3:42 PM" in the person's zone, or null when unknown/invalid. `locale` is
+ * the reader's (`useLocale()`); omitted, the runtime's default.
+ */
+export function localTimeIn(
+    timeZone: string | null,
+    now: Date = new Date(),
+    locale?: string
+): string | null {
     if (!timeZone) return null;
     try {
-        return new Intl.DateTimeFormat(undefined, {
+        return new Intl.DateTimeFormat(locale, {
             timeZone,
             hour: "numeric",
             minute: "2-digit",

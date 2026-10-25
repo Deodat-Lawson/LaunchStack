@@ -4,6 +4,8 @@ import { db } from "~/server/db";
 import { agentAiChatbotVote } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertChatOwnedByUser, assertMessageInChat } from "~/lib/ai-chat-ownership";
 
@@ -14,16 +16,18 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateVoteSchema);
         if (!validation.success) return validation.response;
         const { chatId, messageId, isUpvoted, feedback } = validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
-        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId);
+        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId, locale);
         if (!message.success) return message.response;
 
         // Check if vote already exists
@@ -78,7 +82,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error voting:", error);
-        return NextResponse.json({ error: "Failed to vote" }, { status: 500 });
+        return NextResponse.json({ error: t("vote") }, { status: 500 });
     }
 }
 
@@ -86,6 +90,8 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { searchParams } = new URL(request.url);
@@ -93,16 +99,13 @@ export async function GET(request: NextRequest) {
         const chatId = searchParams.get("chatId");
 
         if (!messageId || !chatId) {
-            return NextResponse.json(
-                { error: "messageId and chatId are required" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: t("voteIdsRequired") }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
-        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId);
+        const message = await assertMessageInChat(messageId, chatId, ctx.data.authUserId, locale);
         if (!message.success) return message.response;
 
         const [vote] = await db
@@ -121,6 +124,6 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching vote:", error);
-        return NextResponse.json({ error: "Failed to fetch vote" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchVote") }, { status: 500 });
     }
 }

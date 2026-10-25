@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import {
     ArrowDown,
@@ -39,6 +40,7 @@ export function ChatQueue({
     onResume: () => void;
     onSendNow: (id: string) => void;
 }) {
+    const t = useTranslations("chat.queue");
     const [collapsed, setCollapsed] = useState(false);
     const [dragId, setDragId] = useState<string | null>(null);
     if (!items.length) return null;
@@ -50,7 +52,7 @@ export function ChatQueue({
     };
     return (
         <section
-            aria-label="Queued messages"
+            aria-label={t("label")}
             aria-live="polite"
             className="border-line bg-panel mb-3 rounded-xl border p-2"
         >
@@ -62,11 +64,13 @@ export function ChatQueue({
                     aria-expanded={!collapsed}
                 >
                     {collapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}{" "}
-                    {items.length} queued {held && "· paused"}
+                    {held
+                        ? t("countPaused", { count: items.length })
+                        : t("count", { count: items.length })}
                 </Button>
                 {held && !busy && (
                     <Button variant="ghost" size="sm" onClick={onResume}>
-                        <Play size={14} /> Resume queue
+                        <Play size={14} /> {t("resume")}
                     </Button>
                 )}
             </div>
@@ -94,8 +98,8 @@ export function ChatQueue({
                                 draggable
                                 onDragStart={() => setDragId(item.id)}
                                 onDragEnd={() => setDragId(null)}
-                                aria-label={`Move queued message ${index + 1}`}
-                                title="Drag to reorder, or use arrow keys"
+                                aria-label={t("move", { number: index + 1 })}
+                                title={t("moveTitle")}
                                 onKeyDown={event => {
                                     if (event.key === "ArrowUp" || event.key === "ArrowDown") {
                                         event.preventDefault();
@@ -123,14 +127,15 @@ export function ChatQueue({
                                 className="min-w-0 flex-1 truncate text-xs"
                                 title={item.send.text}
                             >
-                                {item.send.text || `${item.send.attachments.length} attached files`}
+                                {item.send.text ||
+                                    t("attachedFiles", { count: item.send.attachments.length })}
                             </span>
                             <div className="flex items-center">
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Move message ${index + 1} up`}
+                                    aria-label={t("moveUp", { number: index + 1 })}
                                     disabled={index === 0}
                                     onClick={() => move(index, index - 1)}
                                 >
@@ -140,7 +145,7 @@ export function ChatQueue({
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Move message ${index + 1} down`}
+                                    aria-label={t("moveDown", { number: index + 1 })}
                                     disabled={index === items.length - 1}
                                     onClick={() => move(index, index + 1)}
                                 >
@@ -150,7 +155,7 @@ export function ChatQueue({
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Edit queued message ${index + 1}`}
+                                    aria-label={t("edit", { number: index + 1 })}
                                     onClick={() => onEdit(item.id)}
                                 >
                                     <Pencil size={13} />
@@ -159,12 +164,8 @@ export function ChatQueue({
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Send queued message ${index + 1} now`}
-                                    title={
-                                        busy
-                                            ? "Stop current response and send this message"
-                                            : "Send this message"
-                                    }
+                                    aria-label={t("sendNow", { number: index + 1 })}
+                                    title={busy ? t("sendNowBusyTitle") : t("sendNowTitle")}
                                     onClick={() => onSendNow(item.id)}
                                 >
                                     <Send size={13} />
@@ -173,7 +174,7 @@ export function ChatQueue({
                                     variant="ghost"
                                     size="icon"
                                     className="size-7"
-                                    aria-label={`Remove queued message ${index + 1}`}
+                                    aria-label={t("remove", { number: index + 1 })}
                                     onClick={() => onRemove(item.id)}
                                 >
                                     <X size={13} />
@@ -181,11 +182,9 @@ export function ChatQueue({
                             </div>
                             {editingId === item.id && (
                                 <div className="text-ink-2 flex w-full items-center justify-between pl-8 text-xs">
-                                    <span>
-                                        Editing in composer. Send to save this queued message.
-                                    </span>
+                                    <span>{t("editing")}</span>
                                     <Button variant="ghost" size="sm" onClick={onCancelEdit}>
-                                        Cancel edit
+                                        {t("cancelEdit")}
                                     </Button>
                                 </div>
                             )}

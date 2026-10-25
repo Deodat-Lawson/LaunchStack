@@ -133,7 +133,7 @@ export async function POST(
 
             let resolved;
             try {
-                resolved = await withWorkspaceChatModels(workspace.data.companyId, () =>
+                resolved = await withWorkspaceChatModels(workspace.data.companyId, "notes", () =>
                     resolveConfiguredChatModel({ streaming: true })
                 );
             } catch (modelError) {

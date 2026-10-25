@@ -16,7 +16,7 @@ import { authorizeDriveRoute, driveErrorResponse } from "../_shared";
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         const { id: rawId } = await context.params;
-        const auth = await authorizeDriveRoute(rawId);
+        const auth = await authorizeDriveRoute(rawId, { request });
         if (!auth.ok) return auth.response;
 
         try {
@@ -35,7 +35,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             });
         } catch (err) {
             console.error("[google-docs/open] failed:", err);
-            return driveErrorResponse(err);
+            return driveErrorResponse(err, request);
         }
     });
 }

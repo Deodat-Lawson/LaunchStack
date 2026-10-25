@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Download, FileText, File, Code, Loader2, Check } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
@@ -32,10 +33,9 @@ interface ExportDialogProps {
     bibliography?: string;
 }
 
+/** Name and description: `generator.export.formats.<id>`. */
 interface FormatOption {
     id: ExportFormat;
-    name: string;
-    description: string;
     icon: React.ReactNode;
     extension: string;
 }
@@ -43,35 +43,29 @@ interface FormatOption {
 const formatOptions: FormatOption[] = [
     {
         id: "pdf",
-        name: "PDF",
-        description: "Portable Document Format",
         icon: <FileText className="h-5 w-5 text-red-500" />,
         extension: ".pdf",
     },
     {
         id: "markdown",
-        name: "Markdown",
-        description: "Plain text with formatting",
         icon: <Code className="h-5 w-5 text-blue-500" />,
         extension: ".md",
     },
     {
         id: "html",
-        name: "HTML",
-        description: "Web page format",
         icon: <Code className="h-5 w-5 text-orange-500" />,
         extension: ".html",
     },
     {
         id: "text",
-        name: "Plain Text",
-        description: "Unformatted text",
         icon: <File className="h-5 w-5 text-gray-500" />,
         extension: ".txt",
     },
 ];
 
 export function ExportDialog({ isOpen, onClose, title, content, bibliography }: ExportDialogProps) {
+    const t = useTranslations("generator.export");
+    const tc = useTranslations("common");
     const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("pdf");
     const [includeCitations, setIncludeCitations] = useState(true);
     const [pageSize, setPageSize] = useState<PageSize>("letter");
@@ -152,17 +146,15 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Download className="h-5 w-5" />
-                        Export Document
+                        {t("title")}
                     </DialogTitle>
-                    <DialogDescription>
-                        Choose a format and options to download your document.
-                    </DialogDescription>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-6 py-4">
                     {/* Format Selection */}
                     <div className="space-y-3">
-                        <Label>Format</Label>
+                        <Label>{t("format")}</Label>
                         <div className="grid grid-cols-2 gap-2">
                             {formatOptions.map(format => (
                                 <button
@@ -177,7 +169,9 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                                 >
                                     {format.icon}
                                     <div>
-                                        <div className="text-sm font-medium">{format.name}</div>
+                                        <div className="text-sm font-medium">
+                                            {t(`formats.${format.id}.name`)}
+                                        </div>
                                         <div className="text-ink-3 text-xs">{format.extension}</div>
                                     </div>
                                 </button>
@@ -189,7 +183,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                     {selectedFormat === "pdf" && (
                         <div className="bg-panel-2/50 space-y-4 rounded-lg p-4">
                             <div className="flex items-center justify-between">
-                                <Label htmlFor="pageSize">Page Size</Label>
+                                <Label htmlFor="pageSize">{t("pageSize")}</Label>
                                 <Select
                                     value={pageSize}
                                     onValueChange={v => setPageSize(v as PageSize)}
@@ -198,14 +192,14 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="letter">Letter</SelectItem>
+                                        <SelectItem value="letter">{t("letter")}</SelectItem>
                                         <SelectItem value="a4">A4</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
 
                             <div className="flex items-center justify-between">
-                                <Label htmlFor="fontSize">Font Size</Label>
+                                <Label htmlFor="fontSize">{t("fontSize")}</Label>
                                 <Select
                                     value={fontSize.toString()}
                                     onValueChange={v => setFontSize(parseInt(v))}
@@ -228,9 +222,9 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                     {bibliography && (
                         <div className="bg-panel-2/50 flex items-center justify-between rounded-lg p-4">
                             <div>
-                                <Label htmlFor="citations">Include Bibliography</Label>
+                                <Label htmlFor="citations">{t("includeBibliography")}</Label>
                                 <p className="text-ink-3 mt-0.5 text-xs">
-                                    Add references section at the end
+                                    {t("includeBibliographyHint")}
                                 </p>
                             </div>
                             <Switch
@@ -252,8 +246,10 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                                     {selectedFormatOption?.extension}
                                 </p>
                                 <p className="text-ink-3 text-xs">
-                                    ~{Math.ceil(content.length / 300)} page(s) •{" "}
-                                    {selectedFormatOption?.description}
+                                    {t("estimate", {
+                                        count: Math.ceil(content.length / 300),
+                                        description: t(`formats.${selectedFormat}.description`),
+                                    })}
                                 </p>
                             </div>
                         </div>
@@ -263,7 +259,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                 {/* Actions */}
                 <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={onClose} disabled={isExporting}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={handleExport}
@@ -278,17 +274,17 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                         {isExporting ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Exporting...
+                                {t("exporting")}
                             </>
                         ) : exportSuccess ? (
                             <>
                                 <Check className="mr-2 h-4 w-4" />
-                                Done!
+                                {t("done")}
                             </>
                         ) : (
                             <>
                                 <Download className="mr-2 h-4 w-4" />
-                                Export
+                                {tc("actions.export")}
                             </>
                         )}
                     </Button>

@@ -29,6 +29,7 @@ import {
 } from "~/lib/authz/permissions";
 import { resolveRole, type ResolvedRole } from "~/lib/authz/resolve";
 import { slugifyName } from "~/lib/workspace-slug";
+import { copy } from "~/i18n/copy";
 
 import { badRequest, conflict, forbidden, notFound } from "./errors";
 import { deleteRoleGrants } from "./ownership";
@@ -77,7 +78,7 @@ export function displayRoleName(slug: string, customNames: ReadonlyMap<string, s
 export async function requireKnownRole(companyId: bigint, slug: string): Promise<ResolvedRole> {
     const resolved = await resolveRole(companyId, slug);
     if (resolved.custom && resolved.name === null) {
-        throw badRequest(`Unknown role "${slug}".`);
+        throw badRequest(copy("team.server.errors.unknownRole", { slug }));
     }
     return resolved;
 }
@@ -92,10 +93,16 @@ export async function requireAssignableRole(
 ): Promise<ResolvedRole> {
     const resolved = await requireKnownRole(ctx.companyId, slug);
     if (resolved.slug === "owner") {
-        throw badRequest("Ownership is transferred, never assigned.");
+        throw badRequest(copy("team.server.errors.ownershipNotAssigned"));
     }
     if (!canAssignRole(ctx, resolved)) {
-        throw forbidden(`You cannot assign the ${roleLabel(resolved.slug, resolved.name)} role.`);
+        throw forbidden(
+            isBuiltinRole(resolved.slug)
+                ? copy("team.server.errors.cannotAssignBuiltinRole", { role: resolved.slug })
+                : copy("team.server.errors.cannotAssignRole", {
+                      role: roleLabel(resolved.slug, resolved.name),
+                  })
+        );
     }
     return resolved;
 }
@@ -235,7 +242,7 @@ async function getRoleView(ctx: WorkspaceContext, id: number): Promise<RoleView>
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, ctx.companyId), eq(workspaceRoles.id, id)))
         .limit(1);
-    if (!row) throw notFound("Role not found.");
+    if (!row) throw notFound(copy("team.server.errors.roleNotFound"));
     const counts = await membershipCountsByRole(ctx.companyId);
     return toRoleView(
         ctx,
@@ -258,19 +265,20 @@ async function getRoleView(ctx: WorkspaceContext, id: number): Promise<RoleView>
 function requestedPermissions(ctx: WorkspaceContext, list: readonly string[]): Set<Permission> {
     const set = permissionsFromList(list);
     if (set.size !== new Set(list).size) {
-        throw badRequest("One or more permissions are not in the catalogue.");
+        throw badRequest(copy("team.server.errors.permissionsNotInCatalogue"));
     }
     if (!canGrantPermissions(ctx, set)) {
-        throw forbidden("A role may only hold permissions you hold yourself.");
+        throw forbidden(copy("team.server.errors.roleBeyondOwnPermissions"));
     }
     return set;
 }
 
 function roleSlugFromName(name: string): string {
     const slug = slugifyName(name).slice(0, 64).replace(/-+$/, "");
-    if (!slug || slug === "workspace") throw badRequest("Choose a name with letters or numbers.");
+    if (!slug || slug === "workspace")
+        throw badRequest(copy("team.server.errors.roleNameNeedsLetters"));
     if (isBuiltinRole(slug) || slug in LEGACY_ROLE_ALIASES) {
-        throw badRequest(`"${name}" is a built-in role name.`);
+        throw badRequest(copy("team.server.errors.builtinRoleName", { name }));
     }
     return slug;
 }
@@ -287,7 +295,7 @@ export async function createRole(
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, ctx.companyId), eq(workspaceRoles.slug, slug)))
         .limit(1);
-    if (existing) throw conflict("A role with that name already exists.");
+    if (existing) throw conflict(copy("team.server.errors.roleNameTaken"));
 
     const id = await db.transaction(async tx => {
         const [row] = await tx
@@ -326,11 +334,11 @@ export async function updateRole(
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, ctx.companyId), eq(workspaceRoles.id, id)))
         .limit(1);
-    if (!row) throw notFound("Role not found.");
+    if (!row) throw notFound(copy("team.server.errors.roleNotFound"));
 
     const current = permissionsFromList(row.permissions ?? []);
     if (!canGrantPermissions(ctx, current)) {
-        throw forbidden("This role holds permissions you do not have.");
+        throw forbidden(copy("team.server.errors.roleHoldsPermissionsYouLack"));
     }
     const next = input.permissions ? requestedPermissions(ctx, input.permissions) : current;
 
@@ -375,7 +383,7 @@ export async function deleteRole(
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, ctx.companyId), eq(workspaceRoles.id, id)))
         .limit(1);
-    if (!row) throw notFound("Role not found.");
+    if (!row) throw notFound(copy("team.server.errors.roleNotFound"));
 
     const holders = await db
         .select({ id: userCompanyMemberships.id, userId: userCompanyMemberships.userId })
@@ -390,14 +398,13 @@ export async function deleteRole(
     let target: ResolvedRole | null = null;
     if (holders.length > 0) {
         if (!reassignTo) {
-            throw conflict(
-                `${holders.length} member${holders.length === 1 ? "" : "s"} still hold this role. Choose a role to move them to.`,
-                { memberCount: holders.length }
-            );
+            throw conflict(copy("team.server.errors.roleStillHeld", { count: holders.length }), {
+                memberCount: holders.length,
+            });
         }
         target = await requireAssignableRole(ctx, reassignTo);
         if (target.slug === row.slug)
-            throw badRequest("Choose a different role to move members to.");
+            throw badRequest(copy("team.server.errors.chooseDifferentRole"));
     }
 
     await db.transaction(async tx => {

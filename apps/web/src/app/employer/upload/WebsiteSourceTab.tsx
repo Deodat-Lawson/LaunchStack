@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Globe, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface WebsiteSourceTabProps {
@@ -35,6 +36,7 @@ export function WebsiteSourceTab({
     categories: _categories,
     defaultCategory,
 }: WebsiteSourceTabProps) {
+    const t = useTranslations("upload.website");
     const { userId } = useAuth();
     const router = useRouter();
 
@@ -62,7 +64,7 @@ export function WebsiteSourceTab({
     const handleSubmit = async () => {
         if (!userId || !url.trim()) return;
         if (!isValidHttpUrl(url)) {
-            toast.error("Please enter a valid http(s) URL");
+            toast.error(t("invalidUrlToast"));
             return;
         }
 
@@ -92,15 +94,15 @@ export function WebsiteSourceTab({
             };
 
             if (!response.ok) {
-                throw new Error(data.error ?? "Failed to index website");
+                throw new Error(data.error ?? t("indexFailed"));
             }
 
             setStatus("success");
-            toast.success(data.message ?? "Website indexing started!");
+            toast.success(data.message ?? t("indexStarted"));
             setTimeout(() => router.push("/employer/documents"), 2000);
         } catch (err) {
             setStatus("error");
-            const msg = err instanceof Error ? err.message : "Unknown error";
+            const msg = err instanceof Error ? err.message : t("unknownError");
             setErrorMessage(msg);
             toast.error(msg);
         } finally {
@@ -114,7 +116,7 @@ export function WebsiteSourceTab({
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
                 <label htmlFor="website-url" style={labelStyle}>
-                    Page URL
+                    {t("urlLabel")}
                 </label>
                 <input
                     id="website-url"
@@ -127,19 +129,19 @@ export function WebsiteSourceTab({
                 />
                 {url && !isValidHttpUrl(url) && (
                     <div style={{ fontSize: 11.5, color: "var(--danger)", marginTop: 4 }}>
-                        Enter a valid http(s) URL
+                        {t("invalidUrl")}
                     </div>
                 )}
             </div>
 
             <div>
                 <label htmlFor="website-title" style={labelStyle}>
-                    Document title (optional)
+                    {t("titleLabel")}
                 </label>
                 <input
                     id="website-title"
                     type="text"
-                    placeholder="Derived from <title> if left blank"
+                    placeholder={t("titlePlaceholder", { tag: "<title>" })}
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                     disabled={isSubmitting}
@@ -173,11 +175,9 @@ export function WebsiteSourceTab({
                         style={{ accentColor: "var(--accent)" }}
                     />
                     <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                        Crawl linked pages
+                        {t("crawl")}
                     </span>
-                    <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                        Follow same-domain links
-                    </span>
+                    <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>{t("crawlHint")}</span>
                 </label>
 
                 {crawlEnabled && (
@@ -191,7 +191,7 @@ export function WebsiteSourceTab({
                     >
                         <div>
                             <label htmlFor="max-depth" style={{ ...labelStyle, fontSize: 11.5 }}>
-                                Max depth: {maxDepth}
+                                {t("maxDepth", { depth: maxDepth })}
                             </label>
                             <input
                                 id="max-depth"
@@ -211,14 +211,14 @@ export function WebsiteSourceTab({
                                     color: "var(--ink-3)",
                                 }}
                             >
-                                <span>1 (shallow)</span>
-                                <span>3 (deep)</span>
+                                <span>{t("shallow")}</span>
+                                <span>{t("deep")}</span>
                             </div>
                         </div>
 
                         <div>
                             <label htmlFor="max-pages" style={{ ...labelStyle, fontSize: 11.5 }}>
-                                Max pages
+                                {t("maxPages")}
                             </label>
                             <input
                                 id="max-pages"
@@ -231,7 +231,7 @@ export function WebsiteSourceTab({
                                 style={inputStyle}
                             />
                             <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4 }}>
-                                Up to 50 pages per crawl
+                                {t("maxPagesHint")}
                             </div>
                         </div>
                     </div>
@@ -247,11 +247,9 @@ export function WebsiteSourceTab({
                     style={{ accentColor: "var(--accent)" }}
                 />
                 <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                    Enable JS rendering
+                    {t("jsRender")}
                 </span>
-                <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                    For SPAs that require JavaScript
-                </span>
+                <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>{t("jsRenderHint")}</span>
             </label>
 
             {status === "success" && (
@@ -268,9 +266,7 @@ export function WebsiteSourceTab({
                     }}
                 >
                     <CheckCircle size={14} />
-                    {crawlEnabled
-                        ? "Crawl submitted! Pages are being indexed. Redirecting…"
-                        : "Website submitted for indexing! Redirecting…"}
+                    {crawlEnabled ? t("crawlSubmitted") : t("submitted")}
                 </div>
             )}
 
@@ -315,12 +311,12 @@ export function WebsiteSourceTab({
                 {isSubmitting ? (
                     <>
                         <Loader2 size={14} className="animate-spin" />
-                        {crawlEnabled ? "Crawling & processing…" : "Fetching & processing…"}
+                        {crawlEnabled ? t("crawling") : t("fetching")}
                     </>
                 ) : (
                     <>
                         <Globe size={14} />
-                        {crawlEnabled ? "Crawl & index site" : "Index page"}
+                        {crawlEnabled ? t("submitCrawl") : t("submit")}
                     </>
                 )}
             </button>
@@ -336,7 +332,7 @@ export function WebsiteSourceTab({
                 }}
             >
                 <div style={{ fontWeight: 600, color: "var(--ink-2)", marginBottom: 6 }}>
-                    How this works
+                    {t("howTitle")}
                 </div>
                 <ul
                     style={{
@@ -347,22 +343,16 @@ export function WebsiteSourceTab({
                         gap: 3,
                     }}
                 >
-                    <li>
-                        Pages are fetched server-side and cleaned with Readability (boilerplate,
-                        ads, and nav are stripped)
-                    </li>
-                    <li>Content is converted to Markdown preserving headings, lists, and tables</li>
-                    <li>Chunks are split along heading boundaries for better retrieval</li>
+                    <li>{t("how.fetch")}</li>
+                    <li>{t("how.markdown")}</li>
+                    <li>{t("how.chunks")}</li>
                     {crawlEnabled ? (
                         <>
-                            <li>
-                                Same-domain links are followed up to depth {maxDepth} (max{" "}
-                                {maxPages} pages)
-                            </li>
-                            <li>Each crawled page becomes a separate document</li>
+                            <li>{t("how.follow", { depth: maxDepth, pages: maxPages })}</li>
+                            <li>{t("how.separate")}</li>
                         </>
                     ) : (
-                        <li>Enable &quot;Crawl linked pages&quot; to index multiple pages</li>
+                        <li>{t("how.enableCrawl")}</li>
                     )}
                 </ul>
             </div>

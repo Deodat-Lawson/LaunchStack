@@ -7,6 +7,7 @@ import { publicOrigin } from "~/server/public-origin";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { resolveActor } from "../../email-campaigns/_lib/context";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -41,13 +42,16 @@ export async function POST(request: Request) {
 
         // The preview generates and reviews a template: the workspace's own
         // models when it brought them.
-        return await withWorkspaceChatModels(actor.companyId, async () => {
+        return await withWorkspaceChatModels(actor.companyId, "emailCampaigns", async () => {
             let json: unknown;
             try {
                 json = await request.json();
             } catch {
                 return NextResponse.json(
-                    { success: false, message: "Invalid JSON body" },
+                    {
+                        success: false,
+                        message: requestTranslator(request, "errors.api")("invalidJsonBody"),
+                    },
                     { status: 400 }
                 );
             }
@@ -56,7 +60,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Invalid input",
+                        message: requestTranslator(request, "errors.api")("invalidInput"),
                         errors: parsed.error.flatten(),
                     },
                     { status: 400 }
@@ -101,7 +105,10 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error("[email-pipeline/send] failed:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to run email campaign" },
+            {
+                success: false,
+                message: requestTranslator(request, "growth.server.email")("runFailed"),
+            },
             { status: 500 }
         );
     }

@@ -12,6 +12,9 @@ import {
     type MetricDefinitionDto,
 } from "@launchstack/pipelines/vantage";
 
+import { localeOfRequest } from "~/i18n/server";
+import { wordEnglish } from "~/i18n/translate";
+
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
 import { ImportSchema } from "../../_schemas";
 
@@ -20,7 +23,7 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = ImportSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const { rows, problems } = parseMetricCsv(parsed.data.csv);
 
         const definitions = await ensureMetricDefinitions({ companyId: auth.ctx.companyId });
@@ -53,8 +56,17 @@ export async function POST(request: NextRequest) {
                 note: row.note,
             })),
         });
-        return json({ imported, problems, createdMetrics: created });
+        // The parser's problems, in the reader's language (the line numbers are the file's).
+        const locale = localeOfRequest(request);
+        return json({
+            imported,
+            problems: problems.map(p => ({
+                ...p,
+                message: wordEnglish(p.message, "vantage.server.csvProblems", locale),
+            })),
+            createdMetrics: created,
+        });
     } catch (err) {
-        return handleVantageError("POST import", err);
+        return handleVantageError("POST import", err, request);
     }
 }

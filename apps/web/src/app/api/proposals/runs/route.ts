@@ -12,6 +12,6 @@ export async function GET(request: NextRequest) {
         const applicationId = request.nextUrl.searchParams.get("applicationId") ?? undefined;
         return json({ runs: await loadRuns(auth.ctx, applicationId) });
     } catch (err) {
-        return handleProposalsError("GET runs", err);
+        return handleProposalsError("GET runs", err, request);
     }
 }

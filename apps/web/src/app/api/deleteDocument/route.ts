@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
@@ -9,17 +11,14 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { callNotesCalls } from "@launchstack/pipelines/call-notes";
-import {
-    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
-    callNoteDocumentReference,
-    isCallNoteDocument,
-} from "~/lib/call-note-document";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import { reassembleAfterDelete } from "~/server/company-profile/service";
-import { DOCUMENT_DELETE_DENIED, DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
 import { canDeleteAtLevel, documentAccess, levelAtLeast } from "~/server/workspace/item-access";
 
 export async function DELETE(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     try {
         const validation = await validateRequestBody(request, DeleteDocumentSchema);
         if (!validation.success) {
@@ -34,7 +33,7 @@ export async function DELETE(request: Request) {
 
         if (isNaN(documentId) || documentId <= 0) {
             return NextResponse.json(
-                { success: false, error: "Invalid document ID format" },
+                { success: false, error: t("invalidDocumentIdFormat") },
                 { status: 400 }
             );
         }
@@ -59,14 +58,14 @@ export async function DELETE(request: Request) {
 
         if (!doc) {
             return NextResponse.json(
-                { success: false, error: "Document not found" },
+                { success: false, error: translatorFor(locale, "errors.api")("documentNotFound") },
                 { status: 404 }
             );
         }
 
         if (isCallNoteDocument(doc)) {
             return NextResponse.json(
-                { success: false, error: CALL_NOTE_DOCUMENT_MANAGED_MESSAGE },
+                { success: false, error: t("callNoteManaged") },
                 { status: 409 }
             );
         }
@@ -79,8 +78,8 @@ export async function DELETE(request: Request) {
                 {
                     success: false,
                     error: levelAtLeast(access.level, "edit")
-                        ? DOCUMENT_DELETE_DENIED
-                        : DOCUMENT_EDIT_DENIED,
+                        ? t("documentDeleteDenied")
+                        : t("documentEditDenied"),
                 },
                 { status: 403 }
             );
@@ -117,14 +116,14 @@ export async function DELETE(request: Request) {
         return NextResponse.json(
             {
                 success: true,
-                message: "Document and all related data deleted successfully",
+                message: t("documentDeleted"),
             },
             { status: 200 }
         );
     } catch (error) {
         console.error("Error deleting document:", error);
         return NextResponse.json(
-            { success: false, error: "Failed to delete document" },
+            { success: false, error: t("deleteDocumentFailed") },
             { status: 500 }
         );
     }

@@ -9,6 +9,8 @@ import { NextResponse } from "next/server";
 
 import { buildMinutes } from "@launchstack/collab";
 import { meetingWorkflow } from "~/lib/agents/meeting-workflows";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 import { getChannelStore } from "~/server/collab/store";
@@ -24,7 +26,10 @@ export async function GET(
 
     const { meetingId } = await params;
     const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
-    if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
+    if (!runtime) {
+        const t = translatorFor(localeOfRequest(request), "collab.server.errors");
+        return NextResponse.json({ error: t("meetingNotFound") }, { status: 404 });
+    }
 
     const { searchParams } = new URL(request.url);
     const afterSeq = Number(searchParams.get("afterSeq") ?? "0");

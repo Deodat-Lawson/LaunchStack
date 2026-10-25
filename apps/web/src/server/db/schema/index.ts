@@ -16,6 +16,7 @@ export * from "./document-features";
 export * from "./agent-ai";
 export * from "./collab";
 export * from "./credits";
+export * from "./ai-usage";
 export * from "./document-notes";
 export * from "./mindmap";
 export * from "./artifacts";

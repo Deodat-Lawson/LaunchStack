@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MapPin, Tag as TagIcon, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { StickyNoteEditor, tiptapJsonToMarkdown } from "../StickyNoteEditor";
 import type { DraftState } from "./anchor";
 
@@ -27,15 +28,18 @@ export function NoteDraftEditor({
     supportsAnchor = true,
     editingExisting,
 }: NoteDraftEditorProps) {
+    const t = useTranslations("notes.draft");
+    const tc = useTranslations("common");
     const [newTag, setNewTag] = useState("");
 
     const addTag = () => {
-        const t = newTag.trim();
-        if (!t || draft.tags.includes(t)) return;
-        setDraft(d => ({ ...d, tags: [...d.tags, t] }));
+        const tag = newTag.trim();
+        if (!tag || draft.tags.includes(tag)) return;
+        setDraft(d => ({ ...d, tags: [...d.tags, tag] }));
         setNewTag("");
     };
-    const removeTag = (t: string) => setDraft(d => ({ ...d, tags: d.tags.filter(x => x !== t) }));
+    const removeTag = (tag: string) =>
+        setDraft(d => ({ ...d, tags: d.tags.filter(x => x !== tag) }));
 
     return (
         <div
@@ -48,7 +52,7 @@ export function NoteDraftEditor({
             }}
         >
             <input
-                placeholder="Title"
+                placeholder={t("titlePlaceholder")}
                 value={draft.title}
                 onChange={e => setDraft(d => ({ ...d, title: e.target.value }))}
                 style={{
@@ -66,7 +70,7 @@ export function NoteDraftEditor({
             />
             <StickyNoteEditor
                 initialContent={draft.rich}
-                placeholder="Write a rich note…"
+                placeholder={t("bodyPlaceholder")}
                 onChange={({ json, text }) =>
                     setDraft(d => ({
                         ...d,
@@ -90,7 +94,7 @@ export function NoteDraftEditor({
                             gap: 5,
                         }}
                     >
-                        <MapPin size={11} /> Anchor this note (optional)
+                        <MapPin size={11} /> {t("anchorSummary")}
                     </summary>
                     <div
                         style={{
@@ -101,7 +105,7 @@ export function NoteDraftEditor({
                         }}
                     >
                         <textarea
-                            placeholder="Paste the exact text you want this note to stick to. Keeps working even after you re-upload a new version."
+                            placeholder={t("anchorQuotePlaceholder")}
                             value={draft.anchorQuote}
                             onChange={e => setDraft(d => ({ ...d, anchorQuote: e.target.value }))}
                             rows={2}
@@ -118,7 +122,7 @@ export function NoteDraftEditor({
                             }}
                         />
                         <input
-                            placeholder="Page number (optional, PDFs only)"
+                            placeholder={t("anchorPagePlaceholder")}
                             value={draft.anchorPage}
                             inputMode="numeric"
                             onChange={e => setDraft(d => ({ ...d, anchorPage: e.target.value }))}
@@ -147,7 +151,7 @@ export function NoteDraftEditor({
                         gap: 5,
                     }}
                 >
-                    <TagIcon size={11} /> Tags
+                    <TagIcon size={11} /> {t("tags")}
                 </summary>
                 <div
                     style={{
@@ -158,7 +162,7 @@ export function NoteDraftEditor({
                     }}
                 >
                     <input
-                        placeholder="Add tag"
+                        placeholder={t("addTagPlaceholder")}
                         value={newTag}
                         onChange={e => setNewTag(e.target.value)}
                         onKeyDown={e => {
@@ -192,7 +196,7 @@ export function NoteDraftEditor({
                             cursor: newTag.trim() ? "pointer" : "not-allowed",
                         }}
                     >
-                        Add
+                        {tc("actions.add")}
                     </button>
                 </div>
                 {draft.tags.length > 0 && (
@@ -204,9 +208,9 @@ export function NoteDraftEditor({
                             gap: 4,
                         }}
                     >
-                        {draft.tags.map(t => (
+                        {draft.tags.map(tag => (
                             <span
-                                key={t}
+                                key={tag}
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -219,10 +223,10 @@ export function NoteDraftEditor({
                                     color: "var(--ink-2)",
                                 }}
                             >
-                                {t}
+                                {tag}
                                 <button
                                     type="button"
-                                    onClick={() => removeTag(t)}
+                                    onClick={() => removeTag(tag)}
                                     style={{
                                         display: "inline-flex",
                                         alignItems: "center",
@@ -279,7 +283,7 @@ export function NoteDraftEditor({
                         fontWeight: 500,
                     }}
                 >
-                    Cancel
+                    {tc("actions.cancel")}
                 </button>
                 <button
                     type="button"
@@ -296,7 +300,11 @@ export function NoteDraftEditor({
                         cursor: saving ? "not-allowed" : "pointer",
                     }}
                 >
-                    {saving ? "Saving…" : editingExisting ? "Update" : "Save note"}
+                    {saving
+                        ? tc("status.saving")
+                        : editingExisting
+                          ? tc("actions.update")
+                          : t("saveNote")}
                 </button>
             </div>
         </div>

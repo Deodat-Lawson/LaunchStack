@@ -211,6 +211,55 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
     console.log("[backfill-file-uploads-company-id] Done.");
 }
 
+/**
+ * Unstamped files whose canonical `/api/files/{id}` URLs (document or
+ * version) all belong to one tenant. The last, additive step of the stamp
+ * above, on its own.
+ */
+const canonicallyOwnedUnstamped = sql`
+  WITH file_refs AS (${fileRefs}),
+  anchored_owner AS (
+      SELECT
+          (regexp_match(r.url, ${ANCHORED_CAPTURE}))[2]::bigint AS file_id,
+          MIN(r.company_id) AS company_id
+      FROM file_refs r
+      WHERE r.url ~ ${ANCHORED_MATCH}
+      GROUP BY 1
+      HAVING COUNT(DISTINCT r.company_id) = 1
+  )
+  SELECT f.id, o.company_id
+  FROM pdr_ai_v2_file_uploads f
+  INNER JOIN anchored_owner o ON f.id = o.file_id
+  WHERE f.company_id IS NULL
+`;
+
+/** Unstamped rows a canonical document URL in one tenant points at. */
+export async function countCanonicallyOwnedUnstampedFileUploads(db: DbClient): Promise<number> {
+    return resultCount(
+        await db.execute(
+            sql`SELECT COUNT(*)::int AS count FROM (${canonicallyOwnedUnstamped}) pending`
+        )
+    );
+}
+
+/**
+ * Stamp rows written without a company after the first backfill ran: the
+ * Drive, Gmail and agent-knowledge sinks uploaded without `companyId` until
+ * 2026-10, and `/api/files` denies an unstamped row to every session. Only
+ * NULL rows with a canonical owner are touched and no stamp is ever cleared,
+ * so it is safe to run at any time and to re-run.
+ */
+export async function stampCanonicallyOwnedFileUploads(db: DbClient): Promise<void> {
+    await db.execute(sql`
+      WITH pending AS (${canonicallyOwnedUnstamped})
+      UPDATE pdr_ai_v2_file_uploads f
+      SET company_id = p.company_id
+      FROM pending p
+      WHERE f.id = p.id
+        AND f.company_id IS NULL
+    `);
+}
+
 /** Exported for the twin-parity test. */
 export const FILE_REF_PATTERNS = {
     WEAK_CAPTURE,

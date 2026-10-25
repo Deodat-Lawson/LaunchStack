@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { AlertTriangle, ExternalLink, FileX, Loader2, RotateCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import type { ViewerHighlight } from "~/lib/find-text-range";
@@ -30,6 +31,8 @@ type LoadState =
  * which transcript belongs to it.
  */
 export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
+    const t = useTranslations("viewers.media");
+    const tc = useTranslations("common");
     const [state, setState] = useState<LoadState>({ status: "loading" });
     const [reload, setReload] = useState(0);
     const [activeIndex, setActiveIndex] = useState(-1);
@@ -58,7 +61,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
                 if (!cancelled) {
                     setState({
                         status: "error",
-                        message: err instanceof Error ? err.message : "Failed to load",
+                        message: err instanceof Error ? err.message : "",
                     });
                 }
             }
@@ -87,7 +90,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
         return (
             <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-sm">
                 <Loader2 className="size-5 animate-spin" aria-hidden />
-                Loading player…
+                {t("loadingPlayer")}
             </div>
         );
     }
@@ -102,14 +105,14 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
                     <AlertTriangle className="size-5" aria-hidden />
                 </div>
                 <div>
-                    <p className="text-ink text-sm font-semibold">
-                        Couldn&apos;t open this recording
+                    <p className="text-ink text-sm font-semibold">{t("openFailed")}</p>
+                    <p className="text-ink-3 mt-1 text-xs">
+                        {state.message || t("loadFailedFallback")}
                     </p>
-                    <p className="text-ink-3 mt-1 text-xs">{state.message}</p>
                 </div>
                 <Button variant="outline" size="sm" onClick={() => setReload(n => n + 1)}>
                     <RotateCw />
-                    Try again
+                    {tc("actions.tryAgain")}
                 </Button>
             </div>
         );
@@ -149,16 +152,16 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
             <div className="border-line bg-panel m-4 flex items-center gap-3 rounded-xl border p-4">
                 <div className="min-w-0 flex-1">
                     <p className="text-ink text-sm font-semibold">
-                        This video plays on {playback.label}
+                        {t("playsOn", { platform: playback.label })}
                     </p>
                     <p className="text-ink-3 mt-0.5 text-xs">
-                        {playback.label} doesn&apos;t allow playing it inside the workspace.
+                        {t("noEmbed", { platform: playback.label })}
                     </p>
                 </div>
                 <Button size="sm" asChild>
                     <a href={playback.url} target="_blank" rel="noopener noreferrer">
                         <ExternalLink />
-                        Watch on {playback.label}
+                        {t("watchOn", { platform: playback.label })}
                     </a>
                 </Button>
             </div>
@@ -167,8 +170,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
         player = (
             <div className="border-line bg-panel-2/50 text-ink-3 m-4 flex items-center gap-3 rounded-xl border border-dashed p-4 text-sm">
                 <FileX className="size-5 shrink-0" aria-hidden />
-                The original recording isn&apos;t available — it may have been deleted or moved to a
-                folder you can&apos;t open.
+                {t("originalMissing")}
             </div>
         );
     }
@@ -188,8 +190,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
             ) : (
                 playback?.type === "file" && (
                     <p className="text-ink-4 border-line shrink-0 border-t px-4 py-2 text-xs">
-                        No transcript for this recording yet. Once it has one, it shows here and the
-                        recording can be cited.
+                        {t("noTranscript")}
                     </p>
                 )
             )}

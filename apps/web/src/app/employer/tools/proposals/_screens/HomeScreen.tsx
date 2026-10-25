@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -13,13 +14,14 @@ import { cn } from "~/lib/utils";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { plural, relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import { NewApplicationDialog } from "../_components/NewApplicationDialog";
 import { ApplicationStatusPill, ReadinessMeter } from "../_components/Pills";
 import { useProposals } from "../_lib/context";
 import { amountWords, closeWords, deadlineTone, deadlineWords } from "../_lib/words";
-import { proposalsApi, type ApplicationRow } from "../api";
+import { proposalsApi, type ApplicationRow, type TodoItem } from "../api";
 
 function ApplicationLine({
     app,
@@ -31,8 +33,10 @@ function ApplicationLine({
     /** In a half-width panel: deadline and status fold into the second line. */
     compact?: boolean;
 }) {
+    const tp = useTranslations("proposals.common");
+    const tWords = useTranslations("proposals.words");
     const tone = deadlineTone(app.daysLeft);
-    const deadline = deadlineWords(app.deadline, app.daysLeft);
+    const deadline = deadlineWords(tWords, app.deadline, app.daysLeft);
     return (
         <ToolLink
             href={href}
@@ -46,13 +50,13 @@ function ApplicationLine({
             <span className="min-w-0">
                 <span className="text-ink block truncate text-sm font-medium">{app.title}</span>
                 <span className="text-ink-3 block truncate text-xs">
-                    {app.funder ?? "Funder not set"}
+                    {app.funder ?? tp("funderNotSet")}
                     {compact && (
                         <>
                             {" · "}
                             <span
                                 className={cn(
-                                    tone === "warn" && "text-warn",
+                                    tone === "warn" && "text-warn-ink",
                                     tone === "lost" && "text-danger"
                                 )}
                             >
@@ -66,7 +70,7 @@ function ApplicationLine({
                 <span
                     className={cn(
                         "@max-md:hidden text-xs",
-                        tone === "warn" && "text-warn",
+                        tone === "warn" && "text-warn-ink",
                         tone === "lost" && "text-danger",
                         tone === "quiet" && "text-ink-3"
                     )}
@@ -90,6 +94,11 @@ function ApplicationLine({
  * things to do next.
  */
 export function HomeScreen() {
+    const t = useTranslations("proposals.home");
+    const errorText = useErrorText();
+    const tp = useTranslations("proposals.common");
+    const tWords = useTranslations("proposals.words");
+    const format = useToolFormat();
     const { href, finishedTick } = useProposals();
     const router = useToolRouter();
     const home = useResource("proposals:home", () => proposalsApi.home());
@@ -107,33 +116,33 @@ export function HomeScreen() {
             await companyProfileApi.rebuild();
             router.push(href("/profile"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not start building the profile");
+            toast.error(errorText(e, t("buildProfileFailed")));
         }
     };
 
     const sub = d
         ? [
-              plural(d.deadlines.length + d.inProgress.length, "application") + " open",
-              plural(d.funders.saved, "funder") + " saved",
+              t("subOpen", { count: d.deadlines.length + d.inProgress.length }),
+              t("subSaved", { count: d.funders.saved }),
               d.profile.status === "ready"
-                  ? `profile built ${relativeTime(d.profile.builtAt)}`
-                  : "no profile yet",
+                  ? t("subProfileBuilt", { time: format.relativeTime(d.profile.builtAt) })
+                  : t("subNoProfile"),
           ].join(" · ")
         : undefined;
 
     return (
         <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
             <PageHeader
-                title="Your proposals,"
-                accent="this week"
+                title={t("title")}
+                accent={t("accent")}
                 sub={sub ?? <Skeleton className="h-3 w-64" />}
                 actions={
                     <>
                         <Button variant="outline" size="sm" asChild>
-                            <ToolLink href={href("/funders")}>Find funders</ToolLink>
+                            <ToolLink href={href("/funders")}>{tp("findFunders")}</ToolLink>
                         </Button>
                         <Button size="sm" onClick={() => setCreating(true)}>
-                            New application
+                            {tp("newApplication")}
                         </Button>
                     </>
                 }
@@ -142,16 +151,13 @@ export function HomeScreen() {
 
             <section>
                 <SectionHeading
-                    title="To do"
-                    aside={d ? plural(d.todo.length, "item") : undefined}
+                    title={t("todo")}
+                    aside={d ? t("todoCount", { count: d.todo.length }) : undefined}
                 />
                 {home.loading ? (
                     <SkeletonRows rows={3} height={56} />
                 ) : d && d.todo.length === 0 ? (
-                    <EmptyState
-                        title="Nothing waiting on you"
-                        body="Deadlines this week, strong-fit funders and unwritten sections show up here."
-                    />
+                    <EmptyState title={t("nothingWaiting")} body={t("nothingWaitingBody")} />
                 ) : (
                     <div className="border-line bg-panel overflow-hidden rounded-lg border">
                         {d?.todo.map(item => (
@@ -160,12 +166,16 @@ export function HomeScreen() {
                                 className="border-line-2 flex items-center gap-4 border-t px-4 py-3 first:border-t-0"
                             >
                                 <div className="min-w-0 flex-1">
-                                    <div className="text-ink text-sm font-medium">{item.title}</div>
-                                    <div className="text-ink-3 truncate text-xs">{item.detail}</div>
+                                    <div className="text-ink text-sm font-medium">
+                                        {todoText(t, item).title}
+                                    </div>
+                                    <div className="text-ink-3 truncate text-xs">
+                                        {todoText(t, item).detail}
+                                    </div>
                                 </div>
                                 {item.id === "profile" ? (
                                     <Button size="sm" onClick={() => void buildProfile()}>
-                                        Build profile
+                                        {t("buildProfile")}
                                     </Button>
                                 ) : (
                                     // The server still builds the old page URLs
@@ -173,7 +183,7 @@ export function HomeScreen() {
                                     // resolves them to the screen in this tab.
                                     <Button variant="outline" size="sm" asChild>
                                         <ToolLink href={item.action.href}>
-                                            {item.action.label}
+                                            {todoText(t, item).action}
                                         </ToolLink>
                                     </Button>
                                 )}
@@ -185,18 +195,18 @@ export function HomeScreen() {
 
             <section>
                 <SectionHeading
-                    title="Deadlines"
-                    aside={d && d.deadlines.length > 0 ? "nearest first" : undefined}
+                    title={t("deadlines")}
+                    aside={d && d.deadlines.length > 0 ? t("nearestFirst") : undefined}
                 />
                 {home.loading ? (
                     <SkeletonRows rows={3} height={52} />
                 ) : d && d.deadlines.length === 0 ? (
                     <EmptyState
-                        title="No dated applications"
-                        body="An application with a deadline lists here, nearest first."
+                        title={t("noDated")}
+                        body={t("noDatedBody")}
                         action={
                             <Button size="sm" variant="outline" onClick={() => setCreating(true)}>
-                                New application
+                                {tp("newApplication")}
                             </Button>
                         }
                     />
@@ -215,11 +225,11 @@ export function HomeScreen() {
 
             <div className="@max-lg:grid-cols-1 grid grid-cols-2 gap-7">
                 <section className="min-w-0">
-                    <SectionHeading title="In progress" aside="no deadline this week" />
+                    <SectionHeading title={t("inProgress")} aside={t("noDeadlineThisWeek")} />
                     {home.loading ? (
                         <SkeletonRows rows={3} height={52} />
                     ) : d && d.inProgress.length === 0 ? (
-                        <p className="text-ink-3 text-[13px]">Nothing else in flight.</p>
+                        <p className="text-ink-3 text-[13px]">{t("nothingElse")}</p>
                     ) : (
                         <div className="border-line bg-panel overflow-hidden rounded-lg border">
                             {d?.inProgress.map(app => (
@@ -235,10 +245,13 @@ export function HomeScreen() {
                 </section>
                 <section className="min-w-0">
                     <SectionHeading
-                        title="Funders worth a look"
+                        title={t("fundersWorth")}
                         aside={
                             d
-                                ? `${d.funders.strong} strong of ${d.funders.candidates} found`
+                                ? t("strongOf", {
+                                      strong: d.funders.strong,
+                                      candidates: d.funders.candidates,
+                                  })
                                 : undefined
                         }
                     />
@@ -246,15 +259,15 @@ export function HomeScreen() {
                         <SkeletonRows rows={3} height={52} />
                     ) : d && d.funders.top.length === 0 ? (
                         <EmptyState
-                            title="No funders found yet"
+                            title={t("noFunders")}
                             body={
                                 d.profile.status === "ready"
-                                    ? "Search Grants.gov and the web for calls that fit your profile."
-                                    : "Build your profile first; the search is planned from it."
+                                    ? t("noFundersReady")
+                                    : t("noFundersNoProfile")
                             }
                             action={
                                 <Button size="sm" variant="outline" asChild>
-                                    <ToolLink href={href("/funders")}>Find funders</ToolLink>
+                                    <ToolLink href={href("/funders")}>{tp("findFunders")}</ToolLink>
                                 </Button>
                             }
                         />
@@ -271,14 +284,15 @@ export function HomeScreen() {
                                             {f.title}
                                         </span>
                                         <span className="text-ink-3 block truncate text-xs">
-                                            {f.funder} · {closeWords(f.closesOn, f.daysLeft)}
-                                            {amountWords(f.amountMin, f.amountMax)
-                                                ? ` · ${amountWords(f.amountMin, f.amountMax)}`
+                                            {f.funder} ·{" "}
+                                            {closeWords(tWords, f.closesOn, f.daysLeft)}
+                                            {amountWords(tWords, f.amountMin, f.amountMax)
+                                                ? ` · ${amountWords(tWords, f.amountMin, f.amountMax)}`
                                                 : ""}
                                         </span>
                                     </span>
                                     <span className="text-ink text-xs font-medium tabular-nums">
-                                        {f.fit === null ? "—" : `fit ${f.fit}`}
+                                        {f.fit === null ? "—" : t("fit", { fit: f.fit })}
                                     </span>
                                 </ToolLink>
                             ))}
@@ -289,16 +303,74 @@ export function HomeScreen() {
 
             {d && d.profile.status === "ready" && (
                 <p className="text-ink-3 max-w-[70ch] text-[13px]">
-                    Every draft starts from your profile: {plural(d.profile.facts, "fact")} from{" "}
-                    {plural(d.profile.documents, "source")}, built {relativeTime(d.profile.builtAt)}
-                    .{" "}
-                    <ToolLink href={href("/profile")} className="text-brand-ink hover:underline">
-                        Review it
-                    </ToolLink>{" "}
-                    after you add reports or proposals.
+                    {t.rich("profileNote", {
+                        facts: d.profile.facts,
+                        documents: d.profile.documents,
+                        time: format.relativeTime(d.profile.builtAt),
+                        link: chunks => (
+                            <ToolLink
+                                href={href("/profile")}
+                                className="text-brand-ink hover:underline"
+                            >
+                                {chunks}
+                            </ToolLink>
+                        ),
+                    })}
                 </p>
             )}
             <NewApplicationDialog open={creating} onOpenChange={setCreating} />
         </div>
     );
+}
+
+type HomeTranslator = ReturnType<typeof useTranslations<"proposals.home">>;
+
+/** A to-do item in the reader's language; the server's English when it sent no copy. */
+function todoText(
+    t: HomeTranslator,
+    item: TodoItem
+): { title: string; detail: string; action: string } {
+    const copy = item.copy;
+    if (!copy) return { title: item.title, detail: item.detail, action: item.action.label };
+    switch (copy.key) {
+        case "profile":
+            return {
+                title: t("todoItems.profile.title"),
+                detail: t("todoItems.profile.detail", { sources: copy.sources }),
+                action: t("todoItems.profile.action"),
+            };
+        case "deadline":
+            return {
+                title:
+                    copy.daysLeft < 0
+                        ? t("todoItems.deadline.pastTitle", { application: copy.application })
+                        : t("todoItems.deadline.title", {
+                              application: copy.application,
+                              daysLeft: copy.daysLeft,
+                          }),
+                detail: t("todoItems.deadline.detail", {
+                    readiness: copy.readiness,
+                    written: copy.written,
+                    total: copy.total,
+                    blockers: copy.blockers,
+                }),
+                action: t("todoItems.deadline.action"),
+            };
+        case "funders":
+            return {
+                title: t("todoItems.funders.title", { count: copy.count }),
+                // The funders' own names.
+                detail: item.detail,
+                action: t("todoItems.funders.action"),
+            };
+        case "sections":
+            return {
+                title: t("todoItems.sections.title", {
+                    count: copy.count,
+                    application: copy.application,
+                }),
+                detail: copy.funder ?? t("todoItems.sections.noFunder"),
+                action: t("todoItems.sections.action"),
+            };
+    }
 }

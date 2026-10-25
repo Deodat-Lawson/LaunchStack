@@ -7,8 +7,10 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
-import { errorMessage, peopleApi, type Group, type Member } from "../settings/people/api";
+import { peopleApi, type Group, type Member } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 
 export interface TeamDirectory {
     /** Active members, in the server's order (role, then name). */
@@ -24,6 +26,8 @@ export interface TeamDirectory {
 }
 
 export function useTeamDirectory(enabled: boolean): TeamDirectory {
+    const t = useTranslations("team.tool");
+    const errorText = useErrorText();
     const [members, setMembers] = useState<Member[]>([]);
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState(true);
@@ -39,11 +43,11 @@ export function useTeamDirectory(enabled: boolean): TeamDirectory {
             setMembers(mem.members.filter(m => m.status === "active"));
             setGroups(gr.groups);
         } catch (err) {
-            setError(errorMessage(err, "Couldn't load the team."));
+            setError(errorText(err, t("loadError")));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t, errorText]);
 
     useEffect(() => {
         if (enabled) void reload();

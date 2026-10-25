@@ -10,6 +10,7 @@
  */
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { Card, Section } from "~/components/layout/page-shell";
 
@@ -17,11 +18,9 @@ import type { SettingsSectionProps } from "./contract";
 import { SectionRows } from "./SettingRow";
 
 export function LabsSection(_: SettingsSectionProps) {
+    const t = useTranslations("settings.labs");
     return (
-        <Section
-            title="Experiments"
-            description="Off by default. On for everyone in the workspace once an admin turns one on."
-        >
+        <Section title={t("title")} description={t("description")}>
             <Card>
                 <SectionRows section="labs" />
             </Card>

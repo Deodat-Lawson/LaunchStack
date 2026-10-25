@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type AgendaDto, type TopicDto, type VantageAgendaStatus } from "../api";
 import { StatusWord } from "../_components/Primitives";
@@ -34,18 +36,11 @@ import {
     SET_ASIDE_DAYS,
     useOneClick,
 } from "../_lib/actions";
-import { addDaysIso, fmtDate, plural, weekRange } from "../_lib/format";
+import { addDaysIso, useVantageFormat } from "../_lib/format";
 import { unhideSuggestion, useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
 import { draftedWords, hasMaterial } from "../_lib/suggestions";
 import { useAutoDraft } from "../_lib/useAutoDraft";
-
-const STATUS_WORD: Record<VantageAgendaStatus, string> = {
-    draft: "Draft",
-    ready: "Ready for the meeting",
-    held: "Meeting held",
-    closed: "Closed",
-};
 
 function isIsoWeek(v: string | null): v is string {
     return Boolean(v && /^\d{4}-\d{2}-\d{2}$/.test(v));
@@ -64,6 +59,9 @@ function isIsoWeek(v: string | null): v is string {
  * rule); the week arrows and past weeks move the tab to another `?week=`.
  */
 export function AgendaScreen({ week: weekParam = null }: { week?: string | null }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.agenda");
+    const fmt = useVantageFormat();
     const router = useToolRouter();
     const key = isIsoWeek(weekParam) ? weekParam : "default";
     const res = useResource(`vantage:agenda:${key}`, () =>
@@ -113,7 +111,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                       ...c,
                       agenda: {
                           ...c.agenda,
-                          topics: c.agenda.topics.map(t => (t.id === topic.id ? topic : t)),
+                          topics: c.agenda.topics.map(x => (x.id === topic.id ? topic : x)),
                       },
                   }
                 : c
@@ -125,7 +123,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             await work();
             if (done) toast(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not work");
+            toast.error(errorText(e, t("failed")));
         } finally {
             setBusy(false);
         }
@@ -136,7 +134,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             const { agenda: next } = await vantageApi.prepare(week);
             setAgenda(next);
             void res.reload();
-        }, "Fresh suggestions — your kept and edited topics stayed");
+        }, t("regenerated"));
 
     const patch = (
         topic: TopicDto,
@@ -153,13 +151,13 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
         [agenda]
     );
     const suggested = topics.filter(
-        t => t.status === "suggested" && !t.decision && !gone.has(`topic:${t.id}`)
+        x => x.status === "suggested" && !x.decision && !gone.has(`topic:${x.id}`)
     );
-    const kept = topics.filter(t => t.status === "kept");
-    const ignored = topics.filter(t => t.status === "dismissed");
-    const decided = kept.filter(t => t.decision).length;
+    const kept = topics.filter(x => x.status === "kept");
+    const ignored = topics.filter(x => x.status === "dismissed");
+    const decided = kept.filter(x => x.decision).length;
     const unsupported = [...suggested, ...kept].reduce(
-        (n, t) => n + t.facts.filter(f => f.unsupported).length,
+        (n, x) => n + x.facts.filter(f => f.unsupported).length,
         0
     );
 
@@ -167,10 +165,10 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
     const move = (topic: TopicDto, dir: -1 | 1) =>
         run(async () => {
             if (!agenda) return;
-            const i = kept.findIndex(t => t.id === topic.id);
+            const i = kept.findIndex(x => x.id === topic.id);
             const other = kept[i + dir];
             if (i < 0 || !other) return;
-            const ids = topics.map(t => t.id);
+            const ids = topics.map(x => x.id);
             const a = ids.indexOf(topic.id);
             const b = ids.indexOf(other.id);
             [ids[a], ids[b]] = [ids[b]!, ids[a]!];
@@ -187,20 +185,23 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                           ...c,
                           agenda: {
                               ...c.agenda,
-                              topics: c.agenda.topics.filter(t => t.id !== topic.id),
+                              topics: c.agenda.topics.filter(x => x.id !== topic.id),
                           },
                       }
                     : c
             );
-        }, "Topic deleted");
+        }, t("deleted"));
 
     const setStatus = (status: VantageAgendaStatus) =>
-        run(async () => {
-            if (!agenda) return;
-            const { agenda: next } = await vantageApi.setAgendaStatus(agenda.id, status);
-            setAgenda(next);
-            void res.reload();
-        }, `Agenda marked ${STATUS_WORD[status].toLowerCase()}`);
+        run(
+            async () => {
+                if (!agenda) return;
+                const { agenda: next } = await vantageApi.setAgendaStatus(agenda.id, status);
+                setAgenda(next);
+                void res.reload();
+            },
+            t(`marked.${status}`)
+        );
 
     const copyUpdate = (includePrivate: boolean) =>
         run(
@@ -209,18 +210,16 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                 const { markdown } = await vantageApi.weeklyUpdate(agenda.id, includePrivate);
                 await navigator.clipboard.writeText(markdown);
             },
-            includePrivate
-                ? "Your private copy is on the clipboard"
-                : "Shared update copied — paste it anywhere"
+            includePrivate ? t("copiedPrivate") : t("copiedShared")
         );
 
-    const share = (t: TopicDto, shared: boolean) =>
-        void patch(t, { shared }, shared ? "Shared with the program" : "Made private");
+    const share = (topic: TopicDto, shared: boolean) =>
+        void patch(topic, { shared }, shared ? t("sharedToast") : t("privateToast"));
 
-    const drafted = agenda ? draftedWords(agenda) : null;
+    const drafted = agenda ? draftedWords(fmt, agenda) : null;
     const sub = agenda ? (
         <span className="inline-flex flex-wrap items-center gap-x-2">
-            <span>{weekRange(agenda.weekStart, agenda.weekEnd)}</span>
+            <span>{fmt.weekRange(agenda.weekStart, agenda.weekEnd)}</span>
             {drafted && (
                 <>
                     <span>·</span>
@@ -229,19 +228,24 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             )}
             <span>·</span>
             <span>
-                {plural(kept.length, "topic")} on the agenda, {decided} decided,{" "}
-                {kept.filter(t => t.shared).length} shared
+                {t("subCounts", {
+                    count: kept.length,
+                    decided,
+                    shared: kept.filter(topic => topic.shared).length,
+                })}
             </span>
         </span>
     ) : isIsoWeek(week) ? (
-        weekRange(week, addDaysIso(week, 6))
+        fmt.weekRange(week, addDaysIso(week, 6))
     ) : undefined;
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="The agenda for the"
-                accent={isIsoWeek(week) ? `week of ${fmtDate(week)}` : "week"}
+                title={t("title")}
+                accent={
+                    isIsoWeek(week) ? t("accentWeekOf", { date: fmt.date(week) }) : t("accentWeek")
+                }
                 sub={sub}
                 actions={
                     <>
@@ -250,7 +254,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 variant="ghost"
                                 size="icon"
                                 className="size-8"
-                                aria-label="Previous week"
+                                aria-label={t("previousWeek")}
                                 onClick={() => goTo(addDaysIso(week, -7))}
                                 disabled={!isIsoWeek(week)}
                             >
@@ -260,7 +264,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 variant="ghost"
                                 size="icon"
                                 className="size-8"
-                                aria-label="Next week"
+                                aria-label={t("nextWeek")}
                                 onClick={() => goTo(addDaysIso(week, 7))}
                                 disabled={!isIsoWeek(week)}
                             >
@@ -273,42 +277,42 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                             <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" size="sm" disabled={busy}>
-                                        More
+                                        {t("more")}
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem onSelect={() => setEditing("new")}>
-                                        Add a topic
+                                        {t("addTopic")}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onSelect={() => void regenerate()}>
-                                        Ask Vantage for fresh suggestions
+                                        {t("regenerate")}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onSelect={() => void copyUpdate(false)}>
-                                        Copy weekly update (shared)
+                                        {t("copyShared")}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onSelect={() => void copyUpdate(true)}>
-                                        Copy my private copy
+                                        {t("copyPrivate")}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                     {agenda.status !== "draft" && (
                                         <DropdownMenuItem onSelect={() => void setStatus("draft")}>
-                                            Back to draft
+                                            {t("backToDraft")}
                                         </DropdownMenuItem>
                                     )}
                                     {agenda.status !== "ready" && (
                                         <DropdownMenuItem onSelect={() => void setStatus("ready")}>
-                                            Mark ready
+                                            {t("markReady")}
                                         </DropdownMenuItem>
                                     )}
                                     {agenda.status !== "held" && (
                                         <DropdownMenuItem onSelect={() => void setStatus("held")}>
-                                            Meeting held
+                                            {t("meetingHeld")}
                                         </DropdownMenuItem>
                                     )}
                                     {agenda.status !== "closed" && (
                                         <DropdownMenuItem onSelect={() => void setStatus("closed")}>
-                                            Close
+                                            {t("close")}
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>
@@ -320,7 +324,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 onClick={() => void setStatus("ready")}
                                 disabled={busy || kept.length === 0}
                             >
-                                Mark ready
+                                {t("markReady")}
                             </Button>
                         ) : agenda?.status === "ready" ? (
                             <Button
@@ -328,7 +332,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 onClick={() => void setStatus("held")}
                                 disabled={busy}
                             >
-                                Meeting held
+                                {t("meetingHeld")}
                             </Button>
                         ) : null}
                     </>
@@ -346,26 +350,19 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                 <SkeletonRows rows={4} height={64} />
             ) : !agenda ? (
                 auto.drafting ? (
-                    <DraftingCard reading="Reading the evidence, numbers and open commitments on file. The topics land here as suggestions." />
+                    <DraftingCard reading={t("draftingReading")} />
                 ) : (
                     <EmptyState
-                        title={
-                            auto.error
-                                ? "Vantage could not draft this week"
-                                : "No agenda for this week"
-                        }
-                        body={
-                            auto.error ??
-                            "Vantage drafts three to five topics from the evidence, numbers and open commitments on file — each with what happened, its sources, why it matters, the decision to make and a next step — and brings them here as suggestions for you to take or ignore."
-                        }
+                        title={auto.error ? t("draftFailed") : t("emptyTitle")}
+                        body={auto.error ?? t("emptyBody")}
                         action={
                             <>
                                 <Button size="sm" onClick={auto.draft} disabled={!res.data}>
-                                    {auto.error ? "Try again" : "Draft this week"}
+                                    {auto.error ? t("tryAgain") : t("draftWeek")}
                                 </Button>
                                 <Button size="sm" variant="outline" asChild>
                                     <ToolLink href={vantagePath("/evidence")}>
-                                        Add evidence first
+                                        {t("addEvidenceFirst")}
                                     </ToolLink>
                                 </Button>
                             </>
@@ -378,100 +375,113 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
 
                     {(Boolean(agenda.summary) || unsupported > 0) && (
                         <section
-                            aria-label="Vantage's read on the week"
+                            aria-label={t("readOnWeek")}
                             className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-4"
                         >
-                            <SuggestionMark>Vantage&apos;s read on the week</SuggestionMark>
+                            <SuggestionMark>{t("readOnWeek")}</SuggestionMark>
                             {agenda.summary && (
                                 <p className="text-ink mt-1.5 max-w-[72ch] text-[14.5px] leading-[1.55]">
                                     {agenda.summary}
                                 </p>
                             )}
                             {unsupported > 0 && (
-                                <p className="text-warn mt-2 text-[12px]">
-                                    {plural(unsupported, "fact")} without a source on file — open
-                                    Details on a topic to see which.
+                                <p className="text-warn-ink mt-2 text-[12px]">
+                                    {t("unsupported", { count: unsupported })}
                                 </p>
                             )}
                         </section>
                     )}
 
                     {suggested.length > 0 ? (
-                        <section aria-label="Suggested by Vantage">
+                        <section aria-label={t("suggestedTitle")}>
                             <SectionHeading
-                                title="Suggested by Vantage"
+                                title={t("suggestedTitle")}
                                 aside={
                                     busy ? (
                                         <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
                                     ) : (
-                                        `${plural(suggested.length, "topic")} to review`
+                                        t("toReview", { count: suggested.length })
                                     )
                                 }
                             />
                             <div className="flex flex-col gap-2.5">
-                                {suggested.map(t => (
+                                {suggested.map(topic => (
                                     <TopicSuggestion
-                                        key={t.id}
-                                        topic={t}
+                                        key={topic.id}
+                                        topic={topic}
                                         busy={busy}
-                                        onKeep={() => void act(`topic:${t.id}`, () => keepTopic(t))}
-                                        onIgnore={() =>
-                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
+                                        onKeep={() =>
+                                            void act(`topic:${topic.id}`, () =>
+                                                keepTopic(fmt, topic)
+                                            )
                                         }
-                                        onEdit={() => setEditing(t)}
-                                        onDecide={() => setDeciding(t)}
-                                        onDelete={() => void remove(t)}
+                                        onIgnore={() =>
+                                            void act(`topic:${topic.id}`, () =>
+                                                ignoreTopic(fmt, topic)
+                                            )
+                                        }
+                                        onEdit={() => setEditing(topic)}
+                                        onDecide={() => setDeciding(topic)}
+                                        onDelete={() => void remove(topic)}
                                     />
                                 ))}
                             </div>
                         </section>
                     ) : agenda.status === "draft" && kept.length > 0 ? (
-                        <AllCaughtUp body="Every suggestion is answered. Mark the agenda ready when it says what the meeting should decide." />
+                        <AllCaughtUp body={t("caughtUp")} />
                     ) : null}
 
-                    <section aria-label="On the agenda">
+                    <section aria-label={t("onAgenda")}>
                         <SectionHeading
-                            title="On the agenda"
-                            aside={kept.length > 0 ? `${kept.length} of 5` : undefined}
+                            title={t("onAgenda")}
+                            aside={
+                                kept.length > 0 ? t("ofFive", { count: kept.length }) : undefined
+                            }
                         />
                         {kept.length === 0 ? (
                             <p className="text-ink-3 border-line rounded-lg border border-dashed px-4 py-3 text-[13px]">
                                 {suggested.length > 0
-                                    ? "Nothing yet. Add Vantage's suggestions above, or write a topic of your own."
-                                    : "Nothing on the agenda. Ask Vantage for fresh suggestions from the More menu, or write a topic of your own."}
+                                    ? t("emptyAgendaSuggested")
+                                    : t("emptyAgenda")}
                             </p>
                         ) : (
                             <div className="border-line bg-panel rounded-lg border">
-                                {kept.map((t, i) => (
+                                {kept.map((topic, i) => (
                                     <AgendaTopicRow
-                                        key={t.id}
-                                        topic={t}
+                                        key={topic.id}
+                                        topic={topic}
                                         index={i}
                                         first={i === 0}
                                         last={i === kept.length - 1}
-                                        busy={busy || gone.has(`commit:${t.id}`)}
+                                        busy={busy || gone.has(`commit:${topic.id}`)}
                                         onCommit={() =>
-                                            void act(`commit:${t.id}`, () => commitToNextStep(t))
+                                            void act(`commit:${topic.id}`, () =>
+                                                commitToNextStep(fmt, topic)
+                                            )
                                         }
-                                        nextStepHidden={hidden.has(`commit:${t.id}`)}
+                                        nextStepHidden={hidden.has(`commit:${topic.id}`)}
                                         onIgnoreNextStep={() =>
-                                            void act(`commit:${t.id}`, () =>
+                                            void act(`commit:${topic.id}`, () =>
                                                 setAside(
-                                                    `commit:${t.id}`,
+                                                    `commit:${topic.id}`,
                                                     SET_ASIDE_DAYS.nextStep,
-                                                    "Ignored — decide it your own way"
+                                                    t("ignoredOwnWay")
                                                 )
                                             )
                                         }
-                                        onShowNextStep={() => unhideSuggestion(`commit:${t.id}`)}
-                                        onDecide={() => setDeciding(t)}
-                                        onEdit={() => setEditing(t)}
-                                        onMove={dir => void move(t, dir)}
-                                        onShare={shared => share(t, shared)}
-                                        onIgnore={() =>
-                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
+                                        onShowNextStep={() =>
+                                            unhideSuggestion(`commit:${topic.id}`)
                                         }
-                                        onDelete={() => void remove(t)}
+                                        onDecide={() => setDeciding(topic)}
+                                        onEdit={() => setEditing(topic)}
+                                        onMove={dir => void move(topic, dir)}
+                                        onShare={shared => share(topic, shared)}
+                                        onIgnore={() =>
+                                            void act(`topic:${topic.id}`, () =>
+                                                ignoreTopic(fmt, topic)
+                                            )
+                                        }
+                                        onDelete={() => void remove(topic)}
                                     />
                                 ))}
                             </div>
@@ -484,22 +494,22 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 disabled={busy}
                             >
                                 <Plus aria-hidden="true" />
-                                Write a topic
+                                {t("writeTopic")}
                             </Button>
                         </div>
                     </section>
 
                     {ignored.length > 0 && (
-                        <section aria-label="Ignored">
+                        <section aria-label={t("ignored")}>
                             <button
                                 type="button"
                                 onClick={() => setShowIgnored(o => !o)}
                                 aria-expanded={showIgnored}
                                 className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 mb-2 inline-flex items-center gap-1.5 rounded-sm text-[13px] font-semibold outline-none focus-visible:ring-2"
                             >
-                                Ignored
+                                {t("ignored")}
                                 <span className="text-ink-3 text-xs font-normal">
-                                    {plural(ignored.length, "topic")}
+                                    {t("topics", { count: ignored.length })}
                                 </span>
                                 <ChevronDown
                                     className={cn(
@@ -511,19 +521,15 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                             </button>
                             {showIgnored && (
                                 <div className="border-line bg-panel rounded-lg border">
-                                    {ignored.map(t => (
+                                    {ignored.map(topic => (
                                         <IgnoredTopicRow
-                                            key={t.id}
-                                            topic={t}
+                                            key={topic.id}
+                                            topic={topic}
                                             busy={busy}
                                             onRestore={() =>
-                                                void patch(
-                                                    t,
-                                                    { status: "kept" },
-                                                    "Back on the agenda"
-                                                )
+                                                void patch(topic, { status: "kept" }, t("restored"))
                                             }
-                                            onDelete={() => void remove(t)}
+                                            onDelete={() => void remove(topic)}
                                         />
                                     ))}
                                 </div>
@@ -535,7 +541,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
 
             {history.length > 0 && (
                 <section>
-                    <SectionHeading title="Past weeks" />
+                    <SectionHeading title={t("pastWeeks")} />
                     <div className="border-line bg-panel rounded-lg border">
                         {history.map(h => (
                             <ToolLink
@@ -545,10 +551,13 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                 className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 flex min-h-10 items-center gap-3 border-t px-4 py-2 outline-none first:border-t-0 focus-visible:ring-[3px]"
                             >
                                 <span className="text-ink @max-sm:w-28 w-40 text-[13px] font-medium">
-                                    {weekRange(h.weekStart, h.weekEnd)}
+                                    {fmt.weekRange(h.weekStart, h.weekEnd)}
                                 </span>
                                 <span className="text-ink-3 text-[12px]">
-                                    {plural(h.topicCount, "topic")} · {h.decidedCount} decided
+                                    {t("pastCounts", {
+                                        count: h.topicCount,
+                                        decided: h.decidedCount,
+                                    })}
                                 </span>
                                 <StatusWord
                                     className="ml-auto"
@@ -560,7 +569,7 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                               : "success"
                                     }
                                 >
-                                    {STATUS_WORD[h.status]}
+                                    {t(`status.${h.status}`)}
                                 </StatusWord>
                             </ToolLink>
                         ))}

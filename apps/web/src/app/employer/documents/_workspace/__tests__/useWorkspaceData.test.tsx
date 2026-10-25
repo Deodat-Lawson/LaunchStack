@@ -3,8 +3,28 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 
 import type { WorkspaceCallNoteFile } from "@launchstack/pipelines/call-notes/files";
+import { createFormatter, createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+import type { SourceProcessingView } from "~/lib/source-progress";
+
 import type { MindmapSummary } from "../../_mindmap/lib/api";
-import { mapMindmap, mindmapCitability, useWorkspaceData } from "../useWorkspaceData";
+import {
+    mapMindmap as mapMindmapWith,
+    mindmapCitability,
+    useWorkspaceData,
+    type SourceRowLabels,
+} from "../useWorkspaceData";
+
+/** The mapping with the English words a source row is made of. */
+const ENGLISH_ROW_LABELS: SourceRowLabels = {
+    t: createTranslator({ locale: "en", messages: englishMessages, namespace: "workspace" }),
+    format: createFormatter({ locale: "en" }),
+};
+const mapMindmap = (
+    map: Parameters<typeof mapMindmapWith>[0],
+    published?: Parameters<typeof mapMindmapWith>[1]
+) => mapMindmapWith(map, published, ENGLISH_ROW_LABELS);
 
 /**
  * A mindmap is a source. The list the whole workspace reads comes from this
@@ -50,6 +70,19 @@ const callNote: WorkspaceCallNoteFile = {
     updatedAt: "2026-09-14T12:00:00.000Z",
     preview: "Ship the revised onboarding flow.",
     documentId: 101,
+};
+
+const callNoteProcessing: SourceProcessingView = {
+    jobId: "call-note-job",
+    status: "processing",
+    progress: {
+        stage: "embedding",
+        done: 2,
+        total: 5,
+        updatedAt: callNote.updatedAt,
+    },
+    retryCount: 0,
+    retry: null,
 };
 
 /** The URL a fetch mock was called with, whatever form the caller used. */
@@ -153,6 +186,10 @@ describe("useWorkspaceData", () => {
                         category: "Calls",
                         url: "/x/101",
                         ocrMetadata: { callNote: { callId: callNote.callId } },
+                        currentVersionId: 1010,
+                        currentVersionOcrProcessed: false,
+                        currentVersionOcrMetadata: null,
+                        processing: callNoteProcessing,
                     },
                 ]);
             }
@@ -216,10 +253,15 @@ describe("useWorkspaceData", () => {
                 type: "call-note",
                 documentId: 101,
                 folder: "Calls",
+                indexStatus: "processing",
+                processing: callNoteProcessing,
             }),
         ]);
         expect(result.current.sources.find(source => source.id === "d101")).toBeUndefined();
-        expect(result.current.folders.map(folder => folder.name)).toContain("Calls");
+        expect(result.current.folders.find(folder => folder.name === "Calls")).toMatchObject({
+            system: true,
+            access: { canEdit: false, canManage: false },
+        });
     });
 
     it("lists private and not-yet-indexed Call Notes without a chat document", async () => {
@@ -328,6 +370,9 @@ describe("useWorkspaceData", () => {
                 }
                 if (url.startsWith("/api/folders")) {
                     return Promise.resolve(jsonResponse({ data: { folders: [] } }));
+                }
+                if (url.startsWith("/api/call-notes/files")) {
+                    return Promise.resolve(jsonResponse([]));
                 }
                 return Promise.resolve(jsonResponse({ companyId: 1, role: "owner" }));
             });

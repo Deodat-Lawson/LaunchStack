@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -10,11 +12,7 @@ import {
 } from "~/components/ui/chart";
 import type { ScenarioPerson, ScenarioRoundStats, Stance } from "~/lib/scenarios/types";
 
-import { STANCES, STANCE_BG, STANCE_COLOR, STANCE_KEY, STANCE_LABEL } from "~/lib/scenarios/words";
-
-const CONFIG: ChartConfig = Object.fromEntries(
-    STANCES.map(s => [STANCE_KEY[s], { label: STANCE_LABEL[s], color: STANCE_COLOR[s] }])
-);
+import { STANCES, STANCE_BG, STANCE_COLOR, STANCE_KEY, stanceLabel } from "~/lib/scenarios/words";
 
 /** Supportive on top, critical at the bottom: the stack reads like the scale. */
 const STACK_ORDER: readonly Stance[] = [-2, -1, 0, 1, 2];
@@ -37,25 +35,45 @@ export function StanceChart({
     people: ScenarioPerson[];
     rounds: ScenarioRoundStats[];
 }) {
+    const t = useTranslations("scenarios.chart");
+    const tw = useTranslations("scenarios.words");
+    const config = useMemo<ChartConfig>(
+        () =>
+            Object.fromEntries(
+                STANCES.map(s => [
+                    STANCE_KEY[s],
+                    { label: stanceLabel(tw, s), color: STANCE_COLOR[s] },
+                ])
+            ),
+        [tw]
+    );
     const start = counts(people.map(p => p.stanceHistory[0] ?? p.startStance));
     const rows = [
-        { label: "Start", counts: start },
-        ...rounds.map(r => ({ label: `R${r.round}`, counts: r.stanceCounts })),
+        { label: t("start"), counts: start },
+        ...rounds.map(r => ({ label: t("roundTick", { round: r.round }), counts: r.stanceCounts })),
     ].map(row => ({
         label: row.label,
         ...Object.fromEntries(STANCES.map(s => [STANCE_KEY[s], row.counts[s + 2]])),
     }));
     const last = rounds[rounds.length - 1];
     const describe = (c: readonly number[]) =>
-        `${c[0]! + c[1]!} critical, ${c[2]} neutral, ${c[3]! + c[4]!} supportive`;
+        t("describe", {
+            critical: c[0]! + c[1]!,
+            neutral: c[2]!,
+            supportive: c[3]! + c[4]!,
+        });
     const summary = last
-        ? `Opinion by round. At the start: ${describe(start)}. After round ${last.round}: ${describe(last.stanceCounts)}.`
-        : "Opinion by round.";
+        ? t("summary", {
+              start: describe(start),
+              round: last.round,
+              end: describe(last.stanceCounts),
+          })
+        : t("summaryEmpty");
 
     return (
         <div className="flex flex-col gap-2">
             <ChartContainer
-                config={CONFIG}
+                config={config}
                 className="aspect-auto h-[240px] w-full"
                 role="img"
                 aria-label={summary}
@@ -105,7 +123,7 @@ export function StanceChart({
                 {STANCES.map(s => (
                     <li key={s} className="inline-flex items-center gap-1.5">
                         <span className={`size-2 rounded-[2px] ${STANCE_BG[s]}`} />
-                        {STANCE_LABEL[s]}
+                        {stanceLabel(tw, s)}
                     </li>
                 ))}
             </ul>

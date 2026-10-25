@@ -12,7 +12,7 @@ import { requireAuthIdentity } from "~/lib/require-workspace-context";
  * the name of their default workspace when they do. The membership row, not
  * the legacy `users.role`, says what they may do there.
  */
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -42,6 +42,6 @@ export async function GET() {
         });
     } catch (error: unknown) {
         console.error("Error checking registration:", error);
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

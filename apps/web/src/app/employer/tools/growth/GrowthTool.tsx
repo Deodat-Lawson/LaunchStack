@@ -16,6 +16,7 @@ import {
     Target,
     Users,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ProspectsMark } from "~/components/icons/prospects";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
@@ -74,11 +75,12 @@ export function GrowthTool({ host }: { host?: ToolHost }) {
  * it, and it covers this tab only.
  */
 function GrowthFrame() {
+    const t = useTranslations("growth.tool");
     const path = useToolPathname();
     const groups = useGrowthGroups();
     return (
         <ToolFrame
-            title="Growth"
+            title={t("title")}
             mark={<ProspectsMark size={15} tile />}
             groups={groups}
             // A run belongs to the whole tool: its pill is in the bar on
@@ -96,53 +98,63 @@ function GrowthFrame() {
 }
 
 function useGrowthGroups(): ToolNavGroup[] {
+    const t = useTranslations("growth.tool");
     const { segment } = useProspects();
     const paths = useGrowthPaths();
     const counts = segment?.counts;
     return [
         {
             id: "brand",
-            label: "Brand",
+            label: t("groups.brand"),
             items: [
-                { to: paths.brand(""), label: "Overview", icon: LayoutDashboard, exact: true },
-                { to: paths.brand("/compose"), label: "Compose", icon: SquarePen },
-                { to: paths.brand("/calendar"), label: "Calendar", icon: CalendarDays },
-                { to: paths.brand("/analytics"), label: "Analytics", icon: ChartColumn },
-                { to: paths.brand("/engagement"), label: "Engagement", icon: MessagesSquare },
-                { to: paths.brand("/campaigns"), label: "Campaigns", icon: Megaphone },
-                { to: paths.brand("/accounts"), label: "Accounts", icon: AtSign },
+                {
+                    to: paths.brand(""),
+                    label: t("nav.overview"),
+                    icon: LayoutDashboard,
+                    exact: true,
+                },
+                { to: paths.brand("/compose"), label: t("nav.compose"), icon: SquarePen },
+                { to: paths.brand("/calendar"), label: t("nav.calendar"), icon: CalendarDays },
+                { to: paths.brand("/analytics"), label: t("nav.analytics"), icon: ChartColumn },
+                {
+                    to: paths.brand("/engagement"),
+                    label: t("nav.engagement"),
+                    icon: MessagesSquare,
+                },
+                { to: paths.brand("/campaigns"), label: t("nav.campaigns"), icon: Megaphone },
+                { to: paths.brand("/accounts"), label: t("nav.accounts"), icon: AtSign },
             ],
         },
         {
             id: "prospects",
-            label: "Prospects",
+            label: t("groups.prospects"),
             toolbar: <SegmentSwitcher compact />,
             header: <SegmentSwitcher />,
             items: [
-                { to: paths.prospects(""), label: "Home", icon: House, exact: true },
+                { to: paths.prospects(""), label: t("nav.home"), icon: House, exact: true },
                 {
                     to: paths.prospects("/companies"),
-                    label: "Companies",
+                    label: t("nav.companies"),
                     icon: Building2,
                     count: counts?.companies,
                 },
                 {
                     to: paths.prospects("/people"),
-                    label: "People",
+                    label: t("nav.people"),
                     icon: Users,
                     count: counts?.people,
                 },
                 {
                     to: paths.prospects("/deals"),
-                    label: "Deals",
+                    label: t("nav.deals"),
                     icon: Handshake,
                     count: counts?.deals,
                 },
-                { to: paths.prospects("/runs"), label: "Runs", icon: History },
-                { to: paths.prospects("/segment"), label: "Segment", icon: Target },
+                { to: paths.prospects("/runs"), label: t("nav.runs"), icon: History },
+                { to: paths.prospects("/segment"), label: t("nav.segment"), icon: Target },
                 {
                     to: paths.prospects("/sources"),
-                    label: "Sources",
+                    label: t("nav.sources"),
                     icon: Database,
                     count: counts?.sources,
                 },
@@ -153,6 +165,7 @@ function useGrowthGroups(): ToolNavGroup[] {
 
 /** The element for a screen key; the path → key half lives in `_lib/screens.ts`. */
 function GrowthScreenView({ screen }: { screen: GrowthScreen }) {
+    const t = useTranslations("growth.tool");
     const { segmentId, segmentsLoading } = useProspects();
     // Every Prospects screen is about one segment. Until the segment list has
     // answered there is no segment to ask about, and a screen asked anyway
@@ -193,13 +206,14 @@ function GrowthScreenView({ screen }: { screen: GrowthScreen }) {
         case "prospects-sources":
             return <SourcesScreen />;
         case "not-found":
-            return <ToolNotFound home={GROWTH_HOME} homeLabel="Brand overview" />;
+            return <ToolNotFound home={GROWTH_HOME} homeLabel={t("notFoundHome")} />;
     }
 }
 
 function ProspectsLoading() {
+    const tc = useTranslations("common.a11y");
     return (
-        <div className="flex flex-col gap-5" aria-busy="true" aria-label="Loading">
+        <div className="flex flex-col gap-5" aria-busy="true" aria-label={tc("loading")}>
             <Skeleton className="h-8 w-56" />
             <SkeletonRows rows={8} />
         </div>

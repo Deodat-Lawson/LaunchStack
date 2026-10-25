@@ -16,6 +16,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { ChatOpenAI } from "@langchain/openai";
 import OpenAI from "openai";
 import { createEndpointFetch } from "./endpoint-fetch";
+import type { UsageMeterContext } from "./usage-meter";
 import {
     DEFAULT_MAX_OUTPUT_TOKENS_FIELD,
     type ChatEndpointConfig,
@@ -53,6 +54,8 @@ export interface CreateCompatibleChatOptions {
     maxRetries?: number;
     /** Operator-declared reasoning fields, already resolved for this request. */
     requestPatch?: ChatRequestPatch;
+    /** Route, price and recorder for the usage report; the model id is added here. */
+    usage?: Omit<UsageMeterContext, "modelId">;
 }
 
 /**
@@ -86,12 +89,20 @@ export function buildModelKwargs(
 const fetchWithoutRedirects: typeof fetch = (input, init) =>
     fetch(input, { ...init, redirect: "error" });
 
-/** Instructions in, provider error text out (see endpoint-fetch.ts); no redirects for a workspace's address. */
-function endpointFetch(endpoint: ChatEndpointConfig, behavior: ChatModelBehavior) {
+/**
+ * Instructions in, provider error text out, usage counted (see
+ * endpoint-fetch.ts); no redirects for a workspace's address.
+ */
+function endpointFetch(
+    endpoint: ChatEndpointConfig,
+    behavior: ChatModelBehavior,
+    meter?: UsageMeterContext
+) {
     return createEndpointFetch(
         endpoint,
         behavior,
-        endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined
+        endpoint.owner === "workspace" ? fetchWithoutRedirects : undefined,
+        meter
     );
 }
 
@@ -114,7 +125,7 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
         modelName: modelId,
         configuration: {
             baseURL: endpoint.baseUrl,
-            fetch: endpointFetch(endpoint, behavior),
+            fetch: endpointFetch(endpoint, behavior, { ...options.usage, modelId }),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...retriesFor(endpoint, options.maxRetries),
@@ -150,12 +161,14 @@ export function createOpenAiCompatibleClient(options: {
     behavior: ChatModelBehavior;
     timeoutMs?: number;
     maxRetries?: number;
+    /** Route, model and price for the usage report. */
+    usage?: UsageMeterContext;
 }): OpenAI {
     const { endpoint, behavior } = options;
     return new OpenAI({
         apiKey: endpoint.apiKey ?? KEYLESS_PLACEHOLDER_API_KEY,
         baseURL: endpoint.baseUrl,
-        fetch: endpointFetch(endpoint, behavior),
+        fetch: endpointFetch(endpoint, behavior, options.usage),
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...retriesFor(endpoint, options.maxRetries),
     });
@@ -186,7 +199,7 @@ export function describeChatEndpointError(
     // A workspace's own endpoint is fixed by its admins in Settings, not by
     // whoever runs the server, so its failures say so.
     const ownedByWorkspace = endpoint.owner === "workspace";
-    const fixInSettings = "A workspace admin can fix it in Settings › Models.";
+    const fixInSettings = "A workspace admin can fix it in Settings › Bring your own keys.";
 
     if (
         status === 402 ||

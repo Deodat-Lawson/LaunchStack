@@ -7,18 +7,14 @@
  */
 
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
-import {
-    DRAFT_EDIT_DENIED,
-    canEditDraftAt,
-    draftAccess,
-    draftReader,
-} from "~/server/mindmap/access";
+import { canEditDraftAt, draftAccess, draftReader } from "~/server/mindmap/access";
 import {
     getMindmap,
     getRevision,
@@ -33,47 +29,59 @@ function parseId(raw: string): number | null {
     return Number.isInteger(id) && id > 0 ? id : null;
 }
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
+        }
 
         const row = await getMindmap(id, await draftReader(ctx.data));
-        if (!row) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!row) return NextResponse.json({ error: t("notFound") }, { status: 404 });
 
         return NextResponse.json({ revisions: await listRevisions(id) }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] revisions list failed:", error);
-        return serverError("Failed to load history");
+        return serverError(t("historyLoadFailed"));
     }
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
+        }
 
         const body = (await request.json().catch(() => null)) as { revisionId?: unknown } | null;
         const revisionId =
             typeof body?.revisionId === "number" ? body.revisionId : Number(body?.revisionId);
         if (!Number.isInteger(revisionId) || revisionId <= 0) {
-            return NextResponse.json({ error: "revisionId is required" }, { status: 400 });
+            return NextResponse.json({ error: t("revisionIdRequired") }, { status: 400 });
         }
 
         const current = await getMindmap(id, await draftReader(ctx.data));
-        if (!current) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!current) return NextResponse.json({ error: t("notFound") }, { status: 404 });
         if (!canEditDraftAt((await draftAccess(ctx.data, current)).level)) {
-            return NextResponse.json({ error: DRAFT_EDIT_DENIED }, { status: 403 });
+            return NextResponse.json({ error: t("editDenied") }, { status: 403 });
         }
 
         const snapshot = await getRevision(id, revisionId);
-        if (!snapshot) return NextResponse.json({ error: "Revision not found" }, { status: 404 });
+        if (!snapshot) return NextResponse.json({ error: t("revisionNotFound") }, { status: 404 });
 
         const stats = summariseDoc(snapshot.doc);
         const nextRevision = current.revision + 1;
@@ -92,7 +100,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
             .where(and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId)))
             .returning();
 
-        if (!row) return serverError("Failed to restore revision");
+        if (!row) return serverError(t("restoreFailed"));
 
         try {
             await writeRevision({
@@ -110,6 +118,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         return NextResponse.json({ mindmap: toDetail(row) }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] restore failed:", error);
-        return serverError("Failed to restore revision");
+        return serverError(t("restoreFailed"));
     }
 }

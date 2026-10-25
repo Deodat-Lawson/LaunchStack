@@ -26,6 +26,9 @@ import {
     getWorkspaceEndpointView,
     saveWorkspaceEndpoint,
 } from "~/server/workspace-models/store";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { wordModels } from "~/server/workspace-models/words";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -39,16 +42,19 @@ export async function GET() {
 export async function PUT(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "settings.server.models");
 
     const parsed = saveEndpointSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
-        return NextResponse.json({ error: "That isn't a valid model setup." }, { status: 400 });
+        return NextResponse.json({ error: t("invalidSetup") }, { status: 400 });
     }
     const body = parsed.data;
 
     if (body.models) {
         const problem = selectionProblem(body.models);
-        if (problem) return NextResponse.json({ error: problem }, { status: 400 });
+        if (problem)
+            return NextResponse.json({ error: wordModels(problem, locale) }, { status: 400 });
     }
 
     try {
@@ -67,13 +73,16 @@ export async function PUT(request: Request) {
             error instanceof WorkspaceEndpointUrlError ||
             error instanceof KeyNeededForNewAddressError
         ) {
-            return NextResponse.json({ error: error.message }, { status: 400 });
+            return NextResponse.json({ error: wordModels(error.message, locale) }, { status: 400 });
         }
         if (error instanceof MissingSecretsKeyError) {
-            return NextResponse.json({ error: NO_SECRETS_KEY_MESSAGE }, { status: 503 });
+            return NextResponse.json(
+                { error: wordModels(NO_SECRETS_KEY_MESSAGE, locale) },
+                { status: 503 }
+            );
         }
         console.error("[settings/models/workspace] save failed:", error);
-        return NextResponse.json({ error: "Couldn't save the model setup." }, { status: 500 });
+        return NextResponse.json({ error: t("saveFailed") }, { status: 500 });
     }
 
     invalidateWorkspaceChatModels(ctx.data.companyId);

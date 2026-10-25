@@ -76,6 +76,20 @@ describe("ai-chat-ownership", () => {
         }
     });
 
+    it("says which thing is missing, in the reader's language", async () => {
+        mockLimit.mockResolvedValue([]);
+
+        const english = await assertChatOwnedByUser("c1", "user-b");
+        const chinese = await assertTaskOwnedByUser("t1", "user-b", "zh-CN");
+
+        expect(english.success || (await english.response.json())).toEqual({
+            error: "Chat not found",
+        });
+        expect(chinese.success || (await chinese.response.json())).toEqual({
+            error: "未找到该任务",
+        });
+    });
+
     it("assertTaskOwnedByUser returns 404 when task chat is not owned", async () => {
         mockLimit.mockResolvedValue([]);
 

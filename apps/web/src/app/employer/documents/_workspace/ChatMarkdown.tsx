@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -173,12 +174,23 @@ export function markdownTableText(table: Element, format: "markdown" | "csv"): s
         .join("\n");
 }
 
-async function copy(value: string, message: string) {
+type MarkdownTranslator = ReturnType<typeof useTranslations<"chat.markdown">>;
+
+async function copy(value: string, message: string, t: MarkdownTranslator) {
     if (await copyText(value)) toast.success(message);
-    else toast.error("Clipboard unavailable. Select the text to copy it.");
+    else toast.error(t("clipboardUnavailable"));
+}
+
+const ALERT_KINDS = ["note", "tip", "important", "warning", "caution"] as const;
+type AlertKind = (typeof ALERT_KINDS)[number];
+
+function alertKind(value: string | undefined): AlertKind {
+    const kind = value?.toLowerCase();
+    return ALERT_KINDS.find(item => item === kind) ?? "note";
 }
 
 function MermaidBlock({ code }: { code: string }) {
+    const t = useTranslations("chat.markdown");
     const [svg, setSvg] = useState<string | null>(null);
     const [failed, setFailed] = useState(false);
     const id = useRef(`chat-mermaid-${Math.random().toString(36).slice(2)}`);
@@ -217,13 +229,11 @@ function MermaidBlock({ code }: { code: string }) {
             )}
             {!svg && (
                 <p role="status" className="text-xs text-[var(--ink-3)]">
-                    {failed
-                        ? "Diagram unavailable. The original source is below."
-                        : "Rendering diagram…"}
+                    {failed ? t("diagramFailed") : t("diagramRendering")}
                 </p>
             )}
             <details open={failed}>
-                <summary className="cursor-pointer py-2 text-xs">Mermaid source</summary>
+                <summary className="cursor-pointer py-2 text-xs">{t("mermaidSource")}</summary>
                 <CodeBlock code={code} language="mermaid" diagram={false} />
             </details>
         </div>
@@ -239,6 +249,8 @@ function CodeBlock({
     language: string;
     diagram?: boolean;
 }) {
+    const t = useTranslations("chat.markdown");
+    const tc = useTranslations("common");
     const [highlighted, setHighlighted] = useState<string | null>(null);
     const [wrap, setWrap] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -282,9 +294,9 @@ function CodeBlock({
                     variant="ghost"
                     size="sm"
                     type="button"
-                    aria-label="Wrap code lines"
+                    aria-label={t("wrapCode")}
                     aria-pressed={wrap}
-                    title="Wrap code lines"
+                    title={t("wrapCode")}
                     className="rounded p-1 focus-visible:outline"
                     onClick={() => {
                         const next = !wrap;
@@ -302,17 +314,17 @@ function CodeBlock({
                     variant="ghost"
                     size="sm"
                     type="button"
-                    aria-label={copied ? "Code copied" : "Copy code"}
+                    aria-label={copied ? t("codeCopied") : t("copyCode")}
                     className="flex items-center gap-1 rounded p-1 focus-visible:outline"
                     onClick={() =>
                         void copyText(code).then(ok => {
                             setCopied(ok);
-                            if (!ok) toast.error("Couldn't copy code");
+                            if (!ok) toast.error(t("copyCodeFailed"));
                         })
                     }
                 >
                     {copied ? <Check size={14} /> : <Copy size={14} />}
-                    {copied ? "Copied" : "Copy"}
+                    {copied ? tc("actions.copied") : tc("actions.copy")}
                 </Button>
             </div>
             <pre
@@ -333,6 +345,7 @@ function CodeBlock({
 }
 
 function ChatTableCell({ node, children }: { node?: Element; children: React.ReactNode }) {
+    const t = useTranslations("chat.markdown");
     const text = node ? nodeText(node) : "";
     if (text.length <= 80) return <td>{children}</td>;
     return (
@@ -342,7 +355,7 @@ function ChatTableCell({ node, children }: { node?: Element; children: React.Rea
                     <Button
                         variant="ghost"
                         size="sm"
-                        aria-label="View full table cell"
+                        aria-label={t("viewCell")}
                         title={text}
                         className="h-auto max-w-[240px] justify-start truncate p-0 text-left font-normal"
                     >
@@ -351,15 +364,15 @@ function ChatTableCell({ node, children }: { node?: Element; children: React.Rea
                 </PopoverTrigger>
                 <PopoverContent
                     className="max-h-80 w-80 max-w-[calc(100vw-2rem)] overflow-auto break-words"
-                    aria-label="Full table cell"
+                    aria-label={t("fullCell")}
                 >
                     <div className="text-sm">{children}</div>
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => void copy(text, "Cell copied")}
+                        onClick={() => void copy(text, t("cellCopied"), t)}
                     >
-                        Copy cell
+                        {t("copyCell")}
                     </Button>
                 </PopoverContent>
             </Popover>
@@ -368,6 +381,7 @@ function ChatTableCell({ node, children }: { node?: Element; children: React.Rea
 }
 
 function ChatTable({ node, children }: { node: Element; children: React.ReactNode }) {
+    const t = useTranslations("chat.markdown");
     const [expanded, setExpanded] = useState(false);
     return (
         <div className="my-3 min-w-0 rounded-lg border border-[var(--line)]">
@@ -377,18 +391,20 @@ function ChatTable({ node, children }: { node: Element; children: React.ReactNod
                     size="sm"
                     type="button"
                     onClick={() =>
-                        void copy(markdownTableText(node, "markdown"), "Table Markdown copied")
+                        void copy(markdownTableText(node, "markdown"), t("tableMarkdownCopied"), t)
                     }
                 >
-                    Copy as Markdown
+                    {t("copyMarkdown")}
                 </Button>
                 <Button
                     variant="ghost"
                     size="sm"
                     type="button"
-                    onClick={() => void copy(markdownTableText(node, "csv"), "Table CSV copied")}
+                    onClick={() =>
+                        void copy(markdownTableText(node, "csv"), t("tableCsvCopied"), t)
+                    }
                 >
-                    Copy as CSV
+                    {t("copyCsv")}
                 </Button>
                 <Button
                     variant="ghost"
@@ -397,7 +413,7 @@ function ChatTable({ node, children }: { node: Element; children: React.ReactNod
                     aria-pressed={expanded}
                     onClick={() => setExpanded(v => !v)}
                 >
-                    {expanded ? "Compact cells" : "Expand cells"}
+                    {expanded ? t("compactCells") : t("expandCells")}
                 </Button>
             </div>
             <div className="overflow-x-auto">
@@ -420,6 +436,7 @@ function removeAlertMarker(children: React.ReactNode): React.ReactNode {
 }
 
 export function ChatMarkdown({ text }: { text: string }) {
+    const t = useTranslations("chat.markdown");
     const root = useRef<HTMLDivElement>(null);
     const [gallery, setGallery] = useState<{ items: ChatMediaItem[]; index: number } | null>(null);
     const markdown = useMemo(() => escapeCurrencyDollars(text), [text]);
@@ -429,7 +446,7 @@ export function ChatMarkdown({ text }: { text: string }) {
     return (
         <div
             ref={root}
-            className="chat-markdown min-w-0 break-words text-sm leading-[1.65] [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-[var(--accent)] [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ink-3)] [&_h1]:my-4 [&_h1]:text-xl [&_h1]:font-semibold [&_h2]:my-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:my-3 [&_h3]:font-semibold [&_img]:max-h-96 [&_img]:max-w-full [&_img]:rounded-lg [&_li]:my-1 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_table[data-expanded=false]_td]:max-w-[240px] [&_table[data-expanded=false]_td]:overflow-hidden [&_table[data-expanded=false]_td]:text-ellipsis [&_table[data-expanded=false]_td]:whitespace-nowrap [&_td]:border [&_td]:border-[var(--line)] [&_td]:p-2 [&_th]:border [&_th]:border-[var(--line)] [&_th]:bg-[var(--panel-2)] [&_th]:p-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
+            className="chat-markdown min-w-0 break-words text-sm leading-[1.65] [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-[var(--line)] [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ink-3)] [&_h1]:my-4 [&_h1]:text-xl [&_h1]:font-semibold [&_h2]:my-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:my-3 [&_h3]:font-semibold [&_img]:max-h-96 [&_img]:max-w-full [&_img]:rounded-lg [&_li]:my-1 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_table[data-expanded=false]_td]:max-w-[240px] [&_table[data-expanded=false]_td]:overflow-hidden [&_table[data-expanded=false]_td]:text-ellipsis [&_table[data-expanded=false]_td]:whitespace-nowrap [&_td]:border [&_td]:border-[var(--line)] [&_td]:p-2 [&_th]:border [&_th]:border-[var(--line)] [&_th]:bg-[var(--panel-2)] [&_th]:p-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
         >
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
@@ -473,15 +490,14 @@ export function ChatMarkdown({ text }: { text: string }) {
                         const alert = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/i.exec(
                             node ? node.children.map(nodeText).join("").trimStart() : ""
                         );
+                        const kind = alert ? t(`alerts.${alertKind(alert[1])}`) : "";
                         return alert ? (
                             <aside
                                 role="note"
-                                aria-label={alert[1]?.toLowerCase()}
+                                aria-label={kind}
                                 className="my-3 rounded-lg border border-[var(--line)] bg-[var(--panel)] px-3 py-1"
                             >
-                                <p className="font-semibold capitalize">
-                                    {alert[1]?.toLowerCase()}
-                                </p>
+                                <p className="font-semibold capitalize">{kind}</p>
                                 {removeAlertMarker(children)}
                             </aside>
                         ) : (
@@ -512,7 +528,9 @@ export function ChatMarkdown({ text }: { text: string }) {
                                 size="sm"
                                 type="button"
                                 className="block max-w-full rounded text-left"
-                                aria-label={`Preview image: ${alt?.trim() ? alt : "Chat image"}`}
+                                aria-label={t("previewImage", {
+                                    name: alt?.trim() ? alt : t("chatImage"),
+                                })}
                                 onClick={e => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -540,12 +558,12 @@ export function ChatMarkdown({ text }: { text: string }) {
                                         typeof src === "string" ? src : undefined,
                                         true
                                     )}
-                                    alt={alt ?? "Chat image"}
+                                    alt={alt ?? t("chatImage")}
                                     loading="lazy"
                                 />
                             </Button>
                         ) : (
-                            <span>{alt ?? "Image unavailable"}</span>
+                            <span>{alt ?? t("imageUnavailable")}</span>
                         ),
                     video: ({ src, children }) => (
                         <video

@@ -131,7 +131,7 @@ export async function processQueuedCallNotesEnrichment(
             gaps: snapshot.gaps,
             note: snapshot.note,
         });
-        const result = await withWorkspaceChatModels(company, () =>
+        const result = await withWorkspaceChatModels(company, "notes", () =>
             new ConfiguredCallNotesEnrichmentModel().generate(input, rememberPreview)
         );
         await flushFinalPreview();

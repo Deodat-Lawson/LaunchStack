@@ -10,12 +10,18 @@
 
 import sharp from "sharp";
 
+import { copy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 import { PROFILE_PHOTO } from "~/lib/profile/fields";
 
+/** Why a photo was refused: `message` is English, `copy` the route words for its reader. */
 export class ProfilePhotoError extends Error {
-    constructor(message: string) {
-        super(message);
+    readonly copy: Copy;
+
+    constructor(message: Copy) {
+        super(englishCopy(message));
         this.name = "ProfilePhotoError";
+        this.copy = message;
     }
 }
 
@@ -33,13 +39,14 @@ const READABLE_FORMATS = new Set(["jpeg", "png", "webp", "gif", "heif"]);
 /** A large phone photo is ~50 MP; beyond this is a decompression bomb, not a portrait. */
 const MAX_INPUT_PIXELS = 80_000_000;
 
-const UNREADABLE = `That file isn't an image we can read. Use a ${PROFILE_PHOTO.acceptLabel}.`;
+/** Names the formats `PROFILE_PHOTO.acceptLabel` lists. */
+const UNREADABLE = copy("settings.server.photo.unreadable");
 
 export async function normalizeProfilePhoto(input: Buffer): Promise<NormalizedPhoto> {
-    if (input.length === 0) throw new ProfilePhotoError("That file is empty.");
+    if (input.length === 0) throw new ProfilePhotoError(copy("settings.server.photo.empty"));
     if (input.length > PROFILE_PHOTO.maxBytes) {
         const mb = Math.round(PROFILE_PHOTO.maxBytes / (1024 * 1024));
-        throw new ProfilePhotoError(`Photos can be up to ${mb} MB.`);
+        throw new ProfilePhotoError(copy("settings.server.photo.tooLarge", { mb }));
     }
 
     let meta: sharp.Metadata;
@@ -50,9 +57,7 @@ export async function normalizeProfilePhoto(input: Buffer): Promise<NormalizedPh
     }
     if (!meta.format || !READABLE_FORMATS.has(meta.format)) throw new ProfilePhotoError(UNREADABLE);
     if (meta.format === "heif" && meta.compression !== "av1") {
-        throw new ProfilePhotoError(
-            "HEIC photos aren't supported. Export it as a JPG and try again."
-        );
+        throw new ProfilePhotoError(copy("settings.server.photo.heic"));
     }
 
     // EXIF orientations 5–8 are quarter turns: the displayed width is the
@@ -62,7 +67,7 @@ export async function normalizeProfilePhoto(input: Buffer): Promise<NormalizedPh
     const height = (turned ? meta.width : meta.height) ?? 0;
     if (Math.min(width, height) < PROFILE_PHOTO.minSide) {
         const min = PROFILE_PHOTO.minSide;
-        throw new ProfilePhotoError(`Use an image at least ${min}×${min} pixels.`);
+        throw new ProfilePhotoError(copy("settings.server.photo.tooSmall", { min }));
     }
 
     try {
@@ -85,6 +90,6 @@ export async function normalizeProfilePhoto(input: Buffer): Promise<NormalizedPh
             byteSize: data.length,
         };
     } catch {
-        throw new ProfilePhotoError("That image couldn't be processed. Try a different file.");
+        throw new ProfilePhotoError(copy("settings.server.photo.processFailed"));
     }
 }

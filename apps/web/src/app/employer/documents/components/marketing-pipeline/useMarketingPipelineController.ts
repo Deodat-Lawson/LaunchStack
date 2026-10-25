@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import {
     MARKETING_ACTIVE_SESSION_KEY,
@@ -24,9 +25,11 @@ import {
 } from "./shared";
 
 function buildInitialSteps(): PipelineStepState[] {
+    // The label is the server's, filled in by `step_start`; the screen names
+    // a step by its id.
     return PIPELINE_STEP_ORDER.map(s => ({
         id: s.id,
-        label: s.label,
+        label: "",
         status: "pending" as const,
     }));
 }
@@ -61,6 +64,7 @@ export interface EvalResult {
 
 export function useMarketingPipelineController(options: { debug: boolean }) {
     const { debug } = options;
+    const t = useTranslations("growth.marketingPipeline");
     const router = useRouter();
     const [platform, setPlatform] = useState<MarketingSession["platform"]>(null);
     const [prompt, setPrompt] = useState("");
@@ -256,7 +260,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             setMessageVariants(prev => {
                 const newVariant: MessageVariant = {
                     id: variantId,
-                    label: `Rewrite ${prev.length}`,
+                    label: t("variants.rewrite", { n: prev.length }),
                     text: rewrittenText,
                     createdAt: Date.now(),
                 };
@@ -277,7 +281,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 );
             }
         },
-        [activeSessionId, resetPostFeedback]
+        [activeSessionId, resetPostFeedback, t]
     );
 
     const selectVariant = useCallback(
@@ -325,7 +329,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             sessionStorage.setItem(
                 PENDING_REWRITE_STORAGE_KEY,
                 JSON.stringify({
-                    title: `Campaign Draft (${selectedPlatform?.label ?? "Marketing"})`,
+                    title: t("draftDocTitle", {
+                        platform: selectedPlatform?.label ?? t("draftDocFallback"),
+                    }),
                     content: editableMessage,
                     createdAt: Date.now(),
                     source: "marketing-pipeline",
@@ -335,7 +341,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             // Ignore storage errors and still navigate.
         }
         router.push("/employer/documents?feature=rewrite");
-    }, [editableMessage, router, selectedPlatform?.label]);
+    }, [editableMessage, router, selectedPlatform?.label, t]);
 
     const handleCopy = useCallback(async () => {
         if (!editableMessage.trim()) return;
@@ -411,13 +417,13 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         resetPostFeedback();
 
         if (!platform) {
-            setError("Choose a platform to continue.");
+            setError(t("errors.choosePlatform"));
             return;
         }
 
         const normalizedPrompt = prompt.trim();
         if (!normalizedPrompt) {
-            setError("Add a short description of what you want to promote.");
+            setError(t("errors.addDescription"));
             return;
         }
 
@@ -448,7 +454,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
             if (!response.ok || !response.body) {
                 const text = await response.text();
-                let message = "We couldn't generate a campaign right now. Please try again.";
+                let message = t("errors.generateFailed");
                 try {
                     const payload = JSON.parse(text) as { message?: string; error?: string };
                     message = payload.message ?? message;
@@ -491,7 +497,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                             pipelineResult = event.data;
                         } else if (event.type === "error") {
                             const detail = event.error ? ` ${event.error}` : "";
-                            setError((event.message ?? "Pipeline failed") + detail);
+                            setError((event.message ?? t("errors.pipelineFailed")) + detail);
                             return;
                         }
                     } catch {
@@ -501,7 +507,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             }
 
             if (!pipelineResult) {
-                setError("Server returned an incomplete response. Please try again.");
+                setError(t("errors.incomplete"));
                 return;
             }
 
@@ -519,7 +525,13 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             if (pipelineVariants && pipelineVariants.length > 0) {
                 initialVariants = pipelineVariants.map((v, i) => ({
                     id: v.variantId,
-                    label: i === 0 ? "Best" : `Variant ${i + 1}: ${v.variantId.replace(/-/g, " ")}`,
+                    label:
+                        i === 0
+                            ? t("variants.best")
+                            : t("variants.numbered", {
+                                  n: i + 1,
+                                  name: v.variantId.replace(/-/g, " "),
+                              }),
                     text: v.message,
                     createdAt: now + i,
                 }));
@@ -532,7 +544,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 initialVariants = [
                     {
                         id: originalVariantId,
-                        label: "Original",
+                        label: t("variants.original"),
                         text: pipelineResult.message,
                         createdAt: now,
                     },
@@ -581,7 +593,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         } catch (requestError) {
             if (requestError instanceof DOMException && requestError.name === "AbortError") return;
             console.error("[marketing-pipeline] request error:", requestError);
-            setError("Something went wrong talking to the marketing engine. Try again.");
+            setError(t("errors.engine"));
         } finally {
             setLoading(false);
             setGenerationStartTime(null);
@@ -597,6 +609,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         platformMeta,
         prompt,
         resetPostFeedback,
+        t,
         targetAudience,
         toneOverride,
     ]);
@@ -645,19 +658,19 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             } else {
                 setPublishResult({
                     success: false,
-                    error: payload.message ?? payload.error ?? "Publish failed.",
+                    error: payload.message ?? payload.error ?? t("errors.publishFailed"),
                 });
             }
         } catch (err) {
             if (epoch !== postFeedbackEpochRef.current) return;
             setPublishResult({
                 success: false,
-                error: err instanceof Error ? err.message : "Network error while publishing.",
+                error: err instanceof Error ? err.message : t("errors.publishNetwork"),
             });
         } finally {
             if (epoch === postFeedbackEpochRef.current) setPublishing(false);
         }
-    }, [editableMessage, platform, result?.platform]);
+    }, [editableMessage, platform, result?.platform, t]);
 
     const evaluatePost = useCallback(async () => {
         // Score the currently-visible/edited post with the LLM-as-judge pipeline
@@ -690,17 +703,17 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 error?: string;
             };
             if (!res.ok || !json.success || !json.data) {
-                throw new Error(json.error ?? json.message ?? "Evaluation failed");
+                throw new Error(json.error ?? json.message ?? t("errors.evaluationFailed"));
             }
             if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
             setEvalResult(json.data);
         } catch (err) {
             if (epoch !== postFeedbackEpochRef.current) return;
-            setEvalError(err instanceof Error ? err.message : "Evaluation failed");
+            setEvalError(err instanceof Error ? err.message : t("errors.evaluationFailed"));
         } finally {
             if (epoch === postFeedbackEpochRef.current) setEvaluating(false);
         }
-    }, [editableMessage, result]);
+    }, [editableMessage, result, t]);
 
     /**
      * Context-aware rewrite backend for the Refine sheet (unification P3):
@@ -726,11 +739,11 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 message?: string;
             };
             if (!res.ok || !json.success || !json.data?.message) {
-                throw new Error(json.message ?? "Refinement failed");
+                throw new Error(json.message ?? t("errors.refinementFailed"));
             }
             return json.data.message;
         },
-        [platform, result]
+        [platform, result, t]
     );
 
     const activeSession = sessions.find(session => session.id === activeSessionId) ?? null;

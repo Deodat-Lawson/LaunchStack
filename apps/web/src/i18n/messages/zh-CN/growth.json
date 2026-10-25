@@ -1,0 +1,1430 @@
+{
+  "tool": {
+    "title": "增长",
+    "groups": {
+      "brand": "品牌",
+      "prospects": "潜在客户"
+    },
+    "nav": {
+      "overview": "概览",
+      "compose": "撰写",
+      "calendar": "日历",
+      "analytics": "分析",
+      "engagement": "互动",
+      "campaigns": "营销活动",
+      "accounts": "账号",
+      "home": "首页",
+      "companies": "公司",
+      "people": "联系人",
+      "deals": "商机",
+      "runs": "运行记录",
+      "segment": "细分市场",
+      "sources": "来源"
+    },
+    "notFoundHome": "品牌概览"
+  },
+  "common": {
+    "listSeparator": "、",
+    "counts": {
+      "posts": "{count, plural, other {# 篇帖子}}",
+      "channels": "{count, plural, other {# 个渠道}}",
+      "comments": "{count, plural, other {# 条评论}}",
+      "items": "{count, plural, other {# 项}}",
+      "drafts": "{count, plural, other {# 篇草稿}}"
+    }
+  },
+  "runIndicator": {
+    "verbs": {
+      "sources": "正在搜索来源",
+      "shortlist": "正在筛选",
+      "profiles": "正在生成画像",
+      "people": "正在查找联系人"
+    },
+    "doingDetail": "{verb} {detail}",
+    "label": "正在查找公司",
+    "labelDoing": "正在查找公司 · {doing}",
+    "open": "{label}。打开运行"
+  },
+  "segmentSwitcher": {
+    "compactAria": "细分市场：{name}。切换细分市场",
+    "noneLower": "无",
+    "none": "无",
+    "label": "细分市场",
+    "switch": "切换细分市场",
+    "noSegment": "暂无细分市场",
+    "createToStart": "新建一个即可开始",
+    "heading": "细分市场",
+    "draftConfirm": "草稿 · 确认后开始搜索",
+    "newSegment": "新建细分市场"
+  },
+  "prospects": {
+    "wordmark": "潜在客户",
+    "common": {
+      "findCompanies": "查找公司",
+      "startFailed": "无法启动运行",
+      "outreachFailed": "无法起草外联",
+      "addToOutreach": "加入外联",
+      "updateFailed": "无法更新",
+      "exclude": "排除",
+      "includeAgain": "重新纳入",
+      "select": "选择 {name}",
+      "signals": "{count} 个信号",
+      "companies": "公司",
+      "people": "联系人",
+      "company": "公司",
+      "source": "来源",
+      "fit": "匹配度",
+      "stage": "阶段",
+      "deals": "商机",
+      "sources": "来源",
+      "segment": "细分市场"
+    },
+    "stages": {
+      "lead": "线索",
+      "qualified": "已确认",
+      "contacted": "已联系",
+      "meeting": "会议",
+      "proposal": "提案",
+      "negotiating": "谈判中",
+      "won": "赢单",
+      "lost": "不合适",
+      "nurture": "培育中"
+    },
+    "emailStatus": {
+      "label": {
+        "verified": "已验证",
+        "found": "已找到",
+        "generic": "通用邮箱",
+        "guess": "推测"
+      },
+      "help": {
+        "verified": "邮箱已由服务商确认。",
+        "found": "公开于我们抓取的页面上，未经验证。",
+        "generic": "共享邮箱，如 info@ 或 sales@。",
+        "guess": "根据公司的邮箱格式推测得出，使用前请先确认。"
+      }
+    },
+    "sourceKind": {
+      "api": "目录或 API",
+      "recipe": "搜索索引收录",
+      "signal": "信号"
+    },
+    "sourceChip": {
+      "seen": "发现于 {when}"
+    },
+    "bulkBar": {
+      "selected": "已选 {count} 项"
+    },
+    "citation": {
+      "withTitle": "证据 {n}：{title}",
+      "plain": "证据 {n}"
+    },
+    "funnel": {
+      "segment": "{stage} {count}",
+      "title": "{stage}：{count}"
+    },
+    "stagePill": {
+      "staleDays": "· {count} 天",
+      "menuAria": "阶段：{stage}。更改阶段",
+      "moveTo": "移至",
+      "current": "当前"
+    },
+    "newSegment": {
+      "created": "已创建细分市场“{name}”。准备好后运行“查找公司”。",
+      "createFailed": "无法创建细分市场",
+      "title": "新建细分市场",
+      "description": "你想把产品卖给谁、卖到哪里。之后可以随时调整每一项。",
+      "namePlaceholder": "履约服务商 · 欧盟",
+      "offering": "你卖什么",
+      "offeringPlaceholder": "面向电商仓库的拣货机器人，按台按月租赁",
+      "industries": "行业 <hint>（用逗号分隔）</hint>",
+      "industriesPlaceholder": "电商履约、第三方物流、合同物流",
+      "countries": "国家/地区 <hint>（两位字母代码）</hint>",
+      "countriesPlaceholder": "NL, DE, GB",
+      "create": "创建细分市场"
+    },
+    "runSheet": {
+      "stopped": "已停止运行。目前已找到的公司会保留。",
+      "stopFailed": "无法停止运行",
+      "titleCompleted": "已找到公司",
+      "titleStopped": "运行已停止",
+      "titleFailed": "运行失败",
+      "titleRunning": "正在查找公司",
+      "description": "{segment}。先搜索该细分市场已启用的来源，再为最匹配的公司生成画像，并为前十名查找联系人。",
+      "segmentFallback": "细分市场",
+      "starting": "正在启动…",
+      "spend": "已花费 {spent}（上限 {cap}）· {credits} 点额度",
+      "background": "后台运行",
+      "running": "运行中"
+    },
+    "home": {
+      "off": "已关闭",
+      "title": "{headline}，",
+      "loadingTitle": "正在加载你的细分市场",
+      "accent": "本周",
+      "subWithRun": "{companies, plural, other {# 家公司}} · {deals, plural, other {# 个商机}} · 上次运行于 {when}，共 {sources, plural, other {# 个来源}}",
+      "subNoRun": "{companies, plural, other {# 家公司}} · {deals, plural, other {# 个商机}} · 尚未运行",
+      "todo": "待办",
+      "nothingWaiting": "没有需要你处理的事项",
+      "nothingWaitingBody": "新的高匹配度公司、待回复的消息和停滞的商机会显示在这里。",
+      "firstTitle": "查找你的第一批公司",
+      "firstBody": "搜索该细分市场已启用的 {count, plural, other {# 个来源}}，为最匹配的公司生成附带引用证据的画像，并找到可以联系的人。",
+      "median": "从“{from}”到“{to}”的中位时长为 {days} 天",
+      "whereFrom": "公司来自哪里",
+      "whereFromAside": "已找到 · 进入商机",
+      "noSources": "尚无来源运行过",
+      "noSourcesBody": "首次运行后，这里会显示每个平台的产出。",
+      "fresh": "值得一看的新公司",
+      "fromLastRun": "来自上次运行",
+      "nothingNew": "暂无新公司",
+      "nothingNewBody": "最近一次运行中超过匹配阈值的公司会显示在这里。",
+      "todoItems": {
+        "review": {
+          "title": "{highFit, select, true {查看上次运行新发现的 {count} 家高匹配公司} other {查看上次运行新发现的 {count} 家公司}}",
+          "action": "查看"
+        },
+        "due": {
+          "title": "有 {count} 个下一步行动已到期",
+          "step": "{name}：{action}",
+          "followUp": "跟进",
+          "action": "打开交易"
+        },
+        "stale": {
+          "title": "有 {count} 笔交易已沉寂",
+          "deal": "{name} 已沉寂 {days} 天",
+          "action": "跟进"
+        }
+      }
+    },
+    "sources": {
+      "updateFailed": "无法更新来源",
+      "sub": "下次运行将搜索 {total} 个来源中的 {on} 个。平台根据该细分市场的买家类型、地区和规模挑选。",
+      "needs": "需要在环境变量中配置 <code>{key}</code>。",
+      "lastYield": "<num>找到 {found} 个</num>，新增 {fresh} 个 · {cost}",
+      "lastYieldSignals": "<num>找到 {found} 个</num> · {cost}",
+      "notRun": "尚未运行",
+      "locked": "按细分市场的设置将随来源注册表一起推出；目前由环境变量中的密钥决定",
+      "switchOn": "{label}：已开启",
+      "switchOff": "{label}：已关闭"
+    },
+    "deals": {
+      "moveFailed": "无法移动商机",
+      "inMotion": "{count} 个推进中",
+      "leadsNotQualified": "{count} 条线索尚未确认",
+      "exits": {
+        "lost": "{count} 个不合适",
+        "nurture": "{count} 个培育中"
+      },
+      "empty": "没有推进中的商机",
+      "emptyBody": "在公司列表中确认一家公司，或在公司页面将其移到这里。在此之前，线索会留在公司列表中。",
+      "noActivity": "已 {count} 天无动态",
+      "lastActivity": "最近动态：{when}",
+      "emptyColumn": "空"
+    },
+    "runs": {
+      "status": {
+        "running": "运行中",
+        "completed": "已完成",
+        "failed": "失败",
+        "stopped": "已停止"
+      },
+      "found": "找到",
+      "new": "新增",
+      "inDeal": "进入商机",
+      "ok": "正常",
+      "title": "运行记录",
+      "subKeyless": "目前共 {count} 次 · 未配置 API 密钥，因此运行时会读取公开目录和各公司的官网",
+      "subLive": "目前共 {count} 次 · 每次运行都会搜索该细分市场已启用的来源",
+      "sampleAria": "使用示例数据",
+      "sample": "示例数据",
+      "noRuns": "暂无运行记录",
+      "noRunsBody": "一次运行会搜索该细分市场已启用的所有来源，为最匹配的公司生成画像并查找联系人。整个过程需要几分钟，并会实时显示进度。",
+      "started": "开始时间",
+      "profiled": "已生成画像",
+      "spend": "花费",
+      "took": "耗时",
+      "openProgress": "查看进度",
+      "spendCell": "{money} · {credits} 点"
+    },
+    "segment": {
+      "separateItems": "用逗号分隔各项。",
+      "editAria": "编辑 {label}",
+      "confirmed": "细分市场已确认。之后的运行将使用此版本。",
+      "confirmFailed": "无法确认",
+      "rederived": "已根据你的公司档案和 {count, plural, other {# 份文档}}重新推导。",
+      "rederiveFailed": "无法重新推导",
+      "saved": "已保存。下次运行前请重新确认细分市场。",
+      "saveFailed": "无法保存",
+      "title": "你的目标客户，",
+      "accent": "据我们判断",
+      "subConfirmed": "已于 {confirmed} 确认 · 于 {derived} 根据你的公司档案和 {count, plural, other {# 份文档}}起草",
+      "subDraft": "于 {derived} 根据你的公司档案和 {count, plural, other {# 份文档}}起草。请确认，或先修改有问题的地方。",
+      "rederive": "重新推导",
+      "confirmedButton": "已确认",
+      "confirm": "确认细分市场",
+      "noProfile": "目前还没有公司档案，因此这份草稿只依据文档。在设置中添加公司档案可以让它更准确。"
+    },
+    "people": {
+      "drafted": "已在邮件中起草营销活动，共 {count, plural, other {# 位联系人}}。",
+      "draftedSkipped": "已在邮件中起草营销活动，共 {count, plural, other {# 位联系人}}。已跳过 {skipped} 位。",
+      "sub": "细分市场内的公司共有 {count} 位联系人 · {eligible} 位可外联",
+      "statusAria": "邮箱状态",
+      "searchPlaceholder": "搜索联系人或公司",
+      "searchAria": "搜索联系人",
+      "empty": "暂无联系人",
+      "emptyBody": "每次运行后，系统会为排名靠前的公司查找联系人。运行“查找公司”，或打开一家公司查看已找到的人。",
+      "openCompanies": "打开公司列表",
+      "selectAllEligible": "全选可外联的联系人",
+      "person": "联系人"
+    },
+    "companies": {
+      "views": {
+        "all": "全部",
+        "new": "新增",
+        "highfit": "高匹配",
+        "uncontacted": "未联系",
+        "excluded": "已排除"
+      },
+      "drafted": "已在邮件中为 {count, plural, other {# 家公司}}起草营销活动。请在那里审批；这里不会发送任何邮件。",
+      "excludedToast": "已将 {count} 家公司排除在后续运行之外",
+      "includedToast": "{count} 家公司已重新加入细分市场",
+      "moved": "已将 {count} 家公司移至“已确认”",
+      "notMoved": "未移动：{names}",
+      "sub": "该细分市场共 {count} 家",
+      "subNew": "该细分市场共 {count} 家 · 自上次运行以来新增 {fresh} 家",
+      "viewAria": "视图",
+      "search": "搜索公司",
+      "sort": "排序",
+      "sortAria": "排序方式",
+      "sortActivity": "最近动态",
+      "sortName": "名称",
+      "emptyQuery": "没有与“{query}”匹配的公司",
+      "emptyAll": "该细分市场暂无公司",
+      "emptyView": "“{view}”中没有内容",
+      "emptyAllBody": "运行“查找公司”，搜索该细分市场已启用的来源。",
+      "emptyFilterBody": "清除筛选条件，或查找更多公司。",
+      "clearFilter": "清除筛选",
+      "why": "推荐理由",
+      "activity": "动态",
+      "shortcuts": "<k>j</k> <k>k</k> 移动 · <k>x</k> 选择 · <k>Enter</k> 打开 · <k>o</k> 加入外联 · <k>/</k> 搜索",
+      "moveToQualified": "移至“已确认”",
+      "newBadge": "新",
+      "foundInLastRun": "在上次运行中发现"
+    },
+    "company": {
+      "updateDealFailed": "无法更新商机",
+      "backInSegment": "已重新加入细分市场",
+      "excludedToast": "已排除在后续运行之外",
+      "goneTitle": "这家公司已不在此处",
+      "goneBody": "它可能已从细分市场中移除，或者该链接来自其他工作区。",
+      "previous": "上一家公司",
+      "next": "下一家公司",
+      "staff": "{size} 名员工",
+      "noPeopleYet": "尚未找到联系人",
+      "addPeople": "将联系人加入外联",
+      "excludedNote": "已排除。它不会出现在后续运行中，也无法加入外联。",
+      "excludedNoteReason": "已排除：{reason}。它不会出现在后续运行中，也无法加入外联。",
+      "notProfiled": "尚未生成画像",
+      "notProfiledBody": "已找到这家公司，但尚未为它生成画像。如果它的匹配度仍高于阈值，将在下次运行时生成画像。",
+      "about": "简介",
+      "whyFit": "匹配原因",
+      "openQuestion": "待确认问题：{question}",
+      "signals": "信号",
+      "evidence": "证据",
+      "evidenceAside": "{count} 个来源",
+      "evidenceAsideFetched": "{count} 个来源，抓取于 {when}",
+      "deal": "商机",
+      "since": "自 {date}",
+      "owner": "负责人",
+      "unassigned": "未分配",
+      "takeIt": "由我负责",
+      "youOwn": "你已成为该商机的负责人",
+      "nextStep": "下一步",
+      "nextStepPlaceholder": "发送介绍邮件后打电话",
+      "dueDate": "截止日期",
+      "nextStepSaved": "已保存下一步",
+      "noneYet": "暂无 · 去设置",
+      "findMore": "查找更多",
+      "findMoreTitle": "联系人搜索会在生成画像后进行",
+      "noPeople": "尚未找到联系人。每次运行后会为排名靠前的公司查找联系人。",
+      "outreachRule": "“已验证”和“已找到”的邮箱可以用于外联，“推测”的邮箱需要先确认。",
+      "foundVia": "发现渠道",
+      "profileSaved": "画像已作为“{title}”保存到来源。",
+      "fitTitle": "匹配度 {fit}",
+      "buyerType": "买家类型",
+      "size": "规模",
+      "geography": "地区",
+      "notAFit": "不匹配项",
+      "none": "无",
+      "dialogTitle": "将联系人加入外联",
+      "dialogDescription": "在邮件中为 {company} 起草营销活动，由你在那里审批。",
+      "guessed": "推测的地址，请先确认",
+      "sharedInbox": "共享邮箱，不适合发个人邮件",
+      "draftFor": "为 {count} 人起草营销活动",
+      "draftInbox": "起草发往公共邮箱的邮件",
+      "drafted": "已在邮件中起草营销活动，共 {count, plural, other {# 位联系人}}。请在那里审批；这里不会发送任何邮件。"
+    }
+  },
+  "brand": {
+    "common": {
+      "compose": "撰写",
+      "composeAPost": "撰写帖子",
+      "openAccounts": "打开账号",
+      "connectAccount": "连接账号",
+      "openOn": "在 {network} 上打开",
+      "accounts": "账号",
+      "channels": "渠道",
+      "channel": "渠道",
+      "post": "帖子",
+      "published": "发布时间"
+    },
+    "kinds": {
+      "organization": "主页",
+      "person": "个人资料",
+      "account": "账号",
+      "deployment": "部署账号"
+    },
+    "kindCounts": {
+      "organization": "{count, plural, other {# 个主页}}",
+      "person": "{count, plural, other {# 个个人资料}}",
+      "account": "{count, plural, other {# 个账号}}",
+      "deployment": "{count, plural, other {# 个部署账号}}"
+    },
+    "channels": {
+      "capabilities": {
+        "cannotPublish": "无法发布",
+        "images": "图片",
+        "analytics": "数据分析",
+        "comments": "评论"
+      },
+      "reconnectReason": "该平台拒绝了登录，请在“账号”中重新连接。",
+      "cannotPublish": "该渠道无法发布。",
+      "expiry": {
+        "renews": "自动续期",
+        "noExpiry": "永不过期",
+        "expiredToday": "今天已过期",
+        "expiredAgo": "已过期 {count, plural, other {# 天}}",
+        "inHours": "{count, plural, other {# 小时}}后过期",
+        "inDays": "{count, plural, other {# 天}}后过期"
+      }
+    },
+    "composeRules": {
+      "wrongType": "请附加 JPEG、PNG、GIF 或 WebP 格式的图片。",
+      "wrongTypeNamed": "{name}：请附加 JPEG、PNG、GIF 或 WebP 格式的图片。",
+      "tooBig": "图片最大为 5 MB。",
+      "tooBigNamed": "{name}：图片最大为 5 MB。",
+      "textOnly": "{name} 只会发布文字。",
+      "linkedinWebp": "LinkedIn 不支持 WebP 图片，请使用 JPEG、PNG 或 GIF。",
+      "blueskySize": "Bluesky 仅支持 1 MB 以内的图片。请换一张更小的图片，或不发布到 Bluesky。"
+    },
+    "status": {
+      "draft": "草稿",
+      "scheduled": "已排期",
+      "publishing": "发布中",
+      "published": "已发布",
+      "failed": "失败",
+      "cancelled": "已取消",
+      "due": "已到期"
+    },
+    "metrics": {
+      "impressions": "{count, plural, other {# 次曝光}}",
+      "reactions": "{count, plural, other {# 次点赞}}",
+      "comments": "{count, plural, other {# 条评论}}",
+      "images": "{count, plural, other {# 张图片}}"
+    },
+    "stats": {
+      "posts": "帖子",
+      "impressions": "曝光",
+      "reactions": "点赞",
+      "comments": "评论",
+      "shares": "分享",
+      "clicks": "点击",
+      "engagement": "互动率",
+      "followers": "粉丝"
+    },
+    "channelLabel": {
+      "disconnected": "已断开的渠道"
+    },
+    "sync": {
+      "partial": "已读取 {posts, plural, other {# 篇帖子}}和 {comments, plural, other {# 条评论}}；{channels, plural, other {# 个渠道}}无法读取",
+      "done": "已同步：读取了 {posts, plural, other {# 篇帖子}}和 {comments, plural, other {# 条评论}}",
+      "unreachable": "无法连接到各平台",
+      "readOnly": "你的角色可以查看品牌，但不能同步",
+      "syncing": "正在同步…",
+      "syncNow": "立即同步",
+      "never": "从未同步",
+      "updated": "更新于 {ago}",
+      "failed": "同步失败：{error}。请稍后再试。"
+    },
+    "postActions": {
+      "failed": "操作未成功",
+      "wentOut": "已于 {date} {time} 发布",
+      "due": "计划于 {date} {time} 发布",
+      "noTime": "未设置时间",
+      "fromCampaign": "来自营销活动",
+      "newTime": "新时间",
+      "rescheduled": "已重新排期",
+      "move": "改期",
+      "schedule": "排期",
+      "notAccepted": "该平台未接受此帖子",
+      "published": "已发布",
+      "publishNow": "立即发布",
+      "cancelled": "已取消，帖子仍保留在日历上。",
+      "deleted": "已删除"
+    },
+    "trackRecord": {
+      "title": "帖子测试",
+      "aside": "模拟结果与真实互动对比",
+      "notEnough": "已有结果的测试帖子还不够（{count}/{minimum}）",
+      "notEnoughBody": "在“撰写”中测试草稿，然后发布同样的文字。当 {minimum} 篇测试过的帖子都有了来自平台的真实数据后，这里会显示模拟看好的帖子在现实中是否也表现更好。",
+      "soFar": "目前已测试 {count, plural, other {# 篇帖子}}。",
+      "soFarWaiting": "目前已测试 {count, plural, other {# 篇帖子}}，其中 {waiting} 篇在等待曝光数据。",
+      "agrees": "模拟排名靠前的帖子在现实中也表现更好。",
+      "disagrees": "模拟排名靠前的帖子在现实中并没有表现更好。",
+      "agreement": "{count, plural, other {# 篇帖子}}的排名一致性为 <mono>{value}</mono>：1 表示顺序完全相同，0 表示没有关联，低于 0 表示顺序相反。模拟对 {total} 篇中的 {hits} 篇判断正确——预期高于中位数的确实更高，预期低于中位数的确实更低。",
+      "smallSample": "{count, plural, other {# 篇帖子}}的样本量较小：仅供参考，不能作为定论。",
+      "network": "平台",
+      "simulated": "模拟",
+      "real": "真实",
+      "notYet": "尚未发布",
+      "waiting": "等待曝光数据"
+    },
+    "postTest": {
+      "titles": {
+        "testing": "正在测试你的帖子",
+        "done": "模拟读者的反应",
+        "failed": "测试失败",
+        "cancelled": "测试已取消"
+      },
+      "description": "根据你的资料构建的 {readers} 位模拟读者会在 {rounds} 轮中于信息流里看到这篇草稿。",
+      "stale": "测试后草稿已修改——请重新测试",
+      "starting": "正在启动…",
+      "testAgain": "重新测试",
+      "rounds": "第 {round}/{rounds} 轮",
+      "stoppedEarly": "测试在完成前停止了。",
+      "engaged": "{exposed} 位模拟读者中有 {engaged} 位参与了互动（{rate}）",
+      "likes": "点赞",
+      "comments": "评论",
+      "shares": "分享",
+      "dislikes": "踩",
+      "mood": "看到帖子的读者情绪：<num>{start}</num>（{startWords}）→ <num>{end}</num>（{endWords}），范围为 −2 到 +2。",
+      "whatTheySaid": "部分读者的评论",
+      "openRun": "打开完整运行记录"
+    },
+    "overview": {
+      "connectDetail": "连接 LinkedIn 主页、个人资料或 Bluesky 账号之后才能发布内容。",
+      "reconnectTitle": "重新连接 {name}",
+      "reconnectDetail": "{network} 拒绝了登录；重新连接之前，这里不会发布任何内容。",
+      "expiryTitle": "{account} 的 {network} 登录：{status}",
+      "expiryDetail": "请在过期前重新连接，否则其渠道上已排期的帖子将发布失败。",
+      "failedTitle": "{count, plural, other {# 篇帖子}}发布失败",
+      "notAccepted": "该平台未接受此帖子。",
+      "openCalendar": "打开日历",
+      "commentsTitle": "{count, plural, other {# 条评论}}等待回复",
+      "commentsDetail": "来自 {count, plural, other {# 篇帖子}}。以渠道身份回复，或标记为已处理。",
+      "openEngagement": "打开互动",
+      "comingUpCount": "即将发布 {count, plural, other {# 篇帖子}}",
+      "outLastWeek": "过去 7 天发布了 {count, plural, other {# 篇帖子}}",
+      "title": "你的品牌，",
+      "accent": "本周",
+      "generateCampaign": "生成营销活动",
+      "needsAttention": "需要处理",
+      "last30": "最近 30 天",
+      "analytics": "分析",
+      "acrossChannels": "来自 {count, plural, other {# 个渠道}}",
+      "comingUp": "即将发布",
+      "nothingScheduled": "暂无排期",
+      "nothingScheduledBody": "写一篇帖子并选择时间，它会自动发布。也可以根据你的文档生成营销活动，再为草稿排期。",
+      "moreOnCalendar": "日历上还有 {count} 篇",
+      "drafts": "草稿",
+      "wentOut": "已发布",
+      "last7": "最近 7 天",
+      "nothingPublished": "过去一周没有发布内容。"
+    },
+    "calendar": {
+      "draft": "草稿",
+      "disconnected": "{network} · 已断开",
+      "publishedOverdue": "已发布 {count, plural, other {# 篇逾期帖子}}",
+      "failedSee": "{count, plural, other {# 篇帖子}}发布失败，请查看日历",
+      "nothingOverdue": "没有逾期的帖子",
+      "publishFailed": "无法发布",
+      "title": "日历",
+      "sub": "本周已排期 {scheduled, plural, other {# 篇帖子}}，已发布 {published} 篇",
+      "subOverdue": "本周已排期 {scheduled, plural, other {# 篇帖子}}，已发布 {published} 篇 · {overdue, plural, other {# 篇}}已逾期",
+      "publishOverdue": "立即发布逾期帖子",
+      "previousWeek": "上一周",
+      "nextWeek": "下一周",
+      "thisWeek": "本周",
+      "weekOf": "{start}–{end}",
+      "nothing": "本周没有内容。<link>撰写帖子</link>，或生成营销活动并为其草稿排期。"
+    },
+    "analytics": {
+      "title": "分析",
+      "range": "{from} 至 {to}",
+      "rangeAria": "时间范围",
+      "days": "{count} 天",
+      "noAnalytics": "没有可提供数据的渠道",
+      "noAnalyticsBody": "你管理的 LinkedIn 主页会提供曝光、点赞和点击数据；个人资料以及你仅能发帖的主页不会提供。连接一个主页或 Bluesky 账号即可查看帖子表现。",
+      "neverSynced": "尚未读取数据",
+      "neverSyncedBody": "同步会从各渠道所在平台读取曝光、点赞、评论和粉丝数据。",
+      "lastDays": "最近 {count} 天",
+      "postsAside": "最近 {days} 天发布了 {count, plural, other {# 篇帖子}}",
+      "nothingPublished": "最近 {days} 天没有发布内容",
+      "nothingPublishedBody": "帖子发布并在下一次同步读取后，数据会显示在这里。"
+    },
+    "engagement": {
+      "noChannel": "该渠道已不再连接。",
+      "cannotReply": "{name} 无法在这里回复。",
+      "needsReconnect": "{name} 需要先重新连接。",
+      "yourReply": "你的回复",
+      "sending": "正在发送…",
+      "handled": "已处理",
+      "reply": "回复",
+      "reopen": "重新打开",
+      "markDone": "标记为已处理",
+      "replyTo": "回复 {name}",
+      "replyAs": "以 {name} 身份回复",
+      "markedDone": "已将 {name} 的评论标记为已处理",
+      "changeFailed": "无法更改评论",
+      "replied": "已以 {name} 身份回复",
+      "replyFailed": "回复未能发送",
+      "title": "互动",
+      "subOpen": "{count, plural, other {# 条评论}}待处理",
+      "subAll": "{count, plural, other {# 条评论}}，{open} 条待处理",
+      "showAria": "显示",
+      "open": "待处理",
+      "noRead": "没有可读取评论的渠道",
+      "noReadBody": "你管理的 LinkedIn 主页和 Bluesky 账号的评论会汇集到这里；LinkedIn 个人资料不会。请连接一个主页或 Bluesky 账号。",
+      "allDone": "全部处理完毕",
+      "allDoneBody": "每条评论都已回复或标记为已处理。新评论会在下次同步后出现。",
+      "showAll": "显示全部评论",
+      "noComments": "暂无评论",
+      "noCommentsBody": "从这里发布的帖子的评论会在同步后显示。",
+      "commentsOn": "关于“{excerpt}”的评论",
+      "groupOpen": "{count} 条待处理",
+      "groupDone": "全部已处理"
+    },
+    "campaigns": {
+      "title": "营销活动",
+      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断都可追溯到来源。可以直接在这里发布，也可以排到日历上。"
+    },
+    "accounts": {
+      "title": "账号",
+      "openOnNetwork": "在 {network} 上打开 {name}",
+      "offerInCompose": "在“撰写”中提供",
+      "offered": "已在“撰写”中提供",
+      "hidden": "已在“撰写”中隐藏",
+      "reconnectStatus": "需重新连接",
+      "reconnectStatusReason": "需重新连接——{reason}",
+      "active": "正常",
+      "followers": "{count, plural, other {# 位粉丝}}",
+      "connectedBy": "由 {name} 于 {date} 连接",
+      "connectedOn": "连接于 {date}",
+      "signedOutBy": "已被 {network} 注销登录",
+      "checking": "正在检查…",
+      "refreshPages": "刷新主页",
+      "refreshProfile": "刷新个人资料",
+      "reconnect": "重新连接",
+      "permissionsGranted": "已授予 {count, plural, other {# 项权限}}",
+      "appPasswordSignIn": "已使用应用专用密码登录",
+      "noPermissions": "未列出权限",
+      "notAppPassword": "这不是应用专用密码：它的格式类似 xxxx-xxxx-xxxx-xxxx。这里不能使用你的账号密码。",
+      "blueskyRefused": "Bluesky 未接受此次登录",
+      "handle": "用户名",
+      "appPassword": "应用专用密码",
+      "patternTitle": "四组，每组四个字母或数字：xxxx-xxxx-xxxx-xxxx",
+      "passwordHelp": "不是你的账号密码。<link>在 Bluesky › 设置 › 隐私与安全中创建应用专用密码</link>。",
+      "signingIn": "正在登录…",
+      "connectBluesky": "连接 Bluesky",
+      "setUp": "已配置",
+      "available": "可用",
+      "notSetUp": "未配置",
+      "noLimit": "无硬性限制",
+      "characters": "{count} 个字符",
+      "connectProblems": {
+        "denied": "LinkedIn 登录已取消，因此没有连接任何账号。",
+        "error": "LinkedIn 未完成登录。请重试；如果一直失败，请对照应用的 Auth 标签页检查重定向 URL 和 LINKEDIN_OAUTH_SCOPES。",
+        "partial": "LinkedIn 已连接，但无法读取其主页。请使用下方的“刷新主页”。",
+        "noChannels": "LinkedIn 已连接，但此次登录没有授予发帖权限。请对照应用的 Auth 标签页检查 LINKEDIN_OAUTH_SCOPES。"
+      },
+      "offeredToast": "{name} 已在“撰写”中提供",
+      "hiddenToast": "{name} 已在“撰写”中隐藏",
+      "changeFailed": "无法更改 {name}",
+      "foundPages": "找到 {count, plural, other {# 个新主页}}：{names}",
+      "foundAccounts": "找到 {count, plural, other {# 个新账号}}：{names}",
+      "upToDate": "{name} 已是最新",
+      "unreachable": "无法连接到该平台",
+      "disconnected": "已断开 {name}",
+      "disconnectFailed": "无法断开连接",
+      "subChannels": "帖子会以这 {count, plural, other {# 个渠道}}的身份发布。关闭没人使用的渠道后，“撰写”中将不再提供它们。",
+      "subConnect": "连接此工作区用于发帖的账号。",
+      "subAskAdmin": "请联系工作区管理员连接账号。",
+      "empty": "尚未连接任何账号",
+      "emptyBodyManage": "品牌帖子会以 LinkedIn 主页、个人资料或 Bluesky 账号的身份发布。连接一个账号后，“撰写”、日历和分析即可使用。",
+      "emptyBodyAsk": "品牌帖子会以 LinkedIn 主页、个人资料或 Bluesky 账号的身份发布。请联系工作区管理员连接账号。",
+      "connectLinkedIn": "连接 LinkedIn",
+      "connectAnotherLinkedIn": "连接另一位 LinkedIn 成员",
+      "connections": "连接",
+      "connectionsAside": "登录者以及有效期",
+      "connect": "连接",
+      "connectAside": "此部署支持的平台",
+      "linkedinPages": "以 LinkedIn 成员身份登录，并带入其个人资料和其管理的所有主页。LinkedIn 会请该成员批准；登录会自动续期，最长一年。",
+      "linkedinProfilesOnly": "此部署的 LinkedIn 应用仅支持个人资料；主页需要 Community Management API。",
+      "blueskyIntro": "使用账号的用户名和应用专用密码登录，你可以随时在 Bluesky 中撤销该密码。",
+      "connectedBluesky": "已以 {handle} 身份连接 Bluesky",
+      "operatorAvailable": "由运营方为整个部署配置：每个工作区都可以用它发帖。",
+      "operator": "由运营方为整个部署配置。",
+      "confirmTitle": "断开 {name}？",
+      "confirmLeaves": "{count, plural, other {{names} 将从“撰写”中移除。}}",
+      "confirmRest": "在重新连接之前，已排期到{count, plural, =1 {该渠道} other {这些渠道}}的帖子将发布失败。已发布的帖子仍保留在日历上。"
+    },
+    "compose": {
+      "previewFor": "{name} 的预览",
+      "yourPost": "你的帖子会显示在这里。",
+      "seeMore": "…查看更多",
+      "overLimit": "超出 {name} 的字数上限 {count} 个字符。",
+      "readOnly": "你的角色可以查看品牌，但不能以公司身份发帖。请向管理员申请成员权限。",
+      "tooLong": "对 {names} 来说太长了",
+      "uploading": "正在等待图片上传完成",
+      "uploadFailedBlock": "有图片未能上传，请重试或移除",
+      "whenNow": "现在",
+      "whenDraft": "草稿",
+      "whenAt": "{date} {time}",
+      "pickTime": "选择时间",
+      "uploadFailed": "上传失败",
+      "tooMany": "每篇帖子最多 {max} 张图片，已有 {count, plural, other {# 张}}未添加。",
+      "testStartFailed": "无法启动测试",
+      "testForbidden": "你的角色可以查看品牌，但不能以公司身份测试或发帖。请向管理员申请成员权限。",
+      "noCredits": "额度不足，无法测试这篇帖子。{message}",
+      "allFailed": "各平台均未接受这篇帖子",
+      "partial": "已发布到 {count, plural, other {# 个渠道}}；{names} 发布失败",
+      "published": "已发布到 {count, plural, other {# 个渠道}}",
+      "scheduled": "已排期到 {count, plural, other {# 个渠道}}",
+      "saved": "已保存 {count, plural, other {# 篇草稿}}",
+      "staleTest": "帖子测试针对的是较早的草稿，因此未随帖子保存。",
+      "saveFailed": "无法保存帖子",
+      "allOff": "所有渠道均已关闭",
+      "nothingToPost": "还没有可以发布的渠道",
+      "allOffBody": "管理员已为所有渠道关闭“在‘撰写’中提供”。请在“账号”中重新开启一个。",
+      "nothingToPostBody": "帖子会以 LinkedIn 主页、个人资料或 Bluesky 账号的身份发布。请先连接一个账号。",
+      "title": "一次撰写，",
+      "accent": "多处发布",
+      "sub": "选择渠道，对照字数上限检查每个预览，然后立即发布或排到日历上。",
+      "placeholder": "这周你想让大家知道什么？",
+      "fromCampaign": "来自营销活动草稿，可随意编辑。",
+      "linkedinFold": "LinkedIn 会在约 210 个字符后折叠帖子，请把重点放在开头。",
+      "characters": "{count} 个字符",
+      "redditTitle": "Reddit 标题",
+      "redditTitlePlaceholder": "默认使用第一行",
+      "images": "图片",
+      "imagesAside": "JPEG、PNG、GIF 或 WebP · 最大 5 MB · 每篇最多 {max} 张",
+      "remove": "移除 {name}",
+      "describe": "描述图片",
+      "altFor": "{name} 的替代文本",
+      "attachment": {
+        "uploading": "上传中",
+        "ready": "已就绪",
+        "error": "未上传"
+      },
+      "addImage": "添加图片",
+      "reconnectInAccounts": "在“账号”中重新连接",
+      "noLimit": "无限制",
+      "whenAria": "发布时间",
+      "when": {
+        "later": "排期于",
+        "now": "立即发布",
+        "draft": "存为草稿"
+      },
+      "whenToPublish": "发布时间",
+      "publishTo": "发布到 {count, plural, other {# 个渠道}}",
+      "schedule": "排期",
+      "saveDraft": "保存草稿",
+      "startingTest": "正在启动测试…",
+      "testPost": "测试这篇帖子",
+      "pickChannel": "请先选择一个渠道。",
+      "preview": "预览",
+      "previewEmpty": "选择一个渠道，查看帖子发布后的样子。",
+      "testNote": {
+        "stale": "测试后草稿已修改——请重新测试。",
+        "testing": "正在用模拟读者测试：{progress}。",
+        "tested": "已测试：{exposed} 位模拟读者中有 {engaged} 位参与了互动（{rate}）。结果会随帖子保存，以便与真实结果对比。",
+        "failed": "测试失败。",
+        "cancelled": "测试已取消。",
+        "seeResult": "查看结果"
+      }
+    }
+  },
+  "marketingPipeline": {
+    "title": "营销流程",
+    "subtitle": "根据公司知识库，为 Reddit、X、LinkedIn 和 Bluesky 创建可直接发布的营销帖子",
+    "howItWorks": {
+      "pick": "选择平台",
+      "describe": "描述要推广的内容",
+      "get": "约 30 秒得到可直接使用的营销草稿"
+    },
+    "steps": {
+      "loadingContext": "加载公司知识",
+      "extractingDna": "提取公司 DNA",
+      "analyzingCompetitors": "分析竞争对手",
+      "researchingTrends": "研究平台趋势",
+      "extractingVoice": "识别品牌语气",
+      "extractingPersona": "构建目标画像",
+      "checkingPerformance": "检查历史表现",
+      "buildingStrategy": "制定传播策略",
+      "generatingContent": "生成内容变体",
+      "verifyingClaims": "核验论断来源"
+    },
+    "stepper": {
+      "completedIn": "用时 {seconds} 秒完成",
+      "parallelRunning": "{active} 个步骤运行中 · 已完成 {done}/{total}",
+      "stepOf": "第 {current}/{total} 步",
+      "elapsed": "已用时 {seconds} 秒 · {pct}%",
+      "seconds": "{seconds} 秒",
+      "parallel": "∥ 并行",
+      "items": "{count} 项"
+    },
+    "thinking": {
+      "thinking": "思考中...",
+      "thought": "思考过程",
+      "steps": "{count, plural, other {# 步}}"
+    },
+    "strategy": {
+      "used": "采用的策略",
+      "angle": "定位角度",
+      "proof": "关键佐证",
+      "hook": "情感切入点",
+      "avoid": "需要避免的内容"
+    },
+    "stages": {
+      "title": "流程思考过程",
+      "brandVoice": "品牌语气",
+      "tone": "语气：",
+      "formality": "正式程度：",
+      "style": "句式风格：",
+      "vocabulary": "常用词汇：",
+      "persona": "目标画像",
+      "role": "角色：",
+      "painPoints": "痛点：",
+      "priorities": "关注重点：",
+      "language": "语言风格：",
+      "competitors": "竞争对手（{count}）",
+      "weaknesses": "弱点：{list}",
+      "advantages": "我们的优势：",
+      "gaps": "市场空白：",
+      "strategies": "策略变体（{count}）",
+      "angle": "角度：",
+      "keyProof": "关键佐证：",
+      "hook": "切入点：",
+      "performance": "表现洞察"
+    },
+    "claims": {
+      "title": "论断来源（{sourced}/{total} 条有来源）",
+      "source": "来源：{doc}",
+      "relevance": "（相关度 {pct}%）",
+      "lookupFailed": "来源查找失败——请人工核查",
+      "noMatch": "知识库中未找到匹配的来源"
+    },
+    "tones": {
+      "conversational": "口语化",
+      "formal": "正式",
+      "technical": "技术性",
+      "bold": "大胆"
+    },
+    "contentTypes": {
+      "post": {
+        "label": "单篇帖子",
+        "hint": "标准社交帖子"
+      },
+      "thread": {
+        "label": "串文",
+        "hint": "多段式叙述"
+      },
+      "adCopy": {
+        "label": "广告文案",
+        "hint": "以转化为目标"
+      },
+      "email": {
+        "label": "邮件",
+        "hint": "营销邮件"
+      }
+    },
+    "customize": {
+      "toggle": "自定义生成",
+      "tone": "语气",
+      "audience": "目标受众（可选）",
+      "audiencePlaceholder": "例如：成长期 SaaS 公司的 CTO",
+      "contentType": "内容类型"
+    },
+    "fields": {
+      "subreddit": "目标 subreddit",
+      "hashtags": "话题标签",
+      "removeTag": "移除 {tag}",
+      "addHashtag": "添加话题标签..."
+    },
+    "variants": {
+      "header": "变体（{count}）",
+      "active": "使用中",
+      "useThis": "使用此版本",
+      "best": "最佳",
+      "numbered": "变体 {n}：{name}",
+      "original": "原始版本",
+      "rewrite": "改写 {n}"
+    },
+    "platforms": {
+      "reddit": {
+        "subtitle": "社区优先的讨论帖",
+        "bestFor": "开发者社区、真诚的讨论",
+        "charLimit": "约 10,000 字符",
+        "placeholder": "你想和 Reddit 社区分享或讨论什么？",
+        "templates": {
+          "t1": "分享我们如何解决行业中的常见痛点",
+          "t2": "征求大家对我们新开源工具的反馈",
+          "t3": "讲述我们打造这款产品背后的故事"
+        }
+      },
+      "x": {
+        "subtitle": "快速变化的热点",
+        "bestFor": "病毒式传播、实时互动",
+        "charLimit": "约 280 字符",
+        "placeholder": "你想分享什么简短洞见或公告？",
+        "templates": {
+          "t1": "用醒目的开头宣布新功能上线",
+          "t2": "分享我们产品的一个惊人数据或成果",
+          "t3": "回应行业内的热门话题"
+        }
+      },
+      "linkedin": {
+        "subtitle": "B2B 与思想领导力",
+        "bestFor": "专业受众、长篇叙事",
+        "charLimit": "约 1,300 字符",
+        "placeholder": "你想和职业人脉分享什么洞见或故事？",
+        "templates": {
+          "t1": "向 CTO 和技术负责人推广我们的新功能",
+          "t2": "分享一个关于改进工作流程的客户成功案例",
+          "t3": "关于 AI 在我们行业应用的思想领导力帖子"
+        }
+      },
+      "bluesky": {
+        "subtitle": "去中心化热点",
+        "bestFor": "早期用户、开放网络倡导者",
+        "charLimit": "约 300 字符",
+        "placeholder": "你想和 Bluesky 社区分享什么？",
+        "templates": {
+          "t1": "向开源社区介绍我们的产品",
+          "t2": "分享我们正在打造的产品的幕后故事",
+          "t3": "围绕我们领域的某个趋势发起讨论"
+        }
+      }
+    },
+    "workspace": {
+      "choosePlatform": "选择平台",
+      "sessions": "会话",
+      "new": "新建",
+      "untitledSession": "未命名会话",
+      "noPlatform": "未选平台",
+      "assistant": "AI 助手",
+      "newCampaign": "新建营销活动",
+      "confirmNew": "要开始新的营销活动吗？当前草稿已保存在会话中。",
+      "yesStartNew": "是，开始新的",
+      "promptTitle": "描述你想推广的内容",
+      "promptHint": "1–3 句话即可。",
+      "promptPlaceholder": "例如：本月面向初创公司运营团队推广我们的 AI 文档工作流。",
+      "generating": "正在生成营销活动...",
+      "generate": "生成营销活动草稿",
+      "draft": "营销活动草稿",
+      "preview": "{platform} 预览",
+      "messagePlaceholder": "你的营销文案...",
+      "saveAsDocTitle": "将草稿保存到文档工作区以便继续编辑",
+      "saveAsDoc": "保存为文档",
+      "hideRewrite": "隐藏改写",
+      "refine": "用 AI 优化",
+      "copied": "已复制！",
+      "copyTo": "复制到 {platform}",
+      "platform": "平台",
+      "thePlatform": "该平台",
+      "evaluateTitle": "用评估流程为这篇帖子的质量打分",
+      "scoring": "正在评分…",
+      "evaluate": "评估质量",
+      "scheduleTitle": "将这篇帖子排到品牌日历上",
+      "schedule": "排期…",
+      "publishTitle": "将这篇帖子直接发布到 {platform}",
+      "publishing": "正在发布…",
+      "publishTo": "发布到 {platform}",
+      "qualityScore": "质量评分",
+      "judge": "评审模型 {model} · 评分标准 {version}",
+      "publishedTo": "已发布到 {platform}。",
+      "publishedToAs": "已以 {channel} 身份发布到 {platform}。",
+      "viewPost": "查看帖子",
+      "refineTitle": "优化你的营销活动",
+      "refineBody": "使用语气、长度和受众选项优化文案——基于你的公司背景和品牌语气。满意后预览并采用。",
+      "debugDna": "调试：DNA 来源",
+      "rawContext": "发送给 LLM 的原始上下文",
+      "trendRefs": "趋势参考",
+      "noTrends": "此营销活动没有可用的趋势参考。"
+    },
+    "errors": {
+      "choosePlatform": "请选择一个平台以继续。",
+      "addDescription": "请简单描述你想推广的内容。",
+      "generateFailed": "暂时无法生成营销活动，请重试。",
+      "pipelineFailed": "流程失败",
+      "incomplete": "服务器返回的响应不完整，请重试。",
+      "engine": "与营销引擎通信时出错，请重试。",
+      "publishFailed": "发布失败。",
+      "publishNetwork": "发布时出现网络错误。",
+      "evaluationFailed": "评估失败",
+      "refinementFailed": "优化失败"
+    },
+    "draftDocTitle": "营销活动草稿（{platform}）",
+    "draftDocFallback": "营销"
+  },
+  "emailPipeline": {
+    "title": "邮件外联",
+    "subtitle": "在你明确确认发送之前，每次运行都只是演练。",
+    "severity": {
+      "error": "错误",
+      "warning": "警告"
+    },
+    "recipients": {
+      "title": "收件人",
+      "paste": "粘贴地址",
+      "csv": "或粘贴 CSV（需要包含 <code>email</code> 列）",
+      "ready": "<strong>{count}</strong> 个可用",
+      "rejected": "· {count} 个被拒绝",
+      "unparsed": "· {count} 个无法解析",
+      "rowReason": "第 {row} 行：{reason}"
+    },
+    "template": {
+      "title": "模板",
+      "defaultName": "外联",
+      "campaignName": "营销活动名称",
+      "goalPlaceholder": "这次外联的目的是什么？",
+      "goalAria": "营销活动目标",
+      "senderExample": "你的公司，示例街 1 号，城市",
+      "senderPlaceholder": "发件人身份——{example}",
+      "senderAria": "发件人身份",
+      "generating": "正在生成…",
+      "generate": "生成模板",
+      "useSeed": "使用“{name}”",
+      "seeds": {
+        "intro": {
+          "name": "首次联系",
+          "description": "第一次接触。先说明为什么要写信给这位收件人，再给出一个具体的佐证。"
+        },
+        "followUp": {
+          "name": "单次跟进",
+          "description": "一次礼貌的跟进。用一句话重申提议，并让对方可以轻松拒绝。"
+        }
+      },
+      "subject": "主题：",
+      "verdictLabel": "审查结论：",
+      "verdicts": {
+        "pass": "通过",
+        "revise": "需修改"
+      },
+      "criteria": {
+        "grounding": "事实依据",
+        "clarity": "清晰度",
+        "tone": "语气",
+        "spamRisk": "垃圾邮件风险",
+        "ctaStrength": "行动号召力度",
+        "compliance": "合规性"
+      },
+      "advisory": "评分仅供参考，不会据此拦截或改写任何内容——由你决定。"
+    },
+    "preview": {
+      "title": "预览",
+      "empty": "添加至少一位有效收件人和一个模板，即可查看邮件的实际内容。",
+      "showing": "显示"
+    },
+    "send": {
+      "title": "演练与发送",
+      "running": "运行中…",
+      "dryRun": "演练（{count}）",
+      "confirmCheckbox": "我已阅读预览，确认要真实发送",
+      "preparing": "正在准备…",
+      "sendTo": "发送给 {count} 人",
+      "blocked": "需要有效的模板、至少一位有效收件人，且预览没有错误，才能发送。",
+      "confirmTitle": "确认发送——这是服务器生成并将实际发送的模板（可能与上方的本地预览不同）",
+      "override": "——确认将记录一次例外批准",
+      "sending": "正在发送…",
+      "confirmSendTo": "确认发送给 {count} 人",
+      "resultsSent": "已发送——{count, plural, other {# 位收件人}}",
+      "resultsDry": "演练——{count, plural, other {# 位收件人}}",
+      "statuses": {
+        "queued": "排队中",
+        "dryRun": "演练",
+        "sent": "已发送",
+        "failed": "失败",
+        "suppressed": "已屏蔽",
+        "skipped": "已跳过"
+      },
+      "nothingDelivered": "未发送任何邮件。记录仅用于审计。"
+    },
+    "errors": {
+      "requestFailed": "请求失败（{status}）",
+      "generateFailed": "无法生成模板。",
+      "dryRunFailed": "演练失败。",
+      "createFailed": "创建营销活动失败：{error}",
+      "unknown": "未知错误",
+      "approveFailed": "审批模板失败：{error}",
+      "sendFailed": "发送失败：{error}。重试不会重复发送。",
+      "sendFailedGeneric": "发送失败。"
+    }
+  },
+  "server": {
+    "you": "你",
+    "errors": {
+      "segmentNotFound": "未找到细分市场",
+      "companyNotFound": "未找到公司",
+      "runNotFound": "未找到运行记录",
+      "programNotFound": "未找到计划",
+      "programArchived": "计划已归档",
+      "countryCodes": "请使用两位字母的国家/地区代码，例如 NL、DE、GB",
+      "cannotMoveTo": "无法移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
+      "nothingSelected": "未选择任何内容",
+      "noneContactable": "所选公司目前都还无法联系",
+      "noEligibleRecipients": "没有符合条件的收件人",
+      "idsRequired": "需要提供 ids",
+      "segmentIdRequired": "需要提供 segmentId",
+      "programIdRequired": "需要提供 programId",
+      "invalidView": "视图无效",
+      "invalidSort": "排序方式无效",
+      "invalidStatus": "状态无效",
+      "invalidKind": "类型无效",
+      "invalidLimit": "数量上限无效",
+      "invalidOffset": "偏移量无效",
+      "runsCannotStop": "运行一旦进入队列就无法停止，几分钟内即可完成",
+      "confirmBeforeRun": "运行前请先确认细分市场",
+      "notEnoughCredits": "额度不足，无法启动运行",
+      "insufficientCredits": "额度不足",
+      "deriveLater": "根据你的文档推导细分市场的功能将随流程重构一起推出",
+      "newSegmentRequired": "请填写名称、你卖什么，以及至少一个国家/地区",
+      "sourceSettingsLater": "来源设置将随来源注册表一起推出；目前由环境变量中的密钥决定"
+    },
+    "stageErrors": {
+      "unknownStage": "未知阶段“{to}”。",
+      "sameStage": "关系已处于“{to}”阶段。",
+      "notAllowed": "无法从“{from}”移至“{to}”。允许的阶段：{allowed}。",
+      "ownerRequired": "从“contacted”阶段起需要指定负责人（正在进入“{target}”）。",
+      "nextActionRequired": "从“in_conversation”阶段起需要设置下一步行动（正在进入“{target}”）。",
+      "agreementRequired": "进入“{target}”阶段需要先记录协议。",
+      "pair": "{first}{second}"
+    },
+    "requirements": {
+      "ownerRequired": "需要指定负责人",
+      "nextActionRequired": "需要设置下一步",
+      "agreementRequired": "需要在分销中记录协议"
+    },
+    "moves": {
+      "currentStage": "当前阶段",
+      "notAStage": "此工作区暂未启用该阶段",
+      "wonStaysWon": "已赢单的商机会保持赢单状态",
+      "moveFirst": "请先移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
+      "notAvailableFrom": "无法从“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”移至此阶段",
+      "notAvailableHere": "无法从当前阶段移至此阶段"
+    },
+    "segment": {
+      "subtitle": "{countries} · {kinds}",
+      "headline": "{countries} 的{kinds}",
+      "kind": "{kind, select, importer {进口商} distributor {分销商} wholesaler {批发商} retailer {零售商} agent {代理商} reseller {转售商} supplier {供应商} other {{kind}}}",
+      "fields": {
+        "offering": "你卖什么",
+        "archetype": "买家类型",
+        "industries": "行业",
+        "geographies": "地区",
+        "disqualifiers": "不合适",
+        "exclusions": "已有合作伙伴"
+      },
+      "fieldSources": {
+        "program": "来自计划",
+        "partnerKinds": "来自计划 · 合作伙伴类型",
+        "categories": "来自计划 · 类别",
+        "territories": "来自计划 · 地区",
+        "constraints": "来自计划 · 限制条件",
+        "imports": "来自计划和导入"
+      },
+      "exclusionsCount": "{count} 个域名已从每次运行中排除",
+      "exclusionsNone": "无"
+    },
+    "companies": {
+      "notProfiled": "尚未生成画像",
+      "excludedFromRuns": "已从运行中排除",
+      "blockedExcludedFromRuns": "公司已排除：已从运行中排除",
+      "blockedByYou": "公司已被你排除",
+      "foundVia": {
+        "discovery": "发现运行",
+        "import": "导入",
+        "manual": "由你添加"
+      }
+    },
+    "people": {
+      "inbox": "{local}@ 共享邮箱",
+      "sharedInbox": "共享邮箱",
+      "dossier": "档案"
+    },
+    "claims": {
+      "carries": "经销 {list}。",
+      "activeIn": "活跃于 {list}。",
+      "sellsInto": "销往 {list}。",
+      "certified": "认证：{list}。",
+      "risk": "风险：{flag}",
+      "riskNoEvidence": "风险：未记录证据",
+      "riskThinEvidence": "风险：证据不足",
+      "riskBudget": "风险：研究预算已用尽",
+      "riskRole": "风险：角色未确认",
+      "screeningFlagged": "风险：合规筛查标记了 {names}（仅供参考）。",
+      "screeningFlaggedMatch": "风险：合规筛查发现了一个匹配项（仅供参考）。"
+    },
+    "signals": {
+      "researched": "已研究：匹配度 {fit}，{evidence} 条证据",
+      "meeting": "会议",
+      "meetingSummary": "会议：{summary}",
+      "reply": "已收到回复",
+      "replySummary": "已收到回复：{summary}",
+      "document": "已共享文档",
+      "documentTitle": "已共享文档：{title}",
+      "agreement": "已记录协议",
+      "imported": "以“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”阶段导入",
+      "importedExisting": "以现有阶段导入"
+    },
+    "sources": {
+      "labels": {
+        "live": {
+          "web": "网页搜索",
+          "place": "地点",
+          "trade": "贸易数据"
+        },
+        "keyless": {
+          "web": "公开目录（YC）",
+          "place": "OpenStreetMap",
+          "trade": "贸易数据"
+        },
+        "fixture": {
+          "web": "示例网页搜索",
+          "place": "示例地点",
+          "trade": "示例贸易数据"
+        }
+      },
+      "rows": {
+        "osm": {
+          "label": "OpenStreetMap",
+          "description": "按国家/地区或城市以及组织类型查找有网站的组织。免费，无需密钥；未配置搜索服务时使用。"
+        },
+        "yc": {
+          "label": "Y Combinator 目录",
+          "description": "细分市场所在国家/地区中，简介与其关键词匹配的活跃 YC 公司。免费，无需密钥。"
+        },
+        "web": {
+          "label": "网页搜索",
+          "description": "用 Exa 或 Serper 搜索每个地区的组织；研究智能体需要配置模型。"
+        },
+        "place": {
+          "label": "地点",
+          "description": "在每个城市地区周边进行 Foursquare 地点搜索。"
+        },
+        "trade": {
+          "label": "贸易数据",
+          "description": "按 HS 编码查询进口货运记录（需配置数据服务商）。"
+        },
+        "screening": {
+          "label": "制裁筛查",
+          "description": "对每个入围组织进行 OpenSanctions 匹配，仅供参考。"
+        },
+        "sample": {
+          "label": "示例数据",
+          "description": "为每个服务商提供确定性的替代数据。无需密钥，不消耗额度。可在“运行记录”中切换。"
+        }
+      },
+      "costs": {
+        "free": "免费",
+        "creditsPerRun": "每次运行消耗额度",
+        "included": "已包含",
+        "providerRates": "按服务商费率"
+      },
+      "details": {
+        "noWebQueries": "未规划网页搜索查询",
+        "webNotConfigured": "未配置网页搜索",
+        "zeroResults": "没有结果",
+        "noPlaceQueries": "未规划地点查询",
+        "placeNotConfigured": "未配置地点搜索",
+        "tradeNotConfigured": "未配置贸易数据",
+        "queriesFailed": "{count} 个查询失败",
+        "territoriesFailed": "{count} 个地区查询失败"
+      },
+      "status": {
+        "degraded": "部分可用",
+        "failed": "失败",
+        "skipped": "已跳过",
+        "off": "已关闭"
+      }
+    },
+    "runs": {
+      "steps": {
+        "segment": "细分市场已确认",
+        "sources": "来源",
+        "shortlist": "入围名单",
+        "profiles": "画像",
+        "people": "联系人"
+      },
+      "sourcesDone": "已完成 {ok}/{total}",
+      "shortlistOf": "{resolved} 家公司中的 {shortlisted} 家",
+      "companies": "{count} 家公司",
+      "profilesOf": "{done}/{total}",
+      "peopleLater": "将随联系人查找功能推出",
+      "found": "找到 {count} 个",
+      "excluded": "排除 {count} 个",
+      "failedGrounding": "{count} 个未通过依据核验",
+      "caps": "{count} 个候选",
+      "capsSample": "{count} 个候选 · 示例数据",
+      "capsKeyless": "{count} 个候选 · 公开来源，无需密钥"
+    },
+    "outreach": {
+      "notFound": "未找到",
+      "otherSegment": "属于其他细分市场",
+      "dealIs": "商机处于“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”阶段",
+      "companyMissing": "公司缺失",
+      "excluded": "{name} 已被排除",
+      "noMailbox": "{name}：画像中没有公开邮箱",
+      "notInProgram": "不在此计划中",
+      "stageIs": "阶段为“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”",
+      "orgMissing": "组织缺失",
+      "existingPartner": "现有合作伙伴（已排除）",
+      "noDossierMailbox": "档案中没有公开邮箱"
+    },
+    "brand": {
+      "errors": {
+        "forbiddenManage": "只有工作区管理员可以更改已连接的账号。",
+        "forbiddenPublish": "你的角色可以查看品牌，但不能以公司身份发帖或回复。",
+        "deploymentAccount": "部署账号由运营方配置。",
+        "channelOnOff": "请说明该渠道是开启还是关闭",
+        "channelNotFound": "未找到渠道",
+        "commentDone": "请说明该评论是否已处理",
+        "commentNotFound": "未找到评论",
+        "writeReply": "请先写回复",
+        "connectionNotFound": "未找到连接",
+        "noSecretsKey": "此部署暂时无法存储应用专用密码（未设置 EMBEDDING_SECRETS_KEY）。",
+        "blueskyFields": "请输入账号的用户名和应用专用密码",
+        "imageNotFound": "未找到图片",
+        "sendAsFile": "请以文件上传的方式发送图片",
+        "pickImage": "请选择要上传的图片",
+        "checkChange": "请检查修改内容后重试",
+        "notADate": "该排期时间不是有效日期",
+        "checkPost": "请检查帖子后重试",
+        "channelGone": "其中一个渠道已不再连接。",
+        "switchedOff": "{name} 已在“账号”中关闭。",
+        "needsReconnect": "{name} 需要重新连接。",
+        "cannotPostAs": "此部署的 LinkedIn 应用无法以 {name} 的身份发帖。",
+        "postTestNotFound": "未找到帖子测试",
+        "imageMissing": "其中一张图片缺失，请重新添加。"
+      },
+      "reasons": {
+        "refusedKeepPosting": "{network} 不再接受此登录。请重新连接以继续发帖。",
+        "expiredOn": "{network} 登录已于 {date} 过期。请重新连接以继续发帖。",
+        "signInRemoved": "此登录已被移除。",
+        "noLongerManages": "连接此渠道的账号已不再在该平台上管理它。",
+        "blueskyRefused": "Bluesky 未接受该用户名和应用专用密码。",
+        "blueskyUnreachable": "无法连接到 Bluesky：{error}",
+        "refusedAccounts": "{network} 不再接受此登录。请在“账号”中重新连接。",
+        "linkedinExpired": "LinkedIn 登录已过期。请重新连接以继续发帖。",
+        "channelSignInRemoved": "此渠道的登录已被移除。请在“账号”中重新连接。",
+        "channelNeedsReconnect": "此渠道需要在“账号”中重新连接。",
+        "appPasswordMissing": "缺少 Bluesky 应用专用密码。请在“账号”中重新连接。",
+        "appPasswordUnreadable": "已存储的 Bluesky 应用专用密码无法再读取。请在“账号”中重新连接。",
+        "deploymentKeys": "{platform} 渠道使用部署密钥发帖。",
+        "commentNotFound": "未找到评论",
+        "writeReply": "请先写回复。",
+        "replyLimit": "{network} 上的回复最多 {limit} 个字符。",
+        "channelDisconnected": "此渠道已断开连接。",
+        "postNotOnNetwork": "这条评论所在的帖子不在该平台上。",
+        "syncFirst": "回复这条评论前请再同步一次。",
+        "replyFailed": "回复未能发送：{error}",
+        "replyNotSaved": "回复已发送，但无法保存在这里。",
+        "imageType": "请使用 JPG、PNG、GIF 或 WebP 格式的图片。",
+        "imageEmpty": "该文件为空。",
+        "imageSize": "图片最大为 5 MB。",
+        "linkedinWebp": "LinkedIn 不支持 WebP 图片，请使用 JPEG、PNG 或 GIF。",
+        "blueskySize": "Bluesky 仅支持 1 MB 以内的图片。请换一张更小的图片，或不发布到 Bluesky。",
+        "imageUnreadable": "无法从存储中读取图片 {name}。",
+        "imageDeleted": "这篇帖子中的一张图片已被删除。",
+        "pickChannel": "请至少选择一个渠道。",
+        "writeSomething": "请先写点内容。",
+        "overLimit": "{count} 个字符超出了 {network} 的 {limit} 字符上限。",
+        "fourImages": "一篇帖子最多附带四张图片。",
+        "timeAhead": "请选择一个尚未到来的时间。",
+        "postNotFound": "未找到帖子",
+        "alreadyOutPublishNew": "这篇帖子已经发布。请改为发布一篇新帖子。",
+        "beingPublished": "这篇帖子正在发布中。",
+        "pickScheduleTime": "请为这篇帖子选择排期时间。",
+        "publishedStays": "已发布的帖子会保留在日历上。",
+        "alreadyOut": "这篇帖子已经发布。",
+        "cancelledReschedule": "已取消的帖子需要重新排期才能发布。"
+      },
+      "syncLine": "{channel}：{message}",
+      "networks": {
+        "linkedin": {
+          "createApp": "在 developer.linkedin.com 创建一个应用，并关联公司的 LinkedIn 主页",
+          "products": "如需主页、数据分析和评论：在一个未添加其他产品的应用上申请 Community Management API（需为注册公司，并由主页超级管理员验证该应用）。如只需个人资料：添加 Share on LinkedIn 和 Sign In with LinkedIn using OpenID Connect",
+          "redirect": "在应用的 Auth 标签页中添加重定向 URL {url}",
+          "keys": "设置 LINKEDIN_CLIENT_ID 和 LINKEDIN_CLIENT_SECRET，并将 LINKEDIN_OAUTH_SCOPES 设为 Auth 标签页列出的权限范围",
+          "secretsKey": "设置 EMBEDDING_SECRETS_KEY，以便加密存储登录信息",
+          "notePages": "免费发帖。主页、数据和评论需通过 LinkedIn 的 Community Management API 获取：在通过 LinkedIn 标准层级审核之前，每天限 500 次调用。",
+          "noteProfiles": "免费发帖。此应用支持成员自己的个人资料；主页需要 LinkedIn 的 Community Management API。登录有效期为 60 天。"
+        },
+        "bluesky": {
+          "secretsKey": "设置 EMBEDDING_SECRETS_KEY，以便加密存储应用专用密码",
+          "note": "免费，无需审核。每个工作区使用自己的应用专用密码登录。"
+        },
+        "x": {
+          "account": "一个按用量付费的 X 开发者账号",
+          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，供所有工作区共用",
+          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为整个部署配置。"
+        },
+        "reddit": {
+          "app": "一个 Reddit script 应用（client id 和 secret）",
+          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，供所有工作区共用",
+          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为整个部署配置。"
+        }
+      }
+    },
+    "marketing": {
+      "publishForbidden": "你的角色可以查看品牌，但不能以公司身份发帖。",
+      "nothingCanPost": "目前还没有可以发布到 {network} 的账号。请在“增长 › 品牌 › 账号”中连接。",
+      "operatorOnly": "{network} 由运营方为整个部署配置，而此部署尚未配置 {network} 密钥。",
+      "publishFailed": "发布失败",
+      "runFailed": "营销流程运行失败",
+      "runFailedChat": "营销流程运行失败。请确认已设置 CHAT_BASE_URL（如需要，还有 CHAT_API_KEY），并且聊天模型配置文件有效。",
+      "runFailedCompany": "营销流程运行失败。请确认你的用户拥有有效的公司档案。",
+      "invalidCompanyId": "公司 ID 无效",
+      "messageRequired": "需要提供 message"
+    },
+    "email": {
+      "invalidCampaignId": "营销活动 ID 无效",
+      "campaignNotFound": "未找到营销活动",
+      "idempotencySend": "发送营销活动需要 Idempotency-Key 请求头。",
+      "idempotencyRun": "启动自动运行需要 Idempotency-Key 请求头。",
+      "generateFailed": "生成邮件模板失败",
+      "runFailed": "运行邮件营销活动失败"
+    },
+    "research": {
+      "invalidLimit": "数量上限无效：应为 1 到 500 之间的整数",
+      "invalidOffset": "偏移量无效：应为非负整数",
+      "invalidSearch": "搜索条件无效",
+      "secUnavailable": "SEC EDGAR 没有响应，请稍后再试。"
+    },
+    "emailLifecycle": {
+      "nameRequired": "创建营销活动需要填写名称",
+      "notFound": "未找到营销活动 {campaignId}",
+      "idempotencySend": "发送营销活动需要提供 Idempotency-Key",
+      "idempotencyRun": "启动自动运行需要提供 Idempotency-Key",
+      "notApprovedStatus": "此营销活动的状态为 {status}，请先批准当前模板版本再发送。",
+      "noApprovedVersion": "此营销活动还没有已批准的模板版本，请先批准一个版本再发送。",
+      "approvedVersionMissing": "找不到已批准的模板版本。",
+      "noRecipients": "此营销活动没有收件人。",
+      "sendInProgress": "使用这个 Idempotency-Key 的发送正在进行中。",
+      "versionNotInCampaign": "模板版本 {versionId} 不属于营销活动 {campaignId}",
+      "revisionRequested": "AI 审核要求修改。如仍要批准，需要提供 overrideReason。",
+      "notReviewed": "此版本尚未审核。要批准它，需要提供 overrideReason。",
+      "templateRejected": "模板未通过：{issues}"
+    }
+  }
+}

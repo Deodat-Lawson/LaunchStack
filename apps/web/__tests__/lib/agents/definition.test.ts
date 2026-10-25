@@ -50,7 +50,7 @@ describe("tool list", () => {
     it("null means every tool; a list means exactly those", () => {
         expect(disabledTools(null)).toEqual([]);
         expect(enabledTools(null)).toEqual([...AGENT_TOOL_IDS]);
-        expect(disabledTools(["retrieval", "reasoning"])).toEqual(["web", "attachments"]);
+        expect(disabledTools(["retrieval", "reasoning"])).toEqual(["web", "attachments", "write"]);
         expect(enabledTools(["reasoning", "retrieval"])).toEqual(["retrieval", "reasoning"]);
     });
 
@@ -60,6 +60,7 @@ describe("tool list", () => {
             "retrieval",
             "reasoning",
             "attachments",
+            "write",
         ]);
         expect(normalizeToolList({ retrieval: true, reasoning: true })).toEqual([
             "retrieval",
@@ -95,7 +96,13 @@ describe("tool list", () => {
             thinking: false,
             hasAttachments: false,
         });
-        expect(turn).toMatchObject({ sources: true, webSearch: true, thinking: false, notes: [] });
+        expect(turn).toMatchObject({
+            sources: true,
+            write: true,
+            webSearch: true,
+            thinking: false,
+            notes: [],
+        });
     });
 
     it("lets the model look through the sources only when the agent has workspace retrieval", () => {
@@ -109,6 +116,20 @@ describe("tool list", () => {
         expect(resolveChatTurn(agent(["retrieval"]), request).sources).toBe(true);
         expect(resolveChatTurn(agent(null), request).sources).toBe(true);
         expect(resolveChatTurn(agent(["web", "reasoning"]), request).sources).toBe(false);
+    });
+
+    it("lets the model create documents only when the agent may write", () => {
+        const request = { webSearch: false, thinking: false, hasAttachments: false };
+        const agent = (tools: string[] | null) => ({
+            tools,
+            route: null,
+            style: null,
+            temperature: null,
+        });
+        expect(resolveChatTurn(agent(null), request).write).toBe(true);
+        expect(resolveChatTurn(agent(["retrieval", "write"]), request).write).toBe(true);
+        // An agent restricted before the tool existed stays read-only.
+        expect(resolveChatTurn(agent(["retrieval", "web"]), request).write).toBe(false);
     });
 });
 
@@ -139,7 +160,7 @@ describe("coercion", () => {
         expect(agent.mode).toBe("all");
         expect(agent.route).toBeNull();
         expect(agent.temperature).toBe(2);
-        expect(agent.tools).toEqual(["retrieval", "reasoning", "attachments"]);
+        expect(agent.tools).toEqual(["retrieval", "reasoning", "attachments", "write"]);
         expect(agent.avatarUrl).toBeNull();
     });
 

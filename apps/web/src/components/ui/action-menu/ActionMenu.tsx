@@ -14,6 +14,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { iconFor } from "./icons";
 import { placeMenu, placeSubmenu } from "./placeMenu";
 import { actionableItems, type ActionMenuItem } from "./types";
@@ -43,12 +44,19 @@ function portalRoot(): HTMLElement {
     return document.body;
 }
 
-export function ActionMenu({ open, x, y, items, onClose, ariaLabel = "Actions" }: ActionMenuProps) {
+export function ActionMenu({ open, x, y, items, onClose, ariaLabel }: ActionMenuProps) {
+    const t = useTranslations("common.a11y");
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
     if (!mounted || !open || items.length === 0) return null;
     return createPortal(
-        <ActionMenuLayer x={x} y={y} items={items} onClose={onClose} ariaLabel={ariaLabel} />,
+        <ActionMenuLayer
+            x={x}
+            y={y}
+            items={items}
+            onClose={onClose}
+            ariaLabel={ariaLabel ?? t("actions")}
+        />,
         portalRoot()
     );
 }

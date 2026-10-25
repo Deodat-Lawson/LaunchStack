@@ -1,0 +1,48 @@
+{
+  "userMenu": {
+    "label": "账户菜单",
+    "signOut": "退出登录"
+  },
+  "back": {
+    "label": "返回{place}",
+    "breadcrumb": "面包屑导航",
+    "places": {
+      "studio": "工作台"
+    }
+  },
+  "switchCard": {
+    "title": "切换到其他工作区",
+    "label": "切换工作区",
+    "labelOthers": "切换工作区 · {count, plural, other {另有 # 个}}"
+  },
+  "joinWelcome": {
+    "title": "欢迎加入 {workspace}",
+    "invitedBy": "{inviter} 邀请了你。你已以{role}身份加入。",
+    "joined": "你已以{role}身份加入。",
+    "steps": {
+      "ask": {
+        "title": "随意提问",
+        "body": "问题会基于与你共享的文档来回答，并附带引用。"
+      },
+      "documents": {
+        "title": "浏览文档",
+        "body": "工作区共享的所有内容都在左侧的来源栏中。"
+      },
+      "profile": {
+        "title": "介绍一下你自己",
+        "body": "添加头像和职位，方便队友认出你。"
+      }
+    },
+    "setUpProfile": "设置个人资料",
+    "getStarted": "开始使用"
+  },
+  "tokens": {
+    "remaining": "剩余 {count} 个 token"
+  },
+  "error": {
+    "title": "出了点问题",
+    "body": "加载此页面时出错。请重试，或返回工作台。",
+    "errorId": "错误 ID：{id}",
+    "backToDashboard": "返回工作台"
+  }
+}

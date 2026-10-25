@@ -19,6 +19,7 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FolderAccessSchema } from "~/lib/validation";
 import { getFolderAccessByPath, setFolderAccessByPath } from "~/server/workspace/folder-access";
 import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
+import { requestTranslator } from "~/i18n/server";
 
 const PathSchema = z.string().trim().min(1).max(512);
 const PutSchema = FolderAccessSchema.extend({ path: PathSchema });
@@ -28,12 +29,15 @@ export async function GET(request: Request) {
     if (!ctx.success) return ctx.response;
     const parsed = PathSchema.safeParse(new URL(request.url).searchParams.get("path"));
     if (!parsed.success) {
-        return NextResponse.json({ error: "A folder path is required." }, { status: 400 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "team.server.errors")("folderPathRequired") },
+            { status: 400 }
+        );
     }
     try {
         return NextResponse.json(await getFolderAccessByPath(ctx.data, parsed.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/folders/by-path GET]");
+        return workspaceErrorResponse(error, "[workspace/folders/by-path GET]", request);
     }
 }
 
@@ -47,6 +51,6 @@ export async function PUT(request: Request) {
     try {
         return NextResponse.json(await setFolderAccessByPath(ctx.data, path, input));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/folders/by-path PUT]");
+        return workspaceErrorResponse(error, "[workspace/folders/by-path PUT]", request);
     }
 }

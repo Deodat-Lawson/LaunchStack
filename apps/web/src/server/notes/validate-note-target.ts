@@ -13,6 +13,8 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/store/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
@@ -31,20 +33,24 @@ export async function validateNoteTarget(params: {
     companyId: bigint;
     /** The caller's document scope, resolved once by the route (`ctx.data.documentScope()`). */
     scope: DocumentScope;
+    /** The route's request: the refusal is in its reader's language (English without it). */
+    request?: Request;
 }): Promise<TargetResult> {
     const { documentId, versionId, companyId, scope } = params;
+    const locale = params.request ? localeOfRequest(params.request) : "en";
+    const t = translatorFor(locale, "notes.server.errors");
 
     if (documentId == null || documentId === "") {
         // Freeform note. A version only means something relative to a document.
         if (versionId != null) {
-            return invalid("versionId requires documentId", 400);
+            return invalid(t("versionRequiresDocument"), 400);
         }
         return { ok: true };
     }
 
     const numericDocumentId = Number(documentId);
     if (!Number.isSafeInteger(numericDocumentId) || numericDocumentId <= 0) {
-        return invalid("Invalid documentId", 400);
+        return invalid(t("invalidDocumentIdField"), 400);
     }
 
     const [doc] = await db
@@ -52,13 +58,13 @@ export async function validateNoteTarget(params: {
         .from(document)
         .where(and(eq(document.id, numericDocumentId), scopedDocumentWhere(companyId, scope)));
 
-    if (!doc) return invalid("Document not found", 404);
+    if (!doc) return invalid(translatorFor(locale, "errors.api")("documentNotFound"), 404);
 
     if (versionId == null) return { ok: true };
 
     const numericVersionId = Number(versionId);
     if (!Number.isSafeInteger(numericVersionId) || numericVersionId <= 0) {
-        return invalid("Invalid versionId", 400);
+        return invalid(t("invalidVersionIdField"), 400);
     }
 
     const [version] = await db
@@ -71,7 +77,7 @@ export async function validateNoteTarget(params: {
             )
         );
 
-    if (!version) return invalid("Document version not found", 404);
+    if (!version) return invalid(t("versionNotFound"), 404);
 
     return { ok: true };
 }

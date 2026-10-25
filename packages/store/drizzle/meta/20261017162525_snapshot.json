@@ -1,6 +1,6 @@
 {
   "id": "2a0bdf41-f411-48c6-adb8-196e3893c9c0",
-  "prevId": "86de671f-6fe4-4ca3-99c1-21a2fba4a308",
+  "prevId": "ed0ef34d-19bc-4c98-8ce2-f1d6a9c70f71",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -435,28 +435,6 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "document_company_call_note_id_idx": {
-          "name": "document_company_call_note_id_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "\"pdr_ai_v2_document\".\"ocr_metadata\" ? 'callNote'",
           "concurrently": false,
           "method": "btree",
           "with": {}

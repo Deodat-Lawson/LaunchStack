@@ -97,7 +97,7 @@ it("uses genuine metadata for timestamps and streaming/stopped/reasoning state",
         isSending: true,
     });
     expect(screen.getByText("Retrieving evidence")).toBeInTheDocument();
-    expect(screen.getByText("Reasoning")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Thoughts" })).toBeInTheDocument();
     expect(
         container.querySelector('time[datetime="2026-10-04T12:00:00.000Z"]')
     ).toBeInTheDocument();
@@ -109,6 +109,39 @@ it("uses genuine metadata for timestamps and streaming/stopped/reasoning state",
         />
     );
     expect(screen.getByText("Stopped")).toBeInTheDocument();
+});
+it("shows the thinking as it streams, then folds it once the answer starts", () => {
+    const thinking: ThreadMessage = {
+        ...THREAD[1]!,
+        text: "",
+        status: "streaming",
+        reasoning: "Compare the sources",
+        thoughtMs: 4200,
+    };
+    const { rerender, props } = mount({ thread: [THREAD[0]!, thinking], isSending: true });
+    expect(screen.getByRole("button", { name: "Thoughts" })).toHaveAttribute(
+        "aria-expanded",
+        "true"
+    );
+    expect(screen.getByText("Compare the sources")).toBeVisible();
+
+    rerender(
+        <AskPanel
+            {...props}
+            thread={[
+                THREAD[0]!,
+                { ...thinking, reasoning: "Compare the sources, then answer", text: "It changed." },
+            ]}
+        />
+    );
+    const folded = screen.getByRole("button", { name: "Thought for 4s" });
+    expect(folded).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByText("Compare the sources, then answer")).not.toBeInTheDocument();
+    expect(screen.getByText("It changed.")).toBeInTheDocument();
+
+    // A reader who opens it keeps it open.
+    fireEvent.click(folded);
+    expect(screen.getByText("Compare the sources, then answer")).toBeVisible();
 });
 it("keeps queued composition enabled while a response is active and wires stop", () => {
     const onStop = jest.fn();

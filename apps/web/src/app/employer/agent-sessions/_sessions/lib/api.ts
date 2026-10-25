@@ -64,7 +64,12 @@ export interface ImportReport {
 export class AgentSessionsApiError extends Error {
     constructor(
         message: string,
-        public readonly status?: number
+        public readonly status?: number,
+        /**
+         * False when the server sent no words of its own and `message` is the
+         * client's English fallback — the UI then shows its translated one.
+         */
+        public readonly fromServer = true
     ) {
         super(message);
         this.name = "AgentSessionsApiError";
@@ -85,9 +90,11 @@ async function request<T>(input: string, init?: RequestInit): Promise<T> {
         error?: string;
     };
     if (!res.ok || body.success === false) {
+        const serverMessage = body.message ?? body.error;
         throw new AgentSessionsApiError(
-            body.message ?? body.error ?? `Request failed (HTTP ${res.status})`,
-            res.status
+            serverMessage ?? `Request failed (HTTP ${res.status})`,
+            res.status,
+            serverMessage !== undefined
         );
     }
     return body.data as T;

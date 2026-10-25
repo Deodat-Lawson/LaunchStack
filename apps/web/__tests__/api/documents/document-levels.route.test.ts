@@ -47,7 +47,10 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
         handler(),
 }));
 jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
-jest.mock("~/server/services/document-delete", () => ({ deleteDocumentCore: jest.fn() }));
+jest.mock("~/server/services/document-delete", () => ({
+    deleteDocumentCore: jest.fn().mockResolvedValue([]),
+    deleteDocumentBlobs: jest.fn().mockResolvedValue(undefined),
+}));
 jest.mock("~/server/company-profile/service", () => ({ reassembleAfterDelete: jest.fn() }));
 jest.mock("~/server/services/folder-access", () => ({
     FOLDER_EDIT_DENIED: "You do not have edit access to this folder.",

@@ -1,0 +1,512 @@
+{
+  "words": {
+    "stance": {
+      "stronglyCritical": "Strongly critical",
+      "critical": "Critical",
+      "neutral": "Neutral",
+      "supportive": "Supportive",
+      "stronglySupportive": "Strongly supportive"
+    },
+    "mood": {
+      "stronglyCritical": "strongly critical",
+      "critical": "critical",
+      "mixed": "mixed",
+      "supportive": "supportive",
+      "stronglySupportive": "strongly supportive"
+    },
+    "progress": {
+      "queued": "Waiting to start",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "done": "Done",
+      "gathering": "Gathering sources",
+      "casting": "{count, plural, one {Building # person} other {Building # people}}",
+      "simulating": "Round {round, number} of {rounds, number}",
+      "reporting": "Writing the report"
+    },
+    "size": "{agents, plural, one {# person} other {# people}} · {rounds, plural, one {# round} other {# rounds}}",
+    "sourceKind": {
+      "document": "File",
+      "search": "Found in your files",
+      "prospect": "Prospect",
+      "brandComment": "Comment on your post",
+      "companyProfile": "Company profile",
+      "notes": "Pasted material"
+    },
+    "caveat": "A scenario among simulated people built from your records — something to think with, not a forecast.",
+    "stanceByRound": "Stance by round: {stances}",
+    "stanceMove": "{from} → {to}",
+    "list": {
+      "separator": ", ",
+      "last": "{rest} and {last}"
+    },
+    "shift": {
+      "warmed": "Warmed to {stance}",
+      "softened": "Softened to {stance}",
+      "cooled": "Cooled to {stance}",
+      "turned": "Turned {stance}"
+    }
+  },
+  "tool": {
+    "title": "Scenarios",
+    "navRuns": "Scenarios",
+    "navNew": "New",
+    "about": "People built from your records react to a situation over several rounds: what they say, who changes their mind and why. {caveat}",
+    "liveAria": "{title}: in progress"
+  },
+  "interviews": {
+    "blockedStopped": "This scenario stopped before the first round finished, so there is nobody to ask.",
+    "blockedWaiting": "People can answer once the first round has finished.",
+    "answeredBy": "{name} · {when}",
+    "askError": "Could not ask that",
+    "questionLabel": "Your question",
+    "placeholderAnalyst": "Why did the critics soften after round 4?",
+    "placeholderPerson": "What would change your mind?",
+    "asking": "Asking…",
+    "ask": "Ask",
+    "hintAnalyst": "The analyst has read the whole run and answers about all of it.",
+    "hintPerson": "They answer in character, from what they saw in the run."
+  },
+  "askTab": {
+    "ask": "Ask",
+    "analyst": "The analyst",
+    "analystAsked": "The analyst · asked",
+    "someone": "Someone",
+    "people": "People",
+    "person": "{name} — {role}",
+    "personAsked": "{name} — {role} · asked",
+    "aboutAnalyst": "Questions about the whole run: why something happened, who moved, what would have changed it.",
+    "aboutPerson": "Questions to one person, who answers from what they saw and posted."
+  },
+  "feed": {
+    "emptyLive": "Nothing posted yet. The opening post appears once the people are built.",
+    "empty": "Nothing was posted.",
+    "counts": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# comment} other {# comments}}",
+    "showRound": "Show round",
+    "allRounds": "All rounds",
+    "opening": "Opening",
+    "round": "Round {round, number}",
+    "roundLower": "round {round, number}",
+    "showMore": "{count, plural, one {Show # more post} other {Show # more posts}}",
+    "tag": {
+      "draft": "The draft under test",
+      "situation": "The situation",
+      "event": "Event added during the run"
+    },
+    "postAria": "{name}, {tag}",
+    "likes": "{count, plural, one {# like} other {# likes}}",
+    "dislikes": "{count, plural, one {# dislike} other {# dislikes}}",
+    "shares": "{count, plural, one {# share} other {# shares}}",
+    "comments": "{count, plural, one {# comment} other {# comments}}",
+    "commentsLabel": "Comments",
+    "reposted": "{name} reposted",
+    "moreReplies": "{count, plural, one {Show # more reply} other {Show # more replies}}",
+    "fewerReplies": "Show fewer replies",
+    "rounds": "Rounds",
+    "mostVocal": "Most vocal",
+    "roundMeta": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# reply} other {# replies}}",
+    "quotedAria": "Go to the quoted post by {name}",
+    "openProfile": "Open {name}'s profile"
+  },
+  "people": {
+    "grounded": "Grounded",
+    "inventedBadge": "Invented to fill a gap",
+    "invented": "Invented",
+    "building": "{count, plural, one {Building # person from the sources…} other {Building # people from the sources…}}",
+    "waitingForSources": "People are built once the sources are gathered.",
+    "nobody": "Nobody was built for this scenario.",
+    "summary": "{count, plural, one {# person} other {# people}} · {grounded, number} built from your records · {invented, number} invented to fill gaps",
+    "filterLabel": "Show",
+    "followers": "{count, plural, one {# follower} other {# followers}}",
+    "from": "From {label}",
+    "fromMore": "From {label} +{more, number}",
+    "hiddenFile": "a file you can't open",
+    "keptQuiet": "Never posted. On their mind:",
+    "readAlong": "Read along without posting."
+  },
+  "personSheet": {
+    "caresAbout": "Cares about",
+    "builtFrom": "Built from",
+    "invented": "Nothing in your records: this person was invented to fill a gap.",
+    "readAlong": "Read along without posting.",
+    "seeInFeed": "See in Feed",
+    "ask": "Ask {name}",
+    "followers": "{count, plural, one {follower} other {followers}}",
+    "following": "following",
+    "postsCount": "{count, plural, one {post} other {posts}}",
+    "repliesCount": "{count, plural, one {reply} other {replies}}",
+    "onTheirMind": "On {name}'s mind now",
+    "redacted": "A file you don't have access to",
+    "journey": "How they moved",
+    "started": "Started {stance}",
+    "round": "Round {round, number}",
+    "repliedTo": "Replied to {handle}",
+    "reposted": "Reposted {handle}",
+    "quoted": "Quoted {handle}",
+    "wallet": {
+      "title": "Money and switching",
+      "usesToday": "Uses today",
+      "usesNothing": "Nothing like this",
+      "budget": "Budget",
+      "buyingRole": "In buying",
+      "switchingCost": "Switching",
+      "budgets": {
+        "none": "None set aside",
+        "tight": "Tight",
+        "funded": "Has budget"
+      },
+      "roles": {
+        "decides": "Decides",
+        "influences": "Has a say",
+        "uses": "Uses it, doesn't decide"
+      },
+      "switching": {
+        "low": "Easy",
+        "medium": "Real effort",
+        "high": "Costly"
+      },
+      "wouldPay": {
+        "yes": "Would pay",
+        "maybe": "Might pay",
+        "no": "Wouldn't pay"
+      },
+      "holdingBack": "What held them back last",
+      "firstDoubt": "Their first doubt"
+    }
+  },
+  "report": {
+    "narrator": "the narrator",
+    "opening": "opening",
+    "round": "round {round, number}",
+    "postRefAria": "See the post by {who} in {when}",
+    "postRef": "{who}, {when}",
+    "liveIntro": "The report is written after the last round. Until then, here is how opinion is moving and what each round looked like.",
+    "stoppedAfter": "This scenario stopped before its report was written. What happened up to then is below and in the Feed.",
+    "stoppedBefore": "This scenario stopped before the first round finished, so there is nothing to report.",
+    "receptionTitle": "How the draft was received",
+    "engaged": "Engaged",
+    "engagedValue": "{engaged, number} of {exposed, number} ({rate})",
+    "likes": "Likes",
+    "comments": "Comments",
+    "shares": "Shares",
+    "dislikes": "Dislikes",
+    "mood": "Mood",
+    "moodValue": "{from} → {to}",
+    "opinionTitle": "How opinion moved",
+    "opinionAside": "mean {mean} after round {round, number} · {mood}",
+    "chartPending": "The chart starts when the first round finishes.",
+    "noRound": "No round finished.",
+    "roundByRound": "Round by round",
+    "factionsTitle": "Where people ended up",
+    "factionShare": "{share} of people",
+    "faction": {
+      "supportive": "Supportive",
+      "neutral": "Neutral",
+      "critical": "Critical"
+    },
+    "drivers": "What drove it",
+    "turningPoints": "Turning points",
+    "turningRound": "Round {round, number}",
+    "watchFor": "Watch for in the real world",
+    "numbersPerRound": "Numbers per round",
+    "usageLive": "Used so far: about {calls, number} model calls · {credits, number} credits (estimated {estimate, number}).",
+    "usage": "Used: about {calls, number} model calls · {credits, number} credits (estimated {estimate, number}).",
+    "roundMood": "{mean} · {mood}",
+    "table": {
+      "round": "Round",
+      "active": "Active",
+      "posts": "Posts",
+      "comments": "Comments",
+      "likes": "Likes",
+      "shares": "Shares",
+      "mood": "Mood"
+    }
+  },
+  "sources": {
+    "used": {
+      "files": "{count, plural, one {# picked file} other {# picked files}}",
+      "search": "a search of your files",
+      "prospects": "prospects",
+      "comments": "comments on your posts",
+      "profile": "the company profile",
+      "notes": "pasted material",
+      "nothing": "nothing: every person was invented"
+    },
+    "gathering": "Gathering sources…",
+    "none": "No sources: every person in this scenario was invented. Built from {used}.",
+    "brief": "What everyone knew",
+    "sourceAria": "Source {id}",
+    "title": "Sources",
+    "builtFrom": "Built from {used}",
+    "redacted": "A file you don't have access to",
+    "openPerson": "Open {name}",
+    "peopleBuilt": "{count, plural, one {# person built from it} other {# people built from it}}"
+  },
+  "chart": {
+    "start": "Start",
+    "roundTick": "R{round}",
+    "describe": "{critical, number} critical, {neutral, number} neutral, {supportive, number} supportive",
+    "summary": "Opinion by round. At the start: {start}. After round {round, number}: {end}.",
+    "summaryEmpty": "Opinion by round."
+  },
+  "list": {
+    "newScenario": "New scenario",
+    "title": "What happens",
+    "accent": "if…",
+    "sub": "People built from your records react to a situation, round by round. You read what they said and who changed their mind.",
+    "emptyTitle": "No scenarios yet",
+    "emptyBody": "A scenario is a small simulated social network. People are built from what your workspace already knows — files, prospects, comments on your posts, the company profile — and react to a situation you describe over several rounds: posting, replying, changing their minds. You get the feed, the people and a report of what moved them. It is something to think with, not a forecast.",
+    "shared": "Shared",
+    "byWhen": "{name} · {when}"
+  },
+  "new": {
+    "estimateError": "Could not estimate the cost",
+    "startError": "Could not start the scenario",
+    "addedToast": "{name} was added to your files. Choose it from your files.",
+    "switches": {
+      "search": "Search my files",
+      "searchShort": "file search",
+      "searchHint": "Finds passages about the situation in every file you can see.",
+      "prospects": "Prospects",
+      "prospectsShort": "prospects",
+      "prospectsHint": "{count, plural, one {# company} other {# companies}} from Growth › Prospects become buyers in the network.",
+      "prospectsNone": "No prospects yet. Growth › Prospects finds them.",
+      "prospectsLoading": "Companies from Growth › Prospects.",
+      "comments": "Comments on your posts",
+      "commentsShort": "post comments",
+      "commentsHint": "{count, plural, one {# comment} other {# comments}} people left on the workspace's social posts.",
+      "commentsNone": "No comments on your posts yet.",
+      "commentsLoading": "What people said under the workspace's social posts.",
+      "profile": "Company profile",
+      "profileShort": "company profile",
+      "profileNone": "This workspace has no company profile yet.",
+      "profileHint": "What you sell, to whom, and at what price."
+    },
+    "title": "New",
+    "accent": "scenario",
+    "sub": "Describe a situation and attach what it is about. People built from your records react to it over several rounds.",
+    "uploadLabel": "Upload files about the situation",
+    "situationLabel": "The situation",
+    "subjectLabel": "What happens if…",
+    "subjectPlaceholder": "What could happen — a launch, a price change, a new policy — and, if it helps, the plan behind it, the actions you would take and where things stand now…",
+    "subjectHint": "One situation, in plain words — a line, or a few paragraphs on the plan, the actions and the current cases. Attach what it is about: a business plan, an action plan, case notes, a pricing page.",
+    "subjectHintUpload": "One situation, in plain words — a line, or a few paragraphs on the plan, the actions and the current cases. Attach what it is about: a business plan, an action plan, case notes, a pricing page; drop files on the box to upload them.",
+    "starters": {
+      "raisePrices": "We raise prices 20% for new customers in January.",
+      "freeCompetitor": "A competitor launches a free version of our product.",
+      "chatOnly": "We move support from phone to chat only.",
+      "oldestPlan": "We announce we are shutting down our oldest plan."
+    },
+    "composer": {
+      "try": "Try",
+      "attached": "Attached files",
+      "upload": "Upload files",
+      "choose": "Choose from your files",
+      "fileCount": "{count, number}/{max, number} files",
+      "dropTitle": "Drop to add to the scenario",
+      "dropHint": "Saved to your {folder} folder and read before the run starts"
+    },
+    "titleLabel": "Title (optional)",
+    "titlePlaceholder": "Taken from the situation when left empty",
+    "builtFromTitle": "What else the people are built from",
+    "builtFromAside": "Only material you can see is used",
+    "files": "Files",
+    "notesLabel": "Paste material",
+    "notesHint": "A news story, a policy draft, an announcement, a competitor’s pricing page…",
+    "notesAria": "Pasted material",
+    "notesPlaceholder": "Paste the text here.",
+    "notesShort": "pasted material",
+    "size": "Size",
+    "presetsLabel": "Size presets",
+    "presets": {
+      "quick": "Quick read",
+      "standard": "Standard",
+      "deep": "Deep dive"
+    },
+    "people": "People",
+    "peopleHint": "More people bring more points of view, and cost more.",
+    "rounds": "Rounds",
+    "roundsHint": "Each round, people read their feed and post, reply, share or change their minds.",
+    "summary": {
+      "title": "Your scenario",
+      "question": "What happens if {situation}",
+      "empty": "What happens if… Describe the situation to start.",
+      "noFiles": "None attached",
+      "fileCount": "{count, plural, one {# file} other {# files}}",
+      "uploadingMore": "uploading more",
+      "beingRead": "{count, number} being read",
+      "alsoFrom": "Also from",
+      "nothingElse": "Nothing else"
+    },
+    "noSources": "Nothing to build people from, so every person will be invented. Attach a file, switch on a source or paste some material.",
+    "starting": "Starting…",
+    "run": "Run scenario",
+    "describeFirst": "Describe the situation first.",
+    "hold": {
+      "uploading": "Waiting for uploads to finish.",
+      "reading": "{count, plural, one {Waiting for a file to be read, so the people can use it. Remove it to run without.} other {Waiting for # files to be read, so the people can use them. Remove them to run without.}}",
+      "unreadable": "{count, plural, one {Remove the file that could not be read.} other {Remove the files that could not be read.}}",
+      "tooLong": "The situation or the pasted material is too long."
+    },
+    "creditsHint": "Use fewer people or rounds, or ask an admin to add credits.",
+    "estimate": "Estimate",
+    "estimateCredits": "≈ {credits, number} <unit>credits</unit>",
+    "estimateCalls": "About {calls, number} model calls",
+    "unmetered": "Usage is not metered on this workspace.",
+    "balance": "Balance: {balance, number} credits",
+    "notEnough": "Not enough credits for this size: it needs about {credits, number} and the workspace has {balance, number}. Use fewer people or rounds."
+  },
+  "files": {
+    "companyTitle": "Your company profile counts this file as written by or about the company.",
+    "aboutCompany": "About your company",
+    "kind": {
+      "pdf": "PDF",
+      "doc": "Document",
+      "slides": "Slides",
+      "sheet": "Spreadsheet",
+      "web": "Web page",
+      "text": "Text",
+      "transcript": "Transcript",
+      "image": "Image",
+      "file": "File"
+    },
+    "added": "added {when}",
+    "reading": "Being read",
+    "unreadable": "Could not be read",
+    "remove": "Remove {name}",
+    "dismiss": "Dismiss {name}",
+    "uploading": "Uploading · {size}",
+    "uploadFailed": "Upload failed",
+    "size": {
+      "bytes": "{size} B",
+      "kb": "{size} KB",
+      "mb": "{size} MB"
+    },
+    "notDocument": "Not a document this form reads. Add a PDF, Word, PowerPoint, Excel, Markdown or text file.",
+    "noRoom": "The scenario already has as many files as it can use."
+  },
+  "picker": {
+    "title": "Choose files",
+    "description": "The people in the scenario are built from what these files say. Your company’s own files come first.",
+    "find": "Find a file or folder",
+    "companyFiles": "Company files",
+    "companyNote": "Written by or about your company",
+    "otherFiles": "Other files",
+    "otherNote": "Everything else you can see",
+    "pickedView": "Picked <n>{count, number}</n>",
+    "noFiles": "No files in this workspace yet. Upload a pitch deck, a price list or a policy to build people from.",
+    "nothingPicked": "Nothing picked yet.",
+    "noCompanyFiles": "No company files yet. Files the company profile counts, and anything in the {folder} folder, show here.",
+    "noMatch": "No file matches.",
+    "upload": "Upload from computer",
+    "picked": "{count, number} of {max, number} picked"
+  },
+  "run": {
+    "notFoundTitle": "This scenario is not here any more",
+    "notFoundBody": "It may have been deleted, or it was not shared with the workspace.",
+    "refreshError": "Could not refresh: {error}",
+    "failedTitle": "This scenario failed",
+    "startNew": "Start a new scenario",
+    "cancelledAfter": "Cancelled after round {round, number}. What happened up to then is below.",
+    "cancelledBefore": "Cancelled before the first round. What happened up to then is below.",
+    "tabs": {
+      "report": "Report",
+      "feed": "Feed",
+      "people": "People",
+      "ask": "Ask",
+      "sources": "Sources"
+    },
+    "renameError": "Could not rename it",
+    "sharedToast": "Shared with the workspace",
+    "privateToast": "Only you can see it now",
+    "sharingError": "Could not change sharing",
+    "cancelledToast": "Scenario cancelled. Rounds that finished are kept.",
+    "deletedToast": "Scenario deleted",
+    "actionError": "That did not work",
+    "saveTitle": "Save title",
+    "keepTitle": "Keep the old title",
+    "draftTested": "The draft tested:",
+    "whatHappensIf": "What happens if:",
+    "showSituation": "Show all of it",
+    "createdBy": "{name}, {when}",
+    "you": "You",
+    "shared": "Shared",
+    "shareLabel": "Share with workspace",
+    "cancelRun": "Cancel run",
+    "roundsDone": "{round, number} of {rounds, number} rounds done",
+    "confirmCancelTitle": "Cancel this scenario?",
+    "confirmDeleteTitle": "Delete this scenario?",
+    "confirmCancelBody": "It stops after the round in progress. Rounds that finished stay readable; there will be no report.",
+    "confirmDeleteBody": "The feed, the people, the report and the interviews go with it. This cannot be undone.",
+    "keepRunning": "Keep running",
+    "keepIt": "Keep it",
+    "addEventError": "Could not add the event",
+    "addEventTitle": "Add an event",
+    "eventsClosed": "The last round has started",
+    "eventsOpen": "It appears in the next round",
+    "eventLabel": "What happens",
+    "eventPlaceholder": "A competitor cuts its price in half.",
+    "adding": "Adding…",
+    "addEvent": "Add event",
+    "injectionPending": "appears in the next round",
+    "injectionRound": "round {round, number}"
+  },
+  "server": {
+    "errors": {
+      "notFound": "Scenario not found",
+      "notCreator": "Only the person who started this run can do that.",
+      "roleCantRun": "Your role can't run scenarios in this workspace.",
+      "notEnoughCredits": "Not enough credits to start this run.",
+      "describeSituation": "Describe the situation to simulate.",
+      "situationTooLong": "Keep the situation under {max} characters.",
+      "tooManyFiles": "Pick at most {max} files.",
+      "notesTooLong": "Keep pasted material under {max} characters.",
+      "titleEmpty": "A title can't be empty.",
+      "eventsClosed": "Events can only be added while the run is going.",
+      "lastRoundFinished": "The last round has finished; this event would never appear.",
+      "describeEvent": "Describe the event.",
+      "eventTooLong": "Keep events under {max} characters.",
+      "lastRoundStarted": "The last round has started; this event would never appear.",
+      "interviewsNotOpen": "Interviews open once the first round has finished.",
+      "noSuchPerson": "No such person in this run.",
+      "askQuestion": "Ask a question.",
+      "questionTooLong": "Keep questions under {max} characters.",
+      "noAnswer": "No answer came back; try again.",
+      "roleCantTestPosts": "Your role can read Brand but not test posts.",
+      "writePostFirst": "Write the post first.",
+      "postTooLong": "Posts over 3,000 characters can't be tested."
+    },
+    "leftWorkspace": "Someone who has left",
+    "sourceLabels": {
+      "document": {
+        "aFilePage": "A file, page {page}",
+        "aFile": "A file",
+        "page": "{title}, page {page}"
+      },
+      "search": {
+        "aFile": "A file"
+      },
+      "prospect": {
+        "prospect": "Prospect: {name}"
+      },
+      "brandComment": {
+        "comment": "Comment on your {platform} post"
+      },
+      "companyProfile": {
+        "fact": "Company profile: {subject}"
+      },
+      "notes": {
+        "part": "Pasted material, part {n}",
+        "whole": "Pasted material"
+      }
+    },
+    "runErrors": {
+      "outOfCredits": "The workspace ran out of credits during this run.",
+      "tooFewPeople": "Only {count} people could be built from the sources",
+      "noWorld": "Run has no world",
+      "reportUnreadable": "The report could not be read",
+      "runFailed": "The run failed",
+      "creatorGone": "The person who started this run is no longer an active member of the workspace."
+    }
+  }
+}

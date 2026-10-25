@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Bug, Mail, MessageSquare, Phone, Send } from "lucide-react";
+import { Bug, CircleAlert, Copy, Mail, MessageSquare, Phone, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { SupportChannels } from "~/server/support";
+import { useSourceFailureCopy, type SourceFailureReport } from "~/lib/source-failure";
 
 import LoadingPage from "~/app/_components/loading";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
@@ -13,16 +15,27 @@ import { Button } from "~/components/ui/button";
 import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
 import { Field, TextArea, TextInput } from "~/components/field";
 
-export function ContactClient({ support }: { support: SupportChannels }) {
+export function ContactClient({
+    support,
+    report = null,
+}: {
+    support: SupportChannels;
+    /** A failed source's details, when its "Contact us about this error" link opened the page. */
+    report?: SourceFailureReport | null;
+}) {
+    const t = useTranslations("onboarding.contact");
+    const tc = useTranslations("common");
+    const failureCopy = useSourceFailureCopy();
     const router = useRouter();
     const { isLoaded, userId } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [formData, setFormData] = useState({
+    const reportText = report ? failureCopy.reportText(report) : null;
+    const [formData, setFormData] = useState(() => ({
         name: "",
         email: "",
-        subject: "",
-        message: "",
-    });
+        subject: reportText?.subject ?? "",
+        message: reportText ? `${t("messageTemplate")}\n\n\n—\n${reportText.details}` : "",
+    }));
 
     useEffect(() => {
         if (!isLoaded) return;
@@ -67,17 +80,20 @@ export function ContactClient({ support }: { support: SupportChannels }) {
 
     return (
         <>
-            <EmployerChrome pageLabel="Launchstack" pageTitle="Contact" />
+            <EmployerChrome pageLabel="Launchstack" pageTitle={t("crumb")} />
             <PageShell>
                 <PageHeader
-                    eyebrow="Support"
-                    title="Get in touch"
-                    description={
-                        support.email
-                            ? "Questions, feedback, or bug reports. Your message opens in your mail client."
-                            : "Questions, feedback, or bug reports."
-                    }
+                    title={report ? t("titleReport") : t("title")}
+                    description={support.email ? t("descriptionMail") : t("description")}
                 />
+
+                {report && reportText && (
+                    <FailureReportCard
+                        report={report}
+                        details={reportText.details}
+                        inMessage={Boolean(support.email)}
+                    />
+                )}
 
                 <div
                     style={{
@@ -99,34 +115,36 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                                     }}
                                 >
                                     <p style={{ margin: "0 0 12px" }}>
-                                        This instance has no support address configured. Whoever
-                                        operates it can set <code>SUPPORT_CONTACT_EMAIL</code> to
-                                        receive messages here.
+                                        {t.rich("noAddress", {
+                                            code: chunks => <code>{chunks}</code>,
+                                        })}
                                     </p>
                                     <p style={{ margin: 0 }}>
-                                        For problems with Launchstack itself, open an issue on{" "}
-                                        <a
-                                            href={support.issuesUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            the issue tracker
-                                        </a>
-                                        .
+                                        {t.rich("issueTracker", {
+                                            link: chunks => (
+                                                <a
+                                                    href={support.issuesUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {chunks}
+                                                </a>
+                                            ),
+                                        })}
                                     </p>
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit} style={{ display: "block" }}>
-                                    <Field label="Your name">
+                                    <Field label={t("yourName")}>
                                         <TextInput
                                             name="name"
                                             value={formData.name}
                                             onChange={handleInput}
-                                            placeholder="Jane Doe"
+                                            placeholder={t("namePlaceholder")}
                                             required
                                         />
                                     </Field>
-                                    <Field label="Email">
+                                    <Field label={tc("fields.email")}>
                                         <TextInput
                                             type="email"
                                             name="email"
@@ -136,21 +154,21 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                                             required
                                         />
                                     </Field>
-                                    <Field label="Subject">
+                                    <Field label={t("subject")}>
                                         <TextInput
                                             name="subject"
                                             value={formData.subject}
                                             onChange={handleInput}
-                                            placeholder="What's this about?"
+                                            placeholder={t("subjectPlaceholder")}
                                             required
                                         />
                                     </Field>
-                                    <Field label="Message">
+                                    <Field label={t("message")}>
                                         <TextArea
                                             name="message"
                                             value={formData.message}
                                             onChange={handleInput}
-                                            placeholder="Tell us what's on your mind…"
+                                            placeholder={t("messagePlaceholder")}
                                             rows={6}
                                             required
                                         />
@@ -164,11 +182,11 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                                         }}
                                     >
                                         <span style={{ fontSize: 12.5, color: "var(--ink-3)" }}>
-                                            Opens in your mail client, addressed to {support.email}.
+                                            {t("opensIn", { email: support.email })}
                                         </span>
                                         <Button type="submit" disabled={!canSubmit}>
                                             <Send style={{ width: 14, height: 14 }} />
-                                            Compose message
+                                            {t("compose")}
                                         </Button>
                                     </div>
                                 </form>
@@ -194,32 +212,32 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                                 {support.email && (
                                     <ContactRow
                                         Icon={Mail}
-                                        label="Email"
+                                        label={tc("fields.email")}
                                         value={support.email}
-                                        hint="Fastest for questions about your workspace."
+                                        hint={t("rows.emailHint")}
                                     />
                                 )}
                                 {support.community && (
                                     <ContactRow
                                         Icon={MessageSquare}
-                                        label="Community"
+                                        label={t("rows.community")}
                                         value={support.community}
-                                        hint="Ask other people running this instance."
+                                        hint={t("rows.communityHint")}
                                     />
                                 )}
                                 {support.responseTime && (
                                     <ContactRow
                                         Icon={Phone}
-                                        label="Response time"
+                                        label={t("rows.responseTime")}
                                         value={support.responseTime}
-                                        hint="Set by whoever operates this instance."
+                                        hint={t("rows.responseTimeHint")}
                                     />
                                 )}
                                 <ContactRow
                                     Icon={Bug}
-                                    label="Launchstack itself"
+                                    label={t("rows.software")}
                                     value={support.issuesUrl.replace(/^https?:\/\//, "")}
-                                    hint="Bugs and feature requests for the software."
+                                    hint={t("rows.softwareHint")}
                                 />
                             </div>
                         </Card>
@@ -227,6 +245,62 @@ export function ContactClient({ support }: { support: SupportChannels }) {
                 </div>
             </PageShell>
         </>
+    );
+}
+
+/**
+ * What the failed source's link carried, shown above the form so the person
+ * can see what will be sent — and copy it, when this instance has no
+ * support address and the issue tracker is the way to reach anyone.
+ */
+function FailureReportCard({
+    report,
+    details,
+    inMessage,
+}: {
+    report: SourceFailureReport;
+    details: string;
+    /** The form below already carries them (a support address is configured). */
+    inMessage: boolean;
+}) {
+    const t = useTranslations("onboarding.contact.report");
+    const tc = useTranslations("common.actions");
+    const { categoryName } = useSourceFailureCopy();
+    const [copied, setCopied] = useState(false);
+    const copy = async () => {
+        try {
+            await navigator.clipboard.writeText(details);
+            setCopied(true);
+        } catch {
+            // Clipboard refused — the details are on screen to select by hand.
+        }
+    };
+    return (
+        <div className="border-line bg-panel mb-5 flex items-start gap-3 rounded-[10px] border px-4 py-3.5">
+            <CircleAlert className="text-danger mt-0.5 size-4 shrink-0" aria-hidden />
+            <div className="min-w-0 flex-1">
+                <div className="text-ink text-[13.5px] font-semibold">
+                    {categoryName(report.category)}
+                </div>
+                <dl className="text-ink-2 mt-1.5 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-0.5 text-[12.5px]">
+                    <dt className="text-ink-3">{t("document")}</dt>
+                    <dd className="truncate">{report.document}</dd>
+                    {report.jobId && (
+                        <>
+                            <dt className="text-ink-3">{t("jobId")}</dt>
+                            <dd className="mono select-all truncate text-[12px]">{report.jobId}</dd>
+                        </>
+                    )}
+                </dl>
+                <p className="text-ink-3 mt-2 text-[12px]">
+                    {inMessage ? t("inMessage") : t("include")}
+                </p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => void copy()}>
+                <Copy aria-hidden />
+                {copied ? tc("copied") : t("copy")}
+            </Button>
+        </div>
     );
 }
 

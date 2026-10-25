@@ -16,10 +16,15 @@ export interface BackTarget {
     href: string;
     /** What the control says, e.g. "Studio". A place, never "Back". */
     label: string;
+    /**
+     * The place's name under `chrome.back.places`, for one of the app's own
+     * places; the control shows it in the reader's language instead of `label`.
+     */
+    place?: "studio";
 }
 
 /** The workspace's home. Everything that is not a tool falls back to it. */
-export const STUDIO: BackTarget = { href: "/employer/documents", label: "Studio" };
+export const STUDIO: BackTarget = { href: "/employer/documents", label: "Studio", place: "studio" };
 
 /**
  * Sections whose own landing page is the natural parent for everything under

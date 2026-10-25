@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callNotesCalls } from "@launchstack/pipelines/schema";
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
 import { eq, and, or, isNull } from "drizzle-orm";
@@ -20,9 +21,8 @@ import { syncNoteLinks } from "~/server/notes/wiki-links";
 import { isNoteDocumentVisible } from "~/server/notes/document-scope";
 import type { JSONContent } from "@tiptap/react";
 
-const CALL_NOTE_MANAGED_MESSAGE = "Call Notes are managed from Calls";
-
-export async function GET(_request: Request, { params }: { params: Promise<{ noteId: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ noteId: string }> }) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -30,7 +30,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ not
         const { noteId } = await params;
         const id = parseInt(noteId, 10);
         if (isNaN(id)) {
-            return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidNoteId") }, { status: 400 });
         }
 
         const [note] = await db
@@ -47,17 +47,18 @@ export async function GET(_request: Request, { params }: { params: Promise<{ not
                 await ctx.data.documentScope()
             ))
         ) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({ note: serializeNote(note) }, { status: 200 });
     } catch (error) {
         console.error("Error fetching note:", error);
-        return NextResponse.json({ error: "Failed to fetch note" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchFailed") }, { status: 500 });
     }
 }
 
 export async function PUT(request: Request, { params }: { params: Promise<{ noteId: string }> }) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -65,7 +66,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
         const { noteId } = await params;
         const id = parseInt(noteId, 10);
         if (isNaN(id)) {
-            return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidNoteId") }, { status: 400 });
         }
 
         const validation = await validateRequestBody(request, UpdateNoteSchema);
@@ -87,10 +88,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
             !existing ||
             !(await isNoteDocumentVisible(existing.documentId, ctx.data.companyId, scope))
         ) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
         if (existing.callId !== null) {
-            return NextResponse.json({ error: CALL_NOTE_MANAGED_MESSAGE }, { status: 409 });
+            return NextResponse.json({ error: t("callNoteManaged") }, { status: 409 });
         }
 
         const [updated] = await db
@@ -110,7 +111,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
             .returning();
 
         if (!updated) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
 
         // Re-embed whenever the embedding input might have shifted. The note is
@@ -158,14 +159,15 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
         return NextResponse.json({ note: serializeNote(updated) }, { status: 200 });
     } catch (error) {
         console.error("Error updating note:", error);
-        return NextResponse.json({ error: "Failed to update note" }, { status: 500 });
+        return NextResponse.json({ error: t("updateFailed") }, { status: 500 });
     }
 }
 
 export async function DELETE(
-    _request: Request,
+    request: Request,
     { params }: { params: Promise<{ noteId: string }> }
 ) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -173,7 +175,7 @@ export async function DELETE(
         const { noteId } = await params;
         const id = parseInt(noteId, 10);
         if (isNaN(id)) {
-            return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidNoteId") }, { status: 400 });
         }
 
         const [existing] = await db
@@ -182,10 +184,10 @@ export async function DELETE(
             .leftJoin(callNotesCalls, eq(callNotesCalls.documentNoteId, documentNotes.id))
             .where(noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId));
         if (!existing) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
         if (existing.callId !== null) {
-            return NextResponse.json({ error: CALL_NOTE_MANAGED_MESSAGE }, { status: 409 });
+            return NextResponse.json({ error: t("callNoteManaged") }, { status: 409 });
         }
 
         const [deleted] = await db
@@ -194,7 +196,7 @@ export async function DELETE(
             .returning();
 
         if (!deleted) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
 
         // Notes have no FK cascade — drop their embeddings explicitly so stale
@@ -209,6 +211,6 @@ export async function DELETE(
         return NextResponse.json({ success: true }, { status: 200 });
     } catch (error) {
         console.error("Error deleting note:", error);
-        return NextResponse.json({ error: "Failed to delete note" }, { status: 500 });
+        return NextResponse.json({ error: t("deleteFailed") }, { status: 500 });
     }
 }

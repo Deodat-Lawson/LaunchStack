@@ -25,6 +25,7 @@ import { findWorkspacePassages } from "~/server/mcp/workspace-search";
 import { parseDocumentId } from "~/server/mcp/tools/shared";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
+import { getSyncState as getNotionSyncState } from "~/server/services/connectors/notion/store";
 import {
     SOURCE_ORIGIN_FILTERS,
     decodeListCursor,
@@ -39,6 +40,9 @@ import {
     type SourceListing,
     type SourceText,
 } from "~/server/workspace-sources";
+
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
 
 import type { ChatTool } from "./chat-tool-loop";
 
@@ -118,14 +122,21 @@ function describeSource(source: {
     return `"${source.title}" (d${source.id}) — in ${source.folder || "Unfiled"}${from ? `, from ${from}` : ""}`;
 }
 
-function quoted(value: unknown, fallback: string): string {
-    return typeof value === "string" && value.trim() ? `“${value.trim().slice(0, 80)}”` : fallback;
+/** A value a status line quotes (trimmed, at most 80 characters); null when there is none. */
+function quotable(value: unknown): string | null {
+    return typeof value === "string" && value.trim() ? value.trim().slice(0, 80) : null;
 }
 
+/**
+ * `locale` words the status line each tool call shows in the chat ("Searching
+ * your sources for …"); what the model reads stays English.
+ */
 export function createSourceTools(
     ctx: WorkspaceContext,
-    ports: SourceToolPorts = {}
+    ports: SourceToolPorts = {},
+    locale: Locale = "en"
 ): SourceToolSession {
+    const status = translatorFor(locale, "chat.server.toolStatus");
     const list = ports.list ?? listReadableSources;
     const search = ports.search ?? findWorkspacePassages;
     const findTitles = ports.findTitles ?? findSourcesByTitle;
@@ -176,10 +187,9 @@ export function createSourceTools(
         describe: args => {
             const { from, folder } = (args ?? {}) as { from?: unknown; folder?: unknown };
             const app = typeof from === "string" ? originLabel(from) : null;
-            if (app && from !== "added-here") return `Looking through your ${app} files`;
-            return typeof folder === "string" && folder.trim()
-                ? `Looking through ${quoted(folder, "a folder")}`
-                : "Looking through your sources";
+            if (app && from !== "added-here") return status("lookingApp", { app });
+            const name = quotable(folder);
+            return name ? status("lookingFolder", { folder: name }) : status("lookingSources");
         },
         run: async args => {
             const { folder, from, cursor: rawCursor } = parse(ListArgs, args);
@@ -249,8 +259,10 @@ export function createSourceTools(
             required: ["query"],
             additionalProperties: false,
         },
-        describe: args =>
-            `Searching your sources for ${quoted((args as { query?: unknown } | null)?.query, "that")}`,
+        describe: args => {
+            const query = quotable((args as { query?: unknown } | null)?.query);
+            return query ? status("searchingSourcesFor", { query }) : status("searchingSources");
+        },
         run: async (args, signal) => {
             const { query, folder } = parse(SearchArgs, args);
             spend("search", MAX_SEARCHES);
@@ -334,7 +346,8 @@ export function createSourceTools(
                     ? parseDocumentId(String(raw))
                     : null;
             const title = id === null ? undefined : titles.get(id);
-            return title ? `Reading ${quoted(title, "a source")}` : "Reading a source";
+            const name = quotable(title);
+            return name ? status("readingSource", { title: name }) : status("readingASource");
         },
         run: async args => {
             const { id } = parse(ReadArgs, args);
@@ -389,7 +402,14 @@ export function citedPassages(passages: readonly SearchResult[], answer: string)
 // --- what the model is told about the workspace ------------------------------
 
 /** Apps whose imports become sources, as connector providers. */
-const SOURCE_PROVIDERS = new Set(["google-drive", "gmail"]);
+const SOURCE_PROVIDERS = new Set(["google-drive", "gmail", "notion"]);
+
+/** When a source-importing connection last synced; Gmail keeps no run time here. */
+async function lastSyncAtFor(provider: string, connectionId: number): Promise<Date | null> {
+    if (provider === "google-drive") return (await getSyncState(connectionId))?.lastSyncAt ?? null;
+    if (provider === "notion") return (await getNotionSyncState(connectionId))?.lastSyncAt ?? null;
+    return null;
+}
 
 export interface ConnectedApp {
     provider: string;
@@ -422,10 +442,7 @@ export async function loadSourcesOverview(ctx: WorkspaceContext): Promise<Source
         visible.map(async row => ({
             provider: row.provider,
             status: row.status,
-            lastSyncAt:
-                row.provider === "google-drive"
-                    ? ((await getSyncState(row.id))?.lastSyncAt ?? null)
-                    : null,
+            lastSyncAt: await lastSyncAtFor(row.provider, row.id),
         }))
     );
     return { inventory, connected };
@@ -457,10 +474,18 @@ function connectionLines(overview: SourcesOverview): string[] {
         const scope =
             app.provider === "google-drive"
                 ? " LaunchStack imports the files and folders someone chose to add from Google Drive, not the whole Drive, so what you can list is what was imported."
-                : "";
+                : app.provider === "notion"
+                  ? " LaunchStack imports the Notion pages someone shared with it on Notion's consent screen, not the whole Notion workspace, so what you can list is what was imported."
+                  : "";
+        const where =
+            app.provider === "google-drive"
+                ? " — nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → Google Drive"
+                : app.provider === "notion"
+                  ? " — nothing has been imported yet, or the pages are in a folder they cannot open; pages are chosen from Add a source → Notion"
+                  : "";
         const none = imported
             ? ""
-            : ` None of its files are among the sources this person can open${app.provider === "google-drive" ? " — nothing has been imported yet, or the imports are in folders they cannot open; files are added from Add a source → Google Drive" : ""}.`;
+            : ` None of its files are among the sources this person can open${where}.`;
         return `${name} is connected to this workspace${synced}.${scope}${none}`;
     });
 }

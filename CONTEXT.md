@@ -13,7 +13,7 @@ The single company-scoped acquisition of live call evidence for a Call, shared b
 _Avoid_: User recording, personal capture, complete recording
 
 **Capture Attempt**:
-One continuous interval within a Capture, anchored to one Capture User. A later interval is a new attempt, and an attempt can end because of silence across the captured channels, user action, source shutdown, or a Local Capture Worker failure.
+One continuous interval within a Capture, anchored to one Capture User and Capture Device. A later interval is a new attempt, and an attempt can end because of sustained silence across both captured channels, user action, a call-ended signal, or a Local Capture Worker failure.
 _Avoid_: New capture, retry job, continuous stream
 
 **Worker-error pause**:
@@ -23,6 +23,22 @@ _Avoid_: Failed capture, crashed call
 **Capture User**:
 The authenticated same-company user who starts and controls a Capture Attempt. The Capture User controls capture lifecycle but does not own the company Transcript; the first successful starter owns the Call Note.
 _Avoid_: Transcript owner, recorder, bot, external-account user
+
+**LaunchStack Capture**:
+The Mac menu-bar application a Capture User connects to their LaunchStack workspace to start, monitor, and stop local call capture. It is the user's installed capture companion, not a meeting participant or a second notes workspace.
+_Avoid_: Web recorder, meeting bot, hosted recorder
+
+**Capture Device**:
+A Mac connected to one Capture User in one company and eligible to receive that user's capture commands. A user may connect several Macs and revoke one without revoking the others.
+_Avoid_: Shared worker account, deployment user, microphone device
+
+**Pairing Code**:
+A short-lived, single-use invitation to connect a Capture Device to the user and company that issued it. It does not grant another user membership or ownership of existing Call Notes.
+_Avoid_: Shared capture password, permanent token, workspace invitation
+
+**Automatic Stop**:
+Ending a Capture because of sustained inactivity across both Audio Channels, a call-ended signal, or the capture duration limit rather than a user Stop command. Its reason remains visible with the Capture; it does not establish complete conversation coverage.
+_Avoid_: Worker-error pause, automatic recording, guaranteed call detection
 
 **Audio Channel**:
 The provenance of a Transcript segment: **microphone** is the Capture User's local microphone signal, and **system** is the computer's combined system output. Channel provenance describes the supplied audio path, not a person or speaker. The Calls surface may use the fallback labels **Me** and **Meeting** while leaving Participant unset.

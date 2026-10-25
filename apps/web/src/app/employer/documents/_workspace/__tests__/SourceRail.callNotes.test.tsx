@@ -60,6 +60,12 @@ const mockHistory = {
     loading: false,
     error: null,
     degraded: [],
+    archived: { open: false, entries: [], loading: false, error: null, count: 0 },
+    markSeen: jest.fn(),
+    setPinned: jest.fn(),
+    setArchived: jest.fn(),
+    reorderPins: jest.fn(),
+    setArchivedOpen: jest.fn(),
     refresh: jest.fn(),
     renameEntry: jest.fn(),
     removeEntry: jest.fn(),
@@ -162,7 +168,6 @@ jest.mock("../DocumentViewer", () => ({ DocumentViewer: () => null }));
 const storedSession: sessionApi.StoredSession = {
     id: "saved-chat",
     title: "Release questions",
-    pinned: false,
     messageCount: 0,
     contextSourceIds: [],
     lastMessageAt: "2026-09-14T12:00:00.000Z",
@@ -208,13 +213,11 @@ describe("Call Notes from the source rail to chat", () => {
             "What did we approve?{Enter}"
         );
         await waitFor(() =>
-            expect(mockSendQuery).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    question: "What did we approve?",
-                    searchScope: "document",
-                    documentId: 41,
-                })
-            )
+            expect(mockSendQuery.mock.calls[0]?.[0]).toMatchObject({
+                question: "What did we approve?",
+                searchScope: "document",
+                documentId: 41,
+            })
         );
         await waitFor(() =>
             expect(sessionApi.createSession).toHaveBeenCalledWith(
@@ -222,14 +225,28 @@ describe("Call Notes from the source rail to chat", () => {
                     contextSourceIds: [indexed.id],
                     messages: expect.arrayContaining([
                         expect.objectContaining({ role: "user", refs: [indexed.id] }),
-                        expect.objectContaining({
-                            role: "assistant",
-                            citations: [expect.objectContaining({ sourceId: indexed.id })],
-                        }),
                     ]),
                 })
             )
         );
+        await waitFor(() => {
+            const saved = [
+                ...jest
+                    .mocked(sessionApi.createSession)
+                    .mock.calls.flatMap(([input]) => input.messages),
+                ...jest
+                    .mocked(sessionApi.appendMessages)
+                    .mock.calls.flatMap(([, input]) => input.messages),
+            ];
+            expect(saved).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        role: "assistant",
+                        citations: [expect.objectContaining({ sourceId: indexed.id })],
+                    }),
+                ])
+            );
+        });
         await user.click(await screen.findByTitle("Open the source at this passage"));
         const href = mockRouter.push.mock.calls.at(-1)?.[0] as string;
         const params = new URL(href, "http://localhost").searchParams;
@@ -320,11 +337,11 @@ describe("Call Notes from the source rail to chat", () => {
                 })
             )
         );
-        expect(mockSendQuery).toHaveBeenCalledWith(expect.objectContaining({ documentId: 41 }));
+        expect(mockSendQuery.mock.calls[0]?.[0]).toMatchObject({ documentId: 41 });
     });
 
     it("never drags a Call Note into a different folder", () => {
-        const move = jest.spyOn(sourceApi, "moveSource").mockResolvedValue(undefined);
+        const move = jest.spyOn(sourceApi, "moveSource").mockResolvedValue({ access: "unchanged" });
         mount();
         const row = screen.getByTestId(`source-row-${indexed.id}`);
         fireEvent.dragStart(row);
@@ -358,9 +375,10 @@ describe("Call Notes from the source rail to chat", () => {
                 "What is the release plan?{Enter}"
             );
             await waitFor(() =>
-                expect(mockSendQuery).toHaveBeenCalledWith(
-                    expect.objectContaining({ documentId: 41, searchScope: "document" })
-                )
+                expect(mockSendQuery.mock.calls[0]?.[0]).toMatchObject({
+                    documentId: 41,
+                    searchScope: "document",
+                })
             );
         }
     );

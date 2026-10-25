@@ -7,7 +7,8 @@
  * - Its own postgres.js client rather than the engine's. Middleware imports
  *   this module to read sessions, and the engine barrel would drag the whole
  *   LLM/storage dependency graph into the middleware bundle. Same pattern as
- *   the role-routing client middleware already owns.
+ *   the role-routing client middleware already owns; both are shared per
+ *   process so dev recompiles don't leave open pools behind.
  *
  * - Lazily built behind a Proxy (the ~/server/db pattern), so importing this
  *   module costs nothing until the first auth call. Tests that mock callers
@@ -35,7 +36,6 @@ import { fetchClientMetadataResource } from "@better-auth/cimd/node";
 import { mcp } from "@better-auth/mcp";
 import bcrypt from "bcryptjs";
 import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
 
 import {
     authAccount,
@@ -51,6 +51,7 @@ import {
     authUser,
     authVerification,
 } from "~/server/db/schema/auth";
+import { sharedPostgresClient } from "~/server/db/shared-client";
 import { MCP_OAUTH_SCOPES, mcpAvailability } from "~/server/mcp/config";
 import { workspaceAccessTokenClaims, workspacePostLogin } from "~/server/mcp/oauth-workspace";
 import { accountLinkingHooks } from "./account-linking";
@@ -62,7 +63,7 @@ import { enabledSocialProviders } from "./providers";
 // dotenv + import.meta resolution in with it; the variables read here are
 // still declared and validated in env.ts via the app's other import paths.
 const buildAuth = () => {
-    const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+    const client = sharedPostgresClient("auth", process.env.DATABASE_URL!, 5);
     const authTables = {
         user: authUser,
         session: authSession,

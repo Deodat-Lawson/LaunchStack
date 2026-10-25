@@ -105,6 +105,15 @@ pnpm --filter @launchstack/call-worker dev
 
 For a bundled run, use `pnpm --filter @launchstack/call-worker build`, then `pnpm --filter @launchstack/call-worker start` in the same configured shell. Leave the worker running; `call_worker_ready` with state `idle` indicates it is polling, not that microphone access has been verified. Sign in as the configured Capture User and use **Start capture** in Calls to open audio. Use the Calls controls to stop Capture; `Ctrl-C` shuts down the worker.
 
+For concurrent local checkouts, give Next.js a free port, for example
+`pnpm --filter @launchstack/web dev --port 3001`. Set `BETTER_AUTH_URL` and
+`APP_PUBLIC_URL` to that app's origin in `apps/web/.env.development.local`,
+and set `CALL_NOTES_WEB_ORIGIN` to the same origin when launching this worker.
+Do not point a worker at another checkout's app or start a second worker for
+the same Capture User. Keep deployment-specific model YAML outside the checkout
+and select it with an absolute `CHAT_MODELS_CONFIG` path so rebasing a sample
+configuration does not change the deployed model.
+
 ## Outages, Pause, and Resume
 
 Backend transport errors, request timeouts, HTTP 429, and HTTP 5xx are retried with exponential backoff and full jitter: a 250 ms initial delay ceiling, capped at 5 seconds. A request times out after 30 seconds. Poll retries have no total budget, so an idle worker keeps waiting for the web server rather than exiting; `call_worker_backend_retry` records retries. Each event and finish request has a 120-second total retry budget, including requests and backoff. Other HTTP 4xx and invalid JSON are not retried. Invalid configuration or a rejected token terminates the worker with a non-zero exit status.

@@ -6,6 +6,7 @@ import { setImmediate as yieldEventLoop } from "node:timers/promises";
 import { setTimeout as delay } from "node:timers/promises";
 import type { CallNotesTestDatabase } from "./testDb";
 import type { StructuredOutputOptions } from "@launchstack/llm";
+import type * as LlmModule from "@launchstack/llm";
 import { sql } from "drizzle-orm";
 
 import {
@@ -53,6 +54,7 @@ jest.mock("~/lib/models", () => ({
     }),
 }));
 jest.mock("@launchstack/llm", () => ({
+    ...jest.requireActual<typeof LlmModule>("@launchstack/llm"),
     invokeStructured: (...args: unknown[]) => mockInvokeStructured(...args),
 }));
 

@@ -582,7 +582,9 @@ export function buildSelectionMenuItems(
 /** Folders the caller may not add files to — a move into one would be refused. */
 function lockedFolders(folders: WorkspaceFolder[]): Set<string> {
     return new Set(
-        folders.filter(f => f.system || f.access?.canEdit === false).map(f => f.name.trim())
+        folders
+            .filter(f => f.system === true || f.access?.canEdit === false)
+            .map(f => f.name.trim())
     );
 }
 

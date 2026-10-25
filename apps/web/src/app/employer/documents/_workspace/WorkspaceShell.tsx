@@ -508,7 +508,8 @@ export function WorkspaceShell() {
     const activeSourceId = activeFeatureId.startsWith(SOURCE_TAB_PREFIX)
         ? sourceIdOfTab(activeFeatureId)
         : activeFeatureId === "calls"
-          ? sources.find(source => source.type === "call-note" && source.callId === activeCallId)?.id
+          ? sources.find(source => source.type === "call-note" && source.callId === activeCallId)
+                ?.id
           : activeFeatureId === "mindmap"
             ? editedMindmap?.id
             : undefined;
@@ -546,11 +547,7 @@ export function WorkspaceShell() {
             }
             const sourceId = source?.id ?? id;
             setSourceTabFocus(prev =>
-                focus
-                    ? { sourceId, ...focus }
-                    : prev?.sourceId === sourceId
-                      ? null
-                      : prev
+                focus ? { sourceId, ...focus } : prev?.sourceId === sourceId ? null : prev
             );
             setActiveFeatureId(tabIdOfSource(sourceId));
         },
@@ -823,10 +820,7 @@ export function WorkspaceShell() {
             const params = new URLSearchParams(searchParams.toString());
             if (id) params.set("session", id);
             else params.delete("session");
-            if (
-                params.get("feature") === "calls" &&
-                activeFeatureIdRef.current !== "calls"
-            ) {
+            if (params.get("feature") === "calls" && activeFeatureIdRef.current !== "calls") {
                 params.delete("feature");
                 params.delete("call");
             }

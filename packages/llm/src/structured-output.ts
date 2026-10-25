@@ -342,7 +342,9 @@ function strictObjectSchema(node: JsonSchema7Type | undefined): JsonSchema7Type 
  * Copies preserve the original checks, defaults, effects and unknown-key policy.
  * Explicit class generics keep child-schema accessors typed after narrowing.
  */
-function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
+function withOptionalNullsAsMissing<T, Input>(
+    schema: z.ZodType<T, z.ZodTypeDef, Input>
+): z.ZodType<T, z.ZodTypeDef, Input> {
     const seen = new Map<z.ZodTypeAny, z.ZodTypeAny>();
     const visit = (node: z.ZodTypeAny): z.ZodTypeAny => {
         const cached = seen.get(node);
@@ -461,7 +463,7 @@ function withOptionalNullsAsMissing<T>(schema: z.ZodType<T>): z.ZodType<T> {
         seen.set(node, result);
         return result;
     };
-    return visit(schema) as z.ZodType<T>;
+    return visit(schema) as z.ZodType<T, z.ZodTypeDef, Input>;
 }
 
 function withoutSizeBounds(node: unknown): unknown {

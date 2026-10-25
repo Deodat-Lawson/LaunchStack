@@ -1,14 +1,11 @@
 import { z } from "zod";
 
-import {
-    getTranscriptionProvider,
-    isTranscriptionError,
-} from "@launchstack/conversion/audio-transcription";
+import { isTranscriptionError } from "@launchstack/conversion/audio-transcription";
 
 import { localeOfRequest } from "~/i18n/server";
 import { wordEnglish } from "~/i18n/translate";
 import { requireCaptureDevice } from "~/server/call-notes/device-auth";
-import { getEngine } from "~/server/engine";
+import { transcribeCallNotesAudio } from "~/server/call-notes/transcription";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -68,22 +65,13 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ error: "invalid_request" }, { status: 400 });
     }
     try {
-        // As in speech-to-text, install the configured provider registry before
-        // resolving it. The request's WAV exists only in this invocation's memory.
-        getEngine();
-        const provider = await getTranscriptionProvider();
-        const result = await provider.transcribe(
-            Buffer.from(await audio.arrayBuffer()),
-            "capture.wav",
-            {
-                mimeType: "audio/wav",
-                timestamps: false,
-            }
-        );
-        return Response.json({
-            text: result.data.text,
-            ...(result.data.language ? { language: result.data.language } : {}),
+        // The request's WAV exists only in this invocation's memory.
+        const result = await transcribeCallNotesAudio({
+            audioWav: new Uint8Array(await audio.arrayBuffer()),
+            language: fields.data.language,
+            signal: request.signal,
         });
+        return Response.json(result);
     } catch (error) {
         // Never log provider errors: an upstream error may echo request audio.
         if (isTranscriptionError(error)) {

@@ -11,6 +11,7 @@ const mockGetEngine = jest.fn();
 const mockTranscribe = jest.fn();
 const mockProvider = jest.fn();
 
+jest.mock("server-only", () => ({}), { virtual: true });
 jest.mock("~/env", () => ({ env: { server: { CALL_NOTES_CAPTURE_ENABLED: true } } }));
 jest.mock("~/server/engine", () => ({ getEngine: () => mockGetEngine() }));
 jest.mock("~/server/call-notes/device-auth", () => ({

@@ -4,6 +4,20 @@ The Local Capture Worker is bundled with **LaunchStack Capture for Mac**. Instal
 
 Supported production runtime: macOS 14+, Apple silicon. The app launches the bundled Node executable with `worker/main.js`; secrets are supplied on stdin, never in arguments or environment variables. Both microphone and computer audio come from the bundled native helper. Computer audio includes other applications and notifications, even when using headphones; it is not limited to the call application and does not identify speakers.
 
+## Server-only transcription configuration
+
+The web deployment, not the Mac app or worker, owns transcription-provider selection and credentials. Leave `CALL_NOTES_TRANSCRIPTION_PROVIDER` unset to keep the shared transcription registry and its existing `TRANSCRIPTION_*` / `AI_*` configuration. To use Azure Speech Fast Transcription for Capture utterances, configure **only the web server**:
+
+```dotenv
+CALL_NOTES_TRANSCRIPTION_PROVIDER="azure_speech"
+CALL_NOTES_TRANSCRIPTION_BASE_URL="https://<region>.api.cognitive.microsoft.com"
+CALL_NOTES_TRANSCRIPTION_API_KEY="<subscription-key>"
+# Optional default locale when the worker supplies no language hint:
+CALL_NOTES_TRANSCRIPTION_LANGUAGE="en-US"
+```
+
+Azure requires the URL and subscription key together. The URL may already end in `/speechtotext/transcriptions:transcribe`; otherwise the server appends that path. Existing query parameters are preserved, and `api-version=2025-10-15` is added only if the URL has no API version. A request's optional `language` overrides the server default; when neither is supplied, the Azure `definition` omits `locales`. Azure requests have a 20-second deadline and honor request cancellation. Do not put these settings or provider keys in the worker's stdin JSON, app configuration, or device credential storage.
+
 ## Development without the Mac app
 
 Prerequisites: Node 24, pnpm 10.15.1, Xcode command-line tools with a macOS 14+ SDK, and a running LaunchStack deployment that supports device pairing. From the repository root:
@@ -50,7 +64,7 @@ There is no environment-based worker configuration. The Mac app normally supplie
 
 | Field                    | Default  | Purpose                                                                  |
 | ------------------------ | -------- | ------------------------------------------------------------------------ |
-| `language`               | Omitted  | Transcription language hint, forwarded to the deployment                 |
+| `language`               | Omitted  | Azure locale hint; overrides the server's optional language default      |
 | `autoEnrich`             | `false`  | Generate AI proposals on finish; this does not accept them automatically |
 | `silenceTimeoutMs`       | `240000` | Both VAD channels must be inactive this long before an auto-stop warning |
 | `audioFrameMs`           | `20`     | PCM frame duration                                                       |

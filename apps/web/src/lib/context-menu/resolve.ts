@@ -21,7 +21,9 @@ import {
  */
 export function resolveMenu(
     ctx: MenuOpenContext,
-    actions: readonly ActionDefinition[]
+    actions: readonly ActionDefinition[],
+    /** The menu's name when no target names it — `common.a11y.actions` in the reader's language. */
+    fallbackLabel = "Actions"
 ): { items: ActionMenuItem[]; ariaLabel: string } {
     const groups: ActionMenuItem[][] = [];
     let primarySeen = false;
@@ -57,7 +59,7 @@ export function resolveMenu(
             i === 0 ? group : [{ type: "separator" as const, id: `sep-group-${i}` }, ...group]
         )
     );
-    return { items, ariaLabel: ariaLabel ?? "Actions" };
+    return { items, ariaLabel: ariaLabel ?? fallbackLabel };
 }
 
 /** The registered actions that apply to one target, as menu items. */

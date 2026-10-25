@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -12,10 +13,11 @@ import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { plural, relativeTime } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
+import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
@@ -25,11 +27,13 @@ import { brandApi, type BrandChannel, type BrandComment } from "../api";
 
 type Filter = "open" | "all";
 
+type EngagementT = ReturnType<typeof useTranslations<"growth.brand.engagement">>;
+
 /** Why this channel cannot reply from here, or null when it can. */
-function replyBlocker(channel: BrandChannel | undefined): string | null {
-    if (!channel) return "This channel is no longer connected.";
-    if (!channel.capabilities.comments) return `${channel.name} cannot reply from here.`;
-    if (channel.status === "reconnect") return `${channel.name} needs reconnecting first.`;
+function replyBlocker(t: EngagementT, channel: BrandChannel | undefined): string | null {
+    if (!channel) return t("noChannel");
+    if (!channel.capabilities.comments) return t("cannotReply", { name: channel.name });
+    if (channel.status === "reconnect") return t("needsReconnect", { name: channel.name });
     return null;
 }
 
@@ -61,7 +65,10 @@ function CommentRow({
     /** Viewers and Guests read the inbox; answering speaks as the company. */
     readOnly: boolean;
 }) {
-    const blocker = replyBlocker(channel);
+    const t = useTranslations("growth.brand.engagement");
+    const tc = useTranslations("common.actions");
+    const { relativeTime } = useGrowthFormat();
+    const blocker = replyBlocker(t, channel);
     const done = comment.handledAt !== null;
     const inputRef = useRef<HTMLTextAreaElement>(null);
     return (
@@ -90,14 +97,14 @@ function CommentRow({
                             {comment.authorHandle}
                         </span>
                     )}
-                    {comment.isOwn && <span className="text-ink-3 text-xs">Your reply</span>}
+                    {comment.isOwn && <span className="text-ink-3 text-xs">{t("yourReply")}</span>}
                     <span className="text-ink-3 text-xs">
-                        {pending ? "Sending…" : relativeTime(comment.createdAt)}
+                        {pending ? t("sending") : relativeTime(comment.createdAt)}
                     </span>
                     {done && !comment.isOwn && (
                         <span className="text-ink-3 inline-flex items-center gap-1 text-xs">
                             <span className="bg-success size-[6px] rounded-full" />
-                            Done
+                            {t("handled")}
                         </span>
                     )}
                 </div>
@@ -122,7 +129,7 @@ function CommentRow({
                                 requestAnimationFrame(() => inputRef.current?.focus());
                             }}
                         >
-                            Reply
+                            {t("reply")}
                         </Button>
                         <Button
                             size="sm"
@@ -130,7 +137,7 @@ function CommentRow({
                             className="h-7 px-2 text-xs"
                             onClick={() => onHandled(!done)}
                         >
-                            {done ? "Reopen" : "Mark done"}
+                            {done ? t("reopen") : t("markDone")}
                         </Button>
                         {blocker && <span className="text-ink-3 text-xs">{blocker}</span>}
                     </div>
@@ -148,8 +155,8 @@ function CommentRow({
                             value={draft}
                             onChange={e => onDraft(e.target.value)}
                             rows={3}
-                            placeholder={`Reply to ${comment.authorName}`}
-                            aria-label={`Reply to ${comment.authorName}`}
+                            placeholder={t("replyTo", { name: comment.authorName })}
+                            aria-label={t("replyTo", { name: comment.authorName })}
                             className="text-[13px]"
                             onKeyDown={e => {
                                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
@@ -161,10 +168,10 @@ function CommentRow({
                         />
                         <div className="flex flex-wrap items-center gap-2">
                             <Button type="submit" size="sm" disabled={!draft.trim()}>
-                                Reply as {channel.name}
+                                {t("replyAs", { name: channel.name })}
                             </Button>
                             <Button type="button" size="sm" variant="ghost" onClick={onCancelReply}>
-                                Cancel
+                                {tc("cancel")}
                             </Button>
                             {replyError && (
                                 <span role="alert" className="text-danger text-xs">
@@ -186,6 +193,9 @@ function CommentRow({
  * still waits on someone.
  */
 export function EngagementScreen() {
+    const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
+    const tc = useTranslations("common");
     const paths = useGrowthPaths();
     const router = useToolRouter();
     const pathname = useToolPathname();
@@ -250,12 +260,15 @@ export function EngagementScreen() {
             const { comment: saved } = await brandApi.setHandled(comment.id, handled);
             patch(comment.id, () => saved);
             if (handled)
-                toast(`Marked ${comment.authorName}'s comment done`, {
-                    action: { label: "Undo", onClick: () => void setHandled(saved, false) },
+                toast(t("engagement.markedDone", { name: comment.authorName }), {
+                    action: {
+                        label: tc("actions.undo"),
+                        onClick: () => void setHandled(saved, false),
+                    },
                 });
         } catch (e) {
             patch(comment.id, c => ({ ...c, handledAt: before }));
-            toast.error(e instanceof Error ? e.message : "Could not change the comment");
+            toast.error(errorText(e, t("engagement.changeFailed")));
         }
     };
 
@@ -286,12 +299,12 @@ export function EngagementScreen() {
                 ...d,
                 comments: d.comments.map(c => (c.id === tempId ? saved : c)),
             }));
-            toast.success(`Replied as ${channel.name}`);
+            toast.success(t("engagement.replied", { name: channel.name }));
         } catch (e) {
             res.mutate(d => ({ ...d, comments: d.comments.filter(c => c.id !== tempId) }));
             setDrafts(d => ({ ...d, [parent.id]: text }));
             setReplyingTo(parent.id);
-            setReplyError(e instanceof Error ? e.message : "The reply did not go through");
+            setReplyError(errorText(e, t("engagement.replyFailed")));
         } finally {
             setPending(p => {
                 const next = new Set(p);
@@ -331,13 +344,16 @@ export function EngagementScreen() {
         <div className="mx-auto flex max-w-[900px] flex-col gap-6">
             <PageHeader
                 size="md"
-                title="Engagement"
+                title={t("engagement.title")}
                 sub={
                     res.data ? (
                         <>
                             {filter === "open"
-                                ? `${plural(open, "comment")} waiting`
-                                : `${plural(comments.filter(c => !c.isOwn).length, "comment")}, ${open} open`}{" "}
+                                ? t("engagement.subOpen", { count: open })
+                                : t("engagement.subAll", {
+                                      count: comments.filter(c => !c.isOwn).length,
+                                      open,
+                                  })}{" "}
                             · <SyncedAt at={res.data.syncedAt} />
                         </>
                     ) : undefined
@@ -360,13 +376,13 @@ export function EngagementScreen() {
                 }}
                 size="sm"
                 className="border-line bg-panel gap-0.5 self-start rounded-md border p-0.5"
-                aria-label="Show"
+                aria-label={t("engagement.showAria")}
             >
                 <ToggleGroupItem
                     value="open"
                     className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2.5 text-xs"
                 >
-                    Open
+                    {t("engagement.open")}
                     {filter === "open" && res.data && (
                         <span className="text-ink-3 ml-1.5 text-[11px] tabular-nums">{open}</span>
                     )}
@@ -375,7 +391,7 @@ export function EngagementScreen() {
                     value="all"
                     className="data-[state=on]:shadow-1 h-7 rounded-[5px] px-2.5 text-xs"
                 >
-                    All
+                    {tc("status.all")}
                 </ToggleGroupItem>
             </ToggleGroup>
 
@@ -385,11 +401,13 @@ export function EngagementScreen() {
                 <SkeletonRows rows={4} height={72} />
             ) : accounts.data && !canRead ? (
                 <EmptyState
-                    title="No channel can read comments"
-                    body="LinkedIn Pages you administer and Bluesky accounts bring their comments here; LinkedIn profiles do not. Connect a Page or a Bluesky account."
+                    title={t("engagement.noRead")}
+                    body={t("engagement.noReadBody")}
                     action={
                         <Button asChild size="sm">
-                            <ToolLink href={paths.brand("/accounts")}>Open Accounts</ToolLink>
+                            <ToolLink href={paths.brand("/accounts")}>
+                                {t("common.openAccounts")}
+                            </ToolLink>
                         </Button>
                     }
                 />
@@ -397,12 +415,12 @@ export function EngagementScreen() {
                 filter === "open" &&
                 (comments.length > 0 || (everything.data?.comments.length ?? 0) > 0) ? (
                     <EmptyState
-                        title="All done"
-                        body="Every comment has a reply or is marked done. New ones show up after the next sync."
+                        title={t("engagement.allDone")}
+                        body={t("engagement.allDoneBody")}
                         action={
                             <Button asChild size="sm" variant="outline">
                                 <ToolLink href={`${pathname}?status=all`}>
-                                    Show all comments
+                                    {t("engagement.showAll")}
                                 </ToolLink>
                             </Button>
                         }
@@ -411,8 +429,8 @@ export function EngagementScreen() {
                     <SkeletonRows rows={2} height={72} />
                 ) : (
                     <EmptyState
-                        title="No comments yet"
-                        body="Comments on posts published from here show up after a sync."
+                        title={t("engagement.noComments")}
+                        body={t("engagement.noCommentsBody")}
                         action={
                             <SyncButton
                                 onClick={() => void sync.run()}
@@ -429,7 +447,9 @@ export function EngagementScreen() {
                         return (
                             <section
                                 key={group.postId}
-                                aria-label={`Comments on ${group.postExcerpt}`}
+                                aria-label={t("engagement.commentsOn", {
+                                    excerpt: group.postExcerpt,
+                                })}
                                 className="border-line bg-panel overflow-hidden rounded-lg border"
                             >
                                 <header className="border-line-2 flex items-center gap-2.5 border-b px-4 py-2.5">
@@ -449,9 +469,10 @@ export function EngagementScreen() {
                                         </p>
                                         <p className="text-ink-3 truncate text-xs">
                                             {channel?.name ?? NETWORK_LABEL[group.platform]}
+                                            {" · "}
                                             {group.open > 0
-                                                ? ` · ${group.open} open`
-                                                : " · all done"}
+                                                ? t("engagement.groupOpen", { count: group.open })
+                                                : t("engagement.groupDone")}
                                         </p>
                                     </div>
                                     {group.postUrl && (
@@ -466,7 +487,9 @@ export function EngagementScreen() {
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                Open on {NETWORK_LABEL[group.platform]}
+                                                {t("common.openOn", {
+                                                    network: NETWORK_LABEL[group.platform],
+                                                })}
                                                 <ExternalLink className="size-3.5" aria-hidden />
                                             </a>
                                         </Button>

@@ -17,6 +17,8 @@ import { z } from "zod";
 import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -176,11 +178,14 @@ const TONE_DESCRIPTIONS: Record<string, string> = {
 const FieldUpdateSchema = z.record(z.string());
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
             let body: unknown;
             try {
                 body = (await request.json()) as unknown;
@@ -188,8 +193,8 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Invalid JSON body",
-                        error: "Request body must be valid JSON",
+                        message: tApi("invalidJsonBody"),
+                        error: t("bodyMustBeJson"),
                     },
                     { status: 400 }
                 );
@@ -198,7 +203,11 @@ export async function POST(request: Request) {
 
             if (!validation.success) {
                 return NextResponse.json(
-                    { success: false, message: "Invalid request", errors: validation.error.errors },
+                    {
+                        success: false,
+                        message: tApi("invalidRequest"),
+                        errors: validation.error.errors,
+                    },
                     { status: 400 }
                 );
             }
@@ -214,7 +223,10 @@ export async function POST(request: Request) {
                 route: action === "field_update" ? "fast" : "default",
             });
             const { chat } = resolved;
-            const compatibility = validateDeprecatedChatSelection({ model: options?.model });
+            const compatibility = validateDeprecatedChatSelection(
+                { model: options?.model },
+                locale
+            );
             if (!compatibility.ok) {
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
@@ -406,7 +418,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to generate content",
+                message: t("generateFailed"),
             },
             { status: 500, headers: { "Content-Type": "application/json" } }
         );

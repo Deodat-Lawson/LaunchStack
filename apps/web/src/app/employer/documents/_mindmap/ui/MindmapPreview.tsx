@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Maximize, Minus, Plus } from "lucide-react";
 
 import { TooltipProvider } from "~/components/ui/tooltip";
@@ -142,6 +143,7 @@ function PreviewBar({
     /** Frames the board *and* re-arms auto-framing — asking to fit means "track it again". */
     onFrame: (size: { w: number; h: number }) => void;
 }) {
+    const t = useTranslations("mindmap.zoom");
     const store = useStore();
     const doc = useCommittedDoc();
     const zoom = useEditor(selectZoom);
@@ -183,7 +185,7 @@ function PreviewBar({
             <div className="flex items-center gap-0.5">
                 <button
                     type="button"
-                    aria-label="Zoom out"
+                    aria-label={t("out")}
                     onClick={() => zoomByStep(store, -1, stageSize)}
                     className={ICON_BUTTON}
                 >
@@ -194,7 +196,7 @@ function PreviewBar({
                 </span>
                 <button
                     type="button"
-                    aria-label="Zoom in"
+                    aria-label={t("in")}
                     onClick={() => zoomByStep(store, 1, stageSize)}
                     className={ICON_BUTTON}
                 >
@@ -202,7 +204,7 @@ function PreviewBar({
                 </button>
                 <button
                     type="button"
-                    aria-label="Fit to screen"
+                    aria-label={t("fit")}
                     onClick={() => onFrame(stageSize)}
                     className={ICON_BUTTON}
                 >

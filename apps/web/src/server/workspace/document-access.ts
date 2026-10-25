@@ -13,11 +13,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { callNotesCalls } from "@launchstack/pipelines/call-notes";
-import {
-    CALL_NOTE_DOCUMENT_MANAGED_MESSAGE,
-    callNoteDocumentReference,
-    isCallNoteDocument,
-} from "~/lib/call-note-document";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 
 import { recordActivity } from "./activity";
 import { conflict, forbidden, notFound } from "./errors";
@@ -33,6 +29,7 @@ import {
     type OwnerView,
 } from "./item-access";
 import { isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
+import { copy } from "~/i18n/copy";
 import {
     activeMemberPrincipals,
     callerGroupIds,
@@ -89,7 +86,7 @@ async function loadVisibleDocument(
         .from(document)
         .where(and(scopedDocumentWhere(ctx.companyId, scope), eq(document.id, documentId)))
         .limit(1);
-    if (!row) throw notFound("Document not found.");
+    if (!row) throw notFound(copy("team.server.errors.documentNotFound"));
     return {
         id: Number(row.id),
         title: row.title,
@@ -176,7 +173,7 @@ export async function setDocumentAccess(
 ): Promise<DocumentAccessView> {
     const doc = await loadVisibleDocument(ctx, documentId);
     if (isCallNoteDocument(doc)) {
-        throw conflict(CALL_NOTE_DOCUMENT_MANAGED_MESSAGE);
+        throw conflict(copy("sources.server.errors.callNoteManaged"));
     }
     const [groupIds, existing, currentlyRestricted] = await Promise.all([
         callerGroupIds(ctx.userPk),
@@ -185,14 +182,14 @@ export async function setDocumentAccess(
     ]);
 
     if (!(await canManageDocument(ctx, doc))) {
-        throw forbidden("You cannot change who can see this document.");
+        throw forbidden(copy("team.server.errors.cannotChangeDocumentAccess"));
     }
 
     const desired = await validatePrincipals(ctx.companyId, input.grants);
     // Restricting a document hides it from everyone not granted, the person
     // doing it included; keep a manage-level grant that reaches you.
     if (input.restricted && !hasManageGrant(ctx, groupIds, desired)) {
-        throw forbidden("Keep a manage-level grant for yourself, or you will lose access.");
+        throw forbidden(copy("team.server.errors.keepManageGrant"));
     }
 
     const diff = diffGrants(existing, desired);

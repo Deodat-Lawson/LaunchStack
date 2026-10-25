@@ -3,6 +3,7 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { draftOutreach } from "~/server/prospects/service";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(auth.ctx.companyId, () =>
+    return withWorkspaceChatModels(auth.ctx.companyId, "prospects", () =>
         withRateLimit(
             request,
             {
@@ -29,10 +30,14 @@ export async function POST(request: NextRequest) {
             async () => {
                 try {
                     const parsed = Schema.safeParse(await readBody(request));
-                    if (!parsed.success) return error("Validation failed", 400);
+                    if (!parsed.success)
+                        return error(
+                            requestTranslator(request, "errors.api")("validationFailed"),
+                            400
+                        );
                     return json(await draftOutreach(auth.ctx, parsed.data), 201);
                 } catch (err) {
-                    return handleProspectsError("POST outreach", err);
+                    return handleProspectsError("POST outreach", err, request);
                 }
             }
         )

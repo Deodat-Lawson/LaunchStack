@@ -5,12 +5,14 @@
 import { syncBrandWorkspace } from "~/server/brand/sync";
 import { listChannelRows } from "~/server/brand/channels";
 
+import { localeOfRequest } from "~/i18n/server";
+
 import { brandPublishContext, handleBrandError, json } from "../../_http";
 
 const MIN_INTERVAL_MS = 60_000;
 
-export async function POST() {
-    const auth = await brandPublishContext();
+export async function POST(request: Request) {
+    const auth = await brandPublishContext(request);
     if (!auth.ok) return auth.response;
     try {
         const rows = await listChannelRows(auth.ctx.companyId);
@@ -18,8 +20,10 @@ export async function POST() {
         if (last > 0 && Date.now() - last < MIN_INTERVAL_MS) {
             return json({ syncedAt: new Date(last), posts: 0, comments: 0, errors: [] });
         }
-        return json(await syncBrandWorkspace(auth.ctx.companyId));
+        return json(
+            await syncBrandWorkspace(auth.ctx.companyId, new Date(), localeOfRequest(request))
+        );
     } catch (err) {
-        return handleBrandError("POST sync", err);
+        return handleBrandError("POST sync", err, request);
     }
 }

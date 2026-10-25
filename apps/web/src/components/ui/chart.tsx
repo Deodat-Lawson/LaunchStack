@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
+import { useLocale } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
@@ -54,7 +55,7 @@ function ChartContainer({
                 data-slot="chart"
                 data-chart={chartId}
                 className={cn(
-                    "[&_.recharts-cartesian-axis-tick_text]:fill-panel-2-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-panel-2 [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-panel-2 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
+                    "[&_.recharts-cartesian-axis-tick_text]:fill-ink-3 [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-line/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-line [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-line [&_.recharts-radial-bar-background-sector]:fill-panel-2 [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-panel-2 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-line [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
                     className
                 )}
                 {...props}
@@ -123,6 +124,7 @@ function ChartTooltipContent({
         labelKey?: string;
     }) {
     const { config } = useChart();
+    const locale = useLocale();
 
     const tooltipLabel = React.useMemo(() => {
         if (hideLabel || !payload?.length) {
@@ -224,7 +226,7 @@ function ChartTooltipContent({
                                         </div>
                                         {item.value && (
                                             <span className="text-ink font-mono font-medium tabular-nums">
-                                                {item.value.toLocaleString()}
+                                                {item.value.toLocaleString(locale)}
                                             </span>
                                         )}
                                     </div>

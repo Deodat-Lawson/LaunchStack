@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { setSourceOverride } from "~/server/company-profile/service";
 import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { requestTranslator } from "~/i18n/server";
 
 const OverrideSchema = z.object({
     override: z.enum(["about_us", "set_aside"]).nullable(),
@@ -18,12 +19,13 @@ export async function PATCH(request: Request, { params }: Params) {
     if (!auth.success) return auth.response;
     const { documentId } = await params;
     const id = Number(documentId);
-    if (!Number.isInteger(id) || id <= 0) return error("Source not found", 404);
+    const t = requestTranslator(request, "companyProfile.server.errors");
+    if (!Number.isInteger(id) || id <= 0) return error(t("sourceNotFound"), 404);
     const parsed = OverrideSchema.safeParse(await readJsonBody(request));
-    if (!parsed.success) return error("override must be about_us, set_aside or null", 400);
+    if (!parsed.success) return error(t("overrideValues"), 400);
     try {
         return json({ profile: await setSourceOverride(auth.data, id, parsed.data.override) });
     } catch (err) {
-        return handleRouteError("PATCH company profile source", err);
+        return handleRouteError("PATCH company profile source", err, request);
     }
 }

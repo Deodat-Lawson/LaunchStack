@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { History, Loader2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,6 +20,14 @@ import { useStore } from "./EditorContext";
  * revision — otherwise the next autosave would 409 against itself.
  */
 
+/**
+ * The label the editor stores on the snapshot of a freshly seeded template.
+ * Snapshot labels are shared data, so they are stored in English and shown in
+ * the reader's language — this one, and the server's "Restored from v3".
+ */
+export const SEED_SNAPSHOT_LABEL = "Created from template";
+const RESTORED_LABEL = /^Restored from v(\d+)$/;
+
 export interface RevisionRow {
     id: number;
     revision: number;
@@ -35,6 +44,9 @@ export function HistoryPanel({
     mindmapId: number;
     onRestored: (revision: number) => void;
 }) {
+    const t = useTranslations("mindmap.history");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const store = useStore();
     const [rows, setRows] = useState<RevisionRow[]>([]);
     const [loading, setLoading] = useState(true);
@@ -48,11 +60,11 @@ export function HistoryPanel({
             const body = (await res.json()) as { revisions: RevisionRow[] };
             setRows(body.revisions);
         } catch {
-            toast.error("Couldn't load version history");
+            toast.error(t("loadFailed"));
         } finally {
             setLoading(false);
         }
-    }, [mindmapId]);
+    }, [mindmapId, t]);
 
     useEffect(() => {
         void load();
@@ -75,10 +87,10 @@ export function HistoryPanel({
             });
             store.markSaved();
             onRestored(body.mindmap.revision);
-            toast.success(`Restored version ${row.revision}`);
+            toast.success(t("restored", { revision: row.revision }));
             void load();
         } catch {
-            toast.error("Couldn't restore that version");
+            toast.error(t("restoreFailed"));
         } finally {
             setRestoring(null);
         }
@@ -88,10 +100,10 @@ export function HistoryPanel({
         <div className="flex h-full flex-col">
             <div className="border-line flex items-center justify-between border-b px-3 py-2">
                 <span className="text-ink-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                    Versions
+                    {t("versions")}
                 </span>
                 <Button variant="ghost" size="sm" onClick={() => void load()} className="h-6 px-2">
-                    Refresh
+                    {tc("actions.refresh")}
                 </Button>
             </div>
 
@@ -100,13 +112,13 @@ export function HistoryPanel({
                     {loading && (
                         <div className="text-ink-3 flex items-center justify-center gap-2 py-8 text-[13px]">
                             <Loader2 className="size-4 animate-spin" />
-                            Loading…
+                            {tc("status.loading")}
                         </div>
                     )}
                     {!loading && rows.length === 0 && (
                         <div className="text-ink-3 px-3 py-8 text-center text-[13px]">
                             <History className="mx-auto mb-2 size-5" />
-                            No snapshots yet. Saving with ⌘S records one.
+                            {t("empty")}
                         </div>
                     )}
                     {rows.map(row => (
@@ -116,16 +128,25 @@ export function HistoryPanel({
                         >
                             <div className="min-w-0 flex-1">
                                 <div className="text-ink truncate font-medium">
-                                    {row.label ?? `Version ${row.revision}`}
+                                    {revisionLabel(row, t)}
                                 </div>
                                 <div className="text-ink-3 text-[11px]">
-                                    {new Date(row.createdAt).toLocaleString()} · {row.nodeCount}{" "}
-                                    shape{row.nodeCount === 1 ? "" : "s"}
+                                    {t("meta", {
+                                        when: format.dateTime(new Date(row.createdAt), {
+                                            year: "numeric",
+                                            month: "numeric",
+                                            day: "numeric",
+                                            hour: "numeric",
+                                            minute: "2-digit",
+                                            second: "2-digit",
+                                        }),
+                                        count: row.nodeCount,
+                                    })}
                                 </div>
                             </div>
                             <button
                                 type="button"
-                                title={`Restore version ${row.revision}`}
+                                title={t("restore", { revision: row.revision })}
                                 disabled={restoring !== null}
                                 onClick={() => void restore(row)}
                                 className="text-ink-3 hover:bg-brand-soft hover:text-brand-ink shrink-0 rounded-md p-1 opacity-0 transition-opacity disabled:opacity-40 group-hover:opacity-100"
@@ -142,4 +163,16 @@ export function HistoryPanel({
             </ScrollArea>
         </div>
     );
+}
+
+/** A snapshot's name: the stored label in the reader's language, else its number. */
+function revisionLabel(
+    row: RevisionRow,
+    t: ReturnType<typeof useTranslations<"mindmap.history">>
+): string {
+    if (row.label === null) return t("version", { revision: row.revision });
+    if (row.label === SEED_SNAPSHOT_LABEL) return t("createdFromTemplate");
+    const restored = RESTORED_LABEL.exec(row.label);
+    if (restored) return t("restoredFrom", { revision: Number(restored[1]) });
+    return row.label;
 }

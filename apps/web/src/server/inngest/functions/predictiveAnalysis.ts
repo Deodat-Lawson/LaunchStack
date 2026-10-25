@@ -114,7 +114,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
         // A step body runs outside the handler's async context, so the
         // workspace's models are entered inside the step, not around the handler.
         const { result: analysisResult, stats } = await step.run("run-analysis", async () => {
-            return withWorkspaceChatModels(companyId, () =>
+            return withWorkspaceChatModels(companyId, "predictiveAnalysis", () =>
                 analyzeDocumentChunks(
                     chunks as PdfChunk[],
                     {

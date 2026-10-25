@@ -182,7 +182,8 @@ function workspaceLocalRuntime(companyId: bigint): AgentRuntime {
     return {
         nodeId: local.nodeId,
         serves: persona => local.serves(persona),
-        takeTurn: request => withWorkspaceChatModels(companyId, () => local.takeTurn(request)),
+        takeTurn: request =>
+            withWorkspaceChatModels(companyId, "meetings", () => local.takeTurn(request)),
     };
 }
 

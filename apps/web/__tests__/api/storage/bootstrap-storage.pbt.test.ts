@@ -196,7 +196,9 @@ describe("Feature: local-s3-migration, Property 11: Bootstrap API storage provid
                     }));
 
                     const { GET } = await import("~/app/api/employer/upload/bootstrap/route");
-                    const response = await GET();
+                    const response = await GET(
+                        new Request("http://localhost/api/employer/upload/bootstrap")
+                    );
                     const body = await response.json();
 
                     // Must not be an error

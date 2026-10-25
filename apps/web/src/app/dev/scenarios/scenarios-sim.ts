@@ -19,6 +19,7 @@ import { moodWords } from "~/lib/scenarios/words";
 import {
     SCENARIO_LIMITS,
     type ScenarioDetail,
+    type ScenarioFileOption,
     type ScenarioInterview,
     type ScenarioKind,
     type ScenarioPerson,
@@ -45,6 +46,8 @@ import {
 // ── Timing of a live run ──────────────────────────────────────────────────
 
 export const TIMING = {
+    /** An uploaded file, from registered to read. */
+    reading: 6000,
     queued: 700,
     gathering: 2500,
     casting: 3000,
@@ -111,10 +114,17 @@ export interface ScenariosSimOptions {
 
 const DEFAULT_OPTIONS: ScenariosSimOptions = { empty: false, credits: "ok" };
 
+/** A file uploaded in the harness: listed at once, read `TIMING.reading` later. */
+interface SimUpload {
+    file: ScenarioFileOption;
+    readAt: number;
+}
+
 interface Store {
     options: ScenariosSimOptions;
     runs: SimRun[];
     seq: number;
+    uploads: SimUpload[];
 }
 
 let store: Store | null = null;
@@ -138,7 +148,7 @@ const NO_SOURCES: ScenarioSources = {
 };
 
 function seed(options: ScenariosSimOptions, now: number): Store {
-    if (options.empty) return { options, runs: [], seq: 10 };
+    if (options.empty) return { options, runs: [], seq: 10, uploads: [] };
 
     const priceCreated = now - 26 * HOUR;
     const price: SimRun = {
@@ -325,7 +335,7 @@ function seed(options: ScenariosSimOptions, now: number): Store {
         draft: null,
     };
 
-    return { options, runs: [trial, price, partner, wholesale, support], seq: 10 };
+    return { options, runs: [trial, price, partner, wholesale, support], seq: 10, uploads: [] };
 }
 
 function emptyScript(): Script {
@@ -656,6 +666,70 @@ function readSources(value: unknown): ScenarioSources {
     };
 }
 
+/** The form's files at `now`: uploads first, each read once its time has come. */
+function filesAt(S: Store, now: number): ScenarioFileOption[] {
+    const uploaded = S.uploads.map(({ file, readAt }) => ({
+        ...file,
+        status:
+            now < readAt
+                ? ("processing" as const)
+                : /unreadable/i.test(file.title)
+                  ? ("failed" as const)
+                  : ("ready" as const),
+    }));
+    return [...uploaded.reverse(), ...SOURCE_OPTIONS.documents];
+}
+
+/**
+ * The two upload calls the form makes (`/api/upload-local`, then
+ * `/api/uploadDocument`), answered in memory: the file is listed at once as
+ * being read, and read `TIMING.reading` later. A name with "unreadable" in it
+ * fails to be read. Null for anything else.
+ */
+export async function simulateUpload(
+    url: URL,
+    init?: RequestInit,
+    now = Date.now()
+): Promise<Response | null> {
+    const method = (init?.method ?? "GET").toUpperCase();
+    if (method !== "POST") return null;
+    const S = state(now);
+    if (url.pathname === "/api/upload-local") {
+        const form = init?.body instanceof FormData ? init.body : null;
+        const blob = form?.get("file");
+        if (!(blob instanceof Blob)) return err(400, "No file");
+        return json({ url: `/api/files/sim-${S.uploads.length + 1}`, provider: "database" });
+    }
+    if (url.pathname === "/api/uploadDocument") {
+        const body = readBody(init);
+        const title = str(body.documentName) || "Untitled";
+        const folder = str(body.category) || null;
+        const id = 900 + S.uploads.length;
+        S.uploads.push({
+            file: {
+                id,
+                title,
+                folder,
+                mimeType: str(body.mimeType) || null,
+                addedAt: new Date(now).toISOString(),
+                status: "processing",
+                aboutCompany: false,
+            },
+            readAt: now + TIMING.reading,
+        });
+        return json(
+            {
+                success: true,
+                jobId: `sim-job-${id}`,
+                message: "Document processing started",
+                document: { id, title, url: str(body.documentUrl), category: folder ?? "" },
+            },
+            202
+        );
+    }
+    return null;
+}
+
 /** Answers `/api/scenarios/**`; null for anything else. */
 export async function simulateScenarios(
     url: URL,
@@ -683,7 +757,8 @@ export async function simulateScenarios(
         return err(405, "Method not allowed");
     }
 
-    if (head === "sources" && method === "GET") return json(SOURCE_OPTIONS);
+    if (head === "sources" && method === "GET")
+        return json({ ...SOURCE_OPTIONS, documents: filesAt(S, now) });
 
     if (head === "estimate" && method === "POST") {
         const body = readBody(init);
@@ -860,7 +935,7 @@ function create(S: Store, body: Record<string, unknown>, now: number): Response 
             subject,
             agents,
             rounds,
-            sources: sourcesFor(sources),
+            sources: sourcesFor(sources, filesAt(S, now)),
             kind: "scenario",
         }),
         progress: { kind: "live", startedAt: now },

@@ -23,6 +23,9 @@ import {
     type WebSearchResponse,
 } from "@launchstack/tools/web-research";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
+
 import type { ChatTool } from "./chat-tool-loop";
 
 export interface WebSource {
@@ -79,12 +82,16 @@ function sourceKey(url: string): string {
     }
 }
 
-function hostOf(url: unknown): string {
+function hostOrNull(url: unknown): string | null {
     try {
         return new URL(String(url)).hostname.replace(/^www\./, "");
     } catch {
-        return "a web page";
+        return null;
     }
+}
+
+function hostOf(url: unknown): string {
+    return hostOrNull(url) ?? "a web page";
 }
 
 const SearchArgs = z.object({ query: z.string().trim().min(1).max(300) });
@@ -98,7 +105,12 @@ function parse<T>(schema: z.ZodType<T>, args: unknown): T {
     );
 }
 
-export function createWebTools(ports: WebToolPorts = {}): WebToolSession {
+/**
+ * `locale` words the status line a tool call shows in the chat ("Searching
+ * the web for …"); what the model reads stays English.
+ */
+export function createWebTools(ports: WebToolPorts = {}, locale: Locale = "en"): WebToolSession {
+    const status = translatorFor(locale, "chat.server.toolStatus");
     const search = ports.search ?? searchWeb;
     const fetchPage =
         ports.fetchPage ??
@@ -140,8 +152,8 @@ export function createWebTools(ports: WebToolPorts = {}): WebToolSession {
         describe: args => {
             const query = (args as { query?: unknown } | null)?.query;
             return typeof query === "string" && query.trim()
-                ? `Searching the web for “${query.trim().slice(0, 80)}”`
-                : "Searching the web";
+                ? status("webSearchFor", { query: query.trim().slice(0, 80) })
+                : status("webSearch");
         },
         run: async (args, signal) => {
             const { query } = parse(SearchArgs, args);
@@ -174,7 +186,10 @@ export function createWebTools(ports: WebToolPorts = {}): WebToolSession {
             required: ["url"],
             additionalProperties: false,
         },
-        describe: args => `Reading ${hostOf((args as { url?: unknown } | null)?.url)}`,
+        describe: args => {
+            const host = hostOrNull((args as { url?: unknown } | null)?.url);
+            return host ? status("readingPage", { host }) : status("readingWebPage");
+        },
         run: async (args, signal) => {
             const { url } = parse(FetchArgs, args);
             if (pages >= MAX_PAGES) {

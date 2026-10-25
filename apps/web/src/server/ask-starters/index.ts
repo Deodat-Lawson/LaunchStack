@@ -13,6 +13,8 @@ import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
 import { createTtlCache } from "@launchstack/tools/web-research";
 import { GeneratedStartersSchema, type AskStartersPayload } from "~/lib/ask-starters/contract";
 import { generateStructured } from "~/lib/llm";
+import { DEFAULT_LOCALE, type Locale } from "~/i18n/locales";
+import { outputLanguageInstruction } from "~/i18n/server";
 
 import { buildWorkspaceBrief } from "./brief";
 import {
@@ -24,6 +26,7 @@ import {
     sanitizeStarters,
     type WorkspaceBrief,
 } from "./starters";
+import { starterWords } from "./words";
 
 export type { WorkspaceBrief } from "./starters";
 
@@ -42,18 +45,22 @@ export interface GetAskStartersArgs {
     scope?: DocumentScope;
     /** Bypass the cached set and ask for a different one. */
     refresh?: boolean;
+    /** The reader's interface language; the questions are written in it. */
+    locale?: Locale;
 }
 
 export async function getAskStarters(args: GetAskStartersArgs): Promise<AskStartersPayload> {
     const scope = args.scope ?? SCOPE_EVERYTHING;
+    const locale = args.locale ?? DEFAULT_LOCALE;
     const brief = await buildWorkspaceBrief(args.companyId, scope);
-    const key = `${args.companyId}:${scopeFingerprint(scope)}:${brief.fingerprint}`;
+    const key = `${args.companyId}:${scopeFingerprint(scope)}:${brief.fingerprint}:${locale}`;
 
     const cached = cache.get(key);
     if (cached && !args.refresh) return cached;
 
     const payload = await generateStarters(brief, {
         avoid: args.refresh ? (cached?.starters.map(s => s.question) ?? []) : [],
+        locale,
     });
     cache.set(key, payload);
     return payload;
@@ -67,8 +74,9 @@ export function resetAskStartersCache(): void {
 
 async function generateStarters(
     brief: WorkspaceBrief,
-    options: { avoid: string[] }
+    options: { avoid: string[]; locale: Locale }
 ): Promise<AskStartersPayload> {
+    const words = await starterWords(options.locale);
     const basis = {
         companyName: brief.company.name,
         sourceCount: brief.sourceCount,
@@ -78,18 +86,19 @@ async function generateStarters(
 
     // Nothing to ground a question in — don't spend a model call on filler.
     if (!hasEvidence(brief)) {
-        return { starters: fallbackStarters(brief), basis: { ...basis, mode: "fallback" } };
+        return { starters: fallbackStarters(brief, words), basis: { ...basis, mode: "fallback" } };
     }
 
+    const language = outputLanguageInstruction(options.locale);
     try {
         const raw = await generateStructured({
             capability: "smallExtraction",
-            system: STARTERS_SYSTEM_PROMPT,
+            system: language ? `${STARTERS_SYSTEM_PROMPT}\n\n${language}` : STARTERS_SYSTEM_PROMPT,
             prompt: buildStarterPrompt(brief, { avoid: options.avoid }),
             schema: GeneratedStartersSchema,
             schemaName: "ask_starters",
         });
-        const starters = completeStarters(sanitizeStarters(raw, brief), brief);
+        const starters = completeStarters(sanitizeStarters(raw, brief, words), brief, words);
         return { starters, basis: { ...basis, mode: "generated" } };
     } catch (error) {
         // An unconfigured or failing model degrades to the deterministic set;
@@ -98,6 +107,6 @@ async function generateStarters(
             "[ask-starters] generation failed, using fallback:",
             error instanceof Error ? error.message : error
         );
-        return { starters: fallbackStarters(brief), basis: { ...basis, mode: "fallback" } };
+        return { starters: fallbackStarters(brief, words), basis: { ...basis, mode: "fallback" } };
     }
 }

@@ -133,6 +133,16 @@
     --warn-soft: oklch(0.96 0.05 80);
     --info: oklch(0.64 0.14 235);
     --info-soft: oklch(0.96 0.04 240);
+    /* Status ink: the status hue as *text*, same idea as --accent-ink. The
+       base status colours are tuned for dots, icons, fills and borders; as
+       words they measured 2.4:1 (warn), 3.5:1 (ok) and 2.9:1 (info) on their
+       own soft fills. Each ink clears 4.5:1 on its soft fill and on every
+       surface above. Use text-warn-ink / text-success-ink / ... for copy. */
+    --ok-ink: oklch(0.48 0.13 150); /* 5.4:1 on --ok-soft */
+    --success-ink: var(--ok-ink);
+    --danger-ink: oklch(0.5 0.2 25); /* 5.7:1 on --danger-soft */
+    --warn-ink: oklch(0.5 0.12 65); /* 5.4:1 on --warn-soft */
+    --info-ink: oklch(0.5 0.13 240); /* 5.2:1 on --info-soft */
 
     /* ── Semantic: code surface (dark in both themes) ───────────── */
     --code-bg: oklch(0.22 0.025 280);
@@ -237,6 +247,10 @@
     --warn-soft: oklch(0.28 0.08 80);
     --info: oklch(0.72 0.14 235);
     --info-soft: oklch(0.28 0.06 240);
+    --ok-ink: oklch(0.78 0.15 150); /* 7.5:1 on --ok-soft */
+    --danger-ink: oklch(0.76 0.17 25); /* 6.2:1 on --danger-soft */
+    --warn-ink: oklch(0.84 0.15 80); /* 8.9:1 on --warn-soft */
+    --info-ink: oklch(0.78 0.12 235); /* 7.4:1 on --info-soft */
 
     --code-bg: oklch(0.12 0.02 290);
     --code-bg-2: oklch(0.16 0.025 290);

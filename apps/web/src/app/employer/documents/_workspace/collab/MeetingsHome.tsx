@@ -11,6 +11,7 @@
  */
 
 import React, { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
     ArrowRight,
     BookOpen,
@@ -26,8 +27,8 @@ import {
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { useAgentCopy } from "~/lib/agents/i18n";
 import {
-    WORKFLOW_CATEGORY_META,
     workflowTurnCount,
     workflowsByCategory,
     type MeetingWorkflow,
@@ -41,6 +42,7 @@ import {
     type AgentPersonaRecord,
     type MeetingSummary,
 } from "./types";
+import { useAgo, useWorkflowTitle } from "./useMeetings";
 
 export interface MeetingsHomeProps {
     meetings: MeetingSummary[];
@@ -51,23 +53,12 @@ export interface MeetingsHomeProps {
     onManageAgents?: () => void;
 }
 
+/** Words: `collab.meetingsHome.steps.<id>`. */
 const STEPS = [
-    {
-        Icon: Workflow,
-        title: "Pick a workflow",
-        body: "A recipe: the objective, the agenda, who belongs in the room, and the phases the conversation moves through.",
-    },
-    {
-        Icon: Users,
-        title: "Choose the room",
-        body: "Any of your agents can take a seat. Each speaks from its standing instructions and cites the workspace's sources.",
-    },
-    {
-        Icon: Play,
-        title: "Run it, step in any time",
-        body: "Turns run on their own. Read along, add a comment, take the floor, or take over an agent's seat. Minutes are extracted from what was said.",
-    },
-];
+    { Icon: Workflow, id: "workflow" },
+    { Icon: Users, id: "room" },
+    { Icon: Play, id: "run" },
+] as const;
 
 export function MeetingsHome({
     meetings,
@@ -77,6 +68,9 @@ export function MeetingsHome({
     onOpen,
     onManageAgents,
 }: MeetingsHomeProps) {
+    const t = useTranslations("collab.meetingsHome");
+    const ts = useTranslations("collab.shared");
+    const copy = useAgentCopy();
     const live = meetings.filter(m => m.status === "running" || m.status === "human_control");
     const recent = meetings.filter(m => !live.includes(m)).slice(0, 6);
     const byKey = useMemo(() => new Map(agents.map(agent => [agent.id, agent])), [agents]);
@@ -90,41 +84,34 @@ export function MeetingsHome({
                     one word to a line. */}
                 <header className="mb-8 flex flex-wrap items-start gap-x-6 gap-y-4">
                     <div className="min-w-[min(100%,280px)] flex-1">
-                        <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                            Meetings
-                        </div>
                         <h1 className="display text-ink @max-sm:text-[23px] m-0 text-[30px] leading-[1.1] tracking-tight">
-                            Put your agents in a room and give them a job
+                            {t("heading")}
                         </h1>
                         <p className="text-ink-3 mt-2 max-w-[640px] text-[13.5px] leading-relaxed">
-                            A meeting is a channel where the participants are agents and you are a
-                            participant too. Pick a workflow, choose the room, press run. The
-                            transcript is the record; the minutes are extracted from it, never
-                            invented.
+                            {t("intro")}
                         </p>
                     </div>
                     <Button onClick={() => onStart()} className="shrink-0">
-                        <Plus className="size-4" /> New meeting
+                        <Plus className="size-4" /> {ts("newMeeting")}
                     </Button>
                 </header>
 
                 <section className="mb-9 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
                     {STEPS.map((step, index) => (
-                        <div
-                            key={step.title}
-                            className="border-line bg-panel rounded-xl border p-4"
-                        >
+                        <div key={step.id} className="border-line bg-panel rounded-xl border p-4">
                             <div className="mb-2 flex items-center gap-2.5">
                                 <span className="bg-brand-soft text-brand-ink inline-flex size-7 items-center justify-center rounded-lg">
                                     <step.Icon className="size-3.5" />
                                 </span>
                                 <span className="mono text-ink-3 text-[10px] font-bold tracking-[0.08em]">
-                                    STEP {index + 1}
+                                    {t("step", { number: index + 1 })}
                                 </span>
                             </div>
-                            <div className="text-ink text-[13.5px] font-semibold">{step.title}</div>
+                            <div className="text-ink text-[13.5px] font-semibold">
+                                {t(`steps.${step.id}.title`)}
+                            </div>
                             <p className="text-ink-3 mt-1 text-[12.5px] leading-relaxed">
-                                {step.body}
+                                {t(`steps.${step.id}.body`)}
                             </p>
                         </div>
                     ))}
@@ -134,11 +121,11 @@ export function MeetingsHome({
                     <section className="mb-9">
                         <SectionHeading
                             Icon={live.length > 0 ? Radio : Clock}
-                            title={live.length > 0 ? "Live now" : "Recent"}
+                            title={live.length > 0 ? ts("liveNow") : ts("recent")}
                             hint={
                                 live.length > 0
-                                    ? `${live.length} meeting${live.length === 1 ? "" : "s"} running`
-                                    : "Reopen a room to read the transcript or its minutes."
+                                    ? t("runningCount", { count: live.length })
+                                    : t("recentHint")
                             }
                         />
                         <div className="grid grid-cols-2 gap-3">
@@ -151,7 +138,7 @@ export function MeetingsHome({
                             ))}
                             {loading && meetings.length === 0 && (
                                 <div className="text-ink-3 col-span-2 text-[12.5px]">
-                                    Loading meetings…
+                                    {t("loadingMeetings")}
                                 </div>
                             )}
                         </div>
@@ -161,14 +148,14 @@ export function MeetingsHome({
                 <section className="mb-9">
                     <SectionHeading
                         Icon={Workflow}
-                        title="Start from a workflow"
-                        hint="Each card is a method teams already run — named on the card — turned into phases the engine enforces. Everything is editable before you start."
+                        title={t("workflowsTitle")}
+                        hint={t("workflowsHint")}
                     />
                     <div className="flex flex-col gap-5">
                         {grouped.map(([category, workflows]) => (
                             <div key={category}>
                                 <div className="mono text-ink-3 mb-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                    {WORKFLOW_CATEGORY_META[category].label}
+                                    {copy.workflowCategoryLabel(category)}
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     {workflows.map(workflow => (
@@ -188,12 +175,12 @@ export function MeetingsHome({
                 <section>
                     <SectionHeading
                         Icon={Bot}
-                        title={`Your agents${agents.length > 0 ? ` (${agents.length})` : ""}`}
-                        hint="The same roster answers in chat and sits in meetings. Try one out or write your own."
+                        title={t("yourAgents", { count: agents.length })}
+                        hint={t("agentsHint")}
                         action={
                             onManageAgents ? (
                                 <Button variant="outline" size="sm" onClick={onManageAgents}>
-                                    Open Agents <ArrowRight className="size-3.5" />
+                                    {t("openAgents")} <ArrowRight className="size-3.5" />
                                 </Button>
                             ) : undefined
                         }
@@ -211,7 +198,7 @@ export function MeetingsHome({
                             </span>
                         ))}
                         {agents.length === 0 && !loading && (
-                            <span className="text-ink-3 text-[12.5px]">No agents yet.</span>
+                            <span className="text-ink-3 text-[12.5px]">{t("noAgents")}</span>
                         )}
                     </div>
                 </section>
@@ -254,6 +241,10 @@ function WorkflowCard({
     agents: Map<string, AgentPersonaRecord>;
     onStart: () => void;
 }) {
+    const t = useTranslations("collab.meetingsHome");
+    const ts = useTranslations("collab.shared");
+    const copy = useAgentCopy();
+    const words = copy.workflowCopy(workflow);
     const turns = workflowTurnCount(workflow);
     const seats = workflow.agents
         .map(key => agents.get(key))
@@ -269,24 +260,27 @@ function WorkflowCard({
         >
             <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
-                    <div className="text-ink text-[14px] font-semibold">{workflow.title}</div>
-                    <div className="text-ink-2 mt-0.5 text-[12.5px]">{workflow.tagline}</div>
+                    <div className="text-ink text-[14px] font-semibold">{words.title}</div>
+                    <div className="text-ink-2 mt-0.5 text-[12.5px]">{words.tagline}</div>
                 </div>
                 <span className="bg-brand-soft text-brand-ink inline-flex size-7 shrink-0 items-center justify-center rounded-lg opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                     <Play className="size-3.5" />
                 </span>
             </div>
-            <p className="text-ink-3 m-0 text-[12px] leading-relaxed">{workflow.description}</p>
-            {workflow.basis && (
+            <p className="text-ink-3 m-0 text-[12px] leading-relaxed">{words.description}</p>
+            {words.basis && (
                 <div
                     className="text-ink-3 flex items-start gap-1.5 text-[11.5px] leading-snug"
-                    title={`${workflow.basis.origin} Used by: ${workflow.basis.usedBy}`}
+                    title={ts("basisTitle", {
+                        origin: words.basis.origin,
+                        usedBy: words.basis.usedBy,
+                    })}
                 >
                     <BookOpen className="mt-px size-3 shrink-0" />
                     <span>
-                        <span className="text-ink-2 font-medium">{workflow.basis.name}</span>
+                        <span className="text-ink-2 font-medium">{words.basis.name}</span>
                         {" · "}
-                        {workflow.basis.usedBy}
+                        {words.basis.usedBy}
                     </span>
                 </div>
             )}
@@ -296,9 +290,9 @@ function WorkflowCard({
                         <li key={phase.id} className="flex items-center gap-1">
                             <span
                                 className="bg-line-2 text-ink-2 rounded-md px-1.5 py-0.5 text-[11px] font-medium"
-                                title={phase.goal}
+                                title={copy.phaseCopy(workflow.key, phase).goal}
                             >
-                                {phase.title}
+                                {copy.phaseCopy(workflow.key, phase).title}
                                 <span className="text-ink-3 ml-1 font-normal">×{phase.turns}</span>
                             </span>
                             {index < workflow.phases.length - 1 && (
@@ -308,9 +302,7 @@ function WorkflowCard({
                     ))}
                 </ol>
             ) : (
-                <div className="text-ink-3 text-[11.5px] italic">
-                    No phases — the turn policy runs the room.
-                </div>
+                <div className="text-ink-3 text-[11.5px] italic">{t("noPhases")}</div>
             )}
             <div className="flex items-center gap-2">
                 <div className="flex -space-x-1.5">
@@ -325,14 +317,10 @@ function WorkflowCard({
                     ))}
                 </div>
                 <span className="text-ink-3 text-[11.5px]">
-                    {seats.length} seat{seats.length === 1 ? "" : "s"}
-                    {turns > 0 ? ` · ${turns} turns` : ""}
+                    {ts("seats", { count: seats.length })}
+                    {turns > 0 ? ` · ${t("turns", { count: turns })}` : ""}
                     {" · "}
-                    {workflow.turnPolicy === "moderated"
-                        ? "chaired"
-                        : workflow.turnPolicy === "reactive"
-                          ? "reactive"
-                          : "round robin"}
+                    {t("policy", { policy: workflow.turnPolicy })}
                 </span>
             </div>
         </button>
@@ -340,6 +328,9 @@ function WorkflowCard({
 }
 
 function MeetingCard({ meeting, onOpen }: { meeting: MeetingSummary; onOpen: () => void }) {
+    const tStatus = useTranslations("collab.meetingStatus");
+    const workflowTitle = useWorkflowTitle()(meeting.workflowKey, meeting.workflowTitle);
+    const ago = useAgo();
     const meta = MEETING_STATUS_META[meeting.status];
     const progress = meeting.maxTurns > 0 ? Math.min(1, meeting.turnIndex / meeting.maxTurns) : 0;
     const isLive = meeting.status === "running" || meeting.status === "human_control";
@@ -360,13 +351,11 @@ function MeetingCard({ meeting, onOpen }: { meeting: MeetingSummary; onOpen: () 
                             style={{ background: statusColor(meta.tone) }}
                         />
                     )}
-                    {meta.label}
+                    {tStatus(meta.labelKey)}
                 </span>
-                {meeting.workflowTitle && (
-                    <Badge variant="secondary">{meeting.workflowTitle}</Badge>
-                )}
+                {workflowTitle && <Badge variant="secondary">{workflowTitle}</Badge>}
                 <span className="text-ink-3 ml-auto text-[11px]">
-                    {relativeDate(meeting.createdAt)}
+                    {ago(meeting.createdAt, { dateAfterDays: 14 })}
                 </span>
             </div>
             <div className="text-ink text-[14px] font-semibold">{meeting.title}</div>
@@ -398,17 +387,4 @@ function MeetingCard({ meeting, onOpen }: { meeting: MeetingSummary; onOpen: () 
             </div>
         </button>
     );
-}
-
-function relativeDate(iso: string): string {
-    const then = new Date(iso).getTime();
-    if (!Number.isFinite(then)) return "";
-    const minutes = Math.round((Date.now() - then) / 60_000);
-    if (minutes < 1) return "just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.round(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.round(hours / 24);
-    if (days < 14) return `${days}d ago`;
-    return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }

@@ -14,6 +14,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -35,7 +36,7 @@ import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
 
 import { CopyRow, OffNote, type McpAvailabilityView } from "./AssistantsBlock";
-import { relativeTime } from "./people/format";
+import { useTimeFormat } from "./people/format";
 
 interface OAuthEndpointsView {
     authorization: string;
@@ -68,17 +69,10 @@ interface CreatedClient {
 
 type AuthMethod = "client_secret_post" | "client_secret_basic";
 
-const AUTH_METHODS: { value: AuthMethod; title: string; detail: string }[] = [
-    {
-        value: "client_secret_post",
-        title: "In the request body",
-        detail: "client_secret_post. Try this first.",
-    },
-    {
-        value: "client_secret_basic",
-        title: "In an HTTP Basic header",
-        detail: "client_secret_basic. Use it if signing in fails with “invalid_client”.",
-    },
+/** Words: `settings.oauthClients.authMethods.<key>` (`title`, `detail`). */
+const AUTH_METHODS: { value: AuthMethod; key: "post" | "basic" }[] = [
+    { value: "client_secret_post", key: "post" },
+    { value: "client_secret_basic", key: "basic" },
 ];
 
 async function errorMessage(res: Response, fallback: string): Promise<string> {
@@ -87,16 +81,14 @@ async function errorMessage(res: Response, fallback: string): Promise<string> {
 }
 
 function Endpoints({ serverUrl, endpoints }: { serverUrl: string; endpoints: OAuthEndpointsView }) {
+    const t = useTranslations("settings.oauthClients.endpoints");
     return (
         <>
-            <CopyRow label="Server URL" value={serverUrl} />
-            <CopyRow label="Authorization URL" value={endpoints.authorization} />
-            <CopyRow label="Token URL" value={endpoints.token} />
-            <CopyRow label="Scopes" value={endpoints.scopes} />
-            <p className="text-ink-3 m-0 text-xs leading-normal">
-                Turn on PKCE in the assistant (Gemini Enterprise: tick Enable PKCE Support).
-                LaunchStack requires it to stay signed in.
-            </p>
+            <CopyRow label={t("serverUrl")} value={serverUrl} />
+            <CopyRow label={t("authorizationUrl")} value={endpoints.authorization} />
+            <CopyRow label={t("tokenUrl")} value={endpoints.token} />
+            <CopyRow label={t("scopes")} value={endpoints.scopes} />
+            <p className="text-ink-3 m-0 text-xs leading-normal">{t("pkce")}</p>
         </>
     );
 }
@@ -112,6 +104,8 @@ function CreateClientDialog({
     suggestedRedirectUri: string;
     onCreated: () => void;
 }) {
+    const t = useTranslations("settings.oauthClients");
+    const tc = useTranslations("common");
     const [name, setName] = useState("Gemini Enterprise");
     const [redirectUri, setRedirectUri] = useState(suggestedRedirectUri);
     const [authMethod, setAuthMethod] = useState<AuthMethod>("client_secret_post");
@@ -147,11 +141,11 @@ function CreateClientDialog({
                     authMethod,
                 }),
             });
-            if (!res.ok) throw new Error(await errorMessage(res, "Could not create the client."));
+            if (!res.ok) throw new Error(await errorMessage(res, t("createFailed")));
             setCreated((await res.json()) as CreatedClient);
             onCreated();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not create the client.");
+            setError(err instanceof Error ? err.message : t("createFailed"));
         } finally {
             setBusy(false);
         }
@@ -163,36 +157,29 @@ function CreateClientDialog({
                 {created ? (
                     <>
                         <DialogHeader>
-                            <DialogTitle>Copy the client secret now</DialogTitle>
-                            <DialogDescription>
-                                You won&apos;t see the secret again. If it&apos;s lost, delete this
-                                client and create another. Paste these into the assistant&apos;s
-                                OAuth settings.
-                            </DialogDescription>
+                            <DialogTitle>{t("created.title")}</DialogTitle>
+                            <DialogDescription>{t("created.description")}</DialogDescription>
                         </DialogHeader>
                         <div>
-                            <CopyRow label="Client ID" value={created.client.clientId} />
-                            <CopyRow label="Client secret" value={created.clientSecret} />
+                            <CopyRow label={t("clientId")} value={created.client.clientId} />
+                            <CopyRow label={t("clientSecret")} value={created.clientSecret} />
                             <Endpoints
                                 serverUrl={created.serverUrl}
                                 endpoints={created.endpoints}
                             />
                         </div>
                         <DialogFooter>
-                            <Button onClick={() => close(false)}>Done</Button>
+                            <Button onClick={() => close(false)}>{tc("actions.done")}</Button>
                         </DialogFooter>
                     </>
                 ) : (
                     <form onSubmit={submit} className="grid gap-4">
                         <DialogHeader>
-                            <DialogTitle>Create an OAuth client</DialogTitle>
-                            <DialogDescription>
-                                For an assistant that asks for a client ID and secret instead of
-                                registering itself, such as Gemini Enterprise.
-                            </DialogDescription>
+                            <DialogTitle>{t("create.title")}</DialogTitle>
+                            <DialogDescription>{t("create.description")}</DialogDescription>
                         </DialogHeader>
                         <div>
-                            <Field label="Name" htmlFor="assistant-client-name">
+                            <Field label={tc("fields.name")} htmlFor="assistant-client-name">
                                 <TextInput
                                     id="assistant-client-name"
                                     value={name}
@@ -202,9 +189,9 @@ function CreateClientDialog({
                                 />
                             </Field>
                             <Field
-                                label="Redirect URI"
+                                label={t("create.redirectUri")}
                                 htmlFor="assistant-client-redirect"
-                                hint="Filled in with Gemini Enterprise's. Another assistant shows its own in its OAuth settings; it must start with https://."
+                                hint={t("create.redirectHint")}
                             >
                                 <TextInput
                                     id="assistant-client-redirect"
@@ -216,12 +203,12 @@ function CreateClientDialog({
                                 />
                             </Field>
                             <div className="text-ink-2 mb-2 text-xs font-semibold">
-                                How the assistant sends the secret
+                                {t("create.sendsSecret")}
                             </div>
                             <RadioGroup
                                 value={authMethod}
                                 onValueChange={value => setAuthMethod(value as AuthMethod)}
-                                aria-label="How the assistant sends the secret"
+                                aria-label={t("create.sendsSecret")}
                             >
                                 {AUTH_METHODS.map(method => {
                                     const id = `assistant-client-auth-${method.value}`;
@@ -240,10 +227,10 @@ function CreateClientDialog({
                                                 className="block font-normal leading-normal"
                                             >
                                                 <span className="text-ink block text-[13px] font-semibold">
-                                                    {method.title}
+                                                    {t(`authMethods.${method.key}.title`)}
                                                 </span>
                                                 <span className="text-ink-3 block text-[12px]">
-                                                    {method.detail}
+                                                    {t(`authMethods.${method.key}.detail`)}
                                                 </span>
                                             </Label>
                                         </div>
@@ -258,10 +245,10 @@ function CreateClientDialog({
                         </div>
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => close(false)}>
-                                Cancel
+                                {tc("actions.cancel")}
                             </Button>
                             <Button type="submit" disabled={!canSubmit || busy}>
-                                {busy ? "Creating…" : "Create client"}
+                                {busy ? t("create.creating") : t("create.submit")}
                             </Button>
                         </DialogFooter>
                     </form>
@@ -272,6 +259,9 @@ function CreateClientDialog({
 }
 
 function ClientsSection() {
+    const t = useTranslations("settings.oauthClients");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
     const [data, setData] = useState<ClientsOverview | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
@@ -281,13 +271,13 @@ function ClientsSection() {
     const refresh = useCallback(async () => {
         try {
             const res = await fetch("/api/assistants/clients", { cache: "no-store" });
-            if (!res.ok) throw new Error(await errorMessage(res, "Could not load OAuth clients."));
+            if (!res.ok) throw new Error(await errorMessage(res, t("loadFailed")));
             setData((await res.json()) as ClientsOverview);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load OAuth clients.");
+            setError(err instanceof Error ? err.message : t("loadFailed"));
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void refresh();
@@ -301,12 +291,12 @@ function ClientsSection() {
                 { method: "DELETE" }
             );
             if (!res.ok && res.status !== 404) {
-                throw new Error(await errorMessage(res, "Could not delete the client."));
+                throw new Error(await errorMessage(res, t("deleteFailed")));
             }
-            toast.success(`Deleted “${client.name}”`);
+            toast.success(t("deleted", { name: client.name }));
             await refresh();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not delete the client.");
+            toast.error(err instanceof Error ? err.message : t("deleteFailed"));
         } finally {
             setBusy(null);
         }
@@ -315,10 +305,7 @@ function ClientsSection() {
     const availability = data?.availability;
 
     return (
-        <Section
-            title="OAuth clients for assistants"
-            description="For assistants that ask an admin for a client ID and secret instead of registering themselves, such as Gemini Enterprise. Everyone in the workspace can then connect through the client, each signing in as themselves. Claude, ChatGPT and the command-line tools don't need one."
-        >
+        <Section title={t("section.title")} description={t("section.description")}>
             <div data-testid="assistant-oauth-clients">
                 {error && !data ? (
                     <div className="flex flex-wrap items-center gap-3">
@@ -326,18 +313,18 @@ function ClientsSection() {
                             {error}
                         </p>
                         <Button size="sm" variant="outline" onClick={() => void refresh()}>
-                            Try again
+                            {tc("actions.tryAgain")}
                         </Button>
                     </div>
                 ) : !data || !availability ? (
-                    <p className="text-ink-3 m-0 text-[13px]">Loading…</p>
+                    <p className="text-ink-3 m-0 text-[13px]">{tc("status.loading")}</p>
                 ) : (
                     <>
                         {availability.enabled ? (
                             <div className="mb-3">
                                 <Button size="sm" onClick={() => setCreating(true)}>
                                     <Plus />
-                                    Create OAuth client
+                                    {t("createButton")}
                                 </Button>
                             </div>
                         ) : (
@@ -348,9 +335,7 @@ function ClientsSection() {
 
                         <Card padding={0}>
                             {data.clients.length === 0 ? (
-                                <div className="text-ink-3 px-5 py-4 text-[13px]">
-                                    No OAuth clients yet.
-                                </div>
+                                <div className="text-ink-3 px-5 py-4 text-[13px]">{t("none")}</div>
                             ) : (
                                 data.clients.map((client, index) => (
                                     <div
@@ -368,9 +353,11 @@ function ClientsSection() {
                                                 {client.clientId}
                                             </div>
                                             <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
-                                                Returns to {client.redirectUris.join(", ")}
+                                                {t("returnsTo", {
+                                                    uris: client.redirectUris.join(", "),
+                                                })}
                                                 {client.createdAt
-                                                    ? ` · created ${relativeTime(client.createdAt)}`
+                                                    ? ` · ${t("createdAt", { when: time.relative(client.createdAt) })}`
                                                     : ""}
                                             </div>
                                         </div>
@@ -380,7 +367,9 @@ function ClientsSection() {
                                             disabled={busy === client.clientId}
                                             onClick={() => setPending(client)}
                                         >
-                                            {busy === client.clientId ? "Deleting…" : "Delete"}
+                                            {busy === client.clientId
+                                                ? t("deleting")
+                                                : tc("actions.delete")}
                                         </Button>
                                     </div>
                                 ))
@@ -390,14 +379,14 @@ function ClientsSection() {
                         {availability.enabled && data.endpoints && (
                             <Card className="mt-3.5">
                                 <div className="text-ink mb-3 text-[13px] font-semibold">
-                                    What the assistant asks for
+                                    {t("asksFor")}
                                 </div>
                                 <Endpoints
                                     serverUrl={availability.serverUrl}
                                     endpoints={data.endpoints}
                                 />
                                 <p className="text-ink-3 m-0 mt-3 text-[12px] leading-normal [overflow-wrap:anywhere]">
-                                    Discovery document, if it asks for one:{" "}
+                                    {t("discovery")}{" "}
                                     <span className="font-mono">{data.endpoints.discovery}</span>
                                 </p>
                             </Card>
@@ -418,9 +407,9 @@ function ClientsSection() {
                 onOpenChange={open => {
                     if (!open) setPending(null);
                 }}
-                title={`Delete “${pending?.name ?? "this client"}”?`}
-                description="Everyone connected through it is disconnected, and the assistant can't sign in again until you give it a new client ID and secret. This can't be undone."
-                confirmLabel="Delete client"
+                title={t("confirm.title", { name: pending?.name ?? t("confirm.thisClient") })}
+                description={t("confirm.description")}
+                confirmLabel={t("confirm.confirmLabel")}
                 onConfirm={() => {
                     if (pending) void remove(pending);
                 }}

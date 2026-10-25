@@ -1,3 +1,7 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import {
     audiencePrincipals,
     connectorDestination,
@@ -16,6 +20,8 @@ import {
  * filed one takes its folder's audience, a new top-level folder is private to
  * its creator, and a new subfolder follows the folder it is made in.
  */
+
+const t = createTranslator({ locale: "en", messages: englishMessages, namespace: "sources" });
 
 const KNOWN = ["Q4 planning", "Q4 planning/Pricing", "Test Folder", "Unfiled"];
 
@@ -64,7 +70,7 @@ describe("resolveDestination", () => {
 
 describe("summarizeAudience", () => {
     it("says a loose file is yours alone", () => {
-        const s = summarizeAudience(resolveDestination("Unfiled", KNOWN), null);
+        const s = summarizeAudience(t, resolveDestination("Unfiled", KNOWN), null);
         expect(s).toEqual({
             tone: "private",
             headline: "Only you",
@@ -73,13 +79,13 @@ describe("summarizeAudience", () => {
     });
 
     it("says a new top-level folder starts private, before the server is asked", () => {
-        const s = summarizeAudience(resolveDestination("Board deck", KNOWN), null);
+        const s = summarizeAudience(t, resolveDestination("Board deck", KNOWN), null);
         expect(s?.headline).toBe("Only you");
         expect(s?.detail).toBe("Board deck is a new folder. New folders start private to you.");
     });
 
     it("names the workspace for an open folder", () => {
-        const s = summarizeAudience(resolveDestination("Test Folder", KNOWN), "workspace", {
+        const s = summarizeAudience(t, resolveDestination("Test Folder", KNOWN), "workspace", {
             workspaceName: "Acme",
         });
         expect(s?.headline).toBe("Everyone at Acme");
@@ -88,35 +94,35 @@ describe("summarizeAudience", () => {
 
     it("counts people for a shared folder once the count is known", () => {
         const dest = resolveDestination("Q4 planning", KNOWN);
-        expect(summarizeAudience(dest, "shared")?.headline).toBe("Specific people");
-        expect(summarizeAudience(dest, "shared", { count: 4 })?.headline).toBe(
+        expect(summarizeAudience(t, dest, "shared")?.headline).toBe("Specific people");
+        expect(summarizeAudience(t, dest, "shared", { count: 4 })?.headline).toBe(
             "Shared with 4 people"
         );
-        expect(summarizeAudience(dest, "shared", { count: 1 })?.headline).toBe(
+        expect(summarizeAudience(t, dest, "shared", { count: 1 })?.headline).toBe(
             "Shared with 1 person"
         );
     });
 
     it("says which folder an inheriting one follows", () => {
-        const s = summarizeAudience(resolveDestination("Q4 planning/Pricing", KNOWN), "shared", {
+        const s = summarizeAudience(t, resolveDestination("Q4 planning/Pricing", KNOWN), "shared", {
             governingPath: "Q4 planning",
         });
         expect(s?.detail).toBe("Pricing follows Q4 planning's sharing.");
     });
 
     it("does not call a folder's own restriction 'following' itself", () => {
-        const s = summarizeAudience(resolveDestination("Q4 planning", KNOWN), "shared", {
+        const s = summarizeAudience(t, resolveDestination("Q4 planning", KNOWN), "shared", {
             governingPath: "Q4 planning",
         });
         expect(s?.detail).toBe("Only the people Q4 planning is shared with can open it.");
     });
 
     it("says a private folder is private, and an inheriting one why", () => {
-        expect(summarizeAudience(resolveDestination("Q4 planning", KNOWN), "private")?.detail).toBe(
-            "Q4 planning is private to you."
-        );
         expect(
-            summarizeAudience(resolveDestination("Q4 planning/Pricing", KNOWN), "private", {
+            summarizeAudience(t, resolveDestination("Q4 planning", KNOWN), "private")?.detail
+        ).toBe("Q4 planning is private to you.");
+        expect(
+            summarizeAudience(t, resolveDestination("Q4 planning/Pricing", KNOWN), "private", {
                 governingPath: "Q4 planning",
             })?.detail
         ).toBe("Pricing follows Q4 planning, which is private to you.");
@@ -124,16 +130,16 @@ describe("summarizeAudience", () => {
 
     it("explains a new subfolder follows its parent", () => {
         const dest = resolveDestination("Q4 planning/Drafts", KNOWN);
-        expect(summarizeAudience(dest, "shared")?.detail).toBe(
+        expect(summarizeAudience(t, dest, "shared")?.detail).toBe(
             "Drafts is a new folder inside Q4 planning, so it follows Q4 planning's sharing."
         );
-        expect(summarizeAudience(dest, "private")?.detail).toBe(
+        expect(summarizeAudience(t, dest, "private")?.detail).toBe(
             "Drafts is a new folder inside Q4 planning, which is private to you."
         );
     });
 
     it("waits rather than guesses while a folder's audience is unknown", () => {
-        expect(summarizeAudience(resolveDestination("Q4 planning", KNOWN), null)).toBeNull();
+        expect(summarizeAudience(t, resolveDestination("Q4 planning", KNOWN), null)).toBeNull();
     });
 });
 
@@ -218,17 +224,17 @@ describe("audiencePrincipals", () => {
 describe("folderAudienceTag", () => {
     it("labels each folder in the picker without a count that could disagree with the bar", () => {
         const base = { principalCount: 3, ownAudience: true, canEdit: true, canManage: true };
-        expect(folderAudienceTag({ ...base, audience: "private" })?.label).toBe("Only you");
-        expect(folderAudienceTag({ ...base, audience: "shared" })?.label).toBe("Shared");
-        expect(folderAudienceTag({ ...base, audience: "workspace" })?.label).toBe("Everyone");
-        expect(folderAudienceTag(undefined)).toBeNull();
+        expect(folderAudienceTag(t, { ...base, audience: "private" })?.label).toBe("Only you");
+        expect(folderAudienceTag(t, { ...base, audience: "shared" })?.label).toBe("Shared");
+        expect(folderAudienceTag(t, { ...base, audience: "workspace" })?.label).toBe("Everyone");
+        expect(folderAudienceTag(t, undefined)).toBeNull();
     });
 });
 
 describe("destinationLabel", () => {
     it("reads a path as a breadcrumb and Unfiled as no folder", () => {
-        expect(destinationLabel("Q4 planning/Pricing")).toBe("Q4 planning / Pricing");
-        expect(destinationLabel("Unfiled")).toBe("No folder");
+        expect(destinationLabel(t, "Q4 planning/Pricing")).toBe("Q4 planning / Pricing");
+        expect(destinationLabel(t, "Unfiled")).toBe("No folder");
     });
 });
 
@@ -236,7 +242,7 @@ describe("planFolderUpload", () => {
     const FILES = ["Q3 data/summary.pdf", "Q3 data/raw/a.csv", "Q3 data/raw/deep/b.csv"];
 
     it("creates the picked folder inside the destination and keeps its subfolders", () => {
-        const plan = planFolderUpload("Q4 planning", "Q3 data", FILES);
+        const plan = planFolderUpload(t, "Q4 planning", "Q3 data", FILES);
         expect(plan.root).toBe("Q4 planning/Q3 data");
         expect(plan.paths).toEqual([
             "Q4 planning/Q3 data",
@@ -248,27 +254,27 @@ describe("planFolderUpload", () => {
     });
 
     it("puts it at the top level when there is no destination folder", () => {
-        const plan = planFolderUpload("Unfiled", "Q3 data", FILES);
+        const plan = planFolderUpload(t, "Unfiled", "Q3 data", FILES);
         expect(plan.root).toBe("Q3 data");
         expect(plan.paths[1]).toBe("Q3 data/raw");
     });
 
     it("uses the name the person typed for the new folder", () => {
-        const plan = planFolderUpload("Q4 planning", "  Quarter   three ", FILES);
+        const plan = planFolderUpload(t, "Q4 planning", "  Quarter   three ", FILES);
         expect(plan.root).toBe("Q4 planning/Quarter three");
         expect(plan.paths[2]).toBe("Q4 planning/Quarter three/raw/deep");
     });
 
     it("refuses an empty name or one with a slash", () => {
-        expect(planFolderUpload("Q4 planning", "  ", FILES).problems).toEqual([
+        expect(planFolderUpload(t, "Q4 planning", "  ", FILES).problems).toEqual([
             "Give the new folder a name.",
         ]);
-        expect(planFolderUpload("Q4 planning", "a/b", FILES).problems[0]).toMatch(/“\/”/);
+        expect(planFolderUpload(t, "Q4 planning", "a/b", FILES).problems[0]).toMatch(/“\/”/);
     });
 
     it("refuses a tree deeper than folders may go", () => {
         const deep = ["Root/a/b/c/d/e/f/g/h/file.txt"];
-        const plan = planFolderUpload("Q4 planning", "Root", deep);
+        const plan = planFolderUpload(t, "Q4 planning", "Root", deep);
         expect(plan.problems.length).toBe(1);
     });
 });

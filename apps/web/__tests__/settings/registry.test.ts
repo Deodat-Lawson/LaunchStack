@@ -50,6 +50,7 @@ describe("settings registry", () => {
 
     it("groups rows by section and resolves keys", () => {
         expect(settingsForSection("appearance").map(d => d.key)).toEqual([
+            "appearance.language",
             "appearance.theme",
             "appearance.density",
             "appearance.reducedMotion",
@@ -72,5 +73,11 @@ describe("settings registry", () => {
     it("finds the answer style by what people call it", () => {
         expect(searchSettings("response style")[0]?.key).toBe("chat.responseStyle");
         expect(searchSettings("answer length")[0]?.key).toBe("chat.responseStyle");
+    });
+
+    it("finds the interface language in English or Chinese", () => {
+        for (const query of ["language", "chinese", "语言", "中文"]) {
+            expect(searchSettings(query).map(d => d.key)).toContain("appearance.language");
+        }
     });
 });

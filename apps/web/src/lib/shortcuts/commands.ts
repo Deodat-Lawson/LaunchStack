@@ -14,6 +14,8 @@
  * are single letters that only make sense with a canvas focused).
  */
 
+import type { useTranslations } from "next-intl";
+
 export type ShortcutWhen = "always" | "outside-input";
 
 export interface ShortcutCommand {
@@ -146,6 +148,58 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
 export const SHORTCUT_COMMANDS_BY_ID: ReadonlyMap<string, ShortcutCommand> = new Map(
     SHORTCUT_COMMANDS.map(command => [command.id, command])
 );
+
+/** `t` for the `shortcuts` namespace — what the lookups below take. */
+export type ShortcutTranslator = ReturnType<typeof useTranslations<"shortcuts">>;
+
+/**
+ * Where each command's name and description live in the `shortcuts`
+ * catalogue. The `label`/`description` on the command stay the English
+ * source of truth; what a person reads goes through `shortcutLabel` and
+ * `shortcutDescription`.
+ */
+export const SHORTCUT_MESSAGE_KEYS = {
+    "palette.toggle": "paletteToggle",
+    "source.add": "sourceAdd",
+    "studio.toggle": "studioToggle",
+    "rail.toggle": "railToggle",
+    "search.focus": "searchFocus",
+    "feature.draft": "featureDraft",
+    "feature.rewrite": "featureRewrite",
+    "feature.workflows": "featureWorkflows",
+    "feature.meetings": "featureMeetings",
+    "settings.open": "settingsOpen",
+    "pane.split": "paneSplit",
+    "pane.splitDown": "paneSplitDown",
+    "pane.zoom": "paneZoom",
+    "pane.focusNext": "paneFocusNext",
+    "pane.focusPrevious": "paneFocusPrevious",
+    "pane.close": "paneClose",
+} as const;
+
+type ShortcutMessageKey = (typeof SHORTCUT_MESSAGE_KEYS)[keyof typeof SHORTCUT_MESSAGE_KEYS];
+
+function shortcutMessageKey(id: string): ShortcutMessageKey | undefined {
+    return (SHORTCUT_MESSAGE_KEYS as Record<string, ShortcutMessageKey | undefined>)[id];
+}
+
+/** A command's name in the reader's language; its own label for an id with no message. */
+export function shortcutLabel(
+    t: ShortcutTranslator,
+    command: Pick<ShortcutCommand, "id" | "label">
+): string {
+    const key = shortcutMessageKey(command.id);
+    return key ? t(`commands.${key}.label`) : command.label;
+}
+
+/** What a command does, in the reader's language. */
+export function shortcutDescription(
+    t: ShortcutTranslator,
+    command: Pick<ShortcutCommand, "id" | "description">
+): string {
+    const key = shortcutMessageKey(command.id);
+    return key ? t(`commands.${key}.description`) : command.description;
+}
 
 /** Feature ids the palette and the Studio menu label with a shortcut. */
 export const FEATURE_COMMAND_IDS: Readonly<Record<string, string>> = {

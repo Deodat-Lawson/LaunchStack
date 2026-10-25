@@ -2,6 +2,7 @@
 
 import React from "react";
 import { LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
     DropdownMenu,
@@ -11,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { LanguageSubmenu } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { useAuth, useUser } from "~/lib/auth-client";
@@ -24,6 +26,7 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
  * the session's name.
  */
 export function UserMenu({ afterSignOutUrl = "/signin" }: { afterSignOutUrl?: string }) {
+    const t = useTranslations("chrome.userMenu");
     const { signOut } = useAuth();
     const { user } = useUser();
     const { data: profile } = useMyProfile({ enabled: Boolean(user) });
@@ -39,7 +42,7 @@ export function UserMenu({ afterSignOutUrl = "/signin" }: { afterSignOutUrl?: st
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label="Account menu"
+                    aria-label={t("label")}
                     className="size-8 rounded-full p-0 hover:bg-transparent"
                 >
                     <ProfileAvatar
@@ -57,9 +60,11 @@ export function UserMenu({ afterSignOutUrl = "/signin" }: { afterSignOutUrl?: st
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <LanguageSubmenu />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => void signOut({ redirectUrl: afterSignOutUrl })}>
                     <LogOut className="h-4 w-4" />
-                    Sign out
+                    {t("signOut")}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

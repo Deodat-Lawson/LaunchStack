@@ -76,23 +76,37 @@ export interface MeetingPlan {
 }
 
 /**
- * Why a meeting as planned is not allowed, in words the dialog can show.
+ * One reason a meeting as planned is not allowed, as data: the UI words it
+ * through `agents.violations.<code>` (`~/lib/agents/i18n`), the server
+ * through `meetingPlanViolations`.
+ */
+export type MeetingPlanViolation =
+    | { code: "mirrorNeedsWrite"; required: "write"; current: AgentAutonomy }
+    | { code: "agentIdentityNeedsFull"; required: "full" };
+
+/** Why a meeting as planned is not allowed. Empty when it is fine. */
+export function meetingPlanViolationCodes(plan: MeetingPlan): MeetingPlanViolation[] {
+    const floor = minAutonomy(plan.participants);
+    const problems: MeetingPlanViolation[] = [];
+    if (plan.slackMirrorEnabled && !autonomyAtLeast(floor, "write")) {
+        problems.push({ code: "mirrorNeedsWrite", required: "write", current: floor });
+    }
+    if (plan.slackMirrorEnabled && plan.slackUseAgentIdentity && !autonomyAtLeast(floor, "full")) {
+        problems.push({ code: "agentIdentityNeedsFull", required: "full" });
+    }
+    return problems;
+}
+
+/**
+ * Why a meeting as planned is not allowed, in English words the API returns.
  * Empty when it is fine.
  */
 export function meetingPlanViolations(plan: MeetingPlan): string[] {
-    const floor = minAutonomy(plan.participants);
-    const problems: string[] = [];
-    if (plan.slackMirrorEnabled && !autonomyAtLeast(floor, "write")) {
-        problems.push(
-            `Mirroring to Slack needs every agent in the room at "${AGENT_AUTONOMY_META.write.label}" or above; one is set to "${AGENT_AUTONOMY_META[floor].label}".`
-        );
-    }
-    if (plan.slackMirrorEnabled && plan.slackUseAgentIdentity && !autonomyAtLeast(floor, "full")) {
-        problems.push(
-            `Posting to Slack under an agent's own name needs every agent at "${AGENT_AUTONOMY_META.full.label}".`
-        );
-    }
-    return problems;
+    return meetingPlanViolationCodes(plan).map(problem =>
+        problem.code === "mirrorNeedsWrite"
+            ? `Mirroring to Slack needs every agent in the room at "${AGENT_AUTONOMY_META.write.label}" or above; one is set to "${AGENT_AUTONOMY_META[problem.current].label}".`
+            : `Posting to Slack under an agent's own name needs every agent at "${AGENT_AUTONOMY_META.full.label}".`
+    );
 }
 
 /** Whether the room may take turns without a person pressing Step each time. */

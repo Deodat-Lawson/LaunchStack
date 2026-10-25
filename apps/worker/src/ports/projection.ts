@@ -19,7 +19,7 @@ export function createCompanyProjectionPort(logger: LoggerPort): CompanyProjecti
     return {
         async projectCompanyState({ companyId, sourceId, traceId }) {
             // Read with the workspace's own models when it brought them.
-            const metadata = await withWorkspaceChatModels(companyId, () =>
+            const metadata = await withWorkspaceChatModels(companyId, "companyProfile", () =>
                 refreshForDocument(BigInt(companyId), sourceId, {
                     generate: input =>
                         generateStructured({ ...input, capability: "smallExtraction" }),

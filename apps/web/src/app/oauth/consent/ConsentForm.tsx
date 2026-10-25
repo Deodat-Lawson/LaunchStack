@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { FlowError } from "../_components/ConnectShell";
@@ -18,13 +19,15 @@ export function ConsentForm({
     lines: string[];
     email: string;
 }) {
+    const t = useTranslations("auth.oauth.consent");
+    const tFlow = useTranslations("auth.oauth.flow");
     const [pending, setPending] = useState<"allow" | "deny" | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const decide = async (accept: boolean) => {
         setError(null);
         setPending(accept ? "allow" : "deny");
-        const failure = await advanceOAuthFlow("/oauth2/consent", { accept });
+        const failure = await advanceOAuthFlow("/oauth2/consent", { accept }, tFlow);
         if (failure) {
             setError(failure);
             setPending(null);
@@ -35,8 +38,7 @@ export function ConsentForm({
         return (
             <div className="border-line rounded-xl border p-5">
                 <p className="text-ink-2 m-0 text-[13.5px] leading-[1.55]">
-                    This connection has no workspace yet, or the choice expired. Start connecting
-                    again from {assistant}.
+                    {t("noWorkspace", { assistant })}
                 </p>
             </div>
         );
@@ -45,8 +47,12 @@ export function ConsentForm({
     return (
         <div>
             <p className="text-ink-2 mb-3 mt-0 text-[13.5px] leading-[1.55]">
-                {assistant} will act as <span className="text-ink font-medium">{email}</span> in{" "}
-                <span className="text-ink font-medium">{workspace}</span>. It will be able to:
+                {t.rich("actsAs", {
+                    assistant,
+                    email,
+                    workspace,
+                    b: chunks => <span className="text-ink font-medium">{chunks}</span>,
+                })}
             </p>
             <ul className="border-line m-0 flex list-none flex-col gap-2.5 rounded-xl border p-4">
                 {lines.map(line => (
@@ -54,21 +60,19 @@ export function ConsentForm({
                         key={line}
                         className="text-ink flex items-start gap-2.5 text-[13.5px] leading-[1.5]"
                     >
-                        <Check className="text-success mt-0.5 size-4 shrink-0" aria-hidden />
+                        <Check className="text-success-ink mt-0.5 size-4 shrink-0" aria-hidden />
                         {line}
                     </li>
                 ))}
             </ul>
-            <p className="text-ink-3 mb-0 mt-3 text-[12.5px] leading-normal">
-                It can never see more than you can. Disconnect it any time in Settings › Account.
-            </p>
+            <p className="text-ink-3 mb-0 mt-3 text-[12.5px] leading-normal">{t("limits")}</p>
             {error ? <FlowError>{error}</FlowError> : null}
             <div className="mt-5 flex flex-wrap gap-2.5">
                 <Button type="button" onClick={() => void decide(true)} disabled={pending !== null}>
                     {pending === "allow" ? (
                         <Loader2 className="size-4 animate-spin" aria-hidden />
                     ) : null}
-                    Allow
+                    {t("allow")}
                 </Button>
                 <Button
                     type="button"
@@ -76,7 +80,7 @@ export function ConsentForm({
                     onClick={() => void decide(false)}
                     disabled={pending !== null}
                 >
-                    Deny
+                    {t("deny")}
                 </Button>
             </div>
         </div>

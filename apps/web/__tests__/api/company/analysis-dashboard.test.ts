@@ -176,7 +176,7 @@ describe("GET /api/company/analysis-dashboard", () => {
             }),
         });
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/company/analysis-dashboard"));
 
         expect(response.status).toBe(403);
         expect((await response.json()).permission).toBe("analytics.view");
@@ -194,7 +194,7 @@ describe("GET /api/company/analysis-dashboard", () => {
 
         mockQueuedResults = [[], [{ count: 0 }], [], [], []];
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/company/analysis-dashboard"));
 
         expect(response.status).toBe(200);
     });
@@ -218,7 +218,7 @@ describe("GET /api/company/analysis-dashboard", () => {
         });
         mockQueuedResults = [[], [{ count: 0 }], [], [], []];
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/company/analysis-dashboard"));
 
         expect(response.status).toBe(200);
         const calls = serialized();
@@ -268,7 +268,7 @@ describe("GET /api/company/analysis-dashboard", () => {
             [{ userId: "clerk_owner", count: 3 }], // chat history counts
         ];
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/company/analysis-dashboard"));
         const json = await response.json();
 
         expect(response.status).toBe(200);

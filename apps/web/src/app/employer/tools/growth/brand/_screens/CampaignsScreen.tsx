@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { useToolRouter, useToolSearchParams } from "~/components/tool-app/nav";
 import { MarketingPipelineWorkspace } from "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace";
 import { toPlatformText } from "~/app/employer/documents/components/marketing-pipeline/useMarketingPipelineController";
@@ -41,13 +43,10 @@ function Workspace() {
  * edited post to Compose to put it on the calendar.
  */
 export function CampaignsScreen() {
+    const t = useTranslations("growth.brand.campaigns");
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
-            <PageHeader
-                size="md"
-                title="Campaigns"
-                sub="Drafts grounded in your documents: angles, brand voice, persona and every claim traced to a source. Publish from here or schedule it on the calendar."
-            />
+            <PageHeader size="md" title={t("title")} sub={t("sub")} />
             <div className="border-line bg-panel @max-md:p-2 rounded-lg border p-4">
                 <Workspace />
             </div>

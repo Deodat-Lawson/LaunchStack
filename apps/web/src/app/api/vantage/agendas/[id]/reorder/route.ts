@@ -10,6 +10,7 @@ import {
     json,
     readBody,
     vantageContext,
+    say,
 } from "../../../_http";
 import { ReorderSchema } from "../../../_schemas";
 
@@ -21,12 +22,12 @@ export async function POST(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = ReorderSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         await reorderTopics({ companyId: auth.ctx.companyId, agendaId: id, ids: parsed.data.ids });
         const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
-        if (!agenda) return error("That agenda is not here.", 404);
+        if (!agenda) return error(say(request, "agendaNotHere"), 404);
         return json({ agenda });
     } catch (err) {
-        return handleVantageError("POST reorder", err);
+        return handleVantageError("POST reorder", err, request);
     }
 }

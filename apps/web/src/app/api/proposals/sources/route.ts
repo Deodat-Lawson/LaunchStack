@@ -11,6 +11,6 @@ export async function GET(request: NextRequest) {
         const q = request.nextUrl.searchParams.get("q") ?? undefined;
         return json({ sources: await listSourceOptions(auth.ctx, q?.slice(0, 120)) });
     } catch (err) {
-        return handleProposalsError("GET sources", err);
+        return handleProposalsError("GET sources", err, request);
     }
 }

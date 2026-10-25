@@ -11,6 +11,7 @@ import { createWorld, type World } from "@launchstack/simulation";
 import { hashDraft, type ScenarioRunRecord } from "@launchstack/pipelines/scenarios";
 
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
+import { SCENARIO_LIMITS } from "~/lib/scenarios/types";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
@@ -69,7 +70,9 @@ jest.mock("~/lib/credits", () => ({ getBalance: jest.fn(), debitTokens: jest.fn(
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn(() => false) }));
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
+        fn()
+    ),
 }));
 
 type Mocks<K extends string> = Record<K, jest.Mock>;
@@ -106,6 +109,7 @@ import {
     getScenarioDetail,
     linkComposedPosts,
     ScenarioError,
+    titleFromSubject,
     updateScenario,
 } from "~/server/scenarios/service";
 
@@ -395,6 +399,35 @@ describe("starting a run", () => {
             403
         );
     });
+
+    it("takes a situation of a few paragraphs, up to the limit", async () => {
+        mockEvidence.visibleDocumentIds.mockResolvedValue(new Set());
+        const plan = [
+            "We launch the Pro plan at $49 a month in March.",
+            `The plan: ${"bundle onboarding and priority support, ".repeat(40)}`,
+            "Where things stand: three pilot customers renewed, one churned over price.",
+        ].join("\n\n");
+        expect(plan.length).toBeGreaterThan(600);
+        await createScenario(as("creator"), { subject: plan });
+        expect(mockDb.createScenarioRun.mock.calls[0]![0]).toMatchObject({
+            subject: plan,
+            title: "We launch the Pro plan at $49 a month in March.",
+        });
+        await expectError(
+            createScenario(as("creator"), { subject: "x".repeat(SCENARIO_LIMITS.subjectMax + 1) }),
+            400,
+            "invalid"
+        );
+    });
+});
+
+describe("titleFromSubject", () => {
+    it("is the first line, cut at a word when it runs long", () => {
+        expect(titleFromSubject("We raise prices.\n\nThe plan…")).toBe("We raise prices.");
+        const long = titleFromSubject(`We launch ${"a bundled onboarding offer ".repeat(10)}`);
+        expect(long.length).toBeLessThanOrEqual(120);
+        expect(long).toMatch(/^We launch a bundled onboarding offer .*[a-z]…$/);
+    });
 });
 
 describe("interviews", () => {
@@ -421,7 +454,7 @@ describe("interviews", () => {
         const { withWorkspaceChatModels } = jest.requireMock<{
             withWorkspaceChatModels: jest.Mock;
         }>("~/server/workspace-models/scope");
-        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
     });
 });
 

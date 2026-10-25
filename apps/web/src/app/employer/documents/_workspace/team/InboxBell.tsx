@@ -13,6 +13,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Bell, CheckCheck, FileText, Folder, MessageSquare } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
@@ -21,9 +22,9 @@ import { Spinner } from "~/components/ui/spinner";
 import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
 
-import { errorMessage } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 import { teamApi, type InboxEntry } from "./api";
-import { badgeCount, inboxSentence, inboxTarget, LEVEL_LABEL, shortAgo } from "./format";
+import { badgeCount, inboxSentence, inboxTarget, shortAgo, useTeamFormat } from "./format";
 import type { TeamTarget } from "./types";
 
 export const INBOX_POLL_MS = 60_000;
@@ -35,6 +36,11 @@ function isHidden(): boolean {
 }
 
 export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget) => void }) {
+    const t = useTranslations("team.inboxBell");
+    const errorText = useErrorText();
+    const tTeam = useTranslations("team");
+    const tc = useTranslations("common");
+    const f = useTeamFormat();
     const [open, setOpen] = useState(false);
     const [entries, setEntries] = useState<InboxEntry[]>([]);
     const [unread, setUnread] = useState(0);
@@ -51,12 +57,12 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
             setUnread(res.unread);
             setError(null);
         } catch (err) {
-            setError(errorMessage(err, "Couldn't load your inbox."));
+            setError(errorText(err, t("loadError")));
         } finally {
             inflight.current = false;
             setLoaded(true);
         }
-    }, []);
+    }, [t, errorText]);
 
     useEffect(() => {
         // Always once on mount: a page opened in a background tab (or a
@@ -111,8 +117,8 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                     variant="ghost"
                     size="icon"
                     data-testid="inbox-bell"
-                    aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"}
-                    title="Inbox"
+                    aria-label={unread > 0 ? t("labelUnread", { count: unread }) : t("title")}
+                    title={t("title")}
                     className="text-ink-3 hover:text-ink relative size-[26px] rounded-md"
                 >
                     <Bell className="size-[15px]" />
@@ -134,7 +140,7 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                 data-testid="inbox-popover"
             >
                 <div className="border-line flex h-10 items-center justify-between border-b pl-3.5 pr-1.5">
-                    <h2 className="text-ink m-0 text-[13px] font-semibold">Inbox</h2>
+                    <h2 className="text-ink m-0 text-[13px] font-semibold">{t("title")}</h2>
                     {unread > 0 && (
                         <Button
                             variant="ghost"
@@ -143,14 +149,14 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                             onClick={markAllRead}
                         >
                             <CheckCheck className="size-3.5" />
-                            Mark all read
+                            {t("markAllRead")}
                         </Button>
                     )}
                 </div>
                 <div className="max-h-[min(420px,60vh)] overflow-y-auto py-1">
                     {!loaded ? (
                         <div className="text-ink-3 flex items-center gap-2 px-3.5 py-4 text-[12.5px]">
-                            <Spinner className="size-3.5" /> Loading…
+                            <Spinner className="size-3.5" /> {tc("status.loading")}
                         </div>
                     ) : error && entries.length === 0 ? (
                         <p className="text-danger m-0 px-3.5 py-4 text-[12.5px]" role="alert">
@@ -158,14 +164,13 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                         </p>
                     ) : entries.length === 0 ? (
                         <p className="text-ink-3 m-0 px-3.5 py-5 text-[12.5px] leading-relaxed">
-                            Nothing new. When someone shares a folder, file or chat with you, it
-                            shows up here.
+                            {t("empty")}
                         </p>
                     ) : (
                         <ul className="m-0 list-none p-0">
                             {entries.map(entry => {
                                 const actor = people[entry.actorUserId];
-                                const actorName = actor?.displayName ?? "Someone";
+                                const actorName = actor?.displayName ?? tTeam("someone");
                                 const Icon = TYPE_ICON[entry.targetType] ?? FileText;
                                 const level = entry.detail?.level;
                                 return (
@@ -192,22 +197,22 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                                                             : "text-ink font-medium"
                                                     )}
                                                 >
-                                                    {inboxSentence(actorName, entry)}
+                                                    {inboxSentence(f, actorName, entry)}
                                                 </span>
                                                 <span className="text-ink-3 mt-0.5 flex items-center gap-1 text-[11.5px]">
                                                     <Icon className="size-3 shrink-0" aria-hidden />
                                                     {level === "view" ||
                                                     level === "edit" ||
                                                     level === "manage"
-                                                        ? `${LEVEL_LABEL[level]} · `
+                                                        ? `${tTeam(`levels.${level}`)} · `
                                                         : ""}
-                                                    {shortAgo(entry.at)}
+                                                    {shortAgo(f, entry.at)}
                                                 </span>
                                             </span>
                                             {!entry.read && (
                                                 <span
                                                     className="bg-brand mt-1.5 size-2 shrink-0 rounded-full"
-                                                    aria-label="Unread"
+                                                    aria-label={t("unread")}
                                                 />
                                             )}
                                         </button>

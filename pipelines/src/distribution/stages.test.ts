@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { ALLOWED_TRANSITIONS, assertTransition, isInPipeline, stageRequirements } from "./stages";
-import { RELATIONSHIP_STAGES } from "./types";
+import {
+    ALLOWED_TRANSITIONS,
+    assertTransition,
+    isInPipeline,
+    stageRequirements,
+    type StageTransitionError,
+} from "./stages";
+import { RELATIONSHIP_STAGES, type RelationshipStage } from "./types";
 
 const full = { ownerUserId: "u1", nextAction: "call", hasAgreement: true };
 const empty = { ownerUserId: null, nextAction: null, hasAgreement: false };
@@ -77,6 +83,31 @@ describe("stage transition table", () => {
         expect(() =>
             assertTransition({ from: "declined", to: "candidate", context: empty })
         ).not.toThrow();
+    });
+
+    it("carries what a refusal was beside its English, for the app to word", () => {
+        const refusal = (from: RelationshipStage, to: RelationshipStage, context = empty) => {
+            try {
+                assertTransition({ from, to, context });
+            } catch (error) {
+                return error as StageTransitionError;
+            }
+            throw new Error("expected a refusal");
+        };
+        expect(refusal("candidate", "qualified").details).toEqual({
+            from: "candidate",
+            to: "qualified",
+            allowed: ["researched", "contacted", "declined", "dormant"],
+        });
+        const missing = refusal("negotiating", "contracted").details?.missing;
+        expect(missing?.map(m => [m.code, m.target])).toEqual([
+            ["owner_required", "contracted"],
+            ["agreement_required", "contracted"],
+        ]);
+        expect(refusal("candidate", "candidate").details).toEqual({
+            from: "candidate",
+            to: "candidate",
+        });
     });
 
     it("knows what counts as in-pipeline", () => {

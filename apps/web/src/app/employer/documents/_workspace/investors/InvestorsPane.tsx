@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     ArrowUpRight,
     FileText,
@@ -34,11 +35,12 @@ import { PageHeader } from "~/components/tools/PageHeader";
 import { copyText } from "~/lib/context-menu";
 
 import {
-    describeRaise,
     fundsMarkdown,
     introPrompt,
     peopleOf,
+    PITCH_STARTER_KEYS,
     PITCH_STARTERS,
+    raiseLine,
     resultSummary,
     sortFunds,
     US_STATES,
@@ -98,6 +100,8 @@ export function InvestorsPane({ host, ...props }: InvestorsPaneProps) {
 const INVESTOR_ROOTS = ["pitch"] as const;
 
 function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPaneProps, "host">) {
+    const t = useTranslations("team.investors");
+    const tc = useTranslations("common");
     const path = useToolPathname();
     // The search lives above the screens, so a trip to the pitch starters
     // and back finds the results where they were.
@@ -106,37 +110,42 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
     const [sortBy, setSortBy] = useState<"newest" | "largest">("newest");
     const inflight = useRef<AbortController | null>(null);
 
-    const run = useCallback(async (next: SearchForm) => {
-        inflight.current?.abort();
-        const controller = new AbortController();
-        inflight.current = controller;
-        setSearch({ status: "loading" });
-        const params = new URLSearchParams({ within: String(next.withinDays) });
-        if (next.q.trim()) params.set("q", next.q.trim());
-        if (next.state) params.set("state", next.state);
-        if (next.spvs) params.set("spvs", "1");
-        try {
-            const res = await fetch(`/api/investors/search?${params.toString()}`, {
-                signal: controller.signal,
-            });
-            const body = (await res.json().catch(() => ({}))) as
-                | InvestorSearchResult
-                | { error?: string };
-            if (!res.ok || !("funds" in body)) {
-                const message =
-                    "error" in body && body.error ? body.error : `Search failed (${res.status})`;
-                setSearch({ status: "error", message });
-                return;
+    const run = useCallback(
+        async (next: SearchForm) => {
+            inflight.current?.abort();
+            const controller = new AbortController();
+            inflight.current = controller;
+            setSearch({ status: "loading" });
+            const params = new URLSearchParams({ within: String(next.withinDays) });
+            if (next.q.trim()) params.set("q", next.q.trim());
+            if (next.state) params.set("state", next.state);
+            if (next.spvs) params.set("spvs", "1");
+            try {
+                const res = await fetch(`/api/investors/search?${params.toString()}`, {
+                    signal: controller.signal,
+                });
+                const body = (await res.json().catch(() => ({}))) as
+                    | InvestorSearchResult
+                    | { error?: string };
+                if (!res.ok || !("funds" in body)) {
+                    const message =
+                        "error" in body && body.error
+                            ? body.error
+                            : t("searchFailedStatus", { status: res.status });
+                    setSearch({ status: "error", message });
+                    return;
+                }
+                setSearch({ status: "done", result: body, form: next });
+            } catch (err) {
+                if (controller.signal.aborted) return;
+                setSearch({
+                    status: "error",
+                    message: err instanceof Error ? err.message : t("searchFailed"),
+                });
             }
-            setSearch({ status: "done", result: body, form: next });
-        } catch (err) {
-            if (controller.signal.aborted) return;
-            setSearch({
-                status: "error",
-                message: err instanceof Error ? err.message : "Search failed",
-            });
-        }
-    }, []);
+        },
+        [t]
+    );
 
     // Something to look at on arrival: the last quarter, everywhere.
     useEffect(() => {
@@ -144,25 +153,23 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
         return () => inflight.current?.abort();
     }, [run]);
 
+    /** `copied` is the toast once the prompt is on the clipboard. */
     const draft = useCallback(
-        async (prompt: string, what: string) => {
+        async (prompt: string, copied: string) => {
             if (onDraftInChat) {
                 onDraftInChat(prompt);
                 return;
             }
-            if (await copyText(prompt)) toast.success(`${what} prompt copied — paste it into chat`);
-            else toast.error("Couldn't copy");
+            if (await copyText(prompt)) toast.success(copied);
+            else toast.error(t("copyFailed"));
         },
-        [onDraftInChat]
+        [onDraftInChat, t]
     );
 
     const screen =
         path === "/" ? (
             <div className="flex flex-col gap-4">
-                <PageHeader
-                    title="Find investors"
-                    sub="The venture funds raising a new fund right now — a fund that has just raised is about to invest."
-                />
+                <PageHeader title={t("find.title")} sub={t("find.sub")} />
                 <form
                     className="flex flex-col gap-2.5"
                     onSubmit={e => {
@@ -176,8 +183,8 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                             <Input
                                 value={form.q}
                                 onChange={e => setForm(f => ({ ...f, q: e.target.value }))}
-                                placeholder="Focus — climate, health, fintech…"
-                                aria-label="Focus: words in the fund's name"
+                                placeholder={t("find.focusPlaceholder")}
+                                aria-label={t("find.focusLabel")}
                                 className="h-8 pl-8 text-[13px]"
                             />
                         </div>
@@ -187,11 +194,14 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                                 setForm(f => ({ ...f, state: v === ALL_STATES ? "" : v }))
                             }
                         >
-                            <SelectTrigger className="h-8 w-40 text-xs" aria-label="Fund's state">
+                            <SelectTrigger
+                                className="h-8 w-40 text-xs"
+                                aria-label={t("find.stateLabel")}
+                            >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={ALL_STATES}>Anywhere</SelectItem>
+                                <SelectItem value={ALL_STATES}>{t("find.anywhere")}</SelectItem>
                                 {US_STATES.map(([code, name]) => (
                                     <SelectItem key={code} value={code}>
                                         {name}
@@ -203,13 +213,16 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                             value={String(form.withinDays)}
                             onValueChange={v => setForm(f => ({ ...f, withinDays: Number(v) }))}
                         >
-                            <SelectTrigger className="h-8 w-36 text-xs" aria-label="Filed within">
+                            <SelectTrigger
+                                className="h-8 w-36 text-xs"
+                                aria-label={t("find.withinLabel")}
+                            >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                                 {WITHIN_OPTIONS.map(o => (
                                     <SelectItem key={o.days} value={String(o.days)}>
-                                        {o.label}
+                                        {t(`within.d${o.days}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -220,7 +233,7 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                             ) : (
                                 <Search />
                             )}
-                            Search
+                            {tc("actions.search")}
                         </Button>
                     </div>
                     <div className="text-ink-3 flex flex-wrap items-center justify-between gap-2 text-[12px]">
@@ -234,10 +247,10 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                                 htmlFor="investors-spvs"
                                 className="text-ink-3 text-[12px] font-normal"
                             >
-                                Include single-deal SPVs and syndicates
+                                {t("find.spvs")}
                             </Label>
                         </div>
-                        <span>From SEC Form D filings — public, no account.</span>
+                        <span>{t("find.sourceNote")}</span>
                     </div>
                 </form>
 
@@ -246,7 +259,9 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                     sortBy={sortBy}
                     onSortBy={setSortBy}
                     onRetry={() => void run(form)}
-                    onDraftIntro={fund => void draft(introPrompt(fund), `Intro to ${fund.name}`)}
+                    onDraftIntro={fund =>
+                        void draft(introPrompt(fund), t("copiedIntro", { fund: fund.name }))
+                    }
                     onSaveAsSource={
                         onSaveAsSource && search.status === "done"
                             ? () =>
@@ -258,55 +273,60 @@ function InvestorsFrame({ onDraftInChat, onSaveAsSource }: Omit<InvestorsPanePro
                                   )
                             : undefined
                     }
-                    draftLabel={onDraftInChat ? "Draft intro" : "Copy intro prompt"}
+                    draftLabel={onDraftInChat ? t("draftIntro") : t("copyIntro")}
                 />
             </div>
         ) : path === "/pitch" ? (
             <div className="flex flex-col gap-4">
-                <PageHeader
-                    title="Pitch starters"
-                    sub="Each one drafts in chat from your sources, cites them, and lists what is missing. Add your deck, financials and metrics as sources first and the drafts get specific."
-                />
+                <PageHeader title={t("pitch.title")} sub={t("pitch.sub")} />
                 <div className="@max-md:grid-cols-1 grid grid-cols-2 gap-3">
-                    {PITCH_STARTERS.map(starter => (
-                        <article
-                            key={starter.id}
-                            className="border-line bg-panel flex flex-col gap-3 rounded-xl border p-4"
-                        >
-                            <div>
-                                <h3 className="text-ink text-[13.5px] font-semibold">
-                                    {starter.title}
-                                </h3>
-                                <p className="text-ink-3 mt-0.5 text-[12.5px]">{starter.desc}</p>
-                            </div>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                className="self-start"
-                                onClick={() => void draft(starter.prompt, starter.title)}
+                    {PITCH_STARTERS.map(starter => {
+                        const key = PITCH_STARTER_KEYS[starter.id];
+                        const title = t(`starters.${key}.title`);
+                        return (
+                            <article
+                                key={starter.id}
+                                className="border-line bg-panel flex flex-col gap-3 rounded-xl border p-4"
                             >
-                                <Sparkles />
-                                {onDraftInChat ? "Draft in chat" : "Copy prompt"}
-                            </Button>
-                        </article>
-                    ))}
+                                <div>
+                                    <h3 className="text-ink text-[13.5px] font-semibold">
+                                        {title}
+                                    </h3>
+                                    <p className="text-ink-3 mt-0.5 text-[12.5px]">
+                                        {t(`starters.${key}.desc`)}
+                                    </p>
+                                </div>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="self-start"
+                                    onClick={() =>
+                                        void draft(starter.prompt, t("copiedStarter", { title }))
+                                    }
+                                >
+                                    <Sparkles />
+                                    {onDraftInChat ? t("pitch.draftInChat") : t("pitch.copyPrompt")}
+                                </Button>
+                            </article>
+                        );
+                    })}
                 </div>
             </div>
         ) : (
-            <ToolNotFound home="/" homeLabel="Find investors" />
+            <ToolNotFound home="/" homeLabel={t("find.title")} />
         );
 
     return (
         <ToolFrame
-            title="Investor relations"
+            title={t("title")}
             mark={<ToolMark icon={HandCoins} />}
             contentClassName="max-w-[960px]"
             groups={[
                 {
                     id: "investors",
                     items: [
-                        { to: "/", label: "Find investors", icon: Search, exact: true },
-                        { to: "/pitch", label: "Pitch starters", icon: Sparkles },
+                        { to: "/", label: t("find.title"), icon: Search, exact: true },
+                        { to: "/pitch", label: t("pitch.title"), icon: Sparkles },
                     ],
                 },
             ]}
@@ -335,13 +355,11 @@ function Results({
     onSaveAsSource,
     draftLabel,
 }: ResultsProps) {
+    const t = useTranslations("team.investors");
+    const tc = useTranslations("common");
     if (search.status === "loading") {
         return (
-            <div
-                className="flex flex-col gap-2"
-                aria-busy="true"
-                aria-label="Searching SEC filings"
-            >
+            <div className="flex flex-col gap-2" aria-busy="true" aria-label={t("searching")}>
                 {[0, 1, 2].map(i => (
                     <Skeleton key={i} className="h-[104px] rounded-xl" />
                 ))}
@@ -355,7 +373,7 @@ function Results({
                 <p className="text-ink-2 text-[13px]">{search.message}</p>
                 <Button size="sm" variant="outline" onClick={onRetry}>
                     <RefreshCw />
-                    Try again
+                    {tc("actions.tryAgain")}
                 </Button>
             </div>
         );
@@ -365,8 +383,7 @@ function Results({
     if (result.funds.length === 0) {
         return (
             <div className="border-line text-ink-3 rounded-xl border border-dashed py-12 text-center text-[13px]">
-                No venture funds filed with these words in this window. Try fewer words, another
-                state, or a longer window.
+                {t("empty")}
             </div>
         );
     }
@@ -376,7 +393,7 @@ function Results({
         <div className="flex flex-col gap-2.5">
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-ink-3 font-mono text-[11px]" data-testid="investors-summary">
-                    {resultSummary(result, funds.length)}
+                    {resultSummary(t, result, funds.length)}
                 </p>
                 <div className="flex items-center gap-2">
                     <ToggleGroup
@@ -385,19 +402,19 @@ function Results({
                         variant="outline"
                         value={sortBy}
                         onValueChange={v => v && onSortBy(v as "newest" | "largest")}
-                        aria-label="Sort funds"
+                        aria-label={t("sortLabel")}
                     >
                         <ToggleGroupItem value="newest" className="px-2.5 text-xs">
-                            Newest
+                            {t("newest")}
                         </ToggleGroupItem>
                         <ToggleGroupItem value="largest" className="px-2.5 text-xs">
-                            Largest
+                            {t("largest")}
                         </ToggleGroupItem>
                     </ToggleGroup>
                     {onSaveAsSource && (
                         <Button size="sm" variant="outline" onClick={onSaveAsSource}>
                             <FileText />
-                            Save list as a source
+                            {t("saveAsSource")}
                         </Button>
                     )}
                 </div>
@@ -416,13 +433,6 @@ function Results({
     );
 }
 
-const filedFormat = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-});
-
 function FundCard({
     fund,
     onDraftIntro,
@@ -432,9 +442,11 @@ function FundCard({
     onDraftIntro: () => void;
     draftLabel: string;
 }) {
+    const t = useTranslations("team.investors");
+    const format = useFormatter();
     const people = peopleOf(fund);
     const entities = fund.managers.filter(m => m.kind === "entity");
-    const raise = describeRaise(fund);
+    const raise = raiseLine(t, fund);
     const shown = people.slice(0, 3);
 
     return (
@@ -448,17 +460,24 @@ function FundCard({
                         <span className="truncate">{fund.name}</span>
                         {fund.amendment && (
                             <Badge variant="secondary" className="shrink-0 text-[10.5px]">
-                                Amended
+                                {t("amended")}
                             </Badge>
                         )}
                     </h3>
                     <p className="text-ink-3 mt-0.5 text-[12.5px]">
                         {[fund.location, raise].filter(Boolean).join(" · ") ||
-                            "Details unavailable — open the filing"}
+                            t("detailsUnavailable")}
                     </p>
                 </div>
                 <span className="text-ink-3 shrink-0 font-mono text-[11px]">
-                    Filed {filedFormat.format(new Date(`${fund.filedAt}T00:00:00Z`))}
+                    {t("filed", {
+                        date: format.dateTime(new Date(`${fund.filedAt}T00:00:00Z`), {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            timeZone: "UTC",
+                        }),
+                    })}
                 </span>
             </div>
 
@@ -472,11 +491,15 @@ function FundCard({
                         </span>
                     ))}
                     {people.length > shown.length && (
-                        <span className="text-ink-3"> +{people.length - shown.length} more</span>
+                        <span className="text-ink-3">
+                            {" "}
+                            {t("more", { count: people.length - shown.length })}
+                        </span>
                     )}
                     {entities.length > 0 && (
                         <span className="text-ink-3">
-                            {shown.length > 0 ? " · " : ""}via {entities[0]!.name}
+                            {shown.length > 0 ? " · " : ""}
+                            {t("via", { name: entities[0]!.name })}
                         </span>
                     )}
                 </p>
@@ -490,14 +513,14 @@ function FundCard({
                 <Button size="sm" variant="ghost" asChild>
                     <a href={fund.filingUrl} target="_blank" rel="noopener noreferrer">
                         <FileText />
-                        Filing
+                        {t("filing")}
                         <ArrowUpRight className="text-ink-3" />
                     </a>
                 </Button>
                 <Button size="sm" variant="ghost" asChild>
                     <a href={websiteSearchUrl(fund)} target="_blank" rel="noopener noreferrer">
                         <Globe />
-                        Website
+                        {t("website")}
                         <ArrowUpRight className="text-ink-3" />
                     </a>
                 </Button>

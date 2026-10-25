@@ -11,8 +11,9 @@ import { eq, desc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { companyMetadataHistory } from "~/server/db/schema";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         // Diffs carry excerpts from every document, whatever the viewer may open.
         const ctx = await requireWorkspacePermission("settings.manage");
@@ -40,6 +41,9 @@ export async function GET() {
         return NextResponse.json({ history: serializable });
     } catch (error) {
         console.error("[company-metadata/history] GET error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

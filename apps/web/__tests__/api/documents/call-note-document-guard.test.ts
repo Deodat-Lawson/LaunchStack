@@ -39,6 +39,20 @@ jest.mock("~/lib/authz/scope", () => ({
     scopedDocumentWhere: (companyId: bigint) => ({ op: "scoped", companyId }),
 }));
 jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
+jest.mock("~/server/company-profile/service", () => ({ reassembleAfterDelete: jest.fn() }));
+jest.mock("~/server/workspace/activity", () => ({ recordActivity: jest.fn() }));
+jest.mock("~/server/workspace/item-access", () => ({
+    ...jest.requireActual("~/server/workspace/item-access"),
+    canEditDocument: jest.fn().mockResolvedValue(true),
+    documentAccess: jest.fn().mockResolvedValue({ level: "manage", audience: "workspace" }),
+    accessSubject: jest.fn().mockResolvedValue({ userPk: "7" }),
+    canManageFolderPath: jest.fn().mockResolvedValue(true),
+    canEditFolderPath: jest.fn().mockResolvedValue(true),
+    folderAccess: jest.fn().mockResolvedValue({ level: "manage", audience: "workspace" }),
+}));
+jest.mock("~/server/workspace/ownership", () => ({
+    applyDocumentMoveDefaults: jest.fn().mockResolvedValue("unchanged"),
+}));
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
         handler(),
@@ -156,12 +170,13 @@ const original = {
     url: "https://storage.example/review.md",
 };
 
+let mockRequestLocale = "en";
+
 function request(path: string, method: string, body?: unknown): Request {
     return new Request(`https://app.example${path}`, {
         method,
-        ...(body === undefined
-            ? {}
-            : { body: JSON.stringify(body), headers: { "Content-Type": "application/json" } }),
+        headers: { "Content-Type": "application/json", "Accept-Language": mockRequestLocale },
+        ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
 }
 
@@ -257,6 +272,7 @@ const mutations = [
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockRequestLocale = "en";
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
         data: makeWorkspaceContext({ companyId: BigInt(10) }),
@@ -268,12 +284,20 @@ beforeEach(() => {
 });
 
 describe("Call Note document mutation ownership", () => {
-    it.each(mutations)("refuses to $name through a generic document API", async ({ run }) => {
+    it.each(
+        mutations.flatMap(mutation => ["en", "zh-CN"].map(locale => ({ ...mutation, locale })))
+    )("refuses to $name through a generic document API ($locale)", async ({ run, locale }) => {
+        mockRequestLocale = locale;
         const response = await run();
 
         expect(response.status).toBe(409);
         expect(await response.json()).toEqual(
-            expect.objectContaining({ error: "Call Note documents are managed from Calls" })
+            expect.objectContaining({
+                error:
+                    locale === "zh-CN"
+                        ? "通话笔记文档请在「通话」中管理"
+                        : "Call Note documents are managed from Calls",
+            })
         );
         expect(mockDb.update).not.toHaveBeenCalled();
         expect(mockDb.delete).not.toHaveBeenCalled();

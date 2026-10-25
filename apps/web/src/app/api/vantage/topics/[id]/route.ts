@@ -15,17 +15,17 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = TopicPatchSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const patch = { ...parsed.data };
         if (patch.proposedDue === "") patch.proposedDue = null;
         const topic = await updateTopic({ companyId: auth.ctx.companyId, id, patch });
         return json({ topic });
     } catch (err) {
-        return handleVantageError("PATCH topic", err);
+        return handleVantageError("PATCH topic", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -33,6 +33,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await deleteTopic({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
-        return handleVantageError("DELETE topic", err);
+        return handleVantageError("DELETE topic", err, request);
     }
 }

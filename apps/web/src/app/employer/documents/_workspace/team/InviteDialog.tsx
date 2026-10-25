@@ -7,6 +7,7 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -27,22 +28,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
-import { INVITABLE_BUILTIN_ROLES, ROLE_LABELS } from "~/lib/authz/permissions";
+import { useRoleLabel } from "~/lib/authz/i18n";
+import { INVITABLE_BUILTIN_ROLES } from "~/lib/authz/permissions";
 
-import { errorMessage, peopleApi, type Role } from "../settings/people/api";
-import { CopyButton } from "../settings/people/ui";
+import { peopleApi, type Role } from "../settings/people/api";
+import { CopyButton, useErrorText } from "../settings/people/ui";
 
 type RoleOption = Pick<Role, "slug" | "name" | "assignable">;
 
+/** Before the role list arrives: the built-ins, named where they render. */
 const FALLBACK_ROLES: RoleOption[] = INVITABLE_BUILTIN_ROLES.map(slug => ({
     slug,
-    name: ROLE_LABELS[slug],
+    name: slug,
     assignable: true,
 }));
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+    const t = useTranslations("team.inviteDialog");
+    const errorText = useErrorText();
+    const tc = useTranslations("common");
+    const roleLabel = useRoleLabel();
     const [roles, setRoles] = useState<RoleOption[]>(FALLBACK_ROLES);
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("member");
@@ -82,7 +89,7 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
         e.preventDefault();
         const trimmed = email.trim().toLowerCase();
         if (!EMAIL_RE.test(trimmed)) {
-            setError("Enter a full email address, like ada@example.com.");
+            setError(t("invalidEmail"));
             return;
         }
         setBusy(true);
@@ -90,9 +97,9 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
         try {
             const res = await peopleApi.invitations.create({ email: trimmed, role });
             setSent({ email: res.invitation.email, acceptUrl: res.acceptUrl });
-            toast.success(`Invitation sent to ${res.invitation.email}`);
+            toast.success(t("sentToast", { email: res.invitation.email }));
         } catch (err) {
-            setError(errorMessage(err, "The invitation wasn't sent."));
+            setError(errorText(err, t("sendError")));
         } finally {
             setBusy(false);
         }
@@ -109,39 +116,36 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
                 {sent ? (
                     <div className="flex flex-col gap-4">
                         <DialogHeader>
-                            <DialogTitle>Invitation sent</DialogTitle>
+                            <DialogTitle>{t("sentTitle")}</DialogTitle>
                             <DialogDescription>
-                                {sent.email} was emailed a link. If mail isn&apos;t set up here,
-                                send them this link yourself.
+                                {t("sentBody", { email: sent.email })}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="flex items-center gap-2">
                             <Input
                                 readOnly
                                 value={sent.acceptUrl}
-                                aria-label="Invitation link"
+                                aria-label={t("linkLabel")}
                                 className="min-w-0 flex-1 font-mono text-xs"
                                 onFocus={e => e.currentTarget.select()}
                             />
-                            <CopyButton value={sent.acceptUrl} label="Copy link" />
+                            <CopyButton value={sent.acceptUrl} label={t("copyLink")} />
                         </div>
                         <DialogFooter>
                             <Button variant="outline" onClick={() => setSent(null)}>
-                                Invite someone else
+                                {t("inviteAnother")}
                             </Button>
-                            <Button onClick={onClose}>Done</Button>
+                            <Button onClick={onClose}>{tc("actions.done")}</Button>
                         </DialogFooter>
                     </div>
                 ) : (
                     <form onSubmit={e => void submit(e)} className="flex flex-col gap-4">
                         <DialogHeader>
-                            <DialogTitle>Invite people</DialogTitle>
-                            <DialogDescription>
-                                They get an email with a link to join with the role you pick.
-                            </DialogDescription>
+                            <DialogTitle>{t("title")}</DialogTitle>
+                            <DialogDescription>{t("description")}</DialogDescription>
                         </DialogHeader>
                         <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="team-invite-email">Email</Label>
+                            <Label htmlFor="team-invite-email">{tc("fields.email")}</Label>
                             <Input
                                 id="team-invite-email"
                                 type="email"
@@ -157,15 +161,15 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
                             />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                            <Label htmlFor="team-invite-role">Role</Label>
+                            <Label htmlFor="team-invite-role">{tc("fields.role")}</Label>
                             <Select value={role} onValueChange={setRole} disabled={busy}>
-                                <SelectTrigger id="team-invite-role" aria-label="Role">
-                                    <SelectValue placeholder="Choose a role" />
+                                <SelectTrigger id="team-invite-role" aria-label={tc("fields.role")}>
+                                    <SelectValue placeholder={t("chooseRole")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {assignable.map(r => (
                                         <SelectItem key={r.slug} value={r.slug}>
-                                            {r.name}
+                                            {roleLabel(r.slug, r.name)}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -183,10 +187,10 @@ export function InviteDialog({ open, onClose }: { open: boolean; onClose: () => 
                                 onClick={onClose}
                                 disabled={busy}
                             >
-                                Cancel
+                                {tc("actions.cancel")}
                             </Button>
                             <Button type="submit" disabled={busy || !email.trim()}>
-                                {busy ? "Sending…" : "Send invitation"}
+                                {busy ? t("sending") : t("send")}
                             </Button>
                         </DialogFooter>
                     </form>

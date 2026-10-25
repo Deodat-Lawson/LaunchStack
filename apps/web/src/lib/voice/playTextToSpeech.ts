@@ -1,4 +1,8 @@
 import type { MutableRefObject, Dispatch, SetStateAction } from "react";
+import type { useTranslations } from "next-intl";
+
+/** `useTranslations("chat.voice")`, for the errors this writes itself. */
+export type VoiceTranslator = ReturnType<typeof useTranslations<"chat.voice">>;
 
 export type VoiceCallState = "connected" | "listening" | "speaking" | "muted";
 
@@ -13,6 +17,8 @@ interface PlayTextToSpeechParams {
     setError: Dispatch<SetStateAction<string | null>>;
     isProcessingRef: MutableRefObject<boolean>;
     ttsStartedAtRef: MutableRefObject<number>;
+    /** Words the screen reads; without it the errors stay in English. */
+    t?: VoiceTranslator;
 }
 
 export async function playTextToSpeech({
@@ -26,6 +32,7 @@ export async function playTextToSpeech({
     setError,
     isProcessingRef,
     ttsStartedAtRef,
+    t,
 }: PlayTextToSpeechParams) {
     if (!text || text.trim().length === 0) return;
     if (isPlayingAudio || isGeneratingTTSRef.current) return;
@@ -59,7 +66,12 @@ export async function playTextToSpeech({
             const errorData = (await response.json().catch(() => ({ error: "Unknown error" }))) as {
                 error?: string;
             };
-            throw new Error(errorData.error ?? `Failed to generate speech: ${response.statusText}`);
+            throw new Error(
+                errorData.error ??
+                    (t
+                        ? t("generateFailedStatus", { status: response.statusText })
+                        : `Failed to generate speech: ${response.statusText}`)
+            );
         }
 
         const setupAudioHandlers = (audio: HTMLAudioElement, urlToRevoke: string) => {
@@ -76,7 +88,7 @@ export async function playTextToSpeech({
                 setIsPlayingAudio(false);
                 setIsLoadingAudio(false);
                 setCallState("connected");
-                setError("Failed to play audio");
+                setError(t ? t("playFailed") : "Failed to play audio");
                 URL.revokeObjectURL(urlToRevoke);
                 audioRef.current = null;
                 isGeneratingTTSRef.current = false;
@@ -101,7 +113,13 @@ export async function playTextToSpeech({
         setIsPlayingAudio(false);
         setIsLoadingAudio(false);
         setCallState("connected");
-        setError(error instanceof Error ? error.message : "Failed to generate speech");
+        setError(
+            error instanceof Error
+                ? error.message
+                : t
+                  ? t("generateFailed")
+                  : "Failed to generate speech"
+        );
         isGeneratingTTSRef.current = false;
         setTimeout(() => setError(null), 5000);
     }

@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { newSection } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../../../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../../../_http";
 
 const Schema = z.object({
     question: z.string().min(1).max(1_000),
@@ -18,9 +18,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     try {
         const { id } = await params;
         const parsed = Schema.safeParse(await readBody(request));
-        if (!parsed.success) return error("A section needs a question", 400);
+        if (!parsed.success) return error(say(request, "sectionNeedsQuestion"), 400);
         return json({ section: await newSection(auth.ctx, id, parsed.data) }, 201);
     } catch (err) {
-        return handleProposalsError("POST sections", err);
+        return handleProposalsError("POST sections", err, request);
     }
 }

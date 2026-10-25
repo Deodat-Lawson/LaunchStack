@@ -156,6 +156,27 @@ describe("POST /route", () => {
         expect(body.pageCount).toBe(2);
     });
 
+    it("routes complex documents to Azure on the lean stack, which runs no Docling", async () => {
+        // docker-compose.prod.yml leaves DOCLING_SERVE_URL empty; with it set,
+        // this went to a docling-serve that was not running.
+        const pdf = await makeEmptyPdf();
+        const body = await route(
+            testConfig({
+                defaultProvider: "AZURE",
+                azureEndpoint: "https://azure.test",
+                azureKey: "azure-key",
+            }),
+            {
+                fetchImpl: bytesFetch(pdf),
+                renderPages: async () => [new Uint8Array([1, 2, 3])],
+                classify: async () => ({ label: "handwritten notes", score: 0.91 }),
+            },
+            {}
+        );
+        expect(body.provider).toBe("AZURE");
+        expect(body.reason).toBe("vision-complex");
+    });
+
     it("routes simple vision results to the default provider", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(

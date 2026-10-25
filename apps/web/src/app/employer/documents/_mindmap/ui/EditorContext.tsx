@@ -9,9 +9,13 @@ import React, {
     useSyncExternalStore,
 } from "react";
 
+import type { useTranslations } from "next-intl";
+
 import { activePage } from "../model/doc";
+import { isSwatchId, isThemeId } from "../model/palette";
+import { SHAPE_CATEGORY_KEYS } from "../model/shapes";
 import type { EditorState, EditorStore } from "../model/store";
-import type { DiagramPage, MindmapDoc } from "../model/types";
+import type { DiagramPage, MindmapDoc, ShapeCategory, ShapeId } from "../model/types";
 
 const StoreContext = createContext<EditorStore | null>(null);
 
@@ -202,4 +206,33 @@ const selectSelectedEdgeIds = (s: EditorState): string[] =>
 
 export function useSelectedEdgeIds(): string[] {
     return useEditor(selectSelectedEdgeIds, shallowArrayEqual);
+}
+
+// ---------------------------------------------------------------------------
+// Names in the reader's language
+// ---------------------------------------------------------------------------
+
+/**
+ * The editor's translator, `useTranslations("mindmap")`. Plain builders (the
+ * context menu, the command list) take one from the component that renders
+ * them. The model's `name` fields stay English — they are search terms and
+ * test fixtures — and these read the name the reader sees.
+ */
+export type MindmapT = ReturnType<typeof useTranslations<"mindmap">>;
+
+export function shapeName(t: MindmapT, id: ShapeId): string {
+    return t(`shapes.${id}`);
+}
+
+export function categoryName(t: MindmapT, category: ShapeCategory): string {
+    return t(`shapeCategories.${SHAPE_CATEGORY_KEYS[category]}`);
+}
+
+/** A swatch's colour name; one outside the table keeps its English name. */
+export function swatchName(t: MindmapT, swatch: { id: string; name: string }): string {
+    return isSwatchId(swatch.id) ? t(`colors.${swatch.id}`) : swatch.name;
+}
+
+export function themeName(t: MindmapT, theme: { id: string; name: string }): string {
+    return isThemeId(theme.id) ? t(`themes.${theme.id}`) : theme.name;
 }

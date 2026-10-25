@@ -19,6 +19,6 @@ export async function GET(request: Request) {
         const days = Number(new URL(request.url).searchParams.get("days")) || 30;
         return NextResponse.json(await usageOverview(ctx.data.companyId, days));
     } catch (error) {
-        return workspaceErrorResponse(error, "[settings/usage GET]");
+        return workspaceErrorResponse(error, "[settings/usage GET]", request);
     }
 }

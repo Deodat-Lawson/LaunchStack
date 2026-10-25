@@ -36,9 +36,22 @@ function displayName(code: string, inLocale: string): string | null {
     }
 }
 
-/** "yue" → "Cantonese"; an unknown code comes back as given. */
-export function languageName(code: string): string {
-    return displayName(code, "en") ?? code;
+/**
+ * A locale to name languages in. Anything but a string (an array index, when
+ * the function is handed straight to `.map`) means English.
+ */
+function namingLocale(inLocale: unknown): string {
+    return typeof inLocale === "string" && inLocale ? inLocale : "en";
+}
+
+/**
+ * "yue" → "Cantonese"; an unknown code comes back as given. `inLocale` names
+ * it in the interface language instead ("yue", "zh-CN" → "粤语").
+ */
+export function languageName(code: string): string;
+export function languageName(code: string, inLocale: string): string;
+export function languageName(code: string, inLocale?: unknown): string {
+    return displayName(code, namingLocale(inLocale)) ?? code;
 }
 
 /** The language's name for itself: "yue" → "粵語", "es" → "español". */
@@ -46,11 +59,16 @@ export function nativeLanguageName(code: string): string {
     return displayName(code, code) ?? languageName(code);
 }
 
-/** "Cantonese · 粵語", or just "English" when the two names agree. */
-export function languageLabel(code: string): string {
-    const english = languageName(code);
+/**
+ * "Cantonese · 粵語", or just "English" when the two names agree. `inLocale`
+ * names the first half in the interface language ("粤语 · 粵語").
+ */
+export function languageLabel(code: string): string;
+export function languageLabel(code: string, inLocale: string): string;
+export function languageLabel(code: string, inLocale?: unknown): string {
+    const named = languageName(code, namingLocale(inLocale));
     const native = nativeLanguageName(code);
-    return native.toLowerCase() === english.toLowerCase() ? english : `${english} · ${native}`;
+    return native.toLowerCase() === named.toLowerCase() ? named : `${named} · ${native}`;
 }
 
 /** "zh-Hant-HK" → "zh"; for "is this the same language" checks. */

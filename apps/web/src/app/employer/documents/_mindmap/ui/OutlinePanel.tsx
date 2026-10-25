@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight, Eye, EyeOff, Lock, LockOpen } from "lucide-react";
 
 import { ScrollArea } from "~/components/ui/scroll-area";
@@ -12,7 +13,7 @@ import { shapeDef } from "../model/shapes";
 import { nonEmpty, trimmedOr } from "../model/strings";
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
-import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { shapeName, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The outline.
@@ -32,6 +33,8 @@ interface OutlineRow {
 }
 
 export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: number } }) {
+    const t = useTranslations("mindmap");
+    const tc = useTranslations("common");
     const store = useStore();
     const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
@@ -88,6 +91,7 @@ export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: numbe
     const renderRow = (row: OutlineRow) => {
         const { node, depth, hasChildren } = row;
         const isCollapsed = collapsed.has(node.id);
+        const kind = shapeName(t, shapeDef(node.shape).id);
         return (
             <div
                 key={node.id}
@@ -104,7 +108,7 @@ export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: numbe
                         type="button"
                         onClick={() => toggle(node.id)}
                         className="text-ink-3 flex size-4 shrink-0 items-center justify-center"
-                        aria-label={isCollapsed ? "Expand" : "Collapse"}
+                        aria-label={isCollapsed ? tc("actions.expand") : tc("actions.collapse")}
                     >
                         {isCollapsed ? (
                             <ChevronRight className="size-3" />
@@ -120,16 +124,16 @@ export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: numbe
                     type="button"
                     onClick={() => focusNode(store, node.id, canvasSize)}
                     className="flex-1 truncate text-left"
-                    title={trimmedOr(node.text, shapeDef(node.shape).name)}
+                    title={trimmedOr(node.text, kind)}
                 >
                     {nonEmpty(node.text.split("\n")[0]) ?? (
-                        <span className="text-ink-3 italic">{shapeDef(node.shape).name}</span>
+                        <span className="text-ink-3 italic">{kind}</span>
                     )}
                 </button>
 
                 <button
                     type="button"
-                    aria-label={node.hidden ? "Show" : "Hide"}
+                    aria-label={node.hidden ? tc("actions.show") : tc("actions.hide")}
                     onClick={() =>
                         store.updatePage(
                             p => mapNodes(p, [node.id], nd => ({ ...nd, hidden: !nd.hidden })),
@@ -145,7 +149,7 @@ export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: numbe
                 </button>
                 <button
                     type="button"
-                    aria-label={node.locked ? "Unlock" : "Lock"}
+                    aria-label={node.locked ? t("outline.unlock") : t("outline.lock")}
                     onClick={() =>
                         store.updatePage(
                             p => mapNodes(p, [node.id], nd => ({ ...nd, locked: !nd.locked })),
@@ -172,14 +176,14 @@ export function OutlinePanel({ canvasSize }: { canvasSize: { w: number; h: numbe
             <div className="px-2 py-2">
                 {rows.length === 0 && unlinked.length === 0 && (
                     <p className="text-ink-3 px-2 py-6 text-center text-[13px]">
-                        Nothing on this page yet. Double-click the canvas to start.
+                        {t("outline.empty")}
                     </p>
                 )}
                 {rows.map(renderRow)}
                 {unlinked.length > 0 && (
                     <>
                         <h4 className="text-ink-3 mb-1 mt-3 px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                            Unlinked
+                            {t("outline.unlinked")}
                         </h4>
                         {unlinked.map(node => renderRow({ node, depth: 0, hasChildren: false }))}
                     </>

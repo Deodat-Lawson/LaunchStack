@@ -8,10 +8,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordCopy, wordOr } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
+
 import { processDocumentUpload } from "~/server/services/document-upload";
 import {
     parseGitHubUrl,
     downloadGitHubRepoZip,
+    GitHubRepoError,
     GitHubRepoNotFoundError,
     GitHubAuthError,
     GitHubRateLimitError,
@@ -21,19 +26,29 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
-    repoUrl: z.string().url("A valid URL is required"),
+    repoUrl: z.string().url(V.validUrlRequired),
     branch: z.string().optional(),
     accessToken: z.string().optional(),
     category: z.string().optional(),
 });
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "upload.server.errors");
+    const unknownError = () => translatorFor(locale, "errors.api")("unknownError");
+    /** A GitHub refusal in the reader's language; anything else as it came. */
+    const errorDetail = (error: unknown) =>
+        error instanceof GitHubRepoError
+            ? wordCopy(error.copy, locale)
+            : error instanceof Error
+              ? error.message
+              : unknownError();
     const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
@@ -47,7 +62,10 @@ export async function POST(request: Request) {
             const { repoUrl, branch, accessToken, category } = validation.data;
 
             if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "sources.server.errors")("folderEditDenied") },
+                    { status: 403 }
+                );
             }
 
             // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
@@ -60,8 +78,8 @@ export async function POST(request: Request) {
             } catch (err) {
                 return NextResponse.json(
                     {
-                        error: "Invalid GitHub URL",
-                        details: err instanceof Error ? err.message : "Unknown error",
+                        error: t("invalidGithubUrl"),
+                        details: errorDetail(err),
                     },
                     { status: 400 }
                 );
@@ -131,7 +149,7 @@ export async function POST(request: Request) {
                     success: true,
                     jobId: uploadResult.jobId,
                     eventIds: uploadResult.eventIds,
-                    message: `Repository ${owner}/${repo} is being indexed`,
+                    message: t("repoIndexing", { repo: `${owner}/${repo}` }),
                     document: uploadResult.document,
                     repo: { owner, repo, branch: branch ?? "default" },
                 },
@@ -139,29 +157,32 @@ export async function POST(request: Request) {
             );
         } catch (error) {
             if (error instanceof GitHubRepoNotFoundError) {
-                return NextResponse.json({ error: error.message }, { status: 404 });
+                return NextResponse.json({ error: wordCopy(error.copy, locale) }, { status: 404 });
             }
 
             if (error instanceof GitHubAuthError) {
-                return NextResponse.json({ error: error.message }, { status: 403 });
+                return NextResponse.json({ error: wordCopy(error.copy, locale) }, { status: 403 });
             }
 
             if (error instanceof GitHubRateLimitError) {
-                return NextResponse.json({ error: error.message }, { status: 429 });
+                return NextResponse.json({ error: wordCopy(error.copy, locale) }, { status: 429 });
             }
 
             // processDocumentUpload authorizes the internal file reference and
             // throws with its own status (404 foreign file / 503 unconfigured);
             // a generic 500 would hide an operator-fixable condition.
             if (error instanceof UploadAuthorizationError) {
-                return NextResponse.json({ error: error.message }, { status: error.status });
+                return NextResponse.json(
+                    { error: wordOr(error.copy, error.message, locale) },
+                    { status: error.status }
+                );
             }
 
             console.error("[GitHubRepoUpload] Error:", error);
             return NextResponse.json(
                 {
-                    error: "Failed to index GitHub repository",
-                    details: error instanceof Error ? error.message : "Unknown error",
+                    error: t("githubIndexFailed"),
+                    details: errorDetail(error),
                 },
                 { status: 500 }
             );

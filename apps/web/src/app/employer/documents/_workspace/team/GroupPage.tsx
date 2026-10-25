@@ -8,6 +8,7 @@
 
 import React, { useMemo, useState } from "react";
 import { MoreHorizontal, Pencil, Search, Trash2, UserPlus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
@@ -23,8 +24,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 
-import { errorMessage, peopleApi, type Group, type Member } from "../settings/people/api";
-import { plural } from "../settings/people/format";
+import { peopleApi, type Group, type Member } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 import { GroupDialog } from "../settings/people/GroupsTab";
 import { teamPaths } from "./screens";
 import { BackButton, EmptyLine } from "./ui";
@@ -45,6 +46,10 @@ export function GroupPage({
     onChanged: (group: Group) => void;
     onDeleted: (groupId: number) => void;
 }) {
+    const t = useTranslations("team.groupPage");
+    const errorText = useErrorText();
+    const tTeam = useTranslations("team");
+    const tc = useTranslations("common");
     const canManage = group.canManage === true;
     const [busy, setBusy] = useState(false);
     const [renaming, setRenaming] = useState(false);
@@ -60,9 +65,9 @@ export function GroupPage({
         try {
             const res = await peopleApi.groups.removeMembers(group.id, [memberId]);
             onChanged(res.group);
-            toast.success(`${name} removed from ${group.name}`);
+            toast.success(t("removed", { name, group: group.name }));
         } catch (err) {
-            toast.error(errorMessage(err, "Couldn't remove them from the group."));
+            toast.error(errorText(err, t("removeError")));
         } finally {
             setBusy(false);
         }
@@ -73,9 +78,9 @@ export function GroupPage({
         try {
             const res = await peopleApi.groups.addMembers(group.id, [member.id]);
             onChanged(res.group);
-            toast.success(`${member.displayName} added to ${group.name}`);
+            toast.success(t("added", { name: member.displayName, group: group.name }));
         } catch (err) {
-            toast.error(errorMessage(err, "Couldn't add them to the group."));
+            toast.error(errorText(err, t("addError")));
         } finally {
             setBusy(false);
         }
@@ -85,10 +90,10 @@ export function GroupPage({
         setBusy(true);
         try {
             await peopleApi.groups.remove(group.id);
-            toast.success(`${group.name} deleted`);
+            toast.success(t("deleted", { name: group.name }));
             onDeleted(group.id);
         } catch (err) {
-            toast.error(errorMessage(err, "The group wasn't deleted."));
+            toast.error(errorText(err, t("deleteError")));
         } finally {
             setBusy(false);
         }
@@ -97,7 +102,7 @@ export function GroupPage({
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5" data-testid="team-group">
             <div>
-                <BackButton label="Groups" onClick={onBack} />
+                <BackButton label={t("back")} onClick={onBack} />
             </div>
 
             <header className="@max-md:grid-cols-1 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
@@ -111,9 +116,13 @@ export function GroupPage({
                         </p>
                     )}
                     <p className="text-ink-3 m-0 mt-1.5 text-[12px]">
-                        {plural(group.memberCount, "member")}
+                        {t("members", { count: group.memberCount })}
                         {creator
-                            ? ` · made by ${creator.isSelf ? "you" : creator.displayName}`
+                            ? ` · ${
+                                  creator.isSelf
+                                      ? t("madeByYou")
+                                      : t("madeBy", { name: creator.displayName })
+                              }`
                             : ""}
                     </p>
                 </div>
@@ -126,20 +135,20 @@ export function GroupPage({
                                     variant="outline"
                                     size="icon"
                                     className="text-ink-2 size-8"
-                                    aria-label={`Actions for ${group.name}`}
+                                    aria-label={t("actionsFor", { name: group.name })}
                                 >
                                     <MoreHorizontal className="size-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem onSelect={() => setRenaming(true)}>
-                                    <Pencil /> Rename
+                                    <Pencil /> {tc("actions.rename")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     variant="destructive"
                                     onSelect={() => setDeleting(true)}
                                 >
-                                    <Trash2 /> Delete group
+                                    <Trash2 /> {t("deleteGroup")}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -148,11 +157,7 @@ export function GroupPage({
             </header>
 
             {group.members.length === 0 ? (
-                <EmptyLine flush>
-                    {canManage
-                        ? "Nobody is in this group yet. Add people, then share with the group in one step."
-                        : "Nobody is in this group yet."}
-                </EmptyLine>
+                <EmptyLine flush>{canManage ? t("emptyManage") : t("empty")}</EmptyLine>
             ) : (
                 <ul
                     className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 p-0"
@@ -174,7 +179,9 @@ export function GroupPage({
                                     <span className="text-ink block truncate text-[13px] font-medium">
                                         {name}
                                         {person?.isSelf && (
-                                            <span className="text-ink-3 font-normal"> (you)</span>
+                                            <span className="text-ink-3 font-normal">
+                                                {tTeam("you")}
+                                            </span>
                                         )}
                                     </span>
                                     <span className="text-ink-3 block truncate text-[11.5px]">
@@ -207,7 +214,7 @@ export function GroupPage({
                                         size="icon"
                                         disabled={busy}
                                         onClick={() => void remove(m.id, name)}
-                                        aria-label={`Remove ${name} from ${group.name}`}
+                                        aria-label={t("removeLabel", { name, group: group.name })}
                                         // Shown on hover; always on a touch screen, which has none.
                                         className="text-ink-3 hover:text-danger size-7 shrink-0 opacity-0 focus-visible:opacity-100 group-hover/row:opacity-100 [@media(hover:none)]:opacity-100"
                                     >
@@ -231,12 +238,9 @@ export function GroupPage({
             <ConfirmDialog
                 open={deleting}
                 onOpenChange={setDeleting}
-                title={`Delete ${group.name}?`}
-                description={`Folders, files and chats shared with this group stop reaching its ${plural(
-                    group.memberCount,
-                    "member"
-                )}. Nobody leaves the workspace.`}
-                confirmLabel="Delete group"
+                title={t("confirmTitle", { name: group.name })}
+                description={t("confirmBody", { count: group.memberCount })}
+                confirmLabel={t("deleteGroup")}
                 onConfirm={() => void destroy()}
             />
         </div>
@@ -254,6 +258,7 @@ function AddPeople({
     busy: boolean;
     onAdd: (member: Member) => Promise<void>;
 }) {
+    const t = useTranslations("team.groupPage");
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState("");
     const inGroup = useMemo(() => new Set(group.members.map(m => m.id)), [group.members]);
@@ -277,7 +282,7 @@ function AddPeople({
             <PopoverTrigger asChild>
                 <Button size="sm" data-testid="team-group-add">
                     <UserPlus className="size-3.5" />
-                    Add people
+                    {t("addPeople")}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" sideOffset={6} className="w-[260px] p-0">
@@ -287,8 +292,8 @@ function AddPeople({
                         <Input
                             value={filter}
                             onChange={e => setFilter(e.target.value)}
-                            placeholder="Find a person"
-                            aria-label="Find a person to add"
+                            placeholder={t("findPlaceholder")}
+                            aria-label={t("findLabel")}
                             className="h-8 pl-8 text-[13px]"
                             autoFocus
                         />
@@ -297,9 +302,7 @@ function AddPeople({
                 <div className="max-h-[280px] overflow-y-auto py-1">
                     {candidates.length === 0 ? (
                         <p className="text-ink-3 m-0 px-3 py-3 text-[12.5px]">
-                            {needle
-                                ? `Nobody else matches “${filter.trim()}”.`
-                                : "Everyone is already in this group."}
+                            {needle ? t("noMatch", { query: filter.trim() }) : t("allIn")}
                         </p>
                     ) : (
                         candidates.map(m => (

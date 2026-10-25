@@ -3,12 +3,12 @@
 import { handleVantageError, json, vantageContext } from "../_http";
 import { loadOverview } from "~/server/vantage/service";
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
         return json(await loadOverview({ companyId: auth.ctx.companyId }));
     } catch (err) {
-        return handleVantageError("GET overview", err);
+        return handleVantageError("GET overview", err, request);
     }
 }

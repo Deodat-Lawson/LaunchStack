@@ -8,20 +8,20 @@
  */
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { Panel } from "./ui";
 import { SettingRow } from "../SettingRow";
 
 export function WorkspaceSettingsCard() {
+    const t = useTranslations("settings.people.settingsCard");
     return (
         <Panel className="p-5">
             <div className="mb-2">
                 <h2 className="text-ink m-0 text-base font-bold tracking-[-0.01em]">
-                    Workspace settings
+                    {t("title")}
                 </h2>
-                <p className="text-ink-3 m-0 mt-1 text-[13px] leading-normal">
-                    Policy that applies to everyone in this workspace.
-                </p>
+                <p className="text-ink-3 m-0 mt-1 text-[13px] leading-normal">{t("description")}</p>
             </div>
             <SettingRow settingKey="workspace.auditRetentionDays" />
         </Panel>

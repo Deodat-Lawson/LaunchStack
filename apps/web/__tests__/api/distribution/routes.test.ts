@@ -12,7 +12,7 @@ import { NextRequest } from "next/server";
 const mockRequireWorkspaceContext = jest.fn();
 // Runs the work as-is: which workspace's models it gets is not this test's concern.
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+    withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));
 
 jest.mock("~/lib/require-workspace-context", () => ({
@@ -102,6 +102,7 @@ jest.mock("~/lib/credits", () => ({ hasTokens: (...args: unknown[]) => mockHasTo
 const mockIsMeteringEnforced = jest.fn();
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: () => mockIsMeteringEnforced() }));
 
+import { assertTransition } from "@launchstack/pipelines/distribution/stages";
 import { POST as POST_PROGRAMS, GET as GET_PROGRAMS } from "~/app/api/distribution/programs/route";
 import { POST as POST_RUNS } from "~/app/api/distribution/runs/route";
 import { GET as GET_PARTNER } from "~/app/api/distribution/partners/[id]/route";
@@ -187,7 +188,7 @@ describe("programs", () => {
             success: false,
             response: new Response("no", { status: 401 }),
         });
-        const res = await GET_PROGRAMS();
+        const res = await GET_PROGRAMS(req("/api/distribution/programs", "GET"));
         expect(res.status).toBe(401);
     });
 });
@@ -312,6 +313,64 @@ describe("relationship transitions", () => {
             { params: Promise.resolve({ id: "rel-1" }) }
         );
         expect(res.status).toBe(400);
+    });
+});
+
+describe("in the reader's language", () => {
+    const zh = (url: string, method: string, body?: unknown): NextRequest =>
+        new NextRequest(`http://localhost:3000${url}`, {
+            method,
+            headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+        });
+
+    it("says a refused stage move in Chinese, and keeps the code", async () => {
+        mockDb.getRelationship.mockResolvedValue({
+            id: "rel-1",
+            stage: "candidate",
+            ownerUserId: null,
+            nextAction: null,
+            nextActionAt: null,
+        });
+        let refused: unknown;
+        try {
+            assertTransition({
+                from: "candidate",
+                to: "qualified",
+                context: { ownerUserId: null, nextAction: null, hasAgreement: false },
+            });
+        } catch (e) {
+            refused = e;
+        }
+        mockDb.transitionStage.mockRejectedValue(refused);
+        const res = await PATCH_RELATIONSHIP(
+            zh("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            { params: Promise.resolve({ id: "rel-1" }) }
+        );
+        expect(res.status).toBe(409);
+        expect(await res.json()).toEqual({
+            error: "无法从“candidate”移至“qualified”。允许的阶段：researched、contacted、declined、dormant。",
+            code: "transition_not_allowed",
+        });
+
+        const english = await PATCH_RELATIONSHIP(
+            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            { params: Promise.resolve({ id: "rel-1" }) }
+        );
+        expect((await english.json()).error).toBe(
+            'Cannot move from "candidate" to "qualified". Allowed: researched, contacted, declined, dormant.'
+        );
+    });
+
+    it("says a missing program in Chinese, and in English without the cookie", async () => {
+        mockDb.getProgram.mockResolvedValue(null);
+        const res = await POST_RUNS(zh("/api/distribution/runs", "POST", { programId: "p-9" }));
+        expect(res.status).toBe(404);
+        expect((await res.json()).error).toBe("未找到计划");
+        const english = await POST_RUNS(
+            req("/api/distribution/runs", "POST", { programId: "p-9" })
+        );
+        expect((await english.json()).error).toBe("Program not found");
     });
 });
 

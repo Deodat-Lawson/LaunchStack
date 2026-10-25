@@ -96,7 +96,7 @@ describe("GET /api/workspace/groups", () => {
             { id: 3, name: "Sales", slug: "sales", description: null, createdBy: "user-m" },
         ]);
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/groups"));
 
         expect(res.status).toBe(200);
         const body = (await res.json()) as { groups: { id: number; canManage: boolean }[] };

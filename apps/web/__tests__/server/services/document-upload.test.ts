@@ -28,13 +28,22 @@ jest.mock("~/server/services/document-creation", () => ({
     createDocumentLifecycle: jest.fn(),
 }));
 
-const mockDeleteDocumentCore = jest.fn().mockResolvedValue(undefined);
+const mockDeleteDocumentCore = jest.fn().mockResolvedValue([]);
+const mockDeleteDocumentBlobs = jest.fn().mockResolvedValue(undefined);
+const mockTransactionCommitted = jest.fn();
 jest.mock("~/server/services/document-delete", () => ({
     deleteDocumentCore: (...args: unknown[]) => mockDeleteDocumentCore(...args) as unknown,
+    deleteDocumentBlobs: (...args: unknown[]) => mockDeleteDocumentBlobs(...args) as unknown,
 }));
 
 jest.mock("~/server/db", () => ({
-    db: { transaction: (fn: (tx: unknown) => Promise<unknown>) => fn("tx") },
+    db: {
+        transaction: async (fn: (tx: unknown) => Promise<unknown>) => {
+            const result = await fn("tx");
+            mockTransactionCommitted();
+            return result;
+        },
+    },
 }));
 
 jest.mock("~/lib/credits", () => ({
@@ -149,6 +158,8 @@ describe("processDocumentUpload when transcription fails", () => {
     it("removes the recording row it made when the transcript row then fails", async () => {
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
         const rowFailure = new Error("transcript row insert failed");
+        const pendingBlobs = [{ url: "https://files.test/memo.m4a" }];
+        mockDeleteDocumentCore.mockResolvedValueOnce(pendingBlobs);
         mockTranscribeAudioFromUrl.mockResolvedValue({
             text: "大家好",
             language: "yue",
@@ -178,6 +189,10 @@ describe("processDocumentUpload when transcription fails", () => {
             ).rejects.toBe(rowFailure);
 
             expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41);
+            expect(mockDeleteDocumentBlobs).toHaveBeenCalledWith(pendingBlobs);
+            expect(mockTransactionCommitted.mock.invocationCallOrder[0]).toBeLessThan(
+                mockDeleteDocumentBlobs.mock.invocationCallOrder[0]!
+            );
             // The transcript text was stored before either row.
             expect(mockUploadFile.mock.invocationCallOrder[0]).toBeLessThan(
                 mockCreateDocumentLifecycle.mock.invocationCallOrder[0]!

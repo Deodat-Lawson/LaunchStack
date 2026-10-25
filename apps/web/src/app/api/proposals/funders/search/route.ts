@@ -6,7 +6,7 @@ import { FunderSearchInputSchema } from "@launchstack/pipelines/proposals/types"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { findFundersRun } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../../_http";
 
 export async function POST(request: NextRequest) {
     const auth = await proposalsContext();
@@ -22,10 +22,10 @@ export async function POST(request: NextRequest) {
         async () => {
             try {
                 const parsed = FunderSearchInputSchema.safeParse(await readBody(request));
-                if (!parsed.success) return error("Check the search and try again", 400);
+                if (!parsed.success) return error(say(request, "checkSearch"), 400);
                 return json({ run: await findFundersRun(ctx, parsed.data) }, 202);
             } catch (err) {
-                return handleProposalsError("POST funders/search", err);
+                return handleProposalsError("POST funders/search", err, request);
             }
         }
     );

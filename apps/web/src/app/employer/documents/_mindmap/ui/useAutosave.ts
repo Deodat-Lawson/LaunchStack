@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { exportSvg, svgToThumbnail } from "../lib/export";
@@ -39,6 +40,11 @@ export function useAutosave(
     initialRevision: number,
     getSvgElement: () => SVGSVGElement | null
 ): AutosaveApi {
+    // Read through a ref so a language switch does not rebuild `save`.
+    const t = useTranslations("mindmap.autosave");
+    const tc = useTranslations("common");
+    const words = useRef({ t, tc });
+    words.current = { t, tc };
     const revision = useRef(initialRevision);
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const inFlight = useRef(false);
@@ -102,9 +108,13 @@ export function useAutosave(
 
                 if (res.status === 409) {
                     store.setSaving(false);
-                    toast.error("This mindmap changed in another tab", {
-                        description: "Reload to pick up the newer version before editing further.",
-                        action: { label: "Reload", onClick: () => window.location.reload() },
+                    const { t, tc } = words.current;
+                    toast.error(t("conflict"), {
+                        description: t("conflictBody"),
+                        action: {
+                            label: tc("actions.reload"),
+                            onClick: () => window.location.reload(),
+                        },
                         duration: 12000,
                     });
                     return;
@@ -121,7 +131,7 @@ export function useAutosave(
                 else store.setSaving(false);
             } catch {
                 store.setSaving(false);
-                toast.error("Couldn't save — retrying shortly");
+                toast.error(words.current.t("failed"));
                 // Leave `dirty` set: the debounce below will try again on the
                 // next edit, and ⌘S still works.
             } finally {

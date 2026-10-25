@@ -3,6 +3,11 @@ import { buildTemplate } from "../model/templates";
 import { activePage, graphIndex } from "../model/doc";
 import { buildCanvasMenuItems } from "../ui/canvasContextMenu";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
+const t = createTranslator({ locale: "en", messages: englishMessages, namespace: "mindmap" });
 
 /**
  * The right-click menu at both chrome depths. Built as data, so this needs
@@ -31,7 +36,7 @@ describe("canvas context menu", () => {
     test("everything depth is the full menu, unchanged", () => {
         const store = storeWithRootSelected("mindmap");
         store.setChromeDepth("everything");
-        const menu = buildCanvasMenuItems(store);
+        const menu = buildCanvasMenuItems(store, t);
         expect(ids(menu)).toEqual(
             expect.arrayContaining([
                 "cut",
@@ -49,7 +54,7 @@ describe("canvas context menu", () => {
     test("focus depth on a mindmap leads with the topic verbs and folds the rest", () => {
         const store = storeWithRootSelected("mindmap");
         store.setChromeDepth("focus");
-        const menu = buildCanvasMenuItems(store);
+        const menu = buildCanvasMenuItems(store, t);
 
         // The centre has no siblings: Enter on it adds a child, so the menu
         // does not offer a sibling it would not make.
@@ -88,7 +93,7 @@ describe("canvas context menu", () => {
         const branch = graphIndex(page).out.get(page.nodes[0]!.id)![0]!;
         store.selectNodes([branch]);
         store.setChromeDepth("focus");
-        const menu = buildCanvasMenuItems(store);
+        const menu = buildCanvasMenuItems(store, t);
         expect(ids(menu).slice(0, 2)).toEqual(["add-child", "add-sibling"]);
 
         const shortcut = (items: ActionMenuItem[], id: string) => {
@@ -111,7 +116,7 @@ describe("canvas context menu", () => {
         const branch = idx.out.get(page.nodes[0]!.id)!.find(id => (idx.out.get(id) ?? []).length)!;
         const below = idx.out.get(branch)!;
         store.selectNodes([branch]);
-        const del = buildCanvasMenuItems(store).find(i => i.id === "delete");
+        const del = buildCanvasMenuItems(store, t).find(i => i.id === "delete");
         if (del?.type === "item") del.onSelect();
         const after = activePage(store.getState().doc);
         for (const id of [branch, ...below]) expect(after.nodes.some(n => n.id === id)).toBe(false);
@@ -120,7 +125,7 @@ describe("canvas context menu", () => {
     test("focus depth on a flowchart leads with shape, not topic", () => {
         const store = storeWithRootSelected("flowchart");
         store.setChromeDepth("focus");
-        const menu = buildCanvasMenuItems(store);
+        const menu = buildCanvasMenuItems(store, t);
         const top = ids(menu);
         expect(top[0]).toBe("shape");
         expect(top).not.toContain("add-sibling");
@@ -131,14 +136,14 @@ describe("canvas context menu", () => {
     test("focus depth with nothing selected is the short paste/layout menu", () => {
         const store = new EditorStore(buildTemplate("mindmap", "Menu"));
         store.setChromeDepth("focus");
-        expect(ids(buildCanvasMenuItems(store))).toEqual(["paste", "layout"]);
+        expect(ids(buildCanvasMenuItems(store, t))).toEqual(["paste", "layout"]);
     });
 
     test("the workspace's Ask verb stays at the top level in focus", () => {
         const store = storeWithRootSelected("mindmap");
         store.setChromeDepth("focus");
         const onAskAboutNode = jest.fn();
-        const menu = buildCanvasMenuItems(store, { onAskAboutNode });
+        const menu = buildCanvasMenuItems(store, t, { onAskAboutNode });
         expect(ids(menu)[0]).toBe("ask");
         const ask = menu[0]!;
         if (ask.type === "item") ask.onSelect();

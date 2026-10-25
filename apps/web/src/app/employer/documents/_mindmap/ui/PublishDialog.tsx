@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -44,6 +45,8 @@ export function PublishDialog({
     publishedDocumentId: number | null;
     onPublished: (documentId: number) => void;
 }) {
+    const t = useTranslations("mindmap.publish");
+    const tc = useTranslations("common");
     const doc = useCommittedDoc();
     const [folder, setFolder] = useState(defaultFolder);
     const [busy, setBusy] = useState(false);
@@ -66,10 +69,10 @@ export function PublishDialog({
             }
             const body = (await res.json()) as { document: { id: number } };
             onPublished(body.document.id);
-            toast.success("Added to your sources — it will finish indexing shortly");
+            toast.success(t("published"));
             onOpenChange(false);
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Couldn't publish this mindmap");
+            toast.error(error instanceof Error ? error.message : t("failed"));
         } finally {
             setBusy(false);
         }
@@ -79,29 +82,28 @@ export function PublishDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[560px]">
                 <DialogHeader>
-                    <DialogTitle>Add to sources</DialogTitle>
+                    <DialogTitle>{t("title")}</DialogTitle>
                     <DialogDescription>
-                        Publishes “{doc.title}” as a citable source, so answers in the workspace can
-                        quote it. {topicCount} topic{topicCount === 1 ? "" : "s"} will be indexed.
+                        {t("description", { title: doc.title, count: topicCount })}
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-2">
                     <label className="text-ink-2 block text-[12px] font-medium" htmlFor="mm-folder">
-                        Save to folder
+                        {t("folder")}
                     </label>
                     <Input
                         id="mm-folder"
                         value={folder}
                         onChange={e => setFolder(e.target.value)}
-                        placeholder="Unfiled"
+                        placeholder={t("unfiled")}
                         onKeyDown={e => e.stopPropagation()}
                     />
                 </div>
 
                 <div>
                     <span className="text-ink-3 mb-1 block font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                        Preview
+                        {tc("actions.preview")}
                     </span>
                     <pre className="border-line bg-panel-2 text-ink-2 max-h-48 overflow-auto rounded-lg border p-3 font-mono text-[11.5px] leading-relaxed">
                         {outline.slice(0, 4000)}
@@ -111,13 +113,13 @@ export function PublishDialog({
                 {publishedDocumentId !== null && (
                     <p className="text-ink-3 flex items-center gap-1.5 text-[12px]">
                         <ExternalLink className="size-3.5" />
-                        Already in your sources — publishing again updates that copy in place.
+                        {t("alreadyPublished")}
                     </p>
                 )}
 
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void publish()} disabled={busy}>
                         {busy ? (
@@ -125,7 +127,7 @@ export function PublishDialog({
                         ) : (
                             <Sparkles className="size-4" />
                         )}
-                        Add to sources
+                        {t("title")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     AlertTriangle,
     Brain,
@@ -32,7 +33,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sh
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
+    PIPELINE_STEP_KEY,
     PLATFORM_OPTIONS,
+    PROMPT_TEMPLATE_KEYS,
     REDDIT_SNOO_URL,
     type ClaimSourceUI,
     type ContentType,
@@ -74,21 +77,22 @@ function usePlatformLogoClassNames() {
 /* ─── How-it-works explainer (Fix 1) ─── */
 
 function HowItWorks() {
+    const t = useTranslations("growth.marketingPipeline.howItWorks");
     return (
         <div className={styles.howItWorks}>
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>1</span>
-                <span className={styles.howItWorksText}>Pick a platform</span>
+                <span className={styles.howItWorksText}>{t("pick")}</span>
             </div>
             <div className={styles.howItWorksDivider} />
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>2</span>
-                <span className={styles.howItWorksText}>Describe what to promote</span>
+                <span className={styles.howItWorksText}>{t("describe")}</span>
             </div>
             <div className={styles.howItWorksDivider} />
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>3</span>
-                <span className={styles.howItWorksText}>Get a campaign-ready draft in ~30s</span>
+                <span className={styles.howItWorksText}>{t("get")}</span>
             </div>
         </div>
     );
@@ -123,6 +127,7 @@ function stepStatusClass(status: PipelineStepState["status"]): string {
 }
 
 function StepDataPreview({ data }: { data: Record<string, unknown> }) {
+    const t = useTranslations("growth.marketingPipeline.stepper");
     const entries = Object.entries(data).slice(0, 6);
     if (entries.length === 0) return null;
 
@@ -138,7 +143,7 @@ function StepDataPreview({ data }: { data: Record<string, unknown> }) {
                                       : String(v)
                               )
                               .join(", ")
-                        : `${value.length} items`
+                        : t("items", { count: value.length })
                     : typeof value === "object" && value !== null
                       ? JSON.stringify(value).slice(0, 100)
                       : String(value);
@@ -170,6 +175,7 @@ function PipelineStepper({
     generationStartTime: number | null;
     isComplete: boolean;
 }) {
+    const t = useTranslations("growth.marketingPipeline");
     const [elapsed, setElapsed] = useState(0);
     const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set());
 
@@ -207,14 +213,23 @@ function PipelineStepper({
             <div className={styles.stepperHeader}>
                 <span className={styles.stepperProgress}>
                     {isComplete
-                        ? `Completed in ${(totalDurationMs / 1000).toFixed(1)}s`
+                        ? t("stepper.completedIn", {
+                              seconds: (totalDurationMs / 1000).toFixed(1),
+                          })
                         : activeCount > 1
-                          ? `${activeCount} steps running · ${finishedCount}/${totalSteps} done`
-                          : `Step ${Math.min(finishedCount + 1, totalSteps)} of ${totalSteps}`}
+                          ? t("stepper.parallelRunning", {
+                                active: activeCount,
+                                done: finishedCount,
+                                total: totalSteps,
+                            })
+                          : t("stepper.stepOf", {
+                                current: Math.min(finishedCount + 1, totalSteps),
+                                total: totalSteps,
+                            })}
                 </span>
                 {!isComplete && (
                     <span className={styles.stepperElapsed}>
-                        {elapsed}s elapsed · {progressPct}%
+                        {t("stepper.elapsed", { seconds: elapsed, pct: progressPct })}
                     </span>
                 )}
                 {isComplete && <span className={styles.stepperElapsed}>{progressPct}%</span>}
@@ -239,7 +254,9 @@ function PipelineStepper({
                     step.status === "skipped" ||
                     step.status === "failed"
                         ? step.durationMs != null
-                            ? `${(step.durationMs / 1000).toFixed(1)}s`
+                            ? t("stepper.seconds", {
+                                  seconds: (step.durationMs / 1000).toFixed(1),
+                              })
                             : "—"
                         : step.status === "active"
                           ? null
@@ -271,9 +288,13 @@ function PipelineStepper({
                                     flexWrap: "wrap",
                                 }}
                             >
-                                <span className={styles.stepperLabel}>{step.label}</span>
+                                <span className={styles.stepperLabel}>
+                                    {t(`steps.${PIPELINE_STEP_KEY[step.id]}`)}
+                                </span>
                                 {isParallel && (
-                                    <span className={styles.stepperParallelTag}>∥ parallel</span>
+                                    <span className={styles.stepperParallelTag}>
+                                        {t("stepper.parallel")}
+                                    </span>
                                 )}
                                 {isClickable && (
                                     <span
@@ -341,6 +362,7 @@ function ThinkingStream({
     entries: ThinkingEntry[];
     isGenerating: boolean;
 }) {
+    const t = useTranslations("growth.marketingPipeline.thinking");
     const [collapsed, setCollapsed] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -363,10 +385,10 @@ function ThinkingStream({
             <button type="button" className={styles.thinkingHeader} onClick={toggleCollapsed}>
                 <Brain size={14} className={isGenerating ? styles.thinkingPulse : undefined} />
                 <span className={styles.thinkingHeaderLabel}>
-                    {isGenerating ? "Thinking..." : "Thought process"}
+                    {isGenerating ? t("thinking") : t("thought")}
                 </span>
                 <span className={styles.thinkingEntryCount}>
-                    {entries.length} step{entries.length !== 1 ? "s" : ""}
+                    {t("steps", { count: entries.length })}
                 </span>
                 {collapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
             </button>
@@ -402,6 +424,7 @@ function StrategyInsights({
     strategyUsed?: { angle: string; keyProof: string[]; humanHook: string; avoidList: string[] };
     competitiveAngle?: string;
 }) {
+    const t = useTranslations("growth.marketingPipeline.strategy");
     const [open, setOpen] = useState(false);
 
     if (!strategyUsed && !competitiveAngle) return null;
@@ -414,18 +437,18 @@ function StrategyInsights({
                 onClick={() => setOpen(prev => !prev)}
             >
                 <Target size={14} />
-                <span>Strategy used</span>
+                <span>{t("used")}</span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {open && strategyUsed && (
                 <div className={styles.strategyContent}>
                     <div className={styles.strategySection}>
-                        <div className={styles.strategySectionLabel}>Positioning angle</div>
+                        <div className={styles.strategySectionLabel}>{t("angle")}</div>
                         <p className={styles.strategySectionText}>{strategyUsed.angle}</p>
                     </div>
                     {strategyUsed.keyProof.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>Key proof points</div>
+                            <div className={styles.strategySectionLabel}>{t("proof")}</div>
                             <ul className={styles.strategyList}>
                                 {strategyUsed.keyProof.map((proof, i) => (
                                     <li key={i}>{proof}</li>
@@ -434,12 +457,12 @@ function StrategyInsights({
                         </div>
                     )}
                     <div className={styles.strategySection}>
-                        <div className={styles.strategySectionLabel}>Human hook</div>
+                        <div className={styles.strategySectionLabel}>{t("hook")}</div>
                         <p className={styles.strategySectionText}>{strategyUsed.humanHook}</p>
                     </div>
                     {strategyUsed.avoidList.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>What to avoid</div>
+                            <div className={styles.strategySectionLabel}>{t("avoid")}</div>
                             <ul className={styles.strategyList}>
                                 {strategyUsed.avoidList.map((item, i) => (
                                     <li key={i}>{item}</li>
@@ -456,6 +479,7 @@ function StrategyInsights({
 /* ─── Pipeline transparency panels ─── */
 
 function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
+    const t = useTranslations("growth.marketingPipeline.stages");
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
     const toggle = (key: string) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
@@ -464,7 +488,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
         <div className={styles.strategyCard}>
             <button type="button" className={styles.strategyToggle} onClick={() => toggle("_root")}>
                 <Sparkles size={14} />
-                <span>Pipeline thought process</span>
+                <span>{t("title")}</span>
                 {openSections._root ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {openSections._root && (
@@ -479,7 +503,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Brand voice
+                                    {t("brandVoice")}
                                 </span>
                                 {openSections.voice ? (
                                     <ChevronDown size={12} />
@@ -490,18 +514,20 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                             {openSections.voice && (
                                 <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
                                     <p>
-                                        <strong>Tone:</strong> {stages.brandVoice.toneDescriptor}
+                                        <strong>{t("tone")}</strong>{" "}
+                                        {stages.brandVoice.toneDescriptor}
                                     </p>
                                     <p>
-                                        <strong>Formality:</strong>{" "}
+                                        <strong>{t("formality")}</strong>{" "}
                                         {stages.brandVoice.formalityLevel}
                                     </p>
                                     <p>
-                                        <strong>Style:</strong> {stages.brandVoice.sentenceStyle}
+                                        <strong>{t("style")}</strong>{" "}
+                                        {stages.brandVoice.sentenceStyle}
                                     </p>
                                     {stages.brandVoice.vocabularyExamples.length > 0 && (
                                         <p>
-                                            <strong>Vocabulary:</strong>{" "}
+                                            <strong>{t("vocabulary")}</strong>{" "}
                                             {stages.brandVoice.vocabularyExamples.join(", ")}
                                         </p>
                                     )}
@@ -520,7 +546,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Target persona
+                                    {t("persona")}
                                 </span>
                                 {openSections.persona ? (
                                     <ChevronDown size={12} />
@@ -531,18 +557,18 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                             {openSections.persona && (
                                 <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
                                     <p>
-                                        <strong>Role:</strong> {stages.targetPersona.role}
+                                        <strong>{t("role")}</strong> {stages.targetPersona.role}
                                     </p>
                                     <p>
-                                        <strong>Pain points:</strong>{" "}
+                                        <strong>{t("painPoints")}</strong>{" "}
                                         {stages.targetPersona.painPoints.join("; ")}
                                     </p>
                                     <p>
-                                        <strong>Priorities:</strong>{" "}
+                                        <strong>{t("priorities")}</strong>{" "}
                                         {stages.targetPersona.priorities.join("; ")}
                                     </p>
                                     <p>
-                                        <strong>Language:</strong>{" "}
+                                        <strong>{t("language")}</strong>{" "}
                                         {stages.targetPersona.languageStyle}
                                     </p>
                                 </div>
@@ -560,7 +586,9 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Competitors ({stages.competitors.competitors.length})
+                                    {t("competitors", {
+                                        count: stages.competitors.competitors.length,
+                                    })}
                                 </span>
                                 {openSections.competitors ? (
                                     <ChevronDown size={12} />
@@ -580,20 +608,22 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                                         marginLeft: "0.5rem",
                                                     }}
                                                 >
-                                                    Weaknesses: {c.weaknesses.join(", ")}
+                                                    {t("weaknesses", {
+                                                        list: c.weaknesses.join(", "),
+                                                    })}
                                                 </div>
                                             )}
                                         </div>
                                     ))}
                                     {stages.competitors.ourAdvantages.length > 0 && (
                                         <p>
-                                            <strong>Our advantages:</strong>{" "}
+                                            <strong>{t("advantages")}</strong>{" "}
                                             {stages.competitors.ourAdvantages.join("; ")}
                                         </p>
                                     )}
                                     {stages.competitors.marketGaps.length > 0 && (
                                         <p>
-                                            <strong>Market gaps:</strong>{" "}
+                                            <strong>{t("gaps")}</strong>{" "}
                                             {stages.competitors.marketGaps.join("; ")}
                                         </p>
                                     )}
@@ -612,7 +642,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Strategy variants ({stages.strategies.length})
+                                    {t("strategies", { count: stages.strategies.length })}
                                 </span>
                                 {openSections.strategies ? (
                                     <ChevronDown size={12} />
@@ -646,13 +676,14 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                                 {s.angleRationale}
                                             </p>
                                             <p>
-                                                <strong>Angle:</strong> {s.angle}
+                                                <strong>{t("angle")}</strong> {s.angle}
                                             </p>
                                             <p>
-                                                <strong>Key proof:</strong> {s.keyProof.join("; ")}
+                                                <strong>{t("keyProof")}</strong>{" "}
+                                                {s.keyProof.join("; ")}
                                             </p>
                                             <p>
-                                                <strong>Hook:</strong> {s.humanHook}
+                                                <strong>{t("hook")}</strong> {s.humanHook}
                                             </p>
                                         </div>
                                     ))}
@@ -664,7 +695,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                     {/* Performance Insights */}
                     {stages.performanceInsights && stages.performanceInsights.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>Performance insights</div>
+                            <div className={styles.strategySectionLabel}>{t("performance")}</div>
                             <ul className={styles.strategyList}>
                                 {stages.performanceInsights.map((insight, i) => (
                                     <li key={i}>{insight}</li>
@@ -679,6 +710,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
 }
 
 function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
+    const t = useTranslations("growth.marketingPipeline.claims");
     const [open, setOpen] = useState(false);
 
     if (claims.length === 0) return null;
@@ -693,9 +725,7 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                 onClick={() => setOpen(prev => !prev)}
             >
                 <FileText size={14} />
-                <span>
-                    Claim sources ({sourced.length}/{claims.length} sourced)
-                </span>
+                <span>{t("title", { sourced: sourced.length, total: claims.length })}</span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {open && (
@@ -719,18 +749,19 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                             <div style={{ color: "var(--ink-3)" }}>
                                 {claim.match ? (
                                     <>
-                                        Source: {claim.match.sourceDoc}
+                                        {t("source", { doc: claim.match.sourceDoc })}
                                         {claim.match.relevance != null && (
                                             <span style={{ marginLeft: "0.5rem" }}>
-                                                ({Math.round(claim.match.relevance * 100)}%
-                                                relevance)
+                                                {t("relevance", {
+                                                    pct: Math.round(claim.match.relevance * 100),
+                                                })}
                                             </span>
                                         )}
                                     </>
                                 ) : claim.error ? (
-                                    "Source lookup failed — review manually"
+                                    t("lookupFailed")
                                 ) : (
-                                    "No matching source found in the knowledge base"
+                                    t("noMatch")
                                 )}
                             </div>
                             {claim.match?.excerpt && (
@@ -755,18 +786,18 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
 
 /* ─── Customization controls ─── */
 
-const TONE_OPTIONS: { id: FormalityLevel; label: string }[] = [
-    { id: "conversational", label: "Conversational" },
-    { id: "formal", label: "Formal" },
-    { id: "technical", label: "Technical" },
-    { id: "bold", label: "Bold" },
-];
+/** Each tone's name is `growth.marketingPipeline.tones.<id>`. */
+const TONE_OPTIONS: readonly FormalityLevel[] = ["conversational", "formal", "technical", "bold"];
 
-const CONTENT_TYPE_OPTIONS: { id: ContentType; label: string; hint: string }[] = [
-    { id: "post", label: "Single post", hint: "Standard social post" },
-    { id: "thread", label: "Thread", hint: "Multi-part narrative" },
-    { id: "ad_copy", label: "Ad copy", hint: "Conversion-focused" },
-    { id: "email", label: "Email", hint: "Marketing email" },
+/** Each content type's name and hint are `growth.marketingPipeline.contentTypes.<key>`. */
+const CONTENT_TYPE_OPTIONS: ReadonlyArray<{
+    id: ContentType;
+    key: "post" | "thread" | "adCopy" | "email";
+}> = [
+    { id: "post", key: "post" },
+    { id: "thread", key: "thread" },
+    { id: "ad_copy", key: "adCopy" },
+    { id: "email", key: "email" },
 ];
 
 function CustomizationControls({
@@ -784,6 +815,7 @@ function CustomizationControls({
     contentType?: ContentType;
     onContentTypeChange: (v: ContentType | undefined) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline");
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -805,7 +837,7 @@ function CustomizationControls({
                 }}
             >
                 <Target size={14} />
-                Customize generation
+                {t("customize.toggle")}
                 {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
             </button>
             {expanded && (
@@ -827,15 +859,15 @@ function CustomizationControls({
                                 color: "var(--ink-3)",
                             }}
                         >
-                            Tone
+                            {t("customize.tone")}
                         </label>
                         <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
-                            {TONE_OPTIONS.map(t => (
+                            {TONE_OPTIONS.map(tone => (
                                 <button
-                                    key={t.id}
+                                    key={tone}
                                     type="button"
                                     onClick={() =>
-                                        onToneChange(toneOverride === t.id ? undefined : t.id)
+                                        onToneChange(toneOverride === tone ? undefined : tone)
                                     }
                                     style={{
                                         padding: "0.25rem 0.625rem",
@@ -843,21 +875,21 @@ function CustomizationControls({
                                         fontSize: "0.75rem",
                                         fontWeight: 500,
                                         border:
-                                            toneOverride === t.id
+                                            toneOverride === tone
                                                 ? "1.5px solid var(--accent)"
                                                 : "1px solid var(--line)",
                                         background:
-                                            toneOverride === t.id
+                                            toneOverride === tone
                                                 ? "var(--accent-soft)"
                                                 : "transparent",
                                         color:
-                                            toneOverride === t.id
+                                            toneOverride === tone
                                                 ? "var(--accent)"
                                                 : "var(--ink-2)",
                                         cursor: "pointer",
                                     }}
                                 >
-                                    {t.label}
+                                    {t(`tones.${tone}`)}
                                 </button>
                             ))}
                         </div>
@@ -873,13 +905,13 @@ function CustomizationControls({
                                 color: "var(--ink-3)",
                             }}
                         >
-                            Target audience (optional)
+                            {t("customize.audience")}
                         </label>
                         <input
                             type="text"
                             value={targetAudience}
                             onChange={e => onTargetAudienceChange(e.target.value)}
-                            placeholder="e.g., CTOs at mid-stage SaaS companies"
+                            placeholder={t("customize.audiencePlaceholder")}
                             style={{
                                 width: "100%",
                                 padding: "0.375rem 0.5rem",
@@ -901,7 +933,7 @@ function CustomizationControls({
                                 color: "var(--ink-3)",
                             }}
                         >
-                            Content type
+                            {t("customize.contentType")}
                         </label>
                         <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
                             {CONTENT_TYPE_OPTIONS.map(ct => (
@@ -913,7 +945,7 @@ function CustomizationControls({
                                             contentType === ct.id ? undefined : ct.id
                                         )
                                     }
-                                    title={ct.hint}
+                                    title={t(`contentTypes.${ct.key}.hint`)}
                                     style={{
                                         padding: "0.25rem 0.625rem",
                                         borderRadius: "9999px",
@@ -934,7 +966,7 @@ function CustomizationControls({
                                         cursor: "pointer",
                                     }}
                                 >
-                                    {ct.label}
+                                    {t(`contentTypes.${ct.key}.label`)}
                                 </button>
                             ))}
                         </div>
@@ -956,6 +988,7 @@ function SubredditField({
     value: string;
     onChange: (v: string) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.fields");
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState(value.replace(/^r\//, ""));
 
@@ -972,7 +1005,7 @@ function SubredditField({
 
     return (
         <div className={styles.platformFieldGroup}>
-            <label className={styles.platformFieldLabel}>{config.label}</label>
+            <label className={styles.platformFieldLabel}>{t(config.type)}</label>
             <div className={styles.subredditInputWrapper}>
                 <span className={styles.subredditPrefix}>r/</span>
                 <input
@@ -1017,6 +1050,7 @@ function HashtagField({
     values: string[];
     onChange: (v: string[]) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.fields");
     const [inputValue, setInputValue] = useState("");
     const atLimit = values.length >= config.maxItems;
 
@@ -1038,7 +1072,7 @@ function HashtagField({
     return (
         <div className={styles.platformFieldGroup}>
             <label className={styles.platformFieldLabel}>
-                {config.label}
+                {t(config.type)}
                 <span className={styles.platformFieldCount}>
                     {values.length}/{config.maxItems}
                 </span>
@@ -1051,7 +1085,7 @@ function HashtagField({
                             type="button"
                             className={styles.hashtagTagRemove}
                             onClick={() => removeTag(tag)}
-                            aria-label={`Remove ${tag}`}
+                            aria-label={t("removeTag", { tag })}
                         >
                             <X size={10} />
                         </button>
@@ -1062,7 +1096,7 @@ function HashtagField({
                         type="text"
                         className={styles.hashtagInput}
                         value={inputValue}
-                        placeholder={values.length === 0 ? "Add a hashtag..." : ""}
+                        placeholder={values.length === 0 ? t("addHashtag") : ""}
                         onChange={e => setInputValue(e.target.value)}
                         onKeyDown={e => {
                             if (e.key === "Enter" || e.key === ",") {
@@ -1144,11 +1178,14 @@ function VariantStack({
     activeVariantId: string | null;
     onSelect: (id: string) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.variants");
     if (variants.length < 2) return null;
 
     return (
         <div className={styles.variantStack}>
-            <div className={styles.variantStackHeader}>Variants ({variants.length})</div>
+            <div className={styles.variantStackHeader}>
+                {t("header", { count: variants.length })}
+            </div>
             {variants.map(v => {
                 const isActive = v.id === activeVariantId;
                 return (
@@ -1161,7 +1198,7 @@ function VariantStack({
                             {isActive ? (
                                 <span className={styles.variantActiveBadge}>
                                     <Check size={10} />
-                                    Active
+                                    {t("active")}
                                 </span>
                             ) : (
                                 <button
@@ -1169,7 +1206,7 @@ function VariantStack({
                                     className={styles.variantUseButton}
                                     onClick={() => onSelect(v.id)}
                                 >
-                                    Use this
+                                    {t("useThis")}
                                 </button>
                             )}
                         </div>
@@ -1191,6 +1228,9 @@ export function MarketingPipelineWorkspace({
     embedded = false,
     onSchedule,
 }: MarketingPipelineWorkspaceProps) {
+    const t = useTranslations("growth.marketingPipeline");
+    const tc = useTranslations("common.actions");
+    const format = useFormatter();
     const [debugOpen, setDebugOpen] = useState(false);
     const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
     const logoClassNames = usePlatformLogoClassNames();
@@ -1249,6 +1289,9 @@ export function MarketingPipelineWorkspace({
     } = useMarketingPipelineController({ debug });
 
     const hasSessions = sessions.length > 0;
+    const platformLabel = result
+        ? PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label
+        : undefined;
 
     const handleNewCampaignClick = () => {
         if (result) {
@@ -1274,11 +1317,8 @@ export function MarketingPipelineWorkspace({
                         <Megaphone className={styles.pageTitleIconInner} />
                     </div>
                     <div>
-                        <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
-                        <p className={styles.pageSubtitle}>
-                            Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your
-                            company knowledge base
-                        </p>
+                        <h1 className={styles.pageTitle}>{t("title")}</h1>
+                        <p className={styles.pageSubtitle}>{t("subtitle")}</p>
                     </div>
                 </div>
             )}
@@ -1286,7 +1326,9 @@ export function MarketingPipelineWorkspace({
             {!platform ? (
                 <section className={styles.mainContent}>
                     <section className={styles.platformShell}>
-                        <h2 className={styles.platformShellTitle}>Choose platform</h2>
+                        <h2 className={styles.platformShellTitle}>
+                            {t("workspace.choosePlatform")}
+                        </h2>
                         <HowItWorks />
                         <div className={styles.platformGrid}>
                             {PLATFORM_OPTIONS.map(option => (
@@ -1319,11 +1361,13 @@ export function MarketingPipelineWorkspace({
                                     </span>
                                     <span className={styles.platformName}>{option.label}</span>
                                     <span className={styles.platformSubtitle}>
-                                        {option.subtitle}
+                                        {t(`platforms.${option.id}.subtitle`)}
                                     </span>
-                                    <span className={styles.platformBestFor}>{option.bestFor}</span>
+                                    <span className={styles.platformBestFor}>
+                                        {t(`platforms.${option.id}.bestFor`)}
+                                    </span>
                                     <span className={styles.platformCharLimit}>
-                                        {option.charLimit}
+                                        {t(`platforms.${option.id}.charLimit`)}
                                     </span>
                                 </button>
                             ))}
@@ -1343,14 +1387,16 @@ export function MarketingPipelineWorkspace({
                             <aside className={styles.sessionSidebar}>
                                 <div className={styles.sessionPanel}>
                                     <div className={styles.sessionPanelHeader}>
-                                        <h3 className={styles.sessionPanelTitle}>Sessions</h3>
+                                        <h3 className={styles.sessionPanelTitle}>
+                                            {t("workspace.sessions")}
+                                        </h3>
                                         <button
                                             type="button"
                                             className={styles.newSessionButton}
                                             onClick={handleNewCampaignClick}
                                         >
                                             <Plus size={12} />
-                                            New
+                                            {t("workspace.new")}
                                         </button>
                                     </div>
                                     <div className={styles.sessionList}>
@@ -1370,16 +1416,19 @@ export function MarketingPipelineWorkspace({
                                                         ? session.prompt.length > 80
                                                             ? `${session.prompt.slice(0, 80)}...`
                                                             : session.prompt
-                                                        : "Untitled session"}
+                                                        : t("workspace.untitledSession")}
                                                 </span>
                                                 <span className={styles.sessionItemMeta}>
                                                     {session.platform
                                                         ? (PLATFORM_OPTIONS.find(
                                                               p => p.id === session.platform
                                                           )?.label ?? session.platform)
-                                                        : "No platform"}{" "}
+                                                        : t("workspace.noPlatform")}{" "}
                                                     &bull;{" "}
-                                                    {new Date(session.updatedAt).toLocaleString()}
+                                                    {format.dateTime(session.updatedAt, {
+                                                        dateStyle: "short",
+                                                        timeStyle: "medium",
+                                                    })}
                                                 </span>
                                             </button>
                                         ))}
@@ -1398,7 +1447,9 @@ export function MarketingPipelineWorkspace({
                                             size={18}
                                             className={styles.assistantIcon}
                                         />
-                                        <h2 className={styles.workspaceMainTitle}>AI Assistant</h2>
+                                        <h2 className={styles.workspaceMainTitle}>
+                                            {t("workspace.assistant")}
+                                        </h2>
                                     </div>
                                 )}
                                 <div className={styles.workspaceLeft}>
@@ -1434,31 +1485,28 @@ export function MarketingPipelineWorkspace({
                                             onClick={handleNewCampaignClick}
                                         >
                                             <Plus size={14} />
-                                            New campaign
+                                            {t("workspace.newCampaign")}
                                         </button>
                                     </header>
 
                                     {/* Fix 7: Confirmation dialog */}
                                     {confirmNewCampaign && (
                                         <div className={styles.confirmBar}>
-                                            <span>
-                                                Start a new campaign? Your current draft is saved in
-                                                sessions.
-                                            </span>
+                                            <span>{t("workspace.confirmNew")}</span>
                                             <div className={styles.confirmBarActions}>
                                                 <button
                                                     type="button"
                                                     className={styles.confirmBarYes}
                                                     onClick={confirmAndStartNew}
                                                 >
-                                                    Yes, start new
+                                                    {t("workspace.yesStartNew")}
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={styles.confirmBarNo}
                                                     onClick={() => setConfirmNewCampaign(false)}
                                                 >
-                                                    Cancel
+                                                    {tc("cancel")}
                                                 </button>
                                             </div>
                                         </div>
@@ -1467,10 +1515,10 @@ export function MarketingPipelineWorkspace({
                                     <div className={styles.promptCard}>
                                         <div className={styles.promptHeaderRow}>
                                             <h2 className={styles.promptTitle}>
-                                                Describe what you want to promote
+                                                {t("workspace.promptTitle")}
                                             </h2>
                                             <span className={styles.promptHint}>
-                                                1-3 sentences is perfect.
+                                                {t("workspace.promptHint")}
                                             </span>
                                         </div>
                                         <textarea
@@ -1478,23 +1526,31 @@ export function MarketingPipelineWorkspace({
                                             value={prompt}
                                             onChange={e => setPrompt(e.target.value)}
                                             placeholder={
-                                                selectedPlatform?.placeholder ??
-                                                "Example: Promote our AI-powered document workflow for startup operations teams this month."
+                                                selectedPlatform
+                                                    ? t(
+                                                          `platforms.${selectedPlatform.id}.placeholder`
+                                                      )
+                                                    : t("workspace.promptPlaceholder")
                                             }
                                         />
 
-                                        {!prompt.trim() && selectedPlatform?.promptTemplates && (
+                                        {!prompt.trim() && selectedPlatform && (
                                             <div className={styles.promptChips}>
-                                                {selectedPlatform.promptTemplates.map(template => (
-                                                    <button
-                                                        key={template}
-                                                        type="button"
-                                                        className={styles.promptChip}
-                                                        onClick={() => setPrompt(template)}
-                                                    >
-                                                        {template}
-                                                    </button>
-                                                ))}
+                                                {PROMPT_TEMPLATE_KEYS.map(key => {
+                                                    const template = t(
+                                                        `platforms.${selectedPlatform.id}.templates.${key}`
+                                                    );
+                                                    return (
+                                                        <button
+                                                            key={key}
+                                                            type="button"
+                                                            className={styles.promptChip}
+                                                            onClick={() => setPrompt(template)}
+                                                        >
+                                                            {template}
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         )}
 
@@ -1535,12 +1591,12 @@ export function MarketingPipelineWorkspace({
                                                             size={16}
                                                             className={styles.spinIcon}
                                                         />
-                                                        Generating campaign...
+                                                        {t("workspace.generating")}
                                                     </>
                                                 ) : (
                                                     <>
                                                         <Sparkles size={16} />
-                                                        Generate campaign draft
+                                                        {t("workspace.generate")}
                                                     </>
                                                 )}
                                             </button>
@@ -1551,7 +1607,7 @@ export function MarketingPipelineWorkspace({
                                                     onClick={cancelPipeline}
                                                 >
                                                     <X size={14} />
-                                                    Cancel
+                                                    {tc("cancel")}
                                                 </button>
                                             )}
                                         </div>
@@ -1577,7 +1633,7 @@ export function MarketingPipelineWorkspace({
                                         {result && !loading && (
                                             <div className={styles.assistantResult}>
                                                 <div className={styles.assistantSectionHeader}>
-                                                    Campaign draft
+                                                    {t("workspace.draft")}
                                                 </div>
                                                 <div className={styles.platformPreviewCard}>
                                                     <div className={styles.platformPreviewHeader}>
@@ -1614,10 +1670,13 @@ export function MarketingPipelineWorkspace({
                                                         <span
                                                             className={styles.platformPreviewLabel}
                                                         >
-                                                            {PLATFORM_OPTIONS.find(
-                                                                p => p.id === result.platform
-                                                            )?.label ?? result.platform}{" "}
-                                                            preview
+                                                            {t("workspace.preview", {
+                                                                platform:
+                                                                    PLATFORM_OPTIONS.find(
+                                                                        p =>
+                                                                            p.id === result.platform
+                                                                    )?.label ?? result.platform,
+                                                            })}
                                                         </span>
                                                         <button
                                                             type="button"
@@ -1631,8 +1690,8 @@ export function MarketingPipelineWorkspace({
                                                             }
                                                             title={
                                                                 viewMode === "preview"
-                                                                    ? "Edit"
-                                                                    : "Preview"
+                                                                    ? tc("edit")
+                                                                    : tc("preview")
                                                             }
                                                         >
                                                             <Pencil size={14} />
@@ -1656,7 +1715,9 @@ export function MarketingPipelineWorkspace({
                                                                         e.target.value
                                                                     )
                                                                 }
-                                                                placeholder="Your campaign message..."
+                                                                placeholder={t(
+                                                                    "workspace.messagePlaceholder"
+                                                                )}
                                                             />
                                                         )}
                                                     </div>
@@ -1669,10 +1730,10 @@ export function MarketingPipelineWorkspace({
                                                         className={styles.actionTertiary}
                                                         onClick={handlePushToRewriteDocument}
                                                         disabled={!editableMessage.trim()}
-                                                        title="Save this draft to your documents workspace for further editing"
+                                                        title={t("workspace.saveAsDocTitle")}
                                                     >
                                                         <FileText size={14} />
-                                                        Save as document
+                                                        {t("workspace.saveAsDoc")}
                                                     </button>
                                                     <button
                                                         type="button"
@@ -1684,8 +1745,8 @@ export function MarketingPipelineWorkspace({
                                                     >
                                                         <Sparkles size={14} />
                                                         {showRewriteSheet
-                                                            ? "Hide Rewrite"
-                                                            : "Refine with AI"}
+                                                            ? t("workspace.hideRewrite")
+                                                            : t("workspace.refine")}
                                                     </button>
                                                     <button
                                                         type="button"
@@ -1695,8 +1756,12 @@ export function MarketingPipelineWorkspace({
                                                     >
                                                         <Copy size={14} />
                                                         {copySuccess
-                                                            ? "Copied!"
-                                                            : `Copy to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "platform"}`}
+                                                            ? t("workspace.copied")
+                                                            : t("workspace.copyTo", {
+                                                                  platform:
+                                                                      platformLabel ??
+                                                                      t("workspace.platform"),
+                                                              })}
                                                     </button>
                                                     <button
                                                         type="button"
@@ -1705,7 +1770,7 @@ export function MarketingPipelineWorkspace({
                                                         disabled={
                                                             !editableMessage.trim() || evaluating
                                                         }
-                                                        title="Score this post's quality with the evaluation pipeline"
+                                                        title={t("workspace.evaluateTitle")}
                                                     >
                                                         {evaluating ? (
                                                             <Loader2
@@ -1716,8 +1781,8 @@ export function MarketingPipelineWorkspace({
                                                             <Gauge size={14} />
                                                         )}
                                                         {evaluating
-                                                            ? "Scoring…"
-                                                            : "Evaluate quality"}
+                                                            ? t("workspace.scoring")
+                                                            : t("workspace.evaluate")}
                                                     </button>
                                                     {onSchedule && result.platform && (
                                                         <button
@@ -1730,10 +1795,10 @@ export function MarketingPipelineWorkspace({
                                                                 })
                                                             }
                                                             disabled={!editableMessage.trim()}
-                                                            title="Put this post on the Brand calendar"
+                                                            title={t("workspace.scheduleTitle")}
                                                         >
                                                             <CalendarClock size={14} />
-                                                            Schedule…
+                                                            {t("workspace.schedule")}
                                                         </button>
                                                     )}
                                                     <button
@@ -1743,7 +1808,11 @@ export function MarketingPipelineWorkspace({
                                                         disabled={
                                                             !editableMessage.trim() || publishing
                                                         }
-                                                        title={`Publish this post directly to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "the platform"}`}
+                                                        title={t("workspace.publishTitle", {
+                                                            platform:
+                                                                platformLabel ??
+                                                                t("workspace.thePlatform"),
+                                                        })}
                                                     >
                                                         {publishing ? (
                                                             <Loader2
@@ -1754,8 +1823,12 @@ export function MarketingPipelineWorkspace({
                                                             <Send size={14} />
                                                         )}
                                                         {publishing
-                                                            ? "Publishing…"
-                                                            : `Publish to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "platform"}`}
+                                                            ? t("workspace.publishing")
+                                                            : t("workspace.publishTo", {
+                                                                  platform:
+                                                                      platformLabel ??
+                                                                      t("workspace.platform"),
+                                                              })}
                                                     </button>
                                                 </div>
 
@@ -1804,7 +1877,7 @@ export function MarketingPipelineWorkspace({
                                                                 }}
                                                             >
                                                                 <Gauge size={16} />
-                                                                Quality score
+                                                                {t("workspace.qualityScore")}
                                                             </span>
                                                             <span
                                                                 style={{
@@ -1908,8 +1981,10 @@ export function MarketingPipelineWorkspace({
                                                                 color: "var(--ink-3)",
                                                             }}
                                                         >
-                                                            judge {evalResult.judgeModel} · rubric{" "}
-                                                            {evalResult.rubricVersion}
+                                                            {t("workspace.judge", {
+                                                                model: evalResult.judgeModel,
+                                                                version: evalResult.rubricVersion,
+                                                            })}
                                                         </div>
                                                     </div>
                                                 )}
@@ -1932,15 +2007,29 @@ export function MarketingPipelineWorkspace({
                                                             <>
                                                                 <Check size={15} />
                                                                 <span>
-                                                                    Published to{" "}
-                                                                    {PLATFORM_OPTIONS.find(
-                                                                        p =>
-                                                                            p.id === result.platform
-                                                                    )?.label ?? "the platform"}
                                                                     {publishResult.channel
-                                                                        ? ` as ${publishResult.channel}`
-                                                                        : ""}
-                                                                    .
+                                                                        ? t(
+                                                                              "workspace.publishedToAs",
+                                                                              {
+                                                                                  platform:
+                                                                                      platformLabel ??
+                                                                                      t(
+                                                                                          "workspace.thePlatform"
+                                                                                      ),
+                                                                                  channel:
+                                                                                      publishResult.channel,
+                                                                              }
+                                                                          )
+                                                                        : t(
+                                                                              "workspace.publishedTo",
+                                                                              {
+                                                                                  platform:
+                                                                                      platformLabel ??
+                                                                                      t(
+                                                                                          "workspace.thePlatform"
+                                                                                      ),
+                                                                              }
+                                                                          )}
                                                                 </span>
                                                                 {publishResult.postUrl && (
                                                                     <a
@@ -1956,7 +2045,7 @@ export function MarketingPipelineWorkspace({
                                                                                 "underline",
                                                                         }}
                                                                     >
-                                                                        View post{" "}
+                                                                        {t("workspace.viewPost")}{" "}
                                                                         <ExternalLink size={12} />
                                                                     </a>
                                                                 )}
@@ -1981,14 +2070,10 @@ export function MarketingPipelineWorkspace({
                                                     >
                                                         <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
                                                             <SheetTitle className="text-lg font-semibold">
-                                                                Refine your campaign
+                                                                {t("workspace.refineTitle")}
                                                             </SheetTitle>
                                                             <p className="text-ink-3 text-sm">
-                                                                Use tone, length, and audience
-                                                                options to refine the message —
-                                                                grounded in your company context and
-                                                                brand voice. Preview and accept when
-                                                                you&apos;re happy.
+                                                                {t("workspace.refineBody")}
                                                             </p>
                                                         </SheetHeader>
                                                         <div className="flex-1 overflow-y-auto px-6 py-4">
@@ -2065,7 +2150,7 @@ export function MarketingPipelineWorkspace({
                                                             ) : (
                                                                 <ChevronRight size={14} />
                                                             )}
-                                                            Debug: DNA Source
+                                                            {t("workspace.debugDna")}
                                                             <span
                                                                 style={{
                                                                     marginLeft: "0.5rem",
@@ -2134,7 +2219,7 @@ export function MarketingPipelineWorkspace({
                                                                         color: "var(--ink-3)",
                                                                     }}
                                                                 >
-                                                                    Raw context sent to LLM
+                                                                    {t("workspace.rawContext")}
                                                                 </div>
                                                                 <pre
                                                                     style={{
@@ -2158,7 +2243,7 @@ export function MarketingPipelineWorkspace({
                                                 )}
 
                                                 <div className={styles.assistantSectionHeader}>
-                                                    Trend references
+                                                    {t("workspace.trendRefs")}
                                                 </div>
                                                 <div className={styles.researchList}>
                                                     {(result.research ?? []).length > 0 ? (
@@ -2197,8 +2282,7 @@ export function MarketingPipelineWorkspace({
                                                         )
                                                     ) : (
                                                         <p className={styles.sessionEmpty}>
-                                                            No trend references available for this
-                                                            campaign.
+                                                            {t("workspace.noTrends")}
                                                         </p>
                                                     )}
                                                 </div>

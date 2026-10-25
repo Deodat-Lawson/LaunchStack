@@ -5,13 +5,13 @@ import { getCompany } from "~/server/prospects/service";
 
 import { handleProspectsError, json, prospectsContext } from "../../_http";
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         return json({ company: await getCompany(auth.ctx, id) });
     } catch (err) {
-        return handleProspectsError("GET company", err);
+        return handleProspectsError("GET company", err, request);
     }
 }

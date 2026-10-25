@@ -5,6 +5,8 @@ import { agentAiChatbotToolCall } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateToolCallSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertToolCallParentsOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -15,6 +17,8 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateToolCallSchema);
@@ -24,7 +28,8 @@ export async function POST(request: NextRequest) {
         const owned = await assertToolCallParentsOwnedByUser(
             messageId,
             taskId,
-            ctx.data.authUserId
+            ctx.data.authUserId,
+            locale
         );
         if (!owned.success) return owned.response;
 
@@ -48,7 +53,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error creating tool call:", error);
-        return NextResponse.json({ error: "Failed to create tool call" }, { status: 500 });
+        return NextResponse.json({ error: t("createToolCall") }, { status: 500 });
     }
 }
 
@@ -56,6 +61,8 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { searchParams } = new URL(request.url);
@@ -63,13 +70,14 @@ export async function GET(request: NextRequest) {
         const taskId = searchParams.get("taskId");
 
         if (!messageId && !taskId) {
-            return NextResponse.json({ error: "messageId or taskId is required" }, { status: 400 });
+            return NextResponse.json({ error: t("messageOrTaskRequired") }, { status: 400 });
         }
 
         const owned = await assertToolCallParentsOwnedByUser(
             messageId,
             taskId,
-            ctx.data.authUserId
+            ctx.data.authUserId,
+            locale
         );
         if (!owned.success) return owned.response;
 
@@ -94,7 +102,8 @@ export async function GET(request: NextRequest) {
             const rowOwned = await assertToolCallParentsOwnedByUser(
                 toolCall.messageId,
                 toolCall.taskId,
-                ctx.data.authUserId
+                ctx.data.authUserId,
+                locale
             );
             if (rowOwned.success) authorizedToolCalls.push(toolCall);
         }
@@ -105,6 +114,6 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching tool calls:", error);
-        return NextResponse.json({ error: "Failed to fetch tool calls" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchToolCalls") }, { status: 500 });
     }
 }

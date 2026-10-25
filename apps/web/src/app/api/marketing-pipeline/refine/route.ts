@@ -4,6 +4,7 @@ import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -21,15 +22,20 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
             const validation = RefineInputSchema.safeParse(await readJson(request));
             if (!validation.success) {
-                return fail("Invalid input", 400, { errors: validation.error.flatten() });
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: validation.error.flatten(),
+                });
             }
 
             const companyId = Number(ctx.data.companyId);
             if (Number.isNaN(companyId)) {
-                return fail("Invalid company ID", 400);
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("invalidCompanyId"),
+                    400
+                );
             }
 
             const companyContext = await buildCompanyKnowledgeContext({
@@ -48,6 +54,6 @@ export async function POST(request: Request) {
             return ok(result);
         });
     } catch (error) {
-        return handleRouteError("marketing-pipeline/refine", error);
+        return handleRouteError("marketing-pipeline/refine", error, request);
     }
 }

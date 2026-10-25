@@ -28,6 +28,7 @@ import {
     segmentsAfter,
 } from "../shared/http";
 import { standInClock } from "../shared/store";
+import { docxFromMarkdown } from "./docx";
 import { pickerScript } from "./picker-script";
 import {
     ACCOUNT,
@@ -47,6 +48,7 @@ import {
 } from "./world";
 
 const ACCESS_TOKEN_SECONDS = 3600;
+const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 const CODE_TTL_MS = 10 * 60_000;
 
 function driveError(status: number, reason: string, message: string): Response {
@@ -220,7 +222,12 @@ function getFile(w: GoogleWorld, scopes: string[], id: string, url: URL): Respon
     return json(fileResource(file));
 }
 
-function exportFile(w: GoogleWorld, scopes: string[], id: string, url: URL): Response {
+async function exportFile(
+    w: GoogleWorld,
+    scopes: string[],
+    id: string,
+    url: URL
+): Promise<Response> {
     const file = readable(w, scopes, id);
     if (!file) return notFound(id);
     const target = url.searchParams.get("mimeType") ?? "";
@@ -230,11 +237,14 @@ function exportFile(w: GoogleWorld, scopes: string[], id: string, url: URL): Res
     ) {
         return driveError(403, "fileNotExportable", "Export only supports Docs Editors files.");
     }
+    if (target === DOCX_MIME) {
+        return bytes(await docxFromMarkdown(file.content ?? ""), target);
+    }
     if (target !== "text/markdown" && target !== "text/plain") {
         return driveError(
             400,
             "badRequest",
-            `The stand-in exports Docs as Markdown, not ${target}.`
+            `The stand-in exports Docs as Word or Markdown, not ${target}.`
         );
     }
     return bytes(new TextEncoder().encode(file.content ?? ""), target);

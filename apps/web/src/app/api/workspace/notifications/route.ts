@@ -24,6 +24,6 @@ export async function GET(request: Request) {
     try {
         return NextResponse.json(await listNotifications(ctx.data, { limit }));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/notifications GET]");
+        return workspaceErrorResponse(error, "[workspace/notifications GET]", request);
     }
 }

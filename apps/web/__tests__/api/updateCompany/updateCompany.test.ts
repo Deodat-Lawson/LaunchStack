@@ -300,6 +300,28 @@ describe("POST /api/updateCompany: the embeddings key and its endpoint URL", () 
         expect(auditKeys).toEqual(expect.arrayContaining(["openAIApiKey", "openAIBaseUrl"]));
     });
 
+    it("saves the key and URL alone, without the company's name, leaving the row untouched", async () => {
+        // What Bring your own keys sends: credentials and nothing else.
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: {
+                embeddingOpenAIApiKey: "sk-new-key",
+                embeddingOpenAIBaseUrl: "https://api.openai.com/v1",
+            },
+        });
+
+        const response = await POST(makeRequest());
+
+        expect(response.status).toBe(200);
+        expect(upsertCompanyCredentials).toHaveBeenCalledWith(7, {
+            openAIApiKey: "sk-new-key",
+            openAIBaseUrl: "https://api.openai.com/v1",
+        });
+        expect(db.update).not.toHaveBeenCalled();
+        const auditKeys = (recordAuditEvent as jest.Mock).mock.calls[0][1].detail.keys;
+        expect(auditKeys).toEqual(["openAIApiKey", "openAIBaseUrl"]);
+    });
+
     it("pairs a new key with the URL already stored", async () => {
         stored("sk-old-key", "https://embeddings.example/v1");
         body({ embeddingOpenAIApiKey: "sk-new-key" });
@@ -451,6 +473,18 @@ describe("POST /api/updateCompany: the embeddings key and its endpoint URL", () 
                 openAIBaseUrl: "https://embeddings.example/v1",
             })
         );
+    });
+});
+
+describe("UpdateCompanySchema: name", () => {
+    it("is optional, so credentials can be saved alone", () => {
+        const parsed = UpdateCompanySchema.parse({ embeddingOpenAIApiKey: "sk-new-key" });
+        expect(parsed.name).toBeUndefined();
+        expect(parsed.embeddingOpenAIApiKey).toBe("sk-new-key");
+    });
+
+    it("still refuses an empty one", () => {
+        expect(() => UpdateCompanySchema.parse({ name: "" })).toThrow("Company name is required");
     });
 });
 

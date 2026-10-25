@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface PasteSourceTabProps {
@@ -29,15 +30,16 @@ const inputStyle: React.CSSProperties = {
 };
 
 export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
+    const t = useTranslations("upload.paste");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
     const handleAddToQueue = () => {
-        const trimmedTitle = title.trim() || "Untitled Document";
+        const trimmedTitle = title.trim() || t("untitled");
         const trimmedContent = content.trim();
 
         if (!trimmedContent) {
-            toast.error("Please enter some content");
+            toast.error(t("contentRequired"));
             return;
         }
 
@@ -54,7 +56,7 @@ export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
         onFilesAdded([file]);
         setTitle("");
         setContent("");
-        toast.success(`"${trimmedTitle}" added to upload queue`);
+        toast.success(t("added", { title: trimmedTitle }));
     };
 
     const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
@@ -64,12 +66,12 @@ export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
                 <label htmlFor="paste-title" style={labelStyle}>
-                    Document title
+                    {t("titleLabel")}
                 </label>
                 <input
                     id="paste-title"
                     type="text"
-                    placeholder="e.g. Meeting notes, research summary…"
+                    placeholder={t("titlePlaceholder")}
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                     style={inputStyle}
@@ -86,17 +88,17 @@ export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
                     }}
                 >
                     <label htmlFor="paste-content" style={{ ...labelStyle, marginBottom: 0 }}>
-                        Content
+                        {t("contentLabel")}
                     </label>
                     {wordCount > 0 && (
                         <span className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                            {wordCount} word{wordCount !== 1 ? "s" : ""}
+                            {t("wordCount", { count: wordCount })}
                         </span>
                     )}
                 </div>
                 <textarea
                     id="paste-content"
-                    placeholder="Paste your text or markdown content here…"
+                    placeholder={t("contentPlaceholder")}
                     value={content}
                     onChange={e => setContent(e.target.value)}
                     style={{
@@ -131,7 +133,7 @@ export function PasteSourceTab({ onFilesAdded }: PasteSourceTabProps) {
                 }}
             >
                 <Plus size={14} />
-                Add to upload queue
+                {t("submit")}
             </button>
         </div>
     );

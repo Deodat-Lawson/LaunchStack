@@ -120,10 +120,16 @@ export interface PickedItemInput {
     readonly mimeType: string | null;
 }
 
+/**
+ * `destination` is the folder chosen in Add source (see the column). A
+ * re-pick that names one takes it — it only matters for files not placed
+ * yet; what is already in LaunchStack stays where it is.
+ */
 export async function addPickedItems(
     connectionId: number,
     items: readonly PickedItemInput[],
-    addedByUserPk: number
+    addedByUserPk: number,
+    destination: string | null = null
 ): Promise<void> {
     if (items.length === 0) return;
     await db
@@ -136,6 +142,7 @@ export async function addPickedItems(
                 name: item.name,
                 mimeType: item.mimeType,
                 addedByUserPk,
+                destination,
             }))
         )
         // Re-picking is how users refresh a drive.file folder grant, so the
@@ -146,6 +153,7 @@ export async function addPickedItems(
                 name: sql`excluded.name`,
                 mimeType: sql`excluded.mime_type`,
                 kind: sql`excluded.kind`,
+                destination: sql`coalesce(excluded.destination, ${googleDrivePickedItem.destination})`,
             },
         });
 }

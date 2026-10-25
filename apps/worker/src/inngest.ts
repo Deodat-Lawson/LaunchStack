@@ -36,6 +36,7 @@ import {
     googleDriveSyncJob,
 } from "~/server/inngest/functions/googleDriveSync";
 import { gmailSyncCron, gmailSyncJob } from "~/server/inngest/functions/gmailSync";
+import { notionSyncCron, notionSyncJob } from "~/server/inngest/functions/notionSync";
 
 export function createInngestHandler() {
     return serve({
@@ -58,6 +59,8 @@ export function createInngestHandler() {
             googleDriveSyncCron,
             gmailSyncJob,
             gmailSyncCron,
+            notionSyncJob,
+            notionSyncCron,
             distributionRunJob,
             brandPublishDueCron,
             brandSyncInsightsCron,

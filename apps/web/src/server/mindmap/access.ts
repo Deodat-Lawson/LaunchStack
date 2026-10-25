@@ -26,6 +26,7 @@
 
 import { and, eq, ne, or, type SQL } from "drizzle-orm";
 
+import { englishCopy } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { mindmaps, users } from "~/server/db/schema";
 import { folderScopePredicate } from "~/lib/authz/scope";
@@ -74,13 +75,12 @@ export type DraftActor = AccessActor & { readonly authUserId: string };
 /** Same shape as a document's in the documents list, so the rail treats both alike. */
 export type DraftAccessView = DocumentAccessView;
 
-export const DRAFT_EDIT_DENIED = "You can view this mindmap but not change it.";
-export const DRAFT_DELETE_DENIED =
-    "Only the person who made this mindmap, or someone who manages its folder, can delete it.";
-export const DRAFT_UNFILED_DENIED =
-    "Only the person who made this mindmap can move it to Unfiled: drafts there are private to whoever made them.";
-export const DRAFT_MOVE_WIDENS =
-    "Moving this mindmap there would show it to people who can't see it now. A draft takes its folder's access, so publish it to share it, or change who can see the folder.";
+// The English of the refusals (`mindmap.server.errors`); the routes word them
+// in the reader's language.
+export const DRAFT_EDIT_DENIED = englishCopy({ key: "mindmap.server.errors.editDenied" });
+export const DRAFT_DELETE_DENIED = englishCopy({ key: "mindmap.server.errors.deleteDenied" });
+export const DRAFT_UNFILED_DENIED = englishCopy({ key: "mindmap.server.errors.unfiledDenied" });
+export const DRAFT_MOVE_WIDENS = englishCopy({ key: "mindmap.server.errors.moveWidens" });
 
 export async function draftReader(ctx: WorkspaceContext): Promise<DraftReader> {
     return {

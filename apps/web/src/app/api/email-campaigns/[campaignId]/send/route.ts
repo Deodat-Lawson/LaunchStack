@@ -13,6 +13,7 @@ import {
     resolveSendingActor,
     unsubscribeBaseUrl,
 } from "../../_lib/context";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -46,11 +47,17 @@ export async function POST(
 ) {
     try {
         const campaignId = parseCampaignId((await params).campaignId);
-        if (campaignId === null) return fail("Invalid campaign ID", 400);
+        if (campaignId === null)
+            return fail(
+                requestTranslator(request, "growth.server.email")("invalidCampaignId"),
+                400
+            );
 
         const parsed = SendSchema.safeParse((await readJson(request)) ?? {});
         if (!parsed.success) {
-            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+            return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                errors: parsed.error.flatten(),
+            });
         }
 
         // Real delivery needs `campaigns.send`; a dry-run preview stays open
@@ -61,7 +68,7 @@ export async function POST(
 
         const idempotencyKey = idempotencyKeyFrom(request, parsed.data.idempotencyKey);
         if (!idempotencyKey) {
-            return fail("An Idempotency-Key header is required to send a campaign.", 400, {
+            return fail(requestTranslator(request, "growth.server.email")("idempotencySend"), 400, {
                 code: "idempotency_key_required",
             });
         }
@@ -97,6 +104,6 @@ export async function POST(
             recipientsFrozen: dispatched.recipientsFrozen,
         });
     } catch (error) {
-        return handleRouteError("email-campaigns/send", error);
+        return handleRouteError("email-campaigns/send", error, request);
     }
 }

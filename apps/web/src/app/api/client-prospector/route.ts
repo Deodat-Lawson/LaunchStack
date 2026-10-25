@@ -22,6 +22,7 @@ import {
 } from "@launchstack/pipelines/client-prospector";
 import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/client-prospector/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {
@@ -42,7 +43,10 @@ export async function POST(request: NextRequest) {
                 const parsed = ProspectorInputSchema.safeParse(body);
                 if (!parsed.success) {
                     return NextResponse.json(
-                        { error: "Validation failed", details: parsed.error.flatten() },
+                        {
+                            error: requestTranslator(request, "errors.api")("validationFailed"),
+                            details: parsed.error.flatten(),
+                        },
                         { status: 400 }
                     );
                 }
@@ -94,7 +98,10 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ jobId, status: "queued" }, { status: 202 });
             } catch (error) {
                 console.error("[client-prospector] POST error:", error);
-                return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+                return NextResponse.json(
+                    { error: requestTranslator(request, "errors.api")("internal") },
+                    { status: 500 }
+                );
             }
         }
     );
@@ -115,14 +122,14 @@ export async function GET(request: NextRequest) {
 
         if (!Number.isInteger(limit) || limit < 1 || limit > 500) {
             return NextResponse.json(
-                { error: "Invalid limit: expected an integer between 1 and 500" },
+                { error: requestTranslator(request, "growth.server.research")("invalidLimit") },
                 { status: 400 }
             );
         }
 
         if (!Number.isInteger(offset) || offset < 0) {
             return NextResponse.json(
-                { error: "Invalid offset: expected a non-negative integer" },
+                { error: requestTranslator(request, "growth.server.research")("invalidOffset") },
                 { status: 400 }
             );
         }
@@ -141,6 +148,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ jobs: results, pagination: { limit, offset } }, { status: 200 });
     } catch (error) {
         console.error("[client-prospector] GET error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

@@ -5,17 +5,28 @@
  * none — so these pin that the prompts say what is known and what is not.
  */
 
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import {
     describeRaise,
     formatUsd,
     fundsMarkdown,
     introPrompt,
     PITCH_STARTERS,
+    raiseLine,
     resultSummary,
     sortFunds,
     websiteSearchUrl,
     type FundProfile,
 } from "../investors/investors";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "team.investors",
+});
 
 function fund(over: Partial<FundProfile> = {}): FundProfile {
     return {
@@ -65,6 +76,18 @@ describe("money", () => {
         expect(describeRaise(fund({ offeringAmount: null, amountSold: 1_890_486_304 }))).toBe(
             "Size not stated · $1.9B closed"
         );
+    });
+
+    it("words the card's raise line the same way in English", () => {
+        for (const over of [
+            {},
+            { offeringAmount: 80_000_000, amountSold: 21_000_000 },
+            { offeringAmount: null, amountSold: 1_890_486_304 },
+            { offeringAmount: null, amountSold: 0 },
+            { detailed: false },
+        ]) {
+            expect(raiseLine(t, fund(over))).toBe(describeRaise(fund(over)));
+        }
     });
 
     it("claims nothing about a fund whose filing could not be read", () => {
@@ -163,11 +186,11 @@ describe("links and summary", () => {
             singleDealVehiclesHidden: 65,
             source: "sec-edgar-form-d" as const,
         };
-        expect(resultSummary(result, 1)).toBe(
+        expect(resultSummary(t, result, 1)).toBe(
             "1 fund · 10,000+ filings in the window · 65 single-deal vehicles hidden"
         );
-        expect(resultSummary({ ...result, totalFilings: 1, singleDealVehiclesHidden: 0 }, 1)).toBe(
-            "1 fund"
-        );
+        expect(
+            resultSummary(t, { ...result, totalFilings: 1, singleDealVehiclesHidden: 0 }, 1)
+        ).toBe("1 fund");
     });
 });

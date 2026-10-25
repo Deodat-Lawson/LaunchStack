@@ -9,13 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Migration histories ordered after main** — Main's SQL, journal entries, and snapshots stay unchanged. The twelve Call Notes SQL files retain their exact bodies under post-main timestamps, with regenerated merged-schema snapshots that include the original enrichment-run foreign key without adding duplicate DDL. Existing databases with the former Call Notes tags need explicit ledger-tag reconciliation before deployment.
 - **Main rebase and local runtime recovery** — Reconciled Call Notes with main's private-by-default document permissions, source tabs, and durable chat queue. Restored document references resolve to their canonical Call Note or mindmap before retrieval and history persistence. Calls chat and enrichment now honor workspace-specific model endpoints. Migration journals and snapshot ancestry retain already-applied Call Notes SQL alongside main's newer migrations; the Next.js patch retains both request-body hand-off and local development-memory fixes.
 - **Capture survives worker and backend outages** — A failed Local Capture Worker no longer fails the Call:
   - **Worker:** retries transport errors, timeouts, 429 and 5xx with backoff. Polls retry without limit; events and finish retry for up to 120 s. Up to 600 transcribed segments queue in order while the web app is unreachable. A failed pipeline no longer exits the process.
   - **Pause instead of fail:** when the worker gives up, crashes, or stops renewing its lease, the Capture is paused with `pausedReason: "worker_error"`. The Call stays open with its Transcript, the outage is a Gap, and the Calls UI shows "Paused — capture error" with Resume. Resume continues the same Call with a new Capture Attempt.
   - **Reattach:** a worker that was only unreachable reattaches to its attempt, and the presumed Gap is removed.
   - **User Pause:** now drains and ends the attempt instead of failing it.
-  - **Migration:** `20261005025623_capture_paused_reason` adds `paused_reason`.
+  - **Migration:** `20261025000010_capture_paused_reason` adds `paused_reason`.
   - **Older Calls:** Calls failed by a worker error before this release stay failed.
 - **Dev server memory leak** — `next dev` no longer grows by about 1 GB of live heap per hour. Three causes, all measured with heap snapshots under the Calls polling workload:
   - The React Flight development runtime that Next loads into its router process tracked every async operation in the process and linked them into one chain that was never released (99% of the growth). `patches/next@15.5.7.patch` now starts that tracking only inside a React render (`app-page-turbo.runtime.dev.js`).
@@ -122,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     (⌘⌥⇧\), maximize (⌘⇧↩), focus the next or previous pane (⌘⌥] and ⌘⌥[),
     close the current app (⌘⌥W)
   - Apps fit the pane they are in, not the window: the composer drops to icons
-    and Meetings stacks its channel list in a narrow pane  - The document viewer folds its versions and notes rail into a Details
+    and Meetings stacks its channel list in a narrow pane - The document viewer folds its versions and notes rail into a Details
     panel once its column is too narrow for both
 - **Resizable sidebar** - drag its edge (or use the arrow keys) between 220 and
   520px; the width is remembered

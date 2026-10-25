@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Code2, ExternalLink, Eye, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
@@ -30,12 +31,16 @@ function safeHref(url: string | null): string | null {
  * with an opaque origin, Markdown and Mermaid drawn, React and code as source.
  */
 export function ArtifactDocumentViewer({ document }: { document: DocumentType }) {
+    const t = useTranslations("viewers.artifact");
+    const tTypes = useTranslations("viewers.artifactTypes");
+    const tc = useTranslations("common");
     const marker = artifactMarkerOf(document.ocrMetadata);
     const type = marker?.artifactType ?? "code";
     const meta = artifactTypeMeta(type);
     const original = safeHref(marker?.sourceUrl ?? null);
 
     const [content, setContent] = useState<string | null>(null);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
     const [view, setView] = useState<"preview" | "source">(meta.previewable ? "preview" : "source");
 
@@ -52,8 +57,7 @@ export function ArtifactDocumentViewer({ document }: { document: DocumentType })
                 if (!cancelled) setContent(text);
             })
             .catch((cause: unknown) => {
-                if (!cancelled)
-                    setError(cause instanceof Error ? cause.message : "Couldn't load the artifact");
+                if (!cancelled) setError(cause instanceof Error ? cause.message : "");
             });
         return () => {
             cancelled = true;
@@ -66,8 +70,8 @@ export function ArtifactDocumentViewer({ document }: { document: DocumentType })
         <div className="bg-surface flex h-full min-h-0 flex-col">
             <div className="border-line flex h-10 shrink-0 items-center gap-2 border-b px-3">
                 <Icon className="text-ink-3 size-4 shrink-0" aria-hidden />
-                <span className="text-ink-2 truncate text-xs font-medium">{meta.label}</span>
-                <span className="text-ink-3 truncate text-xs">· Claude artifact</span>
+                <span className="text-ink-2 truncate text-xs font-medium">{tTypes(type)}</span>
+                <span className="text-ink-3 truncate text-xs">{t("claudeArtifact")}</span>
                 <div className="flex-1" />
                 {meta.previewable && (
                     <ToggleGroup
@@ -77,15 +81,15 @@ export function ArtifactDocumentViewer({ document }: { document: DocumentType })
                         onValueChange={value => {
                             if (value === "preview" || value === "source") setView(value);
                         }}
-                        aria-label="Show the artifact or its source"
+                        aria-label={t("viewToggle")}
                     >
                         <ToggleGroupItem value="preview" className="gap-1.5 px-2.5 text-xs">
                             <Eye className="size-3.5" aria-hidden />
-                            Preview
+                            {tc("actions.preview")}
                         </ToggleGroupItem>
                         <ToggleGroupItem value="source" className="gap-1.5 px-2.5 text-xs">
                             <Code2 className="size-3.5" aria-hidden />
-                            Source
+                            {t("source")}
                         </ToggleGroupItem>
                     </ToggleGroup>
                 )}
@@ -93,20 +97,20 @@ export function ArtifactDocumentViewer({ document }: { document: DocumentType })
                     <Button asChild variant="ghost" size="sm" className="h-7 gap-1.5 px-2 text-xs">
                         <a href={original} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="size-3.5" aria-hidden />
-                            Original
+                            {t("original")}
                         </a>
                     </Button>
                 )}
             </div>
             <div className="min-h-0 flex-1">
-                {error ? (
+                {error !== null ? (
                     <div className="text-ink-3 flex h-full items-center justify-center px-6 text-center text-sm">
-                        Couldn&apos;t load this artifact ({error}).
+                        {t("loadFailed", { error: error || t("loadFailedFallback") })}
                     </div>
                 ) : content === null ? (
                     <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-sm">
                         <Loader2 className="size-4 animate-spin" aria-hidden />
-                        Loading…
+                        {tc("status.loading")}
                     </div>
                 ) : view === "preview" ? (
                     <ArtifactPreview type={type} content={content} />

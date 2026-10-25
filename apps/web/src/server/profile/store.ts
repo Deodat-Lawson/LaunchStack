@@ -26,6 +26,7 @@ import {
     type WorkspaceProfileOverride,
 } from "~/lib/profile/resolve";
 import { conflict, notFound } from "~/server/workspace/errors";
+import { copy } from "~/i18n/copy";
 
 import type { NormalizedPhoto } from "./photo";
 
@@ -74,7 +75,7 @@ export async function loadMyProfile(caller: ProfileCaller): Promise<MyProfile> {
         })
         .from(users)
         .where(eq(users.id, Number(caller.userPk)));
-    if (!person) throw notFound("No profile yet.");
+    if (!person) throw notFound(copy("settings.server.errors.noProfileYet"));
 
     const photos = await photoIds(caller.userPk, caller.companyId);
     const profile: ProfileFields = { ...person, avatarUrl: profileImageUrl(photos.global) };
@@ -292,7 +293,8 @@ export async function updateProfile(
 }
 
 function requireWorkspace(caller: ProfileCaller): bigint {
-    if (caller.companyId === null) throw notFound("Open a workspace first.");
+    if (caller.companyId === null)
+        throw notFound(copy("settings.server.errors.openWorkspaceFirst"));
     return caller.companyId;
 }
 
@@ -383,7 +385,7 @@ export async function replaceProfilePhoto(
         });
     } catch (error) {
         // Two uploads raced for the same slot; the other one won.
-        if (isUniqueViolation(error)) throw conflict("Another upload just finished. Try again.");
+        if (isUniqueViolation(error)) throw conflict(copy("settings.server.errors.uploadRaced"));
         throw error;
     }
     return loadMyProfile(caller);

@@ -33,7 +33,9 @@ jest.mock("@launchstack/pipelines/scenarios/db", () => {
 });
 jest.mock("~/server/scenarios/executor", () => ({ createScenarioPorts: jest.fn(() => ({})) }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
+        fn()
+    ),
 }));
 
 import { scenarioRunJob } from "~/server/inngest/functions/scenarioRun";
@@ -68,7 +70,7 @@ it("runs one step per unit until the run stops advancing", async () => {
     expect(advanceRun).toHaveBeenCalledWith({}, 7);
     // Each step enters the workspace's model scope itself (steps don't inherit it).
     expect(withWorkspaceChatModels).toHaveBeenCalledTimes(4);
-    expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
+    expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
     expect(result).toEqual({ runId: 7, state: "done" });
 });
 

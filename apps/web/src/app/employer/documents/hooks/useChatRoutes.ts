@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 /**
  * Reads the deployment's sanitized chat route configuration.
@@ -70,6 +71,7 @@ export interface ChatRoutesState {
 }
 
 export function useChatRoutes(): ChatRoutesState {
+    const t = useTranslations("workspace.chatRoutes");
     const [config, setConfig] = useState<ChatRoutesConfig>(CLOSED);
     const [loading, setLoading] = useState(true);
 
@@ -106,13 +108,11 @@ export function useChatRoutes(): ChatRoutesState {
         reasoningEfforts: reasoning?.reasoning?.efforts,
         visionDisabledReason:
             vision?.unavailableReason ??
-            (vision?.available && !vision.vision?.supported
-                ? "The model serving the vision route does not accept images."
-                : undefined),
+            (vision?.available && !vision.vision?.supported ? t("noImages") : undefined),
         reasoningDisabledReason:
             reasoning?.unavailableReason ??
             (reasoning?.available && reasoning.reasoning?.mode === "always"
-                ? "The model serving the reasoning route always reasons; there is nothing to toggle."
+                ? t("alwaysReasons")
                 : undefined),
     };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
     AlignCenterHorizontal,
     AlignCenterVertical,
@@ -86,7 +87,7 @@ import {
     Segmented,
     Slider,
 } from "./controls";
-import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
+import { shapeName, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * The properties panel.
@@ -101,25 +102,50 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 const selectSelection = (s: EditorState) => s.selection;
 
-/** Stroke weights people ask for by name; the field still takes any number. */
+/**
+ * Stroke weights people ask for by name; the field still takes any number.
+ * `key` names the weight in `mindmap.inspector.weights`.
+ */
 const WEIGHT_PRESETS = [
-    { label: "Hairline", value: 0.75 },
-    { label: "Thin", value: 1 },
-    { label: "Regular", value: 1.5 },
-    { label: "Medium", value: 2.5 },
-    { label: "Bold", value: 4 },
-    { label: "Heavy", value: 6 },
+    { key: "hairline", value: 0.75 },
+    { key: "thin", value: 1 },
+    { key: "regular", value: 1.5 },
+    { key: "medium", value: 2.5 },
+    { key: "bold", value: 4 },
+    { key: "heavy", value: 6 },
 ] as const;
 
-/** Type sizes by role rather than by pixel. */
+/** Type sizes by role rather than by pixel, named in `inspector.fontSizes`. */
 const FONT_SIZE_PRESETS = [
-    { label: "Small", value: 11 },
-    { label: "Body", value: 14 },
-    { label: "Emphasis", value: 16 },
-    { label: "Subheading", value: 20 },
-    { label: "Heading", value: 24 },
-    { label: "Display", value: 32 },
+    { key: "small", value: 11 },
+    { key: "body", value: 14 },
+    { key: "emphasis", value: 16 },
+    { key: "subheading", value: 20 },
+    { key: "heading", value: 24 },
+    { key: "display", value: 32 },
 ] as const;
+
+type InspectorT = ReturnType<typeof useTranslations<"mindmap.inspector">>;
+
+function weightPresets(t: InspectorT) {
+    return WEIGHT_PRESETS.map(p => ({ label: t(`weights.${p.key}`), value: p.value }));
+}
+
+function strokeStyleOptions(t: InspectorT) {
+    return [
+        { value: "solid", label: "──", title: t("strokeStyles.solid") },
+        { value: "dashed", label: "╌╌", title: t("strokeStyles.dashed") },
+        { value: "dotted", label: "···", title: t("strokeStyles.dotted") },
+    ] as const;
+}
+
+function routeOptions(t: InspectorT) {
+    return [
+        { value: "straight", label: "╱", title: t("routes.straight") },
+        { value: "elbow", label: "⌐", title: t("routes.elbow") },
+        { value: "curved", label: "∿", title: t("routes.curved") },
+    ] as const;
+}
 
 /** Common value across a set, or `null` when they disagree. */
 function common<T, K>(items: readonly T[], read: (item: T) => K): K | null {
@@ -129,6 +155,7 @@ function common<T, K>(items: readonly T[], read: (item: T) => K): K | null {
 }
 
 export function Inspector() {
+    const t = useTranslations("mindmap.inspector");
     const store = useStore();
     const doc = useCommittedDoc();
     const selection = useEditor(selectSelection);
@@ -157,41 +184,41 @@ export function Inspector() {
                 {nodes.length > 0 && <NodeSections nodes={nodes} />}
                 {edges.length > 0 && <EdgeSections edges={edges} />}
                 {(nodes.length > 0 || edges.length > 0) && (
-                    <Section title="Arrange" collapsible defaultOpen={false}>
+                    <Section title={t("arrange")} collapsible defaultOpen={false}>
                         <Row>
                             <IconToggle
-                                title="Align left"
+                                title={t("alignLeft")}
                                 onClick={() => alignSelection(store, "left")}
                             >
                                 <AlignStartVertical className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Align centre"
+                                title={t("alignCentre")}
                                 onClick={() => alignSelection(store, "hcenter")}
                             >
                                 <AlignCenterVertical className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Align right"
+                                title={t("alignRight")}
                                 onClick={() => alignSelection(store, "right")}
                             >
                                 <AlignEndVertical className="size-4" />
                             </IconToggle>
                             <div className="bg-line mx-1 h-5 w-px" />
                             <IconToggle
-                                title="Align top"
+                                title={t("alignTop")}
                                 onClick={() => alignSelection(store, "top")}
                             >
                                 <AlignStartVertical className="size-4 rotate-90" />
                             </IconToggle>
                             <IconToggle
-                                title="Align middle"
+                                title={t("alignMiddle")}
                                 onClick={() => alignSelection(store, "vcenter")}
                             >
                                 <AlignCenterHorizontal className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Align bottom"
+                                title={t("alignBottom")}
                                 onClick={() => alignSelection(store, "bottom")}
                             >
                                 <AlignEndVertical className="size-4 rotate-90" />
@@ -199,56 +226,56 @@ export function Inspector() {
                         </Row>
                         <Row>
                             <IconToggle
-                                title="Distribute horizontally"
+                                title={t("distributeH")}
                                 onClick={() => distributeSelection(store, "h")}
                             >
                                 <AlignHorizontalDistributeCenter className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Distribute vertically"
+                                title={t("distributeV")}
                                 onClick={() => distributeSelection(store, "v")}
                             >
                                 <AlignVerticalDistributeCenter className="size-4" />
                             </IconToggle>
-                            <IconToggle title="Match size" onClick={() => matchSize(store, "both")}>
+                            <IconToggle
+                                title={t("matchSize")}
+                                onClick={() => matchSize(store, "both")}
+                            >
                                 <Maximize2 className="size-4" />
                             </IconToggle>
                             <div className="bg-line mx-1 h-5 w-px" />
                             <IconToggle
-                                title="Flip horizontally"
+                                title={t("flipH")}
                                 onClick={() => flipSelection(store, "h")}
                             >
                                 <FlipHorizontal className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Flip vertically"
+                                title={t("flipV")}
                                 onClick={() => flipSelection(store, "v")}
                             >
                                 <FlipVertical className="size-4" />
                             </IconToggle>
                         </Row>
                         <Row>
-                            <IconToggle
-                                title="Bring to front"
-                                onClick={() => reorder(store, "front")}
-                            >
+                            <IconToggle title={t("front")} onClick={() => reorder(store, "front")}>
                                 <BringToFront className="size-4" />
                             </IconToggle>
-                            <IconToggle title="Send to back" onClick={() => reorder(store, "back")}>
+                            <IconToggle title={t("back")} onClick={() => reorder(store, "back")}>
                                 <SendToBack className="size-4" />
                             </IconToggle>
                             <div className="bg-line mx-1 h-5 w-px" />
-                            <IconToggle title="Group (⌘G)" onClick={() => groupSelection(store)}>
+                            <IconToggle title={t("group")} onClick={() => groupSelection(store)}>
                                 <Group className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Ungroup (⇧⌘G)"
+                                title={t("ungroup")}
                                 onClick={() => ungroupSelection(store)}
                             >
                                 <Ungroup className="size-4" />
                             </IconToggle>
                             <IconToggle
-                                title="Lock / unlock (⌘L)"
+                                title={t("lock")}
                                 active={nodes.some(nd => nd.locked)}
                                 onClick={() => toggleLock(store)}
                             >
@@ -271,6 +298,8 @@ export function Inspector() {
 // ---------------------------------------------------------------------------
 
 function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
+    const t = useTranslations("mindmap.inspector");
+    const tm = useTranslations("mindmap");
     const store = useStore();
     const first = nodes[0]!;
     const ids = nodes.map(nd => nd.id);
@@ -299,20 +328,22 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
 
     return (
         <>
-            <Section title={nodes.length > 1 ? `${nodes.length} shapes` : "Shape"}>
+            <Section
+                title={nodes.length > 1 ? t("shapesCount", { count: nodes.length }) : t("shape")}
+            >
                 <Select
                     value={shape ?? undefined}
                     onValueChange={value => setShapeType(store, value as ShapeId)}
                 >
                     <SelectTrigger className="h-7 text-[12px]">
-                        <SelectValue placeholder="Mixed shapes" />
+                        <SelectValue placeholder={t("mixedShapes")} />
                     </SelectTrigger>
                     <SelectContent className="max-h-72">
                         {/* Hidden duplicates stay listable only while one is the
                             current value, so a legacy node's select isn't blank. */}
                         {SHAPES.filter(def => !def.paletteHidden || def.id === shape).map(def => (
                             <SelectItem key={def.id} value={def.id} className="text-[12px]">
-                                {def.name}
+                                {shapeName(tm, def.id)}
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -321,47 +352,47 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
 
             {/* The three things people change constantly, pinned at the top
                 and side by side; everything below is reached for rarely. */}
-            <Section title="Colour">
+            <Section title={t("colour")}>
                 <div className="flex items-center gap-3">
                     <div className="flex flex-col items-center gap-1">
                         <ColorField
-                            label="Fill colour"
+                            label={t("fillColour")}
                             tone="fill"
                             allowNone
                             value={fill ?? "none"}
                             onChange={value => styleSelection(store, { fill: value }, "Fill")}
                         />
-                        <span className="text-ink-3 text-[10px]">Fill</span>
+                        <span className="text-ink-3 text-[10px]">{t("fill")}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1">
                         <ColorField
-                            label="Stroke colour"
+                            label={t("strokeColour")}
                             tone="stroke"
                             allowNone
                             value={stroke ?? "none"}
                             onChange={value => styleSelection(store, { stroke: value }, "Stroke")}
                         />
-                        <span className="text-ink-3 text-[10px]">Stroke</span>
+                        <span className="text-ink-3 text-[10px]">{t("stroke")}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1">
                         <ColorField
-                            label="Text colour"
+                            label={t("textColour")}
                             tone="ink"
                             value={textColor ?? "var(--ink)"}
                             onChange={value =>
                                 styleTextSelection(store, { color: value }, "Text colour")
                             }
                         />
-                        <span className="text-ink-3 text-[10px]">Text</span>
+                        <span className="text-ink-3 text-[10px]">{t("text")}</span>
                     </div>
                 </div>
             </Section>
-            <Section title="Shape style" collapsible>
+            <Section title={t("shapeStyle")} collapsible>
                 <Row>
-                    <Label>Weight</Label>
+                    <Label>{t("weight")}</Label>
                     <PresetNumberField
-                        aria-label="Stroke width"
-                        presets={WEIGHT_PRESETS}
+                        aria-label={t("strokeWidth")}
+                        presets={weightPresets(t)}
                         value={strokeWidth ?? 1.5}
                         mixed={strokeWidth === null}
                         min={0}
@@ -376,17 +407,13 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         onChange={value =>
                             styleSelection(store, { strokeStyle: value }, "Stroke style")
                         }
-                        options={[
-                            { value: "solid", label: "──", title: "Solid" },
-                            { value: "dashed", label: "╌╌", title: "Dashed" },
-                            { value: "dotted", label: "···", title: "Dotted" },
-                        ]}
+                        options={strokeStyleOptions(t)}
                     />
                 </Row>
                 <Row>
-                    <Label>Corner</Label>
+                    <Label>{t("corner")}</Label>
                     <NumberField
-                        aria-label="Corner radius"
+                        aria-label={t("cornerRadius")}
                         value={radius ?? 0}
                         mixed={radius === null}
                         min={0}
@@ -397,20 +424,20 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         suffix="px"
                     />
                     <div className="flex items-center gap-1.5">
-                        <span className="text-ink-3 text-[11px]">Shadow</span>
+                        <span className="text-ink-3 text-[11px]">{t("shadow")}</span>
                         <Switch
                             checked={shadow ?? false}
                             onCheckedChange={value =>
                                 styleSelection(store, { shadow: value }, "Shadow")
                             }
-                            aria-label="Drop shadow"
+                            aria-label={t("dropShadow")}
                         />
                     </div>
                 </Row>
                 <Row>
-                    <Label>Opacity</Label>
+                    <Label>{t("opacity")}</Label>
                     <Slider
-                        aria-label="Opacity"
+                        aria-label={t("opacity")}
                         value={opacity ?? 1}
                         onChange={value => styleSelection(store, { opacity: value }, "Opacity")}
                     />
@@ -420,12 +447,15 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                 </Row>
             </Section>
 
-            <Section title="Text">
+            <Section title={t("text")}>
                 <Row>
-                    <Label>Size</Label>
+                    <Label>{t("size")}</Label>
                     <PresetNumberField
-                        aria-label="Font size"
-                        presets={FONT_SIZE_PRESETS}
+                        aria-label={t("fontSize")}
+                        presets={FONT_SIZE_PRESETS.map(p => ({
+                            label: t(`fontSizes.${p.key}`),
+                            value: p.value,
+                        }))}
                         value={fontSize ?? 14}
                         mixed={fontSize === null}
                         min={6}
@@ -438,15 +468,15 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                             styleTextSelection(store, { family: value }, "Font family")
                         }
                         options={[
-                            { value: "sans" as const, label: "Aa", title: "Sans" },
-                            { value: "serif" as const, label: "Aa", title: "Serif" },
-                            { value: "mono" as const, label: "Aa", title: "Mono" },
+                            { value: "sans" as const, label: "Aa", title: t("families.sans") },
+                            { value: "serif" as const, label: "Aa", title: t("families.serif") },
+                            { value: "mono" as const, label: "Aa", title: t("families.mono") },
                         ]}
                     />
                 </Row>
                 <Row>
                     <IconToggle
-                        title="Bold"
+                        title={t("bold")}
                         active={first.textStyle.bold}
                         onClick={() =>
                             styleTextSelection(store, { bold: !first.textStyle.bold }, "Bold")
@@ -455,7 +485,7 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         <Bold className="size-4" />
                     </IconToggle>
                     <IconToggle
-                        title="Italic"
+                        title={t("italic")}
                         active={first.textStyle.italic}
                         onClick={() =>
                             styleTextSelection(store, { italic: !first.textStyle.italic }, "Italic")
@@ -464,7 +494,7 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         <Italic className="size-4" />
                     </IconToggle>
                     <IconToggle
-                        title="Underline"
+                        title={t("underline")}
                         active={first.textStyle.underline}
                         onClick={() =>
                             styleTextSelection(
@@ -477,7 +507,7 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         <Underline className="size-4" />
                     </IconToggle>
                     <IconToggle
-                        title="Strikethrough"
+                        title={t("strikethrough")}
                         active={first.textStyle.strike}
                         onClick={() =>
                             styleTextSelection(store, { strike: !first.textStyle.strike }, "Strike")
@@ -494,17 +524,17 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                             {
                                 value: "left",
                                 icon: <AlignLeft className="size-3.5" />,
-                                title: "Left",
+                                title: t("textAlign.left"),
                             },
                             {
                                 value: "center",
                                 icon: <AlignCenterHorizontal className="size-3.5" />,
-                                title: "Centre",
+                                title: t("textAlign.center"),
                             },
                             {
                                 value: "right",
                                 icon: <AlignRight className="size-3.5" />,
-                                title: "Right",
+                                title: t("textAlign.right"),
                             },
                         ]}
                     />
@@ -512,9 +542,9 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                         value={valign}
                         onChange={value => styleTextSelection(store, { valign: value }, "Align")}
                         options={[
-                            { value: "top", label: "⌃", title: "Top" },
-                            { value: "middle", label: "―", title: "Middle" },
-                            { value: "bottom", label: "⌄", title: "Bottom" },
+                            { value: "top", label: "⌃", title: t("textAlign.top") },
+                            { value: "middle", label: "―", title: t("textAlign.middle") },
+                            { value: "bottom", label: "⌄", title: t("textAlign.bottom") },
                         ]}
                     />
                 </Row>
@@ -523,11 +553,11 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                     onClick={() => fitNodeToText(store, ids)}
                     className="border-line text-ink-2 hover:bg-panel-2 w-full rounded-md border py-1.5 text-[12px] transition-colors"
                 >
-                    Fit shape to text
+                    {t("fitToText")}
                 </button>
             </Section>
 
-            <Section title="Position & size" collapsible defaultOpen={false}>
+            <Section title={t("positionSize")} collapsible defaultOpen={false}>
                 <Row>
                     <Label>X / Y</Label>
                     <NumberField
@@ -544,16 +574,16 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                     />
                 </Row>
                 <Row>
-                    <Label>W / H</Label>
+                    <Label>{t("widthHeight")}</Label>
                     <NumberField
-                        aria-label="Width"
+                        aria-label={t("width")}
                         value={first.w}
                         min={1}
                         mixed={common(nodes, nd => nd.w) === null}
                         onChange={value => setGeometry({ w: value })}
                     />
                     <NumberField
-                        aria-label="Height"
+                        aria-label={t("height")}
                         value={first.h}
                         min={1}
                         mixed={common(nodes, nd => nd.h) === null}
@@ -561,9 +591,9 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
                     />
                 </Row>
                 <Row>
-                    <Label>Rotate</Label>
+                    <Label>{t("rotate")}</Label>
                     <NumberField
-                        aria-label="Rotation"
+                        aria-label={t("rotation")}
                         value={first.rotation}
                         mixed={common(nodes, nd => nd.rotation) === null}
                         min={-360}
@@ -582,6 +612,7 @@ function NodeSections({ nodes }: { nodes: DiagramNode[] }) {
 // ---------------------------------------------------------------------------
 
 function EdgeSections({ edges }: { edges: DiagramEdge[] }) {
+    const t = useTranslations("mindmap.inspector");
     const store = useStore();
     const kind = common(edges, e => e.kind);
     const stroke = common(edges, e => e.style.stroke);
@@ -591,23 +622,23 @@ function EdgeSections({ edges }: { edges: DiagramEdge[] }) {
     const endArrow = common(edges, e => e.endArrow);
 
     return (
-        <Section title={edges.length > 1 ? `${edges.length} connectors` : "Connector"}>
+        <Section
+            title={
+                edges.length > 1 ? t("connectorsCount", { count: edges.length }) : t("connector")
+            }
+        >
             <Row>
-                <Label>Route</Label>
+                <Label>{t("route")}</Label>
                 <Segmented<EdgeKind>
                     value={kind}
                     onChange={value => setEdgeKind(store, value)}
-                    options={[
-                        { value: "straight", label: "╱", title: "Straight" },
-                        { value: "elbow", label: "⌐", title: "Elbow" },
-                        { value: "curved", label: "∿", title: "Curved" },
-                    ]}
+                    options={routeOptions(t)}
                 />
             </Row>
             <Row>
-                <Label>Colour</Label>
+                <Label>{t("colour")}</Label>
                 <ColorField
-                    label="Connector colour"
+                    label={t("connectorColour")}
                     tone="stroke"
                     value={stroke ?? "var(--ink-2)"}
                     onChange={value =>
@@ -616,10 +647,10 @@ function EdgeSections({ edges }: { edges: DiagramEdge[] }) {
                 />
             </Row>
             <Row>
-                <Label>Weight</Label>
+                <Label>{t("weight")}</Label>
                 <PresetNumberField
-                    aria-label="Connector width"
-                    presets={WEIGHT_PRESETS}
+                    aria-label={t("connectorWidth")}
+                    presets={weightPresets(t)}
                     value={strokeWidth ?? 1.8}
                     mixed={strokeWidth === null}
                     min={0.5}
@@ -630,37 +661,33 @@ function EdgeSections({ edges }: { edges: DiagramEdge[] }) {
                 <Segmented<StrokeStyle>
                     value={strokeStyle}
                     onChange={value => styleEdgeSelection(store, { strokeStyle: value }, "Style")}
-                    options={[
-                        { value: "solid", label: "──", title: "Solid" },
-                        { value: "dashed", label: "╌╌", title: "Dashed" },
-                        { value: "dotted", label: "···", title: "Dotted" },
-                    ]}
+                    options={strokeStyleOptions(t)}
                 />
             </Row>
             <Row>
-                <Label>Start</Label>
+                <Label>{t("start")}</Label>
                 <ArrowSelect
                     value={startArrow}
                     onChange={value => setArrow(store, "start", value)}
-                    ariaLabel="Start arrowhead"
+                    ariaLabel={t("startArrow")}
                 />
             </Row>
             <Row>
-                <Label>End</Label>
+                <Label>{t("end")}</Label>
                 <ArrowSelect
                     value={endArrow}
                     onChange={value => setArrow(store, "end", value)}
-                    ariaLabel="End arrowhead"
+                    ariaLabel={t("endArrow")}
                 />
             </Row>
             <Row>
-                <IconToggle title="Reverse direction" onClick={() => reverseEdges(store)}>
+                <IconToggle title={t("reverse")} onClick={() => reverseEdges(store)}>
                     <ArrowLeftRight className="size-4" />
                 </IconToggle>
-                <IconToggle title="Reset route" onClick={() => clearWaypoints(store)}>
+                <IconToggle title={t("resetRoute")} onClick={() => clearWaypoints(store)}>
                     <Waypoints className="size-4" />
                 </IconToggle>
-                <span className="text-ink-3 text-[11px]">Double-click a connector to label it</span>
+                <span className="text-ink-3 text-[11px]">{t("labelHint")}</span>
             </Row>
         </Section>
     );
@@ -675,15 +702,16 @@ function ArrowSelect({
     onChange: (next: ArrowId) => void;
     ariaLabel: string;
 }) {
+    const t = useTranslations("mindmap");
     return (
         <Select value={value ?? undefined} onValueChange={v => onChange(v as ArrowId)}>
             <SelectTrigger className="h-7 flex-1 text-[12px]" aria-label={ariaLabel}>
-                <SelectValue placeholder="Mixed" />
+                <SelectValue placeholder={t("controls.mixed")} />
             </SelectTrigger>
             <SelectContent>
                 {ARROW_OPTIONS.map(option => (
                     <SelectItem key={option.id} value={option.id} className="text-[12px]">
-                        {option.label}
+                        {t(`arrows.${option.id}`)}
                     </SelectItem>
                 ))}
             </SelectContent>
@@ -701,46 +729,47 @@ function ArrowSelect({
  * empty selection means an empty panel, not ten themes.
  */
 export function PageSettings() {
+    const t = useTranslations("mindmap.inspector");
     const store = useStore();
     const doc = useCommittedDoc();
     const page = useMemo(() => activePage(doc), [doc]);
 
     return (
         <>
-            <Section title="Theme">
+            <Section title={t("theme")}>
                 <ThemePicker
                     activeId={doc.settings.paletteId}
                     onPick={id => applyTheme(store, id)}
                 />
             </Section>
 
-            <Section title="Canvas">
+            <Section title={t("canvas")}>
                 <Row>
-                    <Label>Background</Label>
+                    <Label>{t("background")}</Label>
                     <ColorField
-                        label="Background colour"
+                        label={t("backgroundColour")}
                         tone="fill"
                         value={page.background.color}
                         onChange={value => setPageBackground(store, { color: value })}
                     />
                 </Row>
                 <Row>
-                    <Label>Pattern</Label>
+                    <Label>{t("pattern")}</Label>
                     <Segmented
                         value={page.background.pattern}
                         onChange={value => setPageBackground(store, { pattern: value })}
                         options={[
-                            { value: "plain" as const, label: "None" },
-                            { value: "dots" as const, label: "Dots" },
-                            { value: "grid" as const, label: "Grid" },
-                            { value: "lines" as const, label: "Lines" },
+                            { value: "plain" as const, label: t("patterns.plain") },
+                            { value: "dots" as const, label: t("patterns.dots") },
+                            { value: "grid" as const, label: t("patterns.grid") },
+                            { value: "lines" as const, label: t("patterns.lines") },
                         ]}
                     />
                 </Row>
                 <Row>
-                    <Label>Spacing</Label>
+                    <Label>{t("spacing")}</Label>
                     <NumberField
-                        aria-label="Grid spacing"
+                        aria-label={t("gridSpacing")}
                         value={page.background.spacing}
                         min={4}
                         max={200}
@@ -750,43 +779,43 @@ export function PageSettings() {
                 </Row>
             </Section>
 
-            <Section title="Snapping">
+            <Section title={t("snapping")}>
                 <Row>
-                    <span className="text-ink-2 flex-1 text-[12px]">Show grid</span>
+                    <span className="text-ink-2 flex-1 text-[12px]">{t("showGrid")}</span>
                     <Switch
                         checked={doc.settings.showGrid}
                         onCheckedChange={value => setSettings(store, { showGrid: value })}
-                        aria-label="Show grid"
+                        aria-label={t("showGrid")}
                     />
                 </Row>
                 <Row>
-                    <span className="text-ink-2 flex-1 text-[12px]">Show rulers</span>
+                    <span className="text-ink-2 flex-1 text-[12px]">{t("showRulers")}</span>
                     <Switch
                         checked={doc.settings.showRulers}
                         onCheckedChange={value => setSettings(store, { showRulers: value })}
-                        aria-label="Show rulers"
+                        aria-label={t("showRulers")}
                     />
                 </Row>
                 <Row>
-                    <span className="text-ink-2 flex-1 text-[12px]">Snap to grid</span>
+                    <span className="text-ink-2 flex-1 text-[12px]">{t("snapToGrid")}</span>
                     <Switch
                         checked={doc.settings.snapToGrid}
                         onCheckedChange={value => setSettings(store, { snapToGrid: value })}
-                        aria-label="Snap to grid"
+                        aria-label={t("snapToGrid")}
                     />
                 </Row>
                 <Row>
-                    <span className="text-ink-2 flex-1 text-[12px]">Snap to objects</span>
+                    <span className="text-ink-2 flex-1 text-[12px]">{t("snapToObjects")}</span>
                     <Switch
                         checked={doc.settings.snapToObjects}
                         onCheckedChange={value => setSettings(store, { snapToObjects: value })}
-                        aria-label="Snap to objects"
+                        aria-label={t("snapToObjects")}
                     />
                 </Row>
                 <Row>
-                    <Label>Grid size</Label>
+                    <Label>{t("gridSize")}</Label>
                     <NumberField
-                        aria-label="Grid size"
+                        aria-label={t("gridSize")}
                         value={doc.settings.gridSize}
                         min={1}
                         max={100}
@@ -796,7 +825,7 @@ export function PageSettings() {
                 </Row>
             </Section>
 
-            <Section title="New connectors">
+            <Section title={t("newConnectors")}>
                 <Row>
                     <Label>
                         <Spline className="size-3.5" />
@@ -804,11 +833,7 @@ export function PageSettings() {
                     <Segmented<EdgeKind>
                         value={doc.settings.defaultEdgeKind}
                         onChange={value => setSettings(store, { defaultEdgeKind: value })}
-                        options={[
-                            { value: "straight", label: "╱", title: "Straight" },
-                            { value: "elbow", label: "⌐", title: "Elbow" },
-                            { value: "curved", label: "∿", title: "Curved" },
-                        ]}
+                        options={routeOptions(t)}
                     />
                 </Row>
             </Section>

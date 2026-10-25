@@ -39,6 +39,7 @@ jest.mock("~/lib/company-profile/api", () => ({
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
 
+import { renderWithLocale } from "~/i18n/testing/render";
 import { CompanyProfileView } from "~/components/company-profile/CompanyProfileView";
 import { factPathFor } from "~/components/company-profile/words";
 
@@ -622,5 +623,41 @@ describe("the way back to onboarding", () => {
         render(<CompanyProfileView variant="settings" />);
         await screen.findByText("Baltimore, Maryland");
         expect(screen.queryByRole("link", { name: "Go through setup again" })).toBeNull();
+    });
+});
+
+describe("CompanyProfileView in Chinese", () => {
+    it("words the default fact labels and the rules' reasons; a typed label and the model's words stay", async () => {
+        const base = readyProfile();
+        const noise = "Only reference lists — nothing about the organisation to read.";
+        mockApi.get.mockResolvedValue({
+            profile: {
+                ...base,
+                facts: [
+                    { ...base.facts[0]!, labelKey: "company.headquarters" },
+                    { ...base.facts[1]!, label: "Why we exist", labelKey: null },
+                ],
+                sources: [
+                    ...base.sources,
+                    source({
+                        documentId: 47,
+                        title: "References.pdf",
+                        role: "no_content",
+                        roleBy: "rules",
+                        counted: false,
+                        reason: noise,
+                        reasonCopy: { key: "onlyNoise", drops: ["references"] },
+                    }),
+                ],
+            },
+        });
+        renderWithLocale(<CompanyProfileView variant="settings" />, "zh-CN");
+
+        expect(await screen.findByText("总部")).toBeInTheDocument();
+        expect(screen.getByText("Why we exist")).toBeInTheDocument();
+        expect(
+            screen.getByText("只有参考文献列表，没有关于该组织的可读内容。")
+        ).toBeInTheDocument();
+        expect(screen.getByText(PAPER_REASON)).toBeInTheDocument();
     });
 });

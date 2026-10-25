@@ -5,7 +5,14 @@ import { z } from "zod";
 
 import { createSegment, listSegments } from "~/server/prospects/service";
 
-import { error, handleProspectsError, json, prospectsContext, readBody } from "../_http";
+import {
+    error,
+    handleProspectsError,
+    json,
+    prospectsContext,
+    prospectsT,
+    readBody,
+} from "../_http";
 
 const NewSegmentSchema = z.object({
     name: z.string().min(1).max(256),
@@ -14,13 +21,13 @@ const NewSegmentSchema = z.object({
     countries: z.array(z.string().length(2)).min(1).max(20),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
     try {
         return json({ segments: await listSegments(auth.ctx) });
     } catch (err) {
-        return handleProspectsError("GET segments", err);
+        return handleProspectsError("GET segments", err, request);
     }
 }
 
@@ -29,10 +36,9 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = NewSegmentSchema.safeParse(await readBody(request));
-        if (!parsed.success)
-            return error("Name, what you sell and at least one country are required", 400);
+        if (!parsed.success) return error(prospectsT(request)("newSegmentRequired"), 400);
         return json({ segment: await createSegment(auth.ctx, parsed.data) }, 201);
     } catch (err) {
-        return handleProspectsError("POST segments", err);
+        return handleProspectsError("POST segments", err, request);
     }
 }

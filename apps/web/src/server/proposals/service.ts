@@ -64,6 +64,9 @@ import type {
     SectionPatch,
     SourceOption,
 } from "~/app/employer/tools/proposals/api";
+import { copy, type Copy, type MessageKey } from "~/i18n/copy";
+import type { Messages } from "~/i18n/messages";
+import { englishCopy } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { isBuilding } from "~/server/company-profile/adapter";
 import { uploadFile } from "~/lib/storage";
@@ -88,16 +91,33 @@ export interface ProposalsCtx {
     userId: string;
 }
 
+/**
+ * An expected failure with the status the route answers with. The sentence
+ * is a `Copy` where a screen shows it: `message` is its English, and the
+ * route words it in the reader's language (`handleProposalsError`).
+ */
 export class ProposalsError extends Error {
+    readonly copy: Copy | null;
+
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number,
         readonly extra: Record<string, unknown> = {}
     ) {
-        super(message);
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "ProposalsError";
+        this.copy = typeof message === "string" ? null : message;
     }
 }
+
+type ErrorName = keyof Messages["proposals"]["server"]["errors"];
+
+/** One of `proposals.server.errors`, as a Copy. */
+export const proposalsErrorCopy = (name: ErrorName): Copy =>
+    copy(`proposals.server.errors.${name}` as MessageKey);
+
+const fail = (name: ErrorName, status: number, extra?: Record<string, unknown>) =>
+    new ProposalsError(proposalsErrorCopy(name), status, extra);
 
 const PROPOSALS_BASE = "/employer/tools/proposals";
 const href = (path: string) => `${PROPOSALS_BASE}${path}`;
@@ -187,13 +207,7 @@ export async function findFundersRun(
 ): Promise<RunDto> {
     const profile = await loadOrgProfile(ctx.companyId);
     if (!profile && !(input.keywords && input.keywords.length > 0))
-        throw new ProposalsError(
-            "Build your organisation profile first, or give keywords to search for",
-            409,
-            {
-                code: "profile_required",
-            }
-        );
+        throw fail("profileOrKeywords", 409, { code: "profile_required" });
     const run = await startProposalRun({
         companyId: ctx.companyId,
         userId: ctx.userId,
@@ -231,14 +245,13 @@ export async function setFunderStatus(
     status: OpportunityStatus
 ): Promise<FunderRow> {
     const record = await setOpportunityStatus(ctx.companyId, id, status);
-    if (!record) throw new ProposalsError("Funder not found", 404);
+    if (!record) throw fail("funderNotFound", 404);
     const byOpportunity = await applicationsByOpportunity(ctx);
     return toFunderRow(record, { now: new Date(), applicationId: byOpportunity.get(id) ?? null });
 }
 
 export async function removeFunder(ctx: ProposalsCtx, id: string): Promise<void> {
-    if (!(await deleteOpportunity(ctx.companyId, id)))
-        throw new ProposalsError("Funder not found", 404);
+    if (!(await deleteOpportunity(ctx.companyId, id))) throw fail("funderNotFound", 404);
 }
 
 // ─── Applications ────────────────────────────────────────────────────────────
@@ -262,7 +275,7 @@ export async function loadApplications(ctx: ProposalsCtx): Promise<ApplicationRo
 
 export async function loadApplication(ctx: ProposalsCtx, id: string): Promise<ApplicationDetail> {
     const record = await getApplication(id, ctx.companyId);
-    if (!record) throw new ProposalsError("Application not found", 404);
+    if (!record) throw fail("applicationNotFound", 404);
     const sections = await listSections(ctx.companyId, id);
     return toApplicationDetail(record, sections, new Date());
 }
@@ -278,7 +291,7 @@ export async function newApplication(
     let requestUrl = blankToNull(input.requestUrl);
     if (input.opportunityId) {
         const opportunity = await getOpportunity(input.opportunityId, ctx.companyId);
-        if (!opportunity) throw new ProposalsError("Funder not found", 404);
+        if (!opportunity) throw fail("funderNotFound", 404);
         funder ??= opportunity.funder;
         title ||= opportunity.title;
         deadline ??= opportunity.closesOn;
@@ -302,11 +315,7 @@ export async function newApplication(
     }
     if (input.requestDocumentId) {
         const text = await readSourceText(ctx.companyId, input.requestDocumentId);
-        if (!text)
-            throw new ProposalsError(
-                "That source has no readable text yet; wait for it to finish processing",
-                409
-            );
+        if (!text) throw fail("sourceNotReadable", 409);
         requestText = text;
     }
     const record = await createApplication({
@@ -351,7 +360,7 @@ export async function patchApplication(
     input: ApplicationPatch
 ): Promise<ApplicationDetail> {
     const record = await getApplication(id, ctx.companyId);
-    if (!record) throw new ProposalsError("Application not found", 404);
+    if (!record) throw fail("applicationNotFound", 404);
     const sections = await listSections(ctx.companyId, id);
     let requirements = record.requirements;
     if (input.requirement) {
@@ -362,8 +371,7 @@ export async function patchApplication(
         );
     }
     requirements = syncSectionRequirements(requirements, sections);
-    if (input.status && !STATUS_ORDER.includes(input.status))
-        throw new ProposalsError("Unknown status", 400);
+    if (input.status && !STATUS_ORDER.includes(input.status)) throw fail("unknownStatus", 400);
     const updated = await updateApplication(ctx.companyId, id, {
         title: blankToNull(input.title) ?? undefined,
         funder: input.funder,
@@ -376,27 +384,24 @@ export async function patchApplication(
         readiness: computeReadiness({ sections, requirements }),
         submittedAt: input.status === "submitted" && !record.submittedAt ? new Date() : undefined,
     });
-    if (!updated) throw new ProposalsError("Application not found", 404);
+    if (!updated) throw fail("applicationNotFound", 404);
     return toApplicationDetail(updated, sections, new Date());
 }
 
 export async function removeApplication(ctx: ProposalsCtx, id: string): Promise<void> {
-    if (!(await deleteApplication(ctx.companyId, id)))
-        throw new ProposalsError("Application not found", 404);
+    if (!(await deleteApplication(ctx.companyId, id))) throw fail("applicationNotFound", 404);
 }
 
 async function requireOpenApplication(ctx: ProposalsCtx, id: string) {
     const record = await getApplication(id, ctx.companyId);
-    if (!record) throw new ProposalsError("Application not found", 404);
+    if (!record) throw fail("applicationNotFound", 404);
     return record;
 }
 
 export async function extractRun(ctx: ProposalsCtx, id: string): Promise<RunDto> {
     const record = await requireOpenApplication(ctx, id);
     if (!record.requestText?.trim() && !record.requestUrl)
-        throw new ProposalsError("Paste the funder's request or give its URL first", 409, {
-            code: "request_required",
-        });
+        throw fail("requestRequired", 409, { code: "request_required" });
     return toRunDto(
         await startProposalRun({
             companyId: ctx.companyId,
@@ -417,13 +422,7 @@ export async function draftRun(
     const wanted = sectionIds?.length ? new Set(sectionIds) : null;
     const targets = sections.filter(s => (wanted ? wanted.has(s.id) : s.status === "empty"));
     if (targets.length === 0)
-        throw new ProposalsError(
-            wanted
-                ? "Section not found"
-                : "Every section already has a draft; redraft one from its own menu",
-            409,
-            { code: "nothing_to_draft" }
-        );
+        throw fail(wanted ? "sectionNotFound" : "allDrafted", 409, { code: "nothing_to_draft" });
     return toRunDto(
         await startProposalRun({
             companyId: ctx.companyId,
@@ -443,12 +442,8 @@ export async function rewriteRun(
 ): Promise<RunDto> {
     await requireOpenApplication(ctx, applicationId);
     const section = await getSection(ctx.companyId, sectionId);
-    if (!section || section.applicationId !== applicationId)
-        throw new ProposalsError("Section not found", 404);
-    if (!section.draft?.trim())
-        throw new ProposalsError("Write or draft the answer first, then rewrite it", 409, {
-            code: "nothing_to_rewrite",
-        });
+    if (!section || section.applicationId !== applicationId) throw fail("sectionNotFound", 404);
+    if (!section.draft?.trim()) throw fail("nothingToRewrite", 409, { code: "nothing_to_rewrite" });
     return toRunDto(
         await startProposalRun({
             companyId: ctx.companyId,
@@ -505,7 +500,7 @@ export async function exportApplication(
     const record = await requireOpenApplication(ctx, id);
     const sections = await listSections(ctx.companyId, id);
     if (sections.every(s => !s.draft?.trim()))
-        throw new ProposalsError("Nothing has been written yet", 409, { code: "nothing_written" });
+        throw fail("nothingWritten", 409, { code: "nothing_written" });
     const exportedAt = new Date();
     const markdown = renderApplicationMarkdown({ application: record, sections, exportedAt });
     const filename = makeApplicationFilename(record);
@@ -595,10 +590,8 @@ export async function patchSection(
     input: SectionPatch
 ): Promise<SectionDto> {
     const current = await getSection(ctx.companyId, sectionId);
-    if (!current || current.applicationId !== applicationId)
-        throw new ProposalsError("Section not found", 404);
-    if (input.status && !SECTION_STATUSES.includes(input.status))
-        throw new ProposalsError("Unknown status", 400);
+    if (!current || current.applicationId !== applicationId) throw fail("sectionNotFound", 404);
+    if (input.status && !SECTION_STATUSES.includes(input.status)) throw fail("unknownStatus", 400);
     let status = input.status;
     if (input.draft !== undefined && status === undefined) {
         // Typing into a draft makes it "edited"; clearing it makes it empty.
@@ -609,7 +602,7 @@ export async function patchSection(
             : "empty";
     }
     if (input.status === "approved" && !(input.draft ?? current.draft)?.trim())
-        throw new ProposalsError("Write the answer before approving it", 409);
+        throw fail("approveEmpty", 409);
     const updated = await updateSection(ctx.companyId, sectionId, {
         draft: input.draft,
         status,
@@ -618,7 +611,7 @@ export async function patchSection(
         wordLimit: input.wordLimit,
         draftMeta: input.draft !== undefined && !input.draft?.trim() ? null : undefined,
     });
-    if (!updated) throw new ProposalsError("Section not found", 404);
+    if (!updated) throw fail("sectionNotFound", 404);
     await refreshReadiness(ctx, applicationId);
     return toSectionDto(updated);
 }
@@ -629,8 +622,7 @@ export async function removeSection(
     sectionId: string
 ): Promise<void> {
     const current = await getSection(ctx.companyId, sectionId);
-    if (!current || current.applicationId !== applicationId)
-        throw new ProposalsError("Section not found", 404);
+    if (!current || current.applicationId !== applicationId) throw fail("sectionNotFound", 404);
     await deleteSection(ctx.companyId, sectionId);
     const record = await getApplication(applicationId, ctx.companyId);
     if (record) {
@@ -663,9 +655,8 @@ export async function saveSectionToLibrary(
     tags: string[]
 ): Promise<LibraryItemDto> {
     const section = await getSection(ctx.companyId, sectionId);
-    if (!section || section.applicationId !== applicationId)
-        throw new ProposalsError("Section not found", 404);
-    if (!section.draft?.trim()) throw new ProposalsError("Write the answer before saving it", 409);
+    if (!section || section.applicationId !== applicationId) throw fail("sectionNotFound", 404);
+    if (!section.draft?.trim()) throw fail("saveEmpty", 409);
     const cited = new Set(section.draftMeta?.cites ?? []);
     const item = await createLibraryItem({
         companyId: ctx.companyId,
@@ -716,13 +707,12 @@ export async function editLibraryItem(
             .filter(Boolean)
             .slice(0, 10),
     });
-    if (!item) throw new ProposalsError("Library item not found", 404);
+    if (!item) throw fail("libraryItemNotFound", 404);
     return toLibraryItemDto(item, await applicationTitles(ctx));
 }
 
 export async function removeLibraryItem(ctx: ProposalsCtx, id: string): Promise<void> {
-    if (!(await getLibraryItem(ctx.companyId, id)))
-        throw new ProposalsError("Library item not found", 404);
+    if (!(await getLibraryItem(ctx.companyId, id))) throw fail("libraryItemNotFound", 404);
     await deleteLibraryItem(ctx.companyId, id);
 }
 
@@ -735,7 +725,7 @@ export async function loadRuns(ctx: ProposalsCtx, applicationId?: string): Promi
 
 export async function loadRun(ctx: ProposalsCtx, id: string): Promise<RunDto> {
     const run = await getRun(id, ctx.companyId);
-    if (!run) throw new ProposalsError("Run not found", 404);
+    if (!run) throw fail("runNotFound", 404);
     return toRunDto(run);
 }
 

@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import {
     BRAND_PLATFORMS,
     type BrandChannel,
@@ -10,16 +12,12 @@ import {
 /**
  * Channels, in the words the screens use. Pure functions over the contract's
  * types so the rules (what Compose offers and starts with, how a token's
- * life is said) are tested on their own.
+ * life is said) are tested on their own. The words come from
+ * `growth.brand.channels`; the caller passes its translator. The kind word
+ * beside a channel's name is `growth.brand.kinds.<kind>`.
  */
 
-/** The kind word beside a channel's name. */
-export const KIND_WORD: Record<BrandChannelKind, string> = {
-    organization: "Page",
-    person: "Profile",
-    account: "Account",
-    deployment: "Deployment account",
-};
+export type ChannelsT = ReturnType<typeof useTranslations<"growth.brand.channels">>;
 
 /** Order inside a network: Pages first (what a company posts as), then people, then the rest. */
 const KIND_ORDER: Record<BrandChannelKind, number> = {
@@ -43,12 +41,12 @@ export function initials(name: string): string {
 }
 
 /** "Images · Analytics · Comments", minus what the channel cannot do. Publishing is assumed. */
-export function capabilityWords(capabilities: BrandChannelCapabilities): string[] {
+export function capabilityWords(t: ChannelsT, capabilities: BrandChannelCapabilities): string[] {
     const out: string[] = [];
-    if (!capabilities.publish) out.push("Cannot publish");
-    if (capabilities.images) out.push("Images");
-    if (capabilities.analytics) out.push("Analytics");
-    if (capabilities.comments) out.push("Comments");
+    if (!capabilities.publish) out.push(t("capabilities.cannotPublish"));
+    if (capabilities.images) out.push(t("capabilities.images"));
+    if (capabilities.analytics) out.push(t("capabilities.analytics"));
+    if (capabilities.comments) out.push(t("capabilities.comments"));
     return out;
 }
 
@@ -111,10 +109,9 @@ export function defaultChannelSelection(
 }
 
 /** Why a channel cannot be picked in Compose, or null when it can. */
-export function unavailableReason(channel: BrandChannel): string | null {
-    if (channel.status === "reconnect")
-        return channel.statusReason ?? "The network refused the sign-in; reconnect it in Accounts.";
-    if (!channel.capabilities.publish) return "This channel cannot publish.";
+export function unavailableReason(t: ChannelsT, channel: BrandChannel): string | null {
+    if (channel.status === "reconnect") return channel.statusReason ?? t("reconnectReason");
+    if (!channel.capabilities.publish) return t("cannotPublish");
     return null;
 }
 
@@ -125,37 +122,34 @@ const DAY = 24 * HOUR;
 /** Under this many days left, a token that does not renew itself is a warning. */
 export const EXPIRY_WARN_DAYS = 14;
 
-function count(n: number, one: string): string {
-    return `${n} ${n === 1 ? one : `${one}s`}`;
-}
-
 /**
  * A connection's token life in words: "Renews itself" when LinkedIn gave a
  * refresh token, "Expires in 23 days" otherwise — a warning under two weeks,
  * danger once it has run out.
  */
 export function tokenExpiry(
+    t: ChannelsT,
     connection: Pick<BrandConnection, "expiresAt" | "refreshable">,
     now = Date.now()
 ): { word: string; tone: Tone } {
-    if (connection.refreshable) return { word: "Renews itself", tone: "ok" };
-    if (!connection.expiresAt) return { word: "Does not expire", tone: "ok" };
+    if (connection.refreshable) return { word: t("expiry.renews"), tone: "ok" };
+    if (!connection.expiresAt) return { word: t("expiry.noExpiry"), tone: "ok" };
     const ms = new Date(connection.expiresAt).getTime() - now;
-    if (Number.isNaN(ms)) return { word: "Does not expire", tone: "ok" };
+    if (Number.isNaN(ms)) return { word: t("expiry.noExpiry"), tone: "ok" };
     if (ms <= 0) {
         const days = Math.floor(-ms / DAY);
         return {
-            word: days < 1 ? "Expired today" : `Expired ${count(days, "day")} ago`,
+            word: days < 1 ? t("expiry.expiredToday") : t("expiry.expiredAgo", { count: days }),
             tone: "danger",
         };
     }
     const days = Math.round(ms / DAY);
     if (days < 1) {
         const hours = Math.max(1, Math.round(ms / HOUR));
-        return { word: `Expires in ${count(hours, "hour")}`, tone: "warn" };
+        return { word: t("expiry.inHours", { count: hours }), tone: "warn" };
     }
     return {
-        word: `Expires in ${count(days, "day")}`,
+        word: t("expiry.inDays", { count: days }),
         tone: days < EXPIRY_WARN_DAYS ? "warn" : "ok",
     };
 }

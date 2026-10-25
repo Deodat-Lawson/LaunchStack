@@ -16,6 +16,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Building2,
     Check,
@@ -36,11 +37,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import {
     folderDepth,
     folderLeafName,
+    folderPathIssue,
     isUnfiledFolder,
     joinFolderPath,
     normalizeFolderPath,
     UNFILED_FOLDER,
-    validateFolderPath,
 } from "~/lib/folders/path";
 import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
@@ -111,6 +112,7 @@ export function AddDestinationBar({
     audienceNote,
     fixedAudience,
 }: AddDestinationBarProps) {
+    const t = useTranslations("sources");
     const child = pendingChild?.trim() ?? "";
     const effective = child ? joinFolderPath(isUnfiledFolder(value) ? null : value, child) : value;
     const dest = useMemo(
@@ -137,7 +139,7 @@ export function AddDestinationBar({
             : (known?.governingPath ?? null);
     const summary =
         fixedAudience ??
-        summarizeAudience(dest, tone, {
+        summarizeAudience(t, dest, tone, {
             workspaceName: facts?.workspaceName ?? workspaceName,
             governingPath,
             count,
@@ -152,12 +154,12 @@ export function AddDestinationBar({
 
     return (
         <section
-            aria-label="Where this goes and who can see it"
+            aria-label={t("addDestinationBar.sectionAria")}
             data-testid="add-destination"
             className="border-line bg-panel-2 grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] items-start gap-x-4 gap-y-2.5 rounded-xl border px-4 py-3 max-sm:grid-cols-1 max-sm:gap-y-1 max-sm:px-3"
         >
             <span className="text-ink-3 pt-1.5 text-xs font-medium max-sm:pt-0">
-                {mode === "fixed" ? "Goes to" : "Add to"}
+                {mode === "fixed" ? t("addDestinationBar.goesTo") : t("addDestinationBar.addTo")}
             </span>
             <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                 {mode === "pick" && onChange ? (
@@ -175,7 +177,7 @@ export function AddDestinationBar({
                         data-testid="add-destination-path"
                     >
                         <Folder className="text-ink-3 size-4 shrink-0" aria-hidden />
-                        <span className="truncate">{destinationLabel(value)}</span>
+                        <span className="truncate">{destinationLabel(t, value)}</span>
                     </span>
                 )}
                 {child && (
@@ -184,13 +186,15 @@ export function AddDestinationBar({
                         <span className="text-ink min-w-0 truncate text-sm font-medium">
                             {child}
                         </span>
-                        {dest.kind !== "folder" && <Badge variant="secondary">New folder</Badge>}
+                        {dest.kind !== "folder" && (
+                            <Badge variant="secondary">{t("addDestinationBar.newFolder")}</Badge>
+                        )}
                     </>
                 )}
             </div>
 
             <span className="text-ink-3 pt-0.5 text-xs font-medium max-sm:pt-1.5">
-                Who can see it
+                {t("addDestinationBar.whoCanSee")}
             </span>
             <div className="min-w-0" data-testid="add-source-audience" role="note">
                 {summary ? (
@@ -207,7 +211,9 @@ export function AddDestinationBar({
                                 {summary.headline}
                             </span>
                             {count !== null && summary.tone === "workspace" && (
-                                <span className="text-ink-3 text-xs">· {peopleCount(count)}</span>
+                                <span className="text-ink-3 text-xs">
+                                    · {peopleCount(t, count)}
+                                </span>
                             )}
                             {canShare && (
                                 <Button
@@ -215,10 +221,12 @@ export function AddDestinationBar({
                                     variant="link"
                                     size="sm"
                                     className="ml-auto h-auto p-0 text-xs"
-                                    title={`Change who can open ${folderLeafName(dest.path)}`}
+                                    title={t("addDestinationBar.changeAccessTitle", {
+                                        folder: folderLeafName(dest.path),
+                                    })}
                                     onClick={() => onShareFolder?.(dest.path)}
                                 >
-                                    Change access
+                                    {t("addDestinationBar.changeAccess")}
                                 </Button>
                             )}
                         </div>
@@ -233,8 +241,8 @@ export function AddDestinationBar({
                 ) : (
                     <p className="text-ink-3 text-xs">
                         {settled
-                            ? "Couldn't load who can see this folder right now."
-                            : "Checking who can see it…"}
+                            ? t("addDestinationBar.loadFailed")
+                            : t("addDestinationBar.checking")}
                     </p>
                 )}
             </div>
@@ -313,16 +321,17 @@ function useFolderAudience(
 const MAX_CHIPS = 4;
 
 function PrincipalChips({ principals }: { principals: AudiencePrincipal[] }) {
+    const t = useTranslations("sources.addDestinationBar");
     const shown = principals.slice(0, MAX_CHIPS);
     const more = principals.length - shown.length;
     const looks = usePeople(
         shown.flatMap(p => (p.type === "user" && p.authUserId ? [p.authUserId] : []))
     );
     return (
-        <ul className="mt-1.5 flex flex-wrap gap-1.5" aria-label="People with access">
+        <ul className="mt-1.5 flex flex-wrap gap-1.5" aria-label={t("peopleWithAccess")}>
             {shown.map(p => {
                 const look = p.authUserId ? looks[p.authUserId] : undefined;
-                const name = p.self ? "You" : (look?.displayName ?? p.name);
+                const name = p.self ? t("you") : (look?.displayName ?? p.name);
                 return (
                     <li
                         key={`${p.type}:${p.authUserId ?? p.name}`}
@@ -343,14 +352,16 @@ function PrincipalChips({ principals }: { principals: AudiencePrincipal[] }) {
                         <span className="truncate">{name}</span>
                         {p.type !== "user" && (
                             <span className="text-ink-3 shrink-0">
-                                {p.type === "group" ? "group" : "role"}
+                                {p.type === "group" ? t("group") : t("role")}
                             </span>
                         )}
                     </li>
                 );
             })}
             {more > 0 && (
-                <li className="text-ink-3 inline-flex items-center px-1 text-xs">+{more} more</li>
+                <li className="text-ink-3 inline-flex items-center px-1 text-xs">
+                    {t("more", { count: more })}
+                </li>
             )}
         </ul>
     );
@@ -377,6 +388,7 @@ function FolderPicker({
     folderAccess,
     onCreate,
 }: FolderPickerProps) {
+    const t = useTranslations("sources");
     const [open, setOpen] = useState(false);
     const [q, setQ] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
@@ -386,7 +398,10 @@ function FolderPicker({
     // Typing "Contracts/2026" creates a nested folder; the path is validated
     // the same way the folder dialog validates it.
     const candidate = normalizeFolderPath(q);
-    const candidateProblem = q.trim().length > 0 ? validateFolderPath(candidate) : null;
+    const candidateIssue = q.trim().length > 0 ? folderPathIssue(candidate) : null;
+    const candidateProblem = candidateIssue
+        ? t(`folderIssues.${candidateIssue.code}`, candidateIssue)
+        : null;
     const canCreate =
         !!onCreate &&
         q.trim().length > 0 &&
@@ -395,8 +410,10 @@ function FolderPicker({
     const created = canCreate ? resolveDestination(candidate, knownFolders) : null;
     const createdNote = created
         ? created.kind === "new-sub" && created.audienceFrom
-            ? `Inside ${folderLeafName(created.audienceFrom)} · follows its sharing`
-            : "Private to you"
+            ? t("addDestinationBar.createdInside", {
+                  parent: folderLeafName(created.audienceFrom),
+              })
+            : t("addDestinationBar.createdPrivate")
         : null;
 
     const pick = (path: string) => {
@@ -431,10 +448,12 @@ function FolderPicker({
                     size="sm"
                     className="h-8 min-w-0 max-w-full justify-start"
                     data-testid="add-destination-picker"
-                    aria-label={`Add to: ${destinationLabel(value)}. Change folder`}
+                    aria-label={t("addDestinationBar.pickerAria", {
+                        folder: destinationLabel(t, value),
+                    })}
                 >
                     <Folder className="text-ink-3" aria-hidden />
-                    <span className="truncate">{destinationLabel(value)}</span>
+                    <span className="truncate">{destinationLabel(t, value)}</span>
                     <ChevronDown className="text-ink-3" aria-hidden />
                 </Button>
             </PopoverTrigger>
@@ -451,8 +470,8 @@ function FolderPicker({
                         ref={inputRef}
                         value={q}
                         onChange={e => setQ(e.target.value)}
-                        placeholder="Find or create a folder…"
-                        aria-label="Find or create a folder"
+                        placeholder={t("addDestinationBar.findPlaceholder")}
+                        aria-label={t("addDestinationBar.findAria")}
                         className="h-8 text-[13px]"
                         onKeyDown={e => {
                             if (e.key !== "Enter") return;
@@ -462,29 +481,35 @@ function FolderPicker({
                         }}
                     />
                 </div>
-                <div className="max-h-64 overflow-y-auto py-1" role="listbox" aria-label="Folders">
+                <div
+                    className="max-h-64 overflow-y-auto py-1"
+                    role="listbox"
+                    aria-label={t("addDestinationBar.foldersAria")}
+                >
                     {!q.trim() && (
                         <FolderOption
-                            label="No folder"
-                            hint="Unfiled"
+                            label={t("addDestination.noFolder")}
+                            hint={t("addDestinationBar.unfiled")}
                             depth={0}
                             selected={isUnfiledFolder(value)}
-                            tag={{ tone: "private", label: "Only you" }}
+                            tag={{ tone: "private", label: t("addDestination.tagOnlyYou") }}
                             onSelect={() => pick(UNFILED_FOLDER)}
                         />
                     )}
                     {filtered.map(f => (
                         <FolderOption
                             key={f}
-                            label={q.trim() ? destinationLabel(f) : folderLeafName(f)}
+                            label={q.trim() ? destinationLabel(t, f) : folderLeafName(f)}
                             depth={q.trim() ? 0 : folderDepth(f)}
                             selected={normalizeFolderPath(value) === normalizeFolderPath(f)}
-                            tag={folderAudienceTag(folderAccess[normalizeFolderPath(f)])}
+                            tag={folderAudienceTag(t, folderAccess[normalizeFolderPath(f)])}
                             onSelect={() => pick(f)}
                         />
                     ))}
                     {q.trim() && filtered.length === 0 && !canCreate && !candidateProblem && (
-                        <p className="text-ink-3 px-3 py-2 text-xs">No folder by that name.</p>
+                        <p className="text-ink-3 px-3 py-2 text-xs">
+                            {t("addDestinationBar.noMatch")}
+                        </p>
                     )}
                     {canCreate && (
                         <button
@@ -498,7 +523,9 @@ function FolderPicker({
                             <FolderPlus className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                             <span className="min-w-0">
                                 <span className="block truncate font-semibold">
-                                    Create &ldquo;{destinationLabel(candidate)}&rdquo;
+                                    {t("addDestinationBar.create", {
+                                        name: destinationLabel(t, candidate),
+                                    })}
                                 </span>
                                 <span className="text-ink-3 block text-[11px]">{createdNote}</span>
                             </span>
@@ -528,6 +555,7 @@ function FolderOption({
     tag: { tone: SourceAudience; label: string } | null;
     onSelect: () => void;
 }) {
+    const t = useTranslations("sources.addDestinationBar");
     const TagIcon = tag ? TONE_ICON[tag.tone] : null;
     return (
         <button
@@ -549,7 +577,7 @@ function FolderOption({
             {tag && TagIcon && (
                 <span
                     className="text-ink-3 inline-flex shrink-0 items-center gap-1 text-[11px]"
-                    title={`Who can see it: ${tag.label}`}
+                    title={t("tagTitle", { label: tag.label })}
                 >
                     <TagIcon className="size-3" aria-hidden />
                     {tag.label}

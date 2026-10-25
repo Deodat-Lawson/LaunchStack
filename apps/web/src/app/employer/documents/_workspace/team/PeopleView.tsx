@@ -8,15 +8,16 @@
 
 import React, { useMemo, useState } from "react";
 import { UserPlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { useRoleLabel } from "~/lib/authz/i18n";
 
 import type { Member } from "../settings/people/api";
-import { plural } from "../settings/people/format";
 import { teamPaths } from "./screens";
 import { EmptyLine, FilterInput } from "./ui";
 
@@ -47,6 +48,7 @@ export function PeopleView({
     /** "Manage access" into Settings, for those who may open it. */
     manageLink?: React.ReactNode;
 }) {
+    const t = useTranslations("team.peopleView");
     const [query, setQuery] = useState("");
     const needle = query.trim().toLowerCase();
     const shown = useMemo(() => members.filter(m => matchesPerson(m, needle)), [members, needle]);
@@ -54,23 +56,23 @@ export function PeopleView({
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
             <PageHeader
-                title="People"
+                title={t("title")}
                 sub={
                     needle
-                        ? `${shown.length} of ${plural(members.length, "person", "people")}`
-                        : `${plural(members.length, "person", "people")} in the workspace. Open someone to see what you share with each other.`
+                        ? t("subFiltered", { shown: shown.length, count: members.length })
+                        : t("sub", { count: members.length })
                 }
                 actions={
                     <>
                         <FilterInput
                             value={query}
                             onChange={setQuery}
-                            placeholder="Filter people"
+                            placeholder={t("filterPlaceholder")}
                         />
                         {canInvite && (
                             <Button size="sm" onClick={onInvite} data-testid="team-invite">
                                 <UserPlus className="size-3.5" />
-                                Invite people
+                                {t("invite")}
                             </Button>
                         )}
                         {manageLink}
@@ -80,7 +82,7 @@ export function PeopleView({
 
             {shown.length === 0 ? (
                 <EmptyLine flush>
-                    {needle ? `Nobody matches “${query.trim()}”.` : "Nobody else is here yet."}
+                    {needle ? t("noMatch", { query: query.trim() }) : t("empty")}
                 </EmptyLine>
             ) : (
                 <ul
@@ -99,6 +101,8 @@ export function PeopleView({
 }
 
 function PersonCard({ member }: { member: Member }) {
+    const tTeam = useTranslations("team");
+    const roleLabel = useRoleLabel();
     const groups = member.groups.map(g => g.name).join(", ");
     return (
         <ToolLink
@@ -116,14 +120,16 @@ function PersonCard({ member }: { member: Member }) {
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="text-ink truncate text-[13.5px] font-medium">
                     {member.displayName}
-                    {member.isSelf && <span className="text-ink-3 font-normal"> (you)</span>}
+                    {member.isSelf && (
+                        <span className="text-ink-3 font-normal">{tTeam("you")}</span>
+                    )}
                 </span>
                 <span className="text-ink-2 truncate text-[12px]" title={member.title ?? undefined}>
                     {member.title ?? member.email}
                 </span>
                 <span className="mt-1 flex min-w-0 items-center gap-1.5">
                     <Badge variant="secondary" className="shrink-0 px-1.5 text-[11px]">
-                        {member.roleName}
+                        {roleLabel(member.role, member.roleName)}
                     </Badge>
                     {groups && (
                         <span className="text-ink-3 min-w-0 truncate text-[11.5px]" title={groups}>

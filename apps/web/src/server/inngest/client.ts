@@ -139,6 +139,16 @@ export type GmailSyncEvent = {
     };
 };
 
+export type NotionSyncEvent = {
+    name: "notion/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 export type Events =
     | TrendSearchEvent
     | ClientProspectorEvent
@@ -152,6 +162,7 @@ export type Events =
     | RepoExplainerJobEvent
     | GoogleDriveSyncEvent
     | GmailSyncEvent
+    | NotionSyncEvent
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent;

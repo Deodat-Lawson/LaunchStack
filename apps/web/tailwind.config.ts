@@ -68,22 +68,28 @@ export default {
                     ink: token("accent-ink"),
                     fg: token("accent-fg"),
                 },
+                // `ink` is the status hue as text (text-warn-ink); the
+                // DEFAULT is for dots, icons, fills and borders.
                 success: {
                     DEFAULT: token("success"),
                     soft: token("success-soft"),
+                    ink: token("success-ink"),
                 },
                 danger: {
                     DEFAULT: token("danger"),
                     fg: token("danger-fg"),
                     soft: token("danger-soft"),
+                    ink: token("danger-ink"),
                 },
                 warn: {
                     DEFAULT: token("warn"),
                     soft: token("warn-soft"),
+                    ink: token("warn-ink"),
                 },
                 info: {
                     DEFAULT: token("info"),
                     soft: token("info-soft"),
+                    ink: token("info-ink"),
                 },
             },
             keyframes: {

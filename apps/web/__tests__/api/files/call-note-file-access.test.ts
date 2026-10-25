@@ -64,6 +64,13 @@ jest.mock("~/lib/authz/scope", () => ({
 }));
 
 jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
+jest.mock("~/server/company-profile/service", () => ({ reassembleAfterDelete: jest.fn() }));
+jest.mock("~/server/workspace/activity", () => ({ recordActivity: jest.fn() }));
+jest.mock("~/server/workspace/item-access", () => ({
+    ...jest.requireActual("~/server/workspace/item-access"),
+    documentAccess: jest.fn().mockResolvedValue({ level: "manage", audience: "workspace" }),
+    accessSubject: jest.fn().mockResolvedValue({ userPk: "7" }),
+}));
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
         handler(),

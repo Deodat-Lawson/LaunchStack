@@ -6,6 +6,7 @@ import type {
 } from "@launchstack/pipelines/call-notes";
 
 import type { CallWorkerConfig } from "./config";
+import { deferred } from "./deferred";
 import {
     emitWorkerMessage,
     logWorkerEvent,
@@ -299,7 +300,7 @@ export class CallWorkerRuntime {
                     this.emit(message);
                 },
             });
-            const completion = Promise.withResolvers<void>();
+            const completion = deferred();
             const active: ActivePipeline = {
                 session,
                 pipeline,

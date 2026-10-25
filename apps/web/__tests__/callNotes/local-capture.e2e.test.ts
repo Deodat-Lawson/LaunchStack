@@ -1,13 +1,12 @@
 import type * as NextServerModule from "next/server";
 import { randomUUID } from "node:crypto";
 import { createServer, type Server } from "node:http";
-import { EventEmitter, once } from "node:events";
 import { setImmediate as yieldEventLoop } from "node:timers/promises";
-import { setTimeout as delay } from "node:timers/promises";
 import type { CallNotesTestDatabase } from "./testDb";
 import type { StructuredOutputOptions } from "@launchstack/llm";
 import type * as LlmModule from "@launchstack/llm";
 import { sql } from "drizzle-orm";
+import { z } from "zod";
 
 import {
     CALL_NOTES_ENRICHMENT_PROPOSAL,
@@ -21,6 +20,10 @@ import {
 const mockWorkspacePermission = jest.fn();
 const mockInvokeStructured = jest.fn<Promise<unknown>, unknown[]>();
 const mockCallNoteSync = jest.fn<Promise<void>, [{ companyId: string; callId: string }]>();
+const mockTranscribe = jest.fn<
+    Promise<{ text: string; language?: string }>,
+    [{ audioWav: Uint8Array; language?: string }]
+>();
 const mockAfterTasks: Promise<void>[] = [];
 jest.mock("next/server", () => ({
     ...jest.requireActual<typeof NextServerModule>("next/server"),
@@ -29,12 +32,7 @@ jest.mock("next/server", () => ({
     },
 }));
 let mockTestDb: CallNotesTestDatabase | undefined;
-const mockServerEnv = {
-    CALL_NOTES_CAPTURE_ENABLED: true,
-    CALL_NOTES_INTERNAL_TOKEN: "explicit-capture-e2e-token",
-    CALL_NOTES_LOCAL_COMPANY_ID: "1",
-    CALL_NOTES_LOCAL_USER_ID: "explicit-capture-owner",
-};
+const mockServerEnv = { CALL_NOTES_CAPTURE_ENABLED: true };
 
 jest.mock("~/env", () => ({
     get env() {
@@ -57,6 +55,10 @@ jest.mock("@launchstack/llm", () => ({
     ...jest.requireActual<typeof LlmModule>("@launchstack/llm"),
     invokeStructured: (...args: unknown[]) => mockInvokeStructured(...args),
 }));
+jest.mock("~/server/call-notes/transcription", () => ({
+    transcribeCallNotesAudio: (input: { audioWav: Uint8Array; language?: string }) =>
+        mockTranscribe(input),
+}));
 
 import {
     configureWebCallNotesApplication,
@@ -71,10 +73,13 @@ import { EnrichmentStreamEventSchema } from "~/lib/call-notes-enrichment-stream"
 import { POST as workerIngress } from "~/app/api/internal/call-notes/local/route";
 import { GET as listCallFiles } from "~/app/api/call-notes/files/route";
 import { GET as getWorkerStatus } from "~/app/api/call-notes/worker/route";
+import { POST as createConnectCode } from "~/app/api/call-notes/capture-app/connect-codes/route";
+import { POST as pairDevice } from "~/app/api/call-notes/devices/pair/route";
+import { POST as transcribeAudio } from "~/app/api/call-notes/devices/transcribe/route";
+import { DELETE as revokeDevice } from "~/app/api/call-notes/devices/[deviceId]/route";
 import { CallWorkerRuntime } from "../../../call-worker/src/worker";
-import type { CallWorkerConfig } from "../../../call-worker/src/config";
+import { loadCallWorkerConfig, type CallWorkerConfig } from "../../../call-worker/src/config";
 import type { AudioSource, PcmFrame } from "../../../call-worker/src/local/audio";
-import { OpenAiCompatibleTranscriptionModel } from "../../../call-worker/src/local/transcription";
 import { LocalBackendClient } from "../../../call-worker/src/local/backend-client";
 import { createCallNotesTestDatabase } from "./testDb";
 
@@ -82,15 +87,14 @@ const describeIfDatabase =
     (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
-const OWNER = mockServerEnv.CALL_NOTES_LOCAL_USER_ID;
+const OWNER = "explicit-capture-owner";
 const MICROPHONE_TEXT = "I will send the revised onboarding checklist by Friday.";
 const SYSTEM_TEXT = "We need to reduce onboarding time before the September launch.";
 const proposal = {
     ...CALL_NOTES_ENRICHMENT_PROPOSAL,
 };
 
-// The web suite runs on Node 20, matching the web image; the standalone worker
-// has its own Node 24 test step.
+// Keep this test host compatible with the web image's Node 20 runtime.
 function deferred() {
     let resolve!: () => void;
     let reject!: (reason?: unknown) => void;
@@ -105,8 +109,6 @@ function deferred() {
 class ControlledAudioSource implements AudioSource {
     opened = 0;
     closed = 0;
-    readonly consumed = deferred();
-    private delivered = 0;
     private readonly queue: PcmFrame[] = [];
     private notify: (() => void) | undefined;
 
@@ -139,8 +141,6 @@ class ControlledAudioSource implements AudioSource {
                 const frame = this.queue.shift();
                 if (frame) {
                     yield frame;
-                    this.delivered += 1;
-                    if (this.delivered === 3) this.consumed.resolve();
                 } else {
                     const waiting = deferred();
                     this.notify = waiting.resolve;
@@ -187,26 +187,58 @@ interface HttpTestHost {
     server: Server;
     origin: string;
     polls: number;
-    events: EventEmitter;
+    pendingLongPolls: number;
+    ingressAvailable: boolean;
+    transcriptionChannels: string[];
 }
 
-/** Real HTTP transport terminating at production handlers, with only auth and external models substituted. */
+/** Real production handlers over HTTP; session identity and external models are the only server substitutions. */
 async function startHttpHost(): Promise<HttpTestHost> {
     const server = createServer((incoming, outgoing) => {
         void (async () => {
+            let longPoll = false;
+            const controller = new AbortController();
+            outgoing.once("close", () => controller.abort());
             try {
                 const chunks: Buffer[] = [];
                 for await (const chunk of incoming as AsyncIterable<Buffer>) chunks.push(chunk);
-                const url = new URL(incoming.url!, "http://127.0.0.1");
+                const url = new URL(incoming.url!, `http://${incoming.headers.host!}`);
                 const request = new Request(url, {
                     method: incoming.method,
                     headers: incoming.headers as Record<string, string>,
+                    signal: controller.signal,
                     ...(chunks.length ? { body: Buffer.concat(chunks) } : {}),
                 });
+                const body: unknown =
+                    chunks.length && incoming.headers["content-type"]?.startsWith("application/json")
+                        ? JSON.parse(Buffer.concat(chunks).toString())
+                        : null;
+                const poll =
+                    url.pathname === "/api/internal/call-notes/local" &&
+                    body !== null &&
+                    typeof body === "object" &&
+                    "kind" in body &&
+                    body.kind === "poll";
+                longPoll = poll && "wait" in body && body.wait === true;
+                if (longPoll) host.pendingLongPolls += 1;
                 let response: Response;
-                if (url.pathname === "/api/internal/call-notes/local")
-                    response = await workerIngress(request);
-                else if (url.pathname === "/api/call-notes") {
+                if (url.pathname === "/api/internal/call-notes/local") {
+                    response = host.ingressAvailable
+                        ? await workerIngress(request)
+                        : Response.json({ error: "fixture_ingress_outage" }, { status: 503 });
+                } else if (url.pathname === "/api/call-notes/capture-app/connect-codes") {
+                    response = await createConnectCode(request);
+                } else if (url.pathname === "/api/call-notes/devices/pair") {
+                    response = await pairDevice(request);
+                } else if (url.pathname === "/api/call-notes/devices/transcribe") {
+                    const form = await request.clone().formData();
+                    host.transcriptionChannels.push(String(form.get("channel")));
+                    response = await transcribeAudio(request);
+                } else if (url.pathname.startsWith("/api/call-notes/devices/")) {
+                    response = await revokeDevice(request, {
+                        params: Promise.resolve({ deviceId: url.pathname.split("/").at(-1)! }),
+                    });
+                } else if (url.pathname === "/api/call-notes") {
                     response =
                         incoming.method === "POST"
                             ? await productCommand(request)
@@ -222,22 +254,14 @@ async function startHttpHost(): Promise<HttpTestHost> {
                 } else response = new Response("Not found", { status: 404 });
                 outgoing.writeHead(response.status, Object.fromEntries(response.headers));
                 outgoing.end(Buffer.from(await response.arrayBuffer()));
-                const body: unknown = chunks.length
-                    ? JSON.parse(Buffer.concat(chunks).toString())
-                    : null;
-                if (
-                    url.pathname === "/api/internal/call-notes/local" &&
-                    body !== null &&
-                    typeof body === "object" &&
-                    "kind" in body &&
-                    body.kind === "poll"
-                ) {
-                    host.polls += 1;
-                    host.events.emit("poll");
-                }
+                if (poll) host.polls += 1;
             } catch (error) {
-                outgoing.writeHead(500);
-                outgoing.end(error instanceof Error ? error.message : String(error));
+                if (!outgoing.destroyed) {
+                    outgoing.writeHead(500);
+                    outgoing.end(error instanceof Error ? error.message : String(error));
+                }
+            } finally {
+                if (longPoll) host.pendingLongPolls -= 1;
             }
         })();
     });
@@ -250,39 +274,92 @@ async function startHttpHost(): Promise<HttpTestHost> {
         server,
         origin: `http://127.0.0.1:${address.port}`,
         polls: 0,
-        events: new EventEmitter(),
+        pendingLongPolls: 0,
+        ingressAvailable: true,
+        transcriptionChannels: [],
     };
     return host;
 }
 
-function workerConfig(origin: string): CallWorkerConfig {
-    return {
-        captureEnabled: true,
-        webOrigin: origin,
-        internalToken: mockServerEnv.CALL_NOTES_INTERNAL_TOKEN,
-        companyId: "1",
-        userId: OWNER,
-        ffmpegPath: "unused-fixture-source",
-        audioInputFormat: "unused-fixture-source",
-        audioInputDevice: "unused-fixture-source",
-        systemAudioEnabled: true,
-        systemAudioHelperPath: "unused-fixture-source",
-        audioSampleRate: 16_000,
-        audioFrameMs: 20,
-        audioPreRollMs: 200,
-        audioReadyTimeoutMs: 10_000,
-        stopDrainTimeoutMs: 30_000,
-        transcriptionTimeoutMs: 20_000,
-        vadThreshold: 0.015,
-        vadActivationFrames: 1,
-        vadReleaseFrames: 2,
-        utteranceMaxMs: 3_000,
-        transcriptionProvider: "openai",
-        transcriptionBaseUrl: "https://transcription.example.test/v1",
-        transcriptionModel: "fixture-asr",
-        transcriptionApiKey: "fixture-asr-token",
-        autoEnrich: true,
-    };
+const PairedDeviceSchema = z.object({
+    deviceId: z.string(),
+    token: z.string().regex(/^lsc_[A-Za-z0-9_-]{43}$/),
+    origin: z.string().url(),
+    user: z.object({ id: z.string() }),
+    company: z.object({ id: z.string() }),
+});
+type PairedDevice = z.infer<typeof PairedDeviceSchema>;
+
+async function pairCaptureDevice(origin: string): Promise<PairedDevice> {
+    const mint = await fetch(`${origin}/api/call-notes/capture-app/connect-codes`, {
+        method: "POST",
+    });
+    expect(mint.status).toBe(201);
+    const { code, deepLink } = z
+        .object({ code: z.string(), deepLink: z.string() })
+        .parse(await mint.json());
+    expect(new URL(deepLink).searchParams.get("origin")).toBe(origin);
+    expect(new URL(deepLink).searchParams.get("code")).toBe(code);
+    const paired = await fetch(`${origin}/api/call-notes/devices/pair`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+            code,
+            name: "Capture E2E Mac",
+            appVersion: "1.0.0",
+            os: "macos",
+            arch: "arm64",
+        }),
+    });
+    expect(paired.status).toBe(201);
+    const device = PairedDeviceSchema.parse(await paired.json());
+    expect(device).toMatchObject({ origin, user: { id: OWNER }, company: { id: "1" } });
+    return device;
+}
+
+function workerConfig(device: PairedDevice): CallWorkerConfig {
+    return loadCallWorkerConfig(
+        JSON.stringify({
+            origin: device.origin,
+            deviceToken: device.token,
+            appVersion: "1.0.0",
+            systemAudioHelperPath: "unused-fixture-source",
+            vadActivationFrames: 1,
+            vadReleaseFrames: 2,
+            autoEnrich: true,
+        })
+    );
+}
+
+async function command(origin: string, body: Record<string, unknown>): Promise<CallSnapshot> {
+    const response = await fetch(`${origin}/api/call-notes`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+            schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+            requestId: randomUUID(),
+            ...body,
+        }),
+    });
+    const payload: unknown = await response.json();
+    if (!response.ok)
+        throw new Error(`Command HTTP ${response.status}: ${JSON.stringify(payload)}`);
+    return CallSnapshotSchema.parse(payload);
+}
+
+async function readCall(origin: string, callId: string): Promise<CallSnapshot> {
+    const response = await fetch(`${origin}/api/call-notes/${callId}`);
+    if (!response.ok) throw new Error(`Read Call HTTP ${response.status}`);
+    return CallSnapshotSchema.parse(await response.json());
+}
+
+function peakSample(wav: Uint8Array): number {
+    expect(new TextDecoder().decode(wav.subarray(0, 4))).toBe("RIFF");
+    const samples = new DataView(wav.buffer, wav.byteOffset, wav.byteLength);
+    let sample = 0;
+    for (let offset = 44; offset < wav.byteLength; offset += 2)
+        sample = Math.max(sample, samples.getInt16(offset, true));
+    return sample;
 }
 
 async function readEnrichmentEvent(reader: ReadableStreamDefaultReader<Uint8Array>) {
@@ -300,6 +377,8 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
     let releaseEnrichment: (() => void) | undefined;
     let enrichmentStreamAbort: AbortController | undefined;
     let applicationNow: Date | undefined;
+    let device: PairedDevice;
+    const originalAuthUrl = process.env.BETTER_AUTH_URL;
 
     beforeEach(async () => {
         runtime = undefined;
@@ -313,10 +392,11 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         await seedOwner();
         mockWorkspacePermission.mockResolvedValue({
             success: true,
-            data: { authUserId: OWNER, companyId: 1n },
+            data: { authUserId: OWNER, companyId: 1n, role: "owner" },
         });
         mockInvokeStructured.mockReset().mockResolvedValue(proposal);
         mockCallNoteSync.mockReset().mockResolvedValue(undefined);
+        mockTranscribe.mockReset().mockResolvedValue({ text: MICROPHONE_TEXT });
         configureWebCallNotesApplication(
             createPostgresCallNotesApplication({
                 db: mockTestDb.db,
@@ -328,6 +408,8 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             })
         );
         host = await startHttpHost();
+        process.env.BETTER_AUTH_URL = host.origin;
+        device = await pairCaptureDevice(host.origin);
     }, 60_000);
 
     afterEach(async () => {
@@ -344,6 +426,8 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             await closed.promise;
         }
         await mockTestDb?.close();
+        if (originalAuthUrl === undefined) delete process.env.BETTER_AUTH_URL;
+        else process.env.BETTER_AUTH_URL = originalAuthUrl;
     });
 
     it("stays idle until Start, drains final words on Stop, finalizes and creates a reviewable AI proposal", async () => {
@@ -368,26 +452,12 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         });
         const transcriptionStarted = deferred();
         let transcriptionRequests = 0;
-        const transcription = new OpenAiCompatibleTranscriptionModel({
-            baseUrl: "https://transcription.example.test/v1",
-            model: "fixture-asr",
-            apiKey: "fixture-asr-token",
-            fetch: async (_input, init) => {
-                const form = init?.body as FormData;
-                const audio = form.get("file") as Blob;
-                const wav = new Uint8Array(await audio.arrayBuffer());
-                expect(new TextDecoder().decode(wav.subarray(0, 4))).toBe("RIFF");
-                const samples = new DataView(wav.buffer);
-                let sample = 0;
-                for (let offset = 44; offset < wav.byteLength; offset += 2) {
-                    sample = Math.max(sample, samples.getInt16(offset, true));
-                }
-                transcriptionRequests += 1;
-                if (transcriptionRequests === 2) transcriptionStarted.resolve();
-                await modelGate.promise;
-                await delay(1_250);
-                return Response.json({ text: sample === 16_000 ? MICROPHONE_TEXT : SYSTEM_TEXT });
-            },
+        mockTranscribe.mockImplementation(async ({ audioWav }) => {
+            const sample = peakSample(audioWav);
+            transcriptionRequests += 1;
+            if (transcriptionRequests === 2) transcriptionStarted.resolve();
+            await modelGate.promise;
+            return { text: sample === 16_000 ? MICROPHONE_TEXT : SYSTEM_TEXT };
         });
         const offline = await fetch(`${host!.origin}/api/call-notes/worker`);
         expect(await offline.json()).toMatchObject({ available: false });
@@ -402,61 +472,52 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             }),
         });
         expect(unavailableStart.status).toBe(503);
-        runtime = new CallWorkerRuntime(workerConfig(host!.origin), {
+        runtime = new CallWorkerRuntime(workerConfig(device), {
             sources: { microphone, system },
-            transcription,
+            emit: () => undefined,
+            log: () => undefined,
         });
         runtimeRun = runtime.run();
         void runtimeRun.catch(() => undefined);
 
-        const command = async (body: Record<string, unknown>): Promise<CallSnapshot> => {
-            const response = await fetch(`${host!.origin}/api/call-notes`, {
-                method: "POST",
-                headers: { "content-type": "application/json" },
-                body: JSON.stringify({
-                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
-                    requestId: randomUUID(),
-                    ...body,
-                }),
-            });
-            const payload: unknown = await response.json();
-            if (!response.ok)
-                throw new Error(`Command HTTP ${response.status}: ${JSON.stringify(payload)}`);
-            return CallSnapshotSchema.parse(payload);
-        };
-        const readCall = async (callId: string) => {
-            const response = await fetch(`${host!.origin}/api/call-notes/${callId}`);
-            if (!response.ok) throw new Error(`Read Call HTTP ${response.status}`);
-            return CallSnapshotSchema.parse(await response.json());
-        };
-
-        // Observe completed control polls, not a guessed startup sleep.
-        while (host!.polls < 2) await once(host!.events, "poll");
+        // The real idle request is held, not a stream of short polls or a guessed sleep.
+        await eventually(
+            async () => host!.pendingLongPolls,
+            pending => pending === 1
+        );
+        expect(host!.polls).toBe(0);
         expect(microphone.opened).toBe(0);
         expect(system.opened).toBe(0);
         const idleList = await fetch(`${host!.origin}/api/call-notes`);
         expect(await idleList.json()).toEqual([]);
-        const available = await fetch(`${host!.origin}/api/call-notes/worker`);
-        expect(await available.json()).toMatchObject({ available: true });
+        const available = await eventually(
+            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                available: boolean;
+            }>,
+            status => status.available
+        );
+        expect(available).toMatchObject({ available: true });
 
-        const started = await command({
+        const started = await command(host!.origin, {
             kind: "start_capture",
             sourceOccurrenceKey: randomUUID(),
             title: "Explicit capture proof",
+            targetDeviceId: device.deviceId,
         });
         const live = await eventually(
-            () => readCall(started.id),
+            () => readCall(host!.origin, started.id),
             call => call.capture.lifecycle === "live"
         );
         expect(live.capture.attemptCount).toBe(1);
-        microphone.speech(16_000);
-        system.speech(8_000);
-        await Promise.all([microphone.consumed.promise, system.consumed.promise]);
-
-        const stopping = await command({ kind: "stop_capture", callId: live.id });
-        expect(stopping.capture.desiredMode).toBe("stopped");
+        microphone.speech(16_000, 2);
+        system.speech(8_000, 2);
         await transcriptionStarted.promise;
-        const draining = await readCall(live.id);
+        expect(mockTranscribe).toHaveBeenCalledTimes(2);
+        expect(host!.transcriptionChannels.sort()).toEqual(["microphone", "system"]);
+
+        const stopping = await command(host!.origin, { kind: "stop_capture", callId: live.id });
+        expect(stopping.capture.desiredMode).toBe("stopped");
+        const draining = await readCall(host!.origin, live.id);
         expect(draining.status).toBe("finalizing");
         expect(draining.enrichment).toBeNull();
         expect(mockInvokeStructured).not.toHaveBeenCalled();
@@ -467,7 +528,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
 
         releaseModel();
         const completed = await eventually(
-            () => readCall(live.id),
+            () => readCall(host!.origin, live.id),
             call => call.status === "completed" && call.enrichment?.status === "generating"
         );
         expect(completed.transcript).toHaveLength(2);
@@ -492,7 +553,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
             status: "generating",
             markdown: `## ${partialSection.heading}\n\n${partialSection.markdown.trim()}`,
         });
-        const duringGeneration = await readCall(live.id);
+        const duringGeneration = await readCall(host!.origin, live.id);
         expect(duringGeneration.enrichment?.proposal).toBeNull();
         expect(duringGeneration.note?.contentMarkdown).toBe("");
         releaseEnrichment();
@@ -519,7 +580,7 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         expect(mockInvokeStructured).toHaveBeenCalledTimes(1);
 
         const rendered = renderEnrichedNoteProposal(proposal);
-        const accepted = await command({
+        const accepted = await command(host!.origin, {
             kind: "accept_enrichment",
             callId: ready.id,
             enrichmentRunId: ready.enrichment!.id,
@@ -543,100 +604,85 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
                 title: accepted.note!.title,
             }),
         ]);
-        const repeatedStop = await command({ kind: "stop_capture", callId: ready.id });
+        const repeatedStop = await command(host!.origin, { kind: "stop_capture", callId: ready.id });
         expect(repeatedStop.status).toBe("completed");
-        const idlePollTarget = host!.polls + 2;
-        while (host!.polls < idlePollTarget) await once(host!.events, "poll");
+        await eventually(
+            async () => host!.pendingLongPolls,
+            pending => pending === 1
+        );
         expect(microphone.opened).toBe(1);
         expect(system.opened).toBe(1);
     }, 30_000);
 
-    it("keeps audio before, during and after an HTTP outage longer than the capture lease on one Call", async () => {
+    it("keeps evidence before, during and after an HTTP ingress outage longer than the capture lease on one Call", async () => {
         const microphone = new ControlledAudioSource();
+        const system = new ControlledAudioSource();
         const retryObserved = deferred();
         const duringAudioTranscribed = deferred();
         const beforeText = "We began the conversation before the backend outage.";
         const duringText = "These words were spoken while the backend was offline.";
         const afterText = "The conversation continued after the backend returned.";
-        const transcription = new OpenAiCompatibleTranscriptionModel({
-            baseUrl: "https://transcription.example.test/v1",
-            model: "fixture-asr",
-            apiKey: "fixture-asr-token",
-            fetch: async (_input, init) => {
-                const form = init?.body as FormData;
-                const wav = new Uint8Array(await (form.get("file") as Blob).arrayBuffer());
-                const samples = new DataView(wav.buffer);
-                let sample = 0;
-                for (let offset = 44; offset < wav.byteLength; offset += 2) {
-                    sample = Math.max(sample, samples.getInt16(offset, true));
-                }
-                if (sample === 12_000) duringAudioTranscribed.resolve();
-                return Response.json({
-                    text:
-                        sample === 8_000 ? beforeText : sample === 12_000 ? duringText : afterText,
-                });
-            },
+        mockTranscribe.mockImplementation(async ({ audioWav }) => {
+            const sample = peakSample(audioWav);
+            if (sample === 12_000) duringAudioTranscribed.resolve();
+            return {
+                text: sample === 8_000 ? beforeText : sample === 12_000 ? duringText : afterText,
+            };
         });
         const backend = new LocalBackendClient({
-            webOrigin: host!.origin,
-            token: mockServerEnv.CALL_NOTES_INTERNAL_TOKEN,
+            origin: device.origin,
+            deviceToken: device.token,
+            appVersion: "1.0.0",
             timeoutMs: 1_000,
             retryBudgetMs: 10_000,
             retryBaseDelayMs: 10,
             retryMaxDelayMs: 20,
             random: () => 0.5,
             onRetry: () => {
-                if (!host!.server.listening) retryObserved.resolve();
+                if (!host!.ingressAvailable) retryObserved.resolve();
             },
         });
         runtime = new CallWorkerRuntime(
-            { ...workerConfig(host!.origin), systemAudioEnabled: false, autoEnrich: false },
-            { sources: { microphone }, transcription, backend }
+            { ...workerConfig(device), autoEnrich: false },
+            {
+                sources: { microphone, system },
+                backend,
+                emit: () => undefined,
+                log: () => undefined,
+            }
         );
         let runtimeFailure: unknown;
         runtimeRun = runtime.run();
         void runtimeRun.catch(error => {
             runtimeFailure = error;
         });
-        while (host!.polls < 1) await once(host!.events, "poll");
-        const startResponse = await fetch(`${host!.origin}/api/call-notes`, {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                schemaVersion: CALL_NOTES_SCHEMA_VERSION,
-                requestId: randomUUID(),
-                kind: "start_capture",
-                sourceOccurrenceKey: randomUUID(),
-                title: "Capture continues through a backend outage",
-            }),
+        await eventually(
+            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                available: boolean;
+            }>,
+            status => status.available
+        );
+        const started = await command(host!.origin, {
+            kind: "start_capture",
+            sourceOccurrenceKey: randomUUID(),
+            title: "Capture continues through an ingress outage",
+            targetDeviceId: device.deviceId,
         });
-        expect(startResponse.status).toBe(200);
-        const started = CallSnapshotSchema.parse(await startResponse.json());
-        const readCall = async (): Promise<CallSnapshot> => {
-            const response = await fetch(`${host!.origin}/api/call-notes/${started.id}`);
-            expect(response.status).toBe(200);
-            return CallSnapshotSchema.parse(await response.json());
-        };
-        await eventually(readCall, call => call.capture.lifecycle === "live");
+        const readSnapshot = () => readCall(host!.origin, started.id);
+        await eventually(readSnapshot, call => call.capture.lifecycle === "live");
         microphone.speech(8_000, 2);
-        const before = await eventually(readCall, call => call.transcript.length === 1);
+        const before = await eventually(readSnapshot, call => call.transcript.length === 1);
         expect(before.transcript[0]?.text).toBe(beforeText);
 
-        const port = new URL(host!.origin).port;
-        host!.server.closeAllConnections();
-        const closed = deferred();
-        host!.server.close(error => (error ? closed.reject(error) : closed.resolve()));
-        await closed.promise;
+        // Only the control/evidence endpoint is unavailable. Server-side
+        // transcription still runs through the real device route over HTTP.
+        host!.ingressAvailable = false;
         microphone.speech(12_000, 2);
         await Promise.all([duringAudioTranscribed.promise, retryObserved.promise]);
         // Only the server clock jumps: the real client remains retrying while
         // its audio pipeline continues consuming and transcribing PCM.
         applicationNow = new Date(Date.now() + 16_000);
-        const reapedResponse = await getCall(
-            new Request(`${host!.origin}/api/call-notes/${started.id}`),
-            { params: Promise.resolve({ callId: started.id }) }
-        );
-        const reaped = CallSnapshotSchema.parse(await reapedResponse.json());
+        const reaped = await readSnapshot();
         expect(reaped).toMatchObject({
             id: started.id,
             status: "active",
@@ -651,21 +697,15 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         expect(reaped.gaps).toEqual([
             expect.objectContaining({ kind: "worker_unavailable", endedAt: null }),
         ]);
-        await new Promise<void>((resolve, reject) => {
-            host!.server.once("error", reject);
-            host!.server.listen(Number(port), "127.0.0.1", () => {
-                host!.server.off("error", reject);
-                resolve();
-            });
-        });
+        host!.ingressAvailable = true;
         const recovered = await eventually(
-            readCall,
+            readSnapshot,
             call => call.transcript.length === 2 && call.capture.lifecycle === "live"
         );
         expect(recovered.gaps).toEqual([]);
         microphone.speech(16_000, 2);
         const live = await eventually(
-            readCall,
+            readSnapshot,
             call => call.transcript.length === 3 && call.capture.lifecycle === "live"
         );
         expect(runtimeFailure).toBeUndefined();
@@ -693,5 +733,108 @@ describeIfDatabase("Explicit local capture HTTP/PostgreSQL end-to-end", () => {
         const callsResponse = await fetch(`${host!.origin}/api/call-notes`);
         const calls = (await callsResponse.json()) as unknown[];
         expect(calls).toHaveLength(1);
+    }, 30_000);
+
+    it("automatically stops after both channels become quiet with stopReason silence", async () => {
+        const microphone = new ControlledAudioSource();
+        const system = new ControlledAudioSource();
+        const autoStopPending = deferred();
+        const autoStopped = deferred();
+        let pending = false;
+        runtime = new CallWorkerRuntime(
+            { ...workerConfig(device), autoEnrich: false, silenceTimeoutMs: 25 },
+            {
+                sources: { microphone, system },
+                emit: message => {
+                    if (message.type === "auto_stop_pending") {
+                        expect(message.reason).toBe("silence");
+                        pending = true;
+                        autoStopPending.resolve();
+                    } else if (message.type === "state" && message.state === "idle" && pending) {
+                        autoStopped.resolve();
+                    }
+                },
+                log: () => undefined,
+            }
+        );
+        runtimeRun = runtime.run();
+        void runtimeRun.catch(() => undefined);
+        await eventually(
+            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                available: boolean;
+            }>,
+            status => status.available
+        );
+        const started = await command(host!.origin, {
+            kind: "start_capture",
+            sourceOccurrenceKey: randomUUID(),
+            targetDeviceId: device.deviceId,
+            title: "Quiet capture",
+        });
+        microphone.speech(16_000, 2);
+        await autoStopPending.promise;
+        expect((await readCall(host!.origin, started.id)).capture.desiredMode).toBe("running");
+        // Exercise the production sixty-second cancellation window, not an injected pipeline.
+        await autoStopped.promise;
+        const stopped = await readCall(host!.origin, started.id);
+        expect(stopped.status).toBe("completed");
+        expect(stopped.capture).toMatchObject({
+            desiredMode: "stopped",
+            stopReason: "silence",
+        });
+        expect(microphone.closed).toBe(1);
+        expect(system.closed).toBe(1);
+        expect(mockTranscribe).toHaveBeenCalledTimes(1);
+        expect(stopped.transcript).toEqual([
+            expect.objectContaining({ audioChannel: "microphone", text: MICROPHONE_TEXT }),
+        ]);
+        expect(mockInvokeStructured).not.toHaveBeenCalled();
+    }, 85_000);
+
+    it("terminates a running worker with exit code 77 semantics after its device is revoked", async () => {
+        const microphone = new ControlledAudioSource();
+        const system = new ControlledAudioSource();
+        runtime = new CallWorkerRuntime(
+            { ...workerConfig(device), autoEnrich: false },
+            {
+                sources: { microphone, system },
+                emit: () => undefined,
+                log: () => undefined,
+            }
+        );
+        runtimeRun = runtime.run();
+        void runtimeRun.catch(() => undefined);
+        await eventually(
+            async () => (await fetch(`${host!.origin}/api/call-notes/worker`)).json() as Promise<{
+                available: boolean;
+            }>,
+            status => status.available
+        );
+        const started = await command(host!.origin, {
+            kind: "start_capture",
+            sourceOccurrenceKey: randomUUID(),
+            targetDeviceId: device.deviceId,
+            title: "Revoked capture",
+        });
+        await eventually(
+            () => readCall(host!.origin, started.id),
+            call => call.capture.lifecycle === "live"
+        );
+        const revoked = await fetch(`${host!.origin}/api/call-notes/devices/${device.deviceId}`, {
+            method: "DELETE",
+        });
+        expect(revoked.status).toBe(204);
+        await expect(runtimeRun).rejects.toMatchObject({
+            name: "LocalBackendError",
+            status: 401,
+            retryable: false,
+            exitCode: 77,
+        });
+        expect(microphone.closed).toBe(1);
+        expect(system.closed).toBe(1);
+        expect(await (await fetch(`${host!.origin}/api/call-notes/worker`)).json()).toMatchObject({
+            available: false,
+            devices: [],
+        });
     }, 30_000);
 });

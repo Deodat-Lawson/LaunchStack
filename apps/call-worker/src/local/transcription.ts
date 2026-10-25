@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import type { AudioChannel } from "@launchstack/pipelines/call-notes";
 
+import { deferred } from "../deferred";
 import { LocalBackendError } from "./backend-client";
 
 export interface TranscriptionInput {
@@ -66,13 +67,13 @@ export class DeviceTranscriptionModel implements TranscriptionModel {
             throw new RangeError("transcription timeout must be positive");
         const controller = new AbortController();
         let removeAbort: (() => void) | undefined;
-        const deadline = Promise.withResolvers<never>();
+        const deadline = deferred<never>();
         const timer = setTimeout(() => {
             const error = new Error(`transcription request timed out after ${timeoutMs}ms`);
             controller.abort(error);
             deadline.reject(error);
         }, timeoutMs);
-        const cancelled = Promise.withResolvers<never>();
+        const cancelled = deferred<never>();
         if (signal) {
             const abort = (): void => {
                 controller.abort(signal.reason);

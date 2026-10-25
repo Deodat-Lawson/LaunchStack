@@ -57,8 +57,13 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
     "/api/inngest",
-    // Local capture workers use the route's scoped bearer token, not a browser session.
+    // Capture pairing and device-token routes authenticate at their own boundary.
     "/api/internal/call-notes/local",
+    "/api/call-notes/devices/pair",
+    "/api/call-notes/devices/commands",
+    "/api/call-notes/devices/transcribe",
+    "/api/call-notes/devices/appcast.xml",
+    "/api/call-notes/devices/updates/(.*)",
     // Pre-auth join UX: an invitation or join link is previewed (workspace
     // name, role) before the person has an account. Neither route consumes
     // anything; accepting requires a session.
@@ -323,7 +328,10 @@ export default async function middleware(req: NextRequest) {
         if (shouldLogPerf) {
             const totalMs = Date.now() - requestStart;
             const dbSegment = dbQueryMs == null ? "n/a" : `${dbQueryMs}ms`;
-            console.info(`[perf] middleware path=${pathname} total=${totalMs}ms db=${dbSegment}`);
+            const logPath = pathname.startsWith("/api/call-notes/capture-app/d/")
+                ? "/api/call-notes/capture-app/d/[code]/[filename]"
+                : pathname;
+            console.info(`[perf] middleware path=${logPath} total=${totalMs}ms db=${dbSegment}`);
         }
     }
 }

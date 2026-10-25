@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from "node:crypto";
+import { createHash } from "node:crypto";
 
 import { after, NextResponse } from "next/server";
 import { z } from "zod";
@@ -11,19 +11,20 @@ import {
     type CallSnapshot,
 } from "@launchstack/pipelines/call-notes";
 
-import { env } from "~/env";
 import {
     CallNotesApplicationError,
     callNotesErrorResponse,
     getWebCallNotesApplication,
 } from "~/server/call-notes/application";
 import { processQueuedCallNotesEnrichment } from "~/server/call-notes/enrichment-runner";
+import { assertCaptureDeviceCall } from "~/server/call-notes/capture-control";
+import { requireCaptureDevice, type CaptureDeviceContext } from "~/server/call-notes/device-auth";
+import { pollCaptureDevice } from "~/server/call-notes/capture-wake";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const CompanyIdSchema = z.string().regex(/^\d+$/);
-const UserIdSchema = z.string().min(1).max(256);
 const CallIdSchema = z.string().min(1).max(64);
 const EventIdSchema = z.string().min(1).max(64);
 const SourceKeySchema = z.string().min(1).max(256);
@@ -77,17 +78,17 @@ const LocalCaptureEventSchema = z.discriminatedUnion("kind", [
     }).strict(),
 ]);
 
-type LocalCaptureEvent = z.infer<typeof LocalCaptureEventSchema>;
-
-const LocalWorkerPollSchema = LocalCapturePollInputSchema.extend({
+const LocalWorkerPollSchema = LocalCapturePollInputSchema.omit({
+    companyId: true,
+    userId: true,
+    deviceId: true,
+}).extend({
     kind: z.literal("poll"),
 });
 
 const LocalWorkerEventSchema = z
     .object({
         kind: z.literal("event"),
-        companyId: CompanyIdSchema,
-        userId: UserIdSchema,
         callId: CallIdSchema,
         event: LocalCaptureEventSchema,
     })
@@ -96,8 +97,6 @@ const LocalWorkerEventSchema = z
 const LocalWorkerFinishSchema = z
     .object({
         kind: z.literal("finish"),
-        companyId: CompanyIdSchema,
-        userId: UserIdSchema,
         callId: CallIdSchema,
         autoEnrich: z.boolean(),
     })
@@ -108,45 +107,8 @@ const LocalWorkerRequestSchema = z.discriminatedUnion("kind", [
     LocalWorkerEventSchema,
     LocalWorkerFinishSchema,
 ]);
-type LocalWorkerRequest = z.infer<typeof LocalWorkerRequestSchema>;
-type LocalWorkerContext = { companyId: string; userId: string };
 
-function unauthorized(): NextResponse {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-}
-
-function forbidden(): NextResponse {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-}
-
-function unavailable(): NextResponse {
-    return NextResponse.json({ error: "Call Notes is unavailable" }, { status: 503 });
-}
-
-function constantTimeTokenMatches(expected: string | undefined, supplied: string | null): boolean {
-    const expectedDigest = createHash("sha256")
-        .update(expected ?? "")
-        .digest();
-    const suppliedDigest = createHash("sha256")
-        .update(supplied ?? "")
-        .digest();
-    return Boolean(expected) && timingSafeEqual(expectedDigest, suppliedDigest);
-}
-
-function hasValidBearerToken(request: Request): boolean {
-    const header = request.headers.get("authorization");
-    const match = header?.match(/^Bearer ([^\s]+)$/);
-    return constantTimeTokenMatches(env.server.CALL_NOTES_INTERNAL_TOKEN, match?.[1] ?? null);
-}
-
-function configuredContext(): LocalWorkerContext | null {
-    const companyId = env.server.CALL_NOTES_LOCAL_COMPANY_ID;
-    const userId = env.server.CALL_NOTES_LOCAL_USER_ID;
-    if (!companyId || !/^\d+$/.test(companyId) || !userId) return null;
-    return { companyId, userId };
-}
-
-function requestId(kind: string, context: LocalWorkerContext, key: string): string {
+function requestId(kind: string, context: CaptureDeviceContext, key: string): string {
     return createHash("sha256")
         .update(
             `${CALL_NOTES_SCHEMA_VERSION}\0${kind}\0${context.companyId}\0${context.userId}\0${key}`
@@ -154,42 +116,6 @@ function requestId(kind: string, context: LocalWorkerContext, key: string): stri
         .digest("hex");
 }
 
-function requestMatchesContext(
-    request: LocalWorkerRequest,
-    context: LocalWorkerContext
-): request is LocalWorkerRequest & { companyId: string } {
-    return request.companyId === context.companyId && request.userId === context.userId;
-}
-
-function hasStrictCaptureEventShape(raw: unknown, parsed: LocalCaptureEvent): boolean {
-    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) return false;
-    const rawEvent = raw as Record<string, unknown>;
-    const parsedEvent = parsed as unknown as Record<string, unknown>;
-    const rawKeys = Object.keys(rawEvent);
-    const parsedKeys = Object.keys(parsedEvent);
-    if (rawKeys.length !== parsedKeys.length || rawKeys.some(key => !parsedKeys.includes(key))) {
-        return false;
-    }
-
-    if (!("participant" in rawEvent) || rawEvent.participant === null) return true;
-    if (
-        !("participant" in parsed) ||
-        parsed.participant === null ||
-        typeof rawEvent.participant !== "object" ||
-        rawEvent.participant === null ||
-        Array.isArray(rawEvent.participant)
-    ) {
-        return false;
-    }
-    const rawParticipant = rawEvent.participant as Record<string, unknown>;
-    const parsedParticipant = parsed.participant as Record<string, unknown>;
-    const rawParticipantKeys = Object.keys(rawParticipant);
-    const parsedParticipantKeys = Object.keys(parsedParticipant);
-    return (
-        rawParticipantKeys.length === parsedParticipantKeys.length &&
-        rawParticipantKeys.every(key => parsedParticipantKeys.includes(key))
-    );
-}
 function assertCallOwner(snapshot: CallSnapshot, userId: string): void {
     const noteOwner = snapshot.note?.ownerUserId;
     if (noteOwner !== null && noteOwner !== undefined && noteOwner !== userId) {
@@ -213,62 +139,61 @@ function assertCallOwner(snapshot: CallSnapshot, userId: string): void {
 }
 
 export async function POST(request: Request): Promise<Response> {
-    if (!hasValidBearerToken(request)) return unauthorized();
-    if (!env.server.CALL_NOTES_CAPTURE_ENABLED) return unavailable();
-
-    const context = configuredContext();
-    if (!context) return unavailable();
+    const auth = await requireCaptureDevice(request);
+    if (!auth.success) return auth.response;
+    const context = auth.data;
+    const t = requestTranslator(request, "calls.server");
 
     let body: unknown;
     try {
         body = await request.json();
     } catch {
-        return NextResponse.json({ error: "Invalid Call Notes request" }, { status: 400 });
+        return NextResponse.json({ error: t("invalidRequest") }, { status: 400 });
     }
 
     const parsed = LocalWorkerRequestSchema.safeParse(body);
     if (!parsed.success) {
-        return NextResponse.json({ error: "Invalid Call Notes request" }, { status: 400 });
+        return NextResponse.json({ error: t("invalidRequest") }, { status: 400 });
     }
-    if (parsed.data.kind === "event") {
-        const rawEvent =
-            body !== null && typeof body === "object" && !Array.isArray(body)
-                ? (body as Record<string, unknown>).event
-                : undefined;
-        if (!hasStrictCaptureEventShape(rawEvent, parsed.data.event)) {
-            return NextResponse.json({ error: "Invalid Call Notes request" }, { status: 400 });
-        }
-    }
-    if (!requestMatchesContext(parsed.data, context)) return forbidden();
 
     try {
         const application = getWebCallNotesApplication();
         switch (parsed.data.kind) {
             case "poll": {
-                const result = await application.pollLocalCapture({
-                    companyId: context.companyId,
-                    userId: context.userId,
-                    workerId: parsed.data.workerId,
-                    activeAttemptKey: parsed.data.activeAttemptKey,
+                const poll = parsed.data;
+                const result = await pollCaptureDevice({
+                    deviceId: context.deviceId,
+                    wait: poll.wait === true && poll.activeAttemptKey === undefined,
+                    signal: request.signal,
+                    poll: () =>
+                        application.pollLocalCapture({
+                            companyId: context.companyId,
+                            userId: context.userId,
+                            deviceId: context.deviceId,
+                            workerId: poll.workerId,
+                            activeAttemptKey: poll.activeAttemptKey,
+                        }),
                 });
                 return NextResponse.json(LocalCapturePollResultSchema.parse(result));
             }
             case "event": {
+                await assertCaptureDeviceCall(context, parsed.data.callId);
                 const snapshot = await application.getCall({
                     companyId: context.companyId,
                     actorUserId: context.userId,
                     callId: parsed.data.callId,
                 });
                 if (snapshot.viewerCapabilities.canControlCapture !== true) {
-                    return forbidden();
+                    return NextResponse.json({ error: "forbidden" }, { status: 403 });
                 }
                 if (snapshot.sourceOccurrenceKey !== parsed.data.event.sourceOccurrenceKey) {
-                    return forbidden();
+                    return NextResponse.json({ error: "forbidden" }, { status: 403 });
                 }
                 await application.ingestLocalCaptureEvent(context.companyId, parsed.data.event);
                 return NextResponse.json({ ok: true });
             }
             case "finish": {
+                await assertCaptureDeviceCall(context, parsed.data.callId);
                 const initial = await application.getCall({
                     companyId: context.companyId,
                     actorUserId: context.userId,
@@ -309,6 +234,6 @@ export async function POST(request: Request): Promise<Response> {
             }
         }
     } catch (error) {
-        return callNotesErrorResponse(error);
+        return callNotesErrorResponse(error, request);
     }
 }

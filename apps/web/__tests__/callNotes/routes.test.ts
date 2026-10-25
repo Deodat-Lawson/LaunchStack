@@ -16,8 +16,6 @@ const mockProcessQueuedEnrichment = jest.fn();
 const mockWorkerStatus = jest.fn();
 const mockServerEnv: Record<string, unknown> = {
     CALL_NOTES_CAPTURE_ENABLED: true,
-    CALL_NOTES_LOCAL_COMPANY_ID: "42",
-    CALL_NOTES_LOCAL_USER_ID: "user_actual",
 };
 
 jest.mock("~/env", () => ({
@@ -37,6 +35,9 @@ jest.mock("~/server/engine", () => ({
 jest.mock("~/server/call-notes/enrichment-runner", () => ({
     processQueuedCallNotesEnrichment: (...args: unknown[]): unknown =>
         mockProcessQueuedEnrichment(...args),
+}));
+jest.mock("~/server/call-notes/capture-control", () => ({
+    wakeCaptureCommand: jest.fn(),
 }));
 
 jest.mock("~/server/call-notes/application", () => {
@@ -78,8 +79,6 @@ function callParams(callId: string) {
 beforeEach(() => {
     jest.clearAllMocks();
     mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = true;
-    mockServerEnv.CALL_NOTES_LOCAL_COMPANY_ID = "42";
-    mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "user_actual";
     mockWorkspacePermission.mockResolvedValue({
         success: true,
         data: { authUserId: "user_actual", companyId: 42n },
@@ -90,7 +89,11 @@ beforeEach(() => {
     mockGetCall.mockResolvedValue({ id: "call-1" });
     mockSearchTranscript.mockResolvedValue([]);
     mockListDetectedCalls.mockResolvedValue([]);
-    mockWorkerStatus.mockResolvedValue({ available: true, lastSeenAt: "2026-09-06T00:00:00.000Z" });
+    mockWorkerStatus.mockResolvedValue({
+        available: true,
+        lastSeenAt: "2026-09-06T00:00:00.000Z",
+        devices: [],
+    });
 });
 
 describe("Call Notes authenticated routes", () => {
@@ -106,10 +109,14 @@ describe("Call Notes authenticated routes", () => {
         expect(mockWorkerStatus).not.toHaveBeenCalled();
     });
 
-    it("does not expose another configured user's worker as available", async () => {
-        mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "different-user";
+    it("does not expose devices when capture is disabled", async () => {
+        mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = false;
         const response = await getWorkerStatus();
-        expect(await responseBody(response)).toEqual({ available: false, lastSeenAt: null });
+        expect(await responseBody(response)).toEqual({
+            available: false,
+            lastSeenAt: null,
+            devices: [],
+        });
         expect(mockWorkerStatus).not.toHaveBeenCalled();
     });
     it("derives actor and company from the workspace context instead of GET query spoofing", async () => {
@@ -190,8 +197,8 @@ describe("Call Notes authenticated routes", () => {
         expect(mockGetEngine).not.toHaveBeenCalled();
     });
 
-    it("rejects explicit local start when no configured worker serves the actor", async () => {
-        mockServerEnv.CALL_NOTES_LOCAL_USER_ID = "different-user";
+    it("rejects explicit local start when capture is disabled", async () => {
+        mockServerEnv.CALL_NOTES_CAPTURE_ENABLED = false;
         const response = await executeCommand(
             request("/api/call-notes", {
                 method: "POST",
@@ -209,10 +216,45 @@ describe("Call Notes authenticated routes", () => {
 
         expect(response.status).toBe(503);
         expect(await responseBody(response)).toEqual({
-            error: "No configured local capture worker serves this workspace user",
+            error: "Local capture is disabled",
             code: "unavailable",
         });
         expect(mockExecute).not.toHaveBeenCalled();
+    });
+
+    it("localizes capture validation and availability errors for Chinese requests", async () => {
+        const headers = { "Content-Type": "application/json", "Accept-Language": "zh-CN" };
+        const invalid = await executeCommand(
+            request("/api/call-notes", {
+                method: "POST",
+                headers,
+                body: "not-json",
+            })
+        );
+        expect(await invalid.json()).toEqual({ error: "无效的通话笔记请求" });
+        mockExecute.mockRejectedValue(
+            new CallNotesApplicationError(
+                "unavailable",
+                "Local capture worker is unavailable; open LaunchStack Capture and retry"
+            )
+        );
+        const unavailable = await executeCommand(
+            request("/api/call-notes", {
+                method: "POST",
+                headers,
+                body: JSON.stringify({
+                    schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+                    requestId: "localized-start",
+                    kind: "start_capture",
+                    sourceOccurrenceKey: "localized-occurrence",
+                }),
+            })
+        );
+        expect(unavailable.status).toBe(503);
+        expect(await unavailable.json()).toEqual({
+            error: "本地录制服务不可用，请打开 LaunchStack Capture 后重试",
+            code: "unavailable",
+        });
     });
 
     it("passes an explicit stop command through the authenticated product route", async () => {

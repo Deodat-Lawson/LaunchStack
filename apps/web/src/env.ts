@@ -419,9 +419,16 @@ const serverSchema = z.object({
     // Local audio capture is fail-closed unless explicitly enabled. The worker
     // posts normalized microphone and system-audio events back to this app.
     CALL_NOTES_CAPTURE_ENABLED: localCaptureBoolean(false),
-    CALL_NOTES_INTERNAL_TOKEN: optionalString(),
-    CALL_NOTES_LOCAL_COMPANY_ID: optionalString(),
-    CALL_NOTES_LOCAL_USER_ID: optionalString(),
+    CALL_NOTES_MIN_APP_VERSION: optionalString(),
+    CALL_NOTES_MAX_CAPTURE_MINUTES: z.preprocess(
+        normalize,
+        z.coerce.number().int().positive().default(240)
+    ),
+    CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING: optionalString(),
+    CALL_NOTES_CAPTURE_APP_CONTAINER: z.preprocess(
+        normalize,
+        z.string().min(1).default("capture-app")
+    ),
     // Drive-linked files: PDFs and Word docs manually editable via a durable
     // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
     // OAuth client below exists — the GCP consent screen is the one real
@@ -679,9 +686,11 @@ function parseServerEnv() {
         SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
         CALL_NOTES_CAPTURE_ENABLED: process.env.CALL_NOTES_CAPTURE_ENABLED,
-        CALL_NOTES_INTERNAL_TOKEN: process.env.CALL_NOTES_INTERNAL_TOKEN,
-        CALL_NOTES_LOCAL_COMPANY_ID: process.env.CALL_NOTES_LOCAL_COMPANY_ID,
-        CALL_NOTES_LOCAL_USER_ID: process.env.CALL_NOTES_LOCAL_USER_ID,
+        CALL_NOTES_MIN_APP_VERSION: process.env.CALL_NOTES_MIN_APP_VERSION,
+        CALL_NOTES_MAX_CAPTURE_MINUTES: process.env.CALL_NOTES_MAX_CAPTURE_MINUTES,
+        CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING:
+            process.env.CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING,
+        CALL_NOTES_CAPTURE_APP_CONTAINER: process.env.CALL_NOTES_CAPTURE_APP_CONTAINER,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"
             | "database"

@@ -6,6 +6,7 @@ import {
     CallNotesCommandSchema,
 } from "@launchstack/pipelines/call-notes";
 import { env } from "~/env";
+import { requestTranslator } from "~/i18n/server";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import {
@@ -13,36 +14,22 @@ import {
     getWebCallNotesApplication,
 } from "~/server/call-notes/application";
 import { processQueuedCallNotesEnrichment } from "~/server/call-notes/enrichment-runner";
+import { wakeCaptureCommand } from "~/server/call-notes/capture-control";
 
 export const dynamic = "force-dynamic";
 
-function invalidRequest(): NextResponse {
-    return NextResponse.json({ error: "Invalid Call Notes request" }, { status: 400 });
+function invalidRequest(request: Request): NextResponse {
+    return NextResponse.json(
+        { error: requestTranslator(request, "calls.server")("invalidRequest") },
+        { status: 400 }
+    );
 }
 
-function localCaptureUnavailable(context: {
-    companyId: string;
-    userId: string;
-}): NextResponse | null {
+function localCaptureUnavailable(request: Request): NextResponse | null {
     if (!env.server.CALL_NOTES_CAPTURE_ENABLED) {
         return callNotesErrorResponse(
-            new CallNotesApplicationError("unavailable", "Local capture is disabled")
-        ) as NextResponse;
-    }
-    const configuredCompanyId = env.server.CALL_NOTES_LOCAL_COMPANY_ID;
-    const configuredUserId = env.server.CALL_NOTES_LOCAL_USER_ID;
-    if (
-        !configuredCompanyId ||
-        !/^\d+$/.test(configuredCompanyId) ||
-        !configuredUserId ||
-        configuredCompanyId !== context.companyId ||
-        configuredUserId !== context.userId
-    ) {
-        return callNotesErrorResponse(
-            new CallNotesApplicationError(
-                "unavailable",
-                "No configured local capture worker serves this workspace user"
-            )
+            new CallNotesApplicationError("unavailable", "Local capture is disabled"),
+            request
         ) as NextResponse;
     }
     return null;
@@ -64,12 +51,12 @@ export async function GET(request: Request): Promise<Response> {
             actorUserId: context.userId,
             limit: rawLimit === null ? undefined : Number(rawLimit),
         });
-        if (!parsed.success) return invalidRequest();
+        if (!parsed.success) return invalidRequest(request);
 
         const calls = await getWebCallNotesApplication().listCalls(parsed.data);
         return NextResponse.json(calls);
     } catch (error) {
-        return callNotesErrorResponse(error);
+        return callNotesErrorResponse(error, request);
     }
 }
 
@@ -86,7 +73,7 @@ export async function POST(request: Request): Promise<Response> {
         try {
             body = await request.json();
         } catch {
-            return invalidRequest();
+            return invalidRequest(request);
         }
 
         // Actor, company, and capture source are always resolved server-side.
@@ -96,7 +83,7 @@ export async function POST(request: Request): Promise<Response> {
             "kind" in requestBody &&
             (requestBody.kind === "start_capture" || requestBody.kind === "resume_capture")
         ) {
-            const unavailableResponse = localCaptureUnavailable(context);
+            const unavailableResponse = localCaptureUnavailable(request);
             if (unavailableResponse) return unavailableResponse;
         }
         const parsed = CallNotesCommandSchema.safeParse({
@@ -107,9 +94,10 @@ export async function POST(request: Request): Promise<Response> {
                 ? { source: "local_audio" }
                 : {}),
         });
-        if (!parsed.success) return invalidRequest();
+        if (!parsed.success) return invalidRequest(request);
 
         let snapshot = await getWebCallNotesApplication().execute(parsed.data);
+        await wakeCaptureCommand(parsed.data, snapshot);
         if (parsed.data.kind === "request_enrichment" && snapshot) {
             await processQueuedCallNotesEnrichment(context.companyId, snapshot.id);
             snapshot = await getWebCallNotesApplication().getCall({
@@ -120,6 +108,6 @@ export async function POST(request: Request): Promise<Response> {
         }
         return NextResponse.json(snapshot);
     } catch (error) {
-        return callNotesErrorResponse(error);
+        return callNotesErrorResponse(error, request);
     }
 }

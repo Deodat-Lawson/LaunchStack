@@ -1,228 +1,117 @@
 import assert from "node:assert/strict";
-import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { test } from "node:test";
 
-import {
-    AzureSpeechFastTranscriptionModel,
-    OpenAiCompatibleTranscriptionModel,
-} from "./transcription";
+import { encodePcm16Wav } from "./audio";
+import { LocalBackendError } from "./backend-client";
+import { DeviceTranscriptionModel } from "./transcription";
 
-type RequestRecord = {
-    method: string | undefined;
-    url: string | undefined;
-    authorization: string | undefined;
-    subscriptionKey: string | undefined;
-    contentType: string | undefined;
-    body: Buffer;
+const OPTIONS = {
+    origin: "https://launchstack.example",
+    deviceToken: "device-secret",
+    appVersion: "1.2.3",
 };
+const wav = () => encodePcm16Wav(new Uint8Array([1, 0, 2, 0]), 16_000);
 
-type RequestHandler = (
-    request: IncomingMessage,
-    response: ServerResponse,
-    body: Buffer
-) => void | Promise<void>;
-
-async function readBody(request: IncomingMessage): Promise<Buffer> {
-    const chunks: Buffer[] = [];
-    for await (const chunk of request) chunks.push(Buffer.from(chunk));
-    return Buffer.concat(chunks);
-}
-
-async function startServer(handler: RequestHandler): Promise<{ server: Server; origin: string }> {
-    const server = createServer((request, response) => {
-        void readBody(request)
-            .then(body => handler(request, response, body))
-            .catch(error => {
-                if (!response.writableEnded) {
-                    response.statusCode = 500;
-                    response.end(error instanceof Error ? error.message : "handler failed");
-                }
-            });
+await test("device transcription posts mono 16 kHz s16 WAV, channel and language to the paired origin", async () => {
+    let requests = 0;
+    const audio = wav();
+    const model = new DeviceTranscriptionModel({
+        ...OPTIONS,
+        fetch: async (url, init) => {
+            requests += 1;
+            assert.equal(url, "https://launchstack.example/api/call-notes/devices/transcribe");
+            assert.equal(init?.method, "POST");
+            const headers = new Headers(init.headers);
+            assert.equal(headers.get("authorization"), "Bearer device-secret");
+            assert.equal(headers.get("x-launchstack-capture-version"), "1.2.3");
+            assert.equal(
+                headers.has("content-type"),
+                false,
+                "fetch must supply the multipart boundary"
+            );
+            assert.ok(init.body instanceof FormData);
+            assert.deepEqual([...init.body.keys()], ["audio", "channel", "language"]);
+            assert.equal(init.body.get("channel"), "system");
+            assert.equal(init.body.get("language"), "en-US");
+            const file = init.body.get("audio");
+            assert.ok(file instanceof Blob);
+            assert.equal(file.type, "audio/wav");
+            const bytes = new Uint8Array(await file.arrayBuffer());
+            assert.deepEqual(bytes, audio);
+            const view = new DataView(bytes.buffer);
+            assert.equal(view.getUint16(22, true), 1);
+            assert.equal(view.getUint32(24, true), 16_000);
+            assert.equal(view.getUint16(34, true), 16);
+            return Response.json({ text: "Recognized speech", language: "en" });
+        },
     });
-    await new Promise<void>((resolve, reject) => {
-        server.once("error", reject);
-        server.listen(0, "127.0.0.1", () => resolve());
-    });
-    const address = server.address();
-    if (!address || typeof address === "string") {
-        await stopServer(server);
-        throw new Error("test server did not expose a TCP address");
-    }
-    return { server, origin: `http://127.0.0.1:${address.port}` };
-}
-
-async function stopServer(server: Server): Promise<void> {
-    server.closeAllConnections();
-    if (!server.listening) return;
-    await new Promise<void>((resolve, reject) => {
-        server.close(error => {
-            if (error && (error as NodeJS.ErrnoException).code !== "ERR_SERVER_NOT_RUNNING") {
-                reject(error);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
-function jsonResponse(response: ServerResponse, status: number, value: unknown): void {
-    response.statusCode = status;
-    response.setHeader("content-type", "application/json");
-    response.end(JSON.stringify(value));
-}
-
-await test("OpenAiCompatibleTranscriptionModel sends WAV multipart data to the configured endpoint", async () => {
-    const requests: RequestRecord[] = [];
-    const { server, origin } = await startServer((request, response, body) => {
-        requests.push({
-            method: request.method,
-            url: request.url,
-            authorization: request.headers.authorization,
-            contentType: request.headers["content-type"],
-            subscriptionKey:
-                typeof request.headers["ocp-apim-subscription-key"] === "string"
-                    ? request.headers["ocp-apim-subscription-key"]
-                    : undefined,
-            body,
-        });
-        jsonResponse(response, 200, { text: "  transcript from local model  " });
-    });
-
-    try {
-        const audioWav = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0x01, 0x02, 0x03, 0x04]);
-        const model = new OpenAiCompatibleTranscriptionModel({
-            baseUrl: `${origin}/v1/`,
-            model: "tiny-whisper",
-            apiKey: "local-secret",
-        });
-        const text = await model.transcribe({ audioWav, language: " en " });
-
-        assert.equal(text, "  transcript from local model  ");
-        assert.equal(requests.length, 1);
-        const request = requests[0]!;
-        assert.equal(request.method, "POST");
-        assert.equal(request.url, "/v1/audio/transcriptions");
-        assert.equal(request.authorization, "Bearer local-secret");
-        assert.match(request.contentType ?? "", /^multipart\/form-data; boundary=/);
-
-        const body = request.body.toString("latin1");
-        assert.match(body, /name="model"\r\n\r\ntiny-whisper/);
-        assert.match(body, /name="language"\r\n\r\nen/);
-        assert.match(body, /filename="audio\.wav"/);
-        assert.notEqual(request.body.indexOf(Buffer.from(audioWav)), -1);
-    } finally {
-        await stopServer(server);
-    }
+    assert.equal(
+        await model.transcribe({ audioWav: audio, channel: "system", language: "en-US" }),
+        "Recognized speech"
+    );
+    assert.equal(requests, 1);
 });
 
-await test("AzureSpeechFastTranscriptionModel uses the Azure Fast Transcription contract", async () => {
-    const requests: RequestRecord[] = [];
-    const { server, origin } = await startServer((request, response, body) => {
-        requests.push({
-            method: request.method,
-            url: request.url,
-            authorization: request.headers.authorization,
-            subscriptionKey:
-                typeof request.headers["ocp-apim-subscription-key"] === "string"
-                    ? request.headers["ocp-apim-subscription-key"]
-                    : undefined,
-            contentType: request.headers["content-type"],
-            body,
-        });
-        jsonResponse(response, 200, {
-            combinedPhrases: [{ text: " Meeting " }, { text: "notes" }],
-        });
+await test("device transcription omits unspecified language and accepts no recognized speech", async () => {
+    const model = new DeviceTranscriptionModel({
+        ...OPTIONS,
+        fetch: async (_url, init) => {
+            assert.ok(init?.body instanceof FormData);
+            assert.equal(init.body.get("channel"), "microphone");
+            assert.equal(init.body.has("language"), false);
+            return Response.json({ text: "" });
+        },
     });
-    try {
-        const audioWav = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0x01, 0x02, 0x03, 0x04]);
-        const model = new AzureSpeechFastTranscriptionModel({
-            endpoint: origin,
-            apiKey: "speech-secret",
-        });
-        const text = await model.transcribe({ audioWav, language: "en-US" });
-
-        assert.equal(text, "Meeting notes");
-        assert.equal(requests.length, 1);
-        const request = requests[0]!;
-        assert.equal(request.method, "POST");
-        assert.equal(request.url, "/speechtotext/transcriptions:transcribe?api-version=2025-10-15");
-        assert.equal(request.authorization, undefined);
-        assert.equal(request.subscriptionKey, "speech-secret");
-        assert.match(request.contentType ?? "", /^multipart\/form-data; boundary=/);
-        const body = request.body.toString("latin1");
-        assert.match(body, /name="audio"; filename="audio\.wav"/);
-        assert.match(body, /name="definition"\r\n\r\n\{"locales":\["en-US"\]\}/);
-        assert.notEqual(request.body.indexOf(Buffer.from(audioWav)), -1);
-    } finally {
-        await stopServer(server);
-    }
+    assert.equal(await model.transcribe({ audioWav: wav(), channel: "microphone" }), "");
 });
 
-await test("AzureSpeechFastTranscriptionModel treats no recognized speech as an empty transcript", async () => {
-    const { server, origin } = await startServer((_request, response) => {
-        jsonResponse(response, 200, { combinedPhrases: [] });
-    });
-    try {
-        const model = new AzureSpeechFastTranscriptionModel({
-            endpoint: origin,
-            apiKey: "speech-secret",
-        });
-
-        assert.equal(await model.transcribe({ audioWav: new Uint8Array([1, 2]) }), "");
-    } finally {
-        await stopServer(server);
-    }
-});
-
-await test("OpenAiCompatibleTranscriptionModel converts a stalled request into a timeout", async () => {
-    const { server, origin } = await startServer((_request, _response) => {
-        // Keep the HTTP response open until the model's AbortSignal closes it.
-    });
-
-    try {
-        const model = new OpenAiCompatibleTranscriptionModel({
-            baseUrl: origin,
-            model: "timeout-model",
-            timeoutMs: 20,
+await test("device transcription preserves non-retryable authorization and upgrade exit codes", async () => {
+    for (const [status, exitCode] of [
+        [401, 77],
+        [426, 75],
+    ] as const) {
+        let requests = 0;
+        const model = new DeviceTranscriptionModel({
+            ...OPTIONS,
+            fetch: async () => {
+                requests += 1;
+                return new Response("denied", { status });
+            },
         });
         await assert.rejects(
-            model.transcribe({ audioWav: new Uint8Array([1, 2]) }),
-            /transcription request timed out after 20ms/
+            model.transcribe({ audioWav: wav(), channel: "microphone" }),
+            error =>
+                error instanceof LocalBackendError &&
+                !error.retryable &&
+                error.exitCode === exitCode
         );
-    } finally {
-        await stopServer(server);
+        assert.equal(requests, 1);
     }
 });
 
-await test("OpenAiCompatibleTranscriptionModel reports non-2xx responses with server detail", async () => {
-    const { server, origin } = await startServer((_request, response) => {
-        response.statusCode = 422;
-        response.end("model rejected audio");
+await test("device transcription bounds stalled requests even if a fetch adapter ignores abort", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout"] });
+    const model = new DeviceTranscriptionModel({
+        ...OPTIONS,
+        timeoutMs: 20,
+        fetch: async () => Promise.withResolvers<Response>().promise,
     });
-
-    try {
-        const model = new OpenAiCompatibleTranscriptionModel({ baseUrl: origin });
-        await assert.rejects(
-            model.transcribe({ audioWav: new Uint8Array([1, 2]) }),
-            /transcription request failed \(422\): model rejected audio/
-        );
-    } finally {
-        await stopServer(server);
-    }
+    const pending = model.transcribe({ audioWav: wav(), channel: "microphone" });
+    const rejected = assert.rejects(pending, /timed out after 20ms/);
+    context.mock.timers.tick(20);
+    await rejected;
 });
 
-await test("OpenAiCompatibleTranscriptionModel rejects an empty response transcript", async () => {
-    const { server, origin } = await startServer((_request, response) => {
-        jsonResponse(response, 200, { text: " \n\t " });
+await test("device transcription respects cancellation and rejects malformed responses", async () => {
+    const controller = new AbortController();
+    controller.abort(new Error("capture stopped"));
+    const model = new DeviceTranscriptionModel({
+        ...OPTIONS,
+        fetch: async () => Response.json({ other: "invalid" }),
     });
-
-    try {
-        const model = new OpenAiCompatibleTranscriptionModel({ baseUrl: origin });
-        await assert.rejects(
-            model.transcribe({ audioWav: new Uint8Array([1, 2]) }),
-            /transcription response text must not be empty/
-        );
-    } finally {
-        await stopServer(server);
-    }
+    await assert.rejects(
+        model.transcribe({ audioWav: wav(), channel: "microphone", signal: controller.signal }),
+        /capture stopped/
+    );
+    await assert.rejects(model.transcribe({ audioWav: wav(), channel: "microphone" }), /text/);
 });

@@ -10,19 +10,10 @@ import {
 } from "@launchstack/pipelines/call-notes";
 
 import type { CallWorkerConfig } from "../config";
-import {
-    FfmpegPcmSource,
-    encodePcm16Wav,
-    SystemAudioPcmSource,
-    type AudioSource,
-    type PcmFrame,
-} from "./audio";
+import type { AutoStopMessage, CaptureProgress } from "../ipc";
+import { encodePcm16Wav, SystemAudioPcmSource, type AudioSource, type PcmFrame } from "./audio";
 import { VoiceActivityDetector, type VoiceActivityResult } from "./vad";
-import {
-    AzureSpeechFastTranscriptionModel,
-    OpenAiCompatibleTranscriptionModel,
-    type TranscriptionModel,
-} from "./transcription";
+import { DeviceTranscriptionModel, type TranscriptionModel } from "./transcription";
 import {
     LocalBackendClient,
     type LocalBackendEventInput,
@@ -67,8 +58,6 @@ export interface LocalCapturePipelineOptions {
     vads: LocalCaptureVads;
     transcription: TranscriptionModel;
     backend: LocalCaptureBackend;
-    companyId: string;
-    userId: string;
     autoEnrich: boolean;
     sampleRate: number;
     utteranceMaxMs: number;
@@ -79,6 +68,9 @@ export interface LocalCapturePipelineOptions {
     language?: string;
     frameDurationMs?: number;
     closeTimeoutMs?: number;
+    silenceTimeoutMs?: number;
+    onStateChange?: (state: "capturing" | "stopping") => void;
+    onAutoStop?: (message: AutoStopMessage) => void;
 }
 
 export interface LocalCapturePipelineDependencies {
@@ -86,6 +78,8 @@ export interface LocalCapturePipelineDependencies {
     vads?: Partial<LocalCaptureVads>;
     transcription?: TranscriptionModel;
     backend?: LocalCaptureBackend;
+    onStateChange?: (state: "capturing" | "stopping") => void;
+    onAutoStop?: (message: AutoStopMessage) => void;
 }
 
 interface BufferedFrame {
@@ -251,6 +245,14 @@ export class LocalCapturePipeline {
     private stopTimeoutError?: Error;
     private connected = false;
     private readonly removeRunSignalListeners: Array<() => void> = [];
+    private readonly channelActivity = { microphone: false, system: false };
+    private segments = 0;
+    private lastSegmentAt?: string;
+    private silenceTimer?: NodeJS.Timeout;
+    private autoStopTimer?: NodeJS.Timeout;
+    private pendingAutoStop?: "silence" | "call_ended";
+    private stopReason: "user_stopped" | "silence_timeout" | "source_stopped" = "user_stopped";
+    private stoppingNotified = false;
 
     constructor(private readonly options: LocalCapturePipelineOptions) {
         const session = LocalCaptureSessionSchema.parse(options.session);
@@ -259,8 +261,6 @@ export class LocalCapturePipeline {
         if (options.sources.system && !options.vads.system) {
             throw new Error("system VAD is required when system audio is enabled");
         }
-        if (options.companyId.trim().length === 0) throw new Error("companyId must not be empty");
-        if (options.userId.trim().length === 0) throw new Error("userId must not be empty");
         if (!Number.isSafeInteger(options.sampleRate) || options.sampleRate <= 0) {
             throw new Error("sampleRate must be a positive integer");
         }
@@ -325,6 +325,72 @@ export class LocalCapturePipeline {
         ];
     }
 
+    get progress(): CaptureProgress {
+        return {
+            channels: { ...this.channelActivity },
+            segments: this.segments,
+            ...(this.lastSegmentAt ? { lastSegmentAt: this.lastSegmentAt } : {}),
+        };
+    }
+
+    keepRecording(): void {
+        if (!this.connected || this.stopRequested || this.closeRequested) return;
+        this.clearAutoStop(true);
+        this.resetSilenceTimer();
+    }
+
+    callEnded(): void {
+        if (!this.connected || this.stopRequested || this.closeRequested) return;
+        this.startAutoStop("call_ended");
+    }
+
+    private resetSilenceTimer(): void {
+        clearTimeout(this.silenceTimer);
+        this.silenceTimer = undefined;
+        if (
+            this.stopRequested ||
+            this.closeRequested ||
+            this.pendingAutoStop ||
+            this.channelActivity.microphone ||
+            this.channelActivity.system
+        )
+            return;
+        this.silenceTimer = setTimeout(() => {
+            this.silenceTimer = undefined;
+            this.startAutoStop("silence");
+        }, this.options.silenceTimeoutMs ?? 240_000);
+    }
+
+    private startAutoStop(reason: "silence" | "call_ended"): void {
+        if (this.pendingAutoStop || this.stopRequested || this.closeRequested) return;
+        clearTimeout(this.silenceTimer);
+        this.silenceTimer = undefined;
+        this.pendingAutoStop = reason;
+        this.options.onAutoStop?.({
+            type: "auto_stop_pending",
+            reason,
+            stopsAt: new Date(Date.now() + 60_000).toISOString(),
+        });
+        this.autoStopTimer = setTimeout(() => {
+            this.autoStopTimer = undefined;
+            this.pendingAutoStop = undefined;
+            void this.stop(reason === "silence" ? "silence_timeout" : "source_stopped").catch(
+                error => this.recordFatalFailure(error)
+            );
+        }, 60_000);
+    }
+
+    private clearAutoStop(notify = false): void {
+        clearTimeout(this.silenceTimer);
+        clearTimeout(this.autoStopTimer);
+        this.silenceTimer = undefined;
+        this.autoStopTimer = undefined;
+        if (notify && this.pendingAutoStop) {
+            this.options.onAutoStop?.({ type: "auto_stop_cancelled" });
+        }
+        this.pendingAutoStop = undefined;
+    }
+
     run(signal?: AbortSignal): Promise<void> {
         if (signal) {
             const abort = (): void => {
@@ -345,10 +411,13 @@ export class LocalCapturePipeline {
         return this.runPromise;
     }
 
-    stop(): Promise<void> {
+    stop(
+        reason: "user_stopped" | "silence_timeout" | "source_stopped" = "user_stopped"
+    ): Promise<void> {
         if (this.drainPromise) return this.drainPromise;
         if (this.closePromise) return this.closePromise;
         this.stopRequested = true;
+        this.stopReason = reason;
         this.stopSources(new Error("local capture stopped by user"));
         this.drainPromise = this.finishDrain(this.run());
         return this.drainPromise;
@@ -377,6 +446,13 @@ export class LocalCapturePipeline {
     }
 
     private stopSources(reason: unknown): void {
+        this.clearAutoStop();
+        this.channelActivity.microphone = false;
+        this.channelActivity.system = false;
+        if (!this.stoppingNotified) {
+            this.stoppingNotified = true;
+            this.options.onStateChange?.("stopping");
+        }
         for (const state of this.streams) {
             try {
                 state.source.stop?.(reason);
@@ -522,6 +598,7 @@ export class LocalCapturePipeline {
                 );
             }
         } finally {
+            this.clearAutoStop();
             this.zeroBufferedFrames();
             await this.closeIterators();
             for (const remove of this.removeRunSignalListeners.splice(0)) remove();
@@ -593,6 +670,8 @@ export class LocalCapturePipeline {
                 occurredAt: readyAt.toISOString(),
             });
             this.connected = true;
+            this.options.onStateChange?.("capturing");
+            this.resetSilenceTimer();
             pending.clear();
 
             for (const pendingFrame of initial) {
@@ -694,6 +773,11 @@ export class LocalCapturePipeline {
             buffered = copyFrame(frame, this.options.frameDurationMs ?? DEFAULT_FRAME_DURATION_MS);
             this.lastFrameEnd = newerDate(this.lastFrameEnd, buffered.endAt);
             const activity: VoiceActivityResult = state.vad.process(frame);
+            if (this.channelActivity[state.channel] !== activity.active) {
+                this.channelActivity[state.channel] = activity.active;
+                if (activity.active && this.pendingAutoStop === "silence") this.clearAutoStop(true);
+                this.resetSilenceTimer();
+            }
 
             if (activity.active && state.utterance.length === 0) {
                 for (const prior of state.preRoll) state.utterance.push(prior);
@@ -818,6 +902,8 @@ export class LocalCapturePipeline {
                     ...(this.options.language ? { language: this.options.language } : {}),
                     occurredAt: result.occurredAt,
                 });
+                this.segments += 1;
+                this.lastSegmentAt = new Date().toISOString();
             })
             .finally(() => {
                 if (queued) this.pendingTranscriptSegments -= 1;
@@ -855,6 +941,7 @@ export class LocalCapturePipeline {
             const text = await this.options.transcription.transcribe(
                 {
                     audioWav,
+                    channel: audioChannel,
                     ...(this.options.language ? { language: this.options.language } : {}),
                     timeoutMs: this.transcriptionTimeoutMs,
                 },
@@ -913,7 +1000,7 @@ export class LocalCapturePipeline {
                 kind: "attempt_ended",
                 sourceAttemptKey: this.activeCapture.attemptKey,
                 sourceOccurrenceKey: this.activeCapture.occurrenceKey,
-                reason: this.pauseRequested ? "user_paused" : "user_stopped",
+                reason: this.pauseRequested ? "user_paused" : this.stopReason,
                 occurredAt: (this.lastFrameEnd ?? this.activeCapture.startedAt).toISOString(),
             });
             if (this.pauseRequested) {
@@ -924,13 +1011,11 @@ export class LocalCapturePipeline {
                 kind: "occurrence_ended",
                 sourceOccurrenceKey: this.activeCapture.occurrenceKey,
                 occurredAt: (this.lastFrameEnd ?? this.activeCapture.startedAt).toISOString(),
-                reason: "user_stopped",
+                reason: this.stopReason,
             });
             this.assertOperationAvailable();
             await this.options.backend.finish(
                 {
-                    companyId: this.options.companyId,
-                    userId: this.options.userId,
                     callId: this.activeCapture.callId,
                     autoEnrich: this.options.autoEnrich,
                 },
@@ -1027,8 +1112,6 @@ export class LocalCapturePipeline {
         });
         await this.options.backend.event(
             {
-                companyId: this.options.companyId,
-                userId: this.options.userId,
                 callId: this.activeCapture.callId,
                 event: parsed,
             },
@@ -1058,21 +1141,20 @@ export function createLocalCapturePipeline(
 ): LocalCapturePipeline {
     const microphoneSource =
         dependencies.sources?.microphone ??
-        new FfmpegPcmSource({
-            ffmpegPath: config.ffmpegPath,
-            inputFormat: config.audioInputFormat,
-            input: config.audioInputDevice,
-            sampleRate: config.audioSampleRate,
+        new SystemAudioPcmSource({
+            helperPath: config.systemAudioHelperPath,
+            source: "microphone",
+            sampleRate: 16_000,
             frameDurationMs: config.audioFrameMs,
         });
-    const systemSource = config.systemAudioEnabled
-        ? (dependencies.sources?.system ??
-          new SystemAudioPcmSource({
-              helperPath: config.systemAudioHelperPath,
-              sampleRate: config.audioSampleRate,
-              frameDurationMs: config.audioFrameMs,
-          }))
-        : dependencies.sources?.system;
+    const systemSource =
+        dependencies.sources?.system ??
+        new SystemAudioPcmSource({
+            helperPath: config.systemAudioHelperPath,
+            source: "system",
+            sampleRate: 16_000,
+            frameDurationMs: config.audioFrameMs,
+        });
     const sources: LocalCaptureSources = {
         microphone: microphoneSource,
         ...(systemSource ? { system: systemSource } : {}),
@@ -1100,23 +1182,18 @@ export function createLocalCapturePipeline(
     };
     const transcription =
         dependencies.transcription ??
-        (config.transcriptionProvider === "azure_speech"
-            ? new AzureSpeechFastTranscriptionModel({
-                  endpoint: config.transcriptionBaseUrl,
-                  apiKey: config.transcriptionApiKey,
-                  timeoutMs: config.transcriptionTimeoutMs,
-              })
-            : new OpenAiCompatibleTranscriptionModel({
-                  baseUrl: config.transcriptionBaseUrl,
-                  model: config.transcriptionModel,
-                  apiKey: config.transcriptionApiKey,
-                  timeoutMs: config.transcriptionTimeoutMs,
-              }));
+        new DeviceTranscriptionModel({
+            origin: config.origin,
+            deviceToken: config.deviceToken,
+            appVersion: config.appVersion,
+            timeoutMs: config.transcriptionTimeoutMs,
+        });
     const backend =
         dependencies.backend ??
         new LocalBackendClient({
-            webOrigin: config.webOrigin,
-            token: config.internalToken,
+            origin: config.origin,
+            deviceToken: config.deviceToken,
+            appVersion: config.appVersion,
         });
     return new LocalCapturePipeline({
         session,
@@ -1124,16 +1201,17 @@ export function createLocalCapturePipeline(
         vads,
         transcription,
         backend,
-        companyId: config.companyId,
-        userId: config.userId,
         autoEnrich: config.autoEnrich,
-        sampleRate: config.audioSampleRate,
+        sampleRate: 16_000,
         utteranceMaxMs: config.utteranceMaxMs,
         audioPreRollMs: config.audioPreRollMs,
         audioReadyTimeoutMs: config.audioReadyTimeoutMs,
         stopDrainTimeoutMs: config.stopDrainTimeoutMs,
         transcriptionTimeoutMs: config.transcriptionTimeoutMs,
-        language: config.transcriptionLanguage,
+        language: config.language,
         frameDurationMs: config.audioFrameMs,
+        silenceTimeoutMs: config.silenceTimeoutMs,
+        onStateChange: dependencies.onStateChange,
+        onAutoStop: dependencies.onAutoStop,
     });
 }

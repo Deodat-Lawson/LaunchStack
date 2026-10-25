@@ -1,53 +1,81 @@
-import { loadCallWorkerConfig } from "./config";
+import { createInterface } from "node:readline";
+
+import { CallWorkerConfigError, loadCallWorkerConfig } from "./config";
+import { logWorkerEvent, WorkerControlSchema } from "./ipc";
+import { LocalBackendError } from "./local/backend-client";
 import { CallWorkerRuntime } from "./worker";
 
-function log(event: string, fields: Record<string, unknown> = {}): void {
-    process.stdout.write(
-        `${JSON.stringify({ event, ...fields, observedAt: new Date().toISOString() })}\n`
-    );
-}
-
 async function main(): Promise<void> {
-    const config = loadCallWorkerConfig();
-    const runtime = config.captureEnabled ? new CallWorkerRuntime(config, { log }) : undefined;
-    const { promise: stopped, resolve: stop } = Promise.withResolvers<void>();
-    let closing: Promise<void> | undefined;
-
-    const shutdown = (signal: NodeJS.Signals): void => {
-        if (closing) return;
-        log("call_worker_stopping", { signal });
-        closing = (runtime ? runtime.close() : Promise.resolve()).finally(stop);
-    };
-    process.once("SIGINT", shutdown);
-    process.once("SIGTERM", shutdown);
-
-    log("call_worker_ready", {
-        captureEnabled: config.captureEnabled,
-        state: config.captureEnabled ? "idle" : "disabled",
-        controlPlane: config.captureEnabled ? "polling" : "disabled",
-        systemAudioEnabled: config.systemAudioEnabled,
-    });
-
-    const heartbeat = setInterval(() => {
-        log("call_worker_heartbeat", { captureEnabled: config.captureEnabled });
-    }, 30_000);
-
+    const input = createInterface({ input: process.stdin, terminal: false, crlfDelay: Infinity });
+    const lines = input[Symbol.asyncIterator]();
+    let runtime: CallWorkerRuntime | undefined;
+    const shutdownController = new AbortController();
+    const shutdown = (): void => shutdownController.abort();
+    let controlFailure: Error | undefined;
     try {
-        if (runtime) {
-            await Promise.race([stopped, runtime.run()]);
-        } else {
-            await stopped;
+        const first = await lines.next();
+        if (first.done)
+            throw new CallWorkerConfigError("Startup configuration is required on stdin line 1");
+        const config = loadCallWorkerConfig(first.value);
+        runtime = new CallWorkerRuntime(config);
+        const worker = runtime;
+        process.once("SIGINT", shutdown);
+        process.once("SIGTERM", shutdown);
+        const running = worker.run(shutdownController.signal);
+        const controls = (async () => {
+            while (true) {
+                const line = await lines.next();
+                // A config file may reach EOF in development. Keep polling until shutdown.
+                if (line.done) return;
+                let message: unknown;
+                try {
+                    message = JSON.parse(line.value) as unknown;
+                } catch {
+                    logWorkerEvent("call_worker_invalid_control");
+                    continue;
+                }
+                const parsed = WorkerControlSchema.safeParse(message);
+                if (!parsed.success) {
+                    logWorkerEvent("call_worker_invalid_control");
+                    continue;
+                }
+                await worker.handleControl(parsed.data);
+                if (parsed.data.type === "shutdown") return;
+            }
+        })().catch((error: unknown) => {
+            controlFailure =
+                error instanceof Error
+                    ? error
+                    : new Error("Stdin control failed", { cause: error });
+            shutdownController.abort();
+        });
+        logWorkerEvent("call_worker_ready");
+        try {
+            await running;
+            if (controlFailure) throw controlFailure;
+        } finally {
+            await worker.close();
+            input.close();
+            await controls;
         }
+        logWorkerEvent("call_worker_stopped");
     } finally {
-        clearInterval(heartbeat);
-        if (closing) await closing;
-        else if (runtime) await runtime.close();
+        process.removeListener("SIGINT", shutdown);
+        process.removeListener("SIGTERM", shutdown);
+        input.close();
+        process.stdin.pause();
+        await runtime?.close();
     }
-    log("call_worker_stopped", { captureEnabled: config.captureEnabled });
 }
 
 main().catch((error: unknown) => {
-    const message = error instanceof Error ? error.message : "Unknown call worker failure";
-    log("call_worker_failed", { message });
-    process.exitCode = 1;
+    logWorkerEvent("call_worker_failed", {
+        message: error instanceof Error ? error.message : "Unknown call worker failure",
+    });
+    process.exitCode =
+        error instanceof CallWorkerConfigError
+            ? 64
+            : error instanceof LocalBackendError
+              ? (error.exitCode ?? 1)
+              : 1;
 });

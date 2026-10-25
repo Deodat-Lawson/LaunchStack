@@ -1,16 +1,27 @@
+import { z } from "zod";
+
 import {
-    LocalCapturePollInputSchema,
     LocalCapturePollResultSchema,
     type CaptureEvent,
-    type LocalCapturePollInput,
     type LocalCapturePollResult,
 } from "@launchstack/pipelines/call-notes";
+
+import { logWorkerEvent } from "../ipc";
+
+const LocalBackendPollInputSchema = z
+    .object({
+        workerId: z.string().min(1).max(256),
+        activeAttemptKey: z.string().min(1).max(512).optional(),
+        wait: z.boolean().optional(),
+    })
+    .strict();
 
 const LOCAL_ENDPOINT_PATH = "/api/internal/call-notes/local";
 
 export interface LocalBackendClientOptions {
-    webOrigin: string;
-    token: string;
+    origin: string;
+    deviceToken: string;
+    appVersion: string;
     timeoutMs?: number;
     fetch?: typeof fetch;
     retryBudgetMs?: number;
@@ -22,19 +33,15 @@ export interface LocalBackendClientOptions {
     onRetry?: (error: LocalBackendError, delayMs: number) => void;
 }
 
-export type LocalBackendPollInput = LocalCapturePollInput;
+export type LocalBackendPollInput = z.infer<typeof LocalBackendPollInputSchema>;
 export type LocalBackendPollResult = LocalCapturePollResult;
 
 export interface LocalBackendEventInput {
-    companyId: string;
-    userId: string;
     callId: string;
     event: CaptureEvent;
 }
 
 export interface LocalBackendFinishInput {
-    companyId: string;
-    userId: string;
     callId: string;
     autoEnrich: boolean;
 }
@@ -57,6 +64,7 @@ export class LocalBackendError extends Error {
     readonly retryable: boolean;
     readonly status?: number;
     readonly exhausted: boolean;
+    readonly exitCode?: 75 | 77;
 
     constructor(
         message: string,
@@ -67,6 +75,7 @@ export class LocalBackendError extends Error {
         this.retryable = options.retryable;
         this.status = options.status;
         this.exhausted = options.exhausted ?? false;
+        this.exitCode = options.status === 401 ? 77 : options.status === 426 ? 75 : undefined;
     }
 }
 
@@ -131,6 +140,8 @@ function abortableDelay(milliseconds: number, signal?: AbortSignal): Promise<voi
 export class LocalBackendClient {
     private readonly endpoint: string;
     private readonly token: string;
+    private readonly appVersion: string;
+    readonly longPollTimeoutMs: number;
     readonly timeoutMs: number;
     private readonly request: typeof fetch;
     private readonly retryBudgetMs: number;
@@ -142,9 +153,11 @@ export class LocalBackendClient {
     private readonly onRetry?: (error: LocalBackendError, delayMs: number) => void;
 
     constructor(options: LocalBackendClientOptions) {
-        this.endpoint = new URL(LOCAL_ENDPOINT_PATH, validOrigin(options.webOrigin)).toString();
-        this.token = nonempty("Local backend token", options.token);
+        this.endpoint = new URL(LOCAL_ENDPOINT_PATH, validOrigin(options.origin)).toString();
+        this.token = nonempty("Local backend device token", options.deviceToken);
+        this.appVersion = nonempty("Capture app version", options.appVersion);
         this.timeoutMs = positiveOption("timeoutMs", options.timeoutMs ?? 30_000);
+        this.longPollTimeoutMs = Math.max(35_000, this.timeoutMs);
         this.request = options.fetch ?? fetch;
         this.retryBudgetMs = positiveOption("retryBudgetMs", options.retryBudgetMs ?? 120_000);
         this.retryBaseDelayMs = positiveOption("retryBaseDelayMs", options.retryBaseDelayMs ?? 250);
@@ -159,7 +172,7 @@ export class LocalBackendClient {
         input: LocalBackendPollInput,
         signal?: AbortSignal
     ): Promise<LocalBackendPollResult> {
-        const parsedInput = LocalCapturePollInputSchema.parse(input);
+        const parsedInput = LocalBackendPollInputSchema.parse(input);
         const payload = await this.post({ kind: "poll", ...parsedInput }, true, signal);
         return LocalCapturePollResultSchema.parse(payload);
     }
@@ -180,6 +193,8 @@ export class LocalBackendClient {
         const serializedBody = JSON.stringify(body);
         const startedAt = this.now();
         const budgetMs = body.kind === "poll" ? Infinity : this.retryBudgetMs;
+        const timeoutMs =
+            body.kind === "poll" && body.wait ? this.longPollTimeoutMs : this.timeoutMs;
         let backoffMs = Math.min(this.retryBaseDelayMs, this.retryMaxDelayMs);
         let lastError: LocalBackendError | undefined;
         const exhausted = (): LocalBackendError =>
@@ -199,7 +214,7 @@ export class LocalBackendClient {
                 return await this.requestOnce(
                     serializedBody,
                     parseJson,
-                    Math.min(this.timeoutMs, remainingMs),
+                    Math.min(timeoutMs, remainingMs),
                     externalSignal
                 );
             } catch (error) {
@@ -215,16 +230,12 @@ export class LocalBackendClient {
             );
             if (this.onRetry) this.onRetry(lastError, delayMs);
             else {
-                process.stdout.write(
-                    `${JSON.stringify({
-                        event: "call_worker_backend_retry",
-                        kind: body.kind,
-                        message: lastError.message,
-                        status: lastError.status,
-                        delayMs,
-                        observedAt: new Date().toISOString(),
-                    })}\n`
-                );
+                logWorkerEvent("call_worker_backend_retry", {
+                    kind: body.kind,
+                    message: lastError.message,
+                    status: lastError.status,
+                    delayMs,
+                });
             }
             try {
                 await this.sleep(delayMs, externalSignal);
@@ -258,6 +269,7 @@ export class LocalBackendClient {
                 method: "POST",
                 headers: {
                     authorization: `Bearer ${this.token}`,
+                    "X-LaunchStack-Capture-Version": this.appVersion,
                     "content-type": "application/json",
                 },
                 body: serializedBody,

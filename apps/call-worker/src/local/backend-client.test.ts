@@ -60,12 +60,10 @@ const EVENT: CaptureEvent = {
     occurredAt: "2026-08-20T10:00:00.000Z",
 };
 
-const COMPANY_ID = "42";
-const USER_ID = "user-7";
 const CALL_ID = "call-fixed";
 
 function pollInput(workerId = "worker-fixed"): LocalBackendPollInput {
-    return { companyId: COMPANY_ID, userId: USER_ID, workerId };
+    return { workerId };
 }
 
 function pollResult(callId = CALL_ID): LocalCapturePollResult {
@@ -83,12 +81,13 @@ function pollResult(callId = CALL_ID): LocalCapturePollResult {
 }
 
 function eventInput(callId: string = CALL_ID): LocalBackendEventInput {
-    return { companyId: COMPANY_ID, userId: USER_ID, callId, event: EVENT };
+    return { callId, event: EVENT };
 }
 
-await test("LocalBackendClient sends authenticated poll, event, and finish tenant bodies", async () => {
+await test("LocalBackendClient sends device-authenticated tenant-free poll, event and finish bodies", async () => {
     const requests: RequestRecord[] = [];
     const { server, origin } = await startServer(async (request, response, body) => {
+        assert.equal(request.headers["x-launchstack-capture-version"], "1.2.3");
         requests.push({ body, authorization: request.headers.authorization });
         const kind =
             body !== null &&
@@ -101,12 +100,14 @@ await test("LocalBackendClient sends authenticated poll, event, and finish tenan
         else response.end(JSON.stringify({ ok: true }));
     });
     try {
-        const client = new LocalBackendClient({ webOrigin: origin, token: "worker-secret" });
+        const client = new LocalBackendClient({
+            origin: origin,
+            deviceToken: "worker-secret",
+            appVersion: "1.2.3",
+        });
         const polled = await client.poll(pollInput());
         await client.event(eventInput());
         await client.finish({
-            companyId: COMPANY_ID,
-            userId: USER_ID,
             callId: CALL_ID,
             autoEnrich: true,
         });
@@ -119,8 +120,6 @@ await test("LocalBackendClient sends authenticated poll, event, and finish tenan
                 { kind: "event", ...eventInput() },
                 {
                     kind: "finish",
-                    companyId: COMPANY_ID,
-                    userId: USER_ID,
                     callId: CALL_ID,
                     autoEnrich: true,
                 },
@@ -141,7 +140,11 @@ await test("LocalBackendClient surfaces non-2xx responses and response detail", 
         response.end("capture conflict");
     });
     try {
-        const client = new LocalBackendClient({ webOrigin: origin, token: "worker-secret" });
+        const client = new LocalBackendClient({
+            origin: origin,
+            deviceToken: "worker-secret",
+            appVersion: "1.2.3",
+        });
         await assert.rejects(client.poll(pollInput()), /HTTP 409: capture conflict/);
     } finally {
         await stopServer(server);
@@ -155,7 +158,11 @@ await test("LocalBackendClient validates shared poll responses", async () => {
         else response.end(JSON.stringify({ capture: { callId: "missing" } }));
     });
     try {
-        const client = new LocalBackendClient({ webOrigin: origin, token: "worker-secret" });
+        const client = new LocalBackendClient({
+            origin: origin,
+            deviceToken: "worker-secret",
+            appVersion: "1.2.3",
+        });
         await assert.rejects(client.poll(pollInput()), /capture|expected/i);
         malformed = true;
         await assert.rejects(client.poll(pollInput()), /invalid JSON/);
@@ -168,8 +175,9 @@ await test("LocalBackendClient retries transport refusal and HTTP 503 before rec
     const attempts: string[] = [];
     const delays: number[] = [];
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         random: () => 0.5,
         sleep: async milliseconds => {
             delays.push(milliseconds);
@@ -192,11 +200,12 @@ await test("LocalBackendClient retries transport refusal and HTTP 503 before rec
 });
 
 await test("LocalBackendClient never retries validation and authorization responses", async () => {
-    for (const status of [400, 401, 403]) {
+    for (const status of [400, 401, 403, 426]) {
         let calls = 0;
         const client = new LocalBackendClient({
-            webOrigin: "http://localhost:3000",
-            token: "worker-secret",
+            origin: "http://localhost:3000",
+            deviceToken: "worker-secret",
+            appVersion: "1.2.3",
             sleep: async () => assert.fail("non-retryable responses must not back off"),
             fetch: async () => {
                 calls += 1;
@@ -224,8 +233,9 @@ await test("LocalBackendClient event and finish exhaust their finite retry budge
         let calls = 0;
         const delays: number[] = [];
         const client = new LocalBackendClient({
-            webOrigin: "http://localhost:3000",
-            token: "worker-secret",
+            origin: "http://localhost:3000",
+            deviceToken: "worker-secret",
+            appVersion: "1.2.3",
             retryBudgetMs: 1_000,
             random: () => 0.5,
             now: () => elapsed,
@@ -243,8 +253,6 @@ await test("LocalBackendClient event and finish exhaust their finite retry budge
             kind === "event"
                 ? client.event(eventInput())
                 : client.finish({
-                      companyId: COMPANY_ID,
-                      userId: USER_ID,
                       callId: CALL_ID,
                       autoEnrich: false,
                   });
@@ -272,8 +280,9 @@ await test("LocalBackendClient poll keeps retrying beyond the delivery budget wi
     let calls = 0;
     const delays: number[] = [];
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         retryBudgetMs: 1_000,
         random: () => 0.5,
         now: () => elapsed,
@@ -299,8 +308,9 @@ await test("LocalBackendClient retries a timed-out request", async context => {
     context.mock.timers.enable({ apis: ["setTimeout"] });
     let calls = 0;
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         timeoutMs: 5,
         sleep: async () => undefined,
         onRetry: () => undefined,
@@ -324,8 +334,9 @@ await test("LocalBackendClient retries a timed-out request", async context => {
 await test("LocalBackendClient never retries invalid JSON", async () => {
     let calls = 0;
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         fetch: async () => {
             calls += 1;
             return new Response("not json");
@@ -347,8 +358,9 @@ await test("LocalBackendClient caller abort cancels retry backoff without anothe
     let calls = 0;
     const controller = new AbortController();
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         onRetry: () => undefined,
         sleep: async () => {
             const reason = new Error("caller stopped polling");
@@ -375,8 +387,9 @@ await test("LocalBackendClient caller abort cancels retry backoff without anothe
 await test("LocalBackendClient event and finish retry the identical idempotent request after recovery", async () => {
     const requests: string[] = [];
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         sleep: async () => undefined,
         onRetry: () => undefined,
         fetch: async (_url, init) => {
@@ -389,8 +402,6 @@ await test("LocalBackendClient event and finish retry the identical idempotent r
 
     await client.event(eventInput());
     await client.finish({
-        companyId: COMPANY_ID,
-        userId: USER_ID,
         callId: CALL_ID,
         autoEnrich: true,
     });
@@ -402,8 +413,9 @@ await test("LocalBackendClient event and finish retry the identical idempotent r
 await test("LocalBackendClient a broken unauthorized response body is still not retryable", async () => {
     let calls = 0;
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         sleep: async () => assert.fail("authorization must not be retried"),
         fetch: async () => {
             calls += 1;
@@ -434,8 +446,9 @@ await test("LocalBackendClient a caller abort during fetch never retries the req
     let calls = 0;
     const controller = new AbortController();
     const client = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         fetch: async (_url, init) => {
             calls += 1;
             controller.abort(new Error("capture revoked"));
@@ -459,4 +472,55 @@ await test("LocalBackendClient a caller abort during fetch never retries the req
             error.retryable === false
     );
     assert.equal(calls, 1);
+});
+
+await test("LocalBackendClient preserves the unauthorized and upgrade-required exit mapping", async () => {
+    for (const [status, exitCode] of [
+        [401, 77],
+        [426, 75],
+    ] as const) {
+        const client = new LocalBackendClient({
+            origin: "https://launchstack.example",
+            deviceToken: "device-token",
+            appVersion: "1.2.3",
+            fetch: async () => new Response("", { status }),
+        });
+        await assert.rejects(
+            client.poll(pollInput()),
+            error => error instanceof Error && "exitCode" in error && error.exitCode === exitCode
+        );
+    }
+});
+
+await test("LocalBackendClient idle polls send wait and outlive the 25-second server hold", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout"] });
+    let calls = 0;
+    let firstSignal: AbortSignal | null | undefined;
+    const client = new LocalBackendClient({
+        origin: "https://launchstack.example",
+        deviceToken: "device-token",
+        appVersion: "1.2.3",
+        sleep: async () => undefined,
+        onRetry: () => undefined,
+        fetch: async (_url, init) => {
+            calls += 1;
+            assert.ok(typeof init?.body === "string");
+            assert.deepEqual(JSON.parse(init.body), {
+                kind: "poll",
+                workerId: "idle-worker",
+                wait: true,
+            });
+            if (calls > 1) return Response.json({ capture: null });
+            firstSignal = init?.signal;
+            return Promise.withResolvers<Response>().promise;
+        },
+    });
+    const pending = client.poll({ workerId: "idle-worker", wait: true });
+    context.mock.timers.tick(25_000);
+    assert.equal(firstSignal?.aborted, false);
+    assert.equal(calls, 1);
+    context.mock.timers.tick(10_000);
+    assert.deepEqual(await pending, { capture: null });
+    assert.equal(firstSignal?.aborted, true);
+    assert.equal(calls, 2);
 });

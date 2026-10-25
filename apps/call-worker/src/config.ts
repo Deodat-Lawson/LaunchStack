@@ -1,281 +1,101 @@
-export interface CallWorkerConfig {
-    captureEnabled: boolean;
-    webOrigin: string;
-    internalToken: string;
-    companyId: string;
-    userId: string;
-    ffmpegPath: string;
-    audioInputFormat: string;
-    audioInputDevice: string;
-    systemAudioEnabled: boolean;
-    systemAudioHelperPath: string;
-    audioSampleRate: number;
-    audioFrameMs: number;
-    vadThreshold: number;
-    vadActivationFrames: number;
-    vadReleaseFrames: number;
-    utteranceMaxMs: number;
-    audioPreRollMs: number;
-    audioReadyTimeoutMs: number;
-    stopDrainTimeoutMs: number;
-    transcriptionTimeoutMs: number;
-    transcriptionProvider: "openai" | "azure_speech";
-    transcriptionBaseUrl: string;
-    transcriptionModel: string;
-    transcriptionApiKey: string;
-    transcriptionLanguage?: string;
-    autoEnrich: boolean;
-}
+import { z } from "zod";
 
-function raw(name: string): string | undefined {
-    const value = process.env[name]?.trim();
-    return value === "" ? undefined : value;
-}
+const positiveInteger = (maximum: number) => z.number().int().positive().max(maximum);
 
-function required(name: string, enabled: boolean, fallback = ""): string {
-    const value = raw(name);
-    if (value) return value;
-    if (!enabled) return fallback;
-    throw new Error(`${name} is required when local capture is enabled`);
-}
+const ConfigSchema = z
+    .object({
+        origin: z
+            .string()
+            .url()
+            .transform((value, context) => {
+                const url = new URL(value);
+                if (
+                    (url.protocol !== "https:" && url.protocol !== "http:") ||
+                    url.username ||
+                    url.password ||
+                    url.pathname !== "/" ||
+                    url.search ||
+                    url.hash
+                ) {
+                    context.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "must be an HTTP(S) origin",
+                    });
+                    return z.NEVER;
+                }
+                return url.origin;
+            }),
+        deviceToken: z.string().regex(/^lsc_[A-Za-z0-9_-]{43}$/),
+        appVersion: z
+            .string()
+            .max(32)
+            .regex(
+                /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/
+            ),
+        systemAudioHelperPath: z.string().trim().min(1),
+        language: z.string().trim().min(1).max(32).optional(),
+        autoEnrich: z.boolean().default(false),
+        silenceTimeoutMs: positiveInteger(86_400_000).default(240_000),
+        audioFrameMs: positiveInteger(1_000).default(20),
+        vadThreshold: z.number().min(0).max(1).default(0.015),
+        vadActivationFrames: positiveInteger(10_000).default(3),
+        vadReleaseFrames: positiveInteger(100_000).default(15),
+        // The server accepts at most 2 MB of 16 kHz mono s16 WAV per utterance.
+        utteranceMaxMs: positiveInteger(60_000).default(3_000),
+        audioPreRollMs: z.number().int().min(0).max(60_000).default(200),
+        audioReadyTimeoutMs: positiveInteger(120_000).default(10_000),
+        stopDrainTimeoutMs: positiveInteger(300_000).default(30_000),
+        transcriptionTimeoutMs: positiveInteger(300_000).default(20_000),
+    })
+    .strict()
+    .superRefine((config, context) => {
+        if (config.utteranceMaxMs < config.audioFrameMs) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["utteranceMaxMs"],
+                message: "must cover at least one audio frame",
+            });
+        }
+        if (
+            (config.utteranceMaxMs + config.audioPreRollMs + config.audioFrameMs) * 32 + 44 >
+            2_000_000
+        ) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["utteranceMaxMs"],
+                message: "utterance and pre-roll must fit the 2 MB WAV limit",
+            });
+        }
+    });
 
-function boolean(name: string, enabled: boolean, fallback: boolean): boolean {
-    const value = raw(name);
-    if (value === undefined) {
-        if (!enabled) return fallback;
-        throw new Error(`${name} is required when local capture is enabled`);
+export type CallWorkerConfig = z.infer<typeof ConfigSchema>;
+
+export class CallWorkerConfigError extends Error {
+    readonly exitCode = 64;
+
+    constructor(message: string) {
+        super(message);
+        this.name = "CallWorkerConfigError";
     }
-    if (value === "true") return true;
-    if (value === "false") return false;
-    throw new Error(`${name} must be exactly true or false`);
 }
 
-function transcriptionProvider(): "openai" | "azure_speech" {
-    const value = raw("CALL_NOTES_TRANSCRIPTION_PROVIDER") ?? "openai";
-    if (value === "openai" || value === "azure_speech") return value;
-    throw new Error("CALL_NOTES_TRANSCRIPTION_PROVIDER must be openai or azure_speech");
-}
-
-function integer(
-    name: string,
-    enabled: boolean,
-    fallback: number,
-    predicate: (value: number) => boolean,
-    description: string
-): number {
-    const value = raw(name);
-    if (value === undefined) {
-        if (!enabled) return fallback;
-        throw new Error(`${name} is required when local capture is enabled`);
-    }
-    const parsed = Number(value);
-    if (!Number.isSafeInteger(parsed) || !predicate(parsed)) {
-        throw new Error(`${name} must be a ${description}`);
-    }
-    return parsed;
-}
-
-function optionalInteger(
-    name: string,
-    _enabled: boolean,
-    fallback: number,
-    predicate: (value: number) => boolean,
-    description: string
-): number {
-    const value = raw(name);
-    if (value === undefined) return fallback;
-    const parsed = Number(value);
-    if (!Number.isSafeInteger(parsed) || !predicate(parsed)) {
-        throw new Error(`${name} must be a ${description}`);
-    }
-    return parsed;
-}
-
-function number(
-    name: string,
-    enabled: boolean,
-    fallback: number,
-    predicate: (value: number) => boolean,
-    description: string
-): number {
-    const value = raw(name);
-    if (value === undefined) {
-        if (!enabled) return fallback;
-        throw new Error(`${name} is required when local capture is enabled`);
-    }
-    const parsed = Number(value);
-    if (!Number.isFinite(parsed) || !predicate(parsed)) {
-        throw new Error(`${name} must be ${description}`);
-    }
-    return parsed;
-}
-
-function origin(name: string, enabled: boolean): string {
-    const value = required(name, enabled);
-    if (!value) return value;
-    let parsed: URL;
+/** Parse exactly the app's first stdin line; never read credentials from argv or env. */
+export function loadCallWorkerConfig(line: string): CallWorkerConfig {
+    let input: unknown;
     try {
-        parsed = new URL(value);
+        input = JSON.parse(line) as unknown;
     } catch {
-        throw new Error(`${name} must be a valid HTTP(S) origin`);
+        throw new CallWorkerConfigError(
+            "Startup configuration must be one JSON object on stdin line 1"
+        );
     }
-    if (
-        (parsed.protocol !== "http:" && parsed.protocol !== "https:") ||
-        parsed.username ||
-        parsed.password ||
-        parsed.pathname !== "/" ||
-        parsed.search ||
-        parsed.hash
-    ) {
-        throw new Error(`${name} must be a valid HTTP(S) origin`);
+    const result = ConfigSchema.safeParse(input);
+    if (!result.success) {
+        // Do not include values or Zod's unrecognized-key details in diagnostics.
+        const fields = [
+            ...new Set(result.error.issues.map(issue => issue.path.join(".") || "config")),
+        ];
+        throw new CallWorkerConfigError(`Invalid startup configuration: ${fields.join(", ")}`);
     }
-    return parsed.origin;
-}
-
-function endpoint(name: string, enabled: boolean): string {
-    const value = required(name, enabled);
-    if (!value) return value;
-    let parsed: URL;
-    try {
-        parsed = new URL(value);
-    } catch {
-        throw new Error(`${name} must be a valid HTTP(S) URL`);
-    }
-    if (
-        (parsed.protocol !== "http:" && parsed.protocol !== "https:") ||
-        parsed.username ||
-        parsed.password
-    ) {
-        throw new Error(`${name} must be a valid HTTP(S) URL`);
-    }
-    return parsed.toString().replace(/\/$/, "");
-}
-
-export function loadCallWorkerConfig(): CallWorkerConfig {
-    const captureEnabled = boolean("CALL_NOTES_CAPTURE_ENABLED", false, false);
-    const systemAudioEnabled = boolean(
-        "CALL_NOTES_SYSTEM_AUDIO_ENABLED",
-        false,
-        process.platform === "darwin"
-    );
-    const audioFrameMs = integer(
-        "CALL_NOTES_AUDIO_FRAME_MS",
-        captureEnabled,
-        20,
-        value => value > 0 && value <= 1_000,
-        "positive integer no greater than 1000"
-    );
-    const audioSampleRate = integer(
-        "CALL_NOTES_AUDIO_SAMPLE_RATE",
-        captureEnabled,
-        16_000,
-        value => value >= 8_000 && value <= 192_000,
-        "integer between 8000 and 192000"
-    );
-    const vadActivationFrames = integer(
-        "CALL_NOTES_VAD_ACTIVATION_FRAMES",
-        captureEnabled,
-        3,
-        value => value > 0 && value <= 10_000,
-        "positive integer no greater than 10000"
-    );
-    const vadReleaseFrames = optionalInteger(
-        "CALL_NOTES_VAD_RELEASE_FRAMES",
-        captureEnabled,
-        15,
-        value => value > 0 && value <= 100_000,
-        "positive integer no greater than 100000"
-    );
-    const audioPreRollMs = optionalInteger(
-        "CALL_NOTES_AUDIO_PRE_ROLL_MS",
-        captureEnabled,
-        200,
-        value => value >= 0 && value <= 60_000,
-        "nonnegative integer no greater than 60000"
-    );
-    const audioReadyTimeoutMs = optionalInteger(
-        "CALL_NOTES_AUDIO_READY_TIMEOUT_MS",
-        captureEnabled,
-        10_000,
-        value => value > 0 && value <= 120_000,
-        "positive integer no greater than 120000"
-    );
-    const stopDrainTimeoutMs = optionalInteger(
-        "CALL_NOTES_STOP_DRAIN_TIMEOUT_MS",
-        captureEnabled,
-        30_000,
-        value => value > 0 && value <= 300_000,
-        "positive integer no greater than 300000"
-    );
-    const transcriptionTimeoutMs = optionalInteger(
-        "CALL_NOTES_TRANSCRIPTION_TIMEOUT_MS",
-        captureEnabled,
-        20_000,
-        value => value > 0 && value <= 300_000,
-        "positive integer no greater than 300000"
-    );
-    const utteranceMaxMs = optionalInteger(
-        "CALL_NOTES_UTTERANCE_MAX_MS",
-        captureEnabled,
-        3_000,
-        value => value >= audioFrameMs && value <= 3_600_000,
-        `an integer between ${audioFrameMs} and 3600000`
-    );
-
-    const language = raw("CALL_NOTES_TRANSCRIPTION_LANGUAGE");
-    const configuredTranscriptionProvider = transcriptionProvider();
-    const webOrigin = origin("CALL_NOTES_WEB_ORIGIN", captureEnabled);
-    const internalToken = required("CALL_NOTES_INTERNAL_TOKEN", captureEnabled);
-    const companyId = required("CALL_NOTES_LOCAL_COMPANY_ID", captureEnabled);
-    const userId = required("CALL_NOTES_LOCAL_USER_ID", captureEnabled);
-    if (captureEnabled && !/^\d+$/.test(companyId)) {
-        throw new Error("CALL_NOTES_LOCAL_COMPANY_ID must contain only digits");
-    }
-    if (captureEnabled && userId.length > 256) {
-        throw new Error("CALL_NOTES_LOCAL_USER_ID must be at most 256 characters");
-    }
-    const ffmpegPath = required("CALL_NOTES_FFMPEG_PATH", captureEnabled, "ffmpeg");
-    const audioInputFormat = required("CALL_NOTES_AUDIO_INPUT_FORMAT", captureEnabled);
-    const audioInputDevice = required("CALL_NOTES_AUDIO_INPUT_DEVICE", captureEnabled);
-    const systemAudioHelperPath = required(
-        "CALL_NOTES_SYSTEM_AUDIO_HELPER_PATH",
-        captureEnabled && systemAudioEnabled
-    );
-    return {
-        captureEnabled,
-        webOrigin,
-        internalToken,
-        companyId,
-        userId,
-        ffmpegPath,
-        audioInputFormat,
-        audioInputDevice,
-        systemAudioEnabled,
-        systemAudioHelperPath,
-        audioSampleRate,
-        audioFrameMs,
-        vadThreshold: number(
-            "CALL_NOTES_VAD_THRESHOLD",
-            captureEnabled,
-            0.015,
-            value => value >= 0 && value <= 1,
-            "a finite number between 0 and 1"
-        ),
-        vadActivationFrames,
-        vadReleaseFrames,
-        utteranceMaxMs,
-        audioPreRollMs,
-        audioReadyTimeoutMs,
-        stopDrainTimeoutMs,
-        transcriptionTimeoutMs,
-        transcriptionProvider: configuredTranscriptionProvider,
-        transcriptionBaseUrl: endpoint("CALL_NOTES_TRANSCRIPTION_BASE_URL", captureEnabled),
-        transcriptionModel: required(
-            "CALL_NOTES_TRANSCRIPTION_MODEL",
-            captureEnabled && configuredTranscriptionProvider === "openai"
-        ),
-        transcriptionApiKey: required("CALL_NOTES_TRANSCRIPTION_API_KEY", captureEnabled),
-        ...(language ? { transcriptionLanguage: language } : {}),
-        autoEnrich: boolean("CALL_NOTES_AUTO_ENRICH", false, false),
-    };
+    return result.data;
 }

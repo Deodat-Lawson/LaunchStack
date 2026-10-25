@@ -10,6 +10,7 @@ import type {
 import type { AudioSource, PcmFrame } from "./local/audio";
 import {
     LocalBackendClient,
+    LocalBackendError,
     type LocalBackendEventInput,
     type LocalBackendFinishInput,
     type LocalBackendPollInput,
@@ -17,35 +18,19 @@ import {
 import { VoiceActivityDetector } from "./local/vad";
 import { CallWorkerRuntime, type LocalCaptureControlBackend } from "./worker";
 import type { TranscriptionInput, TranscriptionModel } from "./local/transcription";
-import type { CallWorkerConfig } from "./config";
+import { loadCallWorkerConfig } from "./config";
+import type { WorkerMessage } from "./ipc";
 
-const CONFIG: CallWorkerConfig = {
-    captureEnabled: true,
-    webOrigin: "http://localhost:3000",
-    internalToken: "worker-token",
-    companyId: "42",
-    userId: "user-7",
-    ffmpegPath: "ffmpeg",
-    audioInputFormat: "avfoundation",
-    audioInputDevice: ":0",
-    systemAudioEnabled: false,
-    systemAudioHelperPath: "",
-    audioSampleRate: 1_000,
-    audioFrameMs: 20,
-    vadThreshold: 0.1,
-    vadActivationFrames: 1,
-    vadReleaseFrames: 15,
-    utteranceMaxMs: 3_000,
-    audioPreRollMs: 200,
-    audioReadyTimeoutMs: 10_000,
-    stopDrainTimeoutMs: 30_000,
-    transcriptionTimeoutMs: 20_000,
-    transcriptionProvider: "openai",
-    transcriptionBaseUrl: "http://localhost:8000/v1",
-    transcriptionModel: "whisper-1",
-    transcriptionApiKey: "test-key",
-    autoEnrich: false,
-};
+const CONFIG = loadCallWorkerConfig(
+    JSON.stringify({
+        origin: "http://localhost:3000",
+        deviceToken: `lsc_${"a".repeat(43)}`,
+        appVersion: "1.2.3",
+        systemAudioHelperPath: "/bundled/launchstack-system-audio",
+        vadThreshold: 0.1,
+        vadActivationFrames: 1,
+    })
+);
 
 class QuietSource implements AudioSource {
     starts = 0;
@@ -143,7 +128,7 @@ await test("CallWorkerRuntime polls while idle and starts only explicit sessions
             const source = new QuietSource();
             sourceInstances.push(source);
             return {
-                sources: { microphone: source },
+                sources: { microphone: source, system: new QuietSource() },
                 vads: {
                     microphone: new VoiceActivityDetector({
                         threshold: 0.1,
@@ -184,7 +169,7 @@ await test("CallWorkerRuntime keeps a claimed pipeline responsive to a stop poll
         backend,
         sleep: async () => nextTurn(),
         pipelineDependenciesFactory: () => ({
-            sources: { microphone: source },
+            sources: { microphone: source, system: new QuietSource() },
             vads: {
                 microphone: new VoiceActivityDetector({
                     threshold: 0.1,
@@ -214,7 +199,7 @@ await test("CallWorkerRuntime force-closes capture when backend unassigns it", a
         backend,
         sleep: async () => nextTurn(),
         pipelineDependenciesFactory: () => ({
-            sources: { microphone: source },
+            sources: { microphone: source, system: new QuietSource() },
             vads: {
                 microphone: new VoiceActivityDetector({
                     threshold: 0.1,
@@ -259,7 +244,7 @@ await test("CallWorkerRuntime keeps graceful stop draining after a null poll", a
         backend,
         sleep: async () => nextTurn(),
         pipelineDependenciesFactory: () => ({
-            sources: { microphone: source },
+            sources: { microphone: source, system: new QuietSource() },
             vads: {
                 microphone: new VoiceActivityDetector({
                     threshold: 0.1,
@@ -300,7 +285,7 @@ await test("CallWorkerRuntime reports the opaque active Attempt key while its pi
         backend,
         workerId: "worker-fixed",
         sleep: async () => nextTurn(),
-        sources: { microphone: new QuietSource() },
+        sources: { microphone: new QuietSource(), system: new QuietSource() },
         transcription: new NoopTranscription(),
     });
     const running = runtime.run();
@@ -336,7 +321,7 @@ await test("CallWorkerRuntime survives a pipeline rejection and omits its dead A
     const runtime = new CallWorkerRuntime(CONFIG, {
         backend,
         sleep: async () => nextTurn(),
-        sources: { microphone: new FailingSource() },
+        sources: { microphone: new FailingSource(), system: new QuietSource() },
         transcription: new NoopTranscription(),
         log: (event, fields) => {
             if (event === "call_worker_pipeline_failed") failures.push(fields);
@@ -385,8 +370,9 @@ await test("CallWorkerRuntime stops retrying a stale active Attempt poll when it
     const retryStarted = Promise.withResolvers<void>();
     const failureLogged = Promise.withResolvers<void>();
     const backend = new LocalBackendClient({
-        webOrigin: CONFIG.webOrigin,
-        token: CONFIG.internalToken,
+        origin: CONFIG.origin,
+        deviceToken: CONFIG.deviceToken,
+        appVersion: CONFIG.appVersion,
         onRetry: () => undefined,
         sleep: async (_milliseconds, signal) => {
             retryStarted.resolve();
@@ -409,7 +395,7 @@ await test("CallWorkerRuntime stops retrying a stale active Attempt poll when it
     });
     const runtime = new CallWorkerRuntime(CONFIG, {
         backend,
-        sources: { microphone: new GatedFailureSource() },
+        sources: { microphone: new GatedFailureSource(), system: new QuietSource() },
         transcription: new NoopTranscription(),
         sleep: async () => nextTurn(),
         log: event => {
@@ -489,7 +475,10 @@ await test("CallWorkerRuntime user pause idles and Resume opens a new Attempt on
         pipelineDependenciesFactory: () => {
             const source = new QuietSource();
             sources.push(source);
-            return { sources: { microphone: source }, transcription: new NoopTranscription() };
+            return {
+                sources: { microphone: source, system: new QuietSource() },
+                transcription: new NoopTranscription(),
+            };
         },
     });
     const running = runtime.run();
@@ -522,8 +511,9 @@ await test("CallWorkerRuntime user pause idles and Resume opens a new Attempt on
 await test("CallWorkerRuntime rejects a bad-token response rather than polling it again", async () => {
     let calls = 0;
     const backend = new LocalBackendClient({
-        webOrigin: CONFIG.webOrigin,
-        token: CONFIG.internalToken,
+        origin: CONFIG.origin,
+        deviceToken: CONFIG.deviceToken,
+        appVersion: CONFIG.appVersion,
         fetch: async () => {
             calls += 1;
             return new Response("Unauthorized", { status: 401 });
@@ -544,5 +534,158 @@ await test("CallWorkerRuntime rejects a bad-token response rather than polling i
         assert.equal(calls, 1);
     } finally {
         await runtime.close();
+    }
+});
+
+await test("shutdown IPC and SIGTERM-style abort both drain the active capture gracefully", async () => {
+    for (const mode of ["shutdown", "signal"]) {
+        const capture = session(10);
+        const backend = new PollBackend([]);
+        backend.poll = async input => {
+            backend.polls.push(input);
+            return { capture };
+        };
+        const messages: WorkerMessage[] = [];
+        const runtime = new CallWorkerRuntime(CONFIG, {
+            backend,
+            emit: message => messages.push(message),
+            sources: { microphone: new QuietSource(), system: new QuietSource() },
+            transcription: new NoopTranscription(),
+            sleep: async () => nextTurn(),
+        });
+        const controller = new AbortController();
+        const running = runtime.run(controller.signal);
+        try {
+            while (!backend.events.some(event => event.kind === "attempt_connected"))
+                await nextTurn();
+            if (mode === "shutdown") await runtime.handleControl({ type: "shutdown" });
+            else controller.abort();
+            await running;
+            await runtime.close();
+            assert.equal(backend.finishes.length, 1);
+            assert.equal(
+                backend.events.some(event => event.kind === "attempt_failed"),
+                false
+            );
+            assert.deepEqual(
+                messages.filter(message => message.type === "state").map(message => message.state),
+                ["idle", "starting", "capturing", "stopping", "idle"]
+            );
+            assert.equal(backend.polls[0]?.wait, true);
+            assert.ok(backend.polls.slice(1).every(input => input.wait === false));
+        } finally {
+            await runtime.close();
+        }
+    }
+});
+
+await test("capturing IPC reports VAD activity and delivered segment progress at most every two seconds", async context => {
+    context.mock.timers.enable({
+        apis: ["setTimeout", "setInterval", "Date"],
+        now: Date.parse("2026-08-20T10:00:00.000Z"),
+    });
+    const quiet = Promise.withResolvers<void>();
+    const microphone: AudioSource = {
+        async *frames(signal) {
+            yield { pcm: new Uint8Array([0, 64]), capturedAt: new Date(), durationMs: 20 };
+            await quiet.promise;
+            if (signal.aborted) return;
+            yield { pcm: new Uint8Array([0, 0]), capturedAt: new Date(), durationMs: 20 };
+            if (!signal.aborted) {
+                const stopped = Promise.withResolvers<void>();
+                signal.addEventListener("abort", () => stopped.resolve(), { once: true });
+                await stopped.promise;
+            }
+        },
+    };
+    const capture = session(11);
+    const backend = new PollBackend([]);
+    backend.poll = async () => ({ capture });
+    const messages: WorkerMessage[] = [];
+    const runtime = new CallWorkerRuntime(
+        { ...CONFIG, vadReleaseFrames: 1 },
+        {
+            backend,
+            emit: message => messages.push(message),
+            sources: { microphone, system: new QuietSource() },
+            transcription: { transcribe: async () => "Delivered segment" },
+        }
+    );
+    const running = runtime.run();
+    try {
+        await nextTurn();
+        const states = () =>
+            messages.filter(message => message.type === "state" && message.state === "capturing");
+        assert.equal(states().length, 1);
+        context.mock.timers.tick(1_999);
+        await nextTurn();
+        assert.equal(states().length, 1);
+        context.mock.timers.tick(1);
+        await nextTurn();
+        const speaking = states().at(-1);
+        assert.equal(speaking?.type === "state" && speaking.channels.microphone, true);
+        assert.equal(speaking?.type === "state" && speaking.channels.system, false);
+        assert.equal(states().length, 2);
+        quiet.resolve();
+        await nextTurn();
+        context.mock.timers.tick(2_000);
+        await nextTurn();
+        const delivered = states().at(-1);
+        assert.equal(delivered?.type === "state" && delivered.segments, 1);
+        assert.equal(delivered?.type === "state" && delivered.channels.microphone, false);
+        assert.ok(delivered?.type === "state" && delivered.lastSegmentAt);
+        assert.equal(states().length, 3);
+    } finally {
+        quiet.resolve();
+        await runtime.close();
+        await running;
+    }
+});
+
+await test("authorization and upgrade failures from transcription terminate the runtime instead of restarting capture", async () => {
+    for (const status of [401, 426]) {
+        const capture = session(12);
+        const backend = new PollBackend([]);
+        backend.poll = async () => ({ capture });
+        const source: AudioSource = {
+            async *frames(signal) {
+                yield { pcm: new Uint8Array([0, 64]), capturedAt: new Date(), durationMs: 20 };
+                yield { pcm: new Uint8Array([0, 0]), capturedAt: new Date(), durationMs: 20 };
+                if (!signal.aborted) {
+                    const stopped = Promise.withResolvers<void>();
+                    signal.addEventListener("abort", () => stopped.resolve(), { once: true });
+                    await stopped.promise;
+                }
+            },
+        };
+        const runtime = new CallWorkerRuntime(
+            { ...CONFIG, vadReleaseFrames: 1 },
+            {
+                backend,
+                emit: () => undefined,
+                log: () => undefined,
+                sources: { microphone: source, system: new QuietSource() },
+                transcription: {
+                    transcribe: async () => {
+                        throw new LocalBackendError("device rejected", {
+                            retryable: false,
+                            status,
+                        });
+                    },
+                },
+                sleep: async () => nextTurn(),
+            }
+        );
+        try {
+            await assert.rejects(
+                runtime.run(),
+                error =>
+                    error instanceof LocalBackendError &&
+                    error.exitCode === (status === 401 ? 77 : 75)
+            );
+            assert.equal(backend.finishes.length, 0);
+        } finally {
+            await runtime.close();
+        }
     }
 });

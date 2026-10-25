@@ -19,38 +19,10 @@ export interface AudioSource {
     stop?(reason?: unknown): void;
 }
 
-export interface FfmpegPcmSourceOptions {
-    /** ffmpeg input device (for example `:0` or `hw:1,0`). */
-    input?: string;
-    /** Alias for input, useful when the value is called a device in config. */
-    device?: string;
-    /** Alias for input. */
-    inputDevice?: string;
-    /** ffmpeg input demuxer (normally `avfoundation` on macOS or `alsa` on Linux). */
-    inputFormat?: string;
-    /** Alias for inputFormat. */
-    format?: string;
-    ffmpegPath?: string;
-    sampleRate?: number;
-    /** Target frame duration. The nearest whole number of samples is used. */
-    frameDurationMs?: number;
-    /** Explicit frame size in samples, useful when the source rate is unusual. */
-    frameSamples?: number;
-    /** Explicit frame size in bytes. Must be an even number. */
-    frameBytes?: number;
-    /** Complete ffmpeg argv override, excluding the executable. */
-    args?: readonly string[];
-    /** Additional ffmpeg arguments inserted before the PCM output arguments. */
-    extraArgs?: readonly string[];
-    /** Clock used for the first frame timestamp. */
-    clock?: () => Date;
-    /** Spawn implementation override for embedders and deterministic integration tests. */
-    spawn?: typeof nodeSpawn;
-}
-
 export interface SystemAudioPcmSourceOptions {
     /** Absolute or PATH-resolvable launchstack-system-audio executable. */
     helperPath: string;
+    source: "microphone" | "system";
     sampleRate?: number;
     /** Target frame duration. The nearest whole number of samples is used. */
     frameDurationMs?: number;
@@ -267,13 +239,6 @@ async function waitForProcessAfterStop(
     }
 }
 
-export class FfmpegPcmSourceError extends Error {
-    constructor(message: string, options?: ErrorOptions) {
-        super(message, options);
-        this.name = "FfmpegPcmSourceError";
-    }
-}
-
 export type SystemAudioStatusReason = "ready" | "unsupported" | "permission_denied";
 
 export type SystemAudioReadinessCode =
@@ -460,112 +425,6 @@ async function* readProcessPcmFrames(
     }
 }
 
-/**
- * Captures mono signed 16-bit PCM from an ffmpeg input device.
- *
- * ffmpeg is intentionally invoked with an argv array and `shell: false`; the
- * input format and device are therefore safe to configure independently on
- * macOS (`avfoundation`, e.g. `:0`) and Linux (`alsa`, e.g. `default`).
- */
-export class FfmpegPcmSource implements AudioSource {
-    readonly ffmpegPath: string;
-    readonly input: string;
-    readonly inputFormat: string;
-    readonly sampleRate: number;
-    readonly frameSamples: number;
-    readonly frameBytes: number;
-    readonly frameDurationMs: number;
-    private readonly args?: readonly string[];
-    private readonly extraArgs: readonly string[];
-    private readonly clock: () => Date;
-    private readonly spawnProcess: typeof nodeSpawn;
-    private readonly activeStops = new Set<() => void>();
-    constructor(options?: FfmpegPcmSourceOptions);
-    constructor(input: string, options?: Omit<FfmpegPcmSourceOptions, "input">);
-    constructor(
-        inputOrOptions: string | FfmpegPcmSourceOptions = {},
-        positionalOptions: Omit<FfmpegPcmSourceOptions, "input"> = {}
-    ) {
-        const options: FfmpegPcmSourceOptions =
-            typeof inputOrOptions === "string"
-                ? { ...positionalOptions, input: inputOrOptions }
-                : inputOrOptions;
-
-        this.ffmpegPath = nonEmpty(options.ffmpegPath ?? "ffmpeg", "ffmpegPath");
-        this.input = nonEmpty(
-            options.input ??
-                options.device ??
-                options.inputDevice ??
-                (process.platform === "darwin" ? ":0" : "default"),
-            "input"
-        );
-        this.inputFormat = nonEmpty(
-            options.inputFormat ??
-                options.format ??
-                (process.platform === "darwin" ? "avfoundation" : "alsa"),
-            "inputFormat"
-        );
-        const layout = frameLayout(options);
-        this.sampleRate = layout.sampleRate;
-        this.frameSamples = layout.frameSamples;
-        this.frameBytes = layout.frameBytes;
-        this.frameDurationMs = layout.frameDurationMs;
-
-        this.args = options.args === undefined ? undefined : [...options.args];
-        this.extraArgs = options.extraArgs === undefined ? [] : [...options.extraArgs];
-        this.clock = options.clock ?? (() => new Date());
-        this.spawnProcess = options.spawn ?? nodeSpawn;
-    }
-
-    frames(signal: AbortSignal): AsyncIterable<PcmFrame> {
-        return readProcessPcmFrames(
-            {
-                executable: this.ffmpegPath,
-                args: this.buildArgs(),
-                label: "ffmpeg",
-                sampleRate: this.sampleRate,
-                frameSamples: this.frameSamples,
-                frameBytes: this.frameBytes,
-                frameDurationMs: this.frameDurationMs,
-                clock: this.clock,
-                spawn: this.spawnProcess,
-                createError: (message, options) => new FfmpegPcmSourceError(message, options),
-                registerStop: stop => this.activeStops.add(stop),
-                unregisterStop: stop => this.activeStops.delete(stop),
-            },
-            signal
-        );
-    }
-
-    stop(): void {
-        for (const stop of this.activeStops) stop();
-    }
-
-    private buildArgs(): string[] {
-        if (this.args !== undefined) return [...this.args];
-        return [
-            "-hide_banner",
-            "-loglevel",
-            "error",
-            "-nostdin",
-            "-f",
-            this.inputFormat,
-            "-i",
-            this.input,
-            "-ac",
-            "1",
-            "-ar",
-            String(this.sampleRate),
-            ...this.extraArgs,
-            "-f",
-            "s16le",
-            "-acodec",
-            "pcm_s16le",
-            "pipe:1",
-        ];
-    }
-}
-
 function statusDiagnostic(
     code: SystemAudioReadinessCode,
     message: string,
@@ -575,7 +434,10 @@ function statusDiagnostic(
     return { ready: code === "ready", code, supported, authorized, message };
 }
 
-function parseSystemAudioStatus(stdout: string): SystemAudioReadiness {
+function parseSystemAudioStatus(
+    stdout: string,
+    source: "microphone" | "system"
+): SystemAudioReadiness {
     let value: unknown;
     try {
         value = JSON.parse(stdout.trim());
@@ -589,7 +451,14 @@ function parseSystemAudioStatus(stdout: string): SystemAudioReadiness {
         );
     }
 
-    const record = value as Record<string, unknown>;
+    const status = (value as Record<string, unknown>)[source];
+    if (!status || typeof status !== "object" || Array.isArray(status)) {
+        return statusDiagnostic(
+            "invalid_status",
+            `audio helper status must contain ${source} permissions`
+        );
+    }
+    const record = status as Record<string, unknown>;
     if (typeof record.supported !== "boolean" || typeof record.authorized !== "boolean") {
         return statusDiagnostic(
             "invalid_status",
@@ -650,6 +519,7 @@ function parseSystemAudioStatus(stdout: string): SystemAudioReadiness {
 
 async function probeSystemAudioStatusProcess(options: {
     helperPath: string;
+    source: "microphone" | "system";
     timeoutMs: number;
     spawn: typeof nodeSpawn;
     signal: AbortSignal;
@@ -775,17 +645,8 @@ async function probeSystemAudioStatusProcess(options: {
                 `system audio status exited due to signal ${exit.signal}`
             );
         }
-        const readiness = parseSystemAudioStatus(stdout);
-        const expectedExitCode =
-            readiness.code === "ready"
-                ? 0
-                : readiness.code === "permission_denied"
-                  ? 2
-                  : readiness.code === "unsupported"
-                    ? 3
-                    : undefined;
-        if (expectedExitCode === undefined) return readiness;
-        if (exit.code !== expectedExitCode) {
+        const readiness = parseSystemAudioStatus(stdout, options.source);
+        if (exit.code !== 0) {
             const detail = stderr.trim();
             return statusDiagnostic(
                 "status_failed",
@@ -805,11 +666,12 @@ async function probeSystemAudioStatusProcess(options: {
 }
 
 /**
- * Process-backed ScreenCaptureKit system-output capture. The helper is probed
- * before capture and is never invoked through a shell.
+ * Process-backed microphone or system-output capture. Both sources use the same
+ * helper readiness, bounded backpressure and unexpected-EOF semantics.
  */
 export class SystemAudioPcmSource implements AudioSource {
     readonly helperPath: string;
+    readonly source: "microphone" | "system";
     readonly sampleRate: number;
     readonly frameSamples: number;
     readonly frameBytes: number;
@@ -823,6 +685,7 @@ export class SystemAudioPcmSource implements AudioSource {
 
     constructor(options: SystemAudioPcmSourceOptions) {
         this.helperPath = nonEmpty(options.helperPath, "helperPath");
+        this.source = options.source;
         const layout = frameLayout({
             sampleRate: options.sampleRate ?? DEFAULT_SAMPLE_RATE,
             frameDurationMs: options.frameDurationMs,
@@ -855,6 +718,7 @@ export class SystemAudioPcmSource implements AudioSource {
         }
         this.readinessPromise ??= probeSystemAudioStatusProcess({
             helperPath: this.helperPath,
+            source: this.source,
             timeoutMs: this.statusTimeoutMs,
             spawn: this.spawnProcess,
             signal,
@@ -874,7 +738,7 @@ export class SystemAudioPcmSource implements AudioSource {
         if (signal.aborted || readiness.code === "cancelled") return;
         if (!readiness.ready) {
             throw new SystemAudioPcmSourceError(
-                `System audio is not ready (${readiness.code}): ${readiness.message}`,
+                `${this.source} audio is not ready (${readiness.code}): ${readiness.message}`,
                 { code: readiness.code, readiness }
             );
         }
@@ -882,8 +746,8 @@ export class SystemAudioPcmSource implements AudioSource {
         yield* readProcessPcmFrames(
             {
                 executable: this.helperPath,
-                args: ["--sample-rate", String(this.sampleRate)],
-                label: "system audio helper",
+                args: ["--source", this.source, "--sample-rate", String(this.sampleRate)],
+                label: `${this.source} audio helper`,
                 sampleRate: this.sampleRate,
                 frameSamples: this.frameSamples,
                 frameBytes: this.frameBytes,
@@ -898,9 +762,12 @@ export class SystemAudioPcmSource implements AudioSource {
             signal
         );
         if (!signal.aborted) {
-            throw new SystemAudioPcmSourceError("system audio helper stopped unexpectedly", {
-                code: "capture_failed",
-            });
+            throw new SystemAudioPcmSourceError(
+                `${this.source} audio helper stopped unexpectedly`,
+                {
+                    code: "capture_failed",
+                }
+            );
         }
     }
 

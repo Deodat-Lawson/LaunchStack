@@ -1,12 +1,18 @@
 import { randomUUID } from "node:crypto";
 
 import type {
-    LocalCapturePollInput,
     LocalCapturePollResult,
     LocalCaptureSession,
 } from "@launchstack/pipelines/call-notes";
 
 import type { CallWorkerConfig } from "./config";
+import {
+    emitWorkerMessage,
+    logWorkerEvent,
+    type WorkerControl,
+    type WorkerMessage,
+    type WorkerState,
+} from "./ipc";
 import {
     createLocalCapturePipeline,
     type LocalCapturePipeline,
@@ -40,6 +46,7 @@ export interface CallWorkerRuntimeDependencies extends LocalCapturePipelineDepen
     workerId?: string;
     sleep?: (milliseconds: number, signal: AbortSignal) => Promise<void>;
     log?: (event: string, fields: Record<string, unknown>) => void;
+    emit?: (message: WorkerMessage) => void;
 }
 
 interface ActivePipeline {
@@ -47,6 +54,7 @@ interface ActivePipeline {
     pipeline: LocalCapturePipeline;
     done: Promise<void>;
     stopping: boolean;
+    pausing: boolean;
 }
 
 function abortError(signal: AbortSignal): Error {
@@ -63,7 +71,6 @@ function abortableDelay(milliseconds: number, signal: AbortSignal): Promise<void
             signal.removeEventListener("abort", onAbort);
             resolve();
         }, milliseconds);
-        timer.unref?.();
         const onAbort = (): void => {
             clearTimeout(timer);
             signal.removeEventListener("abort", onAbort);
@@ -108,6 +115,10 @@ export class CallWorkerRuntime {
     private active?: ActivePipeline;
     private pollAbortController?: AbortController;
     private externalAbortCleanup?: () => void;
+    private readonly emit: (message: WorkerMessage) => void;
+    private state: WorkerState = "idle";
+    private progressTimer?: NodeJS.Timeout;
+    private fatalPipelineError?: LocalBackendError;
 
     constructor(
         private readonly config: CallWorkerConfig,
@@ -117,19 +128,15 @@ export class CallWorkerRuntime {
         this.pollIntervalMs = boundedPollInterval(dependencies.pollIntervalMs);
         this.sleep = dependencies.sleep ?? abortableDelay;
         this.createPipeline = dependencies.createPipeline ?? createLocalCapturePipeline;
-        this.log =
-            dependencies.log ??
-            ((event, fields) => {
-                process.stdout.write(
-                    `${JSON.stringify({ event, ...fields, observedAt: new Date().toISOString() })}\n`
-                );
-            });
+        this.log = dependencies.log ?? logWorkerEvent;
+        this.emit = dependencies.emit ?? emitWorkerMessage;
 
         const backend =
             dependencies.backend ??
             new LocalBackendClient({
-                webOrigin: config.webOrigin,
-                token: config.internalToken,
+                origin: config.origin,
+                deviceToken: config.deviceToken,
+                appVersion: config.appVersion,
             });
         if (typeof backend.poll !== "function") {
             throw new Error("call worker backend must implement poll");
@@ -148,8 +155,7 @@ export class CallWorkerRuntime {
     run(signal?: AbortSignal): Promise<void> {
         if (signal) {
             const abort = (): void => {
-                this.controlAbortController.abort(abortError(signal));
-                void this.active?.pipeline.close();
+                void this.close().catch(() => undefined);
             };
             if (signal.aborted) abort();
             else {
@@ -157,8 +163,40 @@ export class CallWorkerRuntime {
                 this.externalAbortCleanup = () => signal.removeEventListener("abort", abort);
             }
         }
-        this.runPromise ??= this.pollLoop();
+        if (!this.runPromise) {
+            this.publishState("idle");
+            this.progressTimer = setInterval(() => {
+                if (this.state === "capturing") this.publishState("capturing");
+            }, 2_000);
+            this.progressTimer.unref();
+            this.runPromise = this.pollLoop();
+        }
         return this.runPromise;
+    }
+
+    async handleControl(control: WorkerControl): Promise<void> {
+        if (control.type === "keep_recording") this.active?.pipeline.keepRecording();
+        else if (control.type === "call_ended_signal") this.active?.pipeline.callEnded();
+        else await this.close();
+    }
+
+    private publishState(state: WorkerState, active = this.active): void {
+        this.state = state;
+        this.emit({
+            type: "state",
+            state,
+            ...(active
+                ? {
+                      callId: active.session.callId,
+                      title: active.session.title,
+                      startedAt: active.session.startedAt,
+                  }
+                : {}),
+            ...(active?.pipeline.progress ?? {
+                channels: { microphone: false, system: false },
+                segments: 0,
+            }),
+        });
     }
 
     async close(): Promise<void> {
@@ -167,7 +205,7 @@ export class CallWorkerRuntime {
         this.externalAbortCleanup?.();
         this.externalAbortCleanup = undefined;
         this.closePromise = (async () => {
-            await this.active?.pipeline.close();
+            await this.active?.pipeline.stop();
             await this.runPromise?.catch(() => undefined);
         })();
         return this.closePromise;
@@ -191,18 +229,20 @@ export class CallWorkerRuntime {
         } catch (error) {
             if (!signal.aborted) throw error;
         } finally {
+            clearInterval(this.progressTimer);
             this.externalAbortCleanup?.();
             this.externalAbortCleanup = undefined;
-            await this.active?.pipeline.close();
+            if (signal.aborted) await this.active?.pipeline.stop();
+            else await this.active?.pipeline.close();
         }
     }
 
     private async poll(signal: AbortSignal): Promise<LocalCapturePollResult> {
         while (!signal.aborted) {
-            const input: LocalCapturePollInput = {
-                companyId: this.config.companyId,
-                userId: this.config.userId,
+            if (this.fatalPipelineError) throw this.fatalPipelineError;
+            const input: LocalBackendPollInput = {
                 workerId: this.workerId,
+                wait: !this.active,
                 ...(this.active ? { activeAttemptKey: this.active.session.attemptKey } : {}),
             };
             const controller = new AbortController();
@@ -248,34 +288,37 @@ export class CallWorkerRuntime {
             const pipeline = this.createPipeline(this.config, session, {
                 ...dependencies,
                 backend: dependencies.backend ?? this.backend,
+                onStateChange: state => {
+                    dependencies.onStateChange?.(state);
+                    if (!this.active || !sameSession(this.active.session, session)) return;
+                    if (state === "stopping") this.active.stopping = true;
+                    this.publishState(state);
+                },
+                onAutoStop: message => {
+                    dependencies.onAutoStop?.(message);
+                    this.emit(message);
+                },
             });
-            const run = pipeline.run();
+            const completion = Promise.withResolvers<void>();
             const active: ActivePipeline = {
                 session,
                 pipeline,
                 stopping: false,
-                done: run.then(
-                    () => {
-                        if (this.active === active) {
-                            this.active = undefined;
-                            this.pollAbortController?.abort(new Error("capture pipeline settled"));
-                        }
-                    },
-                    error => {
-                        if (this.active === active) {
-                            this.active = undefined;
-                            this.pollAbortController?.abort(new Error("capture pipeline settled"));
-                        }
-                        this.log("call_worker_pipeline_failed", {
-                            callId: session.callId,
-                            captureId: session.captureId,
-                            attemptKey: session.attemptKey,
-                            message: error instanceof Error ? error.message : String(error),
-                        });
-                    }
-                ),
+                pausing: false,
+                done: completion.promise,
             };
             this.active = active;
+            this.publishState("starting");
+            void pipeline.run().then(
+                () => {
+                    this.settlePipeline(active);
+                    completion.resolve();
+                },
+                error => {
+                    this.settlePipeline(active, error);
+                    completion.resolve();
+                }
+            );
         }
 
         const current = this.active;
@@ -287,8 +330,31 @@ export class CallWorkerRuntime {
             });
         } else if (session.desiredMode === "paused") {
             current.stopping = true;
+            current.pausing = true;
             void current.pipeline.pause().catch(() => {
                 current.stopping = false;
+            });
+        }
+    }
+
+    private settlePipeline(active: ActivePipeline, error?: unknown): void {
+        if (this.active === active) {
+            this.active = undefined;
+            this.publishState(
+                active.pausing && !error ? "paused" : "idle",
+                active.pausing ? active : undefined
+            );
+            if (error instanceof LocalBackendError && error.exitCode)
+                this.fatalPipelineError = error;
+            this.pollAbortController?.abort(new Error("capture pipeline settled"));
+        }
+        if (error) {
+            this.log("call_worker_pipeline_failed", {
+                callId: active.session.callId,
+                captureId: active.session.captureId,
+                attemptKey: active.session.attemptKey,
+                message:
+                    error instanceof Error ? error.message : "Unknown capture pipeline failure",
             });
         }
     }

@@ -6,13 +6,12 @@ import { test } from "node:test";
 
 import {
     encodePcm16Wav,
-    FfmpegPcmSource,
-    FfmpegPcmSourceError,
     SystemAudioPcmSource,
     SystemAudioPcmSourceError,
+    type PcmFrame,
 } from "./audio";
 
-class FakeFfmpegProcess extends EventEmitter {
+class FakeHelperProcess extends EventEmitter {
     readonly stdout = new PassThrough();
     readonly stderr = new PassThrough();
     readonly killed: NodeJS.Signals[] = [];
@@ -57,7 +56,7 @@ class FakeFfmpegProcess extends EventEmitter {
     }
 }
 
-function fakeSpawn(process: FakeFfmpegProcess, calls: string[][]) {
+function fakeSpawn(process: FakeHelperProcess, calls: string[][]) {
     return ((_: string, args: readonly string[], options: SpawnOptions) => {
         calls.push([...args, `shell=${String(options.shell)}`]);
         process.start();
@@ -66,8 +65,8 @@ function fakeSpawn(process: FakeFfmpegProcess, calls: string[][]) {
 }
 
 function fakeSystemSpawn(
-    statusProcess: FakeFfmpegProcess,
-    captureProcess: FakeFfmpegProcess,
+    statusProcess: FakeHelperProcess,
+    captureProcess: FakeHelperProcess,
     calls: string[][]
 ) {
     return ((_: string, args: readonly string[], options: SpawnOptions) => {
@@ -79,139 +78,19 @@ function fakeSystemSpawn(
 }
 
 function readyStatus(): Uint8Array {
-    return new TextEncoder().encode(
-        JSON.stringify({
-            supported: true,
-            authorized: true,
-            reason: "ready",
-            message: "ready",
-        })
-    );
+    const ready = { supported: true, authorized: true, reason: "ready", message: "ready" };
+    return new TextEncoder().encode(JSON.stringify({ microphone: ready, system: ready }));
 }
 
 const FIXED_START = new Date("2026-08-20T10:00:00.000Z");
 
-await test("FfmpegPcmSource frames PCM across arbitrary stdout chunks and preserves timing", async () => {
-    const child = new FakeFfmpegProcess([
-        new Uint8Array([0x01]),
-        new Uint8Array([0x02, 0x03, 0x04, 0x05, 0x06]),
-        new Uint8Array([0x07]),
-        new Uint8Array([0x08, 0x09, 0x0a]),
-    ]);
-    const spawnCalls: string[][] = [];
-    const source = new FfmpegPcmSource({
-        ffmpegPath: "fake-ffmpeg",
-        input: "fake-device",
-        inputFormat: "fake-format",
-        sampleRate: 1_000,
-        frameSamples: 2,
-        clock: () => new Date(FIXED_START),
-        spawn: fakeSpawn(child, spawnCalls),
-    });
-
-    const frames = [];
-    for await (const frame of source.frames(new AbortController().signal)) frames.push(frame);
-
-    assert.deepEqual(
-        frames.map(frame => ({
-            pcm: [...frame.pcm],
-            capturedAt: frame.capturedAt.toISOString(),
-            durationMs: frame.durationMs,
-        })),
-        [
-            {
-                pcm: [0x01, 0x02, 0x03, 0x04],
-                capturedAt: FIXED_START.toISOString(),
-                durationMs: 2,
-            },
-            {
-                pcm: [0x05, 0x06, 0x07, 0x08],
-                capturedAt: new Date(FIXED_START.getTime() + 2).toISOString(),
-                durationMs: 2,
-            },
-            {
-                pcm: [0x09, 0x0a],
-                capturedAt: new Date(FIXED_START.getTime() + 4).toISOString(),
-                durationMs: 1,
-            },
-        ]
-    );
-    assert.equal(spawnCalls.length, 1);
-    assert.equal(spawnCalls[0]?.at(-1), "shell=false");
-    assert.equal(child.killed.length, 0);
-});
-
-await test("FfmpegPcmSource stops a running process cleanly when aborted", async () => {
-    const child = new FakeFfmpegProcess([], 0, "", true);
-    const source = new FfmpegPcmSource({
-        ffmpegPath: "fake-ffmpeg",
-        input: "fake-device",
-        inputFormat: "fake-format",
-        sampleRate: 16_000,
-        frameSamples: 320,
-        spawn: fakeSpawn(child, []),
-    });
-    const controller = new AbortController();
-    const iterator = source.frames(controller.signal)[Symbol.asyncIterator]();
-    const pending = iterator.next();
-
-    await Promise.resolve();
-    assert.equal(child.started, true);
-    controller.abort(new Error("test stopped"));
-
-    assert.deepEqual(await pending, { done: true, value: undefined });
-    assert.deepEqual(child.killed, ["SIGTERM"]);
-});
-
-await test("FfmpegPcmSource exposes prompt native shutdown for a blocked iterator", async () => {
-    const child = new FakeFfmpegProcess([], 0, "", true);
-    const source = new FfmpegPcmSource({
-        ffmpegPath: "fake-ffmpeg",
-        input: "fake-device",
-        inputFormat: "fake-format",
-        sampleRate: 16_000,
-        frameSamples: 320,
-        spawn: fakeSpawn(child, []),
-    });
-    const controller = new AbortController();
-    const pending = source.frames(controller.signal)[Symbol.asyncIterator]().next();
-    await Promise.resolve();
-    source.stop();
-    await new Promise<void>(resolve => setImmediate(resolve));
-    controller.abort(new Error("test stopped"));
-    assert.deepEqual(await pending, { done: true, value: undefined });
-    assert.deepEqual(child.killed, ["SIGTERM"]);
-});
-
-await test("FfmpegPcmSource reports nonzero fake ffmpeg exits and stderr", async () => {
-    const child = new FakeFfmpegProcess([], 7, "device unavailable\n");
-    const source = new FfmpegPcmSource({
-        ffmpegPath: "fake-ffmpeg",
-        input: "fake-device",
-        inputFormat: "fake-format",
-        sampleRate: 16_000,
-        frameSamples: 320,
-        spawn: fakeSpawn(child, []),
-    });
-
-    await assert.rejects(
-        async () => {
-            for await (const _frame of source.frames(new AbortController().signal)) {
-                assert.fail(`Unexpected ${_frame.pcm.byteLength}-byte frame before source failure`);
-            }
-        },
-        (error: unknown) =>
-            error instanceof FfmpegPcmSourceError &&
-            error.message.includes("ffmpeg exited with code 7: device unavailable")
-    );
-});
-
 await test("SystemAudioPcmSource strictly parses a ready status response", async () => {
-    const statusProcess = new FakeFfmpegProcess([readyStatus()]);
-    const captureProcess = new FakeFfmpegProcess([], 0, "", true);
+    const statusProcess = new FakeHelperProcess([readyStatus()]);
+    const captureProcess = new FakeHelperProcess([], 0, "", true);
     const calls: string[][] = [];
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         sampleRate: 1_000,
         frameSamples: 2,
         spawn: fakeSystemSpawn(statusProcess, captureProcess, calls),
@@ -230,21 +109,24 @@ await test("SystemAudioPcmSource strictly parses a ready status response", async
 });
 
 await test("SystemAudioPcmSource returns typed permission diagnostics", async () => {
-    const statusProcess = new FakeFfmpegProcess(
+    const statusProcess = new FakeHelperProcess(
         [
             new TextEncoder().encode(
                 JSON.stringify({
-                    supported: true,
-                    authorized: false,
-                    reason: "permission_denied",
-                    message: "Screen capture permission is required",
+                    system: {
+                        supported: true,
+                        authorized: false,
+                        reason: "permission_denied",
+                        message: "Screen capture permission is required",
+                    },
                 })
             ),
         ],
-        2
+        0
     );
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         spawn: fakeSpawn(statusProcess, []),
     });
 
@@ -258,11 +140,12 @@ await test("SystemAudioPcmSource returns typed permission diagnostics", async ()
 });
 
 await test("SystemAudioPcmSource rejects malformed status JSON before capture", async () => {
-    const statusProcess = new FakeFfmpegProcess([new TextEncoder().encode("{}")]);
-    const captureProcess = new FakeFfmpegProcess([], 0, "", true);
+    const statusProcess = new FakeHelperProcess([new TextEncoder().encode("{}")]);
+    const captureProcess = new FakeHelperProcess([], 0, "", true);
     const calls: string[][] = [];
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         spawn: fakeSystemSpawn(statusProcess, captureProcess, calls),
     });
 
@@ -275,17 +158,18 @@ await test("SystemAudioPcmSource rejects malformed status JSON before capture", 
         (error: unknown) =>
             error instanceof SystemAudioPcmSourceError &&
             error.code === "invalid_status" &&
-            error.message.includes("supported and authorized")
+            error.message.includes("system permissions")
     );
     assert.deepEqual(calls, [["--status", "shell=false"]]);
 });
 
 await test("SystemAudioPcmSource cancels the capture child without retaining a process", async () => {
-    const statusProcess = new FakeFfmpegProcess([readyStatus()]);
-    const captureProcess = new FakeFfmpegProcess([], 0, "", true);
+    const statusProcess = new FakeHelperProcess([readyStatus()]);
+    const captureProcess = new FakeHelperProcess([], 0, "", true);
     const calls: string[][] = [];
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         sampleRate: 16_000,
         frameSamples: 320,
         spawn: fakeSystemSpawn(statusProcess, captureProcess, calls),
@@ -305,15 +189,16 @@ await test("SystemAudioPcmSource cancels the capture child without retaining a p
     assert.deepEqual(captureProcess.killed, ["SIGTERM"]);
     assert.deepEqual(calls, [
         ["--status", "shell=false"],
-        ["--sample-rate", "16000", "shell=false"],
+        ["--source", "system", "--sample-rate", "16000", "shell=false"],
     ]);
 });
 
 await test("SystemAudioPcmSource reports capture child failures", async () => {
-    const statusProcess = new FakeFfmpegProcess([readyStatus()]);
-    const captureProcess = new FakeFfmpegProcess([], 9, "capture failed\n");
+    const statusProcess = new FakeHelperProcess([readyStatus()]);
+    const captureProcess = new FakeHelperProcess([], 9, "capture failed\n");
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         spawn: fakeSystemSpawn(statusProcess, captureProcess, []),
     });
 
@@ -331,10 +216,11 @@ await test("SystemAudioPcmSource reports capture child failures", async () => {
 });
 
 await test("SystemAudioPcmSource treats a clean capture exit as stream loss", async () => {
-    const statusProcess = new FakeFfmpegProcess([readyStatus()]);
-    const captureProcess = new FakeFfmpegProcess([]);
+    const statusProcess = new FakeHelperProcess([readyStatus()]);
+    const captureProcess = new FakeHelperProcess([]);
     const source = new SystemAudioPcmSource({
         helperPath: "launchstack-system-audio",
+        source: "system",
         spawn: fakeSystemSpawn(statusProcess, captureProcess, []),
     });
 
@@ -378,4 +264,63 @@ await test("encodePcm16Wav writes a canonical PCM header and exact payload", () 
         () => encodePcm16Wav(new Uint8Array([0, 1]), { sampleRate: 16_000, channels: 2 }),
         /complete samples for every channel/
     );
+});
+
+await test("microphone helper uses its own readiness and the same PCM framing and EOF semantics", async () => {
+    const status = new FakeHelperProcess([
+        new TextEncoder().encode(
+            JSON.stringify({
+                microphone: {
+                    supported: true,
+                    authorized: true,
+                    reason: "ready",
+                    message: "Microphone ready",
+                },
+                system: {
+                    supported: true,
+                    authorized: false,
+                    reason: "permission_denied",
+                    message: "Screen permission required",
+                },
+            })
+        ),
+    ]);
+    const capture = new FakeHelperProcess([
+        new Uint8Array([1]),
+        new Uint8Array([2, 3, 4, 5, 6]),
+        new Uint8Array([7, 8, 9, 10]),
+    ]);
+    const calls: string[][] = [];
+    const source = new SystemAudioPcmSource({
+        helperPath: "launchstack-system-audio",
+        source: "microphone",
+        sampleRate: 1_000,
+        frameSamples: 2,
+        clock: () => new Date(FIXED_START),
+        spawn: fakeSystemSpawn(status, capture, calls),
+    });
+    const frames: PcmFrame[] = [];
+    await assert.rejects(async () => {
+        for await (const frame of source.frames(new AbortController().signal)) frames.push(frame);
+    }, /microphone audio helper stopped unexpectedly/);
+    assert.deepEqual(
+        frames.map(frame => [...frame.pcm]),
+        [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10],
+        ]
+    );
+    assert.deepEqual(
+        frames.map(frame => frame.capturedAt.toISOString()),
+        [
+            FIXED_START.toISOString(),
+            new Date(FIXED_START.getTime() + 2).toISOString(),
+            new Date(FIXED_START.getTime() + 4).toISOString(),
+        ]
+    );
+    assert.deepEqual(calls, [
+        ["--status", "shell=false"],
+        ["--source", "microphone", "--sample-rate", "1000", "shell=false"],
+    ]);
 });

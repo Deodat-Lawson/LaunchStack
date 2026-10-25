@@ -3,6 +3,7 @@ import { test } from "node:test";
 
 import type { CaptureEvent, LocalCaptureSession } from "@launchstack/pipelines/call-notes";
 
+import type { AutoStopMessage } from "../ipc";
 import type { AudioSource, PcmFrame } from "./audio";
 import { LocalCapturePipeline, type LocalCaptureBackend } from "./pipeline";
 import {
@@ -111,7 +112,8 @@ class GatedTranscription implements TranscriptionModel {
 }
 
 function createPipeline(input: {
-    source: ScriptedAudioSource;
+    source: AudioSource;
+    systemSource?: AudioSource;
     transcription: TranscriptionModel;
     backend: LocalCaptureBackend;
     utteranceMaxMs?: number;
@@ -122,6 +124,8 @@ function createPipeline(input: {
     vadActivationFrames?: number;
     vadReleaseFrames?: number;
     session?: LocalCaptureSession;
+    silenceTimeoutMs?: number;
+    onAutoStop?: (message: AutoStopMessage) => void;
 }): LocalCapturePipeline {
     const microphoneVad = new VoiceActivityDetector({
         threshold: 0.1,
@@ -131,12 +135,24 @@ function createPipeline(input: {
     });
     return new LocalCapturePipeline({
         session: input.session ?? SESSION,
-        sources: { microphone: input.source },
-        vads: { microphone: microphoneVad },
+        sources: {
+            microphone: input.source,
+            ...(input.systemSource ? { system: input.systemSource } : {}),
+        },
+        vads: {
+            microphone: microphoneVad,
+            ...(input.systemSource
+                ? {
+                      system: new VoiceActivityDetector({
+                          threshold: 0.1,
+                          activationFrames: 1,
+                          releaseFrames: 1,
+                      }),
+                  }
+                : {}),
+        },
         transcription: input.transcription,
         backend: input.backend,
-        companyId: "42",
-        userId: "user-7",
         autoEnrich: false,
         sampleRate: SAMPLE_RATE,
         utteranceMaxMs: input.utteranceMaxMs ?? 3_000,
@@ -145,6 +161,8 @@ function createPipeline(input: {
         stopDrainTimeoutMs: input.stopDrainTimeoutMs ?? 30_000,
         transcriptionTimeoutMs: input.transcriptionTimeoutMs ?? 20_000,
         frameDurationMs: FRAME_DURATION_MS,
+        silenceTimeoutMs: input.silenceTimeoutMs,
+        onAutoStop: input.onAutoStop,
     });
 }
 
@@ -418,8 +436,9 @@ await test("LocalCapturePipeline buffers more than eight utterances through a 40
     let elapsed = 0;
     let finishes = 0;
     const backend = new LocalBackendClient({
-        webOrigin: "http://localhost:3000",
-        token: "worker-secret",
+        origin: "http://localhost:3000",
+        deviceToken: "worker-secret",
+        appVersion: "1.2.3",
         random: () => 0.5,
         now: () => elapsed,
         onRetry: () => undefined,
@@ -608,4 +627,139 @@ await test("LocalCapturePipeline an already-paused session ends its Attempt with
     assert.equal(ended?.kind, "attempt_ended");
     if (ended?.kind === "attempt_ended") assert.equal(ended.reason, "user_paused");
     assert.equal(backend.finishes.length, 0);
+});
+
+await test("silence auto-stop counts down, keep_recording cancels and resets, then expiry drains and finishes", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout", "Date"], now: CAPTURE_START.getTime() });
+    const messages: AutoStopMessage[] = [];
+    const backend = new RecordingBackend();
+    const pipeline = createPipeline({
+        source: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        systemSource: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        transcription: new RecordingTranscription([]),
+        backend,
+        silenceTimeoutMs: 1_000,
+        onAutoStop: message => messages.push(message),
+    });
+    const running = pipeline.run();
+    try {
+        await nextTurn();
+        context.mock.timers.tick(999);
+        assert.equal(messages.length, 0);
+        context.mock.timers.tick(1);
+        assert.deepEqual(messages[0], {
+            type: "auto_stop_pending",
+            reason: "silence",
+            stopsAt: new Date(CAPTURE_START.getTime() + 61_000).toISOString(),
+        });
+        assert.equal(backend.finishes.length, 0);
+        pipeline.keepRecording();
+        assert.deepEqual(messages[1], { type: "auto_stop_cancelled" });
+        context.mock.timers.tick(999);
+        assert.equal(messages.length, 2);
+        context.mock.timers.tick(1);
+        assert.deepEqual(messages[2], {
+            type: "auto_stop_pending",
+            reason: "silence",
+            stopsAt: new Date(CAPTURE_START.getTime() + 62_000).toISOString(),
+        });
+        context.mock.timers.tick(59_999);
+        assert.equal(backend.finishes.length, 0);
+        context.mock.timers.tick(1);
+        await running;
+        assert.deepEqual(eventKinds(backend), [
+            "attempt_connected",
+            "attempt_ended",
+            "occurrence_ended",
+        ]);
+        const ended = backend.events.find(event => event.kind === "attempt_ended");
+        assert.equal(ended?.kind === "attempt_ended" && ended.reason, "silence_timeout");
+        assert.equal(backend.finishes.length, 1);
+        assert.deepEqual(backend.finishes[0], { callId: SESSION.callId, autoEnrich: false });
+    } finally {
+        await pipeline.close();
+    }
+});
+
+await test("call_ended_signal uses the same 60-second countdown and source_stopped finish path", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout", "Date"], now: CAPTURE_START.getTime() });
+    const messages: AutoStopMessage[] = [];
+    const backend = new RecordingBackend();
+    const pipeline = createPipeline({
+        source: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        systemSource: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        transcription: new RecordingTranscription([]),
+        backend,
+        onAutoStop: message => messages.push(message),
+    });
+    const running = pipeline.run();
+    try {
+        await nextTurn();
+        pipeline.callEnded();
+        pipeline.callEnded();
+        assert.deepEqual(messages, [
+            {
+                type: "auto_stop_pending",
+                reason: "call_ended",
+                stopsAt: new Date(CAPTURE_START.getTime() + 60_000).toISOString(),
+            },
+        ]);
+        pipeline.keepRecording();
+        assert.deepEqual(messages[1], { type: "auto_stop_cancelled" });
+        pipeline.callEnded();
+        context.mock.timers.tick(59_999);
+        assert.equal(backend.finishes.length, 0);
+        context.mock.timers.tick(1);
+        await running;
+        const ended = backend.events.find(event => event.kind === "attempt_ended");
+        assert.equal(ended?.kind === "attempt_ended" && ended.reason, "source_stopped");
+        assert.equal(backend.finishes.length, 1);
+        assert.equal(eventKinds(backend).at(-1), "occurrence_ended");
+    } finally {
+        await pipeline.close();
+    }
+});
+
+await test("activity on either channel prevents silence auto-stop until both VADs are inactive", async context => {
+    context.mock.timers.enable({ apis: ["setTimeout", "Date"], now: CAPTURE_START.getTime() });
+    const quiet = Promise.withResolvers<void>();
+    const messages: AutoStopMessage[] = [];
+    const system: AudioSource = {
+        async *frames(signal) {
+            yield pcmFrame(12_000, 0);
+            await quiet.promise;
+            if (signal.aborted) return;
+            yield pcmFrame(0, 1);
+            if (!signal.aborted) {
+                const stopped = Promise.withResolvers<void>();
+                signal.addEventListener("abort", () => stopped.resolve(), { once: true });
+                await stopped.promise;
+            }
+        },
+    };
+    const pipeline = createPipeline({
+        source: new ScriptedAudioSource([pcmFrame(0, 0)], undefined, true),
+        systemSource: system,
+        transcription: new RecordingTranscription(["System speech"]),
+        backend: new RecordingBackend(),
+        silenceTimeoutMs: 1_000,
+        onAutoStop: message => messages.push(message),
+    });
+    const running = pipeline.run();
+    try {
+        await nextTurn();
+        context.mock.timers.tick(2_000);
+        assert.equal(messages.length, 0);
+        assert.equal(pipeline.progress.channels.system, true);
+        quiet.resolve();
+        await nextTurn();
+        assert.equal(pipeline.progress.channels.system, false);
+        context.mock.timers.tick(1_000);
+        assert.equal(messages[0]?.type, "auto_stop_pending");
+        await pipeline.stop();
+        await running;
+    } finally {
+        quiet.resolve();
+        await pipeline.close();
+    }
 });

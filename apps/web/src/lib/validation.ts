@@ -9,6 +9,7 @@ import type { Locale } from "~/i18n/locales";
 import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
 import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
+import { MAX_TURN_STEPS } from "~/lib/chat-turns";
 import { MAX_SESSION_APPEND, MAX_SESSION_MESSAGE_CHARS } from "~/lib/workspace-history";
 import {
     FOLDER_VISIBILITIES,
@@ -913,8 +914,21 @@ export const SessionMessageSchema = z.object({
             id: z.string().max(128).optional(),
             status: z.enum(["complete", "stopped", "error"]).optional(),
             reasoning: z.string().max(MAX_SESSION_MESSAGE_CHARS).optional(),
-            thoughtMs: z.number().nonnegative().optional(),
             elapsedMs: z.number().nonnegative().optional(),
+            steps: z
+                .array(
+                    z.object({
+                        id: z.string().min(1).max(64),
+                        label: z.string().max(500),
+                        detail: z.string().max(500).optional(),
+                        state: z.enum(["active", "done"]),
+                        startMs: z.number().nonnegative().optional(),
+                        endMs: z.number().nonnegative().optional(),
+                    })
+                )
+                .max(MAX_TURN_STEPS)
+                .optional(),
+            thoughtMs: z.number().nonnegative().optional(),
             send: ChatSendPayloadSchema.optional(),
             tokenBreakdown: z
                 .object({

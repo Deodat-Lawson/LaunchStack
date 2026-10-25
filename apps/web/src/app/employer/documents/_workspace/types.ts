@@ -3,7 +3,7 @@ import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
-import type { ChatCreatedSource } from "~/lib/chat-turns";
+import type { ChatCreatedSource, ChatTurnStep } from "~/lib/chat-turns";
 import type { SourceProcessingView } from "~/lib/source-progress";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
@@ -261,9 +261,11 @@ export interface ThreadMessage {
     status?: "streaming" | "complete" | "stopped" | "error";
     stage?: string;
     reasoning?: string;
-    /** When the last reasoning arrived, from the start of the turn: how long it thought. */
-    thoughtMs?: number;
     elapsedMs?: number;
+    /** The answer's work, shown in its thinking trace. */
+    steps?: ChatTurnStep[];
+    /** Time from the send to the answer's first word ("Thought for 4s"). */
+    thoughtMs?: number;
     send?: ComposerSend;
     role: "user" | "assistant";
     text: string;

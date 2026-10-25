@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>LaunchStack Capture</string>
+    <key>CFBundleExecutable</key>
+    <string>LaunchStackCapture</string>
+    <key>CFBundleIdentifier</key>
+    <string>app.launchstack.capture</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>LaunchStack Capture</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>@CAPTURE_VERSION@</string>
+    <key>CFBundleVersion</key>
+    <string>@CAPTURE_VERSION@</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>app.launchstack.capture.pair</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>launchstack-capture</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+        </dict>
+    </array>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
+    <key>LSArchitecturePriority</key>
+    <array>
+        <string>arm64</string>
+    </array>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>LaunchStack Capture records your microphone to create notes for calls you start recording.</string>
+    <key>NSAudioCaptureUsageDescription</key>
+    <string>LaunchStack Capture records call audio from your Mac to create notes for calls you start recording.</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+    <key>SUPublicEDKey</key>
+    <string>@SPARKLE_PUBLIC_ED_KEY@</string>
+</dict>
+</plist>

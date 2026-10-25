@@ -1,0 +1,136 @@
+name: Capture Mac release
+
+on:
+  push:
+    tags: ['capture-v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Capture version (MAJOR.MINOR.PATCH, without capture-v)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+# A shared Azure latest.json/appcast is a single publication stream.
+concurrency:
+  group: capture-mac-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish Apple-silicon Capture
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '14.0'
+      CAPTURE_SIGN_IDENTITY: ${{ secrets.CAPTURE_SIGN_IDENTITY }}
+      SPARKLE_PUBLIC_ED_KEY: ${{ secrets.SPARKLE_PUBLIC_ED_KEY }}
+      SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+      CAPTURE_NOTARY_KEY_ID: ${{ secrets.CAPTURE_NOTARY_KEY_ID }}
+      CAPTURE_NOTARY_ISSUER: ${{ secrets.CAPTURE_NOTARY_ISSUER }}
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+
+      - name: Select release version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == workflow_dispatch ]]; then
+            version="$INPUT_VERSION"
+          else
+            version="${GITHUB_REF_NAME#capture-v}"
+          fi
+          [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || {
+            echo 'Expected a numeric MAJOR.MINOR.PATCH capture version.' >&2
+            exit 1
+          }
+          echo "CAPTURE_VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+
+      - name: Set up Corepack and pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.15.1 --activate
+
+      - name: Cache verified runtime downloads
+        uses: actions/cache@v4
+        with:
+          path: .cache/capture-mac
+          key: capture-node-24.14.0-${{ runner.os }}-${{ runner.arch }}
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Azure CLI
+        run: |
+          if ! command -v az >/dev/null 2>&1; then
+            brew install azure-cli
+          fi
+
+      - name: Import signing certificate when present
+        env:
+          CAPTURE_CERTIFICATE_P12_BASE64: ${{ secrets.CAPTURE_CERTIFICATE_P12_BASE64 }}
+          CAPTURE_CERTIFICATE_PASSWORD: ${{ secrets.CAPTURE_CERTIFICATE_PASSWORD }}
+        run: |
+          if [[ -z "$CAPTURE_CERTIFICATE_P12_BASE64" ]]; then
+            echo 'No certificate supplied; scripts default to ad-hoc signing.'
+            exit 0
+          fi
+          umask 077
+          certificate="$RUNNER_TEMP/capture-signing.p12"
+          keychain="$RUNNER_TEMP/capture-signing.keychain-db"
+          password="$(uuidgen)"
+          printf '%s' "$CAPTURE_CERTIFICATE_P12_BASE64" | /usr/bin/base64 -D > "$certificate"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$certificate" -k "$keychain" -P "$CAPTURE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$password" "$keychain"
+          security list-keychains -d user -s "$keychain" login.keychain-db
+          rm -f "$certificate"
+
+      - name: Prepare notary API key when present
+        env:
+          CAPTURE_NOTARY_KEY_P8: ${{ secrets.CAPTURE_NOTARY_KEY_P8 }}
+        run: |
+          if [[ -n "$CAPTURE_NOTARY_KEY_P8" ]]; then
+            umask 077
+            key="$RUNNER_TEMP/capture-notary-key.p8"
+            printf '%s' "$CAPTURE_NOTARY_KEY_P8" > "$key"
+            echo "CAPTURE_NOTARY_KEY_PATH=$key" >> "$GITHUB_ENV"
+          else
+            echo 'No notary private key supplied; notarization will skip.'
+          fi
+
+      - name: Build, sign, notarize, package, and publish
+        run: apps/capture-mac/scripts/release.sh
+
+      - name: Retain release artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaunchStack-Capture-${{ env.CAPTURE_VERSION }}-arm64
+          if-no-files-found: ignore
+          path: |
+            dist/capture-mac/LaunchStack-Capture-*.dmg
+            dist/capture-mac/LaunchStack-Capture-*.zip
+            dist/capture-mac/appcast.xml
+            dist/capture-mac/latest.json
+            dist/capture-mac/notarization/*.json
+
+      - name: Remove temporary signing credentials
+        if: always()
+        run: |
+          keychain="$RUNNER_TEMP/capture-signing.keychain-db"
+          if [[ -f "$keychain" ]]; then
+            security delete-keychain "$keychain"
+          fi
+          rm -f "$RUNNER_TEMP/capture-signing.p12" "$RUNNER_TEMP/capture-notary-key.p8"

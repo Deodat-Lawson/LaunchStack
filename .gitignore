@@ -59,6 +59,10 @@ pipelines/dist/
 apps/call-worker/dist/
 **/.build/
 
+# Native Capture build products and verified toolchain downloads
+/dist/capture-mac/
+/.cache/capture-mac/
+
 # idea files
 .idea
 /.localFiles

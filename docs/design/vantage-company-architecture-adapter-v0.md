@@ -4,6 +4,17 @@ Status: design only, 2026-10-25. Inspected source: `83cf88c8aa77b33587632a0b352f
 
 The smallest proposed adapter reads the existing canonical company profile, preserves its fact provenance, checks every dependency against the requesting actor, and supplies one bounded `RequiredCompanyArchitectureSourceV0` through the existing V0 ports. It does not generate Company Architecture, resolve business roles, retrieve additional documents, or make another model call. The profile is a candidate source for that contract, not proof that the product's definition of Company Architecture is already fulfilled.
 
+## Task 2 implementation follow-up — 2026-10-25
+
+The original audit and recommendations below describe source `83cf88c8aa77b33587632a0b352f6365275d0153`. The subsequent authorized implementation starts from `98c8eaeca1606e86e638a815c408410e735fe141` and adds the opt-in pure [`projectCompanyArchitectureV0`](../../pipelines/src/vantage/context-v0/company-architecture.ts), with a separate server reader/guard seam. This does not activate the default generation path.
+
+- The proposed review gate below was a recommendation, **not an existing V0 contract requirement**. The implementation always emits `reviewState: "unreviewed"`; it creates no approval workflow, receipt store or automatic `unknowns-marked` transition.
+- `available` means the actor-authorized projection is safe and useful under its declared source/field/budget checks. It does not mean human approval or a complete `RequiredContextBundleV0`. Identity plus a substantive authorized fact is the minimum; extra declared required paths add to it. Missing optional organizational fields remain explicit unknowns.
+- A `partial` projection may provide safe canonical content for registry inspection, but withholds `requiredEntry`. It cannot silently satisfy mandatory Company Architecture coverage. Joseph/TL retain ownership of final review policy, required-field policy and the complete mandatory bundle.
+- All positive document dependencies, including grouped subject identities, must be authorized and exactly current before their fused value is exposed. Manual entries remain unreviewed accounts. Profile/provenance/version and actor/ACL identities bind the projection; current-state guards must recheck them before use or persistence.
+
+The stricter whole-source/review activation recommendations in the original proposal are therefore not claims about the implemented default behavior. See the implementation's focused synthetic tests for its actual boundary; production activation remains separate work.
+
 ## Verified source map
 
 | Existing source                                                                                                                                                                                                                                                                                                                                                                   | What it actually provides                                                                                                                                                                                                                                                                                              |

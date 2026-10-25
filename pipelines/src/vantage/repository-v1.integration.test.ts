@@ -39,6 +39,8 @@ import { getCommitment, getEvidence, getObservation } from "./db";
 import { reportPeriod } from "./period-v1";
 import { previousVantageFingerprint } from "./previous-context-v1";
 import type { GenerationResult } from "./contract-v1";
+import { validateGenerationResult } from "./validate-generation-v1";
+import { computeGenerationSignals, eligibleInput } from "./evidence-v1";
 
 const target = process.env.VANTAGE_TL_TEST_DATABASE_URL;
 describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
@@ -1265,6 +1267,71 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
         expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(1);
         expect(JSON.stringify(third.input.pendingHistoricalQuestions)).not.toContain("PRIVATE");
+    });
+    it("rejects a source-bound event promotion before persistence and retains reports, ledger, decisions and actions", async () => {
+        const prior = await pendingPrior();
+        const current = await saveNoTopics();
+        const sourceId = randomUUID();
+        await connection.db.insert(evidence).values({
+            id: sourceId,
+            companyId: ours,
+            createdByUserId: userId,
+            kind: "note",
+            title: "Synthetic pilot scheduling request",
+            body: "The customer requested moving the pilot start from November 20 to November 27.",
+            observedAt: "2026-10-16",
+            visibility: "private",
+            createdAt: new Date("2026-10-16T16:00:00Z"),
+            updatedAt: null,
+        });
+        const beforeReport = await getAgendaV1(ours, { id: current.agenda.id });
+        const beforeOrigin = await getAgendaV1(ours, { id: prior.id });
+        const beforeActions = await listCommitmentsV1({ companyId: ours });
+        const beforeState = await connection.db
+            .select()
+            .from(states)
+            .where(eq(states.companyId, ours))
+            .orderBy(states.agendaId);
+        const s = await generationSnapshot(ours, rollingPeriod(), "configured-model", {
+            actorId: userId,
+        });
+        expect(s.input.data.currentEvidence.map(item => item.id)).toContain(sourceId);
+        const contradictory = result(s);
+        contradictory.signals = computeGenerationSignals(eligibleInput(s.input));
+        contradictory.draft = {
+            summary: "The customer moved the pilot start from November 20 to November 27.",
+            topics: [],
+            origin: "ai",
+            modelMetadata: { mode: "ai" },
+        };
+        contradictory.execution = {
+            outcome: "generated",
+            mode: "ai",
+            fallbackReason: null,
+            modelId: "synthetic-boundary-test",
+            promptVersion: "synthetic-boundary-test",
+            attempts: 1,
+            durationMs: 1,
+        };
+        let reachedPersistence = false;
+        await expect(
+            (async () => {
+                const checked = validateGenerationResult(s.input, contradictory);
+                reachedPersistence = true;
+                return saveGeneration(ours, userId, s, checked);
+            })()
+        ).rejects.toMatchObject({ code: "generation_failed" });
+        expect(reachedPersistence).toBe(false);
+        expect(await getAgendaV1(ours, { id: current.agenda.id })).toEqual(beforeReport);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(beforeOrigin);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(beforeActions);
+        expect(
+            await connection.db
+                .select()
+                .from(states)
+                .where(eq(states.companyId, ours))
+                .orderBy(states.agendaId)
+        ).toEqual(beforeState);
     });
     it.each(["old-origin", "old-source", "carried-review"])(
         "rejects generation if %s changes after its rolling snapshot",

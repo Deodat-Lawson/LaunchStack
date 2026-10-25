@@ -1,0 +1,779 @@
+{
+  "fixtureVersion": "vantage-grounding/event-states-v1",
+  "evidenceClass": "Synthetic supplied inputs and manual semantic criteria, not observed outputs or validated truth",
+  "baselineCommit": "83cf88c8aa77b33587632a0b352f6365275d0153",
+  "originalRollingInput": {
+    "path": "test-output\\rolling-carry-forward\\20261025T162731Z\\live-02\\C-week-3.input.json",
+    "inputSha256": "f342720ff59f773db0fb793dacb3e599323cc208ac50c7c0a5585aff53ebede6"
+  },
+  "cases": [
+    {
+      "id": "requested-only",
+      "description": "A customer requests a date change; no acceptance is recorded.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-requested-only",
+        "inputVersion": "fixture-event-states-v1:requested-only",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "request-only",
+              "kind": "note",
+              "title": "Pilot scheduling note",
+              "body": "The customer requested moving the synthetic pilot start from November 20 to November 27. No technical acceptance review was conducted in the rescheduling call.",
+              "source": "Pilot scheduling note",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:request-only records a request to move the pilot start and no technical review during that call."
+        ],
+        "unsupported": [
+          "A changed or confirmed start date; customer/operator agreement; no review anywhere; readiness or deletion completion."
+        ],
+        "usefulReview": [
+          "Keep requested/proposed modality in summary and framing, not only the cited fact. A useful question may ask whether the request was accepted and what acceptance evidence is available."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "confirmed-later",
+      "description": "A later separate source explicitly confirms the previously requested date.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-confirmed-later",
+        "inputVersion": "fixture-event-states-v1:confirmed-later",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "date-request",
+              "kind": "note",
+              "title": "Customer date request",
+              "body": "On November 10, the customer requested moving the synthetic pilot start from November 20 to November 27.",
+              "source": "Customer date request",
+              "sourceUrl": null,
+              "observedAt": "2026-11-10",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-10T16:00:00.000Z"
+            },
+            {
+              "id": "date-confirmation",
+              "kind": "note",
+              "title": "Pilot date confirmation",
+              "body": "On November 13, the customer and pilot operator explicitly confirmed November 27 as the pilot start date. No technical acceptance review was recorded in this confirmation.",
+              "source": "Pilot date confirmation",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:date-confirmation supports confirmed November 27 start; ev:date-request supplies the earlier request."
+        ],
+        "unsupported": [
+          "Confirmation based only on ev:date-request; technical approval or implementation completion from schedule confirmation."
+        ],
+        "usefulReview": [
+          "Allow a stronger confirmed state when cited to the later explicit confirmation. Do not become so cautious that confirmation can never be reported."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "planned-versus-actual-deployment",
+      "description": "A production deployment is planned; a staging deployment actually occurred.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-planned-versus-actual-deployment",
+        "inputVersion": "fixture-event-states-v1:planned-versus-actual-deployment",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "production-plan",
+              "kind": "note",
+              "title": "Release plan",
+              "body": "Release v17 is planned for production deployment on November 15, subject to operator approval.",
+              "source": "Release plan",
+              "sourceUrl": null,
+              "observedAt": "2026-11-10",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-10T16:00:00.000Z"
+            },
+            {
+              "id": "staging-deployed",
+              "kind": "note",
+              "title": "Staging deployment record",
+              "body": "On November 13, release v17 was deployed to the synthetic staging environment and its staging smoke check passed. This record contains no production deployment event.",
+              "source": "Staging deployment record",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:production-plan supports a conditional production plan; ev:staging-deployed supports actual staging deployment and one staging check."
+        ],
+        "unsupported": [
+          "Production deployed because its planned date passed; staging success proves production completion or universal reliability."
+        ],
+        "usefulReview": [
+          "Preserve environment and event-state boundaries. Distinguish actual staging observation from the conditional production plan."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "reported-success-open-action",
+      "description": "Source-reported acceptance success coexists with a canonical open action.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-reported-success-open-action",
+        "inputVersion": "fixture-event-states-v1:reported-success-open-action",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "reported-invoice-success",
+              "kind": "note",
+              "title": "Invoice verification account",
+              "body": "On November 13, a synthetic reviewer reported that all five invoice export checks downloaded CSVs with matching totals and displayed confirmation notifications.",
+              "source": "Invoice verification account",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": [
+            {
+              "id": "invoice-verification-action",
+              "agendaId": null,
+              "topicId": null,
+              "topicTitle": null,
+              "title": "Verify invoice CSV and confirmation in five checks",
+              "owner": "Noah",
+              "dueOn": "2026-11-13",
+              "test": "All five checks download a CSV with matching totals and display a confirmation notification.",
+              "status": "open",
+              "outcome": null,
+              "shared": false,
+              "resolvedAt": null,
+              "createdAt": "2026-11-10T15:00:00.000Z"
+            }
+          ]
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:reported-invoice-success is a dated reported result; cm:invoice-verification-action is currently recorded open with no outcome or resolution."
+        ],
+        "unsupported": [
+          "Action recorded done/closed; actual noncompletion because status is open; independent human confirmation of closure; automatic status mutation or a duplicate commitment."
+        ],
+        "usefulReview": [
+          "Compare the reported result with the supplied acceptance test and ask what record reconciliation is needed. Do not order the same five checks again by default."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "document-edit-not-implementation",
+      "description": "A submitted document-change account describes editorial edits without implementation evidence.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-document-edit-not-implementation",
+        "inputVersion": "fixture-event-states-v1:document-edit-not-implementation",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "document-editorial-edit",
+              "kind": "document",
+              "title": "Invoice checklist document edit",
+              "body": "The synthetic workspace checklist was renamed and its date label corrected on November 13. The change account contains no implementation result, deployment record, or acceptance check.",
+              "source": "Invoice checklist document edit",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:document-editorial-edit reports an editorial change account; automatic actor-authorized workspace document verification remains unavailable."
+        ],
+        "unsupported": [
+          "Implementation, deployment, task completion, verified document contents, or action closure because a document changed."
+        ],
+        "usefulReview": [
+          "Attribute the account and distinguish edits from product behavior. A useful check requests relevant actual behavior evidence rather than treating version metadata as completion."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "negated-confirmation",
+      "description": "Negation and call-local absence must retain their scope.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-negated-confirmation",
+        "inputVersion": "fixture-event-states-v1:negated-confirmation",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "not-confirmed",
+              "kind": "note",
+              "title": "Scheduling clarification",
+              "body": "The customer has not confirmed the requested November 27 pilot start. No technical acceptance review took place during the November 13 scheduling call. Deployment of release v18 to production was not approved.",
+              "source": "Scheduling clarification",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:not-confirmed states confirmation has not occurred, no technical review occurred during the named call, and deployment of release v18 to production was not approved."
+        ],
+        "unsupported": [
+          "A confirmed date or approved production deployment; dropping either negation; no technical acceptance review at any time; failure inferred from missing feedback."
+        ],
+        "usefulReview": [
+          "Retain the explicit negation and limit review absence to the call. Ask whether evidence exists elsewhere without asserting it must be missing."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "same-body-request-then-confirmation",
+      "description": "One source contains an older request followed by a later explicit confirmation.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-same-body-request-then-confirmation",
+        "inputVersion": "fixture-event-states-v1:same-body-request-then-confirmation",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "request-then-confirmed",
+              "kind": "note",
+              "title": "Pilot date follow-up",
+              "body": "On November 10, the customer requested moving the pilot start from November 20 to November 27. On November 13, the customer and pilot operator confirmed November 27 as the pilot start date. No technical acceptance review was part of that confirmation.",
+              "source": "Pilot date follow-up",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": null,
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:request-then-confirmed supports both dated phases and the later confirmed November 27 date."
+        ],
+        "unsupported": [
+          "Rejecting all confirmed wording merely because the same body also contains requested; technical approval from scheduling confirmation."
+        ],
+        "usefulReview": [
+          "Use the later supported event state while keeping technical acceptance separate. This is a guard against a blanket lexical requested-to-confirmed prohibition."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "current-contradicts-history",
+      "description": "Current approval-pending evidence overrides an unsupported historical AI approval conclusion.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "synthetic-grounding-current-contradicts-history",
+        "inputVersion": "fixture-event-states-v1:current-contradicts-history",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "approval-pending",
+              "kind": "note",
+              "title": "Current approval status",
+              "body": "On November 13, the pilot operator recorded that the requested November 27 start still awaits customer approval. No approval confirmation is recorded in this account.",
+              "source": "Current approval status",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "factual-grounding"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": {
+          "contractVersion": "previous-vantage/v1",
+          "trust": "untrusted-history",
+          "reportId": "historical-pilot-report",
+          "weekStart": "2026-11-02",
+          "generatedAt": "2026-11-09T17:00:00.000Z",
+          "reportVersion": 1,
+          "snapshotVersion": "synthetic-historical-approval-v1",
+          "summary": "The previous AI concluded that the pilot date was approved for November 27.",
+          "topics": [
+            {
+              "topicId": "historical-approved-topic",
+              "contentVersion": 1,
+              "origin": "ai",
+              "status": "suggested",
+              "title": "Pilot date approved",
+              "historicalClaims": [
+                "The previous AI stated that the customer approved November 27."
+              ],
+              "interpretation": "The previous AI treated an earlier request as an approved schedule.",
+              "question": "What follows from the approved date?",
+              "suggestedNextStep": "Prepare access for the approved date.",
+              "suggestedDue": "2026-11-20",
+              "recordedDecision": null,
+              "reportedActions": [],
+              "originalRefs": [
+                {
+                  "ref": "ev:historical-date-request",
+                  "status": "available",
+                  "documentVerification": "not-applicable"
+                }
+              ]
+            }
+          ],
+          "unavailableSources": [],
+          "omissions": {
+            "topics": 0,
+            "refs": 0,
+            "summary": false
+          },
+          "documentVerification": "unavailable"
+        },
+        "pendingHistoricalQuestions": null
+      },
+      "manualReview": {
+        "supported": [
+          "ev:approval-pending reports the current awaiting-approval state. Historical AI approval language remains untrusted history."
+        ],
+        "unsupported": [
+          "Treating historical AI approval as authoritative or current; citing the historical report as current proof; claiming the historical week was conclusively disproved without time-specific evidence."
+        ],
+        "usefulReview": [
+          "Explain the current pending approval rather than continue planning as though confirmed. The current source may revise current interpretation without proving every past event."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    },
+    {
+      "id": "original-rolling-c3",
+      "description": "Exact original rolling C3 input retained, including actual historical pending IDs and prior summary.",
+      "input": {
+        "contractVersion": "v1",
+        "runId": "c7c8dbfd-691d-4ad3-8535-dc040114be74",
+        "inputVersion": "79702cd2958045764638a89f4f4a3a7c44a5ec23cd0c5818e7c9e006a33c0217",
+        "reportPeriod": {
+          "weekStart": "2026-11-09",
+          "timeZone": "America/New_York",
+          "startInclusive": "2026-11-09T05:00:00.000Z",
+          "endExclusive": "2026-11-16T05:00:00.000Z",
+          "asOf": "2026-11-16T17:00:00.000Z",
+          "kind": "completed-week"
+        },
+        "generationMode": "configured-model",
+        "data": {
+          "metricDefinitions": [],
+          "currentEvidence": [
+            {
+              "id": "d86c5d37-89f3-4d24-a38e-06b3604d8786",
+              "kind": "note",
+              "title": "Pilot scheduling note",
+              "body": "The customer requested moving the synthetic pilot start from November 20 to November 27. No technical acceptance review was conducted in the rescheduling call.",
+              "source": "Pilot scheduling note",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "cross-week-evaluation"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            },
+            {
+              "id": "6ef8e9ed-d2b6-4b88-9757-26d44309fe97",
+              "kind": "note",
+              "title": "Operator invitation observation",
+              "body": "Two of six invited synthetic operators could not locate the invitation link in the onboarding message during the November 13 test. The other four opened the link. No explanation for the difference was recorded.",
+              "source": "Operator invitation observation",
+              "sourceUrl": null,
+              "observedAt": "2026-11-13",
+              "visibility": "private",
+              "tags": ["synthetic", "cross-week-evaluation"],
+              "createdAt": "2026-11-13T16:00:00.000Z"
+            }
+          ],
+          "currentObservations": [],
+          "comparisonObservations": [],
+          "resolvedCommitments": [],
+          "carryForwardCommitments": []
+        },
+        "reviewedTopics": [],
+        "previousVantageContext": {
+          "contractVersion": "previous-vantage/v1",
+          "trust": "untrusted-history",
+          "reportId": "4cca954c-7872-4cf2-a170-4969bb21ef22",
+          "weekStart": "2026-11-02",
+          "generatedAt": "2026-11-09T17:00:00.000Z",
+          "reportVersion": 1,
+          "snapshotVersion": "fa0056fe80d9c38da87aa66cf556355249367ba6f5b4a4a9782376dcb73d1dcb",
+          "summary": "Invoice verification results and the resolved commitment record report that all five synthetic invoice checks downloaded matching-total CSVs and showed confirmation, meeting the stated acceptance test. The Showcase follow-up note says the optional November 4 showcase took place without team attendance and the organizer requested no follow-up materials. No supplied current item reports the deletion dry-run result, so the previously recorded pilot-readiness question remains unknown; if it is still relevant this week, checking for that result is a useful focus before revisiting go/no-go.",
+          "topics": [],
+          "unavailableSources": [],
+          "omissions": {
+            "topics": 0,
+            "refs": 0,
+            "summary": false
+          },
+          "documentVerification": "unavailable"
+        },
+        "pendingHistoricalQuestions": {
+          "contractVersion": "pending-historical-questions/v1",
+          "trust": "historical-human-records",
+          "questions": [
+            {
+              "title": "Invoice export result is unverified",
+              "origin": "ai",
+              "question": "Did either click generate a CSV, and should the export provide clearer confirmation?",
+              "questionId": "67f60126-1439-455f-994d-3e07b54ab620",
+              "sourceRefs": [
+                {
+                  "ref": "ev:6d6b6ade-8bd5-4aa8-9450-7c3f6451684f",
+                  "date": "2026-10-30",
+                  "label": "Invoice export test note"
+                }
+              ],
+              "humanReview": {
+                "kind": "recorded-decision",
+                "status": "kept",
+                "decision": "Verify CSV generation and confirmation separately in five synthetic tests before deciding whether implementation work is needed.",
+                "decidedAt": "2026-11-02T17:00:00.000Z",
+                "contentVersion": 3
+              },
+              "suggestedDue": null,
+              "originTopicId": "67f60126-1439-455f-994d-3e07b54ab620",
+              "originReportId": "a90a32ca-cafc-47e9-b807-b719813f6e86",
+              "originWeekStart": "2026-10-26",
+              "originGeneratedAt": "2026-11-02T17:00:00.000Z"
+            },
+            {
+              "title": "Deletion dry run required before pilot access",
+              "origin": "ai",
+              "question": "Should the deletion dry run be the next readiness check for the synthetic pilot?",
+              "questionId": "e637cb46-0e71-4b30-9dcb-583f56768db6",
+              "sourceRefs": [
+                {
+                  "ref": "ev:30dbf055-a0e2-4d0f-a5de-626447074d48",
+                  "date": "2026-10-30",
+                  "label": "Pilot acceptance note"
+                }
+              ],
+              "humanReview": {
+                "kind": "recorded-decision",
+                "status": "kept",
+                "decision": "Before enabling pilot access, obtain and review the deletion dry-run result required by the November 20 acceptance checklist. Keep the go/no-go question for the next weekly review; do not infer readiness without the result.",
+                "decidedAt": "2026-11-02T17:00:00.000Z",
+                "contentVersion": 2
+              },
+              "suggestedDue": null,
+              "originTopicId": "e637cb46-0e71-4b30-9dcb-583f56768db6",
+              "originReportId": "a90a32ca-cafc-47e9-b807-b719813f6e86",
+              "originWeekStart": "2026-10-26",
+              "originGeneratedAt": "2026-11-02T17:00:00.000Z"
+            }
+          ],
+          "unavailableCount": 0,
+          "reviewedQuestionIds": [],
+          "snapshotVersion": "aedbc886f8de4589ba133ffc49741b00af54c0cafaa7b7205a782b4a94d2ad88"
+        }
+      },
+      "manualReview": {
+        "supported": [
+          "Current pilot scheduling source supports a request to move dates, with no technical review during that call; invitation source supports two of six missed links and four opened links. Historical deletion question is a human-reviewed investigation clue."
+        ],
+        "unsupported": [
+          "Customer definitely moved/confirmed the date; schedule change proves readiness or deletion completion; no review ever occurred; invitation difficulty causes pilot date change."
+        ],
+        "usefulReview": [
+          "Preserve requested modality across summary/title/why/question as well as facts; keep invitation and scheduling independent; seek the historical deletion result without claiming it is currently missing or incomplete."
+        ],
+        "fieldsToInspect": [
+          "summary",
+          "topic.title",
+          "topic.facts",
+          "topic.whyItMatters",
+          "topic.decisionQuestion",
+          "topic.proposedNextStep",
+          "topic.unknowns",
+          "topic.conflicts",
+          "topic.rationale",
+          "enhancements"
+        ],
+        "rule": "These are human qualitative criteria, not automatic keyword scores. Clearly labeled proposals and conditions are not completed-event claims."
+      }
+    }
+  ],
+  "observedPriorFailure": {
+    "summary": "In the Nov 13 operator test, two of six synthetic operators could not find the invitation link, while four opened it; the Operator invitation observation records no explanation for the difference. Separately, the Pilot scheduling note says the customer moved the synthetic pilot start from Nov 20 to Nov 27, and no technical acceptance review took place during that rescheduling call—this does not establish whether a review happened elsewhere. A useful focus this week is to clarify what acceptance evidence is available ahead of the revised start, while separately checking whether invitation-link discoverability can be improved.",
+    "model": "gpt-6-luna-2026-09-22",
+    "source": "test-output/rolling-carry-forward/20261025T162731Z/live-02/C-week-3.result.json",
+    "promptVersion": "vantage-agenda/contract-v1.5-history.2-rolling"
+  }
+}

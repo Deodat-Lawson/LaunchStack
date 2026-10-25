@@ -27,8 +27,9 @@ import {
 import { canonicalRefs, protectReviewedTopics, rulesGeneration } from "./rules-v1";
 import { usablePreviousVantage } from "./revalidate-previous-v1";
 import { projectHistoricalPrompt, usablePendingQuestions } from "./pending-question-context-v1";
+import { eventStateContradictions } from "./event-state-grounding-v1";
 
-export const GENERATION_PROMPT_VERSION = "vantage-agenda/contract-v1.5-history.2-rolling";
+export const GENERATION_PROMPT_VERSION = "vantage-agenda/contract-v1.5-history.3-event-state";
 export const GENERATION_BUDGETS: GenerationRuntime["budgets"] = {
     attemptTimeoutMs: 20000,
     maxAttempts: 2,
@@ -83,6 +84,7 @@ Write a decision-useful weekly summary in 3–5 concise sentences when evidence 
 Prioritize topics by their supported relevance to the week: unresolved measurement conflicts, observed changes, specific feedback, and existing commitments. Explain the choice in rationale; do not invent business impact or urgency. In whyItMatters, distinguish a plausible implication from a fact. For a proposedNextStep, suggest a concrete, small check or experiment tied to the cited observation, including what to observe before deciding whether to change direction. Label hypotheses and new ideas as suggestions. Avoid the same generic next step for every topic. Stay within the field limits and prefer fewer well-developed topics to shallow filler.
 Return up to five useful topics; do not fill a quota. Topics may ask the founder to decide, think, or discuss. Separate observed facts, interpretation (whyItMatters), question, optional proposed next step, and unknowns. Never infer prevalence or willingness to pay from a few interviews; never invent causes or urgency. Numerical comparisons must use the computed signals and cite BOTH observations. Overlapping conflicting measurements are conflicts, not a reliable trend. Comparison observations are prior context; carry-forward commitments retain original dates and are not current events. A date-only observation is not an exact timestamp.
 Each fact/conflict and enhancement must cite only supplied item refs; a source ID alone is not proof of support. Summaries, titles, and interpretations must also remain grounded. Report unsupported conclusions as unknowns, not facts. The private agenda may refer to authorized private notes; it grants no sharing permission.
+EVENT-STATE ATTRIBUTION: Preserve the state supported by each source throughout the summary, titles, facts, interpretations and questions: requested; proposed; planned; approved or scheduled; executed or deployed; reported completed; independently verified completed. These are distinct claims, not automatic transitions. A request to move a date does not establish that it moved or was agreed; keep the requested date conditional unless supplied current evidence explicitly confirms the same event and target. Approval or a plan does not establish execution. Preserve negation, environment, timing and the particular test/attempt. A source reporting successful checks is a reported result, not independent verification or official closure of an action. An edited document is not evidence its described implementation was completed. A recorded human decision proves the choice was recorded, not that the work happened. Cite the actual confirming source for a stronger fact. When a source contains an old request and an explicit subsequent confirmation, distinguish both instead of freezing its state at the request. Current evidence may correct historical AI claims; historical interpretation never supplies confirmation. If confirmation is absent, say what remains unconfirmed and ask a useful clarification.
 Reviewed topics, their decisions, and action links are protected. Propose additions only in enhancements with the exact topicId and baseTopicVersion; never duplicate or replace a reviewed topic. New evidence, ideas, and questions are separate suggestions, never approved changes. Owner must be null unless explicitly named in a supplied commitment. Set helpRequested to null. When evidence is thin, say what remains unknown. Return JSON only.`;
 
 export const GENERATION_SYSTEM_PROMPT =
@@ -211,6 +213,11 @@ export function generationPrompt(input: GenerationInput, pack: EvidencePack) {
 
 function normalizeOutput(raw: unknown, input: GenerationInput, pack: EvidencePack) {
     const output = GenerationOutputSchema.parse(raw);
+    if (
+        eventStateContradictions(output, pack.items, input.reportPeriod.weekStart.slice(0, 4))
+            .length
+    )
+        throw new InvalidStructuredAttemptError();
     const canonical = canonicalRefs(input),
         selected = new Set(pack.items.map(i => i.ref));
     const refs = (ids: string[]) => {
@@ -385,7 +392,7 @@ export function createGenerationPort(invoke: Invoke = invokeStructuredAttempt): 
                                         new SystemMessage(
                                             GENERATION_SYSTEM_PROMPT +
                                                 (fallbackReason === "invalid-output"
-                                                    ? "\nThe previous attempt was invalid. Check the schema, source IDs and protected topic versions carefully."
+                                                    ? "\nThe previous attempt was invalid. Check schema, source IDs and protected topic versions. Preserve event states in summary and topics: a request or plan is not confirmation or execution; a stronger claim needs current confirming evidence."
                                                     : "")
                                         ),
                                         new HumanMessage(prompt.text),
@@ -462,7 +469,8 @@ export function createGenerationPort(invoke: Invoke = invokeStructuredAttempt): 
                       progress: "Unverified; only explicit human review closes a carried question.",
                   }
                 : null,
-            grounding: "Citation IDs validated; semantic source support requires human review.",
+            grounding:
+                "Citation IDs and narrowly matched event-state contradictions checked; semantic source support still requires human review.",
         };
         return {
             runId: supplied.runId,

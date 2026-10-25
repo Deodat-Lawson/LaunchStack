@@ -50,7 +50,7 @@
     "reconnecting": "正在重新连接",
     "live": "录制中",
     "connecting": "正在连接",
-    "stoppedSilence": "已自动停止 — 无音频",
+    "stoppedSilence": "已自动停止 — 长时间静音",
     "stoppedCallEnded": "已自动停止 — 通话已结束",
     "stoppedLimit": "已自动停止 — 已达录制时长上限",
     "partial": "{status} · 不完整",

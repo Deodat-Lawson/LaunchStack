@@ -50,7 +50,7 @@
     "reconnecting": "Reconnecting",
     "live": "Live",
     "connecting": "Connecting",
-    "stoppedSilence": "Stopped automatically — no audio",
+    "stoppedSilence": "Stopped automatically — silence",
     "stoppedCallEnded": "Stopped automatically — call ended",
     "stoppedLimit": "Stopped automatically — capture time limit",
     "partial": "{status} · Partial",

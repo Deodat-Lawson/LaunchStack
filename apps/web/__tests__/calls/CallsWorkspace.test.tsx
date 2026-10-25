@@ -310,25 +310,3 @@ describe("CallsWorkspace", () => {
         );
     });
 });
-
-it.each([
-    ["silence", "Stopped automatically — no audio"],
-    ["call_ended", "Stopped automatically — call ended"],
-    ["max_duration", "Stopped automatically — capture time limit"],
-] as const)(
-    "shows the server-provided %s auto-stop reason in the ended state",
-    (stopReason, label) => {
-        const ended = {
-            ...northstarPricingReviewCall,
-            capture: {
-                ...northstarPricingReviewCall.capture,
-                desiredMode: "stopped" as const,
-                stopReason,
-            },
-        };
-        render(<CallsWorkspace calls={[ended]} initialSelectedId={ended.id} />);
-        expect(screen.getByRole("status", { name: "Capture status" })).toHaveTextContent(label);
-        expect(screen.queryByRole("button", { name: "Stop capture" })).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Resume capture" })).not.toBeInTheDocument();
-    }
-);

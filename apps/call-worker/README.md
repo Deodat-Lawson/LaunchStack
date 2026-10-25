@@ -1,8 +1,10 @@
 # LaunchStack Capture worker
 
-The Local Capture Worker is bundled with **LaunchStack Capture for Mac**. Install the Apple-silicon DMG from **Calls → Get Call Notes for Mac**, open the app, and approve Microphone and Screen & System Audio Recording permissions. The download pairs this Mac with your LaunchStack account; the app stores the device token in Keychain and supervises its bundled Node 24 worker. Use Start, Pause, Resume and Stop in Calls or the menu-bar app. The worker needs no database access or transcription-provider credentials.
+The Local Capture Worker is bundled with **LaunchStack Capture for Mac**. Install the Apple-silicon DMG from **Calls → Get Call Notes for Mac**, open the app, and approve Microphone and Screen & System Audio Recording permissions. The app stores its paired device token in Keychain and supervises its bundled Node 24 worker. Start and Stop are available in both Calls and the menu-bar app; Pause and Resume are website controls, not native buttons. Users need no repository checkout, shared token, company/user environment configuration, database access, or transcription-provider credentials.
 
-Supported production runtime: macOS 14+, Apple silicon. The app launches the bundled Node executable with `worker/main.js`; secrets are supplied on stdin, never in arguments or environment variables. Both microphone and computer audio come from the bundled native helper. Computer audio includes other applications and notifications, even when using headphones; it is not limited to the call application and does not identify speakers.
+The target runtime is macOS 14+, Apple silicon. The app launches the bundled Node executable with `worker/main.js`; secrets are supplied on stdin, never in arguments or environment variables. Both microphone and computer audio come from the bundled native helper. Computer audio includes other applications and notifications, even when using headphones; it is not limited to the call application and does not identify speakers.
+
+The download carries a 24-hour, single-use pairing code. Automatic pairing uses the app's own quarantine download URL, or the original DMG's raw `com.apple.metadata:kMDItemWhereFroms` extended attribute only after its quarantine event UUID exactly matches the app's. Spotlight locates candidate installers first; the bounded Downloads lookup may request macOS Downloads permission and reads installer metadata, not file contents. If provenance is unavailable, permission is denied, or the code has expired or been consumed, use **Connect** in Calls for a new `launchstack-capture://pair` link. The app's **Sync with website** opens that flow.
 
 ## Server-only transcription configuration
 
@@ -18,9 +20,9 @@ CALL_NOTES_TRANSCRIPTION_LANGUAGE="en-US"
 
 Azure requires the URL and subscription key together. The URL may already end in `/speechtotext/transcriptions:transcribe`; otherwise the server appends that path. Existing query parameters are preserved, and `api-version=2025-10-15` is added only if the URL has no API version. A request's optional `language` overrides the server default; when neither is supplied, the Azure `definition` omits `locales`. Azure requests have a 20-second deadline and honor request cancellation. Do not put these settings or provider keys in the worker's stdin JSON, app configuration, or device credential storage.
 
-## Development without the Mac app
+## Optional development without the Mac app
 
-Prerequisites: Node 24, pnpm 10.15.1, Xcode command-line tools with a macOS 14+ SDK, and a running LaunchStack deployment that supports device pairing. From the repository root:
+This is a developer-only alternative, not an installation requirement. Prerequisites: Node 24, pnpm 10.15.1, Xcode command-line tools with a macOS 14+ SDK, and a running LaunchStack deployment that supports device pairing. From the repository root:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -32,13 +34,15 @@ pnpm --filter @launchstack/call-worker system-audio:status
 
 The helper is `apps/call-worker/native/system-audio-capture/.build/release/launchstack-system-audio`. Its `--status` command does not prompt: it reports separate `microphone` and `system` permission objects. A successful status command means the payload was read, **not** that both permissions are granted; check each source's `authorized` field. Grant permissions to the host application macOS lists for this launch context and restart that host after changing permissions.
 
-Obtain a device token through pairing (`POST /api/call-notes/devices/pair` using a single-use pairing code generated in Calls). Keep the raw token private. Create `~/.config/launchstack/call-worker.json`, readable only by your user (`chmod 600`), containing **one JSON line**, for example:
+Worker probes use `--status --source microphone|system` and read only the selected permission object. Status observes permission and active-display availability; it is not capture proof. Only an explicit system-audio capture enumerates ScreenCaptureKit content, avoiding concurrent inventory queries from routine permission checks. The outer status-process deadline is seven seconds; actual capture inventory has its own five-second bound.
 
-```json
+For this optional development path, obtain a device token through pairing (`POST /api/call-notes/devices/pair` using a single-use pairing code generated in Calls). Keep the raw token private. Create `~/.config/launchstack/call-worker.json`, readable only by your user (`chmod 600`), containing **one JSON line**, for example:
+
+```jsonl
 {
   "origin": "https://app.example.com",
   "deviceToken": "lsc_REPLACE_WITH_THE_43_CHARACTER_PAIRED_TOKEN",
-  "appVersion": "0.1.0",
+  "appVersion": "0.1.7",
   "systemAudioHelperPath": "/absolute/path/to/checkout/apps/call-worker/native/system-audio-capture/.build/release/launchstack-system-audio",
   "language": "en",
   "autoEnrich": false
@@ -83,6 +87,8 @@ There is no environment-based worker configuration. The Mac app normally supplie
 
 PCM and transcription WAVs are always 16 kHz mono signed 16-bit little-endian. Utterance, pre-roll and frame budgets together must fit the deployment's 2 MB WAV limit. Unknown config fields and invalid tuning values are rejected rather than silently ignored.
 
+These are worker-level development settings, not per-user website preferences. The installed app uses the four-minute silence default and a fixed 60-second native warning; Calls does not expose a pre-stop countdown or threshold editor.
+
 ## App IPC
 
 Stdin line 1 is the config above. Subsequent JSON lines are control messages:
@@ -95,7 +101,9 @@ Stdin line 1 is the config above. Subsequent JSON lines are control messages:
 
 Stdout is reserved **only** for newline-delimited contract JSON. Lifecycle updates are emitted for `idle`, `starting`, `capturing`, `paused` and `stopping`, with capture identity when applicable, microphone/system VAD activity, delivered segment count and the most recent segment timestamp. While capturing, progress snapshots are emitted every two seconds. Diagnostics and retry messages go only to stderr and do not include the device token or raw audio.
 
-After both channels remain inactive for `silenceTimeoutMs`, the worker emits `auto_stop_pending` with reason `silence` and an ISO `stopsAt` 60 seconds ahead. `call_ended_signal` starts the same countdown with reason `call_ended`. `keep_recording` emits `auto_stop_cancelled` when a countdown is pending and resets the silence window; renewed speech also cancels a silence countdown. On expiry, the worker sends `attempt_ended` with reason `silence_timeout` or `source_stopped`, then drains pending transcription before `occurrence_ended` and finish. A server-requested Stop, including its maximum-duration policy, follows the normal Stop drain. Pause drains only the current attempt; Resume opens a new attempt on the same call.
+After both channels remain inactive for `silenceTimeoutMs` (four minutes by default), the worker emits `auto_stop_pending` with reason `silence` and an ISO `stopsAt` 60 seconds ahead. The native app shows the countdown and **Keep recording**, and requests a macOS notification when notification permission permits. The website shows the persisted automatic-stop reason, not this pre-stop warning. `call_ended_signal` starts the same countdown with reason `call_ended`; the app's macOS 14.2+ heuristic observes other processes releasing microphone input after previously using it, not a conferencing service's authoritative call state.
+
+`keep_recording` emits `auto_stop_cancelled` when a countdown is pending and resets the silence window; renewed speech also cancels a silence countdown. On expiry, the worker stops sources and sends `attempt_ended` with reason `silence_timeout` or `source_stopped`, then drains pending transcription before `occurrence_ended` and finish. A server-requested Stop, including its maximum-duration policy, follows the normal Stop drain. Website Pause drains only the current attempt; website Resume opens a new attempt on the same Call.
 
 | Exit | Meaning                                                                                 |
 | ---- | --------------------------------------------------------------------------------------- |
@@ -112,6 +120,12 @@ All requests use `Authorization: Bearer <deviceToken>` and `X-LaunchStack-Captur
 Control-plane transport errors, timeouts, HTTP 429 and HTTP 5xx retain exponential backoff with full jitter (250 ms initial ceiling, 5-second cap). Poll retries have no total budget. Event and finish delivery have a 120-second total retry budget; individual non-long-poll requests time out after 30 seconds. Other HTTP 4xx and invalid JSON are non-retryable. HTTP 401 or 426 from either control or transcription terminates the worker with the app-specific exit code rather than restarting the capture.
 
 The worker bounds pending audio/transcription at eight utterances and ordered text delivery at 600 undelivered segments. PCM/WAV buffers are zeroed once transcription settles. These are memory-only buffers, not a durable replay queue: a failed attempt cannot recover undelivered segments on Resume. Unexpected helper EOF, readiness failure, transcription failure, buffer exhaustion or an exceeded drain budget reports attempt failure without falsely finishing the call. Already-ingested transcript remains available.
+
+A locally failed attempt is not restarted if a stale server poll reoffers it before the failure event arrives. Explicit website Resume must create a fresh attempt key. Confirmed stream loss uses `capture_stream_lost`; only an expired-lease `worker_unavailable` attempt proven to have a still-running pipeline may reattach and remove its presumed Gap. A crashed/restarted process does not prove that the old stream survived. Saved evidence remains available; real missing intervals remain Gaps and make a retained Transcript partial.
+
+Successful audio shutdown is not proof that speech was transcribed. A stopped Call with no saved Transcript evidence finalizes with `outcome: "failed"` and Call failure code `empty_capture`, including an otherwise orderly silence auto-stop. Its attempt can be ended without an attempt failure code while Capture `stopReason` is still `silence`; do not report that as a source crash or a successful non-empty Call.
+
+Installed ad-hoc **0.1.7** verified the native warning and silence-countdown expiry with three saved Computer audio sentences retained, a completed Call, native return to idle, and no recording helpers left running. Recorded installed-DMG coverage and release-signing limits are in the [implementation contract](../../docs/call-notes/implementation-contract.md#installed-mac-delivery-verification--2026-10-25). Local test artifacts are ad-hoc signed, not Developer ID-signed or notarized distribution proof.
 
 ## Checks
 

@@ -1648,8 +1648,9 @@ function TranscriptSection({
             <footer className={styles.transcriptFooter}>
                 <span className={styles.transcriptCapture}>
                     <i />
-                    {captureLabel(snapshot)}
-                    {snapshot.capture.outcome === "partial" ? " · Partial" : ""}
+                    {snapshot.capture.outcome === "partial"
+                        ? t("partial", { status: t(captureLabel(snapshot)) })
+                        : t(captureLabel(snapshot))}
                 </span>
                 <span className={styles.transcriptFeedback} role="status">
                     {copyStatus}

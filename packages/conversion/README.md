@@ -27,7 +27,6 @@ import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/vide
 | `./video-transcription` | URL detection + download-then-transcribe |
 | `./extraction-router` | (mime, filename, signals) → converter choice |
 | `./archive-expansion` | archive upload → member sources |
-| `./heading-chunker` | markdown → heading-aligned chunks |
 | `./ocr` | OCR primitives: config, complexity, enrichment, provider adapters, processor |
 | `./ports` | DocumentConverterPort · TranscriptionPort |
 

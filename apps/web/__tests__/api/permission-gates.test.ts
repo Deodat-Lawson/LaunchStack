@@ -382,7 +382,7 @@ const GATES: readonly Gate[] = [
         route: "GET /api/employer/upload/bootstrap",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => uploadBootstrap(),
+        call: () => uploadBootstrap(new Request("http://localhost/api/employer/upload/bootstrap")),
     },
     {
         route: "GET /api/fetchCompany (key tails, Ollama endpoint)",

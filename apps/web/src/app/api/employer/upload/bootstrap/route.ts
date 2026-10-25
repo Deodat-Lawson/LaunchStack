@@ -36,8 +36,7 @@ type UploadBootstrapResponse = {
     s3Endpoint?: string;
 };
 
-/** `request` is optional so a caller without one (a test) reads English. */
-export async function GET(request?: Request) {
+export async function GET(request: Request) {
     try {
         // Exposes storage configuration and every folder name, so it sits at
         // the settings tier rather than behind `documents.upload`.
@@ -106,7 +105,7 @@ export async function GET(request?: Request) {
         return NextResponse.json(
             {
                 error: translatorFor(
-                    request ? localeOfRequest(request) : "en",
+                    localeOfRequest(request),
                     "upload.server.errors"
                 )("bootstrapFailed"),
             },

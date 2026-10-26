@@ -12,13 +12,18 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Bell, CheckCheck, FileText, Folder, MessageSquare } from "lucide-react";
+import { Bell, CheckCheck, FileText, Folder, MessageSquare, MessageSquareText } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Spinner } from "~/components/ui/spinner";
+import {
+    FEEDBACK_NOTIFICATION_TARGET,
+    FEEDBACK_STATUSES,
+    type FeedbackStatus,
+} from "~/lib/feedback/contract";
 import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
 
@@ -29,14 +34,39 @@ import type { TeamTarget } from "./types";
 
 export const INBOX_POLL_MS = 60_000;
 
-const TYPE_ICON = { document: FileText, folder: Folder, chat: MessageSquare } as const;
+const TYPE_ICON = {
+    document: FileText,
+    folder: Folder,
+    chat: MessageSquare,
+    [FEEDBACK_NOTIFICATION_TARGET]: MessageSquareText,
+} as const;
+
+function isFeedbackEntry(entry: InboxEntry): boolean {
+    return entry.targetType === FEEDBACK_NOTIFICATION_TARGET;
+}
+
+function feedbackStatusOf(entry: InboxEntry): FeedbackStatus | null {
+    const status = entry.detail?.status;
+    return typeof status === "string" && (FEEDBACK_STATUSES as readonly string[]).includes(status)
+        ? (status as FeedbackStatus)
+        : null;
+}
 
 function isHidden(): boolean {
     return typeof document !== "undefined" && document.visibilityState === "hidden";
 }
 
-export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget) => void }) {
+export function InboxBell({
+    onOpenTarget,
+    onOpenFeedback,
+}: {
+    onOpenTarget: (target: TeamTarget) => void;
+    /** Where a feedback entry goes: the report in the Feedback tab. */
+    onOpenFeedback?: (reportId: number) => void;
+}) {
     const t = useTranslations("team.inboxBell");
+    const tFeedback = useTranslations("feedback.inbox");
+    const tStatus = useTranslations("feedback.status");
     const errorText = useErrorText();
     const tTeam = useTranslations("team");
     const tc = useTranslations("common");
@@ -94,8 +124,20 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
             void teamApi.inbox.markRead([entry.id]).catch(() => void refresh());
         }
         setOpen(false);
+        if (isFeedbackEntry(entry)) {
+            if (/^\d+$/.test(entry.targetId)) onOpenFeedback?.(Number(entry.targetId));
+            return;
+        }
         const target = inboxTarget(entry);
         if (target) onOpenTarget(target);
+    };
+
+    /** "Ada replied to your report “Upload stalls”" / "… marked it Done". */
+    const feedbackSentence = (entry: InboxEntry, actor: string): string => {
+        const status = feedbackStatusOf(entry);
+        return entry.detail?.event === "status" && status
+            ? tFeedback("status", { actor, name: entry.targetLabel, status: tStatus(status) })
+            : tFeedback("reply", { actor, name: entry.targetLabel });
     };
 
     const markAllRead = () => {
@@ -197,7 +239,9 @@ export function InboxBell({ onOpenTarget }: { onOpenTarget: (target: TeamTarget)
                                                             : "text-ink font-medium"
                                                     )}
                                                 >
-                                                    {inboxSentence(f, actorName, entry)}
+                                                    {isFeedbackEntry(entry)
+                                                        ? feedbackSentence(entry, actorName)
+                                                        : inboxSentence(f, actorName, entry)}
                                                 </span>
                                                 <span className="text-ink-3 mt-0.5 flex items-center gap-1 text-[11.5px]">
                                                     <Icon className="size-3 shrink-0" aria-hidden />

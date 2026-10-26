@@ -18,6 +18,8 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { useRegisterActions } from "~/components/context-menu";
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
+import { feedbackReportHref } from "~/lib/feedback/contract";
 import {
     APP_TARGET_KIND,
     SELECTION_TARGET_KIND,
@@ -1430,8 +1432,12 @@ export function WorkspaceShell() {
 
     /** The sidebar's inbox bell; the rail itself shows where the item lives. */
     const inboxRail = useMemo(
-        () => ({ onOpenTarget: (target: TeamTarget) => void openTeamTarget(target) }),
-        [openTeamTarget]
+        () => ({
+            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            // Through the URL, like any tool link: the `?feature=` effect opens the tab there.
+            onOpenFeedback: (reportId: number) => router.push(feedbackReportHref(reportId, "mine")),
+        }),
+        [openTeamTarget, router]
     );
 
     /**
@@ -2209,6 +2215,9 @@ export function WorkspaceShell() {
     const shortcutOverrides = useSettingValue<ShortcutBindings>("shortcuts.bindings");
     const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
     const bindingsRef = useRef(bindings);
+    const feedback = useFeedback();
+    const feedbackRef = useRef(feedback);
+    feedbackRef.current = feedback;
     bindingsRef.current = bindings;
     /** The member's keys, formatted for the controls that show them. */
     const shortcutHints = useMemo<ShortcutHints>(() => {
@@ -2291,6 +2300,9 @@ export function WorkspaceShell() {
                     break;
                 case "pane.close":
                     paneVerbsRef.current.close();
+                    break;
+                case "feedback.report":
+                    feedbackRef.current.open({ kind: "bug" });
                     break;
                 default:
                     if (command.id.startsWith("feature.")) {
@@ -2672,7 +2684,7 @@ export function WorkspaceShell() {
                             editingQueued={Boolean(editingQueued)}
                             queuedEditUnavailable={Boolean(
                                 editingQueued &&
-                                    !chatRuntime.queue.items.some(item => item.id === editingQueued)
+                                !chatRuntime.queue.items.some(item => item.id === editingQueued)
                             )}
                             onCancelQueueEdit={() => setEditingQueued(null)}
                             onQueueSendOldest={() => {

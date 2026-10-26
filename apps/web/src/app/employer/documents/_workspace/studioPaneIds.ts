@@ -26,6 +26,7 @@ export const STUDIO_PANE_IDS = [
     "mindmap",
     "workflows",
     "metadata",
+    "feedback",
 ] as const;
 
 export type StudioPaneId = (typeof STUDIO_PANE_IDS)[number];

@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronDown, Loader2, RefreshCw, Sparkles, X } from "lucide-react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolNav } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -18,10 +18,12 @@ import {
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
 import { useResource } from "~/lib/tools/useResource";
+import { PersonalContextPanel } from "~/components/vantage-context/PersonalContextPanel";
 import { ContextSourceDialog } from "../_components/ContextSourceDialog";
 import { PendingQuestions } from "../_components/PendingQuestions";
 import { BasisTag } from "../_components/Primitives";
 import { DemoApiError, demoSourceKey, demoSourceName, vantageDemoApi } from "../demo-api";
+import { createDemoPersonalContextClient } from "../demo-personal-client";
 import type {
     DemoHumanDecision,
     DemoReport,
@@ -75,6 +77,9 @@ function ContextDemoWeek({
     const [withheld, setWithheld] = useState(false);
     const [source, setSource] = useState<DemoSourceRef | null>(null);
     const [decision, setDecision] = useState<DemoTopic | null>(null);
+    const [personalOpen, setPersonalOpen] = useState(false);
+    const [personalReady, setPersonalReady] = useState<boolean | null>(null);
+    const [personalBlocker, setPersonalBlocker] = useState<string | null>(null);
     const alive = useRef(true);
     const running = useRef(false);
     const abort = useRef<AbortController | null>(null);
@@ -88,6 +93,32 @@ function ContextDemoWeek({
     const data = state.data;
     const report = !withheld && !state.error ? data?.report : null;
     const replayMode = data?.generationMode === "replay";
+    const personalEnabled = data?.personalContextAvailable === true;
+    const personalBlocked = personalEnabled && personalReady !== true;
+    const personalClient = useMemo(
+        () =>
+            createDemoPersonalContextClient(data?.selectedWeek, {
+                loaded: view => {
+                    if (!alive.current) return;
+                    setPersonalReady(view.ready);
+                    setPersonalBlocker(view.blocker ?? null);
+                },
+                invalidated: () => {
+                    if (alive.current) setPersonalReady(null);
+                },
+                unavailable: () => {
+                    if (!alive.current) return;
+                    setPersonalReady(false);
+                    setPersonalBlocker(
+                        "Personal context could not be checked. Reload before generation."
+                    );
+                },
+            }),
+        [data?.selectedWeek]
+    );
+    useEffect(() => {
+        if (personalEnabled) void personalClient.load().catch(() => undefined);
+    }, [personalEnabled, personalClient]);
     const locked = busy !== null || refreshing;
     useEffect(() => {
         if (data) onSelectedWeek?.(data.selectedWeek);
@@ -172,7 +203,7 @@ function ContextDemoWeek({
         }
     }
     function generate() {
-        if (!data) return;
+        if (!data || personalBlocked) return;
         abort.current = new AbortController();
         void save("generate", () =>
             vantageDemoApi.generate(data.selectedWeek, abort.current!.signal)
@@ -197,7 +228,7 @@ function ContextDemoWeek({
                 accent="with context"
                 sub="Read the evidence, make a decision, and keep your earlier questions in view."
                 actions={
-                    <Button onClick={generate} disabled={!data || locked}>
+                    <Button onClick={generate} disabled={!data || locked || personalBlocked}>
                         {busy === "generate" ? (
                             <Loader2 className="animate-spin" aria-hidden="true" />
                         ) : (
@@ -259,6 +290,44 @@ function ContextDemoWeek({
                     : "Generation explicitly calls the configured model and saves this contextual report only after validation."}{" "}
                 Reviews record your choice; they do not create actions.
             </p>
+            {personalEnabled && (
+                <section
+                    aria-label="Joseph personal context"
+                    className="border-line bg-panel rounded-lg border px-4 py-3"
+                >
+                    <details
+                        open={personalOpen}
+                        onToggle={event => setPersonalOpen(event.currentTarget.open)}
+                    >
+                        <summary className="text-ink cursor-pointer text-sm font-medium">
+                            Your roles and Vantage stars · Joseph integration
+                        </summary>
+                        <p className="text-ink-3 mt-3 text-xs leading-relaxed">
+                            Role and star choices are held in this demo server process memory, not
+                            browser storage or production PostgreSQL. Browser reload retains them
+                            while this server runs; restarting the server resets them. These choices
+                            apply to future context preparation; the saved report retains its
+                            original context.
+                        </p>
+                        {personalOpen && <PersonalContextPanel client={personalClient} />}
+                    </details>
+                    <p role="status" className="text-ink-3 mt-2 text-xs leading-relaxed">
+                        {personalReady === null
+                            ? "Checking Joseph required context before generation."
+                            : personalReady
+                              ? "Joseph required context is ready for the next generation."
+                              : (personalBlocker ??
+                                "Joseph required context is incomplete. Inspect coverage before generation.")}
+                    </p>
+                    {personalBlocked && (
+                        <p className="text-ink-3 mt-2 text-xs">
+                            Generation is blocked until required context is ready. Earlier report,
+                            citations and human reviews remain available; no company review status
+                            is inferred.
+                        </p>
+                    )}
+                </section>
+            )}
             {data?.companyArchitecture && !withheld && !state.error && (
                 <section
                     aria-label="Available Company Architecture"
@@ -439,7 +508,7 @@ function ContextDemoWeek({
                                             : "Generate when you are ready to call the configured model. Your native weekly review and earlier human decisions remain available."
                                 }
                                 action={
-                                    <Button onClick={generate} disabled={locked}>
+                                    <Button onClick={generate} disabled={locked || personalBlocked}>
                                         <Sparkles aria-hidden="true" />
                                         {replayMode
                                             ? "Replay recorded report"

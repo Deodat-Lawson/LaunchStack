@@ -36,6 +36,7 @@ import {
 } from "./experiments/sophia-composition-v0";
 import { createSophiaContextGenerationExperimentV0 } from "../../../../../pipelines/src/vantage/experiments/sophia-generation-v0";
 import { bindDemoReplayReport, DEMO_REPLAY, replayContextDemo } from "./experiments/demo-replay";
+import { createJosephPersonalHostV0 } from "./experiments/joseph-personal-host";
 import type {
     DemoReport,
     DemoSource,
@@ -273,7 +274,12 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             );
         return row ?? null;
     }
-    async function prepare(descriptor: VantageDemoDescriptor, week: string) {
+    async function prepare(
+        descriptor: VantageDemoDescriptor,
+        week: string,
+        personal?: ReturnType<typeof createJosephPersonalHostV0>,
+        catalogOnly = false
+    ) {
         const spec = descriptor.weeks.find(entry => entry.weekStart === week);
         if (!spec) fail("Choose a configured synthetic reporting week.", 400, "validation_error");
         const period = reportPeriod(new Date(spec.asOf), spec.weekStart);
@@ -303,10 +309,27 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                 maxQueries: 3,
             },
             documentIds: descriptor.documentIds,
-            starDocumentIds: descriptor.starDocumentIds,
+            starDocumentIds: catalogOnly ? [] : descriptor.starDocumentIds,
             roleContext: descriptor.roleContext,
             roleProfileVersions: descriptor.roleProfileVersions,
         };
+        const personalSnapshot = personal ? await personal.snapshot() : null;
+        if (personal && personalSnapshot) {
+            request.roleContext = await personal.provider.resolveBusinessRoles(personal.input);
+            request.roleProfileVersions = Object.fromEntries(
+                request.roleContext.roleIds.map(role => [
+                    role,
+                    `demo-personal/${personalSnapshot.epoch}/${personalSnapshot.revision}/${personalSnapshot.digest}`,
+                ])
+            );
+            request.starDocumentIds = (
+                await personal.provider.readPersonalState(personal.input)
+            ).stars.map(star => {
+                const id = /^workspace-document\/([1-9]\d*)$/.exec(star.documentId)?.[1];
+                if (!id) fail("A personal source identity is invalid.", 409, "stale_context");
+                return id;
+            });
+        }
         const service = createSophiaCompositionExperimentV0({
             syntheticOnly: true,
             database: database(),
@@ -315,21 +338,102 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                 const again = await authorized();
                 if (sha(again.descriptor) !== sha(descriptor))
                     fail("The synthetic context configuration changed.", 409, "stale_context");
+                if (personal && personalSnapshot) {
+                    const nextSnapshot = await personal.snapshot();
+                    if (sha(nextSnapshot) !== sha(personalSnapshot))
+                        fail(
+                            "Personal context changed; reload before continuing.",
+                            409,
+                            "stale_context"
+                        );
+                    const nextRoles = await personal.provider.resolveBusinessRoles(personal.input);
+                    return {
+                        roleContext: nextRoles,
+                        roleProfileVersions: Object.fromEntries(
+                            nextRoles.roleIds.map(role => [
+                                role,
+                                `demo-personal/${nextSnapshot.epoch}/${nextSnapshot.revision}/${nextSnapshot.digest}`,
+                            ])
+                        ),
+                        starDocumentIds: (
+                            await personal.provider.readPersonalState(personal.input)
+                        ).stars.map(star => star.documentId.slice("workspace-document/".length)),
+                    };
+                }
                 return {
                     roleContext: again.descriptor.roleContext,
                     roleProfileVersions: again.descriptor.roleProfileVersions,
-                    starDocumentIds: again.descriptor.starDocumentIds,
+                    starDocumentIds: catalogOnly ? [] : again.descriptor.starDocumentIds,
                 };
             },
         });
-        const prepared = await service.prepare(request);
+        const prepared = await service.prepare(
+            request,
+            personal ? { roles: personal.provider } : undefined
+        );
         const envelope: ContextGenerationEnvelopeV0 = {
             v1Input: snapshot.input,
             manifest: prepared.context.manifest,
             evidenceSnapshot: prepared.context.evidenceSnapshot,
             freeze: prepared.context.freeze,
         };
-        return { service, prepared, envelope };
+        return { service, prepared, envelope, personal, personalSnapshot };
+    }
+    function requirePersonalMode() {
+        if (process.env.VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED !== "true")
+            fail("Personal context is unavailable in this demo mode.", 404, "not_found");
+    }
+    async function personalHost(
+        descriptor: VantageDemoDescriptor,
+        week: string
+    ): Promise<ReturnType<typeof createJosephPersonalHostV0>> {
+        requirePersonalMode();
+        // Catalog reads must not inherit the old mock star requirement: a revoked
+        // former star must remain removable through the authenticated personal UI.
+        const baseline = await prepare(descriptor, week, undefined, true);
+        return createJosephPersonalHostV0({
+            actor: baseline.prepared.actor,
+            records: baseline.prepared.sourceRecords,
+            reportWindow: baseline.prepared.context.manifest.reportWindow,
+            budgets: {
+                maxSources: 20,
+                maxExcerptChars: 12000,
+                maxTokens: 16000,
+                timeoutMs: 5000,
+                maxQueries: 3,
+            },
+            profileTitle: "Founder + Engineering",
+            resolveFresh: async () => {
+                const again = await authorized();
+                if (sha(again.descriptor) !== sha(descriptor))
+                    fail("The synthetic context configuration changed.", 409, "stale_context");
+                const next = await prepare(again.descriptor, week, undefined, true);
+                return { actor: next.prepared.actor, records: next.prepared.sourceRecords };
+            },
+        });
+    }
+    async function personalContext(week?: string) {
+        const { descriptor } = await authorized();
+        return (
+            await personalHost(descriptor, week ?? descriptor.weeks.at(-1)!.weekStart)
+        ).loadView();
+    }
+    async function updatePersonal(
+        week: string | undefined,
+        change:
+            | {
+                  operation: "roles";
+                  roleIds: string[];
+                  primaryRoleId?: string;
+                  expectedRevision: number;
+              }
+            | { operation: "star"; documentId: string; starred: boolean; expectedRevision: number }
+    ) {
+        const { descriptor } = await authorized();
+        const host = await personalHost(descriptor, week ?? descriptor.weeks.at(-1)!.weekStart);
+        if (change.operation === "roles") await host.provider.saveRoles(host.input, change);
+        else await host.provider.setStar(host.input, change);
+        return host.loadView();
     }
     function currentSources(
         saved: SavedRun,
@@ -392,6 +496,7 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             report: null,
             nativeAgendaId: row?.id ?? null,
             generationMode: generationMode(),
+            personalContextAvailable: process.env.VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED === "true",
         };
         try {
             const fresh = await prepare(descriptor, selectedWeek);
@@ -428,7 +533,24 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                     "native_report_required"
                 );
             stage = "context-assembly";
-            const { service, prepared, envelope } = await prepare(descriptor, week);
+            const host =
+                process.env.VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED === "true"
+                    ? await personalHost(descriptor, week)
+                    : undefined;
+            if (host) {
+                const view = await host.loadView();
+                if (!view.ready)
+                    fail(
+                        view.blocker ?? "Required personal context is incomplete.",
+                        409,
+                        "joseph_required_context_incomplete"
+                    );
+            }
+            const { service, prepared, envelope, personalSnapshot } = await prepare(
+                descriptor,
+                week,
+                host
+            );
             const replay = (mode ?? generationMode()) === "replay";
             stage = "model-resolution";
             const controller = new AbortController();
@@ -587,32 +709,38 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             };
             const sealed = sealPayload(payload);
             stage = "guarded-persistence";
-            await service.commitGenerated(
-                prepared,
-                { envelope, generated: output.generated },
-                async transaction => {
-                    const changed = await transaction
-                        .update(vantageAgendas)
-                        .set({
-                            modelMetadata: { ...row.modelMetadata, [DEMO_METADATA_KEY]: sealed },
-                            updatedAt: row.updatedAt,
-                        })
-                        .where(
-                            and(
-                                eq(vantageAgendas.id, row.id),
-                                eq(vantageAgendas.companyId, ctx.companyId),
-                                sql`${vantageAgendas.modelMetadata} IS NOT DISTINCT FROM ${JSON.stringify(row.modelMetadata)}::jsonb`
+            const commit = () =>
+                service.commitGenerated(
+                    prepared,
+                    { envelope, generated: output.generated },
+                    async transaction => {
+                        const changed = await transaction
+                            .update(vantageAgendas)
+                            .set({
+                                modelMetadata: {
+                                    ...row.modelMetadata,
+                                    [DEMO_METADATA_KEY]: sealed,
+                                },
+                                updatedAt: row.updatedAt,
+                            })
+                            .where(
+                                and(
+                                    eq(vantageAgendas.id, row.id),
+                                    eq(vantageAgendas.companyId, ctx.companyId),
+                                    sql`${vantageAgendas.modelMetadata} IS NOT DISTINCT FROM ${JSON.stringify(row.modelMetadata)}::jsonb`
+                                )
                             )
-                        )
-                        .returning({ id: vantageAgendas.id });
-                    if (changed.length !== 1)
-                        fail(
-                            "The weekly report changed. Reload before generating.",
-                            409,
-                            "stale_agenda"
-                        );
-                }
-            );
+                            .returning({ id: vantageAgendas.id });
+                        if (changed.length !== 1)
+                            fail(
+                                "The weekly report changed. Reload before generating.",
+                                409,
+                                "stale_agenda"
+                            );
+                    }
+                );
+            if (host && personalSnapshot) await host.withFreshState(personalSnapshot, commit);
+            else await commit();
             stage = "saved-readback";
             return await load(week);
         } catch (failure) {
@@ -709,6 +837,18 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
     }
     async function preflight(week: string, mode?: "live" | "replay") {
         const { descriptor } = await authorized();
+        if (process.env.VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED === "true") {
+            const view = await (await personalHost(descriptor, week)).loadView();
+            if (!view.ready)
+                return {
+                    ready: false,
+                    providerCalled: false,
+                    persisted: false,
+                    reason: "joseph-required-context-incomplete",
+                    promptBytes: 0,
+                    promptByteLimit: 23500,
+                };
+        }
         const { envelope, prepared } = await prepare(descriptor, week);
         if ((mode ?? generationMode()) === "replay") {
             bindDemoReplayReport(envelope, prepared.sourceRecords, descriptor.fixtureId);
@@ -861,5 +1001,5 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
         if (!record) fail("That exact saved source is unavailable.", 404, "not_found");
         return sourceView(record);
     }
-    return { load, generateWeek, preflight, review, source };
+    return { load, generateWeek, preflight, review, source, personalContext, updatePersonal };
 }

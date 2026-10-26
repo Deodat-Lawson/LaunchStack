@@ -72,6 +72,7 @@ export interface DemoReport {
     };
 }
 export interface DemoState {
+    personalContextAvailable?: boolean;
     /** Explicitly local demo transport; replay never calls a model. */
     generationMode?: "live" | "replay";
     weeks: { weekStart: string; label?: string }[];

@@ -62,6 +62,22 @@ it("distinguishes missing canonical company context", async () => {
     await screen.findByText("Canonical company context has not been created.");
     expect(screen.getByText("Required context needs attention before generation.")).toBeTruthy();
 });
+it("labels authorized source previews as not assembled while required context is blocked", async () => {
+    const base = createPreviewClientV0("normal");
+    render(
+        <PersonalContextPanel
+            client={{
+                ...base,
+                load: async () => ({ ...(await base.load()), ready: false }),
+            }}
+        />
+    );
+    await screen.findByText("Authorized preview · not assembled");
+    expect(screen.getByText(/No complete required bundle has been prepared/)).toBeTruthy();
+    expect(screen.queryByText("Included", { exact: true })).toBeNull();
+    expect(screen.getByText("Required context needs attention before generation.")).toBeTruthy();
+    expect(screen.queryByText("Required context is ready for handoff.")).toBeNull();
+});
 it("prevents double submissions while a save is pending", async () => {
     const base = createPreviewClientV0("normal");
     let release!: () => void;

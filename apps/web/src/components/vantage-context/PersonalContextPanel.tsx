@@ -336,6 +336,8 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                             <p className="text-ink-2 text-sm">
                                 Company context is mandatory and separate from your personal stars.
                                 Inclusion means prepared context, not proof that a model used it.
+                                {!view.ready &&
+                                    " No complete required bundle has been prepared; authorized previews remain pending."}
                             </p>
                         </div>
                         <ul className="space-y-3">
@@ -359,7 +361,9 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                                                     : "text-warn"
                                             }
                                         >
-                                            {coverageLabel[source.status]}
+                                            {!view.ready && source.status === "used"
+                                                ? "Authorized preview · not assembled"
+                                                : coverageLabel[source.status]}
                                         </span>
                                     </div>
                                     {source.status === "used" && source.source ? (

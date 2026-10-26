@@ -25,8 +25,8 @@ export const RUNTIME_DIR = resolve(ROOT, "test-output/vantage-context-demo/runti
 export const FIXTURE_FILE = resolve(RUNTIME_DIR, "fixture.json");
 export const CREDENTIALS_FILE = resolve(RUNTIME_DIR, "credentials.json");
 const requestedAppPort = process.env.VANTAGE_CONTEXT_DEMO_APP_PORT ?? "3104";
-if (!["3104", "3105"].includes(requestedAppPort))
-    throw new Error("Only demo app ports 3104 and 3105 are allowed.");
+if (!["3104", "3105", "3106"].includes(requestedAppPort))
+    throw new Error("Only demo app ports 3104, 3105 and 3106 are allowed.");
 export const APP_URL = `http://localhost:${requestedAppPort}`;
 // A new fixture records a real creation cutoff; retained fixtures keep their original cutoff.
 export const DEMO_AS_OF = new Date(new Date().setUTCHours(23, 59, 59, 999)).toISOString();
@@ -161,6 +161,8 @@ export function demoEnvironment(base, secret, fixture, provider = {}) {
         BETTER_AUTH_SECRET: secret.authSecret,
         EMBEDDING_SECRETS_KEY: secret.embeddingSecretsKey,
         VANTAGE_CONTEXT_DEMO_ENABLED: "true",
+        VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED:
+            process.env.VANTAGE_CONTEXT_DEMO_JOSEPH_ENABLED === "true" ? "true" : "false",
         VANTAGE_CONTEXT_DEMO_FIXTURE: FIXTURE_FILE,
         VANTAGE_CONTEXT_DEMO_CREDENTIALS: CREDENTIALS_FILE,
         VANTAGE_CONTEXT_DEMO_AS_OF: fixture?.weeks?.at(-1)?.asOf ?? DEMO_AS_OF,

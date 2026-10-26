@@ -33,6 +33,7 @@ import {
     type TrustedContextSourceV0,
     type GuardedCommitInputV0,
     type ContextTransactionV0,
+    type RoleContextPortV0,
 } from "@launchstack/pipelines/vantage/context-v0";
 import { resolveDocumentScope, scopedDocumentWhere, scopeAllows } from "~/lib/authz/scope";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -355,7 +356,7 @@ export function createSophiaCompositionExperimentV0(deps: Dependencies = {}) {
     }
     async function prepare(
         raw: SophiaCompositionRequestV0,
-        options: { search?: RetrievalSearchPortV0 } = {}
+        options: { search?: RetrievalSearchPortV0; roles?: RoleContextPortV0 } = {}
     ): Promise<PreparedSophiaCompositionV0> {
         if (deps.syntheticOnly !== true) fail("synthetic_only", 503);
         requireSyntheticEnvironment();
@@ -446,7 +447,7 @@ export function createSophiaCompositionExperimentV0(deps: Dependencies = {}) {
                 inputVersion: request.inputVersion,
             },
             {
-                roles: {
+                roles: options.roles ?? {
                     resolveBusinessRoles: async () =>
                         (await assertFixtureFresh(request)).roleContext,
                     resolveRequiredContext: async () => {

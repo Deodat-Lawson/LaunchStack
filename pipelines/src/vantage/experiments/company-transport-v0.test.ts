@@ -4,7 +4,7 @@ import { compactCompanyTransportV0 } from "./company-transport-v0";
 const source = {
     documentId: "2151",
     versionId: "2183",
-    quote: null,
+    quote: null as string | null,
     snippetRef: null,
     page: null,
     extractedAt: "2026-10-26T18:50:00.000Z",

@@ -5,6 +5,8 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import "@testing-library/jest-dom";
 import type * as DemoApi from "~/app/employer/tools/vantage/demo-api";
 import type { DemoReport, DemoSource, DemoState } from "~/app/employer/tools/vantage/demo-contract";
+import { resolveRoleSelectionV0 } from "@launchstack/pipelines/vantage/role-context-v0";
+import type { DemoPersonalContextView } from "~/app/employer/tools/vantage/demo-personal-client";
 
 const mockLoad = jest.fn();
 const mockGenerate = jest.fn();
@@ -12,6 +14,7 @@ const mockReview = jest.fn();
 const mockSource = jest.fn();
 const mockNavigate = jest.fn();
 let mockQuery = "";
+const originalFetch = globalThis.fetch;
 jest.mock("~/app/employer/tools/vantage/demo-api", () => ({
     ...jest.requireActual<typeof DemoApi>("~/app/employer/tools/vantage/demo-api"),
     vantageDemoApi: {
@@ -146,6 +149,9 @@ beforeEach(() => {
     mockSource.mockImplementation((_reportId: string, ref: DemoSource["source"]) =>
         Promise.resolve(ref.kind === "company" ? company : qa)
     );
+});
+afterEach(() => {
+    globalThis.fetch = originalFetch;
 });
 
 it("loads saved context and native pending questions without automatically calling a model", async () => {
@@ -531,4 +537,186 @@ it("labels uncaptured old-report diagnostics instead of inventing retrieval succ
         screen.getByText("Context selection diagnostics were not captured for this saved report.")
     ).toBeVisible();
     expect(screen.queryByText("Sophia retrieval")).not.toBeInTheDocument();
+});
+
+function personalView(): DemoPersonalContextView {
+    return {
+        state: {
+            version: "joseph-personal-context-v0",
+            companyId: "42",
+            principalRef: "synthetic-actor",
+            module: "vantage",
+            revision: 0,
+            roles: null,
+            stars: [],
+        },
+        roles: resolveRoleSelectionV0({
+            principalRef: "synthetic-actor",
+            values: ["founder", "engineering"],
+            confirmed: false,
+        }),
+        documents: [
+            {
+                id: qa.source.id,
+                title: qa.title,
+                version: qa.source.version,
+                sourceDate: qa.sourceDate!,
+            },
+        ],
+        diagnostics: {
+            coverage: {
+                checked: [company.source],
+                used: [],
+                missing: [],
+                revoked: [],
+                omitted: [],
+            },
+            sources: [
+                {
+                    lane: "company",
+                    companyId: "42",
+                    principalRef: "synthetic-actor",
+                    module: "vantage",
+                    source: company.source,
+                    status: "unavailable",
+                    checkedAt: "2026-10-26T20:00:00.000Z",
+                    reason: "Company Architecture is unreviewed; no approval has been inferred.",
+                },
+            ],
+        },
+        ready: false,
+        blocker: "Company Architecture is unreviewed; no approval has been inferred.",
+        persistence: "server-process-memory",
+    };
+}
+function openPersonalContext() {
+    const details = screen
+        .getByText("Your roles and Vantage stars · Joseph integration")
+        .closest("details")!;
+    details.open = true;
+    fireEvent(details, new Event("toggle"));
+    return details;
+}
+
+it("keeps the saved contextual report and citations visible while Joseph required context blocks fresh generation", async () => {
+    mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
+    globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => personalView() });
+    render(<ContextDemoScreen />);
+    expect(await screen.findByText(report().summary)).toBeVisible();
+    await waitFor(() =>
+        expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
+    );
+    const details = openPersonalContext();
+    expect(
+        await within(details).findByRole("heading", { name: "Your roles and documents" })
+    ).toBeVisible();
+    expect(
+        await within(details).findByText("Required context needs attention before generation.")
+    ).toBeVisible();
+    expect(details).toHaveTextContent("restarting the server resets them");
+    expect(details).toHaveTextContent("not browser storage or production PostgreSQL");
+    expect(screen.getByText(report().summary)).toBeVisible();
+    expect(screen.getByRole("button", { name: "Inspect Company Architecture" })).toBeEnabled();
+    expect(
+        within(screen.getByRole("article", { name: "Compare the recorded sample" })).getByRole(
+            "button",
+            { name: /QA sample record/ }
+        )
+    ).toBeEnabled();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("uses Joseph multi-role, primary and star controls through the authenticated client with exact current versions", async () => {
+    mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
+    const remote = personalView();
+    const fetch = jest.fn(async (_input: unknown, init?: RequestInit) => {
+        if (init?.method === "PATCH") {
+            if (typeof init.body !== "string") throw new Error("Expected synthetic JSON request.");
+            const change = JSON.parse(init.body);
+            remote.state.revision++;
+            if (change.operation === "roles") {
+                remote.roles = resolveRoleSelectionV0({
+                    principalRef: "synthetic-actor",
+                    values: change.roleIds,
+                    primaryRoleId: change.primaryRoleId,
+                    confirmed: true,
+                });
+                remote.state.roles = {
+                    roleIds: change.roleIds,
+                    primaryRoleId: change.primaryRoleId,
+                    confirmedAt: "2026-10-26T20:00:00.000Z",
+                };
+            } else if (change.starred) {
+                remote.state.stars = [
+                    {
+                        documentId: qa.source.id,
+                        lastKnownRef: qa.source,
+                        starredAt: "2026-10-26T20:00:00.000Z",
+                        updatedAt: "2026-10-26T20:00:00.000Z",
+                    },
+                ];
+                remote.documents[0]!.version = "18";
+                remote.diagnostics.sources.push({
+                    lane: "star",
+                    companyId: "42",
+                    principalRef: "synthetic-actor",
+                    module: "vantage",
+                    source: { ...qa.source, version: "18" },
+                    status: "used",
+                    checkedAt: "2026-10-26T20:00:00.000Z",
+                });
+            }
+        }
+        return { ok: true, json: async () => JSON.parse(JSON.stringify(remote)) } as Response;
+    });
+    globalThis.fetch = fetch;
+    render(<ContextDemoScreen />);
+    await screen.findByText(report().summary);
+    const details = openPersonalContext();
+    fireEvent.click(
+        await within(details).findByRole("button", { name: /Make primary.*Engineering/ })
+    );
+    fireEvent.click(within(details).getByRole("button", { name: "Save roles" }));
+    await within(details).findByRole("button", { name: /Primary perspective.*Engineering/ });
+    await waitFor(() =>
+        expect(within(details).getByRole("button", { name: "Save roles" })).toBeEnabled()
+    );
+    const roleWrite = fetch.mock.calls.find(([, init]) => init?.method === "PATCH")!;
+    const roleBody = roleWrite[1]!.body;
+    if (typeof roleBody !== "string") throw new Error("Expected synthetic JSON request.");
+    expect(JSON.parse(roleBody)).toEqual({
+        operation: "roles",
+        roleIds: ["founder", "engineering"],
+        primaryRoleId: "engineering",
+        expectedRevision: 0,
+    });
+    fireEvent.click(within(details).getByRole("button", { name: "Star QA sample record" }));
+    await within(details).findByRole("button", { name: "Unstar QA sample record" });
+    expect(within(details).getByText("Version 18 · Updated 2026-10-16")).toBeVisible();
+    expect(within(details).getByText("Source workspace-document/12 · Version 18")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled();
+    expect(screen.getByText(report().summary)).toBeVisible();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("fails closed on personal-context access errors without hiding the independently authorized saved report", async () => {
+    mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
+    globalThis.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        json: async () => ({ error: "PRIVATE_SOURCE_DETAIL" }),
+    });
+    render(<ContextDemoScreen />);
+    await screen.findByText(report().summary);
+    await waitFor(() =>
+        expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
+    );
+    const details = openPersonalContext();
+    expect(await within(details).findByRole("alert")).toHaveTextContent(
+        "Context could not be loaded"
+    );
+    expect(screen.queryByText("PRIVATE_SOURCE_DETAIL")).not.toBeInTheDocument();
+    expect(screen.getByText(report().summary)).toBeVisible();
+    expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
+    expect(mockGenerate).not.toHaveBeenCalled();
 });

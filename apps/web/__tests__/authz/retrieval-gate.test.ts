@@ -15,6 +15,10 @@ import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
+jest.mock("~/server/chat-company-profile", () => ({
+    loadChatCompanyProfile: jest.fn(async () => ""),
+}));
+
 // Runs the work as-is: which workspace's models it gets is not this test's concern.
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),

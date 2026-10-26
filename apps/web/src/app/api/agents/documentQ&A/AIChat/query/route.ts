@@ -47,6 +47,7 @@ import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import { answerWithTools } from "~/server/chat-tool-loop";
+import { loadChatCompanyProfile } from "~/server/chat-company-profile";
 import {
     citedPassages,
     createSourceTools,
@@ -1201,6 +1202,10 @@ export async function POST(request: Request) {
             let systemPrompt = agent
                 ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
                 : stylePrompt;
+            const companyProfile = sourcesAllowed
+                ? await loadChatCompanyProfile(ctx.data, scope)
+                : "";
+            if (companyProfile) systemPrompt += `\n\n${companyProfile}`;
             if (sourceTools && sourcesOverview) {
                 systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
             } else if (searchScope === "none") {

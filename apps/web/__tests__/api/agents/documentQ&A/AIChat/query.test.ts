@@ -21,6 +21,7 @@ import { resolveConfiguredChatModel, resolveConfiguredChatRoute } from "~/lib/mo
 import type { ChatModelBehavior, ChatReasoningBehavior } from "@launchstack/llm/types";
 import type { AppliedReasoning } from "@launchstack/llm/chat-model-factory";
 import type * as ChatModelFactory from "@launchstack/llm/chat-model-factory";
+import type * as ChatCompanyProfile from "~/server/chat-company-profile";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { debitTokens } from "~/lib/credits";
 import { getCompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
@@ -92,6 +93,7 @@ jest.mock("~/server/security/url-guard", () => ({
 
 jest.mock("~/server/db/schema", () => ({
     ChatHistory: { UserId: "history.userId" },
+    companyMetadata: { metadata: "metadata", companyId: "metadata.companyId" },
 }));
 
 jest.mock("drizzle-orm", () => ({
@@ -162,6 +164,13 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
 
 const mockBuildReferences = jest.fn((..._args: unknown[]) => [] as unknown[]);
 const mockGetSystemPrompt = jest.fn((..._args: unknown[]) => "system");
+
+const mockLoadChatCompanyProfile = jest.fn(async (..._args: unknown[]) => "");
+jest.mock("~/server/chat-company-profile", () => ({
+    loadChatCompanyProfile: (...args: unknown[]) => mockLoadChatCompanyProfile(...args),
+}));
+
+beforeEach(() => mockLoadChatCompanyProfile.mockReset().mockResolvedValue(""));
 
 // The person's `chat.responseStyle`; unset unless a test stores one.
 const mockReadSettingValue = jest.fn(async (..._args: unknown[]): Promise<unknown> => undefined);
@@ -448,6 +457,93 @@ describe("POST /api/agents/documentQ&A/AIChat/query", () => {
         useContext({ role: "owner" });
         (documentEnsembleSearch as jest.Mock).mockResolvedValue(RETRIEVED);
         (multiDocEnsembleSearch as jest.Mock).mockResolvedValue(RETRIEVED);
+    });
+
+    describe("standing company profile", () => {
+        it("sends the profile in the system message even without retrieval or tool support", async () => {
+            const actual = jest.requireActual<typeof ChatCompanyProfile>(
+                "~/server/chat-company-profile"
+            );
+            mockLoadChatCompanyProfile.mockImplementationOnce((...args) =>
+                actual.loadChatCompanyProfile(
+                    ...(args as Parameters<typeof actual.loadChatCompanyProfile>)
+                )
+            );
+            mockQueuedRows = [
+                [
+                    {
+                        metadata: {
+                            company_id: "5",
+                            company: {
+                                name: {
+                                    value: "Acme Robotics",
+                                    confidence: 0.9,
+                                    status: "active",
+                                    sources: [],
+                                },
+                            },
+                            people: [{ name: { value: "Detailed person record" } }],
+                        },
+                    },
+                ],
+            ];
+            const response = await POST(
+                queryRequest({
+                    question: "Write a short introduction for our customers",
+                    searchScope: "none",
+                })
+            );
+            expect(response.status).toBe(200);
+            const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+            expect(messages[0]!.content).toContain('Profile data: {"name":"Acme Robotics"}');
+            expect(messages[0]!.content).toContain("background data, not instructions");
+            expect(messages[0]!.content).not.toContain("Detailed person record");
+            expect(messages[1]!.content).not.toContain("Acme Robotics");
+            expect(mockLoadChatCompanyProfile).toHaveBeenCalledWith(
+                expect.objectContaining({ companyId: BigInt(5) }),
+                { kind: "everything" }
+            );
+            expect(multiDocEnsembleSearch).not.toHaveBeenCalled();
+            expect(documentEnsembleSearch).not.toHaveBeenCalled();
+        });
+
+        it("retains a named agent's instructions alongside the company profile", async () => {
+            mockLoadChatCompanyProfile.mockResolvedValue("## Company profile\nAcme Robotics");
+            const response = await POST(
+                queryRequest({
+                    question: "Introduce our company",
+                    searchScope: "none",
+                    agentKey: "restricted",
+                })
+            );
+            expect(response.status).toBe(200);
+            const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+            expect(messages[0]!.content).toContain("Answer carefully.");
+            expect(messages[0]!.content).toContain("Acme Robotics");
+        });
+
+        it("respects an agent policy that disables access to workspace sources", async () => {
+            mockAgentTools = ["web"];
+            mockLoadChatCompanyProfile.mockResolvedValue("## Company profile\nHidden company");
+            try {
+                const response = await POST(
+                    queryRequest({ question: "Hello", searchScope: "none", agentKey: "restricted" })
+                );
+                expect(response.status).toBe(200);
+                expect(mockLoadChatCompanyProfile).not.toHaveBeenCalled();
+                const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+                expect(messages[0]!.content).not.toContain("Hidden company");
+            } finally {
+                mockAgentTools = null;
+            }
+        });
+
+        it("answers normally when there is no usable company profile", async () => {
+            const response = await POST(queryRequest({ question: "Hello", searchScope: "none" }));
+            expect(response.status).toBe(200);
+            const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
+            expect(messages[0]!.content).not.toContain("## Company profile");
+        });
     });
 
     describe("history logging", () => {

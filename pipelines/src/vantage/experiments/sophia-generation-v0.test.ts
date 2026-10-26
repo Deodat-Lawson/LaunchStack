@@ -292,6 +292,53 @@ describe("opt-in paired Sophia context model experiment", () => {
         );
         expect(input).toEqual(before);
     });
+    it("compacts repeated company provenance only in transport, retaining the full guarded snapshot", async () => {
+        const provenance = {
+            documentId: "2151",
+            versionId: "2183",
+            quote: null,
+            snippetRef: null,
+            page: null,
+            extractedAt: "2026-10-16T16:00:00.000Z",
+        };
+        const company = {
+            adapterVersion: "company-profile-adapter/v0.1",
+            companyId: "2037",
+            reviewState: "unreviewed",
+            facts: Array.from({ length: 13 }, (_, index) => ({
+                path: `profile.facts.fact_${index}`,
+                label: `Fact ${index}`,
+                value: `Source-backed company context ${index}`,
+                basis: "source-extracted-unreviewed",
+                sources: [provenance],
+            })),
+            unknowns: [{ code: "hierarchy_unknown" }],
+        };
+        const input = await envelope({ companyExcerpt: JSON.stringify(company) }),
+            before = structuredClone(input);
+        const invoke = vi.fn().mockResolvedValue(response());
+        const output = await run(invoke)(input, runtime());
+        const last = invoke.mock.calls[0]![2].at(-1) as { content: string };
+        const supplied = JSON.parse(last.content).context.sources.find((entry: { ref: string }) =>
+            entry.ref.startsWith("company:")
+        );
+        const transported = JSON.parse(supplied.excerpt);
+        expect(transported.sourceProvenance).toEqual([provenance]);
+        expect(transported.facts.map((fact: { value: string }) => fact.value)).toEqual(
+            company.facts.map(fact => fact.value)
+        );
+        expect(transported.unknowns).toEqual(company.unknowns);
+        expect(supplied.ref).toBe("company:architecture-tilde@company-v3");
+        expect(supplied).not.toHaveProperty("source");
+        expect(supplied).not.toHaveProperty("contentHash");
+        expect(input).toEqual(before);
+        expect(output.generated.v1Result.inputVersion).toBe(input.v1Input.inputVersion);
+        expect(output.report.topics[0]!.facts[0]!.refs[0]).toEqual({
+            kind: "company",
+            id: "architecture-tilde",
+            version: "company-v3",
+        });
+    });
     it("repairs invalid exact-version citations inside the existing second attempt and clears rejected refs", async () => {
         const invalid = pair();
         invalid.experimental.topics[0]!.facts[0]!.refs = ["doc:doc-weekly-plan@wrong-version"];

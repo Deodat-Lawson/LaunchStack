@@ -178,6 +178,118 @@ it("allows exact authorized Company Architecture inspection before a contextual 
     expect(mockGenerate).not.toHaveBeenCalled();
 });
 
+it("attributes every same-labeled architecture responsibility to its supplied subject and basis", async () => {
+    const rich = {
+        ...company,
+        body: JSON.stringify({
+            facts: [
+                {
+                    label: "Responsibilities",
+                    subject: "Engineering",
+                    value: "Supply deletion traces for the identified sample.",
+                    basis: "source-extracted-unreviewed",
+                },
+                {
+                    label: "Responsibilities",
+                    subject: "Operations",
+                    value: "Reconcile QA and audit account identifiers.",
+                    basis: "human-entered-unreviewed",
+                },
+                {
+                    label: "Responsibilities",
+                    subject: "Privacy reviewer",
+                    value: "Assess the acceptance evidence; no approval is recorded here.",
+                    basis: "source-extracted-unreviewed",
+                },
+            ],
+            unknowns: [{ code: "reviewer_identity_unknown" }],
+        }),
+    };
+    mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: rich }));
+    mockSource.mockResolvedValue(rich);
+    render(<ContextDemoScreen />);
+    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
+    expect(await within(dialog).findByText("Responsibilities · Engineering")).toBeVisible();
+    expect(within(dialog).getByText("Responsibilities · Operations")).toBeVisible();
+    expect(within(dialog).getByText("Responsibilities · Privacy reviewer")).toBeVisible();
+    expect(
+        within(dialog).getByText("Supply deletion traces for the identified sample.")
+    ).toBeVisible();
+    expect(within(dialog).getByText("Reconcile QA and audit account identifiers.")).toBeVisible();
+    expect(
+        within(dialog).getByText("Assess the acceptance evidence; no approval is recorded here.")
+    ).toBeVisible();
+    expect(within(dialog).getAllByText("Source fact · unreviewed")).toHaveLength(2);
+    expect(within(dialog).getByText("Human-entered fact · unreviewed")).toBeVisible();
+    expect(within(dialog).getByText("reviewer identity unknown")).toBeVisible();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("does not infer a per-fact basis from the profile-level review state", async () => {
+    const unclassified = {
+        ...company,
+        body: JSON.stringify({
+            facts: [
+                {
+                    label: "Responsibilities",
+                    subject: "Engineering",
+                    value: "The source does not classify this fact's basis.",
+                },
+            ],
+        }),
+    };
+    mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: unclassified }));
+    mockSource.mockResolvedValue(unclassified);
+    render(<ContextDemoScreen />);
+    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
+    expect(await within(dialog).findByText("Responsibilities · Engineering")).toBeVisible();
+    expect(within(dialog).getByText("unreviewed")).toBeVisible();
+    expect(within(dialog).queryByText("Source fact · unreviewed")).not.toBeInTheDocument();
+    expect(within(dialog).queryByText("Human-entered fact · unreviewed")).not.toBeInTheDocument();
+});
+
+it("names exact market, service and project paths without changing their captured labels or values", async () => {
+    const facts = [
+        {
+            path: "markets.primary.0",
+            label: "0",
+            value: "Pilot operator teams",
+            basis: "source-extracted-unreviewed",
+        },
+        {
+            path: "services.0.name",
+            label: "Name",
+            value: "Pilot workspace lifecycle",
+            basis: "source-extracted-unreviewed",
+        },
+        {
+            path: "projects.0.name",
+            label: "Name",
+            subject: "Run-17",
+            value: "Deletion evidence reconciliation",
+            basis: "source-extracted-unreviewed",
+        },
+    ];
+    const capturedBody = JSON.stringify({ facts });
+    const rich = { ...company, body: capturedBody };
+    mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: rich }));
+    mockSource.mockResolvedValue(rich);
+    render(<ContextDemoScreen />);
+    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
+    expect(await within(dialog).findByText("Target customers")).toBeVisible();
+    expect(within(dialog).getByText("Product or service")).toBeVisible();
+    expect(within(dialog).getByText("Project · Run-17")).toBeVisible();
+    for (const fact of facts) expect(within(dialog).getByText(fact.value)).toBeVisible();
+    expect(within(dialog).queryByText("0", { selector: "dt" })).not.toBeInTheDocument();
+    const original = within(dialog).getByText(/"path": "markets.primary.0"/);
+    expect(original).toHaveTextContent('"label": "0"');
+    expect(rich.body).toBe(capturedBody);
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
 it("generates only after an explicit click and displays the returned saved report", async () => {
     const next = state();
     next.report!.summary = "Fresh contextual report returned after validated save.";

@@ -248,6 +248,40 @@ function readFixture() {
     return JSON.parse(readFileSync(FIXTURE_FILE, "utf8"));
 }
 
+async function enrichCompany() {
+    diagnosticStage = "isolated-runtime-files";
+    assertNoDotenv();
+    const base = databaseEnvironment(),
+        secret = credentials(),
+        fixture = readFixture();
+    diagnosticStage = "existing-owned-database-check";
+    await verifyOwnedDatabase(base);
+    diagnosticStage = "synthetic-company-enrichment";
+    const result = await run(
+        process.execPath,
+        ["--import", "tsx", resolve(WEB, "scripts/vantage-context-company-enrich.ts"), "--apply"],
+        {
+            cwd: WEB,
+            env: {
+                ...demoEnvironment(base, secret, fixture),
+                TSX_TSCONFIG_PATH: resolve(WEB, "tsconfig.json"),
+            },
+        }
+    );
+    const output = scrub(result.stdout + result.stderr, [
+        base.DATABASE_URL,
+        base.VANTAGE_TL_TEST_PASSWORD,
+        secret.authSecret,
+        secret.loginPassword,
+        secret.embeddingSecretsKey,
+    ]);
+    if (output) process.stdout.write(output);
+    if (result.code !== 0)
+        throw new Error(
+            "Synthetic company enrichment failed; preserved local proof must be inspected before retrying."
+        );
+}
+
 async function serve() {
     diagnosticStage = "isolated-runtime-files";
     assertNoDotenv();
@@ -327,15 +361,19 @@ async function serve() {
 }
 
 export async function main(args = process.argv.slice(2)) {
-    if (args.length !== 1 || !["--prepare", "--serve", "--status"].includes(args[0])) {
+    if (
+        args.length !== 1 ||
+        !["--prepare", "--serve", "--status", "--enrich-company"].includes(args[0])
+    ) {
         console.log(
-            "node scripts/dev/vantage-context-demo-runtime.mjs --prepare | --serve | --status"
+            "node scripts/dev/vantage-context-demo-runtime.mjs --prepare | --serve | --status | --enrich-company"
         );
         if (args[0] !== "--help") process.exitCode = 1;
         return;
     }
     if (args[0] === "--prepare") return prepare();
     if (args[0] === "--serve") return serve();
+    if (args[0] === "--enrich-company") return enrichCompany();
     const fixture = existsSync(FIXTURE_FILE) ? readFixture() : null;
     console.log(
         JSON.stringify(

@@ -124,7 +124,13 @@ function SourceContent({ source }: { source: DemoSource }) {
     if (source.source.kind === "company") {
         try {
             const payload = JSON.parse(source.body) as {
-                facts?: { label?: unknown; value?: unknown }[];
+                facts?: {
+                    path?: unknown;
+                    label?: unknown;
+                    value?: unknown;
+                    subject?: unknown;
+                    basis?: unknown;
+                }[];
                 unknowns?: { code?: unknown }[];
             };
             if (Array.isArray(payload.facts))
@@ -134,15 +140,26 @@ function SourceContent({ source }: { source: DemoSource }) {
                             {payload.facts.map((fact, index) => (
                                 <div key={index}>
                                     <dt className="text-ink-3 text-xs font-medium">
-                                        {typeof fact.label === "string"
-                                            ? fact.label
-                                            : "Reported context"}
+                                        {companyFactLabel(fact)}
+                                        {typeof fact.subject === "string" && fact.subject.trim()
+                                            ? ` · ${fact.subject}`
+                                            : ""}
                                     </dt>
                                     <dd className="text-ink mt-1 break-words text-sm leading-relaxed">
                                         {typeof fact.value === "string"
                                             ? fact.value
                                             : JSON.stringify(fact.value)}
                                     </dd>
+                                    {fact.basis === "source-extracted-unreviewed" && (
+                                        <p className="text-ink-3 mt-1 text-[11px]">
+                                            Source fact · unreviewed
+                                        </p>
+                                    )}
+                                    {fact.basis === "human-entered-unreviewed" && (
+                                        <p className="text-ink-3 mt-1 text-[11px]">
+                                            Human-entered fact · unreviewed
+                                        </p>
+                                    )}
                                 </div>
                             ))}
                         </dl>
@@ -179,4 +196,14 @@ function SourceContent({ source }: { source: DemoSource }) {
             {source.body}
         </p>
     );
+}
+
+/** Display names for exact projected paths; the captured source JSON stays untouched. */
+function companyFactLabel(fact: { path?: unknown; label?: unknown }) {
+    if (typeof fact.path === "string") {
+        if (/^markets\.primary\.\d+$/.test(fact.path)) return "Target customers";
+        if (/^services\.\d+\.name$/.test(fact.path)) return "Product or service";
+        if (/^projects\.\d+\.name$/.test(fact.path)) return "Project";
+    }
+    return typeof fact.label === "string" ? fact.label : "Reported context";
 }

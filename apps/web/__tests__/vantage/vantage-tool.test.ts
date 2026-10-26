@@ -18,6 +18,7 @@ describe("vantageScreenFor", () => {
         ["/commitments", "commitments"],
         ["/evidence", "evidence"],
         ["/metrics", "metrics"],
+        ["/context", "context"],
         ["/program", "triage"],
     ])("shows %p as %p", (href, kind) => {
         expect(vantageScreenFor(href).kind).toBe(kind);

@@ -197,6 +197,13 @@
       "when": 1792152000000,
       "tag": "20261016120000_vantage_contract_v1",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1793059200000,
+      "tag": "20261027000000_vantage_personal_context",
+      "breakpoints": true
     }
   ]
 }

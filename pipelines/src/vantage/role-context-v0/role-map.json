@@ -1,0 +1,42 @@
+{
+  "mapVersion": "joseph-roles-2026-10-26-v0",
+  "roles": [
+    {
+      "id": "founder",
+      "label": "Founder",
+      "aliases": ["founder", "co-founder", "ceo"],
+      "description": "Owns company direction and resource tradeoffs",
+      "responsibilities": ["strategy", "resource allocation", "company health"],
+      "agendaPriorities": ["strategic decisions", "runway", "cross-team blockers"]
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "aliases": ["product", "product lead", "product manager"],
+      "description": "Owns customer discovery and product outcomes",
+      "responsibilities": ["discovery", "prioritization", "experiments"],
+      "agendaPriorities": ["customer evidence", "product outcomes", "experiment decisions"]
+    },
+    {
+      "id": "engineering",
+      "label": "Engineering",
+      "aliases": ["engineering", "engineering lead", "engineer", "cto"],
+      "description": "Owns delivery, reliability and technical feasibility",
+      "responsibilities": ["systems", "deployments", "instrumentation"],
+      "agendaPriorities": ["blockers", "technical risks", "reliability"]
+    },
+    {
+      "id": "growth-sales",
+      "label": "Growth / Sales",
+      "aliases": ["growth", "sales", "growth/sales", "growth lead", "sales lead", "marketing"],
+      "description": "Owns positioning, acquisition and customer conversion",
+      "responsibilities": ["positioning", "channels", "sales funnel"],
+      "agendaPriorities": ["pipeline evidence", "conversion tests", "channel performance"]
+    }
+  ],
+  "fallback": {
+    "description": "Business responsibilities have not been confirmed",
+    "responsibilities": [],
+    "agendaPriorities": ["review responsibilities", "review authorized evidence"]
+  }
+}

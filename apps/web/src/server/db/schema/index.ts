@@ -21,6 +21,7 @@ export * from "./mindmap";
 export * from "./artifacts";
 export * from "./workspace-sessions";
 export * from "./settings";
+export * from "./vantage-personal-context";
 
 // Feature-vertical tables live in packages/features (a package cannot import
 // from an app). Same side of the boundary, same product migration set.

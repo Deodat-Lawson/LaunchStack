@@ -227,13 +227,12 @@ function promptOf(call: unknown[]): string {
     const messages = call[0] as Array<{ content: unknown }>;
     // A transient evidence-review reminder now follows the original user
     // message. Inspect the actual retrieved context, not its array position.
-    return String(
-        messages.find(
-            message =>
-                typeof message.content === "string" &&
-                message.content.startsWith("User's question:")
-        )?.content ?? ""
+    const message = messages.find(
+        candidate =>
+            typeof candidate.content === "string" &&
+            candidate.content.startsWith("User's question:")
     );
+    return typeof message?.content === "string" ? message.content : "";
 }
 
 describe("post-retrieval scope gate", () => {

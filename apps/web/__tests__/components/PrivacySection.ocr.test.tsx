@@ -31,7 +31,7 @@ const note = (plan: Plan, locale: Locale) => {
 describe("Privacy › OCR note", () => {
     it("says the order and the last resort in English", () => {
         expect(note({ scope: "all", order: ["AZURE", "DOCLING"] }, "en")).toBe(
-            "Every PDF and image is read with OCR. Azure Document Intelligence reads every page; if it fails, Docling on this deployment (when docling-serve is running) take over in turn. The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank."
+            "Every PDF and image is read with OCR. Azure Document Intelligence reads every page; if it fails, it hands off to Docling on this deployment (when docling-serve is running), in that order. The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank."
         );
     });
 
@@ -53,6 +53,12 @@ describe("Privacy › OCR note", () => {
         expect(text).toMatch(/^Images and scanned PDFs are read with OCR/);
         expect(text).toMatch(/Azure Document Intelligence reads every page\. A scan none/);
         expect(text).not.toMatch(/last resort/);
+    });
+
+    it("keeps the last resort for PDFs someone picks a provider for", () => {
+        const text = note({ scope: "picked", order: ["AZURE"] }, "en");
+        expect(text).toMatch(/^Images, and PDFs someone picks a provider for, are read with OCR/);
+        expect(text).toMatch(/text layer is the last resort/);
     });
 
     it("says plainly when there is no OCR at all, in both languages", () => {

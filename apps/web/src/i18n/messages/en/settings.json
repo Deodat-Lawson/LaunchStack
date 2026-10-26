@@ -1317,7 +1317,7 @@
           "datalab": "Datalab"
         },
         "chain": "{lead} reads every page.",
-        "chainWithFallback": "{lead} reads every page; if it fails, {rest} take over in turn.",
+        "chainWithFallback": "{lead} reads every page; if it fails, it hands off to {rest}, in that order.",
         "listJoin": ", then ",
         "lastResort": "The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank.",
         "retryOnly": "A scan none of them can read is retried rather than indexed blank.",

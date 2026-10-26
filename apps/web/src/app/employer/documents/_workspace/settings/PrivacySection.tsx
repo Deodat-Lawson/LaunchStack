@@ -102,7 +102,9 @@ export function ocrNote(t: PrivacyT, plan: OcrPlan): string {
                   rest: rest.join(t("services.ocr.listJoin")),
               })
             : t("services.ocr.chain", { lead: lead ?? "" });
-    const end = plan.scope === "all" ? t("services.ocr.lastResort") : t("services.ocr.retryOnly");
+    // Only text-layer-first skips the text-layer fallback; a PDF someone picks
+    // a provider for still gets it (processor.ts sets nativeFallback).
+    const end = plan.scope === "scans" ? t("services.ocr.retryOnly") : t("services.ocr.lastResort");
     return t("services.ocr.note", { scope: t(`services.ocr.scope.${plan.scope}`), chain, end });
 }
 

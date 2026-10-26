@@ -10,7 +10,7 @@
  */
 import { z } from "zod";
 
-import type { FormField } from "./accelerators/types";
+import type { EditSuggestion, FormField } from "./accelerators/types";
 // ─── Vocabulary ──────────────────────────────────────────────────────────────
 
 export const APPLICATION_STATUSES = [
@@ -51,6 +51,7 @@ export const RUN_KINDS = [
     "review",
     "programs",
     "accel_draft",
+    "accel_edit",
 ] as const;
 export const RunKindSchema = z.enum(RUN_KINDS);
 export type RunKind = z.infer<typeof RunKindSchema>;
@@ -309,6 +310,8 @@ export interface RunSummary {
     headline: string;
     counts?: Record<string, number>;
     durationMs?: number;
+    /** An `accel_edit` run's proposed replacement; it changes no answer until the user applies it. */
+    suggestion?: EditSuggestion & { applicationId: string; sectionId: string };
 }
 
 /** The rewrites a person can ask for without typing; `custom` carries their own words. */
@@ -329,6 +332,20 @@ export const RunInputSchema = z.object({
             expectedRevision: z.number().int().nonnegative(),
         })
         .strict()
+        .optional(),
+    acceleratorEdit: z
+        .object({
+            sectionId: z.string().min(1),
+            expectedRevision: z.number().int().nonnegative(),
+            start: z.number().int().nonnegative(),
+            end: z.number().int().positive(),
+            instruction: z.string().trim().min(1),
+        })
+        .strict()
+        .refine(value => value.end > value.start, {
+            message: "Select a non-empty original range",
+            path: ["end"],
+        })
         .optional(),
 });
 export type RunInput = z.infer<typeof RunInputSchema>;

@@ -42,6 +42,7 @@
   "runKind": {
     "programs": "Matching Programs",
     "accel_draft": "Drafting an accelerator Field",
+    "accel_edit": "Editing selected accelerator text",
     "funders": "Finding funders",
     "extract": "Reading the request",
     "draft": "Drafting",
@@ -107,6 +108,7 @@
     "doneTitle": {
       "programs": "Programs matched",
       "accel_draft": "Accelerator Field drafted",
+      "accel_edit": "Accelerator edit suggested",
       "funders": "Funders found",
       "extract": "Requirements read",
       "draft": "Drafts written",

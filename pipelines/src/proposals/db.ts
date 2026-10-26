@@ -186,7 +186,7 @@ function grantSectionCondition(companyId: bigint) {
 /** Runs without a parent are grant searches only when their kind is also a grant kind. */
 function grantRunCondition(companyId: bigint) {
     return and(
-        notInArray(proposalRuns.kind, ["programs", "accel_draft"]),
+        notInArray(proposalRuns.kind, ["programs", "accel_draft", "accel_edit"]),
         sql`(${proposalRuns.applicationId} is null or exists (select 1 from ${proposalApplications}
             where ${proposalApplications.id} = ${proposalRuns.applicationId}
             and ${proposalApplications.companyId} = ${companyId}
@@ -916,11 +916,13 @@ export async function createRun(input: {
     input: RunInput;
     steps: RunStep[];
 }): Promise<RunRecord> {
-    const accelerator = input.kind === "programs" || input.kind === "accel_draft";
+    const accelerator =
+        input.kind === "programs" || input.kind === "accel_draft" || input.kind === "accel_edit";
     if (
         (input.kind === "programs" && input.applicationId !== null) ||
         (input.kind === "accel_draft" && (!input.applicationId || !input.input.acceleratorDraft)) ||
-        (!accelerator && input.input.acceleratorDraft) ||
+        (input.kind === "accel_edit" && (!input.applicationId || !input.input.acceleratorEdit)) ||
+        (!accelerator && (input.input.acceleratorDraft || input.input.acceleratorEdit)) ||
         (input.input.applicationId !== undefined &&
             input.input.applicationId !== input.applicationId)
     ) {

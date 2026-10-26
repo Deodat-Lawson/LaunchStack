@@ -42,6 +42,7 @@
   "runKind": {
     "programs": "正在匹配加速器项目",
     "accel_draft": "正在起草加速器申请字段",
+    "accel_edit": "正在修改加速器申请中选中的文字",
     "funders": "正在寻找资助方",
     "extract": "正在读取征集要求",
     "draft": "正在起草",
@@ -107,6 +108,7 @@
     "doneTitle": {
       "programs": "已匹配加速器项目",
       "accel_draft": "加速器申请字段已起草",
+      "accel_edit": "已生成加速器申请的修改建议",
       "funders": "已找到资助方",
       "extract": "已读取要求",
       "draft": "草稿已写好",

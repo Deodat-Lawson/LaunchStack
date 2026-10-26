@@ -43,6 +43,7 @@ export const PROPOSAL_CREDITS = {
     review: 2_000,
     programs: 2_000,
     accel_draft: 1_500,
+    accel_edit: 1_000,
 } as const;
 
 export interface RetrieveArgs {

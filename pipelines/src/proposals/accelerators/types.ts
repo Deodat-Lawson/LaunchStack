@@ -331,12 +331,17 @@ const SelectionShape = {
     end: z.number().int().positive(),
 };
 
+/** `original` is the text the Suggestion replaces; Apply refuses if the saved slice differs. */
 export const ApplyEditSchema = z
-    .object({ ...SelectionShape, replacement: z.string() })
+    .object({ ...SelectionShape, original: z.string().min(1), replacement: z.string() })
     .strict()
     .refine(value => value.end > value.start, {
         message: "Select a non-empty original range",
         path: ["end"],
+    })
+    .refine(value => value.end - value.start === value.original.length, {
+        message: "Original text must match the UTF-16 selection length",
+        path: ["original"],
     });
 export type ApplyEdit = z.infer<typeof ApplyEditSchema>;
 

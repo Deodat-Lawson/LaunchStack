@@ -376,9 +376,10 @@ async function readAnswer(
     db: ProposalDebitExecutor,
     companyId: bigint,
     applicationId: string,
-    sectionId: string
+    sectionId: string,
+    lock = false
 ): Promise<ProposalSectionRow> {
-    const [row] = await db
+    const query = db
         .select({ section: proposalSections })
         .from(proposalSections)
         .innerJoin(
@@ -397,6 +398,8 @@ async function readAnswer(
             )
         )
         .limit(1);
+    // Lock only the answer row: a concurrent save waits until the caller's transaction ends.
+    const [row] = lock ? await query.for("update", { of: proposalSections }) : await query;
     if (!row) throw new AcceleratorError("Application Field not found", 404, "section_not_found");
     return row.section;
 }
@@ -509,6 +512,27 @@ export async function saveAcceleratorDraft(
     });
 }
 
+/**
+ * Commit hook for runs that deliver a Suggestion instead of an answer: lock the Field and
+ * fail the run, uncharged, if its revision is no longer the one the Suggestion was made for.
+ */
+export async function assertAnswerRevision(
+    companyId: bigint,
+    applicationId: string,
+    sectionId: string,
+    expectedRevision: number,
+    executor: ProposalDebitExecutor
+): Promise<void> {
+    const current = await readAnswer(executor, companyId, applicationId, sectionId, true);
+    if (current.revision !== expectedRevision) {
+        throw new AcceleratorError(
+            "This answer has changed; reload the latest revision",
+            409,
+            "revision_conflict"
+        );
+    }
+}
+
 export async function applyAcceleratorEdit(
     companyId: bigint,
     applicationId: string,
@@ -533,6 +557,13 @@ export async function applyAcceleratorEdit(
             400,
             "invalid_edit_range"
         );
+    if (original.slice(parsed.data.start, parsed.data.end) !== parsed.data.original) {
+        throw new AcceleratorError(
+            "The selected text no longer matches the Suggestion",
+            409,
+            "edit_original_mismatch"
+        );
+    }
     const draft =
         original.slice(0, parsed.data.start) +
         parsed.data.replacement +

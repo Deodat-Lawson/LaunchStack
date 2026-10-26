@@ -10,6 +10,7 @@ import {
 } from "@launchstack/pipelines/accelerators";
 import {
     applyAcceleratorEdit,
+    assertAnswerRevision,
     getAcceleratorApplication,
     importCatalogue,
     saveAcceleratorAnswer,
@@ -23,6 +24,7 @@ import {
 } from "@launchstack/pipelines/proposals";
 import {
     createApplication,
+    findLiveRun,
     replaceSections,
     updateSection,
     getApplication,
@@ -209,7 +211,13 @@ describeDb("Accelerators persisted company and answer boundaries", () => {
             expectedRevision: 0,
             draft: "Prefix 😀 old suffix",
         });
-        const edit = { expectedRevision: 1, start: 10, end: 13, replacement: "new" };
+        const edit = {
+            expectedRevision: 1,
+            start: 10,
+            end: 13,
+            original: "old",
+            replacement: "new",
+        };
         await applyAcceleratorEdit(companyId, application.id, section.id, edit);
         await expect(
             applyAcceleratorEdit(companyId, application.id, section.id, edit)
@@ -218,6 +226,104 @@ describeDb("Accelerators persisted company and answer boundaries", () => {
             item => item.id === section.id
         )!;
         expect(saved).toMatchObject({ revision: 2, draft: "Prefix 😀 new suffix" });
+    });
+
+    it("rejects an Apply whose original text differs from the saved slice, without saving", async () => {
+        const section = application.sections.find(item => item.field.fieldType === "long_text")!;
+        await saveAcceleratorAnswer(companyId, application.id, section.id, {
+            expectedRevision: 0,
+            draft: "Prefix 😀 old suffix",
+        });
+        await expect(
+            applyAcceleratorEdit(companyId, application.id, section.id, {
+                expectedRevision: 1,
+                start: 10,
+                end: 13,
+                original: "new",
+                replacement: "x",
+            })
+        ).rejects.toMatchObject({ status: 409, code: "edit_original_mismatch" });
+        const saved = (await getAcceleratorApplication(companyId, application.id))!.sections.find(
+            item => item.id === section.id
+        )!;
+        expect(saved).toMatchObject({ revision: 1, draft: "Prefix 😀 old suffix" });
+    });
+
+    it("checks a Field's revision under lock for runs that deliver a Suggestion", async () => {
+        const section = application.sections.find(item => item.field.fieldType === "long_text")!;
+        await connection.db.transaction(tx =>
+            assertAnswerRevision(companyId, application.id, section.id, 0, tx)
+        );
+        await saveAcceleratorAnswer(companyId, application.id, section.id, {
+            expectedRevision: 0,
+            draft: "changed",
+        });
+        await expect(
+            connection.db.transaction(tx =>
+                assertAnswerRevision(companyId, application.id, section.id, 0, tx)
+            )
+        ).rejects.toMatchObject({ status: 409, code: "revision_conflict" });
+    });
+
+    it("makes a concurrent save wait while a Suggestion run holds the Field's lock", async () => {
+        const section = application.sections.find(item => item.field.fieldType === "long_text")!;
+        let saveSettled = false;
+        let save: Promise<unknown> = Promise.resolve();
+        await connection.db.transaction(async tx => {
+            await assertAnswerRevision(companyId, application.id, section.id, 0, tx);
+            save = saveAcceleratorAnswer(companyId, application.id, section.id, {
+                expectedRevision: 0,
+                draft: "typed during generation",
+            }).finally(() => {
+                saveSettled = true;
+            });
+            await new Promise(resolve => setTimeout(resolve, 500));
+            expect(saveSettled).toBe(false);
+        });
+        await save;
+        const saved = (await getAcceleratorApplication(companyId, application.id))!.sections.find(
+            item => item.id === section.id
+        )!;
+        expect(saved).toMatchObject({ revision: 1, draft: "typed during generation" });
+    });
+
+    it("validates and hides edit runs from grants", async () => {
+        const section = application.sections.find(item => item.field.fieldType === "long_text")!;
+        const selection = {
+            sectionId: section.id,
+            expectedRevision: 0,
+            start: 0,
+            end: 3,
+            instruction: "Make it clearer",
+        };
+        await expect(
+            queueProposalRun({
+                companyId,
+                userId: "regression-author",
+                kind: "accel_edit",
+                input: { applicationId: application.id },
+            })
+        ).rejects.toMatchObject({ status: 400, code: "invalid_run_input" });
+        await expect(
+            queueProposalRun({
+                companyId,
+                userId: "regression-author",
+                kind: "draft",
+                input: { acceleratorEdit: selection },
+            })
+        ).rejects.toMatchObject({ status: 400, code: "invalid_run_input" });
+        const run = await queueProposalRun({
+            companyId,
+            userId: "regression-author",
+            kind: "accel_edit",
+            input: { applicationId: application.id, acceleratorEdit: selection },
+        });
+        expect(await getRun(run.id, companyId)).toBeNull();
+        expect(await listRuns(companyId)).toEqual([]);
+        expect(await findLiveRun(companyId)).toBeNull();
+        expect(await findLiveRun(companyId, { includeAccelerators: true })).toMatchObject({
+            id: run.id,
+        });
     });
 
     it("serializes simultaneous matching requests and keeps their run hidden from grants", async () => {

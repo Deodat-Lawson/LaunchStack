@@ -21,7 +21,7 @@ import { startProposalRun } from "~/server/proposals/executor";
 export const ACCELERATOR_COSTS = {
     match: PROPOSAL_CREDITS.programs,
     draft: PROPOSAL_CREDITS.accel_draft,
-    edit: PROPOSAL_CREDITS.rewrite,
+    edit: PROPOSAL_CREDITS.accel_edit,
 };
 
 export function toAcceleratorRunView(run: RunRecord): RunView {
@@ -151,7 +151,10 @@ export async function draftAcceleratorField(
 
 export async function loadAcceleratorRun(member: WorkspaceContext, id: string): Promise<RunView> {
     const run = await getRun(id, member.companyId, { includeAccelerators: true });
-    if (!run || (run.kind !== "programs" && run.kind !== "accel_draft")) {
+    if (
+        !run ||
+        (run.kind !== "programs" && run.kind !== "accel_draft" && run.kind !== "accel_edit")
+    ) {
         throw new AcceleratorError("Run not found", 404, "run_not_found");
     }
     return toAcceleratorRunView(run);

@@ -79,7 +79,7 @@ export async function executeProposalRunForMember(
     const member = await resolveMemberContext(run.userId, companyId);
     if (!member) throw new Error("The run's writer is no longer an active workspace member.");
     const scope = await member.documentScope();
-    if (run.kind === "programs" || run.kind === "accel_draft") {
+    if (run.kind === "programs" || run.kind === "accel_draft" || run.kind === "accel_edit") {
         await assertAcceleratorAccess(member, "documents.edit");
     }
     return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId, run.userId));

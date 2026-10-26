@@ -73,6 +73,7 @@ export function stepsFor(kind: RunKind, input: RunInput, sectionLabels: string[]
     switch (kind) {
         case "programs":
         case "accel_draft":
+        case "accel_edit":
             return [step("generate", "Generating"), step("save", "Saving")];
         case "funders":
             return [
@@ -218,6 +219,7 @@ export async function executeProposalRun(
         switch (run.kind) {
             case "programs":
             case "accel_draft":
+            case "accel_edit":
                 if (!ports.prepareAcceleratorRun || !ports.assertAcceleratorAccess)
                     throw new Error("Accelerators execution is not configured");
                 await ports.assertAcceleratorAccess();

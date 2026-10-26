@@ -168,12 +168,22 @@ describe("typed answers and edits", () => {
             false
         );
         expect(
-            ApplyEditSchema.safeParse({ expectedRevision: 0, start: 1, end: 1, replacement: "" })
-                .success
+            ApplyEditSchema.safeParse({
+                expectedRevision: 0,
+                start: 1,
+                end: 1,
+                original: "",
+                replacement: "",
+            }).success
         ).toBe(false);
         expect(
-            ApplyEditSchema.safeParse({ expectedRevision: 0, start: 1, end: 2, replacement: "" })
-                .success
+            ApplyEditSchema.safeParse({
+                expectedRevision: 0,
+                start: 1,
+                end: 2,
+                original: "a",
+                replacement: "",
+            }).success
         ).toBe(true);
         expect(
             FitAssessmentSchema.safeParse({

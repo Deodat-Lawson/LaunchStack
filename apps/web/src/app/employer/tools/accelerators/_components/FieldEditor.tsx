@@ -1,9 +1,9 @@
 "use client";
 
 import { AcceleratorError, assertAnswer } from "@launchstack/pipelines/accelerators/types";
-import { FileUp, Loader2, Save, Sparkles, Video } from "lucide-react";
+import { FileUp, Loader2, PenLine, Save, Sparkles, Video } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useId, useRef, useState, type HTMLInputTypeAttribute } from "react";
+import { useEffect, useId, useRef, useState, type HTMLInputTypeAttribute } from "react";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -23,6 +23,7 @@ import { cn } from "~/lib/utils";
 
 import type { AcceleratorSection, FormField } from "../api";
 import { runIsLive, useAccelerators } from "../_lib/context";
+import { EditSuggestionPanel } from "./EditSuggestionPanel";
 import { Notice } from "./ProgramFacts";
 
 const INPUT_TYPES: Record<
@@ -56,11 +57,18 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
         draftAnswer,
         activeRun,
         runBusy,
+        pendingEdit,
+        suggestEdit,
+        applyEdit,
+        dismissEdit,
     } = useAccelerators();
-    const [pending, setPending] = useState<"save" | "draft" | null>(null);
-    const [lastAction, setLastAction] = useState<"save" | "draft">("save");
+    const [pending, setPending] = useState<"save" | "draft" | "edit" | "apply" | null>(null);
+    const [lastAction, setLastAction] = useState<"save" | "draft" | "edit" | "apply">("save");
     const busy = useRef(false);
     const [failure, setFailure] = useState<unknown>(null);
+    const [editOpen, setEditOpen] = useState(false);
+    const [selection, setSelection] = useState<{ start: number; end: number } | null>(null);
+    const [instruction, setInstruction] = useState("");
     const field = section.field;
     const buffer = buffers[section.id] ?? {
         value: section.draft ?? "",
@@ -95,6 +103,72 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
         setFailure(null);
         try {
             await saveAnswer(applicationId, section.id, buffer);
+        } catch (error) {
+            setFailure(error);
+        } finally {
+            busy.current = false;
+            setPending(null);
+        }
+    };
+    // Offsets refer to the saved answer, so a selection only counts while the buffer is clean.
+    const savedText = section.draft ?? "";
+    const edit =
+        pendingEdit?.applicationId === applicationId && pendingEdit.sectionId === section.id
+            ? pendingEdit
+            : null;
+    const editable =
+        prose && !manual && Boolean(home?.canEdit) && savedText.trim() !== "" && !conflict;
+    const activeSelection =
+        selection !== null && selection.end > selection.start && selection.end <= savedText.length
+            ? selection
+            : null;
+    const hasSelection = activeSelection !== null;
+    const stale =
+        edit !== null &&
+        (section.revision !== edit.suggestion.expectedRevision ||
+            savedText.slice(edit.suggestion.start, edit.suggestion.end) !==
+                edit.suggestion.original);
+    const editingRun = live && activeRun?.kind === "accel_edit";
+    // The saved answer moved on, so an old range no longer means the same text.
+    useEffect(() => {
+        setSelection(null);
+    }, [section.revision]);
+    const suggest = async () => {
+        if (busy.current || !activeSelection || dirty || conflict) return;
+        const request = instruction.trim();
+        if (!request || pendingEdit !== null || runBusy) return;
+        busy.current = true;
+        setPending("edit");
+        setLastAction("edit");
+        setFailure(null);
+        try {
+            await suggestEdit(applicationId, section.id, {
+                expectedRevision: buffer.baseRevision,
+                start: activeSelection.start,
+                end: activeSelection.end,
+                instruction: request,
+            });
+        } catch (error) {
+            setFailure(error);
+        } finally {
+            busy.current = false;
+            setPending(null);
+        }
+    };
+    const apply = async () => {
+        if (busy.current || !edit || dirty || stale || !home?.canEdit) return;
+        busy.current = true;
+        setPending("apply");
+        setLastAction("apply");
+        setFailure(null);
+        try {
+            await applyEdit(applicationId, section.id, {
+                expectedRevision: edit.suggestion.expectedRevision,
+                start: edit.suggestion.start,
+                end: edit.suggestion.end,
+                original: edit.suggestion.original,
+                replacement: edit.suggestion.replacement,
+            });
         } catch (error) {
             setFailure(error);
         } finally {
@@ -168,8 +242,10 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
                         describedBy={`${id}-limits${field.guidance ? ` ${id}-guidance` : ""}${validation ? ` ${id}-validation` : ""}`}
                         onChange={value => {
                             setFailure(null);
+                            setSelection(null);
                             changeAnswer(section, value);
                         }}
+                        onSelectionChange={setSelection}
                     />
                 )}
                 {!manual && (
@@ -332,17 +408,131 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
                     <p className="text-ink-3 text-xs leading-relaxed">{t("draftHint")}</p>
                 )}
                 {live && !manual && (
-                    <p className="text-ink-3 text-xs leading-relaxed">{t("draftRunning")}</p>
+                    <p className="text-ink-3 text-xs leading-relaxed">
+                        {t(editingRun ? "editRunning" : "draftRunning")}
+                    </p>
                 )}
-                {failure != null && (
+                {failure != null && !(lastAction === "apply" && edit) && (
                     <p role="alert" className="text-danger text-sm">
-                        {errorText(
-                            failure,
-                            t(lastAction === "draft" ? "draftFailed" : "saveFailed")
-                        )}
+                        {errorText(failure, t(`${lastAction}Failed`))}
                     </p>
                 )}
             </form>
+            {editable && !edit && (
+                <section
+                    aria-label={t("editToggle")}
+                    className="border-line space-y-3 border-t pt-4"
+                >
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        aria-expanded={editOpen}
+                        onClick={() => setEditOpen(open => !open)}
+                    >
+                        <PenLine className="size-3.5" />
+                        {t("editToggle")}
+                    </Button>
+                    {editOpen && (
+                        <div className="space-y-3">
+                            <p className="text-ink-3 text-xs leading-relaxed">{t("editHint")}</p>
+                            {activeSelection && !dirty ? (
+                                <div className="space-y-1">
+                                    <p className="text-ink-3 text-xs">
+                                        {t("editSelected", {
+                                            count: format.number(
+                                                activeSelection.end - activeSelection.start
+                                            ),
+                                        })}
+                                    </p>
+                                    <blockquote
+                                        data-testid="edit-selection"
+                                        className="border-line bg-surface text-ink-2 max-h-32 overflow-auto whitespace-pre-wrap break-words rounded-md border p-3 text-sm"
+                                    >
+                                        {savedText.slice(
+                                            activeSelection.start,
+                                            activeSelection.end
+                                        )}
+                                    </blockquote>
+                                </div>
+                            ) : (
+                                <p role="status" className="text-ink-3 text-sm">
+                                    {t(dirty ? "editNeedSaved" : "editNeedSelection")}
+                                </p>
+                            )}
+                            <div className="space-y-1.5">
+                                <Label htmlFor={`${id}-instruction`}>
+                                    {t("editInstructionLabel")}
+                                </Label>
+                                <Input
+                                    id={`${id}-instruction`}
+                                    value={instruction}
+                                    maxLength={600}
+                                    placeholder={t("editInstructionPlaceholder")}
+                                    disabled={pending !== null}
+                                    onChange={event => setInstruction(event.target.value)}
+                                    onKeyDown={event => {
+                                        if (event.key === "Enter") {
+                                            event.preventDefault();
+                                            void suggest();
+                                        }
+                                    }}
+                                />
+                            </div>
+                            {pendingEdit !== null && (
+                                <p role="status" className="text-ink-3 text-sm">
+                                    {t("editFinishFirst")}
+                                </p>
+                            )}
+                            <Button
+                                type="button"
+                                size="sm"
+                                disabled={
+                                    !hasSelection ||
+                                    dirty ||
+                                    conflict ||
+                                    instruction.trim() === "" ||
+                                    pending !== null ||
+                                    runBusy ||
+                                    pendingEdit !== null
+                                }
+                                onClick={() => void suggest()}
+                            >
+                                {pending === "edit" ? (
+                                    <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
+                                ) : (
+                                    <Sparkles className="size-3.5" />
+                                )}
+                                {pending === "edit"
+                                    ? t("editGenerating")
+                                    : t("editGenerate", {
+                                          credits: format.number(home?.costs.edit ?? 0),
+                                      })}
+                            </Button>
+                        </div>
+                    )}
+                </section>
+            )}
+            {edit && (
+                <EditSuggestionPanel
+                    edit={edit}
+                    stale={stale}
+                    dirty={dirty}
+                    canEdit={Boolean(home?.canEdit)}
+                    credits={home?.costs.edit ?? 0}
+                    applying={pending === "apply"}
+                    failureText={
+                        failure != null && lastAction === "apply"
+                            ? errorText(failure, t("applyFailed"))
+                            : null
+                    }
+                    onApply={() => void apply()}
+                    onDiscard={() => {
+                        setFailure(null);
+                        dismissEdit();
+                    }}
+                />
+            )}
             {section.draftMeta?.gaps.length ? (
                 <section className="border-line space-y-2 border-t pt-4">
                     <h3 className="text-ink text-sm font-medium">{t("missingFacts")}</h3>
@@ -390,6 +580,7 @@ function FieldInput({
     invalid,
     describedBy,
     onChange,
+    onSelectionChange,
 }: {
     id: string;
     field: FormField;
@@ -398,7 +589,11 @@ function FieldInput({
     invalid: boolean;
     describedBy: string;
     onChange: (value: string) => void;
+    /** UTF-16 offsets into `value`, as the browser reports them. */
+    onSelectionChange?: (range: { start: number; end: number }) => void;
 }) {
+    const reportSelection = (element: HTMLInputElement | HTMLTextAreaElement) =>
+        onSelectionChange?.({ start: element.selectionStart ?? 0, end: element.selectionEnd ?? 0 });
     const t = useTranslations("accelerators.field");
     const accessibility = {
         "aria-labelledby": `${id}-question`,
@@ -415,6 +610,7 @@ function FieldInput({
                     value={value}
                     disabled={disabled}
                     onChange={event => onChange(event.target.value)}
+                    onSelect={event => reportSelection(event.currentTarget)}
                     rows={7}
                     className="resize-y text-sm leading-relaxed"
                 />
@@ -433,6 +629,7 @@ function FieldInput({
                     value={value}
                     disabled={disabled}
                     onChange={event => onChange(event.target.value)}
+                    onSelect={event => reportSelection(event.currentTarget)}
                 />
             );
         case "select":

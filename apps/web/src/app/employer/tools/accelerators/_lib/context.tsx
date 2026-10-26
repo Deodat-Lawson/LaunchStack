@@ -17,6 +17,9 @@ import {
     type AcceleratorApplication,
     type AcceleratorRunView,
     type AcceleratorSection,
+    type ApplyEdit,
+    type EditSuggestion,
+    type EditSuggestionRequest,
     type HomeResponse,
 } from "../api";
 
@@ -24,6 +27,14 @@ export interface AnswerBuffer {
     value: string;
     baseline: string;
     baseRevision: number;
+}
+
+/** A delivered, charged Suggestion the user has not yet applied or discarded. */
+export interface PendingEdit {
+    runId: string;
+    applicationId: string;
+    sectionId: string;
+    suggestion: EditSuggestion;
 }
 
 interface AcceleratorsContextValue {
@@ -48,12 +59,32 @@ interface AcceleratorsContextValue {
         sectionId: string,
         expectedRevision: number
     ) => Promise<void>;
+    pendingEdit: PendingEdit | null;
+    suggestEdit: (
+        applicationId: string,
+        sectionId: string,
+        request: EditSuggestionRequest
+    ) => Promise<void>;
+    applyEdit: (applicationId: string, sectionId: string, edit: ApplyEdit) => Promise<void>;
+    dismissEdit: () => void;
 }
 
 const Context = createContext<AcceleratorsContextValue | null>(null);
 
 export function runIsLive(run: AcceleratorRunView | null): boolean {
     return run?.status === "queued" || run?.status === "running";
+}
+
+/** The Suggestion a completed edit run delivered, or null for any other run. */
+function editFromRun(run: AcceleratorRunView): PendingEdit | null {
+    const result = run.result;
+    if (run.status !== "completed" || result?.kind !== "accel_edit") return null;
+    return {
+        runId: run.id,
+        applicationId: result.applicationId,
+        sectionId: result.sectionId,
+        suggestion: result.suggestion,
+    };
 }
 
 function savedBuffer(section: AcceleratorSection): AnswerBuffer {
@@ -103,6 +134,12 @@ export function AcceleratorsProvider({
     const requestSequence = useRef(0);
     const accessDenied = useRef(false);
     const storageKey = storageScope ? `accelerators.run.v1:${storageScope}` : null;
+    // Kept until Apply or Discard, unlike the run key, so a charged Suggestion survives a reload.
+    const editKey = storageScope ? `accelerators.edit.v1:${storageScope}` : null;
+    const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
+    const pendingEditRef = useRef<PendingEdit | null>(null);
+    pendingEditRef.current = pendingEdit;
+    const dismissedEdits = useRef(new Set<string>());
 
     const guardError = useCallback((failure: unknown) => {
         if (failure instanceof AcceleratorsApiError && failure.status === 403) {
@@ -113,9 +150,35 @@ export function AcceleratorsProvider({
             setDenied(true);
             setError(failure);
             setActiveRun(null);
+            setPendingEdit(null);
             runLiveRef.current = false;
         }
     }, []);
+
+    const clearEditKey = useCallback(() => {
+        if (!editKey) return;
+        try {
+            window.sessionStorage.removeItem(editKey);
+        } catch {
+            /* Storage is optional. */
+        }
+    }, [editKey]);
+
+    const adoptEdit = useCallback(
+        (run: AcceleratorRunView) => {
+            if (accessDenied.current || dismissedEdits.current.has(run.id)) return;
+            const edit = editFromRun(run);
+            if (!edit) return;
+            setPendingEdit(edit);
+            if (!editKey) return;
+            try {
+                window.sessionStorage.setItem(editKey, run.id);
+            } catch {
+                /* Storage is optional. */
+            }
+        },
+        [editKey]
+    );
 
     const syncBuffers = useCallback((applications: AcceleratorApplication[]) => {
         setBuffers(previous => {
@@ -262,6 +325,40 @@ export function AcceleratorsProvider({
         };
     }, [runId, live, denied, pollNonce, refresh, guardError, storageKey]);
 
+    // A completed edit run is a paid Suggestion waiting for the user's decision.
+    useEffect(() => {
+        if (activeRun) adoptEdit(activeRun);
+    }, [activeRun, adoptEdit]);
+
+    // After a reload, fetch the stored Suggestion; never start a run on mount.
+    useEffect(() => {
+        if (!editKey) return;
+        let id: string | null = null;
+        try {
+            id = window.sessionStorage.getItem(editKey);
+        } catch {
+            /* Storage is optional. */
+        }
+        if (!id) return;
+        let disposed = false;
+        acceleratorsApi
+            .run(id)
+            .then(({ run }) => {
+                if (disposed) return;
+                if (editFromRun(run)) adoptEdit(run);
+                else if (!runIsLive(run)) clearEditKey();
+            })
+            .catch((failure: unknown) => {
+                if (disposed) return;
+                guardError(failure);
+                if (failure instanceof AcceleratorsApiError && failure.status === 404)
+                    clearEditKey();
+            });
+        return () => {
+            disposed = true;
+        };
+    }, [editKey, adoptEdit, clearEditKey, guardError]);
+
     const trackRun = useCallback(
         (run: AcceleratorRunView) => {
             if (accessDenied.current) return;
@@ -405,6 +502,56 @@ export function AcceleratorsProvider({
         [launchRun, loadApplication]
     );
 
+    const suggestEdit = useCallback(
+        async (applicationId: string, sectionId: string, request: EditSuggestionRequest) => {
+            try {
+                await launchRun(() => acceleratorsApi.suggest(applicationId, sectionId, request));
+            } catch (failure) {
+                if (failure instanceof AcceleratorsApiError && failure.status === 409) {
+                    await loadApplication(applicationId).catch(() => undefined);
+                }
+                throw failure;
+            }
+        },
+        [launchRun, loadApplication]
+    );
+
+    const dismissEdit = useCallback(() => {
+        const current = pendingEditRef.current;
+        if (current) dismissedEdits.current.add(current.runId);
+        setPendingEdit(null);
+        clearEditKey();
+    }, [clearEditKey]);
+
+    const applyEdit = useCallback(
+        async (applicationId: string, sectionId: string, edit: ApplyEdit) => {
+            try {
+                const { section } = await acceleratorsApi.apply(applicationId, sectionId, edit);
+                if (accessDenied.current) return;
+                // A clean buffer follows the saved answer; unsaved text is never replaced.
+                const application = homeRef.current?.applications.find(
+                    item => item.id === applicationId
+                );
+                if (application)
+                    acceptApplication({
+                        ...application,
+                        sections: application.sections.map(item =>
+                            item.id === sectionId ? section : item
+                        ),
+                    });
+                dismissEdit();
+            } catch (failure) {
+                guardError(failure);
+                // A conflict is not permission to retry against the new revision: reload and stop.
+                if (failure instanceof AcceleratorsApiError && failure.status === 409) {
+                    await loadApplication(applicationId).catch(() => undefined);
+                }
+                throw failure;
+            }
+        },
+        [acceptApplication, dismissEdit, guardError, loadApplication]
+    );
+
     const dirty = Object.values(buffers).some(buffer => buffer.value !== buffer.baseline);
     useEffect(() => {
         if (!dirty) return;
@@ -435,6 +582,10 @@ export function AcceleratorsProvider({
                 resolveConflict,
                 saveAnswer,
                 draftAnswer,
+                pendingEdit,
+                suggestEdit,
+                applyEdit,
+                dismissEdit,
             }}
         >
             {children}

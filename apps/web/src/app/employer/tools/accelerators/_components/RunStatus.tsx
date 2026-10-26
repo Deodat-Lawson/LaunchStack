@@ -31,7 +31,15 @@ export function RunStatus() {
                             ) : (
                                 <X className="text-danger size-4" />
                             )}
-                            <span>{t(run.kind === "programs" ? "programs" : "draft")}</span>
+                            <span>
+                                {t(
+                                    run.kind === "programs"
+                                        ? "programs"
+                                        : run.kind === "accel_edit"
+                                          ? "edit"
+                                          : "draft"
+                                )}
+                            </span>
                             <span className="text-ink-3 font-normal">{t(run.status)}</span>
                         </div>
                         {run.creditsUsed > 0 && (

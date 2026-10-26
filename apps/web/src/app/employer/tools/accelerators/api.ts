@@ -2,6 +2,8 @@ import type {
     AcceleratorApplication,
     AcceleratorSection,
     AnswerPatch,
+    ApplyEdit,
+    EditSuggestionRequest,
     HomeResponse,
     ProgramView,
     RunView,
@@ -10,6 +12,9 @@ import type {
 export type {
     AcceleratorApplication,
     AcceleratorSection,
+    ApplyEdit,
+    EditSuggestion,
+    EditSuggestionRequest,
     FormField,
     HomeResponse,
     ProgramCycle,
@@ -98,6 +103,16 @@ export const acceleratorsApi = {
         send<{ run: AcceleratorRunView }>(`${sectionPath(applicationId, sectionId)}/draft`, {
             expectedRevision,
         }),
+    suggest: (applicationId: string, sectionId: string, request: EditSuggestionRequest) =>
+        send<{ run: AcceleratorRunView }>(
+            `${sectionPath(applicationId, sectionId)}/suggest`,
+            request
+        ),
+    apply: (applicationId: string, sectionId: string, edit: ApplyEdit) =>
+        send<{ section: AcceleratorSection }>(
+            `${sectionPath(applicationId, sectionId)}/apply`,
+            edit
+        ),
     run: (id: string) =>
         call<{ run: AcceleratorRunView }>(`/api/accelerators/runs/${encodeURIComponent(id)}`),
 };

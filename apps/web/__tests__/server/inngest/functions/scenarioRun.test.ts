@@ -29,7 +29,10 @@ jest.mock("~/server/inngest/client", () => ({
 jest.mock("@launchstack/pipelines/scenarios", () => ({ advanceRun: jest.fn() }));
 jest.mock("@launchstack/pipelines/scenarios/db", () => {
     const finish = jest.fn();
-    return { createScenarioStore: () => ({ finish }), __finish: finish };
+    return {
+        createScenarioStore: () => ({ finish }),
+        __finish: finish,
+    };
 });
 jest.mock("~/server/scenarios/executor", () => ({ createScenarioPorts: jest.fn(() => ({})) }));
 jest.mock("~/server/workspace-models/scope", () => ({
@@ -65,12 +68,20 @@ it("runs one step per unit until the run stops advancing", async () => {
         .mockResolvedValueOnce({ state: "advanced", step: 3 })
         .mockResolvedValueOnce({ state: "done" });
     const step = recordingStep();
-    const result = await job.handler({ event: { data: { runId: 7, companyId: "5" } }, step });
+    const result = await job.handler({
+        event: { data: { runId: 7, companyId: "5", userId: "starter" } },
+        step,
+    });
     expect(step.names).toEqual(["unit-0", "unit-1", "unit-2", "unit-3"]);
     expect(advanceRun).toHaveBeenCalledWith({}, 7);
     // Each step enters the workspace's model scope itself (steps don't inherit it).
     expect(withWorkspaceChatModels).toHaveBeenCalledTimes(4);
-    expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
+    // Counted against whoever started the run, and never stopped by their allowance.
+    expect(withWorkspaceChatModels).toHaveBeenCalledWith(
+        5n,
+        { feature: "scenarios", userId: "starter", enforce: false },
+        expect.any(Function)
+    );
     expect(result).toEqual({ runId: 7, state: "done" });
 });
 

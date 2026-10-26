@@ -432,15 +432,18 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
         notes:
             "`settings` is the one write path (registry-validated, permission-gated, audited). " +
             "`settings/models`, `settings/usage`, `settings/privacy` and `settings/archive` are " +
-            "overviews computed for the panel. The Account section's profile is the `workspace` " +
-            "service's `profile` routes.",
+            "overviews computed for the panel. The one other write is " +
+            "`settings/usage/members/[userId]`, a person's AI limit (settings.manage, audited), " +
+            "which is a row of its own rather than a registry value. The Account section's " +
+            "profile is the `workspace` service's `profile` routes.",
     },
     {
         id: "platform-ops",
         tier: "system",
-        summary: "Health, metrics, runtime configuration, and usage accounting.",
+        summary:
+            "Health, metrics, runtime configuration, and usage accounting, including each person's own AI allowance.",
         scope: "mixed",
-        routes: ["health", "metrics", "config", "credits"],
+        routes: ["health", "metrics", "config", "credits", "ai-allowance"],
         unscopedRoutes: {
             health: "Liveness probe.",
             metrics: "Prometheus scrape, authenticated by bearer token.",

@@ -177,5 +177,9 @@
     "workspaceModelUnusable": "Your workspace's own model can't be used: {reason} A workspace admin can fix it in Settings › Bring your own keys.",
     "workspaceKeyUnreadable": "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Settings › Bring your own keys.",
     "workspaceSetupInvalid": "Your workspace's own model can't be used: its saved model setup isn't valid, so open it and save it again. A workspace admin can fix it in Settings › Bring your own keys."
+  },
+  "aiAllowance": {
+    "workspace": "You've reached your AI limit in this workspace for this month ({used} of {limit} tokens). It resets on {resetDate}. A workspace admin can raise it in Settings › Usage and costs.",
+    "server": "You've reached this server's monthly AI limit ({used} of {limit} tokens, across all your workspaces). It resets on {resetDate}. Whoever runs this server can raise it."
   }
 }

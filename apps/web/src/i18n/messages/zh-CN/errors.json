@@ -177,5 +177,9 @@
     "workspaceModelUnusable": "无法使用你工作区自有的模型：{reason} 工作区管理员可以在“设置 › 自带密钥”中修复。",
     "workspaceKeyUnreadable": "无法使用你工作区自有的模型：这台服务器读不出已保存的 API 密钥，请重新输入。工作区管理员可以在“设置 › 自带密钥”中修复。",
     "workspaceSetupInvalid": "无法使用你工作区自有的模型：已保存的模型设置无效，请打开并重新保存。工作区管理员可以在“设置 › 自带密钥”中修复。"
+  },
+  "aiAllowance": {
+    "workspace": "你本月在此工作区的 AI 用量已达上限（{used} / {limit} 个 token）。将于 {resetDate} 重置。工作区管理员可以在“设置 › 用量与费用”中提高上限。",
+    "server": "你本月在这台服务器上的 AI 用量已达上限（{used} / {limit} 个 token，合计你所有的工作区）。将于 {resetDate} 重置。服务器的管理者可以提高上限。"
   }
 }

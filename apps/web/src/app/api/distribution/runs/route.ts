@@ -12,13 +12,14 @@ import { RunOptionsSchema } from "@launchstack/pipelines/distribution/types";
 import { createRun, getProgram, getRun, listRuns } from "@launchstack/pipelines/distribution/db";
 import { hasTokens } from "~/lib/credits";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { isMeteringEnforced } from "~/server/deployment";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
 import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 const api = (request: Request) => requestTranslator(request, "errors.api");
 const growth = (request: Request) => requestTranslator(request, "growth.server.errors");
@@ -46,6 +47,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        ctx.data.authUserId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
 
     return withRateLimit(
         request,

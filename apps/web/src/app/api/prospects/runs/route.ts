@@ -29,6 +29,8 @@ import {
     prospectsT,
     readBody,
 } from "../_http";
+import { localeOfRequest } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 const Schema = z.object({
     segmentId: z.string().min(1),
@@ -67,6 +69,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
+    const refused = await refuseAtAiAllowance(
+        auth.ctx.companyId,
+        auth.ctx.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     const { ctx } = auth;
     return withRateLimit(
         request,

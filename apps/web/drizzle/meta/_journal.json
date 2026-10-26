@@ -260,6 +260,13 @@
       "when": 1792882362467,
       "tag": "20261024225242_drive_pick_destination",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1792972503155,
+      "tag": "20261025235503_member_ai_allowances",
+      "breakpoints": true
     }
   ]
 }

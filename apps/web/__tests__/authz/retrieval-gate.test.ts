@@ -16,6 +16,12 @@ import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
 // Runs the work as-is: which workspace's models it gets is not this test's concern.
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    refuseAtAiAllowance: jest.fn(async () => null),
+    assertWithinAiAllowance: jest.fn(async () => undefined),
+}));
+
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));

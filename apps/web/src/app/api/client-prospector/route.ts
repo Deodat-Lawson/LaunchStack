@@ -22,12 +22,19 @@ import {
 } from "@launchstack/pipelines/client-prospector";
 import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/client-prospector/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        ctx.data.authUserId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
 
     return withRateLimit(
         request,

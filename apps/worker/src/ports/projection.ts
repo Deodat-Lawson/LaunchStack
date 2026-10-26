@@ -13,13 +13,17 @@ import type { LoggerPort } from "@launchstack/runtime";
 import { countFacts, refreshForDocument } from "@launchstack/pipelines/company-metadata";
 
 import { generateStructured } from "~/lib/llm";
+import { uploaderOfDocument, uploaderOrNull } from "~/server/ai-usage/uploader";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export function createCompanyProjectionPort(logger: LoggerPort): CompanyProjectionPort {
     return {
         async projectCompanyState({ companyId, sourceId, traceId }) {
-            // Read with the workspace's own models when it brought them.
-            const metadata = await withWorkspaceChatModels(companyId, "companyProfile", () =>
+            // Read with the workspace's own models when it brought them, counted
+            // toward the uploader's AI allowance (never refused for it).
+            const userId = await uploaderOrNull(uploaderOfDocument(sourceId));
+            const aiUse = { feature: "companyProfile", userId, enforce: false } as const;
+            const metadata = await withWorkspaceChatModels(companyId, aiUse, () =>
                 refreshForDocument(BigInt(companyId), sourceId, {
                     generate: input =>
                         generateStructured({ ...input, capability: "smallExtraction" }),

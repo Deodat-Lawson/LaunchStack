@@ -24,6 +24,8 @@ import {
 import { createSlot } from "@launchstack/runtime";
 
 import type { AiFeature } from "~/lib/ai-usage";
+import { AiAllowanceExceededError } from "~/server/ai-usage/errors";
+import { getAiAllowance, type AiAllowance } from "~/server/ai-usage/quota";
 import { aiUsageRecorder } from "~/server/ai-usage/record";
 
 import { buildWorkspaceChatModelsConfig } from "./config";
@@ -132,17 +134,83 @@ export async function loadWorkspaceChatModelsScope(
 }
 
 /**
+ * What work done under a workspace's models is: the feature it is counted
+ * under, and — when the work is for a person — who.
+ */
+export interface WorkspaceModelsUse {
+    feature: AiFeature;
+    /** The person's auth user id; their calls count toward their AI allowance. */
+    userId: string | null | undefined;
+    /**
+     * Refuse the work when they are at a limit (the default). Work that is
+     * already running — a background step, an `after()` continuation — passes
+     * false: it is counted, never stopped midway.
+     */
+    enforce?: boolean;
+}
+
+/** `userId`'s AI allowance in a workspace, with the server cap applied only where it can. */
+export async function loadAiAllowance(
+    companyId: bigint | number | string,
+    userId: string
+): Promise<AiAllowance> {
+    const scope = await loadWorkspaceChatModelsScope(companyId);
+    return getAiAllowance(BigInt(companyId), userId, {
+        serverCapApplies: scope.source === "deployment",
+    });
+}
+
+/**
+ * The allowance error to put on the scope, or undefined to let the work run.
+ * A failed read lets it run: the allowance is a guard against runaway use,
+ * and refusing every member's AI over a database blip is the worse failure.
+ */
+async function allowanceError(
+    companyId: bigint | number | string | null | undefined,
+    scope: ChatModelsScope,
+    actor: WorkspaceModelsUse | null
+): Promise<AiAllowanceExceededError | undefined> {
+    if (!actor?.userId || actor.enforce === false) return undefined;
+    if (companyId === null || companyId === undefined || companyId === "") return undefined;
+    try {
+        const allowance = await getAiAllowance(BigInt(companyId), actor.userId, {
+            serverCapApplies: scope.source === "deployment",
+        });
+        return allowance.blocked ? new AiAllowanceExceededError(allowance) : undefined;
+    } catch (error) {
+        console.warn(
+            `[ai-usage] could not read the AI allowance of ${actor.userId} in workspace ${companyId}; letting the work run:`,
+            error instanceof Error ? error.message : error
+        );
+        return undefined;
+    }
+}
+
+/**
  * Run `fn` with chat resolving against the workspace's own endpoint, if it
- * brought one, and with every model call counted as `feature`'s. A missing
- * workspace id pins the deployment's models and counts nothing, so work
- * nested inside another workspace's scope can't inherit it by accident.
+ * brought one, and with every model call counted as `use`'s feature — and as
+ * its person's, when `use` names one (`{ feature, userId }`; a bare feature is
+ * work no one person started). A missing workspace id pins the deployment's
+ * models and counts nothing, so work nested inside another workspace's scope
+ * can't inherit it by accident.
+ *
+ * A person at their AI allowance gets a scope that refuses: every model
+ * resolution inside throws {@link AiAllowanceExceededError}, which
+ * `describeChatResolutionFailure` words for the screen. Routes that want to
+ * answer before doing any work check first with ~/server/ai-usage/refusal.
  */
 export async function withWorkspaceChatModels<T>(
     companyId: bigint | number | string | null | undefined,
-    feature: AiFeature,
+    use: AiFeature | WorkspaceModelsUse,
     fn: () => T | Promise<T>
 ): Promise<T> {
+    const actor = typeof use === "string" ? null : use;
+    const feature = typeof use === "string" ? use : use.feature;
     const scope = await loadWorkspaceChatModelsScope(companyId);
-    const usage = aiUsageRecorder(companyId, feature);
-    return await runWithChatModelsScope(usage ? { ...scope, usage } : scope, fn);
+    const usage = aiUsageRecorder(companyId, feature, actor?.userId);
+    const refused = await allowanceError(companyId, scope, actor);
+    return await runWithChatModelsScope(
+        { ...scope, ...(usage ? { usage } : {}), ...(refused ? { error: refused } : {}) },
+        fn
+    );
 }

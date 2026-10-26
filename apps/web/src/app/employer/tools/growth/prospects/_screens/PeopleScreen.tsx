@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -20,23 +21,23 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 import { prospectsApi, type EmailStatusKind } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useProspects } from "../_lib/context";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
-import { EMAIL_STATUS_LABEL, EmailStatus, canOutreach } from "../_components/EmailStatus";
+import { EMAIL_STATUSES, EmailStatus, canOutreach } from "../_components/EmailStatus";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
-const STATUSES: Array<{ id: "all" | EmailStatusKind; label: string }> = [
-    { id: "all", label: "All" },
-    { id: "verified", label: EMAIL_STATUS_LABEL.verified },
-    { id: "found", label: EMAIL_STATUS_LABEL.found },
-    { id: "generic", label: EMAIL_STATUS_LABEL.generic },
-    { id: "guess", label: EMAIL_STATUS_LABEL.guess },
-];
+const STATUSES: ReadonlyArray<"all" | EmailStatusKind> = ["all", ...EMAIL_STATUSES];
 
 export function PeopleScreen() {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { segmentId, href } = useProspects();
     const [status, setStatus] = useState<"all" | EmailStatusKind>("all");
     const [q, setQ] = useState("");
@@ -62,11 +63,16 @@ export function PeopleScreen() {
         try {
             const result = await prospectsApi.outreach({ personIds: ids });
             toast.success(
-                `Campaign drafted in Email with ${result.people} ${result.people === 1 ? "person" : "people"}.${result.skipped.length ? ` ${result.skipped.length} skipped.` : ""}`
+                result.skipped.length
+                    ? t("people.draftedSkipped", {
+                          count: result.people,
+                          skipped: result.skipped.length,
+                      })
+                    : t("people.drafted", { count: result.people })
             );
             setSelected(new Set());
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not draft outreach");
+            toast.error(errorText(e, t("common.outreachFailed")));
         }
     };
 
@@ -76,10 +82,10 @@ export function PeopleScreen() {
         <div className="mx-auto flex max-w-[1180px] flex-col gap-5">
             <PageHeader
                 size="md"
-                title="People"
+                title={t("common.people")}
                 sub={
                     res.data
-                        ? `${people.length} across the segment's companies · ${eligible.length} ready for outreach`
+                        ? t("people.sub", { count: people.length, eligible: eligible.length })
                         : undefined
                 }
             />
@@ -90,23 +96,23 @@ export function PeopleScreen() {
                     onValueChange={v => v && setStatus(v as typeof status)}
                     size="sm"
                     className="border-line bg-panel max-w-full justify-start gap-0.5 overflow-x-auto rounded-md border p-0.5"
-                    aria-label="Email status"
+                    aria-label={t("people.statusAria")}
                 >
                     {STATUSES.map(s => (
                         <ToggleGroupItem
-                            key={s.id}
-                            value={s.id}
+                            key={s}
+                            value={s}
                             className="h-7 shrink-0 rounded-[5px] px-2.5 text-xs"
                         >
-                            {s.label}
+                            {s === "all" ? tc("status.all") : t(`emailStatus.label.${s}`)}
                         </ToggleGroupItem>
                     ))}
                 </ToggleGroup>
                 <Input
                     value={q}
                     onChange={e => setQ(e.target.value)}
-                    placeholder="Search people or companies"
-                    aria-label="Search people"
+                    placeholder={t("people.searchPlaceholder")}
+                    aria-label={t("people.searchAria")}
                     className="h-8 w-[260px] text-[13px]"
                 />
             </div>
@@ -117,11 +123,13 @@ export function PeopleScreen() {
                 <SkeletonRows rows={8} height={48} />
             ) : people.length === 0 ? (
                 <EmptyState
-                    title="No people yet"
-                    body="People are looked up for the top companies after each run. Run Find companies, or open a company to see who was found."
+                    title={t("people.empty")}
+                    body={t("people.emptyBody")}
                     action={
                         <Button variant="outline" size="sm" asChild>
-                            <ToolLink href={href("/companies")}>Open companies</ToolLink>
+                            <ToolLink href={href("/companies")}>
+                                {t("people.openCompanies")}
+                            </ToolLink>
                         </Button>
                     }
                 />
@@ -132,7 +140,7 @@ export function PeopleScreen() {
                             <TableRow className="hover:bg-transparent">
                                 <TableHead className="w-9 pl-3">
                                     <Checkbox
-                                        aria-label="Select all eligible"
+                                        aria-label={t("people.selectAllEligible")}
                                         checked={
                                             eligible.length > 0 &&
                                             eligible.every(p => selected.has(p.id))
@@ -147,22 +155,24 @@ export function PeopleScreen() {
                                     />
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Person
+                                    {t("people.person")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Company
+                                    {t("common.company")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Email
+                                    {tc("fields.email")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Source
+                                    {t("common.source")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {people.map(p => {
                                 const ok = canOutreach(p.emailStatus) && !p.blockedReason;
+                                const name = word(p.nameCopy, p.name);
+                                const source = word(p.sourceCopy, p.source);
                                 return (
                                     <TableRow
                                         key={p.id}
@@ -170,7 +180,7 @@ export function PeopleScreen() {
                                     >
                                         <TableCell className="pl-3">
                                             <Checkbox
-                                                aria-label={`Select ${p.name}`}
+                                                aria-label={t("common.select", { name })}
                                                 checked={selected.has(p.id)}
                                                 disabled={!ok}
                                                 onCheckedChange={checked =>
@@ -190,10 +200,10 @@ export function PeopleScreen() {
                                                 </Avatar>
                                                 <span className="min-w-0">
                                                     <span className="text-ink block truncate font-medium">
-                                                        {p.name}
+                                                        {name}
                                                     </span>
                                                     <span className="text-ink-3 block truncate text-xs">
-                                                        {p.title} · {p.seniority}
+                                                        {word(p.titleCopy, p.title)} · {p.seniority}
                                                     </span>
                                                 </span>
                                             </span>
@@ -207,7 +217,7 @@ export function PeopleScreen() {
                                             </ToolLink>
                                             {p.blockedReason && (
                                                 <span className="text-ink-3 block text-xs">
-                                                    {p.blockedReason}
+                                                    {word(p.blockedReasonCopy, p.blockedReason)}
                                                 </span>
                                             )}
                                         </TableCell>
@@ -227,10 +237,10 @@ export function PeopleScreen() {
                                                     rel="noreferrer"
                                                     className="hover:text-brand-ink hover:underline"
                                                 >
-                                                    {p.source}
+                                                    {source}
                                                 </a>
                                             ) : (
-                                                p.source
+                                                source
                                             )}
                                         </TableCell>
                                     </TableRow>
@@ -243,7 +253,7 @@ export function PeopleScreen() {
 
             <BulkBar count={selected.size} onClear={() => setSelected(new Set())}>
                 <Button size="sm" onClick={() => void outreach()}>
-                    Add to outreach
+                    {t("common.addToOutreach")}
                 </Button>
             </BulkBar>
         </div>

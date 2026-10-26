@@ -76,8 +76,8 @@ jest.mock("~/app/employer/documents/_workspace/settings/ModelsSection", () =>
 jest.mock("~/app/employer/documents/_workspace/collab/AgentsPanel", () =>
     mockBody("AgentsPanel", "body-agents", "New agent")
 );
-jest.mock("~/app/employer/documents/_workspace/settings/DocumentDefaultsSection", () =>
-    mockBody("DocumentDefaultsSection", "body-documents")
+jest.mock("~/app/employer/documents/_workspace/settings/KeysSection", () =>
+    mockBody("KeysSection", "body-byok")
 );
 jest.mock("~/app/employer/documents/_workspace/settings/IntegrationsPanel", () =>
     mockBody("IntegrationsPanel", "body-integrations")
@@ -201,7 +201,7 @@ describe("the Workspace tab", () => {
 
         fireEvent.click(within(area).getByRole("radio", { name: "Setup" }));
         await waitFor(() =>
-            expect(tabs()).toEqual(["Models", "Agents", "Document defaults", "Integrations"])
+            expect(tabs()).toEqual(["Bring your own keys", "Models", "Agents", "Integrations"])
         );
         fireEvent.click(within(area).getByRole("radio", { name: "Data" }));
         await waitFor(() => expect(tabs()).toEqual(["Usage", "Archive", "Labs"]));
@@ -213,13 +213,7 @@ describe("the Workspace tab", () => {
         open();
 
         expect(screen.queryByRole("radiogroup", { name: "Area" })).not.toBeInTheDocument();
-        expect(tabs()).toEqual([
-            "General",
-            "People and access",
-            "Company profile",
-            "Document defaults",
-            "Labs",
-        ]);
+        expect(tabs()).toEqual(["General", "People and access", "Company profile", "Labs"]);
         await screen.findByTestId("workspace-general");
         expect(screen.getByText("Read-only")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Save changes" })).not.toBeInTheDocument();
@@ -233,10 +227,33 @@ describe("the Workspace tab", () => {
         expect(heading()).toHaveTextContent("Which model serves each kind of request");
         expect(
             screen.getByText(
-                "Models isn't part of your role (Member). Ask an admin if you need it."
+                "Models and routes isn't part of your role (Member). Ask an admin if you need it."
             )
         ).toBeInTheDocument();
         expect(screen.queryByTestId("body-models")).not.toBeInTheDocument();
+    });
+
+    it("keeps Bring your own keys from a Member, and says why on a link to it", async () => {
+        as("member");
+        open("/byok");
+
+        expect(heading()).toHaveTextContent("Bring your own keys");
+        expect(
+            screen.getByText(
+                "Bring your own keys isn't part of your role (Member). Ask an admin if you need it."
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByTestId("body-byok")).not.toBeInTheDocument();
+    });
+
+    it("shows an owner Bring your own keys on its own screen", async () => {
+        open("/byok");
+        await screen.findByTestId("body-byok");
+        expect(heading()).toHaveTextContent("Bring your own keys");
+        expect(within(bar()).getByRole("link", { name: "Bring your own keys" })).toHaveAttribute(
+            "aria-current",
+            "page"
+        );
     });
 
     it("gives the one primary action to the screen on show", async () => {
@@ -285,11 +302,14 @@ describe("the Workspace tab", () => {
         expect(window.location.hash).toBe("#appearance.theme");
     });
 
-    it("says so for a screen it doesn't have — the retired Processing one included", async () => {
-        open("/processing");
-        expect(await screen.findByText("This screen does not exist")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Go to General" })).toBeInTheDocument();
-    });
+    it.each(["/processing", "/documents"])(
+        "says so for a screen it doesn't have — the retired %s one included",
+        async at => {
+            open(at);
+            expect(await screen.findByText("This screen does not exist")).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Go to General" })).toBeInTheDocument();
+        }
+    );
 });
 
 describe("Workspace › General", () => {

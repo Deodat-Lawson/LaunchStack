@@ -11,6 +11,6 @@ export async function GET(request: Request) {
     try {
         return NextResponse.json(await searchPrincipals(ctx.data, q));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/principals GET]");
+        return workspaceErrorResponse(error, "[workspace/principals GET]", request);
     }
 }

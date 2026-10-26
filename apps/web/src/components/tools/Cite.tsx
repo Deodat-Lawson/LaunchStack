@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ExternalLink } from "lucide-react";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
@@ -59,11 +60,12 @@ export function SourceLink({
  * cites a profile fact and a drafted answer.
  */
 export function Cite({ n, evidence }: { n: number; evidence: CiteEvidence[] }) {
+    const t = useTranslations("tools.cite");
     const item = evidence.find(e => e.n === n);
     const sup = (
         <span
             className="text-brand-ink ml-px inline-block cursor-default rounded-sm px-0.5 align-super font-mono text-[10px] leading-none"
-            aria-label={item ? `Source ${n}: ${item.title}` : `Source ${n}`}
+            aria-label={item ? t("sourceWithTitle", { n, title: item.title }) : t("source", { n })}
         >
             {n}
         </span>
@@ -94,7 +96,11 @@ export function Cite({ n, evidence }: { n: number; evidence: CiteEvidence[] }) {
                 ) : (
                     <div className="text-ink text-[13px] font-medium">{item.title}</div>
                 )}
-                {item.page && <div className="text-ink-3 mt-0.5 text-xs">Page {item.page}</div>}
+                {item.page && (
+                    <div className="text-ink-3 mt-0.5 text-xs">
+                        {t("page", { page: item.page })}
+                    </div>
+                )}
                 <p className="text-ink-2 mt-2 text-xs leading-relaxed">“{item.quote}”</p>
             </HoverCardContent>
         </HoverCard>
@@ -111,10 +117,11 @@ export function CiteList({
     evidence: CiteEvidence[];
     className?: string;
 }) {
+    const t = useTranslations("tools.cite");
     if (cites.length === 0) return null;
     return (
         <span className={cn("text-ink-3 inline-flex items-center gap-0.5 text-xs", className)}>
-            Sources
+            {t("sources")}
             {cites.map(n => (
                 <Cite key={n} n={n} evidence={evidence} />
             ))}
@@ -124,6 +131,7 @@ export function CiteList({
 
 /** The evidence list under a profile or a draft: numbered rows, each a link. */
 export function EvidenceRows({ evidence }: { evidence: CiteEvidence[] }) {
+    const t = useTranslations("tools.cite");
     if (evidence.length === 0) return null;
     return (
         <div className="border-line bg-panel overflow-hidden rounded-lg border">
@@ -144,7 +152,12 @@ export function EvidenceRows({ evidence }: { evidence: CiteEvidence[] }) {
                         ) : (
                             <span className="text-ink font-medium">{e.title}</span>
                         )}
-                        {e.page && <span className="text-ink-3"> · p. {e.page}</span>}
+                        {e.page && (
+                            <span className="text-ink-3">
+                                {" · "}
+                                {t("pageShort", { page: e.page })}
+                            </span>
+                        )}
                         <span className="text-ink-2 mt-0.5 block text-xs leading-relaxed">
                             “{e.quote}”
                         </span>

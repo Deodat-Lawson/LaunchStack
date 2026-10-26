@@ -3,6 +3,8 @@
  * shape OpenCode and Claude Code read. `?download=1` sets a filename.
  */
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { agentFileName, serializeAgentFile } from "~/lib/agents/agent-file";
 import { getPersonaById, personaToDefinition } from "~/server/collab/personas";
@@ -18,7 +20,10 @@ export async function GET(
 
     const { personaId } = await params;
     const persona = await getPersonaById(ctx.data.companyId, personaId);
-    if (!persona) return new Response("Agent not found", { status: 404 });
+    if (!persona) {
+        const t = translatorFor(localeOfRequest(request), "collab.server.errors");
+        return new Response(t("agentNotFound"), { status: 404 });
+    }
 
     const definition = personaToDefinition(persona);
     const headers: Record<string, string> = {

@@ -12,19 +12,31 @@
 
 import { z } from "zod";
 
+import { V } from "~/i18n/validation";
+
 /** Lowercase letters, digits and inner dashes; 1–64 characters (2+ to choose one). */
 export const WORKSPACE_SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
 /** The colours a workspace's mark can take. Drawn by `WorkspaceSwitcherPill.module.css`. */
 export const WORKSPACE_SWATCHES = [1, 2, 3, 4, 5, 6] as const;
 
-/** "Who's joining you?" on the create form, and the team size afterwards. */
+/**
+ * "Who's joining you?" on the create form, and the team size afterwards.
+ * `value` is what is stored (English, as it always was); the words a person
+ * reads are `auth.workspaces.editor.teamSizes.<key>`.
+ */
 export const WORKSPACE_TEAM_SIZES = [
-    "Just me — I'm a solo founder",
-    "2–5 people",
-    "6–20 people",
-    "20+ people",
+    { key: "solo", value: "Just me — I'm a solo founder" },
+    { key: "small", value: "2–5 people" },
+    { key: "medium", value: "6–20 people" },
+    { key: "large", value: "20+ people" },
 ] as const;
+export type WorkspaceTeamSize = (typeof WORKSPACE_TEAM_SIZES)[number];
+
+/** The create form's option a stored team size is, or undefined for anything else ("1"). */
+export function workspaceTeamSizeOf(value: string): WorkspaceTeamSize | undefined {
+    return WORKSPACE_TEAM_SIZES.find(size => size.value === value);
+}
 
 export const WORKSPACE_DETAIL_LIMITS = {
     name: 120,
@@ -68,16 +80,16 @@ export const WorkspaceDetailsPatchSchema = z
         name: z
             .string()
             .trim()
-            .min(1, "Give the workspace a name.")
+            .min(1, V.workspaceNameRequired)
             .max(WORKSPACE_DETAIL_LIMITS.name)
             .optional(),
         slug: z
             .string()
             .trim()
             .toLowerCase()
-            .min(2, "The URL needs at least two characters.")
+            .min(2, V.workspaceUrlTooShort)
             .max(WORKSPACE_DETAIL_LIMITS.slug)
-            .regex(WORKSPACE_SLUG_RE, "Use lowercase letters, numbers and dashes.")
+            .regex(WORKSPACE_SLUG_RE, V.workspaceUrlCharacters)
             .optional(),
         description: optionalText(WORKSPACE_DETAIL_LIMITS.description),
         industry: optionalText(WORKSPACE_DETAIL_LIMITS.industry),
@@ -91,20 +103,10 @@ export const WorkspaceDetailsPatchSchema = z
     })
     .strict()
     .refine(patch => Object.values(patch).some(value => value !== undefined), {
-        message: "Nothing to change",
+        message: V.nothingToChange,
     });
 
 export type WorkspaceDetailsPatch = z.infer<typeof WorkspaceDetailsPatchSchema>;
-
-/** What the audit log says changed, in words: `slug` → "URL". */
-export const WORKSPACE_DETAIL_WORDS: Record<keyof WorkspaceDetailsPatch, string> = {
-    name: "name",
-    slug: "URL",
-    description: "description",
-    industry: "industry",
-    teamSize: "team size",
-    swatch: "colour",
-};
 
 /** "NL" for "Northwind Labs" — the letters on the workspace's mark. */
 export function workspaceInitials(name: string): string {

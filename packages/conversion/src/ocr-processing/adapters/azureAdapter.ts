@@ -12,7 +12,9 @@ import type {
     OCRProvider,
 } from "../types";
 import { getStoragePort } from "@launchstack/runtime";
+import { PDFDocument } from "pdf-lib";
 import { getOcrConfig } from "../config";
+import type { AzureDocumentModel } from "../config-types";
 
 /**
  * Azure Document Intelligence API response types
@@ -96,8 +98,116 @@ interface AzureOperationResponse {
     };
 }
 
+/**
+ * Submit statuses that mean Azure refused the file itself (bad or unsupported
+ * content, too large): resubmitting it cannot succeed. 401/403 are left out
+ * — a wrong key is fixed by the operator, and then the file goes through.
+ */
+const FILE_REJECTED_STATUSES = new Set([400, 413, 415]);
+
+/**
+ * Azure refused the file itself. `fileRejected` tells the provider-first
+ * fallback (processor.ts) that the text layer is all there will ever be.
+ */
+export class AzureFileRejectedError extends Error {
+    readonly fileRejected = true;
+
+    constructor(message: string) {
+        super(message);
+        this.name = "AzureFileRejectedError";
+    }
+}
+
 const AZURE_SUPPORTED_FORMATS =
     "PDF, JPEG, PNG, BMP, TIFF, HEIF, DOCX, PPTX, XLSX, and other common formats.";
+
+/**
+ * S0 analyzes at most this many pages per request and silently ignores the
+ * rest, so a longer PDF is sent as consecutive page ranges.
+ */
+const MAX_PAGES_PER_ANALYSIS = 2000;
+/**
+ * How long one analysis (one page range) may take before it is abandoned.
+ * A full 2,000-page range fits inside this, and it stays far below the
+ * outbox's 60-minute stale-claim window.
+ */
+const MAX_ANALYSIS_MS = 15 * 60_000;
+/** Microsoft asks for no more than one result GET every 2 seconds per analysis. */
+const MIN_POLL_INTERVAL_MS = 2000;
+/** Backoff for throttled (429) or failing (5xx) calls that send no Retry-After — Microsoft's 2-5-13-34 pattern. */
+const RETRY_DELAYS_MS = [2000, 5000, 13_000, 34_000] as const;
+const MAX_RETRY_AFTER_MS = 60_000;
+/** A 500 MB upload (the S0 ceiling) still needs to finish. */
+const SUBMIT_TIMEOUT_MS = 5 * 60_000;
+const POLL_TIMEOUT_MS = 30_000;
+
+function isRetryableStatus(status: number): boolean {
+    return status === 429 || status >= 500;
+}
+
+function backoffMs(attempt: number): number {
+    return RETRY_DELAYS_MS[Math.min(attempt, RETRY_DELAYS_MS.length - 1)] ?? MAX_RETRY_AFTER_MS;
+}
+
+/** Retry-After in seconds (the form Azure sends), capped; undefined when absent. */
+function retryAfterMs(response: Response): number | undefined {
+    const value = response.headers.get("retry-after");
+    if (!value) return undefined;
+    const seconds = Number(value);
+    if (!Number.isFinite(seconds) || seconds < 0) return undefined;
+    return Math.min(seconds * 1000, MAX_RETRY_AFTER_MS);
+}
+
+function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/** One analyze request: a `pages` range (none = the whole file) and what it should return. */
+export interface AnalysisRange {
+    pages?: string;
+    firstPage: number;
+    /** Pages this request should return, when the page count is known. */
+    expectedPages?: number;
+}
+
+function looksLikePdf(bytes: ArrayBuffer): boolean {
+    // The PDF header may be preceded by up to 1024 bytes of junk per spec.
+    return Buffer.from(bytes, 0, Math.min(1024, bytes.byteLength))
+        .toString("latin1")
+        .includes("%PDF-");
+}
+
+/**
+ * Splits a PDF longer than MAX_PAGES_PER_ANALYSIS into consecutive page
+ * ranges. Anything else — a shorter PDF, an image, an Office file, a PDF
+ * pdf-lib cannot open — goes as one request.
+ */
+export async function planAnalysisRanges(bytes: ArrayBuffer): Promise<AnalysisRange[]> {
+    if (!looksLikePdf(bytes)) return [{ firstPage: 1 }];
+
+    let pageCount: number;
+    try {
+        const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+        pageCount = doc.getPageCount();
+    } catch {
+        return [{ firstPage: 1 }];
+    }
+
+    if (pageCount <= MAX_PAGES_PER_ANALYSIS) {
+        return [{ firstPage: 1, expectedPages: pageCount }];
+    }
+
+    const ranges: AnalysisRange[] = [];
+    for (let first = 1; first <= pageCount; first += MAX_PAGES_PER_ANALYSIS) {
+        const last = Math.min(first + MAX_PAGES_PER_ANALYSIS - 1, pageCount);
+        ranges.push({
+            pages: `${first}-${last}`,
+            firstPage: first,
+            expectedPages: last - first + 1,
+        });
+    }
+    return ranges;
+}
 
 /**
  * Parse Azure Document Intelligence error response into a clear message.
@@ -130,17 +240,20 @@ function parseAzureErrorMessage(status: number, errorText: string): string {
 
 /**
  * Azure Document Intelligence Adapter
- * Uses the Layout model for comprehensive document analysis
+ * Uses the Layout model (text, reading order, tables) unless
+ * AZURE_DOC_INTELLIGENCE_MODEL picks the cheaper text-only Read model.
  */
 export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
     private endpoint: string;
     private apiKey: string;
+    private model: AzureDocumentModel;
     private apiVersion = "2024-11-30"; // Latest stable version
 
-    constructor(endpoint?: string, apiKey?: string) {
+    constructor(endpoint?: string, apiKey?: string, model?: AzureDocumentModel) {
         const cfg = getOcrConfig().azure;
         this.endpoint = endpoint ?? cfg?.endpoint ?? "";
         this.apiKey = apiKey ?? cfg?.key ?? "";
+        this.model = model ?? cfg?.model ?? "prebuilt-layout";
 
         if (!this.endpoint || !this.apiKey) {
             console.warn(
@@ -164,23 +277,31 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
             );
         }
 
-        console.log(`[Azure] Starting document processing for: ${documentUrl}`);
+        console.log(`[Azure] Starting document processing for: ${documentUrl} (${this.model})`);
         const startTime = Date.now();
 
-        // Submit document for analysis
-        const operationLocation = await this.submitForAnalysis(documentUrl, options);
-        console.log(`[Azure] Document submitted, polling for results...`);
-
-        // Poll for completion
-        const result = await this.pollForResult(operationLocation);
-        console.log(`[Azure] Analysis completed in ${Date.now() - startTime}ms`);
-
-        if (!result.analyzeResult) {
-            throw new Error("Azure analysis completed but no result returned");
+        const { bytes, contentType } = await this.download(documentUrl);
+        const ranges: AnalysisRange[] =
+            options?.pages && options.pages.length > 0
+                ? [{ pages: options.pages.join(","), firstPage: Math.min(...options.pages) }]
+                : await planAnalysisRanges(bytes);
+        if (ranges.length > 1) {
+            console.log(
+                `[Azure] Over ${MAX_PAGES_PER_ANALYSIS} pages: analyzing in ${ranges.length} page ranges`
+            );
         }
 
-        // Normalize the response
-        const pages = this.normalizePages(result.analyzeResult);
+        // Ranges run side by side; each is its own analysis with its own budget.
+        const results = await Promise.all(
+            ranges.map(range => this.analyzeRange(bytes, contentType, range))
+        );
+        console.log(`[Azure] Analysis completed in ${Date.now() - startTime}ms`);
+
+        const pages = results
+            .flatMap(({ range, analyzeResult }) =>
+                this.normalizePages(analyzeResult, range.firstPage)
+            )
+            .sort((a, b) => a.pageNumber - b.pageNumber);
 
         return {
             pages,
@@ -188,9 +309,41 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
                 totalPages: pages.length,
                 provider: "AZURE",
                 processingTimeMs: Date.now() - startTime,
-                confidenceScore: this.calculateAverageConfidence(result.analyzeResult),
+                confidenceScore: this.calculateAverageConfidence(
+                    results.map(({ analyzeResult }) => analyzeResult)
+                ),
             },
         };
+    }
+
+    /** Submits one page range, waits for it, and checks it came back whole. */
+    private async analyzeRange(
+        bytes: ArrayBuffer,
+        contentType: string,
+        range: AnalysisRange
+    ): Promise<{ range: AnalysisRange; analyzeResult: AzureAnalyzeResult }> {
+        const { operationLocation, firstPollDelayMs } = await this.submitForAnalysis(
+            bytes,
+            contentType,
+            range.pages
+        );
+        console.log(
+            `[Azure] Document submitted${range.pages ? ` (pages ${range.pages})` : ""}, polling for results...`
+        );
+
+        const result = await this.pollForResult(operationLocation, firstPollDelayMs);
+        if (!result.analyzeResult) {
+            throw new Error("Azure analysis completed but no result returned");
+        }
+
+        const returned = result.analyzeResult.pages.length;
+        if (range.expectedPages !== undefined && returned < range.expectedPages) {
+            console.warn(
+                `[Azure] Read ${returned} of ${range.expectedPages} pages${range.pages ? ` in range ${range.pages}` : ""}. ` +
+                    "The free (F0) tier reads only the first 2 pages of a document."
+            );
+        }
+        return { range, analyzeResult: result.analyzeResult };
     }
 
     async extractPage(documentUrl: string, pageNumber: number): Promise<PageContent> {
@@ -207,87 +360,133 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
     }
 
     /**
-     * Submit document to Azure for analysis.
-     * Fetches document server-side and sends bytes; Azure cannot reach localhost/private URLs.
+     * Fetches the document server-side, once for every range; Azure cannot
+     * reach localhost/private URLs, so it is sent as bytes.
      */
-    private async submitForAnalysis(
-        documentUrl: string,
-        options?: OCRAdapterOptions
-    ): Promise<string> {
-        const modelId = "prebuilt-layout"; // Use layout model for tables + text
-        const url = `${this.endpoint}/documentintelligence/documentModels/${modelId}:analyze?api-version=${this.apiVersion}`;
-
-        const queryParams = new URLSearchParams();
-        if (options?.pages && options.pages.length > 0) {
-            queryParams.set("pages", options.pages.join(","));
-        }
-
-        const fullUrl = queryParams.toString() ? `${url}&${queryParams}` : url;
-
-        // Fetch document server-side and send as binary. Azure cannot reach localhost/private URLs.
+    private async download(
+        documentUrl: string
+    ): Promise<{ bytes: ArrayBuffer; contentType: string }> {
         const docResponse = await getStoragePort().download(documentUrl);
         if (!docResponse.ok) {
             throw new Error(
                 `Failed to fetch document from ${documentUrl}: ${docResponse.status} ${docResponse.statusText}`
             );
         }
-        const buffer = await docResponse.arrayBuffer();
-        const contentType = docResponse.headers.get("content-type") ?? "application/pdf";
-
-        const response = await fetch(fullUrl, {
-            method: "POST",
-            headers: {
-                "Ocp-Apim-Subscription-Key": this.apiKey,
-                "Content-Type": contentType,
-            },
-            body: buffer,
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            const message = parseAzureErrorMessage(response.status, errorText);
-            throw new Error(message);
-        }
-
-        const operationLocation = response.headers.get("Operation-Location");
-        if (!operationLocation) {
-            throw new Error("No Operation-Location header in Azure response");
-        }
-
-        return operationLocation;
+        return {
+            bytes: await docResponse.arrayBuffer(),
+            contentType: docResponse.headers.get("content-type") ?? "application/pdf",
+        };
     }
 
     /**
-     * Poll Azure for analysis completion. Five minutes: a paid (S0) resource
-     * reads every page, and a long scan takes well over the two minutes that
-     * were enough when the free tier stopped after page two — timing out
-     * there only sent the document to the next provider.
+     * Submit document to Azure for analysis.
+     * Throttling (429) and 5xx are retried; a fetch that throws is not, because
+     * Azure may already have accepted (and billed) that submission.
      */
-    private async pollForResult(
-        operationLocation: string,
-        maxPolls = 150,
-        pollIntervalMs = 2000
-    ): Promise<AzureOperationResponse> {
-        console.log(
-            `[Azure] Starting polling (max ${maxPolls} attempts, ${pollIntervalMs}ms interval)`
-        );
+    private async submitForAnalysis(
+        bytes: ArrayBuffer,
+        contentType: string,
+        pages?: string
+    ): Promise<{ operationLocation: string; firstPollDelayMs: number }> {
+        const url = `${this.endpoint}/documentintelligence/documentModels/${this.model}:analyze?api-version=${this.apiVersion}`;
+        const fullUrl = pages ? `${url}&${new URLSearchParams({ pages })}` : url;
 
-        for (let attempt = 0; attempt < maxPolls; attempt++) {
-            const response = await fetch(operationLocation, {
-                method: "GET",
+        for (let attempt = 0; ; attempt++) {
+            const response = await fetch(fullUrl, {
+                method: "POST",
                 headers: {
                     "Ocp-Apim-Subscription-Key": this.apiKey,
+                    "Content-Type": contentType,
                 },
+                body: bytes,
+                signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
             });
 
             if (!response.ok) {
-                throw new Error(`Azure polling failed: ${response.status}`);
+                const errorText = await response.text();
+                if (isRetryableStatus(response.status) && attempt < RETRY_DELAYS_MS.length) {
+                    const waitMs = retryAfterMs(response) ?? backoffMs(attempt);
+                    console.warn(
+                        `[Azure] Submit returned ${response.status}, retrying in ${waitMs}ms`
+                    );
+                    await sleep(waitMs);
+                    continue;
+                }
+                const message = parseAzureErrorMessage(response.status, errorText);
+                throw FILE_REJECTED_STATUSES.has(response.status)
+                    ? new AzureFileRejectedError(message)
+                    : new Error(message);
             }
+
+            const operationLocation = response.headers.get("Operation-Location");
+            if (!operationLocation) {
+                throw new Error("No Operation-Location header in Azure response");
+            }
+
+            return {
+                operationLocation,
+                firstPollDelayMs: Math.max(
+                    MIN_POLL_INTERVAL_MS,
+                    retryAfterMs(response) ?? MIN_POLL_INTERVAL_MS
+                ),
+            };
+        }
+    }
+
+    /**
+     * Poll Azure for analysis completion, at the pace its Retry-After asks
+     * for, until MAX_ANALYSIS_MS. A throttled, failing, or unreachable GET is
+     * retried: giving up would make the outbox resubmit, and Azure bills
+     * every submission.
+     */
+    private async pollForResult(
+        operationLocation: string,
+        firstPollDelayMs: number
+    ): Promise<AzureOperationResponse> {
+        const deadline = Date.now() + MAX_ANALYSIS_MS;
+        let waitMs = firstPollDelayMs;
+        let failures = 0;
+
+        console.log(`[Azure] Starting polling (up to ${MAX_ANALYSIS_MS / 60_000} minutes)`);
+
+        for (let poll = 1; ; poll++) {
+            if (Date.now() + waitMs > deadline) {
+                throw new Error(
+                    `Azure Document Intelligence analysis timed out after ${MAX_ANALYSIS_MS / 60_000} minutes`
+                );
+            }
+            await sleep(waitMs);
+
+            let response: Response;
+            try {
+                response = await fetch(operationLocation, {
+                    method: "GET",
+                    headers: {
+                        "Ocp-Apim-Subscription-Key": this.apiKey,
+                    },
+                    signal: AbortSignal.timeout(POLL_TIMEOUT_MS),
+                });
+            } catch (error) {
+                waitMs = backoffMs(failures++);
+                const reason = error instanceof Error ? error.message : "unknown error";
+                console.warn(`[Azure] Poll request failed (${reason}), retrying in ${waitMs}ms`);
+                continue;
+            }
+
+            if (!response.ok) {
+                if (!isRetryableStatus(response.status)) {
+                    throw new Error(`Azure polling failed: ${response.status}`);
+                }
+                waitMs = retryAfterMs(response) ?? backoffMs(failures++);
+                console.warn(`[Azure] Poll returned ${response.status}, retrying in ${waitMs}ms`);
+                continue;
+            }
+            failures = 0;
 
             const result = (await response.json()) as AzureOperationResponse;
 
             if (result.status === "succeeded") {
-                console.log(`[Azure] Analysis succeeded after ${attempt + 1} polls`);
+                console.log(`[Azure] Analysis succeeded after ${poll} polls`);
                 return result;
             }
 
@@ -297,28 +496,27 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
                 );
             }
 
-            // Still processing, wait before next poll
-            if (attempt % 5 === 0) {
-                console.log(
-                    `[Azure] Still processing... (attempt ${attempt + 1}/${maxPolls}, status: ${result.status})`
-                );
+            if (poll % 15 === 1) {
+                console.log(`[Azure] Still processing... (poll ${poll}, status: ${result.status})`);
             }
-            await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
+            waitMs = Math.max(MIN_POLL_INTERVAL_MS, retryAfterMs(response) ?? MIN_POLL_INTERVAL_MS);
         }
-
-        throw new Error("Azure Document Intelligence analysis timed out");
     }
 
     /**
-     * Normalize Azure response to PageContent array
+     * Normalize Azure response to PageContent array. `firstPage` is where the
+     * analyzed range starts: if Azure numbered a range from 1 rather than from
+     * the document's own page, the pages are shifted back into place.
      */
-    private normalizePages(analyzeResult: AzureAnalyzeResult): PageContent[] {
+    private normalizePages(analyzeResult: AzureAnalyzeResult, firstPage = 1): PageContent[] {
         console.log(`[Azure] Received ${analyzeResult.pages.length} pages from Azure`);
         console.log(`[Azure] Content length: ${analyzeResult.content?.length ?? 0} characters`);
         console.log(`[Azure] Paragraphs: ${analyzeResult.paragraphs?.length ?? 0}`);
         console.log(`[Azure] Tables: ${analyzeResult.tables?.length ?? 0}`);
 
         const pages: PageContent[] = [];
+        const lowest = Math.min(...analyzeResult.pages.map(page => page.pageNumber));
+        const offset = firstPage > 1 && lowest < firstPage ? firstPage - 1 : 0;
 
         // Group content by page
         for (const azurePage of analyzeResult.pages) {
@@ -335,7 +533,7 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
             );
 
             pages.push({
-                pageNumber,
+                pageNumber: pageNumber + offset,
                 textBlocks,
                 tables,
             });
@@ -488,11 +686,11 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
      * [0,1] scale. Undefined when no word-level confidence was reported —
      * absence is honest, not a fabricated 100 (ADR-004).
      */
-    private calculateAverageConfidence(analyzeResult: AzureAnalyzeResult): number | undefined {
+    private calculateAverageConfidence(analyzeResults: AzureAnalyzeResult[]): number | undefined {
         let totalConfidence = 0;
         let wordCount = 0;
 
-        for (const page of analyzeResult.pages) {
+        for (const page of analyzeResults.flatMap(result => result.pages)) {
             if (page.words) {
                 for (const word of page.words) {
                     totalConfidence += word.confidence;
@@ -512,7 +710,8 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
  */
 export function createAzureAdapter(
     endpoint?: string,
-    apiKey?: string
+    apiKey?: string,
+    model?: AzureDocumentModel
 ): AzureDocumentIntelligenceAdapter {
-    return new AzureDocumentIntelligenceAdapter(endpoint, apiKey);
+    return new AzureDocumentIntelligenceAdapter(endpoint, apiKey, model);
 }

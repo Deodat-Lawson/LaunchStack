@@ -1,9 +1,11 @@
 "use client";
 
 import { ArrowRight, Check, ChevronDown, Moon, Plus, Search, Sun, Upload, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { LanguageToggle } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { useAuth } from "~/lib/auth-client";
 import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
@@ -11,7 +13,7 @@ import { LANDING_CONTACT_HREF } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { useInstanceHost } from "~/lib/instance-host";
-import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
+import { isBuiltinRole, normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import { WORKSPACE_TEAM_SIZES } from "~/lib/workspace-details";
 
 import styles from "./workspace-select.module.css";
@@ -84,18 +86,21 @@ function initialsOf(s: string): string {
     return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase();
 }
 
-function relativeTime(iso: string): string {
+type RelativeT = ReturnType<typeof useTranslations<"auth.workspaces.relative">>;
+
+function relativeTime(t: RelativeT, justNow: string, iso: string): string {
     const d = new Date(iso);
     const now = Date.now();
     const diffSec = Math.floor((now - d.getTime()) / 1000);
-    if (diffSec < 60) return "just now";
-    if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
-    if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
-    if (diffSec < 86400 * 30) return `${Math.floor(diffSec / 86400)} days ago`;
-    if (diffSec < 86400 * 365) return `${Math.floor(diffSec / (86400 * 30))} months ago`;
-    return `${Math.floor(diffSec / (86400 * 365))} years ago`;
+    if (diffSec < 60) return justNow;
+    if (diffSec < 3600) return t("minutes", { count: Math.floor(diffSec / 60) });
+    if (diffSec < 86400) return t("hours", { count: Math.floor(diffSec / 3600) });
+    if (diffSec < 86400 * 30) return t("days", { count: Math.floor(diffSec / 86400) });
+    if (diffSec < 86400 * 365) return t("months", { count: Math.floor(diffSec / (86400 * 30)) });
+    return t("years", { count: Math.floor(diffSec / (86400 * 365)) });
 }
 
+/** What the "Who's joining you?" choices send: the server keeps the English as the team size. */
 function gradientClass(swatch: number): string {
     const cls: Record<number, string> = {
         1: styles.gradient1!,
@@ -115,6 +120,10 @@ function roleBadgeClass(role: string): string {
     return `${styles.roleBadge} ${styles.roleEditor}`;
 }
 
+const footBold = (chunks: ReactNode) => (
+    <b style={{ color: "var(--ink-2)", fontWeight: 500 }}>{chunks}</b>
+);
+
 const SWATCH_GRADIENTS: Record<number, string> = {
     1: "linear-gradient(135deg, var(--accent), var(--accent-deep))",
     2: "linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.20 220))",
@@ -130,6 +139,16 @@ export function WorkspaceSelectClient({
     fromSignup,
     pendingInvites = [],
 }: Props) {
+    const t = useTranslations("auth.workspaces");
+    const tRelative = useTranslations("auth.workspaces.relative");
+    const tRoles = useTranslations("auth.roles");
+    const tChrome = useTranslations("auth.chrome");
+    const tc = useTranslations("common");
+    const when = (iso: string) => relativeTime(tRelative, tc("time.justNow"), iso);
+    const roleName = (role: string) => {
+        const slug = normalizeRoleSlug(role);
+        return isBuiltinRole(slug) ? tRoles(slug) : roleLabel(role);
+    };
     const router = useRouter();
     const { signOut } = useAuth();
     // Your profile photo (not a workspace's override): no workspace is open here.
@@ -147,7 +166,7 @@ export function WorkspaceSelectClient({
     const [slugValue, setSlugValue] = useState("");
     const [slugEdited, setSlugEdited] = useState(false);
     const [swatch, setSwatch] = useState(1);
-    const [teamSize, setTeamSize] = useState<string>(WORKSPACE_TEAM_SIZES[0]);
+    const [teamSize, setTeamSize] = useState<string>(WORKSPACE_TEAM_SIZES[0].value);
     const [description, setDescription] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -242,7 +261,7 @@ export function WorkspaceSelectClient({
         };
     }, [slugValue]);
 
-    const previewName = name || "New workspace";
+    const previewName = name || t("editor.previewName");
     const previewUrl = `${instanceHost}/${slugValue || "—"}`;
     const previewInitials = initialsOf(name);
 
@@ -268,7 +287,7 @@ export function WorkspaceSelectClient({
                 const data = (await res.json().catch(() => ({}))) as {
                     error?: string;
                 };
-                setError(data.error ?? "Could not switch workspace");
+                setError(data.error ?? t("errors.switchFailed"));
                 setSwitchingId(null);
                 return;
             }
@@ -277,7 +296,7 @@ export function WorkspaceSelectClient({
             router.push(data.redirectTo ?? "/employer/documents");
         } catch (err) {
             console.error(err);
-            setError("Could not switch workspace");
+            setError(t("errors.switchFailed"));
             setSwitchingId(null);
         }
     }
@@ -287,11 +306,11 @@ export function WorkspaceSelectClient({
         const trimmedName = name.trim();
         const trimmedSlug = slugValue.trim().toLowerCase();
         if (trimmedName.length < 1) {
-            setError("Workspace name is required");
+            setError(t("errors.nameRequired"));
             return;
         }
         if (trimmedSlug.length < 2 || !SLUG_RE.test(trimmedSlug)) {
-            setError("URL must be 2+ characters: lowercase letters, numbers, or dashes.");
+            setError(t("errors.badUrl"));
             return;
         }
         setSubmitting(true);
@@ -312,7 +331,7 @@ export function WorkspaceSelectClient({
                 const data = (await res.json().catch(() => ({}))) as {
                     error?: string;
                 };
-                setError(data.error ?? "Could not create workspace");
+                setError(data.error ?? t("errors.createFailed"));
                 setSubmitting(false);
                 return;
             }
@@ -322,7 +341,7 @@ export function WorkspaceSelectClient({
             router.refresh();
         } catch (err) {
             console.error(err);
-            setError("Could not create workspace");
+            setError(t("errors.createFailed"));
             setSubmitting(false);
         }
     }
@@ -344,9 +363,7 @@ export function WorkspaceSelectClient({
             if (!res.ok) {
                 setError(
                     data.error ??
-                        (res.status === 410
-                            ? "That invitation has expired. Ask for a new one."
-                            : "Could not accept the invitation.")
+                        (res.status === 410 ? t("errors.inviteExpired") : t("errors.acceptFailed"))
                 );
                 setAcceptingId(null);
                 return;
@@ -356,7 +373,7 @@ export function WorkspaceSelectClient({
             router.refresh();
         } catch (err) {
             console.error(err);
-            setError("Could not accept the invitation.");
+            setError(t("errors.acceptFailed"));
             setAcceptingId(null);
         }
     }
@@ -376,7 +393,7 @@ export function WorkspaceSelectClient({
                     Launchstack
                 </LandingLogoLink>
                 <div className={styles.spacer} />
-                <div className={styles.me} title="Switch account">
+                <div className={styles.me} title={t("switchAccount")}>
                     <ProfileAvatar
                         name={account.name}
                         email={account.email}
@@ -395,13 +412,14 @@ export function WorkspaceSelectClient({
                     type="button"
                     onClick={() => void signOut({ redirectUrl: "/signin" })}
                 >
-                    Sign out
+                    {tc("actions.signOut")}
                 </button>
+                <LanguageToggle />
                 <button
                     type="button"
                     className={styles.iconBtn}
-                    title="Toggle theme"
-                    aria-label="Toggle theme"
+                    title={tChrome("toggleTheme")}
+                    aria-label={tChrome("toggleTheme")}
                     onClick={() => setTheme((resolvedTheme ?? theme) === "dark" ? "light" : "dark")}
                 >
                     {/* Both icons ship; data-theme on <html> shows one. */}
@@ -417,15 +435,17 @@ export function WorkspaceSelectClient({
                             <span className={styles.dot}>
                                 <Check size={9} strokeWidth={3.5} />
                             </span>
-                            Account
+                            {t("steps.account")}
                         </span>
                         <span className={`${styles.bar} ${styles.barDone}`} />
                         <span className={`${styles.seg} ${styles.segActive}`}>
-                            <span className={styles.dot}>2</span>Workspace
+                            <span className={styles.dot}>2</span>
+                            {t("steps.workspace")}
                         </span>
                         <span className={styles.bar} />
                         <span className={styles.seg}>
-                            <span className={styles.dot}>3</span>Upload context
+                            <span className={styles.dot}>3</span>
+                            {t("steps.upload")}
                         </span>
                     </div>
                 ) : null}
@@ -433,17 +453,15 @@ export function WorkspaceSelectClient({
                 <header className={styles.header}>
                     {fromSignup ? (
                         <div className={styles.step}>
-                            <b>Step 2 of 3</b>
+                            <b>{t("steps.progress")}</b>
                         </div>
                     ) : null}
                     <h1 className={styles.hTitle}>
-                        Pick a <span className={styles.accent}>workspace</span>
+                        {t.rich("title", {
+                            accent: chunks => <span className={styles.accent}>{chunks}</span>,
+                        })}
                     </h1>
-                    <p className={styles.hSub}>
-                        A workspace is where your knowledge graph, sources, and workflows live. Open
-                        one you&apos;re already in, accept an invite, or start a new one for a
-                        different company.
-                    </p>
+                    <p className={styles.hSub}>{t("subtitle")}</p>
                 </header>
 
                 <div className={styles.searchRow}>
@@ -454,9 +472,9 @@ export function WorkspaceSelectClient({
                             type="text"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder="Search workspaces by name, URL, or teammate…"
+                            placeholder={t("searchPlaceholder")}
                             autoComplete="off"
-                            aria-label="Search workspaces"
+                            aria-label={t("searchLabel")}
                         />
                         <kbd className={styles.kbd}>/</kbd>
                     </div>
@@ -464,31 +482,25 @@ export function WorkspaceSelectClient({
 
                 <div className={styles.sectionHead}>
                     <div className={styles.sectionTitle}>
-                        Your workspaces <span className={styles.ct}>{workspaces.length}</span>
+                        {t("yours")} <span className={styles.ct}>{workspaces.length}</span>
                     </div>
-                    <span className={styles.sectionAside}>Last opened first</span>
+                    <span className={styles.sectionAside}>{t("lastOpenedFirst")}</span>
                 </div>
 
                 <div className={styles.wsList}>
                     {filtered.length === 0 ? (
                         <div className={styles.emptyRow}>
-                            {query ? (
-                                <>
-                                    No workspace matches <b>“{query}”</b>. Try creating a new one
-                                    below.
-                                </>
-                            ) : (
-                                <>
-                                    You aren&apos;t in any workspaces yet. Create your first one
-                                    below.
-                                </>
-                            )}
+                            {query
+                                ? t.rich("noMatch", { query, b: chunks => <b>{chunks}</b> })
+                                : t("none")}
                         </div>
                     ) : (
                         filtered.map(ws => {
                             const initials = initialsOf(ws.name);
                             const memberLabel =
-                                ws.memberCount === 1 ? "Just you" : `${ws.memberCount} members`;
+                                ws.memberCount === 1
+                                    ? t("justYou")
+                                    : t("members", { count: ws.memberCount });
                             const isSwitching = switchingId === ws.id;
                             const showPile = ws.memberCount > 1;
                             // You first, then real teammates; the rest is a count.
@@ -509,8 +521,8 @@ export function WorkspaceSelectClient({
                                     disabled={isSwitching}
                                     aria-label={
                                         ws.isActive
-                                            ? `${ws.name} — currently active workspace`
-                                            : `Open ${ws.name}`
+                                            ? t("activeLabel", { name: ws.name })
+                                            : t("openLabel", { name: ws.name })
                                     }
                                     aria-current={ws.isActive ? "true" : undefined}
                                 >
@@ -521,21 +533,23 @@ export function WorkspaceSelectClient({
                                         <div className={styles.wsName}>
                                             <span className={styles.wsNameText}>{ws.name}</span>
                                             {ws.isActive ? (
-                                                <span className={styles.activeChip}>Active</span>
+                                                <span className={styles.activeChip}>
+                                                    {t("activeChip")}
+                                                </span>
                                             ) : null}
                                             {ws.status === "suspended" ? (
                                                 <span
                                                     className={`${styles.statusChip} ${styles.statusChipSuspended}`}
-                                                    title="An admin has paused your access"
+                                                    title={t("suspendedHint")}
                                                 >
-                                                    Suspended
+                                                    {t("suspended")}
                                                 </span>
                                             ) : ws.status === "pending" ? (
                                                 <span
                                                     className={styles.statusChip}
-                                                    title="Waiting for an admin to approve you"
+                                                    title={t("pendingHint")}
                                                 >
-                                                    Pending approval
+                                                    {t("pending")}
                                                 </span>
                                             ) : null}
                                         </div>
@@ -550,13 +564,28 @@ export function WorkspaceSelectClient({
                                             ) : null}
                                             <span>{memberLabel}</span>
                                             <span className={styles.sep}>·</span>
-                                            <span>Opened {relativeTime(ws.lastOpenedAt)}</span>
+                                            <span>
+                                                {t("opened", { when: when(ws.lastOpenedAt) })}
+                                            </span>
                                         </div>
                                     </div>
                                     {showPile ? (
                                         <div
                                             className={styles.pile}
-                                            aria-label={`Members: ${pile.map(p => p.name).join(", ")}${hidden > 0 ? ` and ${hidden} more` : ""}`}
+                                            aria-label={
+                                                hidden > 0
+                                                    ? t("pileLabelMore", {
+                                                          names: pile
+                                                              .map(p => p.name)
+                                                              .join(t("nameSeparator")),
+                                                          count: hidden,
+                                                      })
+                                                    : t("pileLabel", {
+                                                          names: pile
+                                                              .map(p => p.name)
+                                                              .join(t("nameSeparator")),
+                                                      })
+                                            }
                                         >
                                             {pile.map((p, i) => (
                                                 <ProfileAvatar
@@ -575,7 +604,7 @@ export function WorkspaceSelectClient({
                                         </div>
                                     ) : null}
                                     <span className={roleBadgeClass(ws.role)}>
-                                        {roleLabel(ws.role)}
+                                        {roleName(ws.role)}
                                     </span>
                                 </button>
                             );
@@ -587,7 +616,7 @@ export function WorkspaceSelectClient({
                     <>
                         <div className={styles.sectionHead}>
                             <div className={styles.sectionTitle}>
-                                Pending invites{" "}
+                                {t("pendingInvites")}{" "}
                                 <span className={styles.ct}>
                                     {
                                         pendingInvites.filter(p => !dismissedPendingIds.has(p.id))
@@ -595,9 +624,7 @@ export function WorkspaceSelectClient({
                                     }
                                 </span>
                             </div>
-                            <span className={styles.sectionAside}>
-                                From teammates who already use Launchstack
-                            </span>
+                            <span className={styles.sectionAside}>{t("fromTeammates")}</span>
                         </div>
                         <div className={styles.wsList}>
                             {pendingInvites
@@ -621,19 +648,25 @@ export function WorkspaceSelectClient({
                                                     </span>
                                                     <span className={styles.sep}>·</span>
                                                     <span>
-                                                        Invited by{" "}
-                                                        <b
-                                                            style={{
-                                                                color: "var(--ink-2)",
-                                                                fontWeight: 500,
-                                                            }}
-                                                        >
-                                                            {inv.invitedBy}
-                                                        </b>{" "}
-                                                        · {relativeTime(inv.invitedAt)}
+                                                        {t.rich("invitedBy", {
+                                                            name: inv.invitedBy,
+                                                            when: when(inv.invitedAt),
+                                                            b: chunks => (
+                                                                <b
+                                                                    style={{
+                                                                        color: "var(--ink-2)",
+                                                                        fontWeight: 500,
+                                                                    }}
+                                                                >
+                                                                    {chunks}
+                                                                </b>
+                                                            ),
+                                                        })}
                                                     </span>
                                                     <span className={styles.sep}>·</span>
-                                                    <span>Role: {roleLabel(inv.role)}</span>
+                                                    <span>
+                                                        {t("role", { role: roleName(inv.role) })}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className={styles.inviteActions}>
@@ -648,7 +681,7 @@ export function WorkspaceSelectClient({
                                                         })
                                                     }
                                                 >
-                                                    Decline
+                                                    {t("decline")}
                                                 </button>
                                                 <button
                                                     type="button"
@@ -657,8 +690,8 @@ export function WorkspaceSelectClient({
                                                     disabled={acceptingId !== null}
                                                 >
                                                     {acceptingId === inv.id
-                                                        ? "Joining…"
-                                                        : "Accept & open"}
+                                                        ? t("joining")
+                                                        : t("acceptOpen")}
                                                 </button>
                                             </div>
                                         </div>
@@ -669,10 +702,8 @@ export function WorkspaceSelectClient({
                 ) : null}
 
                 <div className={styles.sectionHead}>
-                    <div className={styles.sectionTitle}>Start something new</div>
-                    <span className={styles.sectionAside}>
-                        You can rename or delete this any time
-                    </span>
+                    <div className={styles.sectionTitle}>{t("startNew")}</div>
+                    <span className={styles.sectionAside}>{t("renameAnyTime")}</span>
                 </div>
 
                 <div className={styles.createNewRow}>
@@ -685,27 +716,22 @@ export function WorkspaceSelectClient({
                             <Plus size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.ctTitle}>Create a new workspace</div>
-                            <div className={styles.ctHelp}>
-                                For a new company or product. Empty knowledge graph, ready to fill.
-                            </div>
+                            <div className={styles.ctTitle}>{t("createTitle")}</div>
+                            <div className={styles.ctHelp}>{t("createHelp")}</div>
                         </div>
                         <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
                     <button
                         type="button"
                         className={`${styles.createCard} ${styles.createCardAlt}`}
-                        onClick={() => setError("Importing from another tool is coming soon.")}
+                        onClick={() => setError(t("importSoon"))}
                     >
                         <div className={`${styles.createIcon} ${styles.createIconAlt}`}>
                             <Upload size={16} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.ctTitle}>Import from another tool</div>
-                            <div className={styles.ctHelp}>
-                                Bring in a Notion workspace, a Linear team, or a Google Drive folder
-                                as a starting point.
-                            </div>
+                            <div className={styles.ctTitle}>{t("importTitle")}</div>
+                            <div className={styles.ctHelp}>{t("importHelp")}</div>
                         </div>
                         <ArrowRight className={styles.ctArrow} size={14} />
                     </button>
@@ -716,20 +742,17 @@ export function WorkspaceSelectClient({
                         ref={editorRef}
                         className={styles.createEditor}
                         role="region"
-                        aria-label="Create a new workspace"
+                        aria-label={t("createTitle")}
                     >
                         <div className={styles.ceHead}>
                             <div>
-                                <h3 className={styles.ceTitle}>New workspace</h3>
-                                <p className={styles.ceHelp}>
-                                    You&apos;ll start with an empty knowledge graph. Upload sources
-                                    next.
-                                </p>
+                                <h3 className={styles.ceTitle}>{t("editor.title")}</h3>
+                                <p className={styles.ceHelp}>{t("editor.help")}</p>
                             </div>
                             <button
                                 type="button"
                                 className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
-                                aria-label="Close"
+                                aria-label={tc("a11y.close")}
                                 onClick={() => setEditorOpen(false)}
                             >
                                 <X size={14} />
@@ -739,14 +762,14 @@ export function WorkspaceSelectClient({
                         <div className={styles.ceGrid}>
                             <div className={styles.ceField}>
                                 <label className={styles.ceLabel} htmlFor="ce-name">
-                                    Workspace name <span className={styles.req}>*</span>
+                                    {t("editor.name")} <span className={styles.req}>*</span>
                                 </label>
                                 <input
                                     ref={nameRef}
                                     id="ce-name"
                                     className={styles.input}
                                     type="text"
-                                    placeholder="e.g. Northwind Labs"
+                                    placeholder={t("editor.namePlaceholder")}
                                     autoComplete="off"
                                     value={name}
                                     onChange={e => onNameChange(e.target.value)}
@@ -754,7 +777,7 @@ export function WorkspaceSelectClient({
                             </div>
                             <div className={styles.ceField}>
                                 <label className={styles.ceLabel} htmlFor="ce-url">
-                                    URL <span className={styles.req}>*</span>
+                                    {t("editor.url")} <span className={styles.req}>*</span>
                                 </label>
                                 <div className={styles.urlInput}>
                                     <span className={styles.urlPrefix}>{instanceHost}/</span>
@@ -774,17 +797,17 @@ export function WorkspaceSelectClient({
                                         {slugAvailable ? (
                                             <>
                                                 <Check size={11} strokeWidth={3} />
-                                                <span>Available</span>
+                                                <span>{t("editor.available")}</span>
                                             </>
                                         ) : (
-                                            <span>Taken — try a different URL</span>
+                                            <span>{t("editor.taken")}</span>
                                         )}
                                     </div>
                                 ) : null}
                             </div>
 
                             <div className={styles.ceField}>
-                                <label className={styles.ceLabel}>Workspace icon</label>
+                                <label className={styles.ceLabel}>{t("editor.icon")}</label>
                                 <div className={styles.swatches} role="radiogroup">
                                     {Array.from({ length: SWATCH_COUNT }, (_, i) => i + 1).map(
                                         n => (
@@ -792,7 +815,7 @@ export function WorkspaceSelectClient({
                                                 key={n}
                                                 type="button"
                                                 className={`${styles.swatch} ${gradientClass(n)} ${swatch === n ? styles.swatchSelected : ""}`}
-                                                aria-label={`Color ${n}`}
+                                                aria-label={t("editor.color", { n })}
                                                 aria-checked={swatch === n}
                                                 role="radio"
                                                 onClick={() => setSwatch(n)}
@@ -803,7 +826,7 @@ export function WorkspaceSelectClient({
                             </div>
                             <div className={styles.ceField}>
                                 <label className={styles.ceLabel} htmlFor="ce-team">
-                                    Who&apos;s joining you?
+                                    {t("editor.teamLabel")}
                                 </label>
                                 <select
                                     id="ce-team"
@@ -813,14 +836,16 @@ export function WorkspaceSelectClient({
                                 >
                                     {/* The same options Workspace › General offers afterwards. */}
                                     {WORKSPACE_TEAM_SIZES.map(size => (
-                                        <option key={size}>{size}</option>
+                                        <option key={size.key} value={size.value}>
+                                            {t(`editor.teamSizes.${size.key}`)}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
 
                             <div className={`${styles.ceField} ${styles.ceFieldFull}`}>
                                 <label className={styles.ceLabel} htmlFor="ce-desc">
-                                    Short description{" "}
+                                    {t("editor.description")}{" "}
                                     <span
                                         style={{
                                             color: "var(--ink-4)",
@@ -830,14 +855,14 @@ export function WorkspaceSelectClient({
                                             fontSize: 11,
                                         }}
                                     >
-                                        — optional, helps the AI
+                                        {t("editor.descriptionHint")}
                                     </span>
                                 </label>
                                 <textarea
                                     id="ce-desc"
                                     className={styles.textarea}
                                     rows={2}
-                                    placeholder="One sentence on what this company does. e.g. ‘We turn scattered context into a knowledge graph for AI workflows.’"
+                                    placeholder={t("editor.descriptionPlaceholder")}
                                     value={description}
                                     onChange={e => setDescription(e.target.value)}
                                 />
@@ -855,8 +880,14 @@ export function WorkspaceSelectClient({
                                     {previewInitials}
                                 </span>
                                 <span>
-                                    Preview: <b>{previewName}</b> ·{" "}
-                                    <span className={styles.mono}>{previewUrl}</span>
+                                    {t.rich("editor.preview", {
+                                        name: previewName,
+                                        url: previewUrl,
+                                        b: chunks => <b>{chunks}</b>,
+                                        mono: chunks => (
+                                            <span className={styles.mono}>{chunks}</span>
+                                        ),
+                                    })}
                                 </span>
                             </div>
                             <button
@@ -865,7 +896,7 @@ export function WorkspaceSelectClient({
                                 onClick={() => setEditorOpen(false)}
                                 disabled={submitting}
                             >
-                                Cancel
+                                {tc("actions.cancel")}
                             </button>
                             <button
                                 type="button"
@@ -878,7 +909,7 @@ export function WorkspaceSelectClient({
                                     slugAvailable === false
                                 }
                             >
-                                {submitting ? "Creating…" : "Create & continue"}
+                                {submitting ? t("editor.creating") : t("editor.create")}
                                 <ArrowRight size={13} strokeWidth={2.5} />
                             </button>
                         </div>
@@ -892,17 +923,15 @@ export function WorkspaceSelectClient({
                 ) : null}
 
                 <p className={styles.foot}>
-                    Looking for a workspace that&apos;s not here? Ask its owner to invite{" "}
-                    <b style={{ color: "var(--ink-2)", fontWeight: 500 }}>
-                        {account.email || "you"}
-                    </b>
-                    .
+                    {account.email
+                        ? t.rich("foot", { email: account.email, b: footBold })
+                        : t.rich("footNoEmail", { b: footBold })}
                     <br />
-                    <a href="/signin">Use a different account</a>
+                    <a href="/signin">{t("differentAccount")}</a>
                     <span className={styles.sepDot}>·</span>
                     {/* Cross-origin — support lives on the public site. */}
                     <a href={LANDING_CONTACT_HREF} rel="noopener">
-                        Help
+                        {t("help")}
                     </a>
                     {/*
                       A "Privacy" link pointing at /privacy used to sit here.

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { category, company } from "@launchstack/store/schema";
 import { folderSettings } from "~/server/db/schema";
@@ -30,7 +32,7 @@ type UploadBootstrapResponse = {
     s3Endpoint?: string;
 };
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         // Exposes storage configuration and every folder name, so it sits at
         // the settings tier rather than behind `documents.upload`.
@@ -90,7 +92,12 @@ export async function GET() {
     } catch (error: unknown) {
         console.error("Error fetching upload bootstrap data:", error);
         return NextResponse.json(
-            { error: "Unable to fetch upload bootstrap data" },
+            {
+                error: translatorFor(
+                    localeOfRequest(request),
+                    "upload.server.errors"
+                )("bootstrapFailed"),
+            },
             { status: 500 }
         );
     }

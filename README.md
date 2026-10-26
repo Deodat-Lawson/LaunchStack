@@ -285,7 +285,7 @@ The registration functions store state on `globalThis` (20 `createSlot` call sit
 [`apps/web`](apps/web) is a Next.js app built on the engine. It demonstrates:
 
 - First-party auth (better-auth, in the app's own Postgres) with per-workspace roles, folder-level access, invitations and an audit log (ADR-010)
-- Document upload with OCR on by default: Azure reads every PDF and image, Docling is the fallback, then Landing.AI / Datalab if configured; the PDF's own text layer is the last resort
+- Document upload with OCR on by default: Azure reads every PDF and image, Docling is the fallback, then Landing.AI / Datalab if configured; the PDF's own text layer is the last resort (a scan is retried rather than indexed blank), and `OCR_PDF_STRATEGY=text-layer-first` sends only scans to OCR
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)
 - Predictive document analysis — eight document types are defined, though the request validator currently accepts only `contract`, `financial`, `technical`, `compliance` and `general`

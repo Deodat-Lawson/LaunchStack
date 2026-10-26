@@ -3,6 +3,7 @@
 import { ArrowRight, FileText, FileUp, Globe, Loader2, MessageSquare, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -17,6 +18,7 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
+import { factLabelText, failureText } from "~/components/company-profile/words";
 import { companyProfileApi } from "~/lib/company-profile/api";
 import type { CompanyProfileDto, ProfileSourceDto } from "~/lib/company-profile/dto";
 import { normalizeWebsite } from "~/lib/company-profile/website";
@@ -33,21 +35,24 @@ const FOLDER = "Company";
 /** Where the profile is reviewed and changed afterwards: Workspace › Company profile. */
 const COMPANY_PROFILE_HREF = workspaceHref("company");
 
+/** `value` is what the profile stores (English, whatever language it was picked in); `key` names it on screen. */
 const INDUSTRIES = [
-    "Technology",
-    "Healthcare",
-    "Finance",
-    "Legal",
-    "Education",
-    "Manufacturing",
-    "Retail",
-    "Government",
-    "Non-profit",
-    "Other",
+    { value: "Technology", key: "technology" },
+    { value: "Healthcare", key: "healthcare" },
+    { value: "Finance", key: "finance" },
+    { value: "Legal", key: "legal" },
+    { value: "Education", key: "education" },
+    { value: "Manufacturing", key: "manufacturing" },
+    { value: "Retail", key: "retail" },
+    { value: "Government", key: "government" },
+    { value: "Non-profit", key: "nonProfit" },
+    { value: "Other", key: "other" },
 ] as const;
 
-const STEPS = ["Your company", "Documents", "What we understood"] as const;
+const STEPS = ["company", "documents", "understood"] as const;
 type Step = 0 | 1 | 2;
+
+type FlowT = ReturnType<typeof useTranslations<"onboarding.flow">>;
 
 interface Answers {
     website: string;
@@ -107,10 +112,10 @@ interface OnboardingResponse {
 }
 
 /** A value the documents supply, offered as a placeholder the person can write over. */
-function hint(value: string | null | undefined): string | null {
+function hint(t: FlowT, value: string | null | undefined): string | null {
     if (!value) return null;
     const short = value.length > 140 ? `${value.slice(0, 139)}…` : value;
-    return `From your sources: ${short}`;
+    return t("fromSources", { value: short });
 }
 
 /**
@@ -143,6 +148,8 @@ function changedAnswers(
  * the profile reads and quotes. Every step can be skipped.
  */
 export function OnboardingFlow() {
+    const t = useTranslations("onboarding.flow");
+    const tc = useTranslations("common.status");
     const router = useRouter();
     const [step, setStep] = useState<Step>(0);
     const [name, setName] = useState<string | null>(null);
@@ -201,41 +208,44 @@ export function OnboardingFlow() {
 
     const leave = () => router.replace("/employer/documents");
 
-    const importWebsite = useCallback(async (url: string) => {
-        setWebsiteImport({ state: "importing", url });
-        try {
-            const res = await fetch("/api/upload/website", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url, category: FOLDER }),
-            });
-            if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
+    const importWebsite = useCallback(
+        async (url: string) => {
+            setWebsiteImport({ state: "importing", url });
+            try {
+                const res = await fetch("/api/upload/website", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url, category: FOLDER }),
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: string };
+                    setWebsiteImport({
+                        state: "failed",
+                        url,
+                        message: body.error ?? t("errors.fetchFailed", { status: res.status }),
+                        // A refused address (private, malformed) or folder fails the same way every time.
+                        retry: res.status >= 500 || res.status === 429,
+                    });
+                    return;
+                }
+                setWebsiteImport({ state: "done", url });
+            } catch (e) {
                 setWebsiteImport({
                     state: "failed",
                     url,
-                    message: body.error ?? `The page could not be fetched (HTTP ${res.status})`,
-                    // A refused address (private, malformed) or folder fails the same way every time.
-                    retry: res.status >= 500 || res.status === 429,
+                    message: errorText(e, t("errors.importFailed")),
+                    retry: true,
                 });
-                return;
             }
-            setWebsiteImport({ state: "done", url });
-        } catch (e) {
-            setWebsiteImport({
-                state: "failed",
-                url,
-                message: errorText(e, "Import failed"),
-                retry: true,
-            });
-        }
-    }, []);
+        },
+        [t]
+    );
 
     const saveCompany = async () => {
         const website = answers.website.trim();
         const normalized = website ? normalizeWebsite(website) : null;
         if (website && !normalized) {
-            setSaveError("That doesn't look like a web address. Try something like acme.com.");
+            setSaveError(t("errors.badWebsite"));
             return;
         }
         setSaving(true);
@@ -250,7 +260,7 @@ export function OnboardingFlow() {
                 });
                 if (!res.ok) {
                     const body = (await res.json().catch(() => ({}))) as { error?: string };
-                    throw new Error(body.error ?? "Saving failed");
+                    throw new Error(body.error ?? t("errors.saveFailed"));
                 }
                 // What was just saved is now saved: Back and Continue again sends nothing.
                 setKnown(k =>
@@ -283,7 +293,7 @@ export function OnboardingFlow() {
             if (normalized && !already) void importWebsite(normalized);
             setStep(1);
         } catch (e) {
-            setSaveError(errorText(e, "Saving failed"));
+            setSaveError(errorText(e, t("errors.saveFailed")));
         } finally {
             setSaving(false);
         }
@@ -308,7 +318,11 @@ export function OnboardingFlow() {
                     setUploads(list =>
                         list.map(u =>
                             u.key === key
-                                ? { ...u, state: "failed", message: errorText(e, "Upload failed") }
+                                ? {
+                                      ...u,
+                                      state: "failed",
+                                      message: errorText(e, t("errors.uploadFailed")),
+                                  }
                                 : u
                         )
                     );
@@ -317,13 +331,13 @@ export function OnboardingFlow() {
         }
     };
 
-    const companyName = name ?? "your company";
+    const companyName = name ?? t("yourCompany");
 
     // Nothing until it is known who is asking: a member must not see the admin's form flash by.
     if (!loaded)
         return (
             <div className="text-ink-3 mx-auto w-full max-w-[680px] py-10 text-sm" aria-busy="true">
-                Loading…
+                {tc("loading")}
             </div>
         );
     if (known && !known.canEdit) return <ReadOnly companyName={companyName} onLeave={leave} />;
@@ -333,13 +347,20 @@ export function OnboardingFlow() {
             <div className="flex flex-col gap-2">
                 <div className="text-ink-3 flex items-center justify-between gap-3 text-xs">
                     <span>
-                        Step {step + 1} of {STEPS.length} · {STEPS[step]}
+                        {t("stepOf", {
+                            step: step + 1,
+                            total: STEPS.length,
+                            name: t(`steps.${STEPS[step]}`),
+                        })}
                     </span>
                     <Button variant="ghost" size="sm" onClick={leave}>
-                        Skip setup
+                        {t("skipSetup")}
                     </Button>
                 </div>
-                <Progress value={((step + 1) / STEPS.length) * 100} aria-label="Setup progress" />
+                <Progress
+                    value={((step + 1) / STEPS.length) * 100}
+                    aria-label={t("progressLabel")}
+                />
             </div>
 
             <section ref={panel} className="border-line bg-panel rounded-lg border">
@@ -432,6 +453,8 @@ function CompanyStep({
     onContinue: () => void;
     onSkip: () => void;
 }) {
+    const t = useTranslations("onboarding.flow");
+    const tc = useTranslations("common.actions");
     return (
         <form
             onSubmit={e => {
@@ -439,19 +462,17 @@ function CompanyStep({
                 onContinue();
             }}
         >
-            <StepHeader title={`Tell us about ${companyName}`}>
-                We read your website and documents and build a profile of the company that every
-                tool here uses: chat answers, proposals, outreach. What you write here is kept as
-                your own facts; you can change any of it later in Workspace › Company profile.
+            <StepHeader title={t("company.title", { company: companyName })}>
+                {t("company.intro")}
             </StepHeader>
             <div className="flex flex-col gap-5 px-6 py-6 max-sm:px-4">
                 <div className="grid gap-1.5">
-                    <Label htmlFor="onboarding-website">Website</Label>
+                    <Label htmlFor="onboarding-website">{t("company.website")}</Label>
                     <Input
                         id="onboarding-website"
                         inputMode="url"
                         autoComplete="url"
-                        placeholder={hint(fromSources?.website) ?? "acme.com"}
+                        placeholder={hint(t, fromSources?.website) ?? "acme.com"}
                         value={answers.website}
                         onChange={e => onChange({ website: e.target.value })}
                         maxLength={MAX_WEBSITE}
@@ -459,18 +480,17 @@ function CompanyStep({
                     />
                     <p className="text-ink-3 text-xs">
                         {homepageIsSource
-                            ? "Your homepage is already a source; it is not imported again."
-                            : "We import your homepage as a source, so the profile can quote it."}
+                            ? t("company.homepageIsSource")
+                            : t("company.homepageImport")}
                     </p>
                 </div>
                 <div className="grid gap-1.5">
-                    <Label htmlFor="onboarding-description">What does the company do?</Label>
+                    <Label htmlFor="onboarding-description">{t("company.description")}</Label>
                     <Textarea
                         id="onboarding-description"
                         rows={3}
                         placeholder={
-                            hint(fromSources?.description) ??
-                            "A sentence or two: what you offer and to whom."
+                            hint(t, fromSources?.description) ?? t("company.descriptionPlaceholder")
                         }
                         value={answers.description}
                         onChange={e => onChange({ description: e.target.value })}
@@ -479,13 +499,11 @@ function CompanyStep({
                     />
                 </div>
                 <div className="grid gap-1.5">
-                    <Label htmlFor="onboarding-idea">
-                        What&rsquo;s the idea you&rsquo;re working on?
-                    </Label>
+                    <Label htmlFor="onboarding-idea">{t("company.idea")}</Label>
                     <Textarea
                         id="onboarding-idea"
                         rows={3}
-                        placeholder="What you're building, for whom, and why now."
+                        placeholder={t("company.ideaPlaceholder")}
                         value={answers.idea}
                         onChange={e => onChange({ idea: e.target.value })}
                         maxLength={MAX_TEXT}
@@ -493,19 +511,19 @@ function CompanyStep({
                     />
                 </div>
                 <div className="grid gap-1.5">
-                    <Label htmlFor="onboarding-industry">Industry</Label>
+                    <Label htmlFor="onboarding-industry">{t("company.industry")}</Label>
                     <Select
                         value={answers.industry}
                         onValueChange={value => onChange({ industry: value })}
                         disabled={!loaded}
                     >
                         <SelectTrigger id="onboarding-industry" className="w-full max-w-xs">
-                            <SelectValue placeholder="Choose one (optional)" />
+                            <SelectValue placeholder={t("company.industryPlaceholder")} />
                         </SelectTrigger>
                         <SelectContent>
                             {INDUSTRIES.map(industry => (
-                                <SelectItem key={industry} value={industry}>
-                                    {industry}
+                                <SelectItem key={industry.value} value={industry.value}>
+                                    {t(`industries.${industry.key}`)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -519,14 +537,14 @@ function CompanyStep({
             </div>
             <StepFooter>
                 <Button type="button" variant="ghost" onClick={onSkip}>
-                    Skip this step
+                    {t("skipStep")}
                 </Button>
                 <div className="flex-1 max-sm:hidden" />
                 <Button type="submit" disabled={saving || !loaded}>
                     {saving && (
                         <Loader2 className="size-4 animate-spin motion-reduce:animate-none" />
                     )}
-                    Continue
+                    {tc("continue")}
                 </Button>
             </StepFooter>
         </form>
@@ -548,16 +566,16 @@ function DocumentsStep({
     onBack: () => void;
     onContinue: () => void;
 }) {
+    const t = useTranslations("onboarding.flow");
+    const tc = useTranslations("common.actions");
     const input = useRef<HTMLInputElement>(null);
     const [over, setOver] = useState(false);
     const busy = uploads.some(u => u.state === "uploading");
 
     return (
         <>
-            <StepHeader title="Add documents about the company">
-                A pitch deck, one-pager, plan, past proposal or report. Only documents written by or
-                about {companyName} count toward its profile; anything else you add later is kept
-                for search and set aside, and each source says why.
+            <StepHeader title={t("documents.title")}>
+                {t("documents.intro", { company: companyName })}
             </StepHeader>
             <div className="flex flex-col gap-3 px-6 py-6 max-sm:px-4">
                 <div
@@ -577,9 +595,9 @@ function DocumentsStep({
                     )}
                 >
                     <FileUp className="text-ink-3 size-6" aria-hidden />
-                    <p className="text-ink-2 text-sm">Drop files here, or</p>
+                    <p className="text-ink-2 text-sm">{t("documents.drop")}</p>
                     <Button type="button" variant="outline" onClick={() => input.current?.click()}>
-                        Choose files
+                        {t("documents.choose")}
                     </Button>
                     <input
                         ref={input}
@@ -587,19 +605,19 @@ function DocumentsStep({
                         type="file"
                         multiple
                         className="sr-only"
-                        aria-label="Choose documents about the company"
+                        aria-label={t("documents.chooseLabel")}
                         accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.md,.markdown,.txt,.html,.htm,.csv"
                         onChange={e => {
                             onFiles(Array.from(e.target.files ?? []));
                             e.target.value = "";
                         }}
                     />
-                    <p className="text-ink-3 text-xs">PDF, Word, PowerPoint, Markdown or text</p>
+                    <p className="text-ink-3 text-xs">{t("documents.formats")}</p>
                 </div>
                 {uploads.length > 0 && (
                     <ul
                         className="border-line divide-line-2 divide-y rounded-lg border"
-                        aria-label="Added documents"
+                        aria-label={t("documents.added")}
                         aria-live="polite"
                     >
                         {uploads.map(u => (
@@ -617,11 +635,11 @@ function DocumentsStep({
             </div>
             <StepFooter>
                 <Button type="button" variant="ghost" onClick={onBack}>
-                    Back
+                    {tc("back")}
                 </Button>
                 <div className="flex-1 max-sm:hidden" />
                 <Button type="button" onClick={onContinue} disabled={busy}>
-                    {uploads.length ? "Continue" : "Skip this step"}
+                    {uploads.length ? tc("continue") : t("skipStep")}
                     <ArrowRight className="size-4" />
                 </Button>
             </StepFooter>
@@ -630,19 +648,21 @@ function DocumentsStep({
 }
 
 function UploadState({ item }: { item: UploadItem }) {
+    const t = useTranslations("onboarding.flow.upload");
     if (item.state === "uploading")
         return (
             <span className="text-ink-3 inline-flex items-center gap-1 text-xs">
-                <Loader2 className="size-3 animate-spin motion-reduce:animate-none" /> Uploading
+                <Loader2 className="size-3 animate-spin motion-reduce:animate-none" />{" "}
+                {t("uploading")}
             </span>
         );
     if (item.state === "failed")
         return (
             <span className="text-danger text-xs" title={item.message}>
-                Failed{item.message ? `: ${item.message}` : ""}
+                {item.message ? t("failedWith", { message: item.message }) : t("failed")}
             </span>
         );
-    return <span className="text-ink-2 text-xs">Added</span>;
+    return <span className="text-ink-2 text-xs">{t("added")}</span>;
 }
 
 // ─── Step 3 ──────────────────────────────────────────────────────────────────
@@ -651,36 +671,47 @@ const POLL_MS = 3000;
 const SHOWN_FACTS = 8;
 const POLL_FOR_MS = 5 * 60 * 1000;
 
-function failureLine(error: string | null): string {
+/** Why the profile failed, and that nothing was lost. */
+function failureLine(t: FlowT, error: string | null): string {
     const reason = error?.trim();
-    if (!reason) return "The profile could not be built.";
-    return `The profile could not be built: ${reason}${/[.!?]$/.test(reason) ? "" : "."}`;
+    if (!reason) return t("understood.profileFailed");
+    // The server's reason may end its own sentence; otherwise this one does.
+    return /[.!?]$/.test(reason)
+        ? t("understood.profileFailedReason", { reason })
+        : t("understood.profileFailedReasonStop", { reason });
 }
 
 /** For screen readers, as the page updates: how far reading has got. */
-function progressLine(profile: CompanyProfileDto): string {
+function progressLine(t: FlowT, profile: CompanyProfileDto): string {
     const read = profile.sources.filter(s => s.status !== "pending").length;
     const total = profile.sources.length;
     const facts = profile.facts.length;
-    const sources = total ? `${read} of ${total} sources read. ` : "";
-    return `${sources}${facts} ${facts === 1 ? "fact" : "facts"} so far.`;
+    return total
+        ? t("understood.progress", { read, total, facts })
+        : t("understood.progressNoSources", { facts });
 }
 
-function sourceState(source: ProfileSourceDto): {
+function sourceState(
+    t: FlowT,
+    source: ProfileSourceDto
+): {
     text: string;
     tone: "wait" | "ok" | "aside" | "bad";
 } {
-    if (source.status === "failed") return { text: "Could not be read", tone: "bad" };
+    if (source.status === "failed") return { text: t("sourceState.failed"), tone: "bad" };
     if (source.status === "pending" || source.role === null)
-        return { text: "Reading…", tone: "wait" };
+        return { text: t("sourceState.reading"), tone: "wait" };
     if (source.counted)
         return {
             text: source.facts
-                ? `About you · ${source.facts} fact${source.facts === 1 ? "" : "s"}`
-                : "About you",
+                ? t("sourceState.aboutYouFacts", { count: source.facts })
+                : t("sourceState.aboutYou"),
             tone: "ok",
         };
-    return { text: source.role === "no_content" ? "Nothing to read" : "Set aside", tone: "aside" };
+    return {
+        text: source.role === "no_content" ? t("sourceState.nothing") : t("sourceState.setAside"),
+        tone: "aside",
+    };
 }
 
 function UnderstoodStep({
@@ -698,6 +729,9 @@ function UnderstoodStep({
     onBack: () => void;
     onFinish: () => void;
 }) {
+    const t = useTranslations("onboarding.flow");
+    const tc = useTranslations("common");
+    const ts = useTranslations("companyProfile.server");
     const [profile, setProfile] = useState<CompanyProfileDto | null>(null);
     const started = useRef(Date.now());
 
@@ -743,10 +777,10 @@ function UnderstoodStep({
 
     return (
         <>
-            <StepHeader title="Here's what we understood so far">
+            <StepHeader title={t("understood.title")}>
                 {reading
-                    ? "Your sources are being read now. This page updates as they are, and you can leave at any time: the profile keeps building."
-                    : `This is the profile of ${companyName} as your sources and answers stand. Add documents any time and it grows.`}
+                    ? t("understood.reading")
+                    : t("understood.ready", { company: companyName })}
             </StepHeader>
             <div className="flex flex-col gap-6 px-6 py-6 max-sm:px-4">
                 {websiteImport.state !== "idle" && (
@@ -756,18 +790,20 @@ function UnderstoodStep({
                         {websiteImport.state === "importing" && (
                             <span className="text-ink-3 inline-flex items-center gap-1 text-xs">
                                 <Loader2 className="size-3 animate-spin motion-reduce:animate-none" />
-                                Importing the homepage
+                                {t("understood.importing")}
                             </span>
                         )}
                         {websiteImport.state === "done" && (
-                            <span className="text-ink-2 text-xs">Homepage imported</span>
+                            <span className="text-ink-2 text-xs">{t("understood.imported")}</span>
                         )}
                         {websiteImport.state === "failed" && (
                             <>
                                 <span className="text-danger text-xs">
-                                    {websiteImport.message}
-                                    {!websiteImport.retry &&
-                                        ". It stays your website; change it in Workspace › Company profile."}
+                                    {websiteImport.retry
+                                        ? websiteImport.message
+                                        : t("understood.importFailedKept", {
+                                              message: websiteImport.message,
+                                          })}
                                 </span>
                                 {websiteImport.retry && (
                                     <Button
@@ -775,7 +811,7 @@ function UnderstoodStep({
                                         variant="outline"
                                         onClick={() => onRetryWebsite(websiteImport.url)}
                                     >
-                                        Try again
+                                        {tc("actions.tryAgain")}
                                     </Button>
                                 )}
                             </>
@@ -785,8 +821,7 @@ function UnderstoodStep({
 
                 {profile?.status === "failed" && (
                     <p role="alert" className="text-danger text-sm">
-                        {failureLine(profile.error)} Your answers and sources are kept; rebuild it
-                        from the company profile.
+                        {failureLine(t, failureText(ts, profile))}
                     </p>
                 )}
 
@@ -797,22 +832,22 @@ function UnderstoodStep({
                 ) : (
                     <p className="text-ink-3 text-sm">
                         {!profile
-                            ? "Loading…"
+                            ? tc("status.loading")
                             : profile.status === "building"
-                              ? "Writing the summary…"
-                              : "No summary yet. It is written from your sources: add your website or a document about the company."}
+                              ? t("understood.writingSummary")
+                              : t("understood.noSummary")}
                     </p>
                 )}
 
                 <p className="sr-only" aria-live="polite">
-                    {profile ? progressLine(profile) : ""}
+                    {profile ? progressLine(t, profile) : ""}
                 </p>
 
                 {facts.length > 0 && (
                     <div className="flex flex-col gap-2">
                         <dl
                             className="border-line divide-line-2 divide-y rounded-lg border"
-                            aria-label="Facts so far"
+                            aria-label={t("understood.factsLabel")}
                         >
                             {facts.map(f => (
                                 <div
@@ -820,8 +855,10 @@ function UnderstoodStep({
                                     className="grid grid-cols-[150px_minmax(0,1fr)] gap-3 px-3 py-2 max-sm:grid-cols-1 max-sm:gap-0.5"
                                 >
                                     <dt className="text-ink-3 text-xs">
-                                        {f.label}
-                                        {f.source === "manual" && <span> · from you</span>}
+                                        {factLabelText(ts, f)}
+                                        {f.source === "manual" && (
+                                            <span> {t("understood.fromYou")}</span>
+                                        )}
                                     </dt>
                                     <dd className="text-ink break-words text-sm">{f.value}</dd>
                                 </div>
@@ -832,7 +869,7 @@ function UnderstoodStep({
                                 href={COMPANY_PROFILE_HREF}
                                 className="text-brand-ink self-start text-xs hover:underline"
                             >
-                                {more} more in the company profile
+                                {t("understood.moreInProfile", { count: more })}
                             </Link>
                         )}
                     </div>
@@ -840,13 +877,13 @@ function UnderstoodStep({
 
                 {profile && profile.sources.length > 0 && (
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-ink text-sm font-medium">Sources</h2>
+                        <h2 className="text-ink text-sm font-medium">{t("understood.sources")}</h2>
                         <ul
                             className="border-line divide-line-2 divide-y rounded-lg border"
-                            aria-label="Sources being read"
+                            aria-label={t("understood.sourcesLabel")}
                         >
                             {profile.sources.map(s => {
-                                const st = sourceState(s);
+                                const st = sourceState(t, s);
                                 return (
                                     <li
                                         key={s.documentId}
@@ -877,39 +914,39 @@ function UnderstoodStep({
                 )}
 
                 <div className="flex flex-col gap-2">
-                    <h2 className="text-ink text-sm font-medium">Then try</h2>
+                    <h2 className="text-ink text-sm font-medium">{t("understood.then")}</h2>
                     <div className="grid grid-cols-3 gap-3 max-sm:grid-cols-1">
                         <NextTile
                             href="/employer/documents?feature=chat"
                             Icon={MessageSquare}
-                            title="Ask your sources"
-                            text="Answers cite the exact passage they come from."
+                            title={t("understood.tiles.ask.title")}
+                            text={t("understood.tiles.ask.text")}
                         />
                         <NextTile
                             href="/employer/documents?feature=proposals"
                             Icon={FileText}
-                            title="Write a proposal"
-                            text="Drafts grant and funding applications from the profile."
+                            title={t("understood.tiles.proposal.title")}
+                            text={t("understood.tiles.proposal.text")}
                         />
                         <NextTile
                             href="/employer/documents?feature=growth&at=%2Fprospects"
                             Icon={Search}
-                            title="Find buyers"
-                            text="Searches for companies that match what you sell."
+                            title={t("understood.tiles.buyers.title")}
+                            text={t("understood.tiles.buyers.text")}
                         />
                     </div>
                 </div>
             </div>
             <StepFooter>
                 <Button type="button" variant="ghost" onClick={onBack}>
-                    Back
+                    {tc("actions.back")}
                 </Button>
                 <div className="flex-1 max-sm:hidden" />
                 <Button asChild variant="outline">
-                    <Link href={COMPANY_PROFILE_HREF}>Review the company profile</Link>
+                    <Link href={COMPANY_PROFILE_HREF}>{t("understood.review")}</Link>
                 </Button>
                 <Button type="button" onClick={onFinish}>
-                    Open your workspace
+                    {t("understood.open")}
                     <ArrowRight className="size-4" />
                 </Button>
             </StepFooter>
@@ -942,22 +979,21 @@ function NextTile({
 
 /** Someone without settings.manage: the profile is the admins' to set up. */
 function ReadOnly({ companyName, onLeave }: { companyName: string; onLeave: () => void }) {
+    const t = useTranslations("onboarding.flow");
     return (
         <div className="mx-auto flex w-full max-w-[680px] flex-col gap-5">
             <section className="border-line bg-panel rounded-lg border">
-                <StepHeader title={`Setting up ${companyName}`}>
-                    A workspace admin tells the profile about the company: its website, what it does
-                    and the documents about it. You can read the profile and ask questions of
-                    everything in the workspace.
+                <StepHeader title={t("readOnly.title", { company: companyName })}>
+                    {t("readOnly.body")}
                 </StepHeader>
                 <div className="h-6" />
                 <StepFooter>
                     <Button asChild variant="outline">
-                        <Link href={COMPANY_PROFILE_HREF}>See the company profile</Link>
+                        <Link href={COMPANY_PROFILE_HREF}>{t("readOnly.see")}</Link>
                     </Button>
                     <div className="flex-1 max-sm:hidden" />
                     <Button type="button" onClick={onLeave}>
-                        Open your workspace
+                        {t("understood.open")}
                         <ArrowRight className="size-4" />
                     </Button>
                 </StepFooter>

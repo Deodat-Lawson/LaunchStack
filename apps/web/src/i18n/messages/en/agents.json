@@ -1,0 +1,557 @@
+{
+  "autonomy": {
+    "observe": {
+      "label": "Read only",
+      "description": "Answers when asked. In a meeting a person triggers every turn; it never runs on its own."
+    },
+    "propose": {
+      "label": "Propose",
+      "description": "Takes turns on its own, but nothing leaves the workspace: meetings it joins cannot mirror to Slack."
+    },
+    "write": {
+      "label": "Write",
+      "description": "Takes turns on its own and its turns may be mirrored to Slack under the workspace bot."
+    },
+    "full": {
+      "label": "Full",
+      "description": "Everything, including speaking in Slack under its own name."
+    }
+  },
+  "violations": {
+    "mirrorNeedsWrite": "Mirroring to Slack needs every agent in the room at \"{required}\" or above; one is set to \"{current}\".",
+    "agentIdentityNeedsFull": "Posting to Slack under an agent's own name needs every agent at \"{required}\"."
+  },
+  "modes": {
+    "primary": {
+      "label": "Primary",
+      "description": "Can be picked as the agent a chat is held with. Not summoned with @."
+    },
+    "subagent": {
+      "label": "Subagent",
+      "description": "Summoned into a single turn with @handle, or seated in a meeting."
+    },
+    "all": {
+      "label": "Primary + subagent",
+      "description": "Pickable in the composer and summonable with @handle."
+    }
+  },
+  "styles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Length matches the question: a line for a lookup, a full answer for a how or why.",
+      "summary": "Balanced — length matches the question"
+    },
+    "concise": {
+      "label": "Concise",
+      "description": "Short and direct: the answer first, no filler.",
+      "summary": "Concise — direct and short"
+    },
+    "detailed": {
+      "label": "Detailed",
+      "description": "Comprehensive, with context and background.",
+      "summary": "Detailed — comprehensive with context"
+    },
+    "academic": {
+      "label": "Academic",
+      "description": "Analytical and precise, formal structure.",
+      "summary": "Academic — analytical and precise"
+    },
+    "organized": {
+      "label": "Organized",
+      "description": "Sections and bullets, built to scan.",
+      "summary": "Organized — structured with headings"
+    }
+  },
+  "routes": {
+    "default": "Default route",
+    "fast": "Fast",
+    "reasoning": "Reasoning",
+    "vision": "Vision"
+  },
+  "tools": {
+    "retrieval": {
+      "label": "Workspace retrieval",
+      "description": "Search the workspace's sources and cite passages from them."
+    },
+    "web": {
+      "label": "Web search",
+      "description": "Search the web when the person turns Web on for a message."
+    },
+    "reasoning": {
+      "label": "Extended reasoning",
+      "description": "Use the reasoning route and think before answering when Think is on."
+    },
+    "attachments": {
+      "label": "Attachments and images",
+      "description": "Read files and images attached to a message."
+    }
+  },
+  "turnNotes": {
+    "webOff": "web search is off for this agent",
+    "reasoningOff": "extended reasoning is off for this agent",
+    "noAttachments": "this agent does not read attachments"
+  },
+  "fileErrors": {
+    "missingFrontMatter": "Missing front matter: the file must start with ---",
+    "unexpectedListItem": "Unexpected list item: \"{line}\"",
+    "unreadableLine": "Cannot read front matter line: \"{line}\"",
+    "unexpectedIndent": "Unexpected indented line: \"{line}\"",
+    "missingName": "Front matter needs a `name:` — the agent's handle",
+    "emptyBody": "The body under the front matter is the system prompt; it is empty",
+    "unreadable": "Could not read that file"
+  },
+  "workflowCategories": {
+    "decide": "Decide something",
+    "review": "Review something",
+    "explore": "Explore a question",
+    "run": "Run a routine"
+  },
+  "workflows": {
+    "daciDecision": {
+      "title": "DACI decision",
+      "tagline": "One driver, clear contributors, a recommendation you approve.",
+      "description": "For a decision that needs several perspectives and a clear owner. The chair drives: frames the decision and the options, collects each contributor's input, has the devil's advocate test the leading option, and ends with a recommendation. You are the approver — the meeting produces the recommendation, you make the call.",
+      "basis": {
+        "name": "DACI",
+        "origin": "Atlassian Team Playbook — Driver, Approver, Contributors, Informed; the driver corrals input and gets a decision made by the agreed date.",
+        "usedBy": "Atlassian, Confluence's decision template, and most product organisations' decision logs."
+      },
+      "phases": {
+        "frame": {
+          "title": "Frame",
+          "goal": "State the decision, the options on the table, the deadline, and what a good outcome looks like. Name who approves."
+        },
+        "contribute": {
+          "title": "Contribute",
+          "goal": "Each contributor gives their seat's input on the options: the numbers, the feasibility, the cost. Facts and estimates, no verdicts yet."
+        },
+        "challenge": {
+          "title": "Challenge",
+          "goal": "Test the leading option: the assumption it rests on, how it fails, what would have to be true."
+        },
+        "recommend": {
+          "title": "Recommend",
+          "goal": "Answer the challenge, then write the recommendation for the approver: one option, why, the owner, the date, what is deferred."
+        }
+      }
+    },
+    "sixThinkingHats": {
+      "title": "Six Thinking Hats",
+      "tagline": "Facts, feelings, benefits, risks, alternatives — one at a time.",
+      "description": "For a question the room keeps arguing about in circles. Everyone thinks in the same direction at the same time: first the facts, then gut reactions, then benefits, then risks, then alternatives, and finally the decision. Parallel thinking replaces adversarial debate.",
+      "basis": {
+        "name": "Six Thinking Hats",
+        "origin": "Edward de Bono's parallel-thinking method: the group wears one hat at a time instead of arguing positions.",
+        "usedBy": "Facilitation practice worldwide; standard templates in Miro, Mural and SessionLab."
+      },
+      "phases": {
+        "blueOpen": {
+          "title": "Blue hat: set up",
+          "goal": "Name the question and how the hats will run. No content yet."
+        },
+        "white": {
+          "title": "White hat: facts",
+          "goal": "Only what the sources say. Numbers, dates, quotes with citations. No interpretation."
+        },
+        "red": {
+          "title": "Red hat: gut",
+          "goal": "First reactions from the customer's and the market's side, stated as feelings, without justification."
+        },
+        "yellow": {
+          "title": "Yellow hat: benefits",
+          "goal": "The upside, and the reasons it could work. Be specific about value."
+        },
+        "black": {
+          "title": "Black hat: risks",
+          "goal": "What could go wrong, what is missing, where it fails. Cautions, with the clause or number behind each."
+        },
+        "green": {
+          "title": "Green hat: alternatives",
+          "goal": "New options and modifications that answer the black hat."
+        },
+        "blueClose": {
+          "title": "Blue hat: decide",
+          "goal": "Summarise what each hat produced and state the decision, the owner and the next step."
+        }
+      }
+    },
+    "lightningDecisionJam": {
+      "title": "Lightning decision jam",
+      "tagline": "Problems, then priorities, then solutions — no open discussion.",
+      "description": "For a team that talks a lot and decides little. Everyone names what is working and what is not, the chair prioritises, the biggest problem is reframed as a 'how might we', everyone proposes solutions, and one becomes an experiment with an owner. Written turns keep it from turning into a debate.",
+      "basis": {
+        "name": "Lightning Decision Jam (LDJ)",
+        "origin": "Jonathan Courtney at AJ&Smart, distilled from the Google Ventures design sprint's decision techniques.",
+        "usedBy": "AJ&Smart's workshops; templates in Miro, Mural and the Open Practice Library."
+      },
+      "phases": {
+        "working": {
+          "title": "What is working",
+          "goal": "One line each on what is going well. No discussion."
+        },
+        "problems": {
+          "title": "What is not",
+          "goal": "One line each on the biggest problem or blocker. Still no discussion."
+        },
+        "prioritise": {
+          "title": "Prioritise and reframe",
+          "goal": "Pick the one problem worth solving now and restate it as 'How might we …'."
+        },
+        "solutions": {
+          "title": "Solutions",
+          "goal": "One concrete solution each to the 'how might we'. Concrete enough to try in a week."
+        },
+        "decide": {
+          "title": "Decide the experiment",
+          "goal": "Choose the solution with the best effort-to-impact, define the smallest test, name the owner and the date."
+        }
+      }
+    },
+    "premortem": {
+      "title": "Pre-mortem",
+      "tagline": "It is a year later and the plan failed. Why?",
+      "description": "Run before committing to a plan. Everyone assumes the plan has already failed and writes down why — prospective hindsight surfaces risks people would not raise as objections. The room then ranks the causes and assigns a mitigation to each one that matters.",
+      "basis": {
+        "name": "Pre-mortem",
+        "origin": "Gary Klein's pre-mortem: assume the plan has already failed and write down why, before committing to it.",
+        "usedBy": "Atlassian Team Playbook, Miro and Mural templates, and product and engineering teams before launches."
+      },
+      "phases": {
+        "brief": {
+          "title": "Brief the plan",
+          "goal": "State the plan as it stands and the outcome it is meant to produce. Then: 'It is twelve months on and it failed.'"
+        },
+        "imagine": {
+          "title": "Imagine the failure",
+          "goal": "From your seat, say how it failed — two or three concrete reasons, the more specific the better. No solutions yet."
+        },
+        "rank": {
+          "title": "Rank the causes",
+          "goal": "Consolidate the reasons; agree the three most likely and most costly."
+        },
+        "mitigate": {
+          "title": "Mitigate",
+          "goal": "One mitigation per top cause, with an owner and a trigger that tells you it is happening."
+        }
+      }
+    },
+    "prfaqReview": {
+      "title": "Working-backwards PR/FAQ review",
+      "tagline": "Start from the customer's press release; work back to what must be true.",
+      "description": "For a new product, feature or initiative. Amazon's working-backwards discipline: state the idea as the press release a customer would read, answer the five customer questions, then take the hard internal FAQ — what has to be true, what it costs, what could kill it — and give a verdict.",
+      "basis": {
+        "name": "Working Backwards PR/FAQ",
+        "origin": "Amazon's product-development process: write the press release and FAQ first, iterate until the customer experience is clear.",
+        "usedBy": "Amazon and AWS for new products; widely adopted by product teams as the PR/FAQ document."
+      },
+      "phases": {
+        "pr": {
+          "title": "The press release",
+          "goal": "Read the idea as a press release: headline, who it is for, the problem, the benefit, a customer quote. If none exists, draft it."
+        },
+        "customer": {
+          "title": "The customer questions",
+          "goal": "Who is the customer, what is the problem, what is the most important benefit, how do we know they need it, what does the experience look like — answered from the sources and the customer's voice."
+        },
+        "hardFaq": {
+          "title": "The hard FAQ",
+          "goal": "The internal questions: what has to be true, what it costs to build and run, what the economics look like, what could kill it."
+        },
+        "verdict": {
+          "title": "Verdict",
+          "goal": "Proceed, refine or stop — with the reason, and the next step for whichever it is."
+        }
+      }
+    },
+    "pitchReview": {
+      "title": "Pitch review",
+      "tagline": "Purpose, problem, solution, why now, market, model, team — the investor's outline.",
+      "description": "For a deck, a memo or an application. The room reads the pitch the way an investor does, section by section on Sequoia's outline, and finishes with the three questions the founder will get asked and how to answer them.",
+      "basis": {
+        "name": "Sequoia's business-plan outline",
+        "origin": "Sequoia Capital, 'Writing a Business Plan': company purpose, problem, solution, why now, market size, competition, product, business model, team, financials — in as few words as possible.",
+        "usedBy": "The default pitch-deck structure across venture; the outline behind most deck templates."
+      },
+      "phases": {
+        "purpose": {
+          "title": "Purpose and problem",
+          "goal": "Is the company defined in one declarative sentence, and is the customer's pain concrete — how do they handle it today?"
+        },
+        "solution": {
+          "title": "Solution and why now",
+          "goal": "Does the solution make the customer's life better in a way they would repeat, and what changed recently that makes it possible?"
+        },
+        "market": {
+          "title": "Market and competition",
+          "goal": "The market size with its arithmetic, and who else the customer could choose — with the sources' numbers, not the deck's adjectives."
+        },
+        "model": {
+          "title": "Business model and financials",
+          "goal": "How the money works: pricing, margin, the key assumptions, and what the numbers say about runway and the ask."
+        },
+        "questions": {
+          "title": "The hard questions",
+          "goal": "The three questions an investor will ask, ranked by how badly the answer would go today, and how to answer each."
+        }
+      }
+    },
+    "retrospective4ls": {
+      "title": "Retrospective (4Ls)",
+      "tagline": "Loved, loathed, longed for, learned — then actions.",
+      "description": "After a launch, a sprint or a bad week. Each seat says what it loved, loathed, longed for and learned; the chair turns the loathed and longed-for into a short list of actions with owners.",
+      "basis": {
+        "name": "4Ls retrospective",
+        "origin": "A retrospective format documented as a play in the Atlassian Team Playbook.",
+        "usedBy": "Agile teams' sprint retrospectives; built-in templates in Jira, Miro and Retrium."
+      },
+      "phases": {
+        "loved": {
+          "title": "Loved",
+          "goal": "What went well and should keep happening. One or two things each, from the evidence."
+        },
+        "loathed": {
+          "title": "Loathed",
+          "goal": "What made things worse or was missing. Specific, not personal."
+        },
+        "longed": {
+          "title": "Longed for",
+          "goal": "What you wish you had had: tools, information, time, decisions."
+        },
+        "learned": {
+          "title": "Learned",
+          "goal": "What the period taught us that changes how we work next time."
+        },
+        "actions": {
+          "title": "Actions",
+          "goal": "Turn the loathed and longed-for into at most five actions with owners and dates."
+        }
+      }
+    },
+    "customerDiscovery": {
+      "title": "Customer discovery synthesis",
+      "tagline": "From what they said to what we do — without fooling ourselves.",
+      "description": "Point it at interviews, tickets, reviews or call notes. The customer voice reports what people said with counts, product names the forces behind a switch, sales separates compliments from commitments, and the room agrees the next interviews or experiments.",
+      "basis": {
+        "name": "The Mom Test + jobs-to-be-done forces",
+        "origin": "The Mom Test rules for customer conversations (talk about their life, ask about specifics in the past, listen) and the four forces of a switch (push, pull, anxiety, habit) from jobs-to-be-done interviewing.",
+        "usedBy": "Customer-discovery practice in accelerators and product teams; the interview standard YC and Lean Startup courses teach."
+      },
+      "phases": {
+        "said": {
+          "title": "What they said",
+          "goal": "The recurring problems and requests in the customers' own words, with how often each came up and where."
+        },
+        "forces": {
+          "title": "The forces",
+          "goal": "For the top themes: what pushes people away from today's way, what pulls them to a new one, what makes them anxious, and the habit that holds them."
+        },
+        "signal": {
+          "title": "Commitments versus compliments",
+          "goal": "Which of this is signal — time, money or reputation committed — and which is politeness."
+        },
+        "next": {
+          "title": "Next interviews and experiments",
+          "goal": "What to ask the next five customers, what to test, and who does it."
+        }
+      }
+    },
+    "openDiscussion": {
+      "title": "Open discussion",
+      "tagline": "No phases — just the objective and the room.",
+      "description": "Pick the agents, state the objective, and let the turn policy run. The right choice when the question does not fit a recipe."
+    },
+    "weeklyBusinessReview": {
+      "title": "Weekly business review",
+      "tagline": "Inputs, outputs, exceptions, next steps — in that order.",
+      "description": "The standing weekly meeting over the week's numbers and notes. Controllable input metrics first, then the outputs they are meant to move and the variances, then only the exceptions, then next steps with owners. No storytelling around a number that is on track.",
+      "basis": {
+        "name": "Amazon Weekly Business Review (WBR)",
+        "origin": "Amazon's weekly metrics meeting: a deck of input and output metrics, reviewed for variance and exceptions, ending in actions.",
+        "usedBy": "Amazon; adopted by operators as the WBR, with templates from Working Backwards LLC and Commoncog."
+      },
+      "phases": {
+        "inputs": {
+          "title": "Input metrics",
+          "goal": "The metrics the team controls — activity, pipeline created, shipped, tickets closed — with this week's numbers against the trend, from the sources."
+        },
+        "outputs": {
+          "title": "Outputs and variances",
+          "goal": "Revenue, margin, retention: what moved, what did not, and the variance that needs a reason."
+        },
+        "exceptions": {
+          "title": "Exceptions",
+          "goal": "Only the numbers off-plan. For each: the cause, whether it is fixed, who owns it."
+        },
+        "next": {
+          "title": "Next steps",
+          "goal": "Actions with owners and dates. Close."
+        }
+      }
+    },
+    "okrSetting": {
+      "title": "OKR setting",
+      "tagline": "One objective, three measurable key results, stress-tested.",
+      "description": "For a quarter or a launch. Draft the objective, have each function propose key results, then test them: measurable, ambitious, outcomes rather than tasks, few enough to remember. Commit to what survives.",
+      "basis": {
+        "name": "OKRs",
+        "origin": "Objectives and key results as run at Intel and Google: one qualitative objective, a few measurable key results.",
+        "usedBy": "Google, and most of the startup ecosystem; the default goal framework in Lattice, Asana Goals and Notion templates."
+      },
+      "phases": {
+        "objective": {
+          "title": "The objective",
+          "goal": "One qualitative, memorable objective for the period. Say why it matters now."
+        },
+        "keyResults": {
+          "title": "Key results",
+          "goal": "Each function proposes one key result: a number, a baseline, a target, a date."
+        },
+        "stress": {
+          "title": "Stress test",
+          "goal": "Is each key result measurable, ambitious, an outcome rather than a task, and are there few enough to remember? Cut or rewrite."
+        },
+        "commit": {
+          "title": "Commit",
+          "goal": "The objective and the surviving key results, each with an owner. Close."
+        }
+      }
+    }
+  },
+  "sessions": {
+    "title": "Coding sessions",
+    "intro": "Claude Code and Codex conversations on this machine. Import one to make it searchable workspace knowledge — then continue it in chat.",
+    "rescan": "Rescan",
+    "importAllNew": "Import all new",
+    "scanning": "Scanning local sessions…",
+    "status": {
+      "live": "Live",
+      "updateAvailable": "Update available",
+      "imported": "Imported",
+      "new": "New"
+    },
+    "archived": "archived",
+    "actionsFor": "Actions for {title}",
+    "pathCopied": "Path copied",
+    "idCopied": "Session id copied",
+    "update": "Update",
+    "openHint": "View the imported transcript",
+    "continue": "Continue",
+    "continueHint": "Pick this conversation up in chat",
+    "ago": {
+      "minutes": "{count}m ago",
+      "hours": "{count}h ago",
+      "days": "{count}d ago"
+    },
+    "toasts": {
+      "someFailed": "{count, plural, one {# session failed to import} other {# sessions failed to import}}",
+      "imported": "Imported \"{title}\" — indexing now, it will be searchable shortly",
+      "unchanged": "Already imported and unchanged",
+      "importFailed": "The session could not be imported",
+      "removed": "Import removed",
+      "removeFailed": "Couldn't remove that import",
+      "importedAll": "Imported {stored} of {discovered} sessions",
+      "bulkFailed": "Bulk import failed"
+    },
+    "errors": {
+      "disabledTitle": "The sessions connector is turned off",
+      "title": "Can't browse sessions",
+      "disabledBody": "This browser reads Claude Code and Codex folders on the machine that hosts LaunchStack, so it ships disabled. Set <code>{flag}</code> on that server to turn it on.",
+      "loadFailed": "Failed to load sessions.",
+      "requestFailed": "Request failed (HTTP {status})"
+    },
+    "roots": {
+      "notFound": "not found"
+    },
+    "counts": {
+      "imported": "{imported}/{total} imported",
+      "withUpdates": "{count} with updates",
+      "truncated": "list truncated"
+    },
+    "filters": {
+      "search": "Search titles, prompts, projects…",
+      "allTools": "All tools",
+      "allStatuses": "All statuses",
+      "notImported": "Not imported",
+      "allProjects": "All projects"
+    },
+    "empty": {
+      "none": "No Claude Code or Codex sessions were found on this machine.",
+      "noMatch": "No sessions match these filters."
+    },
+    "remove": {
+      "title": "Remove the imported transcript?",
+      "description": "“{title}” leaves the workspace and its search. The session on this machine stays, so you can import it again.",
+      "confirm": "Remove import"
+    },
+    "menu": {
+      "openTranscript": "Open the transcript",
+      "continueInChat": "Continue in chat",
+      "updateImport": "Update the import",
+      "reimport": "Re-import",
+      "import": "Import",
+      "copyPath": "Copy the project path",
+      "copyId": "Copy the session id",
+      "removeImport": "Remove the import…",
+      "busy": "An import is already running."
+    }
+  },
+  "server": {
+    "chatAgent": {
+      "notFound": "No agent with the handle \"@{handle}\" in this workspace",
+      "primaryOnly": "@{handle} is a primary-only agent — pick it in the composer instead of mentioning it",
+      "subagentOnly": "@{handle} is a subagent — summon it with @{handle} in a message"
+    },
+    "connectors": {
+      "invalidJsonBody": "Invalid JSON body."
+    },
+    "sessions": {
+      "disabled": "The agent-sessions connector is disabled. Set AGENT_SESSIONS_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders.",
+      "invalidProjectSlug": "Invalid project slug.",
+      "invalidMaxSessions": "Invalid maxSessions.",
+      "imported": "Imported {stored} of {discovered} sessions.",
+      "validation": {
+        "notProjectDir": "Not a project directory name.",
+        "notSourceId": "Not an agent-sessions source id."
+      }
+    },
+    "knowledge": {
+      "disabled": "The agent-knowledge connector is disabled. Set AGENT_KNOWLEDGE_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders.",
+      "outsideRoots": "Project directories outside AGENT_KNOWLEDGE_PROJECT_ROOTS: {dirs}",
+      "synced": "Synced {stored} of {discovered} knowledge files."
+    },
+    "repoExplainer": {
+      "invalidUrl": "Invalid GitHub URL format. Please use: https://github.com/owner/repo or owner/repo",
+      "notFoundWithToken": "Repository ''{repo}'' not found or token does not have access.",
+      "notFoundPublic": "Repository ''{repo}'' not found or is private. Add a GitHub token with access for private repos.",
+      "forbiddenWithToken": "Access forbidden for ''{repo}''. Check token permissions and repo access.",
+      "forbiddenPublic": "Repository ''{repo}'' is private or access is forbidden. Add a GitHub token.",
+      "invalidToken": "Invalid GitHub token.",
+      "rateLimited": "Too many requests to GitHub. Please try again later.",
+      "accessError": "Error accessing repository ''{repo}'' (HTTP {status}).",
+      "validateFailed": "Could not validate repository on GitHub. Please try again.",
+      "managersOnlyRun": "Only management roles can run the repo explainer",
+      "jobNotFound": "Repo explainer job",
+      "workspaceNotFound": "Repository workspace",
+      "notReady": "Workspace is {status}. Wait for the first sync to complete.",
+      "neverSynced": "Workspace is {status} and has never synced. Wait for the first sync to complete.",
+      "onlyCompletedPublish": "Only completed explanations can be published",
+      "folderEditDenied": "You do not have edit access to this folder.",
+      "managersOnlyConnect": "Only management roles can connect repositories",
+      "managersOnlyDisconnect": "Only management roles can disconnect repositories",
+      "invalidRepoUrl": "Invalid GitHub URL — expected \"https://github.com/owner/repo\" or \"owner/repo\""
+    },
+    "analysis": {
+      "invalidDocumentId": "Invalid documentId. Must be a positive number.",
+      "invalidAnalysisType": "Invalid analysisType. Must be one of: {types}",
+      "invalidTimeout": "Invalid timeoutMs. Must be between {min} and {max}",
+      "documentNotFound": "Document not found.",
+      "noVersion": "No current document version found.",
+      "noChunks": "No chunks found for the given documentId.",
+      "noChunksStream": "No chunks found for document.",
+      "timedOut": "Analysis timed out. Results will be cached when complete.",
+      "failed": "Failed to perform predictive document analysis",
+      "tookTooLong": "The AI analysis took too long to complete. Please try again or reduce the document size.",
+      "externalLimited": "External service error. Analysis completed with limited functionality."
+    }
+  }
+}

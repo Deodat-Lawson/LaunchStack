@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
 
 import { company } from "@launchstack/store/schema";
 
+import { copy } from "~/i18n/copy";
 import { db } from "~/server/db";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
@@ -57,7 +58,7 @@ export async function getWorkspaceDetails(ctx: WorkspaceContext): Promise<Worksp
         .from(company)
         .where(eq(company.id, Number(ctx.companyId)))
         .limit(1);
-    if (!row) throw notFound("This workspace no longer exists.");
+    if (!row) throw notFound(copy("settings.server.workspaceDetails.notFound"));
     return toDetails(row);
 }
 
@@ -92,9 +93,7 @@ export async function updateWorkspaceDetails(
             .from(company)
             .where(eq(company.slug, slug));
         if (holders.some(holder => Number(holder.id) !== current.id)) {
-            throw conflict("Another workspace already uses that URL. Try a different one.", {
-                field: "slug",
-            });
+            throw conflict(copy("settings.server.workspaceDetails.urlTaken"), { field: "slug" });
         }
     }
 

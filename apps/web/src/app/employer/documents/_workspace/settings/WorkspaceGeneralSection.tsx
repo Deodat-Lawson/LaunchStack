@@ -18,6 +18,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { WorkspaceMark } from "~/app/employer/_chrome/WorkspaceMark";
@@ -43,6 +44,7 @@ import {
     WORKSPACE_SWATCHES,
     WORKSPACE_TEAM_SIZES,
     workspaceInitials,
+    workspaceTeamSizeOf,
     type WorkspaceDetails,
     type WorkspaceDetailsPatch,
     type WorkspaceDetailsResponse,
@@ -85,11 +87,19 @@ function patchOf(saved: Draft, draft: Draft): WorkspaceDetailsPatch {
     return patch;
 }
 
-/** A team size from before the create form's options ("1" from sign-up) reads as a count. */
-function teamSizeLabel(value: string): string {
-    const count = /^\d+$/.test(value) ? Number(value) : null;
-    if (count === null) return value;
-    return count === 1 ? "Just one person" : `About ${count} people`;
+type GeneralT = ReturnType<typeof useTranslations<"settings.general">>;
+type TeamSizeT = ReturnType<typeof useTranslations<"auth.workspaces.editor.teamSizes">>;
+
+/**
+ * A stored team size in the reader's words: one of the create form's
+ * options, a count from before them ("1" from sign-up), or anything else as
+ * it was typed.
+ */
+function teamSizeLabel(t: GeneralT, sizes: TeamSizeT, value: string): string {
+    const option = workspaceTeamSizeOf(value);
+    if (option) return sizes(option.key);
+    if (/^\d+$/.test(value)) return t("teamSize.count", { count: Number(value) });
+    return value;
 }
 
 type SlugState =
@@ -100,6 +110,9 @@ type SlugState =
     | { kind: "taken" };
 
 export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.general");
+    const tc = useTranslations("common");
+    const sizes = useTranslations("auth.workspaces.editor.teamSizes");
     const router = useRouter();
     const { loaded: permissionsLoaded, can } = usePermissions();
     const [saved, setSaved] = useState<WorkspaceDetails | null>(null);
@@ -122,18 +135,16 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                 error?: string;
             };
             if (!res.ok || !body.workspace) {
-                setLoadError(
-                    body.error ?? `Couldn't load the workspace's details (${res.status}).`
-                );
+                setLoadError(body.error ?? t("loadFailedStatus", { status: res.status }));
                 return;
             }
             setSaved(body.workspace);
             setDraft(draftOf(body.workspace));
             setCanEditServer(Boolean(body.canEdit));
         } catch {
-            setLoadError("Couldn't reach the server. Check your connection and try again.");
+            setLoadError(t("offline"));
         }
-    }, []);
+    }, [t]);
     useEffect(() => {
         void load();
     }, [load]);
@@ -196,6 +207,8 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
     patchRef.current = patch;
     const routerRef = useRef(router);
     routerRef.current = router;
+    const tRef = useRef(t);
+    tRef.current = t;
     const save = useCallback(async () => {
         const body = patchRef.current;
         if (Object.keys(body).length === 0) return;
@@ -214,19 +227,21 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
             };
             if (!res.ok || !result.workspace) {
                 if (res.status === 409 && result.field === "slug") setSlugState({ kind: "taken" });
-                setSaveError(result.error ?? `Couldn't save (${res.status}).`);
+                setSaveError(
+                    result.error ?? tRef.current("saveFailedStatus", { status: res.status })
+                );
                 return;
             }
             const next = result.workspace;
             setSaved(next);
             setDraft(draftOf(next));
-            toast.success("Workspace details saved");
+            toast.success(tRef.current("saved"));
             // The sidebar's name comes from the permissions snapshot; the
             // workspace card and the account menu from the server layout.
             setWorkspaceNameLocally(next.name);
             if (body.name !== undefined || body.swatch !== undefined) routerRef.current.refresh();
         } catch {
-            setSaveError("Couldn't reach the server. Nothing was saved.");
+            setSaveError(tRef.current("saveOffline"));
         } finally {
             setSaving(false);
         }
@@ -241,19 +256,19 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
         onActions,
         canEdit
             ? {
-                  primaryLabel: "Save changes",
-                  primaryBusyLabel: "Saving…",
+                  primaryLabel: tc("actions.saveChanges"),
+                  primaryBusyLabel: tc("status.saving"),
                   onPrimary: save,
                   busy: saving,
                   disabled: !dirty || blocked,
                   secondary: dirty ? (
                       <Button variant="ghost" onClick={discard} disabled={saving}>
-                          Discard
+                          {tc("actions.discard")}
                       </Button>
                   ) : undefined,
               }
             : {},
-        [canEdit, save, saving, dirty, blocked, discard]
+        [canEdit, save, saving, dirty, blocked, discard, tc]
     );
 
     if (loadError) {
@@ -261,38 +276,33 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
             <StatusNote tone="danger">
                 {loadError}{" "}
                 <Button variant="link" className="h-auto p-0" onClick={() => void load()}>
-                    Try again
+                    {tc("actions.tryAgain")}
                 </Button>
             </StatusNote>
         );
     }
-    if (!draft || !saved) return <StatusNote tone="muted">Loading…</StatusNote>;
+    if (!draft || !saved) return <StatusNote tone="muted">{tc("status.loading")}</StatusNote>;
 
     const set =
         <K extends keyof Draft>(key: K) =>
         (value: Draft[K]) =>
             setDraft(prev => (prev ? { ...prev, [key]: value } : prev));
     const disabled = !canEdit || saving;
-    const teamSizes: readonly string[] = WORKSPACE_TEAM_SIZES.includes(
-        draft.teamSize as (typeof WORKSPACE_TEAM_SIZES)[number]
-    )
-        ? WORKSPACE_TEAM_SIZES
-        : [draft.teamSize, ...WORKSPACE_TEAM_SIZES];
+    // The stored value is kept as an option, so a count from sign-up ("1")
+    // can still be seen, and left as it is.
+    const options: readonly string[] = WORKSPACE_TEAM_SIZES.map(size => size.value);
+    const teamSizes = options.includes(draft.teamSize) ? options : [draft.teamSize, ...options];
     const initials = workspaceInitials(draft.name || saved.name);
 
     return (
         <div data-testid="workspace-general">
-            {!canEdit && permissionsLoaded && (
-                <StatusNote tone="muted">
-                    Changing these takes a role that manages the workspace&apos;s settings.
-                </StatusNote>
-            )}
+            {!canEdit && permissionsLoaded && <StatusNote tone="muted">{t("readOnly")}</StatusNote>}
             {saveError && <StatusNote tone="danger">{saveError}</StatusNote>}
             <Card padding="4px 20px">
                 <FieldRow
                     id="workspace-name"
-                    label="Name"
-                    description="What everyone in the workspace sees: the sidebar, the workspace picker, invitations."
+                    label={t("name.label")}
+                    description={t("name.description")}
                 >
                     <Input
                         id="workspace-name"
@@ -303,13 +313,13 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                         aria-invalid={nameMissing || undefined}
                         autoComplete="off"
                     />
-                    {nameMissing && <FieldNote tone="danger">Give the workspace a name.</FieldNote>}
+                    {nameMissing && <FieldNote tone="danger">{t("name.missing")}</FieldNote>}
                 </FieldRow>
 
                 <FieldRow
                     id="workspace-slug"
-                    label="URL"
-                    description="How the workspace is listed when you switch between workspaces. It must be unique on this server; nothing else links to it."
+                    label={t("slug.label")}
+                    description={t("slug.description")}
                 >
                     <div
                         className={cn(
@@ -348,8 +358,8 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
 
                 <FieldRow
                     id="workspace-description"
-                    label="Description"
-                    description="One sentence on what the company does. Optional; it helps the assistant."
+                    label={t("description.label")}
+                    description={t("description.description")}
                 >
                     <Textarea
                         id="workspace-description"
@@ -358,14 +368,14 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                         onChange={e => set("description")(e.target.value)}
                         disabled={disabled}
                         rows={3}
-                        placeholder="We turn scattered context into a knowledge graph for AI workflows."
+                        placeholder={t("description.placeholder")}
                     />
                 </FieldRow>
 
                 <FieldRow
                     id="workspace-industry"
-                    label="Industry"
-                    description="The field the company works in. Optional."
+                    label={t("industry.label")}
+                    description={t("industry.description")}
                 >
                     <Input
                         id="workspace-industry"
@@ -373,15 +383,15 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                         maxLength={WORKSPACE_DETAIL_LIMITS.industry}
                         onChange={e => set("industry")(e.target.value)}
                         disabled={disabled}
-                        placeholder="e.g. Logistics software"
+                        placeholder={t("industry.placeholder")}
                         autoComplete="off"
                     />
                 </FieldRow>
 
                 <FieldRow
                     id="workspace-team-size"
-                    label="Team size"
-                    description="Roughly how many people work here."
+                    label={t("teamSize.label")}
+                    description={t("teamSize.description")}
                 >
                     <Select
                         value={draft.teamSize}
@@ -394,7 +404,7 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                         <SelectContent>
                             {teamSizes.map(size => (
                                 <SelectItem key={size} value={size}>
-                                    {teamSizeLabel(size)}
+                                    {teamSizeLabel(t, sizes, size)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -403,8 +413,8 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
 
                 <FieldRow
                     id="workspace-colour"
-                    label="Colour"
-                    description="The workspace's mark in the sidebar and the workspace picker."
+                    label={t("colour.label")}
+                    description={t("colour.description")}
                 >
                     <ToggleGroup
                         id="workspace-colour"
@@ -416,14 +426,14 @@ export function WorkspaceGeneralSection({ onActions }: SettingsSectionProps) {
                             if (value) set("swatch")(Number(value));
                         }}
                         disabled={disabled}
-                        aria-label="Colour"
+                        aria-label={t("colour.label")}
                         className="flex-wrap justify-start gap-1.5"
                     >
                         {WORKSPACE_SWATCHES.map(n => (
                             <ToggleGroupItem
                                 key={n}
                                 value={String(n)}
-                                aria-label={`Colour ${n}`}
+                                aria-label={t("colour.swatch", { n })}
                                 className="data-[state=on]:ring-brand data-[state=on]:ring-offset-panel size-9 min-w-9 rounded-[10px] p-0 data-[state=on]:bg-transparent data-[state=on]:ring-2 data-[state=on]:ring-offset-2"
                             >
                                 <WorkspaceMark swatch={n} initials={initials} />
@@ -489,25 +499,22 @@ function FieldNote({
 }
 
 function SlugNote({ state }: { state: SlugState }) {
+    const t = useTranslations("settings.general.slug");
     switch (state.kind) {
         case "unchanged":
             return null;
         case "checking":
-            return <FieldNote tone="muted">Checking…</FieldNote>;
+            return <FieldNote tone="muted">{t("checking")}</FieldNote>;
         case "invalid":
-            return (
-                <FieldNote tone="danger">
-                    At least two characters: lowercase letters, numbers and dashes.
-                </FieldNote>
-            );
+            return <FieldNote tone="danger">{t("invalid")}</FieldNote>;
         case "available":
             return (
                 <FieldNote tone="ok">
                     <Check className="size-3" strokeWidth={3} aria-hidden />
-                    Available
+                    {t("available")}
                 </FieldNote>
             );
         case "taken":
-            return <FieldNote tone="danger">Taken — try a different URL.</FieldNote>;
+            return <FieldNote tone="danger">{t("taken")}</FieldNote>;
     }
 }

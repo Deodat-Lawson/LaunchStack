@@ -5,6 +5,7 @@ import { Upload, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 import { LANDING_DEPLOYMENT_HREF } from "~/config/landing";
 
 import { useRouter } from "next/navigation";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { genUploader } from "uploadthing/client";
 import type { OurFileRouter } from "~/app/api/uploadthing/core";
@@ -14,7 +15,6 @@ import { SourceGrid, type SourceType } from "./SourceGrid";
 import { SourceDialog } from "./SourceDialog";
 import { FileQueue } from "./FileQueue";
 import { UploadSettings } from "./UploadSettings";
-import { useSettingsPayload } from "~/lib/settings/useSettings";
 
 const { uploadFiles } = genUploader<OurFileRouter>();
 
@@ -59,9 +59,12 @@ export interface AvailableProviders {
     docling: boolean;
 }
 
+type UploadFormT = ReturnType<typeof useTranslations<"upload.form">>;
+
 function uploadToS3WithProgress(
     file: File,
-    onProgress: (percent: number) => void
+    onProgress: (percent: number) => void,
+    t: UploadFormT
 ): Promise<{ objectKey: string; bucket: string; url: string }> {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
@@ -87,20 +90,19 @@ function uploadToS3WithProgress(
                     };
                     resolve(data);
                 } catch {
-                    reject(new Error("Invalid response from storage upload"));
+                    reject(new Error(t("storage.invalidResponse")));
                 }
             } else if (xhr.status === 401) {
-                reject(new Error("Authentication required — please sign in and try again"));
+                reject(new Error(t("storage.auth")));
             } else if (xhr.status >= 500) {
-                reject(new Error("Storage service error — please try again later"));
+                reject(new Error(t("storage.serverError")));
             } else {
-                reject(new Error(`Upload to storage failed (HTTP ${xhr.status})`));
+                reject(new Error(t("storage.failed", { status: xhr.status })));
             }
         };
 
-        xhr.ontimeout = () =>
-            reject(new Error("Upload timed out — check your connection and try again"));
-        xhr.onerror = () => reject(new Error("Storage service unavailable"));
+        xhr.ontimeout = () => reject(new Error(t("storage.timeout")));
+        xhr.onerror = () => reject(new Error(t("storage.unavailable")));
         xhr.send(formData);
     });
 }
@@ -133,6 +135,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
     embedded = false,
     onCompleted,
 }) => {
+    const t = useTranslations("upload.form");
+    const format = useFormatter();
+    const limit = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const folderInputRef = useRef<HTMLInputElement>(null);
@@ -144,27 +149,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
         uploadDate: new Date().toISOString().split("T")[0]!,
         storageMethod: useUploadThing && isUploadThingConfigured ? "cloud" : "database",
     });
-
-    // Workspace defaults (Settings → Document defaults) pre-fill the batch
-    // until the person uploading picks otherwise.
-    const { payload: settings } = useSettingsPayload();
-    const defaultProcessing = settings?.settings["documents.defaultProcessingMethod"]?.value;
-    const defaultFolder = settings?.settings["documents.defaultFolder"]?.value;
-    const defaultsApplied = useRef(false);
-    useEffect(() => {
-        if (defaultsApplied.current || !settings) return;
-        defaultsApplied.current = true;
-        setBatchSettings(prev => ({
-            ...prev,
-            processingMethod:
-                typeof defaultProcessing === "string" ? defaultProcessing : prev.processingMethod,
-            category:
-                prev.category ||
-                (typeof defaultFolder === "string" && categories.some(c => c.name === defaultFolder)
-                    ? defaultFolder
-                    : prev.category),
-        }));
-    }, [settings, defaultProcessing, defaultFolder, categories]);
     const [expandedDocId, setExpandedDocId] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -182,19 +166,22 @@ const UploadForm: React.FC<UploadFormProps> = ({
             ? [
                   {
                       value: "auto",
-                      label: "Auto",
-                      description:
-                          "Automatically select the best method based on document analysis.",
+                      label: t("methods.auto"),
+                      description: t("methods.autoDescription"),
                   },
               ]
             : []),
-        { value: "standard", label: "Standard", description: "No OCR. Use for text-based PDFs." },
+        {
+            value: "standard",
+            label: t("methods.standard"),
+            description: t("methods.standardDescription"),
+        },
         ...(availableProviders.azure
             ? [
                   {
                       value: "azure",
                       label: "Azure OCR",
-                      description: "Azure Document Intelligence OCR",
+                      description: t("methods.azureDescription"),
                   },
               ]
             : []),
@@ -203,19 +190,25 @@ const UploadForm: React.FC<UploadFormProps> = ({
                   {
                       value: "landing_ai",
                       label: "Landing AI",
-                      description: "Multimodal AI processing",
+                      description: t("methods.landingAiDescription"),
                   },
               ]
             : []),
         ...(availableProviders.datalab
-            ? [{ value: "datalab", label: "Datalab", description: "Advanced data extraction" }]
+            ? [
+                  {
+                      value: "datalab",
+                      label: "Datalab",
+                      description: t("methods.datalabDescription"),
+                  },
+              ]
             : []),
         ...(availableProviders.docling
             ? [
                   {
                       value: "docling",
                       label: "Docling",
-                      description: "Open-source document understanding via docling-serve",
+                      description: t("methods.doclingDescription"),
                   },
               ]
             : []),
@@ -268,7 +261,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 }
 
                 if (file.size > MAX_FILE_SIZE) {
-                    toast.error(`${file.name} exceeds ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB limit`);
+                    toast.error(t("tooLarge", { name: file.name, limit }));
                     nonZipErrorCount++;
                     continue;
                 }
@@ -277,28 +270,27 @@ const UploadForm: React.FC<UploadFormProps> = ({
             }
 
             if (nonZipErrorCount > 0) {
-                toast.error(`${nonZipErrorCount} file(s) were rejected`, {
-                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.), or audio (MP3, MP4) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
+                toast.error(t("rejected", { count: nonZipErrorCount }), {
+                    description: t("rejectedDetail", { limit }),
                 });
             }
 
             if (zipArchiveCount > 0) {
                 if (zipQueuedCount > 0) {
-                    toast.success("ZIP archive queued", {
-                        description:
-                            "Files will be auto-extracted and processed individually after upload.",
+                    toast.success(t("zipQueued"), {
+                        description: t("zipQueuedDetail"),
                     });
                 }
                 if (zipOversizedCount > 0) {
-                    toast.error("ZIP archive rejected", {
-                        description: `${zipOversizedCount} ZIP file(s) exceeded the ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB limit.`,
+                    toast.error(t("zipRejected"), {
+                        description: t("zipRejectedDetail", { count: zipOversizedCount, limit }),
                     });
                 }
             }
 
             if (validFiles.length > 0) {
                 setDocuments(prev => [...prev, ...validFiles]);
-                toast.success(`${validFiles.length} file(s) added to upload queue`);
+                toast.success(t("added", { count: validFiles.length }));
                 setErrors(prev => {
                     const next = { ...prev };
                     delete next.files;
@@ -306,7 +298,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
             }
         },
-        [defaultDoc, isZipFile]
+        [defaultDoc, isZipFile, t, limit]
     );
 
     const handleFileSelect = useCallback(
@@ -404,13 +396,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
             const { files, usedEntryApi } = await collectDroppedFiles(e.dataTransfer);
             if (files.length === 0) {
                 if (usedEntryApi) {
-                    toast.error("No files found in dropped folder");
+                    toast.error(t("noFilesInFolder"));
                 }
                 return;
             }
             void validateAndAddFiles(files);
         },
-        [collectDroppedFiles, validateAndAddFiles]
+        [collectDroppedFiles, validateAndAddFiles, t]
     );
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -422,7 +414,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
     const removeDocument = (id: string) => {
         setDocuments(prev => prev.filter(d => d.id !== id));
-        toast.success("File removed from queue");
+        toast.success(t("removed"));
     };
 
     const updateDocument = (id: string, updates: Partial<DocumentFile>) => {
@@ -439,7 +431,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 storageMethod: batchSettings.storageMethod,
             }))
         );
-        toast.success("Settings applied to all documents");
+        toast.success(t("applied"));
     };
 
     useEffect(() => {
@@ -450,11 +442,15 @@ const UploadForm: React.FC<UploadFormProps> = ({
     }, []);
 
     const formatFileSize = (bytes: number) => {
-        if (bytes === 0) return "0 Bytes";
+        if (bytes === 0) return t("size.bytes", { size: format.number(0) });
         const k = 1024;
-        const sizes = ["Bytes", "KB", "MB"];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+        const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), 2);
+        const size = format.number(bytes / Math.pow(k, i), { maximumFractionDigits: 2 });
+        return i === 0
+            ? t("size.bytes", { size })
+            : i === 1
+              ? t("size.kb", { size })
+              : t("size.mb", { size });
     };
 
     const uploadSingleDocument = async (doc: DocumentFile) => {
@@ -468,11 +464,15 @@ const UploadForm: React.FC<UploadFormProps> = ({
         if (storageProvider === "s3") {
             updateDocument(doc.id, { progress: 15 });
 
-            const { objectKey, url } = await uploadToS3WithProgress(doc.file, pct => {
-                updateDocument(doc.id, {
-                    progress: 15 + Math.round(pct * 0.75),
-                });
-            });
+            const { objectKey, url } = await uploadToS3WithProgress(
+                doc.file,
+                pct => {
+                    updateDocument(doc.id, {
+                        progress: 15 + Math.round(pct * 0.75),
+                    });
+                },
+                t
+            );
 
             fileUrl = url;
             uploadedObjectKey = objectKey;
@@ -485,8 +485,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 const res = await uploadFiles("documentUploaderRestricted", {
                     files: [doc.file],
                 });
-                if (!res?.[0]?.url)
-                    throw new Error("UploadThing: Cloud upload failed — no URL returned");
+                if (!res?.[0]?.url) throw new Error(t("cloudNoUrl"));
                 fileUrl = res[0].url;
                 resolvedStorageType = "s3";
             } else {
@@ -499,7 +498,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
                 if (!res.ok) {
                     const err = (await res.json()) as { error?: string };
-                    throw new Error("Upload failed: " + (err.error ?? "unknown error"));
+                    throw new Error(t("localFailed", { error: err.error ?? t("unknownError") }));
                 }
                 const data = (await res.json()) as {
                     url: string;
@@ -544,7 +543,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         if (!response.ok) {
             const text = await response.text().catch(() => "");
             throw new Error(
-                `Document registration failed for ${doc.title} (HTTP ${response.status}) ${text}`
+                t("registrationFailed", { title: doc.title, status: response.status, body: text })
             );
         }
         updateDocument(doc.id, { status: "success", progress: 100 });
@@ -553,11 +552,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const validateBeforeUpload = () => {
         const newErrors: Record<string, string> = {};
         documents.forEach(doc => {
-            if (!doc.title.trim()) newErrors[`title-${doc.id}`] = "Title is required";
+            if (!doc.title.trim()) newErrors[`title-${doc.id}`] = t("titleRequired");
         });
         if (Object.keys(newErrors).length > 0) {
-            toast.error("Please fill in all required fields", {
-                description: "Check that each document has a title",
+            toast.error(t("requiredFields"), {
+                description: t("requiredFieldsDetail"),
             });
         }
         setErrors(newErrors);
@@ -578,7 +577,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 updateDocument(doc.id, {
                     status: "error",
                     progress: 0,
-                    error: err instanceof Error ? err.message : "Upload failed",
+                    error: err instanceof Error ? err.message : t("uploadFailed"),
                 });
             }
         }
@@ -595,8 +594,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
         const finalErrors = documents.filter(d => d.status === "error").length;
 
         if (finalErrors === 0) {
-            toast.success(`All documents uploaded successfully!`, {
-                description: "Your documents are now available in the library.",
+            toast.success(t("allUploaded"), {
+                description: t("allUploadedDetail"),
             });
             setTimeout(() => {
                 setDocuments([]);
@@ -607,11 +606,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 }
             }, 1500);
         } else if (finalSuccess > 0) {
-            toast.warning(`${finalSuccess} succeeded, ${finalErrors} failed`, {
-                description: "You can retry failed uploads or remove them.",
+            toast.warning(t("partial", { succeeded: finalSuccess, failed: finalErrors }), {
+                description: t("partialDetail"),
             });
         } else {
-            toast.error("Upload failed");
+            toast.error(t("uploadFailed"));
         }
     };
 
@@ -633,7 +632,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 updateDocument(doc.id, {
                     status: "error",
                     progress: 0,
-                    error: err instanceof Error ? err.message : "Upload failed",
+                    error: err instanceof Error ? err.message : t("uploadFailed"),
                 });
             }
         }
@@ -642,7 +641,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
         const stillFailed = documents.filter(d => d.status === "error").length;
         if (stillFailed === 0) {
-            toast.success("All uploads completed successfully!");
+            toast.success(t("retryDone"));
             setTimeout(() => {
                 setDocuments([]);
                 if (onCompleted) {
@@ -695,7 +694,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                         <AlertCircle size={16} style={{ flexShrink: 0, marginTop: 2 }} />
                         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                             <span style={{ fontSize: 13, fontWeight: 600 }}>
-                                UploadThing is not configured. Uploads will use Vercel Blob.
+                                {t("notConfigured")}
                             </span>
                             {/*
                 The deployment guide lives on the public site now. Opened in a
@@ -717,7 +716,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     textDecoration: "underline",
                                 }}
                             >
-                                Set up UploadThing <ExternalLink size={12} />
+                                {t("setUp")} <ExternalLink size={12} />
                             </a>
                         </div>
                     </div>
@@ -733,10 +732,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 letterSpacing: "-0.01em",
                             }}
                         >
-                            Add sources
+                            {t("heroTitle")}
                         </div>
                         <div style={{ fontSize: 13, color: "var(--ink-3)", marginTop: 4 }}>
-                            Upload files, connect a repo, paste text, or add a URL
+                            {t("heroSubtitle")}
                         </div>
                     </div>
                 )}
@@ -777,7 +776,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 letterSpacing: "-0.01em",
                             }}
                         >
-                            Drop files or click to upload
+                            {t("dropOrClick")}
                         </div>
                         <div
                             style={{
@@ -787,8 +786,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 maxWidth: 420,
                             }}
                         >
-                            PDF, DOCX, images, audio, video, or ZIP — up to{" "}
-                            {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file.
+                            {t("accepted", { limit })}
                         </div>
                         <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
                             <button
@@ -807,7 +805,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     cursor: "pointer",
                                 }}
                             >
-                                Choose files
+                                {t("chooseFiles")}
                             </button>
                             <button
                                 type="button"
@@ -826,7 +824,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     cursor: "pointer",
                                 }}
                             >
-                                Choose folder
+                                {t("chooseFolder")}
                             </button>
                         </div>
                     </div>
@@ -865,8 +863,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                         marginTop: 18,
                     }}
                 >
-                    Drag and drop files anywhere on this card — max{" "}
-                    {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
+                    {t("dragHint", { limit })}
                 </div>
 
                 {isDragging && (
@@ -891,7 +888,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                             }}
                         >
                             <Upload size={30} style={{ marginBottom: 8 }} />
-                            <div>Drop files here</div>
+                            <div>{t("dropHere")}</div>
                         </div>
                     </div>
                 )}
@@ -907,7 +904,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                     onUpdate={updateDocument}
                     onClearAll={() => {
                         setDocuments([]);
-                        toast.success("Queue cleared");
+                        toast.success(t("queueCleared"));
                     }}
                     onToggleExpand={id => setExpandedDocId(expandedDocId === id ? null : id)}
                     formatFileSize={formatFileSize}
@@ -942,10 +939,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 >
                     <div>
                         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                            Upload progress
+                            {t("progressTitle")}
                         </div>
                         <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2 }}>
-                            {successCount} completed, {errorCount} failed, {pendingCount} pending
+                            {t("progressSummary", {
+                                succeeded: successCount,
+                                failed: errorCount,
+                                pending: pendingCount,
+                            })}
                         </div>
                     </div>
                     {errorCount > 0 && !isSubmitting && (
@@ -962,7 +963,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 cursor: "pointer",
                             }}
                         >
-                            Retry failed
+                            {t("retryFailed")}
                         </button>
                     )}
                 </div>
@@ -998,12 +999,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
                         {isSubmitting ? (
                             <>
                                 <Loader2 size={14} className="animate-spin" />
-                                Uploading…
+                                {t("uploading")}
                             </>
                         ) : (
-                            `Upload ${pendingCount} ${
-                                pendingCount === 1 ? "document" : "documents"
-                            }`
+                            t("submit", { count: pendingCount })
                         )}
                     </button>
                 </div>

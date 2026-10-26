@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, ChevronDown, MoreHorizontal, RotateCcw, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -16,7 +17,7 @@ import { cn } from "~/lib/utils";
 
 import type { TopicDto } from "../api";
 import { canCommitInOneClick } from "../_lib/actions";
-import { fmtDate } from "../_lib/format";
+import { useVantageFormat } from "../_lib/format";
 import { originWords, readyToCommit, topicReason, topicSources } from "../_lib/suggestions";
 import { BasisTag, EvidenceChips, StatusWord } from "./Primitives";
 import { SuggestionCard, SuggestionMark } from "./Suggestion";
@@ -31,18 +32,14 @@ import { SuggestionCard, SuggestionMark } from "./Suggestion";
  * are one click away in each.
  */
 
-const ORIGIN_SENTENCE: Record<TopicDto["origin"], string> = {
-    ai: "Drafted by the AI from the sources above",
-    rules: "Spotted by Vantage's rules in your records",
-    founder: "Written by you",
-};
-
 export function TopicDetails({ topic }: { topic: TopicDto }) {
+    const t = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     return (
         <div className="flex flex-col gap-3.5">
-            <Part label="What happened" basis="observed">
+            <Part label={t("whatHappened")} basis="observed">
                 {topic.facts.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">No facts recorded.</p>
+                    <p className="text-ink-3 text-[13px]">{t("noFacts")}</p>
                 ) : (
                     <ul className="flex flex-col gap-1.5">
                         {topic.facts.map((f, i) => (
@@ -58,7 +55,7 @@ export function TopicDetails({ topic }: { topic: TopicDto }) {
                 )}
             </Part>
             {topic.conflicts.length > 0 && (
-                <Part label="Conflicting evidence" basis="conflict">
+                <Part label={t("conflicting")} basis="conflict">
                     <ul className="flex flex-col gap-1.5">
                         {topic.conflicts.map((c, i) => (
                             <li key={i} className="text-ink flex flex-col gap-1 text-[13px]">
@@ -70,48 +67,50 @@ export function TopicDetails({ topic }: { topic: TopicDto }) {
                 </Part>
             )}
             {topic.whyItMatters && (
-                <Part label="Why it merits discussion" basis="interpretation">
+                <Part label={t("whyDiscuss")} basis="interpretation">
                     <p className="text-ink-2 max-w-[70ch] text-[13px] leading-[1.45]">
                         {topic.whyItMatters}
                     </p>
                 </Part>
             )}
-            <Part label="The decision">
+            <Part label={t("decision")}>
                 <p className="text-ink max-w-[70ch] text-[13px] font-medium leading-[1.45]">
                     {topic.decisionQuestion || (
-                        <span className="text-ink-3 font-normal">
-                            No decision phrased yet — edit the topic.
-                        </span>
+                        <span className="text-ink-3 font-normal">{t("noDecision")}</span>
                     )}
                 </p>
             </Part>
             {(topic.proposedNextStep !== "" ||
                 topic.proposedOwner !== null ||
                 topic.proposedDue !== null) && (
-                <Part label="Proposed next step" basis="suggestion">
+                <Part label={t("proposedNextStep")} basis="suggestion">
                     <p className="text-ink-2 max-w-[70ch] text-[13px] leading-[1.45]">
                         {topic.proposedNextStep}
                     </p>
                     <div className="text-ink-3 mt-1 flex flex-wrap gap-x-3 text-[12px]">
-                        <span>Owner: {topic.proposedOwner ?? <em>unassigned</em>}</span>
                         <span>
-                            Due: {topic.proposedDue ? fmtDate(topic.proposedDue) : <em>not set</em>}
+                            {topic.proposedOwner !== null
+                                ? t("owner", { owner: topic.proposedOwner })
+                                : t.rich("ownerUnassigned", { em: chunks => <em>{chunks}</em> })}
+                        </span>
+                        <span>
+                            {topic.proposedDue
+                                ? t("due", { date: fmt.date(topic.proposedDue) })
+                                : t.rich("dueNotSet", { em: chunks => <em>{chunks}</em> })}
                         </span>
                     </div>
                 </Part>
             )}
             {topic.helpRequested && (
-                <Part label="Help requested">
+                <Part label={t("helpRequested")}>
                     <p className="text-ink-2 max-w-[70ch] text-[13px]">{topic.helpRequested}</p>
                     {!topic.shared && (
-                        <p className="text-ink-3 mt-1 text-[11.5px]">
-                            Share the topic for the program to see this.
-                        </p>
+                        <p className="text-ink-3 mt-1 text-[11.5px]">{t("shareForHelp")}</p>
                     )}
                 </Part>
             )}
             {topic.unknowns.length > 0 && (
-                <Part label="Unknown" basis="unknown">
+                <Part label={t("unknown")} basis="unknown">
                     <ul className="text-ink-2 list-disc pl-4 text-[13px]">
                         {topic.unknowns.map((u, i) => (
                             <li key={i}>{u}</li>
@@ -120,10 +119,10 @@ export function TopicDetails({ topic }: { topic: TopicDto }) {
                 </Part>
             )}
             {topic.origin !== "founder" && (
-                <Part label="Why Vantage suggested it">
+                <Part label={t("whyVantage")}>
                     <p className="text-ink-3 max-w-[70ch] text-[12.5px] leading-[1.45]">
                         {topic.rationale ? `${topic.rationale} ` : ""}
-                        {ORIGIN_SENTENCE[topic.origin]}.
+                        {t(`originSentence.${topic.origin}`)}
                     </p>
                 </Part>
             )}
@@ -164,6 +163,8 @@ interface TopicMenuActions {
 
 /** Everything else a topic can do, behind ⋯ — the card's face stays two buttons. */
 function TopicMenu({ topic, busy, ...a }: TopicMenuActions & { topic: TopicDto; busy: boolean }) {
+    const t = useTranslations("vantage.topicCard");
+    const tc = useTranslations("common");
     // Not modal: its items open dialogs, and a modal menu that hands off to a
     // dialog leaves the page unclickable once the dialog closes.
     return (
@@ -173,42 +174,44 @@ function TopicMenu({ topic, busy, ...a }: TopicMenuActions & { topic: TopicDto; 
                     variant="ghost"
                     size="icon"
                     className="size-7"
-                    aria-label={`More for ${topic.title}`}
+                    aria-label={t("moreFor", { title: topic.title })}
                     disabled={busy}
                 >
                     <MoreHorizontal className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                {a.onEdit && <DropdownMenuItem onSelect={a.onEdit}>Edit</DropdownMenuItem>}
+                {a.onEdit && (
+                    <DropdownMenuItem onSelect={a.onEdit}>{tc("actions.edit")}</DropdownMenuItem>
+                )}
                 {a.onDecide && (
                     <DropdownMenuItem onSelect={a.onDecide}>
-                        {topic.decision ? "Change the decision" : "Record a decision"}
+                        {topic.decision ? t("changeDecision") : t("recordDecision")}
                     </DropdownMenuItem>
                 )}
                 {a.onMove && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onSelect={() => a.onMove?.(-1)} disabled={a.first}>
-                            Move up
+                            {t("moveUp")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => a.onMove?.(1)} disabled={a.last}>
-                            Move down
+                            {t("moveDown")}
                         </DropdownMenuItem>
                     </>
                 )}
                 {(a.onShare ?? a.onIgnore ?? a.onDelete) && <DropdownMenuSeparator />}
                 {a.onShare && (
                     <DropdownMenuItem onSelect={() => a.onShare?.(!topic.shared)}>
-                        {topic.shared ? "Make private" : "Share with the program"}
+                        {topic.shared ? t("makePrivate") : t("share")}
                     </DropdownMenuItem>
                 )}
                 {a.onIgnore && (
-                    <DropdownMenuItem onSelect={a.onIgnore}>Take off the agenda</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={a.onIgnore}>{t("takeOff")}</DropdownMenuItem>
                 )}
                 {a.onDelete && (
                     <DropdownMenuItem className="text-danger" onSelect={a.onDelete}>
-                        Delete
+                        {tc("actions.delete")}
                     </DropdownMenuItem>
                 )}
             </DropdownMenuContent>
@@ -220,7 +223,7 @@ function TopicMenu({ topic, busy, ...a }: TopicMenuActions & { topic: TopicDto; 
 export function TopicSuggestion({
     topic,
     busy = false,
-    kicker = "For the meeting",
+    kicker,
     onKeep,
     onIgnore,
     ...menu
@@ -231,13 +234,15 @@ export function TopicSuggestion({
     onKeep: () => void;
     onIgnore: () => void;
 }) {
+    const t = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     const { refs, unsupported } = topicSources(topic);
     const hasMenu = Boolean(menu.onEdit ?? menu.onDecide ?? menu.onShare ?? menu.onDelete);
     return (
         <SuggestionCard
             label={topic.title}
-            kicker={kicker}
-            meta={originWords(topic.origin)}
+            kicker={kicker ?? t("forMeeting")}
+            meta={originWords(fmt, topic.origin)}
             title={topic.title}
             reason={topicReason(topic)}
             sources={refs}
@@ -248,11 +253,11 @@ export function TopicSuggestion({
                 <>
                     <Button size="sm" onClick={onKeep} disabled={busy}>
                         <Check aria-hidden="true" />
-                        Add to agenda
+                        {t("addToAgenda")}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={onIgnore} disabled={busy}>
                         <X aria-hidden="true" />
-                        Ignore
+                        {t("ignore")}
                     </Button>
                 </>
             }
@@ -281,8 +286,11 @@ export function NextStepSuggestion({
     onIgnore?: () => void;
     className?: string;
 }) {
+    const t = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     const oneClick = canCommitInOneClick(topic);
     const theirs = topic.origin === "founder";
+    const owner = topic.proposedOwner ?? t("noOwner");
     return (
         <div
             className={cn(
@@ -292,28 +300,29 @@ export function NextStepSuggestion({
             )}
         >
             {theirs ? (
-                <span className="text-ink-3 text-[11.5px] font-medium">Your next step</span>
+                <span className="text-ink-3 text-[11.5px] font-medium">{t("yourNextStep")}</span>
             ) : (
-                <SuggestionMark>Suggested next step</SuggestionMark>
+                <SuggestionMark>{t("suggestedNextStep")}</SuggestionMark>
             )}
             <div className="text-ink text-[13px] leading-snug">{topic.proposedNextStep}</div>
             <div className="text-ink-3 text-[12px]">
-                {topic.proposedOwner ?? "No owner proposed"}
-                {topic.proposedDue ? ` · by ${fmtDate(topic.proposedDue)}` : ""}
+                {topic.proposedDue
+                    ? t("ownerBy", { owner, date: fmt.date(topic.proposedDue) })
+                    : owner}
             </div>
             <div className="flex flex-wrap items-center gap-2">
                 <Button size="sm" onClick={oneClick ? onCommit : onDecide} disabled={busy}>
                     <Check aria-hidden="true" />
-                    {oneClick ? "Commit" : "Commit…"}
+                    {oneClick ? t("commit") : t("commitAsk")}
                 </Button>
                 {onIgnore && !theirs && (
                     <Button size="sm" variant="ghost" onClick={onIgnore} disabled={busy}>
                         <X aria-hidden="true" />
-                        Ignore
+                        {t("ignore")}
                     </Button>
                 )}
                 <Button size="sm" variant="ghost" onClick={onDecide} disabled={busy}>
-                    Decide something else…
+                    {t("decideElse")}
                 </Button>
             </div>
         </div>
@@ -342,6 +351,8 @@ export function AgendaTopicRow({
     onIgnoreNextStep?: () => void;
     onShowNextStep?: () => void;
 }) {
+    const t = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     const [open, setOpen] = useState(false);
     const decided = Boolean(topic.decision);
     return (
@@ -364,11 +375,11 @@ export function AgendaTopicRow({
                         </div>
                         {decided ? (
                             <StatusWord tone="success" className="mt-0.5">
-                                Decided
+                                {t("decided")}
                             </StatusWord>
                         ) : (
                             <StatusWord tone="neutral" className="@max-sm:hidden mt-0.5">
-                                On the agenda
+                                {t("onAgenda")}
                             </StatusWord>
                         )}
                         {menu.onShare && (
@@ -377,9 +388,9 @@ export function AgendaTopicRow({
                                     checked={topic.shared}
                                     onCheckedChange={menu.onShare}
                                     disabled={busy}
-                                    aria-label={`Share ${topic.title}`}
+                                    aria-label={t("shareAria", { title: topic.title })}
                                 />
-                                shared
+                                {t("sharedSwitch")}
                             </label>
                         )}
                         <div className="-mr-1.5 -mt-0.5">
@@ -387,10 +398,11 @@ export function AgendaTopicRow({
                         </div>
                     </div>
                     {decided ? (
-                        <div className="border-success/40 bg-panel-2 rounded-md border-l-2 px-3 py-2">
+                        <div className="border-line bg-panel-2 rounded-md border px-3 py-2">
                             <div className="text-ink-3 text-[11.5px]">
-                                Decided {topic.decidedAt ? fmtDate(topic.decidedAt) : ""}
-                                {topic.commitmentId ? " · commitment opened" : ""}
+                                {t(topic.commitmentId ? "decidedOnOpened" : "decidedOn", {
+                                    date: topic.decidedAt ? fmt.date(topic.decidedAt) : "",
+                                })}
                             </div>
                             <p className="text-ink text-[13px]">{topic.decision}</p>
                         </div>
@@ -405,7 +417,7 @@ export function AgendaTopicRow({
                     ) : (
                         <div className="flex flex-wrap items-center gap-3">
                             <Button size="sm" variant="outline" onClick={onDecide} disabled={busy}>
-                                Record a decision
+                                {t("recordDecision")}
                             </Button>
                             {readyToCommit(topic) && onShowNextStep && (
                                 <button
@@ -413,7 +425,7 @@ export function AgendaTopicRow({
                                     onClick={onShowNextStep}
                                     className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm text-[12px] underline-offset-2 outline-none hover:underline focus-visible:ring-2"
                                 >
-                                    Show Vantage&apos;s next step
+                                    {t("showNextStep")}
                                 </button>
                             )}
                         </div>
@@ -424,7 +436,7 @@ export function AgendaTopicRow({
                         aria-expanded={open}
                         className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 inline-flex w-fit items-center gap-1 rounded-sm text-[12px] outline-none focus-visible:ring-2"
                     >
-                        {open ? "Hide the evidence" : "Evidence and reasoning"}
+                        {open ? t("hideEvidence") : t("evidenceReasoning")}
                         <ChevronDown
                             className={cn(
                                 "size-3.5 transition-transform motion-reduce:transition-none",
@@ -456,15 +468,17 @@ export function IgnoredTopicRow({
     onRestore: () => void;
     onDelete: () => void;
 }) {
+    const t = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     return (
         <div className="border-line-2 flex min-h-11 items-center gap-3 border-t px-4 py-2 first:border-t-0">
             <span className="text-ink-2 min-w-0 flex-1 truncate text-[13px]">{topic.title}</span>
             <span className="text-ink-3 @max-sm:hidden text-[11.5px]">
-                {originWords(topic.origin)}
+                {originWords(fmt, topic.origin)}
             </span>
             <Button size="sm" variant="outline" onClick={onRestore} disabled={busy}>
                 <RotateCcw aria-hidden="true" />
-                Add to agenda
+                {t("addToAgenda")}
             </Button>
             <Button
                 size="sm"
@@ -472,7 +486,7 @@ export function IgnoredTopicRow({
                 className="text-ink-3"
                 onClick={onDelete}
                 disabled={busy}
-                aria-label={`Delete ${topic.title}`}
+                aria-label={t("deleteAria", { title: topic.title })}
             >
                 <X aria-hidden="true" />
             </Button>

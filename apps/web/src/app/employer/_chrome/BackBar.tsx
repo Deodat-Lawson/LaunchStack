@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { BackButton } from "./BackButton";
 import { useBreadcrumbs } from "./BreadcrumbContext";
@@ -31,6 +32,7 @@ import styles from "./BackBar.module.css";
 // On a page whose sidebar shows `RailBackLink`, this bar is hidden by CSS
 // (`DriftShell.module.css`) and the sidebar's header carries the way back.
 export function BackBar() {
+    const t = useTranslations("chrome.back");
     const pathname = usePathname();
     const { crumbs } = useBreadcrumbs();
     const target = backTargetFor(pathname ?? "");
@@ -44,7 +46,7 @@ export function BackBar() {
         <div className={styles.bar} data-back-bar data-testid="back-bar">
             <BackButton to={target} data-testid="back-bar-link" />
             {trail.length > 0 && (
-                <nav aria-label="Breadcrumb" className={styles.trail}>
+                <nav aria-label={t("breadcrumb")} className={styles.trail}>
                     {trail.map((crumb, i) => (
                         <span key={`${crumb}-${String(i)}`} className={styles.crumb}>
                             <span aria-hidden className={styles.sep}>

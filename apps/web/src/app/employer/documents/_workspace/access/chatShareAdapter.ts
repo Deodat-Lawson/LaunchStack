@@ -39,7 +39,8 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
         headers: init?.body ? { "Content-Type": "application/json" } : undefined,
     });
     const body = (await res.json().catch(() => ({}))) as { error?: string } & T;
-    if (!res.ok) throw new Error(body.error ?? `Request failed (${res.status})`);
+    // No server sentence: an empty message lets the dialog say it in the reader's words.
+    if (!res.ok) throw new Error(body.error ?? "");
     return body;
 }
 
@@ -52,14 +53,14 @@ export const chatShareAdapter: ShareAdapter = {
         return {
             general: res.general === "workspace" ? "open" : "restricted",
             grants: res.grants.map(
-                (g): ShareGrant => ({ ...g, level: "view", authUserId: g.authUserId })
+                (g): ShareGrant => ({
+                    ...g,
+                    level: "view",
+                    authUserId: g.authUserId,
+                })
             ),
             canManage: res.canManage,
-            open: {
-                kind: "workspace",
-                label: `Everyone at ${res.workspaceName}`,
-                hint: `Anyone in ${res.workspaceName} can read it.`,
-            },
+            open: { kind: "workspace", workspaceName: res.workspaceName, verb: "read" },
             levels: ["view"],
             owner: res.owner,
             audienceCount: res.audienceCount,

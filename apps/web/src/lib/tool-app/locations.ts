@@ -88,7 +88,8 @@ const LEGACY_TOOL_ROUTES: readonly {
 /**
  * Feature ids that are now a place inside a tool: `?feature=brand` and the
  * palette's Brand row open Growth on Brand. The Workspace tab's palette rows
- * (People and access, Company profile, Agents & nodes) are screens of it,
+ * (People and access, Company profile, Agents & nodes, Bring your own keys)
+ * are screens of it,
  * and so is `?feature=metadata`, which was the company profile's own pane.
  */
 export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
@@ -101,6 +102,7 @@ export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
     profile: { toolId: "workspace", at: "/company" },
     metadata: { toolId: "workspace", at: "/company" },
     "agents-nodes": { toolId: "workspace", at: "/agents" },
+    byok: { toolId: "workspace", at: "/byok" },
 };
 
 /**

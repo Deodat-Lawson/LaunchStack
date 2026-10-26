@@ -8,6 +8,22 @@
 /** Stance toward the subject of the run: -2 strongly against … +2 strongly for. */
 export type Stance = -2 | -1 | 0 | 1 | 2;
 
+/** What a persona has to spend: nothing set aside, little, or a budget for the right thing. */
+export type Budget = "none" | "tight" | "funded";
+export const BUDGETS: readonly Budget[] = ["none", "tight", "funded"];
+
+/** Their part in a purchase: they decide, they sway whoever decides, or they only use it. */
+export type BuyingRole = "decides" | "influences" | "uses";
+export const BUYING_ROLES: readonly BuyingRole[] = ["decides", "influences", "uses"];
+
+/** What moving off their current tool would cost them in time, data and habits. */
+export type SwitchingCost = "low" | "medium" | "high";
+export const SWITCHING_COSTS: readonly SwitchingCost[] = ["low", "medium", "high"];
+
+/** Whether they would spend money on what is on offer, as things stand. */
+export type WouldPay = "yes" | "maybe" | "no";
+export const WOULD_PAY: readonly WouldPay[] = ["yes", "maybe", "no"];
+
 /** One piece of evidence a persona may be grounded in. `ref` is opaque to this package. */
 export interface EvidenceItem {
     /** Stable short id the model cites, e.g. "E3". */
@@ -41,6 +57,15 @@ export interface Persona {
     grounding: "grounded" | "invented";
     /** Evidence ids this persona is built from. Empty for invented personas. */
     sourceIds: string[];
+    // The wallet. Optional because worlds cast before it was asked for don't
+    // have one; `parseCast` always sets all five.
+    /** What they use for this today: a product named in the evidence, a spreadsheet, or "nothing". */
+    currentSolution?: string;
+    budget?: Budget;
+    buyingRole?: BuyingRole;
+    switchingCost?: SwitchingCost;
+    /** Their first doubt about the subject, in their own words. */
+    objection?: string;
 }
 
 /** Accounts that post but are not simulated: the scenario narrator, the brand under test. */
@@ -98,6 +123,10 @@ export interface AgentState {
     memory: MemoryItem[];
     /** The agent's last private reasoning, shown in interviews and the run view. */
     lastThought?: string;
+    /** Whether they would pay, as of their last turn. */
+    wouldPay?: WouldPay;
+    /** What still holds them back, as of their last turn. */
+    objection?: string;
     /** Rounds this agent was activated in. */
     activeRounds: number[];
 }
@@ -117,7 +146,12 @@ export type ActionType = Action["type"];
 /** What the model decided for one agent in one round. */
 export interface AgentDecision {
     thought: string;
+    /** The stance the model asked for; the round's stance guard decides what is applied. */
     stance: Stance;
+    /** The feed post that moved them toward the subject, if they named one that was in their feed. */
+    convincedBy?: string;
+    wouldPay?: WouldPay;
+    objection?: string;
     actions: Action[];
 }
 
@@ -145,6 +179,8 @@ export interface RoundSummary {
     meanStance: number;
     /** Count of agents at each stance after the round, index 0 = -2 … 4 = +2. */
     stanceCounts: [number, number, number, number, number];
+    /** Agents whose last answer was yes, maybe and no; absent in worlds from before it was asked. */
+    wouldPayCounts?: [number, number, number];
     usage: Usage;
 }
 
@@ -173,6 +209,10 @@ export interface SimulationConfig {
     maxActionsPerRound: number;
     /** Memory items kept per agent. */
     memorySize: number;
+    /** Most a stance may move in one round. */
+    maxStanceStep: number;
+    /** A move toward the subject applies only when the agent names the feed post that caused it. */
+    warmingNeedsReason: boolean;
 }
 
 export const DEFAULT_CONFIG: SimulationConfig = {
@@ -185,6 +225,8 @@ export const DEFAULT_CONFIG: SimulationConfig = {
     minutesPerRound: 20,
     maxActionsPerRound: 3,
     memorySize: 12,
+    maxStanceStep: 1,
+    warmingNeedsReason: true,
 };
 
 export interface World {
@@ -193,6 +235,8 @@ export interface World {
     round: number;
     /** The question or subject every stance is measured against. */
     subject: string;
+    /** The subject as people read it on their turns, when it is too long to repeat (see `turnSituation`). */
+    situation?: string;
     /** Shared context every agent reads. */
     brief: string;
     config: SimulationConfig;

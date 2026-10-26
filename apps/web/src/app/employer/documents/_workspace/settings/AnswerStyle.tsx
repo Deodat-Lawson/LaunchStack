@@ -14,22 +14,28 @@
 
 import React, { type ReactNode } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useOptionalToolNav } from "~/components/tool-app/nav";
 import type { SettingDefinition } from "~/lib/settings/registry";
 import { SETTINGS_PATH, workspaceHref } from "~/lib/settings/surfaces";
-import { settingAtScope, useSetting } from "~/lib/settings/useSettings";
+import {
+    settingAtScope,
+    useSetting,
+    useSettingCopy,
+    type SettingCopy,
+} from "~/lib/settings/useSettings";
 
 import { SettingRow } from "./SettingRow";
 
 const KEY = "chat.responseStyle";
 
-function styleLabel(definition: SettingDefinition, value: unknown): string {
+function styleLabel(definition: SettingDefinition, copy: SettingCopy, value: unknown): string {
     const control = definition.control;
     const option =
         control.kind === "select" ? control.options.find(o => o.value === value) : undefined;
-    return option?.label ?? String(value);
+    return option ? copy.option(option).label : String(value);
 }
 
 /**
@@ -58,24 +64,21 @@ function Note({ children }: { children: ReactNode }) {
 
 /** Settings › Appearance: this person's own style. Everyone may set it. */
 export function PersonalAnswerStyleRow() {
+    const t = useTranslations("settings.answerStyle");
     const { definition, resolved } = useSetting(KEY);
+    const copy = useSettingCopy(definition);
     const workspace = settingAtScope(definition, resolved, "workspace");
-    const label = styleLabel(definition, workspace.value);
+    const label = styleLabel(definition, copy, workspace.value);
     const ownChoice = resolved?.stored.member !== undefined;
 
     let note: ReactNode = null;
     if (resolved?.canEdit.workspace) {
-        note = (
-            <>
-                Everyone who hasn&apos;t picked their own gets the workspace default, {label}.{" "}
-                <OtherTabLink href={workspaceHref("agents")}>
-                    Change it under Workspace › Agents
-                </OtherTabLink>
-                .
-            </>
-        );
+        note = t.rich("personalNote", {
+            label,
+            link: chunks => <OtherTabLink href={workspaceHref("agents")}>{chunks}</OtherTabLink>,
+        });
     } else if (ownChoice) {
-        note = <>The workspace default is {label}.</>;
+        note = t("workspaceDefault", { label });
     }
 
     return (
@@ -87,18 +90,21 @@ export function PersonalAnswerStyleRow() {
 
 /** Workspace › Agents: what everyone gets until they pick their own. */
 export function WorkspaceAnswerStyleRow() {
+    const t = useTranslations("settings.answerStyle");
     const { definition, resolved } = useSetting(KEY);
+    const copy = useSettingCopy(definition);
     const own = resolved?.stored.member;
 
     return (
         <SettingRow settingKey={KEY} scope="workspace">
             {own !== undefined && (
                 <Note>
-                    Your own choice, {styleLabel(definition, own)}, still applies to your chats.{" "}
-                    <OtherTabLink href={`${SETTINGS_PATH}#${KEY}`}>
-                        Change it under Settings › Appearance
-                    </OtherTabLink>
-                    .
+                    {t.rich("ownChoice", {
+                        label: styleLabel(definition, copy, own),
+                        link: chunks => (
+                            <OtherTabLink href={`${SETTINGS_PATH}#${KEY}`}>{chunks}</OtherTabLink>
+                        ),
+                    })}
                 </Note>
             )}
         </SettingRow>

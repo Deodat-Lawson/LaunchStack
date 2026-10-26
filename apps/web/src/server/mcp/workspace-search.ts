@@ -13,20 +13,21 @@
  * Results are grouped by document: one hit per document, in the order its
  * best passage ranked, with up to three snippets.
  */
-import { and, eq, like, or, type SQL } from "drizzle-orm";
+import { and } from "drizzle-orm";
 
 import { getCompanyEmbeddingConfig, resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { document } from "@launchstack/store/schema";
 import type { EmbeddingsProvider, SearchResult } from "@launchstack/retrieval/search-types";
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { normalizeFolderPath } from "~/lib/folders/path";
 import { getEmbeddings } from "~/lib/models";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
-import { descendantPattern } from "~/server/folders";
 import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import { gateChunksByScope } from "~/server/rag/gate";
+import { documentInFolder } from "~/server/workspace-sources";
+
+export { documentInFolder };
 
 /** Leg outputs that are not a passage of a document. */
 const NON_DOCUMENT_SOURCES = new Set(["note", "company_fact"]);
@@ -58,12 +59,6 @@ export interface WorkspaceSearchDeps {
     embeddingsFor?: (
         companyId: number
     ) => Promise<{ indexKey?: string; embeddings?: EmbeddingsProvider }>;
-}
-
-/** `document.category` is the folder or anything beneath it. */
-export function documentInFolder(folder: string): SQL {
-    const path = normalizeFolderPath(folder);
-    return or(eq(document.category, path), like(document.category, descendantPattern(path)))!;
 }
 
 async function companyEmbeddings(
@@ -136,11 +131,26 @@ export function snippetFor(content: string, query: string, max = SNIPPET_CHARS):
     return `${start > 0 ? "…" : ""}${text.slice(start, end).trim()}${end < text.length ? "…" : ""}`;
 }
 
-export async function searchWorkspace(
+/** One passage of a readable document, ranked for a query. */
+export interface WorkspacePassage {
+    documentId: number;
+    title: string;
+    folder: string;
+    /** The retrieved chunk as the ensemble returned it (text, page, ids). */
+    chunk: SearchResult;
+}
+
+/**
+ * The passages of readable documents that best match a query, best first:
+ * the ensemble over the person's readable ids (optionally one folder), gated
+ * by their scope, with notes, company facts and the lexical leg's zero-score
+ * padding dropped. `topK` is how many passages to ask the ensemble for.
+ */
+export async function findWorkspacePassages(
     ctx: WorkspaceContext,
-    input: WorkspaceSearchInput,
+    input: { query: string; topK: number; folder?: string },
     deps: WorkspaceSearchDeps = {}
-): Promise<WorkspaceSearchHit[]> {
+): Promise<WorkspacePassage[]> {
     const scope = await ctx.documentScope();
     const companyId = Number(ctx.companyId);
 
@@ -157,14 +167,11 @@ export async function searchWorkspace(
     const byId = new Map(readable.map(row => [Number(row.id), row]));
 
     const { indexKey, embeddings } = await (deps.embeddingsFor ?? companyEmbeddings)(companyId);
-    // Several passages can come from one document, so ask for more passages
-    // than documents; the ensemble merges sibling chunks of a section first.
-    const topK = Math.min(50, Math.max(12, input.limit * 3));
     const found = await multiDocEnsembleSearch(
         input.query,
         {
             weights: [0.4, 0.6],
-            topK,
+            topK: input.topK,
             documentIds: [...byId.keys()],
             companyId,
             embeddingIndexKey: indexKey,
@@ -179,7 +186,7 @@ export async function searchWorkspace(
     });
 
     const terms = queryTerms(input.query);
-    const hits = new Map<number, WorkspaceSearchHit>();
+    const passages: WorkspacePassage[] = [];
     for (const chunk of gated) {
         const source = chunkSource(chunk);
         if (source !== undefined && NON_DOCUMENT_SOURCES.has(source)) continue;
@@ -187,13 +194,34 @@ export async function searchWorkspace(
         const id = numericDocumentId(chunk);
         const row = id === null ? undefined : byId.get(id);
         if (id === null || !row) continue;
+        passages.push({ documentId: id, title: row.title, folder: row.category, chunk });
+    }
+    return passages;
+}
+
+export async function searchWorkspace(
+    ctx: WorkspaceContext,
+    input: WorkspaceSearchInput,
+    deps: WorkspaceSearchDeps = {}
+): Promise<WorkspaceSearchHit[]> {
+    // Several passages can come from one document, so ask for more passages
+    // than documents; the ensemble merges sibling chunks of a section first.
+    const topK = Math.min(50, Math.max(12, input.limit * 3));
+    const passages = await findWorkspacePassages(
+        ctx,
+        { query: input.query, topK, folder: input.folder },
+        deps
+    );
+
+    const hits = new Map<number, WorkspaceSearchHit>();
+    for (const { documentId: id, title, folder, chunk } of passages) {
         const snippet = snippetFor(chunk.pageContent ?? "", input.query);
         if (snippet === "") continue;
 
         let hit = hits.get(id);
         if (!hit) {
             if (hits.size >= input.limit) continue;
-            hit = { documentId: id, title: row.title, folder: row.category, snippets: [] };
+            hit = { documentId: id, title, folder, snippets: [] };
             const page = chunk.metadata?.page;
             if (typeof page === "number" && Number.isInteger(page) && page > 0) hit.page = page;
             hits.set(id, hit);

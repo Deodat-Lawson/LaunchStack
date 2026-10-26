@@ -1,3 +1,6 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
 import {
     buildAnswerMenuItems,
     buildChatPaneMenuItems,
@@ -6,6 +9,12 @@ import {
     buildQuestionMenuItems,
 } from "../chatContextMenu";
 import type { ThreadMessage, WorkspaceSource } from "../types";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "chat.contextMenu",
+});
 
 const source: WorkspaceSource = {
     id: "d1",
@@ -31,7 +40,7 @@ describe("chat menu builders", () => {
         const msg: ThreadMessage = { role: "assistant", text: "Cap is **12 months**." };
         const onCopy = jest.fn();
         const onQuote = jest.fn();
-        const items = buildAnswerMenuItems(msg, { onCopy, onQuote });
+        const items = buildAnswerMenuItems(msg, { onCopy, onQuote }, t);
         pick(items, "copy");
         expect(onCopy).toHaveBeenLastCalledWith("Cap is 12 months.");
         pick(items, "copy-markdown");
@@ -48,7 +57,8 @@ describe("chat menu builders", () => {
                 onCopy: jest.fn(),
                 onQuote: jest.fn(),
                 onEdit,
-            }
+            },
+            t
         );
         pick(items, "edit");
         expect(onEdit).toHaveBeenCalledWith("Cap?");
@@ -59,12 +69,17 @@ describe("chat menu builders", () => {
         const onToggleContext = jest.fn();
         const onOpen = jest.fn();
         const cite = { sourceId: "d1", snippet: "capped at twelve months", page: 4 };
-        const items = buildCitationMenuItems(cite, source, {
-            onOpen,
-            onCopy,
-            inContext: false,
-            onToggleContext,
-        });
+        const items = buildCitationMenuItems(
+            cite,
+            source,
+            {
+                onOpen,
+                onCopy,
+                inContext: false,
+                onToggleContext,
+            },
+            t
+        );
         pick(items, "open");
         expect(onOpen).toHaveBeenCalledWith(cite);
         pick(items, "copy-passage");
@@ -74,21 +89,31 @@ describe("chat menu builders", () => {
         expect(pick(items, "context").label).toBe("Add source to context");
         expect(onToggleContext).toHaveBeenCalledWith(source);
 
-        const pinned = buildCitationMenuItems(cite, source, {
-            onCopy,
-            inContext: true,
-            onToggleContext,
-        });
+        const pinned = buildCitationMenuItems(
+            cite,
+            source,
+            {
+                onCopy,
+                inContext: true,
+                onToggleContext,
+            },
+            t
+        );
         expect(pinned.find(i => i.id === "context")).toMatchObject({
             label: "Leave out of the next answer",
         });
         expect(pinned.find(i => i.id === "open")).toBeUndefined();
 
-        const empty = buildCitationMenuItems({ sourceId: "d1", snippet: "  " }, source, {
-            onCopy,
-            inContext: false,
-            onToggleContext,
-        });
+        const empty = buildCitationMenuItems(
+            { sourceId: "d1", snippet: "  " },
+            source,
+            {
+                onCopy,
+                inContext: false,
+                onToggleContext,
+            },
+            t
+        );
         expect(empty.find(i => i.id === "copy-passage")).toMatchObject({ disabled: true });
     });
 
@@ -107,7 +132,8 @@ describe("chat menu builders", () => {
                 uploading: false,
                 disabled: false,
             },
-            handlers
+            handlers,
+            t
         );
         expect(items.find(i => i.id === "cut")).toMatchObject({ disabled: true });
         expect(items.find(i => i.id === "web")).toBeUndefined();
@@ -117,14 +143,17 @@ describe("chat menu builders", () => {
     });
 
     it("disables pane verbs that have nothing to act on", () => {
-        const items = buildChatPaneMenuItems({
-            isEmpty: true,
-            hasContext: false,
-            onNewChat: jest.fn(),
-            onClearContext: jest.fn(),
-            onExportMarkdown: jest.fn(),
-            onOpenPalette: jest.fn(),
-        });
+        const items = buildChatPaneMenuItems(
+            {
+                isEmpty: true,
+                hasContext: false,
+                onNewChat: jest.fn(),
+                onClearContext: jest.fn(),
+                onExportMarkdown: jest.fn(),
+                onOpenPalette: jest.fn(),
+            },
+            t
+        );
         expect(items.find(i => i.id === "new-chat")).toMatchObject({ disabled: true });
         expect(items.find(i => i.id === "clear-context")).toMatchObject({ disabled: true });
         expect(items.find(i => i.id === "export-markdown")).toMatchObject({ disabled: true });

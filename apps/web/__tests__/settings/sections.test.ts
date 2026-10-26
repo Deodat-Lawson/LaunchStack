@@ -60,11 +60,10 @@ describe("SETTINGS_SECTION_ACCESS", () => {
                 "general",
                 "people",
                 "company",
-                "documents",
                 "privacy",
                 "labs",
             ]);
-            expect(readOnlyFor(role)).toEqual(["general", "company", "documents", "labs"]);
+            expect(readOnlyFor(role)).toEqual(["general", "company", "labs"]);
         }
     });
 
@@ -75,7 +74,6 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             "shortcuts",
             "general",
             "company",
-            "documents",
             "privacy",
             "labs",
         ]);
@@ -91,6 +89,7 @@ describe("SETTINGS_SECTION_ACCESS", () => {
         // The API gates behind each section's mount-time GET. A section is
         // never shown to someone its data would answer 403.
         const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
+            byok: "settings.manage", // GET /api/settings/models/workspace
             models: "settings.manage", // GET /api/settings/models
             usage: "analytics.view", // GET /api/settings/usage
             archive: "settings.manage", // GET /api/settings/archive
@@ -145,11 +144,16 @@ describe("SETTINGS_SECTION_ACCESS", () => {
 
 describe("settingsSectionFromHash", () => {
     it("lands old deep links and registry keys where the hub did", () => {
-        // Processing is gone from the UI; its links land on Models, where a
-        // workspace brings its own model.
-        expect(settingsSectionFromHash("#byok")).toBe("models");
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
+        // The embedding key that lived here is gone; its old links still land.
+        expect(settingsSectionFromHash("#embedding")).toBe("byok");
+        expect(settingsSectionFromHash("#openrouter")).toBe("byok");
         expect(settingsSectionFromHash("#profile")).toBe("company");
-        expect(settingsSectionFromHash("#keys")).toBe("models");
+        expect(settingsSectionFromHash("#keys")).toBe("byok");
+        expect(settingsSectionFromHash("#models")).toBe("models");
+        // Document defaults is gone, with no section of its own to land on.
+        expect(settingsSectionFromHash("#documents")).toBeNull();
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         // Hashes arrive lower-cased; the personal row is the one everyone reaches.
         expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");

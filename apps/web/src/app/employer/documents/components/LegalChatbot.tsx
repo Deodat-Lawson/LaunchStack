@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import {
     ArrowLeft,
     Send,
@@ -80,18 +81,19 @@ function carryOverFields(
 
 // ─── Source tag for the field summary table ────────────────────────────────────
 
+/** Where a field's value came from: `generator.chatbot.source.<source>`. */
 function sourceTag(
     key: string,
     hasValue: boolean,
     companyDefaults: Record<string, string>,
     isCurrent: boolean
-): { txt: string; ai?: boolean } {
-    if (!hasValue) return { txt: isCurrent ? "Asking" : "Awaiting" };
-    if (companyDefaults[key]) return { txt: "Company" };
+): { source: "asking" | "awaiting" | "company" | "ai" | "you"; ai?: boolean } {
+    if (!hasValue) return { source: isCurrent ? "asking" : "awaiting" };
+    if (companyDefaults[key]) return { source: "company" };
     if (key === "effective_date" || key === "signature_date" || key.endsWith("_date")) {
-        return { txt: "AI Assist", ai: true };
+        return { source: "ai", ai: true };
     }
-    return { txt: "You" };
+    return { source: "you" };
 }
 
 // ─── Confirm / No-match / Ready cards (compact) ────────────────────────────────
@@ -105,6 +107,7 @@ function TemplateConfirmCard({
     onConfirm: () => void;
     onPickDifferent: () => void;
 }) {
+    const t = useTranslations("generator.chatbot.confirm");
     return (
         <div className={s.banner} style={{ padding: 14 }}>
             <div className="mb-2 flex items-start gap-3">
@@ -136,16 +139,16 @@ function TemplateConfirmCard({
                     marginBottom: 10,
                 }}
             >
-                <span>{template.fieldCount} fields</span>
-                <span>{template.requiredFieldCount} required</span>
+                <span>{t("fields", { count: template.fieldCount })}</span>
+                <span>{t("required", { count: template.requiredFieldCount })}</span>
             </div>
             <div className="flex flex-wrap gap-2">
                 <button className={`${s.btn} ${s.btnAccent} ${s.btnSm}`} onClick={onConfirm}>
                     <CheckCircle2 className="h-4 w-4" />
-                    Use this template
+                    {t("useTemplate")}
                 </button>
                 <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} onClick={onPickDifferent}>
-                    Pick another
+                    {t("pickAnother")}
                 </button>
             </div>
         </div>
@@ -153,12 +156,13 @@ function TemplateConfirmCard({
 }
 
 function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
+    const t = useTranslations("generator.chatbot.noMatch");
     return (
         <div className={`${s.banner} ${s.bannerWarn}`} style={{ padding: 14 }}>
             <div className="mb-2 flex items-center gap-2">
                 <AlertCircle className="h-4 w-4" style={{ color: "var(--warn)" }} />
                 <h4 style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                    No exact match
+                    {t("title")}
                 </h4>
             </div>
             <p
@@ -169,12 +173,11 @@ function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
                     lineHeight: 1.55,
                 }}
             >
-                None of our templates are a perfect fit. Try describing differently, or browse the
-                library.
+                {t("body")}
             </p>
             <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} onClick={onStartOver}>
                 <RotateCcw className="h-3 w-3" />
-                Start over
+                {t("startOver")}
             </button>
         </div>
     );
@@ -189,13 +192,14 @@ function GenerateActionCard({
     extractedFields: Record<string, string>;
     onContinue: () => void;
 }) {
+    const t = useTranslations("generator.chatbot.ready");
     const fieldCount = Object.keys(extractedFields).length;
     return (
         <div className={`${s.banner} ${s.bannerSuccess}`} style={{ padding: 14 }}>
             <div className="mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" style={{ color: "var(--success)" }} />
                 <h4 style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                    Ready for the field form
+                    {t("title")}
                 </h4>
             </div>
             <p
@@ -206,18 +210,22 @@ function GenerateActionCard({
                     lineHeight: 1.55,
                 }}
             >
-                <strong>{templateName}</strong> · {fieldCount} fields collected. Review on the next
-                screen, then your document opens for editing.
+                {t.rich("body", {
+                    template: templateName,
+                    count: fieldCount,
+                    strong: chunks => <strong>{chunks}</strong>,
+                })}
             </p>
             <button className={`${s.btn} ${s.btnAccent} ${s.btnSm}`} onClick={onContinue}>
                 <ChevronRight className="h-3 w-3" />
-                Continue to template fields
+                {t("cta")}
             </button>
         </div>
     );
 }
 
 function ErrorBubble({ content, onRetry }: { content: string; onRetry: () => void }) {
+    const tc = useTranslations("common");
     return (
         <div className="space-y-2">
             <div
@@ -236,7 +244,7 @@ function ErrorBubble({ content, onRetry }: { content: string; onRetry: () => voi
             </div>
             <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} onClick={onRetry}>
                 <RefreshCw className="h-3 w-3" />
-                Retry
+                {tc("actions.retry")}
             </button>
         </div>
     );
@@ -251,6 +259,7 @@ function TemplateTile({
     template: RecommendedTemplate;
     onSelect: (templateId: string) => void;
 }) {
+    const t = useTranslations("generator.chatbot");
     return (
         <button
             onClick={() => onSelect(template.templateId)}
@@ -263,8 +272,10 @@ function TemplateTile({
             <div style={{ minWidth: 0 }}>
                 <div className={s.tplRowName}>{template.name}</div>
                 <div className={s.tplRowCat}>
-                    {template.requiredFieldCount} required · {Math.round(template.confidence * 100)}
-                    % match
+                    {t("tileMatch", {
+                        required: template.requiredFieldCount,
+                        percent: Math.round(template.confidence * 100),
+                    })}
                 </div>
             </div>
             <ChevronRight className="h-4 w-4 flex-shrink-0" style={{ color: "var(--ink-3)" }} />
@@ -279,6 +290,8 @@ export function LegalChatbot({
     onContinueToTemplateForm,
     initialMessage,
 }: LegalChatbotProps) {
+    const t = useTranslations("generator.chatbot");
+    const tc = useTranslations("common");
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -343,7 +356,7 @@ export function LegalChatbot({
                         ...prev,
                         {
                             role: "assistant",
-                            content: `Server error (${response.status}). Please try again.`,
+                            content: t("errors.server", { status: response.status }),
                             isError: true,
                         },
                     ]);
@@ -366,12 +379,17 @@ export function LegalChatbot({
                     ) {
                         hasShownIntro.current = true;
                         const defaults = parsed.companyDefaults;
-                        const parts: string[] = [];
-                        if (defaults.company_name) parts.push(`**${defaults.company_name}**`);
-                        if (defaults.company_address)
-                            parts.push(`based in **${defaults.company_address}**`);
-                        if (parts.length > 0) {
-                            const introContent = `I see your company is ${parts.join(", ")}. I'll pre-fill those details automatically.`;
+                        const name = defaults.company_name;
+                        const address = defaults.company_address;
+                        const introContent =
+                            name && address
+                                ? t("intro.nameAndAddress", { name, address })
+                                : name
+                                  ? t("intro.name", { name })
+                                  : address
+                                    ? t("intro.address", { address })
+                                    : null;
+                        if (introContent) {
                             setMessages(prev => [
                                 ...prev,
                                 { role: "assistant", content: introContent },
@@ -418,7 +436,7 @@ export function LegalChatbot({
                         ...prev,
                         {
                             role: "assistant",
-                            content: data.message ?? "Something went wrong. Please try again.",
+                            content: data.message ?? tc("errors.tryAgain"),
                             isError: true,
                         },
                     ]);
@@ -428,7 +446,7 @@ export function LegalChatbot({
                     ...prev,
                     {
                         role: "assistant",
-                        content: "Failed to connect to the server. Please try again.",
+                        content: t("errors.connect"),
                         isError: true,
                     },
                 ]);
@@ -436,7 +454,7 @@ export function LegalChatbot({
                 setIsLoading(false);
             }
         },
-        [messages, isLoading, accumulatedFields]
+        [messages, isLoading, accumulatedFields, t, tc]
     );
 
     useEffect(() => {
@@ -457,12 +475,12 @@ export function LegalChatbot({
     };
 
     const handleSelectTemplate = (templateId: string) => {
-        let rec = currentResponse?.recommendedTemplates.find(t => t.templateId === templateId);
+        let rec = currentResponse?.recommendedTemplates.find(r => r.templateId === templateId);
         if (!rec) {
             for (const msg of messages) {
                 if (msg.parsed?.recommendedTemplates) {
                     const found = msg.parsed.recommendedTemplates.find(
-                        t => t.templateId === templateId
+                        r => r.templateId === templateId
                     );
                     if (found) {
                         rec = found;
@@ -482,12 +500,12 @@ export function LegalChatbot({
         setAccumulatedFields(carried);
         setConfirmedTemplateId(pendingConfirm.templateId);
         setPendingConfirm(null);
-        void sendMessage(`I want to proceed with the "${pendingConfirm.name}" template.`);
+        void sendMessage(t("confirmMessage", { name: pendingConfirm.name }));
     };
 
     const handlePickDifferent = () => {
         setPendingConfirm(null);
-        void sendMessage("Can you suggest other options?");
+        void sendMessage(t("pickDifferentMessage"));
     };
 
     const handleStartOver = () => {
@@ -549,14 +567,14 @@ export function LegalChatbot({
                             style={{ paddingLeft: 6, paddingRight: 10 }}
                         >
                             <ArrowLeft className="h-4 w-4" />
-                            Back
+                            {tc("actions.back")}
                         </button>
                         <span className={s.dividerVert} />
                     </>
                 )}
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--accent)" }} />
-                    <span className={s.assistTopBarMeta}>Drift Assist · Legal</span>
+                    <span className={s.assistTopBarMeta}>{t("topBarMeta")}</span>
                 </div>
                 <div className={s.assistTopBarSpacer} />
                 {messages.length > 0 && (
@@ -565,7 +583,7 @@ export function LegalChatbot({
                         onClick={handleStartOver}
                     >
                         <RotateCcw className="h-4 w-4" />
-                        Start over
+                        {t("noMatch.startOver")}
                     </button>
                 )}
             </div>
@@ -579,25 +597,27 @@ export function LegalChatbot({
                             <Sparkles />
                         </div>
                         <div className={s.assistChatTitleBlock}>
-                            <div className={s.assistChatName}>Drift Assist</div>
+                            <div className={s.assistChatName}>{t("assistantName")}</div>
                             <div className={s.assistChatSub}>
                                 {previewTemplate
-                                    ? `filling · ${previewTemplate.name.toLowerCase()}`
-                                    : "ready · pick a template to begin"}
+                                    ? t("subFilling", {
+                                          template: previewTemplate.name.toLowerCase(),
+                                      })
+                                    : t("subReady")}
                             </div>
                         </div>
                         <div className={s.assistChatMenu}>
                             <button
                                 className={`${s.btn} ${s.btnGhost} ${s.btnIconSm}`}
-                                title="Show all fields"
-                                aria-label="Show all fields"
+                                title={t("showAllFields")}
+                                aria-label={t("showAllFields")}
                             >
                                 <Eye />
                             </button>
                             <button
                                 className={`${s.btn} ${s.btnGhost} ${s.btnIconSm}`}
-                                title="Settings"
-                                aria-label="Settings"
+                                title={t("settings")}
+                                aria-label={t("settings")}
                             >
                                 <Settings />
                             </button>
@@ -725,9 +745,7 @@ export function LegalChatbot({
                     {/* Progress strip */}
                     {previewTemplate && totalN > 0 && (
                         <div className={s.assistProgress}>
-                            <span>
-                                {filledN} / {totalN} filled
-                            </span>
+                            <span>{t("progress.filled", { filled: filledN, total: totalN })}</span>
                             <div className={s.assistProgressTrack}>
                                 <div
                                     className={s.assistProgressFill}
@@ -735,7 +753,9 @@ export function LegalChatbot({
                                 />
                             </div>
                             <span>
-                                {currentField ? `next: ${currentField.label}` : "all filled"}
+                                {currentField
+                                    ? t("progress.next", { label: currentField.label })
+                                    : t("progress.allFilled")}
                             </span>
                         </div>
                     )}
@@ -749,8 +769,8 @@ export function LegalChatbot({
                             onKeyDown={handleKeyDown}
                             placeholder={
                                 previewTemplate
-                                    ? `Answer — or describe a change…`
-                                    : "Describe what you need…"
+                                    ? t("composer.placeholderAnswer")
+                                    : t("composer.placeholder")
                             }
                             rows={1}
                             onInput={e => {
@@ -763,14 +783,12 @@ export function LegalChatbot({
                             className={s.assistSend}
                             onClick={() => void sendMessage(input)}
                             disabled={!input.trim() || isLoading}
-                            aria-label="Send message"
+                            aria-label={t("composer.send")}
                         >
                             <Send />
                         </button>
                     </div>
-                    <div className={s.assistHint}>
-                        ⌘↵ to send · drift learns your defaults over time
-                    </div>
+                    <div className={s.assistHint}>{t("composer.hint")}</div>
                 </section>
 
                 {/* ─── Live preview column ─────────────────────────────────────── */}
@@ -778,17 +796,19 @@ export function LegalChatbot({
                     <header className={s.assistPreviewHead}>
                         <FileText className="previewIcon" />
                         <span className={s.assistPreviewTitle}>
-                            {previewTemplate ? previewTemplate.name : "Live document"}
+                            {previewTemplate ? previewTemplate.name : t("preview.liveDocument")}
                         </span>
-                        <span className={s.assistPreviewLive}>· live preview</span>
+                        <span className={s.assistPreviewLive}>{t("preview.live")}</span>
                         <div className={s.assistPreviewPills}>
                             <span className={s.assistStatusPill}>
-                                {previewTemplate ? `DRAFT · ${filledN}/${totalN}` : "AWAITING"}
+                                {previewTemplate
+                                    ? t("preview.draftPill", { filled: filledN, total: totalN })
+                                    : t("preview.awaiting")}
                             </span>
                             {previewTemplate && filledN > 0 && (
                                 <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}>
                                     <Eye className="h-3 w-3" />
-                                    Full
+                                    {t("preview.full")}
                                 </button>
                             )}
                         </div>
@@ -815,12 +835,9 @@ export function LegalChatbot({
                                     <Sparkles />
                                 </div>
                                 <div className={s.assistPreviewEmptyTitle}>
-                                    Pick a template to begin
+                                    {t("preview.emptyTitle")}
                                 </div>
-                                <p className={s.assistPreviewEmptySub}>
-                                    Tell the assistant what you need. As you answer questions, the
-                                    document fills in here in real time.
-                                </p>
+                                <p className={s.assistPreviewEmptySub}>{t("preview.emptySub")}</p>
                             </div>
                         )}
                     </div>
@@ -841,6 +858,9 @@ function PreviewDocument({
     fields: Record<string, string>;
     currentField: string | null;
 }) {
+    const t = useTranslations("generator.chatbot.preview");
+    // A facsimile of the document itself, which is English (the templates
+    // are): only the note under it is interface text.
     // Render a stylized preview pulling the most descriptive fields if present.
     const Slot = ({ k }: { k: string }) => {
         const f = template.fields.find(x => x.key === k);
@@ -945,8 +965,7 @@ function PreviewDocument({
                             letterSpacing: "0.04em",
                         }}
                     >
-                        Continued field collection — {template.fields.length} total fields, asked
-                        one at a time.
+                        {t("collecting", { count: template.fields.length })}
                     </p>
                 )}
         </div>
@@ -966,16 +985,15 @@ function FieldSummary({
     currentField: string | null;
     companyDefaults: Record<string, string>;
 }) {
+    const t = useTranslations("generator.chatbot");
     const filledN = template.fields.filter(f => fields[f.key]).length;
     const totalN = template.fields.length;
 
     return (
         <div className={s.assistFields}>
             <div className={s.assistFieldsHead}>
-                <span>Field summary · {totalN}</span>
-                <span>
-                    {filledN} of {totalN} filled
-                </span>
+                <span>{t("fieldSummary.head", { total: totalN })}</span>
+                <span>{t("fieldSummary.filled", { filled: filledN, total: totalN })}</span>
             </div>
             {template.fields.map(f => {
                 const value = fields[f.key];
@@ -985,11 +1003,14 @@ function FieldSummary({
                     <div key={f.key} className={s.assistField}>
                         <div className={s.assistFieldLabel}>{f.label}</div>
                         <div className={value ? s.assistFieldValue : s.assistFieldValueEmpty}>
-                            {(value ?? "") || (isCurrent ? "asking now…" : "awaiting")}
+                            {(value ?? "") ||
+                                (isCurrent
+                                    ? t("fieldSummary.askingNow")
+                                    : t("fieldSummary.awaiting"))}
                         </div>
                         <div className={`${s.assistFieldSrc} ${tag.ai ? s.assistFieldSrcAi : ""}`}>
                             {tag.ai ? <Sparkles /> : <LinkIcon />}
-                            {tag.txt}
+                            {t(`source.${tag.source}`)}
                         </div>
                     </div>
                 );
@@ -1001,11 +1022,12 @@ function FieldSummary({
 // ─── Welcome (when no messages yet) ──────────────────────────────────────────
 
 function WelcomeMessage({ onSuggest }: { onSuggest: (q: string) => void }) {
+    const t = useTranslations("generator.chatbot.welcome");
     const suggestions = [
-        "I need an NDA for new employees",
-        "Setting up a contractor agreement",
-        "We're raising a seed round",
-        "Need a privacy policy for our app",
+        t("suggestions.nda"),
+        t("suggestions.contractor"),
+        t("suggestions.seed"),
+        t("suggestions.privacy"),
     ];
     return (
         <div className={s.assistWelcome}>
@@ -1013,12 +1035,9 @@ function WelcomeMessage({ onSuggest }: { onSuggest: (q: string) => void }) {
                 <Sparkles className="h-6 w-6" />
             </div>
             <h2 className={s.assistWelcomeTitle}>
-                What <em>legal</em> document do you need?
+                {t.rich("title", { em: chunks => <em>{chunks}</em> })}
             </h2>
-            <p className={s.assistWelcomeSub}>
-                Describe your situation — I&apos;ll recommend the right template and help you fill
-                it out, with the document filling in live as you answer.
-            </p>
+            <p className={s.assistWelcomeSub}>{t("sub")}</p>
             <div className={s.assistWelcomeChips}>
                 {suggestions.map(q => (
                     <button key={q} className={s.suggestPill} onClick={() => onSuggest(q)}>

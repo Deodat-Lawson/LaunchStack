@@ -9,11 +9,14 @@
  *   `signals` holding real measurements (vision label/score, interactive
  *   form presence, sampled text length). The 0.99/0.95/0.5 constants do not
  *   exist here.
- * - One provider order for every document (./providers.ts): an OCR engine
- *   reads every PDF whenever one can run — text layer or not, form or not.
- *   The text-layer and AcroForm shortcuts to NATIVE_PDF apply only when no
- *   OCR engine is available. `reason` says what was measured about the
- *   document ("native-text-layer": it has one); `provider` says what reads it.
+ * - Text layer first: a PDF with a real text layer, or an AcroForm, is read
+ *   natively (NATIVE_PDF). The app calls /route only under
+ *   OCR_PDF_STRATEGY=text-layer-first, or when it has no OCR engine of its
+ *   own; by default (provider-first) it sends every PDF to an engine without
+ *   asking.
+ * - One provider order for whatever needs OCR — scans, forceOCR, non-PDFs
+ *   (./providers.ts): the operator pin, Azure, Docling only while
+ *   docling-serve answers, Landing AI, Datalab; NATIVE_PDF when none can run.
  */
 import { createRequire } from "node:module";
 
@@ -127,21 +130,23 @@ export async function determineRouting(
         return decision(request.preferredProvider, "preferred-provider", {});
     }
 
-    const doclingReachable = await deps.doclingReachable();
-    const provider = defaultProvider(config, doclingReachable);
-
     // forceOCR means "run real OCR, never the native text path": the first
     // OCR engine, past a NATIVE_PDF pin. Only when none can run does it come
     // back NATIVE_PDF — the honest answer, rather than naming an engine that
     // will fail.
     if (request.forceOCR) {
-        return decision(forcedOcrProvider(config, doclingReachable), "force-ocr", {});
+        return decision(forcedOcrProvider(config, await deps.doclingReachable()), "force-ocr", {});
     }
+
+    // The engine for a document that needs OCR, asked for only then: a
+    // text-layer PDF never waits on the docling-serve probe.
+    const ocrProvider = async (): Promise<OcrProvider> =>
+        defaultProvider(config, await deps.doclingReachable());
 
     const buffer = await deps.fetchDocument(request.documentUrl);
 
     if (!looksLikePdf(buffer)) {
-        return decision(provider, "not-a-pdf", {});
+        return decision(await ocrProvider(), "not-a-pdf", {});
     }
 
     let pageCount: number | undefined;
@@ -154,10 +159,13 @@ export async function determineRouting(
         pageCount = doc.getPageCount();
         hasInteractiveForm = doc.getForm().getFields().length > 0;
 
-        // A form's filled-in values live in widget annotations the text
-        // layer does not carry, so OCR reads it when it can.
         if (hasInteractiveForm) {
-            return decision(provider, "interactive-form", { hasInteractiveForm: true }, pageCount);
+            return decision(
+                "NATIVE_PDF",
+                "interactive-form",
+                { hasInteractiveForm: true },
+                pageCount
+            );
         }
     } catch (err) {
         log("warn", "routing: pdf structure load failed", {
@@ -176,13 +184,11 @@ export async function determineRouting(
             pageCount = data.numpages;
         }
 
-        // A real text layer: OCR still reads it when an engine can run (it
-        // recovers tables and reading order the layer loses); the text layer
-        // is what reads it otherwise. Vision is skipped either way — it only
-        // ever informed the scanned-page path.
+        // A real text layer: read natively, and never pay for page
+        // rendering + vision, which only ever informed the scanned-page path.
         if (sampleText.length > 50) {
             return decision(
-                provider,
+                "NATIVE_PDF",
                 "native-text-layer",
                 { hasInteractiveForm, textSampleChars },
                 pageCount
@@ -198,10 +204,12 @@ export async function determineRouting(
         }
     }
 
-    // Little or no text layer: a scan. The vision label no longer picks the
-    // engine (one order for every document); it is still measured because the
-    // app's VLM enrichment reads it to decide whether scanned pages get a
-    // visual description — the only text a scan gets when no OCR engine runs.
+    // Little or no text layer: a scan, read by the first engine in the order.
+    // The vision label no longer picks the engine; it is still measured
+    // because the app's VLM enrichment reads it to decide whether scanned
+    // pages get a visual description — the only text a scan gets when no OCR
+    // engine runs.
+    const provider = await ocrProvider();
     try {
         const pagesToSample = selectSamplePages(pageCount ?? 1);
         const images = await deps.renderPages(buffer, pagesToSample);

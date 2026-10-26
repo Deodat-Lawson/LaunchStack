@@ -22,7 +22,7 @@ import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     try {
@@ -32,7 +32,7 @@ export async function GET() {
         };
         return NextResponse.json(body);
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/details GET]");
+        return workspaceErrorResponse(error, "[workspace/details GET]", request);
     }
 }
 
@@ -45,6 +45,6 @@ export async function PATCH(request: Request) {
         const workspace = await updateWorkspaceDetails(ctx.data, body.data);
         return NextResponse.json({ workspace });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/details PATCH]");
+        return workspaceErrorResponse(error, "[workspace/details PATCH]", request);
     }
 }

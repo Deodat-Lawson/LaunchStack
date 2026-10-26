@@ -14,7 +14,8 @@
  * personal, so they live in Integrations: `AssistantOAuthClients`.
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Check, Copy, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,7 +37,7 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { cn } from "~/lib/utils";
 
-import { relativeTime } from "./people/format";
+import { useTimeFormat } from "./people/format";
 
 // ---------------------------------------------------------------------------
 // The API's shapes (GET /api/assistants)
@@ -77,20 +78,18 @@ interface AssistantsOverview {
 
 const WRITE_SCOPE = "launchstack:write";
 
-/** Why assistants can't connect, in words a member can act on. */
-export const MCP_OFF_REASONS: Record<McpOffReason, string> = {
-    disabled:
-        "The assistant server is turned off on this LaunchStack server. Ask whoever runs it to turn it on (MCP_SERVER_ENABLED).",
-    "no-base-url":
-        "This LaunchStack server doesn't know its own web address, so assistants can't sign in. Ask whoever runs it to set BETTER_AUTH_URL.",
-    "insecure-base-url":
-        "Assistants can only sign in to a LaunchStack server reached over HTTPS. This one's address is plain HTTP; ask whoever runs it to serve it over HTTPS.",
-};
+/** Why assistants can't connect: `settings.assistants.offReasons.<key>`, in words a member can act on. */
+const MCP_OFF_REASON_KEYS = {
+    disabled: "disabled",
+    "no-base-url": "noBaseUrl",
+    "insecure-base-url": "insecureBaseUrl",
+} as const satisfies Record<McpOffReason, string>;
 
-const ACCESS_LABEL: Record<KeyAccess, string> = {
-    read: "Search and read",
-    "read-write": "Search, read and save conversations",
-};
+/** What a key may do: `settings.assistants.access.<key>`. */
+const ACCESS_KEYS = { read: "read", "read-write": "readWrite" } as const satisfies Record<
+    KeyAccess,
+    string
+>;
 
 async function errorMessage(res: Response, fallback: string): Promise<string> {
     const body = (await res.json().catch(() => null)) as { error?: unknown } | null;
@@ -102,6 +101,8 @@ async function errorMessage(res: Response, fallback: string): Promise<string> {
 // ---------------------------------------------------------------------------
 
 export function CopyButton({ value, label }: { value: string; label: string }) {
+    const t = useTranslations("settings.assistants");
+    const tc = useTranslations("common");
     const [copied, setCopied] = useState(false);
     useEffect(() => {
         if (!copied) return;
@@ -113,18 +114,16 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
             type="button"
             size="sm"
             variant="outline"
-            aria-label={`Copy ${label}`}
+            aria-label={t("copy", { label })}
             onClick={() => {
                 void navigator.clipboard
                     ?.writeText(value)
                     .then(() => setCopied(true))
-                    .catch(() =>
-                        toast.error("Couldn't copy. Select the text and copy it yourself.")
-                    );
+                    .catch(() => toast.error(t("copyFailed")));
             }}
         >
             {copied ? <Check /> : <Copy />}
-            {copied ? "Copied" : "Copy"}
+            {copied ? tc("actions.copied") : tc("actions.copy")}
         </Button>
     );
 }
@@ -161,20 +160,22 @@ export function CopyRow({ label, value }: { label: string; value: string }) {
 }
 
 export function OffNote({ reason }: { reason: McpOffReason }) {
+    const t = useTranslations("settings.assistants");
     return (
         <div
             role="status"
             className="border-warn/30 bg-warn-soft text-ink-2 rounded-[10px] border px-3.5 py-2.5 text-[13px] leading-normal"
         >
-            {MCP_OFF_REASONS[reason]}
+            {t(`offReasons.${MCP_OFF_REASON_KEYS[reason]}`)}
         </div>
     );
 }
 
 function AccessBadge({ write }: { write: boolean }) {
+    const t = useTranslations("settings.assistants");
     return (
         <Badge variant={write ? "info" : "secondary"}>
-            {write ? "Read and save" : "Read only"}
+            {write ? t("badge.write") : t("badge.read")}
         </Badge>
     );
 }
@@ -196,7 +197,8 @@ const ASSISTANTS = [
     { id: "claude-code", label: "Claude Code" },
     { id: "codex", label: "Codex CLI" },
     { id: "gemini-cli", label: "Gemini CLI" },
-    { id: "api", label: "Scripts and APIs" },
+    // Said in the reader's language: `settings.assistants.tabs.api`.
+    { id: "api", label: null },
 ] as const;
 
 function Steps({ children }: { children: React.ReactNode }) {
@@ -215,11 +217,17 @@ function Menu({ children }: { children: React.ReactNode }) {
     return <strong className="text-ink font-semibold">{children}</strong>;
 }
 
+/** The tags the connect steps' messages use. */
+const menu = (chunks: ReactNode) => <Menu>{chunks}</Menu>;
+const code = (chunks: ReactNode) => <code className="font-mono">{chunks}</code>;
+
 function ConnectSteps({ url, canManageClients }: { url: string; canManageClients: boolean }) {
+    const t = useTranslations("settings.assistants");
+    const header = `Authorization: Bearer <${t("accessKey")}>`;
     return (
         <Tabs defaultValue="claude" className="gap-3">
             <TabsList
-                aria-label="Assistant"
+                aria-label={t("assistantTabs")}
                 className="h-auto w-full flex-wrap justify-start gap-1"
             >
                 {ASSISTANTS.map(assistant => (
@@ -228,127 +236,72 @@ function ConnectSteps({ url, canManageClients }: { url: string; canManageClients
                         value={assistant.id}
                         className="h-8 flex-none px-2.5 text-[12.5px]"
                     >
-                        {assistant.label}
+                        {assistant.label ?? t("tabs.api")}
                     </TabsTrigger>
                 ))}
             </TabsList>
 
             <TabsContent value="claude">
                 <Steps>
-                    <li>
-                        In Claude (claude.ai or the desktop app), open{" "}
-                        <Menu>Customize › Connectors › Add custom connector</Menu> and paste the
-                        server URL.
-                    </li>
-                    <li>
-                        Choose <Menu>Sign in now</Menu>, and for the OAuth client pick{" "}
-                        <Menu>Use Claude&apos;s published identity</Menu> (
-                        <Menu>Register automatically</Menu> also works).
-                    </li>
-                    <li>Sign in to LaunchStack and pick this workspace.</li>
+                    <li>{t.rich("claude.step1", { menu })}</li>
+                    <li>{t.rich("claude.step2", { menu })}</li>
+                    <li>{t("signInPick")}</li>
                 </Steps>
-                <Note>
-                    Free plans can add one custom connector. On Team and Enterprise, an Owner first
-                    adds it under <Menu>Organization settings › Connectors › Add › Custom</Menu>;
-                    then each member connects from Customize › Connectors.
-                </Note>
-                <Note>
-                    For a script or a shared setup, choose No sign-in and add the request header{" "}
-                    <code className="font-mono">Authorization: Bearer &lt;access key&gt;</code>{" "}
-                    instead. Claude still marks that option beta for some organizations.
-                </Note>
+                <Note>{t.rich("claude.note1", { menu })}</Note>
+                <Note>{t.rich("claude.note2", { header, code })}</Note>
             </TabsContent>
 
             <TabsContent value="chatgpt">
                 <Steps>
-                    <li>
-                        In ChatGPT, open{" "}
-                        <Menu>Settings › Apps & Connectors › Advanced settings</Menu> and turn on{" "}
-                        <Menu>Developer mode</Menu>.
-                    </li>
-                    <li>
-                        Create a connector named LaunchStack with the server URL, and choose OAuth
-                        for authentication.
-                    </li>
-                    <li>Sign in to LaunchStack and pick this workspace.</li>
+                    <li>{t.rich("chatgpt.step1", { menu })}</li>
+                    <li>{t("chatgpt.step2")}</li>
+                    <li>{t("signInPick")}</li>
                 </Steps>
-                <Note>
-                    Which plans get developer mode, and whether a workspace admin has to turn it on
-                    and publish the connector, is set by OpenAI and changes; check OpenAI&rsquo;s
-                    developer-mode help page for your plan.
-                </Note>
+                <Note>{t("chatgpt.note")}</Note>
             </TabsContent>
 
             <TabsContent value="gemini">
                 <Steps>
-                    <li>
-                        {canManageClients
-                            ? "Create an OAuth client in Workspace › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste."
-                            : "A LaunchStack admin creates an OAuth client in Workspace › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste."}
-                    </li>
-                    <li>
-                        A Google Cloud admin opens{" "}
-                        <Menu>
-                            Gemini Enterprise › Data stores › Create data store › Custom MCP Server
-                        </Menu>
-                        , chooses OAuth 2.0, pastes the server URL, authorization URL, token URL,
-                        client ID, client secret and scopes, and ticks{" "}
-                        <Menu>Enable PKCE Support</Menu>. Without PKCE, LaunchStack refuses the
-                        sign-in.
-                    </li>
-                    <li>
-                        Each person then signs in to LaunchStack from Gemini and picks this
-                        workspace.
-                    </li>
+                    <li>{canManageClients ? t("gemini.step1Admin") : t("gemini.step1Member")}</li>
+                    <li>{t.rich("gemini.step2", { menu })}</li>
+                    <li>{t("gemini.step3")}</li>
                 </Steps>
-                <Note>
-                    Google blocks custom MCP data stores by default: an organization policy admin
-                    has to override that policy and allow LaunchStack&rsquo;s domain as an egress
-                    destination. Whoever creates the data store needs the Discovery Engine Editor
-                    role.
-                </Note>
+                <Note>{t("gemini.note")}</Note>
             </TabsContent>
 
             <TabsContent value="claude-code">
                 <CopyField
                     value={`claude mcp add --transport http launchstack ${url}`}
-                    label="command"
+                    label={t("copyLabels.command")}
                 />
-                <Note>
-                    Then run <code className="font-mono">/mcp</code> in Claude Code, choose
-                    launchstack and sign in.
-                </Note>
+                <Note>{t.rich("claudeCode.note", { code })}</Note>
             </TabsContent>
 
             <TabsContent value="codex">
-                <CopyField value={`codex mcp add launchstack --url ${url}`} label="command" />
+                <CopyField
+                    value={`codex mcp add launchstack --url ${url}`}
+                    label={t("copyLabels.command")}
+                />
                 <CopyField
                     value="codex mcp login launchstack"
-                    label="sign-in command"
+                    label={t("copyLabels.signInCommand")}
                     className="mt-2"
                 />
-                <Note>The second command opens your browser to sign in.</Note>
+                <Note>{t("codex.note")}</Note>
             </TabsContent>
 
             <TabsContent value="gemini-cli">
                 <CopyField
                     value={`gemini mcp add --transport http launchstack ${url}`}
-                    label="command"
+                    label={t("copyLabels.command")}
                 />
-                <Note>
-                    Then run <code className="font-mono">/mcp auth launchstack</code> in Gemini CLI
-                    to sign in.
-                </Note>
+                <Note>{t.rich("geminiCli.note", { code })}</Note>
             </TabsContent>
 
             <TabsContent value="api">
-                <p className="text-ink-2 m-0 mb-2 text-[13px] leading-relaxed">
-                    Create an access key below and send it with every request to the server URL:
-                </p>
-                <CopyField value="Authorization: Bearer <access key>" label="header" />
-                <Note>
-                    The server speaks MCP over streamable HTTP. Keys never expire; revoke them here.
-                </Note>
+                <p className="text-ink-2 m-0 mb-2 text-[13px] leading-relaxed">{t("api.intro")}</p>
+                <CopyField value={header} label={t("copyLabels.header")} />
+                <Note>{t("api.note")}</Note>
             </TabsContent>
         </Tabs>
     );
@@ -369,6 +322,8 @@ function CreateKeyDialog({
     canSave: boolean;
     onCreated: () => void;
 }) {
+    const t = useTranslations("settings.assistants");
+    const tc = useTranslations("common");
     const [name, setName] = useState("");
     const [access, setAccess] = useState<KeyAccess>("read");
     const [busy, setBusy] = useState(false);
@@ -396,12 +351,12 @@ function CreateKeyDialog({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: name.trim(), access }),
             });
-            if (!res.ok) throw new Error(await errorMessage(res, "Could not create the key."));
+            if (!res.ok) throw new Error(await errorMessage(res, t("createKeyFailed")));
             const body = (await res.json()) as { secret: string };
             setSecret(body.secret);
             onCreated();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not create the key.");
+            setError(err instanceof Error ? err.message : t("createKeyFailed"));
         } finally {
             setBusy(false);
         }
@@ -413,31 +368,25 @@ function CreateKeyDialog({
                 {secret ? (
                     <>
                         <DialogHeader>
-                            <DialogTitle>Copy your key now</DialogTitle>
-                            <DialogDescription>
-                                You won&apos;t see it again. If you lose it, revoke it and create
-                                another.
-                            </DialogDescription>
+                            <DialogTitle>{t("keyCreated.title")}</DialogTitle>
+                            <DialogDescription>{t("keyCreated.description")}</DialogDescription>
                         </DialogHeader>
-                        <CopyField value={secret} label="access key" />
+                        <CopyField value={secret} label={t("accessKey")} />
                         <DialogFooter>
-                            <Button onClick={() => close(false)}>Done</Button>
+                            <Button onClick={() => close(false)}>{tc("actions.done")}</Button>
                         </DialogFooter>
                     </>
                 ) : (
                     <form onSubmit={submit} className="grid gap-4">
                         <DialogHeader>
-                            <DialogTitle>Create an access key</DialogTitle>
-                            <DialogDescription>
-                                The key acts as you, in this workspace only. Anyone who has it can
-                                do what you choose here.
-                            </DialogDescription>
+                            <DialogTitle>{t("createKey.title")}</DialogTitle>
+                            <DialogDescription>{t("createKey.description")}</DialogDescription>
                         </DialogHeader>
                         <div>
                             <Field
-                                label="Name"
+                                label={tc("fields.name")}
                                 htmlFor="assistant-key-name"
-                                hint="So you can tell your keys apart, e.g. “Nightly export script”."
+                                hint={t("createKey.nameHint")}
                             >
                                 <TextInput
                                     id="assistant-key-name"
@@ -449,30 +398,29 @@ function CreateKeyDialog({
                                 />
                             </Field>
                             <div className="text-ink-2 mb-2 text-xs font-semibold">
-                                What it can do
+                                {t("createKey.whatItCan")}
                             </div>
                             <RadioGroup
                                 value={access}
                                 onValueChange={value => setAccess(value as KeyAccess)}
-                                aria-label="What the key can do"
+                                aria-label={t("createKey.whatKeyCan")}
                             >
                                 <AccessOption
                                     value="read"
-                                    title={ACCESS_LABEL.read}
-                                    detail="Search the workspace and open the documents you can see."
+                                    title={t(`access.${ACCESS_KEYS.read}`)}
+                                    detail={t("createKey.readDetail")}
                                 />
                                 {canSave && (
                                     <AccessOption
                                         value="read-write"
-                                        title={ACCESS_LABEL["read-write"]}
-                                        detail="Also save an assistant's conversation into the workspace as a document."
+                                        title={t(`access.${ACCESS_KEYS["read-write"]}`)}
+                                        detail={t("createKey.writeDetail")}
                                     />
                                 )}
                             </RadioGroup>
                             {!canSave && (
                                 <p className="text-ink-3 m-0 mt-2 text-[12px] leading-normal">
-                                    Saving conversations needs permission to add documents, which
-                                    your role doesn&apos;t include.
+                                    {t("createKey.noSave")}
                                 </p>
                             )}
                             {error && (
@@ -483,10 +431,10 @@ function CreateKeyDialog({
                         </div>
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => close(false)}>
-                                Cancel
+                                {tc("actions.cancel")}
                             </Button>
                             <Button type="submit" disabled={!name.trim() || busy}>
-                                {busy ? "Creating…" : "Create key"}
+                                {busy ? t("creating") : t("createKey.submit")}
                             </Button>
                         </DialogFooter>
                     </form>
@@ -526,6 +474,9 @@ type Pending =
     | { kind: "key"; id: number; name: string };
 
 export function AssistantsBlock() {
+    const t = useTranslations("settings.assistants");
+    const tc = useTranslations("common");
+    const time = useTimeFormat();
     const [data, setData] = useState<AssistantsOverview | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
@@ -535,13 +486,13 @@ export function AssistantsBlock() {
     const refresh = useCallback(async () => {
         try {
             const res = await fetch("/api/assistants", { cache: "no-store" });
-            if (!res.ok) throw new Error(await errorMessage(res, "Could not load assistants."));
+            if (!res.ok) throw new Error(await errorMessage(res, t("loadFailed")));
             setData((await res.json()) as AssistantsOverview);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load assistants.");
+            setError(err instanceof Error ? err.message : t("loadFailed"));
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void refresh();
@@ -557,14 +508,16 @@ export function AssistantsBlock() {
                     : `/api/assistants/connections/${encodeURIComponent(target.clientId)}`;
             const res = await fetch(url, { method: "DELETE" });
             if (!res.ok && res.status !== 404) {
-                throw new Error(await errorMessage(res, "Could not revoke it."));
+                throw new Error(await errorMessage(res, t("revokeFailed")));
             }
             toast.success(
-                target.kind === "key" ? `Revoked “${target.name}”` : `Disconnected ${target.name}`
+                target.kind === "key"
+                    ? t("revokedKey", { name: target.name })
+                    : t("disconnectedAssistant", { name: target.name })
             );
             await refresh();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not revoke it.");
+            toast.error(err instanceof Error ? err.message : t("revokeFailed"));
         } finally {
             setBusy(null);
         }
@@ -574,32 +527,33 @@ export function AssistantsBlock() {
 
     return (
         <div data-testid="assistants-block">
-            <Section
-                title="Assistants (MCP)"
-                description="Let Claude, ChatGPT and Gemini search this workspace and save conversations into it. Each connection acts as you, in this workspace only, and sees only what you can."
-            >
+            <Section title={t("section.title")} description={t("section.description")}>
                 {error && !data ? (
                     <div className="flex flex-wrap items-center gap-3">
                         <p role="alert" className="text-danger m-0 text-[13px]">
                             {error}
                         </p>
                         <Button size="sm" variant="outline" onClick={() => void refresh()}>
-                            Try again
+                            {tc("actions.tryAgain")}
                         </Button>
                     </div>
                 ) : !availability ? (
-                    <p className="text-ink-3 m-0 text-[13px]">Loading…</p>
+                    <p className="text-ink-3 m-0 text-[13px]">{tc("status.loading")}</p>
                 ) : availability.enabled ? (
                     <Card>
-                        <div className="text-ink-2 mb-1.5 text-xs font-semibold">Server URL</div>
-                        <CopyField value={availability.serverUrl} label="server URL" />
+                        <div className="text-ink-2 mb-1.5 text-xs font-semibold">
+                            {t("serverUrl")}
+                        </div>
+                        <CopyField
+                            value={availability.serverUrl}
+                            label={t("copyLabels.serverUrl")}
+                        />
                         <p className="text-ink-3 m-0 mt-2 text-[12px] leading-normal">
-                            Paste it into the assistant. It sends you here to sign in and asks which
-                            workspace to use.
+                            {t("pasteIt")}
                         </p>
                         <div className="border-line mt-5 border-t pt-4">
                             <h3 className="text-ink m-0 mb-3 text-[13px] font-semibold">
-                                Connect an assistant
+                                {t("connectTitle")}
                             </h3>
                             <ConnectSteps
                                 url={availability.serverUrl}
@@ -614,14 +568,11 @@ export function AssistantsBlock() {
 
             {data && (
                 <>
-                    <Section
-                        title="Connected assistants"
-                        description="Assistants you have signed in to this workspace. Revoking one cuts it off at its next request; what it already saved stays."
-                    >
+                    <Section title={t("connected.title")} description={t("connected.description")}>
                         <Card padding={0}>
                             {data.connections.length === 0 ? (
                                 <div className="text-ink-3 px-5 py-4 text-[13px]">
-                                    No assistants connected yet.
+                                    {t("connected.none")}
                                 </div>
                             ) : (
                                 data.connections.map((connection, index) => (
@@ -635,10 +586,14 @@ export function AssistantsBlock() {
                                             </div>
                                             <div className="text-ink-3 text-[12px]">
                                                 {connection.connectedAt
-                                                    ? `Connected ${relativeTime(connection.connectedAt)}`
-                                                    : "Connected"}
+                                                    ? t("connected.connectedAt", {
+                                                          when: time.relative(
+                                                              connection.connectedAt
+                                                          ),
+                                                      })
+                                                    : t("connected.connected")}
                                                 {connection.lastActiveAt
-                                                    ? ` · last active ${relativeTime(connection.lastActiveAt)}`
+                                                    ? ` · ${t("connected.lastActive", { when: time.relative(connection.lastActiveAt) })}`
                                                     : ""}
                                             </div>
                                         </div>
@@ -655,8 +610,8 @@ export function AssistantsBlock() {
                                             }
                                         >
                                             {busy === `connection:${connection.clientId}`
-                                                ? "Revoking…"
-                                                : "Revoke"}
+                                                ? t("revoking")
+                                                : tc("actions.revoke")}
                                         </Button>
                                     </div>
                                 ))
@@ -664,22 +619,19 @@ export function AssistantsBlock() {
                         </Card>
                     </Section>
 
-                    <Section
-                        title="Access keys"
-                        description="For scripts, API calls and command-line tools that can't sign in through a browser. A key acts as you, in this workspace only."
-                    >
+                    <Section title={t("keys.title")} description={t("keys.description")}>
                         {data.availability.enabled && (
                             <div className="mb-3">
                                 <Button size="sm" onClick={() => setCreating(true)}>
                                     <Plus />
-                                    Create access key
+                                    {t("keys.create")}
                                 </Button>
                             </div>
                         )}
                         <Card padding={0}>
                             {data.keys.length === 0 ? (
                                 <div className="text-ink-3 px-5 py-4 text-[13px]">
-                                    No access keys yet.
+                                    {t("keys.none")}
                                 </div>
                             ) : (
                                 data.keys.map((key, index) => (
@@ -693,10 +645,12 @@ export function AssistantsBlock() {
                                                 <span className="font-mono">
                                                     {key.displayPrefix}…
                                                 </span>
-                                                {` · created ${relativeTime(key.createdAt)} · `}
+                                                {` · ${t("keys.created", { when: time.relative(key.createdAt) })} · `}
                                                 {key.lastUsedAt
-                                                    ? `last used ${relativeTime(key.lastUsedAt)}`
-                                                    : "never used"}
+                                                    ? t("keys.lastUsed", {
+                                                          when: time.relative(key.lastUsedAt),
+                                                      })
+                                                    : t("keys.neverUsed")}
                                             </div>
                                         </div>
                                         <Button
@@ -711,7 +665,9 @@ export function AssistantsBlock() {
                                                 })
                                             }
                                         >
-                                            {busy === `key:${key.id}` ? "Revoking…" : "Revoke"}
+                                            {busy === `key:${key.id}`
+                                                ? t("revoking")
+                                                : tc("actions.revoke")}
                                         </Button>
                                     </div>
                                 ))
@@ -735,15 +691,17 @@ export function AssistantsBlock() {
                 }}
                 title={
                     pending?.kind === "key"
-                        ? `Revoke “${pending.name}”?`
-                        : `Disconnect ${pending?.name ?? "this assistant"}?`
+                        ? t("confirm.revokeKey", { name: pending.name })
+                        : t("confirm.disconnect", {
+                              name: pending?.name ?? t("confirm.thisAssistant"),
+                          })
                 }
                 description={
-                    pending?.kind === "key"
-                        ? "Anything using this key stops working at its next request. This can't be undone."
-                        : "It loses access to this workspace at its next request. Conversations it already saved stay. You can connect it again any time."
+                    pending?.kind === "key" ? t("confirm.keyBody") : t("confirm.connectionBody")
                 }
-                confirmLabel={pending?.kind === "key" ? "Revoke key" : "Revoke"}
+                confirmLabel={
+                    pending?.kind === "key" ? t("confirm.revokeKeyLabel") : tc("actions.revoke")
+                }
                 onConfirm={() => {
                     if (pending) void revoke(pending);
                 }}

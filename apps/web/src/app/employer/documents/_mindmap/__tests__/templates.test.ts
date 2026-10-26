@@ -10,6 +10,11 @@ import {
     templatesMissingBuilders,
 } from "../model/templates";
 import { parseDoc, serializeDoc, toMarkdownOutline } from "../model/serialize";
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+import zhCN from "~/i18n/messages/zh-CN";
+import type { MindmapDoc } from "../model/types";
 
 describe("metadata and builders stay in step", () => {
     it("gives every listed template a builder", () => {
@@ -142,5 +147,42 @@ describe("laid-out templates", () => {
             .map(e => page.nodes.find(n => n.id === e.to.nodeId)!);
         expect(reports.length).toBeGreaterThan(0);
         for (const report of reports) expect(report.y).toBeGreaterThan(ceo.y);
+    });
+});
+
+/** Every word a template writes, in document order. */
+function wordsOf(doc: MindmapDoc): string[] {
+    return doc.pages.flatMap(page => [
+        page.name,
+        ...page.nodes.map(node => node.text),
+        ...page.edges.flatMap(edge => edge.labels.map(label => label.text)),
+    ]);
+}
+
+describe("starter text", () => {
+    const english = createTranslator({
+        locale: "en",
+        messages: englishMessages,
+        namespace: "mindmap.starter",
+    });
+    const chinese = createTranslator({
+        locale: "zh-CN",
+        messages: zhCN as unknown as typeof englishMessages,
+        namespace: "mindmap.starter",
+    });
+
+    // The builders' English literals and the English catalogue are the same
+    // words, so a template reads the same with or without a translator.
+    it.each(TEMPLATES.map(t => [t.id] as const))("%s matches the English catalogue", id => {
+        expect(wordsOf(buildTemplate(id, "T", "light", english))).toEqual(
+            wordsOf(buildTemplate(id, "T"))
+        );
+    });
+
+    it("writes a new mindmap in the creator's language", () => {
+        const words = wordsOf(buildTemplate("mindmap", "T", "light", chinese));
+        expect(words).toContain("中心想法");
+        expect(words).toContain("细节 1.2");
+        expect(words[0]).toBe("第 1 页");
     });
 });

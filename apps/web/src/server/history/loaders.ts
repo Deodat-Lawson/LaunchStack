@@ -23,6 +23,8 @@
 
 import { and, desc, eq } from "drizzle-orm";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
 import type { HistoryEntry, HistoryStatus } from "~/lib/workspace-history";
 import { db } from "~/server/db";
 import {
@@ -45,6 +47,13 @@ export interface HistoryLoaderContext {
     userId: string;
     /** Per-loader row cap, before the merge trims to the request's limit. */
     limit: number;
+    /** The reader's language for the titles and subtitles a loader makes up; English when absent. */
+    locale?: Locale;
+}
+
+/** The words a loader makes up when a row has none of its own. */
+function historyWords(locale: Locale | undefined) {
+    return translatorFor(locale ?? "en", "workspace.server.history");
 }
 
 export interface HistoryLoader {
@@ -102,7 +111,8 @@ function oneLine(value: string | null | undefined, max = 120): string | undefine
 
 const trendSearchLoader: HistoryLoader = {
     kind: "trend-search",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: trendSearchJobs.id,
@@ -121,8 +131,8 @@ const trendSearchLoader: HistoryLoader = {
             id: `trend-search:${row.id}`,
             kind: "trend-search" as const,
             refId: row.id,
-            title: oneLine(row.query) ?? "Trend search",
-            subtitle: "Trend search",
+            title: oneLine(row.query) ?? t("trendSearch"),
+            subtitle: t("trendSearch"),
             status: normalizeStatus(row.status, { done: ["completed"] }),
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
         }));
@@ -138,7 +148,8 @@ const trendSearchLoader: HistoryLoader = {
 
 const prospectorLoader: HistoryLoader = {
     kind: "prospector",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: clientProspectorJobs.id,
@@ -157,8 +168,8 @@ const prospectorLoader: HistoryLoader = {
             id: `prospector:${row.id}`,
             kind: "prospector" as const,
             refId: row.id,
-            title: oneLine(row.query) ?? "Prospect search",
-            subtitle: "Client prospector",
+            title: oneLine(row.query) ?? t("prospectSearch"),
+            subtitle: t("clientProspector"),
             status: normalizeStatus(row.status, { done: ["completed"] }),
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
         }));
@@ -179,7 +190,8 @@ const prospectorLoader: HistoryLoader = {
 
 const repoExplainerLoader: HistoryLoader = {
     kind: "repo-explainer",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: repoExplainerJobs.id,
@@ -199,13 +211,13 @@ const repoExplainerLoader: HistoryLoader = {
             .limit(limit);
 
         return rows.map(row => {
-            const repo = row.owner && row.repo ? `${row.owner}/${row.repo}` : "Repository";
+            const repo = row.owner && row.repo ? `${row.owner}/${row.repo}` : t("repository");
             return {
                 id: `repo-explainer:${row.id}`,
                 kind: "repo-explainer" as const,
                 refId: row.id,
                 title: `${repo} — ${row.diagramType}`,
-                subtitle: oneLine(row.instructions) ?? "Repo explainer",
+                subtitle: oneLine(row.instructions) ?? t("repoExplainer"),
                 status: normalizeStatus(row.status, { done: ["completed"] }),
                 at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
                 href: "/employer/tools/repo-explainer",
@@ -223,7 +235,8 @@ const repoExplainerLoader: HistoryLoader = {
 
 const distributionLoader: HistoryLoader = {
     kind: "distribution",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: distributionRuns.id,
@@ -243,8 +256,8 @@ const distributionLoader: HistoryLoader = {
             id: `distribution:${row.id}`,
             kind: "distribution" as const,
             refId: row.id,
-            title: row.programName ?? "Distribution run",
-            subtitle: "Partner discovery",
+            title: row.programName ?? t("distributionRun"),
+            subtitle: t("partnerDiscovery"),
             status: normalizeStatus(row.status, { done: ["completed"] }),
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
             href: "/employer/tools/distribution",
@@ -261,7 +274,8 @@ const distributionLoader: HistoryLoader = {
 
 const emailLoader: HistoryLoader = {
     kind: "email",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: emailCampaigns.id,
@@ -281,7 +295,7 @@ const emailLoader: HistoryLoader = {
             kind: "email" as const,
             refId: String(row.id),
             title: row.name,
-            subtitle: oneLine(row.goal) ?? "Email campaign",
+            subtitle: oneLine(row.goal) ?? t("emailCampaign"),
             status: normalizeStatus(row.status, {
                 done: ["sent"],
                 // A campaign waiting on a human is not "running" — nothing is
@@ -307,7 +321,8 @@ const emailLoader: HistoryLoader = {
 
 const weeklyReviewLoader: HistoryLoader = {
     kind: "weekly-review",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: founderWeeklyReviewRuns.id,
@@ -328,7 +343,7 @@ const weeklyReviewLoader: HistoryLoader = {
             id: `weekly-review:${row.id}`,
             kind: "weekly-review" as const,
             refId: row.id,
-            title: `Week of ${row.periodStart}`,
+            title: t("weekOf", { date: row.periodStart }),
             subtitle: `${row.periodStart} → ${row.periodEnd}`,
             // A generated-but-unpublished review is finished work someone can
             // read, so `draft` counts as done here.
@@ -352,7 +367,8 @@ const weeklyReviewLoader: HistoryLoader = {
 
 const vantageLoader: HistoryLoader = {
     kind: "vantage",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
         const rows = await db
             .select({
                 id: vantageAgendas.id,
@@ -373,8 +389,8 @@ const vantageLoader: HistoryLoader = {
             id: `vantage:${row.id}`,
             kind: "vantage" as const,
             refId: row.id,
-            title: `Agenda for the week of ${row.weekStart}`,
-            subtitle: oneLine(row.summary) ?? "Vantage",
+            title: t("agendaWeekOf", { date: row.weekStart }),
+            subtitle: oneLine(row.summary) ?? t("vantage"),
             // A draft is a prepared agenda someone can open and edit; every
             // status here is finished work rather than a run in flight.
             status: normalizeStatus(row.status, {
@@ -393,17 +409,28 @@ const vantageLoader: HistoryLoader = {
     },
 };
 
-const PROPOSAL_RUN_TITLE: Record<string, string> = {
-    funders: "Funder search",
-    extract: "Requirements",
-    draft: "Drafts",
-    rewrite: "Rewrite",
-    review: "Review",
-};
+/** Each run kind's name, as its key in `workspace.server.history`. */
+const PROPOSAL_RUN_TITLE = {
+    funders: "funderSearch",
+    extract: "requirements",
+    draft: "drafts",
+    rewrite: "rewrite",
+    review: "review",
+} as const;
 
 const proposalsLoader: HistoryLoader = {
     kind: "proposals",
-    async load({ companyId, limit }) {
+    async load({ companyId, limit, locale }) {
+        const t = historyWords(locale);
+        const runTitle = (kind: string): string => {
+            const key = (
+                PROPOSAL_RUN_TITLE as Record<
+                    string,
+                    (typeof PROPOSAL_RUN_TITLE)[keyof typeof PROPOSAL_RUN_TITLE]
+                >
+            )[kind];
+            return key ? t(key) : kind;
+        };
         const rows = await db
             .select({
                 id: proposalRuns.id,
@@ -427,9 +454,9 @@ const proposalsLoader: HistoryLoader = {
             kind: "proposals" as const,
             refId: row.id,
             title: row.applicationTitle
-                ? `${PROPOSAL_RUN_TITLE[row.kind] ?? row.kind} — ${row.applicationTitle}`
-                : (PROPOSAL_RUN_TITLE[row.kind] ?? row.kind),
-            subtitle: oneLine(row.summary?.headline) ?? "Proposals",
+                ? `${runTitle(row.kind)} — ${row.applicationTitle}`
+                : runTitle(row.kind),
+            subtitle: oneLine(row.summary?.headline) ?? t("proposals"),
             status: normalizeStatus(row.status, { done: ["completed"] }),
             at: activityAt(row.completedAt, row.updatedAt, row.createdAt),
             href: row.applicationId

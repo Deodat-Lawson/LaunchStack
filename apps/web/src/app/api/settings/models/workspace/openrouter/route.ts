@@ -25,20 +25,21 @@ export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
 
-    // Without a key to seal it with, the server could not keep what OpenRouter
-    // hands back; say so before sending the admin away to approve one.
-    if (!env.server.EMBEDDING_SECRETS_KEY) {
-        const back = new URL(
-            workspaceHref("models", { query: { openrouter: "unavailable" } }),
-            publicOrigin(request)
-        );
-        return NextResponse.redirect(back);
-    }
-
     // Where the admin's browser comes back to: the public origin, never
     // APP_PUBLIC_URL (the address the app's own services use, which may be
     // internal) nor `request.url` (the bind address behind the proxy).
     const origin = publicOrigin(request);
+
+    // Without a key to seal it with, the server could not keep what OpenRouter
+    // hands back; say so before sending the admin away to approve one.
+    if (!env.server.EMBEDDING_SECRETS_KEY) {
+        const back = new URL(
+            workspaceHref("byok", { query: { openrouter: "unavailable" } }),
+            origin
+        );
+        return NextResponse.redirect(back);
+    }
+
     const flow = createPkceFlow();
     const response = NextResponse.redirect(
         openRouterAuthorizeUrl(flow, new URL(OPENROUTER_CALLBACK_PATH, origin).toString())

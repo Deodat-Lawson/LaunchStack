@@ -312,7 +312,7 @@ export const GUIDES: Guide[] = [
                 title: "Supporting capabilities and workspace settings",
                 body: [
                     "AI_BASE_URL + AI_API_KEY provide a global endpoint pair for non-chat capabilities. Per-capability EMBEDDING_*, RERANK_*, NER_*, and TRANSCRIPTION_* API pairs can override it. Keep each key paired with its intended endpoint.",
-                    "Workspace › Models shows the resolved chat models and routes, and is where a workspace brings its own model endpoint. Embeddings use the server's EMBEDDING_* settings; there is no per-workspace embedding screen. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
+                    "Workspace › Models shows the resolved chat models and routes as a read-only view; Workspace › Bring your own keys is where a workspace brings its own model endpoint and API key, or connects OpenRouter. Embeddings use the server's EMBEDDING_* settings; there is no per-workspace embedding screen. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
                 ],
                 note: "GOOGLE_MODEL is not the chat model selector. Use the mounted YAML. Do not replace the embedding index just to change the chat model.",
             },
@@ -473,13 +473,13 @@ export const GUIDES: Guide[] = [
             {
                 title: "Document parsing and OCR",
                 body: [
-                    "Every PDF and image is read with OCR, in one order: Azure Document Intelligence when it is configured, then Docling when docling-serve is running (--profile ocr), then Landing AI and Datalab if configured. A provider that fails hands the document to the next one; the PDF's own text layer is the last resort when none is reachable. Set provider credentials on both app and worker.",
-                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. A workspace can also pick a provider, or the text-only method, under Workspace › Document defaults.",
+                    "OCR is on by default whenever an engine can run: every PDF and image goes to the first one in this order: Azure Document Intelligence when it is configured, then Docling while docling-serve is running (--profile ocr), then Landing AI and Datalab if configured. An engine that fails hands the document to the next one, and the PDF's own text layer is the last resort. A scan, or a PDF with scanned pages, keeps the error and is retried instead of being indexed blank. With no engine configured, PDFs are read from their text layer for free. Set provider credentials on both app and worker.",
+                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. OCR_PDF_STRATEGY=text-layer-first opts out of OCR for every PDF: a PDF with its own text layer is read from it, and only scans go to OCR.",
                 ],
                 rows: [
                     {
                         name: "AZURE",
-                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY. Use a paid S0 resource: the free F0 tier reads only the first two pages of each document.",
+                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY. Use a paid S0 resource: the free F0 tier reads only the first two pages of each document. AZURE_DOC_INTELLIGENCE_MODEL=prebuilt-read reads text only for about a seventh of the layout model's price. Longer PDFs go in 2,000-page ranges, and throttling (429) and 5xx answers are retried.",
                     },
                     {
                         name: "DOCLING",
@@ -574,7 +574,7 @@ export const GUIDES: Guide[] = [
                     },
                     {
                         name: "Drive folder import · opt-in",
-                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported. The connection belongs to the workspace, so with it on every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true lets an admin add read-only Drive access after connecting (Allow folder access), so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Connecting itself asks only for the files picked one by one, so it never shows Google's unverified-app warning; only allowing folder access does, until the app is verified. Without the flag, only files picked one by one can be imported. The connection belongs to the workspace, so once folder access is allowed every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
                     },
                 ],
                 note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",

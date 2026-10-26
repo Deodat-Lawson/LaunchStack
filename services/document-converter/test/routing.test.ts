@@ -130,16 +130,16 @@ describe("POST /route", () => {
         expect(body.reason).toBe("force-ocr");
     });
 
-    it("sends AcroForm PDFs to Azure when it is configured", async () => {
+    it("reads AcroForm PDFs natively even when Azure is configured (text layer first)", async () => {
         const pdf = await makeAcroFormPdf();
         const body = await route(testConfig(AZURE), { fetchImpl: bytesFetch(pdf) }, {});
-        expect(body.provider).toBe("AZURE");
+        expect(body.provider).toBe("NATIVE_PDF");
         expect(body.reason).toBe("interactive-form");
         expect(body.signals.hasInteractiveForm).toBe(true);
         expect(body.pageCount).toBe(1);
     });
 
-    it("routes AcroForm PDFs to NATIVE_PDF only when no OCR engine can run", async () => {
+    it("routes AcroForm PDFs to NATIVE_PDF with no OCR engine either", async () => {
         const pdf = await makeAcroFormPdf();
         const body = await route(testConfig(), { fetchImpl: bytesFetch(pdf) }, {});
         expect(body.provider).toBe("NATIVE_PDF");
@@ -150,14 +150,18 @@ describe("POST /route", () => {
         expect(body).not.toHaveProperty("confidence");
     });
 
-    it("sends text-layer PDFs to Azure too — Azure reads every PDF when it is configured", async () => {
+    it("reads text-layer PDFs natively even when Azure and Docling can run (text layer first)", async () => {
         const pdf = await makeTextPdf();
         const calls: number[][] = [];
+        let doclingProbes = 0;
         const body = await route(
             testConfig({ ...AZURE, ...DOCLING }),
             {
                 fetchImpl: bytesFetch(pdf),
-                ...doclingUp,
+                doclingHealth: async () => {
+                    doclingProbes += 1;
+                    return true;
+                },
                 renderPages: async (_buffer, pages) => {
                     calls.push(pages);
                     return [];
@@ -165,14 +169,16 @@ describe("POST /route", () => {
             },
             {}
         );
-        expect(body.provider).toBe("AZURE");
+        expect(body.provider).toBe("NATIVE_PDF");
         expect(body.reason).toBe("native-text-layer");
         expect(body.signals.textSampleChars).toBeGreaterThan(50);
-        // A real text layer never pays for page rendering + vision.
+        // A real text layer never pays for page rendering + vision, nor
+        // waits on the docling-serve probe.
         expect(calls).toEqual([]);
+        expect(doclingProbes).toBe(0);
     });
 
-    it("routes text-layer PDFs to NATIVE_PDF when no OCR engine can run", async () => {
+    it("routes text-layer PDFs to NATIVE_PDF with no OCR engine either", async () => {
         const pdf = await makeTextPdf();
         const body = await route(testConfig(), { fetchImpl: bytesFetch(pdf) }, {});
         expect(body.provider).toBe("NATIVE_PDF");
@@ -200,6 +206,27 @@ describe("POST /route", () => {
         expect(body.signals.visionLabel).toBe("handwritten notes");
         expect(body.signals.visionScore).toBeCloseTo(0.91);
         expect(body.pageCount).toBe(2);
+    });
+
+    it("routes complex documents to Azure on the lean stack, which runs no Docling", async () => {
+        // docker-compose.prod.yml leaves DOCLING_SERVE_URL empty; with it set,
+        // this went to a docling-serve that was not running.
+        const pdf = await makeEmptyPdf();
+        const body = await route(
+            testConfig({
+                defaultProvider: "AZURE",
+                azureEndpoint: "https://azure.test",
+                azureKey: "azure-key",
+            }),
+            {
+                fetchImpl: bytesFetch(pdf),
+                renderPages: async () => [new Uint8Array([1, 2, 3])],
+                classify: async () => ({ label: "handwritten notes", score: 0.91 }),
+            },
+            {}
+        );
+        expect(body.provider).toBe("AZURE");
+        expect(body.reason).toBe("vision-complex");
     });
 
     it("simple scans go to the first engine too", async () => {

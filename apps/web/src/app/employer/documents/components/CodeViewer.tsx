@@ -3,9 +3,11 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import "highlight.js/styles/github-dark-dimmed.min.css";
 import { Loader2, AlertTriangle, RotateCw, Copy, Check, WrapText, Hash } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
+import { ViewerNotice } from "./ViewerNotice";
 
 interface CodeViewerProps {
     url: string;
@@ -74,9 +76,13 @@ function detectExtension(title: string, url: string): string {
 }
 
 export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }: CodeViewerProps) {
+    const t = useTranslations("viewers.code");
+    const tc = useTranslations("common");
+    const format = useFormatter();
     const [code, setCode] = useState<string>("");
     const [highlightedHtml, setHighlightedHtml] = useState<string>("");
     const [loading, setLoading] = useState(true);
+    // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [wordWrap, setWordWrap] = useState(false);
@@ -107,7 +113,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
             }
             setHighlightedHtml(result.value);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to load file");
+            setError(err instanceof Error ? err.message : "");
         } finally {
             setLoading(false);
         }
@@ -163,29 +169,24 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
         return (
             <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
                 <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
-                <p className="text-ink-3 text-sm font-medium">Loading source code...</p>
+                <p className="text-ink-3 text-sm font-medium">{t("loading")}</p>
             </div>
         );
     }
 
-    if (error) {
+    if (error !== null) {
         return (
-            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">Failed to load source code</p>
-                    <p className="text-ink-3 mb-4 text-xs">{error}</p>
-                    <button
-                        onClick={() => void fetchCode()}
-                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-                    >
-                        <RotateCw className="h-4 w-4" />
-                        Retry
-                    </button>
-                </div>
-            </div>
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("loadFailed")}
+                detail={error || t("loadFailedFallback")}
+                action={
+                    <Button onClick={() => void fetchCode()}>
+                        <RotateCw />
+                        {tc("actions.retry")}
+                    </Button>
+                }
+            />
         );
     }
 
@@ -200,7 +201,13 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
                         {extension ? `.${extension}` : language}
                     </span>
                     <span className="font-mono text-[10px] text-[var(--code-ink-muted)]">
-                        {lineCount} lines &middot; {(new Blob([code]).size / 1024).toFixed(1)} KB
+                        {t("stats", {
+                            lines: lineCount,
+                            size: format.number(new Blob([code]).size / 1024, {
+                                minimumFractionDigits: 1,
+                                maximumFractionDigits: 1,
+                            }),
+                        })}
                     </span>
                 </div>
 
@@ -218,7 +225,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">Toggle line numbers</p>
+                                <p className="text-xs">{t("toggleLineNumbers")}</p>
                             </TooltipContent>
                         </Tooltip>
 
@@ -234,7 +241,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">Toggle word wrap</p>
+                                <p className="text-xs">{t("toggleWordWrap")}</p>
                             </TooltipContent>
                         </Tooltip>
 
@@ -254,7 +261,7 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
-                                <p className="text-xs">{copied ? "Copied!" : "Copy code"}</p>
+                                <p className="text-xs">{copied ? t("copied") : t("copyCode")}</p>
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>

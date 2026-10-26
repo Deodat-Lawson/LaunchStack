@@ -6,6 +6,7 @@ import { RESPONSE_STYLES, type ResponseStyleId, DEFAULT_STYLE } from "~/lib/ai/s
 
 // Re-export for backward compatibility or direct usage
 export const SYSTEM_PROMPTS = {
+    balanced: RESPONSE_STYLES.balanced.systemPrompt,
     concise: RESPONSE_STYLES.concise.systemPrompt,
     detailed: RESPONSE_STYLES.detailed.systemPrompt,
     academic: RESPONSE_STYLES.academic.systemPrompt,

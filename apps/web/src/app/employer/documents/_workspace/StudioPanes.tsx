@@ -3,13 +3,21 @@
 import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import LoadingPage from "~/app/_components/loading";
+import { Button } from "~/components/ui/button";
 import type { ToolHost } from "~/components/tool-app/nav";
+import { cn } from "~/lib/utils";
 import type { KnowledgePaneProps } from "./KnowledgePane";
 import type { PersonalSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
 import type { TeamToolProps } from "./team/TeamTool";
-import type { StudioFeature } from "./types";
+import {
+    studioFeatureDescription,
+    studioFeatureLabel,
+    useStudioText,
+    type StudioFeature,
+} from "./types";
 import { ChevronRight as IconChevronRight } from "lucide-react";
 
 /**
@@ -127,213 +135,100 @@ interface PaneProps {
 }
 
 function PaneShell({
-    eyebrow,
     title,
     body,
     children,
     footer,
 }: {
-    eyebrow: string;
     title: string;
     body?: string;
     children: ReactNode;
     footer: ReactNode;
 }) {
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-            <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
-                <div
-                    className="mono"
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        color: "var(--ink-3)",
-                        textTransform: "uppercase",
-                        marginBottom: 6,
-                    }}
-                >
-                    {eyebrow}
-                </div>
-                <h2
-                    className="display"
-                    style={{
-                        fontSize: 28,
-                        lineHeight: 1.15,
-                        letterSpacing: "-0.02em",
-                        color: "var(--ink)",
-                        margin: "0 0 10px",
-                    }}
-                >
+        <div className="flex h-full flex-col">
+            <div className="flex-1 overflow-y-auto px-7 py-6">
+                <h2 className="display text-ink m-0 mb-2.5 text-[28px] leading-[1.15] tracking-[-0.02em]">
                     {title}
                 </h2>
                 {body && (
-                    <div
-                        style={{
-                            fontSize: 13,
-                            lineHeight: 1.6,
-                            color: "var(--ink-3)",
-                            marginBottom: 22,
-                        }}
-                    >
+                    <p className="text-ink-3 mb-[22px] mt-0 max-w-[68ch] text-[13px] leading-[1.6]">
                         {body}
-                    </div>
+                    </p>
                 )}
                 {children}
             </div>
-            <div
-                style={{
-                    padding: "14px 24px",
-                    borderTop: "1px solid var(--line)",
-                    background: "var(--line-2)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                }}
-            >
+            <div className="border-line bg-line-2 flex items-center gap-2 border-t px-6 py-3.5">
                 {footer}
             </div>
         </div>
     );
 }
 
-function PrimaryCTA({
-    onClick,
-    children,
-    disabled,
-}: {
-    onClick: () => void;
-    children: ReactNode;
-    disabled?: boolean;
-}) {
+function SecondaryLink({ onClick, children }: { onClick: () => void; children: ReactNode }) {
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "9px 16px",
-                borderRadius: 8,
-                background: disabled ? "var(--line)" : "var(--accent)",
-                color: disabled ? "var(--ink-3)" : "white",
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: disabled ? "not-allowed" : "pointer",
-                boxShadow: disabled ? "none" : "0 2px 10px var(--accent-glow)",
-            }}
-        >
+        <Button variant="ghost" size="sm" onClick={onClick} className="text-ink-2">
             {children}
-        </button>
+        </Button>
     );
 }
 
-function SecondaryLink({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+/** The accent-dotted list the explainer panes share. */
+function BulletList({ items, className }: { items: string[]; className?: string }) {
+    if (items.length === 0) return null;
     return (
-        <button
-            onClick={onClick}
-            style={{
-                fontSize: 12,
-                fontWeight: 500,
-                color: "var(--ink-2)",
-            }}
-            onMouseEnter={e => {
-                e.currentTarget.style.color = "var(--accent)";
-            }}
-            onMouseLeave={e => {
-                e.currentTarget.style.color = "var(--ink-2)";
-            }}
-        >
-            {children}
-        </button>
+        <ul className={cn("m-0 flex list-none flex-col gap-2.5 p-0", className)}>
+            {items.map(item => (
+                <li
+                    key={item}
+                    className="text-ink-2 flex items-start gap-2.5 text-[13px] leading-[1.55]"
+                >
+                    <span
+                        aria-hidden
+                        className="bg-brand mt-[7px] size-[5px] shrink-0 rounded-full"
+                    />
+                    {item}
+                </li>
+            ))}
+        </ul>
     );
 }
 
 function InlineFeatureShell({
-    eyebrow,
     title,
     subtitle,
     children,
 }: {
-    eyebrow: string;
     title: string;
     /** One line shown under title (Studio panes where copy helps orientation). */
     subtitle?: string;
     children: ReactNode;
 }) {
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-            <div
-                style={{
-                    padding: "14px 24px 12px",
-                    borderBottom: "1px solid var(--line)",
-                    background: "var(--panel)",
-                    flexShrink: 0,
-                }}
-            >
-                <div
-                    className="mono"
-                    style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        color: "var(--ink-3)",
-                        textTransform: "uppercase",
-                        marginBottom: 2,
-                    }}
-                >
-                    {eyebrow}
-                </div>
-                <h2
-                    className="display"
-                    style={{
-                        fontSize: 22,
-                        lineHeight: 1.15,
-                        letterSpacing: "-0.02em",
-                        color: "var(--ink)",
-                        margin: 0,
-                    }}
-                >
+        <div className="flex h-full flex-col">
+            <div className="border-line bg-panel shrink-0 border-b px-6 pb-3 pt-3.5">
+                <h2 className="display text-ink m-0 text-[22px] leading-[1.15] tracking-[-0.02em]">
                     {title}
                 </h2>
                 {subtitle ? (
-                    <p
-                        style={{
-                            margin: "8px 0 0",
-                            fontSize: 12.5,
-                            lineHeight: 1.5,
-                            color: "var(--ink-3)",
-                            maxWidth: "min(560px, 100%)",
-                        }}
-                    >
+                    <p className="text-ink-3 mb-0 mt-2 max-w-[min(560px,100%)] text-[12.5px] leading-normal">
                         {subtitle}
                     </p>
                 ) : null}
             </div>
-            <div style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>{children}</div>
+            <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
         </div>
     );
 }
 
 export function ChatPane(_: PaneProps) {
+    const t = useTranslations("workspace.studioPanes.chat");
     return (
-        <InlineFeatureShell eyebrow="Workspace" title="Chat">
-            <div
-                style={{
-                    padding: "20px 24px",
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                    color: "var(--ink-2)",
-                }}
-            >
-                <p style={{ margin: 0 }}>
-                    Ask grounded questions over your indexed sources. Pick sources on the left to
-                    scope your questions, or ask globally across the workspace.
-                </p>
-                <p style={{ marginTop: 12, color: "var(--ink-3)", fontSize: 12 }}>
-                    Select <strong>Chat</strong> in the sidebar to return to your conversation, or
-                    close Studio.
+        <InlineFeatureShell title={t("title")}>
+            <div className="text-ink-2 px-6 py-5 text-[13px] leading-[1.6]">
+                <p className="m-0">{t("body")}</p>
+                <p className="text-ink-3 mb-0 mt-3 text-xs">
+                    {t.rich("hint", { strong: chunks => <strong>{chunks}</strong> })}
                 </p>
             </div>
         </InlineFeatureShell>
@@ -350,76 +245,30 @@ export function DraftPane({ context }: PaneProps & { context?: StudioPaneContext
 }
 
 interface ComingSoonPaneProps extends PaneProps {
-    eyebrow: string;
     title: string;
     body: string;
     bullets: string[];
 }
 
 /** Reusable "coming soon" pane for Tools features that aren't shipped yet. */
-export function ComingSoonPane({ onClose, eyebrow, title, body, bullets }: ComingSoonPaneProps) {
+export function ComingSoonPane({ onClose, title, body, bullets }: ComingSoonPaneProps) {
+    const t = useTranslations("workspace.studioPanes");
+    const tc = useTranslations("common");
     return (
         <PaneShell
-            eyebrow={eyebrow}
-            title={`${title} (coming soon)`}
+            title={t("comingSoonTitle", { title })}
             body={body}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Close</SecondaryLink>
-                    <div style={{ flex: 1 }} />
-                    <button
-                        disabled
-                        style={{
-                            fontSize: 13,
-                            fontWeight: 600,
-                            padding: "9px 16px",
-                            borderRadius: 8,
-                            background: "var(--line)",
-                            color: "var(--ink-3)",
-                            cursor: "not-allowed",
-                        }}
-                    >
-                        Coming soon
-                    </button>
+                    <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
+                    <div className="flex-1" />
+                    <Button variant="secondary" disabled>
+                        {t("comingSoon")}
+                    </Button>
                 </>
             }
         >
-            <ul
-                style={{
-                    listStyle: "none",
-                    margin: 0,
-                    padding: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 10,
-                }}
-            >
-                {bullets.map(b => (
-                    <li
-                        key={b}
-                        style={{
-                            display: "flex",
-                            gap: 10,
-                            alignItems: "flex-start",
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            lineHeight: 1.55,
-                        }}
-                    >
-                        <span
-                            style={{
-                                marginTop: 7,
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                background: "var(--accent)",
-                                flexShrink: 0,
-                            }}
-                        />
-                        {b}
-                    </li>
-                ))}
-            </ul>
+            <BulletList items={bullets} />
         </PaneShell>
     );
 }
@@ -482,35 +331,15 @@ export function KnowledgeStudioPane({
     context,
     onClose,
 }: PaneProps & { context?: StudioPaneContext }) {
+    const t = useTranslations("workspace.studioPanes.knowledge");
     if (!context?.knowledge) {
         return (
-            <InlineFeatureShell eyebrow="Knowledge" title="Your corpus">
-                <div
-                    style={{
-                        padding: "20px 24px",
-                        fontSize: 13,
-                        lineHeight: 1.6,
-                        color: "var(--ink-2)",
-                    }}
-                >
-                    <p style={{ margin: 0 }}>
-                        Everything the workspace can cite — uploads, pasted notes, and connected
-                        tools — with filters, collections, and indexing status.
-                    </p>
-                    <button
-                        onClick={onClose}
-                        style={{
-                            marginTop: 14,
-                            padding: "8px 14px",
-                            borderRadius: 8,
-                            background: "var(--accent)",
-                            color: "white",
-                            fontSize: 12.5,
-                            fontWeight: 600,
-                        }}
-                    >
-                        Open Knowledge
-                    </button>
+            <InlineFeatureShell title={t("title")}>
+                <div className="text-ink-2 px-6 py-5 text-[13px] leading-[1.6]">
+                    <p className="m-0">{t("body")}</p>
+                    <Button size="sm" className="mt-3.5" onClick={onClose}>
+                        {t("open")}
+                    </Button>
                 </div>
             </InlineFeatureShell>
         );
@@ -524,174 +353,58 @@ export function KnowledgeStudioPane({
 
 export function PredictiveGapsPane({ onClose }: PaneProps) {
     const router = useRouter();
+    const t = useTranslations("workspace.studioPanes.predictive");
     return (
-        <InlineFeatureShell eyebrow="Predictive gaps" title="What's missing from this document">
-            <div
-                style={{
-                    padding: "20px 24px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 16,
-                }}
-            >
-                <div
-                    style={{
-                        fontSize: 13,
-                        color: "var(--ink-3)",
-                        lineHeight: 1.55,
-                    }}
-                >
-                    Runs across a document and flags cross-references pointing to missing
-                    attachments, numeric inconsistencies, and missing schedules. Pick a document
-                    from the source rail, then run the analyzer.
-                </div>
-                <ul
-                    style={{
-                        listStyle: "none",
-                        margin: 0,
-                        padding: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 10,
-                    }}
-                >
-                    {[
-                        "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
-                        "Domain-aware: Contract / Financial / Compliance / Research / HR / Educational",
-                        "Findings link back to the source span that triggered them",
-                    ].map(b => (
-                        <li
-                            key={b}
-                            style={{
-                                display: "flex",
-                                gap: 10,
-                                alignItems: "flex-start",
-                                fontSize: 13,
-                                color: "var(--ink-2)",
-                                lineHeight: 1.55,
-                            }}
-                        >
-                            <span
-                                style={{
-                                    marginTop: 7,
-                                    width: 5,
-                                    height: 5,
-                                    borderRadius: "50%",
-                                    background: "var(--accent)",
-                                    flexShrink: 0,
-                                }}
-                            />
-                            {b}
-                        </li>
-                    ))}
-                </ul>
-                <button
+        <InlineFeatureShell title={t("title")}>
+            <div className="flex flex-col gap-4 px-6 py-5">
+                <p className="text-ink-3 m-0 text-[13px] leading-[1.55]">{t("body")}</p>
+                <BulletList items={[t("crossReferences"), t("domainAware"), t("findingsLink")]} />
+                <Button
+                    className="self-start"
                     onClick={() => {
                         router.push("/employer/documents");
                         onClose();
                     }}
-                    style={{
-                        alignSelf: "flex-start",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "9px 16px",
-                        borderRadius: 8,
-                        background: "var(--accent)",
-                        color: "white",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        boxShadow: "0 2px 10px var(--accent-glow)",
-                    }}
                 >
-                    Back to workspace <IconChevronRight size={12} />
-                </button>
+                    {t("back")} <IconChevronRight />
+                </Button>
             </div>
         </InlineFeatureShell>
     );
 }
 
 export function WorkflowsPane({ onClose }: PaneProps) {
+    const t = useTranslations("workspace.studioPanes");
+    const tc = useTranslations("common");
     return (
         <PaneShell
-            eyebrow="Automate"
-            title="Workflows (coming soon)"
-            body="Chain source-aware steps: 'Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.' Currently in design."
+            title={t("workflows.title")}
+            body={t("workflows.body")}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Close</SecondaryLink>
-                    <div style={{ flex: 1 }} />
-                    <button
-                        disabled
-                        style={{
-                            fontSize: 13,
-                            fontWeight: 600,
-                            padding: "9px 16px",
-                            borderRadius: 8,
-                            background: "var(--line)",
-                            color: "var(--ink-3)",
-                            cursor: "not-allowed",
-                        }}
-                    >
-                        Coming soon
-                    </button>
+                    <SecondaryLink onClick={onClose}>{tc("actions.close")}</SecondaryLink>
+                    <div className="flex-1" />
+                    <Button variant="secondary" disabled>
+                        {t("comingSoon")}
+                    </Button>
                 </>
             }
         >
-            <ul
-                style={{
-                    listStyle: "none",
-                    margin: 0,
-                    padding: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 10,
-                }}
-            >
-                {[
-                    "Scheduled or event-triggered",
-                    "Composable actions: query, draft, rewrite, export, notify",
-                    "Dry-run preview before first run",
-                ].map(b => (
-                    <li
-                        key={b}
-                        style={{
-                            display: "flex",
-                            gap: 10,
-                            alignItems: "flex-start",
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            lineHeight: 1.55,
-                        }}
-                    >
-                        <span
-                            style={{
-                                marginTop: 7,
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                background: "var(--accent)",
-                                flexShrink: 0,
-                            }}
-                        />
-                        {b}
-                    </li>
-                ))}
-            </ul>
+            <BulletList
+                items={[t("workflows.scheduled"), t("workflows.composable"), t("workflows.dryRun")]}
+            />
         </PaneShell>
     );
 }
 
 export function DefaultLinkPane({
     onClose,
-    eyebrow,
     title,
     body,
     bullets,
     href,
     ctaLabel,
 }: PaneProps & {
-    eyebrow: string;
     title: string;
     body: string;
     bullets: string[];
@@ -699,63 +412,27 @@ export function DefaultLinkPane({
     ctaLabel: string;
 }) {
     const router = useRouter();
+    const tc = useTranslations("common");
     return (
         <PaneShell
-            eyebrow={eyebrow}
             title={title}
             body={body}
             footer={
                 <>
-                    <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-                    <div style={{ flex: 1 }} />
-                    <PrimaryCTA
+                    <SecondaryLink onClick={onClose}>{tc("actions.cancel")}</SecondaryLink>
+                    <div className="flex-1" />
+                    <Button
                         onClick={() => {
                             router.push(href);
                             onClose();
                         }}
                     >
-                        {ctaLabel} <IconChevronRight size={12} />
-                    </PrimaryCTA>
+                        {ctaLabel} <IconChevronRight />
+                    </Button>
                 </>
             }
         >
-            <ul
-                style={{
-                    listStyle: "none",
-                    margin: 0,
-                    padding: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 10,
-                    marginBottom: 22,
-                }}
-            >
-                {bullets.map(b => (
-                    <li
-                        key={b}
-                        style={{
-                            display: "flex",
-                            gap: 10,
-                            alignItems: "flex-start",
-                            fontSize: 13,
-                            color: "var(--ink-2)",
-                            lineHeight: 1.55,
-                        }}
-                    >
-                        <span
-                            style={{
-                                marginTop: 7,
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                background: "var(--accent)",
-                                flexShrink: 0,
-                            }}
-                        />
-                        {b}
-                    </li>
-                ))}
-            </ul>
+            <BulletList items={bullets} className="mb-[22px]" />
         </PaneShell>
     );
 }
@@ -766,49 +443,27 @@ export function DefaultLinkPane({
  * something useful — start a new one.
  */
 function MindmapStudioPane({ context, onClose }: PaneProps & { context?: StudioPaneContext }) {
+    const t = useTranslations("workspace");
     if (!context?.mindmap) {
         return (
             <DefaultLinkPane
                 onClose={onClose}
-                eyebrow="Studio"
-                title="Mindmap"
-                body="Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create."
+                title={t("studioPanes.mindmap.linkTitle")}
+                body={t("studioPanes.mindmap.linkBody")}
                 bullets={[]}
                 href="/employer/documents?add=1&tab=mindmap"
-                ctaLabel="New mindmap"
+                ctaLabel={t("common.newMindmap")}
             />
         );
     }
     const { onCreate } = context.mindmap;
     return (
-        <InlineFeatureShell eyebrow="Mindmap" title="Sources you draw">
-            <div
-                style={{
-                    padding: "20px 24px",
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                    color: "var(--ink-2)",
-                }}
-            >
-                <p style={{ margin: 0 }}>
-                    Diagrams, mindmaps and flowcharts live in your library beside every other
-                    source. Open one from the rail to preview it, edit it in place, and make it
-                    citable when it is ready.
-                </p>
-                <button
-                    onClick={onCreate}
-                    style={{
-                        marginTop: 14,
-                        padding: "8px 14px",
-                        borderRadius: 8,
-                        background: "var(--accent)",
-                        color: "white",
-                        fontSize: 12.5,
-                        fontWeight: 600,
-                    }}
-                >
-                    New mindmap
-                </button>
+        <InlineFeatureShell title={t("studioPanes.mindmap.title")}>
+            <div className="text-ink-2 px-6 py-5 text-[13px] leading-[1.6]">
+                <p className="m-0">{t("studioPanes.mindmap.body")}</p>
+                <Button size="sm" className="mt-3.5" onClick={onCreate}>
+                    {t("common.newMindmap")}
+                </Button>
             </div>
         </InlineFeatureShell>
     );
@@ -828,19 +483,9 @@ export function renderStudioPane(
     onClose: () => void,
     context?: StudioPaneContext
 ): React.ReactNode {
-    if (feature.comingSoon) {
-        return (
-            <ComingSoonPane
-                onClose={onClose}
-                eyebrow="Studio"
-                title={feature.label}
-                body={feature.desc}
-                bullets={[]}
-            />
-        );
-    }
+    if (feature.comingSoon) return <FeatureComingSoonPane feature={feature} onClose={onClose} />;
     const id = feature.id;
-    if (!isStudioPaneId(id)) return <UnknownPane label={feature.label} />;
+    if (!isStudioPaneId(id)) return <UnknownPane feature={feature} />;
     switch (id) {
         case "chat":
             return <ChatPane onClose={onClose} />;
@@ -893,16 +538,37 @@ export function renderStudioPane(
             return <WorkspaceTool host={context?.tool} />;
         default: {
             const unhandled: never = id;
-            return <UnknownPane label={String(unhandled)} />;
+            return <UnknownPane feature={{ id: String(unhandled), label: String(unhandled) }} />;
         }
     }
 }
 
+/** An app that is listed but not shipped yet, named in the reader's language. */
+function FeatureComingSoonPane({
+    feature,
+    onClose,
+}: {
+    feature: StudioFeature;
+    onClose: () => void;
+}) {
+    const studio = useStudioText();
+    return (
+        <ComingSoonPane
+            onClose={onClose}
+            title={studioFeatureLabel(studio, feature)}
+            body={studioFeatureDescription(studio, feature)}
+            bullets={[]}
+        />
+    );
+}
+
 /** A tab whose app this build does not have — a layout saved by a newer version, say. */
-function UnknownPane({ label }: { label: string }) {
+function UnknownPane({ feature }: { feature: Pick<StudioFeature, "id" | "label"> }) {
+    const t = useTranslations("workspace");
+    const studio = useStudioText();
     return (
         <div className="text-ink-3 flex h-full items-center justify-center px-6 text-center text-[13px]">
-            {label} is not available in this version of the app.
+            {t("studioPanes.unknown", { label: studioFeatureLabel(studio, feature) })}
         </div>
     );
 }

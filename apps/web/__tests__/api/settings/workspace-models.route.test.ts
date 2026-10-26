@@ -1,5 +1,5 @@
 /**
- * Settings › Models › Your own model. What must not regress: only
+ * Workspace › Bring your own keys. What must not regress: only
  * `settings.manage` reaches any of it, the key goes in and never comes back
  * out, a stored key is never re-aimed at a new address, and the OpenRouter
  * return leg refuses anything but the flow it started.
@@ -284,7 +284,8 @@ describe("test and list", () => {
         await expect(response.json()).resolves.toMatchObject({ ok: true });
         expect(mockProbe.test).toHaveBeenCalledWith(
             { baseUrl: "https://a.b/v1", apiKey: "sk-typed-1234" },
-            selection
+            selection,
+            "en"
         );
     });
 });
@@ -318,7 +319,7 @@ describe("Connect OpenRouter", () => {
             expect(target.origin).toBe("http://localhost:3000");
             expect(target.searchParams.get("openrouter")).toBe("unavailable");
             expect(target.searchParams.get("feature")).toBe("workspace");
-            expect(target.searchParams.get("at")).toBe("/models");
+            expect(target.searchParams.get("at")).toBe("/byok");
         } finally {
             mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
         }
@@ -354,7 +355,7 @@ describe("Connect OpenRouter", () => {
             expect(response.cookies.get(OPENROUTER_COOKIE)!.secure).toBe(true);
         });
 
-        it("lands the return leg on Workspace › Models at the public origin", async () => {
+        it("lands the return leg on Workspace › Bring your own keys at the public origin", async () => {
             const response = await openRouterCallback(
                 new Request(
                     `${BEHIND_PROXY}/api/settings/models/workspace/openrouter/callback?state=s`
@@ -364,7 +365,7 @@ describe("Connect OpenRouter", () => {
             expect(target.origin).toBe("https://launchstack.example");
             expect(target.pathname).toBe("/employer/documents");
             expect(target.searchParams.get("feature")).toBe("workspace");
-            expect(target.searchParams.get("at")).toBe("/models");
+            expect(target.searchParams.get("at")).toBe("/byok");
             expect(target.searchParams.get("openrouter")).toBe("denied");
         });
     });
@@ -413,7 +414,7 @@ describe("Connect OpenRouter", () => {
         expect(outcome(response)).toBe("connected");
         const back = new URL(response.headers.get("location")!);
         expect(back.searchParams.get("feature")).toBe("workspace");
-        expect(back.searchParams.get("at")).toBe("/models");
+        expect(back.searchParams.get("at")).toBe("/byok");
         const [url, init] = fetchSpy.mock.calls[0]!;
         expect(url).toBe("https://openrouter.ai/api/v1/auth/keys");
         expect(JSON.parse(init?.body as string)).toEqual({
@@ -455,5 +456,132 @@ describe("Connect OpenRouter", () => {
         );
         expect(outcome(response)).toBe("error");
         expect(mockStore.save).not.toHaveBeenCalled();
+    });
+
+    describe("behind the proxy", () => {
+        /** What a route handler sees in the image: the bind address, whatever the Host says. */
+        const PROXIED = "https://0.0.0.0:3000";
+        const PUBLIC = "https://app.example.com";
+        const saved = process.env.BETTER_AUTH_URL;
+
+        beforeEach(() => {
+            process.env.BETTER_AUTH_URL = PUBLIC;
+        });
+        afterEach(() => {
+            if (saved === undefined) delete process.env.BETTER_AUTH_URL;
+            else process.env.BETTER_AUTH_URL = saved;
+        });
+
+        const proxied = (path: string, init?: RequestInit) =>
+            new Request(`${PROXIED}${path}`, {
+                ...init,
+                headers: { host: "app.example.com", ...init?.headers },
+            });
+        const location = (response: Response) => new URL(response.headers.get("location")!);
+
+        it("sends OpenRouter back to the public origin", async () => {
+            const response = await startOpenRouter(
+                proxied("/api/settings/models/workspace/openrouter")
+            );
+            expect(location(response).searchParams.get("callback_url")).toBe(
+                `${PUBLIC}/api/settings/models/workspace/openrouter/callback`
+            );
+            expect(response.cookies.get(OPENROUTER_COOKIE)!.secure).toBe(true);
+        });
+
+        it("says the server can't store keys on the public origin", async () => {
+            mockServerEnv.EMBEDDING_SECRETS_KEY = undefined;
+            try {
+                const response = await startOpenRouter(
+                    proxied("/api/settings/models/workspace/openrouter")
+                );
+                expect(location(response).origin).toBe(PUBLIC);
+            } finally {
+                mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
+            }
+        });
+
+        it("returns the admin to the public origin, not the bind address", async () => {
+            jest.spyOn(global, "fetch").mockResolvedValue(
+                new Response(JSON.stringify({ key: "openrouter-fixture-key" }), { status: 200 })
+            );
+            mockStore.row.mockResolvedValue(null);
+            const flow = encodeFlowCookie({ v: "v", s: "s", c: "5" });
+            const connected = await openRouterCallback(
+                proxied("/api/settings/models/workspace/openrouter/callback?code=abc&state=s", {
+                    headers: { cookie: `${OPENROUTER_COOKIE}=${flow}` },
+                })
+            );
+            expect(location(connected).origin).toBe(PUBLIC);
+            expect(outcome(connected)).toBe("connected");
+
+            const denied = await openRouterCallback(
+                proxied("/api/settings/models/workspace/openrouter/callback?state=s")
+            );
+            expect(location(denied).origin).toBe(PUBLIC);
+        });
+    });
+});
+
+describe("in the reader's language", () => {
+    function chinese(body: unknown, method = "POST") {
+        return new Request("http://localhost/api/settings/models/workspace", {
+            method,
+            headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            body: JSON.stringify(body),
+        });
+    }
+
+    it("words the address check, and keeps the English without the cookie", async () => {
+        const body = { provider: "custom", baseUrl: "not a url", models: selection };
+        const english = await PUT(json(body, "PUT"));
+        await expect(english.json()).resolves.toEqual({
+            error: "That isn't a web address. It should look like https://api.example.com/v1.",
+        });
+        const zh = await PUT(chinese(body, "PUT"));
+        expect(zh.status).toBe(400);
+        await expect(zh.json()).resolves.toEqual({
+            error: "这不是一个网址。它应该类似 https://api.example.com/v1。",
+        });
+    });
+
+    it("words a selection that can't work and a setup that isn't one", async () => {
+        const noVision = await PUT(
+            chinese(
+                {
+                    provider: "custom",
+                    baseUrl: "https://a.b/v1",
+                    models: { ...selection, vision: { id: "x", vision: false, reasoning: false } },
+                },
+                "PUT"
+            )
+        );
+        await expect(noVision.json()).resolves.toEqual({
+            error: "处理图片的模型必须能够读取图片。",
+        });
+        const invalid = await PUT(chinese({ nonsense: true }, "PUT"));
+        await expect(invalid.json()).resolves.toEqual({ error: "这不是有效的模型设置。" });
+    });
+
+    it("words each failed model in a test", async () => {
+        mockProbe.test.mockResolvedValue([
+            {
+                route: "default",
+                modelId: "acme/chat",
+                ok: false,
+                latencyMs: 3,
+                message: "The model answered with nothing. Check that it is a chat model.",
+            },
+        ]);
+        const res = await testModels(
+            chinese({
+                provider: "openai",
+                baseUrl: "https://a.b/v1",
+                apiKey: "k",
+                models: selection,
+            })
+        );
+        const body = (await res.json()) as { results: { message?: string }[] };
+        expect(body.results[0]?.message).toBe("模型没有返回任何内容。请确认它是一个对话模型。");
     });
 });

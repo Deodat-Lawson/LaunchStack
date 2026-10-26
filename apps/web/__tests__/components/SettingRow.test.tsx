@@ -154,15 +154,15 @@ describe("SettingRow — a select says what the chosen option does", () => {
             if (url.startsWith("/api/settings")) {
                 return json({
                     settings: {
-                        "documents.defaultProcessingMethod": {
-                            key: "documents.defaultProcessingMethod",
-                            value: "auto",
-                            source: "default",
-                            sourceId: null,
-                            updatedBy: null,
+                        "chat.responseStyle": {
+                            key: "chat.responseStyle",
+                            value: "concise",
+                            source: "member",
+                            sourceId: VIEWER,
+                            updatedBy: VIEWER,
                             updatedAt: null,
-                            canEdit: { workspace: true, folder: true, member: false },
-                            stored: {},
+                            canEdit: { workspace: true, folder: false, member: true },
+                            stored: { member: "concise" },
                         },
                     },
                     viewer: { authUserId: VIEWER, permissions: ["settings.manage"] },
@@ -174,22 +174,12 @@ describe("SettingRow — a select says what the chosen option does", () => {
     });
 
     it("shows the chosen option's description under the closed menu, tied to it", async () => {
-        render(
-            <SettingRow
-                settingKey="documents.defaultProcessingMethod"
-                options={[
-                    {
-                        value: "auto",
-                        label: "Automatic",
-                        description: "Azure reads every page, then Docling if it fails.",
-                    },
-                    { value: "standard", label: "Text layer only" },
-                ]}
-            />
-        );
+        render(<SettingRow settingKey="chat.responseStyle" scope="member" />);
 
-        const note = await screen.findByText("Azure reads every page, then Docling if it fails.");
-        const trigger = screen.getByRole("combobox", { name: /default processing method/i });
+        // In the reader's words: the answer styles' own messages.
+        const note = await screen.findByText("Short and direct: the answer first, no filler.");
+        const trigger = screen.getByRole("combobox", { name: /answer style/i });
+        expect(trigger).toHaveTextContent("Concise");
         expect(trigger).toHaveAttribute("aria-describedby", note.id);
     });
 });

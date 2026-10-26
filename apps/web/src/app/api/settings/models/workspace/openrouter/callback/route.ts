@@ -3,13 +3,13 @@
  * it started in) and the admin's permission, trades the code for a key, and
  * stores it. A workspace that was already on OpenRouter keeps its chosen
  * models; otherwise none is chosen yet, so nothing switches over until an
- * admin picks one in Workspace › Models.
+ * admin picks one in Workspace › Bring your own keys.
  *
- * Every exit is a redirect back to Workspace › Models with an `openrouter=`
- * code the page turns into a message: this runs as a top-level navigation,
- * where a JSON error would strand the admin on a blank page. The redirect is
- * built on the public origin — behind the proxy `request.url` is the
- * server's bind address (`0.0.0.0:3000`).
+ * Every exit is a redirect back to Workspace › Bring your own keys with an
+ * `openrouter=` code the page turns into a message: this runs as a top-level
+ * navigation, where a JSON error would strand the admin on a blank page. The
+ * redirect is built on the public origin — behind the proxy `request.url` is
+ * the server's bind address (`0.0.0.0:3000`).
  */
 
 import { NextResponse } from "next/server";
@@ -37,7 +37,7 @@ type Outcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 function backToSettings(request: Request, outcome: Outcome): NextResponse {
     const url = new URL(
-        workspaceHref("models", { query: { openrouter: outcome } }),
+        workspaceHref("byok", { query: { openrouter: outcome } }),
         publicOrigin(request)
     );
     const response = NextResponse.redirect(url);

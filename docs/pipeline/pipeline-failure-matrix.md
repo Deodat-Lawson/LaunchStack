@@ -55,7 +55,7 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | [B1](#b1) | OCR / Normalize | Object storage + `pdfjs-serverless`    | `processNativePDF` throws on storage-download failure or corrupted/unparseable PDF | Last link of the chain |
 | [B2](#b2) | OCR / Normalize | Object storage (HEAD request)          | Content-type sniffing for non-`.pdf`-named URLs fails silently                     | Needs discussion (Low) |
 | [B3](#b3) | OCR / Normalize | —                                      | Unrecognized `selectedProvider` reads the PDF's text layer only                    | Working as intended    |
-| [B4](#b4) | OCR / Normalize | Azure Document Intelligence (external) | Any Azure error or the 5-minute poll timeout → next provider (Docling, text layer) | Fixed: falls back      |
+| [B4](#b4) | OCR / Normalize | Azure Document Intelligence (external) | Any Azure error or the 15-minute analysis limit → next provider, then text layer   | Fixed: falls back      |
 | [B5](#b5) | OCR / Normalize | document converter → docling-serve     | Unreachable, 503 (no docling-serve), 10-min timeout, or non-200 → next provider    | Fixed: falls back      |
 
 | ID        | Stage | Dependency                     | Failure mode                                                                       | Status                             |
@@ -194,9 +194,9 @@ Invalid/unrecognized `preferredProvider` value silently ignored, falls back to a
 
 `processNativePDF` throws on storage-download failure or corrupted/unparseable PDF · Object storage + pdfjs-serverless · Last link of the chain
 
-- What happens: The text layer is the last provider `normalizeDocument` tries (and the only one for the text-only method). If it throws too — the download failed, or the PDF does not parse — `normalizeDocument` throws `Every OCR provider failed (AZURE: …; NATIVE_PDF: …)`, naming every attempt, and the pipeline's retry/`onFailure` path runs as before.
-- Left behind: A failed job whose error lists what each provider said.
-- Notes: Native is no longer reached by a provider error in the middle of the chain going unrecorded — see B4.
+- What happens: The text layer is the last step `normalizeDocument` takes under provider-first (and the only one for the text-only method). If it throws too — the download failed, or the PDF does not parse — the OCR engines' error stands (one engine: its own error; several: `Every OCR provider failed (AZURE: …; DOCLING: …)`), and the pipeline's retry/`onFailure` path runs as before.
+- Left behind: A failed job whose error says what each engine said.
+- Notes: For the text-only method there is no engine error to keep, so the text layer's own error is the job's.
 
 ### B2
 
@@ -210,7 +210,7 @@ Content-type sniffing for non-`.pdf`-named URLs fails silently · Object storage
 
 Unrecognized `selectedProvider` reads the PDF's text layer only · — · Working as intended
 
-- What happens: `ocrFallbackChain` (`provider-order.ts`) turns anything that is not an OCR engine into `["NATIVE_PDF"]`, so `normalizeDocument` reads the text layer.
+- What happens: `normalizeDocument` only runs the engine chain for an OCR engine; anything else goes to `processWithProvider`, whose `default` case logs a warning and reads the text layer.
 - Left behind: Could cascade into B1 if the content isn't actually a valid PDF.
 - Notes: Cross-reference with B1.
 
@@ -218,8 +218,8 @@ Unrecognized `selectedProvider` reads the PDF's text layer only · — · Workin
 
 Azure Document Intelligence fails: missing credentials, fetch-document failure, submit failure (401/403/429/5xx), poll failure, or the poll timeout · Azure Document Intelligence (external) · Fixed: falls back
 
-- What happens: `normalizeDocument` (`processor.ts`) catches the error and tries the next provider in the shared order (`packages/conversion/src/ocr-processing/provider-order.ts`): Docling when the converter reports docling-serve answering, then Landing AI and Datalab when configured, then the PDF's own text layer. The poll budget is 150 × 2s (5 minutes): a paid S0 resource reads every page, and a long scan outgrew the old 120s.
-- Left behind: The document indexes with whatever the next provider read. `document.ocr_metadata.ocrRouting` records the requested provider, the one that produced the text, `fellBack`, and every attempt with its error (URL query strings removed); `ocr_jobs.primary_provider` / `actual_provider` hold the requested and actual provider.
+- What happens: Before throwing, the adapter retries a 429 or 5xx submit up to four times (honouring `Retry-After`), keeps polling through 429s, 5xx and network errors, and gives each analysis 15 minutes; a PDF over 2,000 pages goes as consecutive page ranges. When it does throw, `normalizeDocument` (`processor.ts`) tries the next provider in the shared order (`packages/conversion/src/ocr-processing/provider-order.ts`): Docling when the converter reports docling-serve answering, then Landing AI and Datalab when configured, then — under provider-first, the default — the PDF's own text layer. The text layer does not stand in for a scan or for image-only pages: then the error stands and the outbox retries, unless every engine refused the file outright (Azure 400/413/415, `fileRejected`).
+- Left behind: The document indexes with whatever the next provider read, or the job fails and is retried as above. `document.ocr_metadata.ocrRouting` records the requested provider, the one that produced the text, `fellBack`, and every attempt with its error (URL query strings removed); `ocr_jobs.primary_provider` / `actual_provider` hold the requested and actual provider.
 - Notes: Azure returning fewer pages than the PDF has — a free F0 resource reads only the first two pages of each document — counts as a partial read: the chain continues and the result with more text is kept, with the shortfall on the record.
 
 ### B5

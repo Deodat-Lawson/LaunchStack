@@ -10,6 +10,8 @@ jest.mock("~/env", () => ({
             APP_PUBLIC_URL: "http://app:3000",
             SLACK_CLIENT_ID: "slack-id",
             SLACK_CLIENT_SECRET: "slack-secret",
+            NOTION_OAUTH_CLIENT_ID: "notion-id",
+            NOTION_OAUTH_CLIENT_SECRET: "notion-secret",
             EMBEDDING_SECRETS_KEY: "test-key",
         },
         client: {},
@@ -18,7 +20,10 @@ jest.mock("~/env", () => ({
 jest.mock("~/server/db", () => ({ db: {} }));
 
 import { listBrandNetworks } from "~/server/brand/accounts";
-import { getConnectorConfig } from "~/server/services/connectors/config";
+import {
+    getConnectorConfig,
+    getConnectorProvidersStatus,
+} from "~/server/services/connectors/config";
 
 const saved = process.env.BETTER_AUTH_URL;
 
@@ -42,6 +47,14 @@ describe("connector redirect URIs", () => {
         delete process.env.BETTER_AUTH_URL;
         // A worker refresh sends no redirect URI, so none is better than an internal one.
         expect(getConnectorConfig("slack")?.redirectUri).toBe("");
+    });
+
+    it("give Notion its own callback on the public origin", () => {
+        expect(getConnectorConfig("notion", "https://app.example.com")?.redirectUri).toBe(
+            "https://app.example.com/api/connectors/notion/oauth/callback"
+        );
+        // The pair plus the secret-box key is all Notion needs to be offered.
+        expect(getConnectorProvidersStatus().notion.configured).toBe(true);
     });
 
     // LinkedIn is unconfigured here, so its setup steps are shown.

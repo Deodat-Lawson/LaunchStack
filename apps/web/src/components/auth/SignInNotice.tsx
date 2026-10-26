@@ -15,6 +15,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -26,13 +27,13 @@ import {
     DialogTitle,
 } from "~/components/ui/dialog";
 import {
-    parseTakeoverNotice,
+    parseTakeoverNoticeMethods,
     TAKEOVER_NOTICE_COOKIE,
-    type TakeoverNotice,
+    type TakeoverNoticeMethods,
 } from "~/lib/auth/takeover-notice";
 
 /** Reads the note and deletes it in the same step, so it shows exactly once. */
-function takeNotice(): TakeoverNotice | null {
+function takeNotice(): TakeoverNoticeMethods | null {
     const prefix = `${TAKEOVER_NOTICE_COOKIE}=`;
     const raw = document.cookie
         .split("; ")
@@ -40,11 +41,13 @@ function takeNotice(): TakeoverNotice | null {
         ?.slice(prefix.length);
     if (raw === undefined) return null;
     document.cookie = `${TAKEOVER_NOTICE_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
-    return parseTakeoverNotice(raw);
+    return parseTakeoverNoticeMethods(raw);
 }
 
 export function SignInNotice() {
-    const [notice, setNotice] = useState<TakeoverNotice | null>(null);
+    const t = useTranslations("auth.signInNotice");
+    const format = useFormatter();
+    const [notice, setNotice] = useState<TakeoverNoticeMethods | null>(null);
 
     useEffect(() => {
         // Only ever set: a second run (Strict Mode) finds the cookie already
@@ -55,7 +58,13 @@ export function SignInNotice() {
 
     if (!notice) return null;
     const close = () => setNotice(null);
-    const { provider, removed, plural, passwordRemoved } = notice;
+    const { provider } = notice;
+    const removed = format.list(
+        notice.removed.map(method => t(`methods.${method}`)),
+        { type: "conjunction" }
+    );
+    const passwordRemoved = notice.removed.includes("credential");
+    const body = notice.removed.length > 1 ? "bodyPlural" : "bodySingle";
 
     return (
         <Dialog open onOpenChange={open => !open && close()}>
@@ -65,30 +74,23 @@ export function SignInNotice() {
                         <ShieldCheck className="size-[18px]" aria-hidden />
                     </span>
                     <DialogTitle className="text-ink text-xl">
-                        You&apos;re signed in with {provider}
+                        {t("title", { provider })}
                     </DialogTitle>
-                    <DialogDescription>
-                        {provider} confirmed this email address is yours. Launchstack had never
-                        confirmed it, so we couldn&apos;t tell who set up the earlier sign-in. To
-                        keep the account yours, {removed} {plural ? "were" : "was"} removed and
-                        every other browser was signed out.
-                    </DialogDescription>
+                    <DialogDescription>{t(body, { provider, removed })}</DialogDescription>
                 </DialogHeader>
                 <p className="text-ink-3 m-0 text-center text-[13px] leading-relaxed sm:text-left">
-                    If you didn&apos;t create this account yourself, check who else is in its
-                    workspaces under Workspace › People and access.
-                    {passwordRemoved && " Want a password too? Set a new one in Settings."}
+                    {passwordRemoved ? t("checkPeopleSetPassword") : t("checkPeople")}
                 </p>
                 <DialogFooter>
                     {passwordRemoved && (
                         <Button asChild variant="outline" onClick={close}>
                             <Link href="/employer/settings?show=sign-in#account">
-                                Set a password
+                                {t("setPassword")}
                             </Link>
                         </Button>
                     )}
                     <Button onClick={close} autoFocus>
-                        Got it
+                        {t("gotIt")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

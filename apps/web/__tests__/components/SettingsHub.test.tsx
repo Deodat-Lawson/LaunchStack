@@ -102,10 +102,14 @@ const railLabels = () =>
 
 describe("settingsSectionFromHash", () => {
     it("maps every documented alias, including the ones that used to be routes", () => {
-        // The retired Processing section's links land on Models.
-        expect(settingsSectionFromHash("#byok")).toBe("models");
-        expect(settingsSectionFromHash("#embedding")).toBe("models");
-        expect(settingsSectionFromHash("#processing")).toBe("models");
+        // Processing became Bring your own keys; the embedding key it held is
+        // gone, and its links land there too.
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#embedding")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
+        expect(settingsSectionFromHash("#openrouter")).toBe("byok");
+        expect(settingsSectionFromHash("#keys")).toBe("byok");
+        expect(settingsSectionFromHash("#models")).toBe("models");
         expect(settingsSectionFromHash("#agents")).toBe("agents");
         expect(settingsSectionFromHash("#nodes")).toBe("agents");
         expect(settingsSectionFromHash("#slack")).toBe("integrations");
@@ -124,7 +128,7 @@ describe("settingsSectionFromHash", () => {
     });
 
     it("is case-insensitive and tolerates a missing #", () => {
-        expect(settingsSectionFromHash("BYOK")).toBe("models");
+        expect(settingsSectionFromHash("BYOK")).toBe("byok");
         expect(settingsSectionFromHash("#Agents")).toBe("agents");
     });
 
@@ -150,12 +154,13 @@ describe("SettingsHub", () => {
             "People and access",
             "Company profile",
             "Processing",
-            "Models",
-            "Agents",
+            "Bring your own keys",
+            "Models and routes",
+            "Agents and autonomy",
             "Document defaults",
             "Integrations",
-            "Usage",
-            "Archive",
+            "Usage and costs",
+            "Archive and retention",
             "Labs",
             "Analytics",
         ]) {
@@ -248,7 +253,14 @@ describe("SettingsHub", () => {
         ["#people", "/employer/documents?feature=workspace&at=%2Fpeople"],
         ["#company", "/employer/documents?feature=workspace&at=%2Fcompany"],
         ["#metadata", "/employer/documents?feature=workspace&at=%2Fcompany"],
-        ["#byok", "/employer/documents?feature=workspace&at=%2Fmodels"],
+        ["#byok", "/employer/documents?feature=workspace&at=%2Fbyok"],
+        ["#processing", "/employer/documents?feature=workspace&at=%2Fbyok"],
+        ["#embedding", "/employer/documents?feature=workspace&at=%2Fbyok"],
+        ["#openrouter", "/employer/documents?feature=workspace&at=%2Fbyok"],
+        ["#models", "/employer/documents?feature=workspace&at=%2Fmodels"],
+        // Document defaults is gone; its links open the Workspace tab.
+        ["#documents", "/employer/documents?feature=workspace&at=%2Fgeneral"],
+        ["#documents.defaultFolder", "/employer/documents?feature=workspace&at=%2Fgeneral"],
         ["#agents", "/employer/documents?feature=workspace&at=%2Fagents"],
         [
             "#audit",
@@ -267,12 +279,12 @@ describe("SettingsHub", () => {
         await waitFor(() => expect(mockReplace).toHaveBeenCalledWith(href));
     });
 
-    it("sends the old OpenRouter return leg to Workspace › Models with its outcome", async () => {
+    it("sends the old OpenRouter return leg to Workspace › Bring your own keys with its outcome", async () => {
         setUrl("", "?openrouter=connected");
         render(<SettingsHub />);
         await waitFor(() =>
             expect(mockReplace).toHaveBeenCalledWith(
-                "/employer/documents?feature=workspace&at=%2Fmodels&openrouter=connected"
+                "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=connected"
             )
         );
     });

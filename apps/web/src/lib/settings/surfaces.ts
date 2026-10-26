@@ -5,8 +5,9 @@
  *   privacy. A Studio tab, and a page of its own at `/employer/settings`.
  * - **Workspace** is everything about the workspace, as a Studio tab with its
  *   screens across the top: its own details (General), people and access,
- *   the company profile, models, agents, document defaults, integrations,
- *   usage, the archive and labs. Each screen's path is `/<section id>`.
+ *   the company profile, its own keys (Bring your own keys), models, agents,
+ *   integrations, usage, the archive and labs. Each screen's path is
+ *   `/<section id>`.
  *
  * Until October 2026 both were one Settings hub, so every link that exists
  * says `/employer/settings#<something>`: a section alias (`#people`,
@@ -48,15 +49,26 @@ export const WORKSPACE_SCREEN_IDS = [
     "general",
     "people",
     "company",
+    "byok",
     "models",
     "agents",
-    "documents",
     "integrations",
     "usage",
     "archive",
     "labs",
 ] as const satisfies readonly SettingsSectionId[];
 export type WorkspaceScreenId = (typeof WORKSPACE_SCREEN_IDS)[number];
+
+/**
+ * The bar's groups, in order: ten screens are more than one row holds, so
+ * they switch by group. Their names are `settings.workspaceTab.groups.<id>`.
+ */
+export const WORKSPACE_SCREEN_GROUPS = [
+    { id: "basics", screens: ["general", "people", "company"] },
+    { id: "setup", screens: ["byok", "models", "agents", "integrations"] },
+    { id: "data", screens: ["usage", "archive", "labs"] },
+] as const satisfies readonly { id: string; screens: readonly WorkspaceScreenId[] }[];
+export type WorkspaceScreenGroupId = (typeof WORKSPACE_SCREEN_GROUPS)[number]["id"];
 
 /** Where the Workspace tab opens when nothing names a screen. */
 export const WORKSPACE_HOME = "/general";
@@ -88,7 +100,8 @@ export function workspaceScreenFromPath(path: string): WorkspaceScreenId | null 
 
 /**
  * The link that opens the Workspace tab on a screen. `query` rides along on
- * the workspace page itself (`openrouter=connected`, read by Models).
+ * the workspace page itself (`openrouter=connected`, read by Bring your own
+ * keys).
  */
 export function workspaceHref(
     screen: WorkspaceScreenId,
@@ -108,6 +121,15 @@ const MOVED_TO_STUDIO: Record<string, string> = {
     statistics: "analytics",
     stats: "analytics",
 };
+
+/**
+ * Document defaults (`#documents`, and its rows `#documents.defaultFolder`
+ * and friends) was a section until its settings were retired. Its links open
+ * the Workspace tab where it opens anyway, rather than nowhere.
+ */
+function isRetiredDocumentsHash(hash: string): boolean {
+    return hash === "documents" || hash.startsWith("documents.");
+}
 
 export type SettingsDestination =
     /** Settings, on a section of its own (null: wherever it is). `hash` is what to put in the address bar. */
@@ -129,6 +151,14 @@ export function settingsDestination(hash: string): SettingsDestination | null {
 
     const app = MOVED_TO_STUDIO[lower];
     if (app) return { kind: "app", featureId: app, href: toolTabHref(app) };
+    if (isRetiredDocumentsHash(lower)) {
+        return {
+            kind: "workspace",
+            screen: "general",
+            at: workspaceScreenPath("general"),
+            href: workspaceHref("general"),
+        };
+    }
 
     const section = settingsSectionFromHash(lower);
     if (!section) return null;

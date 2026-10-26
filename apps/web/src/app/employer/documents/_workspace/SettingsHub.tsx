@@ -4,10 +4,10 @@
  * Settings — yours alone: Account, Appearance, Shortcuts, and Data and
  * privacy.
  *
- * Settings used to hold the workspace too (people, the company profile,
- * models, agents, document defaults, integrations, usage, the archive,
- * labs). Those are the Workspace tab now, with the workspace's own details
- * beside them; the rail ends with the way there. A section is drawn by
+ * Settings used to hold the workspace too (people, the company profile, its
+ * own keys, models, agents, integrations, usage, the archive, labs). Those
+ * are the Workspace tab now, with the workspace's own details beside them;
+ * the rail ends with the way there. A section is drawn by
  * `settings/SectionView`, the same chrome the Workspace tab uses, so there is
  * one header, one action area and one read-only rule for both.
  *
@@ -20,6 +20,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ArrowUpRight, Briefcase } from "lucide-react";
 
 import { RailBackLink } from "~/app/employer/_chrome/RailBackLink";
@@ -63,6 +64,7 @@ export interface SettingsHubProps {
 }
 
 export function SettingsHub({ embedded = false, initialSection }: SettingsHubProps) {
+    const t = useTranslations("settings");
     const router = useRouter();
     const [section, setSection] = useState<PersonalSectionId>(initialSection ?? "account");
 
@@ -76,11 +78,12 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             const hash = window.location.hash.replace(/^#/, "");
             if (!hash) {
                 // OpenRouter's old return leg (`?feature=settings&openrouter=…`)
-                // belongs on Workspace › Models, which reads the outcome. In
-                // the shell, the shell routes it before this hub mounts.
+                // belongs on Workspace › Bring your own keys, which reads the
+                // outcome. In the shell, the shell routes it before this hub
+                // mounts.
                 const outcome = new URLSearchParams(window.location.search).get("openrouter");
                 if (outcome && !embedded) {
-                    router.replace(workspaceHref("models", { query: { openrouter: outcome } }));
+                    router.replace(workspaceHref("byok", { query: { openrouter: outcome } }));
                 }
                 return;
             }
@@ -119,7 +122,7 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             )}
         >
             <nav
-                aria-label="Settings sections"
+                aria-label={t("hub.navLabel")}
                 className="border-line bg-panel w-[240px] shrink-0 overflow-y-auto border-r px-2.5 py-4 [@container(max-width:639px)]:hidden"
             >
                 {/* Standalone, the way back leads the rail as it does in
@@ -129,15 +132,15 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 {/* The workspace you are in, and the one place to switch to
                     another — not a back arrow in the Studio. */}
                 <WorkspaceSwitchCard className="mb-4" />
-                <div className="mono text-ink-3 px-2.5 pb-3 text-[10px] font-bold uppercase tracking-[0.1em]">
-                    Settings
+                <div className="mono text-ink-3 px-2.5 pb-3 text-[11px] font-bold uppercase tracking-[0.1em]">
+                    {t("hub.railTitle")}
                 </div>
                 <div className="mb-3">
                     <div
-                        className="text-ink-3 px-2.5 pb-1 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.08em]"
-                        title="Yours alone; changes affect nobody else."
+                        className="text-ink-3 px-2.5 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                        title={t("groups.you.blurb")}
                     >
-                        You
+                        {t("groups.you.label")}
                     </div>
                     {SECTIONS.map(item => {
                         const isActive = item.id === section;
@@ -163,10 +166,15 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                                             isActive ? "font-semibold" : "font-medium"
                                         )}
                                     >
-                                        {item.label}
+                                        {t(`sections.${item.id}.label`)}
                                     </span>
-                                    <span className="text-ink-3 mt-px block text-[11px] leading-[1.4]">
-                                        {item.blurb}
+                                    <span
+                                        className={cn(
+                                            "mt-px block text-[11px] leading-[1.4]",
+                                            isActive ? "text-ink-2" : "text-ink-3"
+                                        )}
+                                    >
+                                        {t(`sections.${item.id}.blurb`)}
                                     </span>
                                 </span>
                             </Button>
@@ -184,13 +192,13 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                             if (isPersonalSection(next)) selectSection(next);
                         }}
                     >
-                        <SelectTrigger aria-label="Settings section" className="min-w-0 flex-1">
+                        <SelectTrigger aria-label={t("hub.pickerLabel")} className="min-w-0 flex-1">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                             {SECTIONS.map(item => (
                                 <SelectItem key={item.id} value={item.id}>
-                                    {item.label}
+                                    {t(`sections.${item.id}.label`)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -201,7 +209,7 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                             data-testid="settings-open-workspace-compact"
                         >
                             <Briefcase aria-hidden />
-                            Workspace
+                            {t("workspaceTab.title")}
                         </Link>
                     </Button>
                 </div>
@@ -217,10 +225,14 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
  * know that.
  */
 function WorkspacePointer() {
+    const t = useTranslations("settings");
     return (
         <div className="border-line mx-1 border-t pt-3">
-            <div className="text-ink-3 px-1.5 pb-1 text-[10.5px] font-semibold uppercase tracking-[0.08em]">
-                Workspace
+            <div
+                className="text-ink-3 px-1.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                title={t("groups.workspace.blurb")}
+            >
+                {t("groups.workspace.label")}
             </div>
             <Button
                 asChild
@@ -230,9 +242,11 @@ function WorkspacePointer() {
                 <Link href={WORKSPACE_TAB_HREF} data-testid="settings-open-workspace">
                     <Briefcase size={15} className="mt-px shrink-0 opacity-85" aria-hidden />
                     <span className="min-w-0 flex-1">
-                        <span className="block text-[13px] font-medium">Workspace settings</span>
+                        <span className="block text-[13px] font-medium">
+                            {t("hub.workspacePointer.label")}
+                        </span>
                         <span className="text-ink-3 mt-px block text-[11px] leading-[1.4]">
-                            Name, people, models, agents, documents, integrations and usage
+                            {t("hub.workspacePointer.blurb")}
                         </span>
                     </span>
                     <ArrowUpRight size={13} className="text-ink-3 mt-0.5 shrink-0" aria-hidden />

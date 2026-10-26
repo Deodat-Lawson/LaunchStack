@@ -1,0 +1,1867 @@
+{
+  "page": {
+    "title": "设置"
+  },
+  "hub": {
+    "navLabel": "设置分区",
+    "railTitle": "设置",
+    "pickerLabel": "设置分区",
+    "readOnly": "只读",
+    "readOnlyTitle": "你可以查看此部分，但你的角色无权更改。",
+    "withheld": "你的角色无权访问“{label}”。如有需要，请联系管理员。",
+    "withheldWithRole": "你的角色（{role}）无权访问“{label}”。如有需要，请联系管理员。",
+    "workspacePointer": {
+      "label": "工作区设置",
+      "blurb": "名称、成员、自带密钥、模型、智能体、集成和用量"
+    }
+  },
+  "groups": {
+    "you": {
+      "label": "你",
+      "blurb": "仅对你生效，不影响其他人。"
+    },
+    "workspace": {
+      "label": "工作区",
+      "blurb": "适用于工作区所有人的策略。"
+    }
+  },
+  "sections": {
+    "account": {
+      "label": "账户",
+      "blurb": "个人资料、头像、密码、会话",
+      "title": "你是谁，以及你在哪里登录",
+      "description": "你的个人资料和头像、你在此工作区中的显示方式、登录信息，以及当前保持登录会话的每个浏览器。"
+    },
+    "appearance": {
+      "label": "外观",
+      "blurb": "语言、主题、密度、动画、回答",
+      "title": "应用的外观，以及它如何回答你",
+      "description": "只有五项设置，而不是十一项：四项关于界面显示，一项关于助手的回答方式。思维导图中的配色属于导图本身，而不属于主题。"
+    },
+    "shortcuts": {
+      "label": "快捷键",
+      "blurb": "所有命令及其按键",
+      "title": "键盘能做什么",
+      "description": "所有命令、对应的按键，以及修改它们的地方。仅对你生效；打开思维导图时，思维导图编辑器使用自己的一套快捷键。"
+    },
+    "people": {
+      "label": "成员与权限",
+      "blurb": "成员、角色、文件夹",
+      "title": "工作区里有谁，以及他们能看到什么",
+      "description": "成员及其角色、邀请和加入链接、用户组、自定义角色，以及审计日志。谁能打开某个文件夹在文件夹本身上设置，其余一切由角色决定。"
+    },
+    "company": {
+      "label": "公司档案",
+      "blurb": "你的来源能证明什么",
+      "title": "你的来源能证明什么",
+      "description": "从你公司撰写或关于你公司的来源中提取，每条事实都附有证明它的片段。智能体引用它作为公司背景，“提案”也据此起草。关于其他公司的来源会被搁置，你可以推翻这一判断。"
+    },
+    "byok": {
+      "label": "自带密钥",
+      "blurb": "工作区 AI 使用你自己的 API 密钥",
+      "title": "自带密钥",
+      "description": "工作区的 AI（对话、起草、会议和后台任务）使用你自己的提供商账户。可选：留空则使用服务器的密钥。"
+    },
+    "models": {
+      "label": "模型与路由",
+      "blurb": "哪个模型回答什么",
+      "title": "每类请求由哪个模型处理",
+      "description": "服务器的默认模型和路由，在其配置文件中设置，这里只读显示。自带 API 密钥的工作区会改用自己的密钥运行。"
+    },
+    "agents": {
+      "label": "智能体与自主程度",
+      "blurb": "智能体名单及其权限",
+      "title": "谁参加会议，以及他们可以独立做多少事",
+      "description": "每个智能体都是会议中的一个席位：有名字、角色、常设指令和自主程度。智能体可以在本应用中运行，也可以在你连接的其他机器上运行。"
+    },
+    "integrations": {
+      "label": "集成",
+      "blurb": "连接、Slack、远程节点",
+      "title": "此工作区连接了哪些服务",
+      "description": "工作区与 Drive、Slack 和 GitHub 的连接；会议的 Slack 同步；以及远程智能体机器接入的中枢。全部可选，且彼此独立。"
+    },
+    "usage": {
+      "label": "用量与费用",
+      "blurb": "模型 token、费用、余额",
+      "title": "工作区的支出情况",
+      "description": "工作区的每一次 AI 模型调用及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的两项设置提供参考。"
+    },
+    "archive": {
+      "label": "归档与保留",
+      "blurb": "回收站、停用的智能体、清除",
+      "title": "哪些内容已被收起，以及何时永久删除",
+      "description": "已删除的思维导图和产物、停用的智能体和已归档的频道，可以恢复或永久删除。保留期决定回收站会自动清空哪些内容。"
+    },
+    "privacy": {
+      "label": "数据与隐私",
+      "blurb": "哪些数据会离开部署",
+      "title": "哪些数据会离开此部署，哪些会留下",
+      "description": "哪些外部服务能看到文档正文，哪些只能看到元数据，保留了什么、保留多久。在把敏感内容交给本应用之前，请先阅读这部分。"
+    },
+    "labs": {
+      "label": "实验室",
+      "blurb": "未完成，需手动开启",
+      "title": "尚未完成的功能",
+      "description": "每一项都如实说明了它目前能做什么。默认关闭；开启任意一项都会影响整个工作区。"
+    },
+    "general": {
+      "label": "常规",
+      "blurb": "名称、网址、描述、颜色",
+      "title": "工作区叫什么，以及别人如何认出它",
+      "description": "它的名称、列出时使用的网址、一句话介绍它做什么，以及它标志的颜色。工作区里的每个人都能看到这些信息，由管理员修改。"
+    }
+  },
+  "registry": {
+    "appearance": {
+      "theme": {
+        "label": "主题",
+        "description": "浅色、深色，或跟随系统设置。",
+        "options": {
+          "system": {
+            "label": "跟随系统",
+            "description": "跟随操作系统的设置。"
+          },
+          "light": {
+            "label": "浅色"
+          },
+          "dark": {
+            "label": "深色"
+          }
+        }
+      },
+      "density": {
+        "label": "密度",
+        "description": "决定屏幕上能放下多少内容。紧凑模式会收紧列表中的间距和字号。",
+        "options": {
+          "comfortable": {
+            "label": "舒适"
+          },
+          "compact": {
+            "label": "紧凑"
+          }
+        }
+      },
+      "reducedMotion": {
+        "label": "动画效果",
+        "description": "应用中的动画和过渡效果。",
+        "options": {
+          "system": {
+            "label": "跟随系统",
+            "description": "遵循操作系统的“减弱动态效果”设置。"
+          },
+          "reduce": {
+            "label": "减弱",
+            "description": "关闭动画。"
+          },
+          "allow": {
+            "label": "允许"
+          }
+        }
+      }
+    },
+    "chat": {
+      "responseStyle": {
+        "label": "默认助手的回答风格",
+        "description": "输入框中未选择智能体时，Launchstack 的回答方式。智能体自带风格，因此此设置对智能体不生效。"
+      }
+    },
+    "shortcuts": {
+      "bindings": {
+        "label": "键盘快捷键",
+        "description": "哪些按键执行哪些命令。仅对你生效，其他成员保留各自的设置。"
+      }
+    },
+    "privacy": {
+      "productAnalytics": {
+        "label": "产品分析",
+        "description": "你的浏览器产生的页面浏览是否计入托管版产品的使用分析。不在托管服务上时，无论如何都不会发送任何数据。"
+      }
+    },
+    "workspace": {
+      "auditRetentionDays": {
+        "label": "审计事件保留时长",
+        "description": "审计日志保留多长时间。",
+        "consequence": "更早的事件会被删除。如需永久留存，请先导出 CSV。",
+        "options": {
+          "forever": {
+            "label": "永久保留"
+          },
+          "days30": {
+            "label": "30 天"
+          },
+          "days90": {
+            "label": "90 天"
+          },
+          "days180": {
+            "label": "180 天"
+          },
+          "days365": {
+            "label": "一年"
+          }
+        }
+      }
+    },
+    "agents": {
+      "defaultAutonomy": {
+        "label": "智能体的默认自主程度",
+        "description": "未单独设置级别的智能体在无人值守时可以做多少事。每个智能体都可以在自己的卡片上调低或调高。",
+        "consequence": "调低后，会议可能无法同步到 Slack，也无法自动进行，直到会议中的智能体级别重新调高。"
+      }
+    },
+    "usage": {
+      "pricePerMillionTokens": {
+        "label": "每百万 token 单价",
+        "description": "每一百万账本 token 的费用，以你的货币计。仅用于估算本页上的支出；填 0 则只显示 token 数。",
+        "unit": "/ 百万 token"
+      },
+      "lowBalanceThreshold": {
+        "label": "余额不足提醒",
+        "description": "余额低于此值时，本页和余额标签会发出提醒。",
+        "unit": "token"
+      }
+    },
+    "retention": {
+      "trashDays": {
+        "label": "回收站自动清空时间",
+        "description": "在回收站中超过此时长的思维导图和产物将被永久移除。",
+        "consequence": "下次打开归档时生效。被移除的项目无法恢复。",
+        "options": {
+          "untilDeleted": {
+            "label": "保留到手动删除"
+          },
+          "days7": {
+            "label": "7 天"
+          },
+          "days30": {
+            "label": "30 天"
+          },
+          "days90": {
+            "label": "90 天"
+          }
+        }
+      }
+    },
+    "labs": {
+      "predictiveGaps": {
+        "label": "预测性缺口分析",
+        "description": "列出你的文档中缺失的附件、附表和合规缺口。分析功能已经就绪，但展示它的界面尚未完成，因此开启后只会在命令面板中显示入口。"
+      }
+    }
+  },
+  "row": {
+    "permissionReason": "更改此项需要拥有“{permission}”权限的角色。",
+    "notEditable": "在此范围内不可编辑。",
+    "readOnly": "只读",
+    "setByYou": "你于 {when}设置",
+    "setBy": "{who} 于 {when}设置",
+    "setByLeft": "已离开的成员于 {when}设置",
+    "setAt": "设置于 {when}",
+    "loading": "加载中…",
+    "reset": "重置",
+    "resetToWorkspace": "重置为工作区设置",
+    "resetToDefault": "重置为默认值",
+    "setOnFolder": "在此文件夹上设置",
+    "setAtFolderLevel": "在此文件夹级别设置",
+    "setAtWorkspaceLevel": "在工作区级别设置",
+    "yourChoice": "你的选择",
+    "defaultNothingSet": "默认 · 未设置",
+    "inheritedFromFolder": "继承自文件夹“{folder}”",
+    "inheritedFromThisFolder": "继承自此文件夹",
+    "inheritedFromWorkspace": "继承自工作区",
+    "inheritedFromYou": "继承自你的设置",
+    "choose": "请选择…"
+  },
+  "ui": {
+    "notConfigured": "未配置"
+  },
+  "store": {
+    "signedOut": "你已退出登录。",
+    "loadFailedStatus": "无法加载设置（{status}）。",
+    "loadFailed": "无法加载设置。",
+    "unexpectedShape": "设置接口返回的数据格式不符合预期。",
+    "saveFailedStatus": "无法保存该设置（{status}）。",
+    "saveFailed": "无法保存该设置。"
+  },
+  "account": {
+    "providers": {
+      "credential": "邮箱和密码"
+    },
+    "agent": {
+      "unknown": "未知浏览器",
+      "desktopApp": "桌面应用",
+      "browser": "浏览器",
+      "on": "{os} 上的 {browser}"
+    },
+    "couldNotListSessions": "无法列出会话。",
+    "couldNotLoad": "无法加载你的账户。",
+    "connected": "已连接 {provider}",
+    "accountFallback": "账户",
+    "couldNotConnect": "无法连接 {provider}。",
+    "couldNotEndSession": "无法结束该会话。",
+    "sessionEnded": "会话已结束",
+    "couldNotEndOthers": "无法结束其他会话。",
+    "othersEnded": "其他所有会话均已结束",
+    "signIn": {
+      "title": "登录方式",
+      "description": "你的登录方式，以及与你的账户关联的其他账户。",
+      "loadFailed": "无法加载你的登录方式。请刷新页面重试。",
+      "linked": "关联于 {when}",
+      "couldNotUnlink": "无法取消关联。",
+      "unlinked": "已取消关联账户",
+      "unlink": "取消关联",
+      "connecting": "正在连接…"
+    },
+    "sessions": {
+      "title": "会话",
+      "description": "当前为你保持登录会话的所有浏览器。结束某个会话后，该浏览器会在下一次请求时退出登录。",
+      "thisBrowser": "当前浏览器",
+      "meta": "最近活动：{active} · 过期：{expires}",
+      "metaWithIp": "{ip} · 最近活动：{active} · 过期：{expires}",
+      "ending": "正在结束…",
+      "end": "结束会话",
+      "endOthers": "结束其他 {count, plural, other {# 个会话}}"
+    },
+    "password": {
+      "couldNotSet": "无法设置密码。",
+      "passwordSet": "密码已设置。现在你可以使用邮箱和密码登录了。",
+      "setTitle": "设置密码",
+      "setBody": "除了上面的账户，你还可以使用邮箱和密码登录。",
+      "newPassword": "新密码",
+      "hint": "至少 8 个字符。",
+      "repeat": "再次输入",
+      "mismatch": "两次输入不一致。",
+      "setting": "正在设置…",
+      "setSubmit": "设置密码",
+      "couldNotChange": "无法修改密码。",
+      "changed": "密码已修改",
+      "changeTitle": "修改密码",
+      "current": "当前密码",
+      "signOutOthers": "让其他所有浏览器退出登录",
+      "changing": "正在修改…",
+      "changeSubmit": "修改密码"
+    }
+  },
+  "answerStyle": {
+    "personalNote": "未自行选择的人会使用工作区默认风格“{label}”。<link>在“工作区 › 智能体”中更改</link>。",
+    "workspaceDefault": "工作区默认风格为“{label}”。",
+    "ownChoice": "你自己选择的“{label}”仍适用于你的对话。<link>在“设置 › 外观”中更改</link>。"
+  },
+  "appearance": {
+    "display": {
+      "title": "显示",
+      "description": "更改后立即应用于此浏览器，并在你登录的所有地方保持一致。"
+    },
+    "answers": {
+      "title": "回答",
+      "description": "未选择智能体时，Launchstack 在对话中回答你的方式。仅对你生效，其他人的回答不受影响。"
+    }
+  },
+  "archive": {
+    "kinds": {
+      "mindmap": "思维导图",
+      "artifact": "产物",
+      "agent": "已停用的智能体",
+      "channel": "已归档的频道"
+    },
+    "groupHeader": {
+      "mindmap": "思维导图 · {count}",
+      "artifact": "产物 · {count}",
+      "agent": "已停用的智能体 · {count}",
+      "channel": "已归档的频道 · {count}"
+    },
+    "loadFailedStatus": "无法加载归档（{status}）。",
+    "loadFailed": "无法加载归档。",
+    "refreshing": "正在刷新…",
+    "requestFailed": "请求失败（{status}）。",
+    "restored": "已恢复 {count, plural, other {# 项}}",
+    "deleted": "已永久删除 {count, plural, other {# 项}}",
+    "failed": "操作未成功。",
+    "purged": "加载此页面时，保留期设置移除了 {count, plural, other {# 个}}超过 {days} 天的项目。",
+    "retention": {
+      "title": "保留期",
+      "description": "回收站会自动清空的内容。停用的智能体和已归档的频道永远不会被自动移除。"
+    },
+    "putAway": {
+      "title": "已收起",
+      "description": "共 {count, plural, other {# 项}}。恢复会把它放回原处；删除则是永久的。"
+    },
+    "search": "搜索归档",
+    "selected": "已选择 {count} 项",
+    "deleteForGood": "永久删除",
+    "needsDelete": "永久删除需要 documents.delete 权限。",
+    "notDeletable": "智能体和频道无法永久删除。",
+    "loading": "正在加载归档…",
+    "noMatch": "没有匹配的内容。",
+    "empty": "没有已收起的内容。",
+    "select": "选择“{title}”",
+    "keepsHistory": "保留历史记录",
+    "deleting": "正在删除…",
+    "restoring": "正在恢复…",
+    "confirm": {
+      "deleteOne": "永久删除“{title}”？",
+      "deleteMany": "永久删除 {count} 个项目？",
+      "restoreOne": "恢复“{title}”？",
+      "restoreMany": "恢复 {count} 个项目？",
+      "deleteBody": "这会移除该项目及其所有附属内容，且无法撤销。",
+      "restoreBody": "每个项目都会回到原来的位置。"
+    }
+  },
+  "assistants": {
+    "offReasons": {
+      "disabled": "此 LaunchStack 服务器上的助手服务已关闭。请联系服务器管理员开启（MCP_SERVER_ENABLED）。",
+      "noBaseUrl": "此 LaunchStack 服务器不知道自己的网址，因此助手无法登录。请联系服务器管理员设置 BETTER_AUTH_URL。",
+      "insecureBaseUrl": "助手只能登录通过 HTTPS 访问的 LaunchStack 服务器。此服务器的地址是普通 HTTP；请联系服务器管理员改用 HTTPS。"
+    },
+    "access": {
+      "read": "搜索和阅读",
+      "readWrite": "搜索、阅读并保存对话"
+    },
+    "copy": "复制{label}",
+    "copyFailed": "无法复制。请选中文本后手动复制。",
+    "badge": {
+      "write": "读取和保存",
+      "read": "只读"
+    },
+    "tabs": {
+      "api": "脚本和 API"
+    },
+    "assistantTabs": "助手",
+    "accessKey": "访问密钥",
+    "copyLabels": {
+      "command": "命令",
+      "signInCommand": "登录命令",
+      "header": "请求头",
+      "serverUrl": "服务器 URL"
+    },
+    "signInPick": "登录 LaunchStack 并选择此工作区。",
+    "claude": {
+      "step1": "在 Claude（claude.ai 或桌面应用）中，打开 <menu>Customize › Connectors › Add custom connector</menu>，然后粘贴服务器 URL。",
+      "step2": "选择 <menu>Sign in now</menu>，OAuth 客户端选择 <menu>Use Claude''s published identity</menu>（<menu>Register automatically</menu> 也可以）。",
+      "note1": "免费套餐可以添加一个自定义连接器。在 Team 和 Enterprise 套餐中，需由所有者先在 <menu>Organization settings › Connectors › Add › Custom</menu> 中添加；然后每位成员从 Customize › Connectors 进行连接。",
+      "note2": "对于脚本或共享配置，请选择 No sign-in，并改为添加请求头 <code>{header}</code>。对于部分组织，Claude 仍将该选项标记为 Beta。"
+    },
+    "chatgpt": {
+      "step1": "在 ChatGPT 中，打开 <menu>Settings › Apps & Connectors › Advanced settings</menu>，然后开启 <menu>Developer mode</menu>。",
+      "step2": "使用服务器 URL 创建一个名为 LaunchStack 的连接器，并选择 OAuth 作为认证方式。",
+      "note": "哪些套餐可以使用开发者模式，以及是否需要工作区管理员开启并发布连接器，均由 OpenAI 决定且会变化；请查看 OpenAI 关于开发者模式的帮助页面，了解你的套餐情况。"
+    },
+    "gemini": {
+      "step1Admin": "在“工作区 › 集成”的“助手的 OAuth 客户端”中创建一个 OAuth 客户端。它会给你客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
+      "step1Member": "由 LaunchStack 管理员在“工作区 › 集成”中创建 OAuth 客户端。它会提供客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
+      "step2": "Google Cloud 管理员打开 <menu>Gemini Enterprise › Data stores › Create data store › Custom MCP Server</menu>，选择 OAuth 2.0，粘贴服务器 URL、授权 URL、令牌 URL、客户端 ID、客户端密钥和权限范围，并勾选 <menu>Enable PKCE Support</menu>。没有 PKCE，LaunchStack 会拒绝登录。",
+      "step3": "之后，每个人从 Gemini 登录 LaunchStack 并选择此工作区。",
+      "note": "Google 默认阻止自定义 MCP 数据存储：组织政策管理员需要覆盖该政策，并允许 LaunchStack 的域名作为出站目标。创建数据存储的人需要拥有 Discovery Engine Editor 角色。"
+    },
+    "claudeCode": {
+      "note": "然后在 Claude Code 中运行 <code>/mcp</code>，选择 launchstack 并登录。"
+    },
+    "codex": {
+      "note": "第二条命令会打开浏览器让你登录。"
+    },
+    "geminiCli": {
+      "note": "然后在 Gemini CLI 中运行 <code>/mcp auth launchstack</code> 进行登录。"
+    },
+    "api": {
+      "intro": "在下方创建访问密钥，并在每次请求服务器 URL 时附带它：",
+      "note": "服务器通过可流式传输的 HTTP 提供 MCP。密钥永不过期；可在此处撤销。"
+    },
+    "createKeyFailed": "无法创建密钥。",
+    "keyCreated": {
+      "title": "请立即复制你的密钥",
+      "description": "密钥不会再次显示。如果丢失，请撤销并重新创建。"
+    },
+    "createKey": {
+      "title": "创建访问密钥",
+      "description": "该密钥以你的身份运行，且仅限此工作区。任何持有它的人都可以执行你在这里选择的操作。",
+      "nameHint": "便于区分你的各个密钥，例如“夜间导出脚本”。",
+      "whatItCan": "可执行的操作",
+      "whatKeyCan": "密钥可执行的操作",
+      "readDetail": "搜索工作区，并打开你能查看的文档。",
+      "writeDetail": "还可以将助手的对话作为文档保存到工作区。",
+      "noSave": "保存对话需要添加文档的权限，而你的角色不包含该权限。",
+      "submit": "创建密钥"
+    },
+    "creating": "正在创建…",
+    "loadFailed": "无法加载助手。",
+    "revokeFailed": "无法撤销。",
+    "revokedKey": "已撤销“{name}”",
+    "disconnectedAssistant": "已断开 {name}",
+    "section": {
+      "title": "助手（MCP）",
+      "description": "让 Claude、ChatGPT 和 Gemini 搜索此工作区并将对话保存进来。每个连接都以你的身份运行，仅限此工作区，且只能看到你能看到的内容。"
+    },
+    "serverUrl": "服务器 URL",
+    "pasteIt": "将它粘贴到助手中。助手会带你来这里登录，并询问要使用哪个工作区。",
+    "connectTitle": "连接助手",
+    "connected": {
+      "title": "已连接的助手",
+      "description": "你已登录到此工作区的助手。撤销后，它会在下一次请求时被切断；它已保存的内容会保留。",
+      "none": "还没有连接任何助手。",
+      "connectedAt": "连接于 {when}",
+      "connected": "已连接",
+      "lastActive": "最近活动：{when}"
+    },
+    "revoking": "正在撤销…",
+    "keys": {
+      "title": "访问密钥",
+      "description": "适用于无法通过浏览器登录的脚本、API 调用和命令行工具。密钥以你的身份运行，且仅限此工作区。",
+      "create": "创建访问密钥",
+      "none": "还没有访问密钥。",
+      "created": "创建于 {when}",
+      "lastUsed": "最近使用：{when}",
+      "neverUsed": "从未使用"
+    },
+    "confirm": {
+      "revokeKey": "撤销“{name}”？",
+      "disconnect": "断开 {name}？",
+      "thisAssistant": "此助手",
+      "keyBody": "所有使用此密钥的程序都会在下一次请求时停止工作。此操作无法撤销。",
+      "connectionBody": "它会在下一次请求时失去对此工作区的访问权限。它已保存的对话会保留。你可以随时重新连接。",
+      "revokeKeyLabel": "撤销密钥"
+    }
+  },
+  "integrations": {
+    "checking": "正在检查配置…",
+    "reconnectMenu": "重新连接…",
+    "disconnectMenu": "断开连接…",
+    "disconnecting": "正在断开…",
+    "removing": "正在移除…",
+    "listSeparator": "、",
+    "drive": {
+      "description": "在“添加来源”中从 Google Drive 选择的文件和文件夹会保持同步，同步的内容列在这里。关联功能还可以让你使用专业工具编辑 PDF 和 Word 文档：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
+      "actions": "Google Drive 操作",
+      "connectMenu": "连接 Google Drive…",
+      "linking": "Drive 关联",
+      "setup": "设置 <code>GOOGLE_DOCS_EDITING_ENABLED=true</code>、<code>GOOGLE_OAUTH_CLIENT_ID</code> 和 <code>GOOGLE_OAUTH_CLIENT_SECRET</code>（一个具有 <code>drive.file</code> 权限范围的 GCP OAuth 客户端）即可启用此功能。",
+      "account": "工作区账户",
+      "connectedAs": "已以 <code>{email}</code> 身份连接。关联的文件保存在此账户的“我的云端硬盘”中。",
+      "unknown": "未知",
+      "notConnected": "此工作区尚未连接 Google 账户。",
+      "reconnect": "重新连接",
+      "connect": "连接 Google Drive",
+      "confirmTitle": "要断开此工作区与 Google Drive 的连接吗？",
+      "confirmBody": "其 Google 账户将被取消关联。你可以在此页面重新连接。"
+    },
+    "slackCommands": {
+      "takeover": "暂停智能体并接管发言，也可以占用某个智能体的席位",
+      "release": "将控制权交还给智能体",
+      "pause": "停止或恢复智能体发言",
+      "run": "让智能体最多再发言三轮",
+      "end": "结束会议并生成会议纪要",
+      "help": "在频道中发布命令参考"
+    },
+    "recheck": "重新检查",
+    "rechecking": "正在检查…",
+    "disconnectedToast": "已断开 {label}",
+    "disconnectFailedToast": "无法断开 {label}",
+    "connections": {
+      "title": "工作区连接",
+      "description": "此工作区已连接的账户。连接操作在文档工作区的“添加来源 → 连接”中进行；令牌以加密方式存储，且不会离开服务器。",
+      "checking": "正在检查连接…",
+      "noneAvailable": "尚未连接任何账户。此服务器可用：{list}。",
+      "noClients": "未配置任何提供商的 OAuth 客户端。请设置 <code>.env.example</code> 中（Workspace connections 部分）所述的 client-id / client-secret，并设置 <code>EMBEDDING_SECRETS_KEY</code>。",
+      "actionsFor": "{label} 的操作",
+      "connected": "已连接",
+      "personal": "你的邮箱，仅你可见",
+      "connectedBy": "由 {who} 连接",
+      "confirmTitle": "要断开此工作区与 {label} 的连接吗？",
+      "confirmBody": "该连接将被移除，其访问权限也会被撤销。如需重新连接，请使用“添加来源 → 连接”。"
+    },
+    "slack": {
+      "description": "在真实的 Slack 频道中开会。智能体的发言会发布到频道里，有人回复的内容也会记入同一份转录文本。",
+      "post": "发布到 Slack",
+      "postOn": "会议发言会同步到关联的频道。",
+      "postOff": "在已安装到你工作区的 Slack 应用上，设置带有 <code>chat:write</code> 权限的 <code>SLACK_BOT_TOKEN</code>。",
+      "receive": "从 Slack 接收",
+      "receiveOn": "人们在 Slack 中写的消息会加入会议，包括下面的控制命令。",
+      "receiveOff": "设置 <code>SLACK_SIGNING_SECRET</code>，以便验证传入的 Events API 推送。"
+    },
+    "setup": {
+      "title": "Slack 应用设置",
+      "description": "需要在 Slack 端配置的两件事，每个工作区只需配置一次。",
+      "step1": "将 <strong>Event Subscriptions</strong> 指向 <code>{url}</code>。",
+      "step2": "订阅 <code>message.channels</code>；私有频道还需订阅 <code>message.groups</code>。",
+      "step3": "将机器人邀请到频道，然后在发起会议时粘贴该频道的 ID。"
+    },
+    "controls": {
+      "title": "频道内控制命令",
+      "description": "可以在 Slack 中输入哪些命令来控制进行中的会议。使用 ! 而不是 / 作为前缀，因此无需额外配置 Slack 应用。"
+    },
+    "hub": {
+      "title": "会议中枢",
+      "description": "智能体工作机器接入的端点。已接入哪些机器以及如何接入新机器，请在“智能体与节点”中查看。",
+      "accept": "接受远程智能体节点",
+      "listening": "中枢 <code>{hubId}</code> 正在 <code>{url}</code> 监听。",
+      "off": "设置 <code>COLLAB_HUB_SECRET</code> 以允许工作机器注册。未设置时，所有智能体都在此进程中运行。"
+    }
+  },
+  "keys": {
+    "openRouter": {
+      "connectedActive": "已连接 OpenRouter，此工作区正在使用它。",
+      "connected": "已连接 OpenRouter。选择一个模型即可将工作区切换过去。",
+      "denied": "OpenRouter 登录已取消，未做任何更改。",
+      "expired": "登录已过期，请重试。",
+      "unavailable": "此服务器暂时无法存储 API 密钥：服务器的管理员需要设置 EMBEDDING_SECRETS_KEY。",
+      "error": "无法连接 OpenRouter。请重试，或改用 API 密钥。"
+    },
+    "endpointFailedStatus": "无法读取你的模型设置（{status}）。",
+    "endpointFailed": "无法读取你的模型设置。"
+  },
+  "labs": {
+    "title": "实验功能",
+    "description": "默认关闭。管理员开启后，对工作区所有人生效。"
+  },
+  "models": {
+    "routeBlurb": {
+      "default": "所有未路由到其他地方的请求：提问、会议、草稿。",
+      "fast": "小型结构化调用：元数据提取、开场建议、分类。",
+      "reasoning": "需要推理的请求。",
+      "vision": "包含图片的请求。"
+    },
+    "readFailedStatus": "无法读取配置（{status}）。",
+    "readFailed": "无法读取配置。",
+    "reread": "重新读取",
+    "reading": "正在读取…",
+    "server": {
+      "title": "服务器默认",
+      "description": "未自带模型的工作区所使用的服务器模型。一个 AI 端点服务所有路由；其地址和凭据保留在服务器上。",
+      "usesOwn": "此工作区使用在“自带密钥”中设置的自有模型运行，因此不会使用下面的服务器默认模型。",
+      "ownNoModel": "此工作区自己的 API 密钥尚未选择模型，因此仍在使用服务器默认模型。请在“自带密钥”中选择一个。",
+      "fixFile": "{error} 请修正 <code>CHAT_MODELS_CONFIG</code> 指定的文件，然后重新读取。",
+      "readingConfig": "正在读取配置…",
+      "fileNote": "模型在服务器的对话模型文件中设置，该文件由 <code>CHAT_MODELS_CONFIG</code> 指定。如需更换模型，请编辑该文件并重启；这里不会写入该文件。"
+    },
+    "routes": {
+      "title": "路由",
+      "description": "路由是应用所请求的一种能力。没有明确指定模型的路由，会在 default 能够处理时继承 default。",
+      "route": "路由",
+      "model": "模型",
+      "assignment": "分配方式",
+      "unavailable": "不可用",
+      "inherits": "继承默认",
+      "explicit": "显式指定"
+    },
+    "declared": {
+      "title": "已声明的模型",
+      "description": "每个已配置模型所声明的能力。预设是经过验证的目录条目；覆盖则是运维人员自己的声明，按原样采信。",
+      "behaviourFrom": "行为来源",
+      "preset": "经过验证的预设",
+      "override": "配置文件（运维人员覆盖）",
+      "input": "输入",
+      "reasoning": "推理",
+      "none": "无",
+      "structured": "结构化输出",
+      "promptedJson": "提示词约束的 JSON",
+      "limits": "上限",
+      "context": "上下文 {count}",
+      "output": "输出 {count}"
+    }
+  },
+  "oauthClients": {
+    "authMethods": {
+      "post": {
+        "title": "放在请求正文中",
+        "detail": "client_secret_post。建议先尝试这种方式。"
+      },
+      "basic": {
+        "title": "放在 HTTP Basic 请求头中",
+        "detail": "client_secret_basic。如果登录时出现“invalid_client”错误，请使用这种方式。"
+      }
+    },
+    "endpoints": {
+      "serverUrl": "服务器 URL",
+      "authorizationUrl": "授权 URL",
+      "tokenUrl": "令牌 URL",
+      "scopes": "权限范围",
+      "pkce": "请在助手中开启 PKCE（Gemini Enterprise：勾选 Enable PKCE Support）。LaunchStack 需要它来保持登录。"
+    },
+    "createFailed": "无法创建客户端。",
+    "created": {
+      "title": "请立即复制客户端密钥",
+      "description": "密钥不会再次显示。如果丢失，请删除此客户端并重新创建。请将以下内容粘贴到助手的 OAuth 设置中。"
+    },
+    "clientId": "客户端 ID",
+    "clientSecret": "客户端密钥",
+    "create": {
+      "title": "创建 OAuth 客户端",
+      "description": "适用于需要客户端 ID 和密钥、而不会自行注册的助手，例如 Gemini Enterprise。",
+      "redirectUri": "重定向 URI",
+      "redirectHint": "已预填 Gemini Enterprise 的地址。其他助手会在其 OAuth 设置中显示自己的地址；必须以 https:// 开头。",
+      "sendsSecret": "助手发送密钥的方式",
+      "creating": "正在创建…",
+      "submit": "创建客户端"
+    },
+    "loadFailed": "无法加载 OAuth 客户端。",
+    "deleteFailed": "无法删除客户端。",
+    "deleted": "已删除“{name}”",
+    "section": {
+      "title": "助手的 OAuth 客户端",
+      "description": "适用于需要管理员提供客户端 ID 和密钥、而不会自行注册的助手，例如 Gemini Enterprise。之后，工作区中的每个人都可以通过该客户端连接，并各自以自己的身份登录。Claude、ChatGPT 和命令行工具不需要它。"
+    },
+    "createButton": "创建 OAuth 客户端",
+    "none": "还没有 OAuth 客户端。",
+    "returnsTo": "回调到 {uris}",
+    "createdAt": "创建于 {when}",
+    "deleting": "正在删除…",
+    "asksFor": "助手需要填写的内容",
+    "discovery": "发现文档（如果需要）：",
+    "confirm": {
+      "title": "删除“{name}”？",
+      "thisClient": "此客户端",
+      "description": "所有通过它连接的人都会断开连接，在你提供新的客户端 ID 和密钥之前，助手无法再次登录。此操作无法撤销。",
+      "confirmLabel": "删除客户端"
+    }
+  },
+  "people": {
+    "audit": {
+      "someone": "某人",
+      "someoneLower": "某人",
+      "possessive": "{endsWithS, select, yes {{name} 的} other {{name} 的}}",
+      "levels": {
+        "view": "查看",
+        "edit": "编辑",
+        "manage": "管理",
+        "access": "访问",
+        "different": "其他级别"
+      },
+      "anotherRole": "其他角色",
+      "valueOff": "关闭",
+      "valueNew": "新值",
+      "roleChanged": "{actor} 将 {targetPossessive}角色从 {from} 改为 {to}",
+      "madeOwner": "{actor} 将 {target} 设为所有者",
+      "madeA": "{actor} 将 {target} 设为 {to}",
+      "madeAn": "{actor} 将 {target} 设为 {to}",
+      "roleChangedBare": "{actor} 更改了 {targetPossessive}角色",
+      "approved": "{actor} 批准 {target} 加入",
+      "suspended": "{actor} 停用了 {targetPossessive}访问权限",
+      "reinstated": "{actor} 恢复了 {targetPossessive}访问权限",
+      "removed": "{actor} 将 {target} 移出了工作区",
+      "left": "{actor} 离开了工作区",
+      "joined": "{actor} 加入了工作区",
+      "transferred": "{actor} 将所有权转让给了 {target}",
+      "invited": "{actor} 邀请了 {target}",
+      "invitedAs": "{actor} 邀请了 {target}，角色为 {role}",
+      "resent": "{actor} 重新向 {target} 发送了邀请",
+      "invitationRevoked": "{actor} 撤销了发给 {target} 的邀请",
+      "invitationAccepted": "{actor} 接受邀请加入了工作区",
+      "joinLinkCreated": "{actor} 创建了一个加入链接",
+      "joinLinkCreatedFor": "{actor} 创建了一个角色为 {role} 的加入链接",
+      "joinLinkRequiresApproval": "{actor} 将一个加入链接设为需要审批",
+      "joinLinkOpen": "{actor} 将一个加入链接设为无需审批、直接加入",
+      "joinLinkChanged": "{actor} 修改了一个加入链接",
+      "joinLinkChangedTo": "{actor} 将一个加入链接的角色改为 {role}",
+      "joinLinkReset": "{actor} 重置了一个加入链接",
+      "joinLinkRevoked": "{actor} 撤销了一个加入链接",
+      "joinLinkUsed": "{actor} 通过链接加入了工作区",
+      "groupCreated": "{actor} 创建了用户组 {target}",
+      "groupRenamed": "{actor} 将一个用户组重命名为 {target}",
+      "groupDeleted": "{actor} 删除了用户组 {target}",
+      "groupDeletedGrants": "{actor} 删除了用户组 {target}（移除了 {count, plural, other {# 项访问授权}}）",
+      "groupAddedWho": "{actor} 将 {who} 添加到了 {target}",
+      "groupAddedCount": "{actor} 将 {count, plural, other {# 人}}添加到了 {target}",
+      "groupAddedSome": "{actor} 向 {target} 添加了成员",
+      "groupRemovedWho": "{actor} 将 {who} 移出了 {target}",
+      "groupRemovedCount": "{actor} 将 {count, plural, other {# 人}}移出了 {target}",
+      "groupRemovedSome": "{actor} 从 {target} 移除了成员",
+      "roleCreated": "{actor} 创建了角色 {target}",
+      "roleUpdated": "{actor} 修改了角色 {target}",
+      "roleDeleted": "{actor} 删除了角色 {target}",
+      "roleDeletedMoved": "{actor} 删除了角色 {target}，并将 {count, plural, other {# 名成员}}移至 {to}",
+      "folderOpened": "{actor} 将文件夹 {target} 向整个工作区开放",
+      "folderRestricted": "{actor} 限制了文件夹 {target} 的访问",
+      "folderAccessChanged": "{actor} 更改了文件夹 {target} 的可见范围",
+      "documentRestricted": "{actor} 限制了文档 {target} 的访问",
+      "restrictionLifted": "{actor} 解除了 {target} 的访问限制",
+      "documentAccessChanged": "{actor} 更改了文档 {target} 的可见范围",
+      "folderCreated": "{actor} 创建了文件夹 {target}",
+      "folderRenamedFrom": "{actor} 将文件夹 {from} 重命名为 {target}",
+      "folderRenamed": "{actor} 重命名了文件夹 {target}",
+      "folderDeleted": "{actor} 删除了文件夹 {target}",
+      "grantAdded": "{actor} 授予 {who} 对{kind, select, folder {文件夹} other {文档}} {target} 的{level}权限",
+      "grantChanged": "{actor} 将 {who} 对{kind, select, folder {文件夹} other {文档}} {target} 的权限改为{level}",
+      "grantRemoved": "{actor} 移除了 {who} 对{kind, select, folder {文件夹} other {文档}} {target} 的访问权限",
+      "documentDeleted": "{actor} 删除了文档 {target}",
+      "connectorConnected": "{actor} 连接了 {provider}",
+      "connectorDisconnected": "{actor} 断开了 {provider}",
+      "settingReset": "{actor} 将“{label}”重置为继承",
+      "settingResetFolder": "{actor} 将文件夹“{folder}”的“{label}”重置为继承",
+      "settingSet": "{actor} 将“{label}”设为 {value}",
+      "settingSetFolder": "{actor} 将文件夹“{folder}”的“{label}”设为 {value}",
+      "joinPolicyOpen": "{actor} 允许任何持有链接的人立即加入",
+      "joinPolicyApproval": "{actor} 要求新成员加入需经审批",
+      "workspaceSettingsChanged": "{actor} 修改了工作区设置",
+      "fallback": "{actor}：{verb} {what}",
+      "fallbackChanged": "{actor} 更改了 {what}",
+      "actions": {
+        "member": {
+          "invited": "成员 · 已邀请",
+          "joined": "成员 · 已加入",
+          "approved": "成员 · 已批准",
+          "roleChanged": "成员 · 角色变更",
+          "suspended": "成员 · 已停用",
+          "reinstated": "成员 · 已恢复",
+          "removed": "成员 · 已移除",
+          "left": "成员 · 已离开"
+        },
+        "ownership": {
+          "transferred": "所有权 · 已转让"
+        },
+        "invitation": {
+          "resent": "邀请 · 已重新发送",
+          "revoked": "邀请 · 已撤销"
+        },
+        "joinLink": {
+          "created": "加入链接 · 已创建",
+          "updated": "加入链接 · 已更新",
+          "revoked": "加入链接 · 已撤销"
+        },
+        "group": {
+          "created": "用户组 · 已创建",
+          "updated": "用户组 · 已更新",
+          "deleted": "用户组 · 已删除",
+          "memberAdded": "用户组 · 已添加成员",
+          "memberRemoved": "用户组 · 已移除成员"
+        },
+        "role": {
+          "created": "角色 · 已创建",
+          "updated": "角色 · 已更新",
+          "deleted": "角色 · 已删除"
+        },
+        "folder": {
+          "created": "文件夹 · 已创建",
+          "renamed": "文件夹 · 已重命名",
+          "deleted": "文件夹 · 已删除",
+          "visibilityChanged": "文件夹 · 可见范围变更",
+          "grantAdded": "文件夹 · 已添加授权",
+          "grantChanged": "文件夹 · 授权变更",
+          "grantRemoved": "文件夹 · 已移除授权"
+        },
+        "document": {
+          "restricted": "文档 · 已限制访问",
+          "unrestricted": "文档 · 已解除限制",
+          "grantAdded": "文档 · 已添加授权",
+          "grantChanged": "文档 · 授权变更",
+          "grantRemoved": "文档 · 已移除授权",
+          "deleted": "文档 · 已删除"
+        },
+        "connector": {
+          "connected": "连接器 · 已连接",
+          "disconnected": "连接器 · 已断开"
+        },
+        "settings": {
+          "changed": "设置 · 已更改"
+        },
+        "archive": {
+          "restored": "归档 · 已恢复",
+          "deleted": "归档 · 已删除"
+        }
+      },
+      "workspaceRenamed": "{actor} 将工作区重命名为“{name}”",
+      "workspaceRenamedAndChanged": "{actor} 将工作区重命名为“{name}”，并修改了它的{fields}",
+      "workspaceChanged": "{actor} 修改了工作区的{fields}",
+      "workspaceFields": {
+        "name": "名称",
+        "slug": "网址",
+        "description": "描述",
+        "industry": "行业",
+        "teamSize": "团队规模",
+        "swatch": "颜色",
+        "auditRetentionDays": "审计日志保留期",
+        "separator": "、",
+        "list": "{rest}和{last}"
+      }
+    },
+    "auditTab": {
+      "loadFailed": "无法加载审计日志。",
+      "title": "审计日志",
+      "notAllowed": {
+        "title": "你的角色无权查看审计日志",
+        "body": "如有需要，请向管理员申请“查看审计日志”权限。"
+      },
+      "description": "谁更改了什么，按时间倒序排列：角色、成员资格、邀请、用户组和文件夹访问权限。可以按操作或日期筛选，或导出当前视图。",
+      "exportCsv": "导出 CSV",
+      "action": "操作",
+      "allActions": "全部操作",
+      "from": "开始日期",
+      "to": "结束日期",
+      "apply": "应用筛选",
+      "loading": "正在加载审计日志…",
+      "empty": {
+        "filteredTitle": "没有符合筛选条件的记录",
+        "filteredBody": "请扩大日期范围或选择其他操作。",
+        "title": "还没有任何记录",
+        "body": "对成员、角色、用户组和文件夹访问权限的更改会显示在这里。"
+      },
+      "system": "系统",
+      "details": "详情",
+      "loadMore": "加载更多"
+    },
+    "errors": {
+      "requestFailed": "请求失败（{status}）。"
+    },
+    "format": {
+      "never": "从未",
+      "unknown": "未知",
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "yesterday": "昨天",
+      "daysAgo": "{count} 天前",
+      "expired": "{when}已过期",
+      "inMinutes": "{count} 分钟后",
+      "inHours": "{count} 小时后",
+      "inDays": "{count, plural, other {# 天后}}"
+    },
+    "groups": {
+      "loadFailed": "无法加载用户组。",
+      "deletedWithGrants": "已删除 {name}，并移除了 {count, plural, other {# 项访问授权}}。",
+      "deleted": "已删除 {name}。",
+      "deleteFailed": "用户组未能删除。",
+      "intro": {
+        "title": "用户组",
+        "description": "用户组是一组有名称的成员，你可以一步把文件夹共享给他们。这里的成员变动会改变这些文件夹的可见内容，但不会改变任何人的角色。"
+      },
+      "newGroup": "新建用户组",
+      "loading": "正在加载用户组…",
+      "empty": {
+        "title": "还没有用户组",
+        "bodyCreate": "当多人需要访问同一批受限文件夹时，可以创建一个用户组。",
+        "bodyView": "管理员可以创建用户组，一次性向多人共享文件夹。"
+      },
+      "confirm": {
+        "title": "删除 {name}？",
+        "thisGroup": "此用户组",
+        "body": "删除此用户组会移除它授予的访问权限。{count, plural, other {# 人}}可能会失去对共享给该组的文件夹的访问权限。他们在工作区中的成员身份不受影响。",
+        "confirm": "删除用户组"
+      },
+      "row": {
+        "added": "已将 {name} 添加到 {group}",
+        "memberFallback": "成员",
+        "addFailed": "无法将其添加到用户组。",
+        "removed": "已将 {name} 移出 {group}",
+        "removeFailed": "无法将其移出用户组。",
+        "members": "{count, plural, other {# 名成员}}",
+        "empty": "此用户组还没有成员。",
+        "removeFrom": "将 {name} 移出 {group}",
+        "addTo": "向 {group} 添加成员",
+        "everyoneIn": "所有人都已在此用户组中",
+        "addPlaceholder": "添加成员…",
+        "addButton": "添加到用户组"
+      },
+      "dialog": {
+        "nameRequired": "请为用户组取一个大家能认出的名称。",
+        "createdToast": "已创建用户组 {name}",
+        "renamedToast": "用户组已重命名为 {name}",
+        "saveFailed": "用户组未能保存。",
+        "newTitle": "新建用户组",
+        "renameTitle": "重命名用户组",
+        "newDescription": "填写名称，并可选填一句说明哪些人属于该组。创建后再添加成员。",
+        "renameDescription": "共享给此用户组的文件夹在新名称下保留访问权限。",
+        "namePlaceholder": "财务",
+        "description": "描述<optional>（可选）</optional>",
+        "descriptionPlaceholder": "所有审阅董事会文件的人",
+        "create": "创建用户组",
+        "saveName": "保存名称"
+      }
+    },
+    "invitations": {
+      "actionsFor": "发给 {email} 的邀请的操作",
+      "emailCopied": "已复制邮箱",
+      "loadFailed": "无法加载邀请。",
+      "notAllowed": {
+        "title": "你的角色无权邀请成员",
+        "body": "请联系管理员邀请成员，或为你的角色授予“发送邀请”权限。"
+      },
+      "intro": {
+        "title": "邀请",
+        "description": "分享一个邀请链接让成员加入，或通过邮箱邀请某人。两种方式都会分配你选择的角色。邀请会过期；链接可以重置或关闭。"
+      },
+      "loading": "正在加载邀请…",
+      "form": {
+        "invalidEmail": "请输入完整的邮箱地址，例如 ada@example.com。",
+        "chooseRole": "请选择此人应有的角色。",
+        "emailedToast": "已通过邮件向 {email} 发送邀请",
+        "createdToast": "邀请已创建，请复制链接发送",
+        "failed": "邀请未能发送。",
+        "title": "通过邮箱邀请",
+        "roleLabel": "被邀请人的角色",
+        "addToGroups": "添加到用户组<optional>（可选）</optional>",
+        "sending": "正在发送…",
+        "send": "发送邀请",
+        "createLink": "创建邀请链接"
+      },
+      "sent": {
+        "expires": "将于 {when}过期。",
+        "expiresRenewed": "将于 {when}过期。之前的链接已失效。",
+        "emailed": "已通过邮件向 {email} 发送邀请。",
+        "notSent": "此服务器未配置邮件，因此没有发送任何内容。",
+        "shareToo": "你也可以自己分享此链接。{expiry}",
+        "copyAndSend": "请复制此链接并自行发送给 {email}。{expiry}",
+        "linkFor": "发给 {email} 的邀请链接"
+      },
+      "list": {
+        "resentToast": "已向 {email} 重新发送邀请",
+        "newLinkToast": "新的邀请链接已就绪，请复制后发送",
+        "resendFailed": "邀请未能重新发送。",
+        "withdrawnToast": "已撤回发给 {email} 的邀请",
+        "withdrawFailed": "邀请未能撤回。",
+        "empty": {
+          "title": "还没有邀请",
+          "body": "在上方发送邀请。在被接受或过期之前，它会显示在这里。"
+        },
+        "columns": {
+          "invitedBy": "邀请人",
+          "expires": "过期时间",
+          "actions": "操作"
+        },
+        "resending": "正在重新发送…",
+        "resend": "重新发送",
+        "makingLink": "正在生成新链接…",
+        "newLink": "新链接",
+        "confirm": {
+          "title": "撤回发给 {email} 的邀请？",
+          "body": "链接会立即失效。你可以随时发送新的邀请。",
+          "confirm": "撤销邀请"
+        }
+      },
+      "status": {
+        "pending": "待接受",
+        "accepted": "已接受",
+        "revoked": "已撤销",
+        "expired": "已过期"
+      },
+      "more": {
+        "invalidDays": "有效期必须是整数天数，留空表示永不过期。",
+        "invalidUses": "最大使用次数必须是整数，留空表示不限。",
+        "chooseRole": "请选择此链接要分配的角色。",
+        "createdTop": "链接已创建，它现在是顶部的邀请链接",
+        "created": "链接已创建",
+        "resetToast": "链接已重置，旧链接已失效",
+        "revokedToast": "加入链接已撤销",
+        "revokeFailed": "链接未能撤销。",
+        "title": "更多链接",
+        "description": "拥有独立角色、有效期或使用次数上限的额外链接。每个链接可以决定加入者是直接加入还是等待审批。",
+        "roleLabel": "链接分配的角色",
+        "expiresIn": "有效期（天）",
+        "never": "永不",
+        "maxUses": "最大使用次数",
+        "unlimited": "不限",
+        "requireApproval": "需要审批",
+        "createLink": "创建链接",
+        "loading": "正在加载链接…",
+        "empty": {
+          "title": "没有其他链接",
+          "body": "上面的邀请链接是唯一的一个。当某个群体需要单独的角色、有效期或使用上限时，可以在这里再创建一个。"
+        },
+        "needsApproval": "需要审批",
+        "confirmResetTitle": "重置此链接？",
+        "confirmRevokeTitle": "撤销此链接？",
+        "resetBody": "当前链接会立即失效，并由一个条件相同的新链接替代。已加入的人保留其访问权限。",
+        "revokeBody": "持有此链接的人将无法再使用它。已加入的人保留其访问权限。",
+        "revokeLink": "撤销链接",
+        "revoking": "正在撤销…"
+      }
+    },
+    "links": {
+      "terms": {
+        "usesOf": "已使用 {used}/{max} 次",
+        "uses": "{count, plural, other {已使用 # 次}}",
+        "neverExpires": "永不过期",
+        "expires": "{when}过期",
+        "joined": "{uses} · {expiry}"
+      },
+      "termsSentence": "{terms}。",
+      "noRole": "目前还没有可以通过链接分配的角色。",
+      "createdToast": "邀请链接已创建，复制后即可分享",
+      "createFailed": "链接未能创建。",
+      "nowHandsOut": "此链接现在分配的角色为 {role}",
+      "nowApproval": "新加入者现在需要等待审批",
+      "nowStraightIn": "新加入者现在可以直接加入",
+      "changeFailed": "链接未能修改。",
+      "resetToast": "邀请链接已重置，请分享新链接",
+      "offToast": "邀请链接已关闭",
+      "resetFailed": "链接未能重置。",
+      "offFailed": "链接未能关闭。",
+      "title": "邀请链接",
+      "loading": "正在加载邀请链接…",
+      "emptyBody": "分享一个链接即可邀请成员加入。他们创建账户后会直接进入工作区。",
+      "creating": "正在创建…",
+      "create": "创建邀请链接",
+      "expired": "已过期",
+      "usedUp": "已用完",
+      "legacy": "旧版短链接",
+      "copyLink": "复制链接",
+      "approvalNote": "打开链接的人会进入待审批列表，直到管理员批准。",
+      "openNote": "任何持有此链接的人都可以创建账户，并以 {role} 身份直接进入工作区。",
+      "noLongerWorks": "此链接已失效（{terms}），请重置以获取新链接。",
+      "legacyNote": "这是一个可能被猜到的旧版短链接，因此始终需要审批。重置后可获得一个安全链接，让人们直接加入。",
+      "joinsAs": "加入角色",
+      "roleLabel": "邀请链接分配的角色",
+      "chooseRole": "选择角色",
+      "requireAdminApproval": "需要管理员审批",
+      "resetLink": "重置链接",
+      "turnOff": "关闭",
+      "confirmOffTitle": "关闭邀请链接？",
+      "confirmResetTitle": "重置邀请链接？",
+      "confirmOffBody": "链接会立即失效。已加入的人保留其访问权限。",
+      "confirmResetBody": "当前链接会立即失效，你会得到一个新的链接用于分享。已加入的人保留其访问权限。",
+      "turnOffLink": "关闭链接",
+      "turningOff": "正在关闭…",
+      "resetting": "正在重置…"
+    },
+    "members": {
+      "actionsFor": "{name} 的操作",
+      "loadFailed": "无法加载成员列表。",
+      "changeFailed": "更改未成功。",
+      "nowRole": "{name} 的角色已改为 {role}",
+      "removedToast": "已将 {name} 移出工作区",
+      "suspendedToast": "已停用 {name} 的访问权限",
+      "transferredToast": "{name} 现在是此工作区的所有者",
+      "pendingFailed": "操作未成功。",
+      "confirm": {
+        "remove": {
+          "title": "移除 {name}？",
+          "body": "{name} 将立即失去对此工作区的访问权限。其添加的文档会保留。你之后可以再次邀请。",
+          "confirm": "从工作区移除"
+        },
+        "suspend": {
+          "title": "停用 {name} 的访问权限？",
+          "body": "{name} 仍会显示为成员，但在你恢复其访问权限之前无法打开任何内容。",
+          "confirm": "停用访问权限"
+        },
+        "transfer": {
+          "title": "将所有权转让给 {name}？",
+          "body": "{name} 将成为所有者，负责账单、所有权以及其他一切。你将成为管理员。只有新的所有者才能把所有权转回来。",
+          "confirm": "转让所有权"
+        },
+        "leave": {
+          "title": "离开此工作区？",
+          "body": "你将立即失去访问权限。你添加的文档会保留。管理员可以重新邀请你。",
+          "confirm": "离开工作区"
+        }
+      },
+      "intro": {
+        "title": "成员",
+        "description": "工作区中的所有人，以及决定其权限的角色。你可以批准通过链接加入的人、更改角色，或在不移除任何人的情况下停用其访问权限。"
+      },
+      "counts": {
+        "label": "成员统计",
+        "active": "{count} 人正常",
+        "pending": "{count} 人待审批",
+        "suspended": "{count} 人已停用"
+      },
+      "loading": "正在加载成员…",
+      "empty": {
+        "title": "还没有成员",
+        "body": "可以在“邀请”标签页中邀请成员，或分享加入链接。"
+      },
+      "columns": {
+        "groups": "用户组",
+        "lastActive": "最近活动",
+        "actions": "操作"
+      },
+      "emailCopied": "已复制邮箱",
+      "approvedToast": "{name} 现在可以进入工作区了",
+      "reinstatedToast": "{name} 的访问权限已恢复",
+      "you": "你",
+      "changeRoleFor": "更改 {name} 的角色",
+      "leaveNote": "离开后你将失去对此工作区的访问权限。你添加的文档会保留。",
+      "ownerCantLeave": "作为所有者，你不能离开。请先将所有权转让给其他人。"
+    },
+    "menu": {
+      "stillSaving": "还有更改正在保存。",
+      "changeRole": "更改角色",
+      "copyEmail": "复制邮箱",
+      "approve": "批准",
+      "suspend": "停用访问权限…",
+      "reinstate": "恢复访问权限",
+      "transfer": "转让所有权…",
+      "remove": "从工作区移除…",
+      "resend": "重新发送邀请",
+      "stillResending": "正在重新发送。",
+      "revoke": "撤销…"
+    },
+    "roles": {
+      "loadFailed": "无法加载角色。",
+      "deletedMoved": "已删除 {name}，{count, plural, other {# 名成员}}已移至其他角色。",
+      "deleted": "已删除 {name}。",
+      "deleteFailed": "角色未能删除。",
+      "intro": {
+        "title": "角色",
+        "description": "角色是一组有名称的权限。内置角色能满足大多数工作区的需要；当某项工作需要不同的权限组合时（例如可以阅读和上传、但不能删除的审阅者），可以添加自定义角色。"
+      },
+      "newRole": "新建角色",
+      "loading": "正在加载角色…",
+      "builtinRoles": "内置角色",
+      "customRoles": "自定义角色",
+      "empty": {
+        "title": "没有自定义角色",
+        "bodyManage": "当内置角色都不完全适合某项工作时，可以创建一个。",
+        "bodyView": "当内置角色都不适合时，管理员可以创建新角色。"
+      },
+      "confirmDelete": {
+        "title": "删除角色“{name}”？",
+        "bodyHas": "当前有 {count, plural, other {# 名成员}}拥有此角色。系统会询问你要将他们移至哪个角色。",
+        "bodyNone": "目前没有人拥有此角色，因此删除它不会影响任何人的访问权限。",
+        "confirm": "删除角色"
+      },
+      "reassign": {
+        "title": "将 {count, plural, other {# 名成员}}移至其他角色",
+        "body": "{name} 仍有成员在使用。请选择删除后这些人应拥有的角色。",
+        "thisRole": "此角色",
+        "confirm": "移动成员并删除",
+        "newRole": "新角色",
+        "chooseRole": "选择角色"
+      },
+      "card": {
+        "builtin": "内置",
+        "members": "{count, plural, other {# 名成员}}",
+        "noPermissions": "没有权限。",
+        "showFewer": "收起",
+        "showAll": "显示全部 {count} 项权限"
+      },
+      "dialog": {
+        "nameRequired": "请为角色取一个大家能认出的名称。",
+        "pickPermission": "请至少选择一项权限——没有任何权限的角色无法使用。",
+        "createdToast": "已创建角色 {name}",
+        "savedToast": "已保存角色 {name}",
+        "saveFailed": "角色未能保存。",
+        "newTitle": "新建角色",
+        "editTitle": "编辑 {name}",
+        "roleFallback": "角色",
+        "description": "勾选拥有此角色的人可以做的事。你只能分配自己拥有的权限；仅限所有者的权限保留给所有者。",
+        "namePlaceholder": "法务审阅者",
+        "descriptionLabel": "描述<optional>（可选）</optional>",
+        "descriptionPlaceholder": "可以阅读和评论，但不能删除",
+        "permissions": "权限",
+        "ownerOnly": "仅限所有者",
+        "notYours": "你无权分配",
+        "create": "创建角色",
+        "save": "保存角色"
+      }
+    },
+    "section": {
+      "invite": "邀请成员",
+      "notInRole": "你的角色无权查看工作区成员。如有需要，请联系管理员。",
+      "tabsLabel": "成员与权限",
+      "tabs": {
+        "members": "成员",
+        "invitations": "邀请",
+        "groups": "用户组",
+        "roles": "角色",
+        "audit": "审计"
+      }
+    },
+    "settingsCard": {
+      "title": "工作区设置",
+      "description": "适用于此工作区所有人的策略。"
+    },
+    "ui": {
+      "statusActive": "正常",
+      "statusPending": "待审批",
+      "statusSuspended": "已停用"
+    }
+  },
+  "permissionsStore": {
+    "signedOut": "你已退出登录。",
+    "loadFailedStatus": "无法加载你的权限（{status}）。",
+    "loadFailed": "无法加载你的权限。"
+  },
+  "privacy": {
+    "sends": {
+      "documentText": "文档正文",
+      "metadata": "仅元数据",
+      "none": "不发送"
+    },
+    "loadFailedStatus": "无法加载隐私概览（{status}）。",
+    "loadFailed": "无法加载。",
+    "outside": {
+      "title": "外部服务",
+      "description": "根据此部署的配置计算得出。生成此列表时不会读取任何凭据。",
+      "checking": "正在检查配置…",
+      "deploymentAnalyticsOn": "这是一个<strong>{mode, select, cloud {托管} other {自托管}}</strong>部署。页面浏览会计入托管版产品的使用分析，除非你在下方选择退出。",
+      "deploymentAnalyticsOff": "这是一个<strong>{mode, select, cloud {托管} other {自托管}}</strong>部署。不会向外回传任何数据：此实例上没有产品分析脚本。",
+      "talksTo": "连接到 <code>{host}</code>。{note}"
+    },
+    "services": {
+      "aiLocal": "在此部署自己的服务器上运行。",
+      "aiThirdParty": "发送给第三方 AI 模型提供商。",
+      "withPrefix": "{prefix}{note}",
+      "chat": {
+        "label": "对话与生成",
+        "note": "每个问题、为回答它而检索到的片段，以及每一份生成的文档都会发送到这里。"
+      },
+      "embedding": {
+        "label": "嵌入",
+        "note": "每个已索引文档的每个分块都会被发送去生成嵌入。之前保存过自己的嵌入密钥或端点的工作区会继续使用它。"
+      },
+      "rerank": {
+        "label": "重排序",
+        "note": "问题的候选片段会被发送去重新排序。"
+      },
+      "ner": {
+        "label": "实体提取",
+        "note": "仅在文档开启实体提取时运行。"
+      },
+      "ocr": {
+        "provider": "扫描页面会通过文档转换器发送给 {provider} 提供商。",
+        "native": "仅使用原生 PDF 提取，任何内容都不会离开服务器。"
+      },
+      "transcription": {
+        "label": "转录",
+        "note": "上传的音频和视频会在这里转录。"
+      },
+      "email": {
+        "label": "外发邮件",
+        "note": "邀请、密码重置和已批准的营销活动邮件。从不包含文档正文。"
+      },
+      "slack": {
+        "note": "仅限同步到频道的会议；智能体的发言会发布到该频道。"
+      },
+      "drive": {
+        "note": "仅限有人在 Drive 中关联或创建的文件；会作为版本同步回来。"
+      },
+      "notion": {
+        "note": "只读取在 Notion 授权页面中选择的页面，不会向 Notion 写入任何内容。"
+      },
+      "secEdgar": {
+        "label": "投资人搜索",
+        "note": "仅发送在“查找投资人”中输入的关键词和州名，从不包含文档正文。"
+      }
+    },
+    "kept": {
+      "title": "保留的数据",
+      "description": "保留期在各自的位置设置，这里是汇总。",
+      "audit": {
+        "label": "审计日志",
+        "keptForever": "永久保留",
+        "days": "{days} 天",
+        "detail": "在“工作区 › 成员与权限”中设置。<link>去更改</link>。"
+      },
+      "trash": {
+        "label": "回收站",
+        "keptUntilDeleted": "保留到手动删除",
+        "emptiedAfter": "{days} 天后清空",
+        "detail": "已删除的思维导图和产物。在“工作区 › 归档”中设置。<link>去更改</link>。"
+      },
+      "credentials": {
+        "label": "已存储的凭据",
+        "okLabel": "静态加密",
+        "detail": "工作区保存的 API 密钥、连接器令牌和应用专用密码都使用 EMBEDDING_SECRETS_KEY 加密，且从不完整显示。文档正文会发送到哪里生成嵌入，请见“外部服务”。"
+      }
+    },
+    "choices": {
+      "title": "你的选择",
+      "description": "仅对你生效。",
+      "noEffect": "此处无效",
+      "noEffectBody": "此实例不发送任何分析数据，因此在托管服务上运行之前，这个开关不会产生任何影响。"
+    }
+  },
+  "profile": {
+    "couldNotSaveName": "无法保存你的姓名。",
+    "saved": "个人资料已保存",
+    "saveFailed": "无法保存你的个人资料。",
+    "loadFailed": "无法加载你的个人资料。",
+    "savePrimary": "保存个人资料",
+    "tooLarge": "照片最大为 {mb} MB。",
+    "photoUpdatedIn": "已更新 {workspace} 中的照片",
+    "photoUpdated": "照片已更新",
+    "photoRemoved": "照片已移除",
+    "removeFailed": "无法移除照片。",
+    "usingProfile": "此工作区将使用你的个人资料",
+    "resetFailed": "无法重置。",
+    "section": {
+      "title": "个人资料",
+      "loadingDescription": "你在同事面前的形象。",
+      "description": "在你所属的每个工作区中通用。某个工作区可以显示不同的照片、名称或职位，详见下方。"
+    },
+    "changePhoto": "更换照片",
+    "uploadPhoto": "上传照片",
+    "photoHint": "支持 JPG、PNG、WebP、GIF 或 AVIF，最大 {mb} MB。接下来可以裁剪。",
+    "fullName": "全名",
+    "fullNameHint": "用于登录、邀请和审计记录。",
+    "nameEmpty": "姓名不能为空。",
+    "displayName": "显示名称",
+    "displayNameHint": "其他人在列表和对话中看到的名称。留空则使用你的全名。",
+    "title": "职位",
+    "titlePlaceholder": "例如：增长负责人",
+    "pronouns": "代词",
+    "pronounsPlaceholder": "例如：they/them",
+    "timeZone": "时区",
+    "localTimeHint": "其他人会看到你的当地时间：{time}。",
+    "timeZoneHint": "让其他人在给你发消息前了解你的当地时间。",
+    "notSet": "未设置",
+    "useZone": "使用 {zone}",
+    "about": "简介",
+    "aboutPlaceholder": "用一句话介绍你的工作。",
+    "emailHint": "登录邮箱。如需更改，请联系管理员重新邀请你。",
+    "verified": "已验证",
+    "unverified": "未验证",
+    "previewIn": "{workspace} 中的你",
+    "previewOthers": "其他人眼中的你",
+    "workspaceSection": {
+      "title": "在 {workspace} 中",
+      "description": "仅在此工作区中以不同的形象出现：例如客户的标志、他们熟悉的称呼、你在那里的职位。留空的字段使用你的个人资料。其他工作区永远看不到这些设置。"
+    },
+    "changePhotoHere": "更换此处的照片",
+    "usePhotoHere": "在此使用不同的照片",
+    "useProfilePhoto": "使用我的个人资料照片",
+    "onlyWorkspaceSees": "只有 {workspace} 能看到这张照片。",
+    "showingProfilePhoto": "正在显示你的个人资料照片。",
+    "displayNameHere": "此处的显示名称",
+    "titleHere": "此处的职位",
+    "titleHerePlaceholder": "例如：顾问",
+    "resetToProfile": "重置为我的个人资料",
+    "photoDialog": {
+      "titleIn": "{workspace} 中的照片",
+      "titleProfile": "个人资料照片",
+      "descriptionIn": "只有 {workspace} 中的人会看到它。",
+      "descriptionProfile": "拖动调整位置，缩放以适应。除非你为某个工作区单独设置，否则你所在的所有工作区的人都会看到这张照片。"
+    },
+    "localTime": "当地时间 {time}"
+  },
+  "profilePhoto": {
+    "prepareFailed": "你的浏览器无法处理这张照片。",
+    "saveFailed": "无法保存照片。",
+    "position": "照片位置。拖动或使用方向键移动，按加号和减号缩放。",
+    "cantOpen": "你的浏览器无法打开该文件。请尝试 JPG、PNG、WebP、GIF 或 AVIF 格式。",
+    "zoom": "缩放",
+    "savePhoto": "保存照片"
+  },
+  "shortcuts": {
+    "resetAll": "全部恢复默认",
+    "resetting": "正在重置…",
+    "conflicts": "有 {count, plural, other {# 个快捷键}}被多个命令共用。列表中靠下的命令优先。",
+    "commands": {
+      "title": "命令",
+      "description": "点击快捷键进行修改，然后按下新的按键。按 Backspace 可移除。Mac 上的 ⌘ 在其他系统上对应 Ctrl。"
+    },
+    "listSeparator": "、",
+    "sharedWith": "与 {list} 共用。",
+    "custom": "自定义",
+    "notWhileTyping": "输入时不可用",
+    "changeFor": "更改“{command}”的快捷键",
+    "pressKeys": "请按下按键…",
+    "unbound": "未绑定",
+    "default": "默认",
+    "elsewhere": {
+      "title": "其他位置",
+      "description": "有些界面自带快捷键，无法在此重新映射。",
+      "body": "打开思维导图时，思维导图编辑器用单个字母键切换工具（V、R、E、T…），并用 ⌘Z / ⌘⇧Z 撤销和重做。命令面板本身使用 ↑ ↓ 和 ↵。"
+    }
+  },
+  "usage": {
+    "services": {
+      "llmChat": "对话",
+      "embedding": "嵌入",
+      "ocr": "OCR",
+      "transcription": "转录",
+      "rerank": "重排序",
+      "ner": "实体提取",
+      "distributionResearch": "分发调研",
+      "scenarioSimulation": "情景",
+      "other": "其他"
+    },
+    "types": {
+      "grant": "赠送",
+      "purchase": "购买",
+      "debit": "扣费",
+      "refund": "退款",
+      "adjustment": "调整"
+    },
+    "loadFailedStatus": "无法加载用量（{status}）。",
+    "loadFailed": "无法加载用量。",
+    "refreshing": "正在刷新…",
+    "lowBalance": "余额已低于 {threshold} token 的余额不足提醒线。",
+    "tokens": "Token 数",
+    "balance": {
+      "title": "余额",
+      "remaining": "剩余 token",
+      "exactly": "精确值：{value}",
+      "usedInLast": "最近 {days} 天用量",
+      "estimate": "≈ {cost}（按每百万 {price} 计）",
+      "setPrice": "在下方设置单价即可估算支出。",
+      "lifetime": "累计",
+      "used": "已用",
+      "granted": "赠送",
+      "purchased": "购买"
+    },
+    "models": {
+      "title": "AI 模型用量",
+      "description": "此工作区各项功能对 AI 模型的每一次调用，按模型服务商自己的报告计数。与下方余额分开统计，余额只由部分功能扣除。",
+      "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
+      "tokens": "最近 {days} 天的模型 token",
+      "split": "输入 {input} · 输出 {output} · {calls} 次调用",
+      "cost": "模型费用",
+      "costPriced": "按每个模型设定的价格计算。",
+      "costFallback": "未设定价格的模型按每百万 {price} 计算。",
+      "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
+      "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",
+      "efficiency": "缓存与推理",
+      "cached": "来自缓存的输入",
+      "reasoning": "推理 token",
+      "nothing": "此时间段内没有模型调用。",
+      "feature": "功能",
+      "route": "模型路由",
+      "calls": "调用次数",
+      "input": "输入",
+      "output": "输出",
+      "costColumn": "费用",
+      "features": {
+        "ask": "提问",
+        "mcp": "助手（MCP）",
+        "notes": "笔记",
+        "documentWriter": "文档撰写",
+        "marketing": "营销流程",
+        "emailCampaigns": "邮件外联",
+        "prospects": "潜在客户",
+        "distribution": "分发调研",
+        "proposals": "提案",
+        "scenarios": "情景模拟",
+        "trends": "趋势搜索",
+        "predictiveAnalysis": "预测分析",
+        "repoExplainer": "代码库解读",
+        "meetings": "会议",
+        "vantage": "Vantage",
+        "companyProfile": "公司档案",
+        "ingestion": "文档处理"
+      },
+      "routes": {
+        "default": "标准",
+        "fast": "快速",
+        "reasoning": "推理",
+        "vision": "图像",
+        "auxiliary": "文档处理"
+      }
+    },
+    "burn": {
+      "title": "每日消耗",
+      "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
+      "lastDays": "最近 {days} 天",
+      "nothing": "此时间段内没有消耗余额。"
+    },
+    "byService": {
+      "title": "按服务",
+      "description": "同一时间段的合计。",
+      "service": "服务",
+      "operations": "操作数",
+      "share": "占比",
+      "empty": "此时间段内没有记录。"
+    },
+    "pricing": {
+      "title": "价格与提醒",
+      "description": "以上数字是为这两项设置提供参考。"
+    },
+    "recent": {
+      "title": "最近的账本记录",
+      "description": "余额最近的 40 笔变动。",
+      "when": "时间",
+      "what": "内容",
+      "amount": "数量",
+      "balanceAfter": "变动后余额"
+    }
+  },
+  "workspaceModel": {
+    "routes": {
+      "default": {
+        "label": "主模型",
+        "short": "主模型",
+        "hint": "回答所有未路由到其他地方的请求：提问、会议、草稿、后台任务。"
+      },
+      "fast": {
+        "label": "快速",
+        "short": "快速",
+        "hint": "小型结构化调用：元数据提取、开场建议、分类。"
+      },
+      "reasoning": {
+        "label": "推理",
+        "short": "推理",
+        "hint": "需要推理的请求。必须是推理模型。"
+      },
+      "vision": {
+        "label": "图像",
+        "short": "图像",
+        "hint": "包含图片的请求。必须是能读取图片的模型。"
+      }
+    },
+    "providers": {
+      "anthropic": {
+        "note": "使用 Anthropic 的 OpenAI 兼容 API。这里不能使用 Claude Pro 或 Max 套餐，需要 API 密钥。"
+      },
+      "openrouter": {
+        "note": "一个账户即可使用数百个模型，费用从你的 OpenRouter 额度中扣除。"
+      },
+      "custom": {
+        "label": "其他 OpenAI 兼容服务",
+        "note": "任何支持 OpenAI chat-completions 协议的服务器，包括你自己托管的服务器。"
+      }
+    },
+    "serverAnswered": "服务器返回了 {status}。",
+    "testFailed": "无法运行测试。",
+    "testing": "正在测试 {count, plural, other {# 个模型}}…每个最多可能需要 45 秒。",
+    "allAnswered": "所有模型都已回答。",
+    "notAllAnswered": "并非所有模型都已回答。",
+    "testResults": "测试结果",
+    "passed": "通过：",
+    "failed": "失败：",
+    "answeredIn": "{latency} 内回答",
+    "noAnswer": "没有回答。",
+    "savedActive": "已保存。此工作区的 AI 现在使用你的模型运行。",
+    "savedChoose": "已保存。选择一个主模型即可将工作区切换过去。",
+    "disconnected": "已断开连接。此工作区已恢复使用服务器的默认模型，已保存的密钥也已删除。",
+    "disconnectFailed": "无法断开连接。",
+    "section": {
+      "title": "API 密钥",
+      "description": "可选。使用你自己的提供商账户运行此工作区的 AI：对话、起草、会议和后台任务都会使用它，费用由你的提供商直接向你收取，而不是消耗 LaunchStack 额度。如果不设置，工作区会使用服务器的默认模型运行。"
+    },
+    "checking": "正在检查你是否有自己的模型…",
+    "connectOpenRouter": "连接 OpenRouter",
+    "useApiKey": "使用 API 密钥",
+    "intro": "OpenRouter 会请你批准一个密钥，然后带你回到这里选择模型。API 密钥适用于任何提供 OpenAI 兼容 API 的提供商，包括你自己托管的服务器。",
+    "confirm": {
+      "title": "断开你自己的模型？",
+      "description": "此工作区将恢复使用服务器的默认模型，已保存的密钥也会被删除。"
+    },
+    "listSeparator": "、",
+    "capabilities": {
+      "readsImages": "可读取图片",
+      "reasons": "可推理",
+      "jsonSchema": "JSON schema"
+    },
+    "summary": {
+      "keyEnding": "密钥末尾为 {last4}",
+      "keySaved": "已保存密钥",
+      "noKey": "无密钥",
+      "active": "使用中",
+      "chooseModel": "请选择模型",
+      "notChosenNote": "已连接，但尚未选择模型，因此此工作区仍在使用服务器默认模型。请在“编辑”中选择。",
+      "address": "地址",
+      "key": "密钥",
+      "notChosen": "未选择",
+      "mainModel": "主模型",
+      "offNoImages": "关闭：主模型无法读取图片",
+      "offNoReason": "关闭：主模型不支持推理",
+      "lastChangedBy": "最近由 {who} 于 {when}修改",
+      "lastChanged": "最近修改于 {when}",
+      "chooseFirst": "请先选择模型。"
+    },
+    "testingShort": "正在测试…",
+    "test": "测试",
+    "disconnecting": "正在断开…",
+    "problems": {
+      "badId": "这看起来不像模型 ID。请完全按照提供商列出的样子复制，不要包含空格。",
+      "needsReasoning": "只有推理模型才能处理此类工作。请勾选“逐步推理”，或留空。",
+      "needsVision": "只有能读取图片的模型才能处理此类工作。请勾选“可读取图片”，或留空。"
+    },
+    "blockers": {
+      "address": "地址",
+      "apiKey": "API 密钥",
+      "mainModel": "主模型",
+      "and": "、",
+      "toSave": "保存前请添加{list}。"
+    },
+    "listFailed": "无法列出模型。",
+    "saveFailed": "无法保存模型设置。",
+    "editor": {
+      "keepEnding": "留空则保留末尾为 {last4} 的密钥",
+      "keepSaved": "留空则保留已保存的密钥",
+      "paste": "粘贴你的 API 密钥",
+      "pasteOptional": "如果你的服务器需要，请粘贴密钥",
+      "keyHintChanged": "地址已更改，请输入新地址对应的密钥。已保存的密钥只会发送到保存时的地址。",
+      "keyHintStored": "加密存储，且不会再次显示。",
+      "connection": "连接",
+      "provider": "提供商",
+      "getKey": "获取密钥",
+      "opensNewTab": "（在新标签页中打开）",
+      "baseUrl": "基础 URL",
+      "baseUrlHint": "你的提供商的 OpenAI 兼容 API 地址，以路径结尾，例如 /v1。",
+      "apiKey": "API 密钥",
+      "keyless": "此端点不需要密钥",
+      "noKeyYet": "还没有密钥？",
+      "connectInstead": "改为连接 OpenRouter",
+      "models": "模型",
+      "loadModels": "加载模型",
+      "listedNone": "服务器没有列出任何模型。请直接输入 ID。",
+      "listed": "已列出 {count} 个模型。输入时可从中选择，也可以输入任意 ID。",
+      "listFailedSuffix": "{message} 你仍然可以输入模型 ID。",
+      "listOptional": "可选：列出你的账户可以使用的模型。有些服务器不会列出模型；你随时可以直接输入 ID。",
+      "moreModels": "为部分工作使用不同的模型",
+      "moreHint": "留空则该类工作使用主模型。",
+      "testConnection": "测试连接",
+      "testHint": "向每个模型发送一条简短消息，不会保存任何内容。",
+      "optional": "（可选）",
+      "modelIdPlaceholder": "模型 ID，与提供商列出的完全一致",
+      "emptyUsesMain": "留空则使用主模型",
+      "readsImages": "可读取图片",
+      "reasons": "逐步推理（推理模型）",
+      "followsSchema": "遵循 JSON schema",
+      "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。"
+    }
+  },
+  "server": {
+    "errors": {
+      "unknownSetting": "未知的设置“{key}”",
+      "folderScopeNeedsPath": "文件夹范围需要提供文件夹路径",
+      "scopeNotAllowed": "“{key}”不能在{scope, select, workspace {工作区} folder {文件夹} member {成员} other {“{scope}”}}范围设置",
+      "settingNeedsPermission": "更改“{label}”需要 {permission} 权限",
+      "ownPreferencesOnly": "你只能更改自己的偏好设置",
+      "invalidSettingValue": "“{label}”的值无效：{detail}",
+      "agentsCannotBeDeleted": "已停用的智能体不能删除：它们的名称出现在过去的对话记录中。",
+      "channelsKeepTranscript": "频道会保留其对话记录，最多只能归档。",
+      "noProfileYet": "还没有个人资料。",
+      "openWorkspaceFirst": "请先打开一个工作区。",
+      "uploadRaced": "另一次上传刚刚完成，请重试。",
+      "lookupTooMany": "一次最多只能查询 {max} 人。",
+      "photoScope": "scope 必须是 global 或 workspace",
+      "photoMultipart": "请以 multipart 表单数据的形式发送照片。",
+      "photoAttachFile": "请将照片作为 `file` 字段附上。",
+      "crossSiteRefused": "已拒绝跨站请求",
+      "signInAgainForPassword": "为了你的账户安全，请先退出并重新登录，然后再设置密码。",
+      "setPasswordFailed": "无法设置密码",
+      "companyNotFound": "找不到该公司。",
+      "fetchCompanyFailed": "无法获取公司信息",
+      "preferenceSaveFailed": "无法更新偏好设置",
+      "embeddingEndpointForKey": "请输入这个密钥所属的嵌入端点 URL，例如 https://api.openai.com/v1。密钥只会发送到保存时对应的地址。",
+      "embeddingKeyNeedsEndpoint": "已保存的嵌入密钥需要对应的端点 URL。请保留该地址，或者同时输入新的密钥和新的地址。",
+      "embeddingEndpointChanged": "嵌入端点已更改，请输入新地址对应的 API 密钥。已保存的密钥只会发送到输入时对应的地址。",
+      "embeddingValidationFailed": "嵌入凭据未通过验证。",
+      "reindexRunning": "这家公司已有一个重建索引任务在运行。请等它完成后再更改嵌入索引。",
+      "reindexLockContended": "无法获取重建索引锁，请几秒后重试。",
+      "reindexScheduleFailed": "无法安排重建索引任务，设置更改未生效。",
+      "credentialsStoreFailed": "无法保存嵌入凭据。",
+      "companyUpdateNotFound": "无法更新公司记录。",
+      "reindexScheduled": "已为 {count} 组文档分块安排重建索引。在重写完成之前，现有文档仍可通过之前的索引搜索。",
+      "companyUpdated": "公司设置已更新。",
+      "companyUpdateFailed": "无法更新公司设置。",
+      "assistantsLoadFailed": "无法加载助手。",
+      "oauthClientsLoadFailed": "无法加载 OAuth 客户端。",
+      "assistantServerOffSignIn": "助手服务器已关闭，因此无处可登录。",
+      "oauthClientCreateFailed": "无法创建 OAuth 客户端。",
+      "assistantServerOffKey": "助手服务器已关闭，因此密钥无法使用。",
+      "keyCreateFailed": "无法创建密钥。",
+      "clientNotFound": "找不到该客户端",
+      "oauthClientDeleteFailed": "无法删除 OAuth 客户端。",
+      "connectionNotFound": "找不到该连接",
+      "disconnectFailed": "无法断开助手的连接。",
+      "keyNotFound": "找不到该密钥",
+      "keyRevokeFailed": "无法撤销密钥。",
+      "accessKeyLimit": "你在一个工作区中最多只能持有 {max} 个访问密钥。",
+      "oauthClientLimit": "一个工作区最多只能有 {max} 个 OAuth 客户端。",
+      "chatModelsUnreadable": "无法读取对话模型配置，详情请查看服务器日志。"
+    },
+    "models": {
+      "enterAddress": "请输入你的模型端点地址。",
+      "notWebAddress": "这不是一个网址。它应该类似 https://api.example.com/v1。",
+      "needsHttps": "地址必须以 https:// 开头。",
+      "keyInAddress": "请把密钥填在 API 密钥字段中，不要放在地址里。",
+      "queryInAddress": "地址中不要带查询字符串；基础 URL 以路径结尾，例如 /v1。",
+      "privateAddress": "该地址指向私有网络，这台服务器不允许这样做。请使用服务商的公网地址。",
+      "unreachable": "无法访问该地址。请检查地址，或者自己输入模型 ID。",
+      "keyRejected": "端点拒绝了这个 API 密钥。",
+      "noModelList": "该端点不提供模型列表（HTTP {status}）。请自己输入模型 ID。",
+      "emptyAnswer": "模型没有返回任何内容。请确认它是一个对话模型。",
+      "modelError": "端点对这个模型返回了错误。请检查模型 ID，并确认该密钥可以使用它。",
+      "noSecretsKey": "这台服务器暂时无法保存 API 密钥：服务器的运维人员需要设置 EMBEDDING_SECRETS_KEY。",
+      "keyForNewAddress": "地址已更改，请输入新地址对应的 API 密钥。已保存的密钥只会发送到输入时对应的地址。",
+      "keyForThisAddress": "请输入这个地址对应的 API 密钥。已保存的密钥只会发送到保存时对应的地址。",
+      "notModelId": "“{id}”看起来不像模型 ID。请按服务商列出的原样复制。",
+      "visionModel": "处理图片的模型必须能够读取图片。",
+      "reasoningModel": "用于推理的模型必须具备推理能力。",
+      "invalidSetup": "这不是有效的模型设置。",
+      "saveFailed": "无法保存模型设置。",
+      "chooseModel": "请选择要测试的模型。",
+      "testFailed": "无法运行测试。",
+      "enterEndpointFirst": "请先输入端点地址。",
+      "listFailed": "无法列出模型。"
+    },
+    "photo": {
+      "empty": "这个文件是空的。",
+      "tooLarge": "照片最大为 {mb} MB。",
+      "unreadable": "无法读取这个图片文件。请使用 JPG、PNG、WebP、GIF 或 AVIF 格式。",
+      "heic": "不支持 HEIC 照片。请导出为 JPG 后重试。",
+      "tooSmall": "请使用至少 {min}×{min} 像素的图片。",
+      "processFailed": "无法处理这张图片，请换一个文件试试。"
+    },
+    "ledger": {
+      "grant": "{grantType, select, signup_bonus {注册赠送} monthly_refresh {每月发放} promotional {促销赠送} manual {手动发放} other {{grantType}}}：+{amount} token",
+      "serviceUsage": "{service} 用量",
+      "chatQuery": "对话提问（{route} 路由）",
+      "transcribe": "转录 {file}",
+      "ner": "为 {count} 个分块提取实体",
+      "embed": "为文档 {document} 嵌入 {count} 个分块",
+      "ocr": "OCR 识别 {count} 页",
+      "distribution": "分发调研：{name}",
+      "proposalsRewrite": "提案：改写",
+      "proposalsReview": "提案：审阅",
+      "scenarioInterview": "情景“{title}”：访谈",
+      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} other {{unit}}}）",
+      "scenarioRound": "情景“{title}”（第 {round} 轮）"
+    },
+    "workspaceDetails": {
+      "notFound": "此工作区已不存在。",
+      "urlTaken": "另一个工作区已在使用该网址，请换一个。"
+    }
+  },
+  "workspaceTab": {
+    "title": "工作区",
+    "about": "关于此工作区的一切：它叫什么、里面有谁以及他们能看到什么、它自带的密钥、它运行的模型和智能体、它连接了哪些服务，以及它的支出。你自己的账户、主题和快捷键在“设置”中。",
+    "groups": {
+      "basics": "基本信息",
+      "setup": "配置",
+      "data": "数据"
+    },
+    "screens": {
+      "general": "常规",
+      "people": "成员与权限",
+      "company": "公司档案",
+      "byok": "自带密钥",
+      "models": "模型",
+      "agents": "智能体",
+      "integrations": "集成",
+      "usage": "用量",
+      "archive": "归档",
+      "labs": "实验室"
+    }
+  },
+  "general": {
+    "readOnly": "更改这些信息需要具备管理工作区设置权限的角色。",
+    "loadFailedStatus": "无法加载工作区详情（{status}）。",
+    "offline": "无法连接服务器。请检查网络连接后重试。",
+    "saveFailedStatus": "无法保存（{status}）。",
+    "saveOffline": "无法连接服务器，未保存任何内容。",
+    "saved": "工作区详情已保存",
+    "name": {
+      "label": "名称",
+      "description": "工作区里每个人看到的名称：显示在侧边栏、工作区选择器和邀请中。",
+      "missing": "请为工作区命名。"
+    },
+    "slug": {
+      "label": "网址",
+      "description": "在工作区之间切换时显示的网址。它在此服务器上必须唯一；没有其他内容链接到它。",
+      "checking": "正在检查…",
+      "invalid": "至少两个字符：小写字母、数字和短横线。",
+      "available": "可用",
+      "taken": "已被占用——换一个网址试试。"
+    },
+    "description": {
+      "label": "描述",
+      "description": "用一句话说明公司做什么。可选；有助于助手理解。",
+      "placeholder": "我们把分散的信息整理成知识图谱，供 AI 工作流使用。"
+    },
+    "industry": {
+      "label": "行业",
+      "description": "公司所在的领域。可选。",
+      "placeholder": "例如：物流软件"
+    },
+    "teamSize": {
+      "label": "团队规模",
+      "description": "大约有多少人在这里工作。",
+      "count": "{count, plural, =1 {只有一个人} other {大约 # 人}}"
+    },
+    "colour": {
+      "label": "颜色",
+      "description": "工作区在侧边栏和工作区选择器中的标志颜色。",
+      "swatch": "颜色 {n}"
+    }
+  }
+}

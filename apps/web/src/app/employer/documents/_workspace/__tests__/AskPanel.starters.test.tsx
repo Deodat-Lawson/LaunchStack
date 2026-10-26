@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { ContextMenuProvider } from "~/components/context-menu";
@@ -211,14 +211,15 @@ describe("AskPanel starter questions", () => {
         expect(failedCheckbox).toBeDisabled();
         await user.click(failedCheckbox);
         expect(setSelected).not.toHaveBeenCalled();
-        expect(
-            within(screen.getByTestId("source-row-d11")).getByText("syncing…")
-        ).toBeInTheDocument();
-        const failedStatus = failedRow.getByText("failed");
-        act(() => failedStatus.focus());
-        expect(await screen.findByRole("tooltip")).toHaveTextContent(errorMessage);
-        expect(failedStatus).toHaveAccessibleDescription(errorMessage);
-        act(() => failedStatus.blur());
+        expect(screen.getByTestId("source-progress-d11")).toHaveTextContent("Syncing…");
+        // The failure reads in words; the worker's own text waits behind Details.
+        const failedStatus = failedRow.getByTestId("source-failure-d9");
+        expect(failedStatus).toHaveTextContent("Not set up");
+        await user.click(failedStatus);
+        const card = await screen.findByRole("dialog");
+        expect(card).toHaveTextContent("This server isn't set up to process this file.");
+        expect(card).not.toHaveTextContent(errorMessage);
+        await user.keyboard("{Escape}");
 
         await user.click(within(screen.getByTestId("folder-row-Contracts")).getByRole("checkbox"));
         const update = setSelected.mock.calls[0]![0] as (previous: string[]) => string[];

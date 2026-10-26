@@ -1,7 +1,8 @@
 /**
  * Which OCR provider reads a document, and what it falls back to — the one
- * order every app-side path uses (routing's local fallback, forceOCR,
- * normalizeDocument's fallback chain, the image converter):
+ * order every app-side path uses (provider-first routing, the default;
+ * routing's local fallback; forceOCR; normalizeDocument's fallback chain; the
+ * image converter):
  *
  *   1. OCR_DEFAULT_PROVIDER, when an operator pinned one and it can run here
  *   2. AZURE — Document Intelligence, when its endpoint and key are set
@@ -154,4 +155,20 @@ export async function ocrAvailability(): Promise<OcrAvailability> {
 /** Engines that can run right now, in the order they are tried. */
 export async function availableOcrEngines(): Promise<OcrEngine[]> {
     return orderOcrEngines(await ocrAvailability());
+}
+
+/**
+ * The first engine that can run right now, or undefined when none can. The
+ * converter is asked about Docling only when its answer could change the
+ * result: an available pin, or an Azure key with no pin, settles it without
+ * a round trip.
+ */
+export async function firstAvailableOcrEngine(): Promise<OcrEngine | undefined> {
+    const cfg = getOcrConfig();
+    const pin = cfg.defaultProvider;
+    const [first] = orderOcrEngines(configuredOcrAvailability(cfg, false), pin);
+    const settled =
+        first !== undefined && (first === pin || (first === "AZURE" && pin !== "DOCLING"));
+    if (settled || !cfg.converter?.url) return first;
+    return (await availableOcrEngines())[0];
 }

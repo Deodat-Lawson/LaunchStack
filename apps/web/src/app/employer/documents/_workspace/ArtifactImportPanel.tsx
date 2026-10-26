@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ClipboardPaste, FileUp, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,8 +25,9 @@ import {
     detectArtifactType,
     type ArtifactType,
 } from "~/lib/artifact-content";
-import { ARTIFACT_TYPE_META } from "../components/artifact/artifact-meta";
-import { registerDocument, uploadFileToStorage } from "./sourceUpload";
+import { registerDocument, sourceUploadErrorMessage, uploadFileToStorage } from "./sourceUpload";
+
+type ArtifactTranslator = ReturnType<typeof useTranslations<"sources.artifactImport">>;
 
 /** What a file picked here may be: the formats a Claude artifact is saved as. */
 const ACCEPT = ".html,.htm,.svg,.md,.markdown,.mmd,.jsx,.tsx,.js,.ts,.txt";
@@ -110,9 +112,15 @@ async function listLegacyArtifacts(): Promise<LegacyArtifact[]> {
 }
 
 /** Read an old artifact, add it as a source, then move the old copy to the archive. */
-async function moveLegacyArtifact(artifact: LegacyArtifact, category: string): Promise<void> {
+async function moveLegacyArtifact(
+    artifact: LegacyArtifact,
+    category: string,
+    t: ArtifactTranslator
+): Promise<void> {
     const res = await fetch(`/api/artifacts/${artifact.id}`);
-    if (!res.ok) throw new Error(`Couldn't read "${artifact.title}" (HTTP ${res.status})`);
+    if (!res.ok) {
+        throw new Error(t("readFailed", { title: artifact.title, status: res.status }));
+    }
     const { artifact: detail } = (await res.json()) as {
         artifact: LegacyArtifact & { content: string };
     };
@@ -129,8 +137,7 @@ async function moveLegacyArtifact(artifact: LegacyArtifact, category: string): P
     // Soft delete: the old copy goes to Workspace › Archive, where it can be
     // restored, rather than being destroyed the moment its source exists.
     const removed = await fetch(`/api/artifacts/${artifact.id}`, { method: "DELETE" });
-    if (!removed.ok)
-        throw new Error(`Added "${artifact.title}", but couldn't archive the old copy`);
+    if (!removed.ok) throw new Error(t("archiveFailed", { title: artifact.title }));
 }
 
 export interface ArtifactImportPanelProps {
@@ -150,6 +157,10 @@ export interface ArtifactImportPanelProps {
  * way back to the original.
  */
 export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactImportPanelProps) {
+    const t = useTranslations("sources.artifactImport");
+    const tc = useTranslations("common");
+    const tu = useTranslations("sources.sourceUpload");
+    const tTypes = useTranslations("viewers.artifactTypes");
     const [mode, setMode] = useState<"paste" | "file">("paste");
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState<string | null>(null);
@@ -165,11 +176,10 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
         () =>
             deriveArtifactTitle(content, type) ??
             (fileName ? fileName.replace(/\.[^.]+$/, "") : null) ??
-            "Claude artifact",
-        [content, type, fileName]
+            t("defaultTitle"),
+        [content, type, fileName, t]
     );
-    const linkError =
-        sourceUrl.trim() && !isHttpUrl(sourceUrl.trim()) ? "Use an http(s) link." : null;
+    const linkError = sourceUrl.trim() && !isHttpUrl(sourceUrl.trim()) ? t("linkError") : null;
     const tooBig = new Blob([content]).size > MAX_ARTIFACT_BYTES;
 
     const [legacy, setLegacy] = useState<LegacyArtifact[]>([]);
@@ -188,7 +198,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
 
     const readFile = async (file: File) => {
         if (file.size > MAX_ARTIFACT_BYTES) {
-            toast.error("That file is over 10 MB — an artifact is a single self-contained file.");
+            toast.error(t("tooBigToast"));
             return;
         }
         setContent(await file.text());
@@ -198,7 +208,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
 
     const submit = async () => {
         if (!userId) {
-            toast.error("Sign in to add sources");
+            toast.error(t("signIn"));
             return;
         }
         if (!content.trim() || linkError || tooBig) return;
@@ -212,10 +222,10 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                 sourceUrl: sourceUrl.trim() || null,
                 category,
             });
-            toast.success(`"${name}" added to "${category}"`);
+            toast.success(t("added", { name, folder: category }));
             onUploaded();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Couldn't add the artifact");
+            toast.error(sourceUploadErrorMessage(err, tu, t("addFailed")));
         } finally {
             setBusy(false);
         }
@@ -228,9 +238,11 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
         setMoving({ done, total: items.length });
         for (const item of items) {
             try {
-                await moveLegacyArtifact(item, category);
+                await moveLegacyArtifact(item, category, t);
             } catch (err) {
-                failures.push(err instanceof Error ? err.message : `"${item.title}" failed`);
+                failures.push(
+                    sourceUploadErrorMessage(err, tu, t("itemFailed", { title: item.title }))
+                );
             }
             done += 1;
             setMoving({ done, total: items.length });
@@ -238,9 +250,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
         setMoving(null);
         const moved = items.length - failures.length;
         if (moved > 0) {
-            toast.success(
-                `${moved} artifact${moved === 1 ? "" : "s"} added to "${category}". The old copies are in Workspace › Archive.`
-            );
+            toast.success(t("movedToast", { count: moved, folder: category }));
         }
         if (failures.length > 0) toast.error(failures.join("\n"));
         setLegacy(await listLegacyArtifacts().catch(() => []));
@@ -258,15 +268,15 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                     if (value === "paste" || value === "file") setMode(value);
                 }}
                 className="self-start"
-                aria-label="How to bring the artifact in"
+                aria-label={t("modeAria")}
             >
                 <ToggleGroupItem value="paste" className="gap-1.5 px-3 text-xs">
                     <ClipboardPaste className="size-3.5" aria-hidden />
-                    Paste code
+                    {t("pasteCode")}
                 </ToggleGroupItem>
                 <ToggleGroupItem value="file" className="gap-1.5 px-3 text-xs">
                     <FileUp className="size-3.5" aria-hidden />
-                    Upload a file
+                    {t("uploadFile")}
                 </ToggleGroupItem>
             </ToggleGroup>
 
@@ -278,8 +288,8 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                         setFileName(null);
                     }}
                     disabled={busy}
-                    aria-label="Artifact code"
-                    placeholder="Paste the artifact's code — an HTML page, a React component, SVG, Markdown or a Mermaid diagram."
+                    aria-label={t("codeAria")}
+                    placeholder={t("codePlaceholder")}
                     className="min-h-44 resize-y font-mono text-[12.5px] leading-relaxed"
                 />
             ) : (
@@ -292,17 +302,17 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                         onClick={() => fileInput.current?.click()}
                     >
                         <FileUp className="size-4" aria-hidden />
-                        Choose a file
+                        {t("chooseFile")}
                     </Button>
                     <span className="text-ink-3 min-w-0 truncate text-xs">
-                        {fileName ?? "HTML, SVG, Markdown, Mermaid, JSX or TSX — up to 10 MB"}
+                        {fileName ?? t("fileHint")}
                     </span>
                     <input
                         ref={fileInput}
                         type="file"
                         accept={ACCEPT}
                         className="hidden"
-                        aria-label="Artifact file"
+                        aria-label={t("fileAria")}
                         onChange={event => {
                             const file = event.target.files?.[0];
                             if (file) void readFile(file);
@@ -315,7 +325,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
             <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="artifact-type" className="text-ink-3 text-xs">
-                        Type {typeChoice === null && content.trim() ? "(detected)" : ""}
+                        {typeChoice === null && content.trim() ? t("typeDetected") : t("type")}
                     </Label>
                     <Select
                         value={type}
@@ -328,7 +338,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                         <SelectContent>
                             {ARTIFACT_TYPES.map(option => (
                                 <SelectItem key={option} value={option}>
-                                    {ARTIFACT_TYPE_META[option].label}
+                                    {tTypes(option)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -336,7 +346,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                 </div>
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="artifact-title" className="text-ink-3 text-xs">
-                        Title
+                        {tc("fields.title")}
                     </Label>
                     <Input
                         id="artifact-title"
@@ -351,7 +361,7 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
 
             <div className="flex flex-col gap-1.5">
                 <Label htmlFor="artifact-link" className="text-ink-3 text-xs">
-                    Link to the original (optional)
+                    {t("linkLabel")}
                 </Label>
                 <Input
                     id="artifact-link"
@@ -364,16 +374,13 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                     className="h-9 text-sm"
                 />
                 <p className={linkError ? "text-danger text-xs" : "text-ink-3 text-xs"}>
-                    {linkError ??
-                        "Kept as the way back to it. A claude.ai link can't be read from here, so bring the code itself above."}
+                    {linkError ?? t("linkHint")}
                 </p>
             </div>
 
             <div className="flex items-center justify-between gap-3">
                 <span className="text-ink-3 font-mono text-xs">
-                    {tooBig
-                        ? "Over 10 MB — too large for one artifact"
-                        : `${content.length.toLocaleString()} chars`}
+                    {tooBig ? t("tooBig") : t("chars", { count: content.length })}
                 </span>
                 <Button
                     type="button"
@@ -381,18 +388,18 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                     onClick={() => void submit()}
                 >
                     {busy && <Loader2 className="size-4 animate-spin" aria-hidden />}
-                    Add as source
+                    {t("addAsSource")}
                 </Button>
             </div>
 
             {legacy.length > 0 && (
                 <div className="border-line bg-panel-2 flex flex-wrap items-center gap-3 rounded-lg border p-3">
                     <p className="text-ink-2 min-w-[min(100%,240px)] flex-1 text-xs leading-relaxed">
-                        <span className="text-ink font-medium">
-                            {legacy.length} artifact{legacy.length === 1 ? "" : "s"} from before
-                        </span>{" "}
-                        they were sources. Add them to &ldquo;{category}&rdquo; to search and cite
-                        them; the old copies move to Workspace › Archive.
+                        {t.rich("legacy", {
+                            count: legacy.length,
+                            folder: category,
+                            b: chunks => <span className="text-ink font-medium">{chunks}</span>,
+                        })}
                     </p>
                     <Button
                         type="button"
@@ -404,12 +411,12 @@ export function ArtifactImportPanel({ userId, category, onUploaded }: ArtifactIm
                         {moving ? (
                             <>
                                 <Loader2 className="size-4 animate-spin" aria-hidden />
-                                {moving.done} of {moving.total}
+                                {t("movingProgress", { done: moving.done, total: moving.total })}
                             </>
                         ) : legacy.length === 1 ? (
-                            "Add it as a source"
+                            t("addIt")
                         ) : (
-                            `Add all ${legacy.length} as sources`
+                            t("addAll", { count: legacy.length })
                         )}
                     </Button>
                 </div>

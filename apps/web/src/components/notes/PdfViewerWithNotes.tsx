@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -119,6 +120,7 @@ export function PdfViewerWithNotes({
     onSelectionDraft,
     citationHighlight,
 }: Props) {
+    const t = useTranslations("notes.pdf");
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageGeometry, setPageGeometry] = useState<Map<number, PageGeometry>>(() => new Map());
     const [selectionDraft, setSelectionDraft] = useState<SelectionDraft | null>(null);
@@ -235,9 +237,12 @@ export function PdfViewerWithNotes({
         },
         []
     );
-    const onDocumentLoadError = useCallback((err: Error) => {
-        setLoadError(err.message || "Failed to load PDF");
-    }, []);
+    const onDocumentLoadError = useCallback(
+        (err: Error) => {
+            setLoadError(err.message || t("loadFailedFallback"));
+        },
+        [t]
+    );
 
     const onPageRenderSuccess = useCallback(
         (page: { pageNumber: number; width: number; height: number }) => {
@@ -481,7 +486,7 @@ export function PdfViewerWithNotes({
                         overflowWrap: "anywhere",
                     }}
                 >
-                    Couldn&rsquo;t load PDF: {loadError}
+                    {t("loadError", { error: loadError })}
                 </div>
             ) : (
                 <Document
@@ -489,7 +494,7 @@ export function PdfViewerWithNotes({
                     onLoadSuccess={onDocumentLoadSuccess}
                     onLoadError={onDocumentLoadError}
                     loading={<LoadingPlaceholder />}
-                    error={<LoadingPlaceholder text="Failed to load" />}
+                    error={<LoadingPlaceholder text={t("failedToLoad")} />}
                 >
                     {numPages !== null &&
                         Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
@@ -541,16 +546,16 @@ export function PdfViewerWithNotes({
                             cursor: "pointer",
                         }}
                     >
-                        + Note
+                        {t("addNote")}
                     </button>
                     {onAskAi && (
                         <button
                             type="button"
                             onClick={handleAskAi}
-                            title="Ask about this passage in the chat"
+                            title={t("askAiTitle")}
                             style={askBtnStyle}
                         >
-                            ✦ Ask AI
+                            {t("askAi")}
                         </button>
                     )}
                 </div>
@@ -573,7 +578,8 @@ const askBtnStyle: React.CSSProperties = {
     cursor: "pointer",
 };
 
-function LoadingPlaceholder({ text = "Loading PDF…" }: { text?: string }) {
+function LoadingPlaceholder({ text }: { text?: string }) {
+    const t = useTranslations("notes.pdf");
     return (
         <div
             style={{
@@ -583,7 +589,7 @@ function LoadingPlaceholder({ text = "Loading PDF…" }: { text?: string }) {
                 fontSize: 13,
             }}
         >
-            {text}
+            {text ?? t("loading")}
         </div>
     );
 }
@@ -696,6 +702,7 @@ function NoteOverlay({
     highlighted: boolean;
     onClick: () => void;
 }) {
+    const t = useTranslations("notes.pdf");
     // First quad's top-left is where the pin goes.
     const firstQuad = note.quads[0];
     if (!firstQuad) return null;
@@ -743,7 +750,7 @@ function NoteOverlay({
             <button
                 type="button"
                 onClick={onClick}
-                title={note.title ?? `Note ${ordinal}`}
+                title={note.title ?? t("pinTitle", { ordinal })}
                 style={{
                     position: "absolute",
                     left: pinLeft - 12,

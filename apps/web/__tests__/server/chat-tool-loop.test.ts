@@ -5,12 +5,13 @@
  * answer cites the numbered sources the response returns.
  */
 
-import { AIMessage, AIMessageChunk, ToolMessage } from "@langchain/core/messages";
+import { AIMessage, AIMessageChunk, HumanMessage, ToolMessage } from "@langchain/core/messages";
+import { _convertMessagesToOpenAIParams } from "@langchain/openai";
 import type { BaseMessage } from "@langchain/core/messages";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { WebSearchResponse } from "@launchstack/tools/web-research";
 
-import { answerWithTools } from "~/server/chat-tool-loop";
+import { OUT_OF_TOOL_ROUNDS, answerWithTools } from "~/server/chat-tool-loop";
 import { createWebTools, webToolsPrompt } from "~/server/chat-web-tools";
 
 /** One scripted model turn: streamed chunks (one message when invoked), or a failed request. */
@@ -197,6 +198,59 @@ describe("Ask web search as a model-called tool", () => {
         expect(answer.usage.totalTokens).toBe(105 + 11 + 11);
     });
 
+    it("sends a signed call back with its signature, as Gemini 3 requires", async () => {
+        const search = jest.fn().mockResolvedValue(HEADLINES);
+        const web = createWebTools({ search });
+        const signed = new AIMessageChunk({
+            content: "",
+            tool_call_chunks: [
+                {
+                    name: "search_web",
+                    args: '{"query":"tech news"}',
+                    id: "call_1",
+                    index: 0,
+                    type: "tool_call_chunk",
+                },
+            ],
+            additional_kwargs: {
+                tool_calls: [
+                    {
+                        id: "call_1",
+                        index: 0,
+                        type: "function",
+                        function: { name: "search_web", arguments: '{"query":"tech news"}' },
+                        extra_content: { google: { thought_signature: "c2lnbmVk" } },
+                    } as never,
+                ],
+            },
+        });
+        const { chat, calls } = scriptedChat([[signed], [text("The news.")]]);
+
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: web.tools,
+            signal: new AbortController().signal,
+        });
+
+        expect(search).toHaveBeenCalledWith("tech news", expect.anything());
+        expect(answer.modelCalls).toBe(2);
+        // What LangChain puts on the wire for the second request.
+        const wire = _convertMessagesToOpenAIParams(calls[1]!.messages) as unknown as {
+            role: string;
+            tool_calls?: unknown[];
+        }[];
+        expect(wire.find(m => m.role === "assistant")?.tool_calls).toEqual([
+            {
+                id: "call_1",
+                type: "function",
+                function: { name: "search_web", arguments: '{"query":"tech news"}' },
+                extra_content: { google: { thought_signature: "c2lnbmVk" } },
+            },
+        ]);
+        expect(wire.find(m => m.role === "tool")).toMatchObject({ tool_call_id: "call_1" });
+    });
+
     it("keeps one number per page across searches and page reads", async () => {
         const search = jest.fn().mockResolvedValue(HEADLINES);
         const fetchPage = jest.fn().mockResolvedValue({
@@ -281,6 +335,59 @@ describe("Ask web search as a model-called tool", () => {
         expect(calls[0]!.kwargs).toBeUndefined();
         expect(calls[2]!.kwargs).toEqual({ tool_choice: "none" });
         expect(answer.finalContent).toBe("Answer from what I found [Source 1].");
+        // The last round is told, in words, that the tools are spent: an
+        // endpoint that ignores tool_choice otherwise answers with a dropped
+        // tool call and no text.
+        const told = (call: ModelCall) =>
+            call.messages.some(m => m instanceof HumanMessage && m.content === OUT_OF_TOOL_ROUNDS);
+        expect(calls.map(told)).toEqual([false, false, true]);
+        expect(calls[2]!.messages.at(-1)).toBeInstanceOf(HumanMessage);
+    });
+
+    it("asks once more, tools off, when the model reads a result and says nothing", async () => {
+        const web = createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) });
+        const { chat, calls } = scriptedChat([
+            [toolCall("search_web", { query: "news" })],
+            [text("")],
+            [text("Three products shipped [Source 1].")],
+        ]);
+
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: web.tools,
+            signal: new AbortController().signal,
+        });
+
+        expect(calls).toHaveLength(3);
+        expect(calls[1]!.kwargs).toBeUndefined();
+        expect(calls[2]!.kwargs).toEqual({ tool_choice: "none" });
+        expect(calls[2]!.messages.at(-1)).toEqual(new HumanMessage(OUT_OF_TOOL_ROUNDS));
+        expect(answer.finalContent).toBe("Three products shipped [Source 1].");
+        expect(answer.modelCalls).toBe(3);
+    });
+
+    it("does not ask again when a turn that used no tool comes back empty", async () => {
+        const { chat, calls } = scriptedChat([[text("")]]);
+        const answer = await answerWithTools({
+            chat,
+            messages: [],
+            tools: createWebTools({ search: jest.fn() }).tools,
+            signal: new AbortController().signal,
+        });
+        expect(calls).toHaveLength(1);
+        expect(answer.finalContent).toBe("");
+    });
+
+    it("says nothing about spent tools to a turn that never used one", async () => {
+        const { chat, calls } = scriptedChat([[text("391.")]]);
+        await answerWithTools({
+            chat,
+            messages: [],
+            tools: createWebTools({ search: jest.fn() }).tools,
+            signal: new AbortController().signal,
+        });
+        expect(calls[0]!.messages.some(m => m instanceof HumanMessage)).toBe(false);
     });
 
     it("reports a failed search to the model instead of failing the answer", async () => {

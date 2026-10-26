@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronRight, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -23,8 +24,9 @@ import { CiteList } from "~/components/tools/Cite";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { plural, relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProposals } from "../_lib/context";
 import { proposalsApi, type LibraryItemDto } from "../api";
 
@@ -39,6 +41,10 @@ function ItemDialog({
     item: LibraryItemDto | null;
     onSaved: () => void;
 }) {
+    const t = useTranslations("proposals.library");
+    const errorText = useErrorText();
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [tags, setTags] = useState("");
@@ -58,16 +64,16 @@ function ItemDialog({
                 answer: answer.trim(),
                 tags: tags
                     .split(",")
-                    .map(t => t.trim())
+                    .map(tag => tag.trim())
                     .filter(Boolean),
             };
             if (item) await proposalsApi.patchLibraryItem(item.id, input);
             else await proposalsApi.createLibraryItem(input);
-            toast.success(item ? "Answer updated" : "Answer saved");
+            toast.success(item ? t("updated") : t("saved"));
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not save the answer");
+            toast.error(errorText(e, t("saveFailed")));
         } finally {
             setBusy(false);
         }
@@ -76,10 +82,8 @@ function ItemDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{item ? "Edit answer" : "Save an answer"}</DialogTitle>
-                    <DialogDescription>
-                        Drafts reuse a saved answer when a funder asks the same question.
-                    </DialogDescription>
+                    <DialogTitle>{item ? t("dialog.editTitle") : t("saveAnswer")}</DialogTitle>
+                    <DialogDescription>{t("dialog.description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -90,7 +94,7 @@ function ItemDialog({
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="lib-question" className="text-xs">
-                            Question
+                            {tp("question")}
                         </Label>
                         <Input
                             id="lib-question"
@@ -101,7 +105,7 @@ function ItemDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="lib-answer" className="text-xs">
-                            Answer
+                            {t("dialog.answer")}
                         </Label>
                         <Textarea
                             id="lib-answer"
@@ -113,13 +117,13 @@ function ItemDialog({
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="lib-tags" className="text-xs">
-                            Tags, comma-separated
+                            {t("dialog.tags")}
                         </Label>
                         <Input
                             id="lib-tags"
                             value={tags}
                             onChange={e => setTags(e.target.value)}
-                            placeholder="mission, history"
+                            placeholder={t("dialog.tagsPlaceholder")}
                         />
                     </div>
                     <DialogFooter>
@@ -129,10 +133,10 @@ function ItemDialog({
                             onClick={() => onOpenChange(false)}
                             disabled={busy}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={!valid}>
-                            {item ? "Save changes" : "Save answer"}
+                            {item ? tc("actions.saveChanges") : t("dialog.submit")}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -152,7 +156,18 @@ function ItemRow({
     onDelete: () => void;
     href: (path: string) => string;
 }) {
+    const t = useTranslations("proposals.library");
+    const tc = useTranslations("common");
+    const format = useToolFormat();
     const [open, setOpen] = useState(false);
+    const meta = [
+        item.uses === 0 ? t("notReused") : t("reused", { count: item.uses }),
+        item.sourceApplicationTitle
+            ? t("fromApplication", { title: item.sourceApplicationTitle })
+            : null,
+        item.tags.length ? item.tags.join(", ") : null,
+        format.relativeTime(item.updatedAt),
+    ].filter(Boolean);
     return (
         <div className="border-line-2 border-t first:border-t-0">
             <div className="grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5">
@@ -160,7 +175,7 @@ function ItemRow({
                     type="button"
                     onClick={() => setOpen(o => !o)}
                     className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 rounded-sm outline-none focus-visible:ring-2"
-                    aria-label={open ? "Hide answer" : "Show answer"}
+                    aria-label={open ? t("hideAnswer") : t("showAnswer")}
                     aria-expanded={open}
                 >
                     {open ? (
@@ -173,21 +188,14 @@ function ItemRow({
                     <span className="text-ink block truncate text-sm font-medium">
                         {item.question}
                     </span>
-                    <span className="text-ink-3 block truncate text-xs">
-                        {item.uses === 0 ? "not reused yet" : `reused ${plural(item.uses, "time")}`}
-                        {item.sourceApplicationTitle
-                            ? ` · from ${item.sourceApplicationTitle}`
-                            : ""}
-                        {item.tags.length ? ` · ${item.tags.join(", ")}` : ""} ·{" "}
-                        {relativeTime(item.updatedAt)}
-                    </span>
+                    <span className="text-ink-3 block truncate text-xs">{meta.join(" · ")}</span>
                 </span>
                 <span className="flex items-center gap-1">
                     <Button size="sm" variant="ghost" onClick={onEdit}>
-                        Edit
+                        {tc("actions.edit")}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={onDelete}>
-                        Delete
+                        {tc("actions.delete")}
                     </Button>
                 </span>
             </div>
@@ -203,7 +211,7 @@ function ItemRow({
                                 href={href(`/write/${item.sourceApplicationId}`)}
                                 className="text-brand-ink text-xs hover:underline"
                             >
-                                Open the application it came from
+                                {t("openOrigin")}
                             </ToolLink>
                         )}
                     </div>
@@ -215,6 +223,9 @@ function ItemRow({
 
 /** Answers worth reusing: what was approved before, findable by the question it answered. */
 export function LibraryScreen() {
+    const t = useTranslations("proposals.library");
+    const errorText = useErrorText();
+    const tc = useTranslations("common");
     const { href, finishedTick } = useProposals();
     const res = useResource("proposals:library", () => proposalsApi.library());
     const reload = res.reload;
@@ -234,7 +245,7 @@ export function LibraryScreen() {
             i =>
                 i.question.toLowerCase().includes(q) ||
                 i.answer.toLowerCase().includes(q) ||
-                i.tags.some(t => t.toLowerCase().includes(q))
+                i.tags.some(tag => tag.toLowerCase().includes(q))
         );
     }, [items, query]);
 
@@ -243,9 +254,9 @@ export function LibraryScreen() {
         try {
             await proposalsApi.deleteLibraryItem(deleting.id);
             res.mutate(current => ({ items: current.items.filter(i => i.id !== deleting.id) }));
-            toast("Answer deleted");
+            toast(t("deleted"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not delete the answer");
+            toast.error(errorText(e, t("deleteFailed")));
         } finally {
             setDeleting(null);
         }
@@ -254,13 +265,9 @@ export function LibraryScreen() {
     return (
         <div className="mx-auto flex max-w-[1000px] flex-col gap-6">
             <PageHeader
-                title="Answers worth"
-                accent="reusing"
-                sub={
-                    res.data
-                        ? `${plural(items.length, "saved answer")} · reused automatically when a question matches`
-                        : undefined
-                }
+                title={t("title")}
+                accent={t("accent")}
+                sub={res.data ? t("sub", { count: items.length }) : undefined}
                 actions={
                     <Button
                         size="sm"
@@ -269,7 +276,7 @@ export function LibraryScreen() {
                             setDialogOpen(true);
                         }}
                     >
-                        Save an answer
+                        {t("saveAnswer")}
                     </Button>
                 }
             />
@@ -279,8 +286,8 @@ export function LibraryScreen() {
                 <Input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Search questions, answers, tags"
-                    aria-label="Search the library"
+                    placeholder={t("searchPlaceholder")}
+                    aria-label={t("searchAria")}
                     className="h-8 pl-8 text-[13px]"
                 />
             </div>
@@ -288,12 +295,8 @@ export function LibraryScreen() {
                 <SkeletonRows rows={4} height={52} />
             ) : shown.length === 0 ? (
                 <EmptyState
-                    title={items.length === 0 ? "Nothing saved yet" : "No answers match"}
-                    body={
-                        items.length === 0
-                            ? "Approve a section in an application and save it here; the next application that asks the same question starts from it."
-                            : "Try other words."
-                    }
+                    title={items.length === 0 ? t("emptyTitle") : t("noMatch")}
+                    body={items.length === 0 ? t("emptyBody") : t("noMatchBody")}
                 />
             ) : (
                 <div className="border-line bg-panel rounded-lg border">
@@ -320,9 +323,9 @@ export function LibraryScreen() {
             <ConfirmDialog
                 open={deleting !== null}
                 onOpenChange={open => !open && setDeleting(null)}
-                title="Delete this answer?"
-                description="Drafts will no longer reuse it. The applications it came from keep their text."
-                confirmLabel="Delete"
+                title={t("confirmTitle")}
+                description={t("confirmBody")}
+                confirmLabel={tc("actions.delete")}
                 destructive
                 onConfirm={() => void remove()}
             />

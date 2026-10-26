@@ -8,12 +8,17 @@
  * default here, so the dialog and the API give the same answer.
  */
 
+import { copy } from "~/i18n/copy";
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
 import {
     DEFAULT_AGENT_AUTONOMY,
     canRunUnattended,
     effectiveAutonomy,
+    meetingPlanViolationCodes,
     meetingPlanViolations,
     type AgentAutonomy,
+    type MeetingPlanViolation,
 } from "~/lib/agents/autonomy";
 import { badRequest } from "~/server/workspace/errors";
 import { readWorkspaceSetting } from "~/server/settings/store";
@@ -39,22 +44,48 @@ export async function effectiveLevelsFor(
     return personaKeys.map(key => effectiveAutonomy(byKey.get(key)?.autonomy, fallback));
 }
 
-/** Throws a 400 when the planned meeting exceeds what its agents may do. */
+/** One violation in the reader's words (`agents.violations`, the dialog's own sentences). */
+function violationText(violation: MeetingPlanViolation, locale: Locale): string {
+    const t = translatorFor(locale, "agents");
+    if (violation.code === "mirrorNeedsWrite") {
+        return t("violations.mirrorNeedsWrite", {
+            required: t(`autonomy.${violation.required}.label`),
+            current: t(`autonomy.${violation.current}.label`),
+        });
+    }
+    return t("violations.agentIdentityNeedsFull", {
+        required: t(`autonomy.${violation.required}.label`),
+    });
+}
+
+/**
+ * Throws a 400 when the planned meeting exceeds what its agents may do. The
+ * sentences are in `locale` (English, as `meetingPlanViolations` words them,
+ * for API readers); the route shows the message as it is.
+ */
 export async function assertMeetingPlanAllowed(
     companyId: bigint,
     plan: {
         participantKeys: readonly string[];
         slackMirrorEnabled?: boolean;
         slackUseAgentIdentity?: boolean;
-    }
+    },
+    locale: Locale = "en"
 ): Promise<void> {
     const levels = await effectiveLevelsFor(companyId, plan.participantKeys);
-    const problems = meetingPlanViolations({
+    const meeting = {
         participants: levels,
         slackMirrorEnabled: plan.slackMirrorEnabled,
         slackUseAgentIdentity: plan.slackUseAgentIdentity,
-    });
-    if (problems.length > 0) throw badRequest(problems.join(" "));
+    };
+    if (locale === "en") {
+        const problems = meetingPlanViolations(meeting);
+        if (problems.length > 0) throw badRequest(problems.join(" "));
+        return;
+    }
+    const problems = meetingPlanViolationCodes(meeting).map(v => violationText(v, locale));
+    // Chinese sentences end in a full stop of their own and run on without a space.
+    if (problems.length > 0) throw badRequest(problems.join(""));
 }
 
 /** Throws a 400 when a room contains an agent that may only speak when a person asks. */
@@ -64,8 +95,6 @@ export async function assertRoomMayRun(
 ): Promise<void> {
     const levels = await effectiveLevelsFor(companyId, participantKeys);
     if (!canRunUnattended(levels)) {
-        throw badRequest(
-            'An agent in this room is set to "Read only", so turns only happen when someone presses Step. Raise its autonomy under Workspace › Agents to let the meeting run on its own.'
-        );
+        throw badRequest(copy("collab.server.errors.roomReadOnly"));
     }
 }

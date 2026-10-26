@@ -27,17 +27,21 @@ describe("the two surfaces", () => {
         expect(PERSONAL_SECTION_IDS).toEqual(["account", "appearance", "shortcuts", "privacy"]);
     });
 
-    it("has no Processing section any more", () => {
-        expect(SETTINGS_SECTION_IDS).not.toContain("processing");
-        expect(SETTINGS.some(definition => definition.section === ("processing" as never))).toBe(
-            false
-        );
+    it("has no Processing or Document defaults section any more", () => {
+        for (const gone of ["processing", "documents"]) {
+            expect(SETTINGS_SECTION_IDS).not.toContain(gone);
+            expect(SETTINGS.some(definition => definition.section === (gone as never))).toBe(false);
+        }
     });
 
     it("puts every Workspace screen in exactly one group of the bar, in order", () => {
         const grouped = WORKSPACE_SCREEN_GROUPS.flatMap(group => group.screens);
         expect(grouped).toEqual([...WORKSPACE_SCREEN_IDS]);
-        expect(WORKSPACE_SCREEN_GROUPS.every(group => group.label)).toBe(true);
+        expect(WORKSPACE_SCREEN_GROUPS.map(group => [group.id, [...group.screens]])).toEqual([
+            ["basics", ["general", "people", "company"]],
+            ["setup", ["byok", "models", "agents", "integrations"]],
+            ["data", ["usage", "archive", "labs"]],
+        ]);
     });
 });
 
@@ -52,18 +56,23 @@ describe("settingsDestination", () => {
         ["#company", "/company"],
         ["#models", "/models"],
         ["#agents", "/agents"],
-        ["#documents", "/documents"],
         ["#integrations", "/integrations"],
         ["#usage", "/usage"],
         ["#archive", "/archive"],
         ["#labs", "/labs"],
         // The company profile's old page.
         ["#metadata", "/company"],
-        // Bring-your-own-model lives on Models; so do the retired Processing
-        // section's links.
-        ["#byok", "/models"],
-        ["#processing", "/models"],
-        ["#embedding", "/models"],
+        // The workspace's own model key; Processing was its name once, and the
+        // embedding key it also held is gone.
+        ["#byok", "/byok"],
+        ["#processing", "/byok"],
+        ["#embedding", "/byok"],
+        ["#openrouter", "/byok"],
+        ["#keys", "/byok"],
+        // Document defaults is gone; its links open where the tab opens.
+        ["#documents", "/general"],
+        ["#documents.defaultProcessingMethod", "/general"],
+        ["#documents.uploadStorage", "/general"],
         ["#general", "/general"],
         ["#employees", "/people"],
     ])("opens %s on the Workspace tab at %s", (hash, location) => {
@@ -71,9 +80,6 @@ describe("settingsDestination", () => {
     });
 
     it("carries a registry row in a workspace section as the screen's focus, in its own case", () => {
-        expect(at("#documents.defaultProcessingMethod")).toBe(
-            "/documents?focus=documents.defaultProcessingMethod"
-        );
         expect(at("#usage.priceperMillionTokens")).toBe("/usage?focus=usage.pricePerMillionTokens");
         expect(at("#retention.trashDays")).toBe("/archive?focus=retention.trashDays");
         expect(at("#workspace.auditRetentionDays")).toBe(
@@ -141,13 +147,14 @@ describe("Workspace tab links", () => {
     });
 
     it("rides the page's own query along, for OpenRouter's outcome", () => {
-        expect(workspaceHref("models", { query: { openrouter: "connected" } })).toBe(
-            "/employer/documents?feature=workspace&at=%2Fmodels&openrouter=connected"
+        expect(workspaceHref("byok", { query: { openrouter: "connected" } })).toBe(
+            "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=connected"
         );
     });
 
     it("names the section a link opens, either way it is written", () => {
-        expect(settingsSectionOfHref("/employer/settings#byok")).toBe("models");
+        expect(settingsSectionOfHref("/employer/settings#byok")).toBe("byok");
+        expect(settingsSectionOfHref("/employer/settings#documents")).toBeNull();
         expect(settingsSectionOfHref("/employer/settings#appearance.theme")).toBe("appearance");
         expect(settingsSectionOfHref("/employer/settings")).toBeNull();
         expect(settingsSectionOfHref(workspaceHref("people", { focus: "audit" }))).toBe("people");
@@ -158,7 +165,7 @@ describe("Workspace tab links", () => {
 
     it("opens the old company-profile pane and the palette's workspace rows on their screens", () => {
         expect(TOOL_ALIASES.metadata).toEqual({ toolId: "workspace", at: "/company" });
-        for (const id of ["people-access", "profile", "agents-nodes"]) {
+        for (const id of ["people-access", "profile", "agents-nodes", "byok"]) {
             const row = DEMOTED_FEATURES.find(feature => feature.id === id)!;
             // Picking the row (by id) and following its link land in the same place.
             expect(toolTargetFromHref(row.href)).toEqual(TOOL_ALIASES[id]);

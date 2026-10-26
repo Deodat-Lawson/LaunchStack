@@ -1,9 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { PanelsTopLeft, Plus } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-import type { StudioFeature } from "./types";
+import {
+    studioFeatureDescription,
+    studioFeatureLabel,
+    useStudioText,
+    type StudioFeature,
+} from "./types";
 
 export interface PaneLauncherProps {
     title: string;
@@ -22,6 +28,8 @@ export interface PaneLauncherProps {
  * away and the rest behind "All apps".
  */
 export function PaneLauncher({ title, hint, apps, onPick, onMore }: PaneLauncherProps) {
+    const t = useTranslations("workspace");
+    const studio = useStudioText();
     return (
         <div className="bg-surface text-ink-3 flex flex-1 flex-col items-center justify-center gap-4 overflow-auto p-8 text-center">
             <PanelsTopLeft className="text-ink-3 size-9 shrink-0" strokeWidth={1.25} />
@@ -35,16 +43,16 @@ export function PaneLauncher({ title, hint, apps, onPick, onMore }: PaneLauncher
                         key={app.id}
                         variant="outline"
                         size="sm"
-                        title={app.desc}
+                        title={studioFeatureDescription(studio, app)}
                         onClick={() => onPick(app.id)}
                     >
                         <app.Icon size={14} />
-                        {app.label}
+                        {studioFeatureLabel(studio, app)}
                     </Button>
                 ))}
                 <Button variant="ghost" size="sm" onClick={onMore}>
                     <Plus className="size-4" />
-                    All apps
+                    {t("paneLauncher.allApps")}
                 </Button>
             </div>
         </div>

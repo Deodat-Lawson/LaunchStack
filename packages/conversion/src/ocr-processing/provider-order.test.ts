@@ -11,6 +11,7 @@ import {
     availableOcrEngines,
     configuredOcrAvailability,
     defaultOcrProvider,
+    firstAvailableOcrEngine,
     isDoclingReachable,
     ocrFallbackChain,
     orderOcrEngines,
@@ -169,5 +170,48 @@ describe("Docling reachability", () => {
             vi.fn(async () => capabilities("ok"))
         );
         await expect(availableOcrEngines()).resolves.toEqual(["DOCLING", "AZURE"]);
+    });
+});
+
+describe("first available engine (provider-first routing)", () => {
+    const AZURE_CFG = { endpoint: "https://a.test", key: "k" };
+
+    it("settles on Azure, or an available pin, without asking the converter", async () => {
+        const fetchMock = vi.fn(async () => capabilities("ok"));
+        vi.stubGlobal("fetch", fetchMock);
+
+        configureOcr({ converter: CONVERTER, azure: AZURE_CFG });
+        await expect(firstAvailableOcrEngine()).resolves.toBe("AZURE");
+        configureOcr({ converter: CONVERTER, datalabApiKey: "d", defaultProvider: "DATALAB" });
+        await expect(firstAvailableOcrEngine()).resolves.toBe("DATALAB");
+
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it("asks the converter when Docling could come first", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => capabilities("ok"))
+        );
+        configureOcr({ converter: CONVERTER, azure: AZURE_CFG, defaultProvider: "DOCLING" });
+        await expect(firstAvailableOcrEngine()).resolves.toBe("DOCLING");
+
+        resetDoclingReachability();
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => capabilities("unreachable"))
+        );
+        await expect(firstAvailableOcrEngine()).resolves.toBe("AZURE");
+    });
+
+    it("is undefined when nothing can run", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => capabilities("unreachable"))
+        );
+        configureOcr({ converter: CONVERTER });
+        await expect(firstAvailableOcrEngine()).resolves.toBeUndefined();
+        configureOcr({});
+        await expect(firstAvailableOcrEngine()).resolves.toBeUndefined();
     });
 });

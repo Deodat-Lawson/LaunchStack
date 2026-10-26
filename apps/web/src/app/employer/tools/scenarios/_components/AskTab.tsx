@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Label } from "~/components/ui/label";
@@ -16,6 +17,7 @@ import type { ScenarioDetail, ScenarioInterview } from "~/lib/scenarios/types";
 
 import { ANALYST_ID } from "../api";
 import { AskBox, InterviewThread, askBlockedReason } from "./Interviews";
+import { Portrait } from "./Portrait";
 
 /**
  * Interview anyone in the run, or the analyst, who has read all of it.
@@ -33,19 +35,24 @@ export function AskTab({
     interviewsError: string | null;
     onAsk: (agentId: string, question: string) => Promise<void>;
 }) {
+    const t = useTranslations("scenarios.askTab");
+    const ti = useTranslations("scenarios.interviews");
     const [agentId, setAgentId] = useState<string>(ANALYST_ID);
-    const blocked = askBlockedReason(run);
+    const blocked = askBlockedReason(ti, run);
     const people = [...run.people].sort((a, b) => a.name.localeCompare(b.name));
     const nameOf = (id: string) =>
-        id === ANALYST_ID ? "The analyst" : (run.people.find(p => p.id === id)?.name ?? "Someone");
+        id === ANALYST_ID
+            ? t("analyst")
+            : (run.people.find(p => p.id === id)?.name ?? t("someone"));
     const thread = interviews.filter(i => i.agentId === agentId);
+    const selected = run.people.find(p => p.id === agentId);
     const asked = new Set(interviews.map(i => i.agentId));
 
     return (
         <div className="flex max-w-[760px] flex-col gap-5">
             <div className="flex flex-col gap-1.5">
                 <Label htmlFor="scenario-ask-who" className="text-ink-2 text-[13px] font-normal">
-                    Ask
+                    {t("ask")}
                 </Label>
                 <Select value={agentId} onValueChange={setAgentId} disabled={Boolean(blocked)}>
                     <SelectTrigger
@@ -56,15 +63,19 @@ export function AskTab({
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value={ANALYST_ID}>
-                            The analyst{asked.has(ANALYST_ID) ? " · asked" : ""}
+                            {asked.has(ANALYST_ID) ? t("analystAsked") : t("analyst")}
                         </SelectItem>
                         {people.length > 0 && (
                             <SelectGroup>
-                                <SelectLabel className="text-ink-3 text-xs">People</SelectLabel>
+                                <SelectLabel className="text-ink-3 text-xs">
+                                    {t("people")}
+                                </SelectLabel>
                                 {people.map(p => (
                                     <SelectItem key={p.id} value={p.id}>
-                                        {p.name} — {p.role}
-                                        {asked.has(p.id) ? " · asked" : ""}
+                                        {t(asked.has(p.id) ? "personAsked" : "person", {
+                                            name: p.name,
+                                            role: p.role,
+                                        })}
                                     </SelectItem>
                                 ))}
                             </SelectGroup>
@@ -72,14 +83,33 @@ export function AskTab({
                     </SelectContent>
                 </Select>
                 <p className="text-ink-3 text-xs">
-                    {agentId === ANALYST_ID
-                        ? "Questions about the whole run: why something happened, who moved, what would have changed it."
-                        : "Questions to one person, who answers from what they saw and posted."}
+                    {agentId === ANALYST_ID ? t("aboutAnalyst") : t("aboutPerson")}
                 </p>
             </div>
 
+            {selected && (
+                <div className="border-line bg-panel flex items-start gap-3 rounded-xl border p-3.5">
+                    <Portrait handle={selected.handle} size={44} stance={selected.stance} />
+                    <div className="min-w-0">
+                        <div className="text-ink text-[14px] font-semibold">{selected.name}</div>
+                        <div className="text-ink-2 text-[13px] leading-snug">{selected.role}</div>
+                        {selected.bio && (
+                            <p className="text-ink-3 mt-1 line-clamp-2 text-xs leading-snug">
+                                {selected.bio}
+                            </p>
+                        )}
+                    </div>
+                </div>
+            )}
             {interviewsError && <p className="text-danger text-xs">{interviewsError}</p>}
-            <InterviewThread interviews={thread} answererName={nameOf} />
+            <InterviewThread
+                interviews={thread}
+                answererName={nameOf}
+                answerer={id => {
+                    const person = run.people.find(p => p.id === id);
+                    return person ? <Portrait handle={person.handle} size={24} /> : null;
+                }}
+            />
             <AskBox key={agentId} agentId={agentId} blocked={blocked} onAsk={onAsk} />
         </div>
     );

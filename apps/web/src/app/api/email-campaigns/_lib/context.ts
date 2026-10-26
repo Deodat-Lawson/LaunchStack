@@ -12,7 +12,13 @@
  * in a URL is untrusted input.
  */
 
+import { CampaignLifecycleError } from "@launchstack/pipelines/email/types";
+
+import { localeOfRequest } from "~/i18n/server";
+import { wordEnglish } from "~/i18n/translate";
 import {
+    fail,
+    handleRouteError as handleSharedRouteError,
     parseNumericId,
     requirePermission,
     resolveApiActor,
@@ -21,7 +27,24 @@ import {
 } from "~/server/api/context";
 import { publicOrigin } from "~/server/public-origin";
 
-export { fail, handleRouteError, idempotencyKeyFrom, ok, readJson } from "~/server/api/context";
+export { fail, idempotencyKeyFrom, ok, readJson } from "~/server/api/context";
+
+/**
+ * The shared error mapping, with the email pipeline's lifecycle refusals
+ * (`CampaignLifecycleError`, English from the package) in the reader's
+ * language: `growth.server.emailLifecycle` holds the same sentences.
+ */
+export function handleRouteError(tag: string, error: unknown, request?: Request) {
+    if (request && error instanceof CampaignLifecycleError) {
+        const message = wordEnglish(
+            error.message,
+            "growth.server.emailLifecycle",
+            localeOfRequest(request)
+        );
+        return fail(message, error.status, { code: error.code });
+    }
+    return handleSharedRouteError(tag, error, request);
+}
 
 export interface CampaignActor extends ApiActor {
     /** Sender identity injected into every email for CAN-SPAM compliance. */

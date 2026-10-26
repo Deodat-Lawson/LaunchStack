@@ -59,6 +59,13 @@ export const AGENT_TOOLS: readonly AgentToolSpec[] = [
         surfaces: ["chat"],
         perTurnToggle: false,
     },
+    {
+        id: "write",
+        label: "Write documents",
+        description: "Create a document in the workspace when the person asks for one.",
+        surfaces: ["chat"],
+        perTurnToggle: false,
+    },
 ];
 
 export const AGENT_TOOL_IDS: readonly string[] = AGENT_TOOLS.map(tool => tool.id);

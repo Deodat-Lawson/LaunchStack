@@ -14,8 +14,9 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
@@ -33,7 +34,7 @@ export async function GET() {
         if (!result) {
             return NextResponse.json({
                 metadata: null,
-                message: "No company profile yet. Build it from Workspace › Company profile.",
+                message: requestTranslator(request, "companyProfile.server.errors")("noProfileYet"),
             });
         }
 
@@ -45,6 +46,9 @@ export async function GET() {
         });
     } catch (error) {
         console.error("[company-metadata] GET error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

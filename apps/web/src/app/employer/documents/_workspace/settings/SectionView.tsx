@@ -5,11 +5,16 @@
  * its body — the chrome both settings surfaces draw a section in.
  *
  * Settings (yours alone) shows it beside a rail; the Workspace tab shows it
- * under its screens bar. Either way the chrome here owns the eyebrow, the
- * title, the description and the one primary button. Sections are *bodies* —
- * no page shell, no header of their own, no second Save button. A section
- * publishes its primary action (see `./contract`) and the chrome renders it
- * in the same place every time.
+ * under its screens bar. Either way the chrome here owns the title, the
+ * description and the one primary button. Sections are *bodies* — no page
+ * shell, no header of their own, no second Save button. A section publishes
+ * its primary action (see `./contract`) and the chrome renders it in the
+ * same place every time.
+ *
+ * Its words are `settings.sections.<id>`: `label` (the rail, short), `blurb`
+ * (the rail's second line, one clause), `title` (the header, sentence case)
+ * and `description` (what the section is *for*, not what it contains). The
+ * Workspace tab names its screens `settings.workspaceTab.screens.<id>`.
  *
  * Who sees and who changes each section is `SETTINGS_SECTION_ACCESS`: a
  * section someone may see but not change is read-only, and says so; one
@@ -18,13 +23,14 @@
 
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import {
     Archive,
     Bot,
     Building2,
     Coins,
-    FileText,
     FlaskConical,
+    KeyRound,
     Keyboard,
     Palette,
     Plug,
@@ -48,166 +54,26 @@ import { StatusNote } from "./ui";
 
 export interface SectionDef {
     id: SettingsSectionId;
-    /** Rail label, or the screen's tab in the Workspace bar. Short. */
-    label: string;
-    /** Rail sub-label. One clause. */
-    blurb: string;
-    /** Header eyebrow. */
-    eyebrow: string;
-    /** Header title. Full sentence case. */
-    title: string;
-    /** Header description. Says what the section is *for*, not what it contains. */
-    description: string;
     Icon: LucideIcon;
     /** Wide sections get the full column; forms stay readable at 840px. */
     wide?: boolean;
 }
 
 export const SECTION_DEFS: Record<SettingsSectionId, SectionDef> = {
-    account: {
-        id: "account",
-        label: "Account",
-        blurb: "Profile, photo, password, sessions",
-        eyebrow: "Account",
-        title: "Who you are, and where you are signed in",
-        description:
-            "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session.",
-        Icon: User,
-    },
-    appearance: {
-        id: "appearance",
-        label: "Appearance",
-        blurb: "Theme, density, motion, answers",
-        eyebrow: "Appearance",
-        title: "How the app looks, and how it answers you",
-        description:
-            "Four controls, not eleven: three for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme.",
-        Icon: Palette,
-    },
-    shortcuts: {
-        id: "shortcuts",
-        label: "Shortcuts",
-        blurb: "Every command and its keys",
-        eyebrow: "Shortcuts",
-        title: "What the keyboard does",
-        description:
-            "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open.",
-        Icon: Keyboard,
-    },
-    privacy: {
-        id: "privacy",
-        label: "Data and privacy",
-        blurb: "What leaves the deployment",
-        eyebrow: "Privacy",
-        title: "What leaves this deployment, and what stays",
-        description:
-            "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive.",
-        Icon: ShieldCheck,
-    },
-    general: {
-        id: "general",
-        label: "General",
-        blurb: "Name, URL, description, colour",
-        eyebrow: "General",
-        title: "What the workspace is called, and how it is known",
-        description:
-            "Its name, the URL it is listed under, a line on what it does, and the colour of its mark. Everyone in the workspace sees these; admins change them.",
-        Icon: SlidersHorizontal,
-    },
-    people: {
-        id: "people",
-        label: "People and access",
-        blurb: "Members, roles, folders",
-        eyebrow: "People",
-        title: "Who is in the workspace, and what they can see",
-        description:
-            "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else.",
-        Icon: Users,
-        wide: true,
-    },
-    company: {
-        id: "company",
-        label: "Company profile",
-        blurb: "What your sources prove",
-        eyebrow: "Company",
-        title: "What your sources can prove",
-        description:
-            "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that.",
-        Icon: Building2,
-        wide: true,
-    },
-    models: {
-        id: "models",
-        label: "Models",
-        blurb: "Which model answers what",
-        eyebrow: "Models",
-        title: "Which model serves each kind of request",
-        description:
-            "Run this workspace on your own provider account, or on the server's default models. The default's routes and models are set in the server's configuration file and shown here read-only.",
-        Icon: Sparkles,
-    },
-    agents: {
-        id: "agents",
-        label: "Agents",
-        blurb: "The roster, and what it may do",
-        eyebrow: "Agents",
-        title: "Who shows up to a meeting, and how much they may do alone",
-        description:
-            "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect.",
-        Icon: Bot,
-    },
-    documents: {
-        id: "documents",
-        label: "Document defaults",
-        blurb: "Storage, processing, destination",
-        eyebrow: "Documents",
-        title: "What a new document gets unless someone says otherwise",
-        description:
-            "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc.",
-        Icon: FileText,
-    },
-    integrations: {
-        id: "integrations",
-        label: "Integrations",
-        blurb: "Connections, Slack, remote nodes",
-        eyebrow: "Integrations",
-        title: "What this workspace connects to",
-        description:
-            "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent.",
-        Icon: Plug,
-    },
-    usage: {
-        id: "usage",
-        label: "Usage",
-        blurb: "Balance, burn, estimate",
-        eyebrow: "Usage",
-        title: "What the workspace is spending",
-        description:
-            "The token balance, what has been drawing on it and when, and an estimate of cost from a price you set. The numbers exist to inform the two settings on this page.",
-        Icon: Coins,
-        wide: true,
-    },
-    archive: {
-        id: "archive",
-        label: "Archive",
-        blurb: "Trash, retired agents, purge",
-        eyebrow: "Archive",
-        title: "What has been put away, and when it goes for good",
-        description:
-            "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own.",
-        Icon: Archive,
-        wide: true,
-    },
-    labs: {
-        id: "labs",
-        label: "Labs",
-        blurb: "Unfinished, opt-in",
-        eyebrow: "Labs",
-        title: "Features that are not finished",
-        description:
-            "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace.",
-        Icon: FlaskConical,
-    },
+    account: { id: "account", Icon: User },
+    appearance: { id: "appearance", Icon: Palette },
+    shortcuts: { id: "shortcuts", Icon: Keyboard },
+    privacy: { id: "privacy", Icon: ShieldCheck },
+    general: { id: "general", Icon: SlidersHorizontal },
+    people: { id: "people", Icon: Users, wide: true },
+    company: { id: "company", Icon: Building2, wide: true },
+    byok: { id: "byok", Icon: KeyRound },
+    models: { id: "models", Icon: Sparkles },
+    agents: { id: "agents", Icon: Bot },
+    integrations: { id: "integrations", Icon: Plug },
+    usage: { id: "usage", Icon: Coins, wide: true },
+    archive: { id: "archive", Icon: Archive, wide: true },
+    labs: { id: "labs", Icon: FlaskConical },
 };
 
 type SectionBodyComponent = React.ComponentType<{
@@ -227,11 +93,9 @@ const WorkspaceGeneralSection = load(() =>
 const PeopleAccessSection = load(() =>
     import("./PeopleAccessSection").then(m => m.PeopleAccessSection)
 );
+const KeysSection = load(() => import("./KeysSection").then(m => m.KeysSection));
 const ModelsSection = load(() => import("./ModelsSection").then(m => m.ModelsSection));
 const AgentsPanel = load(() => import("../collab/AgentsPanel").then(m => m.AgentsPanel));
-const DocumentDefaultsSection = load(() =>
-    import("./DocumentDefaultsSection").then(m => m.DocumentDefaultsSection)
-);
 const IntegrationsPanel = load(() => import("./IntegrationsPanel").then(m => m.IntegrationsPanel));
 const UsageSection = load(() => import("./UsageSection").then(m => m.UsageSection));
 const ArchiveSection = load(() => import("./ArchiveSection").then(m => m.ArchiveSection));
@@ -256,6 +120,7 @@ export function SettingsSectionView({
 }
 
 function SectionViewInner({ id, className }: { id: SettingsSectionId; className?: string }) {
+    const t = useTranslations("settings");
     const definition = SECTION_DEFS[id];
     const [actions, setActions] = useState<SettingsSectionActions | null>(null);
     const { loaded, error, roleName, can } = usePermissions();
@@ -279,7 +144,7 @@ function SectionViewInner({ id, className }: { id: SettingsSectionId; className?
                         <SectionBody id={id} onActions={setActions} />
                     ) : (
                         <SectionWithheld
-                            label={definition.label}
+                            label={t(`sections.${id}.label`)}
                             loaded={loaded}
                             error={error}
                             roleName={roleName}
@@ -306,6 +171,7 @@ function SectionHeader({
     actions: SettingsSectionActions | null;
     readOnly: boolean;
 }) {
+    const t = useTranslations("settings");
     const busyLabel = actions?.primaryBusyLabel ?? `${actions?.primaryLabel ?? ""}…`;
 
     return (
@@ -319,22 +185,18 @@ function SectionHeader({
                 )}
             >
                 <div className="min-w-0 flex-1">
-                    <div className="mono text-ink-3 mb-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {definition.eyebrow}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <h1 className="display text-ink @max-sm:text-[22px] m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
+                            {t(`sections.${definition.id}.title`)}
+                        </h1>
                         {readOnly && (
-                            <Badge
-                                variant="secondary"
-                                title="You can see this; changing it isn't part of your role."
-                            >
-                                Read-only
+                            <Badge variant="secondary" title={t("hub.readOnlyTitle")}>
+                                {t("hub.readOnly")}
                             </Badge>
                         )}
                     </div>
-                    <h1 className="display text-ink @max-sm:text-[22px] m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
-                        {definition.title}
-                    </h1>
-                    <p className="text-ink-3 m-0 mt-[7px] max-w-[660px] text-[13px] leading-[1.55]">
-                        {definition.description}
+                    <p className="text-ink-3 m-0 mt-[7px] max-w-[68ch] text-[13px] leading-[1.55]">
+                        {t(`sections.${definition.id}.description`)}
                     </p>
                 </div>
 
@@ -381,12 +243,12 @@ function SectionBody({
             return <PeopleAccessSection onActions={onActions} />;
         case "company":
             return <CompanyProfileView variant="settings" onActions={onActions} />;
+        case "byok":
+            return <KeysSection onActions={onActions} />;
         case "models":
             return <ModelsSection onActions={onActions} />;
         case "agents":
             return <AgentsPanel onActions={onActions} />;
-        case "documents":
-            return <DocumentDefaultsSection onActions={onActions} />;
         case "integrations":
             return <IntegrationsPanel onActions={onActions} />;
         case "usage":
@@ -415,16 +277,17 @@ function SectionWithheld({
     error: string | null;
     roleName: string | null;
 }) {
+    const t = useTranslations("settings.hub");
     if (!loaded) return <SectionLoading />;
     if (error) return <StatusNote tone="danger">{error}</StatusNote>;
     return (
         <StatusNote tone="muted">
-            {label} isn&apos;t part of your role{roleName ? ` (${roleName})` : ""}. Ask an admin if
-            you need it.
+            {roleName ? t("withheldWithRole", { label, role: roleName }) : t("withheld", { label })}
         </StatusNote>
     );
 }
 
 export function SectionLoading() {
-    return <StatusNote tone="muted">Loading…</StatusNote>;
+    const tc = useTranslations("common");
+    return <StatusNote tone="muted">{tc("status.loading")}</StatusNote>;
 }

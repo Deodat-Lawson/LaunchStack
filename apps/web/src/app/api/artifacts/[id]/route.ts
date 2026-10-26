@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
+import { requestTranslator } from "~/i18n/server";
 import { artifactSearchText, detectArtifactType } from "~/lib/artifact-content";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, UpdateArtifactSchema, validateRequestBody } from "~/lib/validation";
@@ -23,20 +24,30 @@ function parseId(raw: string): number | null {
     return Number.isInteger(id) && id > 0 ? id : null;
 }
 
-function notFound() {
-    return NextResponse.json({ error: "Artifact not found" }, { status: 404 });
+type Words = ReturnType<typeof requestTranslator<"viewers.server.artifacts">>;
+
+function notFound(t: Words) {
+    return NextResponse.json({ error: t("notFound") }, { status: 404 });
 }
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+function invalidId(request: Request) {
+    return NextResponse.json(
+        { error: requestTranslator(request, "errors.api")("invalidId") },
+        { status: 400 }
+    );
+}
+
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const row = await getArtifact(id, ctx.data.companyId);
-        if (!row) return notFound();
+        if (!row) return notFound(t);
 
         // Best-effort recency stamp — a failure here must never stop the
         // artifact from opening.
@@ -49,24 +60,25 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         return NextResponse.json({ artifact: toDetail(row) }, { status: 200 });
     } catch (error) {
         console.error("[artifacts] fetch failed:", error);
-        return serverError("Failed to load artifact");
+        return serverError(t("loadFailed"));
     }
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const validation = await validateRequestBody(request, UpdateArtifactSchema);
         if (!validation.success) return validation.response;
         const body = validation.data;
 
         const current = await getArtifact(id, ctx.data.companyId);
-        if (!current) return notFound();
+        if (!current) return notFound(t);
 
         const patch: Partial<typeof claudeArtifacts.$inferInsert> = {
             updatedByUserId: ctx.data.authUserId,
@@ -97,21 +109,22 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             )
             .returning();
 
-        if (!row) return notFound();
+        if (!row) return notFound(t);
         return NextResponse.json({ artifact: toDetail(row) }, { status: 200 });
     } catch (error) {
         console.error("[artifacts] update failed:", error);
-        return serverError("Failed to update artifact");
+        return serverError(t("updateFailed"));
     }
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const scope = and(
             eq(claudeArtifacts.id, id),
@@ -124,7 +137,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
                 .delete(claudeArtifacts)
                 .where(scope)
                 .returning({ id: claudeArtifacts.id });
-            if (!row) return notFound();
+            if (!row) return notFound(t);
             return NextResponse.json({ deleted: true, purged: true }, { status: 200 });
         }
 
@@ -133,11 +146,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
             .set({ deletedAt: new Date(), updatedByUserId: ctx.data.authUserId })
             .where(scope)
             .returning({ id: claudeArtifacts.id });
-        if (!row) return notFound();
+        if (!row) return notFound(t);
 
         return NextResponse.json({ deleted: true, purged: false }, { status: 200 });
     } catch (error) {
         console.error("[artifacts] delete failed:", error);
-        return serverError("Failed to delete artifact");
+        return serverError(t("deleteFailed"));
     }
 }

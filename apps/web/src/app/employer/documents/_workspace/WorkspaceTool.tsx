@@ -6,8 +6,11 @@
  *
  * - **Basics** — General (the workspace's name, URL, description, industry,
  *   team size and colour), People and access, Company profile.
- * - **Setup** — Models, Agents, Document defaults, Integrations.
+ * - **Setup** — Bring your own keys, Models, Agents, Integrations.
  * - **Data** — Usage, Archive, Labs.
+ *
+ * Its words are `settings.workspaceTab` (the tab's name, what it is for, its
+ * groups and its screens' names) and, inside a screen, `settings.sections`.
  *
  * These were sections of Settings until Settings became yours alone (Account,
  * Appearance, Shortcuts, Data and privacy). Each screen is drawn by
@@ -25,6 +28,7 @@
 
 import React, { useLayoutEffect, useMemo } from "react";
 import { Briefcase } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
     ToolFrame,
@@ -36,29 +40,17 @@ import { ToolNavProvider, useToolNav, type ToolHost } from "~/components/tool-ap
 import { canSeeSettingsSection } from "~/lib/settings/sections";
 import {
     WORKSPACE_HOME,
+    WORKSPACE_SCREEN_GROUPS,
     WORKSPACE_SCREEN_IDS,
     WORKSPACE_TOOL_ID,
     settingsDestination,
     workspaceScreenFromPath,
-    type WorkspaceScreenId,
 } from "~/lib/settings/surfaces";
 import { usePermissions } from "~/lib/use-permissions";
 
 import { SECTION_DEFS, SettingsSectionView } from "./settings/SectionView";
 
-/** The bar's groups. Ten screens are more than one row holds, so they switch by group. */
-export const WORKSPACE_SCREEN_GROUPS: readonly {
-    id: string;
-    label: string;
-    screens: readonly WorkspaceScreenId[];
-}[] = [
-    { id: "basics", label: "Basics", screens: ["general", "people", "company"] },
-    { id: "setup", label: "Setup", screens: ["models", "agents", "documents", "integrations"] },
-    { id: "data", label: "Data", screens: ["usage", "archive", "labs"] },
-];
-
-const ABOUT =
-    "Everything about this workspace: what it is called, who is in it and what they can see, the models and agents it runs, where documents go, what it connects to and what it spends. Your own account, theme and shortcuts are in Settings.";
+export { WORKSPACE_SCREEN_GROUPS } from "~/lib/settings/surfaces";
 
 export function WorkspaceTool({ host }: { host?: ToolHost }) {
     return (
@@ -74,6 +66,7 @@ export function WorkspaceTool({ host }: { host?: ToolHost }) {
 }
 
 function WorkspaceFrame() {
+    const t = useTranslations("settings.workspaceTab");
     const { path, searchParams } = useToolNav();
     const { can } = usePermissions();
     const screen = workspaceScreenFromPath(path);
@@ -85,24 +78,24 @@ function WorkspaceFrame() {
         () =>
             WORKSPACE_SCREEN_GROUPS.map(group => ({
                 id: group.id,
-                label: group.label,
+                label: t(`groups.${group.id}`),
                 items: group.screens
                     .filter(id => canSeeSettingsSection(id, can))
                     .map(id => ({
                         to: `/${id}`,
-                        label: SECTION_DEFS[id].label,
+                        label: t(`screens.${id}`),
                         icon: SECTION_DEFS[id].Icon,
                     })),
             })).filter(group => group.items.length > 0),
-        [can]
+        [can, t]
     );
 
     return (
         <ToolFrame
-            title="Workspace"
+            title={t("title")}
             mark={<ToolMark icon={Briefcase} />}
             groups={groups}
-            about={ABOUT}
+            about={t("about")}
             // A section brings its own header and scrolls its own body.
             fill
         >
@@ -114,7 +107,7 @@ function WorkspaceFrame() {
                 </div>
             ) : (
                 <div className="@max-md:px-4 @max-md:pt-4 px-8 pt-6">
-                    <ToolNotFound home={WORKSPACE_HOME} homeLabel="General" />
+                    <ToolNotFound home={WORKSPACE_HOME} homeLabel={t("screens.general")} />
                 </div>
             )}
         </ToolFrame>

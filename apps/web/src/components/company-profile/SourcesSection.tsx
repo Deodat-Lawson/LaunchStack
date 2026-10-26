@@ -1,14 +1,13 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { SourceLink } from "~/components/tools/Cite";
 import { SectionHeading } from "~/components/tools/PageHeader";
 import type { ProfileSourceDto, SourceOverride } from "~/lib/company-profile/dto";
-import { plural } from "~/lib/tools/format";
-
-import { ROLE_WORD } from "./words";
+import { ROLE_KEY, failureText, sourceReasonText } from "./words";
 
 export type SetSource = (source: ProfileSourceDto, override: SourceOverride | null) => void;
 
@@ -33,32 +32,31 @@ export function SourcesSection({
     busyId: number | null;
     onSetSource: SetSource;
 }) {
+    const t = useTranslations("companyProfile.sources");
     if (sources.length === 0) return null;
     const counted = sources.filter(s => s.counted);
     const reading = sources.filter(s => !s.counted && s.status === "pending");
     const aside = sources.filter(s => !s.counted && s.status !== "pending");
 
     const summary = [
-        `${counted.length} read for the profile`,
-        `${aside.length} set aside`,
+        t("summary.counted", { count: counted.length }),
+        t("summary.aside", { count: aside.length }),
         reading.length > 0
-            ? `${reading.length} ${building ? "still reading" : "not read yet"}`
+            ? building
+                ? t("summary.stillReading", { count: reading.length })
+                : t("summary.notReadYet", { count: reading.length })
             : null,
     ]
         .filter(Boolean)
         .join(" · ");
 
     return (
-        <section aria-label="Sources">
-            <SectionHeading title="Sources" aside={summary} />
+        <section aria-label={t("title")}>
+            <SectionHeading title={t("title")} aside={summary} />
             <div className="flex flex-col gap-4">
                 <SourceGroup
-                    title="Read for the profile"
-                    note={
-                        counted.length > 0
-                            ? "Written by you or about you. Their facts count."
-                            : "None yet. A source written by you or about you counts."
-                    }
+                    title={t("groups.counted")}
+                    note={counted.length > 0 ? t("groups.countedSome") : t("groups.countedNone")}
                     sources={counted}
                     canEdit={canEdit}
                     building={building}
@@ -67,8 +65,8 @@ export function SourcesSection({
                 />
                 {reading.length > 0 && (
                     <SourceGroup
-                        title="Reading now"
-                        note="Each is decided as soon as it has been read."
+                        title={t("groups.reading")}
+                        note={t("groups.readingNote")}
                         sources={reading}
                         canEdit={canEdit}
                         building={building}
@@ -78,8 +76,8 @@ export function SourcesSection({
                 )}
                 {aside.length > 0 && (
                     <SourceGroup
-                        title="Set aside"
-                        note="Not counted. Each says why."
+                        title={t("groups.aside")}
+                        note={t("groups.asideNote")}
                         sources={aside}
                         canEdit={canEdit}
                         building={building}
@@ -151,24 +149,29 @@ function SourceRow({
     busy: boolean;
     onSetSource: SetSource;
 }) {
+    const t = useTranslations("companyProfile.sources");
+    const tf = useTranslations("companyProfile.facts");
+    const ts = useTranslations("companyProfile.server");
+    const tc = useTranslations("common");
+    const reason = sourceReasonText(ts, source);
     const roleWord =
         source.role !== null
-            ? ROLE_WORD[source.role]
+            ? t(`roles.${ROLE_KEY[source.role]}`)
             : source.status === "pending"
-              ? "Not read yet"
+              ? t("roles.notReadYet")
               : null;
     const meta = [
         roleWord,
         source.folder || null,
-        source.counted && source.facts > 0 ? plural(source.facts, "fact") : null,
+        source.counted && source.facts > 0 ? tf("count", { count: source.facts }) : null,
     ].filter((part): part is string => Boolean(part));
 
     const note =
         source.status === "pending"
             ? null
             : source.status === "failed"
-              ? `Could not be read: ${source.error ?? "reading it failed"}. Rebuild to try again.`
-              : source.reason;
+              ? t("row.failed", { error: failureText(ts, source) ?? t("row.readingFailed") })
+              : reason;
 
     // What the reader decided, before any person's call.
     const readerCounts = source.role === "about_us";
@@ -191,11 +194,8 @@ function SourceRow({
                         <span className="text-ink-3 text-xs">{meta.join(" · ")}</span>
                     )}
                     {source.override !== null && (
-                        <span
-                            className="text-brand-ink text-xs"
-                            title="Someone in the workspace decided this, not the reader."
-                        >
-                            · your call
+                        <span className="text-brand-ink text-xs" title={t("row.yourCallTitle")}>
+                            {t("row.yourCall")}
                         </span>
                     )}
                 </div>
@@ -203,12 +203,10 @@ function SourceRow({
                     building ? (
                         <p className="text-ink-3 mt-0.5 inline-flex items-center gap-1.5 text-xs">
                             <Loader2 className="size-3 animate-spin motion-reduce:animate-none" />
-                            Reading…
+                            {t("row.reading")}
                         </p>
                     ) : (
-                        <p className="text-ink-3 mt-0.5 text-xs">
-                            {source.reason ?? "Read on the next build."}
-                        </p>
+                        <p className="text-ink-3 mt-0.5 text-xs">{reason ?? t("row.nextBuild")}</p>
                     )
                 ) : (
                     note && (
@@ -232,20 +230,20 @@ function SourceRow({
                                 size="sm"
                                 variant="outline"
                                 disabled={busy}
-                                aria-label={`Set aside: ${source.title}`}
+                                aria-label={t("row.setAsideLabel", { title: source.title })}
                                 onClick={() => onSetSource(source, "set_aside")}
                             >
-                                Set aside
+                                {t("row.setAside")}
                             </Button>
                         ) : (
                             <Button
                                 size="sm"
                                 variant="outline"
                                 disabled={busy}
-                                aria-label={`Count this source: ${source.title}`}
+                                aria-label={t("row.countLabel", { title: source.title })}
                                 onClick={() => onSetSource(source, "about_us")}
                             >
-                                Count this source
+                                {t("row.count")}
                             </Button>
                         ))}
                     {showUndo && (
@@ -253,10 +251,10 @@ function SourceRow({
                             size="sm"
                             variant="ghost"
                             disabled={busy}
-                            aria-label={`Undo your call on ${source.title}`}
+                            aria-label={t("row.undoLabel", { title: source.title })}
                             onClick={() => onSetSource(source, null)}
                         >
-                            Undo
+                            {tc("actions.undo")}
                         </Button>
                     )}
                 </div>

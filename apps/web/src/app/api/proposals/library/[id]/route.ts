@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { editLibraryItem, removeLibraryItem } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../../_http";
 
 const Schema = z.object({
     question: z.string().min(1).max(1_000).optional(),
@@ -21,14 +21,14 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = Schema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Check the change and try again", 400);
+        if (!parsed.success) return error(say(request, "checkChange"), 400);
         return json({ item: await editLibraryItem(auth.ctx, id, parsed.data) });
     } catch (err) {
-        return handleProposalsError("PATCH library item", err);
+        return handleProposalsError("PATCH library item", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
@@ -36,6 +36,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await removeLibraryItem(auth.ctx, id);
         return json({ ok: true });
     } catch (err) {
-        return handleProposalsError("DELETE library item", err);
+        return handleProposalsError("DELETE library item", err, request);
     }
 }

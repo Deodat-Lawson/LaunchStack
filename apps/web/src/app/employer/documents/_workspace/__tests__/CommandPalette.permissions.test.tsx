@@ -14,8 +14,18 @@ import "@testing-library/jest-dom";
 
 import { BUILTIN_ROLE_PERMISSIONS, type Permission } from "~/lib/authz/permissions";
 
+import type * as Registry from "~/lib/settings/registry";
+
 jest.mock("next/navigation", () => ({ useRouter: () => ({ push: jest.fn() }) }));
-jest.mock("~/lib/settings/useSettings", () => ({ useSettingValue: () => false }));
+jest.mock("~/lib/settings/useSettings", () => ({
+    useSettingValue: () => false,
+    // The real registry search, in English: what a Member may find is what is under test.
+    useSettingsSearch: () => (query: string, limit?: number) => {
+        const registry: typeof Registry = jest.requireActual("~/lib/settings/registry");
+        return registry.searchSettings(query, limit);
+    },
+    useSettingCopier: () => (definition: { label: string; description: string }) => definition,
+}));
 jest.mock("~/lib/context-menu", () => ({
     APP_TARGET_KIND: "app",
     actionItems: () => [],
@@ -116,13 +126,21 @@ describe("CommandPalette permissions", () => {
         expect(screen.getByText("Workspace")).toBeInTheDocument();
     });
 
-    it("no longer offers the self-host / BYOK row", () => {
+    it("offers Bring your own keys to an admin, found by BYOK, and opens it by id", () => {
         mockPerms = new Set(ADMIN);
-        search("byok");
+        const onPickFeature = search("byok");
         expect(screen.queryByText("Self-host / BYOK")).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText("Bring your own keys"));
+        expect(onPickFeature).toHaveBeenCalledWith("byok");
         cleanup();
         search("vercel");
         expect(screen.queryByText(/Vercel, Docker/)).not.toBeInTheDocument();
+    });
+
+    it("keeps Bring your own keys from a Member", () => {
+        mockPerms = new Set(MEMBER);
+        search("own keys");
+        expect(screen.queryByText("Bring your own keys")).not.toBeInTheDocument();
     });
 
     it("finds the theme for a Guest by what people call it, and opens it", () => {

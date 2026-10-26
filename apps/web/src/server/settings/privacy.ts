@@ -95,8 +95,10 @@ const OCR_SERVICES = [
 /**
  * Where PDFs and images go to be read: the configured OCR services in the
  * pipeline's order (an operator pin first), from the same variables the
- * adapters read. Docling runs on this deployment (docling-serve behind the
- * document converter), so it never counts as leaving it.
+ * adapters read, and which PDFs reach them (every one by default; only scans
+ * under OCR_PDF_STRATEGY=text-layer-first). Docling runs on this deployment
+ * (docling-serve behind the document converter), so it never counts as
+ * leaving it.
  */
 function ocrDisclosure(server: typeof env.server): {
     host: string | null;
@@ -137,12 +139,19 @@ function ocrDisclosure(server: typeof env.server): {
             : service.name
     );
     const [lead, ...rest] = named;
-    const order = `${lead} reads every page${rest.length > 0 ? `; ${rest.join(", then ")} if it fails` : ""}; the PDF's own text layer is the last resort.`;
+    const chain = `${lead} reads every page${rest.length > 0 ? `; ${rest.join(", then ")} if it fails` : ""}`;
+    // OCR_PDF_STRATEGY=text-layer-first opts out of provider-first, the default.
+    const textLayerFirst = server.OCR_PDF_STRATEGY === "text-layer-first" && pin !== "NATIVE_PDF";
     const scope =
         pin === "NATIVE_PDF"
             ? "Images, and PDFs someone picks a provider for, are read with OCR (this deployment defaults PDFs to their text layer)."
-            : "Every PDF and image is read with OCR.";
-    return { host, local: !host, note: `${scope} ${order}` };
+            : textLayerFirst
+              ? "Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it on this server."
+              : "Every PDF and image is read with OCR.";
+    const last = textLayerFirst
+        ? "a scan none of them can read is retried, not indexed blank."
+        : "the PDF's own text layer is the last resort, and a scan none of them can read is retried, not indexed blank.";
+    return { host, local: !host, note: `${scope} ${chain}; ${last}` };
 }
 
 export function privacyOverview(): PrivacyOverview {
@@ -234,6 +243,17 @@ export function privacyOverview(): PrivacyOverview {
             sends: "document-text",
             enabled: server.GOOGLE_DOCS_EDITING_ENABLED === "true",
             note: "Only files someone links or creates in Drive; synced back as versions.",
+        },
+        {
+            id: "notion",
+            label: "Notion",
+            host:
+                server.NOTION_OAUTH_CLIENT_ID && server.NOTION_OAUTH_CLIENT_SECRET
+                    ? "api.notion.com"
+                    : null,
+            sends: "metadata",
+            enabled: Boolean(server.NOTION_OAUTH_CLIENT_ID && server.NOTION_OAUTH_CLIENT_SECRET),
+            note: "Reads only the pages picked on Notion's consent screen. Nothing is written to Notion.",
         },
         {
             id: "sec-edgar",

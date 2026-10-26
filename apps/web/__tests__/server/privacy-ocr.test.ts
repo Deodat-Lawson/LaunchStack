@@ -33,6 +33,21 @@ describe("Privacy › OCR", () => {
         expect(row.note).toMatch(/^Every PDF and image is read with OCR\./);
         expect(row.note).toMatch(/Azure Document Intelligence reads every page; Docling/);
         expect(row.note).toMatch(/text layer is the last resort/);
+        expect(row.note).toMatch(/a scan none of them can read is retried, not indexed blank/);
+    });
+
+    it("says only scans reach OCR under OCR_PDF_STRATEGY=text-layer-first", () => {
+        Object.assign(serverEnv, {
+            AZURE_DOC_INTELLIGENCE_ENDPOINT: "https://docintel.cognitiveservices.azure.com/",
+            AZURE_DOC_INTELLIGENCE_KEY: "k",
+            OCR_PDF_STRATEGY: "text-layer-first",
+        });
+        const row = ocrRow();
+        expect(row.host).toBe("docintel.cognitiveservices.azure.com");
+        expect(row.note).toMatch(
+            /^Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it/
+        );
+        expect(row.note).not.toMatch(/last resort/);
     });
 
     it("keeps Docling local: nothing leaves the deployment", () => {

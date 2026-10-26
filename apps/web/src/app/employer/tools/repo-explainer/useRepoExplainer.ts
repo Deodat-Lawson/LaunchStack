@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useCallback, useEffect } from "react";
 import type { DiagramType, RepoExplanationResult } from "@launchstack/pipelines/repo-explainer";
 
@@ -14,6 +15,7 @@ interface UseRepoExplainerOptions {
 }
 
 export function useRepoExplainer(options?: UseRepoExplainerOptions) {
+    const t = useTranslations("tools.repoExplainer.errors");
     const [url, setUrl] = useState(options?.initialUrl ?? "");
     const [instructions, setInstructions] = useState("");
     const [githubToken, setGithubToken] = useState("");
@@ -39,7 +41,7 @@ export function useRepoExplainer(options?: UseRepoExplainerOptions) {
 
             const trimmedUrl = url.trim();
             if (!trimmedUrl) {
-                setError("Please enter a GitHub repository URL.");
+                setError(t("missingUrl"));
                 return;
             }
 
@@ -60,24 +62,19 @@ export function useRepoExplainer(options?: UseRepoExplainerOptions) {
 
                 const payload = (await response.json()) as ApiResponse;
                 if (!response.ok || !payload.success || !payload.data) {
-                    setError(
-                        payload.message ??
-                            "We could not generate an explanation for this repository. Please try again."
-                    );
+                    setError(payload.message ?? t("failed"));
                     return;
                 }
 
                 setResult(payload.data);
             } catch (err) {
                 console.error("[repo-explainer] request error:", err);
-                setError(
-                    "Something went wrong while talking to the repo explainer. Please try again."
-                );
+                setError(t("network"));
             } finally {
                 setLoading(false);
             }
         },
-        [url, instructions, githubToken, diagramType]
+        [url, instructions, githubToken, diagramType, t]
     );
 
     const summary = result?.summary ?? null;

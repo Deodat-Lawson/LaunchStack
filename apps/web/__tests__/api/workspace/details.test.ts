@@ -50,7 +50,7 @@ describe("GET /api/workspace/details", () => {
         as("member");
         fakeDb.onSelect(company, [ROW]);
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/details"));
 
         expect(res.status).toBe(200);
         await expect(res.json()).resolves.toEqual({
@@ -70,7 +70,9 @@ describe("GET /api/workspace/details", () => {
     it("says an admin may change them", async () => {
         as("admin");
         fakeDb.onSelect(company, [ROW]);
-        await expect((await GET()).json()).resolves.toMatchObject({ canEdit: true });
+        await expect(
+            (await GET(new Request("http://localhost/api/workspace/details"))).json()
+        ).resolves.toMatchObject({ canEdit: true });
     });
 
     it("answers for nobody outside the workspace", async () => {
@@ -78,7 +80,7 @@ describe("GET /api/workspace/details", () => {
             success: false,
             response: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 }),
         });
-        expect((await GET()).status).toBe(401);
+        expect((await GET(new Request("http://localhost/api/workspace/details"))).status).toBe(401);
     });
 });
 

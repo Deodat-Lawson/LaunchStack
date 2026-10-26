@@ -9,8 +9,9 @@
  * fallback, so the viewer degrades to Markdown rather than to an error page.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 import { mindmapIdOf } from "~/lib/mindmap-document";
@@ -41,6 +42,11 @@ export function MindmapDocumentViewer({
     document: DocumentType;
     highlight?: ViewerHighlight | null;
 }) {
+    const t = useTranslations("mindmap.viewer");
+    const starter = useTranslations("mindmap.starter");
+    // Read when the map arrives, not a reason to fetch it again.
+    const starterRef = useRef(starter);
+    starterRef.current = starter;
     const mindmapId = mindmapIdOf(document.ocrMetadata);
     const [state, setState] = useState<State>(
         mindmapId === null ? { status: "fallback" } : { status: "loading" }
@@ -54,7 +60,7 @@ export function MindmapDocumentViewer({
             try {
                 const detail = await getMindmap(mindmapId);
                 if (cancelled) return;
-                const { doc } = openMindmapDocument(detail);
+                const { doc } = openMindmapDocument(detail, starterRef.current);
                 setState({ status: "ready", doc, key: `${detail.id}:${detail.revision}` });
             } catch {
                 if (!cancelled) setState({ status: "fallback" });
@@ -72,7 +78,7 @@ export function MindmapDocumentViewer({
         return (
             <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-[13px]">
                 <Loader2 className="size-4 animate-spin" />
-                Opening…
+                {t("opening")}
             </div>
         );
     }

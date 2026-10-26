@@ -254,16 +254,17 @@ describe("studio registry", () => {
         expect(workspace.href).toBe("/employer/documents?feature=workspace");
     });
 
-    it("points every palette row into the settings at a screen someone may see, and no longer offers BYOK", () => {
+    it("points every palette row into the settings at a screen someone may see", () => {
         const intoSettings = DEMOTED_FEATURES.filter(
             f => !resolveStudioFeature(f.id) && settingsSectionOfHref(f.href) !== null
         );
         expect(intoSettings.map(f => f.id).sort()).toEqual(
-            ["agents-nodes", "people-access", "profile", "workspace-general"].sort()
+            ["agents-nodes", "byok", "people-access", "profile", "workspace-general"].sort()
         );
-        expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || f.label.includes("BYOK"))).toBe(
-            false
-        );
+        // The old "Self-host / BYOK" row (Vercel, Docker, your own keys) is
+        // Bring your own keys now, and says nothing about embeddings.
+        expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || /vercel/i.test(f.desc))).toBe(false);
+        expect(DEMOTED_FEATURES.some(f => /embedding/i.test(`${f.label} ${f.desc}`))).toBe(false);
         const owner = (p: Permission | undefined) =>
             p === undefined || BUILTIN_ROLE_PERMISSIONS.owner.has(p);
         for (const row of intoSettings) {

@@ -7,7 +7,13 @@ import type { CompanyProfileDto, ProfileFactPatch, ProfileSourcePatch } from "./
 export class CompanyProfileApiError extends Error {
     constructor(
         message: string,
-        readonly status: number
+        readonly status: number,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead.
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "CompanyProfileApiError";
@@ -29,11 +35,15 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new CompanyProfileApiError(message, response.status);
+                : null;
+        throw new CompanyProfileApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            server === null
+        );
     }
     return body as T;
 }

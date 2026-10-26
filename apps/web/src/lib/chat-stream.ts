@@ -1,6 +1,37 @@
+/**
+ * One piece of work the answer did, named for the reader ("Searching Pitch
+ * deck.pdf", then "Found 5 passages in 2 sources"). The server sends a step
+ * as active, then again as done under the same id; the client upserts by id
+ * and times each step itself.
+ */
+export interface ChatStep {
+    id: string;
+    label: string;
+    state: "active" | "done";
+    detail?: string;
+}
+
+const STEP_TEXT_LIMIT = 500;
+
+function isChatStep(value: unknown): value is ChatStep {
+    if (!value || typeof value !== "object") return false;
+    const step = value as Record<string, unknown>;
+    return (
+        typeof step.id === "string" &&
+        step.id.length > 0 &&
+        step.id.length <= 64 &&
+        typeof step.label === "string" &&
+        step.label.length <= STEP_TEXT_LIMIT &&
+        (step.state === "active" || step.state === "done") &&
+        (step.detail === undefined ||
+            (typeof step.detail === "string" && step.detail.length <= STEP_TEXT_LIMIT))
+    );
+}
+
 /** NDJSON chat protocol shared by the server and client. Each result is final. */
 export type ChatStreamEvent<T> =
     | { type: "status"; status: string }
+    | { type: "step"; step: ChatStep }
     | { type: "text"; delta: string }
     | { type: "reasoning"; delta: string }
     | { type: "result"; response: T }
@@ -19,19 +50,56 @@ export function chatStatusLabel(status: string): string {
     return STATUS_LABELS[status] ?? status;
 }
 
+/** The keyword statuses, which a screen names in the reader's language (`chat.runtime.stages`). */
+export type ChatStatusKeyword = "generating" | "finalizing";
+
+/** The keyword a `status` event carries, or null for a tool's own sentence. */
+export function chatStatusKeyword(status: string): ChatStatusKeyword | null {
+    return status === "generating" || status === "finalizing" ? status : null;
+}
+
+/**
+ * What the stream says when it breaks, by key. The English travels as the
+ * error's message (through `useAIChat`, which keeps only the text); a screen
+ * looks the text up with `chatStreamErrorKey` and shows
+ * `chat.runtime.streamErrors.<key>` instead.
+ */
+export const CHAT_STREAM_ERRORS = {
+    malformed: "The chat stream contained malformed data. Please retry.",
+    invalidEvent: "Invalid chat stream event",
+    unavailable: "The chat stream is unavailable. Please retry.",
+    tooLarge: "The chat stream event exceeded its size limit.",
+    ended: "The chat stream ended before the answer completed. Please retry.",
+    failed: "The chat response failed. Please retry.",
+} as const;
+
+export type ChatStreamErrorKey = keyof typeof CHAT_STREAM_ERRORS;
+
+export function chatStreamErrorKey(message: string): ChatStreamErrorKey | null {
+    for (const [key, text] of Object.entries(CHAT_STREAM_ERRORS))
+        if (text === message) return key as ChatStreamErrorKey;
+    return null;
+}
+
 export function throwIfChatAborted(signal: AbortSignal): void {
     if (signal.aborted) throw new DOMException("Response stopped", "AbortError");
 }
 
-function parseEvent<T>(line: string): ChatStreamEvent<T> {
+/**
+ * One NDJSON line as an event. A malformed step comes back as null and is
+ * skipped: steps only describe the work, so a bad one must never cost the
+ * reader the answer.
+ */
+function parseEvent<T>(line: string): ChatStreamEvent<T> | null {
     let value: unknown;
     try {
         value = JSON.parse(line);
     } catch {
-        throw new Error("The chat stream contained malformed data. Please retry.");
+        throw new Error(CHAT_STREAM_ERRORS.malformed);
     }
-    if (!value || typeof value !== "object") throw new Error("Invalid chat stream event");
+    if (!value || typeof value !== "object") throw new Error(CHAT_STREAM_ERRORS.invalidEvent);
     const event = value as Record<string, unknown>;
+    if (event.type === "step") return isChatStep(event.step) ? (value as ChatStreamEvent<T>) : null;
     if (
         (event.type === "status" && typeof event.status === "string") ||
         ((event.type === "text" || event.type === "reasoning") &&
@@ -43,7 +111,7 @@ function parseEvent<T>(line: string): ChatStreamEvent<T> {
             typeof (event.response as Record<string, unknown>).success === "boolean")
     )
         return value as ChatStreamEvent<T>;
-    throw new Error("Invalid chat stream event");
+    throw new Error(CHAT_STREAM_ERRORS.invalidEvent);
 }
 
 /** Decode lines across arbitrary network and UTF-8 boundaries; never invent a final answer. */
@@ -52,7 +120,7 @@ export async function readChatStream<T>(
     signal: AbortSignal,
     onEvent?: (event: ChatStreamEvent<T>) => void
 ): Promise<T> {
-    if (!response.body) throw new Error("The chat stream is unavailable. Please retry.");
+    if (!response.body) throw new Error(CHAT_STREAM_ERRORS.unavailable);
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let pending = "";
@@ -66,8 +134,7 @@ export async function readChatStream<T>(
             const { value, done } = await reader.read();
             throwIfChatAborted(signal);
             pending += done ? decoder.decode() : decoder.decode(value, { stream: true });
-            if (pending.length > 8_000_000)
-                throw new Error("The chat stream event exceeded its size limit.");
+            if (pending.length > 8_000_000) throw new Error(CHAT_STREAM_ERRORS.tooLarge);
             const lines = pending.split("\n");
             pending = lines.pop() ?? "";
             if (done && pending.trim()) {
@@ -77,13 +144,13 @@ export async function readChatStream<T>(
             for (const line of lines) {
                 if (!line.trim()) continue;
                 const event = parseEvent<T>(line);
+                if (!event) continue;
                 throwIfChatAborted(signal);
                 onEvent?.(event);
                 if (event.type === "error") throw new Error(event.message);
                 if (event.type === "result") return event.response;
             }
-            if (done)
-                throw new Error("The chat stream ended before the answer completed. Please retry.");
+            if (done) throw new Error(CHAT_STREAM_ERRORS.ended);
         }
     } finally {
         signal.removeEventListener("abort", abort);
@@ -118,7 +185,7 @@ export function createChatStream<T>(
                     throwIfChatAborted(abortController.signal);
                     emit({ type: "result", response });
                 } catch (error) {
-                    const message = onError?.(error) ?? "The chat response failed. Please retry.";
+                    const message = onError?.(error) ?? CHAT_STREAM_ERRORS.failed;
                     if (!abortController.signal.aborted) {
                         emit({ type: "error", message });
                     }

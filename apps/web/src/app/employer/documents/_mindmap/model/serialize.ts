@@ -438,14 +438,22 @@ export function toMarkdownOutline(doc: MindmapDoc, options: OutlineOptions = {})
     return out.join("\n");
 }
 
-/** Indented outline → a mindmap document. Tabs or 2/4 spaces all work. */
-export function fromMarkdownOutline(text: string, title = "Imported mindmap"): MindmapDoc {
+/**
+ * Indented outline → a mindmap document. Tabs or 2/4 spaces all work.
+ * `pageName` is the new page's name in the reader's language (the importers
+ * below take it too); English without one.
+ */
+export function fromMarkdownOutline(
+    text: string,
+    title = "Imported mindmap",
+    pageName = "Page 1"
+): MindmapDoc {
     const lines = text
         .split("\n")
         .map(l => l.replace(/\t/g, "    "))
         .filter(l => l.trim() !== "");
 
-    const page = createPage("Page 1");
+    const page = createPage(pageName);
     const nodes: DiagramNode[] = [];
     const edges: DiagramEdge[] = [];
     /** Most recent node id at each indent depth. */
@@ -583,7 +591,11 @@ export function toMermaid(doc: MindmapDoc, pageId?: string): string {
  * Minimal Mermaid flowchart import — enough to bring a diagram from a README
  * into the editor. Unsupported directives are skipped rather than rejected.
  */
-export function fromMermaid(text: string, title = "Imported diagram"): MindmapDoc {
+export function fromMermaid(
+    text: string,
+    title = "Imported diagram",
+    pageName = "Page 1"
+): MindmapDoc {
     const nodes = new Map<string, DiagramNode>();
     const edges: DiagramEdge[] = [];
     let cursor = 0;
@@ -661,7 +673,7 @@ export function fromMermaid(text: string, title = "Imported diagram"): MindmapDo
         }
     }
 
-    const page = createPage("Page 1");
+    const page = createPage(pageName);
     return createDoc(title, [{ ...page, nodes: [...nodes.values()], edges }]);
 }
 
@@ -673,7 +685,11 @@ export function fromMermaid(text: string, title = "Imported diagram"): MindmapDo
  * Two-column `parent,child` CSV → a tree. Handy for importing an org chart or
  * a dependency list exported from a spreadsheet.
  */
-export function fromEdgeList(text: string, title = "Imported chart"): MindmapDoc {
+export function fromEdgeList(
+    text: string,
+    title = "Imported chart",
+    pageName = "Page 1"
+): MindmapDoc {
     const nodes = new Map<string, DiagramNode>();
     const edges: DiagramEdge[] = [];
     let cursor = 0;
@@ -710,6 +726,6 @@ export function fromEdgeList(text: string, title = "Imported chart"): MindmapDoc
         );
     }
 
-    const page = createPage("Page 1");
+    const page = createPage(pageName);
     return createDoc(title, [{ ...page, nodes: [...nodes.values()], edges }]);
 }

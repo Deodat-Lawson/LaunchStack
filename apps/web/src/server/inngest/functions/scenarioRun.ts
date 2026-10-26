@@ -51,7 +51,7 @@ export const scenarioRunJob = inngest.createFunction(
             // A step body doesn't inherit the handler's async context: enter the
             // workspace's model scope inside the step.
             const outcome = await step.run(`unit-${i}`, () =>
-                withWorkspaceChatModels(BigInt(event.data.companyId), () =>
+                withWorkspaceChatModels(BigInt(event.data.companyId), "scenarios", () =>
                     advanceRun(createScenarioPorts(), runId)
                 )
             );

@@ -22,6 +22,7 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 import { Activity, Settings2, UserRound, Users, UsersRound } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { EmptyState } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
@@ -49,7 +50,6 @@ import {
 import { workspaceHref } from "~/lib/settings/surfaces";
 import { usePermissions } from "~/lib/use-permissions";
 import {
-    ACTIVITY_KINDS,
     ACTIVITY_KIND_IDS,
     isActivityKind,
     type ActivityKind,
@@ -86,26 +86,26 @@ export function TeamTool({ host, ...props }: TeamToolProps) {
     );
 }
 
-const SCREENS: ToolNavGroup[] = [
-    {
-        id: "team",
-        items: [
-            { to: teamPaths.people(), label: "People", icon: UserRound },
-            { to: teamPaths.groups(), label: "Groups", icon: Users },
-            { to: teamPaths.activity(), label: "Activity", icon: Activity },
-        ],
-    },
-];
-
-const ABOUT =
-    "Who is in the workspace, the groups you share with, and what everyone has been doing. Roles, invitations, join links and the audit log are in Workspace › People and access.";
-
 /** Where "Manage access" goes: the Workspace tab's screen with roles, invitations and the audit log. */
 export const MANAGE_ACCESS_HREF = workspaceHref("people");
 
 const noop = () => undefined;
 
 function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">) {
+    const t = useTranslations("team.tool");
+    const screens = useMemo<ToolNavGroup[]>(
+        () => [
+            {
+                id: "team",
+                items: [
+                    { to: teamPaths.people(), label: t("nav.people"), icon: UserRound },
+                    { to: teamPaths.groups(), label: t("nav.groups"), icon: Users },
+                    { to: teamPaths.activity(), label: t("nav.activity"), icon: Activity },
+                ],
+            },
+        ],
+        [t]
+    );
     const { path, navigate } = useToolNav();
     const { loaded, can, role } = usePermissions();
     const allowed = loaded && can("members.view");
@@ -121,10 +121,10 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
                 <ToolLink
                     href={MANAGE_ACCESS_HREF}
                     data-testid="team-manage-access"
-                    title="Roles, invitations, join links and the audit log"
+                    title={t("manageAccessTitle")}
                 >
                     <Settings2 className="size-3.5" />
-                    Manage access
+                    {t("manageAccess")}
                 </ToolLink>
             </Button>
         ) : undefined;
@@ -139,8 +139,8 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
         body = (
             <EmptyState
                 className="mx-auto max-w-[1100px]"
-                title="The team list isn't part of your role"
-                body="You see only what is shared with you. New shares arrive in the inbox bell at the top of the sidebar."
+                title={t("noAccessTitle")}
+                body={t("noAccessBody")}
             />
         );
     } else if (screen.kind === "activity") {
@@ -153,7 +153,7 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
             />
         );
     } else if (screen.kind === "not-found") {
-        body = <ToolNotFound home={TEAM_HOME} homeLabel="People" />;
+        body = <ToolNotFound home={TEAM_HOME} homeLabel={t("nav.people")} />;
     } else if (directory.loading) {
         body = <ScreenLoading />;
     } else if (directory.error) {
@@ -189,9 +189,9 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
         ) : (
             <ToolNotFound
                 home={TEAM_HOME}
-                homeLabel="People"
-                title="This person is no longer here"
-                body="They may have left the workspace, or the link is from somewhere else."
+                homeLabel={t("nav.people")}
+                title={t("personGoneTitle")}
+                body={t("personGoneBody")}
             />
         );
     } else if (screen.kind === "groups") {
@@ -228,19 +228,19 @@ function TeamFrame({ onOpenTarget = noop, onShare }: Omit<TeamToolProps, "host">
         ) : (
             <ToolNotFound
                 home={teamPaths.groups()}
-                homeLabel="Groups"
-                title="This group is no longer here"
-                body="It may have been deleted, or the link is from somewhere else."
+                homeLabel={t("nav.groups")}
+                title={t("groupGoneTitle")}
+                body={t("groupGoneBody")}
             />
         );
     }
 
     return (
         <ToolFrame
-            title="Team"
+            title={t("title")}
             mark={<ToolMark icon={UsersRound} />}
-            groups={allowed ? SCREENS : undefined}
-            about={ABOUT}
+            groups={allowed ? screens : undefined}
+            about={t("about")}
         >
             <div data-testid="team-tool">{body}</div>
             <InviteDialog open={inviting} onClose={() => setInviting(false)} />
@@ -286,6 +286,8 @@ function ActivityScreen({
     onOpenTarget: (target: TeamTarget) => void;
     onOpenGroup: (groupId: number) => void;
 }) {
+    const t = useTranslations("team.activityScreen");
+    const tTeam = useTranslations("team");
     const { navigate } = useToolNav();
     const params = useToolSearchParams();
     const [query, setQuery] = useState("");
@@ -318,14 +320,14 @@ function ActivityScreen({
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5">
             <PageHeader
-                title="Activity"
-                sub="Who added, shared, moved, renamed or deleted what. Only what you can open shows here."
+                title={t("title")}
+                sub={t("sub")}
                 actions={
                     <>
                         <FilterInput
                             value={query}
                             onChange={setQuery}
-                            placeholder="Filter activity"
+                            placeholder={t("filterPlaceholder")}
                         />
                         <Select
                             value={person ? String(person.id) : EVERYONE}
@@ -333,16 +335,18 @@ function ActivityScreen({
                         >
                             <SelectTrigger
                                 className="@max-md:w-full h-8 w-44 text-xs"
-                                aria-label="Whose activity"
+                                aria-label={t("whose")}
                                 data-testid="team-activity-person"
                             >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={EVERYONE}>Everyone</SelectItem>
+                                <SelectItem value={EVERYONE}>{t("everyone")}</SelectItem>
                                 {members.map(m => (
                                     <SelectItem key={m.id} value={String(m.id)}>
-                                        {m.isSelf ? `${m.displayName} (you)` : m.displayName}
+                                        {m.isSelf
+                                            ? tTeam("nameYou", { name: m.displayName })
+                                            : m.displayName}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -353,16 +357,16 @@ function ActivityScreen({
                         >
                             <SelectTrigger
                                 className="@max-md:w-full h-8 w-44 text-xs"
-                                aria-label="What kind of activity"
+                                aria-label={t("kindLabel")}
                                 data-testid="team-activity-kind"
                             >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={ALL_KINDS}>All activity</SelectItem>
+                                <SelectItem value={ALL_KINDS}>{t("allKinds")}</SelectItem>
                                 {ACTIVITY_KIND_IDS.map(id => (
                                     <SelectItem key={id} value={id}>
-                                        {ACTIVITY_KINDS[id].label}
+                                        {t(`kinds.${id}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -383,11 +387,7 @@ function ActivityScreen({
                         query={query}
                         groupByDay
                         pageSize={40}
-                        emptyText={
-                            filtered
-                                ? "Nothing matches these filters yet."
-                                : "Nothing yet. Adding, sharing and moving files shows up here."
-                        }
+                        emptyText={filtered ? t("emptyFiltered") : t("empty")}
                         onOpenTarget={onOpenTarget}
                         onOpenGroup={onOpenGroup}
                     />

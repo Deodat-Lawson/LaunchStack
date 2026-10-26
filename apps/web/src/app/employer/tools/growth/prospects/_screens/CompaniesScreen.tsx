@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -34,8 +35,10 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type CompaniesSort, type CompaniesView, type CompanyRow } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
+import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
-import { relativeTime } from "~/lib/tools/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { rememberListOrder } from "../_lib/listOrder";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
@@ -46,22 +49,21 @@ import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { FoundViaChips } from "../_components/SourceChip";
 import { StagePill } from "../_components/StagePill";
 
-const VIEWS: Array<{ id: CompaniesView; label: string }> = [
-    { id: "all", label: "All" },
-    { id: "new", label: "New" },
-    { id: "highfit", label: "High fit" },
-    { id: "uncontacted", label: "Not contacted" },
-    { id: "excluded", label: "Excluded" },
-];
+/** The list's views, in toggle order; each one's name is `companies.views.<view>`. */
+const VIEWS: readonly CompaniesView[] = ["all", "new", "highfit", "uncontacted", "excluded"];
 
 function isView(v: string | null): v is CompaniesView {
-    return VIEWS.some(x => x.id === v);
+    return VIEWS.some(x => x === v);
 }
 function isSort(v: string | null): v is CompaniesSort {
     return v === "fit" || v === "activity" || v === "name";
 }
 
 export function CompaniesScreen() {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common.actions");
+    const { joinList } = useGrowthFormat();
+    const errorText = useErrorText();
     const { segmentId, href, startRun, activeRun } = useProspects();
     const router = useToolRouter();
     const pathname = useToolPathname();
@@ -139,17 +141,18 @@ export function CompaniesScreen() {
 
     const open = useCallback((id: string) => router.push(href(`/companies/${id}`)), [href, router]);
 
-    const outreach = useCallback(async (ids: string[]) => {
-        if (ids.length === 0) return;
-        try {
-            const result = await prospectsApi.outreach({ companyIds: ids });
-            toast.success(
-                `Campaign drafted in Email for ${result.people} ${result.people === 1 ? "company" : "companies"}. Approve it there; nothing is sent from here.`
-            );
-        } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not draft outreach");
-        }
-    }, []);
+    const outreach = useCallback(
+        async (ids: string[]) => {
+            if (ids.length === 0) return;
+            try {
+                const result = await prospectsApi.outreach({ companyIds: ids });
+                toast.success(t("companies.drafted", { count: result.people }));
+            } catch (e) {
+                toast.error(errorText(e, t("common.outreachFailed")));
+            }
+        },
+        [t, errorText]
+    );
 
     // Tabs are hidden, not unmounted: only listen while this tab is the one
     // being used, or j/k would move this list from inside another tab.
@@ -218,8 +221,8 @@ export function CompaniesScreen() {
                 await prospectsApi.setExcluded(ids, action === "exclude");
                 toast.success(
                     action === "exclude"
-                        ? `${ids.length} excluded from future runs`
-                        : `${ids.length} back in the segment`
+                        ? t("companies.excludedToast", { count: ids.length })
+                        : t("companies.includedToast", { count: ids.length })
                 );
             } else {
                 const details = await Promise.all(ids.map(id => prospectsApi.company(id)));
@@ -234,16 +237,18 @@ export function CompaniesScreen() {
                     await prospectsApi.patchDeal(company.deal.id, { stage: "qualified" });
                     moved += 1;
                 }
-                if (moved) toast.success(`${moved} moved to Qualified`);
+                if (moved) toast.success(t("companies.moved", { count: moved }));
                 if (refused.length)
                     toast(
-                        `Not moved: ${refused.slice(0, 3).join(", ")}${refused.length > 3 ? "…" : ""}`
+                        t("companies.notMoved", {
+                            names: `${joinList(refused.slice(0, 3))}${refused.length > 3 ? "…" : ""}`,
+                        })
                     );
             }
             setSelected(new Set());
             await list.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not update");
+            toast.error(errorText(e, t("common.updateFailed")));
         }
     };
 
@@ -251,10 +256,12 @@ export function CompaniesScreen() {
         <div className="mx-auto flex max-w-[1180px] flex-col gap-5">
             <PageHeader
                 size="md"
-                title="Companies"
+                title={t("common.companies")}
                 sub={
                     counts
-                        ? `${counts.all} in this segment${counts.new ? ` · ${counts.new} new since the last run` : ""}`
+                        ? counts.new
+                            ? t("companies.subNew", { count: counts.all, fresh: counts.new })
+                            : t("companies.sub", { count: counts.all })
                         : undefined
                 }
                 actions={
@@ -262,14 +269,12 @@ export function CompaniesScreen() {
                         size="sm"
                         onClick={() =>
                             void startRun().catch((e: unknown) =>
-                                toast.error(
-                                    e instanceof Error ? e.message : "Could not start the run"
-                                )
+                                toast.error(errorText(e, t("common.startFailed")))
                             )
                         }
                         disabled={!segmentId}
                     >
-                        Find companies
+                        {t("common.findCompanies")}
                     </Button>
                 }
             />
@@ -281,18 +286,18 @@ export function CompaniesScreen() {
                     onValueChange={v => v && setParam({ view: v })}
                     size="sm"
                     className="border-line bg-panel max-w-full justify-start gap-0.5 overflow-x-auto rounded-md border p-0.5"
-                    aria-label="View"
+                    aria-label={t("companies.viewAria")}
                 >
                     {VIEWS.map(v => (
                         <ToggleGroupItem
-                            key={v.id}
-                            value={v.id}
+                            key={v}
+                            value={v}
                             className="data-[state=on]:shadow-1 h-7 shrink-0 rounded-[5px] px-2.5 text-xs"
                         >
-                            {v.label}
+                            {t(`companies.views.${v}`)}
                             {counts && (
                                 <span className="text-ink-3 ml-1.5 text-[11px] tabular-nums">
-                                    {counts[v.id]}
+                                    {counts[v]}
                                 </span>
                             )}
                         </ToggleGroupItem>
@@ -304,8 +309,8 @@ export function CompaniesScreen() {
                         ref={searchRef}
                         value={draft}
                         onChange={e => setDraft(e.target.value)}
-                        placeholder="Search companies"
-                        aria-label="Search companies"
+                        placeholder={t("companies.search")}
+                        aria-label={t("companies.search")}
                         className="h-8 w-[240px] pl-8 pr-8 text-[13px]"
                     />
                     <kbd className="text-ink-4 border-line pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border px-1 font-mono text-[10px]">
@@ -313,15 +318,18 @@ export function CompaniesScreen() {
                     </kbd>
                 </div>
                 <div className="ml-auto flex items-center gap-2 text-xs">
-                    <span className="text-ink-3">Sort</span>
+                    <span className="text-ink-3">{t("companies.sort")}</span>
                     <Select value={sort} onValueChange={v => setParam({ sort: v })}>
-                        <SelectTrigger className="h-8 w-[130px] text-xs" aria-label="Sort by">
+                        <SelectTrigger
+                            className="h-8 w-[130px] text-xs"
+                            aria-label={t("companies.sortAria")}
+                        >
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="fit">Fit</SelectItem>
-                            <SelectItem value="activity">Last activity</SelectItem>
-                            <SelectItem value="name">Name</SelectItem>
+                            <SelectItem value="fit">{t("common.fit")}</SelectItem>
+                            <SelectItem value="activity">{t("companies.sortActivity")}</SelectItem>
+                            <SelectItem value="name">{t("companies.sortName")}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -335,15 +343,15 @@ export function CompaniesScreen() {
                 <EmptyState
                     title={
                         query
-                            ? `No companies match “${query}”`
+                            ? t("companies.emptyQuery", { query })
                             : view === "all"
-                              ? "No companies in this segment yet"
-                              : `Nothing in ${VIEWS.find(v => v.id === view)?.label ?? view}`
+                              ? t("companies.emptyAll")
+                              : t("companies.emptyView", { view: t(`companies.views.${view}`) })
                     }
                     body={
                         view === "all" && !query
-                            ? "Run Find companies to search the sources this segment has on."
-                            : "Clear the filter, or find more companies."
+                            ? t("companies.emptyAllBody")
+                            : t("companies.emptyFilterBody")
                     }
                     action={
                         <>
@@ -356,11 +364,11 @@ export function CompaniesScreen() {
                                         setParam({ q: null, view: null });
                                     }}
                                 >
-                                    Clear filter
+                                    {t("companies.clearFilter")}
                                 </Button>
                             )}
                             <Button size="sm" onClick={() => void startRun()}>
-                                Find companies
+                                {t("common.findCompanies")}
                             </Button>
                         </>
                     }
@@ -375,7 +383,7 @@ export function CompaniesScreen() {
                             <TableRow className="hover:bg-transparent">
                                 <TableHead className="w-9 pl-3">
                                     <Checkbox
-                                        aria-label="Select all"
+                                        aria-label={tc("selectAll")}
                                         checked={allChecked}
                                         onCheckedChange={checked =>
                                             setSelected(
@@ -387,22 +395,22 @@ export function CompaniesScreen() {
                                     />
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Company
+                                    {t("common.company")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
-                                    Why them
+                                    {t("companies.why")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 w-[120px] text-xs font-medium">
-                                    Fit
+                                    {t("common.fit")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 w-[150px] text-xs font-medium">
-                                    Stage
+                                    {t("common.stage")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 w-[72px] text-right text-xs font-medium">
-                                    People
+                                    {t("common.people")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 w-[120px] text-xs font-medium">
-                                    Activity
+                                    {t("companies.activity")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -425,26 +433,25 @@ export function CompaniesScreen() {
             )}
 
             <p className="text-ink-4 text-[11.5px]">
-                <kbd className="font-mono">j</kbd> <kbd className="font-mono">k</kbd> move ·{" "}
-                <kbd className="font-mono">x</kbd> select · <kbd className="font-mono">Enter</kbd>{" "}
-                open · <kbd className="font-mono">o</kbd> add to outreach ·{" "}
-                <kbd className="font-mono">/</kbd> search
+                {t.rich("companies.shortcuts", {
+                    k: chunks => <kbd className="font-mono">{chunks}</kbd>,
+                })}
             </p>
 
             <BulkBar count={selected.size} onClear={() => setSelected(new Set())}>
                 <Button size="sm" onClick={() => void outreach([...selected])}>
-                    Add to outreach
+                    {t("common.addToOutreach")}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => void bulk("qualify")}>
-                    Move to Qualified
+                    {t("companies.moveToQualified")}
                 </Button>
                 {view === "excluded" ? (
                     <Button size="sm" variant="outline" onClick={() => void bulk("include")}>
-                        Include again
+                        {t("common.includeAgain")}
                     </Button>
                 ) : (
                     <Button size="sm" variant="outline" onClick={() => void bulk("exclude")}>
-                        Exclude
+                        {t("common.exclude")}
                     </Button>
                 )}
             </BulkBar>
@@ -469,6 +476,9 @@ function CompanyTableRow({
     onOpen: () => void;
     href: string;
 }) {
+    const t = useTranslations("growth.prospects");
+    const { relativeTime } = useGrowthFormat();
+    const word = useCopyText();
     return (
         <TableRow
             data-row-index={index}
@@ -485,7 +495,7 @@ function CompanyTableRow({
         >
             <TableCell className="pl-3" data-no-open>
                 <Checkbox
-                    aria-label={`Select ${c.name}`}
+                    aria-label={t("common.select", { name: c.name })}
                     checked={checked}
                     onCheckedChange={onToggle}
                 />
@@ -499,7 +509,7 @@ function CompanyTableRow({
                     {c.name}
                     {c.isNew && (
                         <span className="bg-brand-soft text-brand-ink ml-2 rounded px-1.5 py-px align-middle text-[10.5px] font-medium">
-                            new
+                            {t("companies.newBadge")}
                         </span>
                     )}
                 </ToolLink>
@@ -511,9 +521,11 @@ function CompanyTableRow({
                 </span>
             </TableCell>
             <TableCell className="text-ink-2 min-w-[260px] max-w-[380px] whitespace-normal">
-                <span className="line-clamp-2 leading-snug">{c.why}</span>
+                <span className="line-clamp-2 leading-snug">{word(c.whyCopy, c.why)}</span>
                 {c.excluded && c.excludedReason && (
-                    <span className="text-ink-3 mt-0.5 block text-xs">{c.excludedReason}</span>
+                    <span className="text-ink-3 mt-0.5 block text-xs">
+                        {word(c.excludedReasonCopy, c.excludedReason)}
+                    </span>
                 )}
             </TableCell>
             <TableCell>
@@ -524,7 +536,7 @@ function CompanyTableRow({
             </TableCell>
             <TableCell className="text-ink-2 text-right tabular-nums">{c.people}</TableCell>
             <TableCell className="text-ink-3 whitespace-normal text-xs">
-                {c.isNew ? "found in the last run" : relativeTime(c.lastActivityAt)}
+                {c.isNew ? t("companies.foundInLastRun") : relativeTime(c.lastActivityAt)}
             </TableCell>
         </TableRow>
     );

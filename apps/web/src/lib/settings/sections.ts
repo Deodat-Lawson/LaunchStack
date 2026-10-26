@@ -18,7 +18,8 @@
  *   read-only: shown, and labelled so, never hidden.
  *
  * Also the one map from a URL hash (`#byok`, `#appearance.theme`) to a
- * section, so a link into Settings and a palette row agree on where it goes.
+ * section, so a link into Settings or the Workspace tab and a palette row
+ * agree on where it goes.
  *
  * Dependency-free apart from the registry, so the hub, the command palette
  * and their tests share it without the palette loading the hub.
@@ -81,29 +82,30 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
     // Everyone reads the profile (agents cite it to everyone) and may rebuild
     // it; the body says so, and withholds the curation actions.
     company: { edit: "settings.manage", aliases: ["company", "metadata", "profile"] },
-    // Its read is refused outright. Also where a workspace brings its own
-    // model: an endpoint and API key, or OpenRouter — so the links that went
-    // to the retired Processing section (the embedding index and its keys,
-    // `#byok`) land here.
-    models: {
+    // The workspace's own model: an endpoint and API key, or OpenRouter. The
+    // form would take edits it can never save. `processing` was this
+    // section's name once, and `embedding` the key it also held; both hashes
+    // still land here so old links keep working.
+    byok: {
         view: "settings.manage",
         edit: "settings.manage",
         aliases: [
-            "processing",
             "byok",
-            "embedding",
             "keys",
-            "models",
-            "routes",
-            "llm",
-            "chat model",
-            "gemini",
-            "openai",
-            "own model",
             "api key",
+            "own model",
             "openrouter",
             "endpoint",
+            "embedding",
+            "embeddings",
+            "processing",
         ],
+    },
+    // Its read is refused outright.
+    models: {
+        view: "settings.manage",
+        edit: "settings.manage",
+        aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone
     // tries an agent in the Agents app, and anyone who edits documents may
@@ -112,11 +114,6 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         view: "settings.manage",
         edit: "settings.manage",
         aliases: ["agents", "nodes", "roster", "autonomy"],
-    },
-    // Readable by all: where an upload goes, and how it is processed.
-    documents: {
-        edit: "settings.manage",
-        aliases: ["documents", "upload", "storage", "defaults", "ocr"],
     },
     // Workspace connections. Someone's own Gmail is connected and removed
     // from Add knowledge, not here.

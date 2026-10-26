@@ -69,7 +69,7 @@ describe("GET /api/workspace/invitations", () => {
         gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
         fakeDb.onSelect(workspaceInvitations, []);
 
-        const res = await LIST();
+        const res = await LIST(new Request("http://localhost/api/workspace/invitations"));
 
         await expect(res.json()).resolves.toEqual({ invitations: [], emailDelivery: false });
     });

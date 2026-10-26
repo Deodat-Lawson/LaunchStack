@@ -10,6 +10,7 @@ import {
     readJson,
     resolveSendingActor,
 } from "../../_lib/context";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -40,11 +41,17 @@ export async function POST(
         if (!actor.ok) return actor.response;
 
         const campaignId = parseCampaignId((await params).campaignId);
-        if (campaignId === null) return fail("Invalid campaign ID", 400);
+        if (campaignId === null)
+            return fail(
+                requestTranslator(request, "growth.server.email")("invalidCampaignId"),
+                400
+            );
 
         const parsed = ApproveSchema.safeParse(await readJson(request));
         if (!parsed.success) {
-            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+            return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                errors: parsed.error.flatten(),
+            });
         }
 
         const approved = await approveEmailCampaign({
@@ -67,6 +74,6 @@ export async function POST(
             approval: approved.approval,
         });
     } catch (error) {
-        return handleRouteError("email-campaigns/approve", error);
+        return handleRouteError("email-campaigns/approve", error, request);
     }
 }

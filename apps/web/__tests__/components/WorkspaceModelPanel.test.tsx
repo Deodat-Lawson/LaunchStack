@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 /**
- * Workspace › Models › Your own model.
+ * Workspace › Bring your own keys › API key.
  *
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
@@ -25,6 +25,7 @@ jest.mock("~/lib/use-permissions", () => ({
 }));
 
 import { WorkspaceTool } from "~/app/employer/documents/_workspace/WorkspaceTool";
+import { KeysSection } from "~/app/employer/documents/_workspace/settings/KeysSection";
 import { ModelsSection } from "~/app/employer/documents/_workspace/settings/ModelsSection";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
 import type { WorkspaceEndpointView } from "~/app/employer/documents/_workspace/settings/WorkspaceModelPanel";
@@ -139,7 +140,7 @@ function serve() {
 function renderSection() {
     actions = null;
     return render(
-        <ModelsSection
+        <KeysSection
             onActions={next => {
                 actions = next;
             }}
@@ -158,7 +159,7 @@ const mainModel = () =>
     // An input with suggestions (`list`) is a combobox.
     screen.getByRole("combobox", { name: "Main model" });
 
-describe("Settings › Models › Your own model", () => {
+describe("Workspace › Bring your own keys › API key", () => {
     beforeAll(() => {
         // Radix Select reaches for layout APIs jsdom lacks.
         Element.prototype.scrollIntoView = jest.fn();
@@ -185,10 +186,11 @@ describe("Settings › Models › Your own model", () => {
 
         expect(await screen.findByRole("button", { name: "Connect OpenRouter" })).toBeVisible();
         expect(screen.getByRole("button", { name: "Use an API key" })).toBeVisible();
-        expect(screen.getByRole("heading", { name: "Your own model" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Server default" })).toBeInTheDocument();
-        expect(screen.queryByText(/uses its own model/)).not.toBeInTheDocument();
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+        expect(screen.getByRole("heading", { name: "API key" })).toBeInTheDocument();
+        // The embedding key that once sat below it is gone.
+        expect(screen.queryByRole("heading", { name: "Embedding key" })).not.toBeInTheDocument();
+        // With the editor closed, the section has no action of its own.
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("fills the base URL from the provider an admin picks", async () => {
@@ -270,9 +272,9 @@ describe("Settings › Models › Your own model", () => {
         });
         expect(puts[0]).not.toHaveProperty("apiKey");
 
-        // Back on the summary, with Re-read as the section's action again.
+        // Back on the summary, where the section has no action of its own.
         expect(await screen.findByText("main-2")).toBeInTheDocument();
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("asks for the key again when the address changes", async () => {
@@ -342,7 +344,6 @@ describe("Settings › Models › Your own model", () => {
         expect(await screen.findByText("Key ending wxyz")).toBeInTheDocument();
         expect(screen.getByText("Active")).toBeInTheDocument();
         expect(screen.getByText(/Last changed by Ada Lovelace, 5 min ago/)).toBeInTheDocument();
-        expect(screen.getByText(/uses its own model, so the server default/)).toBeInTheDocument();
 
         await user.click(screen.getByRole("button", { name: "Edit" }));
         await user.type(screen.getByLabelText("API key"), "sk-SECRET-0123abcd");
@@ -397,7 +398,7 @@ describe("Settings › Models › Your own model", () => {
         window.history.replaceState(
             null,
             "",
-            "/employer/documents?feature=settings&openrouter=connected#models"
+            "/employer/documents?feature=settings&openrouter=connected#byok"
         );
         stored = OPENROUTER_FRESH;
         renderSection();
@@ -409,7 +410,7 @@ describe("Settings › Models › Your own model", () => {
         ).toBeInTheDocument();
         // The outcome is read once; the rest of the address stays.
         expect(window.location.search).toBe("?feature=settings");
-        expect(window.location.hash).toBe("#models");
+        expect(window.location.hash).toBe("#byok");
 
         await waitFor(() => expect(mainModel()).toHaveFocus());
         expect(screen.getByLabelText("API key")).toHaveAttribute(
@@ -433,25 +434,25 @@ describe("Settings › Models › Your own model", () => {
         ["expired", "That sign-in expired, try again."],
         ["error", "Couldn't connect OpenRouter. Try again, or use an API key instead."],
     ])("says what happened when OpenRouter returns %s", async (outcome, message) => {
-        window.history.replaceState(null, "", `/employer/documents?openrouter=${outcome}#models`);
+        window.history.replaceState(null, "", `/employer/documents?openrouter=${outcome}#byok`);
         renderSection();
 
         expect(await screen.findByText(message)).toBeInTheDocument();
         expect(window.location.search).toBe("");
-        expect(window.location.hash).toBe("#models");
+        expect(window.location.hash).toBe("#byok");
     });
 
-    it("lands the OpenRouter return on Workspace › Models with its outcome", async () => {
-        // The callback sends `?feature=workspace&at=/models&openrouter=…`; the
-        // shell opens the tab on Models and strips `feature` and `at`,
-        // leaving the outcome for Models to read.
+    it("lands the OpenRouter return on Workspace › Bring your own keys with its outcome", async () => {
+        // The callback sends `?feature=workspace&at=/byok&openrouter=…`; the
+        // shell opens the tab on Bring your own keys and strips `feature` and
+        // `at`, leaving the outcome for the section to read.
         window.history.replaceState(null, "", "/employer/documents?openrouter=connected");
         stored = OPENROUTER_FRESH;
-        render(<WorkspaceTool host={{ active: true, request: { at: "/models", nonce: 1 } }} />);
+        render(<WorkspaceTool host={{ active: true, request: { at: "/byok", nonce: 1 } }} />);
 
         await waitFor(() =>
             expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-                "Which model serves each kind of request"
+                "Bring your own keys"
             )
         );
         expect(
@@ -460,5 +461,52 @@ describe("Settings › Models › Your own model", () => {
             )
         ).toBeInTheDocument();
         expect(window.location.search).toBe("");
+    });
+});
+
+describe("Workspace › Models", () => {
+    beforeEach(() => {
+        stored = null;
+        serve();
+    });
+
+    afterAll(() => {
+        global.fetch = originalFetch;
+    });
+
+    function renderModels() {
+        actions = null;
+        return render(<ModelsSection onActions={next => (actions = next)} />);
+    }
+
+    it("shows the server default read-only, with nothing to set up here", async () => {
+        renderModels();
+
+        expect(await screen.findByRole("heading", { name: "Server default" })).toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Connect OpenRouter" })
+        ).not.toBeInTheDocument();
+        expect(screen.queryByText(/Bring your own keys/)).not.toBeInTheDocument();
+        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+    });
+
+    it("says the default is unused when the workspace runs on its own model", async () => {
+        stored = CONNECTED;
+        renderModels();
+
+        expect(
+            await screen.findByText(/runs on its own model, set up in Bring your own keys/)
+        ).toBeInTheDocument();
+    });
+
+    it("says a connected key with no model chosen still runs on the default", async () => {
+        stored = OPENROUTER_FRESH;
+        renderModels();
+
+        expect(
+            await screen.findByText(
+                /has no model chosen yet, so it still runs on the server default/
+            )
+        ).toBeInTheDocument();
     });
 });

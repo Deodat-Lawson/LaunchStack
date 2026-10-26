@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { and, desc, eq, isNull, or } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -11,7 +12,8 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
  * scoped to the requester and the active workspace: the target note must be
  * theirs to read, and source notes from another workspace stay hidden.
  */
-export async function GET(_request: Request, { params }: { params: Promise<{ noteId: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ noteId: string }> }) {
+    const t = requestTranslator(request, "notes.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -19,7 +21,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ not
         const { noteId } = await params;
         const id = parseInt(noteId, 10);
         if (Number.isNaN(id)) {
-            return NextResponse.json({ error: "Invalid note id" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidNoteIdLower") }, { status: 400 });
         }
 
         const companyIdStr = String(ctx.data.companyId);
@@ -40,7 +42,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ not
             );
 
         if (!target) {
-            return NextResponse.json({ error: "Note not found" }, { status: 404 });
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
         }
 
         const rows = await db
@@ -74,7 +76,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ not
         return NextResponse.json({ incoming }, { status: 200 });
     } catch (err) {
         console.error("[/api/notes/:id/backlinks] failed:", err);
-        return NextResponse.json({ error: "Backlinks failed" }, { status: 500 });
+        return NextResponse.json({ error: t("backlinksFailed") }, { status: 500 });
     }
 }
 

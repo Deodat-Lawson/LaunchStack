@@ -37,6 +37,7 @@ import {
     ocrProviderToTokenKey,
 } from "@launchstack/store/credits";
 
+import { recordJobProgress } from "./progress";
 import { createStepRunner } from "./step-runner";
 import type { DocIngestionToolInput, DocIngestionToolResult } from "./types";
 
@@ -161,7 +162,9 @@ async function vectorizeWithIndex(
     documentId: number,
     structure: DocumentStructureMap,
     versionId: number,
-    runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>
+    runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+    /** Told how many of the texts are embedded and stored, before the first batch and after each. */
+    onProgress: (done: number, total: number) => Promise<void>
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
     if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
@@ -173,6 +176,7 @@ async function vectorizeWithIndex(
     const batches = splitIntoBatches(chunks, batchSize);
     let totalStored = 0;
     let stringOffset = 0;
+    await onProgress(0, contentStrings.length);
 
     for (let i = 0; i < batches.length; i++) {
         const batch = batches[i];
@@ -210,6 +214,9 @@ async function vectorizeWithIndex(
         );
 
         totalStored += result.stored;
+        // Outside the step, so a durable host replaying memoized batches
+        // still reports where it really is.
+        await onProgress(stringOffset, contentStrings.length);
     }
 
     const versionBigInt = BigInt(versionId);
@@ -390,6 +397,7 @@ export async function runExtractionStage(
     const fastTextPath = runtime?.fastTextPath ?? false;
 
     await maybeMarkProcessing(jobId, updateJobStatus);
+    await recordJobProgress(jobId, { stage: "reading" });
 
     const isPdf = !fastTextPath && shouldUsePdfPipeline(mimeType, routingFilename);
 
@@ -533,6 +541,8 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
     );
 
     const normSummary = await loadPipelineState<ExtractionStageSummary>(jobId, "extraction");
+    const pageCount = normSummary.pageCount;
+    await recordJobProgress(jobId, { stage: "chunking", pages: pageCount });
 
     // -----------------------------------------------------------------------
     // Step C: Chunking
@@ -593,7 +603,14 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
             documentId,
             structure,
             versionId,
-            runStep
+            runStep,
+            (done, total) =>
+                recordJobProgress(jobId, {
+                    stage: "embedding",
+                    done,
+                    total,
+                    pages: pageCount,
+                })
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;
@@ -640,6 +657,7 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
     // -----------------------------------------------------------------------
     // Step E: Finalize (metadata + job status)
     // -----------------------------------------------------------------------
+    await recordJobProgress(jobId, { stage: "finishing", pages: pageCount });
     await runStep("step-e-finalize", async (): Promise<{ ok: true }> => {
         const summaryText = chunks.map(c => c.content).join("\n\n");
         await finalizeStorage(

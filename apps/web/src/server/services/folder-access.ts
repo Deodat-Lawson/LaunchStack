@@ -15,6 +15,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { category } from "@launchstack/store/schema";
+import { englishCopy } from "~/i18n/translate";
 import { db } from "~/server/db";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { canEditFolderPath } from "~/server/workspace/item-access";
@@ -22,18 +23,24 @@ import { canEditFolderPath } from "~/server/workspace/item-access";
 /** The slice of a workspace context the folder check needs. */
 export type FolderActor = Pick<WorkspaceContext, "companyId" | "userPk" | "role" | "permissions">;
 
+// The English of each refusal (`sources.server.errors`); a route words the
+// same key in its reader's language.
+
 /** The 403 body every upload path returns when a restricted folder refuses. */
-export const FOLDER_EDIT_DENIED = "You do not have edit access to this folder.";
+export const FOLDER_EDIT_DENIED = englishCopy({ key: "sources.server.errors.folderEditDenied" });
 
 /**
  * The 403 body for renaming, moving, replacing or deleting a file the caller
  * can open but holds no edit level on (ADR-014's `canEditDocument`).
  */
-export const DOCUMENT_EDIT_DENIED = "You can view this file but not change it.";
+export const DOCUMENT_EDIT_DENIED = englishCopy({
+    key: "sources.server.errors.documentEditDenied",
+});
 
 /** The 403 body when someone can edit a file but neither manages it nor holds `documents.delete`. */
-export const DOCUMENT_DELETE_DENIED =
-    "Only the person who added this file, or someone who manages it, can delete it.";
+export const DOCUMENT_DELETE_DENIED = englishCopy({
+    key: "sources.server.errors.documentDeleteDenied",
+});
 
 /** May `ctx` add documents to the folder named `categoryName`? */
 export async function canEditFolder(ctx: FolderActor, categoryName: string): Promise<boolean> {

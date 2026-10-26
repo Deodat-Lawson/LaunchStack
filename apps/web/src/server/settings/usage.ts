@@ -11,8 +11,9 @@
  * output and cached counts, priced at what the operator declared for each
  * model (see docs/chat-models.md). Routes, never model ids, reach the page.
  *
- * Per-member burn is not shown: usage is recorded per company, not per
- * person, and this page does not pretend otherwise.
+ * Per-person use is the meter's too (`ai_usage_daily.user_id`), but it is
+ * read with the allowances it is measured against: ~/server/ai-usage/members.
+ * The ledger half stays per company.
  */
 
 import { and, desc, eq, gte, sql } from "drizzle-orm";

@@ -73,7 +73,7 @@ importers:
         version: link:../../packages/design-tokens
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -314,7 +314,7 @@ importers:
         version: 7.3.3(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(uploadthing@7.7.4(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwindcss@3.4.17))
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@vercel/blob':
         specifier: ^2.3.0
         version: 2.3.0
@@ -354,9 +354,6 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
-      duck-duck-scrape:
-        specifier: ^2.2.7
-        version: 2.2.7
       formdata-node:
         specifier: ^6.0.3
         version: 6.0.3
@@ -17897,7 +17894,7 @@ snapshots:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
-  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     optionalDependencies:
       next: 15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
@@ -19042,6 +19039,7 @@ snapshots:
     dependencies:
       html-entities: 2.6.0
       needle: 3.3.1
+    optional: true
 
   duck@0.1.12:
     dependencies:
@@ -20074,7 +20072,8 @@ snapshots:
     transitivePeerDependencies:
       - '@noble/hashes'
 
-  html-entities@2.6.0: {}
+  html-entities@2.6.0:
+    optional: true
 
   html-escaper@2.0.2: {}
 
@@ -21701,6 +21700,7 @@ snapshots:
     dependencies:
       iconv-lite: 0.6.3
       sax: 1.4.1
+    optional: true
 
   negotiator@1.1.0:
     dependencies:
@@ -22910,7 +22910,8 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sax@1.4.1: {}
+  sax@1.4.1:
+    optional: true
 
   saxes@6.0.0:
     dependencies:

@@ -1228,6 +1228,10 @@
           "label": "Exa company search",
           "description": "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent."
         },
+        "webSerper": {
+          "label": "Web search (Serper)",
+          "description": "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent."
+        },
         "lookalike": {
           "label": "Lookalikes",
           "description": "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves."

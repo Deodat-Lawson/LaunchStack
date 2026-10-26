@@ -365,17 +365,19 @@ describe("customers like these", () => {
 });
 
 describe("source rows", () => {
-    it("offers Exa company search with Serper as fallback, and lookalikes with Exa only", () => {
+    it("names the web source by its provider, and offers lookalikes with Exa only", () => {
         const serperOnly = Object.fromEntries(
             sourceRows(
                 { web: true, lookalike: false, place: false, trade: false, screening: false },
                 null
             ).map(r => [r.id, r])
         );
+        // Serper alone is named as Serper, not as Exa, and needs nothing more.
         expect(serperOnly.web).toMatchObject({
-            label: "Exa company search",
+            label: "Web search (Serper)",
             enabled: true,
-            requires: "EXA_API_KEY (or SERPER_API_KEY)",
+            requires: null,
+            labelCopy: { key: "growth.server.sources.rows.webSerper.label" },
         });
         expect(serperOnly.lookalike).toMatchObject({
             label: "Lookalikes",
@@ -383,11 +385,24 @@ describe("source rows", () => {
             available: false,
             requires: "EXA_API_KEY",
         });
-        const exa = sourceRows(
-            { web: true, lookalike: true, place: false, trade: false, screening: false },
+        const exa = Object.fromEntries(
+            sourceRows(
+                { web: true, lookalike: true, place: false, trade: false, screening: false },
+                null
+            ).map(r => [r.id, r])
+        );
+        expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
+        expect(exa.web).toMatchObject({ label: "Exa company search", requires: "EXA_API_KEY" });
+        // No key: the row says which one key turns it on, with no English inside the copy.
+        const none = sourceRows(
+            { web: false, lookalike: false, place: false, trade: false, screening: false },
             null
-        ).find(r => r.id === "lookalike")!;
-        expect(exa.enabled && exa.available).toBe(true);
+        ).find(r => r.id === "web")!;
+        expect(none).toMatchObject({
+            label: "Exa company search",
+            enabled: false,
+            requires: "EXA_API_KEY",
+        });
     });
 });
 

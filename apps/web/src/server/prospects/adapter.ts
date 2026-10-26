@@ -983,6 +983,8 @@ const costCopy = (cost: "free" | "creditsPerRun" | "included" | "providerRates")
 
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
     const mode = latest?.options.mode ?? null;
+    // Lookalikes need Exa, so web search without them is Serper's.
+    const serperOnly = avail.web && !avail.lookalike;
     const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
         const s = latest?.summary?.sources.find(x => x.source === id);
         if (!latest || mode !== forMode || !s || s.status === "skipped") return null;
@@ -1021,19 +1023,33 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             locked: true,
             lastYield: yieldFor("web", "keyless"),
         },
-        {
-            id: "web",
-            label: "Exa company search",
-            kind: "api",
-            description:
-                "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent.",
-            enabled: avail.web,
-            available: avail.web,
-            requires: "EXA_API_KEY (or SERPER_API_KEY)",
-            cost: "credits per run",
-            locked: true,
-            lastYield: yieldFor("web", "live"),
-        },
+        serperOnly
+            ? {
+                  id: "web",
+                  label: "Web search (Serper)",
+                  kind: "api",
+                  description:
+                      "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent.",
+                  enabled: true,
+                  available: true,
+                  requires: null,
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              }
+            : {
+                  id: "web",
+                  label: "Exa company search",
+                  kind: "api",
+                  description:
+                      "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent.",
+                  enabled: avail.web,
+                  available: avail.web,
+                  requires: "EXA_API_KEY",
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              },
         {
             id: "lookalike",
             label: "Lookalikes",
@@ -1103,12 +1119,15 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
         included: "included",
         "provider rates": "providerRates",
     };
-    return rows.map(row => ({
-        ...row,
-        labelCopy: rowCopy(row.id, "label"),
-        descriptionCopy: rowCopy(row.id, "description"),
-        costCopy: costCopy(COST[row.cost]!),
-    }));
+    return rows.map(row => {
+        const copyId = row.id === "web" && serperOnly ? "webSerper" : row.id;
+        return {
+            ...row,
+            labelCopy: rowCopy(copyId, "label"),
+            descriptionCopy: rowCopy(copyId, "description"),
+            costCopy: costCopy(COST[row.cost]!),
+        };
+    });
 }
 
 export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "live"): SourceYield {

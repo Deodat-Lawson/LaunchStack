@@ -79,7 +79,7 @@ export function WeekSteps({ agenda, className }: { agenda: AgendaDto; className?
                         className={cn(
                             "mt-px inline-flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-[11px] tabular-nums",
                             s.done
-                                ? "bg-success-soft text-success"
+                                ? "bg-success-soft text-success-ink"
                                 : i === current
                                   ? "bg-brand text-brand-fg"
                                   : "border-line text-ink-3 border"

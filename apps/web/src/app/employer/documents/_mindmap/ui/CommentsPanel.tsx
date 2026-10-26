@@ -195,7 +195,7 @@ export function CommentsPanel({
                                             onClick={() =>
                                                 resolveComment(store, thread.id, !thread.resolved)
                                             }
-                                            className="text-ink-3 hover:text-success"
+                                            className="text-ink-3 hover:text-success-ink"
                                         >
                                             {thread.resolved ? (
                                                 <Undo2 className="size-3.5" />

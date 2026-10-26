@@ -11,6 +11,8 @@
 
 import { NextResponse } from "next/server";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { artifactFileExtension, type ArtifactType } from "~/lib/artifact-content";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
@@ -35,18 +37,22 @@ function sanitizeForFilename(value: string): string {
     );
 }
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = Number.parseInt((await params).id, 10);
         if (!Number.isInteger(id) || id <= 0) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         const row = await getArtifact(id, ctx.data.companyId);
-        if (!row) return NextResponse.json({ error: "Artifact not found" }, { status: 404 });
+        if (!row) return NextResponse.json({ error: t("notFound") }, { status: 404 });
 
         const extension = artifactFileExtension(row.artifactType as ArtifactType);
         const filename = `${sanitizeForFilename(row.title)}.${extension}`;
@@ -64,6 +70,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         });
     } catch (error) {
         console.error("[artifacts] download failed:", error);
-        return serverError("Failed to download artifact");
+        return serverError(t("downloadFailed"));
     }
 }

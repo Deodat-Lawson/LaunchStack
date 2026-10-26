@@ -7,6 +7,9 @@
  * permission surface. It opens on three views, because a folder someone
  * shared with you is easy to miss in the default list and a shared drive is
  * not shown unless asked for: Drive, Shared with me, and Shared drives.
+ *
+ * It picks what the Add source tab asks for: files (Files tab; folders are
+ * there to browse through) or folders (Folder tab; only folders are shown).
  */
 
 import { useCallback, useState } from "react";
@@ -32,9 +35,13 @@ interface PickerResponse {
     docs?: PickerDocument[];
 }
 
+/** What the Picker lets someone select. */
+export type DrivePickTarget = "files" | "folders";
+
 export interface PickerView {
     setIncludeFolders(value: boolean): PickerView;
     setSelectFolderEnabled(value: boolean): PickerView;
+    setMimeTypes(mimeTypes: string): PickerView;
     setOwnedByMe(me: boolean): PickerView;
     setEnableDrives(enabled: boolean): PickerView;
 }
@@ -61,10 +68,19 @@ export interface PickerNamespace {
  * The Picker's tabs: everything (the view it always had), Shared with me, and
  * Shared drives. Google's rules: `setEnableDrives` can't be combined with
  * `setOwnedByMe` or `setParent`, so each view sets only its own filter.
+ * Picking files, folders are listed to open but can't be selected; picking
+ * folders, nothing else is listed.
  */
-export function buildDriveViews(picker: Pick<PickerNamespace, "DocsView">): PickerView[] {
-    const browsable = () =>
-        new picker.DocsView().setIncludeFolders(true).setSelectFolderEnabled(true);
+export function buildDriveViews(
+    picker: Pick<PickerNamespace, "DocsView">,
+    target: DrivePickTarget
+): PickerView[] {
+    const browsable = () => {
+        const view = new picker.DocsView()
+            .setIncludeFolders(true)
+            .setSelectFolderEnabled(target === "folders");
+        return target === "folders" ? view.setMimeTypes(GOOGLE_FOLDER_MIME) : view;
+    };
     return [browsable(), browsable().setOwnedByMe(false), browsable().setEnableDrives(true)];
 }
 
@@ -113,11 +129,12 @@ export interface OpenPickerOptions {
     readonly appId: string;
     /** Server-minted short-lived access token. */
     readonly accessToken: string;
+    readonly target: DrivePickTarget;
     readonly onPicked: (docs: readonly PickedDoc[]) => void;
 }
 
 export function useGooglePicker() {
-    const t = useTranslations("sources.driveConnect");
+    const t = useTranslations("sources.driveSource");
     const [opening, setOpening] = useState(false);
 
     const openPicker = useCallback(
@@ -125,8 +142,10 @@ export function useGooglePicker() {
             setOpening(true);
             try {
                 const picker = await loadPicker(options.scriptUrl);
-                const builder = new picker.PickerBuilder().setTitle(t("pickerTitle"));
-                for (const view of buildDriveViews(picker)) builder.addView(view);
+                const builder = new picker.PickerBuilder().setTitle(
+                    options.target === "folders" ? t("pickerTitleFolders") : t("pickerTitleFiles")
+                );
+                for (const view of buildDriveViews(picker, options.target)) builder.addView(view);
 
                 builder
                     .setOAuthToken(options.accessToken)
@@ -135,12 +154,18 @@ export function useGooglePicker() {
                     .enableFeature(picker.Feature.MULTISELECT_ENABLED)
                     .setCallback(data => {
                         if (data.action !== picker.Action.PICKED) return;
-                        const docs: PickedDoc[] = (data.docs ?? []).map(doc => ({
-                            fileId: doc.id,
-                            name: doc.name ?? "Untitled",
-                            mimeType: doc.mimeType ?? "",
-                            kind: doc.mimeType === GOOGLE_FOLDER_MIME ? "folder" : "file",
-                        }));
+                        const wanted = options.target === "folders" ? "folder" : "file";
+                        const docs: PickedDoc[] = (data.docs ?? [])
+                            .map(doc => ({
+                                fileId: doc.id,
+                                name: doc.name ?? "Untitled",
+                                mimeType: doc.mimeType ?? "",
+                                kind:
+                                    doc.mimeType === GOOGLE_FOLDER_MIME
+                                        ? ("folder" as const)
+                                        : ("file" as const),
+                            }))
+                            .filter(doc => doc.kind === wanted);
                         if (docs.length > 0) options.onPicked(docs);
                     })
                     .build()

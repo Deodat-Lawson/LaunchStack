@@ -30,6 +30,6 @@ export async function POST(request: Request) {
         }
         return response;
     } catch (error) {
-        return workspaceErrorResponse(error, "[signup/join POST]");
+        return workspaceErrorResponse(error, "[signup/join POST]", request);
     }
 }

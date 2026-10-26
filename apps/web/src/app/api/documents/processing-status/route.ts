@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/store/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -63,6 +64,14 @@ export async function GET() {
         return NextResponse.json({ jobs: allJobs, summary });
     } catch (error) {
         console.error("Error fetching processing status:", error);
-        return NextResponse.json({ error: "Failed to fetch processing status" }, { status: 500 });
+        return NextResponse.json(
+            {
+                error: requestTranslator(
+                    request,
+                    "sources.server.errors"
+                )("processingStatusFailed"),
+            },
+            { status: 500 }
+        );
     }
 }

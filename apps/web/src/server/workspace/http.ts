@@ -5,20 +5,40 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
+import { zodErrorText } from "~/i18n/zod";
+import type { Locale } from "~/i18n/locales";
 import { publicOrigin } from "~/server/public-origin";
 
 import { isWorkspaceError } from "./errors";
 
-/** `{ error }` with the service's status for expected failures; a logged 500 otherwise. */
-export function workspaceErrorResponse(error: unknown, label: string): NextResponse {
+/** English when there is no request to read the language from (tests, MCP). */
+function localeOf(request: Request | undefined): Locale {
+    return request ? localeOfRequest(request) : "en";
+}
+
+/**
+ * `{ error }` with the service's status for expected failures; a logged 500
+ * otherwise. With the request, the sentence is in the reader's language.
+ */
+export function workspaceErrorResponse(
+    error: unknown,
+    label: string,
+    request?: Request
+): NextResponse {
+    const locale = localeOf(request);
     if (isWorkspaceError(error)) {
         return NextResponse.json(
-            { error: error.message, ...error.extra },
+            { error: wordOr(error.copy, error.message, locale), ...error.extra },
             { status: error.status }
         );
     }
     console.error(`${label} failed:`, error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+        { error: translatorFor(locale, "errors.api")("internal") },
+        { status: 500 }
+    );
 }
 
 /** A positive integer route param, or null for anything else. */
@@ -28,8 +48,11 @@ export function parseIdParam(raw: string): number | null {
     return Number.isSafeInteger(value) && value > 0 ? value : null;
 }
 
-export function invalidIdResponse(): NextResponse {
-    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+export function invalidIdResponse(request?: Request): NextResponse {
+    return NextResponse.json(
+        { error: translatorFor(localeOf(request), "errors.api")("invalidId") },
+        { status: 400 }
+    );
 }
 
 /** Where links in outbound email and in responses should point (see publicOrigin). */
@@ -51,16 +74,19 @@ export async function readOptionalJson(request: Request): Promise<unknown> {
 /** A validated body, or the `{ error }` 400 the contract promises. */
 export function parseValue<T>(
     value: unknown,
-    schema: z.ZodSchema<T>
+    schema: z.ZodSchema<T>,
+    request?: Request
 ): { success: true; data: T } | { success: false; response: NextResponse } {
     const parsed = schema.safeParse(value);
     if (!parsed.success) {
-        const detail = parsed.error.errors
-            .map(e => (e.path.length > 0 ? `${e.path.join(".")}: ${e.message}` : e.message))
-            .join("; ");
+        const locale = localeOf(request);
+        const detail = zodErrorText(parsed.error, locale, "; ");
         return {
             success: false,
-            response: NextResponse.json({ error: `Invalid request: ${detail}` }, { status: 400 }),
+            response: NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("invalidRequestDetail", { detail }) },
+                { status: 400 }
+            ),
         };
     }
     return { success: true, data: parsed.data };
@@ -76,10 +102,13 @@ export async function parseJsonBody<T>(
     } catch {
         return {
             success: false,
-            response: NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }),
+            response: NextResponse.json(
+                { error: translatorFor(localeOfRequest(request), "errors.api")("invalidJsonBody") },
+                { status: 400 }
+            ),
         };
     }
-    return parseValue(json, schema);
+    return parseValue(json, schema, request);
 }
 
 /** Query-string params as an object, dropping empty values so optional fields stay absent. */

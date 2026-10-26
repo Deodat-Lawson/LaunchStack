@@ -23,6 +23,7 @@ import { recordAuditEvent } from "~/lib/authz/audit";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { describeDraftAccess, draftReader, draftVisibilityWhere } from "~/server/mindmap/access";
 import { badRequest } from "~/server/workspace/errors";
+import { copy } from "~/i18n/copy";
 
 import { readWorkspaceSetting } from "./store";
 
@@ -238,9 +239,7 @@ export async function applyArchiveAction(
                 }
                 case "agent": {
                     if (input.action === "delete") {
-                        throw badRequest(
-                            "Retired agents cannot be deleted: their handles appear in past transcripts."
-                        );
+                        throw badRequest(copy("settings.server.errors.agentsCannotBeDeleted"));
                     }
                     const rows = await db
                         .update(collabAgentPersona)
@@ -257,9 +256,7 @@ export async function applyArchiveAction(
                 }
                 case "channel": {
                     if (input.action === "delete") {
-                        throw badRequest(
-                            "Channels keep their transcript; archive is as far as they go."
-                        );
+                        throw badRequest(copy("settings.server.errors.channelsKeepTranscript"));
                     }
                     const rows = await db
                         .update(collabChannel)

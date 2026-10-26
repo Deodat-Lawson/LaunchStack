@@ -12,15 +12,15 @@ import {
 
 type Params = { params: Promise<{ documentId: string }> };
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
     const ctx = await requireWorkspacePermission("documents.read");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).documentId);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     try {
         return NextResponse.json(await getDocumentAccess(ctx.data, id));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/documents/access GET]");
+        return workspaceErrorResponse(error, "[workspace/documents/access GET]", request);
     }
 }
 
@@ -29,12 +29,12 @@ export async function PUT(request: Request, { params }: Params) {
     const ctx = await requireWorkspacePermission("documents.read");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).documentId);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     const body = await parseJsonBody(request, DocumentAccessSchema);
     if (!body.success) return body.response;
     try {
         return NextResponse.json(await setDocumentAccess(ctx.data, id, body.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/documents/access PUT]");
+        return workspaceErrorResponse(error, "[workspace/documents/access PUT]", request);
     }
 }

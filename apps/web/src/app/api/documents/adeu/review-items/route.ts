@@ -9,6 +9,8 @@
 import { NextResponse } from "next/server";
 import { listReviewItems } from "@launchstack/editing";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { adeuErrorResponse, loadDocument } from "../_shared";
 
 export const runtime = "nodejs";
@@ -20,12 +22,16 @@ export async function GET(request: Request) {
 
     if (!raw || !Number.isInteger(documentId) || documentId <= 0) {
         return NextResponse.json(
-            { success: false, error: "invalid_request", message: "documentId is required" },
+            {
+                success: false,
+                error: "invalid_request",
+                message: requestTranslator(request, "viewers.server.errors")("documentIdRequired"),
+            },
             { status: 400 }
         );
     }
 
-    const loaded = await loadDocument(documentId);
+    const loaded = await loadDocument(documentId, { request });
     if (!loaded.ok) return loaded.response;
 
     try {
@@ -35,6 +41,6 @@ export async function GET(request: Request) {
         return NextResponse.json({ success: true, ...items });
     } catch (err) {
         console.error("[adeu/review-items] failed", err);
-        return adeuErrorResponse(err);
+        return adeuErrorResponse(err, request);
     }
 }

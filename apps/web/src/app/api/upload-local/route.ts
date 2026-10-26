@@ -7,6 +7,8 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/store/schema";
 import { StorageError, uploadFile, resolveStorageBackend } from "~/lib/storage";
@@ -16,11 +18,9 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 
-const UNSUPPORTED_TYPE_MESSAGE =
-    "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.), audio (MP3, M4A, MP4, WAV, AAC, FLAC, OGG).";
-
 export async function POST(request: Request) {
     const uploadStart = Date.now();
+    const t = translatorFor(localeOfRequest(request), "upload.server.errors");
     try {
         // Workspace session required: the active company is stamped onto the
         // file_uploads row, and /api/files/[id] reads it back to enforce ownership.
@@ -40,25 +40,20 @@ export async function POST(request: Request) {
                 `[UploadLocal] Rejected: body could not be read as form data after ${Date.now() - uploadStart}ms:`,
                 error
             );
-            return NextResponse.json(
-                {
-                    error: "The file didn't arrive in one piece. Try again; if it keeps happening, ask an admin.",
-                },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: t("incompleteBody") }, { status: 400 });
         }
         const file = formData.get("file") as File | null;
 
         if (!file) {
             console.warn("[UploadLocal] Rejected: no file in form data");
-            return NextResponse.json({ error: "No file provided" }, { status: 400 });
+            return NextResponse.json({ error: t("noFile") }, { status: 400 });
         }
 
         if (!isUploadAccepted({ name: file.name, type: file.type })) {
             console.warn(
                 `[UploadLocal] Rejected: unsupported file type name=${file.name}, mime=${file.type}`
             );
-            return NextResponse.json({ error: UNSUPPORTED_TYPE_MESSAGE }, { status: 400 });
+            return NextResponse.json({ error: t("unsupportedType") }, { status: 400 });
         }
 
         const backend = resolveStorageBackend();
@@ -71,7 +66,7 @@ export async function POST(request: Request) {
                 `[UploadLocal] Rejected: file too large size=${(file.size / 1024 / 1024).toFixed(1)}MB, max=${MAX_FILE_SIZE / 1024 / 1024}MB`
             );
             return NextResponse.json(
-                { error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB.` },
+                { error: t("tooLarge", { mb: String(MAX_FILE_SIZE / 1024 / 1024) }) },
                 { status: 400 }
             );
         }
@@ -108,7 +103,7 @@ export async function POST(request: Request) {
 
             if (!row) {
                 console.error("[UploadLocal] Database insert returned no result");
-                return NextResponse.json({ error: "Failed to store file" }, { status: 500 });
+                return NextResponse.json({ error: t("storeFailed") }, { status: 500 });
             }
             fileId = row.id;
         } else {
@@ -136,18 +131,8 @@ export async function POST(request: Request) {
         // The file arrived; keeping it did not. Say which, so a retry is the
         // obvious next step rather than a guess.
         if (error instanceof StorageError) {
-            return NextResponse.json(
-                {
-                    error: "The file arrived but couldn't be saved to storage. Try again in a moment; if it keeps failing, ask an admin to check file storage.",
-                },
-                { status: 502 }
-            );
+            return NextResponse.json({ error: t("storageSaveFailed") }, { status: 502 });
         }
-        return NextResponse.json(
-            {
-                error: "Failed to upload file",
-            },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: t("uploadFailed") }, { status: 500 });
     }
 }

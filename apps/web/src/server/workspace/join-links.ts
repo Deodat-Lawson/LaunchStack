@@ -10,6 +10,7 @@ import { randomBytes } from "node:crypto";
 import { and, desc, eq, sql } from "drizzle-orm";
 
 import { company } from "@launchstack/store/schema";
+import { copy, type Copy } from "~/i18n/copy";
 import { db } from "~/server/db";
 import { inviteCodes, userCompanyMemberships } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
@@ -75,11 +76,11 @@ interface JoinLinkRow {
     requiresApproval: boolean;
 }
 
-const PROBLEM_MESSAGES: Record<JoinLinkProblem, string> = {
-    unknown: "This join link is not valid.",
-    expired: "This join link has expired.",
-    exhausted: "This join link has reached its use limit.",
-    inactive: "This join link was revoked.",
+const PROBLEM_MESSAGES: Record<JoinLinkProblem, Copy> = {
+    unknown: copy("team.server.errors.joinLinkInvalid"),
+    expired: copy("team.server.errors.joinLinkExpired"),
+    exhausted: copy("team.server.errors.joinLinkExhausted"),
+    inactive: copy("team.server.errors.joinLinkRevoked"),
 };
 
 /** Longest code accepted from a request; issued codes are 32, legacy ones 8. */
@@ -111,9 +112,6 @@ export function isLegacyJoinCode(code: string): boolean {
 function needsApproval(row: { code: string; requiresApproval: boolean }): boolean {
     return row.requiresApproval || isLegacyJoinCode(row.code);
 }
-
-export const LEGACY_LINK_MESSAGE =
-    "This is an old short link that could be guessed, so it can't let people straight in. Reset it to get a new link that can.";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -231,7 +229,7 @@ async function loadLink(companyId: bigint, id: number): Promise<JoinLinkRow> {
         .from(inviteCodes)
         .where(and(eq(inviteCodes.companyId, companyId), eq(inviteCodes.id, id)))
         .limit(1);
-    if (!row) throw notFound("Join link not found.");
+    if (!row) throw notFound(copy("team.server.errors.joinLinkNotFound"));
     return row;
 }
 
@@ -277,7 +275,7 @@ export async function updateJoinLink(
     origin: string
 ): Promise<JoinLinkView> {
     const row = await loadLink(ctx.companyId, id);
-    if (!row.isActive) throw conflict("This join link was revoked. Create a new one instead.");
+    if (!row.isActive) throw conflict(copy("team.server.errors.joinLinkRevokedCreateNew"));
     // Re-checked for the role the link already carries too: someone who may
     // not hand out Admin must not flip an Admin link to skip approval.
     await requireAssignableRole(ctx, row.role);
@@ -286,7 +284,7 @@ export async function updateJoinLink(
     const set: Partial<{ role: string; requiresApproval: boolean }> = {};
     if (role && role.slug !== normalizeRoleSlug(row.role)) set.role = role.slug;
     if (patch.requiresApproval === false && isLegacyJoinCode(row.code)) {
-        throw conflict(LEGACY_LINK_MESSAGE);
+        throw conflict(copy("team.server.errors.joinLinkLegacy"));
     }
     if (patch.requiresApproval !== undefined && patch.requiresApproval !== row.requiresApproval) {
         set.requiresApproval = patch.requiresApproval;
@@ -319,7 +317,7 @@ export async function resetJoinLink(
     origin: string
 ): Promise<JoinLinkView> {
     const old = await loadLink(ctx.companyId, id);
-    if (!old.isActive) throw conflict("This join link was already revoked.");
+    if (!old.isActive) throw conflict(copy("team.server.errors.joinLinkAlreadyRevoked"));
     const role = await requireAssignableRole(ctx, old.role);
     const lifetime = old.expiresAt ? old.expiresAt.getTime() - old.createdAt.getTime() : null;
 
@@ -358,7 +356,7 @@ export async function revokeJoinLink(
         .from(inviteCodes)
         .where(and(eq(inviteCodes.companyId, ctx.companyId), eq(inviteCodes.id, id)))
         .limit(1);
-    if (!row) throw notFound("Join link not found.");
+    if (!row) throw notFound(copy("team.server.errors.joinLinkNotFound"));
     if (!row.isActive) return { success: true };
 
     await db.transaction(async tx => {
@@ -456,7 +454,7 @@ export async function acceptJoinLink(
         const activatesPending = membership?.status === "pending" && !needsApproval(row);
         if (membership && !activatesPending) {
             if (membership.status === "suspended") {
-                throw conflict("Your membership in this workspace is suspended.");
+                throw conflict(copy("team.server.errors.membershipSuspended"));
             }
             const status = membership.status === "pending" ? "pending" : "active";
             return {

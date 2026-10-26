@@ -12,6 +12,10 @@
 # Flash-Lite, so the tiers differ by reasoning effort rather than by model.
 # A model with neither a preset nor a `behavior` block is a startup error by
 # design — an unknown model is never silently classified as text-only.
+#
+# Optional per model: `pricing: { input, output, cachedInput }` in US dollars
+# per million tokens. Settings › Usage counts every model call either way;
+# with a price it also shows what they cost (docs/chat-models.md#pricing).
 version: 1
 
 models:

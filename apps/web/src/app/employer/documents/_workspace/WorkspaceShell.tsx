@@ -1902,8 +1902,10 @@ export function WorkspaceShell() {
         }
         if (askParam?.trim()) seedComposer(askParam.trim().slice(0, 4_000), "replace");
         if (connectorParam) {
+            // Drive has no tab of its own: it is picked from Files, or from
+            // Folder when the callback says folder access was being granted.
             const tabByProvider: Record<string, string> = {
-                "google-drive": "drive",
+                "google-drive": tabParam === "folder" ? "folder" : "files",
                 slack: "slack",
                 github: "github",
                 gmail: "gmail",

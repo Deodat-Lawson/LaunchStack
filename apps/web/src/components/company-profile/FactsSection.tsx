@@ -13,7 +13,7 @@ import { SectionHeading } from "~/components/tools/PageHeader";
 import type { ProfileEntryDto, ProfileFactDto, ProfileFactPatch } from "~/lib/company-profile/dto";
 
 import { ProfileRow } from "./ProfileRow";
-import { factPathFor } from "./words";
+import { factLabelText, factPathFor } from "./words";
 
 /** Saves one patch; resolves once the profile has the answer, rejects when it failed (already reported). */
 export type SaveFact = (patch: ProfileFactPatch) => Promise<void>;
@@ -31,6 +31,7 @@ export function FactsSection({
     onSave: SaveFact;
 }) {
     const t = useTranslations("companyProfile.facts");
+    const ts = useTranslations("companyProfile.server");
     const cited = facts.some(f => f.cites.length > 0);
     if (facts.length === 0 && !canEdit) return null;
     return (
@@ -49,7 +50,7 @@ export function FactsSection({
                 {facts.map(fact => (
                     <ProfileRow
                         key={fact.path}
-                        label={fact.label}
+                        label={factLabelText(ts, fact)}
                         value={fact.value}
                         cites={fact.cites}
                         evidence={evidence}

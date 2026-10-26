@@ -16,6 +16,8 @@
 
 import type { useTranslations } from "next-intl";
 
+import type { Copy } from "~/i18n/copy";
+
 export const FOLDER_SEPARATOR = "/";
 export const UNFILED_FOLDER = "Unfiled";
 /** `document.category` and `category.name` are both varchar(256). */
@@ -179,6 +181,15 @@ export function validateFolderName(name: string): string | null {
 export function validateFolderPath(path: string): string | null {
     const issue = folderPathIssue(path);
     return issue ? folderIssueText(issue) : null;
+}
+
+/**
+ * An issue as a message key and its values (~/i18n/copy), for the server to
+ * word in the reader's language — the same words the client uses.
+ */
+export function folderIssueCopy(issue: FolderPathIssue): Copy {
+    const { code, ...values } = issue;
+    return { key: `sources.folderIssues.${code}`, values };
 }
 
 /** `useTranslations("sources.folderIssues")`. */

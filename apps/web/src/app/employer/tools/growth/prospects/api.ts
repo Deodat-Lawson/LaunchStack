@@ -6,7 +6,16 @@
  * with the pipeline reframe and must answer with these exact JSON shapes.
  * Every DTO is the user's vocabulary (segment, company, person, deal, source,
  * run), never the pipeline's.
+ *
+ * Text the server composes travels twice: in English (`label`, `detail`, …)
+ * for every API reader, and as a `…Copy` — a message key and its values —
+ * that the screens word in the reader's language (`useCopyText` in
+ * `../_lib/copy`). A screen falls back to the English when a copy is absent.
  */
+
+import type { Copy } from "~/i18n/copy";
+
+export type { Copy };
 
 export type SalesStage =
     | "lead"
@@ -39,6 +48,11 @@ export interface SegmentSummary {
     headline: string;
     status: "draft" | "confirmed";
     counts: SegmentCounts;
+    /**
+     * What `subtitle` and `headline` are made of, for the screen to word:
+     * each buyer type as a copy, and the ISO country codes.
+     */
+    words?: { kinds: Copy[]; countries: string[] };
 }
 
 export interface SegmentField {
@@ -48,6 +62,11 @@ export interface SegmentField {
     /** Where the value came from, in words: "from company profile". */
     sources: string[];
     editable: boolean;
+    labelCopy?: Copy;
+    /** One per source, same order. */
+    sourcesCopy?: Copy[];
+    /** A worded value (never on an editable field): one copy, or one per list item. */
+    valueCopy?: Copy | Copy[];
 }
 
 export interface SegmentDto extends SegmentSummary {
@@ -71,7 +90,16 @@ export interface SourceRow {
     cost: string;
     /** True when the switch is not available yet (settings arrive with the source registry). */
     locked?: boolean;
-    lastYield: { found: number; newCompanies: number; cost: string; at: string } | null;
+    lastYield: {
+        found: number;
+        newCompanies: number;
+        cost: string;
+        at: string;
+        costCopy?: Copy;
+    } | null;
+    labelCopy?: Copy;
+    descriptionCopy?: Copy;
+    costCopy?: Copy;
 }
 
 export type SourceStatus = "ok" | "degraded" | "failed" | "skipped" | "off";
@@ -86,6 +114,8 @@ export interface SourceYield {
     inDeals: number | null;
     status: SourceStatus;
     detail: string | null;
+    labelCopy?: Copy;
+    detailCopy?: Copy | null;
 }
 
 export interface FoundVia {
@@ -94,6 +124,7 @@ export interface FoundVia {
     kind: SourceKind;
     url: string | null;
     at: string;
+    labelCopy?: Copy;
 }
 
 export interface CompanyRow {
@@ -116,6 +147,9 @@ export interface CompanyRow {
     isNew: boolean;
     excluded: boolean;
     excludedReason: string | null;
+    /** Set when `why` is the server's own words rather than the profile's. */
+    whyCopy?: Copy | null;
+    excludedReasonCopy?: Copy | null;
 }
 
 export interface EvidenceItem {
@@ -130,12 +164,17 @@ export interface EvidenceItem {
 export interface Claim {
     text: string;
     cites: number[];
+    /** Set when the sentence is the server's (a profile's own summary has none). */
+    copy?: Copy;
 }
 
 export interface Signal {
+    /** A short date in the server's locale; `at` is the instant, for the screen to format. */
     when: string;
     text: string;
     cites: number[];
+    at?: string;
+    copy?: Copy;
 }
 
 export interface PersonRow {
@@ -152,12 +191,17 @@ export interface PersonRow {
     sourceUrl: string | null;
     /** Set when the person's company is excluded; outreach is refused. */
     blockedReason: string | null;
+    nameCopy?: Copy | null;
+    titleCopy?: Copy | null;
+    sourceCopy?: Copy | null;
+    blockedReasonCopy?: Copy | null;
 }
 
 export interface StageMove {
     stage: SalesStage;
     /** Null when the move is allowed; otherwise why it is not. */
     reason: string | null;
+    reasonCopy?: Copy | null;
 }
 
 export interface DealDto {
@@ -165,6 +209,8 @@ export interface DealDto {
     companyId: string;
     stage: SalesStage;
     ownerName: string | null;
+    /** True when the owner is the person reading; `ownerName` is then "You". */
+    ownerIsViewer?: boolean;
     ownerInitials: string | null;
     nextStep: string | null;
     nextStepAt: string | null;
@@ -241,6 +287,9 @@ export interface RunStep {
     /** Right-aligned figure: "41 found · 9 new", "1 min 40 s". */
     right: string | null;
     children?: RunStep[];
+    labelCopy?: Copy;
+    detailCopy?: Copy | null;
+    rightCopy?: Copy | null;
 }
 
 /** How the next run will execute: live providers, or public directories when no key is configured. */
@@ -255,6 +304,7 @@ export interface RunDto {
     steps: RunStep[];
     spend: { usd: number; usdCap: number; credits: number };
     caps: string;
+    capsCopy?: Copy;
     summary: {
         found: number;
         newCompanies: number;
@@ -269,7 +319,7 @@ export interface RunDto {
 export interface OutreachResult {
     campaignId: string;
     people: number;
-    skipped: Array<{ personId: string; reason: string }>;
+    skipped: Array<{ personId: string; reason: string; reasonCopy?: Copy }>;
 }
 
 export interface NewSegmentInput {
@@ -287,7 +337,13 @@ export class ProspectsApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "ProspectsApiError";
@@ -309,11 +365,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new ProspectsApiError(message, response.status, body);
+                : null;
+        throw new ProspectsApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }

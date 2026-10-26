@@ -31,7 +31,6 @@ export const SETTINGS_SECTION_IDS = [
     "byok",
     "models",
     "agents",
-    "documents",
     "integrations",
     "usage",
     "archive",

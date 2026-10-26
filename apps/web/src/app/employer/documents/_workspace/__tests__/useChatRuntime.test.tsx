@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useChatRuntime } from "../useChatRuntime";
 import type { ComposerSend, ThreadMessage, WorkspaceSource } from "../types";
 import * as sessions from "../sessionApi";
+import { toast } from "sonner";
 
 const mockRequest = jest.fn();
 jest.mock("../../hooks/useAIChat", () => ({ useAIChat: () => ({ sendQuery: mockRequest }) }));
@@ -112,6 +113,310 @@ test("normal follow-ups carry real prior turns and use general chat with no read
     expect(result.current.thread).toHaveLength(4);
     expect(sessions.createSession).toHaveBeenCalledTimes(1);
     expect(sessions.appendMessages).toHaveBeenCalledTimes(3);
+});
+
+test("records the answer's steps, reasoning and first-word time, and saves them with the turn", async () => {
+    const clock = jest.spyOn(performance, "now");
+    let now = 1_000;
+    clock.mockImplementation(() => now);
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        now = 1_080;
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "No sources selected", state: "done" },
+        });
+        now = 1_100;
+        options.onEvent({
+            type: "step",
+            step: { id: "think", label: "Thinking", state: "active" },
+        });
+        now = 2_000;
+        options.onEvent({ type: "reasoning", delta: "Weigh the clauses." });
+        now = 4_100;
+        options.onEvent({
+            type: "step",
+            step: { id: "think", label: "Thought it through", state: "done" },
+        });
+        options.onEvent({ type: "text", delta: "The answer" });
+        now = 4_300;
+        options.onEvent({ type: "text", delta: " is here." });
+        return answer("The answer is here.");
+    });
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit(send("Which clause wins?"));
+    });
+    clock.mockRestore();
+    const turn = result.current.thread[1]!;
+    expect(turn).toMatchObject({
+        status: "complete",
+        text: "The answer is here.",
+        reasoning: "Weigh the clauses.",
+        thoughtMs: 3_100,
+        steps: [
+            { id: "search", label: "No sources selected", state: "done", startMs: 80, endMs: 80 },
+            { id: "think", label: "Thought it through", state: "done", startMs: 100, endMs: 3_100 },
+        ],
+    });
+    const saved = jest.mocked(sessions.appendMessages).mock.calls.at(-1)![1].messages[0]!;
+    expect(saved.metadata).toMatchObject({ steps: turn.steps, thoughtMs: 3_100 });
+});
+
+test("the question goes out while the new chat is still saving, and the answer is saved after it", async () => {
+    let finishCreate: (value: sessions.StoredSession) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise(resolve => {
+                finishCreate = resolve;
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Fast first step"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+    await act(async () => {
+        finishCreate({ id: "slow-session" } as unknown as sessions.StoredSession);
+        await sending!;
+    });
+    expect(sessions.appendMessages).toHaveBeenCalledTimes(1);
+    expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-session");
+    expect(result.current.thread[1]).toMatchObject({ status: "complete", text: "The response" });
+});
+
+test("a chat that can't be saved stops its request and says why", async () => {
+    let finishCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                finishCreate = reject;
+            })
+    );
+    let requestSignal: AbortSignal | undefined;
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                requestSignal = options.signal;
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Will not save"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    await act(async () => {
+        finishCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(requestSignal?.aborted).toBe(true);
+    expect(result.current.thread[1]).toMatchObject({
+        status: "error",
+        text: "Failed to save this chat",
+    });
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
+test("a save that fails after the answer arrived keeps the answer and says the chat wasn't saved", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Answer first, save later"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    await act(async () => {
+        await Promise.resolve();
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({ status: "complete", text: "The response" });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining("Failed to save this chat"));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
+test("a stop shows at once even while the chat is still saving", async () => {
+    let finishCreate: (value: sessions.StoredSession) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise(resolve => {
+                finishCreate = resolve;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop me"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await waitFor(() => expect(result.current.thread[1]?.status).toBe("stopped"));
+    const stoppedAfter = result.current.thread[1]!.elapsedMs;
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+    await act(async () => {
+        finishCreate({ id: "slow-save" } as unknown as sessions.StoredSession);
+        await sending!;
+    });
+    expect(result.current.thread[1]?.status).toBe("stopped");
+    // It keeps the time it stopped at, not the time the save took.
+    expect(result.current.thread[1]?.elapsedMs).toBe(stoppedAfter);
+    expect(jest.mocked(sessions.appendMessages).mock.calls[0]![0]).toBe("slow-save");
+});
+
+test("a stop followed by a failed save keeps what the reader had", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.onEvent({ type: "text", delta: "Short version: a SAFE is" });
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop, then fail to save"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.text).toBe("Short version: a SAFE is"));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await waitFor(() => expect(result.current.thread[1]?.status).toBe("stopped"));
+    await act(async () => {
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({
+        status: "stopped",
+        text: "Short version: a SAFE is",
+    });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining("Failed to save this chat"));
+    expect(sessions.appendMessages).not.toHaveBeenCalled();
+});
+
+test("a stop before any answer, then a failed save, just says the chat wasn't saved", async () => {
+    let failCreate: (error: Error) => void = () => undefined;
+    jest.mocked(sessions.createSession).mockImplementationOnce(
+        () =>
+            new Promise((_resolve, reject) => {
+                failCreate = reject;
+            })
+    );
+    mockRequest.mockImplementationOnce(
+        (_params, options) =>
+            new Promise(resolve => {
+                options.signal.addEventListener(
+                    "abort",
+                    () => resolve({ success: false, cancelled: true }),
+                    { once: true }
+                );
+            })
+    );
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Stop before anything"));
+    });
+    await waitFor(() => expect(mockRequest).toHaveBeenCalledTimes(1));
+    act(() => {
+        result.current.runtime.stop();
+    });
+    await act(async () => {
+        failCreate(new Error("Failed to save this chat"));
+        await sending!;
+    });
+    expect(result.current.thread[1]).toMatchObject({ status: "stopped", text: "" });
+    expect(toast.error).toHaveBeenCalledWith(
+        "This chat couldn't be saved (Failed to save this chat)."
+    );
+});
+
+test("every update hands the panel a new object for the live answer", async () => {
+    let release: () => void = () => undefined;
+    mockRequest.mockImplementationOnce(async (_params, options) => {
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "Searching", state: "active" },
+        });
+        await new Promise<void>(resolve => {
+            release = resolve;
+        });
+        options.onEvent({
+            type: "step",
+            step: { id: "search", label: "Found 1 passage", state: "done" },
+        });
+        return answer("Done");
+    });
+    const { result } = harness();
+    let sending: Promise<unknown>;
+    act(() => {
+        sending = result.current.runtime.submit(send("Which clause?"));
+    });
+    await waitFor(() => expect(result.current.thread[1]?.steps?.[0]?.label).toBe("Searching"));
+    // The panel memoises messages by identity, so an update in place would never paint.
+    const shown = result.current.thread[1]!;
+    await act(async () => {
+        release();
+        await sending!;
+    });
+    expect(result.current.thread[1]).not.toBe(shown);
+    expect(result.current.thread[1]!.steps?.[0]?.label).toBe("Found 1 passage");
+    expect(shown.steps?.[0]?.label).toBe("Searching");
+});
+
+test("a referenced chat is read as its own step", async () => {
+    jest.mocked(sessions.fetchSession).mockResolvedValue({
+        id: "older",
+        title: "Pricing call notes",
+        messages: [],
+    } as unknown as sessions.StoredSession);
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit({ ...send("Use those notes"), threadRefs: ["older"] });
+    });
+    expect(result.current.thread[1]!.steps).toEqual([
+        expect.objectContaining({
+            id: "thread-refs",
+            label: "Read a referenced chat",
+            state: "done",
+            detail: "Pricing call notes",
+        }),
+    ]);
 });
 
 test("stop retains partial response and holds durable queued follow-ups until resume", async () => {
@@ -1007,12 +1312,14 @@ test("hands out a new answer object for every streamed delta, so the row re-rend
     act(() => emitEvent({ type: "reasoning", delta: "Count them: " }));
     const thinking = result.current.thread[1]!;
     expect(thinking).toMatchObject({ reasoning: "Count them: ", text: "", status: "streaming" });
-    expect(thinking.thoughtMs).toEqual(expect.any(Number));
+    // "Thought for" counts to the first word, so it isn't set while thinking.
+    expect(thinking.thoughtMs).toBeUndefined();
 
     act(() => emitEvent({ type: "text", delta: "Ten" }));
     const writing = result.current.thread[1]!;
     expect(writing).not.toBe(thinking);
     expect(writing).toMatchObject({ text: "Ten", stage: "Writing…" });
+    expect(writing.thoughtMs).toEqual(expect.any(Number));
     act(() => emitEvent({ type: "text", delta: " primes." }));
     expect(result.current.thread[1]).not.toBe(writing);
     expect(result.current.thread[1]!.text).toBe("Ten primes.");
@@ -1027,7 +1334,7 @@ test("hands out a new answer object for every streamed delta, so the row re-rend
         .find(message => message.role === "assistant");
     expect(saved?.metadata).toMatchObject({
         reasoning: "Count them: ",
-        thoughtMs: thinking.thoughtMs,
+        thoughtMs: writing.thoughtMs,
     });
 });
 

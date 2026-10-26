@@ -58,6 +58,7 @@ const esmDeps = [
     "intl-messageformat",
     "icu-minify",
     "@formatjs[\\w+.-]*",
+    "@dicebear[\\w+.-]*",
 ];
 
 /** @type {import('jest').Config} */

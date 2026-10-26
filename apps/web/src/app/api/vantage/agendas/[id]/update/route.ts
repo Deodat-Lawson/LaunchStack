@@ -10,7 +10,7 @@ import {
     renderWeeklyUpdate,
 } from "@launchstack/pipelines/vantage";
 
-import { error, handleVantageError, json, vantageContext } from "../../../_http";
+import { error, handleVantageError, json, vantageContext, say } from "../../../_http";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
-        if (!agenda) return error("That agenda is not here.", 404);
+        if (!agenda) return error(say(request, "agendaNotHere"), 404);
         const commitments = await listCommitments({ companyId: auth.ctx.companyId, agendaId: id });
         const includePrivate = request.nextUrl.searchParams.get("private") === "1";
         // Which cited notes are private, so the shared copy can withhold them.
@@ -42,6 +42,6 @@ export async function GET(request: NextRequest, { params }: Params) {
         const markdown = renderWeeklyUpdate({ agenda, commitments, includePrivate, privateRefs });
         return json({ markdown });
     } catch (err) {
-        return handleVantageError("GET update", err);
+        return handleVantageError("GET update", err, request);
     }
 }

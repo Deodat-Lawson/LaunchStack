@@ -172,7 +172,7 @@ export function StaleBanner({ staleBy, dirty }: { staleBy: number; dirty: boolea
     if (staleBy <= 0) return null;
     return (
         <div className="border-warn bg-panel text-ink-2 shadow-2 absolute left-1/2 top-3 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border px-3 py-1.5 text-[12px]">
-            <RefreshCw className="text-warn size-3.5" />
+            <RefreshCw className="text-warn-ink size-3.5" />
             {dirty ? t("staleConflict") : t("stale")}
             <button
                 type="button"

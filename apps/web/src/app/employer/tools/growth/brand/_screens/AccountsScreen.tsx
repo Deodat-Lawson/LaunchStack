@@ -18,6 +18,8 @@ import { Switch } from "~/components/ui/switch";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
 import { NETWORK_LABEL, NetworkMark } from "../_components/NetworkMark";
@@ -47,7 +49,7 @@ function ToneWord({ tone, children }: { tone: Tone; children: React.ReactNode })
             className={cn(
                 "inline-flex items-center gap-1.5 text-xs",
                 tone === "ok" && "text-ink-2",
-                tone === "warn" && "text-warn",
+                tone === "warn" && "text-warn-ink",
                 tone === "danger" && "text-danger"
             )}
         >
@@ -351,16 +353,17 @@ function ConnectionRow({
 // ── Connect ───────────────────────────────────────────────────────────────
 
 function SetupSteps({ network }: { network: BrandNetwork }) {
+    const word = useCopyText();
     return (
         <div className="flex flex-col gap-1.5">
             {network.setup.length > 0 && (
                 <ol className="text-ink-2 list-decimal space-y-0.5 pl-5 text-[13px]">
-                    {network.setup.map(step => (
-                        <li key={step}>{step}</li>
+                    {network.setup.map((step, i) => (
+                        <li key={step}>{word(network.setupCopy?.[i], step)}</li>
                     ))}
                 </ol>
             )}
-            <p className="text-ink-3 text-xs">{network.note}</p>
+            <p className="text-ink-3 text-xs">{word(network.noteCopy, network.note)}</p>
         </div>
     );
 }
@@ -379,6 +382,7 @@ function BlueskyForm({
     onConnected: (handle: string) => Promise<void>;
 }) {
     const t = useTranslations("growth.brand.accounts");
+    const errorText = useErrorText();
     const [password, setPassword] = useState("");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -399,7 +403,7 @@ function BlueskyForm({
             setHandle("");
             await onConnected(result.connection.accountName ?? handle.trim());
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("blueskyRefused"));
+            setError(errorText(e, t("blueskyRefused")));
         } finally {
             setBusy(false);
         }
@@ -529,6 +533,8 @@ const CONNECT_PROBLEMS = new Map<string, "denied" | "error" | "partial" | "noCha
 
 export function AccountsScreen() {
     const t = useTranslations("growth.brand.accounts");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const tc = useTranslations("common.actions");
     const { joinNatural } = useGrowthFormat();
     const params = useToolSearchParams();
@@ -561,7 +567,7 @@ export function AccountsScreen() {
             );
         } catch (e) {
             swap(!enabled);
-            toast.error(e instanceof Error ? e.message : t("changeFailed", { name: channel.name }));
+            toast.error(errorText(e, t("changeFailed", { name: channel.name })));
         }
     };
 
@@ -584,7 +590,7 @@ export function AccountsScreen() {
             );
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("unreachable"));
+            toast.error(errorText(e, t("unreachable")));
         }
     };
 
@@ -598,7 +604,7 @@ export function AccountsScreen() {
             );
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("disconnectFailed"));
+            toast.error(errorText(e, t("disconnectFailed")));
         }
     };
 
@@ -738,7 +744,9 @@ export function AccountsScreen() {
                                                         </Button>
                                                     </div>
                                                 )}
-                                                <p className="text-ink-3 text-xs">{network.note}</p>
+                                                <p className="text-ink-3 text-xs">
+                                                    {word(network.noteCopy, network.note)}
+                                                </p>
                                             </div>
                                         ) : (
                                             <SetupSteps network={network} />
@@ -761,10 +769,14 @@ export function AccountsScreen() {
                                                         await res.reload();
                                                     }}
                                                 />
-                                                <p className="text-ink-3 text-xs">{network.note}</p>
+                                                <p className="text-ink-3 text-xs">
+                                                    {word(network.noteCopy, network.note)}
+                                                </p>
                                             </div>
                                         ) : (
-                                            <p className="text-ink-2">{network.note}</p>
+                                            <p className="text-ink-2">
+                                                {word(network.noteCopy, network.note)}
+                                            </p>
                                         )
                                     ) : (
                                         <div className="flex flex-col gap-1.5">

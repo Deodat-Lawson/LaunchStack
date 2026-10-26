@@ -12,21 +12,27 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
 import { forkSession } from "~/server/sessions/fork";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
 type Params = { params: Promise<{ sessionId: string }> };
 
-export async function POST(_request: Request, { params }: Params) {
+export async function POST(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     try {
         const fork = await forkSession(ctx.data, (await params).sessionId);
         return fork
             ? NextResponse.json(fork, { status: 201 })
-            : NextResponse.json({ error: "Session not found" }, { status: 404 });
+            : NextResponse.json(
+                  {
+                      error: requestTranslator(request, "chat.server.sessions")("notFound"),
+                  },
+                  { status: 404 }
+              );
     } catch (error) {
         console.error("[workspace/sessions] fork failed:", error);
-        return serverError("Failed to continue this chat");
+        return serverError(requestTranslator(request, "workspace.server.errors")("forkFailed"));
     }
 }

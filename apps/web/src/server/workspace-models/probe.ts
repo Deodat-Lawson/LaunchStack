@@ -13,6 +13,8 @@ import {
     resolveChatModel,
 } from "@launchstack/llm";
 
+import type { Locale } from "~/i18n/locales";
+import { wordEnglish } from "~/i18n/translate";
 import type { WorkspaceModelSelection } from "~/server/db/schema/workspace-models";
 import { fetchPublicUrl } from "~/server/security/url-guard";
 
@@ -99,13 +101,22 @@ export interface ModelTestResult {
 }
 
 /**
+ * The admin is already in Settings, so "fix it in Settings" is noise on a test
+ * result — in English, and in the words `chat.server.endpoint` gives it.
+ */
+const SETTINGS_HINT =
+    /\s*(?:A workspace admin can fix it in Settings › Bring your own keys\.|工作区管理员可以在“设置 › 自带密钥”中修复。)$/;
+
+/**
  * Send each distinct chosen model "Reply with OK." and report per route.
  * Never throws for an endpoint failure — the admin needs the per-model
- * answer — only for a selection that can't be built at all.
+ * answer — only for a selection that can't be built at all. A classified
+ * endpoint failure is worded for `locale`; the route words the rest.
  */
 export async function testEndpoint(
     candidate: EndpointCandidate,
-    selection: WorkspaceModelSelection
+    selection: WorkspaceModelSelection,
+    locale: Locale = "en"
 ): Promise<ModelTestResult[]> {
     const config = buildWorkspaceChatModelsConfig({
         baseUrl: candidate.baseUrl,
@@ -165,12 +176,12 @@ export async function testEndpoint(
                 ok: false,
                 latencyMs: Date.now() - started,
                 // The admin is already in Settings; "fix it in Settings" is noise here.
-                message:
-                    described?.message.replace(
-                        /\s*A workspace admin can fix it in Settings › Bring your own keys\.$/,
-                        ""
-                    ) ??
-                    "The endpoint returned an error for this model. Check the model id and that the key can use it.",
+                message: described
+                    ? wordEnglish(described.message, "chat.server.endpoint", locale).replace(
+                          SETTINGS_HINT,
+                          ""
+                      )
+                    : "The endpoint returned an error for this model. Check the model id and that the key can use it.",
             };
         }
         tested.set(modelId, outcome);

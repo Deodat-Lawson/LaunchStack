@@ -619,5 +619,56 @@
     "whatPlaceholder": "Demo day rehearsal",
     "when": "When",
     "note": "Note"
+  },
+  "server": {
+    "errors": {
+      "evidenceNotHere": "That evidence is not here.",
+      "nameMetric": "Give the metric a name.",
+      "metricKeyExists": "A metric with the key \"{key}\" already exists.",
+      "metricNotHere": "That metric is not here.",
+      "metricNotInWorkspace": "One of those metrics is not in this workspace.",
+      "numberNotHere": "That number is not here.",
+      "commitmentNotHere": "That commitment is not here.",
+      "agendaNotHere": "That agenda is not here.",
+      "topicNotHere": "That topic is not here.",
+      "deadlineNotHere": "That deadline is not here.",
+      "adminTriage": "Only a workspace admin can see program triage.",
+      "adminAddDeadline": "Only a workspace admin can add program deadlines.",
+      "adminRemoveDeadline": "Only a workspace admin can remove program deadlines.",
+      "checkForm": "Check the form and try again."
+    },
+    "validation": {
+      "isoDate": "must be a date (YYYY-MM-DD)",
+      "giveTitle": "give it a title",
+      "writeWhatHappened": "write what happened",
+      "nameMetric": "name the metric",
+      "sayWhatCounts": "say what counts",
+      "periodOrder": "the period ends before it starts",
+      "pasteCsv": "paste or choose a CSV",
+      "topicTitle": "give the topic a title",
+      "writeDecision": "write the decision",
+      "nameAction": "name the action",
+      "nameOwner": "name an owner",
+      "nameDeadline": "name the deadline"
+    },
+    "csvProblems": {
+      "empty": "The file is empty.",
+      "header": "The header needs a `metric` column and a `value` column (and `period` or `period_start`/`period_end`).",
+      "period": "Every number needs its period: add a `period` column (one date) or `period_start` and `period_end`.",
+      "missingMetric": "Missing metric.",
+      "notANumber": "\"{value}\" is not a number.",
+      "periodFormat": "Period must be YYYY-MM-DD (got \"{start}\" to \"{end}\").",
+      "periodOrder": "The period ends before it starts."
+    },
+    "weeklyReview": {
+      "notFound": "Founder weekly review run \"{runId}\" was not found.",
+      "forbidden": "The active workspace role cannot mutate founder weekly reviews.",
+      "cannotRetry": "Cannot retry founder weekly review run from status \"{status}\".",
+      "cannotEdit": "Cannot edit founder weekly review run from status \"{status}\".",
+      "cannotPublish": "Cannot publish founder weekly review run from status \"{status}\".",
+      "retryConflict": "Retry request key \"{requestKey}\" belongs to a different failure cycle for run \"{runId}\".",
+      "periodMismatch": "Evidence snapshot reporting period must match the run reporting period.",
+      "collectorUnavailable": "Founder weekly review evidence collection is not configured."
+    }
   }
 }

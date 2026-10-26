@@ -20,6 +20,17 @@ jest.mock("~/server/auth", () => ({
 
 const mockDbSelect = jest.fn();
 
+// Outside a request `headers()` throws, so the guard answers in English; a
+// test that reads Chinese hands it a request scope with the cookie.
+const mockHeaders = jest.fn<Headers, []>(() => {
+    throw new Error("headers() was called outside a request scope");
+});
+
+jest.mock("next/headers", () => ({
+    headers: () => Promise.resolve(mockHeaders()),
+    cookies: () => Promise.resolve({ get: () => undefined }),
+}));
+
 jest.mock("~/server/db", () => ({
     db: {
         select: (...args: unknown[]) => mockDbSelect(...args),
@@ -104,6 +115,20 @@ describe("requireWorkspaceContext", () => {
             const { body, status } = await getJsonAndStatus(result);
             expect(status).toBe(401);
             expect(body.error).toBe("Unauthorized");
+        }
+    });
+
+    it("answers in the reader's language", async () => {
+        mockGetServerSession.mockResolvedValue(null);
+        mockHeaders.mockReturnValueOnce(new Headers({ cookie: "ls-locale=zh-CN.1" }));
+
+        const result = await requireWorkspaceContext();
+
+        expect(result.success).toBe(false);
+        if (!result.success) {
+            const { body, status } = await getJsonAndStatus(result);
+            expect(status).toBe(401);
+            expect(body.error).toBe("未登录或登录已失效");
         }
     });
 
@@ -317,6 +342,7 @@ describe("requireWorkspacePermission", () => {
             const { body, status } = await getJsonAndStatus(result);
             expect(status).toBe(403);
             expect(body.permission).toBe("documents.delete");
+            expect(body.error).toBe("Forbidden");
         }
     });
 

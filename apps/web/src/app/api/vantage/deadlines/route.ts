@@ -4,10 +4,18 @@ import type { NextRequest } from "next/server";
 
 import { addDays, createDeadline, listDeadlines, toIsoDate } from "@launchstack/pipelines/vantage";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
+import {
+    error,
+    firstIssue,
+    handleVantageError,
+    json,
+    readBody,
+    vantageContext,
+    say,
+} from "../_http";
 import { DeadlineSchema } from "../_schemas";
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -17,18 +25,17 @@ export async function GET() {
         });
         return json({ deadlines });
     } catch (err) {
-        return handleVantageError("GET deadlines", err);
+        return handleVantageError("GET deadlines", err, request);
     }
 }
 
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
-    if (!auth.ctx.can("settings.manage"))
-        return error("Only a workspace admin can add program deadlines.", 403);
+    if (!auth.ctx.can("settings.manage")) return error(say(request, "adminAddDeadline"), 403);
     try {
         const parsed = DeadlineSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const deadline = await createDeadline({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -36,6 +43,6 @@ export async function POST(request: NextRequest) {
         });
         return json({ deadline }, 201);
     } catch (err) {
-        return handleVantageError("POST deadline", err);
+        return handleVantageError("POST deadline", err, request);
     }
 }

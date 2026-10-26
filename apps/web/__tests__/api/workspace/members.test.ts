@@ -237,7 +237,9 @@ describe("POST /api/workspace/members/leave", () => {
         context.mockResolvedValue({ success: true, data: ctx });
         fakeDb.onSelect(userCompanyMemberships, [{ userId: 7n }]);
 
-        const res = await LEAVE();
+        const res = await LEAVE(
+            new Request("http://localhost/api/workspace/members/leave", { method: "POST" })
+        );
 
         expect(res.status).toBe(409);
         expect(fakeDb.deletes).toHaveLength(0);
@@ -247,7 +249,9 @@ describe("POST /api/workspace/members/leave", () => {
         const ctx = makeWorkspaceContext({ role: "member", userPk: 7n });
         context.mockResolvedValue({ success: true, data: ctx });
 
-        const res = await LEAVE();
+        const res = await LEAVE(
+            new Request("http://localhost/api/workspace/members/leave", { method: "POST" })
+        );
 
         expect(res.status).toBe(200);
         await expect(res.json()).resolves.toEqual({ success: true, redirectTo: "/workspaces" });
@@ -265,7 +269,7 @@ describe("GET /api/workspace/members", () => {
             memberRow({ id: 8, name: "Bea", role: "admin", status: "suspended" }),
         ]);
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/members"));
 
         expect(res.status).toBe(200);
         const body = (await res.json()) as {

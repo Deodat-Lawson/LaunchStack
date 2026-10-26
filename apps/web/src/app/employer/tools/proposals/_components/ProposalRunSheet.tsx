@@ -16,6 +16,7 @@ import { cn } from "~/lib/utils";
 
 import { useToolFormat } from "~/lib/tools/format";
 import { runIsLive, useProposals } from "../_lib/context";
+import { useCopyText } from "~/lib/tools/copyText";
 import type { RunStepDto } from "../api";
 
 function StepIcon({ status }: { status: RunStepDto["status"] }) {
@@ -45,7 +46,7 @@ function StepIcon({ status }: { status: RunStepDto["status"] }) {
                 <span
                     className={cn(
                         base,
-                        "bg-danger flex items-center justify-center rounded-full text-white"
+                        "bg-danger text-danger-fg flex items-center justify-center rounded-full"
                     )}
                 >
                     <X className="size-2.5" strokeWidth={3} />
@@ -67,8 +68,11 @@ export function ProposalRunSheet() {
     const tKind = useTranslations("proposals.runKind");
     const tc = useTranslations("common");
     const format = useToolFormat();
+    const say = useCopyText();
     const { activeRun, runSheetOpen, closeRunSheet, href } = useProposals();
     const run = activeRun;
+    const headline = run?.headline != null ? say(run.headlineCopy, run.headline) : null;
+    const runError = run?.error != null ? say(run.errorCopy, run.error) : null;
     const live = runIsLive(run);
     const elapsed = run?.completedAt
         ? format.duration(new Date(run.completedAt).getTime() - new Date(run.startedAt).getTime())
@@ -94,7 +98,7 @@ export function ProposalRunSheet() {
                                 : tKind(run.kind)}
                     </SheetTitle>
                     <SheetDescription className="text-ink-3 text-[13px]">
-                        {run?.headline ?? (live ? t("liveHint") : (run?.error ?? ""))}
+                        {headline ?? (live ? t("liveHint") : (runError ?? ""))}
                     </SheetDescription>
                 </SheetHeader>
                 {run && (
@@ -111,17 +115,19 @@ export function ProposalRunSheet() {
                                 >
                                     <StepIcon status={step.status} />
                                     <span className="min-w-0 truncate">
-                                        {step.label}
+                                        {say(step.labelCopy, step.label)}
                                         {step.detail && (
-                                            <span className="text-ink-3"> · {step.detail}</span>
+                                            <span className="text-ink-3">
+                                                {` · ${say(step.detailCopy, step.detail)}`}
+                                            </span>
                                         )}
                                     </span>
                                 </div>
                             ))}
                         </div>
-                        {run.status === "failed" && run.error && (
+                        {run.status === "failed" && runError && (
                             <p role="alert" className="text-danger mt-3 text-[13px]">
-                                {run.error}
+                                {runError}
                             </p>
                         )}
                         <div className="text-ink-3 mt-3 flex items-center justify-between text-xs tabular-nums">

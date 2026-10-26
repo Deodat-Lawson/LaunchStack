@@ -6,6 +6,7 @@ import { inngest } from "~/server/inngest/client";
 import { TrendSearchInputSchema } from "@launchstack/pipelines/trend-search";
 import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/trend-search/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
@@ -18,7 +19,10 @@ export async function POST(request: NextRequest) {
         const parsed = TrendSearchInputSchema.safeParse(body);
         if (!parsed.success) {
             return NextResponse.json(
-                { error: "Validation failed", details: parsed.error.flatten() },
+                {
+                    error: requestTranslator(request, "errors.api")("validationFailed"),
+                    details: parsed.error.flatten(),
+                },
                 { status: 400 }
             );
         }
@@ -55,12 +59,15 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ jobId, status: "queued" }, { status: 202 });
     } catch (error) {
         console.error("[trend-search] POST error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }
 
 // ─── GET /api/trend-search ──────────────────────────────────────────────────
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -78,6 +85,9 @@ export async function GET() {
         return NextResponse.json({ searches: results }, { status: 200 });
     } catch (error) {
         console.error("[trend-search] GET error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

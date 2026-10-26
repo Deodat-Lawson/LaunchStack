@@ -227,18 +227,6 @@ export function KnowledgePane({
                     heading rather than crushing it. */}
                 <div className="flex flex-wrap items-start gap-x-4 gap-y-3">
                     <div className="min-w-[min(100%,240px)] flex-1">
-                        <div
-                            className="mono"
-                            style={{
-                                fontSize: 10,
-                                fontWeight: 700,
-                                letterSpacing: "0.1em",
-                                textTransform: "uppercase",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            {t("eyebrow")}
-                        </div>
                         <h2
                             className="display"
                             style={{

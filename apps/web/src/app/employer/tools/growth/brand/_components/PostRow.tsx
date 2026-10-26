@@ -10,6 +10,7 @@ import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
 import { compact } from "../_lib/numbers";
 import { dayAndMonth, isDue, postMoment, timeOfDay, toLocalInput } from "../_lib/time";
 import { brandApi, type BrandPost, type BrandPostMetrics } from "../api";
@@ -30,7 +31,7 @@ export function PostStatus({ post, className }: { post: BrandPost; className?: s
                 post.status === "failed" && "text-danger",
                 post.status === "cancelled" && "text-ink-3",
                 post.status === "draft" && "text-ink-3",
-                post.status === "scheduled" && (due ? "text-warn" : "text-ink-2"),
+                post.status === "scheduled" && (due ? "text-warn-ink" : "text-ink-2"),
                 className
             )}
         >
@@ -129,6 +130,7 @@ export function PostActions({
     children: React.ReactNode;
 }) {
     const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
     const tc = useTranslations("common.actions");
     const locale = useLocale();
     const [open, setOpen] = useState(false);
@@ -149,7 +151,7 @@ export function PostActions({
             onChange();
             setOpen(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("postActions.failed"));
+            toast.error(errorText(e, t("postActions.failed")));
         } finally {
             setBusy(false);
         }

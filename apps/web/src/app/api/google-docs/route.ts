@@ -14,10 +14,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { createGoogleDocDocument } from "~/server/services/google-drive/create";
 import { recordUpload } from "~/server/workspace/added-documents";
 
@@ -41,7 +43,14 @@ export async function POST(request: Request) {
         const parsed = BodySchema.safeParse(body ?? {});
         if (!parsed.success) {
             return NextResponse.json(
-                { success: false, error: "invalid_body", message: "Invalid title or folder." },
+                {
+                    success: false,
+                    error: "invalid_body",
+                    message: requestTranslator(
+                        request,
+                        "sources.server.drive"
+                    )("invalidTitleOrFolder"),
+                },
                 { status: 400 }
             );
         }
@@ -54,7 +63,14 @@ export async function POST(request: Request) {
         // to create somewhere.
         if (!(await canEditFolder(ctx.data, category))) {
             return NextResponse.json(
-                { success: false, error: "folder_denied", message: FOLDER_EDIT_DENIED },
+                {
+                    success: false,
+                    error: "folder_denied",
+                    message: requestTranslator(
+                        request,
+                        "sources.server.errors"
+                    )("folderEditDenied"),
+                },
                 { status: 403 }
             );
         }
@@ -76,7 +92,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, ...result }, { status: 201 });
         } catch (err) {
             console.error("[google-docs] create failed:", err);
-            return driveErrorResponse(err);
+            return driveErrorResponse(err, request);
         }
     });
 }

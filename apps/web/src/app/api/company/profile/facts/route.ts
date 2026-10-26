@@ -4,8 +4,10 @@
 import { z } from "zod";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { editFact } from "~/server/company-profile/service";
+import { CompanyProfileError, editFact } from "~/server/company-profile/service";
 import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { wordEnglish } from "~/i18n/translate";
 
 const EditSchema = z.object({
     path: z.string().min(1).max(160),
@@ -18,10 +20,24 @@ export async function PATCH(request: Request) {
     const auth = await requireWorkspacePermission("settings.manage");
     if (!auth.success) return auth.response;
     const parsed = EditSchema.safeParse(await readJsonBody(request));
-    if (!parsed.success) return error("A fact edit needs a path and a value", 400);
+    if (!parsed.success) {
+        return error(
+            requestTranslator(request, "companyProfile.server.errors")("editNeedsPathValue"),
+            400
+        );
+    }
     try {
         return json({ profile: await editFact(auth.data, parsed.data) });
     } catch (err) {
-        return handleRouteError("PATCH company profile fact", err);
+        // A refused edit carries the company-metadata package's own English.
+        if (err instanceof CompanyProfileError && !err.copy) {
+            const words = wordEnglish(
+                err.message,
+                "companyProfile.server.editErrors",
+                localeOfRequest(request)
+            );
+            return error(words, err.status, { code: err.code });
+        }
+        return handleRouteError("PATCH company profile fact", err, request);
     }
 }

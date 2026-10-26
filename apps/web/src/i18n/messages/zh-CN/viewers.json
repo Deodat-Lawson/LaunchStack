@@ -79,7 +79,6 @@
   },
   "docxPreview": {
     "fetchFailed": "获取文档失败（{status}）",
-    "empty": "文档似乎是空的",
     "renderFailed": "文档渲染失败",
     "loading": "正在加载文档…",
     "header": "Word 文档预览"
@@ -347,5 +346,33 @@
     "loading": "正在加载转录文本…",
     "loadFailed": "无法加载转录文本。",
     "noSpeech": "未从此录音中转录到任何语音。"
+  },
+  "server": {
+    "errors": {
+      "wordOnlyDocx": "Word 编辑器只能打开 .docx 文件，此文档是其他格式。",
+      "editingNotConfigured": "文档编辑服务尚未配置。请设置 ADEU_SERVICE_URL 和 ADEU_SERVICE_API_KEY，并确保该服务正在运行。",
+      "documentIdRequired": "缺少 documentId",
+      "alreadyPdf": "此文档已经是 PDF，请直接下载。",
+      "pdfOfficeOnly": "PDF 渲染只支持 Office 文档（Word、Excel、PowerPoint、OpenDocument），此文档是其他格式。",
+      "pdfNotConfigured": "PDF 渲染服务尚未配置。请设置 GOTENBERG_SERVICE_URL（及其基本认证用户名和密码），并确保 gotenberg 服务正在运行。",
+      "translationLanguageNotOffered": "不支持翻译为该语言",
+      "notTranscript": "此文档不是转录文本",
+      "transcriptReadFailed": "无法从存储中读取转录文本",
+      "transcriptEmpty": "此转录文本为空",
+      "translationFailed": "翻译失败",
+      "noMedia": "此文档没有音频或视频",
+      "mediaLoadFailed": "媒体加载失败"
+    },
+    "artifacts": {
+      "notFound": "未找到该 Artifact",
+      "loadFailed": "Artifact 加载失败",
+      "updateFailed": "更新 Artifact 失败",
+      "deleteFailed": "删除 Artifact 失败",
+      "downloadFailed": "下载 Artifact 失败",
+      "listFailed": "Artifact 列表加载失败",
+      "claudeShareLink": "claude.ai 页面无法在服务器端获取：它们在浏览器中渲染 Artifact，并受机器人防护保护。请在 Claude 中复制 Artifact 的代码（或下载它），然后粘贴或上传到这里；该链接会作为来源保留。",
+      "fetchFailed": "无法获取该 URL，或它没有返回文本内容",
+      "importFailed": "导入 Artifact 失败"
+    }
   }
 }

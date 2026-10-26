@@ -33,7 +33,7 @@ export async function GET(request: Request) {
             if (!ctx.success) return ctx.response;
 
             const scope = await ctx.data.documentScope();
-            const payload = await withWorkspaceChatModels(ctx.data.companyId, () =>
+            const payload = await withWorkspaceChatModels(ctx.data.companyId, "ask", () =>
                 getAskStarters({
                     companyId: ctx.data.companyId,
                     scope,
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
             );
             return ok(payload);
         } catch (error) {
-            return handleRouteError("ask-starters", error);
+            return handleRouteError("ask-starters", error, request);
         }
     });
 }

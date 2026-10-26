@@ -79,7 +79,6 @@
   },
   "docxPreview": {
     "fetchFailed": "Failed to fetch document ({status})",
-    "empty": "Document appears to be empty",
     "renderFailed": "Failed to render document",
     "loading": "Loading document...",
     "header": "Word Document Preview"
@@ -347,5 +346,33 @@
     "loading": "Loading transcript…",
     "loadFailed": "Couldn't load the transcript.",
     "noSpeech": "No speech was transcribed from this recording."
+  },
+  "server": {
+    "errors": {
+      "wordOnlyDocx": "The Word editor only opens .docx files. This document is a different format.",
+      "editingNotConfigured": "The document editing service is not configured. Set ADEU_SERVICE_URL and ADEU_SERVICE_API_KEY, and make sure the service is running.",
+      "documentIdRequired": "documentId is required",
+      "alreadyPdf": "This document is already a PDF — download it directly.",
+      "pdfOfficeOnly": "PDF rendering handles Office documents (Word, Excel, PowerPoint, OpenDocument). This document is a different format.",
+      "pdfNotConfigured": "The PDF rendering service is not configured. Set GOTENBERG_SERVICE_URL (and its basic-auth pair), and make sure the gotenberg service is running.",
+      "translationLanguageNotOffered": "Translation into that language isn't offered",
+      "notTranscript": "This document is not a transcript",
+      "transcriptReadFailed": "Couldn't read the transcript from storage",
+      "transcriptEmpty": "This transcript is empty",
+      "translationFailed": "Translation failed",
+      "noMedia": "This document has no audio or video",
+      "mediaLoadFailed": "Failed to load media"
+    },
+    "artifacts": {
+      "notFound": "Artifact not found",
+      "loadFailed": "Failed to load artifact",
+      "updateFailed": "Failed to update artifact",
+      "deleteFailed": "Failed to delete artifact",
+      "downloadFailed": "Failed to download artifact",
+      "listFailed": "Failed to load artifacts",
+      "claudeShareLink": "claude.ai pages can't be fetched server-side — they render the artifact in the browser behind bot protection. Copy the artifact's code (or download it) in Claude and paste or upload it here; the link is kept as the source.",
+      "fetchFailed": "Couldn't fetch that URL, or it didn't return text content",
+      "importFailed": "Failed to import artifact"
+    }
   }
 }

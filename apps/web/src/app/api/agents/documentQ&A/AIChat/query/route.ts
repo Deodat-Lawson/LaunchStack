@@ -1196,11 +1196,11 @@ export async function POST(request: Request) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
 
-            // Build comprehensive prompts. The agent's standing instructions go
-            // above the style prompt: who is speaking first, then how.
+            // Operating rules precede presentation preferences; a named
+            // agent supplies the role and more specific output contract.
             const stylePrompt = getSystemPrompt(selectedStyle, aiPersona);
             let systemPrompt = agent
-                ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
+                ? `${stylePrompt}\n\n## Agent instructions\n${agentSystemPromptBlock(agent.persona)}`
                 : stylePrompt;
             const companyProfile = sourcesAllowed
                 ? await loadChatCompanyProfile(ctx.data, scope)
@@ -1296,6 +1296,11 @@ export async function POST(request: Request) {
                     chat,
                     messages,
                     tools,
+                    hasInitialEvidence:
+                        documents.length > 0 ||
+                        passages.length > 0 ||
+                        attachmentTextBlock.length > 0 ||
+                        imageAttachmentUrls.length > 0,
                     signal,
                     stream: emit && {
                         onText: delta => emit({ type: "text", delta }),

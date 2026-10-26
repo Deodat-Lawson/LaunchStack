@@ -1,7 +1,7 @@
 /**
  * Ask's document tool: what `create_document` writes and where, what the
  * model is told back, its budget, and the prompt that keeps the chat from
- * ever again telling someone to copy an answer into a file themselves.
+ * asking someone to copy content that an available tool can save for them.
  *
  * Storage, ingestion and the ADR-014 defaults are the upload path's own
  * (document-upload, added-documents); here they are mocked to check that the
@@ -260,12 +260,25 @@ describe("writing to the workspace", () => {
 });
 
 describe("what the model is told", () => {
-    it("says to create the document, never to have the person paste it", () => {
+    it("creates requested documents with the available tool instead of unnecessary copy and paste", () => {
         const prompt = documentToolsPrompt();
         expect(prompt).toContain("`create_document`");
-        expect(prompt).toContain("never say you cannot create files");
-        expect(prompt).toContain("never ask them to copy and paste it");
+        expect(prompt).toContain("Try the available tool before claiming you cannot create files");
+        expect(prompt).toContain(
+            "do not ask them to copy and paste content that the tool can save"
+        );
+        expect(prompt).toContain("Do not create documents on your own initiative");
         expect(prompt).toContain("Their private space is their Private section");
+    });
+
+    it("claims success only after confirmation and reports failed writes truthfully", () => {
+        const prompt = documentToolsPrompt();
+        expect(prompt).toContain("Only after the tool confirms creation");
+        expect(prompt).toContain(
+            "If creation fails, explain the actual failure and what remains unsaved"
+        );
+        expect(prompt).toContain("do not claim that the document was created");
+        expect(prompt).not.toContain("never say you cannot create files");
     });
 
     it("asks for a grounded document and a short answer about it", () => {

@@ -225,7 +225,15 @@ async function droppedCount(scope: string): Promise<number> {
 
 function promptOf(call: unknown[]): string {
     const messages = call[0] as Array<{ content: unknown }>;
-    return String(messages[messages.length - 1]?.content);
+    // A transient evidence-review reminder now follows the original user
+    // message. Inspect the actual retrieved context, not its array position.
+    return String(
+        messages.find(
+            message =>
+                typeof message.content === "string" &&
+                message.content.startsWith("User's question:")
+        )?.content ?? ""
+    );
 }
 
 describe("post-retrieval scope gate", () => {

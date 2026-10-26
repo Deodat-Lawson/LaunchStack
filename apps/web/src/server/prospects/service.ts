@@ -66,12 +66,10 @@ import { englishCopy } from "~/i18n/translate";
 
 import {
     FIT_THRESHOLD,
-    SALES_OF,
     contactPeople,
     excludedBlock,
     inMotion,
     latestCompleted,
-    relationshipTarget,
     searchMatches,
     sortRows,
     sourceRows,
@@ -293,7 +291,7 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
     endOfToday.setHours(23, 59, 59, 999);
     const due = data.items.filter(
         i =>
-            inMotion(SALES_OF[i.relationship.stage]) &&
+            inMotion(i.relationship.stage) &&
             i.relationship.nextActionAt !== null &&
             i.relationship.nextActionAt <= endOfToday
     );
@@ -340,8 +338,9 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
         stage,
         count: live.filter(r => r.stage === stage).length,
     }));
-    const median =
-        dashboard.medianDaysInStage.contacted ?? dashboard.medianDaysInStage.in_conversation;
+    // Finished Contacted stints from the stage history: how long it takes a
+    // contacted company to agree to a meeting (or leave the funnel).
+    const median = dashboard.medianDaysInStage.contacted;
 
     return {
         segment: toSegmentSummary(data.program, data.rows, sourcesOn(availability())),
@@ -431,7 +430,7 @@ export async function setExcluded(
             else domains.delete(org.domain);
             await updateProgram(program.id, ctx.companyId, { knownPartnerDomains: [...domains] });
         }
-        const target = excluded ? "declined" : "candidate";
+        const target = excluded ? "lost" : "lead";
         if (
             relationship.stage !== target &&
             ALLOWED_TRANSITIONS[relationship.stage].includes(target)
@@ -492,23 +491,11 @@ export async function patchDeal(
     const nextAction =
         patch.nextStep === undefined ? undefined : patch.nextStep === "" ? null : patch.nextStep;
 
-    if (patch.stage && patch.stage !== SALES_OF[relationship.stage]) {
-        const target = relationshipTarget(relationship.stage, patch.stage);
-        if (!target)
-            throw new ProspectsError(
-                copy("growth.server.errors.cannotMoveTo", { stage: patch.stage }),
-                409,
-                {
-                    reason:
-                        patch.stage === "proposal"
-                            ? copy("growth.server.moves.notAStage")
-                            : copy("growth.server.moves.notAvailableHere"),
-                }
-            );
+    if (patch.stage && patch.stage !== relationship.stage) {
         relationship = await transitionStage({
             companyId: ctx.companyId,
             relationshipId,
-            to: target,
+            to: patch.stage,
             actorUserId: ctx.userId,
             ownerUserId,
             nextAction,
@@ -568,7 +555,9 @@ export async function listDeals(ctx: ProspectsCtx, programId: string): Promise<D
         if (row.excluded) continue;
         // Only the won check needs the agreement; skip the query elsewhere.
         const hasAgreement =
-            item.relationship.stage === "negotiating"
+            item.relationship.stage === "negotiating" ||
+            item.relationship.stage === "proposal" ||
+            item.relationship.stage === "nurture"
                 ? (await listAgreements(ctx.companyId, item.relationship.id)).length > 0
                 : false;
         out.push({
@@ -656,10 +645,10 @@ export async function draftOutreach(
             skip(relationshipId, copy("growth.server.outreach.otherSegment"));
             continue;
         }
-        if (["contracted", "active", "declined"].includes(relationship.stage)) {
+        if (relationship.stage === "won" || relationship.stage === "lost") {
             skip(
                 relationshipId,
-                copy("growth.server.outreach.dealIs", { stage: SALES_OF[relationship.stage] })
+                copy("growth.server.outreach.dealIs", { stage: relationship.stage })
             );
             continue;
         }

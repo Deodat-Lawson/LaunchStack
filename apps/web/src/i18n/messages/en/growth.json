@@ -1106,14 +1106,15 @@
       "sameStage": "Relationship is already \"{to}\".",
       "notAllowed": "Cannot move from \"{from}\" to \"{to}\". Allowed: {allowed}.",
       "ownerRequired": "An owner is required from \"contacted\" onward (entering \"{target}\").",
-      "nextActionRequired": "A next action is required from \"in_conversation\" onward (entering \"{target}\").",
+      "nextActionRequired": "A next action is required from \"meeting\" onward (entering \"{target}\").",
       "agreementRequired": "An agreement is required to enter \"{target}\".",
       "pair": "{first} {second}"
     },
     "requirements": {
       "ownerRequired": "Needs an owner",
       "nextActionRequired": "Needs a next step",
-      "agreementRequired": "Needs an agreement recorded in Distribution"
+      "agreementRequired": "Needs an agreement recorded in Distribution",
+      "changedConcurrently": "Someone else moved this deal just now"
     },
     "moves": {
       "currentStage": "Current stage",
@@ -1121,7 +1122,8 @@
       "wonStaysWon": "Won deals stay won",
       "moveFirst": "Move to {stage, select, lead {Lead} qualified {Qualified} contacted {Contacted} meeting {Meeting} proposal {Proposal} negotiating {Negotiating} won {Won} lost {Not a fit} nurture {Nurture} other {{stage}}} first",
       "notAvailableFrom": "Not available from {stage, select, lead {Lead} qualified {Qualified} contacted {Contacted} meeting {Meeting} proposal {Proposal} negotiating {Negotiating} won {Won} lost {Not a fit} nurture {Nurture} other {{stage}}}",
-      "notAvailableHere": "Not available from here"
+      "notAvailableHere": "Not available from here",
+      "backOneStage": "Move back one stage at a time"
     },
     "segment": {
       "subtitle": "{countries} · {kinds}",

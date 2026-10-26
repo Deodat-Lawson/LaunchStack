@@ -1106,14 +1106,15 @@
       "sameStage": "关系已处于“{to}”阶段。",
       "notAllowed": "无法从“{from}”移至“{to}”。允许的阶段：{allowed}。",
       "ownerRequired": "从“contacted”阶段起需要指定负责人（正在进入“{target}”）。",
-      "nextActionRequired": "从“in_conversation”阶段起需要设置下一步行动（正在进入“{target}”）。",
+      "nextActionRequired": "从“meeting”阶段起需要设置下一步行动（正在进入“{target}”）。",
       "agreementRequired": "进入“{target}”阶段需要先记录协议。",
       "pair": "{first}{second}"
     },
     "requirements": {
       "ownerRequired": "需要指定负责人",
       "nextActionRequired": "需要设置下一步",
-      "agreementRequired": "需要在分销中记录协议"
+      "agreementRequired": "需要在分销中记录协议",
+      "changedConcurrently": "刚刚有其他人移动了这笔交易"
     },
     "moves": {
       "currentStage": "当前阶段",
@@ -1121,7 +1122,8 @@
       "wonStaysWon": "已赢单的商机会保持赢单状态",
       "moveFirst": "请先移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
       "notAvailableFrom": "无法从“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”移至此阶段",
-      "notAvailableHere": "无法从当前阶段移至此阶段"
+      "notAvailableHere": "无法从当前阶段移至此阶段",
+      "backOneStage": "请一次只后退一个阶段"
     },
     "segment": {
       "subtitle": "{countries} · {kinds}",
@@ -1184,7 +1186,7 @@
       "document": "已共享文档",
       "documentTitle": "已共享文档：{title}",
       "agreement": "已记录协议",
-      "imported": "以“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”阶段导入",
+      "imported": "以“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”阶段导入",
       "importedExisting": "以现有阶段导入"
     },
     "sources": {
@@ -1286,7 +1288,7 @@
       "excluded": "{name} 已被排除",
       "noMailbox": "{name}：画像中没有公开邮箱",
       "notInProgram": "不在此计划中",
-      "stageIs": "阶段为“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”",
+      "stageIs": "阶段为“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
       "orgMissing": "组织缺失",
       "existingPartner": "现有合作伙伴（已排除）",
       "noDossierMailbox": "档案中没有公开邮箱"

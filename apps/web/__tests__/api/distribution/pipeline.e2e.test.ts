@@ -113,7 +113,7 @@ describeDb("distribution pipeline end to end (fixture ports, real database)", ()
         const partners = await listPartners(companyId, { programId: program.id });
         expect(partners).toHaveLength(summary.shortlisted);
         for (const item of partners) {
-            expect(item.relationship.stage).toBe("researched");
+            expect(item.relationship.stage).toBe("lead");
             expect(item.relationship.fitScore).not.toBeNull();
             expect(item.relationship.dossier).not.toBeNull();
             expect(item.relationship.dossierDocumentId).toBeGreaterThan(1000);
@@ -149,7 +149,7 @@ describeDb("distribution pipeline end to end (fixture ports, real database)", ()
 
         // Dashboard reflects it.
         const dashboard = await getDashboard(companyId, program.id);
-        expect(dashboard.counts.researched).toBe(summary.shortlisted);
+        expect(dashboard.counts.lead).toBe(summary.shortlisted);
         expect(dashboard.targetedCells).toBe(9);
         expect(dashboard.coveredCells).toBe(0);
 

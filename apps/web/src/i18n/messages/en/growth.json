@@ -1395,7 +1395,11 @@
       "runFailedChat": "Failed to run marketing pipeline Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid.",
       "runFailedCompany": "Failed to run marketing pipeline Ensure your user has a valid company profile.",
       "invalidCompanyId": "Invalid company ID",
-      "messageRequired": "message is required"
+      "messageRequired": "message is required",
+      "runStartFailed": "Failed to start the marketing pipeline",
+      "runListFailed": "Failed to list marketing pipeline runs",
+      "runNotFound": "Run not found",
+      "runReadFailed": "Failed to read the marketing pipeline run"
     },
     "email": {
       "invalidCampaignId": "Invalid campaign ID",

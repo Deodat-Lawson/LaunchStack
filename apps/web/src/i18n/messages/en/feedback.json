@@ -1,0 +1,231 @@
+{
+  "entry": {
+    "reportBug": "Report a bug",
+    "requestFeature": "Request a feature",
+    "myReports": "My reports"
+  },
+  "launcher": {
+    "label": "Feedback: report a bug or request a feature",
+    "button": "Feedback",
+    "hide": "Hide this button",
+    "hiddenToast": "Feedback button hidden",
+    "hiddenToastBody": "Report from the account menu, {palette}, or {report}. The Feedback tab can bring the button back.",
+    "undo": "Undo"
+  },
+  "status": {
+    "new": "New",
+    "planned": "Planned",
+    "in_progress": "In progress",
+    "done": "Done",
+    "wont_do": "Won't do"
+  },
+  "severity": {
+    "blocking": "Blocking me",
+    "annoying": "Annoying",
+    "cosmetic": "Cosmetic"
+  },
+  "kind": {
+    "bug": "Bug",
+    "idea": "Feature request",
+    "bugPlural": "Bugs",
+    "ideaPlural": "Feature requests"
+  },
+  "vote": {
+    "add": "Vote for this — {count, plural, one {# vote} other {# votes}} so far",
+    "remove": "Remove your vote — {count, plural, one {# vote} other {# votes}}",
+    "failed": "Your vote didn't go through. Try again."
+  },
+  "editor": {
+    "tool": "Markup tool",
+    "highlight": "Highlight",
+    "redact": "Hide",
+    "undo": "Undo",
+    "clear": "Clear",
+    "highlightHint": "Drag to draw a box round the problem.",
+    "redactHint": "Drag to black out anything private.",
+    "imageAlt": "Screenshot being marked up",
+    "cancel": "Cancel",
+    "done": "Done"
+  },
+  "dialog": {
+    "title": "Send feedback",
+    "description": "LaunchStack is in testing. Tell the team what broke or what you need — every report is read, and replies show up in Feedback › My reports.",
+    "kindLabel": "What kind of feedback",
+    "kinds": {
+      "bug": "Report a bug",
+      "idea": "Request a feature"
+    },
+    "bugTitle": "What went wrong?",
+    "ideaTitle": "What would you like?",
+    "bugTitlePlaceholder": "e.g. Upload stops at 90% for large PDFs",
+    "ideaTitlePlaceholder": "e.g. Export a chat as a Word document",
+    "charsLeft": "{count, plural, one {# character} other {# characters}} left",
+    "bugBody": "Details",
+    "ideaBody": "Why would it help?",
+    "optional": " (optional)",
+    "bugBodyPlaceholder": "What did you do, what did you expect, and what happened instead?",
+    "ideaBodyPlaceholder": "What are you trying to do, and what gets in the way today?",
+    "severity": "How much is it in your way?",
+    "sendHint": "{send} to send",
+    "cancel": "Cancel",
+    "sendBug": "Send report",
+    "sendIdea": "Send request",
+    "errors": {
+      "rateLimited": "You've sent several reports in a short time. Try again in a few minutes.",
+      "generic": "Your report didn't send. Check your connection and try again."
+    },
+    "editor": {
+      "title": "Mark up the screenshot",
+      "description": "Box what's wrong, or hide anything that shouldn't leave your screen. The team sees exactly this."
+    },
+    "images": {
+      "label": "Screenshots",
+      "optional": " (optional, up to 3)",
+      "capture": "Capture this page",
+      "capturing": "Capturing…",
+      "attach": "Attach image",
+      "thumbAlt": "Screenshot {n}",
+      "markup": "Mark up",
+      "remove": "Remove screenshot {n}",
+      "pasteHint": "Or paste an image ({paste}).",
+      "wrongType": "Only PNG, JPEG, WebP or GIF images can be attached.",
+      "tooBig": "Each image can be up to {mb} MB.",
+      "tooMany": "Up to {max} screenshots per report.",
+      "captureFailed": "Couldn't capture this page. Take a screenshot yourself and paste or attach it instead."
+    },
+    "context": {
+      "include": "Include technical details",
+      "errorsCount": "{count, plural, one {# recent error} other {# recent errors}}",
+      "show": "What's sent",
+      "hide": "Hide",
+      "page": "Page",
+      "browser": "Browser",
+      "window": "Window",
+      "screen": "Screen",
+      "theme": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "language": "Language",
+      "timeZone": "Time zone",
+      "recentErrors": "Recent errors on this page",
+      "origin": {
+        "errorId": "Error ID",
+        "message": "Error",
+        "jobId": "Job ID",
+        "document": "Source",
+        "problem": "Problem"
+      },
+      "alsoSent": "Your name and email go with the report so the team can reply, along with the app's version and your current workspace. With technical details off, only the page is sent."
+    },
+    "similar": {
+      "title": "Already requested — vote instead?",
+      "vote": "Vote for this request",
+      "unvote": "Remove your vote",
+      "hint": "A vote on an existing request counts for more than a new one that says the same."
+    },
+    "sent": {
+      "titleBug": "Thanks — bug #{id} is in",
+      "titleIdea": "Thanks — request #{id} is on the board",
+      "body": "The team will see it. When they reply or change its status, you'll get a note in the bell and can follow up in Feedback › My reports.",
+      "another": "Send another",
+      "view": "View report",
+      "done": "Done"
+    }
+  },
+  "list": {
+    "loadFailed": "Couldn't load reports.",
+    "reportBug": "Report a bug",
+    "requestFeature": "Request a feature",
+    "filterPlaceholder": "Search reports",
+    "kindLabel": "Kind",
+    "allKinds": "Bugs and requests",
+    "statusLabel": "Status",
+    "allStatuses": "Any status",
+    "sortLabel": "Sort",
+    "sortVotes": "Most votes",
+    "sortRecent": "Newest",
+    "emptyFiltered": "Nothing matches these filters.",
+    "awaitingReply": "Waiting for a reply from the team",
+    "votes": "{count, plural, one {# vote} other {# votes}}",
+    "replies": "{count, plural, one {# reply} other {# replies}}",
+    "attachments": "{count, plural, one {# screenshot} other {# screenshots}}",
+    "mine": {
+      "title": "My reports",
+      "sub": "Bugs you reported and features you asked for, with the team's replies.",
+      "emptyTitle": "Nothing reported yet",
+      "emptyBody": "Something broke, or something's missing? Use the Feedback button in the corner, or press {report} on any page."
+    },
+    "ideas": {
+      "title": "Ideas",
+      "sub": "What testers have asked for. Vote for the ones you want — the most-wanted rise to the top.",
+      "emptyTitle": "No feature requests yet",
+      "emptyBody": "Be the first: tell the team what would make this more useful to you."
+    },
+    "triage": {
+      "title": "Triage",
+      "sub": "Every report on this instance. Set a status and reply — the reporter sees both. A dot means the last word is theirs.",
+      "emptyTitle": "No reports yet",
+      "emptyBody": "When someone sends a bug report or a feature request, it lands here."
+    }
+  },
+  "report": {
+    "loadFailed": "Couldn't load this report.",
+    "goneTitle": "This report isn't here",
+    "goneBody": "It may have been removed, or it isn't one you can see.",
+    "yours": "Yours",
+    "noBody": "No details given.",
+    "openImage": "Open full size",
+    "imageAlt": "Screenshot {n}",
+    "threadTitle": "Conversation",
+    "threadEmpty": "No replies yet. The team will answer here, and you'll get a note in the bell.",
+    "threadEmptyTriage": "No replies yet. A reply here reaches the reporter in their bell.",
+    "you": "You",
+    "team": "Team",
+    "requester": "Requester",
+    "replyLabel": "Reply",
+    "replyPlaceholder": "Add more detail, or answer the team's question…",
+    "replyPlaceholderTeam": "Reply to the reporter…",
+    "replyHint": "The team sees this straight away.",
+    "replyHintTeam": "The reporter gets a note in their bell.",
+    "replyFailed": "Your reply didn't send. Try again.",
+    "send": "Send",
+    "status": "Status",
+    "severity": "Severity",
+    "noSeverity": "Not set",
+    "statusHint": "A status change tells the reporter too.",
+    "updated": "Saved",
+    "updateFailed": "Couldn't save the change.",
+    "copyIssue": "Copy as GitHub issue",
+    "issueCopied": "Copied as a GitHub issue — without the reporter's name or screenshots",
+    "filed": "Filed",
+    "reporter": "Reported by",
+    "workspace": "Workspace",
+    "votesLabel": "Votes",
+    "version": "App version",
+    "privateNote": "Who asked, and the page they were on, stay between them and the team."
+  },
+  "tool": {
+    "title": "Feedback",
+    "about": "Report bugs and ask for features while the product is in testing, vote on what others asked for, and follow the team's replies.",
+    "nav": {
+      "mine": "My reports",
+      "ideas": "Ideas",
+      "triage": "Triage"
+    },
+    "showButton": "Show the Feedback button",
+    "offTitle": "Feedback isn't switched on here",
+    "offBody": "This instance hasn't named anyone to read reports, so there's nowhere for them to go. An operator turns it on by setting FEEDBACK_ADMIN_EMAILS.",
+    "triageDeniedTitle": "Triage is for the team",
+    "triageDeniedBody": "Only the people who run this instance see every report. Yours are under My reports."
+  },
+  "inbox": {
+    "reply": "{actor} replied to your report “{name}”",
+    "status": "{actor} marked your report “{name}” as {status}"
+  },
+  "contact": {
+    "title": "Found a bug, or missing something?",
+    "body": "Report it in the app — with the page and a screenshot attached — and follow the team's reply under Feedback."
+  }
+}

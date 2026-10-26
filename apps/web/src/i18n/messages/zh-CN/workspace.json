@@ -8,7 +8,8 @@
     "darkTheme": "切换到深色主题",
     "settings": "设置",
     "documentation": "文档",
-    "logOut": "退出登录"
+    "logOut": "退出登录",
+    "feedback": "发送反馈"
   },
   "common": {
     "actionsFor": "{name} 的操作",
@@ -105,6 +106,10 @@
     "metadata": {
       "label": "公司档案",
       "description": "工作区对你公司的了解"
+    },
+    "feedback": {
+      "label": "反馈",
+      "description": "你报告的问题、共享的功能建议看板，以及团队的回复"
     }
   },
   "studioDeniedNotes": {

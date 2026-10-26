@@ -143,6 +143,14 @@ export const SHORTCUT_COMMANDS: readonly ShortcutCommand[] = [
         defaultKeys: "Mod+Alt+W",
         when: "always",
     },
+    {
+        id: "feedback.report",
+        label: "Report a bug",
+        // B for bug. Alt keeps it clear of the browser's ⌘⇧B (bookmarks bar).
+        description: "Open the feedback dialog, with this page and its recent errors attached.",
+        defaultKeys: "Mod+Alt+B",
+        when: "always",
+    },
 ];
 
 export const SHORTCUT_COMMANDS_BY_ID: ReadonlyMap<string, ShortcutCommand> = new Map(
@@ -175,6 +183,7 @@ export const SHORTCUT_MESSAGE_KEYS = {
     "pane.focusNext": "paneFocusNext",
     "pane.focusPrevious": "paneFocusPrevious",
     "pane.close": "paneClose",
+    "feedback.report": "feedbackReport",
 } as const;
 
 type ShortcutMessageKey = (typeof SHORTCUT_MESSAGE_KEYS)[keyof typeof SHORTCUT_MESSAGE_KEYS];

@@ -43,6 +43,8 @@
     "title": "Something went wrong",
     "body": "An error occurred while loading this page. Please try again or return to the dashboard.",
     "errorId": "Error ID: {id}",
-    "backToDashboard": "Back to Dashboard"
+    "backToDashboard": "Back to Dashboard",
+    "report": "Report this problem",
+    "reportTitle": "A page showed “Something went wrong”"
   }
 }

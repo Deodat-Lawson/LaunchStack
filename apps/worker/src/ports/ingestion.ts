@@ -24,8 +24,8 @@ export function createIngestionPipelinePort(logger: LoggerPort): ExtractionPipel
     const pipeline = new DocIngestionPipeline(logger);
     return {
         extract: (job: ExtractionJob) =>
-            withWorkspaceChatModels(job.companyId, () => pipeline.extract(job)),
+            withWorkspaceChatModels(job.companyId, "ingestion", () => pipeline.extract(job)),
         index: (job: IndexingJob) =>
-            withWorkspaceChatModels(job.companyId, () => pipeline.index(job)),
+            withWorkspaceChatModels(job.companyId, "ingestion", () => pipeline.index(job)),
     };
 }

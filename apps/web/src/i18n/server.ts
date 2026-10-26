@@ -1,12 +1,20 @@
 /**
  * The request's language, for server code that is not a component: route
- * handlers that answer in words (the chat route's model instruction) read it
- * here. Components use `getTranslations` / `useTranslations` instead.
+ * handlers that answer in words (their errors, the chat route's model
+ * instruction) read it here. Components use `getTranslations` /
+ * `useTranslations` instead.
  */
 
 import { cookies, headers } from "next/headers";
 
-import { TIME_ZONE_COOKIE, localeDefinition, resolveLocale, type Locale } from "./locales";
+import {
+    DEFAULT_LOCALE,
+    TIME_ZONE_COOKIE,
+    localeDefinition,
+    resolveLocale,
+    type Locale,
+} from "./locales";
+import { translatorFor, type Namespace } from "./translate";
 
 export async function getRequestLocale(): Promise<Locale> {
     const headerStore = await headers();
@@ -19,6 +27,19 @@ export async function getRequestLocale(): Promise<Locale> {
 }
 
 /**
+ * `getRequestLocale()`, or English outside a request (a worker, a script, a
+ * test) — for shared helpers that answer in words without being handed the
+ * request, such as the workspace guard's 401 and 403.
+ */
+export async function requestLocaleOrDefault(): Promise<Locale> {
+    try {
+        return await getRequestLocale();
+    } catch {
+        return DEFAULT_LOCALE;
+    }
+}
+
+/**
  * The language of the person behind `request`, from its own headers — for a
  * route handler that has the request in hand (and for its tests, which have
  * no Next request scope).
@@ -28,6 +49,17 @@ export function localeOfRequest(request: Request): Locale {
         cookieHeader: request.headers.get("cookie"),
         acceptLanguage: request.headers.get("accept-language"),
     });
+}
+
+/**
+ * A translator in the language of the person behind `request`, for the
+ * sentences a route handler writes for a screen:
+ *
+ *   const t = requestTranslator(request, "errors.api");
+ *   return NextResponse.json({ error: t("notFound") }, { status: 404 });
+ */
+export function requestTranslator<N extends Namespace>(request: Request, namespace: N) {
+    return translatorFor(localeOfRequest(request), namespace);
 }
 
 /** The browser's IANA zone, once ./TimeZoneSync has written it. */

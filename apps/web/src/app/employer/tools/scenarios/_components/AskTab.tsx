@@ -17,6 +17,7 @@ import type { ScenarioDetail, ScenarioInterview } from "~/lib/scenarios/types";
 
 import { ANALYST_ID } from "../api";
 import { AskBox, InterviewThread, askBlockedReason } from "./Interviews";
+import { Portrait } from "./Portrait";
 
 /**
  * Interview anyone in the run, or the analyst, who has read all of it.
@@ -44,6 +45,7 @@ export function AskTab({
             ? t("analyst")
             : (run.people.find(p => p.id === id)?.name ?? t("someone"));
     const thread = interviews.filter(i => i.agentId === agentId);
+    const selected = run.people.find(p => p.id === agentId);
     const asked = new Set(interviews.map(i => i.agentId));
 
     return (
@@ -85,8 +87,29 @@ export function AskTab({
                 </p>
             </div>
 
+            {selected && (
+                <div className="border-line bg-panel flex items-start gap-3 rounded-xl border p-3.5">
+                    <Portrait handle={selected.handle} size={44} stance={selected.stance} />
+                    <div className="min-w-0">
+                        <div className="text-ink text-[14px] font-semibold">{selected.name}</div>
+                        <div className="text-ink-2 text-[13px] leading-snug">{selected.role}</div>
+                        {selected.bio && (
+                            <p className="text-ink-3 mt-1 line-clamp-2 text-xs leading-snug">
+                                {selected.bio}
+                            </p>
+                        )}
+                    </div>
+                </div>
+            )}
             {interviewsError && <p className="text-danger text-xs">{interviewsError}</p>}
-            <InterviewThread interviews={thread} answererName={nameOf} />
+            <InterviewThread
+                interviews={thread}
+                answererName={nameOf}
+                answerer={id => {
+                    const person = run.people.find(p => p.id === id);
+                    return person ? <Portrait handle={person.handle} size={24} /> : null;
+                }}
+            />
             <AskBox key={agentId} agentId={agentId} blocked={blocked} onAsk={onAsk} />
         </div>
     );

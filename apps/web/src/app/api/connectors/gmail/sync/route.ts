@@ -6,6 +6,7 @@
 
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -23,6 +24,7 @@ const SyncRequestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const guard = await requireGmailWriter();
@@ -32,11 +34,13 @@ export async function POST(request: Request) {
 
             const raw = await request.text();
             const parsed = SyncRequestSchema.safeParse(raw.trim() ? JSON.parse(raw) : {});
-            if (!parsed.success) return createValidationError("Invalid request body.");
+            if (!parsed.success) return createValidationError(t("invalidBody"));
 
             const scope = await listScope(own.connection.id);
             if (scope.length === 0) {
-                return createValidationError("Pick at least one label or search to sync.");
+                return createValidationError(
+                    requestTranslator(request, "sources.server.gmail")("pickSomething")
+                );
             }
 
             await inngest.send({
@@ -48,9 +52,9 @@ export async function POST(request: Request) {
                 },
             });
 
-            return createSuccessResponse({ queued: true }, "Sync started.", 202);
+            return createSuccessResponse({ queued: true }, t("syncStarted"), 202);
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

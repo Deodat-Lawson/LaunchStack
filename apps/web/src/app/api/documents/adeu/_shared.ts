@@ -12,6 +12,9 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 import { document } from "@launchstack/store/schema";
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -36,6 +39,11 @@ function fail(status: number, error: string, message?: string): NextResponse {
     return NextResponse.json({ success: false, error, message }, { status });
 }
 
+/** English without a request (a test, a script). */
+function localeOf(request: Request | undefined): Locale {
+    return request ? localeOfRequest(request) : "en";
+}
+
 /** Is this a Word document? The editor only handles DOCX. */
 export function isDocx(fileType: string | null, mimeType: string | null, title: string): boolean {
     if (mimeType === DOCX_MIME) return true;
@@ -50,8 +58,12 @@ export function isDocx(fileType: string | null, mimeType: string | null, title: 
  */
 export async function loadDocument(
     documentId: number,
-    options?: { withBytes?: boolean }
+    /** `request` words the refusals in its reader's language. */
+    options?: { withBytes?: boolean; request?: Request }
 ): Promise<LoadResult> {
+    const locale = localeOf(options?.request);
+    const t = translatorFor(locale, "viewers.server.errors");
+    const sources = translatorFor(locale, "sources.server.errors");
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return { ok: false, response: ctx.response };
 
@@ -78,17 +90,20 @@ export async function loadDocument(
         // Same response whether it does not exist, belongs to another company,
         // or sits in a folder the caller cannot see — the distinction would
         // leak which ids are real.
-        return { ok: false, response: fail(404, "not_found", "Document not found") };
+        return {
+            ok: false,
+            response: fail(
+                404,
+                "not_found",
+                translatorFor(locale, "errors.api")("documentNotFound")
+            ),
+        };
     }
 
     if (!isDocx(row.fileType, row.mimeType, row.title)) {
         return {
             ok: false,
-            response: fail(
-                415,
-                "unsupported_type",
-                "The Word editor only opens .docx files. This document is a different format."
-            ),
+            response: fail(415, "unsupported_type", t("wordOnlyDocx")),
         };
     }
 
@@ -102,7 +117,7 @@ export async function loadDocument(
                     response: fail(
                         502,
                         "fetch_failed",
-                        `Could not read the document from storage (HTTP ${res.status}).`
+                        sources("storageReadHttp", { status: String(res.status) })
                     ),
                 };
             }
@@ -113,7 +128,7 @@ export async function loadDocument(
                 response: fail(
                     502,
                     "fetch_failed",
-                    err instanceof Error ? err.message : "Could not read the document from storage."
+                    err instanceof Error ? err.message : sources("storageRead")
                 ),
             };
         }
@@ -136,16 +151,20 @@ export async function loadDocument(
     };
 }
 
-/** Translate an adeu client error into a response the editor can act on. */
-export function adeuErrorResponse(err: unknown): NextResponse {
+/**
+ * Translate an adeu client error into a response the editor can act on, in
+ * the language of the person behind `request`. The service's own detail
+ * passes through.
+ */
+export function adeuErrorResponse(err: unknown, request?: Request): NextResponse {
     const name = (err as { name?: string } | null)?.name;
+    const locale = localeOf(request);
 
     if (name === "AdeuConfigError") {
         return fail(
             503,
             "service_not_configured",
-            "The document editing service is not configured. Set ADEU_SERVICE_URL and " +
-                "ADEU_SERVICE_API_KEY, and make sure the service is running."
+            translatorFor(locale, "viewers.server.errors")("editingNotConfigured")
         );
     }
 
@@ -157,5 +176,9 @@ export function adeuErrorResponse(err: unknown): NextResponse {
         return fail(status, "editing_failed", e.detail);
     }
 
-    return fail(500, "internal_error", err instanceof Error ? err.message : "Unknown error");
+    return fail(
+        500,
+        "internal_error",
+        err instanceof Error ? err.message : translatorFor(locale, "errors.api")("unknownError")
+    );
 }

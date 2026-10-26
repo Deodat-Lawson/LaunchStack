@@ -3,15 +3,15 @@ import type { NextRequest } from "next/server";
 
 import { getBrandMediaRow, readBrandMedia } from "~/server/brand/media";
 
-import { brandContext, error, handleBrandError } from "../../_http";
+import { brandContext, brandT, error, handleBrandError } from "../../_http";
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const auth = await brandContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         const row = await getBrandMediaRow(auth.ctx.companyId, id);
-        if (!row) return error("Image not found", 404);
+        if (!row) return error(brandT(request)("imageNotFound"), 404);
         const bytes = await readBrandMedia(row);
         return new Response(Buffer.from(bytes), {
             headers: {
@@ -23,6 +23,6 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
             },
         });
     } catch (err) {
-        return handleBrandError("GET media", err);
+        return handleBrandError("GET media", err, request);
     }
 }

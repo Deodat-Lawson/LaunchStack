@@ -250,8 +250,22 @@
     {
       "idx": 35,
       "version": "7",
-      "when": 1792863976623,
-      "tag": "20261024174616_marketing_runs",
+      "when": 1792878556252,
+      "tag": "20261024214916_ai_usage_daily",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1792882362467,
+      "tag": "20261024225242_drive_pick_destination",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1793057459632,
+      "tag": "20261026233059_marketing_runs",
       "breakpoints": true
     }
   ]

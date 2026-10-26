@@ -5,6 +5,8 @@ import { agentAiChatbotMemory } from "~/server/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMemorySchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -15,6 +17,8 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateMemorySchema);
@@ -22,7 +26,7 @@ export async function POST(request: NextRequest) {
         const { chatId, memoryType, key, value, importance, embedding, expiresAt } =
             validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const memoryId = randomUUID();
@@ -50,7 +54,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error storing memory:", error);
-        return NextResponse.json({ error: "Failed to store memory" }, { status: 500 });
+        return NextResponse.json({ error: t("storeMemory") }, { status: 500 });
     }
 }
 
@@ -58,6 +62,9 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
+    const tValidation = translatorFor(locale, "errors.validation");
 
     try {
         const { searchParams } = new URL(request.url);
@@ -65,10 +72,10 @@ export async function GET(request: NextRequest) {
         const memoryType = searchParams.get("memoryType");
 
         if (!chatId) {
-            return NextResponse.json({ error: "chatId is required" }, { status: 400 });
+            return NextResponse.json({ error: tValidation("chatIdRequired") }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const whereConditions = memoryType
@@ -102,6 +109,6 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching memories:", error);
-        return NextResponse.json({ error: "Failed to fetch memories" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchMemories") }, { status: 500 });
     }
 }

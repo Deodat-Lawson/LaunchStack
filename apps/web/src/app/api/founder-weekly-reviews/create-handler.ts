@@ -13,7 +13,7 @@ import {
 import type { FounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import type { createRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
-import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
+import { failIn, handleWeeklyReviewError, ok, safeRun } from "~/server/founder-weekly-review/http";
 import { logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
 
 const CreateSchema = z.object({
@@ -53,13 +53,13 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
     return async function POST(request: Request) {
         const session = await getServerSession();
         const userId = session?.user.id;
-        if (!userId) return fail("Unauthorized", 401);
+        if (!userId) return failIn(request, "unauthorized", 401);
         try {
             // Authorization precedes all workflow persistence: invalid callers must
             // never create a company-scoped collection job.
             const actor = await deps.actorResolver.resolve(userId);
             const parsed = CreateSchema.safeParse(await request.json().catch(() => null));
-            if (!parsed.success) return fail("Invalid request", 400);
+            if (!parsed.success) return failIn(request, "invalidRequest", 400);
             const existing = await deps.repository.getByCompanyAndRequestKey(
                 actor.companyId,
                 parsed.data.requestKey
@@ -92,7 +92,7 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
             await deps.sendDispatchRequested();
             return ok({ run: safeRun(run) }, 202);
         } catch (error) {
-            return handleRouteError("founder-weekly-review", error);
+            return handleWeeklyReviewError(error, request);
         }
     };
 }

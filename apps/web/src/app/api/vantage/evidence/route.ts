@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         });
         return json({ evidence: items });
     } catch (err) {
-        return handleVantageError("GET evidence", err);
+        return handleVantageError("GET evidence", err, request);
     }
 }
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = EvidenceSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const item = await createEvidence({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -50,6 +50,6 @@ export async function POST(request: NextRequest) {
         });
         return json({ evidence: item }, 201);
     } catch (err) {
-        return handleVantageError("POST evidence", err);
+        return handleVantageError("POST evidence", err, request);
     }
 }

@@ -511,9 +511,9 @@ export function TranscriptPanel({
                                             })}
                                             onClick={() => onSeek(segment.start)}
                                             className={cn(
-                                                "group flex w-full items-start gap-3 rounded-lg border-l-2 border-transparent px-3 py-1.5 text-left transition-colors",
+                                                "group flex w-full items-start gap-3 rounded-lg px-3 py-1.5 text-left transition-colors",
                                                 "hover:bg-panel-2 focus-visible:ring-brand/50 outline-none focus-visible:ring-[3px]",
-                                                isActive && "border-brand bg-brand-soft",
+                                                isActive && "bg-brand-soft",
                                                 isCited && "bg-warn-soft ring-warn/60 ring-1"
                                             )}
                                         >

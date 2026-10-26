@@ -84,9 +84,6 @@ export function MeetingsHome({
                     one word to a line. */}
                 <header className="mb-8 flex flex-wrap items-start gap-x-6 gap-y-4">
                     <div className="min-w-[min(100%,280px)] flex-1">
-                        <div className="mono text-ink-3 mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em]">
-                            {t("eyebrow")}
-                        </div>
                         <h1 className="display text-ink @max-sm:text-[23px] m-0 text-[30px] leading-[1.1] tracking-tight">
                             {t("heading")}
                         </h1>

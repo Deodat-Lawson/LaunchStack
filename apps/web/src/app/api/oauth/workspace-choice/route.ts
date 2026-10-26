@@ -12,6 +12,7 @@ import { getServerSession } from "~/server/auth";
 import { db } from "~/server/db";
 import { activeWorkspaceOptions } from "~/server/mcp/connect-request";
 import { flowKeyOf, recordWorkspaceChoice } from "~/server/mcp/oauth-workspace";
+import { requestTranslator } from "~/i18n/server";
 
 const Body = z.object({
     companyId: z.string().regex(/^\d+$/),
@@ -20,28 +21,27 @@ const Body = z.object({
 });
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "auth.server.errors");
     const session = await getServerSession();
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session) {
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("unauthorized") },
+            { status: 401 }
+        );
+    }
     // JSON only: a cross-site form can post text/plain with a session cookie
     // attached, but cannot send application/json without a CORS preflight.
     if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
-        return NextResponse.json({ error: "Expected JSON" }, { status: 415 });
+        return NextResponse.json({ error: t("expectedJson") }, { status: 415 });
     }
     const parsed = Body.safeParse(await request.json().catch(() => null));
-    if (!parsed.success) return NextResponse.json({ error: "Pick a workspace" }, { status: 400 });
+    if (!parsed.success) return NextResponse.json({ error: t("pickWorkspace") }, { status: 400 });
     const { companyId, oauthQuery } = parsed.data;
     const flowKey = flowKeyOf(oauthQuery);
-    if (!flowKey)
-        return NextResponse.json(
-            { error: "Start connecting again from your assistant" },
-            { status: 400 }
-        );
+    if (!flowKey) return NextResponse.json({ error: t("startAgain") }, { status: 400 });
     const options = await activeWorkspaceOptions(session.user.id);
     if (!options.some(o => o.id === companyId)) {
-        return NextResponse.json(
-            { error: "You're not an active member of that workspace" },
-            { status: 403 }
-        );
+        return NextResponse.json({ error: t("notActiveMemberThere") }, { status: 403 });
     }
     await recordWorkspaceChoice(db, session.session.id, flowKey, BigInt(companyId));
     return NextResponse.json({ ok: true });

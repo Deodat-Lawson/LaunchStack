@@ -27,7 +27,7 @@ export function SourceProgressStatus({ source }: { source: WorkspaceSource }) {
     const tp = useTranslations("sources.progress");
     const failureCopy = useSourceFailureCopy();
     const { percent, label, waiting } = describeSourceProgress(source.processing, tp);
-    const tone = waiting ? "text-warn" : "text-brand";
+    const tone = waiting ? "text-warn-ink" : "text-brand";
 
     const line = (
         <div className="flex min-w-0 items-center gap-1.5 whitespace-nowrap">

@@ -34,10 +34,10 @@ interface ReviewPaneProps {
 /** Labels are `viewers.review.kinds.<kind>`. */
 const KIND_META: Record<ReviewEntry["kind"], { Icon: typeof Check; tone: string }> = {
     replacement: { Icon: Type, tone: "text-brand" },
-    insert: { Icon: PlusCircle, tone: "text-success" },
+    insert: { Icon: PlusCircle, tone: "text-success-ink" },
     delete: { Icon: MinusCircle, tone: "text-danger" },
-    format: { Icon: Type, tone: "text-info" },
-    comment: { Icon: MessageSquare, tone: "text-warn" },
+    format: { Icon: Type, tone: "text-info-ink" },
+    comment: { Icon: MessageSquare, tone: "text-warn-ink" },
 };
 
 type ReviewT = ReturnType<typeof useTranslations<"viewers.review">>;
@@ -193,7 +193,7 @@ function ReviewCard({
                         <span className="text-danger bg-danger-soft rounded px-1.5 py-1 line-through decoration-1">
                             {entry.oldText || "—"}
                         </span>
-                        <span className="text-success bg-success-soft rounded px-1.5 py-1">
+                        <span className="text-success-ink bg-success-soft rounded px-1.5 py-1">
                             {entry.newText || "—"}
                         </span>
                     </div>
@@ -202,7 +202,7 @@ function ReviewCard({
                         {entry.text || "—"}
                     </span>
                 ) : entry.kind === "insert" ? (
-                    <span className="text-success bg-success-soft inline-block rounded px-1.5 py-1">
+                    <span className="text-success-ink bg-success-soft inline-block rounded px-1.5 py-1">
                         {entry.text || "—"}
                     </span>
                 ) : entry.kind === "comment" ? (
@@ -232,7 +232,7 @@ function ReviewCard({
                     <Button
                         size="sm"
                         variant="ghost"
-                        className="text-success hover:bg-success-soft hover:text-success h-7 px-2 text-xs"
+                        className="text-success-ink hover:bg-success-soft hover:text-success-ink h-7 px-2 text-xs"
                         disabled={disabled}
                         onClick={() => onResolve(entry, "ACCEPT")}
                     >

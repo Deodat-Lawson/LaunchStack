@@ -23,6 +23,8 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -48,11 +50,12 @@ function serializeWorkspace(row: RepoWorkspaceRow) {
 }
 
 export async function POST(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "agents.server.repoExplainer");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("connectors.manage")) {
-            return createForbiddenError("Only management roles can connect repositories");
+            return createForbiddenError(t("managersOnlyConnect"));
         }
 
         const validation = await validateRequestBody(request, ConnectRepoSchema);
@@ -60,9 +63,7 @@ export async function POST(request: Request) {
 
         const parsed = parseGitHubUrl(validation.data.url);
         if (!parsed) {
-            return createValidationError(
-                'Invalid GitHub URL — expected "https://github.com/owner/repo" or "owner/repo"'
-            );
+            return createValidationError(t("invalidRepoUrl"));
         }
 
         const { created, workspace } = await createRepoWorkspace({
@@ -84,11 +85,11 @@ export async function POST(request: Request) {
             created ? 201 : 200
         );
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -96,6 +97,6 @@ export async function GET() {
         const workspaces = await listRepoWorkspaces(BigInt(ctx.data.companyId));
         return createSuccessResponse({ workspaces: workspaces.map(serializeWorkspace) });
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

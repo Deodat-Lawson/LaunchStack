@@ -127,7 +127,7 @@ it("GET of another workspace's run is not found", async () => {
 
 it("the list is this member's unfinished runs, without their events", async () => {
     mockListActive.mockResolvedValue([run()]);
-    const res = await LIST();
+    const res = await LIST(new Request("http://x/api/marketing-pipeline/runs"));
     const body = (await res.json()) as { data: { runs: Array<{ id: string; events: unknown[] }> } };
     expect(body.data.runs.map(r => r.id)).toEqual(["run-1"]);
     expect(body.data.runs[0]!.events).toEqual([]);
@@ -137,5 +137,5 @@ it("the list is this member's unfinished runs, without their events", async () =
 it("a signed-out caller gets the auth response", async () => {
     const { NextResponse } = jest.requireActual<typeof NextServer>("next/server");
     mockCtx.mockResolvedValue({ success: false, response: NextResponse.json({}, { status: 401 }) });
-    expect((await LIST()).status).toBe(401);
+    expect((await LIST(new Request("http://x/api/marketing-pipeline/runs"))).status).toBe(401);
 });

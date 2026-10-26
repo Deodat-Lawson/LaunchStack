@@ -18,6 +18,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { EVIDENCE_KINDS, vantageApi, type EvidenceDto, type VantageEvidenceKind } from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
@@ -37,6 +38,7 @@ type Filter = "all" | VantageEvidenceKind;
  * has been logged for over a week.
  */
 export function EvidenceScreen() {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.evidence");
     const tk = useTranslations("vantage.evidenceKind");
     const tc = useTranslations("common");
@@ -83,7 +85,7 @@ export function EvidenceScreen() {
             list.mutate(current => ({ evidence: current.evidence.filter(x => x.id !== e.id) }));
             toast(t("removed"));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : t("removeError"));
+            toast.error(errorText(err, t("removeError")));
         }
     };
 
@@ -95,7 +97,7 @@ export function EvidenceScreen() {
                 evidence: current.evidence.map(x => (x.id === e.id ? evidence : x)),
             }));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : t("visibilityError"));
+            toast.error(errorText(err, t("visibilityError")));
         }
     };
 

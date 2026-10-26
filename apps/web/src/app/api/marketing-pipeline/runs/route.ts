@@ -6,6 +6,8 @@
 import { MarketingPipelineInputSchema } from "@launchstack/pipelines/marketing";
 import { createMarketingRun, listActiveMarketingRuns } from "@launchstack/pipelines/marketing/runs";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { fail, ok, readJson } from "~/server/api/responses";
 import { dispatchMarketingRun } from "~/server/marketing/executor";
@@ -14,12 +16,15 @@ import { toRunView } from "~/server/marketing/run-view";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
         if (!validation.success) {
-            return fail("Invalid input", 400, { errors: validation.error.flatten() });
+            return fail(translatorFor(locale, "errors.api")("invalidInput"), 400, {
+                errors: validation.error.flatten(),
+            });
         }
         const debug = new URL(request.url).searchParams.get("debug") === "true";
         const run = await createMarketingRun({
@@ -29,22 +34,23 @@ export async function POST(request: Request) {
             debug,
         });
         await dispatchMarketingRun(run);
-        return ok({ run: toRunView(run) }, 202);
+        return ok({ run: toRunView(run, 0, locale) }, 202);
     } catch (error) {
         console.error("[marketing-run] POST error:", error);
-        return fail("Failed to start the marketing pipeline", 500);
+        return fail(translatorFor(locale, "growth.server.marketing")("runStartFailed"), 500);
     }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+    const locale = localeOfRequest(request);
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         const runs = await listActiveMarketingRuns(ctx.data.companyId, ctx.data.authUserId);
         // The list carries no events; the poll of one run replays them.
-        return ok({ runs: runs.map(run => ({ ...toRunView(run, run.events.length) })) });
+        return ok({ runs: runs.map(run => ({ ...toRunView(run, run.events.length, locale) })) });
     } catch (error) {
         console.error("[marketing-run] GET error:", error);
-        return fail("Failed to list marketing pipeline runs", 500);
+        return fail(translatorFor(locale, "growth.server.marketing")("runListFailed"), 500);
     }
 }

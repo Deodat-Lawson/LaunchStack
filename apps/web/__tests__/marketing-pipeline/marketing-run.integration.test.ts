@@ -23,7 +23,7 @@ import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/te
 jest.mock("next/server", () => ({ after: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (_companyId: unknown, fn: () => unknown) => fn(),
+    withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));
 
 import {

@@ -72,5 +72,32 @@
     "askAi": "✦ 问 AI",
     "askAiTitle": "在对话中就这段内容提问",
     "pinTitle": "笔记 {ordinal}"
+  },
+  "server": {
+    "errors": {
+      "invalidNoteId": "笔记 ID 无效",
+      "invalidNoteIdLower": "笔记 ID 无效",
+      "noteNotFound": "未找到该笔记",
+      "fetchNotesFailed": "笔记加载失败",
+      "createFailed": "创建笔记失败",
+      "fetchFailed": "笔记加载失败",
+      "updateFailed": "更新笔记失败",
+      "deleteFailed": "删除笔记失败",
+      "resolveFailed": "链接解析失败",
+      "searchFailed": "搜索失败",
+      "backlinksFailed": "反向链接加载失败",
+      "selectionRequired": "请先选择一段文本",
+      "invalidIntent": "无效的捕获类型",
+      "aiCaptureFailed": "AI 捕获失败",
+      "versionRequiresDocument": "指定 versionId 时必须同时提供 documentId",
+      "invalidDocumentIdField": "documentId 无效",
+      "invalidVersionIdField": "versionId 无效",
+      "versionNotFound": "未找到该文档版本"
+    },
+    "captureTitles": {
+      "summary": "摘要",
+      "action": "待办事项",
+      "decision": "决策"
+    }
   }
 }

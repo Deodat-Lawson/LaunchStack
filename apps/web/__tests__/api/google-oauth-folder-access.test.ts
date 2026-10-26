@@ -65,17 +65,23 @@ async function requestedScopes(query: string): Promise<string[]> {
     return (authorize.searchParams.get("scope") ?? "").split(" ");
 }
 
-/** Consent, then come back from Google with a token response that has no `scope`. */
-async function grantWithoutScope(query: string): Promise<string> {
+/** Consent, then come back from Google (`extra` adds to its query); where the browser lands. */
+async function returnFromGoogle(query: string, extra = "code=c"): Promise<URL> {
     const consent = await start(new Request(`${ORIGIN}/api/connectors/google/oauth/start${query}`));
     const state = new URL(consent.headers.get("location") ?? "").searchParams.get("state") ?? "";
     const nonce = /gdrive_oauth_state=([^;]+)/.exec(consent.headers.get("set-cookie") ?? "")?.[1];
     const back = await callback(
-        new Request(`${ORIGIN}/api/connectors/google/oauth/callback?code=c&state=${state}`, {
+        new Request(`${ORIGIN}/api/connectors/google/oauth/callback?${extra}&state=${state}`, {
             headers: { cookie: `${GOOGLE_OAUTH_STATE_COOKIE}=${nonce}` },
         })
     );
-    expect(back.headers.get("location")).toContain("result=connected");
+    return new URL(back.headers.get("location") ?? "");
+}
+
+/** Consent, then come back from Google with a token response that has no `scope`. */
+async function grantWithoutScope(query: string): Promise<string> {
+    const back = await returnFromGoogle(query);
+    expect(back.searchParams.get("result")).toBe("connected");
     const [input] = (upsertGoogleConnection as jest.Mock).mock.calls.at(-1) as [{ scopes: string }];
     return input.scopes;
 }
@@ -126,5 +132,24 @@ describe("when Google's token response leaves scope out", () => {
         const scopes = (await grantWithoutScope("")).split(" ");
         expect(scopes).toContain(DRIVE_FILE_SCOPE);
         expect(scopes).not.toContain(DRIVE_READONLY_SCOPE);
+    });
+});
+
+describe("where the browser lands afterwards", () => {
+    // Drive has no Add source tab of its own: a plain connect comes back to
+    // Files, folder access to Folder, where it was asked for.
+    it("comes back to Files after a plain connect", async () => {
+        const back = await returnFromGoogle("");
+        expect(back.pathname).toBe("/employer/documents");
+        expect(back.searchParams.get("connector")).toBe("google-drive");
+        expect(back.searchParams.get("result")).toBe("connected");
+        expect(back.searchParams.get("tab")).toBeNull();
+    });
+
+    it("comes back to Folder after Allow folder access, granted or cancelled", async () => {
+        expect((await returnFromGoogle("?access=folders")).searchParams.get("tab")).toBe("folder");
+        const cancelled = await returnFromGoogle("?access=folders", "error=access_denied");
+        expect(cancelled.searchParams.get("result")).toBe("denied");
+        expect(cancelled.searchParams.get("tab")).toBe("folder");
     });
 });

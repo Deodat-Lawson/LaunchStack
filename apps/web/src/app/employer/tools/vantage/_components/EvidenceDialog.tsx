@@ -23,6 +23,7 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { EVIDENCE_KINDS, vantageApi, type EvidenceDto, type VantageEvidenceKind } from "../api";
 import { todayIso } from "../_lib/format";
@@ -47,6 +48,7 @@ export function EvidenceDialog({
     defaultKind?: VantageEvidenceKind;
     onSaved: (saved: EvidenceDto) => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.evidenceDialog");
     const tk = useTranslations("vantage.evidenceKind");
     const tc = useTranslations("common");
@@ -105,7 +107,7 @@ export function EvidenceDialog({
             onSaved(evidence);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("saveError"));
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }

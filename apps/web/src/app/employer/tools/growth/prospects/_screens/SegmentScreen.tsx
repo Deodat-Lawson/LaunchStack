@@ -11,7 +11,9 @@ import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SegmentField } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 import { useResource } from "~/lib/tools/useResource";
 import { InlineError } from "~/components/tools/EmptyState";
@@ -27,8 +29,13 @@ function FieldRow({
 }) {
     const t = useTranslations("growth.prospects.segment");
     const tc = useTranslations("common");
+    const word = useCopyText();
+    const label = word(field.labelCopy, field.label);
     const [editing, setEditing] = useState(false);
     const isList = Array.isArray(field.value);
+    // A worded value, for display only: editable fields carry their own words.
+    const listCopies = Array.isArray(field.valueCopy) ? field.valueCopy : null;
+    const valueCopy = field.valueCopy && !Array.isArray(field.valueCopy) ? field.valueCopy : null;
     const [draft, setDraft] = useState(
         isList ? (field.value as string[]).join(", ") : String(field.value)
     );
@@ -53,7 +60,7 @@ function FieldRow({
 
     return (
         <div className="border-line-2 @max-md:grid-cols-1 grid grid-cols-[150px_1fr_auto] gap-x-5 gap-y-2 border-t py-3.5 first:border-t-0">
-            <div className="text-ink-2 pt-0.5 text-[13px]">{field.label}</div>
+            <div className="text-ink-2 pt-0.5 text-[13px]">{label}</div>
             <div className="min-w-0">
                 {editing ? (
                     <div className="flex flex-col gap-2">
@@ -63,7 +70,7 @@ function FieldRow({
                                 value={draft}
                                 onChange={e => setDraft(e.target.value)}
                                 className="h-8 text-[13px]"
-                                aria-label={field.label}
+                                aria-label={label}
                             />
                         ) : (
                             <Textarea
@@ -72,7 +79,7 @@ function FieldRow({
                                 value={draft}
                                 onChange={e => setDraft(e.target.value)}
                                 className="text-[13px]"
-                                aria-label={field.label}
+                                aria-label={label}
                             />
                         )}
                         {isList && <span className="text-ink-3 text-xs">{t("separateItems")}</span>}
@@ -87,7 +94,7 @@ function FieldRow({
                     </div>
                 ) : isList ? (
                     <div className="flex flex-wrap gap-1.5">
-                        {(field.value as string[]).map(v => (
+                        {(field.value as string[]).map((v, i) => (
                             <span
                                 key={v}
                                 className={cn(
@@ -95,7 +102,7 @@ function FieldRow({
                                     field.key === "seedDomains" && "font-mono text-[12px]"
                                 )}
                             >
-                                {v}
+                                {word(listCopies?.[i], v)}
                             </span>
                         ))}
                         {(field.value as string[]).length === 0 && (
@@ -103,16 +110,16 @@ function FieldRow({
                         )}
                     </div>
                 ) : (
-                    <div className="text-ink text-sm">{field.value}</div>
+                    <div className="text-ink text-sm">{word(valueCopy, String(field.value))}</div>
                 )}
                 {field.sources.length > 0 && !editing && (
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
-                        {field.sources.map(s => (
+                        {field.sources.map((s, i) => (
                             <span
                                 key={s}
                                 className="bg-panel-2 text-ink-3 rounded px-1.5 py-px text-[11px]"
                             >
-                                {s}
+                                {word(field.sourcesCopy?.[i], s)}
                             </span>
                         ))}
                     </div>
@@ -124,7 +131,7 @@ function FieldRow({
                         type="button"
                         onClick={() => setEditing(true)}
                         className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-xs outline-none focus-visible:ring-[3px]"
-                        aria-label={t("editAria", { label: field.label })}
+                        aria-label={t("editAria", { label })}
                     >
                         <Pencil className="size-3" /> {tc("actions.edit")}
                     </button>
@@ -137,6 +144,7 @@ function FieldRow({
 export function SegmentScreen() {
     const t = useTranslations("growth.prospects.segment");
     const { shortDate } = useGrowthFormat();
+    const errorText = useErrorText();
     const { segmentId, reloadSegments } = useProspects();
     const res = useResource(segmentId ? `segment:${segmentId}` : null, () =>
         prospectsApi.segment(segmentId!)
@@ -153,7 +161,7 @@ export function SegmentScreen() {
             await reloadSegments();
             toast.success(t("confirmed"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("confirmFailed"));
+            toast.error(errorText(e, t("confirmFailed")));
         } finally {
             setBusy(null);
         }
@@ -166,7 +174,7 @@ export function SegmentScreen() {
             res.mutate(() => ({ segment }));
             toast.success(t("rederived", { count: segment.basis.documents }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("rederiveFailed"));
+            toast.error(errorText(e, t("rederiveFailed")));
         } finally {
             setBusy(null);
         }
@@ -179,7 +187,7 @@ export function SegmentScreen() {
             await reloadSegments();
             toast.success(t("saved"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveFailed"));
+            toast.error(errorText(e, t("saveFailed")));
             throw e;
         }
     };

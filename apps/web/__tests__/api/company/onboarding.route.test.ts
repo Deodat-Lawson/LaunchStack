@@ -108,7 +108,7 @@ describe("GET /api/company/onboarding", () => {
         };
         mockLoad.mockResolvedValue(state);
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/company/onboarding"));
         expect(res.status).toBe(200);
         await expect(res.json()).resolves.toEqual(state);
         expect(mockLoad).toHaveBeenCalledWith(expect.objectContaining({ companyId: BigInt(5) }));

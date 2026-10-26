@@ -13,6 +13,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
+
 import { assertPublicHttpUrl, fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { processDocumentUpload } from "~/server/services/document-upload";
@@ -22,12 +26,12 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { FOLDER_EDIT_DENIED, canEditFolder } from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { hasReadableText, websiteDocumentMarker, websiteHost } from "~/lib/website-document";
 
 const WebsiteUploadSchema = z.object({
-    url: z.string().url("A valid URL is required"),
+    url: z.string().url(V.validUrlRequired),
     title: z.string().optional(),
     category: z.string().optional(),
     crawl: z.boolean().optional(),
@@ -120,6 +124,8 @@ async function fetchPageWithJsRender(
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "upload.server.errors");
     const ctx = await requireWorkspacePermission("documents.upload");
     if (!ctx.success) return ctx.response;
 
@@ -133,7 +139,10 @@ export async function POST(request: Request) {
             const { url, title, category, crawl, maxDepth, maxPages, jsRender } = validation.data;
 
             if (category !== undefined && !(await canEditFolder(ctx.data, category))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "sources.server.errors")("folderEditDenied") },
+                    { status: 403 }
+                );
             }
 
             // SSRF guard: http(s) only, and the host must resolve to a public
@@ -181,7 +190,11 @@ export async function POST(request: Request) {
                         success: true,
                         crawlGroupId,
                         eventIds: ids,
-                        message: `Crawl started for ${parsedUrl.hostname} (up to ${maxPages ?? DEFAULT_MAX_PAGES} pages, depth ${maxDepth ?? DEFAULT_MAX_DEPTH})`,
+                        message: t("crawlStarted", {
+                            host: parsedUrl.hostname,
+                            pages: maxPages ?? DEFAULT_MAX_PAGES,
+                            depth: maxDepth ?? DEFAULT_MAX_DEPTH,
+                        }),
                         sourceUrl: url,
                     },
                     { status: 202 }
@@ -206,10 +219,7 @@ export async function POST(request: Request) {
             page ??= await fetchPage(url);
 
             if (!page) {
-                return NextResponse.json(
-                    { error: "Failed to fetch URL or URL did not return valid HTML" },
-                    { status: 502 }
-                );
+                return NextResponse.json({ error: t("websiteFetchFailed") }, { status: 502 });
             }
 
             // A page that builds itself with JavaScript arrives as an empty
@@ -218,7 +228,7 @@ export async function POST(request: Request) {
             if (!hasReadableText(page.html)) {
                 return NextResponse.json(
                     {
-                        error: `There is no text on ${websiteHost(page.finalUrl || url)} we can read; sites that build their pages with JavaScript look empty to us`,
+                        error: t("websiteNoText", { host: websiteHost(page.finalUrl || url) }),
                     },
                     { status: 422 }
                 );
@@ -276,7 +286,7 @@ export async function POST(request: Request) {
                     success: true,
                     jobId: uploadResult.jobId,
                     eventIds: uploadResult.eventIds,
-                    message: `"${resolvedTitle}" is being indexed`,
+                    message: t("pageIndexing", { title: resolvedTitle }),
                     document: uploadResult.document,
                     sourceUrl: url,
                     jsRendered: usedJsRender,
@@ -295,13 +305,19 @@ export async function POST(request: Request) {
             // Collapsing that into a 500 hides an actionable, operator-fixable
             // condition behind "something went wrong".
             if (error instanceof UploadAuthorizationError) {
-                return NextResponse.json({ error: error.message }, { status: error.status });
+                return NextResponse.json(
+                    { error: wordOr(error.copy, error.message, locale) },
+                    { status: error.status }
+                );
             }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(
                 {
-                    error: "Failed to index website",
-                    details: error instanceof Error ? error.message : "Unknown error",
+                    error: t("websiteIndexFailed"),
+                    details:
+                        error instanceof Error
+                            ? error.message
+                            : translatorFor(locale, "errors.api")("unknownError"),
                 },
                 { status: 500 }
             );

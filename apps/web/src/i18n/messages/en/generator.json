@@ -690,5 +690,34 @@
       "allRequired": "All required values present",
       "placeholders": "Field placeholders preserved in source HTML"
     }
+  },
+  "server": {
+    "errors": {
+      "invalidRequestBody": "Invalid request body",
+      "bodyMustBeJson": "Request body must be valid JSON",
+      "invalidAction": "Invalid action",
+      "invalidFormat": "Invalid format",
+      "fetchDocuments": "Failed to fetch documents",
+      "createDocument": "Failed to create document",
+      "updateDocument": "Failed to update document",
+      "deleteDocument": "Failed to delete document",
+      "documentDeleted": "Document deleted successfully",
+      "documentNotFound": "Document not found or access denied",
+      "formatCitations": "Failed to format citations",
+      "exportFailed": "Failed to export document",
+      "pdfNotConfigured": "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL (and its basic-auth pair), or export as HTML instead.",
+      "generateFailed": "Failed to generate content",
+      "grammarFailed": "Failed to check grammar",
+      "initializeFailed": "Failed to initialize document",
+      "outlineFailed": "Failed to generate outline",
+      "researchFailed": "Failed to perform research",
+      "legalChatFailed": "Failed to process legal chat",
+      "unknownTemplate": "Unknown template: {templateId}",
+      "templateNoDocument": "Template produced no document",
+      "legalPdfNotConfigured": "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL (and its basic-auth pair), or download the document as DOCX instead.",
+      "legalGenerateFailed": "Failed to generate legal document",
+      "trackChangesNotConfigured": "The Adeu redlining service is not set up. Add ADEU_SERVICE_URL to your .env file (e.g. http://localhost:8000) and ensure the service is running.",
+      "trackChangesError": "Track Changes service error"
+    }
   }
 }

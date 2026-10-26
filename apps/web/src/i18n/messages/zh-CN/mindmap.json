@@ -854,5 +854,28 @@
   },
   "viewer": {
     "opening": "正在打开…"
+  },
+  "server": {
+    "errors": {
+      "notFound": "未找到该思维导图",
+      "listFailed": "思维导图加载失败",
+      "createFailed": "创建思维导图失败",
+      "loadFailed": "思维导图加载失败",
+      "saveFailed": "保存思维导图失败",
+      "deleteFailed": "删除思维导图失败",
+      "changedElsewhere": "此思维导图已在别处被修改。请重新加载以获取最新版本。",
+      "duplicateFailed": "复制思维导图失败",
+      "historyLoadFailed": "版本历史记录加载失败",
+      "revisionIdRequired": "缺少 revisionId",
+      "revisionNotFound": "未找到该版本",
+      "restoreFailed": "恢复版本失败",
+      "presenceFailed": "更新在线状态失败",
+      "leaveFailed": "离开失败",
+      "publishFailed": "发布思维导图失败",
+      "editDenied": "你可以查看此思维导图，但不能修改它。",
+      "deleteDenied": "只有创建此思维导图的人，或管理其所在文件夹的人，才能删除它。",
+      "unfiledDenied": "只有创建此思维导图的人才能将它移到“未归档”：那里的草稿仅对其创建者可见。",
+      "moveWidens": "把此思维导图移到那里，会让目前看不到它的人看到它。草稿沿用所在文件夹的访问权限，因此如需共享，请发布它，或更改该文件夹的可见范围。"
+    }
   }
 }

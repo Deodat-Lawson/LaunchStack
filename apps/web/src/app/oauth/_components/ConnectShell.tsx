@@ -74,12 +74,12 @@ function ClientIdentity({ client }: { client: ConnectingClient }) {
                     </div>
                 ) : null}
                 {client.addedByWorkspace ? (
-                    <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
+                    <div className="text-success-ink mt-1.5 flex items-center gap-1.5 text-[12px]">
                         <BadgeCheck className="size-3.5" aria-hidden />
                         {t("addedByAdmin", { workspace: client.addedByWorkspace })}
                     </div>
                 ) : client.verifiedDomain ? (
-                    <div className="text-success mt-1.5 flex items-center gap-1.5 text-[12px]">
+                    <div className="text-success-ink mt-1.5 flex items-center gap-1.5 text-[12px]">
                         <BadgeCheck className="size-3.5" aria-hidden />
                         {t("identityPublished", { domain: client.verifiedDomain })}
                     </div>

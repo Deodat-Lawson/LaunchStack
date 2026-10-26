@@ -27,9 +27,9 @@ import type { UploadItem } from "../_lib/useUploads";
 
 const KIND_LOOK: Record<FileKind, { icon: LucideIcon; tile: string }> = {
     pdf: { icon: FileText, tile: "bg-danger-soft text-danger" },
-    doc: { icon: FileText, tile: "bg-info-soft text-info" },
-    slides: { icon: Presentation, tile: "bg-warn-soft text-warn" },
-    sheet: { icon: FileSpreadsheet, tile: "bg-success-soft text-success" },
+    doc: { icon: FileText, tile: "bg-info-soft text-info-ink" },
+    slides: { icon: Presentation, tile: "bg-warn-soft text-warn-ink" },
+    sheet: { icon: FileSpreadsheet, tile: "bg-success-soft text-success-ink" },
     web: { icon: Globe, tile: "bg-brand-soft text-brand-ink" },
     text: { icon: FileText, tile: "bg-panel-2 text-ink-2" },
     transcript: { icon: FileAudio, tile: "bg-panel-2 text-ink-2" },

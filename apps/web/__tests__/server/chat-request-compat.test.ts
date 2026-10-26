@@ -41,4 +41,13 @@ describe("deprecated chat request selectors", () => {
         expect(result).toMatchObject({ ok: false, status: 400 });
         expect((result as { message: string }).message).toMatch(/provider selection/);
     });
+
+    it("words the refusal for a Chinese reader and keeps the English otherwise", () => {
+        expect(validateDeprecatedChatSelection({ model: "x" }, "en")).toEqual(MODEL_OVERRIDE);
+        expect(validateDeprecatedChatSelection({ model: "x" }, "zh-CN")).toEqual({
+            ok: false,
+            status: 400,
+            message: "已禁用按请求覆盖模型；每条路由使用的模型由运维人员配置",
+        });
+    });
 });

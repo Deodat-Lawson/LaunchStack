@@ -33,6 +33,8 @@ import {
 import { inngest } from "~/server/inngest/client";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
+import { type RunFailureKey, runFailureEnglish } from "./run-view";
+
 export type MarketingExecutor = "inline" | "worker";
 
 export function readMarketingExecutor(
@@ -48,19 +50,25 @@ export const MAX_ATTEMPTS = 3;
 
 export type AttemptOutcome = "completed" | "failed" | "retry" | "skipped";
 
-/** What the screen shows when a run fails, with a hint for the usual misconfigurations. */
-export function failureMessage(error: unknown): string {
+/** Which failure a run hit, with a hint for the usual misconfigurations. */
+export function failureKey(error: unknown): RunFailureKey {
     const raw = (error instanceof Error ? error.message : String(error)).toLowerCase();
-    const hint =
-        raw.includes("chat_base_url") ||
+    return raw.includes("chat_base_url") ||
         raw.includes("chat model") ||
         raw.includes("route") ||
         raw.includes("api_key")
-            ? " Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid."
-            : raw.includes("company")
-              ? " Ensure your user has a valid company profile."
-              : "";
-    return `Failed to run marketing pipeline${hint}`;
+        ? "runFailedChat"
+        : raw.includes("company")
+          ? "runFailedCompany"
+          : "runFailed";
+}
+
+/**
+ * What the run stores when it fails: the English of its failure key. The run
+ * view words it in the reader's language when it is read back.
+ */
+export function failureMessage(error: unknown): string {
+    return runFailureEnglish(failureKey(error));
 }
 
 export interface ExecutorDeps {
@@ -100,7 +108,7 @@ export async function attemptMarketingRun(
     const checkpoints = { ...run.checkpoints };
 
     try {
-        const result = await withWorkspaceChatModels(companyId, () =>
+        const result = await withWorkspaceChatModels(companyId, "marketing", () =>
             deps.runPipeline({
                 companyId: Number(companyId),
                 input: run.input,

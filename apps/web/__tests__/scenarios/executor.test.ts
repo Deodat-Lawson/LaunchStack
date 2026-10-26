@@ -8,7 +8,9 @@ jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/lib/credits", () => ({ debitTokens: jest.fn() }));
 jest.mock("~/server/scenarios/evidence", () => ({ gatherScenarioEvidence: jest.fn() }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
+        fn()
+    ),
 }));
 jest.mock("@launchstack/pipelines/scenarios/db", () => ({
     claimLease: jest.fn(),
@@ -117,7 +119,7 @@ it("keeps renewing the lease while a slow unit runs, so polls don't start a seco
         const { withWorkspaceChatModels } = jest.requireMock<{
             withWorkspaceChatModels: jest.Mock;
         }>("~/server/workspace-models/scope");
-        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
         const renewals = leases.renewLease.mock.calls.length;
         await jest.advanceTimersByTimeAsync(LEASE_MS * 2);
         expect(leases.renewLease.mock.calls.length).toBe(renewals);

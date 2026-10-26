@@ -19,7 +19,9 @@ import {
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type RunDto, type SourceYield } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 import { useResource } from "~/lib/tools/useResource";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -63,6 +65,8 @@ function StatusWord({ run }: { run: RunDto }) {
 function YieldTable({ sources }: { sources: SourceYield[] }) {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common.fields");
+    const ts = useTranslations("growth.server.sources.status");
+    const word = useCopyText();
     return (
         <table className="w-full text-[13px]">
             <thead>
@@ -77,7 +81,7 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
             <tbody>
                 {sources.map(s => (
                     <tr key={s.sourceId} className="border-line-2 border-t">
-                        <td className="py-1.5 pr-3">{s.label}</td>
+                        <td className="py-1.5 pr-3">{word(s.labelCopy, s.label)}</td>
                         <td className="py-1.5 pr-3 text-right tabular-nums">
                             {s.kind === "signal"
                                 ? t("common.signals", { count: s.found })
@@ -93,12 +97,16 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
                             className={cn(
                                 "py-1.5 text-xs",
                                 s.status === "ok" && "text-ink-2",
-                                s.status === "degraded" && "text-warn",
+                                s.status === "degraded" && "text-warn-ink",
                                 s.status === "failed" && "text-danger",
                                 (s.status === "skipped" || s.status === "off") && "text-ink-3"
                             )}
                         >
-                            {s.status === "ok" ? t("runs.ok") : (s.detail ?? s.status)}
+                            {s.status === "ok"
+                                ? t("runs.ok")
+                                : s.detail
+                                  ? word(s.detailCopy, s.detail)
+                                  : ts(s.status)}
                         </td>
                     </tr>
                 ))}
@@ -110,6 +118,7 @@ function YieldTable({ sources }: { sources: SourceYield[] }) {
 export function RunsScreen() {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common.fields");
+    const errorText = useErrorText();
     const { relativeTime, money, duration } = useGrowthFormat();
     const { segmentId, startRun, activeRun, openRunSheet, samplePreferred, setSamplePreferred } =
         useProspects();
@@ -161,9 +170,7 @@ export function RunsScreen() {
                             size="sm"
                             onClick={() =>
                                 void startRun({ sample: samplePreferred }).catch((e: unknown) =>
-                                    toast.error(
-                                        e instanceof Error ? e.message : t("common.startFailed")
-                                    )
+                                    toast.error(errorText(e, t("common.startFailed")))
                                 )
                             }
                             disabled={!segmentId || (activeRun !== null && runIsLive(activeRun))}

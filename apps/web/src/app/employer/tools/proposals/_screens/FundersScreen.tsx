@@ -33,6 +33,7 @@ import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import { NewApplicationDialog } from "../_components/NewApplicationDialog";
 import { StatusWord } from "../_components/Pills";
 import { useProposals } from "../_lib/context";
@@ -103,7 +104,7 @@ function FunderItem({
                     className={cn(
                         "@max-lg:hidden text-xs",
                         f.daysLeft !== null && f.daysLeft >= 0 && f.daysLeft <= 14
-                            ? "text-warn"
+                            ? "text-warn-ink"
                             : "text-ink-3"
                     )}
                 >
@@ -217,6 +218,7 @@ function AddFunderDialog({
     onAdded: () => void;
 }) {
     const t = useTranslations("proposals.funders.add");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tc = useTranslations("common");
     const [title, setTitle] = useState("");
@@ -245,7 +247,7 @@ function AddFunderDialog({
             setClosesOn("");
             setAmountMax("");
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("failed"));
+            toast.error(errorText(e, t("failed")));
         } finally {
             setBusy(false);
         }
@@ -348,6 +350,7 @@ function AddFunderDialog({
  */
 export function FundersScreen() {
     const t = useTranslations("proposals.funders");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const { href, trackRun, finishedTick } = useProposals();
     const res = useResource("proposals:funders", () => proposalsApi.funders("all"));
@@ -404,7 +407,7 @@ export function FundersScreen() {
             });
             trackRun(run);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("searchFailed"));
+            toast.error(errorText(e, t("searchFailed")));
         } finally {
             setStarting(false);
         }
@@ -418,7 +421,7 @@ export function FundersScreen() {
                 funders: current.funders.map(x => (x.id === funder.id ? funder : x)),
             }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("updateFailed"));
+            toast.error(errorText(e, t("updateFailed")));
         }
     };
 

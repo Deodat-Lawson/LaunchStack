@@ -101,6 +101,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         "GET: the picker's routes for the caller's workspace; signed out gets the deployment's"
     ),
     [
+        "apps/web/src/server/chat-source-data.ts",
+        {
+            scopedBy: [`${API}/agents/documentQ&A/AIChat/query/route.ts`],
+            note: "ask_each's per-source reads, resolved during the answer's tool loop",
+        },
+    ],
+    [
         "apps/web/src/server/ask-starters/index.ts",
         { scopedBy: [`${API}/ask/starters/route.ts`], note: "GET /api/ask/starters" },
     ],

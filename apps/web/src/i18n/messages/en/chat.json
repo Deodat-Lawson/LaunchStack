@@ -81,7 +81,9 @@
     "hiddenCitations": "{count, plural, one {# source you can’t open is hidden.} other {# sources you can’t open are hidden.}}",
     "tokenBreakdown": "{input, number} prompt + {output, number} completion",
     "tokens": "{count, number} tokens",
-    "chunks": "{count, plural, one {# chunk} other {# chunks}}"
+    "chunks": "{count, plural, one {# chunk} other {# chunks}}",
+    "sources": "Sources",
+    "openSourceAtPassage": "Open {title} at the cited passage"
   },
   "activity": {
     "working": "Working…",
@@ -584,7 +586,10 @@
       "queueUpdateFailed": "Couldn't update the queue",
       "stopFirst": "Stop the response before editing an earlier message.",
       "workspaceChangedEditing": "The workspace changed while editing. Your original prompt can be restored in its conversation.",
-      "noResponse": "Couldn't get a response."
+      "noResponse": "Couldn't get a response.",
+      "saveFailed": "Couldn't save this chat.",
+      "chatNotSaved": "This answer is visible but the chat couldn't be saved ({reason}). Copy it before leaving.",
+      "chatNotSavedEmpty": "This chat couldn't be saved ({reason})."
     },
     "streamErrors": {
       "malformed": "The chat stream contained malformed data. Please retry.",
@@ -593,6 +598,10 @@
       "tooLarge": "The chat stream event exceeded its size limit.",
       "ended": "The chat stream ended before the answer completed. Please retry.",
       "failed": "The chat response failed. Please retry."
+    },
+    "steps": {
+      "readingChats": "{count, plural, one {Reading a referenced chat} other {Reading # referenced chats}}",
+      "readChats": "{count, plural, one {Read a referenced chat} other {Read # referenced chats}}"
     }
   },
   "sessionErrors": {
@@ -688,7 +697,10 @@
       "readingSource": "Reading “{title}”",
       "readingASource": "Reading a source",
       "writingDocumentTitled": "Writing “{title}”",
-      "writingDocument": "Writing a document"
+      "writingDocument": "Writing a document",
+      "readingSources": "Reading {count, plural, one {# source} other {# sources}}",
+      "readingSourcesProgress": "Reading {count, plural, one {# source} other {# sources}}… {done} done",
+      "readingYourSources": "Reading your sources"
     },
     "aiChat": {
       "chatNotFound": "Chat not found",
@@ -759,6 +771,50 @@
     "sessions": {
       "notFound": "Session not found",
       "ownerOnlyShare": "Only the person who started this chat can share it."
+    },
+    "steps": {
+      "history": "Reviewed the conversation so far",
+      "readingPassages": "{count, plural, one {Reading your selected passage} other {Reading # selected passages}}",
+      "readPassages": "{count, plural, one {Read your selected passage} other {Read # selected passages}}",
+      "searchingWorkspace": "Searching your workspace",
+      "searchingNamed": "Searching {name}",
+      "searchingSources": "{count, plural, one {Searching # source} other {Searching # sources}}",
+      "searchingDocument": "Searching the document",
+      "found": "Found {passages, plural, one {# passage} other {# passages}} in {sources, plural, one {# source} other {# sources}}",
+      "nothing": "Nothing relevant in your sources",
+      "nothingElse": "Nothing else relevant in your sources",
+      "noSources": "No sources selected",
+      "generalKnowledge": "Answering from general knowledge",
+      "readingAttachments": "{count, plural, one {Reading # attachment} other {Reading # attachments}}",
+      "readAttachments": "{count, plural, one {Read # attachment} other {Read # attachments}}",
+      "thinking": "Thinking",
+      "thought": "Thought it through",
+      "writing": "Writing the answer",
+      "wrote": "Wrote the answer",
+      "names": "{more, plural, =0 {{names}} other {{names} and # more}}",
+      "nameSeparator": ", "
+    }
+  },
+  "trace": {
+    "thinking": "Thinking",
+    "thoughtFor": "Thought for {duration}",
+    "thoughtProcess": "Thought process",
+    "stopped": "Stopped",
+    "stoppedAfter": "Stopped after {duration}",
+    "failed": "Failed",
+    "failedAfter": "Failed after {duration}",
+    "seconds": "{seconds}s",
+    "minutes": "{minutes}m {seconds}s",
+    "stepsLabel": "What the answer did",
+    "tokens": "{count, number} tokens",
+    "passagesRead": "{count, plural, one {# passage read} other {# passages read}}",
+    "tokenBreakdown": "{input, number} prompt + {output, number} completion",
+    "generic": {
+      "search": "Searching your sources",
+      "web": "Searched the web",
+      "source": "Looked through the sources",
+      "doc": "Made a document",
+      "step": "Worked on the answer"
     }
   }
 }

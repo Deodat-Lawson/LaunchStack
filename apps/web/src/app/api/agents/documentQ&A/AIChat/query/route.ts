@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { z } from "zod";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { and, eq, inArray, like, or } from "drizzle-orm";
@@ -45,8 +46,13 @@ import {
 import { getChatModelsSource } from "@launchstack/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
-import { createChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
-import { answerWithTools } from "~/server/chat-tool-loop";
+import {
+    createChatStream,
+    throwIfChatAborted,
+    type ChatStep,
+    type ChatStreamEvent,
+} from "~/lib/chat-stream";
+import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
 import {
     citedPassages,
     createSourceTools,
@@ -65,6 +71,25 @@ import {
     webSearchAvailable,
     webToolsPrompt,
 } from "~/server/chat-web-tools";
+import {
+    FULL_READ_TOKEN_BUDGET,
+    MAX_CITED_SOURCES,
+    attachedFilesPrompt,
+    citeSources,
+    excerptsBlock,
+    filesShown,
+    fitsFullRead,
+    fullReadBlock,
+    labelScopeFiles,
+    manifestBlock,
+    onePerSource,
+    passageResult,
+    type Coverage,
+    type ScopeFile,
+    type SourcePassage,
+} from "~/server/chat-sources";
+import { loadScopeFiles, readWholeFiles } from "~/server/chat-source-data";
+import { addTokenUsage } from "@launchstack/llm";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
@@ -90,6 +115,7 @@ import {
     agentResponseInfo,
     agentSystemPromptBlock,
     resolveChatAgent,
+    type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { copy, type Copy } from "~/i18n/copy";
@@ -129,6 +155,79 @@ async function knownAgentKeys(companyId: bigint, question: string): Promise<stri
 }
 
 const ROUTE = "agents/documentQ&A/AIChat/query";
+
+type QuestionInput = z.output<typeof QuestionSchema>;
+
+/** What `respond` needs from the validated request. */
+interface RespondInput
+    extends Pick<QuestionInput, "question">,
+        Partial<
+            Pick<
+                QuestionInput,
+                | "searchScope"
+                | "archiveName"
+                | "selectedDocumentIds"
+                | "documentId"
+                | "embeddingIndexKey"
+                | "conversationHistory"
+                | "aiPersona"
+                | "chatMode"
+            >
+        > {
+    ctx: { data: WorkspaceContext };
+    userCompanyId: bigint;
+    numericCompanyId: number;
+    scope: DocumentScope;
+    passages: NonNullable<QuestionInput["passages"]>;
+    retrievalQuery: string;
+    authorizedDocument: { id: number; title: string } | null;
+    agent: ChatAgentResolution | null;
+    enableWebSearch: boolean;
+    style: keyof typeof SYSTEM_PROMPTS;
+    textAttachments: AttachmentPayload[];
+    imageAttachments: AttachmentPayload[];
+    resolved: ReturnType<typeof resolveConfiguredChatModel>;
+    route: string;
+    debitChatTokens: boolean;
+    locale: Locale;
+}
+
+/** A refusal's JSON body and status; a stream sends the body as its result. */
+function refusal(message: string, status = 200) {
+    return { body: { success: false as const, message }, status };
+}
+
+/** Keeps a step's text inside the stream protocol's limit. */
+function clip(text: string, limit = 120): string {
+    const chars = Array.from(text);
+    return chars.length > limit ? `${chars.slice(0, limit - 1).join("")}…` : text;
+}
+
+type StepWords = ReturnType<typeof translatorFor<"chat.server.steps">>;
+
+/**
+ * Up to three distinct names in order, then "and N more" — counting `total`
+ * when some of the things counted have no name to show.
+ */
+function nameList(names: readonly string[], t: StepWords, total = 0): string | undefined {
+    const distinct = Array.from(new Set(names.filter(Boolean)));
+    if (distinct.length === 0) return undefined;
+    const shown = distinct.slice(0, 3).map(name => clip(name, 60));
+    const more = Math.max(distinct.length, total) - shown.length;
+    return t("names", { names: shown.join(t("nameSeparator")), more });
+}
+
+function stepEvent(
+    id: string,
+    state: ChatStep["state"],
+    label: string,
+    detail?: string
+): ChatStreamEvent<never> {
+    return {
+        type: "step",
+        step: { id, state, label: clip(label), ...(detail ? { detail: clip(detail, 240) } : {}) },
+    };
+}
 
 /** `describeChatError` writes English; `chat.server.endpoint` has the reader's words. */
 function endpointText(message: string, locale: Locale): string {
@@ -191,6 +290,8 @@ class AttachmentReadError extends Error {
 
 interface AttachmentReadContext {
     request: Request;
+    /** The answer's own signal: it also ends when the reader cancels the stream. */
+    signal: AbortSignal;
     companyId: bigint;
     scope: DocumentScope;
 }
@@ -219,8 +320,8 @@ async function fetchAttachment(
     att: AttachmentPayload,
     context: AttachmentReadContext
 ): Promise<Response> {
-    const { request, companyId, scope } = context;
-    throwIfChatAborted(request.signal);
+    const { request, signal, companyId, scope } = context;
+    throwIfChatAborted(signal);
     const requestOrigin = new URL(request.url).origin;
     const internal =
         isInternalFileUrl(att.url, requestOrigin) ||
@@ -228,7 +329,7 @@ async function fetchAttachment(
     const storage = isConfiguredStorageUrl(att.url);
     if (!internal && !storage) {
         try {
-            return await fetchPublicUrl(att.url, { signal: request.signal });
+            return await fetchPublicUrl(att.url, { signal });
         } catch (error) {
             if (error instanceof UrlGuardError) throw new AttachmentReadError(error.message);
             throw error;
@@ -266,7 +367,7 @@ async function fetchAttachment(
     if ((!file && (internal || !readable)) || (backed.length > 0 && !readable)) {
         throw new AttachmentReadError(copy("chat.server.attachments.outOfScope"), 404);
     }
-    throwIfChatAborted(request.signal);
+    throwIfChatAborted(signal);
     if (internal && file?.storageProvider === "database") {
         if (!file.fileData)
             throw new AttachmentReadError(copy("chat.server.attachments.contentUnavailable"), 404);
@@ -286,7 +387,7 @@ async function fetchAttachment(
         throw new AttachmentReadError(copy("chat.server.attachments.storageUnavailable"), 404);
     }
     // Private configured S3 is allowed only after the ownership check, and cannot redirect.
-    return await fetch(storageUrl, { signal: request.signal, redirect: "error" });
+    return await fetch(storageUrl, { signal, redirect: "error" });
 }
 
 async function readAttachmentBytes(
@@ -295,7 +396,7 @@ async function readAttachmentBytes(
     budget: { remaining: number },
     perFileLimit = ATTACHMENT_FILE_DOWNLOAD_CAP_BYTES
 ): Promise<{ content: Uint8Array<ArrayBuffer>; mimeType: string }> {
-    const { signal } = context.request;
+    const { signal } = context;
     const res = await fetchAttachment(att, context);
     if (!res.ok) {
         await res.body?.cancel();
@@ -402,8 +503,7 @@ async function extractAttachmentText(
         mimeType === "application/octet-stream" || !mimeType
             ? guessAttachmentKind(att.name, att.mimeType)
             : guessAttachmentKind("", mimeType);
-    if (verifiedKind === "pdf")
-        return await extractChatPdfText(content.buffer, context.request.signal);
+    if (verifiedKind === "pdf") return await extractChatPdfText(content.buffer, context.signal);
     if (verifiedKind === "docx") return await extractDocxText(content.buffer);
     if (mimeType.startsWith("image/"))
         throw new AttachmentReadError(
@@ -421,7 +521,7 @@ async function buildAttachmentTextBlock(
     context: AttachmentReadContext
 ): Promise<string> {
     if (textAttachments.length === 0) return "";
-    const { signal } = context.request;
+    const { signal } = context;
 
     let remainingBudget = ATTACHMENT_TEXT_CAP_BYTES;
     const downloadBudget = { remaining: ATTACHMENT_DOWNLOAD_CAP_BYTES };
@@ -706,7 +806,7 @@ export async function POST(request: Request) {
                     { status: compatibility.status }
                 );
             }
-            const { modelId: selectedAiModel, chat } = resolved;
+            const { modelId: selectedAiModel } = resolved;
             // Read where the model was resolved: tokens a workspace's own
             // endpoint serves are on its provider's bill, not its credits.
             const debitChatTokens = shouldDebitChatTokens(getChatModelsSource());
@@ -837,6 +937,112 @@ export async function POST(request: Request) {
                     );
                 }
             }
+            // Everything past validation runs inside the stream when there is
+            // one, so the reader sees each step as it happens.
+            const input: RespondInput = {
+                ctx,
+                question,
+                searchScope,
+                archiveName,
+                selectedDocumentIds,
+                documentId,
+                embeddingIndexKey,
+                conversationHistory,
+                aiPersona,
+                chatMode,
+                userCompanyId,
+                numericCompanyId,
+                scope,
+                passages,
+                retrievalQuery,
+                authorizedDocument,
+                agent,
+                enableWebSearch,
+                style,
+                textAttachments,
+                imageAttachments,
+                resolved,
+                route,
+                debitChatTokens,
+                locale,
+            };
+            if (streamsModel) {
+                const streamingResponse = createChatStream(
+                    request.signal,
+                    async (emit, signal) => (await respond(input, emit, signal)).body,
+                    error => {
+                        recordResult("error");
+                        if (error instanceof AttachmentReadError)
+                            return wordOr(error.copy, error.message, locale);
+                        const friendly = describeChatError(error, selectedAiModel);
+                        if (friendly) return endpointText(friendly.message, locale);
+                        // A stop is the reader's choice, not a failure worth a stack trace.
+                        if (
+                            request.signal.aborted ||
+                            (error as { name?: unknown })?.name === "AbortError"
+                        )
+                            return t("query.stopped");
+                        // The provider's own text can name the vendor or its
+                        // billing page; it goes to the log, not the screen. This one
+                        // stays English: the chat screen finds it again
+                        // (`chatStreamErrorKey`) and shows its own words.
+                        console.error("[AIChat] Streamed response failed:", error);
+                        return "The chat response failed. Please retry.";
+                    }
+                );
+                return new NextResponse(streamingResponse.body, {
+                    headers: streamingResponse.headers,
+                });
+            }
+            const reply = await respond(input);
+            return NextResponse.json(reply.body, { status: reply.status });
+        }
+
+        /**
+         * The answer after validation: passages, retrieval, web search,
+         * attachments, then the model. A refusal comes back as a body and a
+         * status, which `answer` sends as JSON or as the stream's result.
+         */
+        async function respond(
+            input: RespondInput,
+            emit?: (event: ChatStreamEvent<unknown>) => void,
+            signal: AbortSignal = request.signal
+        ) {
+            const {
+                ctx,
+                question,
+                searchScope,
+                archiveName,
+                selectedDocumentIds,
+                documentId,
+                embeddingIndexKey,
+                conversationHistory,
+                aiPersona,
+                chatMode,
+                userCompanyId,
+                numericCompanyId,
+                scope,
+                passages,
+                retrievalQuery,
+                authorizedDocument,
+                agent,
+                enableWebSearch,
+                style,
+                textAttachments,
+                imageAttachments,
+                resolved,
+                route,
+                debitChatTokens,
+                locale,
+            } = input;
+            const { modelId: selectedAiModel, chat } = resolved;
+            const t = translatorFor(locale, "chat.server");
+            const ts = translatorFor(locale, "chat.server.steps");
+            const step = (...args: Parameters<typeof stepEvent>) => emit?.(stepEvent(...args));
+
+            if (conversationHistory) step("history", "done", ts("history"));
+            if (passages.length > 0)
+                step("passages", "active", ts("readingPassages", { count: passages.length }));
             const passageAnchors: PassageAnchor[][] = [];
             for (const passage of passages) {
                 passageAnchors.push(
@@ -844,6 +1050,7 @@ export async function POST(request: Request) {
                 );
             }
             if (passages.length > 0) {
+                step("passages", "done", ts("readPassages", { count: passages.length }));
                 console.info("[AIChat] passages", {
                     count: passages.length,
                     anchored: passageAnchors.filter(found => found.length > 0).length,
@@ -853,6 +1060,10 @@ export async function POST(request: Request) {
 
             let documents: SearchResult[] = [];
             retrievalMethod = "none";
+            // The files attached to the message, listed for the model by id,
+            // and read whole when they fit the full-read budget.
+            let scopeFiles: ScopeFile[] = [];
+            let wholeFiles: Map<number, SourcePassage[]> | null = null;
             if (searchScope !== "none") {
                 const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
@@ -871,10 +1082,7 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("empty");
-                        return NextResponse.json({
-                            success: false,
-                            message: t("query.noRelevantContent"),
-                        });
+                        return refusal(t("query.noRelevantContent"));
                     }
                 } else if (searchScope === "archive" && archiveName) {
                     const rows = await db
@@ -889,13 +1097,7 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("empty");
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: t("query.archiveEmpty", { archive: archiveName }),
-                            },
-                            { status: 404 }
-                        );
+                        return refusal(t("query.archiveEmpty", { archive: archiveName }), 404);
                     }
                 } else if (searchScope === "selected" && selectedDocumentIds?.length) {
                     const uniqueIds = Array.from(new Set(selectedDocumentIds));
@@ -911,15 +1113,22 @@ export async function POST(request: Request) {
                     searchDocumentIds = rows.map(r => r.id);
                     if (searchDocumentIds.length === 0) {
                         recordResult("error");
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: t("query.selectedNotFound"),
-                            },
-                            { status: 404 }
-                        );
+                        return refusal(t("query.selectedNotFound"), 404);
                     }
                 }
+                step(
+                    "search",
+                    "active",
+                    searchScope === "company"
+                        ? ts("searchingWorkspace")
+                        : searchScope === "archive"
+                          ? ts("searchingNamed", { name: archiveName ?? "" })
+                          : searchScope === "selected"
+                            ? ts("searchingSources", { count: searchDocumentIds?.length ?? 0 })
+                            : authorizedDocument
+                              ? ts("searchingNamed", { name: authorizedDocument.title })
+                              : ts("searchingDocument")
+                );
 
                 // Perform comprehensive search
                 const resolvedEmbeddingIndex = resolveEmbeddingIndex(
@@ -939,8 +1148,44 @@ export async function POST(request: Request) {
                             ? "selected_ensemble_rrf"
                             : "document_ensemble_rrf";
 
+                const scopeIds =
+                    searchDocumentIds ??
+                    (searchScope === "document" && authorizedDocument
+                        ? [authorizedDocument.id]
+                        : []);
                 try {
-                    if (searchDocumentIds?.length) {
+                    scopeFiles = labelScopeFiles(await loadScopeFiles(scopeIds));
+                    if (fitsFullRead(scopeFiles)) {
+                        const whole = await readWholeFiles(scopeFiles.map(file => file.id));
+                        const chars = [...whole.values()]
+                            .flat()
+                            .reduce((sum, passage) => sum + passage.content.length, 0);
+                        // The index's token counts are estimates; the text read
+                        // is the check that it really fits.
+                        if (
+                            chars <= FULL_READ_TOKEN_BUDGET * 5 &&
+                            scopeFiles.every(file => (whole.get(file.id)?.length ?? 0) > 0)
+                        ) {
+                            wholeFiles = whole;
+                        }
+                    }
+                } catch (scopeError) {
+                    // Without the file list the turn still answers, as it did
+                    // before: from the retrieved passages.
+                    console.warn("[AIChat] Could not read the attached files:", scopeError);
+                    scopeFiles = [];
+                    wholeFiles = null;
+                }
+
+                try {
+                    if (wholeFiles) {
+                        // Small enough to read whole: no ranking, nothing left out.
+                        const read = wholeFiles;
+                        retrievalMethod = `${searchScope}_full_read`;
+                        documents = scopeFiles.flatMap(file =>
+                            (read.get(file.id) ?? []).map(passage => passageResult(passage, file))
+                        );
+                    } else if (searchDocumentIds?.length) {
                         // One path for every set of ids: from the retriever's
                         // perspective the caller's whole scope, an archive, and a
                         // hand-picked set are identical (`document_id = ANY(...)`).
@@ -1075,16 +1320,40 @@ export async function POST(request: Request) {
                     searchScope: searchScope ?? "document",
                 });
 
+                if (documents.length > 0) {
+                    // Every document-scope result is that document's, unless
+                    // it names its own (a company fact).
+                    const fallbackTitle =
+                        searchScope === "document" ? authorizedDocument?.title : undefined;
+                    const sources = documents.map(doc => {
+                        const title = doc.metadata?.documentTitle ?? doc.title ?? fallbackTitle;
+                        return { key: doc.metadata?.documentId ?? doc.documentId ?? title, title };
+                    });
+                    const sourceCount = new Set(sources.flatMap(source => source.key ?? [])).size;
+                    step(
+                        "search",
+                        "done",
+                        ts("found", {
+                            passages: documents.length,
+                            sources: Math.max(sourceCount, 1),
+                        }),
+                        nameList(
+                            sources.flatMap(source => source.title ?? []),
+                            ts,
+                            sourceCount
+                        )
+                    );
+                } else {
+                    step("search", "done", passages.length > 0 ? ts("nothingElse") : ts("nothing"));
+                }
+
                 // A selected passage is content enough to answer about.
                 if (documents.length === 0 && passages.length === 0) {
                     recordResult("empty");
-                    return NextResponse.json({
-                        success: false,
-                        message: t("query.noRelevantContent"),
-                    });
+                    return refusal(t("query.noRelevantContent"));
                 }
             }
-            throwIfChatAborted(request.signal);
+            throwIfChatAborted(signal);
 
             // The passage section shows each passage's own chunk; a retrieved
             // copy of it is dropped here and the section shows it whole.
@@ -1096,34 +1365,28 @@ export async function POST(request: Request) {
                 whole: anchorsRetrieved,
             });
 
-            // Build comprehensive context from retrieved documents
-            const combinedContent = promptDocuments
-                .map((doc, idx) => {
-                    const page = doc.metadata?.page ?? "Unknown";
-                    const source = doc.metadata?.source ?? retrievalMethod;
-                    const distance = doc.metadata?.distance ?? 0;
-                    const relevanceScore = Math.round((1 - Number(distance)) * 100);
-
-                    console.log(
-                        `📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`
-                    );
-
-                    // A company fact is a curated, cited statement, not a passage;
-                    // label it so the model treats it as such (ADR-011).
-                    const heading =
-                        source === "company_fact"
-                            ? `=== Company fact #${idx + 1}${
-                                  doc.metadata?.documentTitle
-                                      ? ` (from ${doc.metadata.documentTitle})`
-                                      : ""
-                              } ===`
-                            : `=== Chunk #${idx + 1}, Page ${page} ===`;
-                    return `${heading}\n${doc.pageContent}`;
-                })
-                .join("\n\n");
-
+            // What the model is told about the attached files: the list, each
+            // passage under its file's id, and how much of the set it saw
+            // (chat-sources.ts). Without that it reads a sample as the whole.
+            const coverage: Coverage = wholeFiles
+                ? { mode: "full" }
+                : promptDocuments.length > 0
+                  ? {
+                        mode: "excerpts",
+                        passages: promptDocuments.length,
+                        filesShown: filesShown(promptDocuments, scopeFiles),
+                    }
+                  : { mode: "passage-only" };
+            const combinedContent = wholeFiles
+                ? fullReadBlock(scopeFiles, wholeFiles)
+                : excerptsBlock(promptDocuments, scopeFiles);
             console.log(
-                `✅ [AIChat] Built context with pages: ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
+                `✅ [AIChat] Context: ${retrievalMethod}, ${scopeFiles.length} attached file(s), ` +
+                    (coverage.mode === "excerpts"
+                        ? `${coverage.passages} passage(s) from ${coverage.filesShown} file(s), pages ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
+                        : coverage.mode === "full"
+                          ? `${documents.length} section(s) read whole (${combinedContent.length} chars)`
+                          : "selected passage only")
             );
 
             // A workspace's own model has no tool-calling answer to read
@@ -1132,7 +1395,7 @@ export async function POST(request: Request) {
             // refuses them costs a retry without them (chat-tool-loop.ts), not
             // the answer.
             const takesTools =
-                resolved.behavior.nativeStructuredOutput.includes("tool-calling") ||
+                (resolved.behavior.nativeStructuredOutput ?? []).includes("tool-calling") ||
                 getChatModelsSource() === "workspace";
 
             // The web is a tool the model may call, not a step before the
@@ -1171,7 +1434,7 @@ export async function POST(request: Request) {
                 sourcesAllowed &&
                 sourcesOverview &&
                 sourcesOverview.inventory.total > 0
-                    ? createSourceTools(ctx.data, {}, locale)
+                    ? createSourceTools(ctx.data, {}, locale, { attached: scopeFiles })
                     : null;
             // Writing is a tool as well: asked for a document, the model makes
             // one in the workspace instead of pasting it here and telling the
@@ -1188,8 +1451,15 @@ export async function POST(request: Request) {
                 ...(documentTools?.tools ?? []),
                 ...(webTools?.tools ?? []),
             ];
+            // Nothing attached and no way to look through the sources: say so,
+            // rather than leave the reader to guess what the answer drew on.
+            if (searchScope === "none" && passages.length === 0 && !sourceTools)
+                step("search", "done", ts("noSources"), ts("generalKnowledge"));
 
-            const attachmentContext = { request, companyId: userCompanyId, scope };
+            const attachmentCount = textAttachments.length + imageAttachments.length;
+            if (attachmentCount > 0)
+                step("attachments", "active", ts("readingAttachments", { count: attachmentCount }));
+            const attachmentContext = { request, signal, companyId: userCompanyId, scope };
             const attachmentTextBlock = await buildAttachmentTextBlock(
                 textAttachments,
                 attachmentContext
@@ -1199,6 +1469,16 @@ export async function POST(request: Request) {
                 attachmentContext,
                 resolved.behavior.image?.mimeTypes
             );
+            if (attachmentCount > 0)
+                step(
+                    "attachments",
+                    "done",
+                    ts("readAttachments", { count: attachmentCount }),
+                    nameList(
+                        [...textAttachments, ...imageAttachments].map(att => att.name),
+                        ts
+                    )
+                );
 
             const selectedStyle = style satisfies keyof typeof SYSTEM_PROMPTS;
 
@@ -1214,6 +1494,9 @@ export async function POST(request: Request) {
             let systemPrompt = agent
                 ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
                 : stylePrompt;
+            if (scopeFiles.length > 0) {
+                systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
+            }
             if (sourceTools && sourcesOverview) {
                 systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
             } else if (searchScope === "none") {
@@ -1246,7 +1529,16 @@ export async function POST(request: Request) {
                 passageSection && !combinedContent
                     ? "(nothing beyond the selected passage)"
                     : combinedContent;
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}Relevant document content:\n${documentContent}${attachmentTextBlock}\n\nAnswer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Maintain continuity with any previous conversation.`;
+            const contentHeading =
+                scopeFiles.length === 0
+                    ? "Relevant document content:"
+                    : coverage.mode === "full"
+                      ? "Full text of every attached file:"
+                      : coverage.mode === "excerpts"
+                        ? `Relevant passages (${coverage.passages} from ${coverage.filesShown} of ${scopeFiles.length} attached file${scopeFiles.length === 1 ? "" : "s"}):`
+                        : "Relevant passages:";
+            const manifest = scopeFiles.length > 0 ? `${manifestBlock(scopeFiles)}\n\n` : "";
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}${manifest}${contentHeading}\n${documentContent}${attachmentTextBlock}\n\nAnswer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Maintain continuity with any previous conversation.`;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1285,15 +1577,12 @@ export async function POST(request: Request) {
                     }, 0)
                 );
             }, 0);
-            if (promptCharacters > 120_000) {
+            // A whole-file read has its own budget (FULL_READ_TOKEN_BUDGET);
+            // the limit holds for everything else in the prompt.
+            const fullReadCharacters = wholeFiles ? combinedContent.length : 0;
+            if (promptCharacters - fullReadCharacters > 120_000) {
                 recordResult("error");
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: t("query.inputTooLong"),
-                    },
-                    { status: 400 }
-                );
+                return refusal(t("query.inputTooLong"), 400);
             }
             const complete = async (
                 signal: AbortSignal,
@@ -1301,33 +1590,111 @@ export async function POST(request: Request) {
             ) => {
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "generating" });
+                // The trace: thinking, each tool call as its own step (its id
+                // says which kind, so a shared reader can be shown a generic
+                // label), thinking again after the tools, then writing.
+                let calling = "";
+                const tracked: ChatTool[] = tools.map(tool => ({
+                    ...tool,
+                    describe: args => {
+                        calling = tool.name;
+                        return tool.describe(args);
+                    },
+                }));
+                const webToolNames = new Set((webTools?.tools ?? []).map(tool => tool.name));
+                const documentToolNames = new Set(
+                    (documentTools?.tools ?? []).map(tool => tool.name)
+                );
+                let round = 1;
+                let thinking: string | null = null;
+                let toolCall: { id: string; label: string } | null = null;
+                let toolCount = 0;
+                let wrote = false;
+                const startThinking = () => {
+                    thinking = round === 1 ? "think" : `think-${round}`;
+                    step(thinking, "active", ts("thinking"));
+                };
+                const endThinking = () => {
+                    if (thinking) step(thinking, "done", ts("thought"));
+                    thinking = null;
+                };
+                const endToolCall = () => {
+                    if (toolCall) step(toolCall.id, "done", toolCall.label);
+                    toolCall = null;
+                };
+                if (emit) startThinking();
                 const reply = await answerWithTools({
                     chat,
                     messages,
-                    tools,
+                    tools: tracked,
+                    // Checking every file can take a listing, a fan-out and a
+                    // second page of it before the answer.
+                    maxToolRounds: sourceTools ? 6 : 3,
                     signal,
                     stream: emit && {
-                        onText: delta => emit({ type: "text", delta }),
+                        onText: delta => {
+                            if (!wrote) {
+                                endToolCall();
+                                endThinking();
+                                step("write", "active", ts("writing"));
+                                wrote = true;
+                            }
+                            emit({ type: "text", delta });
+                        },
                         onReasoning: delta => emit({ type: "reasoning", delta }),
                     },
-                    onStatus: status => emit?.({ type: "status", status }),
+                    onStatus: status => {
+                        emit?.({ type: "status", status });
+                        if (!emit) return;
+                        endToolCall();
+                        if (status === "generating") {
+                            round += 1;
+                            startThinking();
+                            return;
+                        }
+                        endThinking();
+                        const kind = webToolNames.has(calling)
+                            ? "web"
+                            : documentToolNames.has(calling)
+                              ? "doc"
+                              : "source";
+                        toolCall = { id: `${kind}-${++toolCount}`, label: status };
+                        step(toolCall.id, "active", status);
+                    },
                     // Looking (a search, a read) and then writing takes a
                     // round more than looking alone.
                     ...(documentTools ? { maxToolRounds: 4 } : {}),
                 });
+                if (emit) {
+                    endToolCall();
+                    if (wrote) step("write", "done", ts("wrote"));
+                    else endThinking();
+                }
                 throwIfChatAborted(signal);
                 emit?.({ type: "status", status: "finalizing" });
 
                 let summarizedAnswer = normalizeModelContent(
                     emit ? reply.finalText : reply.finalContent
                 );
+                // The sources the answer cites by id become its source list;
+                // the ids themselves are taken out of the text.
+                const rawAnswer = summarizedAnswer;
+                const cited = citeSources(
+                    rawAnswer,
+                    [...documents, ...(sourceTools?.passages ?? [])],
+                    scopeFiles
+                );
+                summarizedAnswer = cited.text;
                 const totalTime = Date.now() - startTime;
 
                 // Log + meter LLM token usage, summed over every model call
                 // of the turn. Normalized at the chat boundary so credits are
                 // debited the same way whichever deployment endpoint answered;
                 // a workspace's own endpoint is never debited.
-                const usage = reply.usage;
+                // The per-source reads `ask_each` made are part of the turn.
+                const usage = sourceTools
+                    ? addTokenUsage(reply.usage, sourceTools.usage())
+                    : reply.usage;
                 const promptTokens = usage.inputTokens ?? 0;
                 const completionTokens = usage.outputTokens ?? 0;
                 console.log(
@@ -1403,12 +1770,14 @@ export async function POST(request: Request) {
                 throwIfChatAborted(signal);
                 recordResult("success");
 
-                // Citations: the attached sources' passages first, then what
-                // the model found with search_sources and drew on.
+                // Citations: the sources the answer cites, one entry each. An
+                // answer that cites none falls back to the attached sources'
+                // passages, then what the tools found that it names.
                 const references = buildReferences(
                     retrievalQuery,
-                    [...documents, ...citedPassages(toolPassages, summarizedAnswer)],
-                    5
+                    cited.cited ??
+                        onePerSource([...documents, ...citedPassages(toolPassages, rawAnswer)]),
+                    MAX_CITED_SOURCES
                 );
 
                 return {
@@ -1456,37 +1825,15 @@ export async function POST(request: Request) {
                         : undefined,
                 };
             };
-            if (streamsModel) {
-                const streamingResponse = createChatStream(
-                    request.signal,
-                    (emit, signal) => complete(signal, emit),
-                    error => {
-                        recordResult("error");
-                        const friendly = describeChatError(error, selectedAiModel);
-                        if (friendly) return endpointText(friendly.message, locale);
-                        // The provider's own text can name the vendor or its
-                        // billing page; it goes to the log, not the screen. This one
-                        // stays English: the chat screen finds it again
-                        // (`chatStreamErrorKey`) and shows its own words.
-                        console.error("[AIChat] Streamed response failed:", error);
-                        return "The chat response failed. Please retry.";
-                    }
-                );
-                return new NextResponse(streamingResponse.body, {
-                    headers: streamingResponse.headers,
-                });
-            }
+            if (emit) return { body: await complete(signal, emit), status: 200 };
             try {
-                return NextResponse.json(await complete(request.signal));
+                return { body: await complete(signal), status: 200 };
             } catch (modelError) {
-                throwIfChatAborted(request.signal);
+                throwIfChatAborted(signal);
                 const friendly = describeChatError(modelError, selectedAiModel);
                 if (friendly) {
                     recordResult("error");
-                    return NextResponse.json(
-                        { success: false, message: endpointText(friendly.message, locale) },
-                        { status: friendly.status }
-                    );
+                    return refusal(endpointText(friendly.message, locale), friendly.status);
                 }
                 throw modelError;
             }

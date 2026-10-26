@@ -84,5 +84,9 @@ refused rollout because it contains `20261011003324_per_link_join_approval`, whi
 is absent from the assigned Week 2 branch. The guard was not bypassed: no migration,
 container replacement, database downgrade or data modification was made to that
 existing instance. Its code and the assigned integration branch need reconciliation
-before replacing it. The standalone image is being exercised on `localhost:3002`
-against the separate synthetic PostgreSQL database.
+before replacing it. The standalone image was exercised on `localhost:3002`
+against the separate synthetic PostgreSQL database. Normal sign-in, personal-context
+GET and snapshot POST returned 200. The snapshot contained the January document’s
+exact version text. Saving roles in the packaged app returned the visible saved
+confirmation and advanced the stored revision to 3. The original `3000` app remains
+unchanged; the `3002` installation is local testing, not a hosted public release.

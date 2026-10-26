@@ -28,6 +28,7 @@ export const RELATIONSHIP_STAGES = [
     "contacted",
     "in_conversation",
     "qualified",
+    "proposal",
     "negotiating",
     "contracted",
     "active",

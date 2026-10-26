@@ -162,6 +162,8 @@ describe("adapter copies say their English field exactly", () => {
         for (const stage of [
             "candidate",
             "contacted",
+            "in_conversation",
+            "proposal",
             "negotiating",
             "contracted",
             "declined",
@@ -287,7 +289,7 @@ describe("in Chinese", () => {
             allowedMoves(rel({ stage: "candidate" }), false).map(m => [m.stage, zh(m.reasonCopy)])
         );
         expect(reasons.lead).toBe("当前阶段");
-        expect(reasons.proposal).toBe("此工作区暂未启用该阶段");
+        expect(reasons.proposal).toBe("请先移至“已联系”");
         expect(reasons.qualified).toBe("请先移至“已联系”");
         expect(reasons.contacted).toBe("需要指定负责人");
         expect(reasons.lost).toBeNull();

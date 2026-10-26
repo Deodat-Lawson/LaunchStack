@@ -1196,6 +1196,7 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
         "contacted",
         "in_conversation",
         "qualified",
+        "proposal",
         "negotiating",
         "contracted",
         "active",
@@ -1212,7 +1213,9 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
     const now = new Date();
     const weekAhead = new Date(now.getTime() + 7 * 86_400_000);
     const inPipeline = items.filter(i =>
-        ["contacted", "in_conversation", "qualified", "negotiating"].includes(i.relationship.stage)
+        ["contacted", "in_conversation", "qualified", "proposal", "negotiating"].includes(
+            i.relationship.stage
+        )
     ).length;
     const stale = items.filter(i => i.stale).length;
     const dueThisWeek = items.filter(
@@ -1268,7 +1271,9 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
         }
         const stage = item.relationship.stage;
         if (stage === "contracted" || stage === "active") cell.covered += 1;
-        else if (["contacted", "in_conversation", "qualified", "negotiating"].includes(stage))
+        else if (
+            ["contacted", "in_conversation", "qualified", "proposal", "negotiating"].includes(stage)
+        )
             cell.inPipeline += 1;
         else if (stage === "candidate" || stage === "researched") cell.candidates += 1;
     }
